@@ -4,7 +4,7 @@ import { ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
 import { map, switchMap } from "rxjs";
 import { Project } from "@domain/project/project.model";
-import { GetProjectSubscriptionsUseCase } from "@api/project/use-case/get-project-subscriptions.use-case";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**

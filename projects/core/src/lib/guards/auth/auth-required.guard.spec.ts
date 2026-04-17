@@ -6,7 +6,7 @@ import { AuthRequiredGuard } from "./auth-required.guard";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 describe("AuthRequiredGuard", () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe("AuthRequiredGuard", () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthInfoService, useValue: authSpy }],
     });
   });
 

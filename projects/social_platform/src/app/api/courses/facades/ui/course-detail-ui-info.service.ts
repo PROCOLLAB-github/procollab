@@ -1,11 +1,14 @@
 /** @format */
 
-import { computed, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import { CourseDetail, CourseStructure } from "@domain/courses/courses.model";
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
+import { SeenModulesStoragePort } from "@domain/courses/ports/seen-modules-storage.port";
 
 @Injectable()
 export class CourseDetailUIInfoService {
+  private readonly seenModulesStorage = inject(SeenModulesStoragePort);
+
   readonly courseDetail$ = signal<AsyncState<CourseDetail>>(initial());
   readonly courseStructure$ = signal<AsyncState<CourseStructure>>(initial());
 
@@ -46,22 +49,15 @@ export class CourseDetailUIInfoService {
   }
 
   private checkCompletedModules(structure: CourseStructure): void {
-    const completedModuleIds = structure.modules
+    const unseenModule = structure.modules
       .filter(m => m.progressStatus === "completed")
-      .map(m => m.id);
-
-    const unseenModule = completedModuleIds.find(
-      id => !localStorage.getItem(`course_${structure.courseId}_module_${id}_complete_seen`)
-    );
+      .find(m => !this.seenModulesStorage.isSeen(structure.courseId, m.id));
 
     if (unseenModule) {
       const allModulesCompleted = structure.modules.every(m => m.progressStatus === "completed");
       this.isCourseCompleted.set(allModulesCompleted);
       this.isCompleteModule.set(true);
-      localStorage.setItem(
-        `course_${structure.courseId}_module_${unseenModule}_complete_seen`,
-        "true"
-      );
+      this.seenModulesStorage.markSeen(structure.courseId, unseenModule.id);
     }
   }
 }

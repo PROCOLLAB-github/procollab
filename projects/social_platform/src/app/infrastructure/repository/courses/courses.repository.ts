@@ -44,7 +44,7 @@ export class CoursesRepository implements CoursesRepositoryPort {
 
   postAnswerQuestion(
     taskId: number,
-    answerText?: any,
+    answerText?: string,
     optionIds?: number[],
     fileIds?: number[]
   ): Observable<TaskAnswerResponse> {

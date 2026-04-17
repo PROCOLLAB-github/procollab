@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { EMPTY, map, switchMap } from "rxjs";
 import { GetCourseDetailUseCase } from "@api/courses/use-cases/get-course-detail.use-case";
 import { GetCourseStructureUseCase } from "@api/courses/use-cases/get-course-structure.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
 
 export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
   const getCourseDetailUseCase = inject(GetCourseDetailUseCase);
@@ -18,7 +19,7 @@ export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
       const detail = detailResult.ok ? detailResult.value : null;
 
       if (!detail?.isAvailable) {
-        router.navigate(["/office/courses/all"]);
+        router.navigateByUrl(AppRoutes.courses.list());
         return EMPTY;
       }
 

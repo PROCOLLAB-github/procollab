@@ -5,8 +5,8 @@ import { ChatCardComponent } from "./chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
 import { BarComponent } from "@ui/primitives";
 import { BackComponent } from "@uilib";
-import { ChatInfoService } from "@api/chat/facedes/chat-info.service";
-import { ChatUIInfoService } from "@api/chat/facedes/ui/chat-ui-info.service";
+import { ChatInfoService } from "@api/chat/facades/chat-info.service";
+import { ChatUIInfoService } from "@api/chat/facades/ui/chat-ui-info.service";
 
 /**
  * Компонент списка чатов - отображает все чаты пользователя

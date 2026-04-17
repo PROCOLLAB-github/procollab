@@ -25,7 +25,7 @@ import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { Goal } from "@domain/project/goals.model";
 import { ProfileService } from "@api/auth/profile.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { UpdateGoalUseCase } from "@api/project/use-case/update-goal.use-case";
+import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",

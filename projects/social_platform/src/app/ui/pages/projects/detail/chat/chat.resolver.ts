@@ -5,7 +5,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { of, switchMap } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
-import { GetProjectUseCase } from "@api/project/use-case/get-project.use-case";
+import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 
 /**
  * Резолвер для загрузки данных проекта для чата

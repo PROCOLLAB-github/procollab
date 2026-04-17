@@ -9,6 +9,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { LoginUseCase } from "../use-cases/login.use-case";
 import { toAsyncState } from "@domain/shared/to-async-state";
 import { LoginResult, LoginError } from "@domain/auth/results/login.result";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class AuthLoginService {
@@ -49,7 +50,8 @@ export class AuthLoginService {
         tap(result => {
           if (result.ok) {
             this.tokenService.memTokens(result.value.tokens);
-            const url = redirectType === "program" ? "/office/program" : "/office";
+            const url =
+              redirectType === "program" ? AppRoutes.program.root() : AppRoutes.office.root();
             this.router
               .navigateByUrl(url)
               .then(() => this.logger.debug("Route changed from LoginComponent"));

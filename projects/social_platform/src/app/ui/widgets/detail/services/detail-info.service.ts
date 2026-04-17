@@ -12,8 +12,9 @@ import { filter, Subject, takeUntil } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
-import { GetMyProjectsUseCase } from "@api/project/use-case/get-my-projects.use-case";
+import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class DetailInfoService {
@@ -100,15 +101,15 @@ export class DetailInfoService {
   redirectDetailInfo(): void {
     switch (this.listType()) {
       case "profile":
-        this.router.navigateByUrl(`/office/profile/${this.info().id}`);
+        this.router.navigateByUrl(AppRoutes.profile.detail(this.info().id));
         break;
 
       case "project":
-        this.router.navigateByUrl(`/office/projects/${this.info().id}`);
+        this.router.navigateByUrl(AppRoutes.projects.detail(this.info().id));
         break;
 
       case "program":
-        this.router.navigateByUrl(`/office/program/${this.info().id}`);
+        this.router.navigateByUrl(AppRoutes.program.detail(this.info().id));
         break;
     }
   }
@@ -118,9 +119,9 @@ export class DetailInfoService {
    */
   private initializeBackPath(): void {
     if (this.listType() === "project") {
-      this.backPath.set("/office/projects/all");
+      this.backPath.set(AppRoutes.projects.all());
     } else if (this.listType() === "program") {
-      this.backPath.set("/office/program/all");
+      this.backPath.set(AppRoutes.program.list());
     }
   }
 

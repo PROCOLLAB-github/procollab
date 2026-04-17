@@ -5,9 +5,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Resource, ResourceDto } from "@domain/project/resource.model";
 import { LoggerService } from "@corelib";
-import { DeleteResourceUseCase } from "../../use-case/delete-resource.use-case";
-import { CreateResourceUseCase } from "../../use-case/create-resource.use-case";
-import { UpdateResourceUseCase } from "../../use-case/update-resource.use-case";
+import { DeleteResourceUseCase } from "../../use-cases/delete-resource.use-case";
+import { CreateResourceUseCase } from "../../use-cases/create-resource.use-case";
+import { UpdateResourceUseCase } from "../../use-cases/update-resource.use-case";
 
 @Injectable({
   providedIn: "root",

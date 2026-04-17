@@ -8,9 +8,9 @@ import { Goal } from "@domain/project/goals.model";
 import { ProjectGoalsUIService } from "./ui/project-goals-ui.service";
 import { LoggerService } from "@corelib";
 import { GoalFormData } from "@infrastructure/adapters/project/dto/project-goal.dto";
-import { CreateGoalsUseCase } from "../../use-case/create-goals.use-case";
-import { UpdateGoalUseCase } from "../../use-case/update-goal.use-case";
-import { DeleteGoalUseCase } from "../../use-case/delete-goal.use-case";
+import { CreateGoalsUseCase } from "../../use-cases/create-goals.use-case";
+import { UpdateGoalUseCase } from "../../use-cases/update-goal.use-case";
+import { DeleteGoalUseCase } from "../../use-cases/delete-goal.use-case";
 
 /**
  * Сервис для управления целями проекта

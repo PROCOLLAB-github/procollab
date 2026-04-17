@@ -3,7 +3,8 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { CreateProjectUseCase } from "./use-case/create-project.use-case";
+import { CreateProjectUseCase } from "./use-cases/create-project.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable({
   providedIn: "root",
@@ -19,7 +20,7 @@ export class ProjectsService {
         if (!result.ok) return;
 
         this.router
-          .navigate([`/office/projects/${result.value.id}/edit`], {
+          .navigate([AppRoutes.projects.edit(result.value.id)], {
             queryParams: { editingStep: "main" },
           })
           .then(() => this.logger.debug("Route change from ProjectsComponent"));

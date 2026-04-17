@@ -22,8 +22,8 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { GetAllProjectsUseCase } from "../../use-case/get-all-projects.use-case";
-import { GetMyProjectsUseCase } from "../../use-case/get-my-projects.use-case";
+import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "../../use-cases/get-my-projects.use-case";
 import {
   AsyncState,
   initial,

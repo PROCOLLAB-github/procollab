@@ -27,7 +27,7 @@ import { NavigationService } from "../../paths/navigation.service";
 import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import { GetMembersUseCase } from "../use-case/get-members.use-case";
+import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 
 @Injectable()

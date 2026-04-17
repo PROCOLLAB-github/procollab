@@ -8,6 +8,7 @@ import { PartnerProgramFields } from "@domain/program/partner-program-fields.mod
 import { ProjectRate } from "@domain/project/project-rate";
 import { Project } from "@domain/project/project.model";
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class ProgramDetailListUIInfoService {
@@ -57,10 +58,10 @@ export class ProgramDetailListUIInfoService {
   routerLink(linkId: number): string {
     switch (this.listType()) {
       case "projects":
-        return `/office/projects/${linkId}`;
+        return AppRoutes.projects.detail(linkId);
 
       case "members":
-        return `/office/profile/${linkId}`;
+        return AppRoutes.profile.detail(linkId);
 
       default:
         return "";

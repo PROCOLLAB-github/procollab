@@ -11,14 +11,14 @@ import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { User } from "@domain/auth/user.model";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import { RemoveProjectCollaboratorUseCase } from "../../use-case/remove-project-collaborator.use-case";
-import { TransferProjectOwnershipUseCase } from "../../use-case/transfer-project-ownership.use-case";
-import { FetchProjectNewsUseCase } from "../../use-case/fetch-project-news.use-case";
-import { ReadProjectNewsUseCase } from "../../use-case/read-project-news.use-case";
-import { AddProjectNewsUseCase } from "../../use-case/add-project-news.use-case";
-import { DeleteProjectNewsUseCase } from "../../use-case/delete-project-news.use-case";
-import { ToggleProjectNewsLikeUseCase } from "../../use-case/toggle-project-news-like.use-case";
-import { EditProjectNewsUseCase } from "../../use-case/edit-project-news.use-case";
+import { RemoveProjectCollaboratorUseCase } from "../../use-cases/remove-project-collaborator.use-case";
+import { TransferProjectOwnershipUseCase } from "../../use-cases/transfer-project-ownership.use-case";
+import { FetchProjectNewsUseCase } from "../../use-cases/fetch-project-news.use-case";
+import { ReadProjectNewsUseCase } from "../../use-cases/read-project-news.use-case";
+import { AddProjectNewsUseCase } from "../../use-cases/add-project-news.use-case";
+import { DeleteProjectNewsUseCase } from "../../use-cases/delete-project-news.use-case";
+import { ToggleProjectNewsLikeUseCase } from "../../use-cases/toggle-project-news-like.use-case";
+import { EditProjectNewsUseCase } from "../../use-cases/edit-project-news.use-case";
 
 @Injectable({ providedIn: "root" })
 export class ProjectsDetailService {

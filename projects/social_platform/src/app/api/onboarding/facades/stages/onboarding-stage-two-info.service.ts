@@ -11,6 +11,7 @@ import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "./ui/onboarding-stage-two-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { failure, initial, loading } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class OnboardingStageTwoInfoService {
@@ -109,7 +110,7 @@ export class OnboardingStageTwoInfoService {
   private completeRegistration(stage: number): void {
     this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value);
-    this.router.navigateByUrl(`/office/onboarding/stage-${stage}`);
+    this.router.navigateByUrl(AppRoutes.onboarding.stage(stage));
     this.skipSubmitting.set(initial());
   }
 }

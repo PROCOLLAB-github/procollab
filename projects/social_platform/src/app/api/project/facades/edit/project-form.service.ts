@@ -9,12 +9,12 @@ import {
   FormControl,
   ValidatorFn,
 } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { stripNullish } from "@utils/stripNull";
-import { concatMap, filter, Subject, takeUntil } from "rxjs";
+import { Subject } from "rxjs";
 import { Project } from "@domain/project/project.model";
-import { UpdateFormUseCase } from "../../use-case/update-form.use-case";
+import { createProjectAchievementGroup, createProjectForm } from "./project-form.factory";
+import { ProjectFormAutosaveService } from "./project-form-autosave.service";
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
@@ -24,8 +24,7 @@ export class ProjectFormService {
   private projectForm!: FormGroup;
   private additionalForm!: FormGroup;
   private readonly fb = inject(FormBuilder);
-  private readonly route = inject(ActivatedRoute);
-  private readonly updateFormUseCase = inject(UpdateFormUseCase);
+  private readonly projectFormAutosaveService = inject(ProjectFormAutosaveService);
   public editIndex = signal<number | null>(null);
   public relationId = signal<number>(0);
 
@@ -40,64 +39,17 @@ export class ProjectFormService {
    * Подписывается на изменения полей 'presentationAddress' и 'coverImageAddress' для автосохранения при очищении.
    */
   private initializeForm(): void {
-    this.projectForm = this.fb.group({
-      imageAddress: [""],
-      name: ["", [Validators.required]],
-      region: ["", [Validators.required]],
-      implementationDeadline: [null],
-      trl: [null],
-      links: this.fb.array([]),
-      link: ["", Validators.pattern(/^(https?:\/\/)/)],
-      industryId: [undefined, [Validators.required]],
-      description: ["", [Validators.required, Validators.minLength(0), Validators.maxLength(800)]],
-      presentationAddress: [""],
-      coverImageAddress: ["", [Validators.required]],
-      actuality: ["", [Validators.maxLength(400)]],
-      targetAudience: ["", [Validators.required, Validators.maxLength(400)]],
-      problem: ["", [Validators.required, Validators.maxLength(400)]],
-      partnerProgramId: [null],
-      achievements: this.fb.array([]),
-      title: [""],
-      status: [""],
-
-      draft: [null],
-    });
-
-    // Автосохранение при очистке presentationAddress
-    this.presentationAddress?.valueChanges
-      .pipe(
-        filter(value => !value),
-        concatMap(() =>
-          this.updateFormUseCase.execute({
-            id: Number(this.route.snapshot.params["projectId"]),
-            data: {
-              presentationAddress: "",
-              draft: true,
-            },
-          })
-        ),
-        filter(result => result.ok),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-
-    // Автосохранение при очистке coverImageAddress
-    this.coverImageAddress?.valueChanges
-      .pipe(
-        filter(value => !value),
-        concatMap(() =>
-          this.updateFormUseCase.execute({
-            id: Number(this.route.snapshot.params["projectId"]),
-            data: {
-              coverImageAddress: "",
-              draft: true,
-            },
-          })
-        ),
-        filter(result => result.ok),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
+    this.projectForm = createProjectForm(this.fb);
+    this.projectFormAutosaveService.bindDraftCleanupAutosave(
+      this.presentationAddress,
+      "presentationAddress",
+      this.destroy$
+    );
+    this.projectFormAutosaveService.bindDraftCleanupAutosave(
+      this.coverImageAddress,
+      "coverImageAddress",
+      this.destroy$
+    );
   }
 
   /**
@@ -159,19 +111,12 @@ export class ProjectFormService {
     }
 
     achievements.forEach((achievement, index) => {
-      const achievementGroup = this.fb.group({
-        id: achievement.id ?? index,
-        title: [achievement.title || "", Validators.required],
-        status: [
-          achievement.status || "",
-          [
-            Validators.required,
-            Validators.min(2000),
-            Validators.max(currentYear),
-            Validators.pattern(/^\d{4}$/),
-          ],
-        ],
-      });
+      const achievementGroup = createProjectAchievementGroup(
+        this.fb,
+        achievement,
+        index,
+        currentYear
+      );
       achievementsFormArray.push(achievementGroup);
     });
   }

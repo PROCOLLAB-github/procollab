@@ -42,6 +42,7 @@ import { SKILLS_PROVIDERS } from "./infrastructure/di/skills.providers";
 import { SPECIALIZATIONS_PROVIDERS } from "./infrastructure/di/specializations.providers";
 import { VACANCY_PROVIDERS } from "./infrastructure/di/vacancy.providers";
 import { COURSES_PROVIDERS } from "./infrastructure/di/courses/courses.providers";
+import { CHAT_PROVIDERS } from "./infrastructure/di/chat.providers";
 
 registerLocaleData(localeRu, "ru-RU");
 
@@ -111,5 +112,6 @@ export const APP_CONFIG: ApplicationConfig = {
     ...SPECIALIZATIONS_PROVIDERS,
     ...VACANCY_PROVIDERS,
     ...COURSES_PROVIDERS,
+    ...CHAT_PROVIDERS,
   ],
 };

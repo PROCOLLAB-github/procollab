@@ -23,6 +23,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";
 import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент навигационного меню
@@ -104,6 +105,7 @@ export class NavComponent implements OnInit, OnDestroy {
   mobileMenuOpen = false;
   notificationsOpen = false;
   title = "";
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    * Проверка наличия непринятых приглашений
@@ -156,7 +158,7 @@ export class NavComponent implements OnInit, OnDestroy {
         this.mobileMenuOpen = false;
 
         this.router
-          .navigateByUrl(`/office/projects/${invite.project.id}`)
+          .navigateByUrl(AppRoutes.projects.detail(invite.project.id))
           .then(() => this.logger.debug("Route changed from HeaderComponent"));
       });
   }

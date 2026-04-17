@@ -6,7 +6,8 @@ import { NavService } from "@ui/services/nav/nav.service";
 import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil, tap } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
-import { CreateProjectUseCase } from "../use-case/create-project.use-case";
+import { CreateProjectUseCase } from "../use-cases/create-project.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class ProjectsInfoService {
@@ -81,7 +82,7 @@ export class ProjectsInfoService {
           if (!result.ok) return;
 
           this.router
-            .navigate([`/office/projects/${result.value.id}/edit`], {
+            .navigate([AppRoutes.projects.edit(result.value.id)], {
               queryParams: { editingStep: "main", fromProgram },
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));

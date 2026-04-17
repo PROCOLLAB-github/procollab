@@ -6,7 +6,7 @@ import { HttpParams } from "@angular/common/http";
 import { ResolveFn } from "@angular/router";
 import { map } from "rxjs";
 import { Project } from "@domain/project/project.model";
-import { GetMyProjectsUseCase } from "@api/project/use-case/get-my-projects.use-case";
+import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ПОЛУЧЕНИЯ ПРОЕКТОВ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ

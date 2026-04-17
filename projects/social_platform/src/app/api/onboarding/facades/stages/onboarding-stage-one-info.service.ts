@@ -12,6 +12,7 @@ import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { SpecializationsGroup } from "@domain/specializations/specializations-group";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { failure, initial, loading } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class OnboardingStageOneInfoService {
@@ -97,7 +98,7 @@ export class OnboardingStageOneInfoService {
     this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value);
     this.router.navigateByUrl(
-      stage === 2 ? `/office/onboarding/stage-${stage}` : "/office/onboarding/stage-3"
+      stage === 2 ? AppRoutes.onboarding.stage(stage) : AppRoutes.onboarding.stage(3)
     );
     this.skipSubmitting.set(initial());
   }

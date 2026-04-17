@@ -7,6 +7,7 @@ import { filter, interval, map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ResendEmailUseCase } from "../use-cases/resend-email.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class AuthEmailService {
@@ -34,7 +35,7 @@ export class AuthEmailService {
 
       if (this.tokenService.getTokens() !== null) {
         this.router
-          .navigateByUrl("/office")
+          .navigateByUrl(AppRoutes.office.root())
           .then(() => this.logger.debug("Route changed from ConfirmEmailComponent"));
       }
     });

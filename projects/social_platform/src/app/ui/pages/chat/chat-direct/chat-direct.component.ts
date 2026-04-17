@@ -5,8 +5,8 @@ import { RouterLink } from "@angular/router";
 import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { BackComponent } from "@uilib";
-import { ChatDirectInfoService } from "@api/chat/facedes/chat-direct-info.service";
-import { ChatDirectUIInfoService } from "@api/chat/facedes/ui/chat-direct-ui-info.service";
+import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.service";
+import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
 
 /**
  * Компонент для отображения конкретного прямого чата

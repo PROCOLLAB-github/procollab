@@ -22,9 +22,10 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";
 import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-case";
-import { AddProjectSubscriptionUseCase } from "@api/project/use-case/add-project-subscription.use-case";
-import { DeleteProjectSubscriptionUseCase } from "@api/project/use-case/delete-project-subscription.use-case";
+import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-project-subscription.use-case";
+import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -271,7 +272,7 @@ export class InfoCardComponent {
    */
   redirectToProjects(): void {
     this.router
-      .navigateByUrl(`/office/projects/all`)
+      .navigateByUrl(AppRoutes.projects.all())
       .then(() => this.logger.debug("Route change from ProjectsComponent"));
   }
 

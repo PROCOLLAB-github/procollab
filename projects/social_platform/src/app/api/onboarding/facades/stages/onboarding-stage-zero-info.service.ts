@@ -10,6 +10,7 @@ import { User } from "@domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { failure, initial, loading } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class OnboardingStageZeroInfoService {
@@ -115,7 +116,7 @@ export class OnboardingStageZeroInfoService {
     this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value as Partial<User>);
     this.router.navigateByUrl(
-      stage === 1 ? "/office/onboarding/stage-1" : "/office/onboarding/stage-3"
+      stage === 1 ? AppRoutes.onboarding.stage(1) : AppRoutes.onboarding.stage(3)
     );
     this.skipSubmitting.set(initial());
   }

@@ -9,10 +9,10 @@ import { Goal } from "@domain/project/goals.model";
 import { Partner } from "@domain/project/partner.model";
 import { Resource } from "@domain/project/resource.model";
 import { GetProjectInvitesUseCase } from "@api/invite/use-cases/get-project-invites.use-case";
-import { GetProjectUseCase } from "@api/project/use-case/get-project.use-case";
-import { GetProjectGoalsUseCase } from "@api/project/use-case/get-project-goals.use-case";
-import { GetProjectPartnersUseCase } from "@api/project/use-case/get-project-partners.use-case";
-import { GetProjectResourcesUseCase } from "@api/project/use-case/get-project-resources.use-case";
+import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
+import { GetProjectGoalsUseCase } from "@api/project/use-cases/get-project-goals.use-case";
+import { GetProjectPartnersUseCase } from "@api/project/use-cases/get-project-partners.use-case";
+import { GetProjectResourcesUseCase } from "@api/project/use-cases/get-project-resources.use-case";
 
 /**
  * Resolver для загрузки данных редактирования проекта

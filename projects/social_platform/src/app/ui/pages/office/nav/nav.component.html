@@ -34,7 +34,7 @@
         (click)="notificationsOpen = !notificationsOpen"
       >
         <i
-          routerLink="chats"
+          [routerLink]="AppRoutes.office.chats()"
           appIcon
           icon="chats"
           appWidth="23"
@@ -51,25 +51,41 @@
     @if (!notificationsOpen) {
     <nav class="nav nav--vertical">
       <ul class="nav__list">
-        <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
+        <a
+          class="nav__link"
+          [routerLink]="AppRoutes.office.feed()"
+          routerLinkActive="nav__link--active"
+        >
           <li class="text-body-14 nav__item">
             <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20"></i>
             Новости
           </li>
         </a>
-        <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
+        <a
+          class="nav__link"
+          [routerLink]="AppRoutes.projects.all()"
+          routerLinkActive="nav__link--active"
+        >
           <li class="text-body-14 nav__item">
             <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
             Проекты
           </li>
         </a>
-        <a class="nav__link" routerLink="program/list" routerLinkActive="nav__link--active">
+        <a
+          class="nav__link"
+          [routerLink]="AppRoutes.program.list()"
+          routerLinkActive="nav__link--active"
+        >
           <li class="text-body-14 nav__item">
             <i appIcon icon="program" appSquare="24" appViewBox="0 0 24 16"></i>
             Программы
           </li>
         </a>
-        <a class="nav__link" routerLink="members" routerLinkActive="nav__link--active">
+        <a
+          class="nav__link"
+          [routerLink]="AppRoutes.members.root()"
+          routerLinkActive="nav__link--active"
+        >
           <li class="text-body-14 nav__item">
             <i appIcon icon="people-bold" appSquare="24" appViewBox="0 0 24 18"></i>
             Участники
@@ -81,7 +97,11 @@
             Эксперты
           </li>
         </a>
-        <a class="nav__link" routerLink="vacancies" routerLinkActive="nav__link--active">
+        <a
+          class="nav__link"
+          [routerLink]="AppRoutes.office.vacancies()"
+          routerLinkActive="nav__link--active"
+        >
           <li class="text-body-14 nav__item">
             <i appIcon icon="search-sidebar" appSquare="24" appViewBox="0 0 28 20"></i>
             Вакансии

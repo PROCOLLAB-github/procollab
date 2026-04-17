@@ -25,7 +25,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
 import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
 import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
-import { GetProjectSubscriptionsUseCase } from "../../../project/use-case/get-project-subscriptions.use-case";
+import { GetProjectSubscriptionsUseCase } from "../../../project/use-cases/get-project-subscriptions.use-case";
 import { FilterProjectRatingsUseCase } from "../../use-cases/filter-project-ratings.use-case";
 import { GetProjectRatingsUseCase } from "../../use-cases/get-project-ratings.use-case";
 import Fuse from "fuse.js";

@@ -4,7 +4,8 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { LeaveProjectUseCase } from "@api/project/use-case/leave-project.use-case";
+import { LeaveProjectUseCase } from "@api/project/use-cases/leave-project.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class DetailProjectInfoService {
@@ -72,13 +73,13 @@ export class DetailProjectInfoService {
         }
 
         this.router
-          .navigateByUrl("/office/projects/my")
+          .navigateByUrl(AppRoutes.projects.my())
           .then(() => this.logger.debug("Route changed from ProjectInfoComponent"));
       });
   }
 
   routingToMyProjects(): void {
-    this.router.navigateByUrl(`/office/projects/my`);
+    this.router.navigateByUrl(AppRoutes.projects.my());
   }
 
   applyUpdateStage(

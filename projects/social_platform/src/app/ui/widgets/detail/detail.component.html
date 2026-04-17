@@ -21,7 +21,7 @@
           [class.info__avatar--program]="listType() === 'program'"
           [style.width]="listType() === 'project' || listType() === 'profile' ? '110px' : '123px'"
         >
-          @if (chatService.userOnlineStatusCache | async; as cache) {
+          @if (chatStateService.userOnlineStatusCache | async; as cache) {
           <app-avatar
             [url]="listType() === 'profile' ? info().avatar : info().imageAddress"
             [hasBorder]="true"

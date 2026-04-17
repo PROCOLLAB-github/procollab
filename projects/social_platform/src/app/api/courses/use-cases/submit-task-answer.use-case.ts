@@ -12,7 +12,7 @@ export class SubmitTaskAnswerUseCase {
 
   execute(
     taskId: number,
-    answerText?: any,
+    answerText?: string,
     optionIds?: number[],
     fileIds?: number[]
   ): Observable<Result<TaskAnswerResponse, { kind: "submit_answer_error"; cause?: unknown }>> {

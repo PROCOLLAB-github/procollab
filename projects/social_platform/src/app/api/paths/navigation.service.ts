@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { Router } from "@angular/router";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable({ providedIn: "root" })
 export class NavigationService {
@@ -13,7 +14,7 @@ export class NavigationService {
     if (!profileId) return;
 
     this.router
-      .navigateByUrl(`/office/profile/${profileId}`)
+      .navigateByUrl(AppRoutes.profile.detail(profileId))
       .then(() => this.logger.debug("Router Changed form ProfileEditComponent"));
   }
 }

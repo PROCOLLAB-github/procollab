@@ -6,8 +6,8 @@ import { map, of, switchMap } from "rxjs";
 import { ProjectSubscriber } from "@domain/project/project-subscriber.model";
 import { Project } from "@domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
-import { GetProjectUseCase } from "@api/project/use-case/get-project.use-case";
-import { GetProjectSubscribersUseCase } from "@api/project/use-case/get-project-subscribers.use-case";
+import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
+import { GetProjectSubscribersUseCase } from "@api/project/use-cases/get-project-subscribers.use-case";
 
 /**
  * Резолвер для загрузки данных проекта и его подписчиков

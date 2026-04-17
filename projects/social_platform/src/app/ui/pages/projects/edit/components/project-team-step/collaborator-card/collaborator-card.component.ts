@@ -19,7 +19,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { IconComponent } from "@uilib";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { RemoveProjectCollaboratorUseCase } from "@api/project/use-case/remove-project-collaborator.use-case";
+import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
 
 /**
  * Компонент карточки участника команды или проект

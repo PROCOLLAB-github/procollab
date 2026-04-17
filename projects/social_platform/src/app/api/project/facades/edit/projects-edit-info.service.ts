@@ -41,8 +41,8 @@ import { ProjectVacancyService } from "./project-vacancy.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { AssignProjectProgramUseCase } from "../../../program/use-cases/assign-project-program";
-import { DeleteProjectUseCase } from "../../use-case/delete-project.use-case";
-import { UpdateFormUseCase } from "../../use-case/update-form.use-case";
+import { DeleteProjectUseCase } from "../../use-cases/delete-project.use-case";
+import { UpdateFormUseCase } from "../../use-cases/update-form.use-case";
 import {
   AsyncState,
   failure,
@@ -51,6 +51,7 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class ProjectsEditInfoService {
@@ -200,9 +201,9 @@ export class ProjectsEditInfoService {
           }
 
           this.projectsEditUIInfoService.applyOpenAssignProjectModal(r.value);
-          this.router.navigateByUrl(
-            `/office/projects/${r.value.newProjectId}/edit?editingStep=main`
-          );
+          this.router.navigate([AppRoutes.projects.edit(r.value.newProjectId)], {
+            queryParams: { editingStep: "main" },
+          });
         },
       });
   }
@@ -232,9 +233,9 @@ export class ProjectsEditInfoService {
           }
 
           if (this.fromProgram()) {
-            this.router.navigateByUrl(`/office/program/${programId}`);
+            this.router.navigateByUrl(AppRoutes.program.detail(programId));
           } else {
-            this.router.navigateByUrl(`/office/projects/my`);
+            this.router.navigateByUrl(AppRoutes.projects.my());
           }
         },
       });
@@ -549,7 +550,7 @@ export class ProjectsEditInfoService {
     this.snackBarService.success("данные успешно сохранены");
     this.submitMode.set(null);
     this.projFormIsSubmitting$.set(success(undefined));
-    this.router.navigateByUrl(`/office/projects/${projectId}`);
+    this.router.navigateByUrl(AppRoutes.projects.detail(projectId));
   }
 
   private handleProjectSubmitError(error?: unknown): void {

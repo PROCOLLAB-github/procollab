@@ -6,7 +6,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ProjectsDashboardUIInfoService } from "./ui/projects-dashboard-ui-info.service";
 import { ProjectsService } from "../../projects.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import { GetProjectSubscriptionsUseCase } from "../../use-case/get-project-subscriptions.use-case";
+import { GetProjectSubscriptionsUseCase } from "../../use-cases/get-project-subscriptions.use-case";
 
 @Injectable()
 export class ProjectsDashboardInfoService {

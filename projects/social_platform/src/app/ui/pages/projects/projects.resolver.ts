@@ -6,9 +6,9 @@ import { ResolveFn } from "@angular/router";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
-import { GetAllProjectsUseCase } from "@api/project/use-case/get-all-projects.use-case";
-import { GetMyProjectsUseCase } from "@api/project/use-case/get-my-projects.use-case";
-import { GetProjectSubscriptionsUseCase } from "@api/project/use-case/get-project-subscriptions.use-case";
+import { GetAllProjectsUseCase } from "@api/project/use-cases/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**

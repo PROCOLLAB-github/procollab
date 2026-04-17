@@ -6,6 +6,7 @@ import { filter, map, Subject, takeUntil } from "rxjs";
 import { CourseDetail, CourseStructure } from "@domain/courses/courses.model";
 import { CourseDetailUIInfoService } from "./ui/course-detail-ui-info.service";
 import { loading, success } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class CourseDetailInfoService {
@@ -26,18 +27,15 @@ export class CourseDetailInfoService {
   }
 
   redirectDetailInfo(courseId?: number): void {
-    if (courseId != null) {
-      this.router.navigateByUrl(`/office/courses/${courseId}`);
-    } else {
-      this.router.navigateByUrl("/office/courses/all");
-    }
+    const url = courseId != null ? AppRoutes.courses.detail(courseId) : AppRoutes.courses.list();
+    this.router.navigateByUrl(url);
   }
 
   redirectToProgram(): void {
     const course = this.courseDetailUIInfoService.course();
     if (!course) return;
 
-    this.router.navigate([`/office/program/${course.partnerProgramId}`], {
+    this.router.navigate([AppRoutes.program.detail(course.partnerProgramId)], {
       queryParams: { courseId: course.id },
     });
   }

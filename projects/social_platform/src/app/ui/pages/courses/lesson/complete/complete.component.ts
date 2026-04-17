@@ -4,6 +4,7 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/primitives";
 import { ActivatedRoute, Router } from "@angular/router";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент завершения задачи
@@ -34,6 +35,6 @@ export class TaskCompleteComponent implements OnInit {
 
   routeToCourses(): void {
     const id = this.courseId();
-    this.router.navigate(id ? ["/office/courses", id] : ["/office/courses/all"]);
+    this.router.navigateByUrl(id ? AppRoutes.courses.detail(id) : AppRoutes.courses.list());
   }
 }

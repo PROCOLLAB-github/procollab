@@ -8,6 +8,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
 import { FeedNews } from "@domain/project/project-news.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * КОМПОНЕНТ ДЕТАЛЬНОЙ НОВОСТИ
@@ -65,7 +66,7 @@ export class NewsDetailComponent implements OnInit {
       const projectId = this.route.parent?.snapshot.params["projectId"];
       // Навигируем обратно к странице проекта
       this.router
-        .navigateByUrl(`/office/projects/${projectId}`)
+        .navigateByUrl(AppRoutes.projects.detail(projectId))
         .then(() => this.logger.debug("Route changed from NewsDetailComponent"));
     }
   }

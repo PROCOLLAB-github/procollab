@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { map } from "rxjs";
-import { GetMembersUseCase } from "@api/member/use-case/get-members.use-case";
+import { GetMembersUseCase } from "@api/member/use-cases/get-members.use-case";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
 

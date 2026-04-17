@@ -20,6 +20,7 @@ import { LoadingService } from "@ui/services/loading/loading.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Корневой компонент приложения
@@ -77,12 +78,12 @@ export class AppComponent implements OnInit {
     if (location.pathname === "/") {
       if (this.tokenService.getTokens() === null) {
         this.router
-          .navigateByUrl("/auth/login")
+          .navigateByUrl(AppRoutes.auth.login())
           .then(() => this.logger.debug("Route changed from AppComponent"));
       } else {
         this.logger.debug("Route start changing from AppComponent");
         this.router
-          .navigateByUrl("/office")
+          .navigateByUrl(AppRoutes.office.root())
           .then(() => this.logger.debug("Route changed From AppComponent"));
       }
     }

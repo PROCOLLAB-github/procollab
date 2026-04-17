@@ -9,6 +9,7 @@ import { RegisterUseCase } from "../use-cases/register.use-case";
 import { toAsyncState } from "@domain/shared/to-async-state";
 import { RegisterError } from "@domain/auth/results/register.result";
 import { isFailure } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class AuthRegisterService {
@@ -62,7 +63,9 @@ export class AuthRegisterService {
       .pipe(
         tap(result => {
           if (result.ok) {
-            this.router.navigateByUrl("/auth/verification/email?adress=" + form.email);
+            this.router.navigate([AppRoutes.auth.verifyEmail()], {
+              queryParams: { adress: form.email },
+            });
           }
         }),
         toAsyncState<void, RegisterError>(),

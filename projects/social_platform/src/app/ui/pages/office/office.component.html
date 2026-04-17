@@ -29,7 +29,7 @@
             <div class="office__programs">
               @if (programs().length) { @for (program of programs(); track program.id) {
               <app-program-sidebar-card
-                [routerLink]="'/office/program/' + program.id"
+                [routerLink]="AppRoutes.program.detail(program.id)"
                 [program]="program"
               ></app-program-sidebar-card>
               } }
@@ -41,7 +41,7 @@
             <app-profile-control-panel
               [invites]="invites()"
               [hasNotifications]="false"
-              [hasUnreads]="!!(chatService.unread$ | async)"
+              [hasUnreads]="!!(chatStateService.unread$ | async)"
               [user]="user"
               (acceptInvite)="onAcceptInvite($event)"
               (rejectInvite)="onRejectInvite($event)"

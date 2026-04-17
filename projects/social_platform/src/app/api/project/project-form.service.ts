@@ -15,7 +15,7 @@ import { stripNullish } from "@utils/stripNull";
 import { concatMap, filter } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
-import { UpdateFormUseCase } from "./use-case/update-form.use-case";
+import { UpdateFormUseCase } from "./use-cases/update-form.use-case";
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.

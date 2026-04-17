@@ -3,7 +3,6 @@
 import { inject, Injectable } from "@angular/core";
 import { map, Subject, takeUntil, tap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ChatService } from "../../chat/chat.service";
 import { Invite } from "@domain/invite/invite.model";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
@@ -11,6 +10,12 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RejectInviteUseCase } from "../../invite/use-cases/reject-invite.use-case";
 import { AcceptInviteUseCase } from "../../invite/use-cases/accept-invite.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
+import { CheckUnreadsUseCase } from "@api/chat/use-cases/check-unreads.use-case";
+import { ConnectChatUseCase } from "@api/chat/use-cases/connect-chat.use-case";
+import { ObserveSetOfflineUseCase } from "@api/chat/use-cases/observe-set-offline.use-case";
+import { ObserveSetOnlineUseCase } from "@api/chat/use-cases/observe-set-online.use-case";
+import { ChatStateService } from "@api/chat/chat-state.service";
 
 @Injectable()
 export class OfficeInfoService {
@@ -20,9 +25,13 @@ export class OfficeInfoService {
 
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
+  private readonly checkUnreadsUseCase = inject(CheckUnreadsUseCase);
+  private readonly connectChatUseCase = inject(ConnectChatUseCase);
+  private readonly observeSetOfflineUseCase = inject(ObserveSetOfflineUseCase);
+  private readonly observeSetOnlineUseCase = inject(ObserveSetOnlineUseCase);
 
   private readonly router = inject(Router);
-  private readonly chatService = inject(ChatService);
+  private readonly chatStateService = inject(ChatStateService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -40,11 +49,15 @@ export class OfficeInfoService {
     this.initializationStatus();
 
     if (!this.router.url.includes("chats")) {
-      this.chatService
-        .hasUnreads()
+      this.checkUnreadsUseCase
+        .execute()
         .pipe(takeUntil(this.destroy$))
-        .subscribe(unreads => {
-          this.chatService.unread$.next(unreads);
+        .subscribe(result => {
+          if (!result.ok) {
+            return;
+          }
+
+          this.chatStateService.setUnread(result.value);
         });
     }
 
@@ -59,7 +72,7 @@ export class OfficeInfoService {
 
           if (!profile?.doesCompleted()) {
             this.router
-              .navigateByUrl("/office/onboarding")
+              .navigateByUrl(AppRoutes.onboarding.root())
               .then(() => this.logger.debug("Route changed from OfficeComponent"));
           } else if (
             profile?.verificationDate === null &&
@@ -74,20 +87,20 @@ export class OfficeInfoService {
   }
 
   private initializationStatus(): void {
-    this.chatService.connect().pipe(takeUntil(this.destroy$)).subscribe();
+    this.connectChatUseCase.execute().pipe(takeUntil(this.destroy$)).subscribe();
 
-    this.chatService
-      .onSetOffline()
+    this.observeSetOfflineUseCase
+      .execute()
       .pipe(takeUntil(this.destroy$))
       .subscribe(evt => {
-        this.chatService.setOnlineStatus(evt.userId, false);
+        this.chatStateService.setOnlineStatus(evt.userId, false);
       });
 
-    this.chatService
-      .onSetOnline()
+    this.observeSetOnlineUseCase
+      .execute()
       .pipe(takeUntil(this.destroy$))
       .subscribe(evt => {
-        this.chatService.setOnlineStatus(evt.userId, true);
+        this.chatStateService.setOnlineStatus(evt.userId, true);
       });
   }
 
@@ -140,7 +153,7 @@ export class OfficeInfoService {
           this.invites.update(invites => invites.filter(invite => invite.id !== inviteId));
 
           this.router
-            .navigateByUrl(`/office/projects/${invite.project.id}`)
+            .navigateByUrl(AppRoutes.projects.detail(invite.project.id))
             .then(() => this.logger.debug("Route changed from SidebarComponent"));
         }),
         takeUntil(this.destroy$)
@@ -154,7 +167,7 @@ export class OfficeInfoService {
       .pipe(
         tap(() => {
           this.router
-            .navigateByUrl("/auth")
+            .navigateByUrl(AppRoutes.auth.login())
             .then(() => this.logger.debug("Route changed from OfficeComponent"));
         }),
         takeUntil(this.destroy$)

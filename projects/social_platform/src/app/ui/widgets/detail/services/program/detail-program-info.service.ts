@@ -12,6 +12,7 @@ import { Router } from "@angular/router";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { Program } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class DetailProgramInfoService {
@@ -66,7 +67,7 @@ export class DetailProgramInfoService {
           const response = result.value;
 
           this.router
-            .navigate([`/office/projects/${response.projectId}/edit`], {
+            .navigate([AppRoutes.projects.edit(response.projectId)], {
               queryParams: { editingStep: "main", fromProgram: true },
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));
@@ -93,7 +94,7 @@ export class DetailProgramInfoService {
       event.stopPropagation();
       this.isProgramSubmissionProjectsEndedModalOpen.set(true);
     } else {
-      this.router.navigateByUrl("/office/program/" + program.id + "/register");
+      this.router.navigateByUrl(AppRoutes.program.register(program.id));
     }
   }
 

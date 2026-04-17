@@ -19,12 +19,13 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { NavComponent } from "./nav/nav.component";
 import { SnackbarComponent } from "./snackbar/snackbar.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
-import { ChatService } from "@api/chat/chat.service";
 import { GetActualProgramsUseCase } from "@api/program/use-cases/get-actual-programs.use-case";
 import { Program } from "@domain/program/program.model";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+import { ChatStateService } from "@api/chat/chat-state.service";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -65,7 +66,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly getActualProgramsUseCase = inject(GetActualProgramsUseCase);
   public readonly authRepository = inject(AuthInfoService);
-  public readonly chatService = inject(ChatService);
+  public readonly chatStateService = inject(ChatStateService);
   private readonly profile = toSignal(this.authRepository.profile, { initialValue: null });
 
   readonly invites = this.officeInfoService.invites;
@@ -82,6 +83,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   readonly programs = signal<Program[]>([]);
 
   readonly navItems = this.officeUIInfoService.navItems;
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.officeInfoService.initializationOffice();

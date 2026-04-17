@@ -17,8 +17,8 @@ import { FileItemComponent } from "@ui/primitives/file-item/file-item.component"
 import { IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
-import { ChatDirectInfoService } from "@api/chat/facedes/chat-direct-info.service";
-import { ChatDirectUIInfoService } from "@api/chat/facedes/ui/chat-direct-ui-info.service";
+import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.service";
+import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
 
 /**
  * Компонент чата проекта
@@ -33,7 +33,7 @@ import { ChatDirectUIInfoService } from "@api/chat/facedes/ui/chat-direct-ui-inf
  *
  * Принимает:
  * - Данные проекта через ActivatedRoute
- * - WebSocket события через ChatService
+ * - WebSocket события через chat use-case слой
  * - Профиль пользователя через AuthService
  *
  * Предоставляет:

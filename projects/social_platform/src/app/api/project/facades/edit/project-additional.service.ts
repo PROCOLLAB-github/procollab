@@ -8,8 +8,8 @@ import {
   ProjectNewAdditionalProgramFields,
 } from "@domain/program/partner-program-fields.model";
 import { Observable } from "rxjs";
-import { SendProjectAdditionalFieldsUseCase } from "../../use-case/send-project-additional-fields.use-case";
-import { SubmitCompetitiveProjectUseCase } from "../../use-case/submit-competitive-project.use-case";
+import { SendProjectAdditionalFieldsUseCase } from "../../use-cases/send-project-additional-fields.use-case";
+import { SubmitCompetitiveProjectUseCase } from "../../use-cases/submit-competitive-project.use-case";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 
 /**

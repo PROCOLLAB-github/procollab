@@ -10,6 +10,7 @@ import { ResetPasswordUseCase } from "../use-cases/reset-password.use-case";
 import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
 import { toAsyncState } from "@domain/shared/to-async-state";
 import { PasswordError } from "@domain/auth/results/password.result";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class AuthPasswordService {
@@ -59,7 +60,7 @@ export class AuthPasswordService {
         tap(result => {
           if (result.ok) {
             this.router
-              .navigate(["/auth/reset_password/confirm"], {
+              .navigate([AppRoutes.auth.resetPasswordConfirm()], {
                 queryParams: { email: this.resetForm.value.email },
               })
               .then(() => this.logger.debug("ResetPasswordComponent"));
@@ -91,7 +92,7 @@ export class AuthPasswordService {
         tap(result => {
           if (result.ok) {
             this.router
-              .navigateByUrl("/auth/login")
+              .navigateByUrl(AppRoutes.auth.login())
               .then(() => this.logger.debug("SetPasswordComponent"));
           } else {
             this.logger.error("Error setting password:", result.error);

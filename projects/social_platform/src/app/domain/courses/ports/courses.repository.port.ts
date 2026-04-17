@@ -20,7 +20,7 @@ export abstract class CoursesRepositoryPort {
 
   abstract postAnswerQuestion(
     taskId: number,
-    answerText?: any,
+    answerText?: string,
     optionIds?: number[],
     fileIds?: number[]
   ): Observable<TaskAnswerResponse>;

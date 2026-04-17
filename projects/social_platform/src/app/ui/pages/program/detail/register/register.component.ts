@@ -11,6 +11,7 @@ import { RegisterProgramUseCase } from "@api/program/use-cases/register-program.
 import { ProgramDataSchema } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент регистрации в программе
@@ -107,7 +108,7 @@ export class ProgramRegisterComponent implements OnInit {
         }
 
         this.router
-          .navigateByUrl(`/office/program/${this.route.snapshot.params["programId"]}`)
+          .navigateByUrl(AppRoutes.program.detail(this.route.snapshot.params["programId"]))
           .then(() => this.logger.debug("Route changed from ProgramRegisterComponent"));
       });
   }

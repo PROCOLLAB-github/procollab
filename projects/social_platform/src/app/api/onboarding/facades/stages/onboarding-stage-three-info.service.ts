@@ -9,6 +9,7 @@ import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-u
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { loading } from "@domain/shared/async-state";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class OnboardingStageThreeInfoService {
@@ -51,7 +52,7 @@ export class OnboardingStageThreeInfoService {
         concatMap(() => this.authRepository.updateOnboardingStage(null)),
         tap(() => {
           this.router
-            .navigateByUrl("/office")
+            .navigateByUrl(AppRoutes.office.root())
             .then(() => this.logger.debug("Route changed from OnboardingStageTwo"));
         }),
         takeUntil(this.destroy$)

@@ -13,7 +13,6 @@ import { ApproveSkillComponent } from "./approve-skill/approve-skill.component";
 import { ControlErrorPipe } from "@corelib";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { ProfileService } from "@api/auth/profile.service";
-import { ChatService } from "@api/chat/chat.service";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
@@ -24,6 +23,7 @@ import { DetailProgramInfoService } from "./services/program/detail-program-info
 import { DetailProjectInfoService } from "./services/project/detail-project-info.service";
 import { Program } from "@domain/program/program.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ChatStateService } from "@api/chat/chat-state.service";
 
 @Component({
   selector: "app-detail",
@@ -59,7 +59,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);
   public readonly skillsProfileService = inject(ProfileService);
-  public readonly chatService = inject(ChatService);
+  public readonly chatStateService = inject(ChatStateService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
 

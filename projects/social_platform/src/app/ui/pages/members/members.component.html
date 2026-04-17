@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <section class="page" #membersRoot>
-  <app-back namespace="участники" path="/office/feed"></app-back>
+  <app-back namespace="участники" [path]="AppRoutes.office.feed()"></app-back>
 
   <div class="page__bar">
     <div class="page__info">
@@ -16,7 +16,7 @@
 
         <ul class="page__list">
           @for (member of members(); track member.id) {
-          <a [routerLink]="['/office/profile', member.id]">
+          <a [routerLink]="AppRoutes.profile.detail(member.id)">
             <li>
               <app-info-card type="members" [info]="member"></app-info-card>
             </li>
