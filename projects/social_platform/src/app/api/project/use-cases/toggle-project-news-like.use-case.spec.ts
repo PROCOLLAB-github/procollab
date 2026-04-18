@@ -24,7 +24,7 @@ describe("ToggleProjectNewsLikeUseCase", () => {
 
   it("делегирует (projectId, newsId, state) в toggleLike", () => {
     setup();
-    repo.toggleLike.and.returnValue(of(42));
+    repo.toggleLike.and.returnValue(of(undefined));
 
     useCase.execute("p1", 42, true).subscribe();
 
@@ -33,7 +33,7 @@ describe("ToggleProjectNewsLikeUseCase", () => {
 
   it("при успехе возвращает ok c newsId", done => {
     setup();
-    repo.toggleLike.and.returnValue(of(42));
+    repo.toggleLike.and.returnValue(of(undefined));
 
     useCase.execute("p1", 42, true).subscribe(result => {
       expect(result.ok).toBeTrue();

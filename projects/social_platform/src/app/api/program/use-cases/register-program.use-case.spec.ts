@@ -4,6 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { RegisterProgramUseCase } from "./register-program.use-case";
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+import { ProgramDataSchema } from "@domain/program/program.model";
 
 describe("RegisterProgramUseCase", () => {
   let useCase: RegisterProgramUseCase;
@@ -26,7 +27,7 @@ describe("RegisterProgramUseCase", () => {
 
   it("делегирует вызов в репозиторий с теми же аргументами", () => {
     setup();
-    repositoryPort.register.and.returnValue(of({} as null));
+    repositoryPort.register.and.returnValue(of({} as ProgramDataSchema));
 
     useCase.execute(42, { city: "Москва" }).subscribe();
 
@@ -36,7 +37,7 @@ describe("RegisterProgramUseCase", () => {
   it("при успехе возвращает Result.ok с данными из репозитория", done => {
     setup();
     const payload = { city: { name: "Город", placeholder: "" } } as never;
-    repositoryPort.register.and.returnValue(of(payload));
+    repositoryPort.register.and.returnValue(of(payload as ProgramDataSchema));
 
     useCase.execute(1, {}).subscribe(result => {
       expect(result.ok).toBe(true);
