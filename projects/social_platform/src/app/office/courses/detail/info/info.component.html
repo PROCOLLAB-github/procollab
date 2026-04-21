@@ -4,7 +4,7 @@
 <main class="trajectory">
   <section class="course__main">
     <div class="course__details">
-      @if (appWidth > 920) {
+      @if (appWidth > 1000) {
       <div class="course__left">
         <aside class="course__aside">
           <app-soon-card
@@ -34,7 +34,7 @@
         </div>
       </section>
 
-      @if (appWidth > 920) {
+      @if (appWidth > 1000) {
       <div class="course__right">
         <app-course-about [description]="courseDetail()!.description"></app-course-about>
       </div>

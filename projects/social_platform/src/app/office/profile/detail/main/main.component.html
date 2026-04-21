@@ -243,7 +243,7 @@
 
             <div class="lists__info">
               <p class="text-body-10 lists__info--text" style="margin: 0">
-                {{ education.organizationName | truncate: 30 }}
+                {{ education.organizationName | truncate: 20 }}
               </p>
 
               <span class="text-body-6 lists__info--subtext"
@@ -297,10 +297,12 @@
 
             <div class="lists__info">
               <p class="text-body-10 lists__info--text" style="margin: 0">
-                {{ workExperience.organizationName | truncate: 30 }}
+                {{ workExperience.organizationName | truncate: 20 }}
               </p>
 
-              <span class="text-body-6 lists__info--subtext">{{ workExperience.jobPosition }}</span>
+              <span class="text-body-6 lists__info--subtext">{{
+                workExperience.jobPosition | truncate: 30
+              }}</span>
 
               <span (click)="openWorkInfoModal()" class="text-body-6 lists__info--more"
                 >подробнее</span

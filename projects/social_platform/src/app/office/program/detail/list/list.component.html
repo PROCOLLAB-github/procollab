@@ -4,7 +4,7 @@
   class="page"
   #listRoot
   [style.grid-template-columns]="
-    appWidth < 920 ? '1fr' : listType === 'members' ? '10fr' : '8fr 2fr'
+    appWidth < 1000 ? '1fr' : listType === 'members' ? '10fr' : '8fr 2fr'
   "
 >
   <div class="page__outlet">
@@ -14,7 +14,7 @@
       </form>
     </div>
 
-    @if (appWidth < 920 && listType !== 'members') {
+    @if (appWidth < 1000 && listType !== 'members') {
     <div class="page__mobile-controls">
       <div class="page__mobile-filter-row">
         <div class="page__mobile-filter-row">
@@ -67,7 +67,7 @@
           <i appIcon icon="download" appSquare="18"></i>
         </app-button>
       </div>
-      } @else { @if (appWidth > 920) {
+      } @else { @if (appWidth > 1000) {
       <div class="page__mobile-export">
         <app-button
           [loader]="loadingExportRates()"
@@ -104,7 +104,7 @@
     </ul>
   </div>
 
-  @if (appWidth >= 920 && listType !== 'members') {
+  @if (appWidth >= 1000 && listType !== 'members') {
   <div class="page__create">
     <div class="page__left">
       @if (listType === 'projects' || listType === 'rating') {
@@ -145,7 +145,7 @@
               <i appIcon icon="download" appSquare="18"></i>
             </app-button>
           </div>
-          } @else { @if (appWidth > 920) {
+          } @else { @if (appWidth > 1000) {
           <div class="page__export">
             <app-button
               [loader]="loadingExportRates()"
@@ -176,7 +176,7 @@
       }
     </div>
   </div>
-  } @if (listType !== 'members' && listType !== 'projects' && appWidth >= 920) {
+  } @if (listType !== 'members' && listType !== 'projects' && appWidth >= 1000) {
   <div class="page__tooltip">
     <div class="tooltip">
       <app-tooltip color="grey" iconSize="40" (show)="isHintExpertsVisible.set(true)"></app-tooltip>

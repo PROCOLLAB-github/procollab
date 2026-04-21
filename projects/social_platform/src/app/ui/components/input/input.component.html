@@ -1,6 +1,11 @@
 <!-- @format -->
 
-<div class="field" [class.field--error]="error" [style.width]="size === 'small' ? '70px' : '100%'">
+<div
+  class="field"
+  [class.field--error]="error"
+  [style.width]="size === 'small' ? '70px' : '100%'"
+  (click)="focusInput()"
+>
   <div class="field__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
@@ -34,6 +39,7 @@
   <mat-datepicker #picker></mat-datepicker>
   } @else {
   <input
+    #nativeInput
     [value]="value"
     (input)="onInput($event)"
     (keydown.enter)="onEnter($event)"

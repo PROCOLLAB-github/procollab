@@ -539,8 +539,16 @@ export class DeatilComponent implements OnInit, OnDestroy {
         .subscribe({
           next: user => {
             this.info.set(user);
-            this.isProfileFill =
-              user.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
+            if (
+              user.id !== undefined &&
+              user.progress! < 100 &&
+              !this.hasSeenProfileFillModal(user.id)
+            ) {
+              this.isProfileFill = true;
+              this.markSeenProfileFillModal(user.id);
+            } else {
+              this.isProfileFill = false;
+            }
           },
         });
 
@@ -553,6 +561,26 @@ export class DeatilComponent implements OnInit, OnDestroy {
       });
 
       this.subscriptions.push(profileDataSub$, profileLeaderProjectsSub$);
+    }
+  }
+
+  private getProfileFillSeenKey(userId: number): string {
+    return `profile_${userId}_fill_modal_seen`;
+  }
+
+  private hasSeenProfileFillModal(userId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getProfileFillSeenKey(userId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenProfileFillModal(userId: number): void {
+    try {
+      localStorage.setItem(this.getProfileFillSeenKey(userId), "1");
+    } catch (e) {
+      // ignore storage errors
     }
   }
 

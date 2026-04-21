@@ -107,6 +107,14 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  downloadPolicy(event: Event): void {
+    event.stopPropagation();
+    const link = document.createElement("a");
+    link.href = "/assets/downloads/auth/shared/privacy_policy_2022.docx";
+    link.download = "Политика обработки персональных данных 2022.docx";
+    link.click();
+  }
+
   onSendForm(): void {
     if (!this.validationService.getFormValidation(this.registerForm)) {
       return;

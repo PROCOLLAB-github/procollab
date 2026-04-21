@@ -65,6 +65,10 @@
       align-items: center;
       cursor: pointer;
       transition: opacity 0.2s ease;
+      
+      label {
+        cursor: pointer;
+      }
 
       &--disabled {
         pointer-events: none;

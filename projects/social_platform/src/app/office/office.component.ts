@@ -14,7 +14,7 @@ import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./features/nav/nav.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ProgramSidebarCardComponent } from "./features/program-sidebar-card/program-sidebar-card.component";
@@ -39,6 +39,7 @@ import { Program } from "./program/models/program.model";
   styleUrl: "./office.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     SidebarComponent,
     NavComponent,
     RouterOutlet,
@@ -71,6 +72,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   );
 
   profile?: User;
+  protected currentYear = signal(new Date().getFullYear());
 
   waitVerificationModal = false;
   waitVerificationAccepted = false;
@@ -146,6 +148,13 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  downloadPolicy(): void {
+    const link = document.createElement("a");
+    link.href = "/assets/downloads/auth/shared/privacy_policy_2022.docx";
+    link.download = "Политика обработки персональных данных 2022.docx";
+    link.click();
   }
 
   onAcceptWaitVerification() {
