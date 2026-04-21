@@ -71,10 +71,10 @@ export const OFFICE_ROUTES: Routes = [
         path: "vacancies",
         loadChildren: () => import("./vacancies/vacancies.routes").then(c => c.VACANCIES_ROUTES),
       },
-      {
-        path: "chats",
-        loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
-      },
+      // {
+      //   path: "chats",
+      //   loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
+      // },
       {
         path: "**",
         redirectTo: "/error/404",

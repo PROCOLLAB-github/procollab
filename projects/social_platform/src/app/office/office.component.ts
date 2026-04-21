@@ -235,7 +235,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
       { name: "программы", icon: "program", link: "program" },
       { name: "курсы", icon: "trajectories", link: "courses" },
       { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
-      { name: "чаты", icon: "message", link: "chats" },
+      // { name: "чаты", icon: "message", link: "chats" },
     ];
   }
 }
