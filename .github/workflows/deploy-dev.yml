@@ -26,7 +26,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: dist/social_platform/
-          remote_path: /var/www/dev-stage
-          remote_user: ${{ secrets.DEV_DEPLOY_USER }}
-          remote_key: ${{ secrets.DEV_DEPLOY_KEY }}
-          remote_host: ${{ secrets.DEV_HOST }}
+          remote_path: /home/front/app
+          remote_user: front
+          remote_key: ${{ secrets.DEPLOY_KEY_FRONT_DEV }}
+          remote_host: dev.procollab.ru
