@@ -68,6 +68,10 @@
       cursor: pointer;
       transition: opacity 0.2s ease;
 
+      label {
+        cursor: pointer;
+      }
+
       &:hover {
         background-color: var(--light-gray);
       }

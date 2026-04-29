@@ -128,6 +128,10 @@
     }
   }
 
+  &__policy-link {
+    cursor: pointer;
+  }
+
   &__header {
     display: none;
     background-color: var(--white);

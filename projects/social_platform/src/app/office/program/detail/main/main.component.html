@@ -10,7 +10,7 @@
     </div>
     } @else {
     <div class="program__details">
-      @if (appWidth > 920) {
+      @if (appWidth > 1000) {
       <div class="program__left">
         <aside class="program__aside">
           @if (program.isUserMember) {
@@ -60,7 +60,7 @@
         </div>
       </div>
 
-      @if (appWidth > 920) {
+      @if (appWidth > 1000) {
       <div class="program__right">
         @if (program.isUserMember && program.links?.length) {
         <aside class="program__aside program__section">

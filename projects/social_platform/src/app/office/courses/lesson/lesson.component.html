@@ -2,8 +2,8 @@
 
 @if (lessonInfo()) {
 <div class="task">
-  <div class="task__wrapper" [class.task__wrapper--mobile]="appWidth < 920">
-    @if (appWidth >= 920) {
+  <div class="task__wrapper" [class.task__wrapper--mobile]="appWidth < 1000">
+    @if (appWidth >= 1000) {
     <div class="task__tasks">
       <p class="task__name text-bold-body-14">модуль {{ lessonInfo()?.moduleOrder }}</p>
       <p class="task__lesson text-body-12">урок {{ lessonOrder() }}</p>

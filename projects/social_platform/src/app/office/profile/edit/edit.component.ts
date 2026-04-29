@@ -22,8 +22,6 @@ import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from 
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import * as dayjs from "dayjs";
-import * as cpf from "dayjs/plugin/customParseFormat";
 import { NavService } from "@services/nav.service";
 import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
@@ -53,8 +51,7 @@ import { generateOptionsList } from "@utils/generate-options-list";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { navProfileItems } from "projects/core/src/consts/navigation/nav-profile-items.const";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
-
-dayjs.extend(cpf);
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент редактирования профиля пользователя
@@ -103,6 +100,7 @@ dayjs.extend(cpf);
     RouterModule,
     UploadFileComponent,
     FileItemComponent,
+    TruncatePipe,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -225,7 +223,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         lastName: profile.lastName ?? "",
         email: profile.email ?? "",
         userType: profile.userType ?? 1,
-        birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
+        birthday: profile.birthday ?? "",
         city: profile.city ?? "",
         coverImageAddress: profile.coverImageAddress ?? "",
         phoneNumber: profile.phoneNumber ?? "",
@@ -662,6 +660,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
+    const educationOverflow =
+      (this.profileForm.get("organizationName")?.value?.length ?? 0) > 100 ||
+      (this.profileForm.get("description")?.value?.length ?? 0) > 400;
+
+    if (educationOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
+      return;
+    }
+
     ["organizationName", "educationStatus"].forEach(name =>
       this.profileForm.get(name)?.clearValidators()
     );
@@ -799,6 +809,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   addWork() {
     if (!this.showWorkFields) {
       this.showWorkFields = true;
+      return;
+    }
+
+    const workOverflow =
+      (this.profileForm.get("organization")?.value?.length ?? 0) > 50 ||
+      (this.profileForm.get("descriptionWork")?.value?.length ?? 0) > 400;
+
+    if (workOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
       return;
     }
 
@@ -1068,6 +1090,28 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
+    const lengthLimits: { field: string; limit: number }[] = [
+      { field: "city", limit: 100 },
+      { field: "aboutMe", limit: 300 },
+      { field: "organizationName", limit: 100 },
+      { field: "description", limit: 400 },
+      { field: "organization", limit: 50 },
+      { field: "descriptionWork", limit: 400 },
+    ];
+
+    const hasLengthOverflow = lengthLimits.some(({ field, limit }) => {
+      const value = this.profileForm.get(field)?.value;
+      return typeof value === "string" && value.length > limit;
+    });
+
+    if (hasLengthOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
+      return;
+    }
+
     const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality", "city"].every(
       name => this.profileForm.get(name)?.valid
     );
@@ -1099,17 +1143,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       achievements,
       [this.userTypeMap[this.profileForm.value.userType]]: this.typeSpecific.value,
       typeSpecific: undefined,
-      birthday: this.profileForm.value.birthday
-        ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
-        : undefined,
+      birthday: this.profileForm.value.birthday || undefined,
       skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
-      phoneNumber:
-        typeof this.profileForm.value.phoneNumber === "string"
-          ? this.profileForm.value.phoneNumber.replace(/^([87])/, "+7")
-          : this.profileForm.value.phoneNumber,
+      phoneNumber: this.profileForm.value.phoneNumber
+        ? this.profileForm.value.phoneNumber.replace(/^\+?[87]/, "+7")
+        : null,
     };
-
-    console.log(newProfile);
 
     this.authService
       .saveProfile(newProfile)

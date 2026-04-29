@@ -5,7 +5,7 @@
     @if (info()) {
     <div class="info detail__section detail__info">
       <div class="info__cover" [class.info__cover--program]="listType === 'program'">
-        @if (appWidth > 920) {
+        @if (appWidth > 1000) {
         <img
           class="info__cover"
           [class.info__cover--program]="listType === 'program'"
@@ -24,7 +24,7 @@
           (click)="redirectDetailInfo()"
           [class.info__avatar--program]="listType === 'program'"
           [style.width]="
-            appWidth < 920
+            appWidth < 1000
               ? '105px'
               : listType === 'project' || listType === 'profile'
               ? '110px'
@@ -41,7 +41,7 @@
             [onlineBadgeBorder]="0"
             [onlineBadgeOffset]="8"
             [size]="
-              appWidth < 920 ? 105 : listType === 'project' || listType === 'profile' ? 110 : 123
+              appWidth < 1000 ? 105 : listType === 'project' || listType === 'profile' ? 110 : 123
             "
             [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
           ></app-avatar>
@@ -74,7 +74,7 @@
 
         <ng-template #programTpl>
           @if (userType() !== undefined) { @if ((isProjectsPage || isProjectsRatingPage) && appWidth
-          < 920) {
+          < 1000) {
           <a [routerLink]="'/office/program/' + info().id">
             <app-button
               appearance="outline"
@@ -134,7 +134,7 @@
             </a>
             } } @if (isUserMember && !isUserManager && !isUserExpert) {
             <app-button
-              [size]="appWidth > 920 ? 'medium' : 'big'"
+              [size]="appWidth > 1000 ? 'medium' : 'big'"
               [disabled]="!!submissionProjectDateExpired || isProjectAssigned"
               [appearance]="isProjectAssigned ? 'outline' : 'inline'"
               (click)="isProjectAssigned ? null : addNewProject()"
@@ -146,8 +146,8 @@
             } @if ((isUserManager || isUserExpert) && isUserMember) {
             <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
               <app-button
-                [appearance]="isProjectsRatingPage || appWidth < 920 ? 'inline' : 'outline'"
-                [size]="appWidth > 920 ? 'medium' : 'big'"
+                [appearance]="isProjectsRatingPage || appWidth < 1000 ? 'inline' : 'outline'"
+                [size]="appWidth > 1000 ? 'medium' : 'big'"
                 customTypographyClass="text-body-12"
               >
                 оценка проектов
@@ -160,10 +160,10 @@
             <app-button
               [disabled]="isUserManager"
               appearance="outline"
-              [size]="appWidth > 920 ? 'medium' : 'small'"
+              [size]="appWidth > 1000 ? 'medium' : 'small'"
               customTypographyClass="text-body-12"
             >
-              @if (appWidth > 920) {
+              @if (appWidth > 1000) {
               <span>{{
                 info().name.includes("Технолидеры Будущего")
                   ? "Каталог лучших стартапов 2022/23"
@@ -171,7 +171,7 @@
                   ? "аналитика"
                   : "положение"
               }}</span>
-              } @if (isUserManager && appWidth > 920) {
+              } @if (isUserManager && appWidth > 1000) {
               <app-tooltip
                 [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
                 [isVisible]="isTooltipVisible"
@@ -185,16 +185,16 @@
               <i
                 appIcon
                 class="info__presentation-icon"
-                [icon]="appWidth > 920 ? 'arrow-down' : 'file'"
-                [appSquare]="appWidth > 920 ? '8' : '12'"
+                [icon]="appWidth > 1000 ? 'arrow-down' : 'file'"
+                [appSquare]="appWidth > 1000 ? '8' : '12'"
               ></i>
               }
             </app-button>
           </a>
 
-          @if (appWidth > 920) {
+          @if (appWidth > 1000) {
           <div class="info__divider"></div>
-          } @if (appWidth < 920) {
+          } @if (appWidth < 1000) {
           <app-button
             appearance="outline"
             size="small"
@@ -205,7 +205,7 @@
           >
             <i appIcon icon="phone" appSquare="12"></i>
           </app-button>
-          } @if (isUserManager || (isUserExpert && appWidth > 920)) {
+          } @if (isUserManager || (isUserExpert && appWidth > 1000)) {
           <a [routerLink]="'/office/program/' + info().id + '/projects'">
             <app-button
               [appearance]="isProjectsPage ? 'inline' : 'outline'"
@@ -216,7 +216,7 @@
               проекты-участники
             </app-button>
           </a>
-          } @if (!isUserManager && !isUserExpert && appWidth > 920) {
+          } @if (!isUserManager && !isUserExpert && appWidth > 1000) {
           <a class="info__more">
             <app-button
               appearance="outline"
@@ -227,7 +227,7 @@
               узнать подробнее
             </app-button>
           </a>
-          } @if (isUserManager || (isUserExpert && appWidth > 920)) {
+          } @if (isUserManager || (isUserExpert && appWidth > 1000)) {
           <a [routerLink]="'/office/program/' + info().id + '/members'" class="info__members">
             <app-button
               [appearance]="isMembersPage ? 'inline' : 'outline'"
@@ -238,7 +238,7 @@
               участники
             </app-button>
           </a>
-          } @if (appWidth < 920) {
+          } @if (appWidth < 1000) {
           <app-button
             appearance="outline"
             size="big"
@@ -259,10 +259,10 @@
             "
             appearance="outline"
             [disabled]="!info().courses?.length"
-            [size]="appWidth > 920 ? 'medium' : 'big'"
+            [size]="appWidth > 1000 ? 'medium' : 'big'"
             customTypographyClass="text-body-12"
           >
-            {{ appWidth > 920 ? "перейти в курс" : "курс" }}
+            {{ appWidth > 1000 ? "перейти в курс" : "курс" }}
           </app-button>
           }
 

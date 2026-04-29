@@ -6,7 +6,7 @@
 
   &__row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 
     ::ng-deep app-textarea {
       textarea {

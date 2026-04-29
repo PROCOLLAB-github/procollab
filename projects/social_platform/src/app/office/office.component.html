@@ -19,8 +19,10 @@
           >
             <div class="office__sidebar--text">
               <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
-              <p class="text-body-6">Политика обработки персональных данных</p>
-              <p class="text-body-6">2022</p>
+              <span class="text-body-6 office__policy-link" (click)="downloadPolicy()">
+                Политика обработки персональных данных
+              </span>
+              <p class="text-body-6">{{ currentYear() }}</p>
             </div>
 
             <div class="office__programs">

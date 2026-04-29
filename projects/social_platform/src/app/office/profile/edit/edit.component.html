@@ -196,8 +196,7 @@
                 size="big"
                 id="birthday"
                 [error]="birthday | controlError"
-                type="text"
-                mask="00.00.0000"
+                type="date"
                 formControlName="birthday"
               ></app-input>
               @if (birthday | controlError: "required") {
@@ -322,22 +321,15 @@
           <div class="profile__column">
             @if (profileForm.get("phoneNumber"); as phoneNumber) {
             <fieldset>
-              <label for="links" class="field-label">телефон</label>
+              <label for="phoneNumber" class="field-label">телефон</label>
               <app-input
                 size="big"
                 id="phoneNumber"
-                mask="0-000-000-00-00"
-                [error]="phoneNumber | controlError"
                 type="text"
                 placeholder="+79030195823"
                 formControlName="phoneNumber"
                 style="flex-grow: 1"
               ></app-input>
-              @if (phoneNumber | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
             </fieldset>
             }
           </div>
@@ -495,7 +487,7 @@
           track $index) {
           <div class="profile__education--info">
             <p class="text-body-12 education__title">
-              {{ educationItem.organizationName }}
+              {{ educationItem.organizationName | truncate: 50 }}
             </p>
 
             <p class="text-body-10 education__text">
@@ -509,7 +501,7 @@
             <div class="profile__education--card">
               <div class="profile__education--info">
                 <p class="text-body-10 education__text">
-                  {{ educationItem.description }}
+                  {{ educationItem.description | truncate: 150 }}
                 </p>
 
                 <p class="text-body-10 education__text">
@@ -671,7 +663,7 @@
           track $index) {
           <div class="profile__education--info">
             <p class="text-body-12 education__title">
-              {{ workItem.organizationName }}
+              {{ workItem.organizationName | truncate: 50 }}
             </p>
 
             <p class="text-body-10 education__text">
@@ -685,11 +677,11 @@
             <div class="profile__education--card">
               <div class="profile__education--info">
                 <p class="text-body-10 education__text">
-                  {{ workItem.description }}
+                  {{ workItem.description | truncate: 150 }}
                 </p>
 
                 <p class="text-body-10 education__text">
-                  {{ workItem.jobPosition }}
+                  {{ workItem.jobPosition | truncate: 50 }}
                 </p>
               </div>
 
@@ -817,7 +809,7 @@
             <div class="profile__education--card" style="align-items: flex-end">
               <div class="profile__education--info">
                 <p class="text-body-12 education__title">
-                  {{ achievementItem.title }}
+                  {{ achievementItem.title | truncate: 50 }}
                 </p>
 
                 <p class="text-body-10 education__text" style="color: var(--grey-for-text)">
@@ -825,7 +817,7 @@
                 </p>
 
                 <p class="text-body-10 education__text">
-                  {{ achievementItem.status }}
+                  {{ achievementItem.status | truncate: 150 }}
                 </p>
 
                 @if (achievementItem.files?.length) { @if (isStringFiles(achievementItem.files)) {

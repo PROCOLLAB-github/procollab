@@ -68,7 +68,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   get isMobile(): boolean {
-    return this.appWidth < 920;
+    return this.appWidth < 1000;
   }
 
   get showCover(): boolean {

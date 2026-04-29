@@ -118,7 +118,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
               ["squiz", "medal"],
               [user.skills, user.achievements],
               ["array", "array"]
-            )!;
+            )!.filter(item => !Array.isArray(item.about) || item.about.length > 0);
           }
           this.user = user as User;
         },

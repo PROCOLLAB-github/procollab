@@ -124,6 +124,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   // Методы ControlValueAccessor
   writeValue(value: string): void {
     this.value = value ?? "";
+    this.isLengthOverflow = false;
   }
 
   onChange: (value: string) => void = () => {};

@@ -83,10 +83,15 @@
 
     &:hover {
       color: var(--accent);
+
+      .field__option--point {
+        visibility: visible;
+      }
     }
 
     &--point {
       color: var(--accent);
+      visibility: hidden;
     }
   }
 

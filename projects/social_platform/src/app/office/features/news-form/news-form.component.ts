@@ -63,11 +63,18 @@ export class NewsFormComponent implements OnInit {
 
   messageForm: FormGroup;
 
+  readonly maxTextLength = 15940;
+
+  get isTextOverflow(): boolean {
+    return (this.messageForm.get("text")?.value?.length ?? 0) > this.maxTextLength;
+  }
+
   /**
    * Обработчик отправки формы
    * Валидирует форму и эмитит событие с данными новости
    */
   onSubmit() {
+    if (this.isTextOverflow) return;
     if (!this.validationService.getFormValidation(this.messageForm)) {
       return;
     }
