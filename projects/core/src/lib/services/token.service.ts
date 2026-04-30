@@ -32,12 +32,16 @@ import { ApiService, PRODUCTION } from "@corelib";
 export class TokenService {
   private readonly TOKEN_API_URL = "/api/token";
 
+  private get isDevStage(): boolean {
+    return window.location.hostname === "dev.procollab.ru";
+  }
+
   private get accessTokenKey(): string {
-    return this.production ? "accessToken" : "devAccessToken";
+    return this.isDevStage ? "devAccessToken" : "accessToken";
   }
 
   private get refreshTokenKey(): string {
-    return this.production ? "refreshToken" : "devRefreshToken";
+    return this.isDevStage ? "devRefreshToken" : "refreshToken";
   }
 
   constructor(private apiService: ApiService, @Inject(PRODUCTION) private production: boolean) {}
