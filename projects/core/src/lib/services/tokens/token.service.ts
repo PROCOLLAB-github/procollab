@@ -33,6 +33,18 @@ import { ApiService } from "../api/api.service";
 export class TokenService {
   private readonly TOKEN_API_URL = "/api/token";
 
+  private get isDevStage(): boolean {
+    return window.location.hostname === "dev.procollab.ru";
+  }
+
+  private get accessTokenKey(): string {
+    return this.isDevStage ? "devAccessToken" : "accessToken";
+  }
+
+  private get refreshTokenKey(): string {
+    return this.isDevStage ? "devRefreshToken" : "refreshToken";
+  }
+
   constructor(private apiService: ApiService, @Inject(PRODUCTION) private production: boolean) {}
 
   /**
@@ -91,10 +103,9 @@ export class TokenService {
    * Используется в BearerTokenInterceptor для добавления Authorization header
    */
   getTokens(): Tokens | null {
-    const access = Cookies.get("accessToken");
-    const refresh = Cookies.get("refreshToken");
+    const access = Cookies.get(this.accessTokenKey);
+    const refresh = Cookies.get(this.refreshTokenKey);
 
-    // Проверяем наличие обоих токенов
     if (!access || !refresh) {
       return null;
     }
@@ -112,8 +123,8 @@ export class TokenService {
    */
   clearTokens(): void {
     const options = this.getCookieOptions();
-    Cookies.remove("accessToken", options);
-    Cookies.remove("refreshToken", options);
+    Cookies.remove(this.accessTokenKey, options);
+    Cookies.remove(this.refreshTokenKey, options);
   }
 
   /**
@@ -128,7 +139,7 @@ export class TokenService {
    */
   memTokens(tokens: Tokens): void {
     const options = this.getCookieOptions();
-    Cookies.set("accessToken", tokens.access, options);
-    Cookies.set("refreshToken", tokens.refresh, options);
+    Cookies.set(this.accessTokenKey, tokens.access, options);
+    Cookies.set(this.refreshTokenKey, tokens.refresh, options);
   }
 }
