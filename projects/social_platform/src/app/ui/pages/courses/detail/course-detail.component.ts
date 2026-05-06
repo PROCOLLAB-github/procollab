@@ -9,9 +9,7 @@ import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { CourseDetailInfoService } from "@api/courses/facades/course-detail-info.service";
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
 import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.component";
-import { LessonUIInfoService } from "@api/courses/facades/ui/lesson-ui-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { LessonInfoService } from "@api/courses/facades/lesson-info.service";
 
 @Component({
   selector: "app-course-detail",
@@ -38,6 +36,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   protected readonly courseModules = this.courseDetailUIInfoService.courseModules;
   protected readonly isDisabled = this.courseDetailUIInfoService.isDisabled;
   protected readonly isTaskDetail = this.courseDetailUIInfoService.isTaskDetail;
+  protected readonly currentLesson = this.courseDetailUIInfoService.currentLesson;
+  protected readonly currentLessonOrder = this.courseDetailUIInfoService.currentLessonOrder;
 
   isAboutModalOpen = false;
 

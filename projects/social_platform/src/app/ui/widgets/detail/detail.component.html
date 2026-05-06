@@ -101,20 +101,20 @@
             [disabled]="!info().links?.length"
             class="info__contacts"
             customTypographyClass="text-body-12"
-            (click)="isContactsModalOpen = true"
+            (click)="isContactsModalOpen.set(true)"
           >
             <i appIcon icon="phone" appSquare="12"></i>
           </app-button>
 
           <app-modal
-            [open]="isContactsModalOpen"
-            (openChange)="isContactsModalOpen = !isContactsModalOpen"
+            [open]="isContactsModalOpen()"
+            (openChange)="isContactsModalOpen.set(!isContactsModalOpen())"
             bodyClass="modal__body--no-flex"
           >
             <app-program-links
               title="контакты"
               icon="phone"
-              [links]="contactLinks"
+              [links]="contactLinks()"
             ></app-program-links>
           </app-modal>
           } @else {
@@ -213,7 +213,7 @@
             [disabled]="!info().links?.length"
             class="info__contacts"
             customTypographyClass="text-body-12"
-            (click)="isContactsModalOpen = true"
+            (click)="isContactsModalOpen.set(true)"
           >
             <i appIcon icon="phone" appSquare="12"></i>
           </app-button>
@@ -258,7 +258,7 @@
             class="info__materials"
             [class.info__materials--full]="isUserManager() || isUserExpert()"
             customTypographyClass="text-body-12"
-            (click)="isMaterialsModalOpen = true"
+            (click)="isMaterialsModalOpen.set(true)"
           >
             материалы
           </app-button>
@@ -330,26 +330,26 @@
           </app-modal>
 
           <app-modal
-            [open]="isContactsModalOpen"
-            (openChange)="isContactsModalOpen = !isContactsModalOpen"
+            [open]="isContactsModalOpen()"
+            (openChange)="isContactsModalOpen.set(!isContactsModalOpen())"
             bodyClass="modal__body--no-flex"
           >
             <app-program-links
               title="контакты"
               icon="phone"
-              [links]="contactLinks"
+              [links]="contactLinks()"
             ></app-program-links>
           </app-modal>
 
           <app-modal
-            [open]="isMaterialsModalOpen"
-            (openChange)="isMaterialsModalOpen = !isMaterialsModalOpen"
+            [open]="isMaterialsModalOpen()"
+            (openChange)="isMaterialsModalOpen.set(!isMaterialsModalOpen())"
             bodyClass="modal__body--no-flex"
           >
             <app-program-links
               title="материалы"
               icon="book"
-              [links]="materialLinks"
+              [links]="materialLinks()"
             ></app-program-links>
           </app-modal>
           } }

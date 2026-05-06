@@ -1,6 +1,6 @@
 /** @format */
 
-import { Injectable, signal } from "@angular/core";
+import { computed, Injectable, signal } from "@angular/core";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Program } from "@domain/program/program.model";
 import { FeedNews } from "@domain/project/project-news.model";
@@ -9,6 +9,14 @@ import { FeedNews } from "@domain/project/project-news.model";
 export class ProgramDetailMainUIInfoService {
   readonly program = signal<Program | undefined>(undefined);
   readonly programId = signal<number | undefined>(undefined);
+
+  readonly contactLinks = computed<{ label: string; url: string }[]>(() =>
+    (this.program()?.links ?? []).map(link => ({ label: link, url: link }))
+  );
+
+  readonly materialLinks = computed<{ label: string; url: string }[]>(() =>
+    (this.program()?.materials ?? []).map(m => ({ label: m.title, url: m.url }))
+  );
 
   readonly totalNewsCount = signal(0);
 

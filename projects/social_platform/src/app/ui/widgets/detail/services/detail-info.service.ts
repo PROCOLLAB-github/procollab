@@ -49,6 +49,20 @@ export class DetailInfoService {
   // Сторонние переменные для работы с роутингом или доп проверок
   readonly backPath = signal<string | undefined>(undefined);
 
+  readonly isContactsModalOpen = signal(false);
+  readonly isMaterialsModalOpen = signal(false);
+
+  readonly contactLinks = computed<{ label: string; url: string }[]>(() =>
+    ((this.info()?.links as string[] | undefined) ?? []).map(link => ({ label: link, url: link }))
+  );
+
+  readonly materialLinks = computed<{ label: string; url: string }[]>(() =>
+    ((this.info()?.materials as { title: string; url: string }[] | undefined) ?? []).map(m => ({
+      label: m.title,
+      url: m.url,
+    }))
+  );
+
   readonly isUserManager = computed(() => {
     if (this.listType() === "program") {
       return this.info()?.isUserManager;

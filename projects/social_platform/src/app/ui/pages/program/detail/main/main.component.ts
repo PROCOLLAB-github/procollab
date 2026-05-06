@@ -88,13 +88,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly registeredProgramModal =
     this.programDetailMainUIInfoService.registeredProgramModal;
 
-  get contactLinks(): { label: string; url: string }[] {
-    return (this.program()?.links ?? []).map(link => ({ label: link, url: link }));
-  }
-
-  get materialLinks(): { label: string; url: string }[] {
-    return (this.program()?.materials ?? []).map(m => ({ label: m.title, url: m.url }));
-  }
+  protected readonly contactLinks = this.programDetailMainUIInfoService.contactLinks;
+  protected readonly materialLinks = this.programDetailMainUIInfoService.materialLinks;
 
   protected appWidth = window.innerWidth;
 

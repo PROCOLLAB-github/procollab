@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { filter, map, Subject, takeUntil } from "rxjs";
 import { CourseLesson, Task } from "@domain/courses/courses.model";
 import { LessonUIInfoService } from "./ui/lesson-ui-info.service";
+import { CourseDetailUIInfoService } from "./ui/course-detail-ui-info.service";
 import { SubmitTaskAnswerUseCase } from "../use-cases/submit-task-answer.use-case";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { failure, loading, success } from "@domain/shared/async-state";
@@ -16,6 +17,7 @@ export class LessonInfoService {
   private readonly submitTaskAnswerUseCase = inject(SubmitTaskAnswerUseCase);
   private readonly snackbarService = inject(SnackbarService);
   private readonly lessonUIInfoService = inject(LessonUIInfoService);
+  private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -25,6 +27,7 @@ export class LessonInfoService {
   }
 
   destroy(): void {
+    this.courseDetailUIInfoService.currentLesson.set(undefined);
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -127,6 +130,7 @@ export class LessonInfoService {
         next: lessonInfo => {
           this.lessonUIInfoService.loading.set(true);
           this.lessonUIInfoService.lesson$.set(success(lessonInfo));
+          this.courseDetailUIInfoService.currentLesson.set(lessonInfo);
 
           if (lessonInfo.progressStatus === "completed") {
             setTimeout(() => {

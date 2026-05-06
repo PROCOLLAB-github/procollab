@@ -168,19 +168,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   protected readonly errorMessage = ErrorMessage;
 
-  isContactsModalOpen = false;
-  isMaterialsModalOpen = false;
-
-  get contactLinks(): { label: string; url: string }[] {
-    return (this.info()?.links ?? []).map((link: string) => ({ label: link, url: link }));
-  }
-
-  get materialLinks(): { label: string; url: string }[] {
-    return (this.info()?.materials ?? []).map((m: { title: string; url: string }) => ({
-      label: m.title,
-      url: m.url,
-    }));
-  }
+  protected readonly isContactsModalOpen = this.detailInfoService.isContactsModalOpen;
+  protected readonly isMaterialsModalOpen = this.detailInfoService.isMaterialsModalOpen;
+  protected readonly contactLinks = this.detailInfoService.contactLinks;
+  protected readonly materialLinks = this.detailInfoService.materialLinks;
 
   protected appWidth = window.innerWidth;
 

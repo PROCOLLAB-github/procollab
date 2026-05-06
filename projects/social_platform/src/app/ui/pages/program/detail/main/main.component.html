@@ -73,7 +73,7 @@
           <app-program-links
             title="контакты"
             icon="phone"
-            [links]="contactLinks"
+            [links]="contactLinks()"
           ></app-program-links>
         </aside>
         } @if (program()!.isUserMember && program()!.materials?.length) {
@@ -81,7 +81,7 @@
           <app-program-links
             title="материалы"
             icon="book"
-            [links]="materialLinks"
+            [links]="materialLinks()"
           ></app-program-links>
         </aside>
         }

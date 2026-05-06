@@ -1,7 +1,7 @@
 /** @format */
 
 import { computed, inject, Injectable, signal } from "@angular/core";
-import { CourseDetail, CourseStructure } from "@domain/courses/courses.model";
+import { CourseDetail, CourseLesson, CourseStructure } from "@domain/courses/courses.model";
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
 import { SeenModulesStoragePort } from "@domain/courses/ports/seen-modules-storage.port";
 
@@ -11,6 +11,20 @@ export class CourseDetailUIInfoService {
 
   readonly courseDetail$ = signal<AsyncState<CourseDetail>>(initial());
   readonly courseStructure$ = signal<AsyncState<CourseStructure>>(initial());
+
+  readonly currentLesson = signal<CourseLesson | undefined>(undefined);
+
+  readonly currentLessonOrder = computed<number | null>(() => {
+    const lesson = this.currentLesson();
+    const structure = this.courseStructure();
+    if (!lesson || !structure) return null;
+
+    for (const mod of structure.modules) {
+      const found = mod.lessons.find(l => l.id === lesson.id);
+      if (found) return found.order;
+    }
+    return null;
+  });
 
   readonly loading = computed(() => {
     const detail = this.courseDetail$();
