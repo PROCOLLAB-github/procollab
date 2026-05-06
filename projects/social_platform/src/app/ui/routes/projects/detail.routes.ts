@@ -9,9 +9,9 @@ import { ProjectTeamComponent } from "../../pages/projects/detail/team/team.comp
 import { ProjectVacanciesComponent } from "../../pages/projects/detail/vacancies/vacancies.component";
 import { DeatilComponent } from "@ui/widgets/detail/detail.component";
 import { ProjectWorkSectionComponent } from "../../pages/projects/detail/work-section/work-section.component";
-import { KanbanBoardResolver } from "../../pages/projects/detail/kanban/kanban.resolver";
-import { KanbanBoardGuard } from "../../../../../../core/src/lib/guards/kanban/kanban.guard";
-import { KanbanComponent } from "../../pages/projects/detail/kanban/kanban.component";
+// import { KanbanBoardResolver } from "../../pages/projects/detail/kanban/kanban.resolver";
+// import { KanbanBoardGuard } from "../../../../../../core/src/lib/guards/kanban/kanban.guard";
+// import { KanbanComponent } from "../../pages/projects/detail/kanban/kanban.component";
 import { ProjectDetailResolver } from "@ui/pages/projects/detail/detail.resolver";
 import { NewsDetailComponent } from "@ui/pages/projects/detail/news-detail/news-detail.component";
 import { NewsDetailResolver } from "@ui/pages/projects/detail/news-detail/news-detail.resolver";
@@ -69,14 +69,14 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
           data: ProjectResponsesResolver,
         },
       },
-      {
-        path: "kanban",
-        canActivate: [KanbanBoardGuard],
-        component: KanbanComponent,
-        resolve: { data: KanbanBoardResolver },
-        loadChildren: () => import("../kanban/kanban.routes").then(c => c.KANBAN_ROUTES),
-        runGuardsAndResolvers: "always",
-      },
+      // {
+      //   path: "kanban",
+      //   canActivate: [KanbanBoardGuard],
+      //   component: KanbanComponent,
+      //   resolve: { data: KanbanBoardResolver },
+      //   loadChildren: () => import("../kanban/kanban.routes").then(c => c.KANBAN_ROUTES),
+      //   runGuardsAndResolvers: "always",
+      // },
       {
         path: "chat",
         component: ProjectChatComponent,
