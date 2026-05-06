@@ -1,0 +1,18 @@
+<!-- @format -->
+
+<div class="about">
+  <div class="about__head">
+    <h3 class="text-body-12 about__title">о курсе</h3>
+    <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+  </div>
+  @if (description) {
+  <div class="text-body-10 about__text">
+    <p #descEl [innerHTML]="description | parseLinks | parseBreaks"></p>
+    @if (descriptionExpandable) {
+    <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
+      {{ readFullDescription ? "cкрыть" : "подробнее" }}
+    </div>
+    }
+  </div>
+  }
+</div>

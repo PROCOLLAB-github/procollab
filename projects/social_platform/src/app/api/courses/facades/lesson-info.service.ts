@@ -33,6 +33,19 @@ export class LessonInfoService {
     this.lessonUIInfoService.answerBody.set(value);
   }
 
+  onSelectTask(task: Task): void {
+    if (!this.lessonUIInfoService.isClickable(task)) return;
+
+    this.lessonUIInfoService.currentTaskId.set(task.id);
+    this.lessonUIInfoService.answerBody.set(null);
+    this.lessonUIInfoService.success.set(false);
+    this.lessonUIInfoService.hasError.set(false);
+
+    if (this.lessonUIInfoService.isComplete()) {
+      this.router.navigate(["./"], { relativeTo: this.route });
+    }
+  }
+
   onSubmitAnswer(): void {
     const task = this.lessonUIInfoService.currentTask();
     if (!task) return;
@@ -86,6 +99,7 @@ export class LessonInfoService {
 
             if (nextId) {
               this.lessonUIInfoService.currentTaskId.set(nextId);
+              this.lessonUIInfoService.activeTaskId.set(nextId);
               this.lessonUIInfoService.success.set(false);
               this.lessonUIInfoService.answerBody.set(null);
             } else {
@@ -132,6 +146,7 @@ export class LessonInfoService {
 
           if (onResultsPage && !allCompleted) {
             this.lessonUIInfoService.currentTaskId.set(nextTaskId);
+            this.lessonUIInfoService.activeTaskId.set(nextTaskId);
             setTimeout(() => {
               this.lessonUIInfoService.loading.set(false);
               this.router.navigate(["./"], { relativeTo: this.route });
@@ -143,6 +158,7 @@ export class LessonInfoService {
             }, 500);
           } else {
             this.lessonUIInfoService.currentTaskId.set(nextTaskId);
+            this.lessonUIInfoService.activeTaskId.set(nextTaskId);
             setTimeout(() => this.lessonUIInfoService.loading.set(false), 500);
           }
         },

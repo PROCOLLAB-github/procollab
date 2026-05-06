@@ -15,11 +15,11 @@ import {
 } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { TokenService } from "@corelib";
-import { LoadingService } from "@ui/services/loading/loading.service";
-import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { LoggerService, TokenService } from "@corelib";
+import { CookieConsentComponent } from "@ui/widgets/cookie-consent/cookie-consent.component";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { LoadingService } from "@ui/services/loading/loading.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AppRoutes } from "@api/paths/app-routes";
 
 /**
@@ -33,7 +33,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   standalone: true,
-  imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe],
+  imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {

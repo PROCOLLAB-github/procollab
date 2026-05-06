@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { Task } from "@domain/courses/courses.model";
@@ -36,6 +36,13 @@ export class LessonComponent implements OnInit, OnDestroy {
   private readonly lessonInfoService = inject(LessonInfoService);
   private readonly lessonUIInfoService = inject(LessonUIInfoService);
 
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
+
   protected readonly lessonInfo = this.lessonUIInfoService.lessonInfo;
   protected readonly isComplete = this.lessonUIInfoService.isComplete;
   protected readonly currentTask = this.lessonUIInfoService.currentTask;
@@ -46,6 +53,8 @@ export class LessonComponent implements OnInit, OnDestroy {
   protected readonly loading = this.lessonUIInfoService.loading;
   protected readonly success = this.lessonUIInfoService.success;
   protected readonly hasError = this.lessonUIInfoService.hasError;
+  protected readonly isViewingCompleted = this.lessonUIInfoService.isViewingCompleted;
+  protected readonly lessonOrder = this.lessonUIInfoService.lessonOrder;
 
   ngOnInit(): void {
     this.lessonInfoService.init();
@@ -61,6 +70,14 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   isDone(task: Task): boolean {
     return this.lessonUIInfoService.isDone(task);
+  }
+
+  isClickable(task: Task): boolean {
+    return this.lessonUIInfoService.isClickable(task);
+  }
+
+  onSelectTask(task: Task): void {
+    this.lessonInfoService.onSelectTask(task);
   }
 
   onAnswerChange(value: any): void {

@@ -48,6 +48,7 @@ export class FileTaskComponent implements OnInit {
   @Input({ required: true }) data!: Task;
   @Input() success = false;
   @Input() hint = "";
+  @Input() disabled = false;
 
   @Input()
   set error(value: boolean) {

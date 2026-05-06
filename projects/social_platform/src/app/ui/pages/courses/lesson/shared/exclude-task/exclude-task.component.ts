@@ -57,6 +57,7 @@ export class ExcludeTaskComponent implements OnInit {
   @Output() update = new EventEmitter<number[]>(); // Событие обновления выбранных ответов
 
   @Input() success = false; // Флаг успешного выполнения
+  @Input() disabled = false;
 
   @Input()
   set error(value: boolean) {
@@ -104,6 +105,7 @@ export class ExcludeTaskComponent implements OnInit {
    * @param id - ID варианта ответа
    */
   onSelect(id: number) {
+    if (this.disabled) return;
     if (this.result().includes(id)) {
       // Если вариант уже выбран, убираем его из списка
       this.result.set(this.result().filter(i => i !== id));

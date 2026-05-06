@@ -1,11 +1,13 @@
 /** @format */
 
-import { computed, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import { CourseLesson, Task } from "@domain/courses/courses.model";
 import { AsyncState, initial, isSuccess } from "@domain/shared/async-state";
+import { CourseDetailUIInfoService } from "./course-detail-ui-info.service";
 
 @Injectable()
 export class LessonUIInfoService {
+  private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
   readonly lesson$ = signal<AsyncState<CourseLesson>>(initial());
   readonly submitAnswer$ = signal<AsyncState<void>>(initial());
 
@@ -16,6 +18,7 @@ export class LessonUIInfoService {
 
   readonly isComplete = signal<boolean>(false);
   readonly currentTaskId = signal<number | null>(null);
+  readonly activeTaskId = signal<number | null>(null);
 
   /** Transition loading — управляется фасадом вручную (с setTimeout delay) */
   readonly loading = signal(false);
@@ -65,4 +68,25 @@ export class LessonUIInfoService {
   isDone(task: Task): boolean {
     return task.isCompleted || this.completedTaskIds().has(task.id);
   }
+
+  readonly isViewingCompleted = computed(() => {
+    const task = this.currentTask();
+    return task ? this.isDone(task) : false;
+  });
+
+  isClickable(task: Task): boolean {
+    return this.isDone(task) || task.id === this.activeTaskId();
+  }
+
+  readonly lessonOrder = computed<number | null>(() => {
+    const lesson = this.lessonInfo();
+    const structure = this.courseDetailUIInfoService.courseStructure();
+    if (!lesson || !structure) return null;
+
+    for (const mod of structure.modules) {
+      const found = mod.lessons.find(l => l.id === lesson.id);
+      if (found) return found.order;
+    }
+    return null;
+  });
 }

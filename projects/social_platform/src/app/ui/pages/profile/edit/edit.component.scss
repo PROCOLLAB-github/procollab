@@ -176,6 +176,18 @@
     flex-direction: column;
     gap: 12px;
 
+    fieldset {
+      position: relative;
+      padding-bottom: 20px;
+
+      .error {
+        position: absolute;
+        bottom: 2px;
+        left: 0;
+        margin-top: 0;
+      }
+    }
+
     &--date {
       display: grid;
       grid-template-columns: repeat(2, 3fr);
@@ -191,6 +203,12 @@
       align-items: center;
     }
   }
+}
+
+.profile__main-text--grid {
+  display: grid;
+  grid-template-columns: 0.1fr 2fr 1fr 1fr;
+  grid-gap: 20px;
 }
 
 .profile__main--grid {

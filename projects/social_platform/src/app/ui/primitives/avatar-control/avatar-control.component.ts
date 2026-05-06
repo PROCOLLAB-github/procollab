@@ -138,6 +138,9 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   /** Состояние загрузки файла */
   loading = false;
 
+  /** Исправленное изображение в формате base64 для кроппера */
+  correctedImageBase64 = "";
+
   /**
    * Обработчик выбора файла - открывает кроппер
    */
@@ -148,8 +151,169 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
       return;
     }
 
-    this.imageChangedEvent = event;
-    this.showCropperModal = true;
+    // Обрабатываем EXIF ориентацию перед открытием кроппера
+    this.fixImageOrientation(files[0], () => {
+      // Используем исходное событие, но imageChangedEvent уже содержит исправленное изображение
+      this.imageChangedEvent = event;
+      this.showCropperModal = true;
+    });
+  }
+
+  /**
+   * Исправляет EXIF ориентацию изображения
+   * Решает проблему с повернутыми фотографиями со смартфонов
+   */
+  private fixImageOrientation(file: File, onComplete: () => void) {
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        // Читаем EXIF данные для определения ориентации
+        this.getImageOrientation(file, orientation => {
+          // Если ориентация нормальная (1), просто используем исходное изображение
+          if (orientation === 1) {
+            this.correctedImageBase64 = "";
+            onComplete();
+            return;
+          }
+
+          // Ротируем изображение на Canvas
+          const canvas = this.rotateImage(img, orientation);
+          this.correctedImageBase64 = canvas.toDataURL(file.type);
+          onComplete();
+        });
+      };
+      img.src = e.target?.result as string;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  /**
+   * Определяет EXIF ориентацию изображения
+   */
+  private getImageOrientation(file: File, onOrientationDetected: (orientation: number) => void) {
+    const reader = new FileReader();
+
+    reader.onload = event => {
+      const view = new DataView(event.target?.result as ArrayBuffer);
+      // Проверяем JPEG маркер
+      if (view.byteLength < 2 || view.getUint16(0) !== 0xffd8) {
+        onOrientationDetected(1); // Не JPEG, используем нормальную ориентацию
+        return;
+      }
+
+      let offset = 2;
+      // Ищем EXIF данные
+      while (offset < view.byteLength - 9) {
+        if (view.getUint16(offset) === 0xffe1) {
+          const length = view.getUint16(offset + 2) + 2;
+          // Проверяем EXIF идентификатор
+          if (view.getUint32(offset + 4) === 0x45786966 && view.getUint16(offset + 8) === 0x0000) {
+            const orientation = this.getExifOrientation(view, offset + 10);
+            onOrientationDetected(orientation);
+            return;
+          }
+          offset += length;
+        } else {
+          offset += 2;
+        }
+      }
+      onOrientationDetected(1); // EXIF не найден, используем нормальную ориентацию
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  /**
+   * Извлекает значение ориентации из EXIF данных
+   */
+  private getExifOrientation(view: DataView, offset: number): number {
+    try {
+      const littleEndian = view.getUint16(offset) === 0x4949;
+      const ifdOffset = view.getUint32(offset + 4, littleEndian);
+      const entries = view.getUint16(offset + ifdOffset, littleEndian);
+
+      for (let i = 0; i < entries; i++) {
+        const entryOffset = offset + ifdOffset + 2 + i * 12;
+        const tag = view.getUint16(entryOffset, littleEndian);
+        // 0x0112 это тег для ориентации (Orientation tag)
+        if (tag === 0x0112) {
+          const value = view.getUint32(entryOffset + 8, littleEndian);
+          return value > 1 && value <= 8 ? value : 1;
+        }
+      }
+    } catch (e) {
+      console.warn("Ошибка при чтении EXIF ориентации:", e);
+    }
+    return 1;
+  }
+
+  /**
+   * Ротирует изображение на Canvas в зависимости от EXIF ориентации
+   */
+  private rotateImage(img: HTMLImageElement, orientation: number): HTMLCanvasElement {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return canvas;
+    }
+
+    const [newWidth, newHeight] = [img.width, img.height];
+
+    switch (orientation) {
+      case 2:
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, -newWidth, 0);
+        break;
+      case 3:
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.rotate(Math.PI);
+        ctx.drawImage(img, -newWidth, -newHeight);
+        break;
+      case 4:
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.scale(1, -1);
+        ctx.drawImage(img, 0, -newHeight);
+        break;
+      case 5:
+        canvas.width = newHeight;
+        canvas.height = newWidth;
+        ctx.rotate(Math.PI / 2);
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, -newHeight, 0);
+        break;
+      case 6:
+        canvas.width = newHeight;
+        canvas.height = newWidth;
+        ctx.rotate(Math.PI / 2);
+        ctx.drawImage(img, 0, -newWidth);
+        break;
+      case 7:
+        canvas.width = newHeight;
+        canvas.height = newWidth;
+        ctx.rotate(-Math.PI / 2);
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, -newHeight, -newWidth);
+        break;
+      case 8:
+        canvas.width = newHeight;
+        canvas.height = newWidth;
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(img, -newHeight, 0);
+        break;
+      default:
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0);
+    }
+
+    return canvas;
   }
 
   /**

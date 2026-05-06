@@ -8,11 +8,19 @@ import { ButtonComponent } from "@ui/primitives";
 import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { CourseDetailInfoService } from "@api/courses/facades/course-detail-info.service";
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
+import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.component";
 
 @Component({
   selector: "app-course-detail",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent, LoaderComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    AvatarComponent,
+    ButtonComponent,
+    LoaderComponent,
+    CourseAboutComponent,
+  ],
   templateUrl: "./course-detail.component.html",
   styleUrl: "./course-detail.component.scss",
   providers: [CourseDetailInfoService, CourseDetailUIInfoService],

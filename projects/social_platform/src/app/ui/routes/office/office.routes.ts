@@ -76,6 +76,20 @@ export const OFFICE_ROUTES: Routes = [
           import("../profile/profile-detail.routes").then(c => c.PROFILE_DETAIL_ROUTES),
       },
       {
+        path: "courses",
+        loadChildren: () =>
+          import("../courses/course-detail.routes").then(c => c.COURSE_DETAIL_ROUTES),
+      },
+      {
+        path: "vacancies",
+        loadChildren: () =>
+          import("../vacancy/vacancies-detail.routes").then(c => c.VACANCIES_DETAIL_ROUTES),
+      },
+      // {
+      //   path: "chats",
+      //   loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
+      // },
+      {
         path: "**",
         redirectTo: "/error/404",
       },

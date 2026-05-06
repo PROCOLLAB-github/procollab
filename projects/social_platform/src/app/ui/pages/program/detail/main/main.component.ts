@@ -28,6 +28,7 @@ import { ExpandService } from "@api/expand/expand.service";
 import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 
 @Component({
   selector: "app-main",
@@ -48,6 +49,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     TruncatePipe,
     RouterModule,
     NewsCardComponent,
+    ProgramLinksComponent,
   ],
   providers: [ProgramDetailMainService],
   standalone: true,
@@ -81,6 +83,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly showProgramModal = this.programDetailMainUIInfoService.showProgramModal;
   protected readonly showProgramModalErrorMessage =
     this.programDetailMainUIInfoService.showProgramModalErrorMessage;
+
   protected readonly registeredProgramModal =
     this.programDetailMainUIInfoService.registeredProgramModal;
 

@@ -48,6 +48,7 @@ export class WriteTaskComponent implements OnInit {
   @Input({ required: true }) data!: Task;
   @Input() type: "text" | "text-file" = "text";
   @Input() success = false;
+  @Input() disabled = false;
 
   @Output() update = new EventEmitter<{ text: string; fileUrls?: string[] }>();
 

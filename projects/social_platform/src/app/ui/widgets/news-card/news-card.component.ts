@@ -28,18 +28,18 @@ import {
 import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
-import { FileModel } from "@domain/file/file.model";
-import { forkJoin, noop, Observable, take, tap } from "rxjs";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
-import { FileUploadItemComponent } from "@ui/primitives/file-upload-item/file-upload-item.component";
-import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CarouselComponent } from "./carousel/carousel.component";
 import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { FeedNews } from "@domain/project/project-news.model";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
+import { FileUploadItemComponent } from "@ui/primitives/file-upload-item/file-upload-item.component";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
+import { FileModel } from "@domain/file/file.model";
+import { catchError, forkJoin, noop, Observable, of, take, tap } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-news-card",
@@ -302,6 +302,11 @@ export class NewsCardComponent implements OnInit {
               fileObj.src = file.url;
               fileObj.loading = false;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = true;
+              return of(null);
             })
           )
         );
@@ -324,6 +329,11 @@ export class NewsCardComponent implements OnInit {
               fileObj.loading = false;
               fileObj.src = file.url;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = "Ошибка загрузки";
+              return of(null);
             })
           )
         );

@@ -91,4 +91,9 @@ export class RegisterComponent implements OnInit {
   dismissCreationError(): void {
     this.authUIInfoService.register$.set(initial());
   }
+
+  downloadPolicy(event: Event): void {
+    event.stopPropagation();
+    this.authRegisterService.downloadPolicy();
+  }
 }

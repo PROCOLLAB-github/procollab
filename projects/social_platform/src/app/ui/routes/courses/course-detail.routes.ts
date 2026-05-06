@@ -1,9 +1,9 @@
 /** @format */
 
 import type { Routes } from "@angular/router";
-import { TrajectoryInfoComponent } from "../../pages/courses/detail/info/info.component";
-import { CourseDetailComponent } from "../../pages/courses/detail/course-detail.component";
-import { CoursesDetailResolver } from "../../pages/courses/detail/course-detail.resolver";
+import { CourseDetailComponent } from "@ui/pages/courses/detail/course-detail.component";
+import { CoursesDetailResolver } from "@ui/pages/courses/detail/course-detail.resolver";
+import { CourseInfoComponent } from "@ui/pages/courses/detail/info/info.component";
 
 export const COURSE_DETAIL_ROUTES: Routes = [
   {
@@ -16,7 +16,7 @@ export const COURSE_DETAIL_ROUTES: Routes = [
     children: [
       {
         path: "",
-        component: TrajectoryInfoComponent,
+        component: CourseInfoComponent,
       },
       {
         path: "lesson",

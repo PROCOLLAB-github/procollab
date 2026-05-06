@@ -146,7 +146,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly program = this.programDetailMainUIInfoService.program;
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
-    .observe("(min-width: 920px)")
+    .observe("(min-width: 1000px)")
     .pipe(map(result => result.matches));
 
   subscriptions$ = signal<Subscription[]>([]);

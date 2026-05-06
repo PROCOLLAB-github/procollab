@@ -1,24 +1,10 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from "@angular/core";
-import { ActivatedRoute, Params, Router, RouterLink } from "@angular/router";
-import { combineLatest, distinctUntilChanged, map, Subscription, switchMap } from "rxjs";
-import { NavService } from "@ui/services/nav/nav.service";
-import Fuse from "fuse.js";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
-import { generateOptionsList } from "@utils/generate-options-list";
 import { ClickOutsideModule } from "ng-click-outside";
 import { ProgramCardComponent } from "./program-card/program-card.component";
-import { HttpParams } from "@angular/common/http";
-import { Program } from "@domain/program/program.model";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
 

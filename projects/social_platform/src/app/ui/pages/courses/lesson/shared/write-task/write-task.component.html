@@ -52,12 +52,13 @@
     <p class="write-task__input text-body-12">ответ</p>
     <div class="write-task__input write-task__input--textarea">
       <textarea
-        [style.minHeight]="type === 'text-file' ? '125px' : '341px'"
+        [style.minHeight]="type === 'text-file' ? '125px' : ''"
         class="write-task__textarea text-body-12"
         rows="2"
         attr.maxlength="{{ maxLength }}"
         (input)="onKeyUp($event)"
         placeholder="ваш ответ"
+        [disabled]="disabled"
       ></textarea>
       <div class="write-task__counter">
         <p class="text-body-10">
@@ -66,7 +67,7 @@
       </div>
     </div>
 
-    @if (type === 'text-file') {
+    @if (type === 'text-file' && !disabled) {
     <div class="write-task__files">
       <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">
         <div emptyPlaceholder class="write-task__upload">

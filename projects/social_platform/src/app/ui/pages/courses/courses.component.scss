@@ -2,9 +2,42 @@
 @use "styles/responsive";
 
 .profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 100px;
+  margin-top: 30px;
+
+  @include responsive.apply-desktop {
+    display: block;
+  }
+
   &__info {
     display: grid;
-    grid-template-columns: 8fr 2fr;
     column-gap: 20px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 8fr 2fr;
+    }
+  }
+
+  &__search {
+    margin-bottom: 24px;
+  }
+
+  app-back {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+
+  app-soon-card {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
   }
 }

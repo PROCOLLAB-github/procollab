@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   inject,
   OnInit,
   ViewChild,
@@ -19,6 +20,7 @@ import { ButtonComponent } from "@ui/primitives";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 import { CourseModuleCardComponent } from "./course-module-card/course-module-card.component";
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
+import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.component";
 
 @Component({
   selector: "app-detail",
@@ -33,12 +35,20 @@ import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail
     ModalComponent,
     ButtonComponent,
     CourseModuleCardComponent,
+    CourseAboutComponent,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
 })
-export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
+export class CourseInfoComponent implements OnInit, AfterViewInit {
   @ViewChild("descEl") descEl?: ElementRef;
+
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   private readonly cdRef = inject(ChangeDetectorRef);
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);

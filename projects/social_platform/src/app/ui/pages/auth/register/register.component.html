@@ -273,8 +273,8 @@
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement.set(!registerAgreement())">
         я прочитал соглашение и даю согласие на
-        <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download
-          >обработку персональных данных</a
+        <span class="register__policy-link" (click)="downloadPolicy($event)"
+          >обработку персональных данных</span
         >
       </span>
     </div>

@@ -6,6 +6,11 @@
 .register {
   height: 100vh;
 
+  &__policy-link {
+    color: var(--accent);
+    cursor: pointer;
+  }
+
   &__agreement {
     display: flex;
     align-items: center;

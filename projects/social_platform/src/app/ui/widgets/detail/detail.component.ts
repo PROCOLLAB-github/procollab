@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule, Location } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { ButtonComponent, InputComponent } from "@ui/primitives";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -24,6 +31,7 @@ import { DetailProjectInfoService } from "./services/project/detail-project-info
 import { Program } from "@domain/program/program.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ChatStateService } from "@api/chat/chat-state.service";
+import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 
 @Component({
   selector: "app-detail",
@@ -42,6 +50,7 @@ import { ChatStateService } from "@api/chat/chat-state.service";
     InputComponent,
     TruncatePipe,
     ControlErrorPipe,
+    ProgramLinksComponent,
   ],
   providers: [
     ProfileDetailUIInfoService,
@@ -95,6 +104,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly registerDateExpired = this.detailProgramInfoService.registerDateExpired;
   protected readonly submissionProjectDateExpired =
     this.detailProjectInfoService.submissionProjectDateExpired;
+
   protected readonly isInProject = this.detailInfoService.isInProject;
   protected readonly queryCourseId = this.detailInfoService.queryCourseId;
 
@@ -115,12 +125,16 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Переменные для работы с модалками
   protected readonly isAssignProjectToProgramModalOpen =
     this.detailProgramInfoService.isAssignProjectToProgramModalOpen;
+
   protected readonly isProgramEndedModalOpen =
     this.detailProgramInfoService.isProgramEndedModalOpen;
+
   protected readonly isProgramSubmissionProjectsEndedModalOpen =
     this.detailProgramInfoService.isProgramSubmissionProjectsEndedModalOpen;
+
   protected readonly isLeaveProjectModalOpen =
     this.detailProjectInfoService.isLeaveProjectModalOpen; // Флаг модального окна выхода
+
   protected readonly isEditDisable = this.detailProjectInfoService.isEditDisable; // Флаг недоступности редактирования
   protected readonly isEditDisableModal = this.detailProjectInfoService.isEditDisableModal; // Флаг недоступности редактирования для модалки
   protected readonly openSupport = this.detailProjectInfoService.openSupport; // Флаг модального окна поддержки
@@ -152,6 +166,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly inviteForm = this.detailProfileInfoService.inviteForm;
 
   protected readonly errorMessage = ErrorMessage;
+
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   ngOnInit(): void {
     this.detailInfoService.initializationDetail();

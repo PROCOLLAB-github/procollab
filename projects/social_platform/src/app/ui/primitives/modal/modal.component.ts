@@ -55,6 +55,9 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Цветовая схема модального окна */
   @Input() color?: "primary" | "gradient" = "primary";
 
+  /** Дополнительный CSS-класс для modal__body */
+  @Input() bodyClass?: string;
+
   /** Состояние открытия модального окна */
   @Input({ required: true }) set open(value: boolean) {
     setTimeout(() => {

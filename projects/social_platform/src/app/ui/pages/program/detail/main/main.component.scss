@@ -65,8 +65,12 @@
 
   &__details {
     display: grid;
-    grid-template-columns: 2fr 5fr 3fr;
+    grid-template-columns: 1fr;
     grid-gap: 20px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 2fr 5fr 3fr;
+    }
   }
 }
 
@@ -137,43 +141,6 @@
 
   &:hover {
     color: var(--accent-dark);
-  }
-}
-
-.links {
-  overflow: hidden;
-
-  &__section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    border-bottom: 0.5px solid var(--accent);
-  }
-
-  &__icon {
-    color: var(--accent);
-  }
-
-  &__title {
-    margin-bottom: 8px;
-    color: var(--accent);
-  }
-
-  &__item {
-    cursor: pointer;
-  }
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
-
-    span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
   }
 }
 

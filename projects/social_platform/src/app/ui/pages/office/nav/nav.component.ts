@@ -1,5 +1,13 @@
 /** @format */
 
+import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
+import { NotificationService } from "@ui/services/notification/notification.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";
+import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-case";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -10,20 +18,11 @@ import {
   OnInit,
   inject,
 } from "@angular/core";
-import { NavService } from "@ui/services/nav/nav.service";
-import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { noop } from "rxjs";
-import { Invite } from "@domain/invite/invite.model";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { IconComponent } from "@ui/primitives";
-import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
-import { NotificationService } from "@ui/services/notification/notification.service";
-import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";
-import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-case";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
-import { AppRoutes } from "@api/paths/app-routes";
+import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { Invite } from "@domain/invite/invite.model";
+import { NavService } from "@ui/services/nav/nav.service";
 
 /**
  * Компонент навигационного меню
@@ -60,6 +59,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   styleUrl: "./nav.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     IconComponent,
     RouterLink,
     RouterLinkActive,
@@ -74,9 +74,9 @@ export class NavComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
+  private readonly navService = inject(NavService);
 
   constructor(
-    public readonly navService: NavService,
     private readonly router: Router,
     public readonly notificationService: NotificationService,
     public readonly authRepository: AuthInfoService,
@@ -170,6 +170,4 @@ export class NavComponent implements OnInit, OnDestroy {
   openSkills() {
     location.href = "https://skills.procollab.ru";
   }
-
-  protected readonly noop = noop;
 }

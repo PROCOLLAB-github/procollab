@@ -40,6 +40,8 @@ export class ProfileInfoComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  avatarSize = window.innerWidth < 920 ? 42 : 33;
+
   /** Данные пользователя для отображения */
   @Input({ required: true }) user!: User;
 

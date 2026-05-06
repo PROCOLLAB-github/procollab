@@ -2,18 +2,23 @@
 
 @if (lessonInfo()) {
 <div class="task">
-  <div class="task__wrapper">
+  <div class="task__wrapper" [class.task__wrapper--mobile]="appWidth < 1000">
+    @if (appWidth >= 1000) {
     <div class="task__tasks">
       <p class="task__name text-bold-body-14">модуль {{ lessonInfo()?.moduleOrder }}</p>
+      <p class="task__lesson text-body-12">урок {{ lessonOrder() }}</p>
     </div>
+    }
 
     <div class="task__progress">
       @for (task of tasks(); track task.id) {
       <div
         class="progress__task"
+        (click)="onSelectTask(task)"
         [ngClass]="{
           'progress__task--done': isDone(task),
-          'progress__task--current': isCurrent(task.id)
+          'progress__task--current': isCurrent(task.id),
+          'progress__task--clickable': isClickable(task)
         }"
       >
         <p class="text-body-12">{{ task.order }}</p>
@@ -43,6 +48,7 @@
       <app-write-task
         [data]="task"
         [type]="task.answerType === 'text_and_files' ? 'text-file' : 'text'"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange($event)"
       ></app-write-task>
       }
@@ -53,6 +59,7 @@
         [data]="task"
         [success]="success()"
         [error]="hasError()"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange($event)"
       ></app-exclude-task>
       }
@@ -63,6 +70,7 @@
         [data]="task"
         [success]="success()"
         [error]="hasError()"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange([$event.answerId])"
       ></app-radio-select-task>
       }
@@ -73,6 +81,7 @@
         [data]="task"
         [success]="success()"
         [error]="hasError()"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange($event)"
       ></app-file-task>
       }
@@ -82,8 +91,8 @@
 
         <app-button
           [loader]="loader()"
-          [disabled]="isSubmitDisabled()"
-          [style.opacity]="isSubmitDisabled() ? 0.5 : 1"
+          [disabled]="isSubmitDisabled() || isViewingCompleted()"
+          [style.opacity]="isSubmitDisabled() || isViewingCompleted() ? 0.5 : 1"
           size="big"
           customTypographyClass="text-body-12"
           class="action__button"

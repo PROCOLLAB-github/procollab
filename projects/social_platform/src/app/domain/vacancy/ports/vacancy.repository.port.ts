@@ -20,6 +20,7 @@ export abstract class VacancyRepositoryPort {
     salary?: string,
     searchValue?: string
   ): Observable<Vacancy[]>;
+
   abstract getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]>;
   abstract getOne(vacancyId: number): Observable<Vacancy>;
   abstract postVacancy(projectId: number, vacancy: CreateVacancyDto): Observable<Vacancy>;

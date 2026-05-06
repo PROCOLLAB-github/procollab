@@ -12,14 +12,14 @@ import {
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
 import { nanoid } from "nanoid";
-import { FileService } from "@core/lib/services/file/file.service";
-import { forkJoin, noop, Observable, tap } from "rxjs";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FileUploadItemComponent } from "@ui/primitives/file-upload-item/file-upload-item.component";
-import { IconComponent, InputComponent } from "@ui/primitives";
 import { AutosizeModule } from "ngx-autosize";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
+import { FileUploadItemComponent } from "@ui/primitives/file-upload-item/file-upload-item.component";
+import { IconComponent } from "@ui/primitives";
+import { FileService } from "@core/lib/services/file/file.service";
+import { catchError, forkJoin, noop, Observable, of, tap } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент формы создания новости
@@ -74,11 +74,18 @@ export class NewsFormComponent implements OnInit {
 
   messageForm: FormGroup;
 
+  readonly maxTextLength = 15940;
+
+  get isTextOverflow(): boolean {
+    return (this.messageForm.get("text")?.value?.length ?? 0) > this.maxTextLength;
+  }
+
   /**
    * Обработчик отправки формы
    * Валидирует форму и эмитит событие с данными новости
    */
   onSubmit() {
+    if (this.isTextOverflow) return;
     if (!this.validationService.getFormValidation(this.messageForm)) {
       return;
     }
@@ -87,6 +94,8 @@ export class NewsFormComponent implements OnInit {
       ...this.messageForm.value,
       files: [...this.imagesList.map(f => f.src), ...this.filesList.map(f => f.src)],
     });
+
+    this.onResetForm();
   }
 
   /**
@@ -94,6 +103,7 @@ export class NewsFormComponent implements OnInit {
    */
   onResetForm() {
     this.imagesList = [];
+    this.filesList = [];
     this.messageForm.reset();
   }
 
@@ -139,6 +149,11 @@ export class NewsFormComponent implements OnInit {
               fileObj.src = file.url;
               fileObj.loading = false;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = true;
+              return of(null);
             })
           )
         );
@@ -156,6 +171,11 @@ export class NewsFormComponent implements OnInit {
             tap(file => {
               fileObj.loading = false;
               fileObj.src = file.url;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = "Ошибка загрузки";
+              return of(null);
             })
           )
         );

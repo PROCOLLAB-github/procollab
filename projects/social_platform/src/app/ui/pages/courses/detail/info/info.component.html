@@ -4,6 +4,7 @@
 <main class="trajectory">
   <section class="course__main">
     <div class="course__details">
+      @if (appWidth > 1000) {
       <div class="course__left">
         <aside class="course__aside">
           <app-soon-card
@@ -12,6 +13,7 @@
           ></app-soon-card>
         </aside>
       </div>
+      }
 
       <section class="course__content">
         <div
@@ -32,27 +34,11 @@
         </div>
       </section>
 
+      @if (appWidth > 1000) {
       <div class="course__right">
-        <div class="about course__about">
-          <div class="about__head">
-            <h3 class="text-body-12 about__title">о курсе</h3>
-            <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
-          </div>
-          @if (courseDetail()!.description) {
-          <div class="text-body-10 about__text">
-            <p #descEl [innerHTML]="courseDetail()!.description | parseLinks | parseBreaks"></p>
-            @if (descriptionExpandable) {
-            <div
-              class="read-more"
-              (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-            >
-              {{ readFullDescription ? "cкрыть" : "подробнее" }}
-            </div>
-            }
-          </div>
-          }
-        </div>
+        <app-course-about [description]="courseDetail()!.description"></app-course-about>
       </div>
+      }
     </div>
   </section>
 
