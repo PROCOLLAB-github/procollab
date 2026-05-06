@@ -15,6 +15,7 @@
     </div>
     } @else {
     <div class="program__details">
+      @if (appWidth > 1000) {
       <div class="program__left">
         <aside class="program__aside">
           @if (program()!.isUserMember) {
@@ -25,6 +26,7 @@
           }
         </aside>
       </div>
+      }
 
       <div class="program__content">
         <div class="about program__about">
@@ -64,61 +66,27 @@
         </div>
       </div>
 
+      @if (appWidth > 1000) {
       <div class="program__right">
-        <aside class="program__aside">
-          @if (program()!.isUserMember && (program()!.links?.length && program()!.links)) {
-          <div class="links program__section">
-            <div class="links__section">
-              <h3 class="links__title text-body-12">контакты</h3>
-              <i appIcon icon="phone" class="links__icon" appSquare="12"></i>
-            </div>
-            <ul>
-              @for (link of program()!.links; track $index) {
-              <li class="contact-link links__item text-body-10">
-                @if (link | userLinks; as l) {
-                <a
-                  class="contact-link__link"
-                  target="_blank"
-                  [href]="link.includes('@') ? 'mailto:' + link : link"
-                >
-                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span>{{ l.tag | truncate: 30 }}</span>
-                </a>
-                }
-              </li>
-              }
-            </ul>
-          </div>
-          }
+        @if (program()!.isUserMember && (program()!.links?.length && program()!.links)) {
+        <aside class="links program__section">
+          <app-program-links
+            title="контакты"
+            icon="phone"
+            [links]="contactLinks"
+          ></app-program-links>
         </aside>
-
-        <aside class="program__aside">
-          @if (program()!.isUserMember && (program()!.materials?.length && program()!.materials)) {
-          <div class="links program__section">
-            <div class="links__section">
-              <h3 class="links__title text-body-12">материалы</h3>
-              <i appIcon icon="book" appSquare="12" class="links__icon"></i>
-            </div>
-            <ul>
-              @for (material of program()!.materials; track $index) {
-              <li class="contact-link links__item text-body-10">
-                @if (material.url | userLinks; as l) {
-                <a
-                  class="contact-link__link"
-                  target="_blank"
-                  [href]="material.url.includes('@') ? 'mailto:' + material.url : material.url"
-                >
-                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span>{{ material.title | truncate: 30 }}</span>
-                </a>
-                }
-              </li>
-              }
-            </ul>
-          </div>
-          }
+        } @if (program()!.isUserMember && program()!.materials?.length) {
+        <aside class="program__aside program__section">
+          <app-program-links
+            title="материалы"
+            icon="book"
+            [links]="materialLinks"
+          ></app-program-links>
         </aside>
+        }
       </div>
+      }
     </div>
     }
   </section>

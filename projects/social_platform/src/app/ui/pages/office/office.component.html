@@ -3,9 +3,6 @@
 <div class="office">
   @if (authRepository.profile | async; as user) {
   <div class="office__wrapper">
-    <div class="office__top">
-      <app-nav [invites]="invites()"></app-nav>
-    </div>
     <img
       alt="background-image"
       src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
@@ -23,7 +20,7 @@
             <div class="office__sidebar--text">
               <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
               <p class="text-body-6">Политика обработки персональных данных</p>
-              <p class="text-body-6">2022</p>
+              <p class="text-body-6">{{ currentYear() }}</p>
             </div>
 
             <div class="office__programs">
@@ -37,17 +34,21 @@
           </ui-sidebar>
 
           <div class="office__inner--content">
-            @if (user !== undefined && invites !== undefined) {
-            <app-profile-control-panel
-              [invites]="invites()"
-              [hasNotifications]="false"
-              [hasUnreads]="!!(chatStateService.unread$ | async)"
-              [user]="user"
-              (acceptInvite)="onAcceptInvite($event)"
-              (rejectInvite)="onRejectInvite($event)"
-              (logout)="onLogout()"
-            ></app-profile-control-panel>
-            }
+            <div class="office__top">
+              <app-nav [invites]="invites()"></app-nav>
+
+              @if (user !== undefined && invites !== undefined) {
+              <app-profile-control-panel
+                [invites]="invites()"
+                [hasNotifications]="false"
+                [hasUnreads]="!!(chatStateService.unread$ | async)"
+                [user]="user"
+                (acceptInvite)="onAcceptInvite($event)"
+                (rejectInvite)="onRejectInvite($event)"
+                (logout)="onLogout()"
+              ></app-profile-control-panel>
+              }
+            </div>
             <router-outlet></router-outlet>
           </div>
         </div>

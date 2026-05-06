@@ -12,7 +12,7 @@ import {
 import { ButtonComponent, InputComponent } from "@ui/primitives";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -67,6 +67,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
 export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);
+  protected readonly router = inject(Router);
   public readonly skillsProfileService = inject(ProfileService);
   public readonly chatStateService = inject(ChatStateService);
   private readonly projectFormService = inject(ProjectFormService);
@@ -166,6 +167,20 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly inviteForm = this.detailProfileInfoService.inviteForm;
 
   protected readonly errorMessage = ErrorMessage;
+
+  isContactsModalOpen = false;
+  isMaterialsModalOpen = false;
+
+  get contactLinks(): { label: string; url: string }[] {
+    return (this.info()?.links ?? []).map((link: string) => ({ label: link, url: link }));
+  }
+
+  get materialLinks(): { label: string; url: string }[] {
+    return (this.info()?.materials ?? []).map((m: { title: string; url: string }) => ({
+      label: m.title,
+      url: m.url,
+    }));
+  }
 
   protected appWidth = window.innerWidth;
 

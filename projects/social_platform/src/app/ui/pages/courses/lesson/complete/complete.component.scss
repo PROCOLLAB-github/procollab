@@ -7,6 +7,7 @@
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-lg);
+  position: relative;
 
   @include responsive.apply-desktop {
     min-height: 358px;
@@ -24,5 +25,15 @@
   &__text {
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+
+  &__button {
+    position: absolute;
+    top: 84%;
+    width: 90%;
+
+    @include responsive.apply-desktop {
+      position: static;
+    }
   }
 }

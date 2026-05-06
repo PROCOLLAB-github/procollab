@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, HostListener, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/primitives";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -27,6 +27,13 @@ export class TaskCompleteComponent implements OnInit {
   route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
   router = inject(Router); // Сервис для навигации
   courseId = signal<number | null>(null);
+
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   ngOnInit(): void {
     const courseId = Number(this.route.parent?.parent?.parent?.snapshot.paramMap.get("courseId"));

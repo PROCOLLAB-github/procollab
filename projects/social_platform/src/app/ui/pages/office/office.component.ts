@@ -26,6 +26,7 @@ import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.servi
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ChatStateService } from "@api/chat/chat-state.service";
+import { ChatInfoService } from "@api/chat/facades/chat-info.service";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -84,6 +85,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   readonly navItems = this.officeUIInfoService.navItems;
   protected readonly AppRoutes = AppRoutes;
+
+  protected currentYear = signal(new Date().getFullYear());
 
   ngOnInit(): void {
     this.officeInfoService.initializationOffice();

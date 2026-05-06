@@ -9,8 +9,23 @@
       <p class="text-body-12">урок пройден</p>
     </div>
 
-    <app-button customTypographyClass="text-body-12" size="medium" (click)="routeToCourses()"
+    @if (appWidth > 1000) {
+    <app-button
+      class="complete__button"
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="routeToCourses()"
       >отлично</app-button
     >
+    }
   </div>
 </div>
+@if (appWidth < 1000) {
+<app-button
+  class="complete__button"
+  customTypographyClass="text-body-12"
+  [size]="appWidth > 1000 ? 'medium' : 'big'"
+  (click)="routeToCourses()"
+  >отлично</app-button
+>
+}

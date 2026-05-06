@@ -7,6 +7,7 @@ import {
   Component,
   computed,
   ElementRef,
+  HostListener,
   inject,
   OnDestroy,
   OnInit,
@@ -90,6 +91,13 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly isHintExpertsVisible = this.tooltipInfoService.isHintExpertsVisible;
   protected readonly isHintExpertsModal = this.programDetailListUIInfoService.isHintExpertsModal;
+
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   ngOnInit(): void {
     this.programDetailListInfoService.initializationListData();

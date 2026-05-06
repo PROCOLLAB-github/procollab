@@ -5,6 +5,7 @@ import {
   computed,
   DestroyRef,
   ElementRef,
+  HostListener,
   inject,
   OnDestroy,
   OnInit,
@@ -86,6 +87,21 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly registeredProgramModal =
     this.programDetailMainUIInfoService.registeredProgramModal;
+
+  get contactLinks(): { label: string; url: string }[] {
+    return (this.program()?.links ?? []).map(link => ({ label: link, url: link }));
+  }
+
+  get materialLinks(): { label: string; url: string }[] {
+    return (this.program()?.materials ?? []).map(m => ({ label: m.title, url: m.url }));
+  }
+
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   ngOnInit(): void {
     this.programDetailMainService.initializationProgramDetailMain(this.descEl);
