@@ -1,0 +1,56 @@
+/** @format */
+
+import { inject } from "@angular/core";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { HttpParams } from "@angular/common/http";
+import { ResolveFn } from "@angular/router";
+import { map } from "rxjs";
+import { Project } from "@domain/project/project.model";
+import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
+
+/**
+ * РЕЗОЛВЕР ДЛЯ ПОЛУЧЕНИЯ ПРОЕКТОВ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
+ *
+ * Назначение:
+ * - Предзагружает данные проектов, принадлежащих текущему пользователю
+ * - Обеспечивает наличие данных в компоненте на момент его инициализации
+ * - Используется в роутинге Angular для маршрута "мои проекты"
+ *
+ * @params:
+ * - Неявно: внедряется ProjectService через inject()
+ * - Параметры маршрута и состояние роутера (не используются в данной реализации)
+ *
+ * @returns:
+ * - Observable<ApiPagination<Project>> - пагинированный список проектов пользователя
+ * - Первая страница с лимитом 16 проектов
+ *
+ * 1. Внедряет ProjectService через функцию inject()
+ * 2. Вызывает метод getMy() с параметрами пагинации (limit: 16)
+ * 3. Возвращает Observable, который будет разрешен перед активацией маршрута
+ *
+ * - Подключается к маршруту в конфигурации роутера
+ * - Результат доступен в компоненте через route.data['data']
+ *
+ * Особенности:
+ * - Использует функциональный подход (ResolveFn) вместо класса
+ * - Загружает только проекты текущего авторизованного пользователя
+ * - Загружает только первые 16 проектов для оптимизации производительности
+ * - Дополнительные проекты загружаются по мере прокрутки (infinite scroll)
+ */
+
+export const ProjectsMyResolver: ResolveFn<ApiPagination<Project>> = () => {
+  const getMyProjectsUseCase = inject(GetMyProjectsUseCase);
+
+  return getMyProjectsUseCase.execute(new HttpParams({ fromObject: { limit: 16 } })).pipe(
+    map(result =>
+      result.ok
+        ? result.value
+        : {
+            count: 0,
+            results: [],
+            next: "",
+            previous: "",
+          }
+    )
+  );
+};

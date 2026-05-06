@@ -1,0 +1,35 @@
+<!-- @format -->
+
+<!-- vacancies.component.html -->
+<!-- @format -->
+
+<main class="page">
+  <div class="page__bar">
+    <app-back
+      [namespace]="isAll() === 'all' ? 'вакансии' : 'мои отклики'"
+      [path]="isAll() === 'all' ? basePath + '/feed' : basePath + 'vacancies/all'"
+    ></app-back>
+
+    <div class="page__info">
+      <div class="page__outlet">
+        @if(isAll() === 'all') {
+        <form [formGroup]="searchForm" (submit)="onSearchSubmit()">
+          <app-search formControlName="search"></app-search>
+        </form>
+        }
+
+        <router-outlet></router-outlet>
+      </div>
+
+      @if (isAll() === 'all') {
+      <div class="page__left">
+        <app-vacancy-filter
+          (searchValueChange)="onSearhValueChanged($event)"
+          [searchValue]="this.searchForm.get('search')?.value!"
+          class="page__filter"
+        ></app-vacancy-filter>
+      </div>
+      }
+    </div>
+  </div>
+</main>

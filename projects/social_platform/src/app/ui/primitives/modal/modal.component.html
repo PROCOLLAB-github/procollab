@@ -1,0 +1,14 @@
+<!-- @format -->
+<ng-template #modalTemplate>
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal__overlay" (click)="$event.stopPropagation(); openChange.emit(false)"></div>
+    <div
+      class="modal__body {{ bodyClass }}"
+      [ngClass]="{
+        'modal__body--gradient': color === 'gradient'
+      }"
+    >
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-template>

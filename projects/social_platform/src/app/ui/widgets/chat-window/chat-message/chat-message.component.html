@@ -1,0 +1,79 @@
+<!-- @format -->
+
+<div
+  class="message"
+  [class.message--unread]="!chatMessage.isRead"
+  (contextmenu)="onOpenContextmenu($event)"
+  (clickOutside)="onCloseContextmenu()"
+  clickOutsideEvents="contextmenu"
+>
+  <div class="message__inner">
+    <app-avatar
+      class="message__avatar"
+      [size]="30"
+      [isOnline]="chatMessage.author.isOnline"
+      [onlineBadgeBorder]="2"
+      [onlineBadgeSize]="10"
+      [url]="chatMessage.author.avatar"
+    ></app-avatar>
+    <div class="message__info">
+      <div class="message__top">
+        <div class="message__name text-body-10">
+          {{ chatMessage.author.firstName }} {{ chatMessage.author.lastName }}
+        </div>
+        <div class="message__time text-body-10">
+          {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
+        </div>
+      </div>
+      @if (chatMessage.replyTo) {
+      <div class="message__reply reply">
+        <div class="reply__name text-body-10">
+          {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
+        </div>
+        <p class="reply__message text-body-10">
+          {{ chatMessage.replyTo.text }}
+        </p>
+      </div>
+      }
+      <ul class="message__files">
+        @for (file of chatMessage.files; track chatMessage.id) {
+        <li class="message__file">
+          <app-file-item
+            [name]="file.name"
+            [link]="file.link"
+            [type]="file.extension"
+            [size]="file.size"
+          ></app-file-item>
+        </li>
+        }
+      </ul>
+      <div class="message__content text-body-10">{{ chatMessage.text }}</div>
+    </div>
+  </div>
+  <div
+    class="message__menu-dots"
+    (click)="onOpenContextmenu($event)"
+    (clickOutside)="onCloseContextmenu()"
+  >
+    <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
+  </div>
+</div>
+@if (authRepository.profile | async; as profile) {
+<ul
+  #contextMenu
+  class="message__contextmenu contextmenu"
+  [style.opacity]="isOpen ? 1 : 0"
+  [style.pointer-events]="isOpen ? 'auto' : 'none'"
+>
+  <li class="contextmenu__item text-body-10" (click)="onCopyContent($event)">скопировать</li>
+  <li class="contextmenu__item text-body-10" (click)="onReply($event)">ответить</li>
+  @if (profile.id === chatMessage.author.id) {
+  <ng-container>
+    <li class="contextmenu__item text-body-10" (click)="onEdit($event)">редактировать</li>
+    <li class="contextmenu__item contextmenu__item--red text-body-10" (click)="onDelete($event)">
+      удалить
+    </li>
+  </ng-container>
+  }
+</ul>
+}

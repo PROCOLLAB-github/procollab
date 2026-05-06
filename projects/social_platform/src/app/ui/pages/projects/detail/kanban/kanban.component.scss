@@ -1,0 +1,17 @@
+.kanban {
+  &__wrapper {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+    grid-gap: 20px;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__right {
+    position: relative;
+  }
+}

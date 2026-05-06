@@ -4,11 +4,10 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from "@angular/core";
 import { InviteManageCardComponent, ProfileInfoComponent, IconComponent } from "@uilib";
 import { ClickOutsideModule } from "ng-click-outside";
-import type { Invite } from "@office/models/invite.model";
+import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { RouterLink } from "@angular/router";
 import type { User } from "../../../models/user.model";
 import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
-import { UserData } from "projects/skills/src/models/profile.model";
 
 /**
  * Компонент панели управления профилем
@@ -39,7 +38,6 @@ import { UserData } from "projects/skills/src/models/profile.model";
     ProfileInfoComponent,
     ClickOutsideModule,
     IconComponent,
-    RouterLink,
     EmptyManageCardComponent,
   ],
   templateUrl: "./profile-control-panel.component.html",
@@ -48,7 +46,7 @@ import { UserData } from "projects/skills/src/models/profile.model";
 })
 export class ProfileControlPanelComponent {
   /** Данные текущего пользователя */
-  @Input({ required: true }) user!: User | UserData | null;
+  @Input({ required: true }) user!: User | null;
 
   /** Массив приглашений пользователя */
   @Input({ required: true }) invites!: Invite[];

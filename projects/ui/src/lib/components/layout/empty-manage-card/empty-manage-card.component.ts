@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { RouterLink } from "@angular/router";
 
 @Component({

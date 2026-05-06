@@ -1,0 +1,26 @@
+/** @format */
+
+import { TestBed } from "@angular/core/testing";
+import { ProjectsResolver } from "./projects.resolver";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { of } from "rxjs";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+
+describe("ProjectsResolver", () => {
+  beforeEach(() => {
+    const authSpy = jasmine.createSpyObj("authService", {}, { profile: of({}) });
+
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
+    });
+  });
+
+  it("should be created", () => {
+    const result = TestBed.runInInjectionContext(() =>
+      ProjectsResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
+  });
+});

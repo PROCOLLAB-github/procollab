@@ -1,0 +1,59 @@
+<!-- @format -->
+
+<div class="vacancy__left">
+  @if (vacancy()!.description) {
+  <div class="vacancy__content">
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">описание вакансии</p>
+      <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
+    </div>
+    <div class="text-body-10 about__text">
+      <p #descEl [innerHTML]="vacancy()!.description | parseLinks | parseBreaks"></p>
+      @if (descriptionExpandable()) {
+      <div
+        class="read-more text-body-10"
+        (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
+      >
+        {{ readFullDescription() ? "скрыть" : "подробнее" }}
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <div #contentEl class="vacancy__content">
+    @if (vacancy()!.requiredSkills.length; as skillsLength) {
+    <div class="card__skills skills">
+      <div class="lists__section">
+        <p class="text-body-12 lists__title">навыки</p>
+        <i appIcon icon="box" class="lists__icon" appSquare="12"></i>
+      </div>
+      @if (vacancy()!.requiredSkills; as requiredSkills) { @if (requiredSkills) {
+      <ul class="skills__list">
+        @for (skill of requiredSkills.slice(0, 8); track $index) {
+        <app-tag
+          [color]="skill.category.name.includes('Soft') ? 'accent' : 'complete'"
+          [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'"
+          >{{ skill.name }}</app-tag
+        >
+        }
+      </ul>
+      }
+      <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills()">
+        @if (requiredSkills) {
+        <ul class="skills__list">
+          @for (skill of requiredSkills.slice(0, 8); track $index) {
+          <app-tag>{{ skill.name }}</app-tag>
+          }
+        </ul>
+        }
+      </div>
+      } @if (skillsLength > 8) {
+      <div class="read-more text-body-10" (click)="readFullSkills.set(!readFullSkills())">
+        {{ readFullSkills() ? "скрыть" : "подробнее" }}
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>
