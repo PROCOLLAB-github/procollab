@@ -234,7 +234,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/core/consts.md`                   | done    |
 | `docs/uilib.md`                         | done    |
 | `docs/social-platform/architecture.md`  | done    |
-| `docs/social-platform/shared.md`        | planned |
+| `docs/social-platform/shared.md`        | done    |
 | `docs/social-platform/ui-primitives.md` | planned |
 | `docs/social-platform/ui-widgets.md`    | planned |
 | `docs/modules/auth.md`                  | planned |
