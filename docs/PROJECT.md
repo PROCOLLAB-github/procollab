@@ -241,7 +241,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/modules/profile.md`               | done    |
 | `docs/modules/skills.md`                | done    |
 | `docs/modules/specializations.md`       | done    |
-| `docs/modules/industry.md`              | planned |
+| `docs/modules/industry.md`              | done    |
 | `docs/modules/member.md`                | planned |
 | `docs/modules/project.md`               | planned |
 | `docs/modules/vacancy.md`               | planned |
