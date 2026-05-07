@@ -249,7 +249,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/modules/program.md`               | done    |
 | `docs/modules/courses.md`               | done    |
 | `docs/modules/news.md`                  | done    |
-| `docs/modules/feed.md`                  | planned |
+| `docs/modules/feed.md`                  | done    |
 | `docs/modules/chat.md`                  | planned |
 | `docs/modules/office-shell.md`          | planned |
 | `docs/cross-cutting.md`                 | planned |
