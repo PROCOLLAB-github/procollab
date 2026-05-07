@@ -1,0 +1,181 @@
+<!-- @format -->
+
+# Module: `feed`
+
+Глобальная лента (`/office/feed`) — единственная страница на платформе, агрегирующая контент **разных типов**: новые проекты, открытые вакансии, новости (project / profile / program), плюс маркетинговые «адверты».
+
+## Назначение
+
+- **Лента** (`/office/feed`) — бесконечная пагинация поверх единого API-эндпоинта `/feed/`, который возвращает discriminated union `FeedItem` с полем `typeModel: "project" \| "vacancy" \| "news"`.
+- **Фильтрация по типу контента** через `<app-feed-filter>` ([`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md)) — сохраняется в query `?type=project|vacancy|news`.
+- **Like / read** для новостей ленты — отдельные use-case'ы.
+
+---
+
+## Domain (`domain/feed/`)
+
+### `feed-item.model.ts`
+
+```ts
+interface FeedProject {
+  id: number;
+  name: string;
+  shortDescription: string;
+  industry: number;
+  imageAddress: string;
+  viewsCount: number;
+  leader: number;
+  partnerProgram: { id: number; name: string } | null;  // ссылка на программу
+}
+
+type FeedItemType = "vacancy" | "news" | "project";
+
+type FeedItem =
+  | { typeModel: "project"; content: FeedProject }
+  | { typeModel: "vacancy"; content: Vacancy }
+  | { typeModel: "news";    content: FeedNews & { contentObject: { id: number } } };
+```
+
+> `FeedItem` — discriminated union по `typeModel`. Виджет в шаблоне делает `@switch (item.typeModel)` и рендерит подходящий компонент.
+
+> `FeedNews & { contentObject: { id: number } }` — расширенный тип. `contentObject.id` — id владельца новости (project/profile/program), нужен для построения router-link к деталям.
+
+### Port
+
+```ts
+abstract class FeedRepositoryPort {
+  fetchFeed(
+    offset: number,
+    limit: number,
+    type: string             // "project|vacancy|news" (joined with FILTER_SPLIT_SYMBOL = "|")
+  ): Observable<ApiPagination<FeedItem>>;
+}
+```
+
+DI-биндинг (`infrastructure/di/feed.providers.ts`):
+
+```ts
+{ provide: FeedRepositoryPort, useExisting: FeedRepository }
+```
+
+> Только `fetchFeed` — like / read новостей делегируются их собственным репозиториям (`ProjectNewsRepositoryPort` etc.) через отдельные use-case'ы. См. ниже.
+
+---
+
+## Use-cases (3 шт., `api/feed/use-cases/`)
+
+| Use-case | Параметры | Возвращает | Куда делегирует |
+|---|---|---|---|
+| `FetchFeedUseCase` | `offset, limit, type: string` | `Result<ApiPagination<FeedItem>, { kind: "fetch_feed_error"; cause? }>` | `FeedRepositoryPort.fetchFeed` |
+| `ToggleFeedLikeUseCase` | `feedItem: FeedItem, state: boolean` | `Result<void, ...>` | По типу владельца внутри `FeedNews.contentObject.id` дёргает `ProjectNewsRepositoryPort.toggleLike` / `ProgramNewsRepositoryPort.toggleLike` / `ProfileNewsRepositoryPort.toggleLike`. |
+| `ReadFeedNewsUseCase` | `newsItems: FeedItem[]` | `Result<void, ...>` | Аналогично — батчевая отметка просмотренных. |
+
+> `ToggleFeedLikeUseCase` и `ReadFeedNewsUseCase` — это **диспетчеры**, которые на основе `FeedItem.typeModel` и `contentObject` решают какой repository дёргать. Это компромисс — feed не имеет своих like / read endpoint'ов на бэке, всё идёт через owners.
+
+---
+
+## Facades (`api/feed/facades/`)
+
+### `FeedInfoService`
+
+`@Injectable()` (page-scoped). Управляет ленты:
+
+- Подписан на `route.data` для initial-загрузки из resolver'а.
+- `IntersectionObserver` для бесконечной пагинации — при попадании последнего элемента в viewport дёргает `fetchFeedUseCase` с инкрементированным offset.
+- Реагирует на изменения query `?type=...` — пересобирает фильтр, сбрасывает offset и пагинацию.
+- `onLikeFeedItem(item)` → `ToggleFeedLikeUseCase` → оптимистичная мутация `feedUIInfoService.applyToggleLike()`.
+- `onReadFeedNews(items)` → `ReadFeedNewsUseCase` (батч).
+
+Константы:
+
+```ts
+const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
+const FILTER_SPLIT_SYMBOL = "|";
+```
+
+### `FeedUIInfoService`
+
+UI-state:
+- `feedItems$ AsyncState<FeedItem[]>` (через `applyInitializationFeedNewsEvent`, `applyAddFeedItems`, `applyToggleLike`).
+- `feedItems` computed массив для шаблона.
+- `feedTake` (default 10), `feedOffset`, `count`.
+- Сигналы для UI-индикаторов (loading further, has-more).
+
+---
+
+## Repository & Adapter
+
+### `FeedRepository` (`infrastructure/repository/feed/feed.repository.ts`)
+
+Pass-through к адаптеру. Без трансформаций — типы фронта совпадают с DTO.
+
+### `FeedHttpAdapter` (`infrastructure/adapters/feed/feed-http.adapter.ts`)
+
+| Метод | HTTP | URL | Параметры | Ответ |
+|---|---|---|---|---|
+| `fetchFeed(offset, limit, type)` | GET | `/feed/` | `?limit, offset, type` (тип через `\|`, например `vacancy\|news`) | `ApiPagination<FeedItem>` |
+
+Один-единственный endpoint.
+
+---
+
+## Routes
+
+Подключено в **office shell routes** (`ui/routes/office/office.routes.ts`):
+
+```ts
+{
+  path: "feed",
+  component: FeedComponent,
+  resolve: { data: FeedResolver },
+}
+```
+
+Отдельной `ui/routes/feed/` нет.
+
+`FeedResolver` дёргает `FetchFeedUseCase.execute(0, 10, "vacancy|news|project")` (default-фильтр).
+
+---
+
+## Pages (`ui/pages/feed/`)
+
+| Page | Файл | Selector | Что |
+|---|---|---|---|
+| `FeedComponent` | `pages/feed/feed.component.ts` | `app-feed` | Главный компонент. Рендерит `<app-feed-filter>`, заголовок, scroll-контейнер с `@for (item of feedItems(); ...) { @switch (item.typeModel) ... }`. Provides `FeedInfoService` + `FeedUIInfoService`. |
+| `NewProjectComponent` | `pages/feed/new-project/new-project.component.ts` | `app-new-project` | Карточка нового проекта в ленте (`typeModel === "project"`). Принимает `@Input() project: FeedProject`. Использует `IndustryInfoService.getOne` для имени отрасли. |
+| `OpenVacancyComponent` | `pages/feed/open-vacancy/open-vacancy.component.ts` | `app-open-vacancy` | Карточка открытой вакансии в ленте (`typeModel === "vacancy"`). Принимает `@Input() vacancy: Vacancy`. |
+| `AdvertCardComponent` | `pages/feed/open-vacancy/advert-card/advert-card.component.ts` | `app-advert-card` | Карточка маркетингового объявления — `@Input() advert: New, layout: "vertical" \| "horizontal" = "vertical"`. Используется внутри open-vacancy для рекламы между вакансиями. |
+
+Для `typeModel === "news"` используется общий `<app-news-card>` ([`docs/modules/news.md`](news.md)).
+
+---
+
+## Widgets
+
+| Widget | Где |
+|---|---|
+| `<app-feed-filter>` | [`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md) — фильтр по типу контента. |
+| `<app-news-card>` | то же — для `typeModel === "news"`. |
+
+---
+
+## Consumers
+
+| Где | Как использует |
+|---|---|
+| `pages/office/...` | Feed — главная страница office shell (`/office` редиректит на `/office/feed`). |
+| `IndustryInfoService.getOne` | `NewProjectComponent` отображает имя отрасли. |
+
+---
+
+## Известные проблемы
+
+| Что | Где | Заметка |
+|---|---|---|
+| `ToggleFeedLikeUseCase` диспатчит на 3 разных репозитория по `contentObject.id` | `api/feed/use-cases/toggle-feed-like.use-case.ts` | Архитектурно правильнее завести `/feed/.../like/` endpoint на бэке и не диспатчить на стороне фронта. |
+| `ReadFeedNewsUseCase` — то же самое | `read-feed-news.use-case.ts` | То же. |
+| `AdvertCardComponent` подсовывается в open-vacancy без явного контракта (как именно реклама вкрапляется между вакансиями) | `pages/feed/open-vacancy/...` | Описать алгоритм решения «когда показать рекламу». |
+| `FILTER_SPLIT_SYMBOL = "|"` зашит как литерал | `feed-info.service.ts` | Можно вынести в общий config — пайп на бэке такой же. |
+| `FeedItem` не покрывает программные новости отдельно — они приходят через `typeModel: "news"` с `contentObject.id` | port + repo | На бэке надо различать project-news / profile-news / program-news. Сейчас фронт обходится `contentObject.id` lookup'ом. |
+| Нет своего `domain/feed/events/` — feed не эмитит и не слушает domain events | — | OK для текущей логики. |
+| `FeedComponent` не имеет `@Input` — фильтр читается из query | `pages/feed/feed.component.ts` | По соглашению feed = страница, не виджет; OK. |
