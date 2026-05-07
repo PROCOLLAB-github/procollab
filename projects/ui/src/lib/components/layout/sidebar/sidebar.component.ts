@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -50,6 +51,7 @@ export interface NavItem {
   styleUrl: "./sidebar.component.scss",
   standalone: true,
   imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   /** Массив элементов навигации */

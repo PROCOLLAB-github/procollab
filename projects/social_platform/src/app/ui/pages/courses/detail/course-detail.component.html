@@ -1,0 +1,101 @@
+<!-- @format -->
+
+<div class="detail">
+  <div class="detail__body">
+    @if (loading()) {
+    <div class="loading">
+      <app-loader size="125px" color="accent"></app-loader>
+    </div>
+    } @else if (course()) {
+    <div class="info detail__section detail__info">
+      @if (showCover) {
+      <div class="info__cover">
+        <img class="info__cover" [src]="course()!.headerCoverUrl" alt="cover" />
+
+        <div class="info__avatar">
+          <app-avatar
+            [url]="course()!.avatarUrl"
+            [size]="106"
+            (click)="redirectDetailInfo(course()!.id)"
+          ></app-avatar>
+
+          @if (!isTaskDetail() && !isMobile) {
+          <h1 class="info__title text-body-12">
+            {{ course()!.title }}
+          </h1>
+          }
+        </div>
+      </div>
+      }
+
+      <div class="info__body">
+        <div class="info__actions" [class.info__actions--task]="showBackOnly">
+          @if (showBackOnly) {
+          <app-button size="small" appearance="outline" (click)="redirectDetailInfo(course()!.id)">
+            назад
+          </app-button>
+
+          @if (currentLesson()) {
+          <div class="task__meta">
+            <p class="text-body-14">модуль {{ currentLesson()!.moduleOrder }}</p>
+            <p class="task__lesson text-body-12">урок {{ currentLessonOrder() }}</p>
+          </div>
+          }
+
+          <app-button
+            size="small"
+            appearance="outline"
+            (click)="course()!.description ? (isAboutModalOpen = true) : null"
+          >
+            о курсе
+          </app-button>
+          } @else { @if (showAnalyticsButton) {
+          <app-button [disabled]="true" size="small" appearance="outline">аналитика</app-button>
+          } @if (showAboutButton) {
+          <app-button
+            size="small"
+            appearance="outline"
+            class="info__actions--end"
+            [disabled]="!course()!.description"
+            (click)="course()!.description ? (isAboutModalOpen = true) : null"
+          >
+            о курсе
+          </app-button>
+          }
+
+          <app-button
+            class="info__actions--full"
+            size="big"
+            appearance="outline"
+            (click)="redirectDetailInfo(isTaskDetail() ? course()!.id : undefined)"
+          >
+            назад
+          </app-button>
+
+          @if (showProgramButton) {
+          <app-button
+            [disabled]="isDisabled()"
+            size="big"
+            class="info__actions--full"
+            customTypographyClass="text-body-12"
+            appearance="outline"
+            (click)="redirectToProgram()"
+            >вернуться в программу</app-button
+          >
+          } }
+        </div>
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+
+    <app-modal
+      [open]="isAboutModalOpen"
+      (openChange)="isAboutModalOpen = !isAboutModalOpen"
+      bodyClass="modal__body--no-flex"
+    >
+      <app-course-about [description]="course()!.description"></app-course-about>
+    </app-modal>
+    }
+  </div>
+</div>

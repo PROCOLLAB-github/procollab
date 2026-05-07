@@ -1,0 +1,147 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  position: relative;
+
+  &__inner {
+    width: 100%;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  &__left {
+    flex-basis: 60%;
+    margin-bottom: 20px;
+  }
+
+  &__right {
+    flex-basis: 30%;
+
+    :first-child & :not(span, fieldset, label, h4, p, i) {
+      margin-top: 26px;
+      margin-bottom: 10px;
+    }
+
+    :last-child & :not(i, span) {
+      margin-top: 10px;
+    }
+  }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+  }
+}
+
+.invite {
+  &__item {
+    margin-bottom: 12px;
+  }
+}
+
+.vacancy {
+  &__item {
+    margin-bottom: 12px;
+  }
+
+  fieldset {
+    margin-bottom: 12px;
+  }
+
+  &__form-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__skill {
+    margin-bottom: 12px;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  &__info,
+  &__additional {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    :first-child,
+    :last-child {
+      flex-basis: 50%;
+    }
+  }
+
+  &__submit {
+    display: block;
+  }
+}
+
+.vacancies {
+  display: flex;
+
+  &__input {
+    flex-grow: 1;
+    margin-right: 6px;
+  }
+}
+
+.modal {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 672px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 536px;
+    height: 480px;
+    background-color: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 8px;
+    box-shadow: 5px 5px 25px 0 var(--gray-for-shadow);
+  }
+
+  &__specs-groups,
+  &__skills-groups {
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 14px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+  }
+}

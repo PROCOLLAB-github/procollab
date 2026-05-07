@@ -2,7 +2,7 @@
 
 <div class="sidebar">
   <a (click)="redirectToHome()" class="sidebar__logo">
-    <img [src]="logoSrc" alt="logo" />
+    <img [src]="logoSrc" alt="logo" loading="lazy" decoding="async" />
   </a>
   <nav class="sidebar-nav sidebar__nav">
     <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">

@@ -1,0 +1,43 @@
+<!-- @format -->
+
+<div class="field" (clickOutside)="onClickOutside()">
+  <div
+    class="text-body-12 field__input"
+    [class.field__input--error]="error"
+    [class.field__input--placeholder]="!selectedId && selectedId !== 0"
+    [class.field__input--open]="isOpen"
+    [class.field__input--small]="size === 'small'"
+    [class.field__input--big]="size === 'big'"
+    [class.field__input--disabled]="disabled"
+    (click)="isOpen = !isOpen; highlightedIndex = -1"
+  >
+    {{
+      selectedId === -1
+        ? "Ничего"
+        : selectedId || selectedId === 0
+        ? getLabel(selectedId) || placeholder
+        : placeholder
+    }}
+    @if (error) {
+    <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+    } @else {
+    <i
+      class="field__arrow"
+      [class.field__arrow--filpped]="isOpen"
+      appIcon
+      icon="arrow-no-body"
+      appWidth="10"
+      appHeight="8"
+    ></i>
+    }
+  </div>
+  @if (!isDisabled) {
+  <app-dropdown
+    [isOpen]="isOpen"
+    [options]="options"
+    [highlightedIndex]="highlightedIndex"
+    (select)="onUpdate($event)"
+    (outside)="hideDropdown()"
+  ></app-dropdown>
+  }
+</div>

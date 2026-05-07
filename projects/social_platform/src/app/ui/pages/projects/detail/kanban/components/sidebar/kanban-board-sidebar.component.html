@@ -1,0 +1,45 @@
+<!-- @format -->
+
+<div class="kanban__sidebar" (clickOutside)="isContextMenuOpen.set(false)">
+  @if (projectBoardInfo()) {
+  <div class="kanban__sidebar-project">
+    <div (click)="isContextMenuOpen.set(!isContextMenuOpen())">
+      <app-avatar
+        (mousedown)="onMouseDown($event, projectBoardInfo()!)"
+        (contextmenu)="$event.preventDefault()"
+        [size]="32"
+        [url]="projectBoardInfo()?.imageAddress"
+      ></app-avatar>
+    </div>
+
+    @if (isBoardInfoOpen()) {
+    <div
+      class="kanban__sidebar-info"
+      (clickOutside)="$event.stopPropagation(); isBoardInfoOpen.set(false)"
+    >
+      @if (boardInfo(); as boardInfo) {
+      <div class="lists__section">
+        <p class="text-body-12 lists__title">{{ boardInfo.name }}</p>
+      </div>
+
+      <p class="text-body-12">{{ boardInfo.description }}</p>
+      }
+    </div>
+    }
+
+    <app-dropdown
+      type="text"
+      [isOpen]="isContextMenuOpen()"
+      (select)="onContextSelect($event, false)"
+      [options]="contextMenuOptions"
+      (outside)="isContextMenuOpen.set(false)"
+    ></app-dropdown>
+  </div>
+  } @if (isCreateBoardForm()) {
+  <div class="kanban__create-board" (clickOutside)="isCreateBoardForm.set(false)">
+    <app-create-board-form></app-create-board-form>
+  </div>
+  }
+
+  <app-kanban-board-actions (openCreation)="onBoardCreate($event)"></app-kanban-board-actions>
+</div>

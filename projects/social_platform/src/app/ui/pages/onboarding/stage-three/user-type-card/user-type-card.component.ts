@@ -1,0 +1,40 @@
+/** @format */
+
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+
+/**
+ * КОМПОНЕНТ КАРТОЧКИ ТИПА ПОЛЬЗОВАТЕЛЯ
+ *
+ * Назначение: Переиспользуемый UI-компонент для отображения варианта выбора роли пользователя
+ *
+ * Что делает:
+ * - Отображает визуальную карточку с информацией о типе пользователя
+ * - Поддерживает активное/неактивное состояние для визуальной обратной связи
+ * - Используется в stage-three для выбора между ментором и менти
+ *
+ * Что принимает:
+ * - @Input() isActive: boolean - флаг активного состояния карточки
+ *   (определяет визуальное выделение выбранной опции)
+ *
+ * Что возвращает:
+ * - Визуальный элемент карточки с соответствующими стилями
+ * - Реагирует на изменение состояния isActive обновлением внешнего вида
+ *
+ * Использование:
+ * - Встраивается в родительский компонент stage-three
+ * - Родитель управляет состоянием isActive в зависимости от выбора пользователя
+ * - Обеспечивает консистентный UI для выбора опций
+ */
+@Component({
+  selector: "app-user-type-card",
+  templateUrl: "./user-type-card.component.html",
+  styleUrl: "./user-type-card.component.scss",
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class UserTypeCardComponent implements OnInit {
+  @Input() isActive = false;
+  constructor() {}
+
+  ngOnInit(): void {}
+}

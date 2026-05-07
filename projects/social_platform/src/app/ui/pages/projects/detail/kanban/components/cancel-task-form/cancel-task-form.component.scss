@@ -1,0 +1,32 @@
+@use "styles/typography";
+
+.cancel {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    label {
+      color: var(--grey-for-text);
+    }
+  }
+
+  &__quick-answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    ::ng-deep {
+      app-tag {
+        .tag {
+          padding: 7px 10px;
+          cursor: pointer;
+
+          p {
+            @include typography.body-12;
+          }
+        }
+      }
+    }
+  }
+}

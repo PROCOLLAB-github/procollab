@@ -1,0 +1,48 @@
+<!-- @format -->
+
+<form class="cancel__form" [formGroup]="cancelTaskForm" (ngSubmit)="onSubmit($event)">
+  @if (cancelTaskForm.get("description"); as description) {
+  <fieldset>
+    <app-textarea
+      size="big"
+      id="description"
+      formControlName="description"
+      [error]="description | controlError"
+      placeholder="задача была сделана некачественно"
+    ></app-textarea>
+    @if (description | controlError: "required") {
+    <div class="text-body-10 error">
+      {{ errorMessage.VALIDATION_REQUIRED }}
+    </div>
+    } @if (description | controlError: "maxlength") {
+    <div class="text-body-10 error">
+      {{ errorMessage.VALIDATION_TOO_LONG }}
+      @if (description.errors) {
+      {{ description.errors["maxlength"]["requiredLength"] }}
+      }
+    </div>
+    } @if (description | controlError: "minlength") {
+    <div class="text-body-10 error">
+      {{ errorMessage.VALIDATION_TOO_SHORT }}
+      @if (description.errors) {
+      {{ description.errors["minlength"]["requiredLength"] }}
+      }
+    </div>
+    }
+  </fieldset>
+  }
+
+  <label class="text-body-12">воспользуйтесь быстрыми ответами</label>
+
+  <div class="cancel__quick-answers">
+    @for (answer of quickAnswers; track $index) {
+    <app-tag (click)="pickAnAnswer(answer.title)" appearance="outline" type="answer">{{
+      answer.title
+    }}</app-tag>
+    }
+  </div>
+
+  <app-button size="big" (click)="onSubmit($event)" [loader]="sendFormIsSubmitting" type="submit"
+    >отменить результат выполнения</app-button
+  >
+</form>

@@ -1,0 +1,17 @@
+<!-- @format -->
+
+@if (project()) {
+<main class="project">
+  <section class="project__main">
+    <div class="project__details">
+      <app-projects-left-side [project]="project"></app-projects-left-side>
+
+      <app-projects-mid-side [project]="project"></app-projects-mid-side>
+
+      <app-projects-right-side [project]="project"></app-projects-right-side>
+    </div>
+  </section>
+
+  <router-outlet></router-outlet>
+</main>
+}

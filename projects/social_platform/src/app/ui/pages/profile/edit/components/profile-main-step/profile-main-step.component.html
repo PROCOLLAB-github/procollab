@@ -1,0 +1,260 @@
+<!-- @format -->
+
+<div class="profile__wrapper--main" [formGroup]="profileForm">
+  <div class="profile__row">
+    @if (avatar) {
+    <div>
+      <label for="avatar" class="field-label" style="text-align: center">фото</label>
+      <fieldset class="profile__avatar">
+        <app-avatar-control
+          id="avatar"
+          formControlName="avatar"
+          type="profile"
+          [size]="68"
+          [error]="avatar | controlError"
+        ></app-avatar-control>
+        @if (avatar | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.EMPTY_AVATAR }}
+        </div>
+        }
+      </fieldset>
+    </div>
+    } @if (coverImageAddress) {
+    <fieldset class="profile__file">
+      <label class="field-label text-body-12" for="coverImageAddress" style="text-align: center"
+        >обложка для профиля</label
+      >
+      <app-upload-file
+        formControlName="coverImageAddress"
+        accept=".jpg,.png,.jpeg"
+        [error]="coverImageAddress | controlError"
+      >
+        <ng-container emptyPlaceholder>
+          <i appIcon icon="file" appSquare="16"></i>
+          <p class="text-body-12 profile__slides-text">
+            обложка формата
+            <br />
+            .JPG или .JPEG весом до 50МБ
+          </p>
+          @if (coverImageAddress | controlError: "required") {
+          <p class="profile__slides-error text-body-10">загрузите файл</p>
+          }
+        </ng-container>
+      </app-upload-file>
+    </fieldset>
+    }
+  </div>
+
+  <div class="profile__main--grid">
+    <div class="profile__column">
+      @if (firstName) {
+      <fieldset>
+        <label for="firstName" class="field-label">имя</label>
+        <app-input
+          size="big"
+          [error]="firstName | controlError"
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="иван"
+        ></app-input>
+        @if (firstName | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (lastName) {
+      <fieldset>
+        <label for="lastName" class="field-label">фамилия</label>
+        <app-input
+          size="big"
+          [error]="lastName | controlError"
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="иванов"
+        ></app-input>
+        @if (lastName | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (city) {
+      <fieldset>
+        <label for="city" class="field-label">город</label>
+        <app-input
+          size="big"
+          id="city"
+          [error]="city | controlError"
+          type="text"
+          placeholder="москва"
+          [maxLength]="100"
+          formControlName="city"
+        ></app-input>
+        @if (city | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (birthday) {
+      <fieldset class="space">
+        <label for="birthday" class="field-label">дата рождения</label>
+        <app-input
+          size="big"
+          id="birthday"
+          [error]="birthday | controlError"
+          type="text"
+          mask="00.00.0000"
+          formControlName="birthday"
+        ></app-input>
+        @if (birthday | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (userType) { @if (userType.value !== 1) {
+      <fieldset>
+        <label for="userType" class="field-label">тип аккаунта</label>
+        @if (roles(); as options) {
+        <app-select
+          size="big"
+          id="userType"
+          formControlName="userType"
+          placeholder="эксперт"
+          [options]="options"
+        ></app-select>
+        } @if (userType | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } } @if (speciality) {
+      <fieldset>
+        <label for="speciality" class="field-label">специальность</label>
+        <div class="profile__vacancies">
+          <app-autocomplete-input
+            class="profile__vacancies--input"
+            searchIcon="box"
+            [suggestions]="inlineSpecs()"
+            fieldToDisplay="name"
+            valueField="name"
+            fieldToDisplay="name"
+            [forceSelect]="true"
+            [error]="speciality | controlError"
+            (searchStart)="onSearchSpec($event)"
+            placeholder="java developer"
+            formControlName="speciality"
+            (openSkillsFunc)="toggleSpecsGroupsModal()"
+          ></app-autocomplete-input>
+        </div>
+        @if (speciality | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+  </div>
+
+  <div class="profile__column">
+    @if (aboutMe) {
+    <fieldset>
+      <label for="aboutMe" class="field-label">обо мне</label>
+      <app-textarea
+        size="big"
+        id="aboutMe"
+        [error]="aboutMe | controlError"
+        type="text"
+        placeholder="я java developer, очень люблю котиков"
+        formControlName="aboutMe"
+        [maxLength]="300"
+      ></app-textarea>
+      @if (aboutMe | controlError: "required") {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    }
+  </div>
+
+  <div class="profile__wrapper--links">
+    <div class="profile__column">
+      <fieldset>
+        <label for="links" class="field-label">указать личные контакты</label>
+        <div class="profile__row" style="flex-grow: 1">
+          <ul
+            formArrayName="links"
+            style="width: 100%"
+            [class.profile__row]="links.controls.length === 1"
+            [class.profile__column]="links.controls.length > 1"
+          >
+            @for (control of links.controls; let i = $index; track i) {
+            <li class="profile__row">
+              <app-input
+                style="flex-grow: 1"
+                [formControlName]="i"
+                placeholder="@eeeasycarrer"
+                size="big"
+                [error]="control | controlError"
+              ></app-input>
+
+              <app-button type="icon" color="red" (click)="removeLink(i)">
+                <i appIcon icon="basket" appSquare="14"></i>
+              </app-button>
+            </li>
+            }
+          </ul>
+        </div>
+      </fieldset>
+
+      <app-button
+        size="big"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        (click)="addLink()"
+      >
+        <span> добавить контакт </span>
+        <i appIcon icon="plus" appSquare="6"></i>
+      </app-button>
+    </div>
+
+    <div class="profile__column">
+      @if (phoneNumber) {
+      <fieldset>
+        <label for="links" class="field-label">телефон</label>
+        <app-input
+          size="big"
+          id="phoneNumber"
+          mask="0-000-000-00-00"
+          [error]="phoneNumber | controlError"
+          type="text"
+          placeholder="+79030195823"
+          formControlName="phoneNumber"
+          style="flex-grow: 1"
+        ></app-input>
+        @if (phoneNumber | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+  </div>
+</div>

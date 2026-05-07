@@ -1,0 +1,87 @@
+@use "styles/typography";
+
+.create-board {
+  position: relative;
+  z-index: 1000;
+  width: 151px;
+  padding: 10px 22px 10px 30px;
+  background-color: var(--light-white);
+  border-radius: var(--rounded-md);
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    input {
+      width: 93px;
+      height: 14px;
+      padding: 2px 4px;
+    }
+  }
+
+  &__colors {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  &__pick-color {
+    width: 9px;
+    height: 9px;
+    cursor: pointer;
+    border-radius: var(--rounded-sm);
+  }
+
+  &__pick-color,
+  i {
+    cursor: pointer;
+  }
+
+  &__description {
+    textarea {
+      width: 93px;
+      height: 49px;
+    }
+  }
+
+  input,
+  textarea {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 5px;
+    resize: none;
+    background-color: #d9d9d9;
+    border: none;
+    border-radius: var(--rounded-sm);
+    outline: none;
+
+    &::placeholder {
+      @include typography.body-6;
+
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    &:focus {
+      border-color: none;
+      box-shadow: none;
+    }
+  }
+
+  &__icons {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 7px;
+
+    i,
+    svg {
+      color: var(--black);
+    }
+  }
+}

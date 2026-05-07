@@ -1,0 +1,23 @@
+/** @format */
+
+import { inject, Injectable } from "@angular/core";
+import { catchError, map, Observable, of } from "rxjs";
+import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
+import { FeedNews } from "@domain/project/project-news.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+
+@Injectable({ providedIn: "root" })
+export class EditProjectNewsUseCase {
+  private readonly projectNewsRepositoryPort = inject(ProjectNewsRepositoryPort);
+
+  execute(
+    projectId: string,
+    newsId: number,
+    news: Partial<FeedNews>
+  ): Observable<Result<FeedNews, { kind: "edit_project_news_error"; cause?: unknown }>> {
+    return this.projectNewsRepositoryPort.editNews(projectId, newsId, news).pipe(
+      map(result => ok<FeedNews>(result)),
+      catchError(error => of(fail({ kind: "edit_project_news_error" as const, cause: error })))
+    );
+  }
+}

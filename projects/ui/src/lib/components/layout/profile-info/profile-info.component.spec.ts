@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { AuthService } from "@auth/services";
+import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProfileInfoComponent } from "./profile-info.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 

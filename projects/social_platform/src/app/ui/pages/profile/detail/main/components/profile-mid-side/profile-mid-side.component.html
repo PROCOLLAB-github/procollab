@@ -1,0 +1,74 @@
+<!-- @format -->
+
+@if (loggedUserId()) {
+<div class="profile__content">
+  @if (user()!.aboutMe; as about) {
+  <div class="about profile__about">
+    <div class="about__head">
+      <h3 class="text-body-12 about__title">обо мне</h3>
+      <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+    </div>
+
+    <div class="text-body-10 about__text">
+      <p #descEl [innerHTML]="about | parseLinks | parseBreaks"></p>
+      @if (descriptionExpandable()) {
+      <div
+        class="read-more text-body-10"
+        (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
+      >
+        {{ readFullDescription() ? "скрыть" : "подробнее" }}
+      </div>
+      }
+    </div>
+  </div>
+  } @if (user()!.skills.length || user()!.achievements.length) {
+  <div class="profile__directions">
+    @for (directionItem of directions(); track $index) {
+    <app-project-direction-card
+      [direction]="directionItem.direction"
+      [icon]="directionItem.icon"
+      [about]="directionItem.about"
+      [type]="directionItem.type"
+      [profileInfoType]="directionItem.direction === 'навыки' ? 'skills' : 'achievements'"
+    ></app-project-direction-card>
+    }
+  </div>
+  } @if (isProfileEmpty()) { @if (loggedUserId() === user()!.id) {
+  <div class="profile__empty">
+    <i appIcon icon="empty-chat" appSquare="44"></i>
+    <p class="profile__empty--text text-body-12">
+      заполните профиль и начните пользоваться PROCOLLAB
+    </p>
+    <app-button
+      size="medium"
+      customTypographyClass="text-body-12"
+      routerLink="/office/profile/edit"
+      [queryParams]="{ editingStep: 'main' }"
+      >заполнить</app-button
+    >
+  </div>
+  } } @else {
+  <div class="profile__news news">
+    @if (loggedUserId() === user()!.id) {
+    <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+    }
+    <ul>
+      @for (n of news(); track n.id) {
+      <li>
+        <app-news-card
+          class="news__item"
+          [resourceLink]="['/office/profile', n.id]"
+          [attr.data-id]="n.id"
+          [feedItem]="n"
+          [isOwner]="loggedUserId() === user()!.id"
+          (delete)="onDeleteNews($event)"
+          (like)="onLike($event)"
+          (edited)="onEditNews($event, n.id)"
+        ></app-news-card>
+      </li>
+      }
+    </ul>
+  </div>
+  }
+</div>
+}

@@ -1,0 +1,31 @@
+<!-- @format -->
+
+<form class="create-tag__form" [formGroup]="tagForm" (submit)="$event.preventDefault()">
+  <input
+    class="text-body-6 create-tag__input field__option--add-object"
+    type="text"
+    placeholder="введите тэг..."
+    formControlName="tagName"
+    (click)="$event.stopPropagation()"
+    (keydown.enter)="confirmCreateTag($event)"
+  />
+  <div
+    class="create-tag__pick-color"
+    [ngStyle]="{ 'background-color': selectedColor }"
+    (click)="openPickColors = !openPickColors; $event.stopPropagation()"
+  ></div>
+
+  @if (openPickColors) {
+  <div class="create-tag__colors" (click)="$event.stopPropagation()">
+    <div class="create-tag__colors-wrapper">
+      @for (colorItem of tagColors; track $index) {
+      <div
+        class="create-tag__pick-color"
+        (click)="selectTagColor(colorItem.name)"
+        [style.backgroundColor]="colorItem.color"
+      ></div>
+      }
+    </div>
+  </div>
+  }
+</form>

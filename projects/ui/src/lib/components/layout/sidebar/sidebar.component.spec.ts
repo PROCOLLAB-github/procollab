@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SidebarComponent } from "./sidebar.component";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 

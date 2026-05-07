@@ -1,0 +1,63 @@
+<!-- @format -->
+<div class="filter__titles">
+  <p class="text-body-14">фильтры</p>
+  <a class="text-body-12 filter__clear" (click)="clearFilters()">cбросить</a>
+</div>
+
+@if (filters()?.length) {
+<div class="filter">
+  <div class="filter__body" [formGroup]="filterForm">
+    @if (filters()?.length && filterForm.controls) { @for (field of filters(); track field.id) { @if
+    (filterForm.get(field.name)) {
+    <div class="filter__block">
+      @switch (field.fieldType) { @case ("checkbox") {
+      <!-- <h4 class="text-body-12 filter__name">{{ field.label }}</h4> -->
+      <div
+        class="text-body-10 filter__checkbox"
+        (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+      >
+        <app-checkbox [checked]="filterForm.get(field.name)?.value"></app-checkbox>
+        {{ field.label }}
+      </div>
+      } @case ("radio") {
+      <!-- <h4 class="text-body-12 filter__name">{{ field.label }}</h4> -->
+      <div class="filter__switch">
+        <span
+          class="filter__yes-no text-body-10"
+          [class.filter__yes-no--active]="!filterForm.get(field.name)?.value"
+        >
+          Нет
+        </span>
+        <app-switch
+          [checked]="filterForm.get(field.name)?.value"
+          (checkedChange)="filterForm.get(field.name)?.setValue($event)"
+        ></app-switch>
+        <span
+          class="filter__yes-no text-body-10"
+          [class.filter__yes-no--active]="filterForm.get(field.name)?.value"
+        >
+          Да
+        </span>
+      </div>
+      } @case ("select") {
+      <!-- <h4 class="text-body-12 filter__name">{{ field.label }}</h4> -->
+      <div class="filter__select text-body-10">
+        <app-select
+          size="big"
+          [id]="field.name"
+          [formControlName]="field.name"
+          [placeholder]="field.helpText || field.label"
+          [options]="field.options | toSelectOptions"
+        ></app-select>
+      </div>
+      } }
+    </div>
+    } } } @if (listType() === 'rating') {
+    <label class="filter__tags" (click)="setValue($event)">
+      <app-checkbox [checked]="this.filterForm.get('is_rated_by_expert')?.value!"></app-checkbox>
+      <p class="text-body-12">проекты с оценкой</p>
+    </label>
+    }
+  </div>
+</div>
+}

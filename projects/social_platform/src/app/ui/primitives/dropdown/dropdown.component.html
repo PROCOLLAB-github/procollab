@@ -1,0 +1,65 @@
+<!-- @format -->
+
+<div cdkOverlayOrigin #dropdown="cdkOverlayOrigin" (click)="isOpen = !isOpen">
+  <ng-content></ng-content>
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="dropdown"
+  [cdkConnectedOverlayOpen]="isOpen"
+  [cdkConnectedOverlayPositions]="positions"
+  (overlayOutsideClick)="isOpen = false"
+>
+  <ul class="field__options" (click)="$event.stopPropagation()">
+    @for (option of options; track option.id; let index = $index) {
+    <li
+      class="field__option"
+      [class.field__option--highlighted]="index === highlightedIndex"
+      (click)="onSelect($event, option.id)"
+    >
+      <div class="field__option--additional">
+        @if (option.additionalInfo) { @switch (type) { @case('icons') {
+        <i appIcon [icon]="option.additionalInfo" appSquare="10"></i>
+
+        } @case ('avatars') {
+        <app-avatar [size]="20" [url]="option.additionalInfo"></app-avatar>
+
+        } @case ('shapes') {
+        <div
+          class="field__option-priority"
+          [ngStyle]="getPriorityType(+option.additionalInfo, 'color')"
+        ></div>
+
+        } @case ('goals') {
+        <app-tag appearance="outline" color="soft">{{
+          option.label.length > 20 ? option.label.slice(0, 17) + "..." : option.label
+        }}</app-tag>
+        } @case ('tags') {
+        <app-tag [color]="option.additionalInfo"
+          >#{{
+            option.label.length > 15 ? option.label.slice(0, 12) + "..." : option.label
+          }}</app-tag
+        >
+        } } }
+      </div>
+
+      @if (type !== 'tags' && type !== 'goals') {
+      <p class="text-body-12" [style]="getTextColor(colorText)">{{ option.label }}</p>
+      }
+
+      <span class="field__option--point text-body-16">•</span>
+    </li>
+    } @if (type === 'tags') { @if (!creatingTag) {
+    <li class="field__option field__option--add-object" (click)="startCreatingTag($event)">
+      <i appIcon icon="plus" appSquare="5"></i>
+    </li>
+    } @else {
+    <app-create-tag-form
+      [editingTag]="editingTag"
+      (createTag)="onConfirmCreateTag($event)"
+      (updateTag)="onConfirmUpdateTag($event)"
+    ></app-create-tag-form>
+    } }
+  </ul>
+</ng-template>
