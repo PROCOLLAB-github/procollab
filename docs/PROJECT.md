@@ -227,11 +227,11 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | Документ                                | Статус  |
 | --------------------------------------- | ------- |
 | `docs/PROJECT.md` (этот файл)           | done    |
-| `docs/core/services.md`                 | planned |
-| `docs/core/interceptors.md`             | planned |
-| `docs/core/pipes.md`                    | planned |
-| `docs/core/guards-models.md`            | planned |
-| `docs/core/consts.md`                   | planned |
+| `docs/core/services.md`                 | done    |
+| `docs/core/interceptors-providers.md`   | done    |
+| `docs/core/pipes.md`                    | done    |
+| `docs/core/guards-models.md`            | done    |
+| `docs/core/consts.md`                   | done    |
 | `docs/uilib.md`                         | planned |
 | `docs/social-platform/architecture.md`  | planned |
 | `docs/social-platform/shared.md`        | planned |
