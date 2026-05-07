@@ -232,7 +232,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/core/pipes.md`                    | done    |
 | `docs/core/guards-models.md`            | done    |
 | `docs/core/consts.md`                   | done    |
-| `docs/uilib.md`                         | planned |
+| `docs/uilib.md`                         | done    |
 | `docs/social-platform/architecture.md`  | planned |
 | `docs/social-platform/shared.md`        | planned |
 | `docs/social-platform/ui-primitives.md` | planned |
