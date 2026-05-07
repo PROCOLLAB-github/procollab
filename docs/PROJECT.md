@@ -251,5 +251,5 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/modules/news.md`                  | done    |
 | `docs/modules/feed.md`                  | done    |
 | `docs/modules/chat.md`                  | done    |
-| `docs/modules/office-shell.md`          | planned |
+| `docs/modules/office-shell.md`          | done    |
 | `docs/cross-cutting.md`                 | planned |
