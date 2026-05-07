@@ -246,7 +246,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/modules/project.md`               | done    |
 | `docs/modules/vacancy.md`               | done    |
 | `docs/modules/invite.md`                | done    |
-| `docs/modules/program.md`               | planned |
+| `docs/modules/program.md`               | done    |
 | `docs/modules/courses.md`               | planned |
 | `docs/modules/news.md`                  | planned |
 | `docs/modules/feed.md`                  | planned |
