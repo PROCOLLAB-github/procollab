@@ -239,7 +239,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/social-platform/ui-widgets.md`    | done    |
 | `docs/modules/auth.md`                  | done    |
 | `docs/modules/profile.md`               | done    |
-| `docs/modules/skills.md`                | planned |
+| `docs/modules/skills.md`                | done    |
 | `docs/modules/specializations.md`       | planned |
 | `docs/modules/industry.md`              | planned |
 | `docs/modules/member.md`                | planned |
