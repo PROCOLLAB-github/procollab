@@ -238,7 +238,7 @@ npm run format:check && npm run lint:ts && npm run build:pr
 | `docs/social-platform/ui-primitives.md` | done    |
 | `docs/social-platform/ui-widgets.md`    | done    |
 | `docs/modules/auth.md`                  | done    |
-| `docs/modules/profile.md`               | planned |
+| `docs/modules/profile.md`               | done    |
 | `docs/modules/skills.md`                | planned |
 | `docs/modules/specializations.md`       | planned |
 | `docs/modules/industry.md`              | planned |
