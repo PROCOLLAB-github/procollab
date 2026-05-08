@@ -53,11 +53,11 @@ export class NewsInfoService {
 
   // CRUD-апплайеры — изменяют локальный signal:
   applySetNews(news: ApiPagination<FeedNews> | { results: never[]; count: number }): void;
-  applyAddNews(newsRes: FeedNews): void;                  // в начало списка
-  applyUpdateNews(results: FeedNews[]): void;             // append (для пагинации)
+  applyAddNews(newsRes: FeedNews): void; // в начало списка
+  applyUpdateNews(results: FeedNews[]): void; // append (для пагинации)
   applyDeleteNews(newsId: number): void;
-  applyEditNews(resNews: FeedNews): void;                 // map по id
-  applyLikeNews(newsId: number): void;                    // toggle isUserLiked + ±1 likesCount
+  applyEditNews(resNews: FeedNews): void; // map по id
+  applyLikeNews(newsId: number): void; // toggle isUserLiked + ±1 likesCount
 }
 ```
 
@@ -72,11 +72,13 @@ export class NewsInfoService {
 ### `<app-news-card>` (`app-news-card`)
 
 Универсальная карточка новости. Поддерживает:
+
 - Просмотр (текст + изображение + файлы).
 - Лайк / снятие лайка (через `(like)` event, родитель должен дёрнуть `applyLikeNews`).
 - Удаление (для владельца), редактирование, переход к деталям.
 
 Inputs:
+
 - `feedItem: FeedNews` (req).
 - `resourceLink: (string | number)[]` (req) — массив сегментов URL для router-link навигации к деталям. Зависит от контекста:
   - Для feed: `[]` (без префикса).
@@ -87,6 +89,7 @@ Inputs:
 - `isOwner?: boolean` — для отображения кнопок редактировать/удалить.
 
 Outputs:
+
 - `delete: number` — id новости.
 - `like: number` — id новости.
 - `edited: FeedNews` — после inline-edit.
@@ -102,6 +105,7 @@ Outputs:
 Inputs: — (форма управляется внутренней `ReactiveForm`).
 
 Outputs:
+
 - `addNews: { text: string; files: string[] }` — на submit.
 
 Метод `onResetForm()` (публичный) — для ручного сброса формы из родителя после успешной отправки.
@@ -113,12 +117,12 @@ Outputs:
 
 Каждый "вид" новостей ходит на свой бэк-префикс:
 
-| Тип | Префикс |
-|---|---|
+| Тип     | Префикс                                                                        |
+| ------- | ------------------------------------------------------------------------------ |
 | project | `/projects/<projectId>/news/...` (см. [`docs/modules/project.md`](project.md)) |
-| profile | `/auth/users/<userId>/news/...` (см. [`docs/modules/profile.md`](profile.md)) |
+| profile | `/auth/users/<userId>/news/...` (см. [`docs/modules/profile.md`](profile.md))  |
 | program | `/programs/<programId>/news/...` (см. [`docs/modules/program.md`](program.md)) |
-| article | (пока без endpoint в этом модуле — see feed) |
+| article | (пока без endpoint в этом модуле — see feed)                                   |
 
 Все три варианта зеркальны по форме (`fetch / set_viewed / set_liked / add / edit / delete`), но имеют разные URL.
 
@@ -126,24 +130,24 @@ Outputs:
 
 ## Consumers
 
-| Где | Как использует |
-|---|---|
-| `pages/projects/detail/info` | Project news через `<app-news-card>` + `<app-news-form>` (для лидера). |
-| `pages/projects/detail/news-detail` | Детальная страница новости проекта. |
-| `pages/program/detail/main` | Program news. |
-| `pages/profile/detail/profile-news` | Profile news (детальная страница). |
-| `pages/feed` | Глобальная лента — комбинация project / program / profile / article новостей (см. [`docs/modules/feed.md`](feed.md)). |
-| `widgets/news-card`, `widgets/news-form` | Сами виджеты используют `NewsInfoService` через входы / выходы. |
+| Где                                      | Как использует                                                                                                        |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `pages/projects/detail/info`             | Project news через `<app-news-card>` + `<app-news-form>` (для лидера).                                                |
+| `pages/projects/detail/news-detail`      | Детальная страница новости проекта.                                                                                   |
+| `pages/program/detail/main`              | Program news.                                                                                                         |
+| `pages/profile/detail/profile-news`      | Profile news (детальная страница).                                                                                    |
+| `pages/feed`                             | Глобальная лента — комбинация project / program / profile / article новостей (см. [`docs/modules/feed.md`](feed.md)). |
+| `widgets/news-card`, `widgets/news-form` | Сами виджеты используют `NewsInfoService` через входы / выходы.                                                       |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| Тип `FeedNews` живёт в `domain/project/project-news.model.ts`, а не в `domain/news/` | `domain/project/...` | Должен быть в общем месте, раз потребляется тремя модулями (project, profile, program) и feed. Перенос ломающий — много импортов. |
-| `New` (singular) класс в `domain/news/article.model.ts` (plural) | `domain/news/article.model.ts` | Переименовать в `NewsArticle` для ясности. |
-| Три репозитория с одинаковым контрактом (`fetchNews / addNews / readNews / toggleLike / delete / editNews`) — для project / profile / program | `domain/{project,profile,program}/ports/...-news.repository.port.ts` | Кандидат для генерализации в `domain/news/ports/` с параметром "тип владельца". Сейчас тройная копипаста. |
-| Универсальный `NewsInfoService` хранит signal, но потребители сами должны звать `apply*` методы | `api/news/news-info.service.ts` | OK для текущего флоу, но добавляет хрупкости — легко забыть `applyLikeNews()` после успеха `toggleLike()`. |
-| `applyLikeNews` оптимистично мутирует — нет автоматического отката при ошибке | `news-info.service.ts` | Документировать или переделать на «после ответа сервера». |
-| `static default()` на `FeedNews` отдаёт фейковый URL `api.selcdn.ru/...` — может попасть в production | `project-news.model.ts:default` | Используется в тестах; не критично. |
+| Что                                                                                                                                           | Где                                                                  | Заметка                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Тип `FeedNews` живёт в `domain/project/project-news.model.ts`, а не в `domain/news/`                                                          | `domain/project/...`                                                 | Должен быть в общем месте, раз потребляется тремя модулями (project, profile, program) и feed. Перенос ломающий — много импортов. |
+| `New` (singular) класс в `domain/news/article.model.ts` (plural)                                                                              | `domain/news/article.model.ts`                                       | Переименовать в `NewsArticle` для ясности.                                                                                        |
+| Три репозитория с одинаковым контрактом (`fetchNews / addNews / readNews / toggleLike / delete / editNews`) — для project / profile / program | `domain/{project,profile,program}/ports/...-news.repository.port.ts` | Кандидат для генерализации в `domain/news/ports/` с параметром "тип владельца". Сейчас тройная копипаста.                         |
+| Универсальный `NewsInfoService` хранит signal, но потребители сами должны звать `apply*` методы                                               | `api/news/news-info.service.ts`                                      | OK для текущего флоу, но добавляет хрупкости — легко забыть `applyLikeNews()` после успеха `toggleLike()`.                        |
+| `applyLikeNews` оптимистично мутирует — нет автоматического отката при ошибке                                                                 | `news-info.service.ts`                                               | Документировать или переделать на «после ответа сервера».                                                                         |
+| `static default()` на `FeedNews` отдаёт фейковый URL `api.selcdn.ru/...` — может попасть в production                                         | `project-news.model.ts:default`                                      | Используется в тестах; не критично.                                                                                               |

@@ -10,6 +10,7 @@ import { ControlErrorPipe } from "@corelib";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ProfileEditExperienceInfoService } from "@api/profile/facades/edit/profile-edit-experience-info.service";
 import { IconComponent } from "@uilib";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 @Component({
   selector: "app-profile-experience-step",
@@ -24,6 +25,7 @@ import { IconComponent } from "@uilib";
     ButtonComponent,
     ControlErrorPipe,
     ReactiveFormsModule,
+    TruncatePipe,
   ],
   standalone: true,
 })

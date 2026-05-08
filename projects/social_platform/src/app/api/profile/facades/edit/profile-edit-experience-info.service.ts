@@ -70,6 +70,18 @@ export class ProfileEditExperienceInfoService {
       return;
     }
 
+    const workOverflow =
+      (this.profileForm.get("organization")?.value?.length ?? 0) > 50 ||
+      (this.profileForm.get("descriptionWork")?.value?.length ?? 0) > 400;
+
+    if (workOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
+      return;
+    }
+
     ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.clearValidators());
     ["organization", "jobPosition"].forEach(name =>
       this.profileForm.get(name)?.setValidators([Validators.required])

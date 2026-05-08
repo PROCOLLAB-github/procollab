@@ -10,6 +10,7 @@ import { SelectComponent, ButtonComponent, InputComponent } from "@ui/primitives
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ProfileEditEducationInfoService } from "@api/profile/facades/edit/profile-edit-education-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 @Component({
   selector: "app-profile-education-step",
@@ -23,6 +24,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
     InputComponent,
     ReactiveFormsModule,
     ControlErrorPipe,
+    TruncatePipe,
   ],
   providers: [ProfileDetailUIInfoService],
   standalone: true,

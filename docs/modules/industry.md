@@ -29,10 +29,10 @@ export class Industry {
 
 ```ts
 abstract class IndustryRepositoryPort {
-  readonly industries: Signal<Industry[]>;       // signal-кеш всех отраслей
+  readonly industries: Signal<Industry[]>; // signal-кеш всех отраслей
 
-  getAll(): Observable<Industry[]>;              // загрузка с сервера + наполнение кеша
-  getOne(industryId: number): Industry | undefined;  // синхронный lookup в кеше
+  getAll(): Observable<Industry[]>; // загрузка с сервера + наполнение кеша
+  getOne(industryId: number): Industry | undefined; // синхронный lookup в кеше
 }
 ```
 
@@ -59,7 +59,7 @@ DI-биндинг (`infrastructure/di/industry.providers.ts`):
 ```ts
 @Injectable({ providedIn: "root" })
 export class IndustryInfoService {
-  readonly industries = this.industryRepository.industries;  // re-export signal
+  readonly industries = this.industryRepository.industries; // re-export signal
   getAll(): Observable<Industry[]>;
   getOne(industryId: number): Industry | undefined;
 }
@@ -77,7 +77,7 @@ export class IndustryInfoService {
 @Injectable({ providedIn: "root" })
 export class IndustryRepository implements IndustryRepositoryPort {
   readonly industries = signal<Industry[]>([]);
-  private readonly entityCache = new EntityCache<Industry>();  // (см. ниже)
+  private readonly entityCache = new EntityCache<Industry>(); // (см. ниже)
 
   getAll(): Observable<Industry[]> {
     return this.industryAdapter.fetchAll().pipe(
@@ -93,6 +93,7 @@ export class IndustryRepository implements IndustryRepositoryPort {
 ```
 
 Внутреннее устройство:
+
 - `industries: signal<Industry[]>` — наполняется при `getAll()`.
 - Каждый ответ пропускается через `plainToInstance(Industry, ...)`.
 - `getOne()` — синхронный поиск по сигналу.
@@ -103,9 +104,9 @@ export class IndustryRepository implements IndustryRepositoryPort {
 
 ## HTTP endpoints (`infrastructure/adapters/industry/industry-http.adapter.ts`)
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `fetchAll()` | GET | `/industries/` | — | `Industry[]` (плоский список) |
+| Метод        | HTTP | URL            | Параметры | Ответ                         |
+| ------------ | ---- | -------------- | --------- | ----------------------------- |
+| `fetchAll()` | GET  | `/industries/` | —         | `Industry[]` (плоский список) |
 
 Один-единственный endpoint. Бэк не поддерживает поиск/пагинацию для отраслей — список целиком и навсегда.
 
@@ -113,25 +114,25 @@ export class IndustryRepository implements IndustryRepositoryPort {
 
 ## Consumers
 
-| Где | Как использует |
-|---|---|
-| `pages/projects/detail/info/components/projects-left-side` | Имя отрасли проекта через `industryInfoService.getOne(project.industry)`. |
-| `pages/feed/new-project/new-project.component` | Селект для выбора отрасли при создании проекта. |
-| `pages/feed/open-vacancy/open-vacancy.component` | Аналогично для создания вакансии. |
-| `pages/program/detail/list/rating-card/rating-card.component` | Имя отрасли в карточке рейтинга. |
-| `widgets/info-card/info-card.component` | Отображение `industry.name` в карточке проекта. |
-| `widgets/projects-filter/service/projects-filter-info.service` | Опции фильтра проектов по отраслям. |
-| `api/office/facades/office-info.service` | Office shell дёргает `IndustryInfoService.getAll()` при инициализации, чтобы заполнить кеш. |
-| `api/project/facades/edit/projects-edit-info.service` | Селект отрасли в форме редактирования проекта. |
+| Где                                                            | Как использует                                                                              |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `pages/projects/detail/info/components/projects-left-side`     | Имя отрасли проекта через `industryInfoService.getOne(project.industry)`.                   |
+| `pages/feed/new-project/new-project.component`                 | Селект для выбора отрасли при создании проекта.                                             |
+| `pages/feed/open-vacancy/open-vacancy.component`               | Аналогично для создания вакансии.                                                           |
+| `pages/program/detail/list/rating-card/rating-card.component`  | Имя отрасли в карточке рейтинга.                                                            |
+| `widgets/info-card/info-card.component`                        | Отображение `industry.name` в карточке проекта.                                             |
+| `widgets/projects-filter/service/projects-filter-info.service` | Опции фильтра проектов по отраслям.                                                         |
+| `api/office/facades/office-info.service`                       | Office shell дёргает `IndustryInfoService.getAll()` при инициализации, чтобы заполнить кеш. |
+| `api/project/facades/edit/projects-edit-info.service`          | Селект отрасли в форме редактирования проекта.                                              |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| Нет use-case'ов | `api/industry/` | Привести к единому стилю с `skills`. |
-| `IndustryInfoService` — pure passthrough | `api/industry/facades/industry-info.service.ts` | Возможно, удалить и инжектить порт напрямую. |
-| `EntityCache<Industry>` создан, но не используется | `IndustryRepository` | Удалить или применить. |
-| `getOne(id)` синхронный — упадёт `undefined` если `getAll()` ещё не дёрнули | `IndustryRepository.getOne` | Текущий контракт допускает `undefined`, потребители должны это обрабатывать. Для большей строгости — переделать на `Observable<Industry \| undefined>` после `take(1)` от signal. |
-| Нет инвалидации — отрасли подгружаются один раз и живут до перезагрузки страницы | `IndustryRepository` | Нормально, отрасли действительно меняются редко. |
+| Что                                                                              | Где                                             | Заметка                                                                                                                                                                           |
+| -------------------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Нет use-case'ов                                                                  | `api/industry/`                                 | Привести к единому стилю с `skills`.                                                                                                                                              |
+| `IndustryInfoService` — pure passthrough                                         | `api/industry/facades/industry-info.service.ts` | Возможно, удалить и инжектить порт напрямую.                                                                                                                                      |
+| `EntityCache<Industry>` создан, но не используется                               | `IndustryRepository`                            | Удалить или применить.                                                                                                                                                            |
+| `getOne(id)` синхронный — упадёт `undefined` если `getAll()` ещё не дёрнули      | `IndustryRepository.getOne`                     | Текущий контракт допускает `undefined`, потребители должны это обрабатывать. Для большей строгости — переделать на `Observable<Industry \| undefined>` после `take(1)` от signal. |
+| Нет инвалидации — отрасли подгружаются один раз и живут до перезагрузки страницы | `IndustryRepository`                            | Нормально, отрасли действительно меняются редко.                                                                                                                                  |

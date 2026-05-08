@@ -49,7 +49,7 @@ export class OfficeUIInfoService {
       { name: "программы", icon: "program", link: "program" },
       { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
       { name: "курсы", icon: "trajectories", link: "courses" },
-      { name: "чаты", icon: "message", link: "chats" },
+      // { name: "чаты", icon: "message", link: "chats" },
     ]);
   }
 }

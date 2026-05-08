@@ -41,8 +41,8 @@ DI-биндинг (`infrastructure/di/member.providers.ts`):
 
 ## Use-cases (`api/member/use-cases/`)
 
-| Use-case | Параметры | Возвращает | Ошибки |
-|---|---|---|---|
+| Use-case            | Параметры                                          | Возвращает                                                           | Ошибки              |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
 | `GetMembersUseCase` | `skip, take: number, params?: Record<string, ...>` | `Result<ApiPagination<User>, { kind: "get_members_error"; cause? }>` | `get_members_error` |
 
 Только один use-case — для `getMembers`. `getMentors` — без use-case'а.
@@ -65,15 +65,15 @@ DI-биндинг (`infrastructure/di/member.providers.ts`):
 
 `@Injectable()` (page-scoped). UI-info — состояние списка и формы:
 
-| Поле / signal | Тип | Что |
-|---|---|---|
-| `members$` | `signal<AsyncState<User[]>>` | Состояние списка (initial/loading/success/failure). |
-| `members` | `computed<User[]>` | Текущий массив для UI. При `loading` показывает `previous` (оптимистичный refresh). |
-| `membersTotalCount` | `signal<number \| undefined>` | Общее количество (для индикатора). |
-| `membersTake` | `signal<number>` | Размер страницы (default `20`). |
-| `membersPage` | `signal<number>` | Текущая страница пагинации. |
-| `searchForm` | `FormGroup` | `{ search }` (required). |
-| `filterForm` | `FormGroup` | `{ keySkill (req), speciality (req), age: [null, null], isMosPolytechStudent: false }`. |
+| Поле / signal       | Тип                           | Что                                                                                     |
+| ------------------- | ----------------------------- | --------------------------------------------------------------------------------------- |
+| `members$`          | `signal<AsyncState<User[]>>`  | Состояние списка (initial/loading/success/failure).                                     |
+| `members`           | `computed<User[]>`            | Текущий массив для UI. При `loading` показывает `previous` (оптимистичный refresh).     |
+| `membersTotalCount` | `signal<number \| undefined>` | Общее количество (для индикатора).                                                      |
+| `membersTake`       | `signal<number>`              | Размер страницы (default `20`).                                                         |
+| `membersPage`       | `signal<number>`              | Текущая страница пагинации.                                                             |
+| `searchForm`        | `FormGroup`                   | `{ search }` (required).                                                                |
+| `filterForm`        | `FormGroup`                   | `{ keySkill (req), speciality (req), age: [null, null], isMosPolytechStudent: false }`. |
 
 Метод `applyMembersPagination(data)` — сеттер из resolver'а: пишет `count` + `success(results)`.
 
@@ -101,12 +101,13 @@ applyMentorsChunk(data): void;        // append для пагинации
 
 Префикс `/auth/public-users`. Эндпоинт один — фильтр `user_type` различает members от mentors.
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `getMembers(skip, take, otherParams?)` | GET | `/auth/public-users/` | `?user_type=1&limit=<take>&offset=<skip>&...otherParams` | `ApiPagination<User>` |
-| `getMentors(skip, take)` | GET | `/auth/public-users/` | `?user_type=2,3,4&limit=<take>&offset=<skip>` | `ApiPagination<User>` |
+| Метод                                  | HTTP | URL                   | Параметры                                                | Ответ                 |
+| -------------------------------------- | ---- | --------------------- | -------------------------------------------------------- | --------------------- |
+| `getMembers(skip, take, otherParams?)` | GET  | `/auth/public-users/` | `?user_type=1&limit=<take>&offset=<skip>&...otherParams` | `ApiPagination<User>` |
+| `getMentors(skip, take)`               | GET  | `/auth/public-users/` | `?user_type=2,3,4&limit=<take>&offset=<skip>`            | `ApiPagination<User>` |
 
 `otherParams` (фильтры) — произвольный объект, ожидаемые ключи:
+
 - `key_skill` — id ключевого навыка.
 - `speciality` — id специализации.
 - `age_from` / `age_to` — диапазон возраста.
@@ -130,9 +131,9 @@ applyMentorsChunk(data): void;        // append для пагинации
 
 ## Pages (`ui/pages/members/`)
 
-| Page | Файл | Selector | Что |
-|---|---|---|---|
-| `MembersComponent` | `pages/members/members.component.ts` | `app-members` | Главная страница списка. Подключает `<app-search>`, `<app-members-filters>`, `<app-info-card type="members">`, `<app-back>` (через `@uilib`), `<app-button>`. Provides `MembersInfoService` + `MembersUIInfoService`. |
+| Page                      | Файл                                                         | Selector              | Что                                                                                                                                                                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MembersComponent`        | `pages/members/members.component.ts`                         | `app-members`         | Главная страница списка. Подключает `<app-search>`, `<app-members-filters>`, `<app-info-card type="members">`, `<app-back>` (через `@uilib`), `<app-button>`. Provides `MembersInfoService` + `MembersUIInfoService`.                                                |
 | `MembersFiltersComponent` | `pages/members/members-filters/members-filters.component.ts` | `app-members-filters` | Форма фильтров. Принимает `filterForm: MembersComponent["filterForm"]` через `@Input`, эмитит `filtersChanged: void`. Использует `<app-autocomplete-input>` для key skill (через `SkillsInfoService`) и для specialty (через `SearchesService` — см. cross-cutting). |
 
 `members.resolver.ts` — `MembersResolver` для фета первых `0..20` через `GetMembersUseCase`. На `Result.fail` возвращает пустую `ApiPagination`.
@@ -141,21 +142,21 @@ applyMentorsChunk(data): void;        // append для пагинации
 
 ## Consumers (за пределами модуля)
 
-| Где | Как использует |
-|---|---|
-| `widgets/info-card` (с `type="members"`) | Карточка участника в списке. |
+| Где                                                | Как использует                                                                  |
+| -------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `widgets/info-card` (с `type="members"`)           | Карточка участника в списке.                                                    |
 | `pages/projects/edit/components/project-team-step` | Использует `MemberRepositoryPort.getMembers()` для поиска кандидатов в команду. |
-| `pages/onboarding/...` | Может дёргать `getMembers` для рекомендаций. |
+| `pages/onboarding/...`                             | Может дёргать `getMembers` для рекомендаций.                                    |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| `MentorsUIInfoService` нигде не инжектится | `api/member/facades/ui/mentors-ui-info.service.ts` | Мёртвый код. Удалить или подключить mentors-страницу. |
-| `getMentors()` без use-case'а | `api/member/use-cases/` отсутствует | Привести к единому стилю через `GetMentorsUseCase`. |
-| `filterForm.keySkill / speciality` помечены `Validators.required` | `members-ui-info.service.ts` | Странно: фильтры **не должны** быть обязательными — пользователь может не выбрать ничего. Скорее ошибка. |
-| `MentorsUIInfoService.applyMentorsChunk` accepts `data.results` may be `undefined` | mentors-ui-info | Защита `(data.results || [])` есть, но это симптом — DTO должен гарантировать. |
-| `getMembers(otherParams)` принимает `Record<string, ...>` без типизации ключей | port + repo + adapter | Типизировать через `interface MemberFilters { keySkill?, speciality?, ageFrom?, ageTo?, isMosPolytechStudent? }`. |
-| Нет отдельного `ui/routes/members/` | роуты подключены через `office.routes.ts` | Это OK — простой случай. |
+| Что                                                                                | Где                                                | Заметка                                                                                                           |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --- | ----------------------------------------------------- |
+| `MentorsUIInfoService` нигде не инжектится                                         | `api/member/facades/ui/mentors-ui-info.service.ts` | Мёртвый код. Удалить или подключить mentors-страницу.                                                             |
+| `getMentors()` без use-case'а                                                      | `api/member/use-cases/` отсутствует                | Привести к единому стилю через `GetMentorsUseCase`.                                                               |
+| `filterForm.keySkill / speciality` помечены `Validators.required`                  | `members-ui-info.service.ts`                       | Странно: фильтры **не должны** быть обязательными — пользователь может не выбрать ничего. Скорее ошибка.          |
+| `MentorsUIInfoService.applyMentorsChunk` accepts `data.results` may be `undefined` | mentors-ui-info                                    | Защита `(data.results                                                                                             |     | [])` есть, но это симптом — DTO должен гарантировать. |
+| `getMembers(otherParams)` принимает `Record<string, ...>` без типизации ключей     | port + repo + adapter                              | Типизировать через `interface MemberFilters { keySkill?, speciality?, ageFrom?, ageTo?, isMosPolytechStudent? }`. |
+| Нет отдельного `ui/routes/members/`                                                | роуты подключены через `office.routes.ts`          | Это OK — простой случай.                                                                                          |

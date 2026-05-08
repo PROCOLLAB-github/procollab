@@ -26,30 +26,39 @@ export class Invite {
   id: number;
   datetimeCreated: string;
   datetimeUpdated: string;
-  isAccepted?: boolean;             // undefined = ещё не решили
+  isAccepted?: boolean; // undefined = ещё не решили
   motivationalLetter?: string;
-  project: Project;                 // полная модель проекта
-  role: string;                     // должность в проекте
+  project: Project; // полная модель проекта
+  role: string; // должность в проекте
   specialization?: string;
-  user: User;                       // получатель
-  sender: User;                     // отправитель
+  user: User; // получатель
+  sender: User; // отправитель
 }
 ```
 
 ### `commands/`
 
 ```ts
-interface SendForUserCommand { userId; projectId; role: string; specialization?: string; }
-interface UpdateInviteCommand { inviteId; role: string; specialization?: string; }
+interface SendForUserCommand {
+  userId;
+  projectId;
+  role: string;
+  specialization?: string;
+}
+interface UpdateInviteCommand {
+  inviteId;
+  role: string;
+  specialization?: string;
+}
 ```
 
 ### `events/` — все три эмитятся use-case'ами и слушаются `InviteRepository` + `ProjectRepository`
 
-| Event | Payload | Где обрабатывается |
-|---|---|---|
+| Event          | Payload                                 | Где обрабатывается                          |
+| -------------- | --------------------------------------- | ------------------------------------------- |
 | `AcceptInvite` | `{ inviteId, projectId, userId, role }` | `InviteRepository`: `myInvitesCount$ -= 1`. |
-| `RejectInvite` | `{ inviteId, projectId, userId }` | `InviteRepository`: `myInvitesCount$ -= 1`. |
-| `RevokeInvite` | `{ inviteId, projectId, userId }` | (никто не подписан в текущем коде) |
+| `RejectInvite` | `{ inviteId, projectId, userId }`       | `InviteRepository`: `myInvitesCount$ -= 1`. |
+| `RevokeInvite` | `{ inviteId, projectId, userId }`       | (никто не подписан в текущем коде)          |
 
 > `AcceptInvite` также косвенно влияет на `ProjectRepository` (новый коллаборатор), но прямой подписки на это событие в `ProjectRepository` нет — вместо этого инвалидация идёт через `RemoveProjectCollaborator` event (зеркальная операция). Это асимметрия: при invite-accept надо бы тоже инвалидировать проект.
 
@@ -77,15 +86,15 @@ DI-биндинг (`infrastructure/di/invite.providers.ts`):
 
 ## Use-cases (7 шт., `api/invite/use-cases/`)
 
-| Use-case | Параметры | Возвращает | Эмитит событие |
-|---|---|---|---|
-| `SendForUserUseCase` | `command: SendForUserCommand` | `Result<Invite, error>` | — |
-| `RevokeInviteUseCase` | `inviteId, projectId, userId` | `Result<Invite, error>` | `RevokeInvite` |
-| `AcceptInviteUseCase` | `inviteId, projectId, userId, role` | `Result<Invite, error>` | `AcceptInvite` |
-| `RejectInviteUseCase` | `inviteId, projectId, userId` | `Result<Invite, error>` | `RejectInvite` |
-| `UpdateInviteUseCase` | `command: UpdateInviteCommand` | `Result<Invite, error>` | — |
-| `GetMyInvitesUseCase` | — | `Result<Invite[], error>` | — |
-| `GetProjectInvitesUseCase` | `projectId` | `Result<Invite[], error>` | — |
+| Use-case                   | Параметры                           | Возвращает                | Эмитит событие |
+| -------------------------- | ----------------------------------- | ------------------------- | -------------- |
+| `SendForUserUseCase`       | `command: SendForUserCommand`       | `Result<Invite, error>`   | —              |
+| `RevokeInviteUseCase`      | `inviteId, projectId, userId`       | `Result<Invite, error>`   | `RevokeInvite` |
+| `AcceptInviteUseCase`      | `inviteId, projectId, userId, role` | `Result<Invite, error>`   | `AcceptInvite` |
+| `RejectInviteUseCase`      | `inviteId, projectId, userId`       | `Result<Invite, error>`   | `RejectInvite` |
+| `UpdateInviteUseCase`      | `command: UpdateInviteCommand`      | `Result<Invite, error>`   | —              |
+| `GetMyInvitesUseCase`      | —                                   | `Result<Invite[], error>` | —              |
+| `GetProjectInvitesUseCase` | `projectId`                         | `Result<Invite[], error>` | —              |
 
 Все ошибки коллапсятся в `{ kind: "...error", cause? }` (стандартный стиль).
 
@@ -115,15 +124,15 @@ this.eventBus.on<RejectInvite>("RejectInvite").subscribe(() => {
 
 Префикс `/invites`.
 
-| Метод | HTTP | URL | Тело / параметры | Ответ |
-|---|---|---|---|---|
-| `sendForUser(userId, projectId, role, specialization?)` | POST | `/invites/` | `{ user, project, role, specialization }` | `Invite` |
-| `revokeInvite(invitationId)` | DELETE | `/invites/<invitationId>` | — | `void` |
-| `acceptInvite(inviteId)` | POST | `/invites/<inviteId>/accept/` | `{}` | `Invite` |
-| `rejectInvite(inviteId)` | POST | `/invites/<inviteId>/decline/` | `{}` | `Invite` |
-| `updateInvite(inviteId, role, specialization?)` | PATCH | `/invites/<inviteId>` | `{ role, specialization }` | `Invite` |
-| `getMy()` | GET | `/invites/` | — | `Invite[]` |
-| `getByProject(projectId)` | GET | `/invites/` | `?project=<id>&user=any` | `Invite[]` |
+| Метод                                                   | HTTP   | URL                            | Тело / параметры                          | Ответ      |
+| ------------------------------------------------------- | ------ | ------------------------------ | ----------------------------------------- | ---------- |
+| `sendForUser(userId, projectId, role, specialization?)` | POST   | `/invites/`                    | `{ user, project, role, specialization }` | `Invite`   |
+| `revokeInvite(invitationId)`                            | DELETE | `/invites/<invitationId>`      | —                                         | `void`     |
+| `acceptInvite(inviteId)`                                | POST   | `/invites/<inviteId>/accept/`  | `{}`                                      | `Invite`   |
+| `rejectInvite(inviteId)`                                | POST   | `/invites/<inviteId>/decline/` | `{}`                                      | `Invite`   |
+| `updateInvite(inviteId, role, specialization?)`         | PATCH  | `/invites/<inviteId>`          | `{ role, specialization }`                | `Invite`   |
+| `getMy()`                                               | GET    | `/invites/`                    | —                                         | `Invite[]` |
+| `getByProject(projectId)`                               | GET    | `/invites/`                    | `?project=<id>&user=any`                  | `Invite[]` |
 
 > `decline` / `accept` имеют trailing slash, `revoke` (`DELETE /invites/<id>`) и `updateInvite` (`PATCH /invites/<id>`) — без. Несогласованно (особенность бэка).
 
@@ -145,34 +154,34 @@ Resolver `ProjectsInvitesResolver` в [`docs/modules/project.md`](project.md) д
 
 ## Widgets
 
-| Widget | Где |
-|---|---|
-| `<app-invite-manage-card>` | `@uilib` ([`docs/uilib.md`](../uilib.md#invitemanagecardcomponent-app-invite-manage-card)) — карточка одного invite с accept/reject. |
-| `<app-info-card type="invite">` | `widgets/info-card` — представление как часть списка приглашений в виде карточки. |
+| Widget                          | Где                                                                                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `<app-invite-manage-card>`      | `@uilib` ([`docs/uilib.md`](../uilib.md#invitemanagecardcomponent-app-invite-manage-card)) — карточка одного invite с accept/reject. |
+| `<app-info-card type="invite">` | `widgets/info-card` — представление как часть списка приглашений в виде карточки.                                                    |
 
 ---
 
 ## Consumers (за пределами модуля)
 
-| Где | Как использует |
-|---|---|
-| `widgets/header`, `widgets/profile-control-panel` (`@uilib`) | Отображение количества + меню. |
-| `pages/projects/edit/components/project-team-step` | `SendForUserUseCase` (отправка), `UpdateInviteUseCase` (изменение роли), `RevokeInviteUseCase` (отзыв), `GetProjectInvitesUseCase` (список приглашений проекта). |
-| `pages/projects/list` (тип `invites`) | `GetMyInvitesUseCase` (список моих приглашений). |
-| `domain/auth/user.model.ts` | `Invite.user`/`sender: User`. |
-| `pages/profile/detail/main` | Может показывать приглашения профиля. |
-| `utils/inviteToProjectMapper.ts` | Утилита маппинга `Invite[]` → `any[]` для отображения в проектных списках (см. [`docs/social-platform/shared.md`](../social-platform/shared.md)). |
+| Где                                                          | Как использует                                                                                                                                                   |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `widgets/header`, `widgets/profile-control-panel` (`@uilib`) | Отображение количества + меню.                                                                                                                                   |
+| `pages/projects/edit/components/project-team-step`           | `SendForUserUseCase` (отправка), `UpdateInviteUseCase` (изменение роли), `RevokeInviteUseCase` (отзыв), `GetProjectInvitesUseCase` (список приглашений проекта). |
+| `pages/projects/list` (тип `invites`)                        | `GetMyInvitesUseCase` (список моих приглашений).                                                                                                                 |
+| `domain/auth/user.model.ts`                                  | `Invite.user`/`sender: User`.                                                                                                                                    |
+| `pages/profile/detail/main`                                  | Может показывать приглашения профиля.                                                                                                                            |
+| `utils/inviteToProjectMapper.ts`                             | Утилита маппинга `Invite[]` → `any[]` для отображения в проектных списках (см. [`docs/social-platform/shared.md`](../social-platform/shared.md)).                |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| `RevokeInvite` событие никем не слушается | `domain/invite/events/revoke-invite.event.ts` | Возможно стоит подписать `InviteRepository` для инвалидации списка `getByProject`. |
-| `AcceptInvite` не инвалидирует `ProjectRepository` | `infrastructure/repository/invite/invite.repository.ts` | Зеркальная операция к `RemoveProjectCollaborator` — должна тоже инвалидировать проект (новый коллаборатор). |
-| `myInvitesCount$` не инкрементируется при новых invite (нет push) | `InviteRepository` | OK для текущего UX (нет live-уведомлений), но при добавлении WebSocket надо учесть. |
-| Endpoints без согласованного trailing slash | `invite-http.adapter.ts` | На Django безопасно. |
-| `?user=any` — sentinel-значение в query | `getByProject` | Странный API на стороне бэка. На фронте может сломаться при тип-проверке `HttpParams`. |
-| Нет своего `pages/invite/` | — | Не баг — invites показываются в существующих местах. |
-| Тип ответа `revokeInvite()` в порту — `Observable<Invite>`, в адаптере — `Observable<void>` | `port` vs `adapter` | Несоответствие. Бэк возвращает удалённую сущность; либо порт неправильно типизирован, либо адаптер недо-возвращает. |
+| Что                                                                                         | Где                                                     | Заметка                                                                                                             |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `RevokeInvite` событие никем не слушается                                                   | `domain/invite/events/revoke-invite.event.ts`           | Возможно стоит подписать `InviteRepository` для инвалидации списка `getByProject`.                                  |
+| `AcceptInvite` не инвалидирует `ProjectRepository`                                          | `infrastructure/repository/invite/invite.repository.ts` | Зеркальная операция к `RemoveProjectCollaborator` — должна тоже инвалидировать проект (новый коллаборатор).         |
+| `myInvitesCount$` не инкрементируется при новых invite (нет push)                           | `InviteRepository`                                      | OK для текущего UX (нет live-уведомлений), но при добавлении WebSocket надо учесть.                                 |
+| Endpoints без согласованного trailing slash                                                 | `invite-http.adapter.ts`                                | На Django безопасно.                                                                                                |
+| `?user=any` — sentinel-значение в query                                                     | `getByProject`                                          | Странный API на стороне бэка. На фронте может сломаться при тип-проверке `HttpParams`.                              |
+| Нет своего `pages/invite/`                                                                  | —                                                       | Не баг — invites показываются в существующих местах.                                                                |
+| Тип ответа `revokeInvite()` в порту — `Observable<Invite>`, в адаптере — `Observable<void>` | `port` vs `adapter`                                     | Несоответствие. Бэк возвращает удалённую сущность; либо порт неправильно типизирован, либо адаптер недо-возвращает. |

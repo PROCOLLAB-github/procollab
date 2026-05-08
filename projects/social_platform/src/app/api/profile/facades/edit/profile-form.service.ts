@@ -145,7 +145,7 @@ export class ProfileFormService {
           lastName: profile.lastName ?? "",
           email: profile.email ?? "",
           userType: profile.userType ?? 1,
-          birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
+          birthday: profile.birthday ?? "",
           city: profile.city ?? "",
           coverImageAddress: profile.coverImageAddress ?? "",
           phoneNumber: profile.phoneNumber ?? "",

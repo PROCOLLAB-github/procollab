@@ -34,16 +34,16 @@ projects/ui/src/
 
 ## Сводка компонентов
 
-| Компонент | Selector | Тип | Inputs | Outputs |
-|---|---|---|---|---|
-| `SidebarComponent` | `ui-sidebar` | layout | `navItems: NavItem[]`, `logoSrc: string` (required) | — |
-| `ProfileControlPanelComponent` | `app-profile-control-panel` | layout | `user: User \| null`, `invites: Invite[]`, `hasNotifications: boolean`, `hasUnreads: boolean` (все required) | `acceptInvite: number`, `rejectInvite: number`, `logout: void` |
-| `ProfileInfoComponent` | `app-profile-info` | layout | `user: User` (required) | `logout: void` |
-| `InviteManageCardComponent` | `app-invite-manage-card` | layout | `invite: Invite` (required) | `accept: number`, `reject: number` |
-| `EmptyManageCardComponent` | `app-empty-manage-card` | layout (**не в `@uilib`**) | — | — |
-| `AvatarComponent` | `app-avatar` | primitive | `url: string` (required), `size = 50`, `hasBorder = false`, `isOnline = false`, `onlineBadgeSize = 16`, `onlineBadgeBorder = 3`, `onlineBadgeOffset = 0` | — |
-| `BackComponent` | `app-back` | primitive | `path?: string`, `namespace?: string` | — |
-| `IconComponent` | `[appIcon]` (директива-атрибут) | primitive | `appSquare?`, `appViewBox?`, `appWidth?`, `appHeight?`, `icon: string` (required) | — |
+| Компонент                      | Selector                        | Тип                        | Inputs                                                                                                                                                   | Outputs                                                        |
+| ------------------------------ | ------------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `SidebarComponent`             | `ui-sidebar`                    | layout                     | `navItems: NavItem[]`, `logoSrc: string` (required)                                                                                                      | —                                                              |
+| `ProfileControlPanelComponent` | `app-profile-control-panel`     | layout                     | `user: User \| null`, `invites: Invite[]`, `hasNotifications: boolean`, `hasUnreads: boolean` (все required)                                             | `acceptInvite: number`, `rejectInvite: number`, `logout: void` |
+| `ProfileInfoComponent`         | `app-profile-info`              | layout                     | `user: User` (required)                                                                                                                                  | `logout: void`                                                 |
+| `InviteManageCardComponent`    | `app-invite-manage-card`        | layout                     | `invite: Invite` (required)                                                                                                                              | `accept: number`, `reject: number`                             |
+| `EmptyManageCardComponent`     | `app-empty-manage-card`         | layout (**не в `@uilib`**) | —                                                                                                                                                        | —                                                              |
+| `AvatarComponent`              | `app-avatar`                    | primitive                  | `url: string` (required), `size = 50`, `hasBorder = false`, `isOnline = false`, `onlineBadgeSize = 16`, `onlineBadgeBorder = 3`, `onlineBadgeOffset = 0` | —                                                              |
+| `BackComponent`                | `app-back`                      | primitive                  | `path?: string`, `namespace?: string`                                                                                                                    | —                                                              |
+| `IconComponent`                | `[appIcon]` (директива-атрибут) | primitive                  | `appSquare?`, `appViewBox?`, `appWidth?`, `appHeight?`, `icon: string` (required)                                                                        | —                                                              |
 
 > Selector `ui-sidebar` — единственный с префиксом `ui-`, остальные с `app-`. Это исторический артефакт; менять не стоит — сломает все шаблоны-потребители.
 
@@ -66,11 +66,11 @@ projects/ui/src/
 
 ```ts
 export interface NavItem {
-  link: string;          // путь для router
-  icon: string;          // имя иконки из SVG-спрайта
-  name: string;          // отображаемый текст
-  isExternal?: boolean;  // флаг для внешних ссылок (target="_blank" и т. п.)
-  isActive?: boolean;    // ручной флаг активности (для внешних ссылок)
+  link: string; // путь для router
+  icon: string; // имя иконки из SVG-спрайта
+  name: string; // отображаемый текст
+  isExternal?: boolean; // флаг для внешних ссылок (target="_blank" и т. п.)
+  isActive?: boolean; // ручной флаг активности (для внешних ссылок)
 }
 ```
 
@@ -175,13 +175,13 @@ export interface NavItem {
 
 **Inputs**
 
-| Input | Тип | Что |
-|---|---|---|
-| `icon` | `string` (required) | имя иконки в спрайте |
-| `appSquare` | `string` | квадратный размер; автоматически выставляет `viewBox = "0 0 <s> <s>"` если он не задан |
-| `appViewBox` | `string` | `viewBox` напрямую |
-| `appWidth` | `string` | ширина (обновляет `viewBox[2]` если оно есть) |
-| `appHeight` | `string` | высота (обновляет `viewBox[3]` если оно есть) |
+| Input        | Тип                 | Что                                                                                    |
+| ------------ | ------------------- | -------------------------------------------------------------------------------------- |
+| `icon`       | `string` (required) | имя иконки в спрайте                                                                   |
+| `appSquare`  | `string`            | квадратный размер; автоматически выставляет `viewBox = "0 0 <s> <s>"` если он не задан |
+| `appViewBox` | `string`            | `viewBox` напрямую                                                                     |
+| `appWidth`   | `string`            | ширина (обновляет `viewBox[2]` если оно есть)                                          |
+| `appHeight`  | `string`            | высота (обновляет `viewBox[3]` если оно есть)                                          |
 
 **Использование**
 
@@ -194,8 +194,8 @@ export interface NavItem {
 
 ## Models
 
-| Тип | Файл | Поля |
-|---|---|---|
+| Тип    | Файл                       | Поля                                                                                                                                                                                    |
+| ------ | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `User` | `lib/models/user.model.ts` | `id`, `email`, `firstName`, `lastName`, `avatar`, `isOnline`, `isActive`, `onboardingStage: number \| null`, `speciality`, `userType`, `timeCreated`, `timeUpdated`, `verificationDate` |
 
 **Импорт**: `import { User } from "uilib/models/user.model"` (alias `uilib/models` указывает на `projects/ui/src/models/*` — но фактически файл лежит в `lib/models/user.model.ts`, alias настроен под другую раскладку. На практике в `social_platform` импорт идёт через `import { User } from "projects/ui/src/lib/models/user.model"` или вовсе через свой `social_platform/domain/auth/user.model`).
@@ -206,12 +206,12 @@ export interface NavItem {
 
 ## Архитектурный долг
 
-| Что | Как фиксить |
-|---|---|
-| Selector `ui-sidebar` отличается от остальных (`app-*`) | Менять не стоит — сломает шаблоны. Зафиксировать convention: новые компоненты `@uilib` именовать через `ui-*`. |
-| `EmptyManageCardComponent` не реэкспортирован | Если он не нужен снаружи — удалить файл; если нужен — добавить в `layout/index.ts`. |
-| `User` модель дублирует `social_platform/domain/auth/user.model` | Поднять единую версию в `@core/lib/models/`. |
-| Alias `uilib/models` указывает на `projects/ui/src/models/*`, но файл лежит в `projects/ui/src/lib/models/*` | Либо подвинуть файл, либо поправить alias (минимально-инвазивно). |
-| `public-api.ts` не реэкспортирует модели | Добавить `export * from "./lib/models/user.model"`. |
-| `AvatarComponent.url` помечен `required: true`, но тип `string \| undefined` | Снять `required: true` (вернее) или сделать тип `string`. |
-| Subscription-plans компонент упоминался в старом README, но в коде нет | README снесён; если когда-нибудь нужен — поднять отдельно. |
+| Что                                                                                                          | Как фиксить                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| Selector `ui-sidebar` отличается от остальных (`app-*`)                                                      | Менять не стоит — сломает шаблоны. Зафиксировать convention: новые компоненты `@uilib` именовать через `ui-*`. |
+| `EmptyManageCardComponent` не реэкспортирован                                                                | Если он не нужен снаружи — удалить файл; если нужен — добавить в `layout/index.ts`.                            |
+| `User` модель дублирует `social_platform/domain/auth/user.model`                                             | Поднять единую версию в `@core/lib/models/`.                                                                   |
+| Alias `uilib/models` указывает на `projects/ui/src/models/*`, но файл лежит в `projects/ui/src/lib/models/*` | Либо подвинуть файл, либо поправить alias (минимально-инвазивно).                                              |
+| `public-api.ts` не реэкспортирует модели                                                                     | Добавить `export * from "./lib/models/user.model"`.                                                            |
+| `AvatarComponent.url` помечен `required: true`, но тип `string \| undefined`                                 | Снять `required: true` (вернее) или сделать тип `string`.                                                      |
+| Subscription-plans компонент упоминался в старом README, но в коде нет                                       | README снесён; если когда-нибудь нужен — поднять отдельно.                                                     |

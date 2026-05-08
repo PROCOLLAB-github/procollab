@@ -111,8 +111,7 @@
           size="big"
           id="birthday"
           [error]="birthday | controlError"
-          type="text"
-          mask="00.00.0000"
+          type="date"
           formControlName="birthday"
         ></app-input>
         @if (birthday | controlError: "required") {
@@ -237,22 +236,15 @@
     <div class="profile__column">
       @if (phoneNumber) {
       <fieldset>
-        <label for="links" class="field-label">телефон</label>
+        <label for="phoneNumber" class="field-label">телефон</label>
         <app-input
           size="big"
           id="phoneNumber"
-          mask="0-000-000-00-00"
-          [error]="phoneNumber | controlError"
           type="text"
           placeholder="+79030195823"
           formControlName="phoneNumber"
           style="flex-grow: 1"
         ></app-input>
-        @if (phoneNumber | controlError: "required") {
-        <div class="text-body-10 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
       </fieldset>
       }
     </div>

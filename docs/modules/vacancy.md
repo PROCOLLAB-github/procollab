@@ -25,18 +25,18 @@ export class Vacancy {
   id: number;
   role: string;
   isActive: boolean;
-  project: Project;                // полная модель проекта (см. domain/project)
-  requiredSkills: Skill[];          // см. domain/skills
+  project: Project; // полная модель проекта (см. domain/project)
+  requiredSkills: Skill[]; // см. domain/skills
   description: string;
-  requiredExperience: string;       // строка из core/consts/lists/work-experience-list
-  workFormat: string;               // онлайн / гибрид / офис
-  salary: string;                   // строкой "от 50000 до 100000" — без типизации
-  workSchedule: string;             // полный день / частичная / гибкий
+  requiredExperience: string; // строка из core/consts/lists/work-experience-list
+  workFormat: string; // онлайн / гибрид / офис
+  salary: string; // строкой "от 50000 до 100000" — без типизации
+  workSchedule: string; // полный день / частичная / гибкий
   specialization?: string;
   datetimeCreated: string;
   datetimeUpdated: string;
 
-  getSkillsNames(): string[];       // helper для отображения тегов
+  getSkillsNames(): string[]; // helper для отображения тегов
 }
 ```
 
@@ -45,24 +45,24 @@ export class Vacancy {
 ```ts
 export class VacancyResponse {
   id: number;
-  whyMe: string;                    // мотивационное письмо
-  isApproved?: boolean;             // undefined пока решение не принято
-  user: User;                       // отозвавшийся
-  vacancy: number;                  // id вакансии
-  accompanyingFile: FileModel;      // прикреплённый файл
+  whyMe: string; // мотивационное письмо
+  isApproved?: boolean; // undefined пока решение не принято
+  user: User; // отозвавшийся
+  vacancy: number; // id вакансии
+  accompanyingFile: FileModel; // прикреплённый файл
 }
 ```
 
 ### Domain events (`domain/vacancy/events/`)
 
-| Event | Payload | Кто слушает |
-|---|---|---|
-| `VacancyCreated` | `{ projectId }` | `VacancyRepository` (`invalidate(projectId)`) |
-| `VacancyUpdated` | `{ vacancyId }` | `VacancyRepository` (`invalidate(vacancyId)`) |
-| `VacancyDelete` | `{ vacancyId }` | `VacancyRepository` (`invalidate(vacancyId)`) |
-| `SendVacancyResponse` | `{ projectId, vacancyId? }` | `ProjectRepository` (инвалидация проекта) |
-| `AcceptVacancyResponse` | `{ projectId }` | `ProjectRepository` |
-| `RejectVacancyResponse` | `{ projectId }` | `ProjectRepository` |
+| Event                   | Payload                     | Кто слушает                                   |
+| ----------------------- | --------------------------- | --------------------------------------------- |
+| `VacancyCreated`        | `{ projectId }`             | `VacancyRepository` (`invalidate(projectId)`) |
+| `VacancyUpdated`        | `{ vacancyId }`             | `VacancyRepository` (`invalidate(vacancyId)`) |
+| `VacancyDelete`         | `{ vacancyId }`             | `VacancyRepository` (`invalidate(vacancyId)`) |
+| `SendVacancyResponse`   | `{ projectId, vacancyId? }` | `ProjectRepository` (инвалидация проекта)     |
+| `AcceptVacancyResponse` | `{ projectId }`             | `ProjectRepository`                           |
+| `RejectVacancyResponse` | `{ projectId }`             | `ProjectRepository`                           |
 
 > Событие удаления названо `VacancyDelete` (а не `VacancyDeleted`) — ассиметрия с `VacancyCreated` / `VacancyUpdated`. Не исправлять — события уже эмитятся.
 
@@ -72,12 +72,17 @@ export class VacancyResponse {
 abstract class VacancyRepositoryPort {
   // Поиск с фильтрами (для /vacancies/all)
   getForProject(
-    limit, offset: number,
+    limit,
+    offset: number,
     projectId?: number,
-    requiredExperience?, workFormat?, workSchedule?, salary?, searchValue?: string
+    requiredExperience?,
+    workFormat?,
+    workSchedule?,
+    salary?,
+    searchValue?: string
   ): Observable<Vacancy[]>;
 
-  getMyVacancies(limit, offset): Observable<VacancyResponse[]>;   // мои отклики
+  getMyVacancies(limit, offset): Observable<VacancyResponse[]>; // мои отклики
   getOne(vacancyId): Observable<Vacancy>;
   postVacancy(projectId, vacancy: CreateVacancyDto): Observable<Vacancy>;
   updateVacancy(vacancyId, vacancy: Partial<Vacancy> | CreateVacancyDto): Observable<Vacancy>;
@@ -103,18 +108,18 @@ DI-биндинг (`infrastructure/di/vacancy.providers.ts`):
 
 ## Use-cases (`api/vacancy/use-cases/`)
 
-| Use-case | Параметры | Возвращает | Эмитит событие |
-|---|---|---|---|
-| `GetVacanciesUseCase` | `limit, offset, projectId?, requiredExperience?, workFormat?, workSchedule?, salary?, searchValue?` | `Result<Vacancy[], error>` | — |
-| `GetVacancyDetailUseCase` | `vacancyId` | `Result<Vacancy, error>` | — |
-| `GetMyVacanciesUseCase` | `limit, offset` | `Result<VacancyResponse[], error>` | — |
-| `PostVacancyUseCase` | `projectId, vacancy` | `Result<Vacancy, error>` | `VacancyCreated` |
-| `UpdateVacancyUseCase` | `vacancyId, vacancy` | `Result<Vacancy, error>` | `VacancyUpdated` |
-| `DeleteVacancyUseCase` | `vacancyId, projectId` | `Result<void, error>` | `VacancyDelete` |
-| `SendVacancyResponseUseCase` | `vacancyId, body, projectId?` | `Result<VacancyResponse, error>` | `SendVacancyResponse` |
-| `GetProjectResponsesUseCase` | `projectId` | `Result<VacancyResponse[], error>` | — |
-| `AcceptResponseUseCase` | `responseId, projectId` | `Result<VacancyResponse, error>` | `AcceptVacancyResponse` |
-| `RejectResponseUseCase` | `responseId, projectId` | `Result<VacancyResponse, error>` | `RejectVacancyResponse` |
+| Use-case                     | Параметры                                                                                           | Возвращает                         | Эмитит событие          |
+| ---------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------- |
+| `GetVacanciesUseCase`        | `limit, offset, projectId?, requiredExperience?, workFormat?, workSchedule?, salary?, searchValue?` | `Result<Vacancy[], error>`         | —                       |
+| `GetVacancyDetailUseCase`    | `vacancyId`                                                                                         | `Result<Vacancy, error>`           | —                       |
+| `GetMyVacanciesUseCase`      | `limit, offset`                                                                                     | `Result<VacancyResponse[], error>` | —                       |
+| `PostVacancyUseCase`         | `projectId, vacancy`                                                                                | `Result<Vacancy, error>`           | `VacancyCreated`        |
+| `UpdateVacancyUseCase`       | `vacancyId, vacancy`                                                                                | `Result<Vacancy, error>`           | `VacancyUpdated`        |
+| `DeleteVacancyUseCase`       | `vacancyId, projectId`                                                                              | `Result<void, error>`              | `VacancyDelete`         |
+| `SendVacancyResponseUseCase` | `vacancyId, body, projectId?`                                                                       | `Result<VacancyResponse, error>`   | `SendVacancyResponse`   |
+| `GetProjectResponsesUseCase` | `projectId`                                                                                         | `Result<VacancyResponse[], error>` | —                       |
+| `AcceptResponseUseCase`      | `responseId, projectId`                                                                             | `Result<VacancyResponse, error>`   | `AcceptVacancyResponse` |
+| `RejectResponseUseCase`      | `responseId, projectId`                                                                             | `Result<VacancyResponse, error>`   | `RejectVacancyResponse` |
 
 10 use-case'ов. Все мутации эмитят события — потребители (`ProjectRepository`, `VacancyRepository`) сами решают что инвалидировать.
 
@@ -122,12 +127,12 @@ DI-биндинг (`infrastructure/di/vacancy.providers.ts`):
 
 ## Facades (`api/vacancy/facades/`)
 
-| Facade | Provided | Что |
-|---|---|---|
-| `VacancyInfoService` | страница `/vacancies` | Список — реактивный поиск/фильтрация через `searchForm` + `filterForm`, query-param sync (`role_contains`, `required_experience`, `work_format` и т. п.), debounce, инфинит-скролл. |
-| `VacancyUIInfoService` | страница `/vacancies` | UI-info — `vacancies$ AsyncState`, `listType` (`"all" \| "my"`), `searchForm`, `filterForm`, `vacanciesTake`, `vacanciesPage`. |
-| `VacancyDetailInfoService` | страница `/vacancies/:id` | Детальная страница — `initializeDetailInfo()` подписка на `route.data`, `initializeDetailInfoQueryParams()` (модалка результата отправки отклика), `onSubmitForm()` через `SendVacancyResponseUseCase`, проверка валидности через `ValidationService`. |
-| `VacancyDetailUIInfoService` | страница `/vacancies/:id` | `vacancy: signal<Vacancy>`, `sendForm: { whyMe }`, `sendFormIsSubmitting$ AsyncState`, computed для модалок и состояния отклика. |
+| Facade                       | Provided                  | Что                                                                                                                                                                                                                                                    |
+| ---------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `VacancyInfoService`         | страница `/vacancies`     | Список — реактивный поиск/фильтрация через `searchForm` + `filterForm`, query-param sync (`role_contains`, `required_experience`, `work_format` и т. п.), debounce, инфинит-скролл.                                                                    |
+| `VacancyUIInfoService`       | страница `/vacancies`     | UI-info — `vacancies$ AsyncState`, `listType` (`"all" \| "my"`), `searchForm`, `filterForm`, `vacanciesTake`, `vacanciesPage`.                                                                                                                         |
+| `VacancyDetailInfoService`   | страница `/vacancies/:id` | Детальная страница — `initializeDetailInfo()` подписка на `route.data`, `initializeDetailInfoQueryParams()` (модалка результата отправки отклика), `onSubmitForm()` через `SendVacancyResponseUseCase`, проверка валидности через `ValidationService`. |
+| `VacancyDetailUIInfoService` | страница `/vacancies/:id` | `vacancy: signal<Vacancy>`, `sendForm: { whyMe }`, `sendFormIsSubmitting$ AsyncState`, computed для модалок и состояния отклика.                                                                                                                       |
 
 Также используется `ExpandService` (см. cross-cutting) для раскрытия описания вакансии.
 
@@ -140,9 +145,15 @@ DI-биндинг (`infrastructure/di/vacancy.providers.ts`):
 В конструкторе подписывается на свои же события через `EventBus`:
 
 ```ts
-this.eventBus.on<VacancyCreated>("VacancyCreated").subscribe(event => this.invalidate(event.payload.projectId));
-this.eventBus.on<VacancyUpdated>("VacancyUpdated").subscribe(event => this.invalidate(event.payload.vacancyId));
-this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => this.invalidate(event.payload.vacancyId));
+this.eventBus
+  .on<VacancyCreated>("VacancyCreated")
+  .subscribe(event => this.invalidate(event.payload.projectId));
+this.eventBus
+  .on<VacancyUpdated>("VacancyUpdated")
+  .subscribe(event => this.invalidate(event.payload.vacancyId));
+this.eventBus
+  .on<VacancyDelete>("VacancyDelete")
+  .subscribe(event => this.invalidate(event.payload.vacancyId));
 ```
 
 > `VacancyCreated` инвалидирует **по projectId**, `Updated`/`Delete` — **по vacancyId**. Это потенциально расходящиеся ключи в `EntityCache<Vacancy>` (cache по id вакансии). Возможный баг: при `VacancyCreated` инвалидируется неверный ключ. Надо смотреть как используется `entityCache` в `getOne`.
@@ -153,18 +164,18 @@ this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => this.invalid
 
 Префиксы: `/vacancies`, `/projects` (для responses-by-project).
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `getForProject(limit, offset, projectId?, requiredExperience?, workFormat?, workSchedule?, salary?, searchValue?)` | GET | `/vacancies/` | query: `limit, offset, project_id?, required_experience?, work_format?, work_schedule?, salary?, role_contains?` | `Vacancy[]` |
-| `getMyVacancies(limit, offset)` | GET | `/vacancies/responses/self` | `?limit, offset` | `VacancyResponse[]` |
-| `getOne(vacancyId)` | GET | `/vacancies/<vacancyId>` | — | `Vacancy` |
-| `postVacancy(projectId, dto)` | POST | `/vacancies/` | `{ ...dto, project: projectId }` | `Vacancy` |
-| `updateVacancy(vacancyId, dto)` | PATCH | `/vacancies/<vacancyId>` | `Partial<Vacancy>` | `Vacancy` |
-| `deleteVacancy(vacancyId)` | DELETE | `/vacancies/<vacancyId>` | — | `void` |
-| `sendResponse(vacancyId, body)` | POST | `/vacancies/<vacancyId>/respond` | `{ whyMe }` | `VacancyResponse` |
-| `responsesByProject(projectId)` | GET | `/projects/<projectId>/responses` | — | `VacancyResponse[]` |
-| `acceptResponse(responseId)` | POST | `/vacancies/responses/<responseId>/accept` | — | `VacancyResponse` |
-| `rejectResponse(responseId)` | POST | `/vacancies/responses/<responseId>/reject` | — | `VacancyResponse` |
+| Метод                                                                                                              | HTTP   | URL                                        | Параметры                                                                                                        | Ответ               |
+| ------------------------------------------------------------------------------------------------------------------ | ------ | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `getForProject(limit, offset, projectId?, requiredExperience?, workFormat?, workSchedule?, salary?, searchValue?)` | GET    | `/vacancies/`                              | query: `limit, offset, project_id?, required_experience?, work_format?, work_schedule?, salary?, role_contains?` | `Vacancy[]`         |
+| `getMyVacancies(limit, offset)`                                                                                    | GET    | `/vacancies/responses/self`                | `?limit, offset`                                                                                                 | `VacancyResponse[]` |
+| `getOne(vacancyId)`                                                                                                | GET    | `/vacancies/<vacancyId>`                   | —                                                                                                                | `Vacancy`           |
+| `postVacancy(projectId, dto)`                                                                                      | POST   | `/vacancies/`                              | `{ ...dto, project: projectId }`                                                                                 | `Vacancy`           |
+| `updateVacancy(vacancyId, dto)`                                                                                    | PATCH  | `/vacancies/<vacancyId>`                   | `Partial<Vacancy>`                                                                                               | `Vacancy`           |
+| `deleteVacancy(vacancyId)`                                                                                         | DELETE | `/vacancies/<vacancyId>`                   | —                                                                                                                | `void`              |
+| `sendResponse(vacancyId, body)`                                                                                    | POST   | `/vacancies/<vacancyId>/respond`           | `{ whyMe }`                                                                                                      | `VacancyResponse`   |
+| `responsesByProject(projectId)`                                                                                    | GET    | `/projects/<projectId>/responses`          | —                                                                                                                | `VacancyResponse[]` |
+| `acceptResponse(responseId)`                                                                                       | POST   | `/vacancies/responses/<responseId>/accept` | —                                                                                                                | `VacancyResponse`   |
+| `rejectResponse(responseId)`                                                                                       | POST   | `/vacancies/responses/<responseId>/reject` | —                                                                                                                | `VacancyResponse`   |
 
 > Endpoints без trailing slash где-то есть (`getOne`, `updateVacancy`, `deleteVacancy`), в других — с trailing slash. Несогласованно (особенность бэка).
 
@@ -201,14 +212,14 @@ this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => this.invalid
 
 ## Pages (`ui/pages/vacancies/`)
 
-| Page | Файл | Selector | Что |
-|---|---|---|---|
-| `VacanciesComponent` | `pages/vacancies/vacancies.component.ts` | `app-vacancies` | Корневой layout — табы all/my. |
-| `VacanciesListComponent` | `pages/vacancies/list/list.component.ts` | `app-vacancies-list` | Список вакансий или откликов (по URL). Подключает `<app-vacancy-filter>`, `<app-vacancy-card>`. Provides `VacancyInfoService` + `VacancyUIInfoService`. |
-| `ResponseCardComponent` | `pages/vacancies/list/response-card/response-card.component.ts` | `app-response-card` | Карточка отклика (для `/my`). |
-| `VacanciesDetailComponent` | `pages/vacancies/detail/vacancies-detail.component.ts` | `app-vacancies-detail` | Корневой layout детальной страницы. |
-| `VacancyInfoComponent` | `pages/vacancies/detail/info/info.component.ts` | `app-vacancy-info` | Информация о вакансии — два-колоночный layout (`<app-vacancies-left-side>` / `<app-vacancies-right-side>`). |
-| `VacanciesLeftSideComponent`, `VacanciesRightSideComponent` | `detail/info/components/...` | соответствующие селекторы | Колонки detail-страницы. |
+| Page                                                        | Файл                                                            | Selector                  | Что                                                                                                                                                     |
+| ----------------------------------------------------------- | --------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VacanciesComponent`                                        | `pages/vacancies/vacancies.component.ts`                        | `app-vacancies`           | Корневой layout — табы all/my.                                                                                                                          |
+| `VacanciesListComponent`                                    | `pages/vacancies/list/list.component.ts`                        | `app-vacancies-list`      | Список вакансий или откликов (по URL). Подключает `<app-vacancy-filter>`, `<app-vacancy-card>`. Provides `VacancyInfoService` + `VacancyUIInfoService`. |
+| `ResponseCardComponent`                                     | `pages/vacancies/list/response-card/response-card.component.ts` | `app-response-card`       | Карточка отклика (для `/my`).                                                                                                                           |
+| `VacanciesDetailComponent`                                  | `pages/vacancies/detail/vacancies-detail.component.ts`          | `app-vacancies-detail`    | Корневой layout детальной страницы.                                                                                                                     |
+| `VacancyInfoComponent`                                      | `pages/vacancies/detail/info/info.component.ts`                 | `app-vacancy-info`        | Информация о вакансии — два-колоночный layout (`<app-vacancies-left-side>` / `<app-vacancies-right-side>`).                                             |
+| `VacanciesLeftSideComponent`, `VacanciesRightSideComponent` | `detail/info/components/...`                                    | соответствующие селекторы | Колонки detail-страницы.                                                                                                                                |
 
 ### Resolvers
 
@@ -220,36 +231,36 @@ this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => this.invalid
 
 ## Widgets, потребляющие вакансии
 
-| Widget | Где документирован |
-|---|---|
-| `<app-vacancy-card>` | [`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md) — карточка вакансии. |
-| `<app-project-vacancy-card>` | то же — карточка вакансии в контексте проекта. |
-| `<app-vacancy-filter>` | то же — фильтры. |
+| Widget                       | Где документирован                                                                            |
+| ---------------------------- | --------------------------------------------------------------------------------------------- |
+| `<app-vacancy-card>`         | [`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md) — карточка вакансии. |
+| `<app-project-vacancy-card>` | то же — карточка вакансии в контексте проекта.                                                |
+| `<app-vacancy-filter>`       | то же — фильтры.                                                                              |
 
 ---
 
 ## Consumers (за пределами модуля)
 
-| Где | Как использует |
-|---|---|
+| Где                                                   | Как использует                                                                               |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `pages/projects/edit/components/project-vacancy-step` | CRUD вакансий проекта через `VacancyRepositoryPort.postVacancy/updateVacancy/deleteVacancy`. |
-| `pages/projects/detail/vacancies` | Список вакансий проекта через `Project.vacancies` (полная модель из `getOne(projectId)`). |
-| `pages/projects/detail/work-section` | Отклики на вакансии проекта через `responsesByProject(projectId)` + accept/reject. |
-| `pages/feed/open-vacancy` | Создание вакансии из ленты. |
-| `widgets/info-card` (с `type="rating"`) | Отображает информацию о вакансии в карточке проекта. |
-| `domain/project/project.model.ts` | `Project.vacancies: Vacancy[]`. |
-| `core/lib/services/...` | через `EventBus` слушает `VacancyCreated/Updated/Delete`/Send/Accept/Reject. |
+| `pages/projects/detail/vacancies`                     | Список вакансий проекта через `Project.vacancies` (полная модель из `getOne(projectId)`).    |
+| `pages/projects/detail/work-section`                  | Отклики на вакансии проекта через `responsesByProject(projectId)` + accept/reject.           |
+| `pages/feed/open-vacancy`                             | Создание вакансии из ленты.                                                                  |
+| `widgets/info-card` (с `type="rating"`)               | Отображает информацию о вакансии в карточке проекта.                                         |
+| `domain/project/project.model.ts`                     | `Project.vacancies: Vacancy[]`.                                                              |
+| `core/lib/services/...`                               | через `EventBus` слушает `VacancyCreated/Updated/Delete`/Send/Accept/Reject.                 |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| `VacancyDelete` (вместо `VacancyDeleted`) | `domain/vacancy/events/vacancy-deleted.event.ts` | Не переименовывать — слушатели уже подписаны. |
-| `VacancyCreated.payload = { projectId }` инвалидирует `EntityCache<Vacancy>` по `projectId`, а cache по `vacancyId` | `vacancy.repository.ts` constructor | Возможный баг. Использовать вместо этого `entityCache.clear()` при VacancyCreated. |
-| `CreateVacancyDto` живёт в `api/project/dto/`, не в `domain/vacancy/dto/` | `api/project/dto/create-vacancy.model.ts` | Перенести в `@domain/vacancy/dto/`. |
-| `salary: string` в `Vacancy` — нет валидации диапазона | `domain/vacancy/vacancy.model.ts` | Перевести на `{ from?: number; to?: number }` или хотя бы строгий формат. |
-| Endpoints без согласованного trailing slash | `vacancy-http.adapter.ts` | На Django безопасно, на других серверах — потенциальный 301. |
-| `VacanciesListComponent` тип определяет по URL — нет явного `@Input()` | `pages/vacancies/list/list.component.ts` | Сделать `@Input() listType: "all" \| "my"`. |
-| `Vacancy.specialization?: string` — но в коде встречаются объекты | `domain/vacancy/vacancy.model.ts` | Указать тип точнее или нормализовать. |
+| Что                                                                                                                 | Где                                              | Заметка                                                                            |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `VacancyDelete` (вместо `VacancyDeleted`)                                                                           | `domain/vacancy/events/vacancy-deleted.event.ts` | Не переименовывать — слушатели уже подписаны.                                      |
+| `VacancyCreated.payload = { projectId }` инвалидирует `EntityCache<Vacancy>` по `projectId`, а cache по `vacancyId` | `vacancy.repository.ts` constructor              | Возможный баг. Использовать вместо этого `entityCache.clear()` при VacancyCreated. |
+| `CreateVacancyDto` живёт в `api/project/dto/`, не в `domain/vacancy/dto/`                                           | `api/project/dto/create-vacancy.model.ts`        | Перенести в `@domain/vacancy/dto/`.                                                |
+| `salary: string` в `Vacancy` — нет валидации диапазона                                                              | `domain/vacancy/vacancy.model.ts`                | Перевести на `{ from?: number; to?: number }` или хотя бы строгий формат.          |
+| Endpoints без согласованного trailing slash                                                                         | `vacancy-http.adapter.ts`                        | На Django безопасно, на других серверах — потенциальный 301.                       |
+| `VacanciesListComponent` тип определяет по URL — нет явного `@Input()`                                              | `pages/vacancies/list/list.component.ts`         | Сделать `@Input() listType: "all" \| "my"`.                                        |
+| `Vacancy.specialization?: string` — но в коде встречаются объекты                                                   | `domain/vacancy/vacancy.model.ts`                | Указать тип точнее или нормализовать.                                              |
