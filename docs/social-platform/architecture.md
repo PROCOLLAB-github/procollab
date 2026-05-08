@@ -53,13 +53,13 @@ ui  ─┬──▶ api ──▶ domain ◀── infrastructure
 
 В каждой доменной папке:
 
-| Файл / папка | Что |
-|---|---|
-| `*.model.ts` | TypeScript-интерфейсы и классы доменной модели. Без декораторов Angular. |
-| `ports/*.repository.port.ts` | `abstract class` (используется как DI-токен) с сигнатурами методов репозитория. |
-| `events/*.event.ts` | Domain events (если используется EventBus). Каждый файл экспортирует фабрику события. |
-| `commands/*.command.ts` | Структуры данных для use-case'ов (используется в новых модулях, опционально). |
-| `results/*.result.ts` | Структуры результатов use-case'ов с явными ошибками. |
+| Файл / папка                 | Что                                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------------------- |
+| `*.model.ts`                 | TypeScript-интерфейсы и классы доменной модели. Без декораторов Angular.              |
+| `ports/*.repository.port.ts` | `abstract class` (используется как DI-токен) с сигнатурами методов репозитория.       |
+| `events/*.event.ts`          | Domain events (если используется EventBus). Каждый файл экспортирует фабрику события. |
+| `commands/*.command.ts`      | Структуры данных для use-case'ов (используется в новых модулях, опционально).         |
+| `results/*.result.ts`        | Структуры результатов use-case'ов с явными ошибками.                                  |
 
 Зачем `abstract class` для портов вместо `interface`: TypeScript-интерфейсы стираются на runtime → их нельзя использовать как DI-токен. `abstract class` даёт runtime-конструктор, который Angular DI использует как ключ.
 
@@ -122,6 +122,7 @@ export class GetCourseDetailUseCase {
 ```
 
 **Конвенции**:
+
 - Имя файла — `<verb>-<entity>.use-case.ts` (`get-board.use-case.ts`, `submit-task-answer.use-case.ts`).
 - Use-case инжектит **только порты** (никогда конкретные репозитории).
 - Не выбрасывает исключений — все ошибки через `Result.fail`.
@@ -141,8 +142,14 @@ export class GetCourseDetailUseCase {
 export class CourseDetailInfoService {
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
   // ...
-  init(): void { this.loadCourseData(); this.trackNavigation(); }
-  destroy(): void { this.destroy$.next(); this.destroy$.complete(); }
+  init(): void {
+    this.loadCourseData();
+    this.trackNavigation();
+  }
+  destroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
 ```
 
@@ -241,12 +248,12 @@ export const COURSE_DETAIL_ROUTES: Routes = [
 
 Runtime-сервисы UI-уровня (синглтоны):
 
-| Сервис | Что |
-|---|---|
-| `LoadingService` | Глобальный лоадер (`mat-progress-bar` в `app.component.html`). Подписан на router events в `AppComponent`. |
-| `SnackbarService` | Toast-сообщения (`success` / `error` / `warning` / `info`). |
-| `NavService` | Навигационные хелперы (back, breadcrumbs). |
-| `NotificationService` | Полл/sse уведомлений в шапке. |
+| Сервис                | Что                                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `LoadingService`      | Глобальный лоадер (`mat-progress-bar` в `app.component.html`). Подписан на router events в `AppComponent`. |
+| `SnackbarService`     | Toast-сообщения (`success` / `error` / `warning` / `info`).                                                |
+| `NavService`          | Навигационные хелперы (back, breadcrumbs).                                                                 |
+| `NotificationService` | Полл/sse уведомлений в шапке.                                                                              |
 
 Каталог примитивов и виджетов — в [`docs/social-platform/ui-primitives.md`](ui-primitives.md) и [`docs/social-platform/ui-widgets.md`](ui-widgets.md).
 
@@ -326,7 +333,8 @@ RxJS-оператор: `Observable<Result<T, E>> → Observable<AsyncState<T, E>
 
 ```ts
 // в фасаде:
-this.useCase.execute(id)
+this.useCase
+  .execute(id)
   .pipe(toAsyncState(previousValue))
   .subscribe(state => this.signal.set(state));
 ```
@@ -345,7 +353,7 @@ export class EventBus {
 
 Все события автоматически логируются на DEBUG: `[EventBus] <type>`.
 
-Типичный потребитель — репозиторий, который слушает событие из соседнего модуля и инвалидирует свой `EntityCache<T>`. Например, `ProjectRepository` слушает событие `ProjectMemberAdded` от invite-модуля и сбрасывает кеш проекта.
+Типичный потребитель — репозиторий, который слушает событие из соседнего модуля и инвалидирует свой `EntityCache<T>`. Например, `ProjectRepository` слушает `SendVacancyResponse`, `AcceptVacancyResponse` и `RejectVacancyResponse` от vacancy-модуля и сбрасывает кеш проекта.
 
 ### `EntityCache<T>`
 
@@ -360,7 +368,7 @@ getCourseDetail(courseId: number): Observable<CourseDetail> {
 }
 ```
 
-Применён к `Project`, `Vacancy`, `Program`, `Course` репозиториям (см. коммит `49e26046`).
+Применён к `Project`, `Vacancy`, `Program` и `Courses` репозиториям. Project/Vacancy чистят кеш по domain events, Courses чистит detail/structure cache после отправки ответа, Program кеширует `getOne()` без текущих event-listeners.
 
 ### `LoggingInterceptor` + `LoggerService`
 
@@ -433,19 +441,19 @@ HTTP-интерсепторы в Angular работают по принципу 
 
 ## Конвенции импортов
 
-| Откуда | Что импортируем | Alias |
-|---|---|---|
-| `domain/...` | модели, типы, порты | `@domain/<module>/...` |
-| `api/<module>/...` | use-cases, facades, UI-info | `@api/<module>/...` |
-| `infrastructure/...` | **никогда** напрямую — только через DI | — |
-| `ui/primitives` | атомы | `@ui/primitives` (есть `index.ts`) или `@ui/primitives/<name>/<name>.component` |
-| `ui/widgets/<name>` | конкретный widget | `@ui/widgets/<name>/<name>.component` |
-| `ui/services/<name>/<name>.service` | UI-сервисы | `@ui/services/...` |
-| `utils/<name>` | хелперы | `@utils/<name>` |
-| Sub-проект `core` | services, interceptors, providers, pipes, models | `@corelib` (через public-api) или `@core/lib/...` (для непубличных) |
-| Sub-проект `ui` | layout-компоненты, primitives | `@uilib` |
-| Константы из `core/consts` | списки, navigation, etc. | `@core/consts/...` |
-| `environment` | базовые URL, флаги | `@environment` |
+| Откуда                              | Что импортируем                                  | Alias                                                                           |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `domain/...`                        | модели, типы, порты                              | `@domain/<module>/...`                                                          |
+| `api/<module>/...`                  | use-cases, facades, UI-info                      | `@api/<module>/...`                                                             |
+| `infrastructure/...`                | **никогда** напрямую — только через DI           | —                                                                               |
+| `ui/primitives`                     | атомы                                            | `@ui/primitives` (есть `index.ts`) или `@ui/primitives/<name>/<name>.component` |
+| `ui/widgets/<name>`                 | конкретный widget                                | `@ui/widgets/<name>/<name>.component`                                           |
+| `ui/services/<name>/<name>.service` | UI-сервисы                                       | `@ui/services/...`                                                              |
+| `utils/<name>`                      | хелперы                                          | `@utils/<name>`                                                                 |
+| Sub-проект `core`                   | services, interceptors, providers, pipes, models | `@corelib` (через public-api) или `@core/lib/...` (для непубличных)             |
+| Sub-проект `ui`                     | layout-компоненты, primitives                    | `@uilib`                                                                        |
+| Константы из `core/consts`          | списки, navigation, etc.                         | `@core/consts/...`                                                              |
+| `environment`                       | базовые URL, флаги                               | `@environment`                                                                  |
 
 > **Не использовать** глубокие относительные импорты через границу подпроекта (`../../../../core/src/...`). Они обходят `public-api.ts` библиотеки и крепят файлы напрямую к её внутренней структуре. Сейчас в репозитории встречаются (например, `KanbanBoardGuard` импортируется глубоким путём, потому что не попал в `core/public-api.ts`) — архитектурный долг.
 
@@ -453,17 +461,17 @@ HTTP-интерсепторы в Angular работают по принципу 
 
 ## Структурные конвенции
 
-| Что | Правило |
-|---|---|
-| Имена файлов | `kebab-case.<role>.ts` (`courses-list-info.service.ts`, `get-board.use-case.ts`, `kanban-task.component.ts`) |
-| Имена классов | `PascalCase` + суффикс роли (`CoursesListInfoService`, `GetBoardUseCase`, `KanbanTaskComponent`) |
-| Имена селекторов компонентов | `app-<kebab>` (большинство), `ui-<kebab>` для компонентов из `@uilib` (исключение). Для атрибутных директив — `[appIcon]`. |
-| Selector primitives | без префикса фичи: `app-input`, `app-modal`, `app-dropdown` |
-| Selector widgets | с префиксом фичи: `app-news-card`, `app-vacancy-card`, `app-program-links` |
-| Тесты | `*.spec.ts` рядом с покрываемым файлом |
-| `providers` страницы | UI-info сервис и его facade — в `providers` компонента-страницы (не root) |
-| `providers` корневой | репозитории и use-cases — `providedIn: "root"`; биндинг порта на реализацию — в `infrastructure/di/<module>.providers.ts` |
-| Порядок Angular-импортов | `@angular/*` → `rxjs` → `@corelib`/`@uilib` → `@domain` → `@api` → `@infrastructure` → `@ui` → `@utils` → `@environment` (условно — Prettier не форсит, ESLint тоже) |
+| Что                          | Правило                                                                                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Имена файлов                 | `kebab-case.<role>.ts` (`courses-list-info.service.ts`, `get-board.use-case.ts`, `kanban-task.component.ts`)                                                         |
+| Имена классов                | `PascalCase` + суффикс роли (`CoursesListInfoService`, `GetBoardUseCase`, `KanbanTaskComponent`)                                                                     |
+| Имена селекторов компонентов | `app-<kebab>` (большинство), `ui-<kebab>` для компонентов из `@uilib` (исключение). Для атрибутных директив — `[appIcon]`.                                           |
+| Selector primitives          | без префикса фичи: `app-input`, `app-modal`, `app-dropdown`                                                                                                          |
+| Selector widgets             | с префиксом фичи: `app-news-card`, `app-vacancy-card`, `app-program-links`                                                                                           |
+| Тесты                        | `*.spec.ts` рядом с покрываемым файлом                                                                                                                               |
+| `providers` страницы         | UI-info сервис и его facade — в `providers` компонента-страницы (не root)                                                                                            |
+| `providers` корневой         | репозитории и use-cases — `providedIn: "root"`; биндинг порта на реализацию — в `infrastructure/di/<module>.providers.ts`                                            |
+| Порядок Angular-импортов     | `@angular/*` → `rxjs` → `@corelib`/`@uilib` → `@domain` → `@api` → `@infrastructure` → `@ui` → `@utils` → `@environment` (условно — Prettier не форсит, ESLint тоже) |
 
 ---
 

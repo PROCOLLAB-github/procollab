@@ -22,14 +22,14 @@
 
 ### `user.model.ts`
 
-| Класс | Описание |
-|---|---|
-| `User` | Полная модель пользователя — id, email, имена, аватар, ссылки, ключевые навыки + Skill[], `userType` (число), специальность, `v2Speciality`, города/регионы, телефон, программы, проекты, подписки, тип онбординга. Ролевые ветки: `member?`, `mentor?`, `expert?`, `investor?` (опциональные блоки с `usefulToProject`/`preferredIndustries`). Подписочный блок: `isSubscribed`, `lastSubscriptionType`, `subscriptionDateOver`, `isAutopayAllowed`. |
-| `Achievement` | id, title, status, year, files (`string[] \| FileModel[]`). |
-| `Education` | organizationName, entryYear, completionYear, description, educationStatus, educationLevel. |
-| `WorkExperience` | organizationName, entryYear, completionYear, description, jobPosition. |
-| `UserLanguages` | language, languageLevel. |
-| `UserRole` | id, name. |
+| Класс            | Описание                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `User`           | Полная модель пользователя — id, email, имена, аватар, ссылки, ключевые навыки + Skill[], `userType` (число), специальность, `v2Speciality`, города/регионы, телефон, программы, проекты, подписки, тип онбординга. Ролевые ветки: `member?`, `mentor?`, `expert?`, `investor?` (опциональные блоки с `usefulToProject`/`preferredIndustries`). Подписочный блок: `isSubscribed`, `lastSubscriptionType`, `subscriptionDateOver`, `isAutopayAllowed`. |
+| `Achievement`    | id, title, status, year, files (`string[] \| FileModel[]`).                                                                                                                                                                                                                                                                                                                                                                                           |
+| `Education`      | organizationName, entryYear, completionYear, description, educationStatus, educationLevel.                                                                                                                                                                                                                                                                                                                                                            |
+| `WorkExperience` | organizationName, entryYear, completionYear, description, jobPosition.                                                                                                                                                                                                                                                                                                                                                                                |
+| `UserLanguages`  | language, languageLevel.                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `UserRole`       | id, name.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 `User.doesCompleted()` — `onboardingStage === null` (онбординг завершён).
 `User.default()` — статичный заглушка-конструктор для тестов.
@@ -37,14 +37,23 @@
 ### `tokens.model.ts`
 
 ```ts
-class Tokens { access!: string; refresh!: string; }
+class Tokens {
+  access!: string;
+  refresh!: string;
+}
 ```
 
 ### `http.model.ts`
 
 ```ts
-class LoginResponse { access!: string; refresh!: string; }
-class RefreshResponse { access!: string; refresh!: string; }
+class LoginResponse {
+  access!: string;
+  refresh!: string;
+}
+class RefreshResponse {
+  access!: string;
+  refresh!: string;
+}
 class RegisterResponse extends LoginResponse {}
 ```
 
@@ -73,17 +82,28 @@ interface PasswordValidationErrors extends ValidationErrors {
 
 ```ts
 // commands/login.command.ts
-interface LoginCommand { email: string | null; password: string | null; }
+interface LoginCommand {
+  email: string | null;
+  password: string | null;
+}
 
 // commands/register.command.ts
-interface RegisterCommand { firstName, lastName, birthday, email, password: string }
+interface RegisterCommand {
+  firstName;
+  lastName;
+  birthday;
+  email;
+  password: string;
+}
 ```
 
 ### Results
 
 ```ts
 // results/login.result.ts
-interface LoginResult { tokens: LoginResponse; }
+interface LoginResult {
+  tokens: LoginResponse;
+}
 type LoginError = { kind: "wrong_credentials" } | { kind: "unknown" };
 
 // results/register.result.ts
@@ -146,14 +166,14 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 ## Use-cases (`api/auth/use-cases/`)
 
-| Use-case | Команда / параметры | Возвращает | Ошибки |
-|---|---|---|---|
-| `LoginUseCase` | `command: LoginCommand` | `Result<LoginResult, LoginError>` | `wrong_credentials` (HTTP 401), `unknown` |
-| `RegisterUseCase` | `command: RegisterCommand` | `Result<void, RegisterError>` | `server_error` (500), `validation_error` (400, прокидывает `error.error` как `RegisterFieldErrors`), `unknown` |
-| `ResendEmailUseCase` | `email: string` | `Result<void, { kind: "unknown" }>` | `unknown` |
-| `ResetPasswordUseCase` | `email: string` | `Result<void, { kind: "unknown" }>` | `unknown` |
-| `SetPasswordUseCase` | `password: string, token: string` | `Result<void, { kind: "unknown"; cause? }>` | `unknown` (с `cause`) |
-| `DownloadCvUseCase` | — | `Result<Blob, { kind: "download_cv_error"; cause? }>` | `download_cv_error` |
+| Use-case               | Команда / параметры               | Возвращает                                            | Ошибки                                                                                                         |
+| ---------------------- | --------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `LoginUseCase`         | `command: LoginCommand`           | `Result<LoginResult, LoginError>`                     | `wrong_credentials` (HTTP 401), `unknown`                                                                      |
+| `RegisterUseCase`      | `command: RegisterCommand`        | `Result<void, RegisterError>`                         | `server_error` (500), `validation_error` (400, прокидывает `error.error` как `RegisterFieldErrors`), `unknown` |
+| `ResendEmailUseCase`   | `email: string`                   | `Result<void, { kind: "unknown" }>`                   | `unknown`                                                                                                      |
+| `ResetPasswordUseCase` | `email: string`                   | `Result<void, { kind: "unknown" }>`                   | `unknown`                                                                                                      |
+| `SetPasswordUseCase`   | `password: string, token: string` | `Result<void, { kind: "unknown"; cause? }>`           | `unknown` (с `cause`)                                                                                          |
+| `DownloadCvUseCase`    | —                                 | `Result<Blob, { kind: "download_cv_error"; cause? }>` | `download_cv_error`                                                                                            |
 
 Все use-case'ы покрыты `*.spec.ts` файлами рядом — мокают `AuthRepositoryPort` через `jasmine.createSpyObj`.
 
@@ -163,14 +183,14 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 ## Facades (`api/auth/facades/`)
 
-| Facade | Provided | Что хранит | Ключевые методы |
-|---|---|---|---|
-| `AuthInfoService` | `root` | `profile`, `roles`, `changeableRoles` (стримы из репозитория) | `fetchProfile()`, `fetchUser(id)`, `fetchLeaderProjects()`, `fetchUserRoles()`, `fetchChangeableRoles()`, `logout()` |
-| `AuthUIInfoService` | страница (`providers: [AuthUIInfoService]`) | `loginForm`, `registerForm`, `resetForm`, `passwordForm` ReactiveForms; сигналы `login$ / register$ / password$` (`AsyncState`); UI-флаги `showPassword`, `showPasswordRepeat`, `registerAgreement`, `ageAgreement`, `step` (`"credentials" \| "info"`), `credsSubmitInitiated`, `infoSubmitInitiated`; computed `loginIsSubmitting`, `errorWrongAuth`, `errorRequest`, `errorServer`, `registerIsSubmitting`, `isUserCreationModalError`, `isSubmitting` | `toggleShowPassword(section, type?)`, `prepareFormValues(form)` (форматирует birthday через dayjs `DD.MM.YYYY` → ISO) |
-| `AuthLoginService` | страница | — (всё через `AuthUIInfoService`) | `onSubmit()` — валидирует форму, дёргает `LoginUseCase`, при `ok` сохраняет токены, навигирует на `AppRoutes.office.root()` (или `AppRoutes.program.root()` если `?redirect=program`) |
-| `AuthRegisterService` | страница | computed `serverErrors` (плоский массив строк из `validation_error`) | `onSendForm()` — валидирует, дёргает `RegisterUseCase`, при `ok` навигирует на `/auth/verification/email?adress=<email>`. `downloadPolicy()` — JS-загрузка `/assets/downloads/auth/shared/privacy_policy_2022.docx` |
-| `AuthPasswordService` | страница | `email` Observable из query | `init()`, `onSubmitResetPassword()`, `onSubmitSetPassword()` — three-step reset password |
-| `AuthEmailService` | страница | `counter` (signal) для resend-таймера, `userEmail` (signal) | `initializationTokens()` — забирает access_token/refresh_token из query (используется на `/auth/verification` после magic-link), `initializationEmail()` — берёт `?adress=...` из query, `onResend()`, `initializationTimer()` — countdown 60→0 |
+| Facade                | Provided                                    | Что хранит                                                                                                                                                                                                                                                                                                                                                                                                                                                | Ключевые методы                                                                                                                                                                                                                                 |
+| --------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthInfoService`     | `root`                                      | `profile`, `roles`, `changeableRoles` (стримы из репозитория)                                                                                                                                                                                                                                                                                                                                                                                             | `fetchProfile()`, `fetchUser(id)`, `fetchLeaderProjects()`, `fetchUserRoles()`, `fetchChangeableRoles()`, `logout()`                                                                                                                            |
+| `AuthUIInfoService`   | страница (`providers: [AuthUIInfoService]`) | `loginForm`, `registerForm`, `resetForm`, `passwordForm` ReactiveForms; сигналы `login$ / register$ / password$` (`AsyncState`); UI-флаги `showPassword`, `showPasswordRepeat`, `registerAgreement`, `ageAgreement`, `step` (`"credentials" \| "info"`), `credsSubmitInitiated`, `infoSubmitInitiated`; computed `loginIsSubmitting`, `errorWrongAuth`, `errorRequest`, `errorServer`, `registerIsSubmitting`, `isUserCreationModalError`, `isSubmitting` | `toggleShowPassword(section, type?)`, `prepareFormValues(form)` (форматирует birthday через dayjs `DD.MM.YYYY` → ISO)                                                                                                                           |
+| `AuthLoginService`    | страница                                    | — (всё через `AuthUIInfoService`)                                                                                                                                                                                                                                                                                                                                                                                                                         | `onSubmit()` — валидирует форму, дёргает `LoginUseCase`, при `ok` сохраняет токены, навигирует на `AppRoutes.office.root()` (или `AppRoutes.program.root()` если `?redirect=program`)                                                           |
+| `AuthRegisterService` | страница                                    | computed `serverErrors` (плоский массив строк из `validation_error`)                                                                                                                                                                                                                                                                                                                                                                                      | `onSendForm()` — валидирует, дёргает `RegisterUseCase`, при `ok` навигирует на `/auth/verification/email?adress=<email>`. `downloadPolicy()` — JS-загрузка `/assets/downloads/auth/shared/privacy_policy_2022.docx`                             |
+| `AuthPasswordService` | страница                                    | `email` Observable из query                                                                                                                                                                                                                                                                                                                                                                                                                               | `init()`, `onSubmitResetPassword()`, `onSubmitSetPassword()` — three-step reset password                                                                                                                                                        |
+| `AuthEmailService`    | страница                                    | `counter` (signal) для resend-таймера, `userEmail` (signal)                                                                                                                                                                                                                                                                                                                                                                                               | `initializationTokens()` — забирает access_token/refresh_token из query (используется на `/auth/verification` после magic-link), `initializationEmail()` — берёт `?adress=...` из query, `onResend()`, `initializationTimer()` — countdown 60→0 |
 
 > **Опечатка** в query параметре `?adress=` (вместо `?address=`) — сохраняется для совместимости с уже отправленными письмами.
 
@@ -180,13 +200,14 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 `ProfileService` (старый стиль, не на use-case'ах). Используется в profile-edit для **достижений** и **подтверждения навыков**:
 
-| Метод | Endpoint | Что |
-|---|---|---|
-| `getAchievements()` | `GET /auth/users/achievements/` | Список достижений |
-| `addAchievement(a)` | `POST /auth/users/achievements/` | Создание |
-| `editAchievement(id, a)` | `PUT /auth/users/achievement/<id>/` | (sic) endpoint в единственном числе |
-| `deleteAchievement(id)` | `DELETE /auth/users/achievements/<id>/` | Удаление |
-| `approveSkill / unApproveSkill` | (см. файл) | Подтверждение навыков с использованием `class-transformer` для типизации |
+| Метод                             | Endpoint                                               | Что                                        |
+| --------------------------------- | ------------------------------------------------------ | ------------------------------------------ |
+| `getAchievements()`               | `GET /auth/users/achievements/`                        | Список достижений                          |
+| `addAchievement(a)`               | `POST /auth/users/achievements/`                       | Создание                                   |
+| `editAchievement(id, a)`          | `PUT /auth/users/achievement/<id>/`                    | (sic) endpoint в единственном числе        |
+| `deleteAchievement(id)`           | `DELETE /auth/users/achievements/<id>/`                | Удаление                                   |
+| `approveSkill(userId, skillId)`   | `POST /auth/users/<userId>/approve_skill/<skillId>/`   | Подтверждение навыка, возвращает `Approve` |
+| `unApproveSkill(userId, skillId)` | `DELETE /auth/users/<userId>/approve_skill/<skillId>/` | Отмена подтверждения навыка                |
 
 > Архитектурный долг: вынести в `domain/profile`/`api/profile` use-case'ы.
 
@@ -215,23 +236,23 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 Базовые URL: `/api/token`, `/auth`, `/auth/users`.
 
-| Метод адаптера | HTTP | URL | Тело / параметры | Ответ |
-|---|---|---|---|---|
-| `login({email, password})` | POST | `/api/token/` | `{ email, password }` | `LoginResponse { access, refresh }` |
-| `logout()` | POST | `/auth/logout/` | `{ refreshToken }` (берётся из `TokenService`) | `void` |
-| `register(data)` | POST | `/auth/users/` | `RegisterCommand` | `RegisterResponse` |
-| `getProfile()` | GET | `/auth/users/current/` | — | `User` |
-| `getUser(id)` | GET | `/auth/users/<id>/` | — | `User` |
-| `saveProfile(p)` | PATCH | `/auth/users/<p.id>/` | `Partial<User>` | `User` |
-| `saveAvatar(url, profileId)` | PATCH | `/auth/users/<profileId>` | `{ avatar: url }` | `User` |
-| `setOnboardingStage(stage, profileId)` | PUT | `/auth/users/<profileId>/set_onboarding_stage/` | `{ onboardingStage }` | `User` |
-| `getUserRoles()` | GET | `/auth/users/types/` | — | `[[id, name], ...]` |
-| `getChangeableRoles()` | GET | `/auth/users/roles/` | — | `[[id, name], ...]` |
-| `getLeaderProjects()` | GET | `/auth/users/projects/leader/` | — | `ApiPagination<ProjectDto>` |
-| `downloadCV()` | GET | `/auth/users/download_cv/` (responseType `blob`) | — | `Blob` |
-| `resetPassword(email)` | POST | `/auth/reset_password/` | `{ email }` | `void` |
-| `setPassword(password, token)` | POST | `/auth/reset_password/confirm/` | `{ password, token }` | `void` |
-| `resendEmail(email)` | POST | `/auth/resend_email/` | `{ email }` | `User` |
+| Метод адаптера                         | HTTP  | URL                                              | Тело / параметры                               | Ответ                               |
+| -------------------------------------- | ----- | ------------------------------------------------ | ---------------------------------------------- | ----------------------------------- |
+| `login({email, password})`             | POST  | `/api/token/`                                    | `{ email, password }`                          | `LoginResponse { access, refresh }` |
+| `logout()`                             | POST  | `/auth/logout/`                                  | `{ refreshToken }` (берётся из `TokenService`) | `void`                              |
+| `register(data)`                       | POST  | `/auth/users/`                                   | `RegisterCommand`                              | `RegisterResponse`                  |
+| `getProfile()`                         | GET   | `/auth/users/current/`                           | —                                              | `User`                              |
+| `getUser(id)`                          | GET   | `/auth/users/<id>/`                              | —                                              | `User`                              |
+| `saveProfile(p)`                       | PATCH | `/auth/users/<p.id>/`                            | `Partial<User>`                                | `User`                              |
+| `saveAvatar(url, profileId)`           | PATCH | `/auth/users/<profileId>`                        | `{ avatar: url }`                              | `User`                              |
+| `setOnboardingStage(stage, profileId)` | PUT   | `/auth/users/<profileId>/set_onboarding_stage/`  | `{ onboardingStage }`                          | `User`                              |
+| `getUserRoles()`                       | GET   | `/auth/users/types/`                             | —                                              | `[[id, name], ...]`                 |
+| `getChangeableRoles()`                 | GET   | `/auth/users/roles/`                             | —                                              | `[[id, name], ...]`                 |
+| `getLeaderProjects()`                  | GET   | `/auth/users/projects/leader/`                   | —                                              | `ApiPagination<ProjectDto>`         |
+| `downloadCV()`                         | GET   | `/auth/users/download_cv/` (responseType `blob`) | —                                              | `Blob`                              |
+| `resetPassword(email)`                 | POST  | `/auth/reset_password/`                          | `{ email }`                                    | `void`                              |
+| `setPassword(password, token)`         | POST  | `/auth/reset_password/confirm/`                  | `{ password, token }`                          | `void`                              |
+| `resendEmail(email)`                   | POST  | `/auth/resend_email/`                            | `{ email }`                                    | `User`                              |
 
 > `saveAvatar` — единственный endpoint без trailing slash (`/auth/users/<id>` без `/`). Нужно проверить — на бэке Django REST с `APPEND_SLASH = True` это безопасно, но на других серверах может ломать redirect.
 
@@ -259,45 +280,45 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 ## Pages (`ui/pages/auth/`)
 
-| Page | Selector | Facade'ы / providers | Что делает |
-|---|---|---|---|
-| `AuthComponent` | `app-auth` | — | Корневой layout — обёртка `<router-outlet>` с общим фоном/логотипом. |
-| `LoginComponent` | `app-login` | `AuthLoginService`, `AuthUIInfoService`, `TooltipInfoService` | Форма `email + password`, чекбокс «показать пароль», `forgot_password` ссылка, обработка `?redirect=program`. |
-| `RegisterComponent` | `app-register` | `AuthRegisterService`, `AuthUIInfoService` | Двухшаговая форма (`step: "credentials" \| "info"`). Step 1: email/password/repeat. Step 2: firstName/lastName/birthday. Обработка `validation_error` (`serverErrors` computed). Метод `downloadPolicy()` для скачивания соглашения через JS-клик. |
-| `EmailVerificationComponent` | `app-email-verification` | `AuthEmailService`, `AuthUIInfoService` | Экран «отправили письмо», counter 60→0 для повторной отправки. Берёт `?adress=...` из query. |
-| `ConfirmEmailComponent` | `app-confirm-email` | `AuthEmailService` | Принимает `?access_token` + `?refresh_token` из URL (magic-link), сохраняет в cookie, навигирует в `/office`. |
-| `ResetPasswordComponent` | `app-reset-password` | `AuthPasswordService`, `AuthUIInfoService` | Форма `email`, отправляет ссылку на сброс. |
-| `SetPasswordComponent` | `app-set-password` | `AuthPasswordService`, `AuthUIInfoService` | Форма `password + repeat`, требует `?token=` в URL, иначе `LoggerService.error("Token is missing")`. |
-| `ConfirmPasswordResetComponent` | `app-confirm-password-reset` | `AuthPasswordService` | Экран «письмо отправлено», `?email=...` из query. |
+| Page                            | Selector                     | Facade'ы / providers                                          | Что делает                                                                                                                                                                                                                                         |
+| ------------------------------- | ---------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthComponent`                 | `app-auth`                   | —                                                             | Корневой layout — обёртка `<router-outlet>` с общим фоном/логотипом.                                                                                                                                                                               |
+| `LoginComponent`                | `app-login`                  | `AuthLoginService`, `AuthUIInfoService`, `TooltipInfoService` | Форма `email + password`, чекбокс «показать пароль», `forgot_password` ссылка, обработка `?redirect=program`.                                                                                                                                      |
+| `RegisterComponent`             | `app-register`               | `AuthRegisterService`, `AuthUIInfoService`                    | Двухшаговая форма (`step: "credentials" \| "info"`). Step 1: email/password/repeat. Step 2: firstName/lastName/birthday. Обработка `validation_error` (`serverErrors` computed). Метод `downloadPolicy()` для скачивания соглашения через JS-клик. |
+| `EmailVerificationComponent`    | `app-email-verification`     | `AuthEmailService`, `AuthUIInfoService`                       | Экран «отправили письмо», counter 60→0 для повторной отправки. Берёт `?adress=...` из query.                                                                                                                                                       |
+| `ConfirmEmailComponent`         | `app-confirm-email`          | `AuthEmailService`                                            | Принимает `?access_token` + `?refresh_token` из URL (magic-link), сохраняет в cookie, навигирует в `/office`.                                                                                                                                      |
+| `ResetPasswordComponent`        | `app-reset-password`         | `AuthPasswordService`, `AuthUIInfoService`                    | Форма `email`, отправляет ссылку на сброс.                                                                                                                                                                                                         |
+| `SetPasswordComponent`          | `app-set-password`           | `AuthPasswordService`, `AuthUIInfoService`                    | Форма `password + repeat`, требует `?token=` в URL, иначе `LoggerService.error("Token is missing")`.                                                                                                                                               |
+| `ConfirmPasswordResetComponent` | `app-confirm-password-reset` | `AuthPasswordService`                                         | Экран «письмо отправлено», `?email=...` из query.                                                                                                                                                                                                  |
 
 ---
 
 ## Consumers (за пределами модуля)
 
-| Где | Что использует |
-|---|---|
-| `core/lib/services/tokens/token.service.ts` | `Tokens`, `RefreshResponse` (через глубокий импорт — архитектурный долг). |
-| `core/lib/services/validation/validation.service.ts` | `PasswordValidationErrors` (то же самое). |
-| `core/lib/guards/auth/auth-required.guard.ts` | `AuthRepositoryPort` (`fetchProfile()` для проверки сессии). |
-| `core/lib/guards/profile-edit/profile-edit.guard.ts` | `AuthRepositoryPort` (для `profile.id` сравнения). |
-| `core/lib/services/error/...` | использует `LoggerService` параллельно с auth-flow редиректами. |
-| `app.component.ts` | `AuthRepositoryPort.fetchUserRoles()` + `fetchChangeableRoles()` в `forkJoin` при старте; `tokenService.getTokens()` для решения redirect login/office. |
-| `widgets/header`, `widgets/detail`, `widgets/info-card` | `AuthRepositoryPort.profile` (или через `AuthInfoService`) для отображения текущего пользователя. |
-| `pages/profile/edit` | `AuthRepositoryPort.updateProfile()`, `updateAvatar()`, `updateOnboardingStage()`. |
-| `pages/onboarding` | `AuthRepositoryPort.updateOnboardingStage()`. |
-| Любой компонент в `office` через `app-profile-control-panel` | `logout()` через `AuthInfoService.logout()`. |
+| Где                                                          | Что использует                                                                                                                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `core/lib/services/tokens/token.service.ts`                  | `Tokens`, `RefreshResponse` (через глубокий импорт — архитектурный долг).                                                                               |
+| `core/lib/services/validation/validation.service.ts`         | `PasswordValidationErrors` (то же самое).                                                                                                               |
+| `core/lib/guards/auth/auth-required.guard.ts`                | `AuthRepositoryPort` (`fetchProfile()` для проверки сессии).                                                                                            |
+| `core/lib/guards/profile-edit/profile-edit.guard.ts`         | `AuthRepositoryPort` (для `profile.id` сравнения).                                                                                                      |
+| `core/lib/services/error/...`                                | использует `LoggerService` параллельно с auth-flow редиректами.                                                                                         |
+| `app.component.ts`                                           | `AuthRepositoryPort.fetchUserRoles()` + `fetchChangeableRoles()` в `forkJoin` при старте; `tokenService.getTokens()` для решения redirect login/office. |
+| `widgets/header`, `widgets/detail`, `widgets/info-card`      | `AuthRepositoryPort.profile` (или через `AuthInfoService`) для отображения текущего пользователя.                                                       |
+| `pages/profile/edit`                                         | `AuthRepositoryPort.updateProfile()`, `updateAvatar()`, `updateOnboardingStage()`.                                                                      |
+| `pages/onboarding`                                           | `AuthRepositoryPort.updateOnboardingStage()`.                                                                                                           |
+| Любой компонент в `office` через `app-profile-control-panel` | `logout()` через `AuthInfoService.logout()`.                                                                                                            |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| `core` импортирует `domain/auth/*` напрямую | `core/lib/services/{tokens,validation}` | См. `docs/core/services.md`. Поднять разделяемые типы в `core/lib/models/auth/`. |
-| Опечатка `?adress=` в email-verification | `AuthEmailService.initializationEmail`, `AuthRegisterService.onSendForm` | Не исправлять — сломает уже отправленные письма. |
-| `saveAvatar` URL без trailing slash | `auth-http.adapter.ts:saveAvatar` | На Django безопасно (APPEND_SLASH), на других серверах — потенциальный 301. |
-| `ResendEmailUseCase` / `ResetPasswordUseCase` имеют только `unknown` ошибку | `api/auth/use-cases/...` | Расширить до различения 400/500/network. |
-| `ProfileService` (legacy) | `api/auth/profile.service.ts` | Перенести в `api/profile` use-case'ы. |
-| `Achievement.files: string[] \| FileModel[]` | `domain/auth/user.model.ts` | Полиморфизм — на старых записях строки, на новых — `FileModel`. Унифицировать. |
-| `User.phoneNumber: number` | `domain/auth/user.model.ts` | Должно быть `string` (международные номера, лидирующий `+`). |
-| `User` — мегакласс с 30+ полями + 4 опциональных типа-роли блока | `domain/auth/user.model.ts` | Разнести: `User` (базовое) + `UserRolesData`/`UserSubscription`/`UserPersonal`. Сейчас всё одной плоской структурой. |
+| Что                                                                         | Где                                                                      | Заметка                                                                                                              |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `core` импортирует `domain/auth/*` напрямую                                 | `core/lib/services/{tokens,validation}`                                  | См. `docs/core/services.md`. Поднять разделяемые типы в `core/lib/models/auth/`.                                     |
+| Опечатка `?adress=` в email-verification                                    | `AuthEmailService.initializationEmail`, `AuthRegisterService.onSendForm` | Не исправлять — сломает уже отправленные письма.                                                                     |
+| `saveAvatar` URL без trailing slash                                         | `auth-http.adapter.ts:saveAvatar`                                        | На Django безопасно (APPEND_SLASH), на других серверах — потенциальный 301.                                          |
+| `ResendEmailUseCase` / `ResetPasswordUseCase` имеют только `unknown` ошибку | `api/auth/use-cases/...`                                                 | Расширить до различения 400/500/network.                                                                             |
+| `ProfileService` (legacy)                                                   | `api/auth/profile.service.ts`                                            | Перенести в `api/profile` use-case'ы.                                                                                |
+| `Achievement.files: string[] \| FileModel[]`                                | `domain/auth/user.model.ts`                                              | Полиморфизм — на старых записях строки, на новых — `FileModel`. Унифицировать.                                       |
+| `User.phoneNumber: number`                                                  | `domain/auth/user.model.ts`                                              | Должно быть `string` (международные номера, лидирующий `+`).                                                         |
+| `User` — мегакласс с 30+ полями + 4 опциональных типа-роли блока            | `domain/auth/user.model.ts`                                              | Разнести: `User` (базовое) + `UserRolesData`/`UserSubscription`/`UserPersonal`. Сейчас всё одной плоской структурой. |
