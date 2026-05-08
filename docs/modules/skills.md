@@ -47,7 +47,7 @@ interface Approve {
 ```ts
 interface SkillsGroup {
   id: number;
-  name: string;     // "Программирование", "Дизайн", ...
+  name: string; // "Программирование", "Дизайн", ...
   skills: Skill[];
 }
 ```
@@ -59,11 +59,7 @@ interface SkillsGroup {
 ```ts
 abstract class SkillsRepositoryPort {
   getSkillsNested(): Observable<SkillsGroup[]>;
-  getSkillsInline(
-    search: string,
-    limit: number,
-    offset: number
-  ): Observable<ApiPagination<Skill>>;
+  getSkillsInline(search: string, limit: number, offset: number): Observable<ApiPagination<Skill>>;
 }
 ```
 
@@ -77,10 +73,10 @@ DI-биндинг (`infrastructure/di/skills.providers.ts`):
 
 ## Use-cases (`api/skills/use-cases/`)
 
-| Use-case | Параметры | Возвращает | Ошибки |
-|---|---|---|---|
-| `GetSkillsNestedUseCase` | — | `Result<SkillsGroup[], { kind: "server_error" }>` | `server_error` |
-| `SearchSkillsUseCase` | `search: string, limit, offset: number` | `Result<ApiPagination<Skill>, { kind: "server_error" }>` | `server_error` |
+| Use-case                 | Параметры                               | Возвращает                                               | Ошибки         |
+| ------------------------ | --------------------------------------- | -------------------------------------------------------- | -------------- |
+| `GetSkillsNestedUseCase` | —                                       | `Result<SkillsGroup[], { kind: "server_error" }>`        | `server_error` |
+| `SearchSkillsUseCase`    | `search: string, limit, offset: number` | `Result<ApiPagination<Skill>, { kind: "server_error" }>` | `server_error` |
 
 Оба возвращают `server_error` на любую ошибку. Тонкая гранулярность не нужна — для skill-поиска UX простой (показываем «попробуйте ещё раз»).
 
@@ -132,10 +128,10 @@ getSkillsInline(search, limit, offset)                 // → adapter
 
 Префикс `/core/skills`.
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `getSkillsNested()` | GET | `/core/skills/nested` | — | `SkillsGroup[]` |
-| `getSkillsInline(search, limit, offset)` | GET | `/core/skills/inline` | `?limit=N&offset=N&name__icontains=<search>` | `ApiPagination<Skill>` |
+| Метод                                    | HTTP | URL                   | Параметры                                    | Ответ                  |
+| ---------------------------------------- | ---- | --------------------- | -------------------------------------------- | ---------------------- |
+| `getSkillsNested()`                      | GET  | `/core/skills/nested` | —                                            | `SkillsGroup[]`        |
+| `getSkillsInline(search, limit, offset)` | GET  | `/core/skills/inline` | `?limit=N&offset=N&name__icontains=<search>` | `ApiPagination<Skill>` |
 
 > Оба endpoint без trailing slash (`/nested`, `/inline`). В Django это работает с APPEND_SLASH=True; на других серверах — потенциальный 301. Но это особенность бэка, не делать sane defaults.
 
@@ -143,35 +139,35 @@ getSkillsInline(search, limit, offset)                 // → adapter
 
 ## Widgets, потребляющие skills
 
-| Widget | Где документирован | Как использует |
-|---|---|---|
-| `<app-skills-group>` | [`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md#skillsgroupcomponent--specializationsgroupcomponent--skillsbasketcomponent) | Принимает `options: Skill[]` (из `SkillsGroup.skills`) и `selected: Skill[]`, эмитит `optionToggled: Skill`. |
-| `<app-skills-basket>` | то же | Корзина выбранных навыков; читает `Skill[]` из родительской ReactiveForm. |
+| Widget                | Где документирован                                                                                                                                  | Как использует                                                                                               |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `<app-skills-group>`  | [`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md#skillsgroupcomponent--specializationsgroupcomponent--skillsbasketcomponent) | Принимает `options: Skill[]` (из `SkillsGroup.skills`) и `selected: Skill[]`, эмитит `optionToggled: Skill`. |
+| `<app-skills-basket>` | то же                                                                                                                                               | Корзина выбранных навыков; читает `Skill[]` из родительской ReactiveForm.                                    |
 
 ---
 
 ## Consumers
 
-| Где | Как использует |
-|---|---|
-| `pages/profile/edit/components/profile-skills-step` | Главная страница выбора скиллов в profile-edit. Дёргает `SkillsInfoService.getSkillsNested()` для отрисовки `<app-skills-group>` групп; держит `Skill[]` в `FormGroup`. |
-| `pages/projects/edit/components/project-vacancy-step` | Скиллы для каждой вакансии проекта (`requiredSkills`). |
-| `pages/projects/detail/kanban/components/task/detail/task-detail.component.ts` | Канбан-задача (отключён сейчас) — `requiredSkills` для задачи, выбираются из `<app-skills-group>`. |
-| `pages/members/members-filters` | Фильтр участников по навыкам — inline-поиск через `<app-autocomplete-input>`. |
-| `pages/onboarding/stage-two` | Шаг онбординга «выбери свои навыки». |
-| `api/profile/facades/edit/profile-edit-skills-info.service.ts` | Profile-edit step facade использует `SkillsInfoService`. |
-| `api/project/facades/edit/projects-edit-info.service.ts` | Project-edit аналогично. |
-| `api/onboarding/facades/stages/onboarding-stage-two-info.service.ts` | Onboarding stage-two. |
+| Где                                                                            | Как использует                                                                                                                                                          |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pages/profile/edit/components/profile-skills-step`                            | Главная страница выбора скиллов в profile-edit. Дёргает `SkillsInfoService.getSkillsNested()` для отрисовки `<app-skills-group>` групп; держит `Skill[]` в `FormGroup`. |
+| `pages/projects/edit/components/project-vacancy-step`                          | Скиллы для каждой вакансии проекта (`requiredSkills`).                                                                                                                  |
+| `pages/projects/detail/kanban/components/task/detail/task-detail.component.ts` | Канбан-задача (отключён сейчас) — `requiredSkills` для задачи, выбираются из `<app-skills-group>`.                                                                      |
+| `pages/members/members-filters`                                                | Фильтр участников по навыкам — inline-поиск через `<app-autocomplete-input>`.                                                                                           |
+| `pages/onboarding/stage-two`                                                   | Шаг онбординга «выбери свои навыки».                                                                                                                                    |
+| `api/profile/facades/edit/profile-edit-skills-info.service.ts`                 | Profile-edit step facade использует `SkillsInfoService`.                                                                                                                |
+| `api/project/facades/edit/projects-edit-info.service.ts`                       | Project-edit аналогично.                                                                                                                                                |
+| `api/onboarding/facades/stages/onboarding-stage-two-info.service.ts`           | Onboarding stage-two.                                                                                                                                                   |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| `getSkillsNested()` — нет кеширования, повторные подписки бьют API | `SkillsRepository.getSkillsNested` | Добавить `shareReplay(1)` или интегрировать в `EntityCache`-like структуру (но cache по id не подходит — список один). |
-| `onSearchSkill(query)` фиксирует limit=1000 | `SkillsInfoService.onSearchSkill` | Принимать `limit` параметром или сделать ленивую подгрузку. |
-| `SkillsInfoService` ходит в порт минуя use-case'ы | `SkillsInfoService` | Переключить на `GetSkillsNestedUseCase` / `SearchSkillsUseCase` для единообразия. |
-| URL без trailing slash | `skills-http.adapter.ts` | На Django безопасно. |
-| Approve / unapprove ходят через legacy `ProfileService` (`api/auth/profile.service.ts`), не через этот модуль | `auth.profile.service` | Перенести в `api/skills/use-cases/approve-skill.use-case.ts` и подобные. |
-| Двусмысленность имени "skills" — этот модуль и `SkillsApiService` (для подписок) | везде | Не баг, но при чтении кода путает. Возможно стоит переименовать `SkillsApiService` в `SubscriptionsApiService`. |
+| Что                                                                                                           | Где                                | Заметка                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `getSkillsNested()` — нет кеширования, повторные подписки бьют API                                            | `SkillsRepository.getSkillsNested` | Добавить `shareReplay(1)` или интегрировать в `EntityCache`-like структуру (но cache по id не подходит — список один). |
+| `onSearchSkill(query)` фиксирует limit=1000                                                                   | `SkillsInfoService.onSearchSkill`  | Принимать `limit` параметром или сделать ленивую подгрузку.                                                            |
+| `SkillsInfoService` ходит в порт минуя use-case'ы                                                             | `SkillsInfoService`                | Переключить на `GetSkillsNestedUseCase` / `SearchSkillsUseCase` для единообразия.                                      |
+| URL без trailing slash                                                                                        | `skills-http.adapter.ts`           | На Django безопасно.                                                                                                   |
+| Approve / unapprove ходят через legacy `ProfileService` (`api/auth/profile.service.ts`), не через этот модуль | `auth.profile.service`             | Перенести в `api/skills/use-cases/approve-skill.use-case.ts` и подобные.                                               |
+| Двусмысленность имени "skills" — этот модуль и `SkillsApiService` (для подписок)                              | везде                              | Не баг, но при чтении кода путает. Возможно стоит переименовать `SkillsApiService` в `SubscriptionsApiService`.        |

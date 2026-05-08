@@ -77,6 +77,18 @@ export class ProfileEditEducationInfoService {
       return;
     }
 
+    const educationOverflow =
+      (this.profileForm.get("organizationName")?.value?.length ?? 0) > 100 ||
+      (this.profileForm.get("description")?.value?.length ?? 0) > 400;
+
+    if (educationOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
+      return;
+    }
+
     ["organizationName", "educationStatus"].forEach(name =>
       this.profileForm.get(name)?.clearValidators()
     );

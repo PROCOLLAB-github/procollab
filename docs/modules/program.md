@@ -29,7 +29,7 @@ export class Program {
   description: string;
   shortDescription: string;
   city: string;
-  tag: string;                         // строка-категория (например "хакатон")
+  tag: string; // строка-категория (например "хакатон")
   year: number;
 
   // Изображения
@@ -40,7 +40,7 @@ export class Program {
 
   // Ссылки и материалы
   links: string[];
-  registrationLink: string | null;     // URL внешней регистрации (если есть)
+  registrationLink: string | null; // URL внешней регистрации (если есть)
   materials: { title: string; url: string }[];
 
   // Даты
@@ -56,8 +56,8 @@ export class Program {
   isUserLiked: boolean;
 
   // Роли пользователя в программе
-  isUserManager: boolean;              // организатор
-  isUserMember: boolean;                // участник
+  isUserManager: boolean; // организатор
+  isUserMember: boolean; // участник
 
   // Связь с курсом (опционально)
   publishProjectsAfterFinish: boolean;
@@ -73,8 +73,8 @@ export class ProgramDataSchema {
 
 export class ProgramTag {
   id: number;
-  name: string;     // отображаемое название
-  tag: string;      // системный slug
+  name: string; // отображаемое название
+  tag: string; // системный slug
 }
 ```
 
@@ -90,7 +90,7 @@ class PartnerProgramFields {
   fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file";
   isRequired: boolean;
   helpText: string;
-  options: string[];     // для select/radio
+  options: string[]; // для select/radio
   showFilter?: boolean;
 }
 
@@ -100,7 +100,7 @@ class PartnerProgramFieldsValues {
 }
 
 class ProjectNewAdditionalProgramFields {
-  field_id: number;        // snake_case в типе — атавизм
+  field_id: number; // snake_case в типе — атавизм
   value_text: string | boolean;
 }
 ```
@@ -113,12 +113,13 @@ class ProjectNewAdditionalProgramFields {
 
 ### Ports
 
-| Port | Файл | Методы |
-|---|---|---|
-| `ProgramRepositoryPort` | `ports/program.repository.port.ts` | `getAll(skip, take, params?)`, `getActualPrograms()`, `getOne(id)`, `create(program)`, `getDataSchema(id)`, `register(id, data)`, `getAllProjects(id, params?)`, `getAllMembers(id, skip, take)`, `getProgramFilters(id)`, `getProgramProjectAdditionalFields(id)`, `applyProjectToProgram(id, body)`, `createProgramFilters(id, filters, params?)`, `submitCompettetiveProject(relationId)` (sic — опечатка) |
-| `ProgramNewsRepositoryPort` | `ports/program-news.repository.port.ts` | `fetchNews(limit, offset, programId)`, `readNews(programId, ids)`, `toggleLike(programId, newsId, state)`, `addNews(programId, obj)`, `editNews(programId, newsId, item)`, `deleteNews(programId, newsId)` |
+| Port                        | Файл                                    | Методы                                                                                                                                                                                                                                                                                                                                                                                                        |
+| --------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProgramRepositoryPort`     | `ports/program.repository.port.ts`      | `getAll(skip, take, params?)`, `getActualPrograms()`, `getOne(id)`, `create(program)`, `getDataSchema(id)`, `register(id, data)`, `getAllProjects(id, params?)`, `getAllMembers(id, skip, take)`, `getProgramFilters(id)`, `getProgramProjectAdditionalFields(id)`, `applyProjectToProgram(id, body)`, `createProgramFilters(id, filters, params?)`, `submitCompettetiveProject(relationId)` (sic — опечатка) |
+| `ProgramNewsRepositoryPort` | `ports/program-news.repository.port.ts` | `fetchNews(limit, offset, programId)`, `readNews(programId, ids)`, `toggleLike(programId, newsId, state)`, `addNews(programId, obj)`, `editNews(programId, newsId, item)`, `deleteNews(programId, newsId)`                                                                                                                                                                                                    |
 
 DI-биндинги (`infrastructure/di/program/`):
+
 - `program.providers.ts` — `ProgramRepositoryPort` ↔ `ProgramRepository`.
 - `program-news.providers.ts` — `ProgramNewsRepositoryPort` ↔ `ProgramNewsRepository`.
 
@@ -128,42 +129,42 @@ DI-биндинги (`infrastructure/di/program/`):
 
 ## Use-cases (22 шт., `api/program/use-cases/`)
 
-| Use-case | Назначение |
-|---|---|
-| `GetProgramsUseCase` | Список всех программ с пагинацией. |
-| `GetActualProgramsUseCase` | Только актуальные (текущие) программы. |
-| `GetProgramUseCase` | Одна программа по id. |
-| `RegisterProgramUseCase` | Регистрация в программу с динамическими полями. |
-| `GetProgramDataSchemaUseCase` | Схема полей для регистрации. |
-| `GetProgramFiltersUseCase` / `CreateProgramFiltersUseCase` | Фильтры проектов в программе. |
-| `GetAllProjectsUseCase` (program-scope) | Проекты программы. |
-| `GetAllMembersUseCase` (program-scope) | Участники программы. |
-| `ApplyProjectToProgramUseCase` | Подать проект в программу. |
-| `AssignProjectProgramUseCase` | Закрепить проект за программой (админ-операция). |
-| `ParticipatingProgramUseCase` | Участие в программе. |
-| `GetProjectRatingsUseCase` | Список рейтингов проектов программы. |
-| `FilterProjectRatingsUseCase` | Фильтрация рейтингов. |
-| `RateProjectUseCase` | Оценить проект (для эксперта). |
-| News (5 шт.) | `FetchNewsUseCase`, `AddNewsUseCase`, `EditNewsUseCase`, `DeleteNewsUseCase`, `ReadNewsUseCase`, `ToggleLikeUseCase` — программные новости. |
+| Use-case                                                   | Назначение                                                                                                                                  |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GetProgramsUseCase`                                       | Список всех программ с пагинацией.                                                                                                          |
+| `GetActualProgramsUseCase`                                 | Только актуальные (текущие) программы.                                                                                                      |
+| `GetProgramUseCase`                                        | Одна программа по id.                                                                                                                       |
+| `RegisterProgramUseCase`                                   | Регистрация в программу с динамическими полями.                                                                                             |
+| `GetProgramDataSchemaUseCase`                              | Схема полей для регистрации.                                                                                                                |
+| `GetProgramFiltersUseCase` / `CreateProgramFiltersUseCase` | Фильтры проектов в программе.                                                                                                               |
+| `GetAllProjectsUseCase` (program-scope)                    | Проекты программы.                                                                                                                          |
+| `GetAllMembersUseCase` (program-scope)                     | Участники программы.                                                                                                                        |
+| `ApplyProjectToProgramUseCase`                             | Подать проект в программу.                                                                                                                  |
+| `AssignProjectProgramUseCase`                              | Закрепить проект за программой (админ-операция).                                                                                            |
+| `ParticipatingProgramUseCase`                              | Участие в программе.                                                                                                                        |
+| `GetProjectRatingsUseCase`                                 | Список рейтингов проектов программы.                                                                                                        |
+| `FilterProjectRatingsUseCase`                              | Фильтрация рейтингов.                                                                                                                       |
+| `RateProjectUseCase`                                       | Оценить проект (для эксперта).                                                                                                              |
+| News (5 шт.)                                               | `FetchNewsUseCase`, `AddNewsUseCase`, `EditNewsUseCase`, `DeleteNewsUseCase`, `ReadNewsUseCase`, `ToggleLikeUseCase` — программные новости. |
 
 ---
 
 ## Facades (`api/program/facades/`)
 
-| Facade | Provided | Что |
-|---|---|---|
-| `ProgramInfoService` | root | Глобальные операции (cross-pages). |
-| `ProgramMainInfoService` + `ProgramMainUIInfoService` | страница `/all` | Список всех программ — пагинация, бесконечный скролл. |
-| `ProgramDetailMainService` + `ProgramDetailMainUIInfoService` | страница `/program/:id` (main child) | Детальная — подгрузка программы + новости через `ProgramNewsRepositoryPort`. Использует `ExpandService` для раскрытия описания. Эмитит подачу проекта через `ProjectAdditionalService`. |
-| `ProgramDetailListInfoService` + `ProgramDetailListUIInfoService` | страница `/program/:id/{projects,members,projects-rating}` | Универсальный список (тип определяется по `route.data.listType`). Фильтрация через `<app-program-projects-filter>`. |
+| Facade                                                            | Provided                                                   | Что                                                                                                                                                                                     |
+| ----------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProgramInfoService`                                              | root                                                       | Глобальные операции (cross-pages).                                                                                                                                                      |
+| `ProgramMainInfoService` + `ProgramMainUIInfoService`             | страница `/all`                                            | Список всех программ — пагинация, бесконечный скролл.                                                                                                                                   |
+| `ProgramDetailMainService` + `ProgramDetailMainUIInfoService`     | страница `/program/:id` (main child)                       | Детальная — подгрузка программы + новости через `ProgramNewsRepositoryPort`. Использует `ExpandService` для раскрытия описания. Эмитит подачу проекта через `ProjectAdditionalService`. |
+| `ProgramDetailListInfoService` + `ProgramDetailListUIInfoService` | страница `/program/:id/{projects,members,projects-rating}` | Универсальный список (тип определяется по `route.data.listType`). Фильтрация через `<app-program-projects-filter>`.                                                                     |
 
 ---
 
 ## Repositories (`infrastructure/repository/program/`)
 
-| Repo | Что |
-|---|---|
-| `ProgramRepository` | Pass-through к `ProgramHttpAdapter`. `EntityCache<Program>` для `getOne`. |
+| Repo                    | Что                                                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProgramRepository`     | Pass-through к `ProgramHttpAdapter`. `EntityCache<Program>` для `getOne`.                                                                                |
 | `ProgramNewsRepository` | Pass-through к `ProgramNewsHttpAdapter` для новостей. `readNews()` использует `StorageService` для дедупликации (как в `profile-news` и `project-news`). |
 
 ---
@@ -172,32 +173,32 @@ DI-биндинги (`infrastructure/di/program/`):
 
 ### `program-http.adapter.ts` (префикс `/programs`)
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `getAll(skip, take, params?)` | GET | `/programs/` | `?limit, offset, ...params` | `ApiPagination<Program>` |
-| `getActualPrograms()` | GET | `/programs/actual/` | — | `ApiPagination<Program>` |
-| `getOne(programId)` | GET | `/programs/<programId>/` | — | `Program` |
-| `create(program)` | POST | `/programs/` | `ProgramCreate` | `Program` |
-| `getDataSchema(programId)` | GET | `/programs/<programId>/data_schema/` | — | `ProgramDataSchema` |
-| `register(programId, data)` | POST | `/programs/<programId>/register/` | `Record<string, string>` | `ProgramDataSchema` |
-| `getAllProjects(programId, params?)` | GET | `/programs/<programId>/projects/` | `?...params` | `ApiPagination<Project>` |
-| `getAllMembers(programId, skip, take)` | GET | `/programs/<programId>/members/` | `?limit, offset` | `ApiPagination<User>` |
-| `getProgramFilters(programId)` | GET | `/programs/<programId>/filters/` | — | `PartnerProgramFields[]` |
-| `getProgramProjectAdditionalFields(programId)` | GET | `/programs/<programId>/...` | — | `ProjectAdditionalFields` |
-| `applyProjectToProgram(programId, body)` | POST | `/programs/<programId>/apply/` | `body` | `any` |
-| `createProgramFilters(programId, filters, params?)` | POST | `/programs/<programId>/filters/` | `Record<string, string[]>` | `ApiPagination<Project>` |
-| `submitCompettetiveProject(relationId)` | POST | `/programs/.../submit/` | — | `Project` |
+| Метод                                               | HTTP | URL                                  | Параметры                   | Ответ                     |
+| --------------------------------------------------- | ---- | ------------------------------------ | --------------------------- | ------------------------- |
+| `getAll(skip, take, params?)`                       | GET  | `/programs/`                         | `?limit, offset, ...params` | `ApiPagination<Program>`  |
+| `getActualPrograms()`                               | GET  | `/programs/actual/`                  | —                           | `ApiPagination<Program>`  |
+| `getOne(programId)`                                 | GET  | `/programs/<programId>/`             | —                           | `Program`                 |
+| `create(program)`                                   | POST | `/programs/`                         | `ProgramCreate`             | `Program`                 |
+| `getDataSchema(programId)`                          | GET  | `/programs/<programId>/data_schema/` | —                           | `ProgramDataSchema`       |
+| `register(programId, data)`                         | POST | `/programs/<programId>/register/`    | `Record<string, string>`    | `ProgramDataSchema`       |
+| `getAllProjects(programId, params?)`                | GET  | `/programs/<programId>/projects/`    | `?...params`                | `ApiPagination<Project>`  |
+| `getAllMembers(programId, skip, take)`              | GET  | `/programs/<programId>/members/`     | `?limit, offset`            | `ApiPagination<User>`     |
+| `getProgramFilters(programId)`                      | GET  | `/programs/<programId>/filters/`     | —                           | `PartnerProgramFields[]`  |
+| `getProgramProjectAdditionalFields(programId)`      | GET  | `/programs/<programId>/...`          | —                           | `ProjectAdditionalFields` |
+| `applyProjectToProgram(programId, body)`            | POST | `/programs/<programId>/apply/`       | `body`                      | `any`                     |
+| `createProgramFilters(programId, filters, params?)` | POST | `/programs/<programId>/filters/`     | `Record<string, string[]>`  | `ApiPagination<Project>`  |
+| `submitCompettetiveProject(relationId)`             | POST | `/programs/.../submit/`              | —                           | `Project`                 |
 
 ### `program-news-http.adapter.ts`
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `fetchNews(limit, offset, programId)` | GET | `/programs/<programId>/news/` | `?limit, offset` | `ApiPagination<FeedNews>` |
-| `setNewsViewed(programId, newsId)` | POST | `/programs/<programId>/news/<newsId>/set_viewed/` | `{}` | `void` |
-| `toggleLike(programId, newsId, state)` | POST | `/programs/<programId>/news/<newsId>/set_liked/` | `{ is_liked }` | `void` |
-| `addNews(programId, obj)` | POST | `/programs/<programId>/news/` | `{ text, files }` | `FeedNews` |
-| `editNews(programId, newsId, item)` | PATCH | `/programs/<programId>/news/<newsId>/` | `Partial<FeedNews>` | `FeedNews` |
-| `deleteNews(programId, newsId)` | DELETE | `/programs/<programId>/news/<newsId>/` | — | `void` |
+| Метод                                  | HTTP   | URL                                               | Параметры           | Ответ                     |
+| -------------------------------------- | ------ | ------------------------------------------------- | ------------------- | ------------------------- |
+| `fetchNews(limit, offset, programId)`  | GET    | `/programs/<programId>/news/`                     | `?limit, offset`    | `ApiPagination<FeedNews>` |
+| `setNewsViewed(programId, newsId)`     | POST   | `/programs/<programId>/news/<newsId>/set_viewed/` | `{}`                | `void`                    |
+| `toggleLike(programId, newsId, state)` | POST   | `/programs/<programId>/news/<newsId>/set_liked/`  | `{ is_liked }`      | `void`                    |
+| `addNews(programId, obj)`              | POST   | `/programs/<programId>/news/`                     | `{ text, files }`   | `FeedNews`                |
+| `editNews(programId, newsId, item)`    | PATCH  | `/programs/<programId>/news/<newsId>/`            | `Partial<FeedNews>` | `FeedNews`                |
+| `deleteNews(programId, newsId)`        | DELETE | `/programs/<programId>/news/<newsId>/`            | —                   | `void`                    |
 
 Зеркало profile-news / project-news, только префикс `/programs/<id>/news`.
 
@@ -236,17 +237,17 @@ DI-биндинги (`infrastructure/di/program/`):
 
 ## Pages (`ui/pages/program/`)
 
-| Page | Файл | Selector | Что |
-|---|---|---|---|
-| `ProgramComponent` | `pages/program/program.component.ts` | `app-program` | Корневой layout. |
-| `ProgramMainComponent` | `pages/program/main/main.component.ts` | `app-program-main` | Список всех программ с пагинацией. |
-| `ProgramCardComponent` | `pages/program/main/program-card/program-card.component.ts` | `app-program-card` | Карточка программы в списке. |
-| `ProgramDetailMainComponent` | `pages/program/detail/main/main.component.ts` | `app-main` | Главная вкладка детальной — описание, новости, кнопки действий, partner-program-links. |
-| `ProgramListComponent` | `pages/program/detail/list/list.component.ts` | `app-program-list` | Универсальный список (projects/members/rating). |
-| `ProgramProjectsFilterComponent` | `detail/list/program-projects-filter/program-projects-filter.component.ts` | `app-program-projects-filter` | Фильтры на странице projects/rating через `PartnerProgramFields`. |
-| `RatingCardComponent` | `detail/list/rating-card/rating-card.component.ts` | `app-rating-card` | Карточка проекта в рейтинге. |
-| `ProjectRatingComponent` | `detail/list/rating-card/project-rating/project-rating.component.ts` | `app-project-rating` | Форма оценки проекта по критериям. |
-| `ProgramRegisterComponent` | `pages/program/detail/register/register.component.ts` | `app-program-register` | Динамическая форма регистрации в программу (поля из `getDataSchema`). |
+| Page                             | Файл                                                                       | Selector                      | Что                                                                                    |
+| -------------------------------- | -------------------------------------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
+| `ProgramComponent`               | `pages/program/program.component.ts`                                       | `app-program`                 | Корневой layout.                                                                       |
+| `ProgramMainComponent`           | `pages/program/main/main.component.ts`                                     | `app-program-main`            | Список всех программ с пагинацией.                                                     |
+| `ProgramCardComponent`           | `pages/program/main/program-card/program-card.component.ts`                | `app-program-card`            | Карточка программы в списке.                                                           |
+| `ProgramDetailMainComponent`     | `pages/program/detail/main/main.component.ts`                              | `app-main`                    | Главная вкладка детальной — описание, новости, кнопки действий, partner-program-links. |
+| `ProgramListComponent`           | `pages/program/detail/list/list.component.ts`                              | `app-program-list`            | Универсальный список (projects/members/rating).                                        |
+| `ProgramProjectsFilterComponent` | `detail/list/program-projects-filter/program-projects-filter.component.ts` | `app-program-projects-filter` | Фильтры на странице projects/rating через `PartnerProgramFields`.                      |
+| `RatingCardComponent`            | `detail/list/rating-card/rating-card.component.ts`                         | `app-rating-card`             | Карточка проекта в рейтинге.                                                           |
+| `ProjectRatingComponent`         | `detail/list/rating-card/project-rating/project-rating.component.ts`       | `app-project-rating`          | Форма оценки проекта по критериям.                                                     |
+| `ProgramRegisterComponent`       | `pages/program/detail/register/register.component.ts`                      | `app-program-register`        | Динамическая форма регистрации в программу (поля из `getDataSchema`).                  |
 
 ### Resolvers
 
@@ -259,37 +260,37 @@ DI-биндинги (`infrastructure/di/program/`):
 
 ## Widgets
 
-| Widget | Где |
-|---|---|
-| `<app-detail listType="program">` | универсальная шапка ([`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md)). |
-| `<app-program-links>` | блок «контакты» / «материалы» ([`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md#programlinkscomponent--courseaboutcomponent)). |
-| `<app-news-card>` | карточка новости в ленте программы. |
-| `<app-news-form>` | создание новости (для менеджера). |
-| `<app-info-card type="rating">` | карточка проекта в рейтинге. |
+| Widget                            | Где                                                                                                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<app-detail listType="program">` | универсальная шапка ([`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md)).                                                       |
+| `<app-program-links>`             | блок «контакты» / «материалы» ([`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md#programlinkscomponent--courseaboutcomponent)). |
+| `<app-news-card>`                 | карточка новости в ленте программы.                                                                                                                   |
+| `<app-news-form>`                 | создание новости (для менеджера).                                                                                                                     |
+| `<app-info-card type="rating">`   | карточка проекта в рейтинге.                                                                                                                          |
 
 ---
 
 ## Consumers
 
-| Где | Как использует |
-|---|---|
+| Где                                                      | Как использует                                                                                                               |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `pages/projects/edit/components/project-additional-step` | Использует `ProgramRepositoryPort.getProgramProjectAdditionalFields()` — определяет дополнительные поля проекта в программе. |
-| `pages/projects/detail/info` | `Project.partnerProgram` — связь с программой. |
-| `pages/courses/detail/...` | `course.partnerProgramId` — связь курса с программой. |
-| `widgets/detail` | `listType: "program"` режим. |
-| `domain/auth/user.model.ts` | `User.programs: Program[]` — программы пользователя. |
+| `pages/projects/detail/info`                             | `Project.partnerProgram` — связь с программой.                                                                               |
+| `pages/courses/detail/...`                               | `course.partnerProgramId` — связь курса с программой.                                                                        |
+| `widgets/detail`                                         | `listType: "program"` режим.                                                                                                 |
+| `domain/auth/user.model.ts`                              | `User.programs: Program[]` — программы пользователя.                                                                         |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| Опечатка `submitCompettetiveProject` | port + repo + adapter | Не исправлять — много вызывающих мест. |
-| `applyProjectToProgram(id, body): any` без типизации `body` и `Observable<any>` | port + repo + adapter | Описать тип `ApplyToProgramDTO` и реальный response. |
-| `value_text: string \| boolean` под именем `value_text` | `ProjectNewAdditionalProgramFields` | Переименовать в `value` или сделать discriminated union. |
-| `field_id` / `value_text` в snake_case (атавизм бэка) | `ProjectNewAdditionalProgramFields` | Привести к camelCase, оставив маппинг в адаптере. |
-| `getProgramProjectAdditionalFields` URL не указан в порту явно | adapter | Документировать. |
-| `ProgramListComponent` — три режима через `route.data.listType` без `@Input` | pages/program/detail/list | Сделать `@Input() listType` для тестируемости. |
-| Программные новости дублируют структуру profile-news / project-news | `ProgramNewsRepositoryPort` + use-cases | Можно унифицировать в `domain/news/` (см. [`docs/modules/news.md`](news.md)). |
-| `Program.tag` — строка, `ProgramTag` — отдельный тип с `id+name+tag` | `program.model.ts` | Несогласованно — где-то string, где-то ссылка на `ProgramTag`. |
+| Что                                                                             | Где                                     | Заметка                                                                       |
+| ------------------------------------------------------------------------------- | --------------------------------------- | ----------------------------------------------------------------------------- |
+| Опечатка `submitCompettetiveProject`                                            | port + repo + adapter                   | Не исправлять — много вызывающих мест.                                        |
+| `applyProjectToProgram(id, body): any` без типизации `body` и `Observable<any>` | port + repo + adapter                   | Описать тип `ApplyToProgramDTO` и реальный response.                          |
+| `value_text: string \| boolean` под именем `value_text`                         | `ProjectNewAdditionalProgramFields`     | Переименовать в `value` или сделать discriminated union.                      |
+| `field_id` / `value_text` в snake_case (атавизм бэка)                           | `ProjectNewAdditionalProgramFields`     | Привести к camelCase, оставив маппинг в адаптере.                             |
+| `getProgramProjectAdditionalFields` URL не указан в порту явно                  | adapter                                 | Документировать.                                                              |
+| `ProgramListComponent` — три режима через `route.data.listType` без `@Input`    | pages/program/detail/list               | Сделать `@Input() listType` для тестируемости.                                |
+| Программные новости дублируют структуру profile-news / project-news             | `ProgramNewsRepositoryPort` + use-cases | Можно унифицировать в `domain/news/` (см. [`docs/modules/news.md`](news.md)). |
+| `Program.tag` — строка, `ProgramTag` — отдельный тип с `id+name+tag`            | `program.model.ts`                      | Несогласованно — где-то string, где-то ссылка на `ProgramTag`.                |

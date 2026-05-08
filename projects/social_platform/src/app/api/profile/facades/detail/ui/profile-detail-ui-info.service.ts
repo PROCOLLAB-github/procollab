@@ -22,7 +22,17 @@ export class ProfileDetailUIInfoService {
     const userWithProgress = data["data"]["user"];
     this.initializationDirections(userWithProgress);
     this.user.set(userWithProgress);
-    this.isProfileFill.set(userWithProgress.progress! < 100);
+
+    if (
+      this.user()?.id !== undefined &&
+      this.user()!.progress! < 100 &&
+      !this.hasSeenProfileFillModal(this.user()!.id)
+    ) {
+      this.isProfileFill.set(true);
+      this.markSeenProfileFillModal(this.user()!.id);
+    } else {
+      this.isProfileFill.set(false);
+    }
   }
 
   applyProfileEmpty(): void {
@@ -49,7 +59,27 @@ export class ProfileDetailUIInfoService {
         ["squiz", "medal"],
         [user.skills, user.achievements],
         ["array", "array"]
-      )!
+      )!.filter(item => !Array.isArray(item.about) || item.about.length > 0)
     );
+  }
+
+  private getProfileFillSeenKey(userId: number): string {
+    return `profile_${userId}_fill_modal_seen`;
+  }
+
+  private hasSeenProfileFillModal(userId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getProfileFillSeenKey(userId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenProfileFillModal(userId: number): void {
+    try {
+      localStorage.setItem(this.getProfileFillSeenKey(userId), "1");
+    } catch (e) {
+      // ignore storage errors
+    }
   }
 }

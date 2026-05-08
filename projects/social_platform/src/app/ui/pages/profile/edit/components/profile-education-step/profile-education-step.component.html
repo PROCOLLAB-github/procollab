@@ -151,7 +151,7 @@
     $index) {
     <div class="profile__education--info">
       <p class="text-body-12 education__title">
-        {{ educationItem.organizationName }}
+        {{ educationItem.organizationName | truncate: 50 }}
       </p>
 
       <p class="text-body-10 education__text">
@@ -165,7 +165,7 @@
       <div class="profile__education--card">
         <div class="profile__education--info">
           <p class="text-body-10 education__text">
-            {{ educationItem.description }}
+            {{ educationItem.description | truncate: 150 }}
           </p>
 
           <p class="text-body-10 education__text">

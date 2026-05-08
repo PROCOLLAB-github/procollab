@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/profile-edit-achievements-info.service";
 import { IconComponent } from "@uilib";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 @Component({
   selector: "app-profile-achievements-step",
@@ -28,6 +29,7 @@ import { IconComponent } from "@uilib";
     FileItemComponent,
     ReactiveFormsModule,
     ControlErrorPipe,
+    TruncatePipe,
   ],
   providers: [ProfileEditAchievementsInfoService],
   standalone: true,

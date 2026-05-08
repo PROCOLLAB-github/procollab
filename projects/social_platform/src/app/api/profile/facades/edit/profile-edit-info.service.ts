@@ -110,6 +110,28 @@ export class ProfileEditInfoService {
       }
     });
 
+    const lengthLimits: { field: string; limit: number }[] = [
+      { field: "city", limit: 100 },
+      { field: "aboutMe", limit: 300 },
+      { field: "organizationName", limit: 100 },
+      { field: "description", limit: 400 },
+      { field: "organization", limit: 50 },
+      { field: "descriptionWork", limit: 400 },
+    ];
+
+    const hasLengthOverflow = lengthLimits.some(({ field, limit }) => {
+      const value = this.profileForm.get(field)?.value;
+      return typeof value === "string" && value.length > limit;
+    });
+
+    if (hasLengthOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
+      return;
+    }
+
     const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality", "city"].every(
       name => this.profileForm.get(name)?.valid
     );
@@ -147,19 +169,16 @@ export class ProfileEditInfoService {
       about_me: this.profileForm.value.aboutMe || "",
       avatar: this.profileForm.value.avatar || null,
       cover_image_address: this.profileForm.value.coverImageAddress || null,
-      phone_number:
-        typeof this.profileForm.value.phoneNumber === "string"
-          ? this.profileForm.value.phoneNumber.replace(/^([87])/, "+7")
-          : this.profileForm.value.phoneNumber,
+      phoneNumber: this.profileForm.value.phoneNumber
+        ? this.profileForm.value.phoneNumber.replace(/^\+?[87]/, "+7")
+        : null,
       speciality: this.profileForm.value.speciality,
-      skills_ids: this.profileForm.value.skills?.map((s: Skill) => s.id) || [],
+      skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
     };
 
     // Добавляем birthday если он указан
     if (this.profileForm.value.birthday) {
-      newProfile.birthday = dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format(
-        "YYYY-MM-DD"
-      );
+      newProfile.birthday = this.profileForm.value.birthday || undefined;
     }
 
     // Добавляем специфичные для типа пользователя поля

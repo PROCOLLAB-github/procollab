@@ -4,7 +4,7 @@
 
 Специализации пользователя — «Frontend разработчик», «UI/UX дизайнер», «Менеджер проекта» и т. п. Используется в profile-edit, onboarding (stage-one), members search.
 
-В отличие от [`skills`](skills.md), специализация — **роль/профессия** (одна или несколько на пользователя), а не *технический навык*. Структурно очень похоже: иерархия "группа → специализация" + плоский поиск.
+В отличие от [`skills`](skills.md), специализация — **роль/профессия** (одна или несколько на пользователя), а не _технический навык_. Структурно очень похоже: иерархия "группа → специализация" + плоский поиск.
 
 ## Назначение
 
@@ -33,7 +33,7 @@ interface Specialization {
 ```ts
 interface SpecializationsGroup {
   id: number;
-  name: string;                       // «Разработка», «Дизайн», ...
+  name: string; // «Разработка», «Дизайн», ...
   specializations: Specialization[];
 }
 ```
@@ -91,10 +91,10 @@ export class SpecializationsInfoService {
 
 Префикс `/auth/users/specializations` (особенность бэка — специализации сидят под auth).
 
-| Метод | HTTP | URL | Параметры | Ответ |
-|---|---|---|---|---|
-| `getSpecializationsNested()` | GET | `/auth/users/specializations/nested` | — | `SpecializationsGroup[]` |
-| `getSpecializationsInline(search, limit, offset)` | GET | `/auth/users/specializations/inline` | `?limit=N&offset=N&name__icontains=<search>` | `ApiPagination<Specialization>` |
+| Метод                                             | HTTP | URL                                  | Параметры                                    | Ответ                           |
+| ------------------------------------------------- | ---- | ------------------------------------ | -------------------------------------------- | ------------------------------- |
+| `getSpecializationsNested()`                      | GET  | `/auth/users/specializations/nested` | —                                            | `SpecializationsGroup[]`        |
+| `getSpecializationsInline(search, limit, offset)` | GET  | `/auth/users/specializations/inline` | `?limit=N&offset=N&name__icontains=<search>` | `ApiPagination<Specialization>` |
 
 Оба endpoint без trailing slash (как в [`skills`](skills.md)).
 
@@ -105,12 +105,14 @@ export class SpecializationsInfoService {
 `<app-specializations-group>` — `widgets/specializations-group/specializations-group.component.ts`. Документирован в [`docs/social-platform/ui-widgets.md`](../social-platform/ui-widgets.md#skillsgroupcomponent--specializationsgroupcomponent--skillsbasketcomponent).
 
 Inputs:
+
 - `title: string` (req)
 - `options: Specialization[]` (req)
 - `hasOpenGroups = false`
 - `disabled = false`
 
 Outputs:
+
 - `selectOption: Specialization`
 - `groupToggled: boolean`
 
@@ -118,21 +120,21 @@ Outputs:
 
 ## Consumers
 
-| Где | Как использует |
-|---|---|
-| `pages/profile/edit/...` (через `ProfileFormService.inlineSpecs` signal) | Profile-edit подгружает специализации через `SpecializationsInfoService.getSpecializationsNested()`, держит выбранные в форме. |
-| `pages/onboarding/stage-one` (выбор первой специализации при регистрации) | См. `onboarding-stage-one-info.service.ts`. Резолвер `stage-one.resolver` дёргает `getSpecializationsNested()`. |
-| `api/onboarding/facades/stages/onboarding-stage-one-info.service.ts` | Facade onboarding-stage-one. |
-| `api/searches/searches.service.ts` | Cross-cutting search-сервис использует inline-поиск специализаций для members-фильтров. |
+| Где                                                                       | Как использует                                                                                                                 |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `pages/profile/edit/...` (через `ProfileFormService.inlineSpecs` signal)  | Profile-edit подгружает специализации через `SpecializationsInfoService.getSpecializationsNested()`, держит выбранные в форме. |
+| `pages/onboarding/stage-one` (выбор первой специализации при регистрации) | См. `onboarding-stage-one-info.service.ts`. Резолвер `stage-one.resolver` дёргает `getSpecializationsNested()`.                |
+| `api/onboarding/facades/stages/onboarding-stage-one-info.service.ts`      | Facade onboarding-stage-one.                                                                                                   |
+| `api/searches/searches.service.ts`                                        | Cross-cutting search-сервис использует inline-поиск специализаций для members-фильтров.                                        |
 
 ---
 
 ## Известные проблемы
 
-| Что | Где | Заметка |
-|---|---|---|
-| Нет use-case'ов | весь `api/specializations/` | Параллельный `skills` имеет use-case'ы. Привести к единому стилю — выделить `GetSpecializationsNestedUseCase` / `SearchSpecializationsUseCase`. |
-| `SpecializationsInfoService` — pure passthrough | `api/specializations/facades/specializations-info.service.ts` | Если бизнес-логики не появится — можно удалить и инжектить порт напрямую. Сейчас оставляем для consistency с другими модулями. |
-| Repository без `shareReplay` для nested-списка | `SpecializationsRepository.getSpecializationsNested` | То же замечание, что и в [`skills`](skills.md): nested-список не меняется в сессии, повторные подписки бьют API. |
-| Endpoint без trailing slash | `specializations-http.adapter.ts` | Безопасно на Django (APPEND_SLASH=True). |
-| URL `/auth/users/specializations/...` — специализации лежат под auth | `specializations-http.adapter.ts:AUTH_USERS_SPECIALIZATIONS_URL` | Не баг, особенность бэка. На фронте эта связь нигде не выражена явно (специализации могли бы быть `/specializations/...`). |
+| Что                                                                  | Где                                                              | Заметка                                                                                                                                         |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Нет use-case'ов                                                      | весь `api/specializations/`                                      | Параллельный `skills` имеет use-case'ы. Привести к единому стилю — выделить `GetSpecializationsNestedUseCase` / `SearchSpecializationsUseCase`. |
+| `SpecializationsInfoService` — pure passthrough                      | `api/specializations/facades/specializations-info.service.ts`    | Если бизнес-логики не появится — можно удалить и инжектить порт напрямую. Сейчас оставляем для consistency с другими модулями.                  |
+| Repository без `shareReplay` для nested-списка                       | `SpecializationsRepository.getSpecializationsNested`             | То же замечание, что и в [`skills`](skills.md): nested-список не меняется в сессии, повторные подписки бьют API.                                |
+| Endpoint без trailing slash                                          | `specializations-http.adapter.ts`                                | Безопасно на Django (APPEND_SLASH=True).                                                                                                        |
+| URL `/auth/users/specializations/...` — специализации лежат под auth | `specializations-http.adapter.ts:AUTH_USERS_SPECIALIZATIONS_URL` | Не баг, особенность бэка. На фронте эта связь нигде не выражена явно (специализации могли бы быть `/specializations/...`).                      |

@@ -15,8 +15,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { RouterModule } from "@angular/router";
-import * as dayjs from "dayjs";
-import * as cpf from "dayjs/plugin/customParseFormat";
 import { EditorSubmitButtonDirective } from "./editor-submit-button.directive";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { Specialization } from "@domain/specializations/specialization";
@@ -45,8 +43,6 @@ import { SpecializationsInfoService } from "@api/specializations/facades/special
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
-
-dayjs.extend(cpf);
 
 /**
  * Компонент редактирования профиля пользователя
