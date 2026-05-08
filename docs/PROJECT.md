@@ -4,7 +4,7 @@
 
 Angular-монорепозиторий из трёх под-проектов: приложения `social_platform` и двух разделяемых библиотек (`core`, `ui`). Приложение деплоится в две среды: prod (с ветки `master`) и dev-stage (с ветки `dev`).
 
-> Документация по конкретным модулям лежит в [`docs/modules/`](modules/), документация по слоям приложения — в [`docs/social-platform/`](social-platform/), документация по библиотеке `core` — в [`docs/core/`](core/), по библиотеке `ui` — в [`docs/uilib.md`](uilib.md). Этот файл — общая карта воркспейса.
+> Документация по конкретным модулям лежит в [`docs/modules/`](modules/), документация по слоям приложения — в [`docs/social-platform/`](social-platform/), cross-cutting API-сервисы описаны в [`docs/cross-cutting.md`](cross-cutting.md), документация по библиотеке `core` — в [`docs/core/`](core/), по библиотеке `ui` — в [`docs/uilib.md`](uilib.md). Этот файл — общая карта воркспейса.
 
 ---
 
@@ -21,7 +21,7 @@ Angular-монорепозиторий из трёх под-проектов: п
 | WebSocket              | `WebsocketService` с reconnect interval / max attempts из `environment`                                                                                                                                         |
 | UI primitives          | `@angular/cdk` 16, `@angular/material` 16 (выборочные модули)                                                                                                                                                   |
 | Стили                  | SCSS + миксины из `styles/_responsive.scss` (`apply-desktop` ≥ 1000px, `apply-tablet` 750–999px, `apply-tablet-and-above` ≥ 750px)                                                                              |
-| Errors / observability | Sentry (`environment.sentryDns`), `LoggerService` (уровень + timestamp), `GlobalErrorHandler`, `LoggingInterceptor`, `EventBus` для domain-событий                                                              |
+| Errors / observability | `LoggerService` (уровень + timestamp), `GlobalErrorHandler`, `LoggingInterceptor`, `EventBus` для domain-событий; `environment.sentryDns` есть, но Sentry SDK в текущем коде не интегрирован                    |
 | Сборка                 | Angular CLI 17, ng-packagr 17 для библиотек                                                                                                                                                                     |
 | Тесты                  | Karma + Jasmine 4 (`karma.conf.js`)                                                                                                                                                                             |
 | Lint / format          | ESLint, Stylelint, Prettier; `precommit` запускает `lint:scss` и `lint:ts`                                                                                                                                      |
@@ -118,9 +118,9 @@ ui  ─┬──▶ api ──▶ domain ◀── infrastructure
 | `AsyncState<T, E>`                     | `domain/shared/async-state.ts`                          | Дискриминатор `{ status: "initial" \| "loading" \| "success" \| "failure" }` с хелперами `initial`, `loading`, `success`, `failure`, `isSuccess`, `isLoading`, `isFailure`. Единый источник правды для состояния асинхронных операций в фасадах. |
 | `Result<T, E>`                         | `domain/shared/result.type.ts`                          | `ok(data)` / `fail(error)` для возврата из use-case'ов. Use-case никогда не бросает — всё через `Result`.                                                                                                                                        |
 | `EventBus` + domain events             | `domain/<module>/events/*` + `infrastructure` listeners | Репозитории слушают доменные события и инвалидируют свой `EntityCache<T>`. Развязывает модули между собой.                                                                                                                                       |
-| `EntityCache<T>`                       | `infrastructure/repository/...`                         | Простой in-memory cache без TTL, инвалидируется через `EventBus` (или вручную). Прикручен к Project, Vacancy, Program репозиториям (см. коммит `49e26046`).                                                                                      |
+| `EntityCache<T>`                       | `infrastructure/repository/...`                         | Простой in-memory cache без TTL. Project и Vacancy инвалидируются через `EventBus` и ручные вызовы `invalidate()`, Courses инвалидирует detail/structure cache после отправки ответа, Program кеширует `getOne()` без текущих listeners.         |
 | `LoggingInterceptor` + `LoggerService` | `core/lib/interceptors`, `core/lib/services/logger`     | Структурированные логи с timestamp и уровнем; DEBUG только не в проде.                                                                                                                                                                           |
-| `GlobalErrorHandler`                   | `core/lib/services/error`                               | Перехватывает все необработанные ошибки, отдаёт в Sentry + `LoggerService`, показывает дружелюбное сообщение пользователю.                                                                                                                       |
+| `GlobalErrorHandler`                   | `core/lib/services/error`                               | Перехватывает необработанные ошибки и Promise rejections, логирует через `LoggerService.error("[GlobalError] ...")`. `ErrorService` и `NgZone` заинжекчены, но в текущем коде не используются.                                                   |
 
 ---
 
@@ -210,9 +210,9 @@ npm run format:check && npm run lint:ts && npm run build:pr
   - `members` — список участников платформы;
   - `vacancies` — список вакансий, детальная страница;
   - `chats` — список чатов и детальные чаты (личные + проектные);
-  - `projects` — `all`/`my` списки + детальная страница с детьми: `info`, `vacancies`, `team`, `work-section`, `chat`;
-  - `program` — `list`, `detail/main`, `detail/list` (projects / projects-rating / members), `register`;
-  - `courses` — `list`, детальная страница с детьми: `info`, `lesson` (и дальнейшие lesson-children);
+  - `projects` — `dashboard`/`my`/`subscriptions`/`invites`/`all` списки + edit + детальная страница с детьми: `info`, `vacancies`, `team`, `work-section`, `chat`;
+  - `program` — `all`, детальная страница (`main`, `projects`, `members`, `projects-rating`) и `register`;
+  - `courses` — `all`, детальная страница с детьми: `info`, `lesson` (и дальнейшие lesson-children);
   - `onboarding` — flow первого захода (привязан к office shell, но грузится по своему пути).
 - **`error`** — `404` и общая страница ошибки.
 
