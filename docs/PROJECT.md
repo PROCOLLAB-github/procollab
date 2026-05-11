@@ -33,13 +33,11 @@ Angular-монорепозиторий из трёх под-проектов: п
 
 ## Под-проекты (`angular.json` → `projects`)
 
-| Проект            | Тип         | Source root                    | Назначение                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----------------- | ----------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `social_platform` | application | `projects/social_platform/src` | Веб-приложение для пользователей. Содержит всё, что лежит в `app/`: `domain`, `api`, `infrastructure`, `ui`, `utils`, плюс ассеты в `assets/` и шрифты. Это единственный application-проект; library-проекты собираются отдельно через `ng-packagr`.                                                                                                                                                                                                                                            |
-| `core`            | library     | `projects/core/src`            | Базовые сервисы и утилиты, которые в принципе могут переехать в любое Angular-приложение: `ApiService`, `TokenService`, HTTP-интерсепторы, пайпы, `LoggerService`, `GlobalErrorHandler`, `ValidationService`, `WebsocketService`, провайдеры (`PRODUCTION`, `API_URL`, `SKILLS_API_URL`), guards (`auth-required`, `projects-edit`, `profile-edit`). Публичный API — `core/src/public-api.ts`, импортируется как `@corelib`. Константы (списки, навигация) лежат отдельно в `core/src/consts/`. |
-| `ui`              | library     | `projects/ui/src`              | Layout-компоненты, которые шарятся между приложениями (sidebar, header, profile-info, profile-control-panel, invite-manage-card, subscription-plans), плюс маленький набор примитивов (`avatar`, `back`, `icon`). Публичный API — `ui/src/public-api.ts`, импортируется как `@uilib`; модели — через `uilib/models`.                                                                                                                                                                            |
-
-> Большинство UI-примитивов и виджетов (input, modal, dropdown, tag, news-card, detail и т. д.) живёт **внутри** `social_platform` (`app/ui/primitives/*`, `app/ui/widgets/*`), а не в библиотеке `ui`. Туда выносится только то, что переиспользуется между разными приложениями.
+| Проект            | Тип         | Source root                    | Назначение                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ----------------- | ----------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `social_platform` | application | `projects/social_platform/src` | Веб-приложение для пользователей. Содержит всё, что лежит в `app/`: `domain`, `api`, `infrastructure`, `ui`, `utils`, плюс ассеты в `assets/` и шрифты. Это единственный application-проект; library-проекты собираются отдельно через `ng-packagr`.                                                                                                                                                                                                                          |
+| `core`            | library     | `projects/core/src`            | Базовые сервисы и утилиты, которые в принципе могут переехать в любое Angular-приложение: `ApiService`, `TokenService`, HTTP-интерсепторы, пайпы, `LoggerService`, `GlobalErrorHandler`, `ValidationService`, `WebsocketService`, провайдеры (`PRODUCTION`, `API_URL`), guards (`auth-required`, `projects-edit`, `profile-edit`). Публичный API — `core/src/public-api.ts`, импортируется как `@corelib`. Константы (списки, навигация) лежат отдельно в `core/src/consts/`. |
+| `ui`              | library     | `projects/ui/src`              | Layout-компоненты, которые шарятся между приложениями (sidebar, header, profile-info, profile-control-panel, invite-manage-card, subscription-plans), плюс маленький набор примитивов (`avatar`, `back`, `icon`). Публичный API — `ui/src/public-api.ts`, импортируется как `@uilib`; модели — через `uilib/models`.                                                                                                                                                          |
 
 ---
 
@@ -59,8 +57,6 @@ Angular-монорепозиторий из трёх под-проектов: п
 | `@utils/*`          | `projects/social_platform/src/app/utils/*`                 |
 | `@environment`      | `projects/social_platform/src/environments/environment.ts` |
 | `core` / `ui`       | `dist/core` / `dist/ui` (сборочные артефакты библиотек)    |
-
-> Используй aliases в импортах. Глубокие относительные пути через границу проекта (`../../../../core/src/...`) — архитектурный запах: он обходит `public-api.ts` библиотеки и крепит файлы напрямую к её внутренней структуре.
 
 ---
 
@@ -128,17 +124,14 @@ ui  ─┬──▶ api ──▶ domain ◀── infrastructure
 
 `fileReplacements` в `angular.json` подменяет `environment.ts` → `environment.prod.ts` для конфигурации `production`.
 
-| Ключ                               | dev (`environment.ts`)            | prod (`environment.prod.ts`)      |
-| ---------------------------------- | --------------------------------- | --------------------------------- |
-| `production`                       | `false`                           | `true`                            |
-| `apiUrl`                           | `https://dev.procollab.ru`        | `https://api.procollab.ru`        |
-| `skillsApiUrl`                     | `https://skills.dev.procollab.ru` | `https://api.skills.procollab.ru` |
-| `websocketUrl`                     | `wss://dev.procollab.ru/ws`       | `wss://api.procollab.ru/ws`       |
-| `websocketReconnectionInterval`    | `500` мс                          | `5000` мс                         |
-| `websocketReconnectionMaxAttempts` | `5`                               | `5`                               |
-| `sentryDns`                        | общий DSN                         | общий DSN                         |
-
-> На dev-окружении в `environment.ts` есть пометки `// TODO: change it before merge` рядом с `apiUrl` и `websocketUrl` — оставлены сознательно, потому что dev-stage именно с `dev.procollab.ru` и работает.
+| Ключ                               | dev (`environment.ts`)      | prod (`environment.prod.ts`) |
+| ---------------------------------- | --------------------------- | ---------------------------- |
+| `production`                       | `false`                     | `true`                       |
+| `apiUrl`                           | `https://dev.procollab.ru`  | `https://api.procollab.ru`   |
+| `websocketUrl`                     | `wss://dev.procollab.ru/ws` | `wss://api.procollab.ru/ws`  |
+| `websocketReconnectionInterval`    | `500` мс                    | `5000` мс                    |
+| `websocketReconnectionMaxAttempts` | `5`                         | `5`                          |
+| `sentryDns`                        | общий DSN                   | общий DSN                    |
 
 ### Изоляция cookies между prod и dev-stage
 
@@ -216,40 +209,4 @@ npm run format:check && npm run lint:ts && npm run build:pr
   - `onboarding` — flow первого захода (привязан к office shell, но грузится по своему пути).
 - **`error`** — `404` и общая страница ошибки.
 
-> **Канбан-роуты закомментированы.** `projects/social_platform/src/app/ui/routes/kanban/{kanban,kanban-detail}.routes.ts` и блок `path: "kanban"` внутри `ui/routes/projects/detail.routes.ts` отключены, ссылка «открыть доску задач» в `ui/pages/projects/detail/work-section/work-section.component.html` тоже закомменчена. Код канбана под `domain/kanban`, `api/kanban`, `ui/pages/projects/detail/kanban` и `core/lib/guards/kanban` физически остаётся в репозитории, но в runtime недостижим. Канбан исключён из этой документации.
-
 ---
-
-## Карта документации
-
-Документация по модулям лежит в [`docs/modules/<name>.md`](modules/) по строгому Swagger-подобному шаблону: назначение / domain models / repository ports + impls / use-cases / facades + UI-info / HTTP endpoints / routes / consumers / known issues. Cross-cutting утилиты и маленькие `api/*` пакеты без отдельного домена документируются в [`docs/cross-cutting.md`](cross-cutting.md).
-
-| Документ                                | Статус  |
-| --------------------------------------- | ------- |
-| `docs/PROJECT.md` (этот файл)           | done    |
-| `docs/core/services.md`                 | done    |
-| `docs/core/interceptors-providers.md`   | done    |
-| `docs/core/pipes.md`                    | done    |
-| `docs/core/guards-models.md`            | done    |
-| `docs/core/consts.md`                   | done    |
-| `docs/uilib.md`                         | done    |
-| `docs/social-platform/architecture.md`  | done    |
-| `docs/social-platform/shared.md`        | done    |
-| `docs/social-platform/ui-primitives.md` | done    |
-| `docs/social-platform/ui-widgets.md`    | done    |
-| `docs/modules/auth.md`                  | done    |
-| `docs/modules/profile.md`               | done    |
-| `docs/modules/skills.md`                | done    |
-| `docs/modules/specializations.md`       | done    |
-| `docs/modules/industry.md`              | done    |
-| `docs/modules/member.md`                | done    |
-| `docs/modules/project.md`               | done    |
-| `docs/modules/vacancy.md`               | done    |
-| `docs/modules/invite.md`                | done    |
-| `docs/modules/program.md`               | done    |
-| `docs/modules/courses.md`               | done    |
-| `docs/modules/news.md`                  | done    |
-| `docs/modules/feed.md`                  | done    |
-| `docs/modules/chat.md`                  | done    |
-| `docs/modules/office-shell.md`          | done    |
-| `docs/cross-cutting.md`                 | planned |

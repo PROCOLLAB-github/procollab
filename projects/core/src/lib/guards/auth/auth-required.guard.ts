@@ -7,28 +7,26 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { TokenService } from "../../services/tokens/token.service";
 
 /**
- * Guard для проверки аутентификации пользователя
+ * Guard для ограничения доступа к маршрутам,
+ * требующим аутентификации пользователя.
  *
- * Назначение: Защищает маршруты, требующие аутентификации пользователя
- * Принимает: ActivatedRouteSnapshot и RouterStateSnapshot (параметры маршрута)
- * Возвращает: boolean или UrlTree для разрешения/запрета доступа к маршруту
+ * Доступ разрешается только при:
+ * - наличии сохранённых токенов;
+ * - успешном получении профиля пользователя.
  *
- * Функциональность:
- * - Проверяет наличие токенов аутентификации
- * - Валидирует токены через получение профиля пользователя
- * - Перенаправляет на страницу входа при отсутствии аутентификации
- * - Обрабатывает ошибки при проверке токенов
- * - Используется в конфигурации маршрутов для защиты приватных страниц
+ * При ошибке проверки выполняется редирект на страницу авторизации.
  */
 export const AuthRequiredGuard: CanActivateFn = () => {
   const tokenService = inject(TokenService);
   const authRepository = inject(AuthRepositoryPort);
   const router = inject(Router);
 
+  // Проверка наличия токенов
   if (tokenService.getTokens() === null) {
     return router.createUrlTree(["/auth/login"]);
   }
 
+  // Получение профиля пользователя и обработка ошибок
   return authRepository.fetchProfile().pipe(
     map(profile => !!profile),
     catchError(() => {

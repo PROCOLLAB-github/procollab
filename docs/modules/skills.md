@@ -4,8 +4,6 @@
 
 Технические навыки пользователей и проектов: «Программирование», «Дизайн», «UI/UX», и т. д. Используется в profile-edit, project-edit (вакансии), members-filters, onboarding.
 
-> **Не путать с подсистемой подписок.** Этот модуль работает с навыками через **основной API** (`/core/skills/...` под `API_URL`). Отдельный `SKILLS_API_URL` (`SkillsApiService`, `SubscriptionPlansService`) — это **другая** подсистема для оплаты подписок (`skills.dev.procollab.ru` / `api.skills.procollab.ru`), не имеющая отношения к этому модулю.
-
 ## Назначение
 
 - **Иерархический список навыков**: дерево "категория → конкретный навык". Используется в формах выбора скиллов через `<app-skills-group>`.
@@ -105,10 +103,6 @@ export class SkillsInfoService {
 }
 ```
 
-> **Замечание про contract**: `onSearchSkill(query)` фиксированно дёргает `getSkillsInline(query, 1000, 0)` — пагинацию не пробрасывает. Если на бэке навыков больше 1000, остальные не подгрузятся. Это нормально для текущего объёма данных, но не масштабируется.
-
-> **Архитектурный долг**: `SkillsInfoService` напрямую дёргает `SkillsRepositoryPort` минуя use-case'ы. На use-case'ы переведена не вся работа — `getSkillsNested()` и `onSearchSkill()` обходят их. На use-case'ы можно перейти точечно.
-
 ---
 
 ## Repository (`infrastructure/repository/skills/skills.repository.ts`)
@@ -160,14 +154,3 @@ getSkillsInline(search, limit, offset)                 // → adapter
 | `api/onboarding/facades/stages/onboarding-stage-two-info.service.ts`           | Onboarding stage-two.                                                                                                                                                   |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                                           | Где                                | Заметка                                                                                                                |
-| ------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `getSkillsNested()` — нет кеширования, повторные подписки бьют API                                            | `SkillsRepository.getSkillsNested` | Добавить `shareReplay(1)` или интегрировать в `EntityCache`-like структуру (но cache по id не подходит — список один). |
-| `onSearchSkill(query)` фиксирует limit=1000                                                                   | `SkillsInfoService.onSearchSkill`  | Принимать `limit` параметром или сделать ленивую подгрузку.                                                            |
-| `SkillsInfoService` ходит в порт минуя use-case'ы                                                             | `SkillsInfoService`                | Переключить на `GetSkillsNestedUseCase` / `SearchSkillsUseCase` для единообразия.                                      |
-| URL без trailing slash                                                                                        | `skills-http.adapter.ts`           | На Django безопасно.                                                                                                   |
-| Approve / unapprove ходят через legacy `ProfileService` (`api/auth/profile.service.ts`), не через этот модуль | `auth.profile.service`             | Перенести в `api/skills/use-cases/approve-skill.use-case.ts` и подобные.                                               |
-| Двусмысленность имени "skills" — этот модуль и `SkillsApiService` (для подписок)                              | везде                              | Не баг, но при чтении кода путает. Возможно стоит переименовать `SkillsApiService` в `SubscriptionsApiService`.        |

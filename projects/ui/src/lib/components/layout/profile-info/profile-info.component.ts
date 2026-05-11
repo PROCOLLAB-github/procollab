@@ -9,9 +9,8 @@ import {
   Output,
 } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
-import { DayjsPipe } from "@corelib";
+import { User } from "@domain/auth/user.model";
 import { AvatarComponent, IconComponent } from "@uilib";
-import type { User } from "../../../models/user.model";
 
 /**
  * Компонент отображения информации о профиле пользователя

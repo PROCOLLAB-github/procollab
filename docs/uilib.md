@@ -43,11 +43,7 @@ projects/ui/src/
 | `EmptyManageCardComponent`     | `app-empty-manage-card`         | layout (**не в `@uilib`**) | —                                                                                                                                                        | —                                                              |
 | `AvatarComponent`              | `app-avatar`                    | primitive                  | `url: string` (required), `size = 50`, `hasBorder = false`, `isOnline = false`, `onlineBadgeSize = 16`, `onlineBadgeBorder = 3`, `onlineBadgeOffset = 0` | —                                                              |
 | `BackComponent`                | `app-back`                      | primitive                  | `path?: string`, `namespace?: string`                                                                                                                    | —                                                              |
-| `IconComponent`                | `[appIcon]` (директива-атрибут) | primitive                  | `appSquare?`, `appViewBox?`, `appWidth?`, `appHeight?`, `icon: string` (required)                                                                        | —                                                              |
-
-> Selector `ui-sidebar` — единственный с префиксом `ui-`, остальные с `app-`. Это исторический артефакт; менять не стоит — сломает все шаблоны-потребители.
-
----
+| `IconComponent`                | `[appIcon]` (директива-атрибут) | primitive                  | `appSquare?`, `appViewBox?`, `appWidth?`, `appHeight?`, `icon: string` (required)                                                                        |
 
 ## Layout components
 
@@ -134,10 +130,6 @@ export interface NavItem {
 
 Пустая карточка-плейсхолдер (используется когда нет приглашений). Без inputs/outputs.
 
-> **Не экспортирована из `layout/index.ts`** — следовательно, не попадает в `@uilib`. Сейчас её достать можно только глубоким импортом, и это ОК потому что она используется только внутри `InviteManageCardComponent` каскадом. Если когда-нибудь понадобится снаружи — добавить в `index.ts`.
-
----
-
 ## Primitives
 
 ### AvatarComponent (`app-avatar`)
@@ -191,27 +183,3 @@ export interface NavItem {
 ```
 
 ---
-
-## Models
-
-| Тип    | Файл                       | Поля                                                                                                                                                                                    |
-| ------ | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `User` | `lib/models/user.model.ts` | `id`, `email`, `firstName`, `lastName`, `avatar`, `isOnline`, `isActive`, `onboardingStage: number \| null`, `speciality`, `userType`, `timeCreated`, `timeUpdated`, `verificationDate` |
-
-**Импорт**: `import { User } from "uilib/models/user.model"` (alias `uilib/models` указывает на `projects/ui/src/models/*` — но фактически файл лежит в `lib/models/user.model.ts`, alias настроен под другую раскладку. На практике в `social_platform` импорт идёт через `import { User } from "projects/ui/src/lib/models/user.model"` или вовсе через свой `social_platform/domain/auth/user.model`).
-
-> Эта `User` модель **дублирует** `social_platform/domain/auth/user.model`. Сейчас оба интерфейса слегка расходятся (например, в social_platform нет `isActive` / `verificationDate`). Архитектурный долг: либо поднять одну версию в `core`, либо явно решить, что это разные модели для разных слоёв.
-
----
-
-## Архитектурный долг
-
-| Что                                                                                                          | Как фиксить                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| Selector `ui-sidebar` отличается от остальных (`app-*`)                                                      | Менять не стоит — сломает шаблоны. Зафиксировать convention: новые компоненты `@uilib` именовать через `ui-*`. |
-| `EmptyManageCardComponent` не реэкспортирован                                                                | Если он не нужен снаружи — удалить файл; если нужен — добавить в `layout/index.ts`.                            |
-| `User` модель дублирует `social_platform/domain/auth/user.model`                                             | Поднять единую версию в `@core/lib/models/`.                                                                   |
-| Alias `uilib/models` указывает на `projects/ui/src/models/*`, но файл лежит в `projects/ui/src/lib/models/*` | Либо подвинуть файл, либо поправить alias (минимально-инвазивно).                                              |
-| `public-api.ts` не реэкспортирует модели                                                                     | Добавить `export * from "./lib/models/user.model"`.                                                            |
-| `AvatarComponent.url` помечен `required: true`, но тип `string \| undefined`                                 | Снять `required: true` (вернее) или сделать тип `string`.                                                      |
-| Subscription-plans компонент упоминался в старом README, но в коде нет                                       | README снесён; если когда-нибудь нужен — поднять отдельно.                                                     |

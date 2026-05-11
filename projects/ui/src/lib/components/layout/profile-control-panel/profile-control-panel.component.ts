@@ -6,8 +6,8 @@ import { InviteManageCardComponent, ProfileInfoComponent, IconComponent } from "
 import { ClickOutsideModule } from "ng-click-outside";
 import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { RouterLink } from "@angular/router";
-import type { User } from "../../../models/user.model";
 import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
+import { User } from "@domain/auth/user.model";
 
 /**
  * Компонент панели управления профилем

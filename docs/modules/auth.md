@@ -177,8 +177,6 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 Все use-case'ы покрыты `*.spec.ts` файлами рядом — мокают `AuthRepositoryPort` через `jasmine.createSpyObj`.
 
-> Возможные refactor-цели: `ResendEmailUseCase` / `ResetPasswordUseCase` имеют узкий тип ошибки `{ kind: "unknown" }` — должны бы различать `400`/`500`/`network` для UX, но сейчас всё схлопывается в `unknown`.
-
 ---
 
 ## Facades (`api/auth/facades/`)
@@ -191,8 +189,6 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 | `AuthRegisterService` | страница                                    | computed `serverErrors` (плоский массив строк из `validation_error`)                                                                                                                                                                                                                                                                                                                                                                                      | `onSendForm()` — валидирует, дёргает `RegisterUseCase`, при `ok` навигирует на `/auth/verification/email?adress=<email>`. `downloadPolicy()` — JS-загрузка `/assets/downloads/auth/shared/privacy_policy_2022.docx`                             |
 | `AuthPasswordService` | страница                                    | `email` Observable из query                                                                                                                                                                                                                                                                                                                                                                                                                               | `init()`, `onSubmitResetPassword()`, `onSubmitSetPassword()` — three-step reset password                                                                                                                                                        |
 | `AuthEmailService`    | страница                                    | `counter` (signal) для resend-таймера, `userEmail` (signal)                                                                                                                                                                                                                                                                                                                                                                                               | `initializationTokens()` — забирает access_token/refresh_token из query (используется на `/auth/verification` после magic-link), `initializationEmail()` — берёт `?adress=...` из query, `onResend()`, `initializationTimer()` — countdown 60→0 |
-
-> **Опечатка** в query параметре `?adress=` (вместо `?address=`) — сохраняется для совместимости с уже отправленными письмами.
 
 ---
 
@@ -208,8 +204,6 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 | `deleteAchievement(id)`           | `DELETE /auth/users/achievements/<id>/`                | Удаление                                   |
 | `approveSkill(userId, skillId)`   | `POST /auth/users/<userId>/approve_skill/<skillId>/`   | Подтверждение навыка, возвращает `Approve` |
 | `unApproveSkill(userId, skillId)` | `DELETE /auth/users/<userId>/approve_skill/<skillId>/` | Отмена подтверждения навыка                |
-
-> Архитектурный долг: вынести в `domain/profile`/`api/profile` use-case'ы.
 
 ---
 
@@ -309,16 +303,3 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 | Любой компонент в `office` через `app-profile-control-panel` | `logout()` через `AuthInfoService.logout()`.                                                                                                            |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                         | Где                                                                      | Заметка                                                                                                              |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| `core` импортирует `domain/auth/*` напрямую                                 | `core/lib/services/{tokens,validation}`                                  | См. `docs/core/services.md`. Поднять разделяемые типы в `core/lib/models/auth/`.                                     |
-| Опечатка `?adress=` в email-verification                                    | `AuthEmailService.initializationEmail`, `AuthRegisterService.onSendForm` | Не исправлять — сломает уже отправленные письма.                                                                     |
-| `saveAvatar` URL без trailing slash                                         | `auth-http.adapter.ts:saveAvatar`                                        | На Django безопасно (APPEND_SLASH), на других серверах — потенциальный 301.                                          |
-| `ResendEmailUseCase` / `ResetPasswordUseCase` имеют только `unknown` ошибку | `api/auth/use-cases/...`                                                 | Расширить до различения 400/500/network.                                                                             |
-| `ProfileService` (legacy)                                                   | `api/auth/profile.service.ts`                                            | Перенести в `api/profile` use-case'ы.                                                                                |
-| `Achievement.files: string[] \| FileModel[]`                                | `domain/auth/user.model.ts`                                              | Полиморфизм — на старых записях строки, на новых — `FileModel`. Унифицировать.                                       |
-| `User.phoneNumber: number`                                                  | `domain/auth/user.model.ts`                                              | Должно быть `string` (международные номера, лидирующий `+`).                                                         |
-| `User` — мегакласс с 30+ полями + 4 опциональных типа-роли блока            | `domain/auth/user.model.ts`                                              | Разнести: `User` (базовое) + `UserRolesData`/`UserSubscription`/`UserPersonal`. Сейчас всё одной плоской структурой. |

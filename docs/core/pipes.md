@@ -13,8 +13,6 @@ pipes/
   truncate-html.pipe.ts   # отдельный — работает с SafeHtml
 ```
 
-> `pipes/index.ts` реэкспортирует **только**: `control-error`, `form-control`, `dayjs`, `parse-breaks`, `parse-links`, `pluralize`, `years-from-birthday`. Остальные доступны только через прямые импорты `@core/lib/pipes/...`. Это исторический артефакт — большинство `transformers/`, `user/`, `truncate-html` стоит добавить в публичный API.
-
 ## Сводка
 
 | Pipe                    | Файл                                       | Имя в шаблоне       | Сигнатура                                                | Назначение                                                                                                                                                                                                  |
@@ -47,12 +45,3 @@ pipes/
 | `"isToday"`  | `dayjs(value).isToday()` — boolean                                   | —                                                   |
 | `"format"`   | `dayjs(value).format(options)`                                       | `options` = строка формата, например `"DD.MM.YYYY"` |
 | прочее       | `throw new Error("Invalid action type specified: ...")`              | —                                                   |
-
-## Архитектурный долг по пайпам
-
-| Что                                                                                                                                                  | Как фиксить                                                             |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `pipes/index.ts` не реэкспортирует половину пайпов (`transformers/*`, `user/*`, `truncate-html`, `capitalize`, `truncate`)                           | Добавить в `index.ts`.                                                  |
-| Импорты глубокими путями (`@core/lib/pipes/formatters/truncate.pipe`, `@core/lib/pipes/user/user-links.pipe`) — раскиданы по всему `social_platform` | После расширения `index.ts` — массово заменить на `@corelib`.           |
-| `LinkTransformPipe` не поддерживает HTTP, не учитывает поддомены. Возвращает пустую строку для `http://...`                                          | Принципиально не баг (договорённость), но в шаблонах хорошо бы помнить. |
-| `UserRolePipe` возвращает `Observable` — в шаблонах легко забыть `\| async`                                                                          | Документация-предупреждение в JSDoc.                                    |

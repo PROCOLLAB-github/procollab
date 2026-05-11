@@ -107,8 +107,6 @@ export class EntityCache<T> {
 
 Применён к `Project`, `Vacancy`, `Program` и `Courses` репозиториям. Project/Vacancy чистят кеш по domain events, Courses чистит detail/structure cache после отправки ответа, Program кеширует `getOne()` без текущих event-listeners.
 
-> На строке 15 — `return this.store.get(id)!` с non-null assertion. Это технически безопасно (если `getOrFetch` только что положил в store), но на это ругается ESLint warning `@typescript-eslint/no-non-null-assertion`. Безобидно.
-
 ### `EventBus`
 
 ```ts
@@ -229,8 +227,6 @@ interface FilterConfig {
 }
 ```
 
-> Тип `any` в нескольких местах — недотипизировано. Виджеты-потребители работают с этим, но IDE-подсказок мало.
-
 ### `navigation.model.ts`
 
 ```ts
@@ -286,16 +282,3 @@ class Notification {
 | `yearRangeValidators.ts`    | `yearRangeValidators(entryField, completionField)` (`ValidatorFn`)                          | Группа-валидатор: `entryYear ≤ completionYear`. Используется в `profile-edit` для образования и опыта работы.                                                                                        |
 
 ---
-
-## Архитектурный долг
-
-| Что                                                                                | Где                                               | Заметка                                                                                                |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Опечатка `days-untit.ts` → `days-until.ts`                                         | `utils/days-untit.ts`                             | Точечный rename + поиск всех мест использования.                                                       |
-| Опечатка `maxAttemps` → `maxAttempts`                                              | `utils/exponentialBackoff.ts`                     | То же.                                                                                                 |
-| `inviteToProjectMapper` возвращает `any[]`                                         | `utils/inviteToProjectMapper.ts`                  | Сделать типизированный return.                                                                         |
-| `FilterFieldConfig.options/.config/.dataSource` через `any`                        | `domain/other/filter-fields.model.ts`             | Типизировать через generic'и.                                                                          |
-| `getActionType` / `getPriorityType` зависят от канбан-модуля                       | `utils/`                                          | Если канбан надолго отключён — перенести вместе с канбан-кодом.                                        |
-| `EntityCache.getOrFetch` использует non-null assertion                             | `domain/shared/entity-cache.ts:15`                | Можно избавиться через if/return. ESLint warning.                                                      |
-| Дубль `responsive.ts` (TS константы) и `_responsive.scss` (SCSS миксины)           | `utils/responsive.ts` + `styles/_responsive.scss` | Источник правды только один — SCSS; TS-константы можно сгенерировать или удалить если не используются. |
-| `FileModel.static default()` отдаёт строки `"string"` вместо реалистичного дефолта | `domain/file/file.model.ts`                       | Поправить или убрать (сейчас никем не используется содержательно).                                     |

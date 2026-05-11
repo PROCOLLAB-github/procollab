@@ -72,8 +72,6 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
 
 Используется как универсальный popover для `app-select`, для тегов в канбан-задачах, для кастомных меню. `type` определяет, как рендерить элементы (`icons`, `avatars`, `shapes`, `tags`, `goals`, `text`).
 
-> **Известный архитектурный долг**: `DropdownComponent` импортирует `TagDto` из `@api/kanban/dto/tag.model.dto` и `CreateTagFormComponent` из `@ui/pages/projects/detail/kanban/components/create-tag-form/create-tag-form.component`. Примитив (атом) зависит от feature-кода (страница). После рефакторинга `be9344be` это регрессия — каждый потребитель `<app-dropdown>` тащит kanban-форму создания тега в бандл. Канбан-роуты сейчас отключены, но импорты остаются.
-
 ### `TagComponent` (`app-tag`)
 
 Палитра `color` — около 10 значений, привязана к CSS-переменным (`--accent`, `--blue-dark` и т. п.). `type: "days" \| "overdue" \| "answer"` — переключатель преднастроенных стилей для тегов времени/статуса.
@@ -94,14 +92,3 @@ Generic-компонент. `T` — тип элемента в `suggestions`. Ч
 Остальные (`Checkbox`, `Switch`) принимают `checked` через `[checked]` + `(checkedChange)` — двухсторонний биндинг через `[(checked)]`, не CVA.
 
 ---
-
-## Архитектурный долг
-
-| Что                                                                             | Где                                            | Заметка                                                                                                                   |
-| ------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `DropdownComponent` импортирует kanban-код                                      | `ui/primitives/dropdown/dropdown.component.ts` | Вытащить `TagDto` в `@domain/...`, `CreateTagFormComponent` оставить в page-области, не использовать его внутри dropdown. |
-| `InputComponent` `value` setter без чёткого типа `string \| number`             | `ui/primitives/input/input.component.ts`       | Привязка к `mask` усложняет, но типизировать стоит.                                                                       |
-| Не все примитивы реэкспортированы из `ui/primitives/index.ts`                   | `index.ts`                                     | Добавить остальные для коротких импортов через `@ui/primitives`.                                                          |
-| `AvatarComponent.url` помечен `required: true`, но тип `string \| undefined`    | `ui/primitives/avatar/avatar.component.ts`     | Решить — либо `url: string`, либо снять `required`. То же замечание в `@uilib`.                                           |
-| `BarComponent.links` без явной типизации (`{ ... }[]`)                          | `ui/primitives/bar/bar.component.ts`           | Описать interface.                                                                                                        |
-| `ImgCardComponent` дублирует функциональность `AvatarComponent` для не-аватарок | оба                                            | Решить, нужен ли отдельный компонент для картинок-карточек.                                                               |

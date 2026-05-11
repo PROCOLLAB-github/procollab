@@ -150,8 +150,6 @@ class Snack {
 }
 ```
 
-> Метод `warning(...)` отсутствует — в коде используется только три типа. Если нужен — добавить.
-
 ### `NavService` (`services/nav/`)
 
 Реактивный заголовок страницы (для `<app-nav>` хедера).
@@ -175,8 +173,6 @@ class NotificationService {
   hasNotifications: Observable<number>; // count of read notifications (странная семантика)
 }
 ```
-
-> **Баг**: `hasNotifications` фильтрует `notification.readAt` (truthy) — то есть считает **прочитанные** уведомления, а не непрочитанные. Имя `hasNotifications` подразумевает «есть непрочитанные». Логика инвертирована. Используется в `app-profile-control-panel` для иконки колокольчика.
 
 ---
 
@@ -202,10 +198,6 @@ class NotificationService {
     /vacancies      → lazy ./vacancy/vacancies-detail.routes  (×2 — дубликат)
     /**             → redirect to /error/404
 ```
-
-> **Архитектурный долг**: дубликаты `/courses` и `/vacancies` — два разных пути с одинаковым `path:`. Angular Router возьмёт **первый** совпавший, поэтому вторые блоки недостижимы. Детальные маршруты сейчас фактически обрабатываются первыми lazy-группами (`courses.routes.ts` и `vacancies.routes.ts`), где уже есть `:courseId` / `:vacancyId`.
-
-> Закомментированный блок `/chats` (тоже лениво) — повторяющийся, не работает. Оставлен на будущее.
 
 ---
 

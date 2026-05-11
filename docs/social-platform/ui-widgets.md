@@ -97,16 +97,3 @@ Stepper для редактирования (профиля и проекта). 
 GDPR-баннер, добавлен через коммит `e3a36e7c`. Лежит **в widgets** (не в primitives), потому что используется ровно один раз — в `app.component.html`. Управляет `localStorage.cookieConsent`, при `accepted` дёргает `AnalyticsService.loadAnalytics()` (Yandex Metrika + Mail.ru counter — только на `app.procollab.ru`, см. [`docs/cross-cutting.md`](../cross-cutting.md)).
 
 ---
-
-## Архитектурный долг
-
-| Что                                                                                                                              | Где                                            | Заметка                                                                                                    |
-| -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `DeatilComponent` опечатка в имени класса                                                                                        | `widgets/detail/detail.component.ts`           | Не переименовывать — слишком много шаблонов-потребителей.                                                  |
-| `InfoCardComponent.appereance` опечатка                                                                                          | `widgets/info-card/info-card.component.ts`     | То же.                                                                                                     |
-| `InfoCardComponent.info: any`                                                                                                    | то же                                          | Превратить в discriminated union по `type`.                                                                |
-| `DeatilComponent` 7+ инжектов сервисов и читает данные из `route.data` напрямую                                                  | `widgets/detail/detail.component.ts`           | Виджет должен быть dumb. Проблема архитектурная — переделать в smart `pages/*` или выделить в `pages/...`. |
-| `FeedFilterComponent` / `ProjectsFilterComponent` / `VacancyFilterComponent` без inputs/outputs, инжектируют свои `*InfoService` | `widgets/...-filter/`                          | Перевести на декларативные `FilterFieldConfig` (есть тип в `domain/other/`, не используется).              |
-| `ChatWindowComponent` `Output type: void` затмевает зарезервированное слово                                                      | `widgets/chat-window/chat-window.component.ts` | Переименовать в `typing` или `userTyping`.                                                                 |
-| Многие виджеты не имеют `index.ts` для коротких импортов                                                                         | `ui/widgets/`                                  | Добавить `index.ts` с реэкспортом всех.                                                                    |
-| `ProjectDirectionCard.about: string \| any[]`                                                                                    | `widgets/project-direction-card/...`           | Разделить на два компонента или сделать generic.                                                           |

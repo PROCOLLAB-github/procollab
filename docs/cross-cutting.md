@@ -34,8 +34,6 @@
 
 Используется в `pages/feed/open-vacancy/advert-card/...` для отображения маркетинговых блоков в ленте.
 
-> Архитектурный долг: переехать на use-case'ы и domain port (как остальные модули).
-
 ---
 
 ## analytics
@@ -83,8 +81,6 @@ checkExpandable(type: "description" | "skills", hasText: boolean, descEl?: Eleme
 ```
 
 `onExpand` дёргает CSS-классы для анимации высоты + переключает signal. `checkExpandable` проверяет `el.scrollHeight > el.clientHeight` чтобы решить, показывать ли кнопку «подробнее».
-
-> Глобальный синглтон с 13 сигналами — гранулярность сомнительная. По хорошему, это должно быть либо component-scoped state, либо сигналы должны сидеть рядом с детальными страницами. Но текущая реализация работает.
 
 ---
 
@@ -205,8 +201,6 @@ class SearchesService {
 
 Используется в `pages/members/members-filters` для фильтра по специализации.
 
-> Параллельный по интерфейсу `SkillsInfoService.onSearchSkill` (см. [`docs/modules/skills.md`](modules/skills.md)) — но для skills нет отдельного `searches` контейнера. Inconsistent.
-
 ---
 
 ## storage
@@ -299,8 +293,6 @@ class TooltipInfoService {
 
 `showTooltip(type)` через `switch` ставит соответствующий signal в `true`; для `"login"` отдельного case нет, поэтому он попадает в default и включает общий `isTooltipVisible`. `toggleTooltip()` отдельно переключает `isHintLoginVisible`.
 
-> Гранулярность 1 signal = 1 tooltip — много дублирования. По-хорошему `Map<string, signal<boolean>>` или `signal<Set<string>>`. Архитектурный долг.
-
 ---
 
 ## office
@@ -312,19 +304,3 @@ class TooltipInfoService {
 ## onboarding
 
 См. [`docs/modules/office-shell.md`](modules/office-shell.md#onboarding-flow). 4 stage facades + 1 root facade + 5 UI-info сервисов (4 stage UI + root UI).
-
----
-
-## Обобщённые архитектурные замечания
-
-| Что                                                                                                   | Где                            | Заметка                                                                                               |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `AdvertService`, `OnboardingService` (legacy) — старый стиль без use-case'ов                          | `api/advert`, `api/onboarding` | Перевести на use-case'ы по аналогии с другими модулями.                                               |
-| `ExpandService` — глобальный singleton с 13 сигналами                                                 | `api/expand`                   | Сделать page-scoped или вынести каждый набор в свой страничный facade.                                |
-| `TooltipInfoService` — 14 дискретных сигналов + общий `isTooltipVisible`                              | `api/tooltip`                  | Переписать через `Map`/`Set` или `WritableSignal<{ [key: string]: boolean }>`.                        |
-| `PathsService` — только 2 computed                                                                    | `api/paths/paths.service.ts`   | Расширить, чтобы все pages могли узнать «я на каком разделе» без `router.url.includes(...)`.          |
-| `AppRoutes` не используется в шаблонах (`routerLink`)                                                 | `api/paths/app-routes.ts`      | Миграция шаблонов на builders отдельно.                                                               |
-| `SearchesService` существует только для специализаций                                                 | `api/searches`                 | Если будут другие inline-поиски — обобщить в `<T>`-параметризованный сервис.                          |
-| `ToggleFieldsInfoService` — overkill для одного boolean                                               | `api/toggle-fields`            | Удалить, держать сигнал в страничном facade.                                                          |
-| `analytics.service.ts` хардкодит `app.procollab.ru` хост, ID счётчиков, URL `/auth/register`          | `api/analytics`                | Параметризовать через `environment` (например, `environment.analyticsHost`, `environment.metrikaId`). |
-| `StorageService.getItem` всегда парсит JSON — для просто-строк это `JSON.parse("text") → SyntaxError` | `api/storage`                  | Добавить `getRaw` или `try/catch` fallback.                                                           |

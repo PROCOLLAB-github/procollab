@@ -6,8 +6,6 @@
 
 Все гарды лежат в `projects/core/src/lib/guards/`. Это `CanActivateFn` (новый Angular 14+ API), не `Injectable`-классы. Используются в `ui/routes/*.routes.ts`.
 
-> Гарды **НЕ** реэкспортируются из `core/src/public-api.ts` — нет `guards/index.ts` и нет `export * from "./lib/guards"`. Сейчас потребители импортируют их глубокими путями. Если добавить экспорт — это ломающее изменение API библиотеки минимально, но согласованно.
-
 | Guard                                                   | Файл                                          | Где используется                                                                             |
 | ------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | [`AuthRequiredGuard`](#authrequiredguard)               | `guards/auth/auth-required.guard.ts`          | Все приватные роуты внутри `office`.                                                         |
@@ -29,8 +27,6 @@
    - если ошибка (401, network, etc.) → `router.navigateByUrl("/auth/login")` (важно: возвращается `Promise<boolean>` от `navigateByUrl`, не `UrlTree`).
 
 **Зависимости**: `TokenService`, `AuthRepositoryPort`, `Router`.
-
-> `AuthRepositoryPort` живёт в `social_platform/domain/auth/ports/`. Это очередное место, где `core` lib зависит от `social_platform`.
 
 ---
 
@@ -79,22 +75,17 @@ projectRepository.getOne(projectId).pipe(
 
 > Бизнес-правило: `partnerProgram.isSubmitted === true` означает «уже подал, редактировать нельзя» — пользователя кидает на страницу просмотра.
 
-**Известное замечание**: `isNaN(projectId)` редиректит на `my`, а вот `getOne` ошибка — на детальную проекта (которая тоже упадёт). Логика на ошибке выглядит странновато, но историческая.
-
 ---
 
 ## Models
 
 `projects/core/src/lib/models/` — **набор интерфейсов и enum'ов общего назначения**.
 
-> `models/index.ts` реэкспортирует **только** `subscription.model`. `error/*` и `http.model` доступны только глубокими путями: `@core/lib/models/error/error-code`, `@core/lib/models/error/error-message`, `@core/lib/models/http.model`.
-
 | Файл                     | Экспорт                                                      | Что                                                                                                                                          |
-| ------------------------ | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------------ | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | `error/error-code.ts`    | `enum ErrorCode { NOT_FOUND = "404", SERVER_ERROR = "500" }` | Используется `ErrorService` для построения URL `/error/<code>`.                                                                              |
 | `error/error-message.ts` | `enum ErrorMessage`                                          | Все текстовые сообщения об ошибках на русском, сгруппированы по категориям: AUTH, VALIDATION, USER, рейтинг проектов. Полная таблица — ниже. |
-| `http.model.ts`          | `interface ApiError { detail: string }`                      | Типизация ошибок API: бэк отдаёт `{ detail: "..." }` для 4xx.                                                                                |
-| `subscription.model.ts`  | `SubscriptionPlan`, `SubscriptionData`, `PaymentStatus`      | Типизация ответов Skills-API в `SubscriptionPlansService`.                                                                                   |
+| `http.model.ts`          | `interface ApiError { detail: string }`                      | Типизация ошибок API: бэк отдаёт `{ detail: "..." }` для 4xx.                                                                                |     |
 
 ### ErrorMessage — все значения
 
@@ -120,23 +111,3 @@ projectRepository.getOne(projectId).pipe(
 | `USER_IS_MEMBER`               | Пользователь уже является участником проекта                   |
 | `VALIDATION_PROFILE_LINK`      | Введенное значение не соответствует формату ссылки на профиль  |
 | `VALIDATION_UNFILLED_CRITERIA` | Не все критерии заполнены                                      |
-
-### Subscription модели
-
-| Тип                | Поля                                                                                                                                                 |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SubscriptionPlan` | `id`, `name`, `price`, `featuresList: string[]`, `active`, `available`                                                                               |
-| `SubscriptionData` | `isSubscribed`, `lastSubscriptionType: SubscriptionPlan \| null`, `lastSubscriptionDate`, `subscriptionDateOver`, `isAutopayAllowed`                 |
-| `PaymentStatus`    | `id`, `status`, `amount: { currency, value }`, `createdAt`, `confirmation: { confirmationUrl, type }`, `paid`, `test`, `metadata: { userProfileId }` |
-
-`PaymentStatus` сделан под формат ЮKassa — `confirmation.confirmationUrl` это URL, на который нужно редиректить пользователя для оплаты.
-
----
-
-## Архитектурный долг
-
-| Что                                                                                                       | Как фиксить                                                                                                     |
-| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Нет `guards/index.ts` и `core/public-api.ts` не реэкспортирует guards                                     | Добавить `index.ts` + `export * from "./lib/guards"` в `public-api.ts`.                                         |
-| Гарды импортируют `AuthRepositoryPort` и `ProjectRepositoryPort` напрямую из `social_platform/domain/...` | Если когда-нибудь захотим переиспользовать `core` — параметризовать через DI-токены или поднять порты в `core`. |
-| `models/index.ts` не реэкспортирует `error/*` и `http.model`                                              | Добавить три `export * from`.                                                                                   |

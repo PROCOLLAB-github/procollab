@@ -136,7 +136,7 @@ this.eventBus.on<RejectInvite>("RejectInvite").subscribe(() => {
 
 > `decline` / `accept` имеют trailing slash, `revoke` (`DELETE /invites/<id>`) и `updateInvite` (`PATCH /invites/<id>`) — без. Несогласованно (особенность бэка).
 
-> Параметр `?user=any` в `getByProject` — особый sentinel для бэка: вернуть приглашения проекта от ВСЕХ пользователей (без фильтра по получателю).
+> Параметр `?user=any` в `getByProject` — вернуть приглашения проекта от ВСЕХ пользователей (без фильтра по получателю).
 
 ---
 
@@ -173,15 +173,3 @@ Resolver `ProjectsInvitesResolver` в [`docs/modules/project.md`](project.md) д
 | `utils/inviteToProjectMapper.ts`                             | Утилита маппинга `Invite[]` → `any[]` для отображения в проектных списках (см. [`docs/social-platform/shared.md`](../social-platform/shared.md)).                |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                         | Где                                                     | Заметка                                                                                                             |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `RevokeInvite` событие никем не слушается                                                   | `domain/invite/events/revoke-invite.event.ts`           | Возможно стоит подписать `InviteRepository` для инвалидации списка `getByProject`.                                  |
-| `AcceptInvite` не инвалидирует `ProjectRepository`                                          | `infrastructure/repository/invite/invite.repository.ts` | Зеркальная операция к `RemoveProjectCollaborator` — должна тоже инвалидировать проект (новый коллаборатор).         |
-| `myInvitesCount$` не инкрементируется при новых invite (нет push)                           | `InviteRepository`                                      | OK для текущего UX (нет live-уведомлений), но при добавлении WebSocket надо учесть.                                 |
-| Endpoints без согласованного trailing slash                                                 | `invite-http.adapter.ts`                                | На Django безопасно.                                                                                                |
-| `?user=any` — sentinel-значение в query                                                     | `getByProject`                                          | Странный API на стороне бэка. На фронте может сломаться при тип-проверке `HttpParams`.                              |
-| Нет своего `pages/invite/`                                                                  | —                                                       | Не баг — invites показываются в существующих местах.                                                                |
-| Тип ответа `revokeInvite()` в порту — `Observable<Invite>`, в адаптере — `Observable<void>` | `port` vs `adapter`                                     | Несоответствие. Бэк возвращает удалённую сущность; либо порт неправильно типизирован, либо адаптер недо-возвращает. |
