@@ -37,8 +37,6 @@ core/src/consts/
 export const navItems = [...];
 ```
 
-> На практике это правило соблюдается с отклонениями: исторически встречаются `QuickAnswers`, `KanbanIcons` (PascalCase), `actiionTypeList` (опечатка в имени файла — `actiion-type-list.const.ts` → переменная `actionTypeList`), `workScheludeList` (опечатка `Schelude` вместо `Schedule`). Менять не стоит — это сломает все потребители; помечать как технический долг.
-
 ---
 
 ## `consts/lists/` — справочники для `<app-select>`
@@ -99,8 +97,6 @@ export const navItems = [...];
 | `kanban-column-info.const.ts` | `kanbanColumnInfo`          | Опции dropdown для колонки канбана.                                                                           | **kanban-only**, модуль отключён                   |
 | `kanban-icons.const.ts`       | `KanbanIcons` (PascalCase)  | Иконки досок канбана.                                                                                         | **kanban-only**, модуль отключён                   |
 
-> Канбан-константы (`quick-answers`, `kanban-column-info`, `kanban-icons`) физически остаются в репо вместе с остальной канбан-инфраструктурой — см. [`docs/PROJECT.md` → kanban-disabled](../PROJECT.md#точки-входа-в-роутинг). Импортировать их вне канбан-кода — нет смысла, можно снести вместе с канбаном или дождаться возобновления модуля.
-
 ---
 
 ## Как добавлять новую константу
@@ -113,13 +109,3 @@ export const navItems = [...];
 6. Импортировать через alias: `import { foo } from "@core/consts/other/foo.const"`.
 
 ---
-
-## Архитектурный долг
-
-| Что                                                                                  | Как фиксить                                                                                             |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| Канбан-константы (`quick-answers`, `kanban-*`) дрейфуют вместе с отключённым модулем | Решить судьбу канбана; если оставляем — пометить через `docs/PROJECT.md`, если удаляем — снести вместе. |
-| Опечатки в именах файлов и переменных (`actiion-type-list`, `workScheludeList`)      | Точечный rename + поиск всех мест использования. Сейчас не критично.                                    |
-| Mismatch с правилом нейминга (`QuickAnswers`, `KanbanIcons` в PascalCase)            | То же.                                                                                                  |
-| `nav-profile-items.const.ts` импортирует `EditStep` из `social_platform`             | Поднять `EditStep` в `core/lib/models/` или превратить в string-литерал union.                          |
-| `consts/` не имеют публичного `index.ts` — каждый импорт идёт глубоким путём         | Не критично (consts read-only), но единый `index.ts` уменьшит длину импортов.                           |

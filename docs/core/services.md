@@ -13,7 +13,6 @@ import {
   LoggerService,
   ValidationService,
   SkillsApiService,
-  SubscriptionPlansService,
   YtExtractService,
 } from "@corelib";
 
@@ -24,21 +23,18 @@ import { ErrorService } from "@core/lib/services/error/error.service";
 import { GlobalErrorHandlerService } from "@core/lib/services/error/global-error-handler.service";
 ```
 
-| Сервис                                                    | Файл                                                   | Provided | В `@corelib` | Зависит от                                                                    |
-| --------------------------------------------------------- | ------------------------------------------------------ | -------- | ------------ | ----------------------------------------------------------------------------- |
-| [`ApiService`](#apiservice)                               | `services/api/api.service.ts`                          | root     | да           | `HttpClient`, `API_URL`                                                       |
-| [`SkillsApiService`](#skillsapiservice)                   | `services/api/skillsApi.service.ts`                    | root     | да           | `HttpClient`, `SKILLS_API_URL`, наследует `ApiService`                        |
-| [`TokenService`](#tokenservice)                           | `services/tokens/token.service.ts`                     | root     | да           | `ApiService`, `PRODUCTION`, `js-cookie`                                       |
-| [`LoggerService`](#loggerservice)                         | `services/logger/logger.service.ts`                    | root     | да           | — (опц. `"PRODUCTION"` — см. известный баг)                                   |
-| [`ValidationService`](#validationservice)                 | `services/validation/validation.service.ts`            | root     | да           | `dayjs` (`customParseFormat`, `relativeTime`)                                 |
-| [`SubscriptionPlansService`](#subscriptionplansservice)   | `services/subscriptions/subscription-plans.service.ts` | root     | да           | `SkillsApiService`                                                            |
-| [`YtExtractService`](#ytextractservice)                   | `services/yt-extract.service.ts`                       | root     | да           | —                                                                             |
-| [`FileService`](#fileservice)                             | `services/file/file.service.ts`                        | root     | **нет**      | `ApiService`                                                                  |
-| [`WebsocketService`](#websocketservice)                   | `services/websockets/websocket.service.ts`             | root     | **нет**      | `TokenService`, `@environment`                                                |
-| [`ErrorService`](#errorservice)                           | `services/error/error.service.ts`                      | root     | **нет**      | `Router`, `LoggerService`                                                     |
-| [`GlobalErrorHandlerService`](#globalerrorhandlerservice) | `services/error/global-error-handler.service.ts`       | manual   | **нет**      | `LoggerService` (+ `ErrorService`/`NgZone` — заинжекчены, но не используются) |
-
-> Сервисы, не входящие в `@corelib`, исторически импортируются глубокими путями. Если их кто-то будет всё-таки шарить наружу — добавить экспорт в `services/index.ts`.
+| Сервис                                                    | Файл                                             | Provided | В `@corelib` | Зависит от                                                                    |
+| --------------------------------------------------------- | ------------------------------------------------ | -------- | ------------ | ----------------------------------------------------------------------------- |
+| [`ApiService`](#apiservice)                               | `services/api/api.service.ts`                    | root     | да           | `HttpClient`, `API_URL`                                                       |
+| [`SkillsApiService`](#skillsapiservice)                   | `services/api/skillsApi.service.ts`              | root     | да           | `HttpClient`,                                                                 |
+| [`TokenService`](#tokenservice)                           | `services/tokens/token.service.ts`               | root     | да           | `ApiService`, `PRODUCTION`, `js-cookie`                                       |
+| [`LoggerService`](#loggerservice)                         | `services/logger/logger.service.ts`              | root     | да           | — (опц. `"PRODUCTION"` — см. известный баг)                                   |
+| [`ValidationService`](#validationservice)                 | `services/validation/validation.service.ts`      | root     | да           | `dayjs` (`customParseFormat`, `relativeTime`)                                 |
+| [`YtExtractService`](#ytextractservice)                   | `services/yt-extract.service.ts`                 | root     | да           | —                                                                             |
+| [`FileService`](#fileservice)                             | `services/file/file.service.ts`                  | root     | **нет**      | `ApiService`                                                                  |
+| [`WebsocketService`](#websocketservice)                   | `services/websockets/websocket.service.ts`       | root     | **нет**      | `TokenService`, `@environment`                                                |
+| [`ErrorService`](#errorservice)                           | `services/error/error.service.ts`                | root     | **нет**      | `Router`, `LoggerService`                                                     |
+| [`GlobalErrorHandlerService`](#globalerrorhandlerservice) | `services/error/global-error-handler.service.ts` | manual   | **нет**      | `LoggerService` (+ `ErrorService`/`NgZone` — заинжекчены, но не используются) |
 
 ---
 
@@ -75,20 +71,6 @@ constructor(http: HttpClient, @Inject(API_URL) apiUrl: string)
 this.apiService.get<Project[]>("/projects/", new HttpParams().set("page", "1"));
 this.apiService.post<Project>("/projects/", { name: "X" });
 ```
-
----
-
-## SkillsApiService
-
-Подкласс `ApiService`, но `apiUrl` инжектится из `SKILLS_API_URL`, а не `API_URL`. Используется для запросов к отдельному Skills-бэкенду (`https://skills.dev.procollab.ru` / `https://api.skills.procollab.ru`).
-
-```ts
-constructor(http: HttpClient, @Inject(SKILLS_API_URL) apiUrl: string) {
-  super(http, apiUrl);
-}
-```
-
-Методы те же, что у `ApiService`. Используется в `SubscriptionPlansService` и в нескольких adapters внутри `social_platform`.
 
 ---
 
@@ -149,16 +131,6 @@ error(message: string, error?: unknown): void
 
 `debug` печатается только если `isDev = true`.
 
-**⚠️ Известный баг — DI токен**
-
-```ts
-constructor(@Optional() @Inject("PRODUCTION") private production?: boolean)
-```
-
-`@Inject("PRODUCTION")` использует **строковый** токен `"PRODUCTION"`. А во всём остальном коде провайдится `PRODUCTION` `InjectionToken<boolean>` (`projects/core/src/lib/providers/production.provide.ts:28`, регистрация в `app.config.ts:81`). Это разные DI-ключи, поэтому `production` всегда `undefined`. Срабатывает fallback `isProduction()` через `process.env["NODE_ENV"]`, которого в браузере нет → `isDev` всегда `true` → DEBUG-логи льются и в prod.
-
-Фикс: заменить `@Inject("PRODUCTION")` на импорт `import { PRODUCTION } from "../../providers/production.provide"` и `@Inject(PRODUCTION)`.
-
 ---
 
 ## ValidationService
@@ -178,19 +150,6 @@ constructor(@Optional() @Inject("PRODUCTION") private production?: boolean)
 `dayjs` расширяется плагинами `customParseFormat` и `relativeTime` при импорте сервиса.
 
 **Известное замечание**: импорт `PasswordValidationErrors` идёт из `projects/social_platform/src/app/domain/auth/...` — то же нарушение направления зависимостей, что и в `TokenService`.
-
----
-
-## SubscriptionPlansService
-
-Тонкая обёртка над `SkillsApiService` для тарифов и оплаты подписок.
-
-| Метод                                                | URL                                                                                            | Что                                                                                                |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `getSubscriptions(): Observable<SubscriptionPlan[]>` | `GET /auth/subscription/`                                                                      | Список тарифов.                                                                                    |
-| `buySubscription(planId): Observable<PaymentStatus>` | `POST /subscription/buy/` body `{ subscriptionId, redirectUrl: window.location.origin + "/" }` | Создаёт платёжную сессию; в ответе `confirmation.confirmationUrl` — туда редиректить пользователя. |
-
-Модели `SubscriptionPlan` и `PaymentStatus` лежат в `core/lib/models/`.
 
 ---
 
@@ -285,13 +244,3 @@ handleError(err: any): void {
 - В будущем сюда можно добавить отправку в Sentry; сейчас Sentry поднимается отдельно через DSN из `environment.sentryDns`.
 
 ---
-
-## Архитектурный долг
-
-| Что                                                                                          | Где                                                     | Как фиксить                                                                                                                                                          |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `core` зависит от `social_platform` (импорты `domain/auth/*`, `@environment`)                | `TokenService`, `WebsocketService`, `ValidationService` | Поднять разделяемые типы в `core/lib/models/`; параметризовать `WebsocketService` через DI-токены `WEBSOCKET_URL` и `WEBSOCKET_RECONNECT_*` по аналогии с `API_URL`. |
-| `LoggerService` инжектит строковый токен `"PRODUCTION"` вместо `PRODUCTION` `InjectionToken` | `LoggerService` ctor                                    | Заменить на `@Inject(PRODUCTION)` импортированный из `providers/production.provide`.                                                                                 |
-| `services/index.ts` не реэкспортирует `error/`, `file/`, `websockets/`                       | `services/index.ts`                                     | Добавить три `export * from`.                                                                                                                                        |
-| Опечатка `throwNotFount`                                                                     | `ErrorService`                                          | Переименовать с deprecation-алиасом, потом убрать алиас.                                                                                                             |
-| Мёртвые DI в `GlobalErrorHandlerService` (`ErrorService`, `NgZone`)                          | конструктор                                             | Удалить.                                                                                                                                                             |

@@ -98,8 +98,6 @@ export class IndustryRepository implements IndustryRepositoryPort {
 - Каждый ответ пропускается через `plainToInstance(Industry, ...)`.
 - `getOne()` — синхронный поиск по сигналу.
 
-> **Архитектурный долг**: `private readonly entityCache = new EntityCache<Industry>();` создан, но **нигде не используется**. Атавизм. Удалить или применить (например, кешировать каждую `Industry` отдельно по id).
-
 ---
 
 ## HTTP endpoints (`infrastructure/adapters/industry/industry-http.adapter.ts`)
@@ -126,13 +124,3 @@ export class IndustryRepository implements IndustryRepositoryPort {
 | `api/project/facades/edit/projects-edit-info.service`          | Селект отрасли в форме редактирования проекта.                                              |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                              | Где                                             | Заметка                                                                                                                                                                           |
-| -------------------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Нет use-case'ов                                                                  | `api/industry/`                                 | Привести к единому стилю с `skills`.                                                                                                                                              |
-| `IndustryInfoService` — pure passthrough                                         | `api/industry/facades/industry-info.service.ts` | Возможно, удалить и инжектить порт напрямую.                                                                                                                                      |
-| `EntityCache<Industry>` создан, но не используется                               | `IndustryRepository`                            | Удалить или применить.                                                                                                                                                            |
-| `getOne(id)` синхронный — упадёт `undefined` если `getAll()` ещё не дёрнули      | `IndustryRepository.getOne`                     | Текущий контракт допускает `undefined`, потребители должны это обрабатывать. Для большей строгости — переделать на `Observable<Industry \| undefined>` после `take(1)` от signal. |
-| Нет инвалидации — отрасли подгружаются один раз и живут до перезагрузки страницы | `IndustryRepository`                            | Нормально, отрасли действительно меняются редко.                                                                                                                                  |

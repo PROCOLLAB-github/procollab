@@ -14,31 +14,23 @@ import camelcaseKeys from "camelcase-keys";
 import { LoggerService } from "../services/logger/logger.service";
 
 /**
- * HTTP интерцептор для автоматического преобразования стиля именования ключей объектов
- *
- * Назначение:
- * - Обеспечивает совместимость между frontend (camelCase) и backend (snake_case)
- * - Автоматически преобразует все ключи объектов в запросах и ответах
- * - Работает рекурсивно с вложенными объектами (deep: true)
+ * HTTP-интерцептор для преобразования стиля именования ключей
+ * между frontend и backend слоями.
  *
  * Преобразования:
- * 1. Исходящие запросы: camelCase → snake_case
- *    Пример: { firstName: "John" } → { first_name: "John" }
+ * - исходящие запросы: camelCase → snake_case;
+ * - входящие ответы: snake_case → camelCase.
  *
- * 2. Входящие ответы: snake_case → camelCase
- *    Пример: { first_name: "John" } → { firstName: "John" }
- *
- * Применяется ко всем HTTP запросам автоматически
+ * Преобразование выполняется рекурсивно
+ * для вложенных объектов и массивов.
  */
 @Injectable()
 export class CamelcaseInterceptor implements HttpInterceptor {
   constructor(private readonly loggerService: LoggerService) {}
 
   /**
-   * Основной метод интерцептора
-   * @param request - Исходящий HTTP запрос (может содержать тело с camelCase ключами)
-   * @param next - Следующий обработчик в цепочке интерцепторов
-   * @returns Observable с HTTP событием (ответ будет содержать camelCase ключи)
+   * Преобразует тело запроса перед отправкой
+   * и тело ответа после получения.
    */
   intercept(
     request: HttpRequest<Record<string, any>>,
@@ -46,19 +38,21 @@ export class CamelcaseInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     let req: HttpRequest<Record<string, any>>;
 
-    // Обрабатываем тело запроса если оно существует
+    /**
+     * FormData исключается из преобразования,
+     * так как содержит бинарные данные и собственную структуру ключей.
+     */
     if (request.body && !(request.body instanceof FormData)) {
-      // Клонируем запрос с преобразованным телом (camelCase → snake_case)
       req = request.clone({
         body: snakecaseKeys(request.body, {
-          deep: true, // Рекурсивное преобразование вложенных объектов
+          deep: true,
         }),
       });
     } else {
       req = request.clone();
     }
 
-    // Выполняем запрос и обрабатываем ответ
+    // Blob-ответы пропускаются без преобразования.
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
@@ -66,15 +60,15 @@ export class CamelcaseInterceptor implements HttpInterceptor {
             return event;
           }
 
+          // Преобразование применяется только к объектным структурам.
           if (typeof event.body !== "object" || event.body === null) {
             return event;
           }
 
-          // Клонируем ответ с преобразованным телом (snake_case → camelCase)
           try {
             return event.clone({
               body: camelcaseKeys(event.body, {
-                deep: true, // Рекурсивное преобразование вложенных объектов
+                deep: true,
               }),
             });
           } catch (error) {

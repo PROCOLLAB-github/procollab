@@ -43,8 +43,6 @@ ui  ─┬──▶ api ──▶ domain ◀── infrastructure
 - **`infrastructure/repository`** реализуют интерфейс порта (`implements XRepositoryPort`), внутри HTTP через `ApiService` + опционально `EntityCache<T>`.
 - **`ui`** импортирует фасады/UI-info из `api`, типы из `domain`, примитивы из `@uilib`/`@ui/primitives`. Никогда не лезет в `infrastructure` напрямую.
 
-> Нарушения этой схемы — архитектурный запах. Пример: `core/lib/services/tokens/token.service.ts` и `validation.service.ts` напрямую импортируют из `social_platform/domain/auth/...` — реверсная зависимость, см. долг в [`docs/core/services.md`](../core/services.md#архитектурный-долг).
-
 ---
 
 ## Слой `domain/`
@@ -288,8 +286,6 @@ utils/
   yearRangeValidators.ts
 ```
 
-> Папка не имеет общего `index.ts` — импорт каждого хелпера через `@utils/<name>`.
-
 ---
 
 ## Cross-cutting блоки
@@ -378,8 +374,6 @@ getCourseDetail(courseId: number): Observable<CourseDetail> {
 
 Регистрируется в `app.config.ts` как `{ provide: ErrorHandler, useClass: GlobalErrorHandlerService }`. Перехватывает все необработанные ошибки и Promise rejections, логирует через `LoggerService.error("[GlobalError] ...")`.
 
-> В будущем сюда можно добавить отправку в Sentry — DSN уже подключен через `environment.sentryDns`, но Sentry SDK на текущей версии не интегрирован.
-
 ---
 
 ## DI и регистрация в `app.config.ts`
@@ -398,7 +392,6 @@ providers: [
 
   // Значения для DI-токенов из @corelib
   { provide: API_URL, useValue: environment.apiUrl },
-  { provide: SKILLS_API_URL, useValue: environment.skillsApiUrl },
   { provide: PRODUCTION, useValue: environment.production },
 
   // Глобальный обработчик ошибок
@@ -435,8 +428,6 @@ HTTP-интерсепторы в Angular работают по принципу 
 - `Logging` стартует таймер последним перед уходом в HTTP, и логирует первым на ответе — таймер `started` максимально близок к реальному запросу.
 - На ответе `Bearer` обрабатывает 401 **до** того, как `Camelcase` начнёт парсить тело. Это правильно: при 401 тело — `{detail: ...}`, его незачем парсить, нужно идти в refresh-флоу.
 
-> В [`docs/core/interceptors-providers.md`](../core/interceptors-providers.md) сказано "BearerToken должен идти раньше Camelcase" — это неточность. Камелкейс-преобразование тела не зависит от bearer-токена; реальный порядок другой и работает корректно. Документ будет поправлен в JSDoc-фазе.
-
 ---
 
 ## Конвенции импортов
@@ -454,8 +445,6 @@ HTTP-интерсепторы в Angular работают по принципу 
 | Sub-проект `ui`                     | layout-компоненты, primitives                    | `@uilib`                                                                        |
 | Константы из `core/consts`          | списки, navigation, etc.                         | `@core/consts/...`                                                              |
 | `environment`                       | базовые URL, флаги                               | `@environment`                                                                  |
-
-> **Не использовать** глубокие относительные импорты через границу подпроекта (`../../../../core/src/...`). Они обходят `public-api.ts` библиотеки и крепят файлы напрямую к её внутренней структуре. Сейчас в репозитории встречаются (например, `KanbanBoardGuard` импортируется глубоким путём, потому что не попал в `core/public-api.ts`) — архитектурный долг.
 
 ---
 

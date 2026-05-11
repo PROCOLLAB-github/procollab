@@ -27,10 +27,6 @@ export class New {
 }
 ```
 
-> Имя класса `New` — почти зарезервированное слово в JavaScript (`new`-оператор). В коде это работает, но при копировании в шаблоны может конфузить. Используется в feed-articles (см. [`docs/modules/feed.md`](feed.md)).
-
-> Имя файла во множественном числе (`article`), а класс — singular (`New`). Это **разные** концепции: `New` — отдельная статья, `Article` файл — про категорию статей. Рекомендуется переименовать `article.model.ts` → `news-article.model.ts`, класс `New` → `NewsArticle`.
-
 ---
 
 ## Shared facade — `NewsInfoService`
@@ -140,14 +136,3 @@ Outputs:
 | `widgets/news-card`, `widgets/news-form` | Сами виджеты используют `NewsInfoService` через входы / выходы.                                                       |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                                                                           | Где                                                                  | Заметка                                                                                                                           |
-| --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Тип `FeedNews` живёт в `domain/project/project-news.model.ts`, а не в `domain/news/`                                                          | `domain/project/...`                                                 | Должен быть в общем месте, раз потребляется тремя модулями (project, profile, program) и feed. Перенос ломающий — много импортов. |
-| `New` (singular) класс в `domain/news/article.model.ts` (plural)                                                                              | `domain/news/article.model.ts`                                       | Переименовать в `NewsArticle` для ясности.                                                                                        |
-| Три репозитория с одинаковым контрактом (`fetchNews / addNews / readNews / toggleLike / delete / editNews`) — для project / profile / program | `domain/{project,profile,program}/ports/...-news.repository.port.ts` | Кандидат для генерализации в `domain/news/ports/` с параметром "тип владельца". Сейчас тройная копипаста.                         |
-| Универсальный `NewsInfoService` хранит signal, но потребители сами должны звать `apply*` методы                                               | `api/news/news-info.service.ts`                                      | OK для текущего флоу, но добавляет хрупкости — легко забыть `applyLikeNews()` после успеха `toggleLike()`.                        |
-| `applyLikeNews` оптимистично мутирует — нет автоматического отката при ошибке                                                                 | `news-info.service.ts`                                               | Документировать или переделать на «после ответа сервера».                                                                         |
-| `static default()` на `FeedNews` отдаёт фейковый URL `api.selcdn.ru/...` — может попасть в production                                         | `project-news.model.ts:default`                                      | Используется в тестах; не критично.                                                                                               |

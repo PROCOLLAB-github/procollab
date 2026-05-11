@@ -12,8 +12,6 @@
 | `camelcase.interceptor.ts`    | `CamelcaseInterceptor`   | camelCase → snake_case на запросе, snake_case → camelCase на ответе.                        |
 | `logging.interceptor.ts`      | `LoggingInterceptor`     | Логирует метод, URL, статус и elapsed-время каждого запроса через `LoggerService`.          |
 
-> Порядок регистрации в `app.config.ts` важен: `BearerTokenInterceptor` должен идти **раньше** `CamelcaseInterceptor`, иначе snake_case-преобразование запроса попадёт в логи без токена. `LoggingInterceptor` обычно ставится в самый конец, чтобы видеть финальный URL и статус.
-
 ---
 
 ### BearerTokenInterceptor
@@ -86,15 +84,13 @@ DEBUG логи реально будут видны только когда `Log
 
 ```ts
 { provide: API_URL, useValue: environment.apiUrl },
-{ provide: SKILLS_API_URL, useValue: environment.skillsApiUrl },
 { provide: PRODUCTION, useValue: environment.production },
 ```
 
-| Токен            | Тип                       | Где используется                                                                     |
-| ---------------- | ------------------------- | ------------------------------------------------------------------------------------ |
-| `API_URL`        | `InjectionToken<string>`  | `ApiService` ctor                                                                    |
-| `SKILLS_API_URL` | `InjectionToken<string>`  | `SkillsApiService` ctor                                                              |
-| `PRODUCTION`     | `InjectionToken<boolean>` | `TokenService` ctor (выбор cookie-опций), задумывался для `LoggerService` (см. баг). |
+| Токен        | Тип                       | Где используется                                                                     |
+| ------------ | ------------------------- | ------------------------------------------------------------------------------------ |
+| `API_URL`    | `InjectionToken<string>`  | `ApiService`                                                                         |
+| `PRODUCTION` | `InjectionToken<boolean>` | `TokenService` ctor (выбор cookie-опций), задумывался для `LoggerService` (см. баг). |
 
 **Для библиотеки переиспользуемой между приложениями ещё нужны** (см. долг в `docs/core/services.md`):
 

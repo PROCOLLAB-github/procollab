@@ -123,8 +123,6 @@ DI-биндинги (`infrastructure/di/program/`):
 - `program.providers.ts` — `ProgramRepositoryPort` ↔ `ProgramRepository`.
 - `program-news.providers.ts` — `ProgramNewsRepositoryPort` ↔ `ProgramNewsRepository`.
 
-> Опечатка `submitCompettetiveProject` сохраняется (правильно — `Competitive`).
-
 ---
 
 ## Use-cases (22 шт., `api/program/use-cases/`)
@@ -281,16 +279,3 @@ DI-биндинги (`infrastructure/di/program/`):
 | `domain/auth/user.model.ts`                              | `User.programs: Program[]` — программы пользователя.                                                                         |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                             | Где                                     | Заметка                                                                       |
-| ------------------------------------------------------------------------------- | --------------------------------------- | ----------------------------------------------------------------------------- |
-| Опечатка `submitCompettetiveProject`                                            | port + repo + adapter                   | Не исправлять — много вызывающих мест.                                        |
-| `applyProjectToProgram(id, body): any` без типизации `body` и `Observable<any>` | port + repo + adapter                   | Описать тип `ApplyToProgramDTO` и реальный response.                          |
-| `value_text: string \| boolean` под именем `value_text`                         | `ProjectNewAdditionalProgramFields`     | Переименовать в `value` или сделать discriminated union.                      |
-| `field_id` / `value_text` в snake_case (атавизм бэка)                           | `ProjectNewAdditionalProgramFields`     | Привести к camelCase, оставив маппинг в адаптере.                             |
-| `getProgramProjectAdditionalFields` URL не указан в порту явно                  | adapter                                 | Документировать.                                                              |
-| `ProgramListComponent` — три режима через `route.data.listType` без `@Input`    | pages/program/detail/list               | Сделать `@Input() listType` для тестируемости.                                |
-| Программные новости дублируют структуру profile-news / project-news             | `ProgramNewsRepositoryPort` + use-cases | Можно унифицировать в `domain/news/` (см. [`docs/modules/news.md`](news.md)). |
-| `Program.tag` — строка, `ProgramTag` — отдельный тип с `id+name+tag`            | `program.model.ts`                      | Несогласованно — где-то string, где-то ссылка на `ProgramTag`.                |

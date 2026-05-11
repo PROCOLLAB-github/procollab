@@ -1,6 +1,7 @@
 /** @format */
 
 import { Inject, Injectable, Optional } from "@angular/core";
+import { PRODUCTION } from "../../providers/production.provide";
 
 /**
  * Уровни логирования
@@ -27,7 +28,7 @@ export class LoggerService {
 
   constructor(
     @Optional()
-    @Inject("PRODUCTION")
+    @Inject(PRODUCTION)
     private production?: boolean
   ) {
     // Если PRODUCTION inject предоставлен, используем его, иначе проверяем окружение

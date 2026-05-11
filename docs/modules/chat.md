@@ -201,8 +201,6 @@ DI-биндинг (`infrastructure/di/chat.providers.ts`):
   ""                  → ChatDirectComponent (resolve: ChatDirectResolver)
 ```
 
-> Project chats не имеют отдельного роута — открываются через `pages/projects/detail/chat` (см. [`docs/modules/project.md`](project.md)).
-
 ---
 
 ## Pages (`ui/pages/chat/`)
@@ -240,17 +238,3 @@ DI-биндинг (`infrastructure/di/chat.providers.ts`):
 | `app.component.ts`                                       | На старте connects WS, инициирует `CheckUnreadsUseCase` для бейджа.          |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                                                                | Где                                                            | Заметка                                                                               |
-| ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `ChatFile.extension` (TODO: switch to mimetype)                                                                                    | `domain/chat/chat-message.model.ts:21`                         | Зависит от бэка — мигрируется.                                                        |
-| `ChatMessage` self-referential `replyTo: ChatMessage \| null` без депфа-ограничения                                                | `chat-message.model.ts`                                        | На фронте может развернуться в большое дерево, если на бэке нет ограничения. Пока ОК. |
-| Legacy `ChatDirectService` / `ChatProjectService` рядом с use-case'ами                                                             | `api/chat/chat-direct/...`, `api/chat/chat-projects/...`       | Постепенно мигрировать в use-case'ы.                                                  |
-| Нет use-case для `loadProjectFiles` отдельно от REST repository — вызывается напрямую                                              | `LoadProjectFilesUseCase` всё-таки есть в списке (см. таблицу) | OK.                                                                                   |
-| WebSocket reconnect не информирует пользователя о потере соединения                                                                | `WebsocketService` + `ChatRealtimeRepository`                  | Добавить toast при `onerror` если `retry` исчерпан.                                   |
-| `ChatStateService` хранит online-статусы в `BehaviorSubject<Record<number, boolean>>`, который не очищается при logout             | `ChatStateService`                                             | При logout сбрасывать кеш.                                                            |
-| Фронт-параметры `chatType: "direct" \| "project"` дублируются на каждом DTO                                                        | `chat.model.ts`                                                | Можно завернуть в `BaseChatDto<T>` базовый класс.                                     |
-| `?project=<id>` в `loadMessages` URL — но `loadMessages` параметр называется `projectId`                                           | adapter                                                        | Переименовать в `chatId` (более общее). На бэке возможно тоже нужно.                  |
-| ChatRealtimePort `connect()` возвращает `Observable<void>`, но не понятно когда событие emit'ится — сразу или после ответа сервера | port + adapter                                                 | Документировать в JSDoc.                                                              |

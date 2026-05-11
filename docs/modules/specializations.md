@@ -77,8 +77,6 @@ export class SpecializationsInfoService {
 }
 ```
 
-> Это, по сути, alias для `SpecializationsRepositoryPort`. Существование такого facade оправдано только если позже добавится бизнес-логика (например, batch-кеширование, computed-сигналы выбранных специализаций).
-
 ---
 
 ## Repository (`infrastructure/repository/specializations/specializations.repository.ts`)
@@ -128,13 +126,3 @@ Outputs:
 | `api/searches/searches.service.ts`                                        | Cross-cutting search-сервис использует inline-поиск специализаций для members-фильтров.                                        |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                  | Где                                                              | Заметка                                                                                                                                         |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Нет use-case'ов                                                      | весь `api/specializations/`                                      | Параллельный `skills` имеет use-case'ы. Привести к единому стилю — выделить `GetSpecializationsNestedUseCase` / `SearchSpecializationsUseCase`. |
-| `SpecializationsInfoService` — pure passthrough                      | `api/specializations/facades/specializations-info.service.ts`    | Если бизнес-логики не появится — можно удалить и инжектить порт напрямую. Сейчас оставляем для consistency с другими модулями.                  |
-| Repository без `shareReplay` для nested-списка                       | `SpecializationsRepository.getSpecializationsNested`             | То же замечание, что и в [`skills`](skills.md): nested-список не меняется в сессии, повторные подписки бьют API.                                |
-| Endpoint без trailing slash                                          | `specializations-http.adapter.ts`                                | Безопасно на Django (APPEND_SLASH=True).                                                                                                        |
-| URL `/auth/users/specializations/...` — специализации лежат под auth | `specializations-http.adapter.ts:AUTH_USERS_SPECIALIZATIONS_URL` | Не баг, особенность бэка. На фронте эта связь нигде не выражена явно (специализации могли бы быть `/specializations/...`).                      |

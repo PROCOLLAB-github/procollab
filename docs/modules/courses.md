@@ -126,8 +126,6 @@ return this.coursesAdapter.postAnswerQuestion(...).pipe(
 | `getCourseLesson(lessonId)`                                     | GET  | `/skills/lessons/<lessonId>/`           | —                                 | `CourseLesson`       |
 | `postAnswerQuestion(taskId, answerText?, optionIds?, fileIds?)` | POST | `/skills/tasks/<taskId>/answer/`        | `{ text?, optionIds?, fileIds? }` | `TaskAnswerResponse` |
 
-> Весь модуль использует **основной** API (`API_URL`), не отдельный `SKILLS_API_URL`. Префикс `/skills/...` — историческое наследие.
-
 ---
 
 ## Routes (`ui/routes/courses/`)
@@ -160,8 +158,6 @@ return this.coursesAdapter.postAnswerQuestion(...).pipe(
   resolve: lessonDetailResolver  → CourseLesson
   /results               → TaskCompleteComponent
 ```
-
-> `runGuardsAndResolvers: "always"` нужно для `CoursesDetailResolver`, чтобы при переключении между уроками внутри одного курса данные обновлялись.
 
 ---
 
@@ -210,15 +206,3 @@ return this.coursesAdapter.postAnswerQuestion(...).pipe(
 | `CoursesRepository` (через `EventBus`)             | После `postAnswerQuestion()` эмитит `TaskAnswerSubmitted` и очищает `structureCache`, потому что прогресс курса изменился. |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                                                                          | Где                                                 | Заметка                                                                                                              |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| URL `/skills/courses` — наследие от удалённого skills sub-project                                                                            | `courses-http.adapter.ts`                           | Бэк не переименовали; на фронте можно завернуть в константу `COURSES_URL_PREFIX`.                                    |
-| `Task.answerType: string \| null` — нет union типа                                                                                           | `domain/courses/courses.model.ts`                   | Зафиксировать union: `"text" \| "text_and_files" \| "single_choice" \| "multiple_choice" \| "files" \| null`.        |
-| `analyticsStub: any` в `CourseDetail`                                                                                                        | `domain/courses/courses.model.ts`                   | Заглушка для будущей аналитики; пока не используется. Удалить или типизировать.                                      |
-| `selector: "app-detail"` в `CourseInfoComponent` совпадает с виджетом `<app-detail>` (DeatilComponent в widgets)                             | `pages/courses/detail/info/info.component.ts`       | Конфликт селекторов — Angular разрешает по моду подключения, но создаёт путаницу. Переименовать в `app-course-info`. |
-| `SeenModulesStoragePort` синхронный — миграция на async (например, IndexedDB) потребует изменения портов и адаптеров                         | `domain/courses/ports/seen-modules-storage.port.ts` | Документировано в комментарии порта.                                                                                 |
-| `CourseLesson.moduleOrder` — порядок модуля, но не урока. `lessonOrder` вычисляется только в `LessonUIInfoService` через cross-сервис lookup | `domain/courses/courses.model.ts`                   | Бэку добавить `lessonOrder` в `CourseLesson` ответ.                                                                  |
-| `lessonId` параметр в `submit-task-answer.use-case.ts` для эмиссии события приходит из `LessonInfoService` — не из use-case context          | use-case + facade                                   | Передавать `lessonId` через команду `SubmitTaskAnswerCommand`.                                                       |

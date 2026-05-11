@@ -33,7 +33,6 @@ import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.comp
  * Интеграция с сервисами:
  * - VacancyService - получение данных вакансии через резолвер
  * - ProjectService - загрузка информации о проекте
- * - SubscriptionPlansService - получение планов подписки
  * - AuthService - информация о текущем пользователе
  *
  * Жизненный цикл:

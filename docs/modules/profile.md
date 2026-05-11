@@ -148,8 +148,6 @@ Lazy-загружается из root-роутера через `office/profile/
 
 `ProfileMainResolver` использует `GetProfileNewsDetailUseCase`, при ошибке возвращает `new ProfileNews()` (пустую).
 
-> `/office/profile/:id/edit` лежит **не здесь** — он отдельным роутом в `ui/routes/profile/` через `profile-edit.routes.ts` или подключается в root office routes напрямую (см. `app.routes.ts`); в текущей версии edit-роут защищён `ProfileEditRequiredGuard` (см. [`docs/core/guards-models.md`](../core/guards-models.md#profileeditrequiredguard)).
-
 ---
 
 ## Pages (`ui/pages/profile/`)
@@ -206,16 +204,3 @@ Lazy-загружается из root-роутера через `office/profile/
 | `pages/onboarding`                                                      | использует `AuthRepositoryPort.updateProfile()` / `updateOnboardingStage()`.                           |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                                                                                                    | Где                                                                  | Заметка                                                                                                 |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Edit-флоу размазан между 5+ facade'ами и общим `ProfileFormService` без чёткого контракта между ними                                                                   | `api/profile/facades/edit/*`                                         | Архитектурный долг — централизовать на одном facade или явно разделить.                                 |
-| `ProfileEditAchievementsInfoService` использует legacy `ProfileService` (не на use-case'ах)                                                                            | `api/profile/facades/edit/profile-edit-achievements-info.service.ts` | Перенести в use-case'ы (`AddAchievementUseCase`, `EditAchievementUseCase`, `DeleteAchievementUseCase`). |
-| Edit flow не имеет своего `domain/profile/ports/profile.repository.port.ts` — мутации идут через `AuthRepositoryPort`                                                  | вся edit-цепочка                                                     | Решить — слить с auth (это всё пользователь) или разделить (profile = view-модель текущего юзера).      |
-| `phoneNumber` нормализация и `birthday` форматирование — на стороне фронта                                                                                             | `ProfileEditInfoService.onSubmit`                                    | dev убрал эти преобразования (см. `memory/project_dev_merge_todo.md`); портирование незавершено.        |
-| `ProfileNewsComponent` — единственная страница, использующая `ProfileMainResolver`; имя `ProfileMainResolver` сбивает с толку (это resolver новости, не main-страницы) | `pages/profile/detail/main/main.resolver.ts`                         | Переименовать в `ProfileNewsDetailResolver`.                                                            |
-| `directionItemBuilder` создаёт массив с двумя жёстко зашитыми элементами ("навыки", "достижения")                                                                      | `ProfileDetailUIInfoService.initializationDirections`                | Это OK сейчас, но если добавятся секции — текущая жёсткая структура мешает.                             |
-| `ProfileDetailUIInfoService` инжектит `ProjectsDetailUIInfoService` для `loggedUserId`                                                                                 | строка 8                                                             | Cross-module зависимость. Лучше вынести `loggedUserId` в общий `AuthInfoService`.                       |
-| `static default()` на `ProfileNews` отдаёт реалистичные тестовые данные с битым URL                                                                                    | `domain/profile/profile-news.model.ts`                               | Используется только в тестах/стори; не критично.                                                        |

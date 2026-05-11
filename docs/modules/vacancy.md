@@ -102,8 +102,6 @@ DI-биндинг (`infrastructure/di/vacancy.providers.ts`):
 { provide: VacancyRepositoryPort, useExisting: VacancyRepository }
 ```
 
-> `CreateVacancyDto` живёт в `api/project/dto/create-vacancy.model.ts` (странное место — DTO одного модуля используется в порту другого). Архитектурный долг — вынести в `domain/vacancy/dto/`.
-
 ---
 
 ## Use-cases (`api/vacancy/use-cases/`)
@@ -156,7 +154,7 @@ this.eventBus
   .subscribe(event => this.invalidate(event.payload.vacancyId));
 ```
 
-> `VacancyCreated` инвалидирует **по projectId**, `Updated`/`Delete` — **по vacancyId**. Это потенциально расходящиеся ключи в `EntityCache<Vacancy>` (cache по id вакансии). Возможный баг: при `VacancyCreated` инвалидируется неверный ключ. Надо смотреть как используется `entityCache` в `getOne`.
+> `VacancyCreated` инвалидирует **по projectId**, `Updated`/`Delete` — **по vacancyId**. Это потенциально расходящиеся ключи в `EntityCache<Vacancy>` (cache по id вакансии).
 
 ---
 
@@ -252,15 +250,3 @@ this.eventBus
 | `core/lib/services/...`                               | через `EventBus` слушает `VacancyCreated/Updated/Delete`/Send/Accept/Reject.                 |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                                                 | Где                                              | Заметка                                                                            |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| `VacancyDelete` (вместо `VacancyDeleted`)                                                                           | `domain/vacancy/events/vacancy-deleted.event.ts` | Не переименовывать — слушатели уже подписаны.                                      |
-| `VacancyCreated.payload = { projectId }` инвалидирует `EntityCache<Vacancy>` по `projectId`, а cache по `vacancyId` | `vacancy.repository.ts` constructor              | Возможный баг. Использовать вместо этого `entityCache.clear()` при VacancyCreated. |
-| `CreateVacancyDto` живёт в `api/project/dto/`, не в `domain/vacancy/dto/`                                           | `api/project/dto/create-vacancy.model.ts`        | Перенести в `@domain/vacancy/dto/`.                                                |
-| `salary: string` в `Vacancy` — нет валидации диапазона                                                              | `domain/vacancy/vacancy.model.ts`                | Перевести на `{ from?: number; to?: number }` или хотя бы строгий формат.          |
-| Endpoints без согласованного trailing slash                                                                         | `vacancy-http.adapter.ts`                        | На Django безопасно, на других серверах — потенциальный 301.                       |
-| `VacanciesListComponent` тип определяет по URL — нет явного `@Input()`                                              | `pages/vacancies/list/list.component.ts`         | Сделать `@Input() listType: "all" \| "my"`.                                        |
-| `Vacancy.specialization?: string` — но в коде встречаются объекты                                                   | `domain/vacancy/vacancy.model.ts`                | Указать тип точнее или нормализовать.                                              |

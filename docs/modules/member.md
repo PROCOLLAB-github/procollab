@@ -149,14 +149,3 @@ applyMentorsChunk(data): void;        // append для пагинации
 | `pages/onboarding/...`                             | Может дёргать `getMembers` для рекомендаций.                                    |
 
 ---
-
-## Известные проблемы
-
-| Что                                                                                | Где                                                | Заметка                                                                                                           |
-| ---------------------------------------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --- | ----------------------------------------------------- |
-| `MentorsUIInfoService` нигде не инжектится                                         | `api/member/facades/ui/mentors-ui-info.service.ts` | Мёртвый код. Удалить или подключить mentors-страницу.                                                             |
-| `getMentors()` без use-case'а                                                      | `api/member/use-cases/` отсутствует                | Привести к единому стилю через `GetMentorsUseCase`.                                                               |
-| `filterForm.keySkill / speciality` помечены `Validators.required`                  | `members-ui-info.service.ts`                       | Странно: фильтры **не должны** быть обязательными — пользователь может не выбрать ничего. Скорее ошибка.          |
-| `MentorsUIInfoService.applyMentorsChunk` accepts `data.results` may be `undefined` | mentors-ui-info                                    | Защита `(data.results                                                                                             |     | [])` есть, но это симптом — DTO должен гарантировать. |
-| `getMembers(otherParams)` принимает `Record<string, ...>` без типизации ключей     | port + repo + adapter                              | Типизировать через `interface MemberFilters { keySkill?, speciality?, ageFrom?, ageTo?, isMosPolytechStudent? }`. |
-| Нет отдельного `ui/routes/members/`                                                | роуты подключены через `office.routes.ts`          | Это OK — простой случай.                                                                                          |
