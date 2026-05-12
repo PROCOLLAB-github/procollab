@@ -1,8 +1,8 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
-import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
+import { LoaderComponent } from "../loader/loader.component";
 
 /**
  * Универсальный компонент кнопки с различными стилями, состояниями и встроенной подсказкой.

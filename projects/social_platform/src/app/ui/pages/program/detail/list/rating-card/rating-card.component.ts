@@ -16,7 +16,6 @@ import {
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
-import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import {
   debounceTime,
@@ -34,7 +33,7 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { HttpResponse } from "@angular/common/http";
 import { ProjectRate } from "@domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";

@@ -11,11 +11,11 @@ import {
   Output,
 } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
-import { IconComponent } from "@ui/primitives";
 import { UpperCasePipe } from "@angular/common";
 import { FileService } from "@core/lib/services/file/file.service";
-import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
+import { FormatedFileSizePipe } from "@corelib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент для отображения информации о файле.

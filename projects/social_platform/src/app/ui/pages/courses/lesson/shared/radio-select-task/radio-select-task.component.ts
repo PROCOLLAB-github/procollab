@@ -12,14 +12,13 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { TruncateHtmlPipe } from "@core/lib/pipes/truncate-html.pipe";
 import { Task } from "@domain/courses/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 import { animateContentHeight } from "@utils/animate-content-height";
 import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
 @Component({
   selector: "app-radio-select-task",

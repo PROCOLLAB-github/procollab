@@ -71,7 +71,7 @@ export class ProjectVacancyStepComponent implements OnInit {
 
   protected readonly experienceList = this.projectVacancyUIService.workExperienceList;
   protected readonly formatList = this.projectVacancyUIService.workFormatList;
-  protected readonly scheludeList = this.projectVacancyUIService.workScheludeList;
+  protected readonly scheludeList = this.projectVacancyUIService.workScheduledList;
   protected readonly rolesMembersList = this.projectVacancyUIService.rolesMembersList;
 
   protected readonly selectedRequiredExperienceId =

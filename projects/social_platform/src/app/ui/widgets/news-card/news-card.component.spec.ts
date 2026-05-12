@@ -10,7 +10,7 @@ import { ProjectNewsRepository as ProjectNewsService } from "@infrastructure/rep
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { DayjsPipe } from "projects/core";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 describe("NewsCardComponent", () => {
   let component: NewsCardComponent;

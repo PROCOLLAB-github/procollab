@@ -20,7 +20,7 @@ import { Project } from "@domain/project/project.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";

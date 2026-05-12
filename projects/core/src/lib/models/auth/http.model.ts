@@ -9,16 +9,10 @@
  *
  * Функциональность:
  * - LoginResponse: ответ сервера при входе (токены)
- * - RefreshResponse: ответ при обновлении токенов
  * - RegisterResponse: ответ сервера при регистрации (наследует LoginResponse)
  */
 
 export class LoginResponse {
-  access!: string;
-  refresh!: string;
-}
-
-export class RefreshResponse {
   access!: string;
   refresh!: string;
 }

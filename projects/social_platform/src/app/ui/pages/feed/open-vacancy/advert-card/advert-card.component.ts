@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
-import { New } from "@domain/news/article.model";
+import { NewsArticle } from "@domain/news/article.model";
 
 /**
  * Компонент карточки рекламного объявления
@@ -30,7 +30,7 @@ import { New } from "@domain/news/article.model";
 export class AdvertCardComponent implements OnInit {
   constructor() {}
 
-  @Input({ required: true }) advert!: New;
+  @Input({ required: true }) advert!: NewsArticle;
   @Input() layout: "vertical" | "horizontal" = "vertical";
 
   ngOnInit(): void {}

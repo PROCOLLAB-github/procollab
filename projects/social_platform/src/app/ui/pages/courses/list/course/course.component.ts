@@ -6,7 +6,7 @@ import { RouterModule } from "@angular/router";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { CourseCard } from "@domain/courses/courses.model";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@corelib";
 
 /**
  * Компонент отображения карточки траектории

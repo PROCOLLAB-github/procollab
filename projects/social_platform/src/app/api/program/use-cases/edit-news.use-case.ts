@@ -4,7 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { catchError, map, Observable, of } from "rxjs";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 @Injectable({ providedIn: "root" })
 export class EditNewsUseCase {

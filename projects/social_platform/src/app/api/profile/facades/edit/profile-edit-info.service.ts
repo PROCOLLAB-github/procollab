@@ -7,11 +7,12 @@ import { Achievement } from "@domain/auth/user.model";
 import dayjs from "dayjs";
 import { Skill } from "@domain/skills/skill";
 import { NavigationService } from "../../../paths/navigation.service";
-import { EditStep, ProjectStepService } from "../../../project/project-step.service";
+import { ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ActivatedRoute } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
+import { EditStep } from "@core/lib/models/edit-step";
 
 @Injectable()
 export class ProfileEditInfoService {

@@ -10,14 +10,13 @@ import {
   signal,
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { Invite } from "@domain/invite/invite.model";
 import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /**
  * Компонент карточки приглашения в команду или проект

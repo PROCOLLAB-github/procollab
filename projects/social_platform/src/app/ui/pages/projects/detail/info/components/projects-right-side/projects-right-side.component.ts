@@ -3,8 +3,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { IconComponent } from "@uilib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
+import { TruncatePipe, UserLinksPipe } from "@corelib";
 import { ExpandService } from "@api/expand/expand.service";
 import { Project } from "@domain/project/project.model";
 

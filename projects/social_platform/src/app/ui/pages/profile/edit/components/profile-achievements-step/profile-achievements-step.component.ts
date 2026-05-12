@@ -9,10 +9,9 @@ import { FileItemComponent } from "@ui/primitives/file-item/file-item.component"
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ControlErrorPipe } from "@corelib";
 import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/profile-edit-achievements-info.service";
 import { IconComponent } from "@uilib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 @Component({
   selector: "app-profile-achievements-step",

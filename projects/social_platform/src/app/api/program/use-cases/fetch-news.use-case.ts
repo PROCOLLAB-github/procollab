@@ -5,7 +5,7 @@ import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.re
 import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 @Injectable({ providedIn: "root" })
 export class FetchNewsUseCase {

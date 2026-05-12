@@ -2,7 +2,10 @@
 
 import { Observable } from "rxjs";
 import { User, UserRole } from "../user.model";
-import { LoginResponse, RegisterResponse } from "../http.model";
+import {
+  LoginResponse,
+  RegisterResponse,
+} from "../../../../../../core/src/lib/models/auth/http.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { Project } from "../../project/project.model";
 import { LoginCommand } from "../commands/login.command";

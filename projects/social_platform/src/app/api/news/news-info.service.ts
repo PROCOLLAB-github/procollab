@@ -1,7 +1,7 @@
 /** @format */
 
 import { computed, Injectable, signal } from "@angular/core";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 

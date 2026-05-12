@@ -24,7 +24,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { navProfileItems } from "@core/consts/navigation/nav-profile-items.const";
 import { Skill } from "@domain/skills/skill";
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
-import { EditStep, ProjectStepService } from "@api/project/project-step.service";
+import { ProjectStepService } from "@api/project/project-step.service";
 import { ProfileEditInfoService } from "@api/profile/facades/edit/profile-edit-info.service";
 import { OnboardingStageOneUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
 import { OnboardingStageOneInfoService } from "@api/onboarding/facades/stages/onboarding-stage-one-info.service";
@@ -44,6 +44,7 @@ import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
+import { EditStep } from "@core/lib/models/edit-step";
 
 /**
  * Компонент редактирования профиля пользователя

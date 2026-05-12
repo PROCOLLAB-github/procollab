@@ -1,6 +1,6 @@
 /** @format */
 
-export const KanbanIcons = [
+export const kanbanIcons = [
   { id: 0, name: "task", value: "task" },
   { id: 1, name: "key", value: "key" },
   { id: 2, name: "command", value: "command" },

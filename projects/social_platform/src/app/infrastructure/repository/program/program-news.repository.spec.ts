@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { ProgramNewsRepository } from "./program-news.repository";
 import { ProgramNewsHttpAdapter } from "../../adapters/program/program-news-http.adapter";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("ProgramNewsRepository", () => {

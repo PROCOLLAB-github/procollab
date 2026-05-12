@@ -21,6 +21,7 @@ import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
+import { InviteProjectSummary } from "@domain/project/invite-project-summary.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
 import { GetMyProjectsUseCase } from "../../use-cases/get-my-projects.use-case";
@@ -55,7 +56,7 @@ export class ProjectsListInfoService {
   private readonly currentSearchQuery = signal<string | undefined>(undefined);
   private previousReqQuery = signal<Record<string, string> | null>(null);
 
-  readonly projects$ = signal<AsyncState<Project[]>>(initial());
+  readonly projects$ = signal<AsyncState<Array<Project | InviteProjectSummary>>>(initial());
 
   readonly projects = computed(() => {
     const state = this.projects$();

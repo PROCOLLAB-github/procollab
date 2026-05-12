@@ -97,7 +97,7 @@ export class User {
   speciality!: string;
   userType!: number;
   city!: string;
-  phoneNumber!: number;
+  phoneNumber!: string;
   region!: string;
   education!: Education[];
   userLanguages!: UserLanguages[];

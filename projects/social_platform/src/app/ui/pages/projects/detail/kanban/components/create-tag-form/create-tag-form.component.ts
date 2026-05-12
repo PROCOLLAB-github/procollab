@@ -19,7 +19,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { TagDto } from "@api/kanban/dto/tag.model.dto";
+import { TagDto } from "@domain/kanban/dto/tag.model.dto";
 
 @Component({
   selector: "app-create-tag-form",

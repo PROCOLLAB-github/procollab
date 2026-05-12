@@ -11,7 +11,7 @@ import {
 } from "@angular/core";
 import { SwitchComponent } from "@ui/primitives/switch/switch.component";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
-import { ToSelectOptionsPipe } from "@core/lib/pipes/transformers/options-transform.pipe";
+import { ToSelectOptionsPipe } from "@corelib";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";

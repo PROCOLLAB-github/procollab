@@ -11,7 +11,7 @@ import {
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@corelib";
 
 /**
  * Компонент карточки вакансии

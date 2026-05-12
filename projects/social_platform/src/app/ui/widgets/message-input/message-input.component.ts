@@ -21,7 +21,7 @@ import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/primitives";
 import { UpperCasePipe } from "@angular/common";
-import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
+import { FormatedFileSizePipe } from "@corelib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**

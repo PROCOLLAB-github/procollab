@@ -12,10 +12,10 @@ import {
   Output,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IconComponent } from "@uilib";
 import { AutosizeModule } from "ngx-autosize";
 import { TooltipComponent } from "../tooltip/tooltip.component";
 import { NgStyle } from "@angular/common";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент многострочного поля ввода с автоматическим изменением размера.
@@ -47,8 +47,8 @@ import { NgStyle } from "@angular/common";
       multi: true,
     },
   ],
-  standalone: true,
   imports: [AutosizeModule, IconComponent, TooltipComponent, NgStyle],
+  standalone: true,
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   private readonly cdr = inject(ChangeDetectorRef);

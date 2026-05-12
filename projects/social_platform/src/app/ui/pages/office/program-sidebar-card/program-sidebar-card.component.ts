@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@corelib";
 import { Program } from "@domain/program/program.model";
 
 @Component({

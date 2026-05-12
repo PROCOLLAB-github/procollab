@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { AddNewsUseCase } from "./add-news.use-case";
 import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 describe("AddNewsUseCase", () => {
   let useCase: AddNewsUseCase;
