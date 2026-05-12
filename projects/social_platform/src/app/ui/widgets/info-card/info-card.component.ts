@@ -39,7 +39,6 @@ import { AppRoutes } from "@api/paths/app-routes";
     CommonModule,
     AvatarComponent,
     IconComponent,
-    AsyncPipe,
     ModalComponent,
     ButtonComponent,
     ClickOutsideModule,
@@ -59,6 +58,8 @@ export class InfoCardComponent {
   public readonly industryRepository = inject(IndustryInfoService);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
+
+  protected readonly AppRoutes = AppRoutes;
 
   @Input() info?: any;
   @Input() type: "invite" | "projects" | "members" | "rating" = "projects";

@@ -37,6 +37,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент редактирования проекта
@@ -90,6 +91,7 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
+  protected readonly AppRoutes = AppRoutes;
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
 
   private readonly projectStepService = inject(ProjectStepService);

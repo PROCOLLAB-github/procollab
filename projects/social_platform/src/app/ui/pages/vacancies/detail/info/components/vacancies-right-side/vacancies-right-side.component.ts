@@ -26,6 +26,7 @@ import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-deta
 import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-vacancies-right-side",
@@ -47,6 +48,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesRightSideComponent {
+  protected readonly AppRoutes = AppRoutes;
   @Input() vacancy!: WritableSignal<Vacancy | undefined>;
   @Output() sendResponse = new EventEmitter<void>();
 

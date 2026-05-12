@@ -8,7 +8,7 @@
       [size]="68"
       [url]="project.imageAddress"
       class="vacancy__right--project-image"
-      [routerLink]="'/office/projects/' + project.id"
+      [routerLink]="AppRoutes.projects.detail(project.id)"
     ></app-avatar>
     <p class="text-body-12 vacancy__right--title">{{ project.name | truncate: 20 }}</p>
 

@@ -6,7 +6,7 @@
     <a class="text-body-10" (click)="resetFilter()">сбросить</a>
   </div>
 
-  <a routerLink="/office/vacancies/my">
+  <a [routerLink]="AppRoutes.office.vacanciesMy()">
     <app-button size="medium" customTypographyClass="text-body-12">мои отклики</app-button>
   </a>
 

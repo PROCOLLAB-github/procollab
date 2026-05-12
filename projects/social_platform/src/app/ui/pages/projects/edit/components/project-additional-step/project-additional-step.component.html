@@ -104,7 +104,7 @@
       } @else {
       <div class="project__additional--no-items">
         <p class="text-body-12">Пока вы не участвуете ни в одной программе</p>
-        <a routerLink="/office/program/all">
+        <a [routerLink]="AppRoutes.program.list()">
           <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
             <span>программы</span>
             <app-tooltip

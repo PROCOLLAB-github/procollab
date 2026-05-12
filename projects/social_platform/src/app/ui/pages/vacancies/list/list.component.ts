@@ -12,6 +12,7 @@ import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/pr
 import { ResponseCardComponent } from "./response-card/response-card.component";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-vacancies-list",
@@ -38,6 +39,8 @@ export class VacanciesListComponent {
   protected readonly vacancyList = this.vacancyUIInfoService.vacancyList;
   protected readonly responsesList = this.vacancyUIInfoService.responsesList;
   protected readonly isMyModal = this.vacancyUIInfoService.isMyModal;
+
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit() {
     this.vacancyInfoService.init();

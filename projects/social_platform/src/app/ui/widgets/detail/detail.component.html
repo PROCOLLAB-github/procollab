@@ -84,7 +84,7 @@
         <ng-template #programTpl>
           @if (userType() !== undefined) { @if ((isProjectsPage() || isProjectsRatingPage() ||
           isMembersPage()) && appWidth < 1000) {
-          <a [routerLink]="'/office/program/' + info().id">
+          <a [routerLink]="AppRoutes.program.detail(info().id)">
             <app-button
               appearance="outline"
               size="small"
@@ -156,7 +156,7 @@
               <i appIcon icon="plus" appSquare="10"></i>
             </app-button>
             } @if ((isUserManager() || isUserExpert()) && isUserMember()) {
-            <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
+            <a [routerLink]="AppRoutes.program.projectsRating(info().id)">
               <app-button
                 [appearance]="isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'"
                 [size]="appWidth > 1000 ? 'medium' : 'big'"
@@ -218,7 +218,7 @@
             <i appIcon icon="phone" appSquare="12"></i>
           </app-button>
           } @if (isUserManager() || (isUserExpert() && appWidth > 1000)) {
-          <a [routerLink]="'/office/program/' + info().id + '/projects'">
+          <a [routerLink]="AppRoutes.program.projects(info().id)">
             <app-button
               [appearance]="isProjectsPage() ? 'inline' : 'outline'"
               size="medium"
@@ -240,7 +240,7 @@
             </app-button>
           </a>
           } @if (isUserManager() || (isUserExpert() && appWidth > 1000)) {
-          <a [routerLink]="'/office/program/' + info().id + '/members'" class="info__members">
+          <a [routerLink]="AppRoutes.program.members(info().id)" class="info__members">
             <app-button
               [appearance]="isMembersPage() ? 'inline' : 'outline'"
               size="medium"
@@ -266,7 +266,7 @@
           <app-button
             (click)="
               info().courses?.length
-                ? router.navigate(['/office/courses/' + info().courses[0].id])
+                ? router.navigateByUrl(AppRoutes.courses.detail(info().courses[0].id))
                 : null
             "
             appearance="outline"
@@ -358,7 +358,7 @@
         <ng-template #projectTpl>
           @if (isInProject()) {
           <app-button
-            [routerLink]="'/office/projects/' + info().id + '/work-section'"
+            [routerLink]="AppRoutes.projects.workSection(info().id)"
             appearance="outline"
             size="medium"
             customTypographyClass="text-body-12"
@@ -384,7 +384,7 @@
           } @else {
           <app-button
             [appearance]="isProjectChatPage() ? 'inline' : 'outline'"
-            [routerLink]="'/office/projects/' + info().id + '/chat'"
+            [routerLink]="AppRoutes.projects.chat(info().id)"
             appearance="outline"
             size="medium"
             customTypographyClass="text-body-12"
@@ -396,7 +396,7 @@
           <div class="info__divider"></div>
 
           <app-button
-            [routerLink]="'/office/projects/' + info().id + '/team'"
+            [routerLink]="AppRoutes.projects.team(info().id)"
             [appearance]="isTeamPage() ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
@@ -409,8 +409,8 @@
             class="info__edit"
             [routerLink]="
               isEditDisable()
-                ? ['/office/projects', info().id]
-                : ['/office/projects', info().id, 'edit']
+                ? AppRoutes.projects.detail(info().id)
+                : AppRoutes.projects.edit(info().id)
             "
             [queryParams]="isEditDisable() ? {} : { editingStep: 'main' }"
           >
@@ -504,7 +504,7 @@
           </app-modal>
           } @else {
           <app-button
-            [routerLink]="'/office/projects/' + info().id + '/vacancies'"
+            [routerLink]="AppRoutes.projects.vacancies(info().id)"
             [appearance]="isVacanciesPage() ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
@@ -573,7 +573,7 @@
           } @if (+profile()!.id !== +info().id) {
           <a
             class="info__send-message"
-            [routerLink]="['/office/chats', profile()!.id + '_' + info().id]"
+            [routerLink]="AppRoutes.chats.detail(profile()!.id + '_' + info().id)"
           >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
               >написать</app-button
@@ -582,7 +582,7 @@
           } @else {
           <a
             class="profile__edit"
-            routerLink="/office/profile/edit"
+            [routerLink]="AppRoutes.profile.edit()"
             [queryParams]="{ editingStep: 'main' }"
           >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
@@ -803,7 +803,7 @@
                 Заполните все поля, чтобы иметь сильное резюме
               </p>
 
-              <a routerLink="/office/profile/edit" [queryParams]="{ editingStep: 'main' }">
+              <a [routerLink]="AppRoutes.profile.edit()" [queryParams]="{ editingStep: 'main' }">
                 <app-button size="big" customTypographyClass="text-body-12"
                   >продолжить заполнение</app-button
                 >

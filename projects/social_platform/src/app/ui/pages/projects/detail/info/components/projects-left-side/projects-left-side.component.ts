@@ -7,6 +7,7 @@ import { IconComponent } from "@ui/primitives";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { Project } from "@domain/project/project.model";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-projects-left-side",
@@ -20,4 +21,5 @@ export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
   protected readonly industryRepository = inject(IndustryInfoService);
+  protected readonly AppRoutes = AppRoutes;
 }

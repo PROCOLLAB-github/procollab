@@ -49,7 +49,7 @@
   <div class="lists">
     <ul class="lists__list--line">
       @for (p of user()!.programs.slice(0, 3); track p.id) {
-      <li class="lists__item" [routerLink]="['/office/program', p.id]">
+      <li class="lists__item" [routerLink]="AppRoutes.program.detail(p.id)">
         <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
       </li>
       }
@@ -70,7 +70,7 @@
     <ng-template #programTemp let-program>
       <div>
         <div class="lists__info">
-          <a [routerLink]="['/office/program', program.id]" class="text-body-10 lists__title">
+          <a [routerLink]="AppRoutes.program.detail(program.id)" class="text-body-10 lists__title">
             <img
               alt="program logo"
               [src]="program.logo"

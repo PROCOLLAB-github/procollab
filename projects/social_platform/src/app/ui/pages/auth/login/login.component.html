@@ -39,7 +39,7 @@
           <fieldset class="auth__field">
             <div class="login__password">
               <label class="field-label" for="password">пароль</label>
-              <a routerLink="/auth/reset_password/send_email" class="login__forget">
+              <a [routerLink]="AppRoutes.auth.resetPasswordEmail()" class="login__forget">
                 забыли пароль?
               </a>
             </div>
@@ -98,7 +98,7 @@
           <div class="login__additional">
             <p class="login__reg text-body-12">
               нет аккаунта?
-              <a routerLink="/auth/register">зарегистрируйтесь</a>
+              <a [routerLink]="AppRoutes.auth.register()">зарегистрируйтесь</a>
             </p>
 
             <hr />

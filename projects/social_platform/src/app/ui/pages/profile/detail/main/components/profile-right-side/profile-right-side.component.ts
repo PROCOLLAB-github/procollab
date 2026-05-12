@@ -10,6 +10,7 @@ import { User } from "@domain/auth/user.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { RouterModule } from "@angular/router";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-profile-right-side",
@@ -37,6 +38,8 @@ export class ProfileRightSideComponent {
   protected readonly readAllEducation = this.expandService.readAllEducation;
   protected readonly readAllWorkExperience = this.expandService.readAllWorkExperience;
   protected readonly readAllProjects = this.expandService.readAllProjects;
+
+  protected readonly AppRoutes = AppRoutes;
 
   protected readonly isShowModal = this.profileDetailUIInfoService.isShowModal;
 

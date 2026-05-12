@@ -301,7 +301,9 @@
       зарегистрироваться
     </app-button>
 
-    <p class="auth__toggle">если есть аккаунт? - <a routerLink="/auth/login">войдите</a></p>
+    <p class="auth__toggle">
+      если есть аккаунт? - <a [routerLink]="AppRoutes.auth.login()">войдите</a>
+    </p>
 
     <app-modal [open]="isUserCreationModalError()" (openChange)="dismissCreationError()">
       <div class="cancel">

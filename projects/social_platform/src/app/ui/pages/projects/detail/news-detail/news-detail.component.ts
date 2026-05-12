@@ -44,6 +44,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 })
 export class NewsDetailComponent implements OnInit {
   private readonly logger = inject(LoggerService);
+  protected readonly AppRoutes = AppRoutes;
 
   constructor(
     private readonly route: ActivatedRoute, // Сервис для работы с активным маршрутом

@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { SkillsGroup } from "@domain/skills/skills-group";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
+import { SearchesService } from "@api/searches/searches.service";
 
 /**
  * РЕЗОЛВЕР ВТОРОГО ЭТАПА ОНБОРДИНГА
@@ -35,7 +35,7 @@ import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
  * - Централизованная обработка ошибок загрузки данных
  */
 export const StageTwoResolver: ResolveFn<SkillsGroup[]> = () => {
-  const skillsService = inject(SkillsInfoService);
+  const searchesService = inject(SearchesService);
 
-  return skillsService.getSkillsNested();
+  return searchesService.getSkillsNested();
 };

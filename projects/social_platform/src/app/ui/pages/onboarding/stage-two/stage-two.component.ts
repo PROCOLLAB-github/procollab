@@ -15,7 +15,7 @@ import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboa
 import { OnboardingStageTwoUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";
 import { OnboardingStageTwoInfoService } from "@api/onboarding/facades/stages/onboarding-stage-two-info.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
+import { SearchesService } from "@api/searches/searches.service";
 
 /**
  * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
@@ -85,11 +85,11 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
-  private readonly skillsService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
 
   protected readonly stageForm = this.onboardingStageTwoUIInfoService.stageForm;
 
-  protected readonly nestedSkills$ = this.skillsService.getSkillsNested();
+  protected readonly nestedSkills$ = this.searchesService.getSkillsNested();
 
   protected readonly searchedSkills = this.onboardingStageTwoUIInfoService.searchedSkills;
 

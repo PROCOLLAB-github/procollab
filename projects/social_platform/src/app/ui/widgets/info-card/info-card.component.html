@@ -149,7 +149,7 @@
       } }
 
       <app-button
-        [routerLink]="'/office/projects/' + info?.id"
+        [routerLink]="AppRoutes.projects.detail(info?.id)"
         customTypographyClass="text-body-6"
         size="extra-small"
         class="card__info--text"
@@ -175,7 +175,7 @@
       </div>
       } } @else {
       <app-button
-        [routerLink]="'/office/projects/' + info?.id"
+        [routerLink]="AppRoutes.projects.detail(info?.id)"
         customTypographyClass="text-body-6"
         size="extra-small"
         class="card__info--text"
@@ -205,7 +205,7 @@
     </div>
     } @else {
     <app-button
-      [routerLink]="'/office/profile/' + info?.userId"
+      [routerLink]="AppRoutes.profile.detail(info?.userId)"
       customTypographyClass="text-body-6"
       size="extra-small"
       class="card__info--text"

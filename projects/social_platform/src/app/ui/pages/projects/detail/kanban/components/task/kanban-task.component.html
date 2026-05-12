@@ -10,7 +10,10 @@
     <div class="kanban__task-mid">
       <div class="kanban__task-people">
         @if (task.responsible; as responsible) {
-        <div class="kanban__task-responsible" [routerLink]="'/office/profile/' + responsible.id">
+        <div
+          class="kanban__task-responsible"
+          [routerLink]="AppRoutes.profile.detail(responsible.id)"
+        >
           <i appIcon icon="person" appSquare="6"></i>
           <app-avatar [size]="12" [url]="responsible.avatar"></app-avatar>
         </div>

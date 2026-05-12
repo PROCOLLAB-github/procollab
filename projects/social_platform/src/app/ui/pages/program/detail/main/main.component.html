@@ -55,7 +55,7 @@
           <app-news-card
             class="news__item"
             [attr.data-id]="n.id"
-            [resourceLink]="['/office/program', program()!.id]"
+            [resourceLink]="[AppRoutes.program.detail(program()!.id)]"
             [feedItem]="n"
             [isOwner]="program()!.isUserMember"
             (like)="onLike($event)"

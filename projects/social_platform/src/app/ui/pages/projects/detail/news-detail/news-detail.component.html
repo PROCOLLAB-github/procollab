@@ -5,7 +5,7 @@
   <app-news-card
     class="item"
     [feedItem]="item"
-    [resourceLink]="['/office/projects', item.id]"
+    [resourceLink]="[AppRoutes.projects.detail(item.id)]"
   ></app-news-card>
   }
 </app-modal>
