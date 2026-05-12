@@ -1,8 +1,8 @@
 /** @format */
 
 import { AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef } from "@angular/core";
-import { fromEvent, Subscription } from "rxjs";
 import { containerSm } from "@utils/responsive";
+import { fromEvent, Subscription } from "rxjs";
 
 /**
  * Директива для управления позиционированием кнопки сохранения в редакторе

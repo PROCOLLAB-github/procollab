@@ -4,7 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
 import { User, UserRole } from "@domain/auth/user.model";
 import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
-import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { plainToInstance } from "class-transformer";
 import { TokenService } from "@corelib";
 import { ApiPagination } from "@domain/other/api-pagination.model";

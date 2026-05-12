@@ -15,14 +15,15 @@ import { nanoid } from "nanoid";
 import { FileService } from "@core/lib/services/file/file.service";
 import { catchError, concatMap, map, of } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { IconComponent, ButtonComponent } from "@ui/primitives";
-import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
 import { ImageCroppedEvent, ImageCropperComponent } from "ngx-image-cropper";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { ModalComponent } from "../modal/modal.component";
-import { TooltipComponent } from "../tooltip/tooltip.component";
 import { LoggerService } from "@corelib";
+import { LoaderComponent } from "../loader/loader.component";
+import { ModalComponent } from "../modal/modal.component";
+import { ButtonComponent } from "../button/button.component";
+import { TooltipComponent } from "../tooltip/tooltip.component";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент для управления аватаром пользователя.

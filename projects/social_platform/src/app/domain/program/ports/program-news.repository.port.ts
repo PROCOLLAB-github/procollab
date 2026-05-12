@@ -2,7 +2,7 @@
 
 import { Observable } from "rxjs";
 import { ApiPagination } from "../../other/api-pagination.model";
-import { FeedNews } from "../../project/project-news.model";
+import { FeedNews } from "../../news/project-news.model";
 
 export abstract class ProgramNewsRepositoryPort {
   abstract fetchNews(

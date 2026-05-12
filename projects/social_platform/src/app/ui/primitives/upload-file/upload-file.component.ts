@@ -15,9 +15,9 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
-import { IconComponent } from "@ui/primitives";
 import { LoaderComponent } from "../loader/loader.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент для загрузки файлов с предварительным просмотром.

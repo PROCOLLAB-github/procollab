@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
 import { Observable } from "rxjs";
-import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { User } from "@domain/auth/user.model";
 import { ProjectDto } from "../project/dto/project.dto";
 import { LoginCommand } from "@domain/auth/commands/login.command";

@@ -23,7 +23,6 @@ import { Invite } from "@domain/invite/invite.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
-import { EditStep, ProjectStepService } from "../../project-step.service";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { SkillsRepositoryPort as SkillsService } from "@domain/skills/ports/skills.repository.port";
 import { ProjectFormService } from "./project-form.service";
@@ -52,6 +51,8 @@ import {
 } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
+import { ProjectStepService } from "@api/project/project-step.service";
+import { EditStep } from "@core/lib/models/edit-step";
 
 @Injectable()
 export class ProjectsEditInfoService {

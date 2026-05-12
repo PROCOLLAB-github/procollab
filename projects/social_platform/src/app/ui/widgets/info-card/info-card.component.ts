@@ -11,13 +11,12 @@ import {
 } from "@angular/core";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { AsyncPipe, CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { YearsFromBirthdayPipe } from "@corelib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { YearsFromBirthdayPipe, TruncatePipe } from "@corelib";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";

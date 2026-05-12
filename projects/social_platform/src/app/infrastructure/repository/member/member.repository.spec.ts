@@ -12,10 +12,7 @@ describe("MemberRepository", () => {
   let adapter: jasmine.SpyObj<MemberHttpAdapter>;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<MemberHttpAdapter>("MemberHttpAdapter", [
-      "getMembers",
-      "getMentors",
-    ]);
+    adapter = jasmine.createSpyObj<MemberHttpAdapter>("MemberHttpAdapter", ["getMembers"]);
     TestBed.configureTestingModule({
       providers: [MemberRepository, { provide: MemberHttpAdapter, useValue: adapter }],
     });
@@ -35,17 +32,6 @@ describe("MemberRepository", () => {
 
     repository.getMembers(0, 10, { q: "a" }).subscribe(res => {
       expect(adapter.getMembers).toHaveBeenCalledOnceWith(0, 10, { q: "a" });
-      expect(res.results[0]).toBeInstanceOf(User);
-      done();
-    });
-  });
-
-  it("getMentors делегирует в adapter и мапит results в User", done => {
-    setup();
-    adapter.getMentors.and.returnValue(of(page()));
-
-    repository.getMentors(0, 10).subscribe(res => {
-      expect(adapter.getMentors).toHaveBeenCalledOnceWith(0, 10);
       expect(res.results[0]).toBeInstanceOf(User);
       done();
     });

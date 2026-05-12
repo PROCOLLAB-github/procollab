@@ -5,7 +5,7 @@
  * @format
  */
 
-export class New {
+export class NewsArticle {
   /** Уникальный идентификатор новости */
   id!: number;
   /** URL обложки новости */

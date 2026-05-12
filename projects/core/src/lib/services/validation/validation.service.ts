@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { PasswordValidationErrors } from "projects/social_platform/src/app/domain/auth/password-errors.model";
+import { PasswordValidationErrors } from "@domain/auth/password-errors.model";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import * as relativeTime from "dayjs/plugin/relativeTime";

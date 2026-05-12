@@ -24,13 +24,4 @@ export class MemberRepository implements MemberRepositoryPort {
       }))
     );
   }
-
-  getMentors(skip: number, take: number): Observable<ApiPagination<User>> {
-    return this.memberAdapter.getMentors(skip, take).pipe(
-      map(result => ({
-        ...result,
-        results: plainToInstance(User, result.results),
-      }))
-    );
-  }
 }

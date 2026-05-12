@@ -20,9 +20,8 @@ import {
 } from "@ui/primitives";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { SwitchComponent } from "@ui/primitives/switch/switch.component";
-import { ControlErrorPipe } from "@corelib";
+import { ControlErrorPipe, ToSelectOptionsPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ToSelectOptionsPipe } from "@core/lib/pipes/transformers/options-transform.pipe";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";

@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { of, switchMap } from "rxjs";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { GetProjectNewsDetailUseCase } from "@api/project/use-cases/get-project-news-detail.use-case";
 
 /**

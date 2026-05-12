@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, Subject, takeUntil, tap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { ActivatedRoute } from "@angular/router";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { ExpandService } from "../../../expand/expand.service";

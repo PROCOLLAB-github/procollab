@@ -6,7 +6,7 @@ import { AuthRepository } from "./auth.repository";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
 import { TokenService } from "@corelib";
 import { User } from "@domain/auth/user.model";
-import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProjectDto } from "../../adapters/project/dto/project.dto";
 

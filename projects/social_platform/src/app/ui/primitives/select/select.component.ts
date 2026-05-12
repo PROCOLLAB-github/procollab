@@ -13,9 +13,9 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IconComponent } from "@ui/primitives";
 import { ClickOutsideModule } from "ng-click-outside";
 import { DropdownComponent } from "../dropdown/dropdown.component";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент выпадающего списка для выбора значения из предустановленных опций.

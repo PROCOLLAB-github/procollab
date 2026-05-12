@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent } from "@ui/primitives";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@corelib";
 import { Project } from "@domain/project/project.model";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 import { AppRoutes } from "@api/paths/app-routes";

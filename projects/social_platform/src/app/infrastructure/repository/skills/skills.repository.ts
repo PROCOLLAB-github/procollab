@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, shareReplay } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Skill } from "@domain/skills/skill";
 import { SkillsGroup } from "@domain/skills/skills-group";
@@ -13,7 +13,7 @@ export class SkillsRepository implements SkillsRepositoryPort {
   private readonly skillsAdapter = inject(SkillsHttpAdapter);
 
   getSkillsNested(): Observable<SkillsGroup[]> {
-    return this.skillsAdapter.getSkillsNested();
+    return this.skillsAdapter.getSkillsNested().pipe(shareReplay(1));
   }
 
   getSkillsInline(search: string, limit: number, offset: number): Observable<ApiPagination<Skill>> {

@@ -5,7 +5,7 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 @Injectable({ providedIn: "root" })
 export class ProgramNewsHttpAdapter {

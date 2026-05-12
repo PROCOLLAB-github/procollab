@@ -5,7 +5,7 @@ import { of, throwError } from "rxjs";
 import { FetchNewsUseCase } from "./fetch-news.use-case";
 import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 describe("FetchNewsUseCase", () => {
   let useCase: FetchNewsUseCase;

@@ -17,7 +17,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { IconComponent } from "@uilib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@corelib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
 

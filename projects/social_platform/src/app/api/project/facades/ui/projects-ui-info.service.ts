@@ -4,7 +4,7 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { Invite } from "@domain/invite/invite.model";
-import { Project } from "@domain/project/project.model";
+import { InviteProjectSummary } from "@domain/project/invite-project-summary.model";
 
 @Injectable()
 export class ProjectsUIInfoService {
@@ -12,7 +12,7 @@ export class ProjectsUIInfoService {
 
   readonly myInvites = computed(() => this.allInvites().slice(0, 1));
 
-  readonly allInvites = signal<Project[]>([]);
+  readonly allInvites = signal<InviteProjectSummary[]>([]);
 
   readonly searchForm = this.fb.group({
     search: [""],

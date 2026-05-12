@@ -5,7 +5,7 @@ import { Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
-import { CreateVacancyDto } from "../../dto/create-vacancy.model";
+import { CreateVacancyDto } from "../../../../domain/vacancy/dto/create-vacancy.model";
 import { ProjectFormService } from "./project-form.service";
 import { UpdateVacancyUseCase } from "../../../vacancy/use-cases/update-vacancy.use-case";
 import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-case";

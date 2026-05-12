@@ -1,5 +1,5 @@
 /** @format */
-import { inject, Injectable } from "@angular/core";
+import { Inject, inject, Injectable } from "@angular/core";
 import { filter, map, Observable, Observer, retry, Subject } from "rxjs";
 import { environment } from "@environment";
 import * as snakecaseKeys from "snakecase-keys";

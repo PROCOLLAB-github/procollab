@@ -2,13 +2,13 @@
 
 import { Observable } from "rxjs";
 
-export interface UnifiedOption {
-  id: string | number;
+export interface UnifiedOption<T = unknown> {
+  id: T;
   label: string;
-  value?: string | number | boolean;
+  value?: T;
 }
 
-export interface FilterFieldConfig {
+export interface FilterFieldConfig<TValue = unknown, TData = unknown> {
   /** Название поля в query параметрах */
   queryParam: string;
   /** Тип поля */
@@ -16,22 +16,22 @@ export interface FilterFieldConfig {
   /** Заголовок поля */
   title: string;
   /** Значение по умолчанию */
-  defaultValue?: any;
+  defaultValue?: TValue;
   /** Опции для select/radio */
-  options?: Array<{ id: any; label: string; value?: any }>;
+  options?: UnifiedOption<TValue>[];
   /** Источник данных (Observable) */
-  dataSource?: Observable<any[]>;
+  dataSource?: Observable<TData[]>;
   /** Поле для отображения из источника данных */
   displayField?: string;
   /** Поле значения из источника данных */
-  valueField?: string;
+  valueField?: keyof TData;
   /** Дополнительные параметры для конкретного типа */
-  config?: any;
+  config?: unknown;
 }
 
-export interface FilterConfig {
+export interface FilterConfig<TValue = unknown, TData = unknown> {
   /** Конфигурация полей фильтра */
-  fields: FilterFieldConfig[];
+  fields: FilterFieldConfig<TValue, TData>[];
   /** Параметры для сброса при clearFilters */
   clearParams?: string[];
   /** Заголовок фильтра */

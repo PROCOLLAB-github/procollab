@@ -1,16 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ControlErrorPipe } from "@corelib";
 import { IconComponent } from "@uilib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { SelectComponent, ButtonComponent, InputComponent } from "@ui/primitives";
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ProfileEditEducationInfoService } from "@api/profile/facades/edit/profile-edit-education-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 @Component({
   selector: "app-profile-education-step",

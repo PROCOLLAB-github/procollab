@@ -6,7 +6,7 @@ import { PostVacancyUseCase } from "./post-vacancy.use-case";
 import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
 import { EventBus } from "@domain/shared/event-bus";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
-import { CreateVacancyDto } from "../../project/dto/create-vacancy.model";
+import { CreateVacancyDto } from "../../../domain/vacancy/dto/create-vacancy.model";
 
 describe("PostVacancyUseCase", () => {
   let useCase: PostVacancyUseCase;

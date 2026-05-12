@@ -2,12 +2,12 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { RefreshResponse } from "projects/social_platform/src/app/domain/auth/http.model";
 import { plainToInstance } from "class-transformer";
-import { Tokens } from "projects/social_platform/src/app/domain/auth/tokens.model";
 import Cookies, { CookieAttributes } from "js-cookie";
 import { PRODUCTION } from "../../providers/production.provide";
 import { ApiService } from "../api/api.service";
+import { environment } from "@environment";
+import { RefreshResponse, Tokens } from "@core/public-api";
 
 /**
  * Сервис для управления JWT токенами аутентификации
@@ -32,9 +32,10 @@ import { ApiService } from "../api/api.service";
 })
 export class TokenService {
   private readonly TOKEN_API_URL = "/api/token";
+  private readonly enviroment = environment;
 
   private get isDevStage(): boolean {
-    return window.location.hostname === "dev.procollab.ru";
+    return window.location.hostname === this.enviroment.apiUrl;
   }
 
   private get accessTokenKey(): string {
