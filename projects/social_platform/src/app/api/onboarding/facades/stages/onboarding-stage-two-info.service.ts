@@ -6,12 +6,12 @@ import { concatMap, Subject, take, takeUntil } from "rxjs";
 import { ValidationService } from "@corelib";
 import { OnboardingService } from "../../onboarding.service";
 import { Skill } from "@domain/skills/skill";
-import { SkillsInfoService } from "../../../skills/facades/skills-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "./ui/onboarding-stage-two-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { SearchesService } from "@api/searches/searches.service";
 
 @Injectable()
 export class OnboardingStageTwoInfoService {
@@ -21,7 +21,7 @@ export class OnboardingStageTwoInfoService {
   private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);
   private readonly validationService = inject(ValidationService);
   private readonly router = inject(Router);
-  private readonly skillsInfoService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -84,11 +84,11 @@ export class OnboardingStageTwoInfoService {
   }
 
   onAddSkill(newSkill: Skill): void {
-    this.skillsInfoService.onAddSkill(newSkill, this.stageForm);
+    this.searchesService.onAddSkill(newSkill, this.stageForm);
   }
 
   onRemoveSkill(oddSkill: Skill): void {
-    this.skillsInfoService.onRemoveSkill(oddSkill, this.stageForm);
+    this.searchesService.onRemoveSkill(oddSkill, this.stageForm);
   }
 
   onOptionToggled(toggledSkill: Skill): void {
@@ -104,7 +104,7 @@ export class OnboardingStageTwoInfoService {
   }
 
   onSearchSkill(query: string): void {
-    this.skillsInfoService.onSearchSkill(query);
+    this.searchesService.onSearchSkill(query);
   }
 
   private completeRegistration(stage: number): void {

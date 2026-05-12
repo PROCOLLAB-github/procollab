@@ -20,6 +20,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { AdvertCardComponent } from "./advert-card/advert-card.component";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  *
@@ -61,6 +62,7 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 })
 export class OpenVacancyComponent implements AfterViewInit {
   @Input() feedItem!: Vacancy;
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    *

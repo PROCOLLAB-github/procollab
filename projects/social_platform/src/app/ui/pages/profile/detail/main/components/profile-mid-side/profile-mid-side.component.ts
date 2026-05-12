@@ -23,6 +23,7 @@ import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-de
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { User } from "@domain/auth/user.model";
 import { ProfileNews } from "@domain/profile/profile-news.model";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-profile-mid-side",
@@ -63,6 +64,8 @@ export class ProfileMidSideComponent {
   protected readonly readFullDescription = this.expandService.readFullDescription;
 
   private readonly destroyRef$ = inject(DestroyRef);
+
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    * Добавление новой новости в профиль

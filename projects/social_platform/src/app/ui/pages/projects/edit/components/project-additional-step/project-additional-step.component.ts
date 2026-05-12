@@ -28,6 +28,7 @@ import { IconComponent } from "@uilib";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-project-additional-step",
@@ -63,6 +64,8 @@ export class ProjectAdditionalStepComponent implements OnInit {
     // Инициализация уже должна быть выполнена в родительском компоненте
     this.cdRef.detectChanges();
   }
+
+  protected readonly AppRoutes = AppRoutes;
 
   // Геттеры для получения данных из сервиса
   protected readonly additionalForm = this.projectAdditionalService.getAdditionalForm();

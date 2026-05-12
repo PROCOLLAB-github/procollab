@@ -7,6 +7,7 @@ import { CourseComponent } from "./course/course.component";
 import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { CoursesListInfoService } from "@api/courses/facades/courses-list-info.service";
 import { CoursesListUIInfoService } from "@api/courses/facades/ui/courses-list-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-list",
@@ -22,6 +23,8 @@ export class CoursesListComponent implements OnInit, OnDestroy {
 
   protected readonly coursesList = this.coursesListUIInfoService.coursesList;
   protected readonly loading = this.coursesListUIInfoService.loading;
+
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.coursesListInfoService.init();

@@ -18,8 +18,8 @@ import { ProfileFormService } from "@api/profile/facades/edit/profile-form.servi
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileEditSkillsInfoService } from "@api/profile/facades/edit/profile-edit-skills-info.service";
 import { Skill } from "@domain/skills/skill";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { IconComponent } from "@uilib";
+import { SearchesService } from "@api/searches/searches.service";
 
 @Component({
   selector: "app-profile-skills-step",
@@ -44,7 +44,7 @@ export class ProfileSkillsStepComponent {
 
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditSkillsInfoService = inject(ProfileEditSkillsInfoService);
-  private readonly skillsInfoService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
 
   protected readonly profileForm = this.profileFormService.getForm();
   protected readonly languageItems = this.profileEditSkillsInfoService.languageItems;
@@ -61,7 +61,7 @@ export class ProfileSkillsStepComponent {
 
   protected readonly selectedLanguageId = this.profileEditSkillsInfoService.selectedLanguageId;
 
-  protected readonly inlineSkills = this.skillsInfoService.inlineSkills;
+  protected readonly inlineSkills = this.searchesService.inlineSkills;
 
   protected readonly errorMessage = ErrorMessage;
 
@@ -82,7 +82,7 @@ export class ProfileSkillsStepComponent {
    * @param toggledSkill - навык для переключения
    */
   protected onToggleSkill(toggledSkill: Skill): void {
-    this.skillsInfoService.onToggleSkill(toggledSkill, this.profileForm);
+    this.searchesService.onToggleSkill(toggledSkill, this.profileForm);
   }
 
   /**
@@ -90,7 +90,7 @@ export class ProfileSkillsStepComponent {
    * @param newSkill - новый навык для добавления
    */
   protected onAddSkill(newSkill: Skill): void {
-    this.skillsInfoService.onAddSkill(newSkill, this.profileForm);
+    this.searchesService.onAddSkill(newSkill, this.profileForm);
   }
 
   protected toggleSkillsGroupsModal(): void {
@@ -98,6 +98,6 @@ export class ProfileSkillsStepComponent {
   }
 
   protected onSearchSkill(query: string): void {
-    this.skillsInfoService.onSearchSkill(query);
+    this.searchesService.onSearchSkill(query);
   }
 }

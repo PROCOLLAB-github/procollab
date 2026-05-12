@@ -32,7 +32,6 @@ import { ProjectPartnerService } from "./project-partner.service";
 import { ProjectResourceService } from "./project-resources.service";
 import { ProjectAchievementsService } from "./project-achievements.service";
 import { ProjectAdditionalService } from "./project-additional.service";
-import { SkillsInfoService } from "../../../skills/facades/skills-info.service";
 import { ProjectsEditUIInfoService } from "./ui/projects-edit-ui-info.service";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
@@ -52,12 +51,13 @@ import {
   success,
 } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { SearchesService } from "@api/searches/searches.service";
 
 @Injectable()
 export class ProjectsEditInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly skillsInfoService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
 
   private readonly projectStepService = inject(ProjectStepService);
   private readonly assignProjectProgramUseCase = inject(AssignProjectProgramUseCase);
@@ -131,7 +131,7 @@ export class ProjectsEditInfoService {
   readonly profileId = signal<number>(+this.route.snapshot.params["projectId"]);
 
   // Сигналы для управления состоянием
-  readonly inlineSkills = this.skillsInfoService.inlineSkills;
+  readonly inlineSkills = this.searchesService.inlineSkills;
   readonly nestedSkills$ = this.skillsService.getSkillsNested();
 
   // Состояние отправки форм
@@ -421,7 +421,7 @@ export class ProjectsEditInfoService {
    * @param query - поисковый запрос
    */
   onSearchSkill(query: string): void {
-    this.skillsInfoService.onSearchSkill(query);
+    this.searchesService.onSearchSkill(query);
   }
 
   private setupEditingStep(): void {

@@ -12,6 +12,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { AuthLoginService } from "@api/auth/facades/auth-login.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент входа в систему
@@ -64,6 +65,7 @@ export class LoginComponent implements OnInit {
 
   protected readonly showPassword = this.authUIInfoService.showPassword;
   protected readonly isHintLoginVisible = this.tooltipInfoService.isHintLoginVisible;
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.tokenService.clearTokens();

@@ -28,6 +28,7 @@ import { ProgramDetailMainService } from "@api/program/facades/detail/program-de
 import { ExpandService } from "@api/expand/expand.service";
 import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
+import { AppRoutes } from "@api/paths/app-routes";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 
@@ -80,6 +81,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly program = this.programDetailMainUIInfoService.program;
   protected readonly news = this.newsInfoService.news;
+
+  protected readonly AppRoutes = AppRoutes;
 
   protected readonly showProgramModal = this.programDetailMainUIInfoService.showProgramModal;
   protected readonly showProgramModalErrorMessage =

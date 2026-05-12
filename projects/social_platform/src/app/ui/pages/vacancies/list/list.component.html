@@ -19,7 +19,7 @@
         <p class="cancel__title text-body-12">вы пока не отправили <br />ни одного отклика :|</p>
       </div>
 
-      <a routerLink="/office/vacancies/all">
+      <a [routerLink]="AppRoutes.office.vacancies()">
         <app-button customTypographyClass="text-body-12" size="big">перейти к вакансиям</app-button>
       </a>
     </div>
@@ -29,7 +29,8 @@
     <i appIcon icon="empty-chat" appSquare="38"></i>
     <p class="text-body-12">
       в данном разделе пока нет ваших откликов : - ( <br />
-      давайте это <a routerLink="/office/vacancies/all/" style="color: var(--accent)">исправим</a>
+      давайте это
+      <a [routerLink]="AppRoutes.office.vacancies()" style="color: var(--accent)">исправим</a>
     </p>
   </div>
   } }

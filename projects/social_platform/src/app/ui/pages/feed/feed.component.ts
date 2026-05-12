@@ -18,6 +18,7 @@ import { NewProjectComponent } from "./new-project/new-project.component";
 import { FeedFilterComponent } from "@ui/widgets/feed-filter/feed-filter.component";
 import { FeedInfoService } from "@api/feed/facades/feed-info.service";
 import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-feed",
@@ -43,6 +44,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly feedUIInfoService = inject(FeedUIInfoService);
 
   protected readonly feedItems = this.feedUIInfoService.feedItems;
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit() {
     this.feedInfoService.initializationFeedNews(this.feedRoot!);

@@ -175,7 +175,7 @@
       </div>
       <ul class="lists__list">
         @for (p of user()!.projects.slice(0, 3); track p.id) {
-        <li class="lists__item" [routerLink]="['/office/projects', p.id]">
+        <li class="lists__item" [routerLink]="AppRoutes.projects.detail(p.id)">
           <ng-container *ngTemplateOutlet="projectTemp; context: { $implicit: p }"></ng-container>
         </li>
         }
@@ -194,7 +194,7 @@
         }
       </div>
       <ng-template #projectTemp let-project>
-        <div class="lists__item" [routerLink]="['/office/projects', project.id]">
+        <div class="lists__item" [routerLink]="AppRoutes.projects.detail(project.id)">
           <img
             class="lists__logo"
             alt="project logo"

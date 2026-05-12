@@ -10,6 +10,7 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { FeedProject } from "@domain/feed/feed-item.model";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -55,6 +56,8 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 })
 export class NewProjectComponent {
   @Input() feedItem!: FeedProject;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    *

@@ -16,7 +16,10 @@
   <div class="succeed">
     <i class="succeed__check" appIcon icon="check" appWidth="60" appHeight="42"></i>
     <p class="text-body-12 succeed__text">отклик отправлен</p>
-    <app-button routerLink="/office/vacancies/all" size="big" customTypographyClass="text-body-12"
+    <app-button
+      [routerLink]="AppRoutes.office.vacancies()"
+      size="big"
+      customTypographyClass="text-body-12"
       >перейти к вакансиям</app-button
     >
   </div>

@@ -32,6 +32,7 @@ import { Program } from "@domain/program/program.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ChatStateService } from "@api/chat/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-detail",
@@ -65,6 +66,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  protected readonly AppRoutes = AppRoutes;
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);
   protected readonly router = inject(Router);

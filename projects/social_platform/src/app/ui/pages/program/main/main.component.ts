@@ -7,6 +7,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { ProgramCardComponent } from "./program-card/program-card.component";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Главный компонент списка программ
@@ -64,6 +65,7 @@ export class ProgramMainComponent implements OnInit, OnDestroy {
   protected readonly programs = this.programMainUIInfoService.programs;
   protected readonly isPparticipating = this.programMainUIInfoService.isPparticipating;
   protected readonly programOptionsFilter = this.programMainUIInfoService.programOptionsFilter;
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.programMainInfoService.initializationMainPrograms();

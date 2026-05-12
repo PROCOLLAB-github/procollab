@@ -60,6 +60,7 @@ export class ProfileNewsComponent implements OnInit, OnDestroy {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
   private readonly loggerService = inject(LoggerService);
+  protected readonly AppRoutes = AppRoutes;
 
   /** ID пользователя, извлеченный из родительского маршрута профиля */
   userId = this.route.parent?.parent?.snapshot.params["id"];

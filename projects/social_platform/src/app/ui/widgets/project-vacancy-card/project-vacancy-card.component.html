@@ -69,11 +69,14 @@
   </div>
 
   <div class="vacancy__actions" [class.vacancy__actions--vacancies]="type === 'vacancies'">
-    <app-button [routerLink]="'/office/vacancies/' + vacancy.id" appearance="outline" size="medium"
+    <app-button
+      [routerLink]="AppRoutes.office.vacancy(vacancy.id)"
+      appearance="outline"
+      size="medium"
       >подробнее</app-button
     >
     <app-button
-      [routerLink]="'/office/vacancies/' + vacancy.id"
+      [routerLink]="AppRoutes.office.vacancy(vacancy.id)"
       [queryParams]="{ sendResponse: true }"
       size="medium"
       >откликнуться</app-button

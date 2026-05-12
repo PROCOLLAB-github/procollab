@@ -8,6 +8,7 @@ import { IconComponent } from "@ui/primitives";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { ExpandService } from "@api/expand/expand.service";
 import { User } from "@domain/auth/user.model";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-profile-left-side",
@@ -23,4 +24,5 @@ export class ProfileLeftSideComponent {
   private readonly expandService = inject(ExpandService);
 
   protected readonly readAllPrograms = this.expandService.readAllPrograms;
+  protected readonly AppRoutes = AppRoutes;
 }

@@ -42,6 +42,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент карточки оценки проекта
@@ -95,6 +96,7 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
+  protected readonly AppRoutes = AppRoutes;
 
   constructor(
     public industryRepository: IndustryInfoService,

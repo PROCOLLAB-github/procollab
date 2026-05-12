@@ -7,6 +7,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { BackComponent } from "@uilib";
 import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.service";
 import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент для отображения конкретного прямого чата
@@ -61,6 +62,8 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
 
   /** Данные текущего чата */
   protected readonly chat = this.ChatDirectInfoService.chat;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /** Массив сообщений чата */
   protected readonly messages = this.ChatDirectInfoService.messages;

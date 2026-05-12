@@ -323,7 +323,7 @@
 
             @if (getSelectedLeaderForGoal(i); as selectedLeader) {
             <div class="selected-leader">
-              <a [routerLink]="'/office/profile/' + selectedLeader.userId">
+              <a [routerLink]="AppRoutes.profile.detail(selectedLeader.userId)">
                 <app-avatar [url]="selectedLeader.avatar" [size]="40"></app-avatar>
               </a>
             </div>

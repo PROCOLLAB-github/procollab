@@ -9,4 +9,10 @@ export const environment = {
   websocketUrl: "wss://api.procollab.ru/ws",
   websocketReconnectionInterval: 5000,
   websocketReconnectionMaxAttempts: 5,
+  // analytics
+  analyticsHost: "app.procollab.ru",
+  yandexMetrikaId: 91871365,
+  mailRuCounterId: "3622531",
+  mailRuRegisterId: "3543687",
+  registerPath: "/auth/register",
 };

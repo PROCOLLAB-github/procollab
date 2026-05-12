@@ -13,6 +13,7 @@ import {
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/primitives";
+import { AppRoutes } from "@api/paths/app-routes";
 import { ClickOutsideModule } from "ng-click-outside";
 import { workFormatFilter } from "@core/consts/filters/work-format-filter.const";
 import { workScheduleFilter } from "@core/consts/filters/work-schedule-filter.const";
@@ -91,6 +92,8 @@ export class VacancyFilterComponent implements OnInit {
 
   /** Опции фильтра по графику работы */
   protected readonly workScheduleFilterOptions = workScheduleFilter;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    * Инициализация компонента
