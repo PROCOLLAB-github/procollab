@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe, TokenService } from "@corelib";
@@ -64,7 +64,9 @@ export class LoginComponent implements OnInit {
   protected readonly errorMessage = ErrorMessage;
 
   protected readonly showPassword = this.authUIInfoService.showPassword;
-  protected readonly isHintLoginVisible = this.tooltipInfoService.isHintLoginVisible;
+  protected readonly isHintLoginVisible = computed(() =>
+    this.tooltipInfoService.isVisible("login")
+  );
   protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
@@ -76,7 +78,7 @@ export class LoginComponent implements OnInit {
   }
 
   toggleTooltip(): void {
-    this.tooltipInfoService.toggleTooltip();
+    this.tooltipInfoService.toggleTooltip("login");
   }
 
   toggleShowPassword() {

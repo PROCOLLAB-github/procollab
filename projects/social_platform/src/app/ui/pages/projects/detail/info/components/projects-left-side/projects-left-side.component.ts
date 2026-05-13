@@ -6,8 +6,8 @@ import { RouterModule } from "@angular/router";
 import { IconComponent } from "@ui/primitives";
 import { TruncatePipe } from "@corelib";
 import { Project } from "@domain/project/project.model";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
 
 @Component({
   selector: "app-projects-left-side",
@@ -20,6 +20,6 @@ import { AppRoutes } from "@api/paths/app-routes";
 export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
-  protected readonly industryRepository = inject(IndustryInfoService);
+  protected readonly industryRepository = inject(IndustryRepository);
   protected readonly AppRoutes = AppRoutes;
 }

@@ -9,6 +9,7 @@ import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.por
 import { EventBus } from "@domain/shared/event-bus";
 import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 import { RejectInvite } from "@domain/invite/events/reject-invite.event";
+import { RevokeInvite } from "@domain/invite/events/revoke-invite.event";
 
 @Injectable({ providedIn: "root" })
 export class InviteRepository implements InviteRepositoryPort {
@@ -39,6 +40,13 @@ export class InviteRepository implements InviteRepositoryPort {
         this.myInvitesCount$.next(Math.max(0, currentCount - 1));
       },
     });
+
+    this.eventBus.on<RevokeInvite>("RevokeInvite").subscribe({
+      next: () => {
+        const currentCount = this.myInvitesCount$.getValue();
+        this.myInvitesCount$.next(Math.max(0, currentCount - 1));
+      },
+    });
   }
 
   /**
@@ -55,10 +63,8 @@ export class InviteRepository implements InviteRepositoryPort {
       .pipe(map(invite => plainToInstance(Invite, invite)));
   }
 
-  revokeInvite(invitationId: number): Observable<Invite> {
-    return this.inviteAdapter
-      .revokeInvite(invitationId)
-      .pipe(map(invite => plainToInstance(Invite, invite)));
+  revokeInvite(invitationId: number): Observable<void> {
+    return this.inviteAdapter.revokeInvite(invitationId);
   }
 
   /**

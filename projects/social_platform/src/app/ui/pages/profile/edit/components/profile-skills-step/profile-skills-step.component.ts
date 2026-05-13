@@ -17,7 +17,7 @@ import { ControlErrorPipe } from "@corelib";
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileEditSkillsInfoService } from "@api/profile/facades/edit/profile-edit-skills-info.service";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { IconComponent } from "@uilib";
 import { SearchesService } from "@api/searches/searches.service";
 

@@ -5,12 +5,13 @@ import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { SkillsGroup } from "@domain/skills/skills-group";
-import { Skill } from "@domain/skills/skill";
+import { SkillsGroup } from "@domain/skills/skills-group.model";
+import { Approve, Skill } from "@domain/skills/skill.model";
 
 @Injectable({ providedIn: "root" })
 export class SkillsHttpAdapter {
   private readonly CORE_SKILLS_URL = "/core/skills";
+  private readonly AUTH_USERS_URL = "/auth/users";
   private readonly apiService = inject(ApiService);
 
   /**
@@ -32,5 +33,13 @@ export class SkillsHttpAdapter {
       `${this.CORE_SKILLS_URL}/inline`,
       new HttpParams({ fromObject: { limit, offset, name__icontains: search } })
     );
+  }
+
+  approveSkill(userId: number, skillId: number): Observable<Approve> {
+    return this.apiService.post(`${this.AUTH_USERS_URL}/${userId}/approve_skill/${skillId}/`, {});
+  }
+
+  unapproveSkill(userId: number, skillId: number): Observable<void> {
+    return this.apiService.delete(`${this.AUTH_USERS_URL}/${userId}/approve_skill/${skillId}/`);
   }
 }

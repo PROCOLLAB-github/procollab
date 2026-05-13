@@ -109,12 +109,12 @@
             <span>программы</span>
             <app-tooltip
               [text]="'Перейдите по ссылке и ознакомьтесь с тем, где можно сейчас поучаствовать'"
-              [isVisible]="isTooltipVisible()"
+              [isVisible]="isTooltipVisible('base')"
               [position]="'right'"
               [tooltipWidth]="300"
               customClass="content__hint"
-              (show)="toggleTooltip('show')"
-              (hide)="toggleTooltip('hide')"
+              (show)="toggleTooltip()"
+              (hide)="toggleTooltip()"
             ></app-tooltip>
           </app-button>
         </a>

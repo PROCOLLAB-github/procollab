@@ -3,7 +3,7 @@
 import { FileModel } from "../file/file.model";
 import { Program } from "../program/program.model";
 import { Project } from "../project/project.model";
-import { Skill } from "../skills/skill";
+import { Skill } from "../skills/skill.model";
 
 /**
  * Модели данных пользователя и связанных сущностей

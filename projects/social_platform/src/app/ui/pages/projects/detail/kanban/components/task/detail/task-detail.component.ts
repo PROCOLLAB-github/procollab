@@ -57,7 +57,7 @@ import {
 import { TagDto } from "@domain/kanban/dto/tag.model.dto";
 import { PerformerDto } from "@domain/kanban/dto/performer.model.dto";
 import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 

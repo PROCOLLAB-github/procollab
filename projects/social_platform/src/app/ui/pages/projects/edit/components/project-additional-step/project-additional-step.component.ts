@@ -88,15 +88,13 @@ export class ProjectAdditionalStepComponent implements OnInit {
   protected readonly tooltipPosition = this.tooltipInfoService.tooltipPosition;
 
   /** Состояние видимости подсказки */
-  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
+  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
 
   protected readonly errorMessage = ErrorMessage;
 
   /** Показать подсказку */
-  toggleTooltip(option: "show" | "hide"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip()
-      : this.tooltipInfoService.hideTooltip();
+  toggleTooltip(): void {
+    this.tooltipInfoService.toggleTooltip("base");
   }
 
   /**

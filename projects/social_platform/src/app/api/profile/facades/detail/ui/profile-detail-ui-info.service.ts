@@ -1,16 +1,14 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
 import { User } from "@domain/auth/user.model";
-import { ProjectsDetailUIInfoService } from "../../../../project/facades/detail/ui/projects-detail-ui.service";
 
 @Injectable()
 export class ProfileDetailUIInfoService {
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
-
   readonly user = signal<User | undefined>(undefined);
-  readonly loggedUserId = this.projectsDetailUIInfoService.loggedUserId;
+  readonly loggedUserId = signal<number>(0);
+  readonly profileId = signal<number>(0); // ID текущего пользователя
 
   readonly isProfileEmpty = signal<boolean | undefined>(undefined);
   readonly isProfileFill = signal<boolean>(false);
@@ -45,6 +43,10 @@ export class ProfileDetailUIInfoService {
         this.user()?.birthday
       )
     );
+  }
+
+  applySetLoggedUserId(type: "logged" | "profile", profileId: number): void {
+    type === "logged" ? this.loggedUserId.set(profileId) : this.profileId.set(profileId);
   }
 
   applyOpenWorkInfoModal(): void {

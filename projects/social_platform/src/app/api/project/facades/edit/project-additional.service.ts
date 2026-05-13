@@ -142,8 +142,8 @@ export class ProjectAdditionalService {
     this.partnerProgramFields().forEach((field: PartnerProgramFields) => {
       const fieldValue = this.additionalForm.get(field.name)?.value;
       newFieldsFormValues.push({
-        field_id: field.id,
-        value_text: String(fieldValue),
+        fieldId: field.id,
+        valueText: String(fieldValue),
       });
     });
 

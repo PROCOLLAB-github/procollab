@@ -16,12 +16,12 @@
             [text]="
               'Идеальная фотография для резюме: свежая, с вашим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)'
             "
-            [isVisible]="isHintPhotoVisible()"
+            [isVisible]="isHintPhotoVisible('photo')"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="content__hint"
-            (show)="toggleTooltip('show', 'photo')"
-            (hide)="toggleTooltip('hide', 'photo')"
+            (show)="toggleTooltip('photo')"
+            (hide)="toggleTooltip('photo')"
           ></app-tooltip>
         </div>
         <app-avatar-control
@@ -69,12 +69,12 @@
             [text]="
               'Заполните информацию о том, что вы изучали. Даже если это трехнедельный интенсив по созданию роликов – для резюме важна каждая деталь'
             "
-            [isVisible]="isHintEducationVisible()"
+            [isVisible]="isHintEducationVisible('education')"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="content__hint"
-            (show)="toggleTooltip('show', 'education')"
-            (hide)="toggleTooltip('hide', 'education')"
+            (show)="toggleTooltip('education')"
+            (hide)="toggleTooltip('education')"
           ></app-tooltip>
         </div>
       </div>
@@ -255,12 +255,12 @@
             [text]="
               'Укажите свой опыт. Разработка бота для школы, дизайн сайта для родительского бизнеса – любой опыт, который оценила какая-либо организация – ваш ключ к первой работе.'
             "
-            [isVisible]="isHintWorkVisible()"
+            [isVisible]="isHintWorkVisible('work')"
             [position]="'right'"
             [tooltipWidth]="350"
             customClass="work-section__hint"
-            (show)="toggleTooltip('show', 'work')"
-            (hide)="toggleTooltip('hide', 'work')"
+            (show)="toggleTooltip('work')"
+            (hide)="toggleTooltip('work')"
           ></app-tooltip>
         </div>
       </div>
@@ -431,12 +431,12 @@
                       [text]="
                         'Кенгуру, медвежонок, а может победа во всероссийском акселераторе технологических проектов? Твоему будущему работодателю надо видеть, что ты самый активный!'
                       "
-                      [isVisible]="isHintAchievementsVisible()"
+                      [isVisible]="isHintAchievementsVisible('achievements')"
                       [position]="'right'"
                       [tooltipWidth]="300"
                       customClass="content__hint"
-                      (show)="toggleTooltip('show', 'achievements')"
-                      (hide)="toggleTooltip('hide', 'achievements')"
+                      (show)="toggleTooltip('achievements')"
+                      (hide)="toggleTooltip('achievements')"
                     ></app-tooltip>
                   </div>
                   <app-input
@@ -501,12 +501,12 @@
             [text]="
               'Вот и понадобились те самые много лет школьной программы английского, французского, китайского, а может и японского – рассказывайте все!'
             "
-            [isVisible]="isHintLanguageVisible()"
+            [isVisible]="isHintLanguageVisible('language')"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="content__hint"
-            (show)="toggleTooltip('show', 'language')"
-            (hide)="toggleTooltip('hide', 'language')"
+            (show)="toggleTooltip('language')"
+            (hide)="toggleTooltip('language')"
           ></app-tooltip>
         </div>
       </div>

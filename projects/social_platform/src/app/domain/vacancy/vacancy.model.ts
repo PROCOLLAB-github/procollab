@@ -1,7 +1,7 @@
 /** @format */
 
 import { Project } from "../project/project.model";
-import { Skill } from "../skills/skill";
+import { Skill } from "../skills/skill.model";
 
 /**
  * Модель вакансии в проекте

@@ -186,12 +186,12 @@
               } @if (isUserManager() && appWidth > 1000) {
               <app-tooltip
                 [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
-                [isVisible]="isTooltipVisible()"
+                [isVisible]="isTooltipVisible('base')"
                 [position]="'right'"
                 [tooltipWidth]="180"
                 customClass="content__hint"
-                (show)="toggleTooltip('show')"
-                (hide)="toggleTooltip('hide')"
+                (show)="toggleTooltip()"
+                (hide)="toggleTooltip()"
               ></app-tooltip>
               } @else {
               <i

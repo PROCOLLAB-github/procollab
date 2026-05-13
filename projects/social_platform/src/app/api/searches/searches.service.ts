@@ -2,11 +2,11 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Observable, Subject, take, takeUntil } from "rxjs";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { FormGroup } from "@angular/forms";
 import { SpecializationsRepositoryPort as SpecializationsService } from "@domain/specializations/ports/specializations.repository.port";
-import { Skill } from "@domain/skills/skill";
-import { SkillsGroup } from "@domain/skills/skills-group";
+import { Skill } from "@domain/skills/skill.model";
+import { SkillsGroup } from "@domain/skills/skills-group.model";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 
 @Injectable({ providedIn: "root" })

@@ -21,9 +21,9 @@ import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
 import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
 import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
+import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.const";
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
-const FILTER_SPLIT_SYMBOL = "|";
 
 @Injectable()
 export class FeedInfoService {

@@ -11,10 +11,10 @@ import {
 } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MembersComponent } from "@ui/pages/members/members.component";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { SearchesService } from "@api/searches/searches.service";
 import { LoggerService } from "@corelib";
 

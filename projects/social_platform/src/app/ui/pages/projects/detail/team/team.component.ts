@@ -12,6 +12,7 @@ import {
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
 /**
  * Компонент страницы команды в деательной информации о проекте
@@ -27,11 +28,12 @@ import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/proj
 export class ProjectTeamComponent implements OnInit, OnDestroy {
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 
   // массив пользователей в команде
   protected readonly collaborators = this.projectsDetailUIInfoService.collaborators;
   protected readonly projectId = this.projectsDetailUIInfoService.projectId;
-  protected readonly loggedUserId = this.projectsDetailUIInfoService.loggedUserId;
+  protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
   protected readonly leaderId = this.projectsDetailUIInfoService.leaderId;
 
   ngOnInit(): void {

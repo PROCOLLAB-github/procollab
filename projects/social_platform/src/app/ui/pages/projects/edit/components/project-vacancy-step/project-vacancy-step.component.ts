@@ -11,7 +11,7 @@ import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.c
 import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
 import { IconComponent } from "@uilib";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";

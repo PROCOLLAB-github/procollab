@@ -1,8 +1,8 @@
 /** @format */
 
 import { Observable } from "rxjs";
-import { Specialization } from "../specialization";
-import { SpecializationsGroup } from "../specializations-group";
+import { Specialization } from "../specialization.model";
+import { SpecializationsGroup } from "../specializations-group.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 
 /**

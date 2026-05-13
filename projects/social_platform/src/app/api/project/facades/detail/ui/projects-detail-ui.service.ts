@@ -13,9 +13,6 @@ export class ProjectsDetailUIInfoService {
   readonly goals = computed(() => this.project()?.goals);
 
   readonly project = signal<Project | undefined>(undefined);
-  readonly loggedUserId = signal<number>(0);
-
-  readonly profileId = signal<number>(0); // ID текущего пользователя
 
   // Состояние компонента
   readonly isCompleted = signal<boolean>(false); // Флаг завершенности проекта
@@ -23,10 +20,6 @@ export class ProjectsDetailUIInfoService {
 
   applySetProject(project: Project) {
     this.project.set(project);
-  }
-
-  applySetLoggedUserId(type: "logged" | "profile", profileId: number): void {
-    type === "logged" ? this.loggedUserId.set(profileId) : this.profileId.set(profileId);
   }
 
   applyDirectionItems(): void {

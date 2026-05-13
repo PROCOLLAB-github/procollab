@@ -5,8 +5,8 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { Specialization } from "@domain/specializations/specialization";
-import { SpecializationsGroup } from "@domain/specializations/specializations-group";
+import { Specialization } from "@domain/specializations/specialization.model";
+import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
 
 @Injectable({ providedIn: "root" })
 export class SpecializationsHttpAdapter {

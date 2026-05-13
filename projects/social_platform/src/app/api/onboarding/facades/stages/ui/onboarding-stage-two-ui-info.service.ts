@@ -3,7 +3,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { NonNullableFormBuilder } from "@angular/forms";
 import { User } from "@domain/auth/user.model";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 
 @Injectable()
 export class OnboardingStageTwoUIInfoService {

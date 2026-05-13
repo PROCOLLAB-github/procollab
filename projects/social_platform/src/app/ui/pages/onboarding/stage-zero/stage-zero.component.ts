@@ -93,19 +93,17 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
 
-  protected readonly isHintPhotoVisible = this.tooltipInfoService.isHintPhotoVisible;
-  protected readonly isHintCityVisible = this.tooltipInfoService.isHintCityVisible;
-  protected readonly isHintEducationVisible = this.tooltipInfoService.isHintEducationVisible;
-  protected readonly isHintEducationDescriptionVisible =
-    this.tooltipInfoService.isHintEducationDescriptionVisible;
+  protected readonly isHintPhotoVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintCityVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintEducationVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintEducationDescriptionVisible = this.tooltipInfoService.isVisible;
 
-  protected readonly isHintWorkVisible = this.tooltipInfoService.isHintWorkVisible;
-  protected readonly isHintWorkNameVisible = this.tooltipInfoService.isHintWorkNameVisible;
-  protected readonly isHintWorkDescriptionVisible =
-    this.tooltipInfoService.isHintWorkDescriptionVisible;
+  protected readonly isHintWorkVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintWorkNameVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintWorkDescriptionVisible = this.tooltipInfoService.isVisible;
 
-  protected readonly isHintAchievementsVisible = this.tooltipInfoService.isHintAchievementsVisible;
-  protected readonly isHintLanguageVisible = this.tooltipInfoService.isHintLanguageVisible;
+  protected readonly isHintAchievementsVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintLanguageVisible = this.tooltipInfoService.isVisible;
 
   protected readonly yearListEducation = generateOptionsList(55, "years");
 
@@ -208,8 +206,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   }
 
   toggleTooltip(
-    option: "show" | "hide",
-    type:
+    key:
       | "photo"
       | "city"
       | "education"
@@ -220,9 +217,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       | "achievements"
       | "language"
   ): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip(type)
-      : this.tooltipInfoService.hideTooltip(type);
+    this.tooltipInfoService.toggleTooltip(key);
   }
 
   addEducation() {

@@ -6,7 +6,7 @@ import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { workExperienceList } from "@core/consts/lists/work-experience-list.const";
 import { workFormatList } from "@core/consts/lists/work-format-list.const";
 import { workScheduledList } from "@core/consts/lists/work-scheduled-list.const";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { AsyncState, initial, isLoading } from "@domain/shared/async-state";
 import { ProjectFormService } from "../project-form.service";

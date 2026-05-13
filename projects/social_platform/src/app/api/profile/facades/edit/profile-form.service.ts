@@ -6,7 +6,7 @@ import { catchError, concatMap, first, map, Observable, skip, Subject, takeUntil
 import dayjs from "dayjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User } from "@domain/auth/user.model";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { SelectComponent } from "@ui/primitives";
 import { generateOptionsList } from "@utils/generate-options-list";
 import {

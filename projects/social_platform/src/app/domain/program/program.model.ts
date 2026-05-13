@@ -110,18 +110,3 @@ export class ProgramDataSchema {
     placeholder: string;
   };
 }
-
-/**
- * Модель тега программы
- *
- * Представляет категорию или тег программы для группировки и фильтрации.
- *
- * @param {number} id - Уникальный идентификатор тега
- * @param {string} name - Отображаемое название тега
- * @param {string} tag - Системное название тега
- */
-export class ProgramTag {
-  id!: number;
-  name!: string;
-  tag!: string;
-}

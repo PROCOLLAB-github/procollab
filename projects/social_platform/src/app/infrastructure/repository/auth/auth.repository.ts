@@ -12,11 +12,13 @@ import { Project } from "@domain/project/project.model";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoginCommand } from "@domain/auth/commands/login.command";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
+import { ChatStateService } from "@api/chat/chat-state.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthRepository implements AuthRepositoryPort {
   private readonly authAdapter = inject(AuthHttpAdapter);
   private readonly tokenService = inject(TokenService);
+  private readonly chatStateService = inject(ChatStateService);
 
   /** Поток данных профиля пользователя */
   private profile$ = new ReplaySubject<User>(1);
@@ -37,7 +39,12 @@ export class AuthRepository implements AuthRepositoryPort {
   }
 
   logout(): Observable<void> {
-    return this.authAdapter.logout().pipe(map(() => this.tokenService.clearTokens()));
+    return this.authAdapter.logout().pipe(
+      tap(() => {
+        this.tokenService.clearTokens();
+        this.chatStateService.reset();
+      })
+    );
   }
 
   register(data: RegisterCommand): Observable<RegisterResponse> {

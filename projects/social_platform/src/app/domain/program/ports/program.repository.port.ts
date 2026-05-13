@@ -9,6 +9,7 @@ import { Project } from "../../project/project.model";
 import { User } from "../../auth/user.model";
 import { PartnerProgramFields } from "../partner-program-fields.model";
 import { ProjectAdditionalFields } from "../../project/project-additional-fields.model";
+import { ApplyToProgramDTO } from "../dto/apply-to-program.model";
 
 export abstract class ProgramRepositoryPort {
   abstract getAll(
@@ -47,7 +48,7 @@ export abstract class ProgramRepositoryPort {
     programId: number
   ): Observable<ProjectAdditionalFields>;
 
-  abstract applyProjectToProgram(programId: number, body: any): Observable<any>;
+  abstract applyProjectToProgram(programId: number, dto: ApplyToProgramDTO): Observable<any>;
 
   abstract createProgramFilters(
     programId: number,
