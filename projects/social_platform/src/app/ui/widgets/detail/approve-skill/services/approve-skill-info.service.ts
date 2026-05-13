@@ -2,30 +2,33 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
-import { ProfileService as ProfileApproveSkillService } from "@api/auth/profile.service";
-import { Skill } from "@domain/skills/skill";
+import { Approve, Skill } from "@domain/skills/skill.model";
 import { map, of, Subject, switchMap, takeUntil } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ApproveSkillUIInfoService } from "./approve-skill-ui-info.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { UnapproveSkillUseCase } from "@api/skills/use-cases/unapprove-skill.use-case";
+import { ApproveSkillUseCase } from "@api/skills/use-cases/approve-skill.use-case";
+import { ok } from "@domain/shared/result.type";
 
 @Injectable()
 export class ApproveskillInfoService {
   private readonly authRepository = inject(AuthInfoService);
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly route = inject(ActivatedRoute);
-  private readonly profileApproveSkillService = inject(ProfileApproveSkillService);
   private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly unapproveSkillUseCase = inject(UnapproveSkillUseCase);
+  private readonly approveSkillUseCase = inject(ApproveSkillUseCase);
 
   private readonly destroy$ = new Subject<void>();
 
-  private readonly loggedUserId = this.projectsDetailUIInfoService.loggedUserId;
+  private readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
 
   init(): void {
     this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
       next: profile => {
-        this.projectsDetailUIInfoService.applySetLoggedUserId("logged", profile.id);
+        this.profileDetailUIInfoService.applySetLoggedUserId("logged", profile.id);
       },
     });
   }
@@ -40,33 +43,37 @@ export class ApproveskillInfoService {
     return skill.approves.some(approve => approve.confirmedBy.id === this.loggedUserId());
   }
 
-  unApproveSkill(userId: number, skillId: number, skill: Skill): void {
-    this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-      skill.approves = skill.approves.filter(
-        approve => approve.confirmedBy.id !== this.loggedUserId()
-      );
+  unapproveSkill(userId: number, skillId: number, skill: Skill): void {
+    this.unapproveSkillUseCase.execute(userId, skillId).subscribe({
+      next: result => {
+        if (result.ok) {
+          skill.approves = skill.approves.filter(
+            approve => approve.confirmedBy.id !== this.loggedUserId()
+          );
+        }
+      },
     });
   }
 
   approveSkill(userId: number, skillId: number, skill: Skill): void {
-    this.profileApproveSkillService
-      .approveSkill(userId, skillId)
+    this.approveSkillUseCase
+      .execute(userId, skillId)
       .pipe(
-        switchMap(newApprove =>
-          newApprove.confirmedBy
-            ? of(newApprove)
-            : this.authRepository.profile.pipe(
-                map(profile => ({
-                  ...newApprove,
-                  confirmedBy: profile,
-                }))
-              )
-        ),
+        switchMap(result => {
+          if (!result.ok) return of(result);
+          if (result.value.confirmedBy) return of(result);
+
+          return this.authRepository.profile.pipe(
+            map(profile => ok({ ...result.value, confirmedBy: profile } as Approve))
+          );
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: updatedApprove => {
-          this.approveSkillUIInfoService.applyApprovedSkills(skill, updatedApprove);
+        next: result => {
+          if (result.ok) {
+            this.approveSkillUIInfoService.applyApprovedSkills(skill, result.value);
+          }
         },
         error: err => {
           if (err instanceof HttpErrorResponse) {
@@ -93,7 +100,7 @@ export class ApproveskillInfoService {
     });
 
     if (isApprovedByCurrentUser) {
-      this.unApproveSkill(userId, skillId, skill);
+      this.unapproveSkill(userId, skillId, skill);
     } else {
       this.approveSkill(userId, skillId, skill);
     }

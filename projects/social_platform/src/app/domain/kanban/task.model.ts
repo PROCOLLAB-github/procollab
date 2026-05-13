@@ -5,7 +5,7 @@ import { FileModel } from "@domain/file/file.model";
 import { Column } from "./column.model";
 import { Goal } from "../project/goals.model";
 import { Tag } from "./tag.model";
-import { Skill } from "../skills/skill";
+import { Skill } from "../skills/skill.model";
 
 export interface TaskResult {
   description: string;

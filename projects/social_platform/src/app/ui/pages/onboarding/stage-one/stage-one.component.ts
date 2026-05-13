@@ -7,7 +7,7 @@ import { ButtonComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { SpecializationsGroupComponent } from "@ui/widgets/specializations-group/specializations-group.component";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { OnboardingStageOneUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
@@ -74,8 +74,8 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
 
   protected readonly stageForm = this.onboardingStageOneUIInfoService.stageForm;
 
-  protected readonly isHintAuthVisible = this.tooltipInfoService.isHintAuthVisible;
-  protected readonly isHintLibVisible = this.tooltipInfoService.isHintLibVisible;
+  protected readonly isHintAuthVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintLibVisible = this.tooltipInfoService.isVisible;
 
   protected readonly inlineSpecializations =
     this.onboardingStageOneInfoService.inlineSpecializations;
@@ -104,10 +104,8 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     this.onboardingStageOneInfoService.destroy();
   }
 
-  toggleTooltip(option: "show" | "hide", type: "auth" | "lib"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip(type)
-      : this.tooltipInfoService.hideTooltip(type);
+  toggleTooltip(key: "auth" | "lib"): void {
+    this.tooltipInfoService.toggleTooltip(key);
   }
 
   /**

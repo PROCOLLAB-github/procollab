@@ -2,8 +2,8 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { SpecializationsGroup } from "@domain/project/specializations-group.model";
 import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
+import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
 
 /**
  * РЕЗОЛВЕР ПЕРВОГО ЭТАПА ОНБОРДИНГА

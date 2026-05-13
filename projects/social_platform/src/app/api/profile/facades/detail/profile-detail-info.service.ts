@@ -161,7 +161,7 @@ export class ProfileDetailInfoService {
   private initializationProfileVields(): void {
     this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
       next: user => {
-        this.projectsDetailUIInfoService.applySetLoggedUserId("logged", user.id);
+        this.profileDetailUIInfoService.applySetLoggedUserId("logged", user.id);
       },
     });
 

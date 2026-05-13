@@ -19,6 +19,7 @@ import { SendVacancyResponse } from "@domain/vacancy/events/send-vacancy-respons
 import { AcceptVacancyResponse } from "@domain/vacancy/events/accept-vacancy-response.event";
 import { RejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-response.event";
 import { EntityCache } from "@domain/shared/entity-cache";
+import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 
 @Injectable({ providedIn: "root" })
 export class ProjectRepository implements ProjectRepositoryPort {
@@ -68,6 +69,12 @@ export class ProjectRepository implements ProjectRepositoryPort {
     });
 
     this.eventBus.on<RemoveProjectCollaborator>("RemoveProjectCollaborator").subscribe({
+      next: event => {
+        this.invalidate(event.payload.projectId);
+      },
+    });
+
+    this.eventBus.on<AcceptInvite>("AcceptInvite").subscribe({
       next: event => {
         this.invalidate(event.payload.projectId);
       },

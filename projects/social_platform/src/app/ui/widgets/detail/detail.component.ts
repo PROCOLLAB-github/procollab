@@ -85,7 +85,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly listType = this.detailInfoService.listType;
 
   // Переменная для подсказок
-  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
+  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
 
   // Переменные для отображения данных в зависимости от url
   protected readonly isProjectsPage = this.detailProgramInfoService.isProjectsPage;
@@ -197,10 +197,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
   }
 
-  toggleTooltip(option: "show" | "hide"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip()
-      : this.tooltipInfoService.hideTooltip();
+  toggleTooltip(): void {
+    this.tooltipInfoService.toggleTooltip("base");
   }
 
   /**

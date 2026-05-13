@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { SearchSkillsUseCase } from "./search-skills.use-case";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("SearchSkillsUseCase", () => {

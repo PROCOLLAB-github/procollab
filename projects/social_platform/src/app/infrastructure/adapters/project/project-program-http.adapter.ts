@@ -39,6 +39,10 @@ export class ProjectProgramHttpAdapter {
     projectId: number,
     newValues: ProjectNewAdditionalProgramFields[]
   ): Observable<ProjectDto> {
-    return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/program-fields/`, newValues);
+    const payload = newValues.map(({ fieldId, valueText }) => ({
+      field_id: fieldId,
+      value_text: valueText,
+    }));
+    return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/program-fields/`, payload);
   }
 }

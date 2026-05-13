@@ -89,7 +89,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;
   protected readonly ratingOptionsList = tagsFilter;
 
-  protected readonly isHintExpertsVisible = this.tooltipInfoService.isHintExpertsVisible;
+  protected readonly isHintExpertsVisible = this.tooltipInfoService.isTooltipVisible;
   protected readonly isHintExpertsModal = this.programDetailListUIInfoService.isHintExpertsModal;
 
   protected appWidth = window.innerWidth;
@@ -156,7 +156,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   openHintModal(event: Event): void {
     event.preventDefault();
-    this.tooltipInfoService.hideTooltip("experts");
+    this.tooltipInfoService.toggleTooltip("base");
     this.programDetailListUIInfoService.applyHintModalOpen();
   }
 

@@ -13,6 +13,7 @@ import { Project } from "@domain/project/project.model";
 import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter";
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
 import { EntityCache } from "@domain/shared/entity-cache";
+import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
@@ -66,8 +67,8 @@ export class ProgramRepository implements ProgramRepositoryPort {
     return this.programAdapter.getProgramProjectAdditionalFields(programId);
   }
 
-  applyProjectToProgram(programId: number, body: any): Observable<any> {
-    return this.programAdapter.applyProjectToProgram(programId, body);
+  applyProjectToProgram(programId: number, dto: ApplyToProgramDTO): Observable<any> {
+    return this.programAdapter.applyProjectToProgram(programId, dto);
   }
 
   createProgramFilters(

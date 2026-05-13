@@ -28,6 +28,6 @@ export class PartnerProgramFieldsValues {
 }
 
 export class ProjectNewAdditionalProgramFields {
-  field_id!: number;
-  value_text!: string | boolean;
+  fieldId!: number;
+  valueText!: string | boolean;
 }

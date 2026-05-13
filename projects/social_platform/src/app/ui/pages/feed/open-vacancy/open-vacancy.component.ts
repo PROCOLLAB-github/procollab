@@ -18,8 +18,8 @@ import { expandElement } from "@utils/expand-element";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { AdvertCardComponent } from "./advert-card/advert-card.component";
 import { TruncatePipe, DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
 
 /**
  *
@@ -76,7 +76,7 @@ export class OpenVacancyComponent implements AfterViewInit {
   constructor(
     public readonly router: Router,
     private readonly cdRef: ChangeDetectorRef,
-    public readonly industryRepository: IndustryInfoService
+    public readonly industryRepository: IndustryRepository
   ) {}
 
   ngAfterViewInit(): void {

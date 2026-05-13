@@ -133,12 +133,12 @@
         [text]="
           'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'
         "
-        [isVisible]="isTooltipVisible()"
+        [isVisible]="isTooltipVisible('base')"
         [position]="'right'"
         [tooltipWidth]="400"
         customClass="content__hint"
-        (show)="toggleTooltip('show')"
-        (hide)="toggleTooltip('hide')"
+        (show)="toggleTooltip('base')"
+        (hide)="toggleTooltip('base')"
       ></app-tooltip>
       }
     </app-button>
@@ -150,10 +150,14 @@
 
   <div class="project__tooltip">
     <div class="tooltip">
-      <app-tooltip color="grey" iconSize="40" (show)="isHintTeamVisible.set(true)"></app-tooltip>
+      <app-tooltip
+        color="grey"
+        iconSize="40"
+        (show)="tooltipInfoService.show('team')"
+      ></app-tooltip>
 
-      @if (isHintTeamVisible()) {
-      <div class="tooltip__wrapper" (mouseleave)="isHintTeamVisible.set(false)">
+      @if (isHintTeamVisible('team')) {
+      <div class="tooltip__wrapper" (mouseleave)="tooltipInfoService.hide('team')">
         <p class="tooltip__text text-body-10">
           Напишите зону ответственности участника, приглашаемого в команду
         </p>

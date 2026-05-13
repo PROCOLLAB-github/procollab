@@ -5,7 +5,7 @@ import { ApiService } from "@corelib";
 import { Achievement } from "@domain/auth/user.model";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
-import { Approve } from "@domain/skills/skill";
+import { Approve } from "@domain/skills/skill.model";
 
 /**
  * Сервис управления профилем пользователя
@@ -48,13 +48,5 @@ export class ProfileService {
     achievement: Omit<Achievement, "id">
   ): Observable<Achievement> {
     return this.apiService.put(`${this.AUTH_USERS_URL}/achievement/${achievementId}/`, achievement);
-  }
-
-  approveSkill(userId: number, skillId: number): Observable<Approve> {
-    return this.apiService.post(`${this.AUTH_USERS_URL}/${userId}/approve_skill/${skillId}/`, {});
-  }
-
-  unApproveSkill(userId: number, skillId: number): Observable<void> {
-    return this.apiService.delete(`${this.AUTH_USERS_URL}/${userId}/approve_skill/${skillId}/`);
   }
 }

@@ -5,7 +5,7 @@ import { concatMap, Subject, takeUntil } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { Achievement } from "@domain/auth/user.model";
 import dayjs from "dayjs";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { NavigationService } from "../../../paths/navigation.service";
 import { ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@ui/services/nav/nav.service";

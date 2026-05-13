@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { concatMap, map, Observable, Subject, take, takeUntil } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { SearchesService } from "../../../searches/searches.service";
 import { OnboardingStageOneUIInfoService } from "./ui/onboarding-stage-one-ui-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
-import { SpecializationsGroup } from "@domain/specializations/specializations-group";
+import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";

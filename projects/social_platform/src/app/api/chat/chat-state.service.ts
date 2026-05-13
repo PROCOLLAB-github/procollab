@@ -18,4 +18,8 @@ export class ChatStateService {
       [userId]: status,
     });
   }
+
+  reset(): void {
+    this.userOnlineStatusCache.next({});
+  }
 }
