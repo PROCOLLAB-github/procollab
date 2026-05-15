@@ -18,7 +18,6 @@ import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ApproveSkillComponent } from "./approve-skill/approve-skill.component";
 import { TruncatePipe, ControlErrorPipe } from "@corelib";
-import { ProfileService } from "@api/auth/profile.service";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
@@ -69,7 +68,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);
   protected readonly router = inject(Router);
-  public readonly skillsProfileService = inject(ProfileService);
   public readonly chatStateService = inject(ChatStateService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly tooltipInfoService = inject(TooltipInfoService);

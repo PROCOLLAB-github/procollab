@@ -334,7 +334,8 @@ export class ProjectsEditInfoService {
       .pipe(
         switchMap(result => {
           if (!result.ok) {
-            this.handleProjectSubmitError(result.error.cause);
+            const cause = result.error.kind === "unknown" ? result.error.cause : result.error;
+            this.handleProjectSubmitError(cause);
             return EMPTY;
           }
 

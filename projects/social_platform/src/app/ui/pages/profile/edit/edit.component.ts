@@ -39,12 +39,13 @@ import { ProfileExperienceStepComponent } from "./components/profile-experience-
 import { ProfileAchievementsStepComponent } from "./components/profile-achievements-step/profile-achievements-step.component";
 import { ProfileSkillsStepComponent } from "./components/profile-skills-step/profile-skills-step.component";
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
-import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
 import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
 import { EditStep } from "@core/lib/models/edit-step";
+import { GetSpecializationsNestedUseCase } from "@api/specializations/use-cases/get-specializations-nested.use-case";
+import { map } from "rxjs";
 
 /**
  * Компонент редактирования профиля пользователя
@@ -108,7 +109,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly projectStepService = inject(ProjectStepService);
-  private readonly specsService = inject(SpecializationsInfoService);
+  private readonly getSpecializationsNestedUseCase = inject(GetSpecializationsNestedUseCase);
   private readonly searchesService = inject(SearchesService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
@@ -151,7 +152,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly inlineSpecs = this.profileFormService.inlineSpecs;
 
-  protected readonly nestedSpecs$ = this.specsService.getSpecializationsNested();
+  protected readonly nestedSpecs$ = this.getSpecializationsNestedUseCase
+    .execute()
+    .pipe(map(result => (result.ok ? result.value : [])));
 
   protected readonly specsGroupsModalOpen = signal(false);
 

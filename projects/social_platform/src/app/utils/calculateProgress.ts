@@ -2,6 +2,7 @@
 
 import { User } from "@domain/auth/user.model";
 import { profileFields } from "@core/consts/other/profile-fields.const";
+import { userToRaw } from "./userRaw";
 
 /**
  * @fileoverview Функция для расчета прогресса заполнения профиля пользователя
@@ -22,9 +23,10 @@ import { profileFields } from "@core/consts/other/profile-fields.const";
  */
 export const calculateProfileProgress = (user: User) => {
   let filledCount = 0;
+  const rawUser = userToRaw(user);
 
   profileFields.forEach(({ key, type }) => {
-    const value = user[key as keyof User];
+    const value = rawUser[key as keyof typeof rawUser];
 
     if (type === "array") {
       if (Array.isArray(value) && value.length > 0) filledCount++;

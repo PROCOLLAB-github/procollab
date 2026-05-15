@@ -75,7 +75,7 @@ export class OfficeInfoService {
               .navigateByUrl(AppRoutes.onboarding.root())
               .then(() => this.logger.debug("Route changed from OfficeComponent"));
           } else if (
-            profile?.verificationDate === null &&
+            profile?.relations.verificationDate === null &&
             localStorage.getItem("waitVerificationAccepted") !== "true"
           ) {
             this.officeUIInfoService.applyOpenVerificationModal();

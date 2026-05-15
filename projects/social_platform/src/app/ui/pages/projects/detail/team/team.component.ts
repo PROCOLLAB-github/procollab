@@ -23,6 +23,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
   styleUrl: "./team.component.scss",
   imports: [CommonModule, InfoCardComponent],
   standalone: true,
+  providers: [ProjectsDetailService, ProfileDetailUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamComponent implements OnInit, OnDestroy {

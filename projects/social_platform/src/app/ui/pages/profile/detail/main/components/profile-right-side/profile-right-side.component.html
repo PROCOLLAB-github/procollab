@@ -2,14 +2,14 @@
 
 <div class="profile__right">
   <div class="profile__aside">
-    @if (user()!.links.length; as linksLength) {
+    @if (user()!.personal.links.length; as linksLength) {
     <div class="profile__section lists">
       <div class="lists__section">
         <h3 class="text-body-12 lists__title">контакты</h3>
         <i class="lists__icon" icon="phone" appIcon appSquare="12"></i>
       </div>
       <ul class="lists__list">
-        @for (link of user()!.links.slice(0, 3); track $index) {
+        @for (link of user()!.personal.links.slice(0, 3); track $index) {
         <li class="lists__item text-body-10">
           <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }"></ng-container>
         </li>
@@ -17,7 +17,7 @@
       </ul>
       <div class="lists__remaining" [class.links__remaining--show]="readAllLinks()">
         <ul class="lists__list">
-          @for (link of user()!.links.slice(3); track $index) {
+          @for (link of user()!.personal.links.slice(3); track $index) {
           <li class="lists__item text-body-12" style="color: var(--black)">
             <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
             </ng-container>
@@ -39,23 +39,23 @@
       </div>
       }
     </div>
-    } @if (user()!.education.length; as educationLength) {
+    } @if (user()!.relations.education.length; as educationLength) {
     <div class="lists profile__section">
       <div class="lists__section">
         <h3 class="text-body-12 lists__title">образование</h3>
         <i class="lists__icon" icon="in-search" appIcon appSquare="12"></i>
       </div>
       <ul class="lists__list">
-        @for (p of user()!.education.slice(0, 3); track $index) {
+        @for (p of user()!.relations.education.slice(0, 3); track $index) {
         <li class="lists__item">
           <ng-container *ngTemplateOutlet="educationTemp; context: { $implicit: p }"></ng-container>
         </li>
         }
       </ul>
       <div class="lists__remaining" [class.lists__remaining--show]="readAllEducation()">
-        @if (user()!.education) {
+        @if (user()!.relations.education) {
         <ul>
-          @for (educationItem of user()!.education.slice(3); track $index) {
+          @for (educationItem of user()!.relations.education.slice(3); track $index) {
           <li>
             <ng-container
               *ngTemplateOutlet="educationTemp; context: { $implicit: educationItem }"
@@ -93,14 +93,14 @@
       </div>
       }
     </div>
-    } @if (user()!.workExperience.length; as workExperienceLength) {
+    } @if (user()!.relations.workExperience.length; as workExperienceLength) {
     <div class="lists profile__section">
       <div class="lists__section">
         <h3 class="text-body-12 lists__title">работа</h3>
         <i class="lists__icon" icon="suitcase" appIcon appSquare="12"></i>
       </div>
       <ul class="lists__list">
-        @for (p of user()!.workExperience.slice(0, 3); track $index) {
+        @for (p of user()!.relations.workExperience.slice(0, 3); track $index) {
         <li class="lists__item">
           <ng-container
             *ngTemplateOutlet="workExperienceTemp; context: { $implicit: p }"
@@ -109,9 +109,9 @@
         }
       </ul>
       <div class="lists__remaining" [class.lists__remaining--show]="readAllWorkExperience()">
-        @if (user()!.workExperience) {
+        @if (user()!.relations.workExperience) {
         <ul>
-          @for (workExperienceItem of user()!.workExperience.slice(3); track $index) {
+          @for (workExperienceItem of user()!.relations.workExperience.slice(3); track $index) {
           <li>
             <ng-container
               *ngTemplateOutlet="workExperienceTemp; context: { $implicit: workExperienceItem }"
@@ -167,23 +167,23 @@
       </div>
       }
     </div>
-    } @if (user()!.projects.length; as projectsLength) {
+    } @if (user()!.relations.projects.length; as projectsLength) {
     <div class="lists profile__section">
       <div class="lists__section">
         <h3 class="text-body-12 lists__title">проекты</h3>
         <i class="lists__icon" icon="projects" appIcon appSquare="12"></i>
       </div>
       <ul class="lists__list">
-        @for (p of user()!.projects.slice(0, 3); track p.id) {
+        @for (p of user()!.relations.projects.slice(0, 3); track p.id) {
         <li class="lists__item" [routerLink]="AppRoutes.projects.detail(p.id)">
           <ng-container *ngTemplateOutlet="projectTemp; context: { $implicit: p }"></ng-container>
         </li>
         }
       </ul>
       <div class="lists__remaining" [class.lists__remaining--show]="readAllProjects()">
-        @if (user()!.projects) {
+        @if (user()!.relations.projects) {
         <ul>
-          @for (project of user()!.projects.slice(3); track project.id) {
+          @for (project of user()!.relations.projects.slice(3); track project.id) {
           <li>
             <ng-container
               *ngTemplateOutlet="projectTemp; context: { $implicit: project }"

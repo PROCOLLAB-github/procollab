@@ -21,7 +21,7 @@ import { ToggleProjectNewsLikeUseCase } from "../../use-cases/toggle-project-new
 import { EditProjectNewsUseCase } from "../../use-cases/edit-project-news.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class ProjectsDetailService {
   private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
   private readonly transferProjectOwnershipUseCase = inject(TransferProjectOwnershipUseCase);
