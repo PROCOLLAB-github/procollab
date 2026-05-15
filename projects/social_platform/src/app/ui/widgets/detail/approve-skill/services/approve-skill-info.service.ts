@@ -64,7 +64,19 @@ export class ApproveskillInfoService {
           if (result.value.confirmedBy) return of(result);
 
           return this.authRepository.profile.pipe(
-            map(profile => ok({ ...result.value, confirmedBy: profile } as Approve))
+            map(profile =>
+              ok({
+                ...result.value,
+                confirmedBy: {
+                  id: profile.id,
+                  firstName: profile.firstName,
+                  lastName: profile.lastName,
+                  avatar: profile.personal.avatar,
+                  speciality: profile.personal.speciality,
+                  v2Speciality: profile.personal.v2Speciality,
+                },
+              } as Approve)
+            )
           );
         }),
         takeUntil(this.destroy$)

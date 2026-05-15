@@ -23,7 +23,7 @@ export class ProfileDetailUIInfoService {
 
     if (
       this.user()?.id !== undefined &&
-      this.user()!.progress! < 100 &&
+      this.user()!.relations.progress! < 100 &&
       !this.hasSeenProfileFillModal(this.user()!.id)
     ) {
       this.isProfileFill.set(true);
@@ -39,8 +39,8 @@ export class ProfileDetailUIInfoService {
         this.user()?.firstName &&
         this.user()?.lastName &&
         this.user()?.email &&
-        this.user()?.avatar &&
-        this.user()?.birthday
+        this.user()?.personal.avatar &&
+        this.user()?.personal.birthday
       )
     );
   }
@@ -59,7 +59,7 @@ export class ProfileDetailUIInfoService {
         2,
         ["навыки", "достижения"],
         ["squiz", "medal"],
-        [user.skills, user.achievements],
+        [user.relations.skills, user.relations.achievements],
         ["array", "array"]
       )!.filter(item => !Array.isArray(item.about) || item.about.length > 0)
     );

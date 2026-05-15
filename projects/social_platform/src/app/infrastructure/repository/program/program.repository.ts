@@ -14,6 +14,8 @@ import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter"
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
 import { EntityCache } from "@domain/shared/entity-cache";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
+import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
+import { userFromRaw } from "@utils/userRaw";
 
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
@@ -56,7 +58,12 @@ export class ProgramRepository implements ProgramRepositoryPort {
   }
 
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
-    return this.programAdapter.getAllMembers(programId, skip, take);
+    return this.programAdapter.getAllMembers(programId, skip, take).pipe(
+      map(result => ({
+        ...result,
+        results: result.results.map(user => userFromRaw(user)),
+      }))
+    );
   }
 
   getProgramFilters(programId: number): Observable<PartnerProgramFields[]> {
@@ -67,7 +74,10 @@ export class ProgramRepository implements ProgramRepositoryPort {
     return this.programAdapter.getProgramProjectAdditionalFields(programId);
   }
 
-  applyProjectToProgram(programId: number, dto: ApplyToProgramDTO): Observable<any> {
+  applyProjectToProgram(
+    programId: number,
+    dto: ApplyToProgramDTO
+  ): Observable<ApplyToProgramResponse> {
     return this.programAdapter.applyProjectToProgram(programId, dto);
   }
 

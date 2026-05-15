@@ -75,7 +75,7 @@ export class ProfileDetailInfoService {
 
   initCheckDescription(descEl?: ElementRef): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", !!this.user()?.aboutMe, descEl);
+      this.expandService.checkExpandable("description", !!this.user()?.personal.aboutMe, descEl);
     }, 150);
   }
 

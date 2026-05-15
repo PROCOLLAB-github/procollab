@@ -51,30 +51,7 @@ export class UserLanguages {
   languageLevel!: string;
 }
 
-export class User {
-  id!: number;
-  email!: string;
-  firstName!: string;
-  lastName!: string;
-  patronymic!: string;
-  aboutMe!: string;
-  birthday!: string;
-  avatar!: string;
-  links!: string[];
-  coverImageAddress?: string;
-  keySkills!: string[];
-  skills!: Skill[];
-  skillsIds!: number[];
-  isOnline!: boolean;
-  isActive!: boolean;
-  isMospolytechStudent?: boolean;
-  studyGroup?: string;
-  progress?: number;
-  v2Speciality!: {
-    id: number;
-    name: string;
-  };
-
+export class UserRolesData {
   member?: {
     usefulToProject: string;
   };
@@ -92,13 +69,17 @@ export class User {
   investor?: {
     preferredIndustries: string[];
   };
+}
 
-  onboardingStage!: number | null;
-  speciality!: string;
-  userType!: number;
-  city!: string;
-  phoneNumber!: string;
-  region!: string;
+export class UserSubscription {
+  isSubscribed!: boolean;
+  lastSubscribeDate!: string;
+  subscriptionDateOver!: string | null;
+  lastSubscriptionType!: string | null;
+  isAutopayAllowed!: boolean;
+}
+
+export class UserRelations {
   education!: Education[];
   userLanguages!: UserLanguages[];
   workExperience!: WorkExperience[];
@@ -106,44 +87,70 @@ export class User {
   programs!: Program[];
   projects!: Project[];
   subscribedProjects!: Project[];
+  keySkills!: string[];
+  skills!: Skill[];
+  skillsIds!: number[];
+  progress?: number;
+  isOnline!: boolean;
+  isActive!: boolean;
   timeCreated!: string;
   timeUpdated!: string;
   verificationDate!: string;
-  isSubscribed!: boolean;
-  lastSubscribeDate!: string;
-  subscriptionDateOver!: string | null;
-  lastSubscriptionType!: string | null;
-  isAutopayAllowed!: boolean;
+}
+
+export class UserPersonal {
+  onboardingStage!: number | null;
+  patronymic!: string;
+  aboutMe!: string;
+  birthday!: string;
+  avatar!: string;
+  links!: string[];
+  coverImageAddress?: string;
+  speciality!: string;
+  userType!: number;
+  city!: string;
+  phoneNumber!: string;
+  region!: string;
+  isMospolytechStudent?: boolean;
+  studyGroup?: string;
+
+  v2Speciality!: {
+    id: number;
+    name: string;
+  };
+}
+
+export type UserRaw = {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+} & UserPersonal &
+  UserRolesData &
+  UserRelations &
+  UserSubscription;
+
+export type UserInput = Partial<UserRaw> & {
+  personal?: Partial<UserPersonal>;
+  roles?: Partial<UserRolesData>;
+  relations?: Partial<UserRelations>;
+  subscription?: Partial<UserSubscription>;
+};
+
+export class User {
+  id!: number;
+  email!: string;
+  firstName!: string;
+  lastName!: string;
+
+  personal!: UserPersonal;
+  roles!: UserRolesData;
+  relations!: UserRelations;
+
+  subscription!: UserSubscription;
 
   doesCompleted(): boolean {
-    return this.onboardingStage === null;
-  }
-
-  static default(): User {
-    return {
-      firstName: "Егор",
-      lastName: "Токарев",
-      userType: 2,
-      email: "example@google.com",
-      birthday: "23.42.3423",
-      city: "234sadfas",
-      onboardingStage: null,
-      speciality: "asdfasdfasd",
-      avatar:
-        "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/07/07b5228efb2df4d2ded575a785f5dedec1db2687.jpg",
-      keySkills: ["sadf"],
-      member: {},
-      aboutMe: "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
-      id: 0,
-      timeCreated: "",
-      timeUpdated: "",
-      verificationDate: "",
-      isSubscribed: false,
-      isAutopayAllowed: false,
-      lastSubscribeDate: "",
-      subscriptionDateOver: null,
-      lastSubscriptionType: null,
-    } as User;
+    return this.personal.onboardingStage === null;
   }
 }
 

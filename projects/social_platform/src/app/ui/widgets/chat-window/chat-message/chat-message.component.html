@@ -11,10 +11,10 @@
     <app-avatar
       class="message__avatar"
       [size]="30"
-      [isOnline]="chatMessage.author.isOnline"
+      [isOnline]="chatMessage.author.relations.isOnline"
       [onlineBadgeBorder]="2"
       [onlineBadgeSize]="10"
-      [url]="chatMessage.author.avatar"
+      [url]="chatMessage.author.personal.avatar"
     ></app-avatar>
     <div class="message__info">
       <div class="message__top">

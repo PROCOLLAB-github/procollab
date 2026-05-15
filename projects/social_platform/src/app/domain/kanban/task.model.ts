@@ -1,6 +1,6 @@
 /** @format */
 
-import { User } from "@domain/auth/user.model";
+import { User, UserRaw } from "@domain/auth/user.model";
 import { FileModel } from "@domain/file/file.model";
 import { Column } from "./column.model";
 import { Goal } from "../project/goals.model";
@@ -26,13 +26,13 @@ export interface TaskPreview {
   tags: Tag[];
   goal: Pick<Goal, "id" | "title"> | null;
   files: FileModel[];
-  responsible: Pick<User, "id" | "avatar"> | null;
-  performers: Pick<User, "id" | "avatar">[] | null;
+  responsible: Pick<UserRaw, "id" | "avatar"> | null;
+  performers: Pick<UserRaw, "id" | "avatar">[] | null;
 }
 
 export interface TaskDetail extends TaskPreview {
   score: number;
-  creator: Pick<User, "id" | "avatar" | "firstName" | "lastName">;
+  creator: Pick<UserRaw, "id" | "avatar" | "firstName" | "lastName">;
   datetimeCreated: string;
   datetimeTaskStart: string;
   requiredSkills: Skill[];

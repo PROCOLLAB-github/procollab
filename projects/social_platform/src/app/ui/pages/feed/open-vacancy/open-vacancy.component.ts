@@ -16,7 +16,6 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { expandElement } from "@utils/expand-element";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { AdvertCardComponent } from "./advert-card/advert-card.component";
 import { TruncatePipe, DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
@@ -53,7 +52,6 @@ import { IndustryRepository } from "@infrastructure/repository/industry/industry
     ParseBreaksPipe,
     TruncatePipe,
     AvatarComponent,
-    AdvertCardComponent,
   ],
   templateUrl: "./open-vacancy.component.html",
   styleUrl: "./open-vacancy.component.scss",

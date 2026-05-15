@@ -41,6 +41,7 @@ export class InviteRepository implements InviteRepositoryPort {
       },
     });
 
+    // Слушание события отзыва приглашения — уменьшаем счётчик так же, как при reject/accept.
     this.eventBus.on<RevokeInvite>("RevokeInvite").subscribe({
       next: () => {
         const currentCount = this.myInvitesCount$.getValue();

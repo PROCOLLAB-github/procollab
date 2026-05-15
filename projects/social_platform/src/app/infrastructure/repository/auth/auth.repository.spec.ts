@@ -115,13 +115,16 @@ describe("AuthRepository", () => {
   it("updateProfile делегирует в adapter.saveProfile и пушит в profile$", done => {
     setup();
     const updated = { id: 1, firstName: "A" } as User;
+    adapter.getProfile.and.returnValue(of({ id: 1 } as User));
     adapter.saveProfile.and.returnValue(of(updated));
+    repository.fetchProfile().subscribe();
 
     repository.updateProfile({ firstName: "A" }).subscribe();
 
     repository.profile.subscribe(profile => {
-      expect(profile).toBe(updated);
-      expect(adapter.saveProfile).toHaveBeenCalledOnceWith({ firstName: "A" });
+      expect(profile).toBeInstanceOf(User);
+      expect(profile.firstName).toBe("A");
+      expect(adapter.saveProfile).toHaveBeenCalledOnceWith({ firstName: "A", id: 1 });
       done();
     });
   });

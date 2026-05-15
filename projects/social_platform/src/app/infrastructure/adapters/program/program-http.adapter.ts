@@ -12,6 +12,7 @@ import { ProgramCreate } from "@domain/program/program-create.model";
 import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
+import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
@@ -135,7 +136,10 @@ export class ProgramHttpAdapter {
    * @param programId идентификатор программы
    * @param body тело заявки
    */
-  applyProjectToProgram(programId: number, dto: ApplyToProgramDTO): Observable<any> {
+  applyProjectToProgram(
+    programId: number,
+    dto: ApplyToProgramDTO
+  ): Observable<ApplyToProgramResponse> {
     const payload = {
       project: dto.project,
       program_field_values: dto.programFieldValues.map(({ fieldId, valueText }) => ({

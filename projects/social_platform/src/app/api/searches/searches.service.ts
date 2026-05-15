@@ -1,18 +1,19 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { Observable, Subject, take, takeUntil } from "rxjs";
+import { Observable, of, Subject, take, takeUntil } from "rxjs";
 import { Specialization } from "@domain/specializations/specialization.model";
 import { FormGroup } from "@angular/forms";
-import { SpecializationsRepositoryPort as SpecializationsService } from "@domain/specializations/ports/specializations.repository.port";
 import { Skill } from "@domain/skills/skill.model";
 import { SkillsGroup } from "@domain/skills/skills-group.model";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
+import { GetSpecializationsInlineUseCase } from "@api/specializations/use-cases/get-specializations-inline.use-case";
+import { fail } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class SearchesService {
-  private readonly specsService = inject(SpecializationsService);
   private readonly skillsRepository = inject(SkillsRepositoryPort);
+  private readonly getSpecializationsInlineUseCase = inject(GetSpecializationsInlineUseCase);
 
   readonly inlineSpecs = signal<Specialization[]>([]);
   readonly inlineSkills = signal<Skill[]>([]);
@@ -28,11 +29,13 @@ export class SearchesService {
   }
 
   onSearchSpec(query: string): void {
-    this.specsService
-      .getSpecializationsInline(query, 1000, 0)
+    this.getSpecializationsInlineUseCase
+      .execute(query, 1000, 0)
       .pipe(take(1), takeUntil(this.destroy$))
-      .subscribe(({ results }) => {
-        this.inlineSpecs.set(results);
+      .subscribe(result => {
+        if (!result.ok) return of(fail(null));
+
+        return this.inlineSpecs.set(result.value.results);
       });
   }
 

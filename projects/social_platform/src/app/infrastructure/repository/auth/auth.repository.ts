@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
-import { User, UserRole } from "@domain/auth/user.model";
+import { User, UserInput, UserRole } from "@domain/auth/user.model";
 import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
 import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { plainToInstance } from "class-transformer";
@@ -13,6 +13,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoginCommand } from "@domain/auth/commands/login.command";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
 import { ChatStateService } from "@api/chat/chat-state.service";
+import { userFromRaw, userToRaw } from "@utils/userRaw";
 
 @Injectable({ providedIn: "root" })
 export class AuthRepository implements AuthRepositoryPort {
@@ -54,28 +55,43 @@ export class AuthRepository implements AuthRepositoryPort {
   }
 
   resendEmail(email: string): Observable<User> {
-    return this.authAdapter.resendEmail(email).pipe(map(user => plainToInstance(User, user)));
+    return this.authAdapter.resendEmail(email).pipe(map(user => userFromRaw(user)));
   }
 
   fetchUser(id: number): Observable<User> {
-    return this.authAdapter.getUser(id).pipe(map(user => plainToInstance(User, user)));
+    return this.authAdapter.getUser(id).pipe(map(user => userFromRaw(user)));
   }
 
   fetchProfile(): Observable<User> {
     return this.authAdapter.getProfile().pipe(
-      map(user => plainToInstance(User, user)),
+      map(user => userFromRaw(user)),
       tap(profile => this.profile$.next(profile))
     );
   }
 
-  updateProfile(data: Partial<User>): Observable<User> {
-    return this.authAdapter.saveProfile(data).pipe(tap(user => this.profile$.next(user)));
+  updateProfile(data: UserInput): Observable<User> {
+    const rawData = userToRaw(data);
+    const saveProfile = (profileData: UserInput) =>
+      this.authAdapter.saveProfile(userToRaw(profileData)).pipe(
+        map(user => userFromRaw(user)),
+        tap(user => this.profile$.next(user))
+      );
+
+    if (rawData.id !== undefined) {
+      return saveProfile(rawData);
+    }
+
+    return this.profile.pipe(
+      take(1),
+      concatMap(profile => saveProfile({ ...rawData, id: profile.id }))
+    );
   }
 
   updateOnboardingStage(stage: number | null): Observable<User> {
     return this.profile.pipe(
       take(1),
       concatMap(profile => this.authAdapter.setOnboardingStage(stage, profile.id)),
+      map(user => userFromRaw(user)),
       tap(user => this.profile$.next(user))
     );
   }
@@ -84,6 +100,7 @@ export class AuthRepository implements AuthRepositoryPort {
     return this.profile.pipe(
       take(1),
       concatMap(profile => this.authAdapter.saveAvatar(url, profile.id)),
+      map(user => userFromRaw(user)),
       tap(user => this.profile$.next(user))
     );
   }

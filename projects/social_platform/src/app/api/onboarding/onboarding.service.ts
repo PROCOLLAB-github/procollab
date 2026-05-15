@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { User } from "@domain/auth/user.model";
+import { UserInput } from "@domain/auth/user.model";
 import { BehaviorSubject, take } from "rxjs";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
@@ -45,26 +45,26 @@ export class OnboardingService {
   constructor(private authRepository: AuthRepositoryPort) {
     this.authRepository.profile.pipe(take(1)).subscribe(p => {
       this._formValue$.next({
-        avatar: p.avatar,
-        city: p.city,
-        education: p.education,
-        workExperience: p.workExperience,
-        speciality: p.speciality,
-        skills: p.skills,
-        userType: p.userType,
+        avatar: p.personal.avatar,
+        city: p.personal.city,
+        education: p.relations.education,
+        workExperience: p.relations.workExperience,
+        speciality: p.personal.speciality,
+        skills: p.relations.skills,
+        userType: p.personal.userType,
       });
 
-      this._currentStage$.next(p.onboardingStage as number);
+      this._currentStage$.next(p.personal.onboardingStage as number);
     });
   }
 
-  private _formValue$ = new BehaviorSubject<Partial<User>>({});
+  private _formValue$ = new BehaviorSubject<UserInput>({});
   formValue$ = this._formValue$.asObservable();
 
   private _currentStage$ = new BehaviorSubject<number | null>(0);
   currentStage$ = this._currentStage$.asObservable();
 
-  setFormValue(updates: Partial<User>): void {
+  setFormValue(updates: UserInput): void {
     this.formValue$.pipe(take(1)).subscribe(fv => {
       this._formValue$.next({ ...fv, ...updates });
     });
