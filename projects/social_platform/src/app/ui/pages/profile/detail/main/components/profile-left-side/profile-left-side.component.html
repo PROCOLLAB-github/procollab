@@ -56,7 +56,7 @@
       </li>
       }
     </ul>
-    <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms()">
+    <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms">
       @if (user()!.relations.programs) {
       <ul>
         @for (program of user()!.relations.programs.slice(3); track program.id) {
@@ -86,8 +86,8 @@
       </div>
     </ng-template>
     @if (programsLength > 3) {
-    <div class="read-more text-body-10" (click)="readAllPrograms.set(!readAllPrograms())">
-      {{ readAllPrograms() ? "скрыть" : "подробнее" }}
+    <div class="read-more text-body-10" (click)="expandService.toggleReadAll('programs')">
+      {{ readAllPrograms ? "скрыть" : "подробнее" }}
     </div>
     }
   </div>

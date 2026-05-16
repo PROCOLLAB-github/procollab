@@ -37,7 +37,7 @@ describe("ProgramNewsRepository", () => {
     setup();
     adapter.fetchNews.and.returnValue(of(page()));
 
-    repository.fetchNews(10, 0, 42).subscribe(res => {
+    repository.fetchNews("10", 0, 42).subscribe(res => {
       expect(adapter.fetchNews).toHaveBeenCalledOnceWith(10, 0, 42);
       expect(res.results[0]).toBeInstanceOf(FeedNews);
       done();
@@ -48,9 +48,9 @@ describe("ProgramNewsRepository", () => {
     setup();
     adapter.setNewsViewed.and.returnValue(of(undefined));
 
-    repository.readNews("p1", [1, 2]).subscribe(() => {
-      expect(adapter.setNewsViewed).toHaveBeenCalledWith("p1", 1);
-      expect(adapter.setNewsViewed).toHaveBeenCalledWith("p1", 2);
+    repository.readNews(1, [1, 2]).subscribe(() => {
+      expect(adapter.setNewsViewed).toHaveBeenCalledWith("1", 1);
+      expect(adapter.setNewsViewed).toHaveBeenCalledWith("1", 2);
       done();
     });
   });
@@ -66,7 +66,7 @@ describe("ProgramNewsRepository", () => {
     setup();
     adapter.addNews.and.returnValue(of({ id: 1 } as FeedNews));
 
-    repository.addNews(42, { text: "t", files: [] }).subscribe(news => {
+    repository.addNews("42", { text: "t", files: [] }).subscribe(news => {
       expect(adapter.addNews).toHaveBeenCalledOnceWith(42, { text: "t", files: [] });
       expect(news).toBeInstanceOf(FeedNews);
       done();
@@ -77,17 +77,17 @@ describe("ProgramNewsRepository", () => {
     setup();
     adapter.editNews.and.returnValue(of({ id: 5 } as FeedNews));
 
-    repository.editNews(42, 5, { text: "t" }).subscribe(news => {
+    repository.editNews("42", 5, { text: "t" }).subscribe(news => {
       expect(adapter.editNews).toHaveBeenCalledOnceWith(42, 5, { text: "t" });
       expect(news).toBeInstanceOf(FeedNews);
       done();
     });
   });
 
-  it("deleteNews делегирует в adapter", () => {
+  it("delete делегирует в adapter", () => {
     setup();
     adapter.deleteNews.and.returnValue(of(undefined));
-    repository.deleteNews(42, 5).subscribe();
+    repository.delete("42", 5).subscribe();
     expect(adapter.deleteNews).toHaveBeenCalledOnceWith(42, 5);
   });
 });

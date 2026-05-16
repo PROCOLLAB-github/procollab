@@ -13,6 +13,7 @@ import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
 
 /**
  * Компонент страницы команды в деательной информации о проекте
@@ -23,7 +24,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
   styleUrl: "./team.component.scss",
   imports: [CommonModule, InfoCardComponent],
   standalone: true,
-  providers: [ProjectsDetailService, ProfileDetailUIInfoService],
+  providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamComponent implements OnInit, OnDestroy {

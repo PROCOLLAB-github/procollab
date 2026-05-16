@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { ChatListItem } from "@domain/chat/chat-item.model";
-import { ChatDirectService } from "@api/chat/chat-direct/chat-direct.service";
+import { ChatGroupsRepositoryPort } from "@domain/chat/ports/chat-groups.port";
 
 /**
  * Резолвер для загрузки прямых чатов пользователя
@@ -16,7 +16,7 @@ import { ChatDirectService } from "@api/chat/chat-direct/chat-direct.service";
  * - Observable<ChatListItem[]> - список элементов прямых чатов
  */
 export const ChatResolver: ResolveFn<ChatListItem[]> = () => {
-  const chatDirectService = inject(ChatDirectService);
+  const chatGroupsRepository = inject(ChatGroupsRepositoryPort);
 
-  return chatDirectService.getDirects();
+  return chatGroupsRepository.getChats("direct");
 };

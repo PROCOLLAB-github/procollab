@@ -53,6 +53,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     FormsModule,
     RouterLink,
   ],
+  providers: [ProjectTeamUIService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

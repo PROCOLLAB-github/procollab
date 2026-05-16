@@ -31,12 +31,9 @@ export class ProfileRightSideComponent {
   @Input() user!: WritableSignal<User | undefined>;
 
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly expandService = inject(ExpandService);
+  protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllLinks = this.expandService.readAllLinks;
-  protected readonly readAllEducation = this.expandService.readAllEducation;
-  protected readonly readAllWorkExperience = this.expandService.readAllWorkExperience;
-  protected readonly readAllProjects = this.expandService.readAllProjects;
+  protected readonly readAll = this.expandService.readAll;
 
   protected readonly AppRoutes = AppRoutes;
 

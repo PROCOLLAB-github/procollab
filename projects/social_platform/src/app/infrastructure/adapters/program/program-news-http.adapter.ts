@@ -19,7 +19,7 @@ export class ProgramNewsHttpAdapter {
    * @param offset смещение
    * @param programId идентификатор программы
    */
-  fetchNews(limit: number, offset: number, programId: number): Observable<ApiPagination<FeedNews>> {
+  fetchNews(programId: number, limit: number, offset: number): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get(
       `${this.PROGRAMS_URL}/${programId}/news/`,
       new HttpParams({ fromObject: { limit, offset } })

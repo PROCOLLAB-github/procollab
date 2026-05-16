@@ -3,20 +3,21 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { FetchProfileNewsUseCase } from "./fetch-profile-news.use-case";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROFILE_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 
 describe("FetchProfileNewsUseCase", () => {
   let useCase: FetchProfileNewsUseCase;
-  let repo: jasmine.SpyObj<ProfileNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProfileNewsRepositoryPort>("ProfileNewsRepositoryPort", [
-      "fetchNews",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["fetchNews"]);
     TestBed.configureTestingModule({
-      providers: [FetchProfileNewsUseCase, { provide: ProfileNewsRepositoryPort, useValue: repo }],
+      providers: [FetchProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(FetchProfileNewsUseCase);
   }
@@ -34,7 +35,7 @@ describe("FetchProfileNewsUseCase", () => {
 
     useCase.execute(42).subscribe();
 
-    expect(repo.fetchNews).toHaveBeenCalledOnceWith(42);
+    expect(repo.fetchNews).toHaveBeenCalledOnceWith("42");
   });
 
   it("при успехе возвращает ok со страницей новостей", done => {

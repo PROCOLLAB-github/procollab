@@ -40,7 +40,7 @@ import { SearchesService } from "@api/searches/searches.service";
     ModalComponent,
     SkillsGroupComponent,
   ],
-  providers: [ProjectsEditInfoService, ProjectVacancyService],
+  providers: [ProjectsEditInfoService, ProjectVacancyService, ProjectVacancyUIService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyStepComponent implements OnInit {

@@ -7,10 +7,10 @@ import { StorageService } from "@api/storage/storage.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ProjectNewsHttpAdapter } from "../../adapters/project/project-news-http.adapter";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
+import { NewsRepositoryPort } from "@domain/news/port/news.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProjectNewsRepository implements ProjectNewsRepositoryPort {
+export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
   private readonly projectNewsAdapter = inject(ProjectNewsHttpAdapter);
   private readonly storageService = inject(StorageService);
 

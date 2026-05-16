@@ -73,7 +73,7 @@
         }
       </ul>
       }
-      <div class="lists__remaining" [class.lists__remaining--show]="readAllAchievements()">
+      <div class="lists__remaining" [class.lists__remaining--show]="readAllAchievements">
         @if (achievements) {
         <ul class="lists__list">
           @for (a of achievements.slice(3); track a.id) {
@@ -86,8 +86,8 @@
         }
       </div>
       } @if (project()!.achievements.length > 3) {
-      <div class="read-more text-body-10" (click)="readAllAchievements.set(!readAllAchievements())">
-        {{ readAllAchievements() ? "скрыть" : "подробнее" }}
+      <div class="read-more text-body-10" (click)="expandService.toggleReadAll('achievements')">
+        {{ readAllAchievements ? "скрыть" : "подробнее" }}
       </div>
       }
     </div>

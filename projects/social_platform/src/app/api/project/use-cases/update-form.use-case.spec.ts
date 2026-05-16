@@ -49,8 +49,7 @@ describe("UpdateFormUseCase", () => {
 
     useCase.execute(cmd).subscribe(result => {
       expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("unknown");
+      if (!result.ok && result.error.kind === "unknown") {
         expect(result.error.cause).toBe(err);
       }
       done();

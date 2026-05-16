@@ -91,6 +91,7 @@ import { IndustryRepository } from "@infrastructure/repository/industry/industry
     ModalComponent,
     TruncatePipe,
   ],
+  providers: [ProgramDetailMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {

@@ -40,10 +40,12 @@ export class DetailProgramInfoService {
     const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
 
     this.additionalFields().forEach((field: PartnerProgramFields) => {
-      newFieldsFormValues.push({
-        fieldId: field.id,
-        valueText: field.options.length ? field.options[0] : "'",
-      });
+      newFieldsFormValues.push(
+        ProjectNewAdditionalProgramFields.fromField(
+          field,
+          field.options.length ? field.options[0] : "'"
+        )
+      );
     });
 
     const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };

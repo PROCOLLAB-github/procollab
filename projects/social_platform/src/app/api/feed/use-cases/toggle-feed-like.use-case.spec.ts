@@ -3,27 +3,30 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { ToggleFeedLikeUseCase } from "./toggle-feed-like.use-case";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROFILE_NEWS_REPOSITORY,
+  PROJECT_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("ToggleFeedLikeUseCase", () => {
   let useCase: ToggleFeedLikeUseCase;
-  let profileNewsRepo: jasmine.SpyObj<ProfileNewsRepositoryPort>;
-  let projectNewsRepo: jasmine.SpyObj<ProjectNewsRepositoryPort>;
+  let profileNewsRepo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let projectNewsRepo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    profileNewsRepo = jasmine.createSpyObj<ProfileNewsRepositoryPort>("ProfileNewsRepositoryPort", [
+    profileNewsRepo = jasmine.createSpyObj<NewsRepositoryPort<any>>("ProfileNewsRepository", [
       "toggleLike",
     ]);
-    projectNewsRepo = jasmine.createSpyObj<ProjectNewsRepositoryPort>("ProjectNewsRepositoryPort", [
+    projectNewsRepo = jasmine.createSpyObj<NewsRepositoryPort<any>>("ProjectNewsRepository", [
       "toggleLike",
     ]);
 
     TestBed.configureTestingModule({
       providers: [
         ToggleFeedLikeUseCase,
-        { provide: ProfileNewsRepositoryPort, useValue: profileNewsRepo },
-        { provide: ProjectNewsRepositoryPort, useValue: projectNewsRepo },
+        { provide: PROFILE_NEWS_REPOSITORY, useValue: profileNewsRepo },
+        { provide: PROJECT_NEWS_REPOSITORY, useValue: projectNewsRepo },
       ],
     });
     useCase = TestBed.inject(ToggleFeedLikeUseCase);

@@ -45,7 +45,7 @@ describe("ProfileNewsRepository", () => {
     setup();
     adapter.fetchNews.and.returnValue(of(page()));
 
-    repository.fetchNews(42).subscribe(res => {
+    repository.fetchNews("42").subscribe(res => {
       expect(adapter.fetchNews).toHaveBeenCalledOnceWith("42");
       expect(res.results[0]).toBeInstanceOf(ProfileNews);
       done();
