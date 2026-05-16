@@ -13,6 +13,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
 import { ProfileLeftSideComponent } from "./components/profile-left-side/profile-left-side.component";
 import { ProfileRightSideComponent } from "./components/profile-right-side/profile-right-side.component";
 import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-mid-side.component";
@@ -49,7 +50,7 @@ import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-m
     ProfileRightSideComponent,
     ProfileMidSideComponent,
   ],
-  providers: [ProfileDetailInfoService, ProfileDetailUIInfoService],
+  providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })

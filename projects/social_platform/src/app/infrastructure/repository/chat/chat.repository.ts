@@ -11,8 +11,8 @@ import { map } from "rxjs";
 export class ChatRepository implements ChatRepositoryPort {
   private readonly chatHttpAdapter = inject(ChatHttpAdapter);
 
-  loadMessages(projectId: number, offset?: number, limit?: number) {
-    return this.chatHttpAdapter.loadMessages(projectId, offset, limit);
+  loadMessages(id: number, type: "directs" | "projects", offset?: number, limit?: number) {
+    return this.chatHttpAdapter.loadMessages(id, type, offset, limit);
   }
 
   loadProjectFiles(projectId: number) {

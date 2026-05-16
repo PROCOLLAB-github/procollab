@@ -20,8 +20,9 @@ import { AppRoutes } from "@api/paths/app-routes";
 export class ProfileLeftSideComponent {
   @Input() user!: WritableSignal<User | undefined>;
 
-  private readonly expandService = inject(ExpandService);
+  protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllPrograms = this.expandService.readAllPrograms;
+  protected readonly readAllPrograms = this.expandService.readAll()["programs"];
+
   protected readonly AppRoutes = AppRoutes;
 }

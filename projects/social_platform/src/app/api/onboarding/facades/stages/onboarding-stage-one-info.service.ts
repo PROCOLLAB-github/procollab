@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Specialization } from "@domain/specializations/specialization.model";
-import { concatMap, map, Observable, Subject, take, takeUntil } from "rxjs";
+import { concatMap, map, Observable, of, Subject, take, takeUntil } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -10,13 +10,15 @@ import { SearchesService } from "../../../searches/searches.service";
 import { OnboardingStageOneUIInfoService } from "./ui/onboarding-stage-one-ui-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
+import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class OnboardingStageOneInfoService {
-  private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly validationService = inject(ValidationService);
@@ -74,15 +76,20 @@ export class OnboardingStageOneInfoService {
 
     this.stageSubmitting.set(loading());
 
-    this.authRepository
-      .updateProfile(this.stageForm.value)
+    this.updateProfileUseCase
+      .execute(this.stageForm.value)
       .pipe(
-        concatMap(() => this.authRepository.updateOnboardingStage(2)),
+        concatMap(result =>
+          result.ok ? this.updateOnboardingStageUseCase.execute(2) : of(result)
+        ),
         takeUntil(this.destroy$)
       )
-      .subscribe({
-        next: () => this.completeRegistration(2),
-        error: () => this.stageSubmitting.set(failure("submit_error")),
+      .subscribe(result => {
+        if (!result.ok) {
+          this.stageSubmitting.set(failure("submit_error"));
+          return;
+        }
+        this.completeRegistration(2);
       });
   }
 

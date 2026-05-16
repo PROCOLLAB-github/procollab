@@ -3,18 +3,19 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { ReadProjectNewsUseCase } from "./read-project-news.use-case";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROJECT_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("ReadProjectNewsUseCase", () => {
   let useCase: ReadProjectNewsUseCase;
-  let repo: jasmine.SpyObj<ProjectNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectNewsRepositoryPort>("ProjectNewsRepositoryPort", [
-      "readNews",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["readNews"]);
     TestBed.configureTestingModule({
-      providers: [ReadProjectNewsUseCase, { provide: ProjectNewsRepositoryPort, useValue: repo }],
+      providers: [ReadProjectNewsUseCase, { provide: PROJECT_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(ReadProjectNewsUseCase);
   }

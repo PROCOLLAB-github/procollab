@@ -3,19 +3,20 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { AddNewsUseCase } from "./add-news.use-case";
-import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROGRAM_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 import { FeedNews } from "@domain/news/project-news.model";
 
 describe("AddNewsUseCase", () => {
   let useCase: AddNewsUseCase;
-  let repo: jasmine.SpyObj<ProgramNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProgramNewsRepositoryPort>("ProgramNewsRepositoryPort", [
-      "addNews",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["addNews"]);
     TestBed.configureTestingModule({
-      providers: [AddNewsUseCase, { provide: ProgramNewsRepositoryPort, useValue: repo }],
+      providers: [AddNewsUseCase, { provide: PROGRAM_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(AddNewsUseCase);
   }
@@ -26,7 +27,7 @@ describe("AddNewsUseCase", () => {
 
     useCase.execute(1, { text: "hi", files: ["f"] }).subscribe();
 
-    expect(repo.addNews).toHaveBeenCalledOnceWith(1, { text: "hi", files: ["f"] });
+    expect(repo.addNews).toHaveBeenCalledOnceWith("1", { text: "hi", files: ["f"] });
   });
 
   it("при успехе возвращает ok с созданной новостью", done => {

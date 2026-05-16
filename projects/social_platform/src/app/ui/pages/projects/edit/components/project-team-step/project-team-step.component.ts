@@ -35,7 +35,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     TooltipComponent,
     ModalComponent,
   ],
-  providers: [ToggleFieldsInfoService],
+  providers: [ToggleFieldsInfoService, ProjectTeamUIService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit {

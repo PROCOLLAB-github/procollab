@@ -26,7 +26,16 @@ describe("ChatMessageComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ChatMessageComponent);
     component = fixture.componentInstance;
-    component.chatMessage = ChatMessage.default();
+    component.chatMessage = {
+      id: 1,
+      isEdited: false,
+      isRead: false,
+      isDeleted: false,
+      replyTo: null,
+      text: "",
+      createdAt: "",
+      files: [],
+    } as unknown as ChatMessage;
     fixture.detectChanges();
   });
 

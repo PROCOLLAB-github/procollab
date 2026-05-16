@@ -3,20 +3,21 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { FetchNewsUseCase } from "./fetch-news.use-case";
-import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROGRAM_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedNews } from "@domain/news/project-news.model";
 
 describe("FetchNewsUseCase", () => {
   let useCase: FetchNewsUseCase;
-  let repo: jasmine.SpyObj<ProgramNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProgramNewsRepositoryPort>("ProgramNewsRepositoryPort", [
-      "fetchNews",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["fetchNews"]);
     TestBed.configureTestingModule({
-      providers: [FetchNewsUseCase, { provide: ProgramNewsRepositoryPort, useValue: repo }],
+      providers: [FetchNewsUseCase, { provide: PROGRAM_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(FetchNewsUseCase);
   }
@@ -29,7 +30,7 @@ describe("FetchNewsUseCase", () => {
 
     useCase.execute(10, 0, 1).subscribe();
 
-    expect(repo.fetchNews).toHaveBeenCalledOnceWith(10, 0, 1);
+    expect(repo.fetchNews).toHaveBeenCalledOnceWith("1", 10, 0);
   });
 
   it("при успехе возвращает ok с пагинацией", done => {

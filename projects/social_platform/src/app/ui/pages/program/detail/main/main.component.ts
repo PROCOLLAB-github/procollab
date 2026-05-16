@@ -51,7 +51,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
     NewsCardComponent,
     ProgramLinksComponent,
   ],
-  providers: [ProgramDetailMainService],
+  providers: [ProgramDetailMainService, ExpandService, ProgramDetailMainUIInfoService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

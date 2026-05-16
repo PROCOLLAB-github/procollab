@@ -28,9 +28,9 @@ describe("ChatRepository", () => {
   });
 
   it("делегирует загрузку сообщений в HTTP adapter", () => {
-    repository.loadMessages(42, 10, 20).subscribe();
+    repository.loadMessages(42, "directs", 10, 20).subscribe();
 
-    expect(adapter.loadMessages).toHaveBeenCalledOnceWith(42, 10, 20);
+    expect(adapter.loadMessages).toHaveBeenCalledOnceWith(42, "directs", 10, 20);
   });
 
   it("делегирует загрузку файлов проекта в HTTP adapter", () => {

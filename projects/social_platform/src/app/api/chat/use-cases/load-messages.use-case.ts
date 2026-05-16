@@ -14,11 +14,12 @@ export class LoadMessagesUseCase {
   private readonly chatRepository = inject(ChatRepositoryPort);
 
   execute(
-    projectId: number,
+    id: number,
+    type: "directs" | "projects",
     offset?: number,
     limit?: number
   ): Observable<Result<ApiPagination<ChatMessage>, LoadMessagesError>> {
-    return this.chatRepository.loadMessages(projectId, offset, limit).pipe(
+    return this.chatRepository.loadMessages(id, type, offset, limit).pipe(
       map(page => ok<ApiPagination<ChatMessage>>(page)),
       catchError(() => of(fail<LoadMessagesError>({ kind: "server_error" })))
     );

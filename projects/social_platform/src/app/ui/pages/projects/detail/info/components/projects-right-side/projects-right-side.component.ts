@@ -18,7 +18,7 @@ import { Project } from "@domain/project/project.model";
 export class ProjectsRightSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
-  private readonly expandService = inject(ExpandService);
+  protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllAchievements = this.expandService.readAllAchievements; // Флаг показа всех достижений
+  protected readonly readAllAchievements = this.expandService.readAll()["achievements"]; // Флаг показа всех достижений
 }

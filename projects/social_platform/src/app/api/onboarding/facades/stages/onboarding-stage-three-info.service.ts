@@ -1,13 +1,14 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { concatMap, Subject, take, takeUntil, tap } from "rxjs";
+import { concatMap, of, Subject, take, takeUntil, tap } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { Router } from "@angular/router";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
+import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
@@ -16,7 +17,8 @@ export class OnboardingStageThreeInfoService {
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
-  private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 
@@ -46,14 +48,17 @@ export class OnboardingStageThreeInfoService {
 
     this.stageSubmitting.set(loading());
 
-    this.authRepository
-      .updateProfile({ userType: this.userRole() })
+    this.updateProfileUseCase
+      .execute({ userType: this.userRole() })
       .pipe(
-        concatMap(() => this.authRepository.updateOnboardingStage(null)),
-        tap(() => {
+        concatMap(result =>
+          result.ok ? this.updateOnboardingStageUseCase.execute(null) : of(result)
+        ),
+        tap(result => {
+          if (!result.ok) return;
           this.router
             .navigateByUrl(AppRoutes.office.root())
-            .then(() => this.logger.debug("Route changed from OnboardingStageTwo"));
+            .then(() => this.logger.debug("Route changed from OnboardingStageThree"));
         }),
         takeUntil(this.destroy$)
       )

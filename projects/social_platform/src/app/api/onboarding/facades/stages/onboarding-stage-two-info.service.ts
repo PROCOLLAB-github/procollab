@@ -2,20 +2,22 @@
 
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { concatMap, Subject, take, takeUntil } from "rxjs";
+import { concatMap, of, Subject, take, takeUntil } from "rxjs";
 import { ValidationService } from "@corelib";
 import { OnboardingService } from "../../onboarding.service";
 import { Skill } from "@domain/skills/skill.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "./ui/onboarding-stage-two-ui-info.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
+import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
 
 @Injectable()
 export class OnboardingStageTwoInfoService {
-  private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);
@@ -68,18 +70,21 @@ export class OnboardingStageTwoInfoService {
 
     const { skills } = this.stageForm.getRawValue();
 
-    this.authRepository
-      .updateProfile({ skillsIds: skills.map((skill: Skill) => skill.id) })
+    this.updateProfileUseCase
+      .execute({ skillsIds: skills.map((skill: Skill) => skill.id) })
       .pipe(
-        concatMap(() => this.authRepository.updateOnboardingStage(2)),
+        concatMap(result =>
+          result.ok ? this.updateOnboardingStageUseCase.execute(2) : of(result)
+        ),
         takeUntil(this.destroy$)
       )
-      .subscribe({
-        next: () => this.completeRegistration(3),
-        error: err => {
+      .subscribe(result => {
+        if (!result.ok) {
           this.stageSubmitting.set(failure("submit_error"));
-          this.onboardingStageTwoUIInfoService.applySubmitErrorModal(err);
-        },
+          this.onboardingStageTwoUIInfoService.applySubmitErrorModal(result.error.cause);
+          return;
+        }
+        this.completeRegistration(3);
       });
   }
 

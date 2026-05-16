@@ -3,13 +3,13 @@
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
 import { FeedNews } from "@domain/news/project-news.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
+import { PROJECT_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class FetchProjectNewsUseCase {
-  private readonly projectNewsRepositoryPort = inject(ProjectNewsRepositoryPort);
+  private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);
 
   execute(
     projectId: string
