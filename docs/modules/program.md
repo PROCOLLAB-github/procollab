@@ -113,15 +113,15 @@ class ProjectNewAdditionalProgramFields {
 
 ### Ports
 
-| Port                        | Файл                                    | Методы                                                                                                                                                                                                                                                                                                                                                                                                        |
-| --------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ProgramRepositoryPort`     | `ports/program.repository.port.ts`      | `getAll(skip, take, params?)`, `getActualPrograms()`, `getOne(id)`, `create(program)`, `getDataSchema(id)`, `register(id, data)`, `getAllProjects(id, params?)`, `getAllMembers(id, skip, take)`, `getProgramFilters(id)`, `getProgramProjectAdditionalFields(id)`, `applyProjectToProgram(id, body)`, `createProgramFilters(id, filters, params?)`, `submitCompettetiveProject(relationId)` (sic — опечатка) |
-| `ProgramNewsRepositoryPort` | `ports/program-news.repository.port.ts` | `fetchNews(limit, offset, programId)`, `readNews(programId, ids)`, `toggleLike(programId, newsId, state)`, `addNews(programId, obj)`, `editNews(programId, newsId, item)`, `deleteNews(programId, newsId)`                                                                                                                                                                                                    |
+| Port                      | Файл                                       | Методы                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProgramRepositoryPort`   | `ports/program.repository.port.ts`         | `getAll(skip, take, params?)`, `getActualPrograms()`, `getOne(id)`, `create(program)`, `getDataSchema(id)`, `register(id, data)`, `getAllProjects(id, params?)`, `getAllMembers(id, skip, take)`, `getProgramFilters(id)`, `getProgramProjectAdditionalFields(id)`, `applyProjectToProgram(id, body)`, `createProgramFilters(id, filters, params?)`, `submitCompettetiveProject(relationId)` (sic — опечатка) |
+| `PROGRAM_NEWS_REPOSITORY` | `domain/news/port/news.repository.port.ts` | `NewsRepositoryPort<FeedNews>`: `fetchNews`, `fetchNewsDetail`, `addNews`, `readNews`, `delete`, `toggleLike`, `editNews`                                                                                                                                                                                                                                                                                     |
 
 DI-биндинги (`infrastructure/di/program/`):
 
 - `program.providers.ts` — `ProgramRepositoryPort` ↔ `ProgramRepository`.
-- `program-news.providers.ts` — `ProgramNewsRepositoryPort` ↔ `ProgramNewsRepository`.
+- `program-news.providers.ts` — `PROGRAM_NEWS_REPOSITORY` ↔ `ProgramNewsRepository`.
 
 ---
 
@@ -143,18 +143,18 @@ DI-биндинги (`infrastructure/di/program/`):
 | `GetProjectRatingsUseCase`                                 | Список рейтингов проектов программы.                                                                                                        |
 | `FilterProjectRatingsUseCase`                              | Фильтрация рейтингов.                                                                                                                       |
 | `RateProjectUseCase`                                       | Оценить проект (для эксперта).                                                                                                              |
-| News (5 шт.)                                               | `FetchNewsUseCase`, `AddNewsUseCase`, `EditNewsUseCase`, `DeleteNewsUseCase`, `ReadNewsUseCase`, `ToggleLikeUseCase` — программные новости. |
+| News (6 шт.)                                               | `FetchNewsUseCase`, `AddNewsUseCase`, `EditNewsUseCase`, `DeleteNewsUseCase`, `ReadNewsUseCase`, `ToggleLikeUseCase` — программные новости. |
 
 ---
 
 ## Facades (`api/program/facades/`)
 
-| Facade                                                            | Provided                                                   | Что                                                                                                                                                                                     |
-| ----------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ProgramInfoService`                                              | root                                                       | Глобальные операции (cross-pages).                                                                                                                                                      |
-| `ProgramMainInfoService` + `ProgramMainUIInfoService`             | страница `/all`                                            | Список всех программ — пагинация, бесконечный скролл.                                                                                                                                   |
-| `ProgramDetailMainService` + `ProgramDetailMainUIInfoService`     | страница `/program/:id` (main child)                       | Детальная — подгрузка программы + новости через `ProgramNewsRepositoryPort`. Использует `ExpandService` для раскрытия описания. Эмитит подачу проекта через `ProjectAdditionalService`. |
-| `ProgramDetailListInfoService` + `ProgramDetailListUIInfoService` | страница `/program/:id/{projects,members,projects-rating}` | Универсальный список (тип определяется по `route.data.listType`). Фильтрация через `<app-program-projects-filter>`.                                                                     |
+| Facade                                                            | Provided                                                   | Что                                                                                                                                                                                   |
+| ----------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProgramInfoService`                                              | root                                                       | Глобальные операции (cross-pages).                                                                                                                                                    |
+| `ProgramMainInfoService` + `ProgramMainUIInfoService`             | страница `/all`                                            | Список всех программ — пагинация, бесконечный скролл.                                                                                                                                 |
+| `ProgramDetailMainService` + `ProgramDetailMainUIInfoService`     | страница `/program/:id` (main child)                       | Детальная — подгрузка программы + новости через `PROGRAM_NEWS_REPOSITORY`. Использует `ExpandService` для раскрытия описания. Эмитит подачу проекта через `ProjectAdditionalService`. |
+| `ProgramDetailListInfoService` + `ProgramDetailListUIInfoService` | страница `/program/:id/{projects,members,projects-rating}` | Универсальный список (тип определяется по `route.data.listType`). Фильтрация через `<app-program-projects-filter>`.                                                                   |
 
 ---
 

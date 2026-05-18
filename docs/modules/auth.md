@@ -12,7 +12,7 @@
 - Сброс пароля (`/auth/reset_password/send_email`, `/auth/reset_password`, `/auth/reset_password/confirm`) — three-step flow.
 - Хранение текущего профиля + ролей пользователя в `AuthRepository` (`ReplaySubject`).
 - Скачивание CV пользователя.
-- Profile-service для achievements / skills approve (legacy, не на новом use-case паттерне).
+- Связанные операции профиля: сохранение edit-формы через `SaveProfileUseCase`, подтверждение навыков через skills use-case'ы.
 
 `logout` отдельной use-case'ом не вынесен — выполняется напрямую в `AuthInfoService.logout()` → `authRepository.logout()`.
 
@@ -192,18 +192,9 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 ---
 
-## Legacy: `api/auth/profile.service.ts`
+## Связанные операции профиля
 
-`ProfileService` (старый стиль, не на use-case'ах). Используется в profile-edit для **достижений** и **подтверждения навыков**:
-
-| Метод                             | Endpoint                                               | Что                                        |
-| --------------------------------- | ------------------------------------------------------ | ------------------------------------------ |
-| `getAchievements()`               | `GET /auth/users/achievements/`                        | Список достижений                          |
-| `addAchievement(a)`               | `POST /auth/users/achievements/`                       | Создание                                   |
-| `editAchievement(id, a)`          | `PUT /auth/users/achievement/<id>/`                    | (sic) endpoint в единственном числе        |
-| `deleteAchievement(id)`           | `DELETE /auth/users/achievements/<id>/`                | Удаление                                   |
-| `approveSkill(userId, skillId)`   | `POST /auth/users/<userId>/approve_skill/<skillId>/`   | Подтверждение навыка, возвращает `Approve` |
-| `unApproveSkill(userId, skillId)` | `DELETE /auth/users/<userId>/approve_skill/<skillId>/` | Отмена подтверждения навыка                |
+Profile-edit хранит достижения в общей форме профиля и сохраняет их через `SaveProfileUseCase` (см. [`docs/modules/profile.md`](profile.md)). Подтверждение навыков вынесено в модуль skills: `ApproveSkillUseCase` / `UnapproveSkillUseCase` работают через `SkillsRepositoryPort`.
 
 ---
 
@@ -298,7 +289,7 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 | `core/lib/services/error/...`                                | использует `LoggerService` параллельно с auth-flow редиректами.                                                                                         |
 | `app.component.ts`                                           | `AuthRepositoryPort.fetchUserRoles()` + `fetchChangeableRoles()` в `forkJoin` при старте; `tokenService.getTokens()` для решения redirect login/office. |
 | `widgets/header`, `widgets/detail`, `widgets/info-card`      | `AuthRepositoryPort.profile` (или через `AuthInfoService`) для отображения текущего пользователя.                                                       |
-| `pages/profile/edit`                                         | `AuthRepositoryPort.updateProfile()`, `updateAvatar()`, `updateOnboardingStage()`.                                                                      |
+| `pages/profile/edit`                                         | `SaveProfileUseCase` для сохранения формы; `AuthRepositoryPort.updateProfile()` используется для смены типа пользователя.                               |
 | `pages/onboarding`                                           | `AuthRepositoryPort.updateOnboardingStage()`.                                                                                                           |
 | Любой компонент в `office` через `app-profile-control-panel` | `logout()` через `AuthInfoService.logout()`.                                                                                                            |
 

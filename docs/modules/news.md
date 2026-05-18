@@ -2,20 +2,39 @@
 
 # Module: `news`
 
-Маленький cross-cutting модуль, объединяющий ленту **разных типов новостей** одной общей логикой презентации:
+Cross-cutting модуль ленты новостей трёх владельцев (project / profile / program) поверх **единого дженерик-порта** + общего UI-info сервиса и виджетов. Плюс отдельная маркетинговая «статья» для feed.
 
-- **Project news** — `domain/project/project-news.model.ts`, `domain/project/ports/project-news.repository.port.ts`. Документирован в [`docs/modules/project.md`](project.md).
-- **Profile news** — `domain/profile/profile-news.model.ts`, `domain/profile/ports/profile-news.repository.port.ts`. Документирован в [`docs/modules/profile.md`](profile.md).
-- **Program news** — `domain/program/ports/program-news.repository.port.ts`. Документирован в [`docs/modules/program.md`](program.md).
-- **Article** — отдельная маркетинговая новость для feed (`domain/news/article.model.ts`).
+## Единый порт `NewsRepositoryPort<T>`
 
-Этот документ покрывает **общие** части — UI-info сервис `NewsInfoService`, виджеты `<app-news-card>` / `<app-news-form>`, домен `New` (article).
+`domain/news/port/news.repository.port.ts` — один абстрактный класс с дженериком `T` (тип новости владельца):
 
----
+```ts
+export abstract class NewsRepositoryPort<T> {
+  abstract fetchNews(id: string, limit?: number, offset?: number): Observable<ApiPagination<T>>;
+  abstract fetchNewsDetail(id: string, newsId: string): Observable<T>;
+  abstract addNews(id: string, obj: { text: string; files: string[] }): Observable<T>;
+  abstract readNews(id: number, newsIds: number[]): Observable<void[]>;
+  abstract delete(id: string, newsId: number): Observable<void>;
+  abstract toggleLike(id: string, newsId: number, state: boolean): Observable<void>;
+  abstract editNews(id: string, newsId: number, newsItem: Partial<T>): Observable<T>;
+}
+```
+
+Дженерик стирается в рантайме, поэтому один общий class-токен `NewsRepositoryPort` дал бы коллизию провайдеров (победил бы последний). Решение — **три раздельных `InjectionToken`** (там же, в `news.repository.port.ts`), каждый домен инжектит свой:
+
+| Токен                     | Тип                               | Реализация (`infrastructure/repository/`) | DI-провайдер                           |
+| ------------------------- | --------------------------------- | ----------------------------------------- | -------------------------------------- |
+| `PROJECT_NEWS_REPOSITORY` | `NewsRepositoryPort<FeedNews>`    | `project/project-news.repository.ts`      | `di/project/project-news.providers.ts` |
+| `PROFILE_NEWS_REPOSITORY` | `NewsRepositoryPort<ProfileNews>` | `profile/profile-news.repository.ts`      | `di/profile-news.providers.ts`         |
+| `PROGRAM_NEWS_REPOSITORY` | `NewsRepositoryPort<FeedNews>`    | `program/program-news.repository.ts`      | `di/program/program-news.providers.ts` |
+
+Каждая реализация делегирует в свой HTTP-адаптер (`*-news-http.adapter.ts`) под своим URL-префиксом (`/projects/<id>/news`, `/auth/users/<id>/news`, `/programs/<id>/news`); `readNews()` дедуплицирует просмотренные через `StorageService` (`sessionStorage`).
 
 ## Domain (`domain/news/`)
 
-### `article.model.ts`
+- `domain/news/project-news.model.ts` — `FeedNews` (используется project- и program-новостями).
+- `domain/profile/profile-news.model.ts` — `ProfileNews` (профильные новости; остался в домене profile).
+- `domain/news/article.model.ts` — маркетинговая статья для feed:
 
 ```ts
 export class New {
