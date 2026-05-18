@@ -106,9 +106,9 @@
 | `OnboardingStageThreeInfoService` + `OnboardingStageThreeUIInfoService` | страница stage-3    | Выбор userType.                                                         |
 | `OnboardingUIInfoService`                                               | страница онбординга | UI-state корневой.                                                      |
 
-### `OnboardingService` (legacy)
+### `OnboardingService` (legacy state)
 
-`api/onboarding/onboarding.service.ts` — старый стиль (не на use-case'ах). Постепенно мигрирует в фасады.
+`api/onboarding/onboarding.service.ts` — общий state-service для `currentStage$` и `formValue$`. Сетевые операции онбординга уже вынесены в use-case'ы (`GetProfileUseCase`, `UpdateProfileUseCase`, `UpdateOnboardingStageUseCase`), но shared state всё ещё живёт в этом сервисе и используется stage-фасадами.
 
 ---
 
@@ -221,7 +221,7 @@ class NotificationService {
 | `SnackbarService.warning(...)` отсутствует, но потенциально нужен                                        | `services/snackbar/snackbar.service.ts`                          | Добавить если нужен.                                                |
 | Дубликаты `/courses` и `/vacancies` в `OFFICE_ROUTES`                                                    | `ui/routes/office/office.routes.ts`                              | Убрать второй блок (он недостижим).                                 |
 | Закомментированный `/chats` блок в OFFICE_ROUTES                                                         | то же                                                            | Удалить если не нужен.                                              |
-| `OnboardingService` (legacy) рядом с фасадами                                                            | `api/onboarding/onboarding.service.ts`                           | Перенести в use-case'ы.                                             |
+| `OnboardingService` (legacy state) рядом с фасадами                                                      | `api/onboarding/onboarding.service.ts`                           | Перенести shared state в page-scoped onboarding facade/store.       |
 | Stage-0 онбординга очень большой по объёму FormArray (education + workExperience)                        | `OnboardingStageZeroUIInfoService`                               | Разнести на под-шаги или выделить FormArray-сервис.                 |
 | `OFFICE_ROUTES` — простыня из 13 lazy-загрузок                                                           | `office.routes.ts`                                               | Можно разбить на функциональные группы.                             |
 | Закомментированный канбан в `detail.routes.ts` (см. [`docs/PROJECT.md`](../PROJECT.md))                  | проектные роуты, не office                                       | Документирован отдельно.                                            |

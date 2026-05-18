@@ -77,7 +77,6 @@ export class IndustryInfoService {
 @Injectable({ providedIn: "root" })
 export class IndustryRepository implements IndustryRepositoryPort {
   readonly industries = signal<Industry[]>([]);
-  private readonly entityCache = new EntityCache<Industry>(); // (см. ниже)
 
   getAll(): Observable<Industry[]> {
     return this.industryAdapter.fetchAll().pipe(

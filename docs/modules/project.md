@@ -77,7 +77,7 @@ interface UpdateFormCommand {
 | `ProjectRepositoryPort`              | `count$ BehaviorSubject<ProjectCount>`, `getAll(params?)`, `getOne(id)`, `getMy(params?)`, `postOne()`, `update(id, data)`, `deleteOne(id)`, `refreshCount()`, `invalidate(id)` |
 | `ProjectCollaboratorsRepositoryPort` | `deleteCollaborator(projectId, userId)`, `patchSwitchLeader(projectId, userId)`, `deleteLeave(projectId)`                                                                       |
 | `ProjectGoalsRepositoryPort`         | `fetchAll(projectId)`, `createGoal(projectId, params: GoalFormData[])`, `editGoal(projectId, goalId, params)`, `deleteGoal(projectId, goalId)`                                  |
-| `ProjectNewsRepositoryPort`          | `fetchNews`, `fetchNewsDetail`, `addNews`, `readNews`, `delete`, `toggleLike`, `editNews` (зеркало `ProfileNewsRepositoryPort`)                                                 |
+| `PROJECT_NEWS_REPOSITORY`            | `NewsRepositoryPort<FeedNews>`: `fetchNews`, `fetchNewsDetail`, `addNews`, `readNews`, `delete`, `toggleLike`, `editNews`                                                       |
 | `ProjectPartnerRepositoryPort`       | `fetchAll`, `createPartner`, `updatePartner` (только `contribution` + `decisionMaker`), `deletePartner`                                                                         |
 | `ProjectProgramRepositoryPort`       | `assignProjectToProgram(projectId, partnerProgramId)`, `sendNewProjectFieldsValues(projectId, newValues)`                                                                       |
 | `ProjectRatingRepositoryPort`        | `getAll(programId, params?)`, `postFilters(programId, filters, params?)`, `rate(projectId, scores)`, `formValuesToDTO(criteria, outputVals)`                                    |
@@ -159,12 +159,11 @@ project-subscription.providers.ts
 
 ### Cross-cutting (старые)
 
-| Сервис                                           | Что                                                                                               |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `projects.service.ts` (`ProjectsService`)        | Legacy старого стиля — постепенно вытесняется use-case'ами. Оставлен ради обратной совместимости. |
-| `project-form.service.ts`                        | Сборка корневой `FormGroup` из 6 шагов.                                                           |
-| `project-step.service.ts` (`ProjectStepService`) | Управление текущим шагом edit (тип `EditStep`). Используется и в profile-edit.                    |
-| `project-form.factory.ts` (в `facades/edit/`)    | Фабрика чистых `FormGroup`-инстансов под каждый шаг.                                              |
+| Сервис                                           | Что                                                                            |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `project-form.service.ts`                        | Сборка корневой `FormGroup` из 6 шагов.                                        |
+| `project-step.service.ts` (`ProjectStepService`) | Управление текущим шагом edit (тип `EditStep`). Используется и в profile-edit. |
+| `project-form.factory.ts` (в `facades/edit/`)    | Фабрика чистых `FormGroup`-инстансов под каждый шаг.                           |
 
 ---
 

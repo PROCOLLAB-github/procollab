@@ -38,7 +38,7 @@ interface Approve {
 }
 ```
 
-`approves[]` — список пользователей, подтвердивших навык. Подтверждение (approve / unapprove) идёт через legacy `ProfileService` (см. [`docs/modules/auth.md`](auth.md#legacy)) — endpoint `/auth/users/<userId>/approve_skill/<skillId>/`.
+`approves[]` — список пользователей, подтвердивших навык. Подтверждение (approve / unapprove) идёт через `ApproveSkillUseCase` / `UnapproveSkillUseCase` и `SkillsRepositoryPort` — endpoint `/auth/users/<userId>/approve_skill/<skillId>/`.
 
 ### `skills-group.ts`
 

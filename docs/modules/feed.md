@@ -54,19 +54,19 @@ DI-биндинг (`infrastructure/di/feed.providers.ts`):
 { provide: FeedRepositoryPort, useExisting: FeedRepository }
 ```
 
-> Только `fetchFeed` — like / read новостей делегируются их собственным репозиториям (`ProjectNewsRepositoryPort` etc.) через отдельные use-case'ы. См. ниже.
+> Только `fetchFeed` — like / read новостей делегируются в `PROJECT_NEWS_REPOSITORY` или `PROFILE_NEWS_REPOSITORY` через отдельные use-case'ы. См. ниже.
 
 ---
 
 ## Use-cases (3 шт., `api/feed/use-cases/`)
 
-| Use-case                | Параметры                            | Возвращает                                                              | Куда делегирует                                                                                                                                                                        |
-| ----------------------- | ------------------------------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FetchFeedUseCase`      | `offset, limit, type: string`        | `Result<ApiPagination<FeedItem>, { kind: "fetch_feed_error"; cause? }>` | `FeedRepositoryPort.fetchFeed`                                                                                                                                                         |
-| `ToggleFeedLikeUseCase` | `feedItem: FeedItem, state: boolean` | `Result<void, ...>`                                                     | По типу владельца внутри `FeedNews.contentObject.id` дёргает `ProjectNewsRepositoryPort.toggleLike` / `ProgramNewsRepositoryPort.toggleLike` / `ProfileNewsRepositoryPort.toggleLike`. |
-| `ReadFeedNewsUseCase`   | `newsItems: FeedItem[]`              | `Result<void, ...>`                                                     | Аналогично — батчевая отметка просмотренных.                                                                                                                                           |
+| Use-case                | Параметры                           | Возвращает                                                              | Куда делегирует                                                                                          |
+| ----------------------- | ----------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `FetchFeedUseCase`      | `offset, limit, type: string`       | `Result<ApiPagination<FeedItem>, { kind: "fetch_feed_error"; cause? }>` | `FeedRepositoryPort.fetchFeed`                                                                           |
+| `ToggleFeedLikeUseCase` | `ownerType, ownerId, newsId, state` | `Result<void, ...>`                                                     | По типу владельца дёргает `PROJECT_NEWS_REPOSITORY.toggleLike` или `PROFILE_NEWS_REPOSITORY.toggleLike`. |
+| `ReadFeedNewsUseCase`   | `ownerType, ownerId, newsIds`       | `Result<void[], ...>`                                                   | Аналогично — батчевая отметка просмотренных.                                                             |
 
-> `ToggleFeedLikeUseCase` и `ReadFeedNewsUseCase` — это **диспетчеры**, которые на основе `FeedItem.typeModel` и `contentObject` решают какой repository дёргать. Это компромисс — feed не имеет своих like / read endpoint'ов на бэке, всё идёт через owners.
+> `FeedInfoService` определяет владельца новости по `FeedItem.typeModel` и `contentObject`, затем передаёт `ownerType` в `ToggleFeedLikeUseCase` / `ReadFeedNewsUseCase`. Feed не имеет своих like / read endpoint'ов на бэке, всё идёт через owners.
 
 ---
 
@@ -80,7 +80,7 @@ DI-биндинг (`infrastructure/di/feed.providers.ts`):
 - `IntersectionObserver` для бесконечной пагинации — при попадании последнего элемента в viewport дёргает `fetchFeedUseCase` с инкрементированным offset.
 - Реагирует на изменения query `?type=...` — пересобирает фильтр, сбрасывает offset и пагинацию.
 - `onLikeFeedItem(item)` → `ToggleFeedLikeUseCase` → оптимистичная мутация `feedUIInfoService.applyToggleLike()`.
-- `onReadFeedNews(items)` → `ReadFeedNewsUseCase` (батч).
+- `onFeedItemView(entries)` → `ReadFeedNewsUseCase` для просмотренных новостей.
 
 Константы:
 

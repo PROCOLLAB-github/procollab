@@ -4,6 +4,8 @@
 
 Чаты — личные («direct») и проектные. Реализуется через WebSocket для real-time + REST для истории сообщений и файлов. Самый сложный по событийной модели модуль приложения: 7 типов событий чата + статусы пользователей online/offline + индикатор «печатает».
 
+Direct- и project-chat используют общий page-scoped фасад `ChatDirectInfoService` и UI-сервис `ChatDirectUIInfoService`; команды, загрузка истории и подписки на WebSocket-события вынесены в use-case слой. Отдельных `ChatDirectService` / `ChatProjectService` в текущем коде нет.
+
 ## Назначение
 
 - **Список чатов** (`/office/chats/directs`, `/office/chats/groups`) — направления чатов и проектные группы.
@@ -121,24 +123,25 @@ DI-биндинг (`infrastructure/di/chat.providers.ts`):
 
 `Observe*UseCase` — это «адаптеры события для UI-слоя»: facade подписывается на них, обновляет `signal`-ы и `BehaviorSubject` в `ChatStateService`.
 
+Команды (`SendMessageUseCase`, `EditMessageUseCase`, `DeleteMessageUseCase`, `ReadMessageUseCase`, `StartTypingUseCase`) не возвращают UI-state напрямую; они делегируют в `ChatRealtimePort`, а состояние страницы меняется после входящих WebSocket-событий.
+
 ---
 
 ## Facades (`api/chat/facades/`)
 
-| Facade                    | Provided                  | Что                                                                                                                      |
-| ------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `ChatInfoService`         | страница `/chats`         | Управление списком чатов (directs / groups).                                                                             |
-| `ChatUIInfoService`       | страница `/chats`         | UI-state списка.                                                                                                         |
-| `ChatDirectInfoService`   | страница `/chats/:chatId` | Жизненный цикл одного диалога: подписка на `ConnectChatUseCase` → подписки на `Observe*UseCase` → реакция на UI-команды. |
-| `ChatDirectUIInfoService` | страница `/chats/:chatId` | `messages: signal<ChatMessage[]>`, `replyMessage`, typing-индикатор, currentUserId.                                      |
+| Facade                      | Provided                   | Что                                                                                                                                               |
+| --------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ChatInfoService`           | страница списка чатов      | Управление списком чатов (directs / groups).                                                                                                      |
+| `ChatUIInfoService`         | страница списка чатов      | UI-state списка.                                                                                                                                  |
+| `ChatDirectInfoService`     | direct chat и project chat | Жизненный цикл чата: route data → `LoadMessagesUseCase`, подписки на `Observe*UseCase`, команды через `*MessageUseCase`, typing и read events.    |
+| `ChatDirectUIInfoService`   | direct chat и project chat | `messages: signal<ChatMessage[]>`, `chatFiles`, `replyMessage`, `typingPersons`, `currentUserId`, `fetching`, состояние мобильной боковой панели. |
+| `ProjectsDetailChatService` | страница project chat      | Минимальный page-scoped сервис с `destroy$`; основная chat-логика страницы проекта находится в `ChatDirectInfoService`.                           |
 
 ### Глобальные сервисы
 
-| Сервис                                                                  | Provided | Что                                                                                                                                                                              |
-| ----------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ChatStateService`                                                      | `root`   | Глобальное состояние: `unread$ BehaviorSubject<boolean>` (бейдж непрочитанных в шапке), `userOnlineStatusCache: BehaviorSubject<Record<number, boolean>>` (кеш online-статусов). |
-| `ChatDirectService` (`api/chat/chat-direct/chat-direct.service.ts`)     | `root`   | Legacy-сервис, постепенно вытесняется фасадами + use-case'ами.                                                                                                                   |
-| `ChatProjectService` (`api/chat/chat-projects/chat-project.service.ts`) | `root`   | Legacy для project-chat.                                                                                                                                                         |
+| Сервис             | Provided | Что                                                                                                                                                                              |
+| ------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ChatStateService` | `root`   | Глобальное состояние: `unread$ BehaviorSubject<boolean>` (бейдж непрочитанных в шапке), `userOnlineStatusCache: BehaviorSubject<Record<number, boolean>>` (кеш online-статусов). |
 
 ---
 
@@ -183,6 +186,8 @@ DI-биндинг (`infrastructure/di/chat.providers.ts`):
 ---
 
 ## Routes (`ui/routes/chat/`)
+
+`CHAT_ROUTES` описывает список и direct-чаты, но блок `path: "chats"` в `ui/routes/office/office.routes.ts` сейчас закомментирован. Поэтому standalone-раздел `/office/chats` недоступен из office-router; project-chat остаётся доступен как дочерняя страница проекта.
 
 ### `chat.routes.ts`
 
@@ -230,11 +235,11 @@ DI-биндинг (`infrastructure/di/chat.providers.ts`):
 
 ## Consumers
 
-| Где                                                      | Как использует                                                               |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `pages/projects/detail/chat`                             | Project chat (тот же `<app-chat-window>` + `<app-message-input>` + facades). |
-| `widgets/header`, `app-profile-control-panel` (`@uilib`) | Бейдж непрочитанных через `ChatStateService.unread$`.                        |
-| `widgets/info-card`, `widgets/detail`                    | online/offline индикатор через `ChatStateService.userOnlineStatusCache`.     |
-| `app.component.ts`                                       | На старте connects WS, инициирует `CheckUnreadsUseCase` для бейджа.          |
+| Где                                                      | Как использует                                                                                                               |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `pages/projects/detail/chat`                             | Project chat: `ProjectChatComponent` переиспользует `ChatDirectInfoService` / `ChatDirectUIInfoService` с типом `"project"`. |
+| `widgets/header`, `app-profile-control-panel` (`@uilib`) | Бейдж непрочитанных через `ChatStateService.unread$`.                                                                        |
+| `widgets/info-card`, `widgets/detail`                    | online/offline индикатор через `ChatStateService.userOnlineStatusCache`.                                                     |
+| `app.component.ts`                                       | На старте connects WS, инициирует `CheckUnreadsUseCase` для бейджа.                                                          |
 
 ---
