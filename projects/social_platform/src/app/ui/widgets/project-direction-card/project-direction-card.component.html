@@ -42,9 +42,9 @@
     </div>
     } @else {
     <ul class="cancel__achievements">
-      @if (!isOpenInfo) { @for (aboutInfo of about; track $index) {
-      <li class="cancel__achievements--year" (click)="openInfo(aboutInfo.year)">
-        <p class="text-body-10">{{ aboutInfo.year }}</p>
+      @if (!isOpenInfo) { @for (yearItem of years; track yearItem.id) {
+      <li class="cancel__achievements--year" (click)="openInfo(yearItem.year.toString())">
+        <p class="text-body-10">{{ yearItem.year }}</p>
         <i appIcon icon="arrow-no-body" appSquare="8"></i>
       </li>
       } } @else {

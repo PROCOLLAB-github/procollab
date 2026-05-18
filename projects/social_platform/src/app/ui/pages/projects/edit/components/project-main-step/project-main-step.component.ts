@@ -23,6 +23,7 @@ import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { RouterLink } from "@angular/router";
+import { AppRoutes } from "@api/paths/app-routes";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
@@ -52,6 +53,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     FormsModule,
     RouterLink,
   ],
+  providers: [ProjectTeamUIService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -121,6 +123,8 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   protected readonly goalLeader = this.projectGoalService.goalLeader;
   protected readonly editIndex = this.projectFormService.editIndex;
   protected readonly collaborators = this.projectTeamUIService.collaborators;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    * Проверяет, есть ли ссылки для отображения

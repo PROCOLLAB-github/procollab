@@ -3,20 +3,21 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { ToggleProfileNewsLikeUseCase } from "./toggle-profile-news-like.use-case";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROFILE_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("ToggleProfileNewsLikeUseCase", () => {
   let useCase: ToggleProfileNewsLikeUseCase;
-  let repo: jasmine.SpyObj<ProfileNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProfileNewsRepositoryPort>("ProfileNewsRepositoryPort", [
-      "toggleLike",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["toggleLike"]);
     TestBed.configureTestingModule({
       providers: [
         ToggleProfileNewsLikeUseCase,
-        { provide: ProfileNewsRepositoryPort, useValue: repo },
+        { provide: PROFILE_NEWS_REPOSITORY, useValue: repo },
       ],
     });
     useCase = TestBed.inject(ToggleProfileNewsLikeUseCase);

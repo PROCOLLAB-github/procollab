@@ -19,6 +19,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.service";
 import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент чата проекта
@@ -71,6 +72,8 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
 
   /** Все сообщения чата */
   protected readonly messages = this.chatDirectUIInfoService.messages;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /** Список пользователей, которые сейчас печатают */
   protected readonly typingPersons = this.chatDirectUIInfoService.typingPersons;

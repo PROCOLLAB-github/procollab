@@ -3,14 +3,13 @@
 import { ChangeDetectorRef, Component, inject, Input, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { TruncateHtmlPipe } from "@core/lib/pipes/truncate-html.pipe";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 import { animateContentHeight } from "@utils/animate-content-height";
 import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { Task } from "@domain/courses/courses.model";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, TruncateHtmlPipe } from "@corelib";
 
 /**
  * Компонент информационного слайда с видео/изображением

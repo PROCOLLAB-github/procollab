@@ -32,7 +32,7 @@ export const ProfileDetailResolver: ResolveFn<{ user: User }> = (route: Activate
     user: authRepository.fetchUser(Number(route.paramMap.get("id"))).pipe(
       map(user => {
         const result = Object.assign(new User(), user);
-        result.progress = calculateProfileProgress(result);
+        result.relations.progress = calculateProfileProgress(result);
         return result;
       })
     ),

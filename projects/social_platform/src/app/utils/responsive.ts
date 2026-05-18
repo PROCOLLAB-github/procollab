@@ -1,12 +1,9 @@
-/**
- * Этот файл содержит константы, используемые для определения
- * контрольных точек (breakpoints) в адаптивном дизайне.
- *
- * @format
- * @fileoverview Константы для адаптивного дизайна
- * @constant containerSm - Малый размер контейнера (680 пикселей)
- * @constant containerMd - Средний размер контейнера (1280 пикселей)
- */
+/** @format */
 
-export const containerSm = 680;
-export const containerMd = 1280;
+// Generated from styles/_responsive.scss — SCSS is single source of truth
+export const containerMd = 1280; // $container-md: 1280px
+export const desktop = 1000; // $desktop: 1000px
+export const tablet = 750; // $tablet: 750px
+
+// Aliases used across the TS codebase
+export const containerSm = tablet;

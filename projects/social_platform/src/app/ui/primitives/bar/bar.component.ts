@@ -24,6 +24,14 @@ import { BackComponent } from "@uilib";
  * - Отображение количества элементов в разделах
  * - Навигация назад к предыдущему экрану
  */
+
+interface BarLinks {
+  link: string;
+  linkText: string;
+  isRouterLinkActiveOptions: boolean;
+  count?: number;
+}
+
 @Component({
   selector: "app-bar",
   standalone: true,
@@ -36,12 +44,7 @@ export class BarComponent {
   constructor() {}
 
   /** Массив навигационных ссылок */
-  @Input() links!: {
-    link: string;
-    linkText: string;
-    isRouterLinkActiveOptions: boolean;
-    count?: number;
-  }[];
+  @Input() links!: BarLinks[];
 
   /** Показывать индикатор в виде шарика */
   @Input() ballHave?: boolean = false;

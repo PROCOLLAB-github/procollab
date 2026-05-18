@@ -2,7 +2,7 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { first, Observable, retry, throwError, timer } from "rxjs";
+import { first, Observable, retry } from "rxjs";
 import { API_URL } from "../../providers";
 import { exponentialBackoff } from "@utils/exponentialBackoff";
 

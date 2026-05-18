@@ -2,7 +2,7 @@
 
 @if (profileForm.get("userType"); as currentType) {
 <div class="profile__top">
-  <div class="profile__back" [routerLink]="'/office/profile/' + profileId()">
+  <div class="profile__back" [routerLink]="AppRoutes.profile.detail(profileId()!)">
     <i appIcon icon="left-arrow" appSquare="24"></i>
     <h1 class="profile__title">редактирование профиля</h1>
   </div>

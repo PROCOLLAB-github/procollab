@@ -30,16 +30,16 @@ describe("LoadMessagesUseCase", () => {
     setup();
     repo.loadMessages.and.returnValue(of(page));
 
-    useCase.execute(1, 10, 20).subscribe();
+    useCase.execute(1, "directs", 10, 20).subscribe();
 
-    expect(repo.loadMessages).toHaveBeenCalledOnceWith(1, 10, 20);
+    expect(repo.loadMessages).toHaveBeenCalledOnceWith(1, "directs", 10, 20);
   });
 
   it("при успехе возвращает ok со страницей сообщений", done => {
     setup();
     repo.loadMessages.and.returnValue(of(page));
 
-    useCase.execute(1).subscribe(result => {
+    useCase.execute(1, "directs").subscribe(result => {
       expect(result.ok).toBe(true);
       if (result.ok) expect(result.value).toBe(page);
       done();
@@ -50,7 +50,7 @@ describe("LoadMessagesUseCase", () => {
     setup();
     repo.loadMessages.and.returnValue(throwError(() => new Error("boom")));
 
-    useCase.execute(1).subscribe(result => {
+    useCase.execute(1, "directs").subscribe(result => {
       expect(result.ok).toBe(false);
       if (!result.ok) expect(result.error.kind).toBe("server_error");
       done();

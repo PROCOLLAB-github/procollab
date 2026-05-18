@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
-import { Approve, Skill } from "@domain/skills/skill";
+import { Approve, Skill } from "@domain/skills/skill.model";
 
 @Injectable()
 export class ApproveSkillUIInfoService {

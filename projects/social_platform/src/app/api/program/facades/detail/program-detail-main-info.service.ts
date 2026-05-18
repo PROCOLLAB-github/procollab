@@ -3,7 +3,7 @@
 import { ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, fromEvent, map, of, Subject, takeUntil, tap, throttleTime } from "rxjs";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { LoadingService } from "@ui/services/loading/loading.service";
 import { ExpandService } from "../../../expand/expand.service";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";

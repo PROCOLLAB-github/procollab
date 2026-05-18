@@ -1,16 +1,18 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { concatMap, Subject, takeUntil } from "rxjs";
+import { concatMap, of, Subject, takeUntil } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { Router } from "@angular/router";
 import { OnboardingStageZeroUIInfoService } from "./ui/onboarding-stage-zero-ui-info.service";
 import { User } from "@domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { GetProfileUseCase } from "@api/auth/use-cases/get-profile.use-case";
+import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
+import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 
 @Injectable()
 export class OnboardingStageZeroInfoService {
@@ -18,8 +20,10 @@ export class OnboardingStageZeroInfoService {
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
   private readonly validationService = inject(ValidationService);
-  private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly getProfileUseCase = inject(GetProfileUseCase);
   private readonly router = inject(Router);
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -33,9 +37,15 @@ export class OnboardingStageZeroInfoService {
   private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
 
   initializationStageZero(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(p => {
-      this.onboardingStageZeroUIInfoService.applySetProfile(p);
-    });
+    this.getProfileUseCase
+      .execute()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: result => {
+          if (!result.ok) return;
+          this.onboardingStageZeroUIInfoService.applySetProfile(result.value);
+        },
+      });
 
     this.onboardingService.formValue$.pipe(takeUntil(this.destroy$)).subscribe(fv => {
       this.onboardingStageZeroUIInfoService.applyInitStageZero(fv);
@@ -69,14 +79,21 @@ export class OnboardingStageZeroInfoService {
     };
 
     this.skipSubmitting.set(loading());
-    this.authRepository
-      .updateProfile(onboardingSkipInfo as Partial<User>)
+
+    this.updateProfileUseCase
+      .execute(onboardingSkipInfo as Partial<User>)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => this.completeRegistration(3),
-        error: error => {
-          this.skipSubmitting.set(failure("skip_error"));
-          this.onboardingStageZeroUIInfoService.applySkipRegistrationModalError(error);
+        next: result => {
+          if (!result.ok) {
+            this.skipSubmitting.set(failure("skip_error"));
+            this.onboardingStageZeroUIInfoService.applySkipRegistrationModalError(
+              result.error.cause
+            );
+            return;
+          }
+
+          this.completeRegistration(3);
         },
       });
   }
@@ -97,17 +114,24 @@ export class OnboardingStageZeroInfoService {
     };
 
     this.stageSubmitting.set(loading());
-    this.authRepository
-      .updateProfile(newStageForm as Partial<User>)
+
+    this.updateProfileUseCase
+      .execute(newStageForm as Partial<User>)
       .pipe(
-        concatMap(() => this.authRepository.updateOnboardingStage(1)),
+        concatMap(result =>
+          result.ok ? this.updateOnboardingStageUseCase.execute(1) : of(result)
+        ),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: () => this.completeRegistration(1),
-        error: error => {
-          this.stageSubmitting.set(failure("submit_error"));
-          this.onboardingStageZeroUIInfoService.applySubmitModalError(error);
+        next: result => {
+          if (!result.ok) {
+            this.stageSubmitting.set(failure("submit_error"));
+            this.onboardingStageZeroUIInfoService.applySubmitModalError(result.error.cause);
+            return;
+          }
+
+          this.completeRegistration(1);
         },
       });
   }

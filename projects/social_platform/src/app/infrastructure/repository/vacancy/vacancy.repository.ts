@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { map, Observable } from "rxjs";
-import { CreateVacancyDto } from "@api/project/dto/create-vacancy.model";
+import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter";

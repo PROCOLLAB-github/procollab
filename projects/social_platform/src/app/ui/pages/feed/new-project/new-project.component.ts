@@ -5,11 +5,11 @@ import { CommonModule } from "@angular/common";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { Router, RouterLink } from "@angular/router";
-import { DayjsPipe } from "@corelib";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, DayjsPipe } from "@corelib";
 import { FeedProject } from "@domain/feed/feed-item.model";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -56,6 +56,8 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 export class NewProjectComponent {
   @Input() feedItem!: FeedProject;
 
+  protected readonly AppRoutes = AppRoutes;
+
   /**
    *
    * @param router - сервис маршрутизации Angular для программной навигации
@@ -63,5 +65,5 @@ export class NewProjectComponent {
    * Инициализирует компонент с доступом к сервису маршрутизации
    * для возможной навигации к детальной странице проекта
    */
-  constructor(public readonly industryRepository: IndustryInfoService) {}
+  constructor(public readonly industryRepository: IndustryRepository) {}
 }

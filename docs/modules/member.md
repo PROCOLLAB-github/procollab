@@ -2,14 +2,13 @@
 
 # Module: `member`
 
-Список и поиск участников платформы. Член (`member`) — это `User` с `userType === 1` (тогда как `userType: 2/3/4` — это `mentor`/`expert`/`investor`, для них есть отдельный API через `getMentors()` с фильтром `user_type=2,3,4`).
+Список и поиск участников платформы. Член (`member`) — это `User` с `userType === 1`
 
 ## Назначение
 
 - **Список участников** (`/office/members`) с пагинацией (skip/take) и инфинит-скроллом.
 - **Поиск по имени** через `searchForm`.
 - **Фильтрация** по ключевому навыку, специальности, возрастному диапазону, флагу студента МосПолитеха (`isMosPolytechStudent`).
-- Параллельный API для **менторов** (`getMentors()`) — пока не используется в UI на kanban-board (см. ниже).
 
 Модель пользователя — `User` из [`docs/modules/auth.md`](auth.md). Свой domain-модели у member нет, только port.
 
@@ -26,8 +25,6 @@ abstract class MemberRepositoryPort {
     take: number,
     otherParams?: Record<string, string | number | boolean>
   ): Observable<ApiPagination<User>>;
-
-  getMentors(skip: number, take: number): Observable<ApiPagination<User>>;
 }
 ```
 
@@ -44,8 +41,6 @@ DI-биндинг (`infrastructure/di/member.providers.ts`):
 | Use-case            | Параметры                                          | Возвращает                                                           | Ошибки              |
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------- | ------------------- |
 | `GetMembersUseCase` | `skip, take: number, params?: Record<string, ...>` | `Result<ApiPagination<User>, { kind: "get_members_error"; cause? }>` | `get_members_error` |
-
-Только один use-case — для `getMembers`. `getMentors` — без use-case'а.
 
 ---
 
@@ -104,7 +99,6 @@ applyMentorsChunk(data): void;        // append для пагинации
 | Метод                                  | HTTP | URL                   | Параметры                                                | Ответ                 |
 | -------------------------------------- | ---- | --------------------- | -------------------------------------------------------- | --------------------- |
 | `getMembers(skip, take, otherParams?)` | GET  | `/auth/public-users/` | `?user_type=1&limit=<take>&offset=<skip>&...otherParams` | `ApiPagination<User>` |
-| `getMentors(skip, take)`               | GET  | `/auth/public-users/` | `?user_type=2,3,4&limit=<take>&offset=<skip>`            | `ApiPagination<User>` |
 
 `otherParams` (фильтры) — произвольный объект, ожидаемые ключи:
 

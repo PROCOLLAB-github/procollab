@@ -5,7 +5,7 @@ import { of, throwError } from "rxjs";
 import { LoginUseCase } from "./login.use-case";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoginCommand } from "@domain/auth/commands/login.command";
-import { LoginResponse } from "@domain/auth/http.model";
+import { LoginResponse } from "@core/lib/models/auth/http.model";
 
 describe("LoginUseCase", () => {
   let useCase: LoginUseCase;

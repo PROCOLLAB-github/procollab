@@ -30,7 +30,7 @@ import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular
 })
 export class AvatarComponent implements OnInit {
   /** URL изображения аватара */
-  @Input({ required: true }) url?: string;
+  @Input({ required: true }) url = "";
 
   /** Размер аватара в пикселях */
   @Input() size = 50;

@@ -6,7 +6,7 @@ import { map, Observable } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
@@ -44,6 +44,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 })
 export class NewsDetailComponent implements OnInit {
   private readonly logger = inject(LoggerService);
+  protected readonly AppRoutes = AppRoutes;
 
   constructor(
     private readonly route: ActivatedRoute, // Сервис для работы с активным маршрутом

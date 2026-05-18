@@ -17,9 +17,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ApproveSkillComponent } from "./approve-skill/approve-skill.component";
-import { ControlErrorPipe } from "@corelib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { ProfileService } from "@api/auth/profile.service";
+import { TruncatePipe, ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
@@ -32,6 +30,7 @@ import { Program } from "@domain/program/program.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ChatStateService } from "@api/chat/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-detail",
@@ -65,10 +64,10 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  protected readonly AppRoutes = AppRoutes;
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);
   protected readonly router = inject(Router);
-  public readonly skillsProfileService = inject(ProfileService);
   public readonly chatStateService = inject(ChatStateService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
@@ -84,7 +83,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly listType = this.detailInfoService.listType;
 
   // Переменная для подсказок
-  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
+  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
 
   // Переменные для отображения данных в зависимости от url
   protected readonly isProjectsPage = this.detailProgramInfoService.isProjectsPage;
@@ -196,10 +195,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
   }
 
-  toggleTooltip(option: "show" | "hide"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip()
-      : this.tooltipInfoService.hideTooltip();
+  toggleTooltip(): void {
+    this.tooltipInfoService.toggleTooltip("base");
   }
 
   /**

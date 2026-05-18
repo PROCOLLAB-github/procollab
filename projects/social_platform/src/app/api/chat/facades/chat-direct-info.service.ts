@@ -2,7 +2,6 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ChatDirectService } from "../chat-direct/chat-direct.service";
 import { ChatMessage } from "@domain/chat/chat-message.model";
 import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
@@ -25,7 +24,6 @@ import { ReadMessageUseCase } from "../use-cases/read-message.use-case";
 export class ChatDirectInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly authRepository = inject(AuthRepositoryPort);
-  private readonly chatDirectService = inject(ChatDirectService);
   private readonly chatDirectUIInfoService = inject(ChatDirectUIInfoService);
   private readonly loadProjectFilesUseCase = inject(LoadProjectFilesUseCase);
   private readonly loadMessagesUseCase = inject(LoadMessagesUseCase);
@@ -130,43 +128,25 @@ export class ChatDirectInfoService {
    * Загружает сообщения чата с сервера с поддержкой пагинации
    */
   private fetchMessages(type: "direct" | "project"): Observable<ApiPagination<ChatMessage>> {
-    return type === "direct"
-      ? this.chatDirectService
-          .loadMessages(
-            this.getChatId(),
-            this.messages().length > 0 ? this.messages().length : 0,
-            this.chatDirectUIInfoService.messagesPerFetch
-          )
-          .pipe(
-            tap(messages => {
-              this.chatDirectUIInfoService.applyInitMessagesEvent(messages);
-            })
-          )
-      : this.loadMessagesUseCase
-          .execute(
-            +this.getChatId(),
-            this.messages().length > 0 ? this.messages().length : 0,
-            this.chatDirectUIInfoService.messagesPerFetch
-          )
-          .pipe(
-            tap(result => {
-              if (result.ok) {
-                this.chatDirectUIInfoService.applyInitMessagesEvent(result.value);
-              }
-            }),
-            map(result => {
-              if (result.ok) {
-                return result.value;
-              }
-
-              return {
-                count: 0,
-                results: [],
-                next: "",
-                previous: "",
-              } as ApiPagination<ChatMessage>;
-            })
-          );
+    return this.loadMessagesUseCase
+      .execute(
+        +this.getChatId(),
+        type === "direct" ? "directs" : "projects",
+        this.messages().length > 0 ? this.messages().length : 0,
+        this.chatDirectUIInfoService.messagesPerFetch
+      )
+      .pipe(
+        tap(result => {
+          if (result.ok) {
+            this.chatDirectUIInfoService.applyInitMessagesEvent(result.value);
+          }
+        }),
+        map(result =>
+          result.ok
+            ? result.value
+            : ({ count: 0, results: [], next: "", previous: "" } as ApiPagination<ChatMessage>)
+        )
+      );
   }
 
   private initMessageEvent(): void {

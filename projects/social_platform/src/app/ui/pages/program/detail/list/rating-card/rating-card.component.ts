@@ -16,7 +16,6 @@ import {
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
-import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import {
   debounceTime,
@@ -34,14 +33,15 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { HttpResponse } from "@angular/common/http";
 import { ProjectRate } from "@domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
 
 /**
  * Компонент карточки оценки проекта
@@ -91,13 +91,15 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
     ModalComponent,
     TruncatePipe,
   ],
+  providers: [ProgramDetailMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
+  protected readonly AppRoutes = AppRoutes;
 
   constructor(
-    public industryRepository: IndustryInfoService,
+    public industryRepository: IndustryRepository,
     private readonly rateProjectUseCase: RateProjectUseCase,
     private readonly authRepository: AuthInfoService,
     private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,

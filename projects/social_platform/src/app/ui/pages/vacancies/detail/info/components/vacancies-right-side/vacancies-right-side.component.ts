@@ -12,20 +12,11 @@ import {
 } from "@angular/core";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { CapitalizePipe } from "@core/lib/pipes/formatters/capitalize.pipe";
+import { UserLinksPipe, TruncatePipe, CapitalizePipe, SalaryTransformPipe } from "@corelib";
 import { RouterModule } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
-import { SalaryTransformPipe } from "@core/lib/pipes/transformers/salary-transform.pipe";
-import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
-import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
-import { ControlErrorPipe } from "@corelib";
-import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
-import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-vacancies-right-side",
@@ -47,6 +38,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesRightSideComponent {
+  protected readonly AppRoutes = AppRoutes;
   @Input() vacancy!: WritableSignal<Vacancy | undefined>;
   @Output() sendResponse = new EventEmitter<void>();
 

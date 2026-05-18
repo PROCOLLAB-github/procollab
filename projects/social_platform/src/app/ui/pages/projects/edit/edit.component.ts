@@ -15,7 +15,7 @@ import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { CommonModule } from "@angular/common";
 import { ProjectNavigationComponent } from "./components/project-navigation/project-navigation.component";
-import { EditStep, ProjectStepService } from "@api/project/project-step.service";
+import { ProjectStepService } from "@api/project/project-step.service";
 import { ProjectMainStepComponent } from "./components/project-main-step/project-main-step.component";
 import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
 import { ProjectPartnerResourcesStepComponent } from "./components/project-partner-resources-step/project-partner-resources-step.component";
@@ -37,6 +37,8 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+import { EditStep } from "@core/lib/models/edit-step";
 
 /**
  * Компонент редактирования проекта
@@ -90,6 +92,7 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
+  protected readonly AppRoutes = AppRoutes;
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
 
   private readonly projectStepService = inject(ProjectStepService);

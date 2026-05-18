@@ -1,13 +1,13 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
+import { PROGRAM_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ToggleLikeUseCase {
-  private readonly programNewsRepositoryPort = inject(ProgramNewsRepositoryPort);
+  private readonly programNewsRepositoryPort = inject(PROGRAM_NEWS_REPOSITORY);
 
   execute(
     programId: string,

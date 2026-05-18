@@ -36,7 +36,7 @@
         <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
         <p
           class="text-body-10"
-          [routerLink]="'/office/profile/' + project()!.leader"
+          [routerLink]="AppRoutes.profile.detail(project()!.leader)"
           style="cursor: pointer"
         >
           {{ project()!.leaderInfo?.lastName | truncate: 10 }}

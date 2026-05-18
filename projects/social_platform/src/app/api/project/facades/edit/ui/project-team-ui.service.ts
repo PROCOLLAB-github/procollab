@@ -6,7 +6,7 @@ import { Invite } from "@domain/invite/invite.model";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { AsyncState, failure, initial } from "@domain/shared/async-state";
 
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class ProjectTeamUIService {
   private readonly fb = inject(FormBuilder);
 

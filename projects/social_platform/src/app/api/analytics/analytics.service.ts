@@ -1,23 +1,29 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
+import { environment } from "../../../environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class AnalyticsService {
   private loaded = false;
+  private readonly ANALYTICS_HOST = environment.analyticsHost;
 
   loadAnalytics(): void {
     if (this.loaded) return;
-    if (window.location.hostname !== "app.procollab.ru") return;
+    if (window.location.hostname !== this.ANALYTICS_HOST) return;
 
     this.loaded = true;
     this.loadYandexMetrika();
-    this.loadMailRuCounter("3622531");
+    if (environment.mailRuCounterId) this.loadMailRuCounter(environment.mailRuCounterId);
 
-    if (window.location.href === "https://app.procollab.ru/auth/register") {
-      this.loadMailRuCounter("3543687");
+    if (
+      environment.registerPath &&
+      window.location.pathname === environment.registerPath &&
+      environment.mailRuRegisterId
+    ) {
+      this.loadMailRuCounter(environment.mailRuRegisterId);
     }
   }
 
@@ -35,13 +41,16 @@ export class AnalyticsService {
     script.src = "https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js";
     document.head.appendChild(script);
 
-    w.ym(91871365, "init", {
-      clickmap: true,
-      trackLinks: true,
-      accurateTrackBounce: true,
-      webvisor: true,
-      trackHash: true,
-    });
+    const id = environment.yandexMetrikaId;
+    if (id) {
+      w.ym(id, "init", {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+        trackHash: true,
+      });
+    }
   }
 
   private loadMailRuCounter(id: string): void {

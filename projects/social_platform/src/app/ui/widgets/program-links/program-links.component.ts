@@ -2,8 +2,7 @@
 
 import { Component, Input } from "@angular/core";
 import { IconComponent } from "@uilib";
-import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { UserLinksPipe, TruncatePipe } from "@corelib";
 
 @Component({
   selector: "app-program-links",

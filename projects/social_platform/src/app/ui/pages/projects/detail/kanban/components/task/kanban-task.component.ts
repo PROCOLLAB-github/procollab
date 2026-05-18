@@ -12,6 +12,7 @@ import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-in
 import { PluralizePipe } from "@corelib";
 import { CancelTaskFormComponent } from "../cancel-task-form/cancel-task-form.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Component({
   selector: "app-kanban-task",
@@ -42,6 +43,8 @@ export class KanbanTaskComponent {
   isCancelFormOpen = false;
 
   getPriorityType = getPriorityType;
+
+  protected readonly AppRoutes = AppRoutes;
 
   onToggleCancelTaskForm(): void {
     this.isCancelFormOpen = !this.isCancelFormOpen;

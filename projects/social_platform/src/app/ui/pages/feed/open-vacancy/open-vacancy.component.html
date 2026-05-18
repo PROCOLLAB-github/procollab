@@ -92,14 +92,14 @@
   <div class="card__actions">
     <app-button
       customTypographyClass="text-body-12"
-      [routerLink]="'/office/projects/' + feedItem.project?.id"
+      [routerLink]="AppRoutes.projects.detail(feedItem.project!.id)"
       appearance="outline"
       size="medium"
       >перейти в проект</app-button
     >
     <app-button
       customTypographyClass="text-body-12"
-      [routerLink]="'/office/vacancies/' + feedItem.id"
+      [routerLink]="AppRoutes.office.vacancy(feedItem.id)"
       appearance="inline"
       size="big"
       >откликнуться на вакансию</app-button

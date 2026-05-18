@@ -9,11 +9,10 @@ import {
   Output,
 } from "@angular/core";
 import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { DayjsPipe } from "@corelib";
 import { ButtonComponent } from "@ui/primitives";
 import { RouterLink } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, DayjsPipe } from "@corelib";
 
 /**
  * Компонент карточки управления приглашением

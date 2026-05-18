@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Input, signal } from "@
 import { IconComponent } from "@ui/primitives";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { noop } from "rxjs";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 
 /**
  * Компонент корзины навыков

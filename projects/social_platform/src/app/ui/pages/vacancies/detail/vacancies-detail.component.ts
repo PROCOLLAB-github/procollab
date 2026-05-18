@@ -9,6 +9,7 @@ import { map, Subscription } from "rxjs";
 import { BackComponent } from "@uilib";
 import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
 import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
 
 /**
  * Компонент детального просмотра вакансии
@@ -34,7 +35,7 @@ import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-deta
   templateUrl: "./vacancies-detail.component.html",
   styleUrl: "./vacancies-detail.component.scss",
   imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
-  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
+  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService, ExpandService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

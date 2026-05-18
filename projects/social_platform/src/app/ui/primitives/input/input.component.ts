@@ -13,13 +13,13 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { NgxMaskModule } from "ngx-mask";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatInputModule } from "@angular/material/input";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { IconComponent } from "../icon/icon.component";
 
 @Component({
   selector: "app-input",

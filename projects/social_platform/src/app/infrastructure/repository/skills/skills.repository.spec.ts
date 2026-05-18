@@ -4,9 +4,9 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { SkillsRepository } from "./skills.repository";
 import { SkillsHttpAdapter } from "../../adapters/skills/skills-http.adapter";
-import { SkillsGroup } from "@domain/skills/skills-group";
+import { SkillsGroup } from "@domain/skills/skills-group.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 
 describe("SkillsRepository", () => {
   let repository: SkillsRepository;

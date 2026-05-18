@@ -3,9 +3,9 @@
 import { computed, Injectable, signal } from "@angular/core";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Program } from "@domain/program/program.model";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class ProgramDetailMainUIInfoService {
   readonly program = signal<Program | undefined>(undefined);
   readonly programId = signal<number | undefined>(undefined);

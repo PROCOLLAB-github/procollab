@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { User } from "@domain/auth/user.model";
+import { UserInput } from "@domain/auth/user.model";
 import { OnboardingService } from "../../../onboarding.service";
 
 @Injectable()
@@ -10,7 +10,7 @@ export class OnboardingStageThreeUIInfoService {
 
   readonly userRole = signal<number>(-1);
 
-  applyInitFormValues(fv: Partial<User>): void {
+  applyInitFormValues(fv: UserInput): void {
     this.userRole.set(fv.userType ? fv.userType : -1);
   }
 

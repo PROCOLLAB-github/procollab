@@ -32,7 +32,7 @@
       <ul class="info__list">
         @for (member of project()?.collaborators; track member.userId) {
         <li class="info__item">
-          <a class="member" [routerLink]="['/office/profile', member.userId]">
+          <a class="member" [routerLink]="AppRoutes.profile.detail(member.userId)">
             <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
             <span class="member__name text-body-10">
               {{ member.firstName }} {{ member.lastName }}

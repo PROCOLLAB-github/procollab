@@ -213,7 +213,7 @@ export class DetailInfoService {
         )
         .subscribe({
           next: user => {
-            this.userType.set(user!.userType);
+            this.userType.set(user!.personal.userType);
             this.profile.set(user);
           },
         });

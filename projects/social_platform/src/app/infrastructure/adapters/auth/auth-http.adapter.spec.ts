@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { ApiService, TokenService } from "@corelib";
 import { AuthHttpAdapter } from "./auth-http.adapter";
 import { User } from "@domain/auth/user.model";
-import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 
 describe("AuthHttpAdapter", () => {
   let adapter: AuthHttpAdapter;

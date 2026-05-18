@@ -5,6 +5,8 @@ import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@
 import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/project-vacancy-card.component";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
 
 /**
  * Компонент страницы вакансий в деательной информации о проекте
@@ -15,6 +17,7 @@ import { ProjectsDetailService } from "@api/project/facades/detail/projects-deta
   styleUrl: "./vacancies.component.scss",
   imports: [CommonModule, ProjectVacancyCardComponent],
   standalone: true,
+  providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacanciesComponent implements OnInit, OnDestroy {

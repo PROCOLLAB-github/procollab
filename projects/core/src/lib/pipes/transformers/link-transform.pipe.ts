@@ -74,34 +74,30 @@ export class LinkTransformPipe implements PipeTransform {
    * - Не учитывает сложные структуры доменов
    * - Возвращает пустую строку для некорректных URL
    */
-  transform(value: string) {
-    // Проверяем наличие значения
+  transform(value: string): string {
     if (!value) {
       return "";
     }
 
     const httpsPrefix = "https://";
+    const httpPrefix = "http://";
 
-    // Ищем позицию протокола HTTPS в строке
-    const startIndex = value.indexOf(httpsPrefix);
+    let domainStartIndex = -1;
 
-    // Если HTTPS не найден, возвращаем пустую строку
-    if (startIndex === -1) {
+    if (value.startsWith(httpsPrefix)) {
+      domainStartIndex = httpsPrefix.length;
+    } else if (value.startsWith(httpPrefix)) {
+      domainStartIndex = httpPrefix.length;
+    } else {
       return "";
     }
 
-    // Вычисляем начало доменного имени (после протокола)
-    const domainStartIndex = startIndex + httpsPrefix.length;
-
-    // Ищем первую точку после доменного имени
     const domainEndIndex = value.indexOf(".", domainStartIndex);
 
-    // Если точка не найдена, возвращаем всё что после протокола
     if (domainEndIndex === -1) {
       return value.substring(domainStartIndex);
     }
 
-    // Извлекаем доменное имя между протоколом и первой точкой
     return value.substring(domainStartIndex, domainEndIndex);
   }
 }

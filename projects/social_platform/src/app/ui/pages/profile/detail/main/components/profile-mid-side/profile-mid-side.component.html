@@ -2,7 +2,7 @@
 
 @if (loggedUserId()) {
 <div class="profile__content">
-  @if (user()!.aboutMe; as about) {
+  @if (user()!.personal.aboutMe; as about) {
   <div class="about profile__about">
     <div class="about__head">
       <h3 class="text-body-12 about__title">обо мне</h3>
@@ -21,7 +21,7 @@
       }
     </div>
   </div>
-  } @if (user()!.skills.length || user()!.achievements.length) {
+  } @if (user()!.relations.skills.length || user()!.relations.achievements.length) {
   <div class="profile__directions">
     @for (directionItem of directions(); track $index) {
     <app-project-direction-card
@@ -42,7 +42,7 @@
     <app-button
       size="medium"
       customTypographyClass="text-body-12"
-      routerLink="/office/profile/edit"
+      [routerLink]="AppRoutes.profile.edit()"
       [queryParams]="{ editingStep: 'main' }"
       >заполнить</app-button
     >
@@ -57,7 +57,7 @@
       <li>
         <app-news-card
           class="news__item"
-          [resourceLink]="['/office/profile', n.id]"
+          [resourceLink]="[AppRoutes.profile.detail(n.id)]"
           [attr.data-id]="n.id"
           [feedItem]="n"
           [isOwner]="loggedUserId() === user()!.id"

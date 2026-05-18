@@ -1,6 +1,6 @@
 /** @format */
 import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, Observer, retry, Subject } from "rxjs";
+import { catchError, EMPTY, filter, map, Observable, Observer, retry, Subject, tap } from "rxjs";
 import { environment } from "@environment";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
@@ -20,6 +20,10 @@ export class WebsocketService {
   private socket: WebSocket | null = null;
   /** Subject для обработки входящих сообщений */
   private messages$ = new Subject<MessageEvent>();
+  /** Subject потери соединения (после исчерпания retry) — приватный, наружу только Observable */
+  private readonly _connectionLost$ = new Subject<void>();
+  /** Сигнал потери WS-соединения. Потребитель отвечает за UX (toast/banner/etc). */
+  public readonly connectionLost$ = this._connectionLost$.asObservable();
 
   private readonly tokenService = inject(TokenService);
 
@@ -63,6 +67,10 @@ export class WebsocketService {
         count: environment.websocketReconnectionMaxAttempts,
         delay: environment.websocketReconnectionInterval,
         resetOnSuccess: true,
+      }),
+      catchError(() => {
+        this._connectionLost$.next();
+        return EMPTY;
       })
     );
   }

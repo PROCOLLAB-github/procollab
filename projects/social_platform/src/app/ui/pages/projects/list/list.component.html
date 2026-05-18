@@ -9,7 +9,7 @@
   }
   <ul class="page__list" #listRoot>
     @for (project of projects(); track project.id) {
-    <a [routerLink]="['/office/projects', project.id]">
+    <a [routerLink]="AppRoutes.projects.detail(project.id)">
       <li>
         <app-info-card
           [info]="project"

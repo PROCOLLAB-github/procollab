@@ -8,7 +8,7 @@ import {
   type OnInit,
   Output,
 } from "@angular/core";
-import { IconComponent } from "@ui/primitives/icon/icon.component";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент чекбокса для выбора булевых значений.
@@ -27,8 +27,8 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
   selector: "app-checkbox",
   templateUrl: "./checkbox.component.html",
   styleUrl: "./checkbox.component.scss",
-  standalone: true,
   imports: [IconComponent],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxComponent implements OnInit {

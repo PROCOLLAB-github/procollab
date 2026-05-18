@@ -1,6 +1,6 @@
 /** @format */
 
-export const QuickAnswers = [
+export const quickAnswers = [
   {
     id: 1,
     title: "у работы нет результата",

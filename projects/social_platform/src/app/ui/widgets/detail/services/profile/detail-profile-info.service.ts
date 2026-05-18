@@ -31,7 +31,7 @@ export class DetailProfileInfoService {
   readonly inviteForm = this.projectTeamUIService.inviteForm;
 
   readonly profile = signal<User | undefined>(undefined);
-  readonly profileProjects = signal<User["projects"]>([]);
+  readonly profileProjects = signal<User["relations"]["projects"]>([]);
   readonly isSended = signal<boolean>(false);
   readonly isProfileFill = signal<boolean>(false);
   readonly showApproveSkillModal = signal<boolean>(false);

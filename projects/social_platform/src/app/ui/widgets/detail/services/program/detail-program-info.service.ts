@@ -40,13 +40,15 @@ export class DetailProgramInfoService {
     const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
 
     this.additionalFields().forEach((field: PartnerProgramFields) => {
-      newFieldsFormValues.push({
-        field_id: field.id,
-        value_text: field.options.length ? field.options[0] : "'",
-      });
+      newFieldsFormValues.push(
+        ProjectNewAdditionalProgramFields.fromField(
+          field,
+          field.options.length ? field.options[0] : "'"
+        )
+      );
     });
 
-    const body = { project: this.projectForm.value, program_field_values: newFieldsFormValues };
+    const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };
 
     this.applyProjectToProgramUseCase
       .execute(programId, body)

@@ -16,7 +16,7 @@ export class RevokeInviteUseCase {
     invitationId: number
   ): Observable<Result<void, { kind: "revoke_invite_error"; cause?: unknown }>> {
     return this.inviteRepositoryPort.revokeInvite(invitationId).pipe(
-      tap(invite => this.eventBus.emit(revokeInvite(invite.id, invite.project.id, invite.user.id))),
+      tap(() => this.eventBus.emit(revokeInvite(invitationId))),
       map(() => ok<void>(undefined)),
       catchError(error => of(fail({ kind: "revoke_invite_error" as const, cause: error })))
     );

@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { PluralizePipe } from "@corelib";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 
 @Component({
   selector: "app-approve-skill-people",

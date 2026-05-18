@@ -10,6 +10,4 @@ export abstract class MemberRepositoryPort {
     take: number,
     otherParams?: Record<string, string | number | boolean>
   ): Observable<ApiPagination<User>>;
-
-  abstract getMentors(skip: number, take: number): Observable<ApiPagination<User>>;
 }

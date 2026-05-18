@@ -2,13 +2,13 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
+import { PROJECT_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class GetProjectNewsDetailUseCase {
-  private readonly projectNewsRepositoryPort = inject(ProjectNewsRepositoryPort);
+  private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);
 
   execute(
     projectId: string,

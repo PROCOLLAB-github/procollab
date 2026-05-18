@@ -17,9 +17,10 @@ import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ExpandService } from "@api/expand/expand.service";
 import { Project } from "@domain/project/project.model";
+import { AppRoutes } from "@api/paths/app-routes";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
@@ -58,6 +59,8 @@ export class ProjectsMidSideComponent {
   private readonly expandService = inject(ExpandService);
 
   protected readonly directions = this.projectsDetailUIInfoService.directions;
+
+  protected readonly AppRoutes = AppRoutes;
 
   // Состояние компонента
   protected readonly news = this.newsInfoService.news; // Массив новостей

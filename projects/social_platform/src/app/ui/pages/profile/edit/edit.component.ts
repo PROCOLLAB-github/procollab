@@ -17,14 +17,14 @@ import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { RouterModule } from "@angular/router";
 import { EditorSubmitButtonDirective } from "./editor-submit-button.directive";
 import { AsyncPipe, CommonModule } from "@angular/common";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
 import { SpecializationsGroupComponent } from "@ui/widgets/specializations-group/specializations-group.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { navProfileItems } from "@core/consts/navigation/nav-profile-items.const";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
-import { EditStep, ProjectStepService } from "@api/project/project-step.service";
+import { ProjectStepService } from "@api/project/project-step.service";
 import { ProfileEditInfoService } from "@api/profile/facades/edit/profile-edit-info.service";
 import { OnboardingStageOneUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
 import { OnboardingStageOneInfoService } from "@api/onboarding/facades/stages/onboarding-stage-one-info.service";
@@ -39,10 +39,13 @@ import { ProfileExperienceStepComponent } from "./components/profile-experience-
 import { ProfileAchievementsStepComponent } from "./components/profile-achievements-step/profile-achievements-step.component";
 import { ProfileSkillsStepComponent } from "./components/profile-skills-step/profile-skills-step.component";
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
-import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+import { SearchesService } from "@api/searches/searches.service";
+import { EditStep } from "@core/lib/models/edit-step";
+import { GetSpecializationsNestedUseCase } from "@api/specializations/use-cases/get-specializations-nested.use-case";
+import { map } from "rxjs";
 
 /**
  * Компонент редактирования профиля пользователя
@@ -106,9 +109,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly projectStepService = inject(ProjectStepService);
-  private readonly specsService = inject(SpecializationsInfoService);
-  private readonly skillsInfoService = inject(SkillsInfoService);
-  private readonly skillsService = inject(SkillsInfoService);
+  private readonly getSpecializationsNestedUseCase = inject(GetSpecializationsNestedUseCase);
+  private readonly searchesService = inject(SearchesService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
   private readonly onboardingStageOneInfoService = inject(OnboardingStageOneInfoService);
@@ -146,15 +148,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly profileId = this.profileEditInfoService.profileId;
 
+  protected readonly AppRoutes = AppRoutes;
+
   protected readonly inlineSpecs = this.profileFormService.inlineSpecs;
 
-  protected readonly nestedSpecs$ = this.specsService.getSpecializationsNested();
+  protected readonly nestedSpecs$ = this.getSpecializationsNestedUseCase
+    .execute()
+    .pipe(map(result => (result.ok ? result.value : [])));
 
   protected readonly specsGroupsModalOpen = signal(false);
 
-  protected readonly inlineSkills = this.skillsInfoService.inlineSkills;
+  protected readonly inlineSkills = this.searchesService.inlineSkills;
 
-  protected readonly nestedSkills$ = this.skillsService.getSkillsNested();
+  protected readonly nestedSkills$ = this.searchesService.getSkillsNested();
 
   protected readonly skillsGroupsModalOpen = this.projectVacancyUIService.skillsGroupsModalOpen;
 
@@ -297,7 +303,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param toggledSkill - навык для переключения
    */
   onToggleSkill(toggledSkill: Skill): void {
-    this.skillsInfoService.onToggleSkill(toggledSkill, this.profileForm);
+    this.searchesService.onToggleSkill(toggledSkill, this.profileForm);
   }
 
   /**
@@ -305,7 +311,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param newSkill - новый навык для добавления
    */
   onAddSkill(newSkill: Skill): void {
-    this.skillsInfoService.onAddSkill(newSkill, this.profileForm);
+    this.searchesService.onAddSkill(newSkill, this.profileForm);
   }
 
   /**
@@ -313,7 +319,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param oddSkill - навык для удаления
    */
   onRemoveSkill(oddSkill: Skill): void {
-    this.skillsInfoService.onRemoveSkill(oddSkill, this.profileForm);
+    this.searchesService.onRemoveSkill(oddSkill, this.profileForm);
   }
 
   toggleSkillsGroupsModal(): void {

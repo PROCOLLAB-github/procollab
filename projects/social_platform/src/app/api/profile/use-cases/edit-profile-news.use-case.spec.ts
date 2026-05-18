@@ -3,19 +3,20 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { EditProfileNewsUseCase } from "./edit-profile-news.use-case";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROFILE_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 
 describe("EditProfileNewsUseCase", () => {
   let useCase: EditProfileNewsUseCase;
-  let repo: jasmine.SpyObj<ProfileNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProfileNewsRepositoryPort>("ProfileNewsRepositoryPort", [
-      "editNews",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["editNews"]);
     TestBed.configureTestingModule({
-      providers: [EditProfileNewsUseCase, { provide: ProfileNewsRepositoryPort, useValue: repo }],
+      providers: [EditProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(EditProfileNewsUseCase);
   }

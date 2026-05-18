@@ -20,6 +20,7 @@ import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 import { ProgramDetailListInfoService } from "@api/program/facades/detail/program-detail-list-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * КОМПОНЕНТ СПИСКА ПРОЕКТОВ
@@ -103,6 +104,8 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly isMy = this.projectsInfoService.isMy;
   protected readonly isSubs = this.projectsInfoService.isSubs;
   protected readonly isInvites = this.projectsInfoService.isInvites;
+
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.projectsListInfoService.initializationProjectsList();

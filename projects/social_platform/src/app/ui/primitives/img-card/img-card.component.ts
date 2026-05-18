@@ -8,7 +8,7 @@ import {
   OnInit,
   Output,
 } from "@angular/core";
-import { IconComponent } from "@ui/primitives";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент карточки изображения с состояниями загрузки и ошибки
