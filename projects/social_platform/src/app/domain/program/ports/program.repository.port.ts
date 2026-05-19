@@ -12,6 +12,7 @@ import { ProjectAdditionalFields } from "../../project/project-additional-fields
 import { ApplyToProgramDTO } from "../dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "../results/apply-to-program";
 
+/** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
   abstract getAll(
     skip: number,
