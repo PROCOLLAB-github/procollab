@@ -82,7 +82,7 @@ this.apiService.post<Project>("/projects/", { name: "X" });
 
 ```ts
 private get isDevStage(): boolean {
-  return window.location.hostname === "dev.procollab.ru";
+  return window.location.hostname === this.enviroment.apiUrl;
 }
 private get accessTokenKey(): string {
   return this.isDevStage ? "devAccessToken" : "accessToken";
@@ -92,7 +92,7 @@ private get refreshTokenKey(): string {
 }
 ```
 
-Это позволяет одновременно держать сессии prod и dev-stage в одном браузере, не затирая друг друга. Подробнее — в [`docs/PROJECT.md` → Изоляция cookies](../PROJECT.md#изоляция-cookies-между-prod-и-dev-stage).
+Замысел — одновременно держать сессии prod и dev-stage в одном браузере, не затирая друг друга (см. [`docs/PROJECT.md` → Изоляция cookies](../PROJECT.md#изоляция-cookies-между-prod-и-dev-stage).
 
 **API**
 
