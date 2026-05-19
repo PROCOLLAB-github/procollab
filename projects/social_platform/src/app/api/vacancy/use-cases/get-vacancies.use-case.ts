@@ -17,6 +17,7 @@ export interface GetVacanciesParams {
   searchValue?: string;
 }
 
+/** Сценарий: список вакансий с фильтрами/поиском; ошибка → `get_vacancies_error`. */
 @Injectable({ providedIn: "root" })
 export class GetVacanciesUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);

@@ -6,6 +6,7 @@ import { Goal } from "@domain/project/goals.model";
 import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: цели проекта; ошибка → `get_project_goals_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectGoalsUseCase {
   private readonly projectGoalsRepositoryPort = inject(ProjectGoalsRepositoryPort);

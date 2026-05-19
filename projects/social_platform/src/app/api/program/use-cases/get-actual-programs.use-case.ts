@@ -7,6 +7,7 @@ import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.
 import { Program } from "@domain/program/program.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: список актуальных программ; ошибка → `get_actual_programs_error`. */
 @Injectable({ providedIn: "root" })
 export class GetActualProgramsUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

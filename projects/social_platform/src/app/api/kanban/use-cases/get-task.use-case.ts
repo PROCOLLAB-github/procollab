@@ -8,6 +8,7 @@ import { TaskDetail } from "@domain/kanban/task.model";
 
 export type GetTaskError = { kind: "not_found" } | { kind: "server_error" };
 
+/** Сценарий (kanban, модуль отключён): детали задачи по taskId. */
 @Injectable({ providedIn: "root" })
 export class GetTaskUseCase {
   private readonly kanbanRepository = inject(KanbanRepositoryPort);

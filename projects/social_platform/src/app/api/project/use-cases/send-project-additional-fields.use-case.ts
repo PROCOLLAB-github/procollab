@@ -7,6 +7,7 @@ import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-progr
 import { Project } from "@domain/project/project.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: отправить доп. поля проекта для программы; ошибка → `send_project_additional_fields_error`. */
 @Injectable({ providedIn: "root" })
 export class SendProjectAdditionalFieldsUseCase {
   private readonly projectProgramRepositoryPort = inject(ProjectProgramRepositoryPort);

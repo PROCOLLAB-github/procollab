@@ -6,6 +6,7 @@ import { Project } from "@domain/project/project.model";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: один проект по id; ошибка → `get_project_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectUseCase {
   private readonly projectRepositoryPort = inject(ProjectRepositoryPort);

@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
 import { RegisterError, RegisterFieldErrors } from "@domain/auth/results/register.result";
 
+/** Сценарий: регистрация по `RegisterCommand`; 400 → `validation_error` (поля), 500 → `server_error`. */
 @Injectable({ providedIn: "root" })
 export class RegisterUseCase {
   private readonly authRepositoryPort = inject(AuthRepositoryPort);

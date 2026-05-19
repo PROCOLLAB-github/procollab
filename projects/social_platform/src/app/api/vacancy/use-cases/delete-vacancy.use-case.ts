@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { vacancyDelete } from "@domain/vacancy/events/vacancy-deleted.event";
 
+/** Сценарий: удалить вакансию; эмитит `VacancyDelete`. */
 @Injectable({ providedIn: "root" })
 export class DeleteVacancyUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);

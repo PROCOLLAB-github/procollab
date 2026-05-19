@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { ProjectPartnerRepositoryPort } from "@domain/project/ports/project-partner.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: удалить партнёра проекта; ошибка → `delete_project_partner_error`. */
 @Injectable({ providedIn: "root" })
 export class DeletePartnerUseCase {
   private readonly projectPartnerRepositoryPort = inject(ProjectPartnerRepositoryPort);

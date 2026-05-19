@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { projectDeleted } from "@domain/project/events/project-deleted.event";
 
+/** Сценарий: удалить проект; эмитит `ProjectDeleted`; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class DeleteProjectUseCase {
   private readonly projectRepositoryPort = inject(ProjectRepositoryPort);

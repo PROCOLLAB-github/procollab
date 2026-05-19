@@ -7,6 +7,7 @@ import { SpecializationsRepositoryPort } from "@domain/specializations/ports/spe
 import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
 import { catchError, map, Observable, of } from "rxjs";
 
+/** Сценарий: иерархия групп специализаций для выбора. */
 @Injectable({ providedIn: "root" })
 export class GetSpecializationsNestedUseCase {
   private readonly specializationRepository = inject(SpecializationsRepositoryPort);

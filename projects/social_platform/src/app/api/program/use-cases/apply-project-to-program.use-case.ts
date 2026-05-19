@@ -6,6 +6,7 @@ import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 
+/** Сценарий: подать проект в программу; ошибка → `apply_project_to_program_error`. */
 @Injectable({ providedIn: "root" })
 export class ApplyProjectToProgramUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

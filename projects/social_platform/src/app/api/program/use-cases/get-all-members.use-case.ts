@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { User } from "@domain/auth/user.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
+/** Сценарий: участники программы (skip/take); ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class GetAllMembersUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

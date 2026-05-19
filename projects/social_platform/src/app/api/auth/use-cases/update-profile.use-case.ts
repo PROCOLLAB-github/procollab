@@ -6,6 +6,7 @@ import { User, UserInput } from "@domain/auth/user.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { catchError, map, Observable, of } from "rxjs";
 
+/** Сценарий: сохранить профиль (`UserInput`); возвращает обновлённый `User`. */
 @Injectable({ providedIn: "root" })
 export class UpdateProfileUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);

@@ -6,6 +6,7 @@ import { ProfileNews } from "@domain/profile/profile-news.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { PROFILE_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: одна новость профиля по id; ошибка → `get_profile_news_detail_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProfileNewsDetailUseCase {
   private readonly profileNewsRepositoryPort = inject(PROFILE_NEWS_REPOSITORY);

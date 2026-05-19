@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { acceptVacancyResponse } from "@domain/vacancy/events/accept-vacancy-response.event";
 
+/** Сценарий: принять отклик на вакансию; эмитит `AcceptVacancyResponse`. */
 @Injectable({ providedIn: "root" })
 export class AcceptResponseUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);

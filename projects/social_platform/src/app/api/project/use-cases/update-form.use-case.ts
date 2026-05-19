@@ -10,6 +10,7 @@ import { UpdateFormCommand } from "@domain/project/commands/update-form.command"
 
 export type UpdateFormError = { kind: "network"; status: 0 } | { kind: "unknown"; cause?: unknown };
 
+/** Сценарий: сохранить форму проекта (`UpdateFormCommand`); ошибка → `UpdateFormError`. */
 @Injectable({ providedIn: "root" })
 export class UpdateFormUseCase {
   private readonly projectRepositoryPort = inject(ProjectRepositoryPort);

@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { HttpErrorResponse } from "@angular/common/http";
 
+/** Сценарий: повторно отправить письмо подтверждения email; ошибки разложены по статусам (400/500/network). */
 @Injectable({ providedIn: "root" })
 export class ResendEmailUseCase {
   private readonly authRepositoryPort = inject(AuthRepositoryPort);

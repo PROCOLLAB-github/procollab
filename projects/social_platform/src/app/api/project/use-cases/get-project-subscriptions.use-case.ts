@@ -8,6 +8,7 @@ import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project
 import { Project } from "@domain/project/project.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: проекты-подписки пользователя; ошибка → `get_project_subscriptions_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectSubscriptionsUseCase {
   private readonly projectSubscriptionRepositoryPort = inject(ProjectSubscriptionRepositoryPort);

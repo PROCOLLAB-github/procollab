@@ -9,6 +9,7 @@ import { ChatMessage } from "@domain/chat/chat-message.model";
 
 export type LoadMessagesError = { kind: "server_error" };
 
+/** Сценарий (REST): загрузить историю сообщений чата (тип + пагинация). */
 @Injectable({ providedIn: "root" })
 export class LoadMessagesUseCase {
   private readonly chatRepository = inject(ChatRepositoryPort);

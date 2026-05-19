@@ -7,6 +7,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedNews } from "@domain/news/project-news.model";
 import { PROGRAM_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: страница новостей программы; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class FetchNewsUseCase {
   private readonly programNewsRepositoryPort = inject(PROGRAM_NEWS_REPOSITORY);

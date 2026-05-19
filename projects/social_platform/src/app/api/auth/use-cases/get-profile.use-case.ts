@@ -6,6 +6,7 @@ import { User } from "@domain/auth/user.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { catchError, map, Observable, of, take } from "rxjs";
 
+/** Сценарий: отдать текущий профиль из потока `AuthRepositoryPort.profile`. */
 @Injectable({ providedIn: "root" })
 export class GetProfileUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);

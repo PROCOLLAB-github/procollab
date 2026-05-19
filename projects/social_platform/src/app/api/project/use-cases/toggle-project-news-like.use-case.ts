@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { PROJECT_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: переключить лайк новости проекта (возвращает newsId); ошибка → `toggle_project_news_like_error`. */
 @Injectable({ providedIn: "root" })
 export class ToggleProjectNewsLikeUseCase {
   private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);

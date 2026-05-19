@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { revokeInvite } from "@domain/invite/events/revoke-invite.event";
 
+/** Сценарий: отозвать отправленное приглашение; эмитит `RevokeInvite`; ошибка → `revoke_invite_error`. */
 @Injectable({ providedIn: "root" })
 export class RevokeInviteUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);

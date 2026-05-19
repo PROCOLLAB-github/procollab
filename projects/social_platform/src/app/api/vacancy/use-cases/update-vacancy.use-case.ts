@@ -9,6 +9,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { vacancyUpdated } from "@domain/vacancy/events/vacancy-updated.event";
 
+/** Сценарий: изменить вакансию; эмитит `VacancyUpdated`. */
 @Injectable({ providedIn: "root" })
 export class UpdateVacancyUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);

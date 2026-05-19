@@ -6,6 +6,7 @@ import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: динамические фильтры программы; ошибка → `get_program_filters_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProgramFiltersUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

@@ -7,6 +7,7 @@ import { ChatRepositoryPort } from "@domain/chat/ports/chat.repository.port";
 
 export type CheckUnreadsError = { kind: "server_error" };
 
+/** Сценарий (REST): есть ли непрочитанные сообщения — для бейджа в шапке. */
 @Injectable({ providedIn: "root" })
 export class CheckUnreadsUseCase {
   private readonly chatRepository = inject(ChatRepositoryPort);

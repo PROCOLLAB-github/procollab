@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { Invite } from "@domain/invite/invite.model";
 
+/** Сценарий: список приглашений конкретного проекта; ошибка → `get_project_invites_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectInvitesUseCase {
   private readonly InviteRepositoryPort = inject(InviteRepositoryPort);

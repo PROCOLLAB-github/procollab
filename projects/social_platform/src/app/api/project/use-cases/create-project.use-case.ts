@@ -8,6 +8,7 @@ import { Project } from "@domain/project/project.model";
 import { EventBus } from "@domain/shared/event-bus";
 import { projectCreated } from "@domain/project/events/project-created.event";
 
+/** Сценарий: создать черновик проекта; эмитит `ProjectCreated`. */
 @Injectable({ providedIn: "root" })
 export class CreateProjectUseCase {
   private readonly projectRepositoryPort = inject(ProjectRepositoryPort);

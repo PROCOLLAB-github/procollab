@@ -8,6 +8,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
 
+/** Сценарий: проекты программы; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class GetAllProjectsUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

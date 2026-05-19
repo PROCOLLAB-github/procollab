@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { projectSubscribed } from "@domain/project/events/project-subscribed.event";
 
+/** Сценарий: подписаться на проект; эмитит `ProjectSubscribed`. */
 @Injectable({ providedIn: "root" })
 export class AddProjectSubscriptionUseCase {
   private readonly projectSubscriptionRepositoryPort = inject(ProjectSubscriptionRepositoryPort);
