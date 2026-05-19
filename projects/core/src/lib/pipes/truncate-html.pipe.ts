@@ -3,6 +3,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
+/** Обрезает HTML по текстовой длине, сохраняя открытые теги валидными. */
 @Pipe({ name: "truncateHtml", standalone: true })
 export class TruncateHtmlPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
@@ -10,14 +11,14 @@ export class TruncateHtmlPipe implements PipeTransform {
   transform(value: string, limit: number): SafeHtml {
     if (!value) return "";
 
-    // Сначала убираем все HTML теги чтобы считать только текст
+    // Сначала убираем HTML-теги, чтобы считать только текст.
     const plainText = value.replace(/<[^>]*>/g, "");
 
     if (plainText.length <= limit) {
       return this.sanitizer.bypassSecurityTrustHtml(value);
     }
 
-    // Обрезаем по тексту, сохраняя теги
+    // Обрезаем по тексту, сохраняя теги.
     let charCount = 0;
     let result = "";
     let inTag = false;
@@ -38,11 +39,11 @@ export class TruncateHtmlPipe implements PipeTransform {
         currentTag += char;
 
         if (char === ">") {
-          // Закончился тег, анализируем его
+          // Закончился тег, анализируем его.
           const tagContent = currentTag.slice(1, -1).trim(); // убираем < и >
 
           if (tagContent.startsWith("/")) {
-            // Закрывающий тег
+            // Закрывающий тег.
             openTags.pop();
           } else if (!tagContent.startsWith("!")) {
             // Открывающий тег (не комментарий)

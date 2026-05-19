@@ -13,25 +13,12 @@ import { Observable, tap } from "rxjs";
 import { LoggerService } from "../services";
 
 /**
- * HTTP-интерцептор для логирования результатов HTTP-запросов.
- *
- * Логирует:
- * - HTTP-метод;
- * - URL запроса;
- * - статус ответа;
- * - длительность выполнения запроса.
- *
- * Ошибки запросов дополнительно записываются
- * через `LoggerService.error`.
+ * Логирует HTTP-метод, URL, статус и длительность запроса.
  */
 @Injectable()
 export class LoggingInterceptor implements HttpInterceptor {
   constructor(private readonly logger: LoggerService) {}
 
-  /**
-   * Измеряет время выполнения запроса
-   * и логирует результат после завершения.
-   */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const started = Date.now();
 
