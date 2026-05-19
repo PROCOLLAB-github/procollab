@@ -4,6 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { NonNullableFormBuilder } from "@angular/forms";
 import { UserInput } from "@domain/auth/user.model";
 
+/** UI-состояние этапа 1 онбординга: выбор специализаций, раскрытие групп. */
 @Injectable()
 export class OnboardingStageOneUIInfoService {
   private readonly nnFb = inject(NonNullableFormBuilder);

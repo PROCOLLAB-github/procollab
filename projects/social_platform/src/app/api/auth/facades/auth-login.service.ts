@@ -11,6 +11,7 @@ import { toAsyncState } from "@domain/shared/to-async-state";
 import { LoginResult, LoginError } from "@domain/auth/results/login.result";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Фасад входа: форма логина, `LoginUseCase`, состояние отправки и редирект. */
 @Injectable()
 export class AuthLoginService {
   private readonly tokenService = inject(TokenService);

@@ -5,6 +5,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedItem } from "@domain/feed/feed-item.model";
 import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 
+/** UI-проекция ленты: computed-сигналы страницы `FeedItem`. */
 @Injectable()
 export class FeedUIInfoService {
   readonly feedItems$ = signal<AsyncState<FeedItem[]>>(initial());

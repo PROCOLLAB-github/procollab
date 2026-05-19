@@ -4,11 +4,12 @@ import { Injectable, signal } from "@angular/core";
 import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
 import { User } from "@domain/auth/user.model";
 
+/** Состояние интерфейса детальной страницы профиля и карточек направлений пользователя. */
 @Injectable()
 export class ProfileDetailUIInfoService {
   readonly user = signal<User | undefined>(undefined);
   readonly loggedUserId = signal<number>(0);
-  readonly profileId = signal<number>(0); // ID текущего пользователя
+  readonly profileId = signal<number>(0); // ID текущего пользователя.
 
   readonly isProfileEmpty = signal<boolean | undefined>(undefined);
   readonly isProfileFill = signal<boolean>(false);

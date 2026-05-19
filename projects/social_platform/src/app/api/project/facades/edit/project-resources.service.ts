@@ -9,6 +9,7 @@ import { DeleteResourceUseCase } from "../../use-cases/delete-resource.use-case"
 import { CreateResourceUseCase } from "../../use-cases/create-resource.use-case";
 import { UpdateResourceUseCase } from "../../use-cases/update-resource.use-case";
 
+/** Фасад ресурсов проекта: создание/обновление/удаление ресурсов. */
 @Injectable({
   providedIn: "root",
 })

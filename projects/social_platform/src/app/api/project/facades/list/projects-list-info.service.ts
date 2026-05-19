@@ -35,6 +35,10 @@ import {
   success,
 } from "@domain/shared/async-state";
 
+/**
+ * Управляет списками проектов: табами, фильтрами URL, поиском,
+ * пагинацией и преобразованием инвайтов в карточки списка.
+ */
 @Injectable()
 export class ProjectsListInfoService {
   private static readonly PROJECTS_PAGE_SIZE = 16;
@@ -54,6 +58,7 @@ export class ProjectsListInfoService {
   private readonly projectsPerFetch = signal<number>(ProjectsListInfoService.PROJECTS_PAGE_SIZE);
 
   private readonly currentSearchQuery = signal<string | undefined>(undefined);
+  // Используется для отсечения повторного запроса с теми же URL-параметрами.
   private previousReqQuery = signal<Record<string, string> | null>(null);
 
   readonly projects$ = signal<AsyncState<Array<Project | InviteProjectSummary>>>(initial());

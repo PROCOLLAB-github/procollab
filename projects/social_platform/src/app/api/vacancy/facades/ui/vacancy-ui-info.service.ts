@@ -6,17 +6,17 @@ import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 
+/** Состояние интерфейса списков вакансий: фильтры, пагинация, форма поиска и модалка. */
 @Injectable()
 export class VacancyUIInfoService {
   private readonly fb = inject(FormBuilder);
-  // Переменная определяющая тип страницы для списка данных и пагинации
 
   readonly listType = signal<"all" | "my" | null>(null);
   readonly totalItemsCount = signal(0);
   readonly vacancyPage = signal(1);
   readonly perFetchTake = signal(20);
 
-  // Переменные для работы с фильтрами
+  // Фильтры синхронизируются с URL-параметрами страницы.
 
   readonly requiredExperience = signal<string | undefined>(undefined);
   readonly roleContains = signal<string | undefined>(undefined);
@@ -24,11 +24,7 @@ export class VacancyUIInfoService {
   readonly workSchedule = signal<string | undefined>(undefined);
   readonly salary = signal<string | undefined>(undefined);
 
-  // Переменные для работы с модалкой
-
   readonly isMyModal = signal<boolean>(false);
-
-  // Переменные для списка вакансий и пагинации
 
   readonly vacancies$ = signal<AsyncState<Vacancy[]>>(initial());
   readonly loadingMore = signal(false);
@@ -63,9 +59,6 @@ export class VacancyUIInfoService {
   applySearhValueChanged(searchValue: string) {
     this.searchForm.get("search")?.setValue(searchValue);
   }
-
-  // myVacanciesPage Modal Section
-  // -------------------
 
   myModalSetup() {
     if (this.listType() === "my" && this.responsesList().length === 0) {

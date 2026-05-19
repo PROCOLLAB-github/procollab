@@ -15,6 +15,7 @@ import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboard
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Координирует шаг выбора специализаций и сохранение первого этапа. */
 @Injectable()
 export class OnboardingStageOneInfoService {
   private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
@@ -51,6 +52,7 @@ export class OnboardingStageOneInfoService {
     });
 
     this.stageForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      // Общий OnboardingService хранит черновик между переходами по шагам.
       this.onboardingService.setFormValue(value);
     });
   }

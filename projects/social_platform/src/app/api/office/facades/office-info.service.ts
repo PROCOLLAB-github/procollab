@@ -17,6 +17,10 @@ import { ObserveSetOfflineUseCase } from "@api/chat/use-cases/observe-set-offlin
 import { ObserveSetOnlineUseCase } from "@api/chat/use-cases/observe-set-online.use-case";
 import { ChatStateService } from "@api/chat/chat-state.service";
 
+/**
+ * Стартовый сервис офисной оболочки: прогревает справочники, собирает навигацию,
+ * подключает чатовые статусы и обрабатывает приглашения пользователя.
+ */
 @Injectable()
 export class OfficeInfoService {
   private readonly industryRepository = inject(IndustryRepositoryPort);
@@ -40,6 +44,7 @@ export class OfficeInfoService {
   private readonly destroy$ = new Subject<void>();
 
   initializationOffice(): void {
+    // Справочник отраслей нужен многим дочерним страницам синхронно через сигнал.
     this.industryRepository.getAll().pipe(takeUntil(this.destroy$)).subscribe();
 
     this.initializationNavItems();
@@ -89,6 +94,7 @@ export class OfficeInfoService {
   private initializationStatus(): void {
     this.connectChatUseCase.execute().pipe(takeUntil(this.destroy$)).subscribe();
 
+    // События входа/выхода из сети обновляют общий кеш для карточек и detail-виджетов.
     this.observeSetOfflineUseCase
       .execute()
       .pipe(takeUntil(this.destroy$))

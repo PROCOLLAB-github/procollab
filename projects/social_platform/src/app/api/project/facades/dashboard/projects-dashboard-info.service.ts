@@ -10,6 +10,7 @@ import { CreateProjectUseCase } from "@api/project/use-cases/create-project.use-
 import { AppRoutes } from "@api/paths/app-routes";
 import { LoggerService } from "@core/public-api";
 
+/** Фасад дашборда проектов: список/подписки и создание проекта. */
 @Injectable()
 export class ProjectsDashboardInfoService {
   private readonly route = inject(ActivatedRoute);

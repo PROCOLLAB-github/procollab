@@ -30,6 +30,7 @@ import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
+/** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
 @Injectable()
 export class MembersInfoService {
   private readonly route = inject(ActivatedRoute);
@@ -193,6 +194,9 @@ export class MembersInfoService {
     fromEvent(target, "scroll")
       .pipe(
         throttleTime(500),
+        // concatMap (а не merge/switchMap): подгрузки идут строго последовательно,
+        // иначе параллельные скроллы посчитают одинаковый skip (= текущая длина
+        // списка) и придут дубли страниц.
         concatMap(() => this.onScroll(target, membersRoot)),
         takeUntil(this.destroy$)
       )

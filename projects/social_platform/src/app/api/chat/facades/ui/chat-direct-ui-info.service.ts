@@ -12,6 +12,7 @@ import {
   OnReadChatMessageDto,
 } from "@domain/chat/chat.model";
 
+/** UI-проекция личного чата: сигналы сообщений/собеседника и мобильная панель. */
 @Injectable()
 export class ChatDirectUIInfoService {
   /** Список пользователей, которые сейчас печатают */

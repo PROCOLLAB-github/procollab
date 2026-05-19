@@ -9,6 +9,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ResendEmailUseCase } from "../use-cases/resend-email.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Координирует подтверждение email, сохранение токенов из URL и таймер повторной отправки. */
 @Injectable()
 export class AuthEmailService {
   private readonly tokenService = inject(TokenService);
@@ -19,14 +20,10 @@ export class AuthEmailService {
 
   private readonly destroy$ = new Subject<void>();
 
-  // ConfirmEmail Component
   private readonly userEmail = signal<string | undefined>(undefined);
 
-  // VerificationEmail Component
   readonly counter = signal<number>(0);
   private timerStarted = false;
-
-  // ConfirmEmail Component
 
   initializationTokens(): void {
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
@@ -40,8 +37,6 @@ export class AuthEmailService {
       }
     });
   }
-
-  // VerificationEmail Component
 
   initializationEmail(): void {
     this.route.queryParams

@@ -6,6 +6,7 @@ import { Params } from "@angular/router";
 import { AsyncState, failure, initial, isLoading, success } from "@domain/shared/async-state";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 
+/** UI-проекция детали вакансии: computed-сигналы для шаблона. */
 @Injectable()
 export class VacancyDetailUIInfoService {
   private readonly fb = inject(FormBuilder);

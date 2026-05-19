@@ -7,6 +7,7 @@ import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 import { transformYearStringToNumber } from "@utils/transformYear";
 
+/** Фасад редактирования достижений профиля. */
 @Injectable()
 export class ProfileEditAchievementsInfoService {
   private readonly fb = inject(FormBuilder);

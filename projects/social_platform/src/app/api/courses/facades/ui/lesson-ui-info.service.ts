@@ -5,6 +5,7 @@ import { CourseLesson, Task } from "@domain/courses/courses.model";
 import { AsyncState, initial, isSuccess } from "@domain/shared/async-state";
 import { CourseDetailUIInfoService } from "./course-detail-ui-info.service";
 
+/** UI-состояние урока: сигналы задач/ответа/прогресса и производные флаги (current/last/submit/done). */
 @Injectable()
 export class LessonUIInfoService {
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);

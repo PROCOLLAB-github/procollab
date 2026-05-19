@@ -7,6 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "../../../project/facades/detail/ui/projects-detail-ui.service";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";
 
+/** Фасад вкладки проектов профиля: проекты пользователя и подписки. */
 @Injectable()
 export class ProfileDetailProjectsInfoService {
   private readonly route = inject(ActivatedRoute);

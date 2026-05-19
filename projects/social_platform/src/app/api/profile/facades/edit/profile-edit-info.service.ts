@@ -14,6 +14,7 @@ import { AsyncState, failure, initial, loading, success } from "@domain/shared/a
 import { EditStep } from "@core/lib/models/edit-step";
 import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
 
+/** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
 export class ProfileEditInfoService {
   private readonly profileFormService = inject(ProfileFormService);

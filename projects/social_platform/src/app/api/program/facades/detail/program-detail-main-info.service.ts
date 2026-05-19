@@ -16,6 +16,10 @@ import { DeleteNewsUseCase } from "../../use-cases/delete-news.use-case";
 import { ToggleLikeUseCase } from "../../use-cases/toggle-like.use-case";
 import { EditNewsUseCase } from "../../use-cases/edit-news.use-case";
 
+/**
+ * Координирует основную вкладку программы: данные резолвера, новости,
+ * раскрытие описания, пагинацию и действия пользователя с новостями.
+ */
 @Injectable()
 export class ProgramDetailMainService {
   private readonly router = inject(Router);
@@ -89,6 +93,7 @@ export class ProgramDetailMainService {
           this.programDetailMainUIInfoService.applyFormatingProgramData(program);
         }),
         concatMap(program => {
+          // Новости программы доступны только участникам программы.
           if (program.isUserMember) {
             return this.fetchNews(0, this.fetchLimit());
           } else {

@@ -7,6 +7,7 @@ import { OnboardingService } from "../onboarding.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Фасад онбординга: текущий/активный этап, навигация по шагам. */
 @Injectable()
 export class OnboardingInfoService {
   private readonly router = inject(Router);

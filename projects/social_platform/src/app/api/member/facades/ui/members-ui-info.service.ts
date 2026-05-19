@@ -6,6 +6,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
 import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 
+/** UI-проекция списка участников: computed-сигналы members/mentors. */
 @Injectable()
 export class MembersUIInfoService {
   private readonly fb = inject(FormBuilder);

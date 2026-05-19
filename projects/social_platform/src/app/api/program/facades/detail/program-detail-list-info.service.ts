@@ -33,6 +33,7 @@ import { Project } from "@domain/project/project.model";
 import { User } from "@domain/auth/user.model";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 
+/** Фасад списка программы: проекты/участники/подписки/рейтинги с фильтрами и пагинацией по скроллу. */
 @Injectable()
 export class ProgramDetailListInfoService {
   private readonly route = inject(ActivatedRoute);
@@ -280,6 +281,9 @@ export class ProgramDetailListInfoService {
 
     if (shouldFetch) {
       this.programDetailListUIInfoService.loadingMore.set(true);
+      // Страница инкрементируется до запроса (offset считается от неё);
+      // при ошибке onFetch откатывает её обратно (p - 1), чтобы повторный
+      // скролл не пропустил недогруженную страницу.
       this.listPage.update(p => p + 1);
       return this.onFetch();
     }

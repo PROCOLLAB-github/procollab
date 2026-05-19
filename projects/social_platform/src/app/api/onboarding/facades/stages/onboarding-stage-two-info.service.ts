@@ -14,6 +14,7 @@ import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
 
+/** Координирует шаг выбора навыков и сохранение второго этапа. */
 @Injectable()
 export class OnboardingStageTwoInfoService {
   private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
@@ -43,6 +44,7 @@ export class OnboardingStageTwoInfoService {
       .subscribe(({ skills }) => this.onboardingStageTwoUIInfoService.applyInitFormValues(skills));
 
     this.stageForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      // Общий OnboardingService хранит черновик между переходами по шагам.
       this.onboardingService.setFormValue(value);
     });
   }

@@ -12,6 +12,7 @@ import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboard
 import { loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Фасад этапа 3 онбординга: обновление профиля и продвижение этапа онбординга. */
 @Injectable()
 export class OnboardingStageThreeInfoService {
   private readonly onboardingService = inject(OnboardingService);

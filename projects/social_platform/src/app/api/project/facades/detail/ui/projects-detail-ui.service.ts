@@ -4,6 +4,7 @@ import { computed, Injectable, signal } from "@angular/core";
 import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
 import { Project } from "@domain/project/project.model";
 
+/** Состояние детальной страницы проекта: сам проект, вкладки и карточки направлений. */
 @Injectable({ providedIn: "root" })
 export class ProjectsDetailUIInfoService {
   readonly collaborators = computed(() => this.project()?.collaborators);
@@ -14,8 +15,7 @@ export class ProjectsDetailUIInfoService {
 
   readonly project = signal<Project | undefined>(undefined);
 
-  // Состояние компонента
-  readonly isCompleted = signal<boolean>(false); // Флаг завершенности проекта
+  readonly isCompleted = signal<boolean>(false);
   readonly directions = signal<DirectionItem[]>([]);
 
   applySetProject(project: Project) {

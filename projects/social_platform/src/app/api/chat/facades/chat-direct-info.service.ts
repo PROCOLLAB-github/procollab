@@ -20,6 +20,7 @@ import { DeleteMessageUseCase } from "../use-cases/delete-message.use-case";
 import { StartTypingUseCase } from "../use-cases/start-typing.use-case";
 import { ReadMessageUseCase } from "../use-cases/read-message.use-case";
 
+/** Фасад личного чата: загрузка истории/файлов и подписки realtime (печать, read, edit/delete), отправка сообщений. */
 @Injectable()
 export class ChatDirectInfoService {
   private readonly route = inject(ActivatedRoute);

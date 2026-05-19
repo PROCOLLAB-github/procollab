@@ -9,6 +9,7 @@ import { ExpandService } from "../../expand/expand.service";
 import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
 import { loading } from "@domain/shared/async-state";
 
+/** Управляет детальной страницей вакансии, раскрытием текста и отправкой отклика. */
 @Injectable()
 export class VacancyDetailInfoService {
   private readonly route = inject(ActivatedRoute);

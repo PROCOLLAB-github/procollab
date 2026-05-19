@@ -13,6 +13,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { ChatStateService } from "../chat-state.service";
 import { ObserveMessagesUseCase } from "../use-cases/observe-messages.use-case";
 
+/** Управляет списком личных/групповых чатов и глобальным индикатором непрочитанных. */
 @Injectable()
 export class ChatInfoService {
   private readonly navService = inject(NavService);
@@ -32,6 +33,7 @@ export class ChatInfoService {
     this.authRepository.profile,
     toObservable(this.chatsData),
   ]).pipe(
+    // Непрочитанность считается относительно текущего пользователя.
     map(([profile, chats]) =>
       chats.map(chat => ({
         ...chat,

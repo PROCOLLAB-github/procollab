@@ -6,6 +6,7 @@ import { map, Subject, takeUntil } from "rxjs";
 import { CoursesListUIInfoService } from "./ui/courses-list-ui-info.service";
 import { loading, success } from "@domain/shared/async-state";
 
+/** Фасад списка курсов: инициализация/очистка загрузки перечня курсов. */
 @Injectable()
 export class CoursesListInfoService {
   private readonly route = inject(ActivatedRoute);

@@ -3,6 +3,7 @@
 import { Injectable, signal } from "@angular/core";
 import { Invite } from "@domain/invite/invite.model";
 
+/** UI-состояние офиса: приглашения, пункты навигации и модалки верификации. */
 @Injectable()
 export class OfficeUIInfoService {
   readonly invites = signal<Invite[]>([]);
