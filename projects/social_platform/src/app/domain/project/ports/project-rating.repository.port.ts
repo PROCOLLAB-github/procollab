@@ -7,6 +7,7 @@ import { HttpParams } from "@angular/common/http";
 import { ProjectRatingCriterionOutput } from "../project-rating-criterion-output";
 import { ProjectRatingCriterion } from "../project-rating-criterion";
 
+/** Порт оценки проектов программы: список, фильтры, `rate`, маппинг формы в DTO. */
 export abstract class ProjectRatingRepositoryPort {
   abstract getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>>;
 

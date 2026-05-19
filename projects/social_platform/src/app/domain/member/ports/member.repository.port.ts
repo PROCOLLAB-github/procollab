@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { User } from "../../auth/user.model";
 
+/** Порт репозитория участников: список members (skip/take/фильтры) и mentors. */
 export abstract class MemberRepositoryPort {
   abstract getMembers(
     skip: number,

@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 
+/** Дженерик-порт новостей (project/profile/program): fetch/detail/add/edit/delete + read/like. DI — через три раздельных InjectionToken (см. ниже). */
 export abstract class NewsRepositoryPort<T> {
   abstract fetchNews(id: string, limit?: number, offset?: number): Observable<ApiPagination<T>>;
 
