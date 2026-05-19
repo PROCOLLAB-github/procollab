@@ -18,6 +18,7 @@ type TooltipKey =
   | "login"
   | "team";
 
+/** Реестр состояния тултипов по ключу: show/hide/toggle. */
 @Injectable()
 export class TooltipInfoService {
   readonly isTooltipVisible = signal<Partial<Record<TooltipKey, boolean>>>({});

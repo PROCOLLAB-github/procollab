@@ -10,6 +10,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { EditStep } from "@core/lib/models/edit-step";
 
+/** Состояние шагов мастера проекта и навигация между ними. */
 @Injectable({
   providedIn: "root",
 })

@@ -10,6 +10,7 @@ import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.por
 import { GetSpecializationsInlineUseCase } from "@api/specializations/use-cases/get-specializations-inline.use-case";
 import { fail } from "@domain/shared/result.type";
 
+/** Сервис подбора навыков/специализаций для форм: поиск, добавление/удаление, inline-специализации. */
 @Injectable({ providedIn: "root" })
 export class SearchesService {
   private readonly skillsRepository = inject(SkillsRepositoryPort);

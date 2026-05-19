@@ -3,6 +3,7 @@
 import { computed, Injectable, signal } from "@angular/core";
 import { Board } from "@domain/kanban/board.model";
 
+/** Состояние канбан-досок проекта (модуль отключён): выбранная доска, список досок. */
 @Injectable({ providedIn: "root" })
 export class KanbanBoardInfoService {
   readonly boardInfo = signal<Board | null>({

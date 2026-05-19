@@ -3,6 +3,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 
+/** Подключает стороннюю аналитику один раз и только на прод-хосте приложения. */
 @Injectable({
   providedIn: "root",
 })

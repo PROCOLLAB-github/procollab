@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 
+/** Экспорт файлов программы: оценки, все/поданные проекты. */
 @Injectable({ providedIn: "root" })
 export class ExportFileService {
   private readonly EXPORT_PROGRAM_FILE_URL = "/programs/";

@@ -2,6 +2,7 @@
 
 import { Injectable, signal } from "@angular/core";
 
+/** Переключение видимости группы полей формы. */
 @Injectable()
 export class ToggleFieldsInfoService {
   readonly showInputFields = signal<boolean>(false);

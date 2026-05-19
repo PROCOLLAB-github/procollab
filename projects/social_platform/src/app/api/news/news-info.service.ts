@@ -5,9 +5,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 
+/** Общее состояние новостей для экранов проекта, профиля и программы. */
 @Injectable({ providedIn: "root" })
 export class NewsInfoService {
-  readonly news$ = signal<AsyncState<FeedNews[]>>(initial()); // Массив новостей
+  readonly news$ = signal<AsyncState<FeedNews[]>>(initial());
 
   readonly news = computed(() => {
     const state = this.news$();

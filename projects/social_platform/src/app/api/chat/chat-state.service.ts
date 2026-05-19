@@ -3,6 +3,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
+/** Глобальное состояние чата: непрочитанные, онлайн-статусы пользователей, сброс. */
 @Injectable({ providedIn: "root" })
 export class ChatStateService {
   readonly unread$ = new BehaviorSubject(false);

@@ -14,6 +14,7 @@ export type ReadAllKey =
   | "languages"
   | "workExperience";
 
+/** Хранит состояния раскрытия длинных блоков текста и списков. */
 @Injectable()
 export class ExpandService {
   readonly readFullDescription = signal(false);
