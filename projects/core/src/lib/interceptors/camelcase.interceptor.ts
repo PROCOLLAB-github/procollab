@@ -14,34 +14,19 @@ import camelcaseKeys from "camelcase-keys";
 import { LoggerService } from "../services/logger/logger.service";
 
 /**
- * HTTP-интерцептор для преобразования стиля именования ключей
- * между frontend и backend слоями.
- *
- * Преобразования:
- * - исходящие запросы: camelCase → snake_case;
- * - входящие ответы: snake_case → camelCase.
- *
- * Преобразование выполняется рекурсивно
- * для вложенных объектов и массивов.
+ * Преобразует JSON-тела запросов в snake_case, а JSON-ответы в camelCase.
  */
 @Injectable()
 export class CamelcaseInterceptor implements HttpInterceptor {
   constructor(private readonly loggerService: LoggerService) {}
 
-  /**
-   * Преобразует тело запроса перед отправкой
-   * и тело ответа после получения.
-   */
   intercept(
     request: HttpRequest<Record<string, any>>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     let req: HttpRequest<Record<string, any>>;
 
-    /**
-     * FormData исключается из преобразования,
-     * так как содержит бинарные данные и собственную структуру ключей.
-     */
+    // FormData содержит бинарные данные и собственные ключи полей.
     if (request.body && !(request.body instanceof FormData)) {
       req = request.clone({
         body: snakecaseKeys(request.body, {

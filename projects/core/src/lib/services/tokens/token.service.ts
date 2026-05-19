@@ -34,6 +34,10 @@ export class TokenService {
   private readonly TOKEN_API_URL = "/api/token";
   private readonly enviroment = environment;
 
+  /**
+   * dev-stage и prod делят один cookie-домен (`.procollab.ru`), поэтому
+   * ключи токенов разводятся, чтобы сессии не затирали друг друга в одном браузере.
+   */
   private get isDevStage(): boolean {
     return window.location.hostname === this.enviroment.apiUrl;
   }
