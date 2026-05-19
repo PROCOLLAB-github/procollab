@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedNews } from "@domain/news/project-news.model";
 
+/** HTTP-адаптер новостей программы: `/programs/<id>/news`. */
 @Injectable({ providedIn: "root" })
 export class ProgramNewsHttpAdapter {
   private readonly PROGRAMS_URL = "/programs";

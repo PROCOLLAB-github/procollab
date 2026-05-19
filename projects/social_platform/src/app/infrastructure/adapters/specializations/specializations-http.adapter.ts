@@ -8,6 +8,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Specialization } from "@domain/specializations/specialization.model";
 import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
 
+/** HTTP-адаптер специализаций: `/auth/users/specializations` (nested/inline). */
 @Injectable({ providedIn: "root" })
 export class SpecializationsHttpAdapter {
   private readonly AUTH_USERS_SPECIALIZATIONS_URL = "/auth/users/specializations";

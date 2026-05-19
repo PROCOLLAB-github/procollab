@@ -3,6 +3,7 @@
 import { Injectable } from "@angular/core";
 import { SeenModulesStoragePort } from "@domain/courses/ports/seen-modules-storage.port";
 
+/** Адаптер `SeenModulesStoragePort` поверх localStorage: «модуль завершён уже показан». */
 @Injectable({ providedIn: "root" })
 export class LocalStorageSeenModulesAdapter implements SeenModulesStoragePort {
   isSeen(courseId: number, moduleId: number): boolean {

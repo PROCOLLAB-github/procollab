@@ -5,6 +5,7 @@ import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { Partner, PartnerDto } from "@domain/project/partner.model";
 
+/** HTTP-адаптер партнёров проекта: `/projects/<id>/partners`. */
 @Injectable({ providedIn: "root" })
 export class ProjectPartnerHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

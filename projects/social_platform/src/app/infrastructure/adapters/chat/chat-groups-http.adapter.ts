@@ -5,6 +5,7 @@ import { ApiService } from "@core/public-api";
 import { ChatItem, ChatListItem } from "@domain/chat/chat-item.model";
 import { Observable } from "rxjs";
 
+/** HTTP-адаптер групповых чатов: `/chats` (опечатка в имени: Adaper). */
 @Injectable({ providedIn: "root" })
 export class ChatGroupsHttpAdaper {
   private readonly CHATS_URL = "/chats";

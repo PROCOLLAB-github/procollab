@@ -7,6 +7,7 @@ import { ChatFile, ChatMessage } from "@domain/chat/chat-message.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Observable } from "rxjs";
 
+/** HTTP-адаптер чата (REST): история сообщений, файлы, флаг непрочитанных. */
 @Injectable({ providedIn: "root" })
 export class ChatHttpAdapter {
   private readonly apiService = inject(ApiService);

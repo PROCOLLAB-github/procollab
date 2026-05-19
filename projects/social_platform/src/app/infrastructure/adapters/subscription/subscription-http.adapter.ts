@@ -8,6 +8,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProjectSubscriber } from "@domain/project/project-subscriber.model";
 import { Project } from "@domain/project/project.model";
 
+/** HTTP-адаптер подписок на проект: `/projects`, `/auth/users` (подписчики/подписки). */
 @Injectable({ providedIn: "root" })
 export class SubscriptionHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

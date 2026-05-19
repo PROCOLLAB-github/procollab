@@ -4,6 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 
+/** HTTP-адаптер участников проекта: `/projects/<id>/collaborators` (удаление, смена лидера, выход). */
 @Injectable({ providedIn: "root" })
 export class ProjectCollaboratorsHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

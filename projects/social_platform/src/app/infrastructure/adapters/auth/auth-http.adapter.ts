@@ -10,6 +10,7 @@ import { LoginCommand } from "@domain/auth/commands/login.command";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
+/** HTTP-адаптер auth: `/api/token`, `/auth`, `/auth/users` (логин/регистрация/профиль/роли). */
 @Injectable({ providedIn: "root" })
 export class AuthHttpAdapter {
   private readonly API_TOKEN_URL = "/api/token";
