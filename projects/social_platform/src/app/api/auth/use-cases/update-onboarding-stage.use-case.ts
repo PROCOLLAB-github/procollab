@@ -6,6 +6,7 @@ import { User } from "@domain/auth/user.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { catchError, map, Observable, of } from "rxjs";
 
+/** Сценарий: сохранить этап онбординга; возвращает обновлённый профиль. */
 @Injectable({ providedIn: "root" })
 export class UpdateOnboardingStageUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);

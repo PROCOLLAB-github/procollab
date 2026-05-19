@@ -8,6 +8,7 @@ import {
   PROJECT_NEWS_REPOSITORY,
 } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: отметить новости ленты просмотренными у их владельца; ошибка → `read_feed_news_error`. */
 @Injectable({ providedIn: "root" })
 export class ReadFeedNewsUseCase {
   private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);

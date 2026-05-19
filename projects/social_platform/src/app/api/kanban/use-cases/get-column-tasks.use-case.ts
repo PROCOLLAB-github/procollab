@@ -8,6 +8,7 @@ import { Column } from "@domain/kanban/column.model";
 
 export type GetColumnTasksError = { kind: "server_error" };
 
+/** Сценарий (kanban, модуль отключён): задачи колонки по columnId. */
 @Injectable({ providedIn: "root" })
 export class GetColumnTasksUseCase {
   private readonly kanbanRepository = inject(KanbanRepositoryPort);

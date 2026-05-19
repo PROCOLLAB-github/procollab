@@ -6,6 +6,7 @@ import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.por
 import { Approve } from "@domain/skills/skill.model";
 import { catchError, map, Observable, of } from "rxjs";
 
+/** Сценарий: подтвердить навык пользователя; ошибка → `approve_skill_error`. */
 @Injectable({ providedIn: "root" })
 export class ApproveSkillUseCase {
   private readonly skillsRepository = inject(SkillsRepositoryPort);

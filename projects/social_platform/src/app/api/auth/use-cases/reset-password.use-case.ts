@@ -6,6 +6,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { HttpErrorResponse } from "@angular/common/http";
 
+/** Сценарий: запросить сброс пароля по email; ошибки по статусам (400/500/network). */
 @Injectable({ providedIn: "root" })
 export class ResetPasswordUseCase {
   private readonly authRepositoryPort = inject(AuthRepositoryPort);

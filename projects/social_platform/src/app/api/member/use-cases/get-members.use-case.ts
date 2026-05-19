@@ -7,6 +7,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MemberRepositoryPort } from "@domain/member/ports/member.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: страница участников (skip/take + фильтры); ошибка → `get_members_error`. */
 @Injectable({ providedIn: "root" })
 export class GetMembersUseCase {
   private readonly memberRepositoryPort = inject(MemberRepositoryPort);

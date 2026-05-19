@@ -9,6 +9,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { vacancyCreated } from "@domain/vacancy/events/vacancy-created.event";
 
+/** Сценарий: создать вакансию в проекте; эмитит `VacancyCreated`. */
 @Injectable({ providedIn: "root" })
 export class PostVacancyUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);

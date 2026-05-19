@@ -6,6 +6,7 @@ import { Resource, ResourceDto } from "@domain/project/resource.model";
 import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-resource.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: изменить ресурс проекта; ошибка → `update_project_resource_error`. */
 @Injectable({ providedIn: "root" })
 export class UpdateResourceUseCase {
   private readonly projectResourceRepositoryPort = inject(ProjectResourceRepositoryPort);

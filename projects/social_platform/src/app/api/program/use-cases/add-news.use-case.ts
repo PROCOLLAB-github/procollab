@@ -6,6 +6,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { FeedNews } from "@domain/news/project-news.model";
 import { PROGRAM_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: создать новость программы; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class AddNewsUseCase {
   private readonly programNewsRepositoryPort = inject(PROGRAM_NEWS_REPOSITORY);

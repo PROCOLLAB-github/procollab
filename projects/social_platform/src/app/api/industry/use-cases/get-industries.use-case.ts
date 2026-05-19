@@ -8,6 +8,7 @@ import { Industry } from "@domain/industry/industry.model";
 
 export type GetIndustriesError = { kind: "server_error"; cause?: unknown };
 
+/** Сценарий: загрузить справочник отраслей (наполняет signal-кеш репозитория). */
 @Injectable({ providedIn: "root" })
 export class GetIndustriesUseCase {
   private readonly industryRepository = inject(IndustryRepositoryPort);

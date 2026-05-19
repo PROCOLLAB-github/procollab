@@ -9,6 +9,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 
 export type SearchSkillsError = { kind: "server_error" };
 
+/** Сценарий: плоский поиск навыков (search/limit/offset) для autocomplete. */
 @Injectable({ providedIn: "root" })
 export class SearchSkillsUseCase {
   private readonly skillsRepository = inject(SkillsRepositoryPort);

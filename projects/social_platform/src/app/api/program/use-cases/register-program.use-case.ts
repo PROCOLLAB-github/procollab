@@ -6,6 +6,7 @@ import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.
 import { ProgramDataSchema } from "@domain/program/program.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: регистрация в программу с доп. полями; ошибка → `register_program_error`. */
 @Injectable({ providedIn: "root" })
 export class RegisterProgramUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { projectUnSubscribed } from "@domain/project/events/project-unsubsribed.event";
 import { EventBus } from "@domain/shared/event-bus";
 
+/** Сценарий: отписаться от проекта; эмитит `ProjectUnSubscribed`. */
 @Injectable({ providedIn: "root" })
 export class DeleteProjectSubscriptionUseCase {
   private readonly projectSubscriptionRepositoryPort = inject(ProjectSubscriptionRepositoryPort);

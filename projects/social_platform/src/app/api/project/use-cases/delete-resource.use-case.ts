@@ -5,6 +5,7 @@ import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-res
 import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: удалить ресурс проекта; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class DeleteResourceUseCase {
   private readonly projectResourceRepositoryPort = inject(ProjectResourceRepositoryPort);

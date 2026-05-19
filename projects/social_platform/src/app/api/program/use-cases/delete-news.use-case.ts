@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { PROGRAM_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: удалить новость программы (возвращает newsId); ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class DeleteNewsUseCase {
   private readonly programNewsRepositoryPort = inject(PROGRAM_NEWS_REPOSITORY);

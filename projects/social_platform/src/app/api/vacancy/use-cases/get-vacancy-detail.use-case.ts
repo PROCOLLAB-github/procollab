@@ -6,6 +6,7 @@ import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: детали вакансии по id; ошибка → `get_vacancy_detail_error`. */
 @Injectable({ providedIn: "root" })
 export class GetVacancyDetailUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);

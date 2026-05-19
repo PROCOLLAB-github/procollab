@@ -9,6 +9,7 @@ import { catchError, concatMap, map, Observable, of } from "rxjs";
 
 export type SaveProfileResultError = { kind: "profile_edit_error"; cause?: SaveProfileError };
 
+/** Сценарий: сохранить профиль и дочитать актуальный `User`; ошибка → `profile_edit_error`. */
 @Injectable({ providedIn: "root" })
 export class SaveProfileUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);

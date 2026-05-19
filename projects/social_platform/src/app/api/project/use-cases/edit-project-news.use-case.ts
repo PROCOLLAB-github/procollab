@@ -6,6 +6,7 @@ import { FeedNews } from "@domain/news/project-news.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { PROJECT_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: отредактировать новость проекта; ошибка → `edit_project_news_error`. */
 @Injectable({ providedIn: "root" })
 export class EditProjectNewsUseCase {
   private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);

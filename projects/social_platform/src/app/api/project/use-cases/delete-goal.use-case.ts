@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: удалить цель проекта; ошибка → `delete_project_goal_error`. */
 @Injectable({ providedIn: "root" })
 export class DeleteGoalUseCase {
   private readonly projectGoalsRepositoryPort = inject(ProjectGoalsRepositoryPort);

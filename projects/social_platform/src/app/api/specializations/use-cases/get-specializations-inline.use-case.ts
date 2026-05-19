@@ -8,6 +8,7 @@ import { SpecializationsRepositoryPort } from "@domain/specializations/ports/spe
 import { Specialization } from "@domain/specializations/specialization.model";
 import { catchError, map, Observable, of } from "rxjs";
 
+/** Сценарий: плоский поиск специализаций (search/limit/offset); ошибка → `server_error`. */
 @Injectable({ providedIn: "root" })
 export class GetSpecializationsInlineUseCase {
   private readonly specializationRepository = inject(SpecializationsRepositoryPort);

@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { PROJECT_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: отметить новости проекта просмотренными; ошибка → `read_project_news_error`. */
 @Injectable({ providedIn: "root" })
 export class ReadProjectNewsUseCase {
   private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);

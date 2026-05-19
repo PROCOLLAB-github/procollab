@@ -7,6 +7,7 @@ import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { GoalFormData } from "@infrastructure/adapters/project/dto/project-goal.dto";
 
+/** Сценарий: создать цели проекта; ошибка → `create_project_goals_error`. */
 @Injectable({ providedIn: "root" })
 export class CreateGoalsUseCase {
   private readonly projectGoalsRepositoryPort = inject(ProjectGoalsRepositoryPort);

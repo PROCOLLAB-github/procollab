@@ -8,6 +8,7 @@ import {
   PROJECT_NEWS_REPOSITORY,
 } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: переключить лайк новости ленты у её владельца; ошибка → `toggle_feed_like_error`. */
 @Injectable({ providedIn: "root" })
 export class ToggleFeedLikeUseCase {
   private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);

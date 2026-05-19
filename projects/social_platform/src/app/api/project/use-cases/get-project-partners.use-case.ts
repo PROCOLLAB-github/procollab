@@ -6,6 +6,7 @@ import { Partner } from "@domain/project/partner.model";
 import { ProjectPartnerRepositoryPort } from "@domain/project/ports/project-partner.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: партнёры проекта; ошибка → `get_project_partners_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectPartnersUseCase {
   private readonly projectPartnerRepositoryPort = inject(ProjectPartnerRepositoryPort);

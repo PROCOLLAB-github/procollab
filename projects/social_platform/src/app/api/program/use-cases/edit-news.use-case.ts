@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { FeedNews } from "@domain/news/project-news.model";
 import { PROGRAM_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: отредактировать новость программы; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class EditNewsUseCase {
   private readonly programNewsRepositoryPort = inject(PROGRAM_NEWS_REPOSITORY);

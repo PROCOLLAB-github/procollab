@@ -8,6 +8,7 @@ import { SkillsGroup } from "@domain/skills/skills-group.model";
 
 export type GetNestedError = { kind: "server_error"; cause?: unknown };
 
+/** Сценарий: иерархия групп навыков для выбора. */
 @Injectable({ providedIn: "root" })
 export class GetSkillsNestedUseCase {
   private readonly skillsRepository = inject(SkillsRepositoryPort);
