@@ -11,6 +11,7 @@ import { ProfileEditExperienceInfoService } from "@api/profile/facades/edit/prof
 import { IconComponent } from "@uilib";
 import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
+/** Шаг редактирования профиля: опыт работы. */
 @Component({
   selector: "app-profile-experience-step",
   templateUrl: "./profile-experience-step.component.html",

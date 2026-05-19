@@ -32,6 +32,7 @@ import { ProjectGoalService } from "@api/project/facades/edit/project-goals.serv
 import { ProjectContactsService } from "@api/project/facades/edit/project-contacts.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 
+/** Шаг редактирования проекта: основная информация. */
 @Component({
   selector: "app-project-main-step",
   templateUrl: "./project-main-step.component.html",

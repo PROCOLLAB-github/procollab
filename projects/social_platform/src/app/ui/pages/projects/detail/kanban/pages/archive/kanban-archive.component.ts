@@ -10,6 +10,7 @@ import { KanbanTaskComponent } from "../../components/task/kanban-task.component
 import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
 import { TaskPreview } from "@domain/kanban/task.model";
 
+/** Канбан (модуль отключён): страница архива задач. */
 @Component({
   selector: "app-kanban-archive",
   templateUrl: "./kanban-archive.component.html",

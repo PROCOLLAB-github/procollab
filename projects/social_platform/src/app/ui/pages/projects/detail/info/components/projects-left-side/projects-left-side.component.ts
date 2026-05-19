@@ -9,6 +9,7 @@ import { Project } from "@domain/project/project.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
 
+/** Левая колонка детали проекта. */
 @Component({
   selector: "app-projects-left-side",
   templateUrl: "./projects-left-side.component.html",

@@ -34,6 +34,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 
+/** Вкладка списка программы: проекты/участники с фильтрами. */
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",

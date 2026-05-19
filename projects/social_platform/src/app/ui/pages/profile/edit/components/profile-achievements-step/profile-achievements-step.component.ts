@@ -13,6 +13,7 @@ import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/pr
 import { IconComponent } from "@uilib";
 import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
+/** Шаг редактирования достижений в общей форме профиля. */
 @Component({
   selector: "app-profile-achievements-step",
   templateUrl: "./profile-achievements-step.component.html",

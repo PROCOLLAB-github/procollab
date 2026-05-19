@@ -18,6 +18,7 @@ import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Правая колонка детали вакансии. */
 @Component({
   selector: "app-vacancies-right-side",
   templateUrl: "./vacancies-right-side.component.html",

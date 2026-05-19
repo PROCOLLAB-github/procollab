@@ -7,6 +7,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { TruncatePipe } from "@corelib";
 import { Program } from "@domain/program/program.model";
 
+/** Карточка программы в боковой панели офиса. */
 @Component({
   selector: "app-program-sidebar-card",
   templateUrl: "./program-sidebar-card.component.html",

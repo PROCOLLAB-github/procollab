@@ -41,6 +41,7 @@ import { FileModel } from "@domain/file/file.model";
 import { catchError, forkJoin, noop, Observable, of, take, tap } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
+/** Виджет карточки новости: отображение, лайк, режим редактирования. */
 @Component({
   selector: "app-news-card",
   templateUrl: "./news-card.component.html",

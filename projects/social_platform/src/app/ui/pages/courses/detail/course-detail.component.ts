@@ -11,6 +11,7 @@ import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail
 import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
+/** Shell детальной страницы курса со структурой модулей и дочерним router-outlet. */
 @Component({
   selector: "app-course-detail",
   standalone: true,

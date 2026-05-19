@@ -13,6 +13,7 @@ import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 
+/** Виджет «о курсе»: описание курса в модалке/блоке. */
 @Component({
   selector: "app-course-about",
   templateUrl: "./course-about.component.html",

@@ -4,6 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { AnalyticsService } from "@api/analytics/analytics.service";
 import { ButtonComponent, CheckboxComponent } from "@ui/primitives";
 
+/** Виджет согласия на cookie. */
 @Component({
   selector: "app-cookie-consent",
   templateUrl: "./cookie-consent.component.html",

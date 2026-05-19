@@ -14,6 +14,7 @@ import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { LessonInfoService } from "@api/courses/facades/lesson-info.service";
 import { LessonUIInfoService } from "@api/courses/facades/ui/lesson-ui-info.service";
 
+/** Страница прохождения урока, выбирающая компонент задачи по текущему типу ответа. */
 @Component({
   selector: "app-lesson",
   standalone: true,

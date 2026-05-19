@@ -25,6 +25,7 @@ import { User } from "@domain/auth/user.model";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Центральная колонка профиля: о себе, навыки, новости. */
 @Component({
   selector: "app-profile-mid-side",
   templateUrl: "./profile-mid-side.component.html",

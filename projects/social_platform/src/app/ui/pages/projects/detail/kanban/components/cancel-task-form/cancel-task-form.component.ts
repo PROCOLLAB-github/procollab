@@ -10,6 +10,7 @@ import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { QuickAnswers } from "@core/consts/other/quick-answers.const";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 
+/** Канбан (модуль отключён): форма отмены задачи. */
 @Component({
   selector: "app-cancel-task-form",
   templateUrl: "./cancel-task-form.component.html",

@@ -14,6 +14,7 @@ import { CommonModule } from "@angular/common";
 import { Navigation } from "@domain/other/navigation.model";
 import { EditStep } from "@core/lib/models/edit-step";
 
+/** Навигация по шагам формы проекта. */
 @Component({
   selector: "app-project-navigation",
   templateUrl: "./project-navigation.component.html",

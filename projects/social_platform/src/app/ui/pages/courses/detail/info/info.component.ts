@@ -22,6 +22,7 @@ import { CourseModuleCardComponent } from "./course-module-card/course-module-ca
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
 import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.component";
 
+/** Информационная вкладка курса с описанием, модулями и about-модалкой. */
 @Component({
   selector: "app-detail",
   standalone: true,

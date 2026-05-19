@@ -20,6 +20,7 @@ import { FileItemComponent } from "@ui/primitives/file-item/file-item.component"
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
+/** Компонент задачи с одним вариантом ответа и локальным сбросом выбора при ошибке. */
 @Component({
   selector: "app-radio-select-task",
   standalone: true,
@@ -41,6 +42,7 @@ export class RadioSelectTaskComponent implements OnInit {
 
     if (value) {
       setTimeout(() => {
+        // Ошибочный ответ сбрасывает выбранный вариант.
         this.result.set({ answerId: null });
         this._error.set(false);
       }, 1000);

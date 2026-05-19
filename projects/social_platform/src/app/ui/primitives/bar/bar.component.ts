@@ -32,6 +32,7 @@ interface BarLinks {
   count?: number;
 }
 
+/** Примитив: индикатор-полоса (progress/bar). */
 @Component({
   selector: "app-bar",
   standalone: true,

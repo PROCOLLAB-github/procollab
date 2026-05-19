@@ -19,6 +19,7 @@ import { TagComponent } from "../tag/tag.component";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { IconComponent } from "../icon/icon.component";
 
+/** Примитив: выпадающий список. */
 @Component({
   selector: "app-dropdown",
   standalone: true,

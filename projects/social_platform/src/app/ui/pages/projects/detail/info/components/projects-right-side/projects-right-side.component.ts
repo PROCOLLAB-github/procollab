@@ -7,6 +7,7 @@ import { TruncatePipe, UserLinksPipe } from "@corelib";
 import { ExpandService } from "@api/expand/expand.service";
 import { Project } from "@domain/project/project.model";
 
+/** Правая колонка детали проекта: команда, вакансии. */
 @Component({
   selector: "app-projects-right-side",
   templateUrl: "./projects-right-side.component.html",
