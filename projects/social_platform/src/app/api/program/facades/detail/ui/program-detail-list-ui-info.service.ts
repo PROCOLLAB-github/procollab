@@ -10,6 +10,7 @@ import { Project } from "@domain/project/project.model";
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Состояние интерфейса списков программы: проекты, участники, рейтинг, фильтры и пагинация. */
 @Injectable()
 export class ProgramDetailListUIInfoService {
   private readonly fb = inject(FormBuilder);

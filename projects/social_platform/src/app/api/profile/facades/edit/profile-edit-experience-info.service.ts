@@ -7,6 +7,7 @@ import { Subject } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 
+/** Фасад редактирования опыта работы профиля. */
 @Injectable()
 export class ProfileEditExperienceInfoService {
   private readonly fb = inject(FormBuilder);

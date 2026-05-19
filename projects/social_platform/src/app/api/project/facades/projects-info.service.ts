@@ -9,6 +9,7 @@ import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 import { CreateProjectUseCase } from "../use-cases/create-project.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Координирует верхний уровень раздела проектов: табы, поиск и создание проекта. */
 @Injectable()
 export class ProjectsInfoService {
   private readonly navService = inject(NavService);

@@ -17,6 +17,7 @@ import { languageLevelsList, languageNamesList } from "@core/consts/lists/langua
 import { error } from "console";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
+/** Реактивная форма профиля: построение `FormGroup`, справочники (роли, годы, образование), inline-специализации. */
 @Injectable({ providedIn: "root" })
 export class ProfileFormService {
   private readonly fb = inject(FormBuilder);

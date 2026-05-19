@@ -4,6 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ProjectFormService } from "../project-form.service";
 import { ToggleFieldsInfoService } from "../../../../toggle-fields/toggle-fields-info.service";
 
+/** UI-состояние достижений проекта в форме редактирования. */
 @Injectable({
   providedIn: "root",
 })

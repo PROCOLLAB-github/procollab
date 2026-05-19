@@ -6,6 +6,7 @@ import { Subject } from "rxjs";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 import { ProfileFormService } from "./profile-form.service";
 
+/** Управляет языками пользователя на шаге навыков в редактировании профиля. */
 @Injectable()
 export class ProfileEditSkillsInfoService {
   private readonly fb = inject(FormBuilder);
@@ -66,6 +67,7 @@ export class ProfileEditSkillsInfoService {
       return;
     }
 
+    // Язык и уровень хранятся парой: частично заполненная строка не добавляется.
     const languageItem = this.fb.group({
       language: languageValue,
       languageLevel: languageLevelValue,

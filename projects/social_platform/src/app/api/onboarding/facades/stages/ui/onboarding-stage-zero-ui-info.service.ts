@@ -12,6 +12,10 @@ import {
 import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
 import { User, UserInput } from "@domain/auth/user.model";
 
+/**
+ * Состояние интерфейса первого шага онбординга: FormArray для образования, опыта,
+ * языков и достижений, а также справочники и состояния редактирования.
+ */
 @Injectable()
 export class OnboardingStageZeroUIInfoService {
   private readonly fb = inject(FormBuilder);
@@ -57,7 +61,7 @@ export class OnboardingStageZeroUIInfoService {
     userLanguages: this.fb.array([]),
     achievements: this.fb.array([]),
 
-    // education
+    // Поля временной формы образования.
     organizationName: [""],
     entryYear: [null],
     completionYear: [null],
@@ -65,7 +69,7 @@ export class OnboardingStageZeroUIInfoService {
     educationStatus: [null],
     educationLevel: [null],
 
-    // work
+    // Поля временной формы опыта работы.
     organizationNameWork: [""],
     entryYearWork: [null],
     completionYearWork: [null],

@@ -11,6 +11,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import Fuse from "fuse.js";
 import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
 
+/** Фасад главной вкладки программы: участие в программе (`ParticipatingProgramUseCase`). */
 @Injectable()
 export class ProgramMainInfoService {
   private readonly navService = inject(NavService);

@@ -14,6 +14,10 @@ import { GetProfileUseCase } from "@api/auth/use-cases/get-profile.use-case";
 import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 
+/**
+ * Координирует первый шаг онбординга: профильные поля, вложенные FormArray,
+ * пропуск шага и сохранение нулевого этапа через use-case'ы auth-модуля.
+ */
 @Injectable()
 export class OnboardingStageZeroInfoService {
   private readonly onboardingService = inject(OnboardingService);

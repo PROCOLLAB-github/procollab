@@ -22,6 +22,10 @@ import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
 import { GetVacanciesUseCase } from "../use-cases/get-vacancies.use-case";
 import { failure, isSuccess, loading, success } from "@domain/shared/async-state";
 
+/**
+ * Управляет списками вакансий: тип списка из URL, фильтры в URL-параметрах,
+ * поиск, пагинация и синхронизация состояния интерфейса через VacancyUIInfoService.
+ */
 @Injectable()
 export class VacancyInfoService {
   private readonly router = inject(Router);
@@ -33,16 +37,13 @@ export class VacancyInfoService {
 
   readonly listType = this.vacancyUIInfoService.listType;
 
-  // Переменные для работы с фильтрами
+  // Сигналы фильтров проксируются из UI-сервиса, чтобы шаблон не знал про URL-параметры.
 
   readonly requiredExperience = this.vacancyUIInfoService.requiredExperience;
   readonly roleContains = this.vacancyUIInfoService.roleContains;
   readonly workFormat = this.vacancyUIInfoService.workFormat;
   readonly workSchedule = this.vacancyUIInfoService.workSchedule;
   readonly salary = this.vacancyUIInfoService.salary;
-
-  // Search Section
-  // --------------
 
   onSearchSubmit(searchValue?: string | null): void {
     this.router.navigate([], {
@@ -59,9 +60,6 @@ export class VacancyInfoService {
       .subscribe(value => this.onSearchSubmit(value));
   }
 
-  // Initialization
-  // --------------
-
   init(): void {
     this.setupRouteListener();
     this.initializationSearchValueForm();
@@ -72,9 +70,6 @@ export class VacancyInfoService {
     this.destroy$.complete();
   }
 
-  // ListType Section
-  // ----------------
-
   updateListType(): void {
     const segment = this.router.url.split("/").pop()?.split("?")[0];
     const newListType = segment as "all" | "my";
@@ -82,7 +77,6 @@ export class VacancyInfoService {
     if (this.listType() !== newListType) {
       this.listType.set(newListType);
 
-      // Загружаем данные для нового типа
       this.loadDataForCurrentType();
     }
   }
@@ -115,9 +109,6 @@ export class VacancyInfoService {
     this.vacancyUIInfoService.myModalSetup();
   }
 
-  // ListItems Section
-  // -----------------
-
   initializeListData(): void {
     const routeData$ =
       this.listType() === "all"
@@ -129,9 +120,6 @@ export class VacancyInfoService {
       error: () => this.vacancyUIInfoService.vacancies$.set(failure("fetch_error")),
     });
   }
-
-  // QueryParams Section
-  // -------------------
 
   initializeQueryParams(): void {
     let isFirstEmit = true;
@@ -177,9 +165,6 @@ export class VacancyInfoService {
       });
   }
 
-  // onScroll Section
-  // -------------------
-
   onScroll(target: HTMLElement): Observable<Vacancy[]> {
     if (
       this.vacancyUIInfoService.totalItemsCount() &&
@@ -209,9 +194,6 @@ export class VacancyInfoService {
     return EMPTY;
   }
 
-  // target for Scroll Section
-  // -------------------
-
   initScroll(target: HTMLElement): void {
     if (target) {
       fromEvent(target, "scroll")
@@ -223,9 +205,6 @@ export class VacancyInfoService {
         .subscribe();
     }
   }
-
-  // QueryParams Section
-  // -------------------
 
   onFetch(offset: number, limit: number) {
     return this.getVacanciesUseCase
@@ -240,9 +219,6 @@ export class VacancyInfoService {
       })
       .pipe(map(result => (result.ok ? result.value : [])));
   }
-
-  // other methods Section
-  // -------------------
 
   private clearQueryParams(): void {
     this.router.navigate([], {

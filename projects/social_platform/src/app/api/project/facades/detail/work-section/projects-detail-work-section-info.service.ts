@@ -8,6 +8,7 @@ import { ProjectsDetailWorkSectionUIInfoService } from "./ui/projects-detail-wor
 import { AcceptResponseUseCase } from "../../../../vacancy/use-cases/accept-response.use-case";
 import { RejectResponseUseCase } from "../../../../vacancy/use-cases/reject-response.use-case";
 
+/** Фасад секции откликов проекта: принятие/отклонение отклика. */
 @Injectable()
 export class ProjectsDetailWorkSectionInfoService {
   private readonly route = inject(ActivatedRoute);

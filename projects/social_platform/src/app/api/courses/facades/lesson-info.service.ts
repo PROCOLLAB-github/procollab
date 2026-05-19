@@ -10,6 +10,10 @@ import { SubmitTaskAnswerUseCase } from "../use-cases/submit-task-answer.use-cas
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { failure, loading, success } from "@domain/shared/async-state";
 
+/**
+ * Управляет прохождением урока: выбором задачи, сборкой ответа,
+ * отправкой решения и переходом к результатам/следующей задаче.
+ */
 @Injectable()
 export class LessonInfoService {
   private readonly router = inject(Router);
@@ -58,6 +62,7 @@ export class LessonInfoService {
 
     const body = this.lessonUIInfoService.answerBody();
     const isTextFile = task.answerType === "text_and_files";
+    // Бэк принимает разные поля тела запроса в зависимости от типа ответа задачи.
     const answerText = task.answerType === "text" || isTextFile ? body?.text : undefined;
     const optionIds =
       task.answerType === "single_choice" || task.answerType === "multiple_choice"
@@ -98,6 +103,7 @@ export class LessonInfoService {
           if (!res.canContinue) return;
 
           setTimeout(() => {
+            // Пауза оставляет пользователю время увидеть успешное состояние.
             const nextId = res.nextTaskId ?? this.getNextTask()?.id ?? null;
 
             if (nextId) {

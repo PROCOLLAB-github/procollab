@@ -7,6 +7,7 @@ import { NavService } from "@ui/services/nav/nav.service";
 import { Subject, takeUntil } from "rxjs";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
 
+/** Фасад программы: загрузка/очистка данных программы. */
 @Injectable()
 export class ProgramInfoService {
   private readonly route = inject(ActivatedRoute);

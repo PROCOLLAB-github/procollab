@@ -4,30 +4,31 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ProjectAssign } from "@domain/project/project-assign.model";
 import { ProjectsDetailUIInfoService } from "../../detail/ui/projects-detail-ui.service";
 
+/** Состояние интерфейса редактирования проекта: модалки, конкурсная программа и флаги шага. */
 @Injectable()
 export class ProjectsEditUIInfoService {
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
 
-  // Id Лидера проекта
+  // ID лидера проекта.
   readonly leaderId = signal<number>(0);
   readonly fromProgram = signal<string>("");
   readonly fromProgramOpen = signal<boolean>(false);
   readonly projectId = this.projectsDetailUIInfoService.projectId;
 
-  // Маркер того является ли проект привязанный к конкурсной программе
+  // Маркер привязки проекта к конкурсной программе.
   readonly isCompetitive = signal<boolean>(false);
   readonly isProjectAssignToProgram = signal<boolean>(false);
 
-  // Состояние компонента
+  // Состояния модалок и ограничений редактирования.
   readonly isCompleted = signal<boolean>(false);
   readonly isSendDescisionLate = signal<boolean>(false);
   readonly isSendDescisionToPartnerProgramProject = signal<boolean>(false);
   readonly isAssignProjectToProgramModalOpen = signal<boolean>(false);
 
-  // Маркер что проект привязан
+  // Маркер активной привязки проекта.
   readonly isProjectBoundToProgram = signal<boolean>(false);
 
-  // Сигналы для работы с модальными окнами с ошибкой
+  // Сигналы модалок с ошибкой.
   readonly errorModalMessage = signal<{
     program_name: string;
     whenCanEdit: string;
@@ -37,7 +38,7 @@ export class ProjectsEditUIInfoService {
   readonly onEditClicked = signal<boolean>(false);
   readonly warningModalSeen = signal<boolean>(false);
 
-  // Сигналы для работы с модальными окнами с текстом
+  // Сигнал модалки с текстом о привязке проекта.
   readonly assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
 
   applyOpenAssignProjectModal(r: any): void {

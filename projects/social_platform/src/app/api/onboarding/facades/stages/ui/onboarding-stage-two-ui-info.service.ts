@@ -5,6 +5,7 @@ import { NonNullableFormBuilder } from "@angular/forms";
 import { UserInput } from "@domain/auth/user.model";
 import { Skill } from "@domain/skills/skill.model";
 
+/** UI-состояние этапа 2 онбординга: выбор навыков, раскрытие групп. */
 @Injectable()
 export class OnboardingStageTwoUIInfoService {
   private readonly nnFb = inject(NonNullableFormBuilder);

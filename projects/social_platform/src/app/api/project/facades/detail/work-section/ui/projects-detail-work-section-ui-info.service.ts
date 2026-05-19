@@ -3,6 +3,7 @@
 import { Injectable, signal } from "@angular/core";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 
+/** UI-проекция секции откликов проекта: computed-сигналы. */
 @Injectable()
 export class ProjectsDetailWorkSectionUIInfoService {
   readonly vacancies = signal<VacancyResponse[]>([]);

@@ -5,6 +5,7 @@ import { FormBuilder } from "@angular/forms";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { Program } from "@domain/program/program.model";
 
+/** UI-проекция главной вкладки программы: computed-сигналы для шаблона. */
 @Injectable()
 export class ProgramMainUIInfoService {
   private readonly fb = inject(FormBuilder);

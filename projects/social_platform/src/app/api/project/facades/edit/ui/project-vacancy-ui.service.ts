@@ -15,6 +15,7 @@ import { stripNullish } from "@utils/stripNull";
 import { ProjectsEditUIInfoService } from "./projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "../../../../toggle-fields/toggle-fields-info.service";
 
+/** UI-состояние вакансий проекта в форме редактирования. */
 @Injectable()
 export class ProjectVacancyUIService {
   private readonly fb = inject(FormBuilder);

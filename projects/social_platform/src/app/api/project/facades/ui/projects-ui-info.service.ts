@@ -6,6 +6,7 @@ import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { Invite } from "@domain/invite/invite.model";
 import { InviteProjectSummary } from "@domain/project/invite-project-summary.model";
 
+/** UI-проекция проектов: общие computed-сигналы. */
 @Injectable()
 export class ProjectsUIInfoService {
   private readonly fb = inject(FormBuilder);

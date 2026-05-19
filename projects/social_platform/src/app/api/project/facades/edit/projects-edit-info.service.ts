@@ -54,6 +54,7 @@ import { SearchesService } from "@api/searches/searches.service";
 import { ProjectStepService } from "@api/project/project-step.service";
 import { EditStep } from "@core/lib/models/edit-step";
 
+/** Фасад редактирования проекта: сбор/отправка формы, привязка к программе, удаление, поиск навыков. */
 @Injectable()
 export class ProjectsEditInfoService {
   private readonly route = inject(ActivatedRoute);

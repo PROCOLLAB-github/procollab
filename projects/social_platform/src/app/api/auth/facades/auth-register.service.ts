@@ -11,6 +11,7 @@ import { RegisterError } from "@domain/auth/results/register.result";
 import { isFailure } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Координирует двухшаговую регистрацию и маппинг серверных ошибок валидации. */
 @Injectable()
 export class AuthRegisterService {
   private readonly registerUseCase = inject(RegisterUseCase);
@@ -32,7 +33,7 @@ export class AuthRegisterService {
 
   readonly step = this.authUIInfoService.step;
 
-  // Вычисляемое из AsyncState — автоматически обновляется при смене состояния
+  // Серверные ошибки валидации показываются списком без ручного парсинга в компоненте.
   readonly serverErrors = computed(() => {
     const state = this.register$();
     if (isFailure(state) && state.error.kind === "validation_error") {

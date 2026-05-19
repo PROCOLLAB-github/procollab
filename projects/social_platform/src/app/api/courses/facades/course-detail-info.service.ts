@@ -8,6 +8,7 @@ import { CourseDetailUIInfoService } from "./ui/course-detail-ui-info.service";
 import { loading, success } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Координирует детальную страницу курса, структуру модулей и навигацию к программе. */
 @Injectable()
 export class CourseDetailInfoService {
   private readonly route = inject(ActivatedRoute);
