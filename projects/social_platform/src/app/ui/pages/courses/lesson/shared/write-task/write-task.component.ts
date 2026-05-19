@@ -24,6 +24,7 @@ import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { TruncateHtmlPipe, TruncatePipe } from "@corelib";
 
+/** Поле ответа для текстовой задачи и задачи с текстом + файлами. */
 @Component({
   selector: "app-write-task",
   standalone: true,

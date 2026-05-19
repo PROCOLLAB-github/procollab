@@ -25,6 +25,7 @@ import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
+/** Центральная колонка детали проекта: описание, новости. */
 @Component({
   selector: "app-projects-mid-side",
   templateUrl: "./projects-mid-side.component.html",

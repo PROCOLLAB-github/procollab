@@ -29,6 +29,7 @@ import { ProjectAdditionalService } from "@api/project/facades/edit/project-addi
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Шаг редактирования проекта: дополнительные поля программы. */
 @Component({
   selector: "app-project-additional-step",
   templateUrl: "./project-additional-step.component.html",

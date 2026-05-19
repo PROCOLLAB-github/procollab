@@ -5,6 +5,7 @@ import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
 
+/** Канбан (модуль отключён): действия над доской. */
 @Component({
   selector: "app-kanban-board-actions",
   templateUrl: "./kanban-board-actions.component.html",

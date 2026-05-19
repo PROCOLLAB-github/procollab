@@ -14,6 +14,7 @@ import { CancelTaskFormComponent } from "../cancel-task-form/cancel-task-form.co
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Канбан (модуль отключён): карточка задачи в колонке. */
 @Component({
   selector: "app-kanban-task",
   templateUrl: "./kanban-task.component.html",

@@ -21,6 +21,7 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { IconComponent } from "../icon/icon.component";
 
+/** Примитив: текстовое поле ввода с ControlValueAccessor. */
 @Component({
   selector: "app-input",
   templateUrl: "./input.component.html",

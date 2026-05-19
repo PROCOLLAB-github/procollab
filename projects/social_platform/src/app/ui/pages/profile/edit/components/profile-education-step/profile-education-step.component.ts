@@ -11,6 +11,7 @@ import { ProfileEditEducationInfoService } from "@api/profile/facades/edit/profi
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
+/** Шаг редактирования образования в общей форме профиля. */
 @Component({
   selector: "app-profile-education-step",
   templateUrl: "./profile-education-step.component.html",

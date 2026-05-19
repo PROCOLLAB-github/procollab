@@ -15,6 +15,7 @@ import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { Project } from "@domain/project/project.model";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Карточка проекта в дашборде. */
 @Component({
   selector: "app-dashboard-item",
   templateUrl: "./dashboardItem.component.html",

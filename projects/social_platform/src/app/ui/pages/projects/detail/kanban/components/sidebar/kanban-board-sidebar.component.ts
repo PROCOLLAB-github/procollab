@@ -12,6 +12,7 @@ import { CreateBoardFormComponent } from "../create-board-form/create-board-form
 import { Project } from "@domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 
+/** Канбан (модуль отключён): боковая панель досок. */
 @Component({
   selector: "app-kanban-board-sidebar",
   templateUrl: "./kanban-board-sidebar.component.html",

@@ -32,6 +32,7 @@ import { ChatStateService } from "@api/chat/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Виджет детального просмотра сущности. */
 @Component({
   selector: "app-detail",
   templateUrl: "./detail.component.html",

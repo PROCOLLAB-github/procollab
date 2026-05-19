@@ -7,6 +7,7 @@ import { ProjectsDashboardInfoService } from "@api/project/facades/dashboard/pro
 import { ProjectsDashboardUIInfoService } from "@api/project/facades/dashboard/ui/projects-dashboard-ui-info.service";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 
+/** Дашборд проектов пользователя. */
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",

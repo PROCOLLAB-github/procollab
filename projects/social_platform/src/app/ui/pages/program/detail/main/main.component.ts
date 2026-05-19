@@ -30,6 +30,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 
+/** Страница основной вкладки программы с описанием, ссылками и новостями. */
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",

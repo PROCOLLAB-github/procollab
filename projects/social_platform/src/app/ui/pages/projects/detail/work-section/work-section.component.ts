@@ -8,6 +8,7 @@ import { RouterLink } from "@angular/router";
 import { ProjectsDetailWorkSectionInfoService } from "@api/project/facades/detail/work-section/projects-detail-work-section-info.service";
 import { ProjectsDetailWorkSectionUIInfoService } from "@api/project/facades/detail/work-section/ui/projects-detail-work-section-ui-info.service";
 
+/** Секция откликов проекта: список и обработка откликов. */
 @Component({
   selector: "app-work-section",
   templateUrl: "./work-section.component.html",

@@ -13,6 +13,7 @@ import { CommonModule } from "@angular/common";
 import { EditStep, ProjectStepService } from "@api/project/project-step.service";
 import { Navigation } from "@domain/other/navigation.model";
 
+/** Виджет навигации по разделам проекта. */
 @Component({
   selector: "app-project-navigation",
   templateUrl: "./project-navigation.component.html",

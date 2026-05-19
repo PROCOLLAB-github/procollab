@@ -61,6 +61,7 @@ import { Skill } from "@domain/skills/skill.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 
+/** Канбан (модуль отключён): детальная карточка задачи. */
 @Component({
   selector: "app-task-detail",
   templateUrl: "./task-detail.component.html",

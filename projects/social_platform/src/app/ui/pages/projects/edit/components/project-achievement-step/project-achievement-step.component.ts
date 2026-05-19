@@ -18,6 +18,7 @@ import { IconComponent } from "@uilib";
 import { ProjectAchievementsService } from "@api/project/facades/edit/project-achievements.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 
+/** Шаг редактирования проекта: достижения. */
 @Component({
   selector: "app-project-achievement-step",
   templateUrl: "./project-achievement-step.component.html",

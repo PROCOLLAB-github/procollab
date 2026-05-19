@@ -9,6 +9,7 @@ import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-in
 import { Subscription } from "rxjs";
 import { ClickOutsideModule } from "ng-click-outside";
 
+/** Канбан (модуль отключён): корневой компонент доски. */
 @Component({
   selector: "app-kanban",
   templateUrl: "./kanban.component.html",

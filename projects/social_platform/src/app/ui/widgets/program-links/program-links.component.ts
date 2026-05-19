@@ -4,6 +4,7 @@ import { Component, Input } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { UserLinksPipe, TruncatePipe } from "@corelib";
 
+/** Виджет ссылок программы (контакты/материалы). */
 @Component({
   selector: "app-program-links",
   templateUrl: "./program-links.component.html",

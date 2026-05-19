@@ -3,6 +3,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
+/** Глобальный флаг загрузки (`isLoading$`); связан с прогресс-баром в `app.component` через router-события. */
 @Injectable({
   providedIn: "root",
 })

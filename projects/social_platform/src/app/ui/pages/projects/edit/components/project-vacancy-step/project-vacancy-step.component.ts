@@ -20,6 +20,7 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
 import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
 import { SearchesService } from "@api/searches/searches.service";
 
+/** Шаг редактирования проекта: вакансии. */
 @Component({
   selector: "app-project-vacancy-step",
   templateUrl: "./project-vacancy-step.component.html",

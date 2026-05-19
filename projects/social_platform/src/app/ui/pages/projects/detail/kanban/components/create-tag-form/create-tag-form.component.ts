@@ -21,6 +21,7 @@ import {
 } from "@angular/forms";
 import { TagDto } from "@domain/kanban/dto/tag.model.dto";
 
+/** Канбан (модуль отключён): форма создания тега. */
 @Component({
   selector: "app-create-tag-form",
   templateUrl: "./create-tag-form.component.html",

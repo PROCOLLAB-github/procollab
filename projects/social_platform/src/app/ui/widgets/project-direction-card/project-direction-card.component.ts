@@ -24,6 +24,8 @@ import { TruncatePipe, DayjsPipe } from "@corelib";
 import { Goal } from "@domain/project/goals.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
+
+/** Универсальная карточка направлений профиля/проекта: навыки, достижения, цели и партнёры. */
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",

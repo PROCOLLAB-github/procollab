@@ -18,6 +18,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
+/** Шаг редактирования проекта: команда. */
 @Component({
   selector: "app-project-team-step",
   templateUrl: "./project-team-step.component.html",

@@ -9,6 +9,7 @@ import { CoursesListInfoService } from "@api/courses/facades/courses-list-info.s
 import { CoursesListUIInfoService } from "@api/courses/facades/ui/courses-list-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Страница списка курсов. */
 @Component({
   selector: "app-list",
   standalone: true,

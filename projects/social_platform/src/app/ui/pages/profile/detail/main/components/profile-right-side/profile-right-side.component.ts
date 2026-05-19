@@ -11,6 +11,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 import { RouterModule } from "@angular/router";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Правая колонка профиля: дополнительные блоки. */
 @Component({
   selector: "app-profile-right-side",
   templateUrl: "./profile-right-side.component.html",

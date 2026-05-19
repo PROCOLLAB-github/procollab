@@ -14,6 +14,7 @@ import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.se
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Страница списка вакансий. */
 @Component({
   selector: "app-vacancies-list",
   templateUrl: "./list.component.html",

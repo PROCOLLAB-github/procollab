@@ -24,6 +24,7 @@ import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
+/** Файловый ответ на задачу курса с превью вложений и сбросом при ошибке. */
 @Component({
   selector: "app-file-task",
   standalone: true,
@@ -55,6 +56,7 @@ export class FileTaskComponent implements OnInit {
 
     if (value) {
       setTimeout(() => {
+        // Ошибочный ответ очищает выбранные файлы для повторной попытки.
         this.uploadedFiles.set([]);
         this._error.set(false);
         this.update.emit([]);

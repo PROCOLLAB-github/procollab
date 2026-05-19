@@ -6,6 +6,7 @@ import { PluralizePipe } from "@corelib";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { Skill } from "@domain/skills/skill.model";
 
+/** Виджет: люди, подтвердившие навык. */
 @Component({
   selector: "app-approve-skill-people",
   templateUrl: "./approve-skill-people.component.html",

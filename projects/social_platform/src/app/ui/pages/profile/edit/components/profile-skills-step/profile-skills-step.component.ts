@@ -21,6 +21,7 @@ import { Skill } from "@domain/skills/skill.model";
 import { IconComponent } from "@uilib";
 import { SearchesService } from "@api/searches/searches.service";
 
+/** Шаг редактирования профиля: навыки. */
 @Component({
   selector: "app-profile-skills-step",
   templateUrl: "./profile-skills-step.component.html",

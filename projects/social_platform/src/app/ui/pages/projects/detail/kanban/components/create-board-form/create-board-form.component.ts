@@ -10,6 +10,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { tagColors } from "@core/consts/other/tag-colors.const";
 import { KanbanIcons } from "@core/consts/other/kanban-icons.const";
 
+/** Канбан (модуль отключён): форма создания доски. */
 @Component({
   selector: "app-create-board-form",
   templateUrl: "./create-board-form.component.html",

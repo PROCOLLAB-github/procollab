@@ -20,6 +20,7 @@ import { FeedInfoService } from "@api/feed/facades/feed-info.service";
 import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Страница ленты активности. */
 @Component({
   selector: "app-feed",
   changeDetection: ChangeDetectionStrategy.OnPush,
