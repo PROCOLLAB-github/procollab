@@ -5,6 +5,7 @@ import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs";
 import { AppRoutes } from "./app-routes";
 
+/** Отслеживание текущего маршрута/сегментов пути для навигационной логики. */
 @Injectable({ providedIn: "root" })
 export class PathsService {
   private readonly router = inject(Router);

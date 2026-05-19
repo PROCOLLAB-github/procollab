@@ -2,6 +2,7 @@
 
 import { ElementRef, inject, Injectable, Renderer2, signal } from "@angular/core";
 
+/** Обрабатывает вертикальный свайп для закрытия мобильной панели фильтров. */
 @Injectable()
 export class SwipeService {
   private readonly renderer = inject(Renderer2);

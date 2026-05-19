@@ -5,6 +5,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { Router } from "@angular/router";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Типобезопасные редиректы по приложению (профиль и пр.) поверх `Router`. */
 @Injectable({ providedIn: "root" })
 export class NavigationService {
   private readonly router = inject(Router);
