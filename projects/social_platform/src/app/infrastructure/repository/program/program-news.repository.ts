@@ -8,6 +8,7 @@ import { FeedNews } from "@domain/news/project-news.model";
 import { ProgramNewsHttpAdapter } from "../../adapters/program/program-news-http.adapter";
 import { NewsRepositoryPort } from "@domain/news/port/news.repository.port";
 
+/** Репозиторий новостей программы через общий NewsRepositoryPort. */
 @Injectable({ providedIn: "root" })
 export class ProgramNewsRepository implements NewsRepositoryPort<FeedNews> {
   private readonly programNewsAdapter = inject(ProgramNewsHttpAdapter);
@@ -45,6 +46,7 @@ export class ProgramNewsRepository implements NewsRepositoryPort<FeedNews> {
   }
 
   fetchNewsDetail(): Observable<FeedNews> {
+    // Детальная ручка программной новости сейчас не используется в UI.
     return EMPTY;
   }
 }

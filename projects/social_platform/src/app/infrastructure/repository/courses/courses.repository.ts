@@ -15,6 +15,7 @@ import { EntityCache } from "@domain/shared/entity-cache";
 import { EventBus } from "@domain/shared/event-bus";
 import { taskAnswerSubmitted } from "@domain/courses/events/task-answer-submitted.event";
 
+/** Репозиторий курсов с кешем detail/structure и инвалидацией структуры после ответа. */
 @Injectable({ providedIn: "root" })
 export class CoursesRepository implements CoursesRepositoryPort {
   private readonly coursesAdapter = inject(CoursesHttpAdapter);
@@ -51,7 +52,7 @@ export class CoursesRepository implements CoursesRepositoryPort {
     return this.coursesAdapter.postAnswerQuestion(taskId, answerText, optionIds, fileIds).pipe(
       tap(response => {
         this.eventBus.emit(taskAnswerSubmitted(taskId, 0, response));
-        // Инвалидируем кеш структуры, т.к. прогресс изменился
+        // Прогресс уроков изменился, структура курса должна быть перечитана.
         this.structureCache.clear();
       })
     );

@@ -8,6 +8,7 @@ import { SkillsGroup } from "@domain/skills/skills-group.model";
 import { SkillsHttpAdapter } from "../../adapters/skills/skills-http.adapter";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 
+/** Репозиторий навыков: passthrough nested/inline + approve/unapprove в адаптер. */
 @Injectable({ providedIn: "root" })
 export class SkillsRepository implements SkillsRepositoryPort {
   private readonly skillsAdapter = inject(SkillsHttpAdapter);

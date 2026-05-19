@@ -6,6 +6,7 @@ import { ChatGroupsRepositoryPort } from "@domain/chat/ports/chat-groups.port";
 import { ChatGroupsHttpAdaper } from "@infrastructure/adapters/chat/chat-groups-http.adapter";
 import { Observable } from "rxjs";
 
+/** Репозиторий групповых чатов: список проектных групп через адаптер. */
 @Injectable({ providedIn: "root" })
 export class ChatGroupsRepository implements ChatGroupsRepositoryPort {
   private readonly chatGroupsHttpAdapter = inject(ChatGroupsHttpAdaper);

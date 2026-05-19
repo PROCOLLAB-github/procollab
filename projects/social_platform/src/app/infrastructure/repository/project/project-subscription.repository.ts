@@ -9,6 +9,7 @@ import { ProjectSubscriber } from "@domain/project/project-subscriber.model";
 import { Project } from "@domain/project/project.model";
 import { SubscriptionHttpAdapter } from "../../adapters/subscription/subscription-http.adapter";
 
+/** Репозиторий подписок на проект: подписчики и проекты-подписки пользователя. */
 @Injectable({ providedIn: "root" })
 export class ProjectSubscriptionRepository implements ProjectSubscriptionRepositoryPort {
   private readonly subscriptionAdapter = inject(SubscriptionHttpAdapter);

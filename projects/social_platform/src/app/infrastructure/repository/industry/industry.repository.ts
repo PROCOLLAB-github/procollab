@@ -7,6 +7,7 @@ import { Industry } from "@domain/industry/industry.model";
 import { plainToInstance } from "class-transformer";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
+/** Репозиторий отраслей: signal-кеш `industries`, наполняется в `getAll` (`plainToInstance`); `getOne` — синхронный поиск в кеше. */
 @Injectable({ providedIn: "root" })
 export class IndustryRepository implements IndustryRepositoryPort {
   private readonly industryAdapter = inject(IndustryHttpAdapter);

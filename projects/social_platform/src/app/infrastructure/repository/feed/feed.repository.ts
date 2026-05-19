@@ -7,6 +7,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
 import { FeedRepositoryPort } from "@domain/feed/ports/feed.repository.port";
 import { FeedHttpAdapter } from "../../adapters/feed/feed-http.adapter";
 
+/** Репозиторий ленты: passthrough `fetchFeed` в адаптер. */
 @Injectable({ providedIn: "root" })
 export class FeedRepository implements FeedRepositoryPort {
   private readonly feedAdapter = inject(FeedHttpAdapter);

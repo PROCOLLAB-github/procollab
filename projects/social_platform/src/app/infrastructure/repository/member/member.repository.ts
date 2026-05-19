@@ -8,6 +8,7 @@ import { MemberRepositoryPort } from "@domain/member/ports/member.repository.por
 import { MemberHttpAdapter } from "../../adapters/member/member-http.adapter";
 import { userFromRaw } from "@utils/userRaw";
 
+/** Репозиторий участников: passthrough + `plainToInstance(User)`. */
 @Injectable({ providedIn: "root" })
 export class MemberRepository implements MemberRepositoryPort {
   private readonly memberAdapter = inject(MemberHttpAdapter);

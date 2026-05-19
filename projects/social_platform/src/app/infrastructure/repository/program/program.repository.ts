@@ -17,6 +17,7 @@ import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 import { userFromRaw } from "@utils/userRaw";
 
+/** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
   private readonly programAdapter = inject(ProgramHttpAdapter);

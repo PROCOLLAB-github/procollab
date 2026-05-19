@@ -9,6 +9,7 @@ import { FeedNews } from "@domain/news/project-news.model";
 import { ProjectNewsHttpAdapter } from "../../adapters/project/project-news-http.adapter";
 import { NewsRepositoryPort } from "@domain/news/port/news.repository.port";
 
+/** Репозиторий новостей проекта с дедупликацией событий чтения в sessionStorage. */
 @Injectable({ providedIn: "root" })
 export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
   private readonly projectNewsAdapter = inject(ProjectNewsHttpAdapter);
@@ -35,6 +36,7 @@ export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
   readNews(projectId: number, newsIds: number[]): Observable<void[]> {
     const cachedReadNews = this.storageService.getItem<number[]>("readNews", sessionStorage) ?? [];
     const readNews = new Set<number>(cachedReadNews);
+    // Повторные просмотры не отправляются на бэк в рамках текущей сессии браузера.
     const unreadIds = newsIds.filter(id => !readNews.has(id));
 
     if (unreadIds.length === 0) {
