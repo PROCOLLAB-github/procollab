@@ -7,6 +7,7 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
 
+/** HTTP-адаптер участников: `/auth/public-users` (фильтр user_type разделяет members/mentors). */
 @Injectable({ providedIn: "root" })
 export class MemberHttpAdapter {
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";

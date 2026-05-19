@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { Goal } from "@domain/project/goals.model";
 import { GoalFormData } from "./dto/project-goal.dto";
 
+/** HTTP-адаптер целей проекта: `/projects/<id>/goals`. */
 @Injectable({ providedIn: "root" })
 export class ProjectGoalsHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

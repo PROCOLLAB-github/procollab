@@ -5,6 +5,7 @@ import { ApiService } from "@corelib";
 import { Industry } from "@domain/industry/industry.model";
 import { Observable } from "rxjs";
 
+/** HTTP-адаптер справочника отраслей: `/industries`. */
 @Injectable({ providedIn: "root" })
 export class IndustryHttpAdapter {
   private readonly INDUSTRIES_URL = "/industries";

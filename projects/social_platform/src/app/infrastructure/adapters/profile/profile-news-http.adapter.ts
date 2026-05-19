@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 
+/** HTTP-адаптер новостей профиля: `/auth/users/<id>/news`. */
 @Injectable({ providedIn: "root" })
 export class ProfileNewsHttpAdapter {
   private readonly AUTH_USERS_URL = "/auth/users";

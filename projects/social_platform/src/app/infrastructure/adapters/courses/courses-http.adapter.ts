@@ -11,6 +11,7 @@ import {
 } from "@domain/courses/courses.model";
 import { Observable } from "rxjs";
 
+/** HTTP-адаптер курсов: `/courses` (курсы, структура, уроки, ответы на задачи). */
 @Injectable({ providedIn: "root" })
 export class CoursesHttpAdapter {
   private readonly COURSE_URL = "/courses";

@@ -14,6 +14,7 @@ import { ProjectAdditionalFields } from "@domain/project/project-additional-fiel
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 
+/** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
   private readonly PROGRAMS_URL = "/programs";

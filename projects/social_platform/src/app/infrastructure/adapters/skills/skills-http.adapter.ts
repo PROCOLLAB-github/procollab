@@ -8,6 +8,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { SkillsGroup } from "@domain/skills/skills-group.model";
 import { Approve, Skill } from "@domain/skills/skill.model";
 
+/** HTTP-адаптер навыков: `/core/skills` (nested/inline), `/auth/users` (approve/unapprove). */
 @Injectable({ providedIn: "root" })
 export class SkillsHttpAdapter {
   private readonly CORE_SKILLS_URL = "/core/skills";
