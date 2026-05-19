@@ -7,6 +7,7 @@ import { Partner, PartnerDto } from "@domain/project/partner.model";
 import { plainToInstance } from "class-transformer";
 import { ProjectPartnerRepositoryPort } from "@domain/project/ports/project-partner.repository.port";
 
+/** Репозиторий партнёров проекта: CRUD + `plainToInstance(Partner)`. */
 @Injectable({ providedIn: "root" })
 export class ProjectPartnerRepository implements ProjectPartnerRepositoryPort {
   private readonly projectPartnerAdapter = inject(ProjectPartnerHttpAdapter);

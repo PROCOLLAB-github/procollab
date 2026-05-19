@@ -7,6 +7,7 @@ import { ChatHttpAdapter } from "../../adapters/chat/chat-http.adapter";
 import { plainToInstance } from "class-transformer";
 import { map } from "rxjs";
 
+/** Репозиторий чата (REST): история, файлы, флаг непрочитанных; `plainToInstance`. */
 @Injectable({ providedIn: "root" })
 export class ChatRepository implements ChatRepositoryPort {
   private readonly chatHttpAdapter = inject(ChatHttpAdapter);

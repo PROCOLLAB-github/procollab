@@ -8,6 +8,7 @@ import { SpecializationsGroup } from "@domain/specializations/specializations-gr
 import { SpecializationsHttpAdapter } from "../../adapters/specializations/specializations-http.adapter";
 import { SpecializationsRepositoryPort } from "@domain/specializations/ports/specializations.repository.port";
 
+/** Репозиторий специализаций: passthrough nested/inline в адаптер. */
 @Injectable({ providedIn: "root" })
 export class SpecializationsRepository implements SpecializationsRepositoryPort {
   private readonly specializationsAdapter = inject(SpecializationsHttpAdapter);

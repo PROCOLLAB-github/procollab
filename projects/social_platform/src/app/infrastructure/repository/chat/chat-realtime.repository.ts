@@ -16,6 +16,10 @@ import { map } from "rxjs";
 import { WebsocketService } from "@core/public-api";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 
+/**
+ * Реализация ChatRealtimePort поверх WebSocket-адаптера.
+ * Команды проксируются в сокет, входящие события типизируются DTO-классами.
+ */
 @Injectable({ providedIn: "root" })
 export class ChatRealtimeRepository implements ChatRealtimePort {
   private readonly chatWsAdapter = inject(ChatWsAdapter);

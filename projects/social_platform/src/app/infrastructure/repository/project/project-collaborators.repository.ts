@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
 import { ProjectCollaboratorsHttpAdapter } from "../../adapters/project/project-collaborators-http.adapter";
 
+/** Репозиторий участников проекта: удаление, смена лидера, выход. */
 @Injectable({ providedIn: "root" })
 export class ProjectCollaboratorsRepository implements ProjectCollaboratorsRepositoryPort {
   private readonly projectCollaboratorsAdapter = inject(ProjectCollaboratorsHttpAdapter);

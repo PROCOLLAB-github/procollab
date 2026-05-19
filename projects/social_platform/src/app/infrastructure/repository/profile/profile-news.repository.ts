@@ -9,6 +9,7 @@ import { ProfileNews } from "@domain/profile/profile-news.model";
 import { ProfileNewsHttpAdapter } from "../../adapters/profile/profile-news-http.adapter";
 import { NewsRepositoryPort } from "@domain/news/port/news.repository.port";
 
+/** Репозиторий новостей профиля с дедупликацией событий чтения в sessionStorage. */
 @Injectable({ providedIn: "root" })
 export class ProfileNewsRepository implements NewsRepositoryPort<ProfileNews> {
   private readonly profileNewsAdapter = inject(ProfileNewsHttpAdapter);
@@ -35,6 +36,7 @@ export class ProfileNewsRepository implements NewsRepositoryPort<ProfileNews> {
   readNews(userId: number, newsIds: number[]): Observable<void[]> {
     const cachedReadNews = this.storageService.getItem<number[]>("readNews", sessionStorage) ?? [];
     const readNews = new Set<number>(cachedReadNews);
+    // Повторные просмотры не отправляются на бэк в рамках текущей сессии браузера.
     const unreadIds = newsIds.filter(id => !readNews.has(id));
 
     if (unreadIds.length === 0) {

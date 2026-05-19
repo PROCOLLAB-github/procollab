@@ -8,6 +8,7 @@ import { Goal } from "@domain/project/goals.model";
 import { GoalFormData } from "../../adapters/project/dto/project-goal.dto";
 import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 
+/** Репозиторий целей проекта: CRUD + `plainToInstance(Goal)`. */
 @Injectable({ providedIn: "root" })
 export class ProjectGoalsRepository implements ProjectGoalsRepositoryPort {
   private readonly projectGoalsHttpAdapter = inject(ProjectGoalsHttpAdapter);

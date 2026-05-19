@@ -7,6 +7,7 @@ import { Resource, ResourceDto } from "@domain/project/resource.model";
 import { plainToInstance } from "class-transformer";
 import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-resource.repository.port";
 
+/** Репозиторий ресурсов проекта: CRUD + `plainToInstance(Resource)`. */
 @Injectable({ providedIn: "root" })
 export class ProjectResourceRepository implements ProjectResourceRepositoryPort {
   private readonly projectResourceAdapter = inject(ProjectResourceHttpAdapter);

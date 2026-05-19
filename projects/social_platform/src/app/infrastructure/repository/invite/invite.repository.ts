@@ -11,6 +11,7 @@ import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 import { RejectInvite } from "@domain/invite/events/reject-invite.event";
 import { RevokeInvite } from "@domain/invite/events/revoke-invite.event";
 
+/** Репозиторий приглашений с локальным счётчиком входящих инвайтов. */
 @Injectable({ providedIn: "root" })
 export class InviteRepository implements InviteRepositoryPort {
   private readonly inviteAdapter = inject(InviteHttpAdapter);
@@ -23,25 +24,21 @@ export class InviteRepository implements InviteRepositoryPort {
   }
 
   private initializeEventListeners(): void {
-    // Слушание события принятия приглашения
+    // Принятие, отклонение и отзыв уменьшают локальный счётчик входящих приглашений.
     this.eventBus.on<AcceptInvite>("AcceptInvite").subscribe({
       next: () => {
-        // Уменьшить счетчик приглашений текущего пользователя
         const currentCount = this.myInvitesCount$.getValue();
         this.myInvitesCount$.next(Math.max(0, currentCount - 1));
       },
     });
 
-    // Слушание события отклонения приглашения
     this.eventBus.on<RejectInvite>("RejectInvite").subscribe({
       next: () => {
-        // Уменьшить счетчик приглашений текущего пользователя
         const currentCount = this.myInvitesCount$.getValue();
         this.myInvitesCount$.next(Math.max(0, currentCount - 1));
       },
     });
 
-    // Слушание события отзыва приглашения — уменьшаем счётчик так же, как при reject/accept.
     this.eventBus.on<RevokeInvite>("RevokeInvite").subscribe({
       next: () => {
         const currentCount = this.myInvitesCount$.getValue();

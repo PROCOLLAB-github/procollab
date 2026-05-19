@@ -21,6 +21,10 @@ import { RejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-res
 import { EntityCache } from "@domain/shared/entity-cache";
 import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 
+/**
+ * Репозиторий проектов с локальным кешем деталей и счётчиками списков.
+ * Инвалидирует кеш по доменным событиям проекта, инвайтов и откликов на вакансии.
+ */
 @Injectable({ providedIn: "root" })
 export class ProjectRepository implements ProjectRepositoryPort {
   private readonly entityCache = new EntityCache<Project>();
@@ -34,6 +38,7 @@ export class ProjectRepository implements ProjectRepositoryPort {
   }
 
   private initializeEventListeners(): void {
+    // События синхронизируют счётчики и кеш деталей без повторной загрузки всех списков.
     this.eventBus.on<ProjectCreated>("ProjectCreated").subscribe(() => {
       this.count$.next({
         ...this.count$.getValue(),
