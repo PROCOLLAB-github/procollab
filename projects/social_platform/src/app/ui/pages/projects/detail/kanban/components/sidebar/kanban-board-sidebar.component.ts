@@ -73,7 +73,6 @@ export class KanbanBoardSidebarComponent {
   onContextSelect(option: any, state: boolean) {
     switch (option) {
       case 1: {
-        console.log(option);
         break;
       }
 
@@ -88,9 +87,6 @@ export class KanbanBoardSidebarComponent {
       }
 
       case 5: {
-        if (!this.isFirstBoard()) {
-          console.log("edited");
-        }
         break;
       }
     }
@@ -122,7 +118,6 @@ export class KanbanBoardSidebarComponent {
     switch (type) {
       case "project": {
         this.router.navigate(["office/projects/" + projectBoardInfo.id + "/kanban/board/"]);
-        console.log(projectBoardInfo.id);
         break;
       }
 

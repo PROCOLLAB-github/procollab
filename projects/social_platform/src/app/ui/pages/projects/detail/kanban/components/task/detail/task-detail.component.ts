@@ -333,14 +333,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(
-      "IS CREATOR" + " " + this.isCreator(),
-      "IS LEADER" + " " + this.isLeader(),
-      "IS PERFORMER" + " " + this.isPerformer(),
-      "IS RESPONSIBLE" + " " + this.isResponsible(),
-      "IS EXTERNAL" + " " + this.isExternal()
-    );
-
     this.updateDescriptionState();
   }
 

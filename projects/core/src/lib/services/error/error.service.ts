@@ -14,7 +14,7 @@ import { LoggerService } from "../logger/logger.service";
  * - Логирование переходов для отладки
  *
  * Методы:
- * - throwNotFount(): навигация на страницу 404
+ * - throwNotFound(): навигация на страницу 404
  * - throwServerError(): навигация на страницу 500
  * - throwError(type): приватный метод для навигации на любую страницу ошибки
  *
@@ -37,7 +37,7 @@ export class ErrorService {
    * Навигация на страницу ошибки 404
    * @returns Promise<void> - промис завершения навигации
    */
-  throwNotFount(): Promise<void> {
+  throwNotFound(): Promise<void> {
     return this.throwError(ErrorCode.NOT_FOUND);
   }
 
