@@ -24,7 +24,7 @@ import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-cas
 import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-project-subscription.use-case";
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -54,7 +54,7 @@ export class InfoCardComponent {
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly addProjectSubscriptionUseCase = inject(AddProjectSubscriptionUseCase);
   private readonly deleteProjectSubscriptionUseCase = inject(DeleteProjectSubscriptionUseCase);
-  public readonly industryRepository = inject(IndustryRepository);
+  public readonly industryRepository = inject(IndustryInfoService);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 

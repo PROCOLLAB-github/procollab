@@ -7,7 +7,7 @@ import { IconComponent } from "@ui/primitives";
 import { TruncatePipe } from "@corelib";
 import { Project } from "@domain/project/project.model";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /** Левая колонка детали проекта. */
 @Component({
@@ -21,6 +21,6 @@ import { IndustryRepository } from "@infrastructure/repository/industry/industry
 export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
-  protected readonly industryRepository = inject(IndustryRepository);
+  protected readonly industryRepository = inject(IndustryInfoService);
   protected readonly AppRoutes = AppRoutes;
 }
