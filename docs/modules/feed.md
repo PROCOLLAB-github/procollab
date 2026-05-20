@@ -136,12 +136,11 @@ Pass-through к адаптеру. Без трансформаций — типы
 
 ## Pages (`ui/pages/feed/`)
 
-| Page                   | Файл                                                           | Selector           | Что                                                                                                                                                                                                  |
-| ---------------------- | -------------------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FeedComponent`        | `pages/feed/feed.component.ts`                                 | `app-feed`         | Главный компонент. Рендерит `<app-feed-filter>`, заголовок, scroll-контейнер с `@for (item of feedItems(); ...) { @switch (item.typeModel) ... }`. Provides `FeedInfoService` + `FeedUIInfoService`. |
-| `NewProjectComponent`  | `pages/feed/new-project/new-project.component.ts`              | `app-new-project`  | Карточка нового проекта в ленте (`typeModel === "project"`). Принимает `@Input() project: FeedProject`. Использует `IndustryInfoService.getOne` для имени отрасли.                                   |
-| `OpenVacancyComponent` | `pages/feed/open-vacancy/open-vacancy.component.ts`            | `app-open-vacancy` | Карточка открытой вакансии в ленте (`typeModel === "vacancy"`). Принимает `@Input() vacancy: Vacancy`.                                                                                               |
-| `AdvertCardComponent`  | `pages/feed/open-vacancy/advert-card/advert-card.component.ts` | `app-advert-card`  | Карточка маркетингового объявления — `@Input() advert: New, layout: "vertical" \| "horizontal" = "vertical"`. Используется внутри open-vacancy для рекламы между вакансиями.                         |
+| Page                   | Файл                                                | Selector           | Что                                                                                                                                                                                                                                                        |
+| ---------------------- | --------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FeedComponent`        | `pages/feed/feed.component.ts`                      | `app-feed`         | Главный компонент. Рендерит `<app-feed-filter>`, заголовок, scroll-контейнер с `@for (item of feedItems(); ...) { @switch (item.typeModel) ... }`. Provides `FeedInfoService` + `FeedUIInfoService`.                                                       |
+| `NewProjectComponent`  | `pages/feed/new-project/new-project.component.ts`   | `app-new-project`  | Карточка нового проекта в ленте (`typeModel === "project"`). Принимает `@Input() project: FeedProject`. Имя отрасли тянет напрямую из `IndustryRepository.getOne(project.industry)` (deep import, см. [`docs/modules/industry.md`](industry.md), долг A3). |
+| `OpenVacancyComponent` | `pages/feed/open-vacancy/open-vacancy.component.ts` | `app-open-vacancy` | Карточка открытой вакансии в ленте (`typeModel === "vacancy"`). Принимает `@Input() vacancy: Vacancy`.                                                                                                                                                     |
 
 Для `typeModel === "news"` используется общий `<app-news-card>` ([`docs/modules/news.md`](news.md)).
 
@@ -158,9 +157,9 @@ Pass-through к адаптеру. Без трансформаций — типы
 
 ## Consumers
 
-| Где                          | Как использует                                                                 |
-| ---------------------------- | ------------------------------------------------------------------------------ |
-| `pages/office/...`           | Feed — главная страница office shell (`/office` редиректит на `/office/feed`). |
-| `IndustryInfoService.getOne` | `NewProjectComponent` отображает имя отрасли.                                  |
+| Где                         | Как использует                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `pages/office/...`          | Feed — главная страница office shell (`/office` редиректит на `/office/feed`). |
+| `IndustryRepository.getOne` | `NewProjectComponent` отображает имя отрасли (deep import — долг A3).          |
 
 ---

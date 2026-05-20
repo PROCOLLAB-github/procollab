@@ -148,9 +148,9 @@ project-subscription.providers.ts
 | ------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | Main                | `ProjectFormService` (root) + `ProjectFormFactory` + `ProjectFormAutosaveService` | Корневая `FormGroup` + autosave (debounce + `update(id, partial)`). |
 | Contacts            | `ProjectContactsService`                                                          | Шаг "контакты".                                                     |
-| Achievements        | `ProjectAchievementsService` + `ProjectAchievementsUIService`                     | FormArray.                                                          |
-| Goals               | `ProjectGoalsService` + `ProjectGoalsUIService`                                   | FormArray + responsible-picker.                                     |
-| Partner & Resources | `ProjectPartnerService` + `ProjectResourcesService`                               | Раздельные FormArrays для партнёров и ресурсов.                     |
+| Achievements        | `ProjectAchievementsService` + `ProjectAchievementUIService`                      | FormArray.                                                          |
+| Goals               | `ProjectGoalService` + `ProjectGoalsUIService`                                    | FormArray + responsible-picker.                                     |
+| Partner & Resources | `ProjectPartnerService` + `ProjectResourceService`                                | Раздельные FormArrays для партнёров и ресурсов.                     |
 | Vacancy             | `ProjectVacancyService` + `ProjectVacancyUIService`                               | Управление вакансиями проекта (CRUD через `Vacancy` модуль).        |
 | Team                | `ProjectTeamService` + `ProjectTeamUIService`                                     | Команда: invites + members.                                         |
 | Additional          | `ProjectAdditionalService`                                                        | Дополнительные поля партнёрской программы.                          |

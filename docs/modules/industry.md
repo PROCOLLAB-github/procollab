@@ -46,26 +46,28 @@ DI-биндинг (`infrastructure/di/industry.providers.ts`):
 
 ---
 
-## Use-cases
+## Use-cases (`api/industry/use-cases/`)
 
-**Нет**. Facade напрямую выставляет порт. Архитектурный долг (как у [`specializations`](specializations.md)).
+| Use-case               | Сценарий                                                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `GetIndustriesUseCase` | Загрузить справочник отраслей и наполнить signal-кеш репозитория. Возвращает `Result<Industry[], { kind: "server_error" }>`. |
+
+Других use-case'ов в `api/industry/` нет — операции «получить одну по id» и «прочитать сигнал» делаются прямо через `IndustryRepositoryPort` (см. архитектурный долг ниже).
 
 ---
 
-## Facade (`api/industry/facades/industry-info.service.ts`)
+## Facade
 
-`IndustryInfoService` — `providedIn: "root"`. Прозрачно проксирует порт:
+**Отсутствует.** Потребители ходят к порту `IndustryRepositoryPort` напрямую (а часть UI — даже к конкретной реализации `IndustryRepository`). Это известный архитектурный долг (нарушение слоя `ui → infrastructure`, фигурирует как **A3** в аудите): UI должен зависеть от порта, а ещё лучше — от тонкого фасада/use-case'а в `api/industry/`. Сейчас в `api/industry/` есть только `GetIndustriesUseCase` (см. ниже), а маппинг `industryId → name` делается на стороне UI через синхронный `getOne()` репозитория.
 
 ```ts
-@Injectable({ providedIn: "root" })
-export class IndustryInfoService {
-  readonly industries = this.industryRepository.industries; // re-export signal
-  getAll(): Observable<Industry[]>;
-  getOne(industryId: number): Industry | undefined;
-}
+// Текущая загрузка из shell — через порт, без фасада
+this.industryRepository.getAll().subscribe(); // в OfficeInfoService.init()
+// Чтение в UI — синхронно из сигнала репозитория
+this.industryRepository.getOne(project.industry); // industryId → Industry | undefined
 ```
 
-Никакого `AsyncState`. Загрузка обычно дёргается один раз (например, в shell-компоненте `office.component.ts`), а дальше потребители читают через `industries()` сигнал.
+Никакого `AsyncState`: загрузка дёргается один раз из shell, дальше потребители читают синхронно из сигнала `industries`.
 
 ---
 
@@ -111,15 +113,17 @@ export class IndustryRepository implements IndustryRepositoryPort {
 
 ## Consumers
 
-| Где                                                            | Как использует                                                                              |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `pages/projects/detail/info/components/projects-left-side`     | Имя отрасли проекта через `industryInfoService.getOne(project.industry)`.                   |
-| `pages/feed/new-project/new-project.component`                 | Селект для выбора отрасли при создании проекта.                                             |
-| `pages/feed/open-vacancy/open-vacancy.component`               | Аналогично для создания вакансии.                                                           |
-| `pages/program/detail/list/rating-card/rating-card.component`  | Имя отрасли в карточке рейтинга.                                                            |
-| `widgets/info-card/info-card.component`                        | Отображение `industry.name` в карточке проекта.                                             |
-| `widgets/projects-filter/service/projects-filter-info.service` | Опции фильтра проектов по отраслям.                                                         |
-| `api/office/facades/office-info.service`                       | Office shell дёргает `IndustryInfoService.getAll()` при инициализации, чтобы заполнить кеш. |
-| `api/project/facades/edit/projects-edit-info.service`          | Селект отрасли в форме редактирования проекта.                                              |
+| Где                                                            | Как использует                                                                                |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `pages/projects/detail/info/components/projects-left-side`     | Имя отрасли проекта через `industryRepository.getOne(project.industry)` (deep import — A3).   |
+| `pages/feed/new-project/new-project.component`                 | Имя отрасли в карточке нового проекта (`industryRepository.getOne(...)`, deep import — A3).   |
+| `pages/feed/open-vacancy/open-vacancy.component`               | Имя отрасли в карточке открытой вакансии (deep import — A3).                                  |
+| `pages/program/detail/list/rating-card/rating-card.component`  | Имя отрасли в карточке рейтинга (deep import — A3).                                           |
+| `widgets/info-card/info-card.component`                        | Отображение `industry.name` в карточке проекта (deep import — A3).                            |
+| `widgets/projects-filter/service/projects-filter-info.service` | Опции фильтра проектов по отраслям (deep import — A3).                                        |
+| `api/office/facades/office-info.service`                       | На инициализации shell вызывает `industryRepository.getAll()` через порт, чтобы прогреть кеш. |
+| `api/project/facades/edit/projects-edit-info.service`          | Селект отрасли в форме редактирования проекта (через `IndustryRepositoryPort`).               |
+
+> Импорт `IndustryRepository` из `@infrastructure/...` в UI-слое — нарушение направления зависимостей (UI должен зависеть от порта или фасада в `@api/...`). Это известный долг **A3**; чистое решение — поднять `getOne()`/`industries` в тонкий фасад/use-case в `api/industry/`.
 
 ---
