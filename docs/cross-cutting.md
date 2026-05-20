@@ -4,20 +4,11 @@
 
 `projects/social_platform/src/app/api/` содержит **12 пакетов без собственного домена** — это утилиты, shell/onboarding facades и UI-state контейнеры, которые не вписываются в обычную схему `domain/<x>` + `api/<x>` + `infrastructure/<x>`. Документируются здесь скопом.
 
-| Пакет                             | Тип           | Назначение                                                                                                                                                             |
-| --------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`advert`](#advert)               | HTTP-сервис   | Маркетинговые объявления (`/news/`).                                                                                                                                   |
-| [`analytics`](#analytics)         | сервис        | Загрузка Yandex Metrika + Mail.ru counter (после согласия cookie).                                                                                                     |
-| [`expand`](#expand)               | UI-state      | Сигналы раскрытия описаний/списков (description / skills / achievements / vacancies / members / projects / programs / links / education / languages / workExperience). |
-| [`export-file`](#export-file)     | HTTP + facade | Экспорт XLSX (`exportProgramRates` / `exportAllProjects` / `exportSubmittedProjects`) + facade для UI.                                                                 |
-| [`paths`](#paths)                 | utility       | `AppRoutes` (типизированные builders), `PathsService` (computed-флаги по URL), `NavigationService` (хелперы навигации).                                                |
-| [`searches`](#searches)           | UI-state      | Inline-поиск специализаций для фильтра members.                                                                                                                        |
-| [`storage`](#storage)             | utility       | Тонкая обёртка над `localStorage`/`sessionStorage` с авто-сериализацией JSON.                                                                                          |
-| [`swipe`](#swipe)                 | UI-helper     | Обработка touch-свайпов для фильтр-модалки на мобильных.                                                                                                               |
-| [`toggle-fields`](#toggle-fields) | UI-state      | Один сигнал `showInputFields` для условного показа полей в формах.                                                                                                     |
-| [`tooltip`](#tooltip)             | UI-state      | Сигналы видимости tooltip'ов (14 полей с `isHint*Visible` + общий `isTooltipVisible`).                                                                                 |
-| [`office`](#office)               | facade        | Office shell facades (документированы в [`docs/modules/office-shell.md`](modules/office-shell.md)).                                                                    |
-| [`onboarding`](#onboarding)       | facades       | Onboarding flow facades (документированы в [`docs/modules/office-shell.md`](modules/office-shell.md)).                                                                 |
+| Пакет               | Тип         | Назначение                   |
+| ------------------- | ----------- | ---------------------------- |
+| [`advert`](#advert) | HTTP-сервис | Маркетинговые объявления (`/ |
+
+`). | | [`analytics`](#analytics) | сервис | Загрузка Yandex Metrika + Mail.ru counter (после согласия cookie). | | [`expand`](#expand) | UI-state | Сигналы раскрытия описаний/списков (description / skills / achievements / vacancies / members / projects / programs / links / education / languages / workExperience). | | [`export-file`](#export-file) | HTTP + facade | Экспорт XLSX (`exportProgramRates`/`exportAllProjects`/`exportSubmittedProjects`) + facade для UI. | | [`paths`](#paths) | utility | `AppRoutes`(типизированные builders),`PathsService`(computed-флаги по URL),`NavigationService` (хелперы навигации). | | [`searches`](#searches) | UI-state | Inline-поиск специализаций для фильтра members. | | [`storage`](#storage) | utility | Тонкая обёртка над `localStorage`/`sessionStorage` с авто-сериализацией JSON. | | [`swipe`](#swipe) | UI-helper | Обработка touch-свайпов для фильтр-модалки на мобильных. | | [`toggle-fields`](#toggle-fields) | UI-state | Один сигнал `showInputFields` для условного показа полей в формах. | | [`tooltip`](#tooltip) | UI-state | Сигналы видимости tooltip'ов (14 полей с `isHint\*Visible`+ общий`isTooltipVisible`). | | [`office`](#office) | facade | Office shell facades (документированы в [`docs/modules/office-shell.md`](modules/office-shell.md)). | | [`onboarding`](#onboarding) | facades | Onboarding flow facades (документированы в [`docs/modules/office-shell.md`](modules/office-shell.md)). |
 
 `office` и `onboarding` уже покрыты в `office-shell.md` — здесь только указаны для полноты.
 
