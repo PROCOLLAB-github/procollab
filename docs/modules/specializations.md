@@ -11,7 +11,7 @@
 - **Иерархический список специализаций** для выбора на onboarding и в profile-edit (через `<app-specializations-group>`).
 - **Inline-поиск** для autocomplete-фильтра в members search (`api/searches`).
 
-В отличие от skills тут **нет** use-case'ов — facade ходит прямо в порт. Это более старый стиль; на use-case'ы пока не переведено.
+Структурно повторяет `skills`: репозиторий + два use-case'а (`GetSpecializationsNestedUseCase`, `GetSpecializationsInlineUseCase`), фасада нет — потребители инжектят use-case'ы напрямую.
 
 ---
 
@@ -59,23 +59,20 @@ DI-биндинг (`infrastructure/di/specializations.providers.ts`):
 
 ---
 
-## Use-cases
+## Use-cases (`api/specializations/use-cases/`)
 
-**Нет**. Facade напрямую дёргает порт. Архитектурный долг — параллельный `skills`-модуль на use-case'ах, тут пока нет.
+| Use-case                          | Сценарий                                                                                                                                       |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GetSpecializationsNestedUseCase` | Иерархия групп специализаций для выбора. Возвращает `Result<SpecializationsGroup[], { kind: "server_error" }>`.                                |
+| `GetSpecializationsInlineUseCase` | Плоский поиск по специализациям (`search` + `limit` + `offset`). Возвращает `Result<ApiPagination<Specialization>, { kind: "server_error" }>`. |
+
+Подписчик сам управляет состоянием (паттерн `Result<T, E>` через `toAsyncState` в фасадах-потребителях).
 
 ---
 
-## Facade (`api/specializations/facades/specializations-info.service.ts`)
+## Facade
 
-`SpecializationsInfoService` — `providedIn: "root"`. Тонкий passthrough в порт — `getSpecializationsNested()` / `getSpecializationsInline()`. Без сигналов, без `AsyncState`. Подписчик сам управляет состоянием.
-
-```ts
-@Injectable({ providedIn: "root" })
-export class SpecializationsInfoService {
-  getSpecializationsNested(): Observable<SpecializationsGroup[]>;
-  getSpecializationsInline(search, limit, offset): Observable<ApiPagination<Specialization>>;
-}
-```
+**Отсутствует.** Потребители (формы редактирования профиля / проекта, `SearchesService`) инжектят use-case'ы напрямую. Это соответствует подходу `skills`-модуля.
 
 ---
 
@@ -118,11 +115,11 @@ Outputs:
 
 ## Consumers
 
-| Где                                                                       | Как использует                                                                                                                 |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `pages/profile/edit/...` (через `ProfileFormService.inlineSpecs` signal)  | Profile-edit подгружает специализации через `SpecializationsInfoService.getSpecializationsNested()`, держит выбранные в форме. |
-| `pages/onboarding/stage-one` (выбор первой специализации при регистрации) | См. `onboarding-stage-one-info.service.ts`. Резолвер `stage-one.resolver` дёргает `getSpecializationsNested()`.                |
-| `api/onboarding/facades/stages/onboarding-stage-one-info.service.ts`      | Facade onboarding-stage-one.                                                                                                   |
-| `api/searches/searches.service.ts`                                        | Cross-cutting search-сервис использует inline-поиск специализаций для members-фильтров.                                        |
+| Где                                                                                    | Как использует                                                                                                 |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `pages/profile/edit/edit.component.ts` (через `ProfileFormService.inlineSpecs` signal) | Profile-edit инжектит `GetSpecializationsNestedUseCase` и держит выбранные в форме.                            |
+| `pages/onboarding/stage-one/stage-one.resolver.ts`                                     | Резолвер шага 1 онбординга дёргает `GetSpecializationsNestedUseCase.execute()`.                                |
+| `api/onboarding/facades/stages/onboarding-stage-one-info.service.ts`                   | Facade onboarding-stage-one — потребляет данные из резолвера.                                                  |
+| `api/searches/searches.service.ts`                                                     | Cross-cutting search-сервис использует `GetSpecializationsInlineUseCase` для inline-поиска в members-фильтрах. |
 
 ---

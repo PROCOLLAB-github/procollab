@@ -72,17 +72,9 @@ DI-биндинг (`infrastructure/di/member.providers.ts`):
 
 Метод `applyMembersPagination(data)` — сеттер из resolver'а: пишет `count` + `success(results)`.
 
-### `MentorsUIInfoService`
+### Mentors
 
-`@Injectable()` для менторов. **Не используется** ни одной страницей в текущей версии (нет `pages/mentors/`). Архитектурный долг — мёртвый код. Файл существует, но `MentorsUIInfoService` нигде не инжектится.
-
-```ts
-readonly mentorsTake = signal<number>(20);
-readonly mentorsTotalCount = signal<number | undefined>(undefined);
-readonly members = signal<User[]>([]);
-applyMentorsPagination(data): void;   // полная замена
-applyMentorsChunk(data): void;        // append для пагинации
-```
+Отдельного UI-фасада для менторов нет — менторы вытаскиваются тем же `MemberRepository.getMentors()` и пагинируются через общий `MembersUIInfoService`. Эндпоинт у бэка один, тип пользователя различается параметром `user_type` (см. ниже).
 
 ---
 
