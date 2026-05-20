@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { Goal } from "@domain/project/goals.model";
 import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
-import { GoalFormData } from "@infrastructure/adapters/project/dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 
 /** Сценарий: изменить цель проекта; ошибка → `update_project_goal_error`. */
 @Injectable({ providedIn: "root" })

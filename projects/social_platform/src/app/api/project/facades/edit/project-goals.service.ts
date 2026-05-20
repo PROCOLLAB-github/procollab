@@ -7,7 +7,7 @@ import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Goal } from "@domain/project/goals.model";
 import { ProjectGoalsUIService } from "./ui/project-goals-ui.service";
 import { LoggerService } from "@corelib";
-import { GoalFormData } from "@infrastructure/adapters/project/dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 import { CreateGoalsUseCase } from "../../use-cases/create-goals.use-case";
 import { UpdateGoalUseCase } from "../../use-cases/update-goal.use-case";
 import { DeleteGoalUseCase } from "../../use-cases/delete-goal.use-case";

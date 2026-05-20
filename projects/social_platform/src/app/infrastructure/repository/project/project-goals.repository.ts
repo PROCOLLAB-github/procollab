@@ -5,7 +5,7 @@ import { map, Observable } from "rxjs";
 import { ProjectGoalsHttpAdapter } from "../../adapters/project/project-goals-http.adapter";
 import { plainToInstance } from "class-transformer";
 import { Goal } from "@domain/project/goals.model";
-import { GoalFormData } from "../../adapters/project/dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 
 /** Репозиторий целей проекта: CRUD + `plainToInstance(Goal)`. */
