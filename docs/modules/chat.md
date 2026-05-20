@@ -181,7 +181,7 @@ DI-биндинг (`infrastructure/di/chat.providers.ts`):
 
 `isConnected: boolean` — публичный флаг состояния.
 
-> WebSocketService реализует **переподключение** (`retry`-логика с `environment.websocketReconnectionInterval / MaxAttempts` — 5 попыток, 500мс интервал на dev / 5000мс на prod).
+> `WebsocketService` реализует **переподключение** (`retry`-логика с `environment.websocketReconnectionInterval / MaxAttempts` — 5 попыток, 500мс интервал на dev / 5000мс на prod).
 
 ---
 
