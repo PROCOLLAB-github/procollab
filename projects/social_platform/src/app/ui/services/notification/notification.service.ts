@@ -33,5 +33,5 @@ export class NotificationService {
    */
   hasNotifications = this.notifications
     .asObservable()
-    .pipe(map(notifications => notifications.filter(notification => notification.readAt).length));
+    .pipe(map(notifications => notifications.filter(notification => !notification.readAt).length));
 }

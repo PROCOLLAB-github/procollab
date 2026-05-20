@@ -158,11 +158,7 @@ export class ProjectsDetailService {
     }
 
     const ids = entries
-      .map(e => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return Number(e.target.dataset.id);
-      })
+      .map(e => Number((e.target as HTMLElement).dataset["id"]))
       .filter(id => Number.isFinite(id));
 
     if (!ids.length) {

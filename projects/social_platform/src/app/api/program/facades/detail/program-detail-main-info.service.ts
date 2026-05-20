@@ -187,11 +187,9 @@ export class ProgramDetailMainService {
   }
 
   private onNewsInVew(entries: IntersectionObserverEntry[]): void {
-    const ids = entries.map(e => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return e.target.dataset.id;
-    });
+    const ids = entries
+      .map(e => Number((e.target as HTMLElement).dataset["id"]))
+      .filter(id => Number.isFinite(id));
     this.readNewsUseCase
       .execute(this.route.snapshot.params["programId"], ids)
       .pipe(takeUntil(this.destroy$))
