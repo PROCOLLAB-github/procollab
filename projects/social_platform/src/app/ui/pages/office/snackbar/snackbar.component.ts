@@ -2,6 +2,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   OnDestroy,
@@ -39,6 +40,7 @@ import { IconComponent } from "@uilib";
 })
 export class SnackbarComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   constructor(private readonly snackbarService: SnackbarService) {}
 
@@ -47,7 +49,8 @@ export class SnackbarComponent implements OnInit, OnDestroy {
 
   /** Добавление нового уведомления */
   private addNotification(snack: Snack): void {
-    this.snacks.push(snack);
+    this.snacks = [...this.snacks, snack];
+    this.cdr.markForCheck();
 
     if (snack.timeout !== 0) {
       setTimeout(() => this.onClose(snack), snack.timeout);
@@ -67,5 +70,6 @@ export class SnackbarComponent implements OnInit, OnDestroy {
   /** Закрытие конкретного уведомления */
   onClose(snack: Snack): void {
     this.snacks = this.snacks.filter(({ id }) => id !== snack.id);
+    this.cdr.markForCheck();
   }
 }
