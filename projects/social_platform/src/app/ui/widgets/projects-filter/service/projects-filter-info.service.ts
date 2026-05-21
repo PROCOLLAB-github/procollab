@@ -35,6 +35,9 @@ export class ProjectsFilterInfoService {
   // Текущий тип проекта (по умолчанию - все проекты)
   readonly currentFilterTag = signal<number>(2);
 
+  // Создаём observable в контексте инжекции (field initializer), чтобы toObservable не падал NG0203 при вызове из ngOnInit
+  private readonly industries$ = toObservable(this.industryRepository.industries);
+
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -50,7 +53,7 @@ export class ProjectsFilterInfoService {
   }
 
   private initializationIndustries(): void {
-    toObservable(this.industryRepository.industries)
+    this.industries$
       .pipe(
         map(industries =>
           industries.map(industry => ({
