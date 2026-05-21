@@ -24,6 +24,8 @@ export class WebsocketService {
   private readonly _connectionLost$ = new Subject<void>();
   /** Сигнал потери WS-соединения. Потребитель отвечает за UX (toast/banner/etc). */
   public readonly connectionLost$ = this._connectionLost$.asObservable();
+  /** Буфер исходящих сообщений, накопленных пока сокет не OPEN — флашится в onopen. */
+  private outboundQueue: string[] = [];
 
   private readonly tokenService = inject(TokenService);
 
@@ -51,12 +53,23 @@ export class WebsocketService {
 
       this.socket.onopen = () => {
         this.isConnected = true;
+        // Отправляем всё, что накопилось пока сокет был CONNECTING.
+        const flush = this.outboundQueue;
+        this.outboundQueue = [];
+        flush.forEach(payload => this.socket?.send(payload));
         observer.next();
       };
 
       this.socket.onerror = error => {
         this.isConnected = false;
         observer.error(error);
+      };
+
+      // Любое закрытие сокета (хоть «чистое» с code=1000, хоть 1006) — повод переподключиться.
+      // Сервер часто закрывает «чисто» по своему timeout, и тогда wasClean=true, но connection всё равно мёртв.
+      this.socket.onclose = () => {
+        this.isConnected = false;
+        observer.error(new Error("WebSocket closed"));
       };
 
       this.socket.onmessage = message => {
@@ -85,16 +98,18 @@ export class WebsocketService {
    * Автоматически преобразует ключи content в snake_case перед отправкой
    */
   public send(type: string, content: any): void {
+    const payload = JSON.stringify({
+      type,
+      content: snakecaseKeys(content, { deep: true }),
+    });
+
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(
-        JSON.stringify({
-          type,
-          content: snakecaseKeys(content, { deep: true }),
-        })
-      );
-    } else {
-      throw new Error("WebSocket is not open.");
+      this.socket.send(payload);
+      return;
     }
+
+    // CONNECTING (handshake) или CLOSED/CLOSING (auto-reconnect ещё не успел) — копим, отправим на следующем onopen.
+    this.outboundQueue.push(payload);
   }
 
   /**
