@@ -19,7 +19,7 @@ export class SkillsHttpAdapter {
    * Получает навыки в виде иерархической структуры (группы и подгруппы).
    */
   getSkillsNested(): Observable<SkillsGroup[]> {
-    return this.apiService.get(`${this.CORE_SKILLS_URL}/nested`);
+    return this.apiService.get(`${this.CORE_SKILLS_URL}/nested/`);
   }
 
   /**
@@ -31,7 +31,7 @@ export class SkillsHttpAdapter {
    */
   getSkillsInline(search: string, limit: number, offset: number): Observable<ApiPagination<Skill>> {
     return this.apiService.get(
-      `${this.CORE_SKILLS_URL}/inline`,
+      `${this.CORE_SKILLS_URL}/inline/`,
       new HttpParams({ fromObject: { limit, offset, name__icontains: search } })
     );
   }

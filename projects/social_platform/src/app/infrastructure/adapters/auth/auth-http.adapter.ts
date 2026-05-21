@@ -100,7 +100,7 @@ export class AuthHttpAdapter {
    * @returns Observable с обновленными данными пользователя
    */
   saveAvatar(url: string, profileId: number): Observable<User> {
-    return this.apiService.patch<User>(`${this.AUTH_USERS_URL}/${profileId}`, { avatar: url });
+    return this.apiService.patch<User>(`${this.AUTH_USERS_URL}/${profileId}/`, { avatar: url });
   }
 
   /**

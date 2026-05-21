@@ -32,13 +32,13 @@ export class ProjectGoalsHttpAdapter {
    * Редактирование цели
    */
   editGoal(projectId: number, goalId: number, params: GoalFormData) {
-    return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`, params);
+    return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}/`, params);
   }
 
   /**
    * Удаляем цель
    */
   deleteGoals(projectId: number, goalId: number): Observable<void> {
-    return this.apiService.delete<void>(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`);
+    return this.apiService.delete<void>(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}/`);
   }
 }

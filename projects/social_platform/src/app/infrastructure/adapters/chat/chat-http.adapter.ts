@@ -30,10 +30,10 @@ export class ChatHttpAdapter {
   }
 
   loadProjectFiles(projectId: number): Observable<ChatFile[]> {
-    return this.apiService.get<ChatFile[]>(`${this.chatsUrl}/projects/${projectId}/files`);
+    return this.apiService.get<ChatFile[]>(`${this.chatsUrl}/projects/${projectId}/files/`);
   }
 
   hasUnreads(): Observable<{ hasUnreads: boolean }> {
-    return this.apiService.get<{ hasUnreads: boolean }>(`${this.chatsUrl}/has-unreads`);
+    return this.apiService.get<{ hasUnreads: boolean }>(`${this.chatsUrl}/has-unreads/`);
   }
 }

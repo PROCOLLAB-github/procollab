@@ -32,7 +32,7 @@ export class ProjectNewsHttpAdapter {
    * @param newsId идентификатор новости
    */
   fetchNewsDetail(projectId: string, newsId: string): Observable<FeedNews> {
-    return this.apiService.get<FeedNews>(`${this.PROJECTS_URL}/${projectId}/news/${newsId}`);
+    return this.apiService.get<FeedNews>(`${this.PROJECTS_URL}/${projectId}/news/${newsId}/`);
   }
 
   /**

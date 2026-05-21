@@ -1,13 +1,10 @@
 /** @format */
 
-import { Injectable, signal } from "@angular/core";
-import { Invite } from "@domain/invite/invite.model";
+import { Injectable, inject, signal } from "@angular/core";
 
 /** UI-состояние офиса: приглашения, пункты навигации и модалки верификации. */
 @Injectable()
 export class OfficeUIInfoService {
-  readonly invites = signal<Invite[]>([]);
-
   readonly waitVerificationModal = signal<boolean>(false);
   readonly waitVerificationAccepted = signal<boolean>(false);
   readonly inviteErrorModal = signal<boolean>(false);
@@ -35,10 +32,6 @@ export class OfficeUIInfoService {
   applyAcceptWaitVerification() {
     this.waitVerificationAccepted.set(true);
     localStorage.setItem("waitVerificationAccepted", "true");
-  }
-
-  applySetInvites(invites: any): void {
-    this.invites.set(invites);
   }
 
   applyCreateNavItems(profileId: number): void {

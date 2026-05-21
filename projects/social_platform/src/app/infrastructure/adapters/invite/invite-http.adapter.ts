@@ -43,7 +43,7 @@ export class InviteHttpAdapter {
    * @param invitationId идентификатор приглашения
    */
   revokeInvite(invitationId: number): Observable<void> {
-    return this.apiService.delete(`${this.INVITES_URL}/${invitationId}`);
+    return this.apiService.delete(`${this.INVITES_URL}/${invitationId}/`);
   }
 
   /**
@@ -72,7 +72,7 @@ export class InviteHttpAdapter {
    * @param specialization новая специализация (необязательно)
    */
   updateInvite(inviteId: number, role: string, specialization?: string): Observable<Invite> {
-    return this.apiService.patch(`${this.INVITES_URL}/${inviteId}`, { role, specialization });
+    return this.apiService.patch(`${this.INVITES_URL}/${inviteId}/`, { role, specialization });
   }
 
   /**

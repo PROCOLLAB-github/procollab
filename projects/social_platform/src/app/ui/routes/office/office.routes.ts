@@ -3,7 +3,6 @@
 import { Routes } from "@angular/router";
 import { OfficeComponent } from "../../pages/office/office.component";
 import { ProfileEditComponent } from "../../pages/profile/edit/edit.component";
-import { OfficeResolver } from "../../pages/office/office.resolver";
 import { MembersComponent } from "@ui/pages/members/members.component";
 import { MembersResolver } from "@ui/pages/members/members.resolver";
 
@@ -26,9 +25,6 @@ export const OFFICE_ROUTES: Routes = [
   {
     path: "",
     component: OfficeComponent,
-    resolve: {
-      invites: OfficeResolver,
-    },
     children: [
       {
         path: "",

@@ -21,7 +21,7 @@ export class ProjectRatingHttpAdapter {
    * @param params query-параметры пагинации/фильтрации
    */
   getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>> {
-    return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}`, params);
+    return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}/`, params);
   }
 
   /**
@@ -36,7 +36,7 @@ export class ProjectRatingHttpAdapter {
     filters: Record<string, string[]>,
     params?: HttpParams
   ): Observable<ApiPagination<ProjectRate>> {
-    let url = `${this.RATE_PROJECT_URL}/${programId}`;
+    let url = `${this.RATE_PROJECT_URL}/${programId}/`;
     if (params) {
       url += `?${params.toString()}`;
     }
@@ -50,6 +50,6 @@ export class ProjectRatingHttpAdapter {
    * @param scores массив оценок критериев
    */
   rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
-    return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}`, scores);
+    return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}/`, scores);
   }
 }

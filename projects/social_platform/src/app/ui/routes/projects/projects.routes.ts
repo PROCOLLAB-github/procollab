@@ -10,7 +10,6 @@ import { ProjectEditComponent } from "../../pages/projects/edit/edit.component";
 import { ProjectEditResolver } from "../../pages/projects/edit/edit.resolver";
 import { ProjectsSubscriptionsResolver } from "../../pages/projects/list/subscriptions.resolver";
 import { ProjectEditRequiredGuard } from "../../../../../../core/src/lib/guards/projects-edit/projects-edit.guard";
-import { ProjectsInvitesResolver } from "../../pages/projects/list/invites.resolver";
 import { DashboardProjectsComponent } from "../../pages/projects/dashboard/dashboard.component";
 
 /**
@@ -40,9 +39,6 @@ export const PROJECTS_ROUTES: Routes = [
   {
     path: "",
     component: ProjectsComponent,
-    resolve: {
-      data: ProjectsInvitesResolver,
-    },
     children: [
       {
         path: "",
@@ -73,9 +69,6 @@ export const PROJECTS_ROUTES: Routes = [
       {
         path: "invites",
         component: ProjectsListComponent,
-        resolve: {
-          data: ProjectsInvitesResolver,
-        },
       },
       {
         path: "all",
