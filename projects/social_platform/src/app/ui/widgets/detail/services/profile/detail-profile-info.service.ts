@@ -83,9 +83,10 @@ export class DetailProfileInfoService {
     fullUrl = `${location.origin}/office/profile/${profileId}/`;
 
     // Копирование в буфер обмена
-    navigator.clipboard.writeText(fullUrl).then(() => {
-      this.snackbarService.success("скопирован URL");
-    });
+    navigator.clipboard.writeText(fullUrl).then(
+      () => this.snackbarService.success("скопирован URL"),
+      () => this.snackbarService.error("не удалось скопировать ссылку")
+    );
   }
 
   /**
@@ -113,13 +114,13 @@ export class DetailProfileInfoService {
   }
 
   sendInvite(): void {
-    const role = this.inviteForm.get("role")?.value;
+    const roleControl = this.inviteForm.get("role");
+    const role = roleControl?.value;
     const userId = this.route.snapshot.params["id"];
 
-    if (
-      !this.validationService.getFormValidation(this.inviteForm) ||
-      this.selectedProjectId === null
-    ) {
+    roleControl?.markAsTouched({ onlySelf: true });
+
+    if (roleControl?.invalid || this.selectedProjectId() === null) {
       return;
     }
 
