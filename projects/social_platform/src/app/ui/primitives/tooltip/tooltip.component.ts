@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
-import { IconComponent } from "@ui/primitives";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Переиспользуемый компонент подсказки с иконкой

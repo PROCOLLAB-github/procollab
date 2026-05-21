@@ -4,6 +4,7 @@ import { Injectable, signal } from "@angular/core";
 import { ChatListItem } from "@domain/chat/chat-item.model";
 import { OnChatMessageDto } from "@domain/chat/chat.model";
 
+/** UI-проекция списка чатов: сигнал `chatsData` для шаблона. */
 @Injectable()
 export class ChatUIInfoService {
   readonly chatsData = signal<ChatListItem[]>([]);

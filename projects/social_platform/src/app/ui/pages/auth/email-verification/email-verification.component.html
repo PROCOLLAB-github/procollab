@@ -18,7 +18,9 @@
         </p>
       </div>
       @if (counter() > 0) {
-      <div class="verification__text">Письмо отправлено, отправить еще раз через {{ counter }}</div>
+      <div class="verification__text">
+        Письмо отправлено, отправить еще раз через {{ counter() }}
+      </div>
       } @else {
       <div class="verification__action">
         <p class="text-body-14 verification__text">Не получил письмо? Проверь папку спам или</p>

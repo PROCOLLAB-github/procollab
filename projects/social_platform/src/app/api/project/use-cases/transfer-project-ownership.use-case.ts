@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: передать лидерство в проекте другому участнику; ошибка → `transfer_project_ownership_error`. */
 @Injectable({ providedIn: "root" })
 export class TransferProjectOwnershipUseCase {
   private readonly projectCollaboratorsRepositoryPort = inject(ProjectCollaboratorsRepositoryPort);

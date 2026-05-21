@@ -5,8 +5,9 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
+/** HTTP-адаптер новостей программы: `/programs/<id>/news`. */
 @Injectable({ providedIn: "root" })
 export class ProgramNewsHttpAdapter {
   private readonly PROGRAMS_URL = "/programs";
@@ -19,7 +20,7 @@ export class ProgramNewsHttpAdapter {
    * @param offset смещение
    * @param programId идентификатор программы
    */
-  fetchNews(limit: number, offset: number, programId: number): Observable<ApiPagination<FeedNews>> {
+  fetchNews(programId: number, limit: number, offset: number): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get(
       `${this.PROGRAMS_URL}/${programId}/news/`,
       new HttpParams({ fromObject: { limit, offset } })

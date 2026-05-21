@@ -1,6 +1,6 @@
 /** @format */
 
-import { User } from "projects/ui/src/lib/models/user.model";
+import { User } from "@domain/auth/user.model";
 import { ProjectRatingCriterion } from "./project-rating-criterion"; // Assuming this is where ProjectRatingCriterion is declared
 
 /**

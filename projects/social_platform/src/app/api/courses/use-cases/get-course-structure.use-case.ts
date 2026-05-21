@@ -6,6 +6,7 @@ import { CoursesRepositoryPort } from "@domain/courses/ports/courses.repository.
 import { CourseStructure } from "@domain/courses/courses.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: получить структуру курса (модули/уроки); ошибка → `get_course_structure_error`. */
 @Injectable({ providedIn: "root" })
 export class GetCourseStructureUseCase {
   private readonly coursesRepository = inject(CoursesRepositoryPort);

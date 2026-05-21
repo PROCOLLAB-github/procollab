@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe, TokenService } from "@corelib";
@@ -12,6 +12,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { AuthLoginService } from "@api/auth/facades/auth-login.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент входа в систему
@@ -63,7 +64,10 @@ export class LoginComponent implements OnInit {
   protected readonly errorMessage = ErrorMessage;
 
   protected readonly showPassword = this.authUIInfoService.showPassword;
-  protected readonly isHintLoginVisible = this.tooltipInfoService.isHintLoginVisible;
+  protected readonly isHintLoginVisible = computed(() =>
+    this.tooltipInfoService.isVisible("login")
+  );
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.tokenService.clearTokens();
@@ -74,7 +78,7 @@ export class LoginComponent implements OnInit {
   }
 
   toggleTooltip(): void {
-    this.tooltipInfoService.toggleTooltip();
+    this.tooltipInfoService.toggleTooltip("login");
   }
 
   toggleShowPassword() {

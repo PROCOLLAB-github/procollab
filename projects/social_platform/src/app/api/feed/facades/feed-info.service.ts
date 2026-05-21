@@ -21,10 +21,14 @@ import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
 import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
 import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
+import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.const";
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
-const FILTER_SPLIT_SYMBOL = "|";
 
+/**
+ * Координирует глобальную ленту: стартовые данные из резолвера, фильтры URL,
+ * бесконечную пагинацию, отметку просмотров и лайки новостей владельцев.
+ */
 @Injectable()
 export class FeedInfoService {
   private readonly route = inject(ActivatedRoute);
@@ -88,9 +92,6 @@ export class FeedInfoService {
       });
   }
 
-  // onScroll Section
-  // -------------------
-
   private onScroll(target: HTMLElement, feedRoot: ElementRef<HTMLElement>): Observable<FeedItem[]> {
     if (
       this.feedUIInfoService.totalItemsCount() &&
@@ -130,9 +131,6 @@ export class FeedInfoService {
 
     return EMPTY;
   }
-
-  // target for Scroll Section
-  // -------------------
 
   initScroll(target: HTMLElement, feedRoot: ElementRef<HTMLElement>): void {
     if (target) {
@@ -177,6 +175,7 @@ export class FeedInfoService {
 
     projectNews.forEach(news => {
       if (news.typeModel !== "news") return;
+      // У ленты нет своей ручки чтения, поэтому просмотр уходит владельцу новости.
       this.readFeedNewsUseCase
         .execute("project", news.content.contentObject.id, [news.content.id])
         .pipe(takeUntil(this.destroy$))
@@ -185,6 +184,7 @@ export class FeedInfoService {
 
     profileNews.forEach(news => {
       if (news.typeModel !== "news") return;
+      // Профильная новость определяется по форме contentObject с email.
       this.readFeedNewsUseCase
         .execute("profile", news.content.contentObject.id, [news.content.id])
         .pipe(takeUntil(this.destroy$))

@@ -7,6 +7,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { Invite } from "@domain/invite/invite.model";
 
+/** Сценарий: отправить приглашение пользователю в проект; ошибка → `invite_error`. */
 @Injectable({ providedIn: "root" })
 export class SendForUserUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);

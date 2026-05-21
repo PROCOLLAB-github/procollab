@@ -8,6 +8,7 @@ import { ChatFile } from "@domain/chat/chat-message.model";
 
 export type LoadProjectFilesError = { kind: "server_error" };
 
+/** Сценарий (REST): загрузить файлы, прикреплённые в чате проекта. */
 @Injectable({ providedIn: "root" })
 export class LoadProjectFilesUseCase {
   private readonly chatRepository = inject(ChatRepositoryPort);

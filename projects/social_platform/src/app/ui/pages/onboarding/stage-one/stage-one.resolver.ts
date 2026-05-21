@@ -2,8 +2,9 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { SpecializationsGroup } from "@domain/project/specializations-group.model";
-import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
+import { GetSpecializationsNestedUseCase } from "@api/specializations/use-cases/get-specializations-nested.use-case";
+import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
+import { EMPTY, map } from "rxjs";
 
 /**
  * РЕЗОЛВЕР ПЕРВОГО ЭТАПА ОНБОРДИНГА
@@ -17,7 +18,7 @@ import { SpecializationsInfoService } from "@api/specializations/facades/special
  *
  * Что принимает:
  * - Контекст маршрута (автоматически от Angular Router)
- * - Доступ к SpecializationsService через dependency injection
+ * - Доступ к getSpecializationsNestedUseCase через dependency injection
  *
  * Что возвращает:
  * - Observable<SpecializationsGroup[]> - массив групп специализаций
@@ -29,7 +30,9 @@ import { SpecializationsInfoService } from "@api/specializations/facades/special
  * - Централизованная обработка ошибок загрузки
  */
 export const StageOneResolver: ResolveFn<SpecializationsGroup[]> = () => {
-  const specializationsService = inject(SpecializationsInfoService);
+  const getSpecializationsNestedUseCase = inject(GetSpecializationsNestedUseCase);
 
-  return specializationsService.getSpecializationsNested();
+  return getSpecializationsNestedUseCase
+    .execute()
+    .pipe(map(result => (result.ok ? result.value : [])));
 };

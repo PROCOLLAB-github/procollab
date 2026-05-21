@@ -23,6 +23,7 @@ import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component"
 import { MembersInfoService } from "@api/member/facades/members-info.service";
 import { MembersUIInfoService } from "@api/member/facades/ui/members-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
 /**
  * Компонент для отображения списка участников с возможностью поиска и фильтрации
@@ -52,7 +53,7 @@ import { AppRoutes } from "@api/paths/app-routes";
     ButtonComponent,
     SoonCardComponent,
   ],
-  providers: [MembersInfoService, MembersUIInfoService],
+  providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService],
   standalone: true,
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {

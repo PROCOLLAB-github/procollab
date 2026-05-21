@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { LoginCommand } from "@domain/auth/commands/login.command";
 import { LoginError, LoginResult } from "@domain/auth/results/login.result";
 
+/** Сценарий: вход по `LoginCommand`; 401 → `wrong_credentials`, прочее → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class LoginUseCase {
   private readonly authRepositoryPort = inject(AuthRepositoryPort);

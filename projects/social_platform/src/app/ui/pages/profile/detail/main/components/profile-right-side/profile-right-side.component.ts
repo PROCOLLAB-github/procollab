@@ -3,14 +3,15 @@
 import { CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
+import { UserLinksPipe, TruncatePipe } from "@corelib";
 import { ExpandService } from "@api/expand/expand.service";
 import { User } from "@domain/auth/user.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { RouterModule } from "@angular/router";
+import { AppRoutes } from "@api/paths/app-routes";
 
+/** Правая колонка профиля: дополнительные блоки. */
 @Component({
   selector: "app-profile-right-side",
   templateUrl: "./profile-right-side.component.html",
@@ -31,12 +32,11 @@ export class ProfileRightSideComponent {
   @Input() user!: WritableSignal<User | undefined>;
 
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly expandService = inject(ExpandService);
+  protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllLinks = this.expandService.readAllLinks;
-  protected readonly readAllEducation = this.expandService.readAllEducation;
-  protected readonly readAllWorkExperience = this.expandService.readAllWorkExperience;
-  protected readonly readAllProjects = this.expandService.readAllProjects;
+  protected readonly readAll = this.expandService.readAll;
+
+  protected readonly AppRoutes = AppRoutes;
 
   protected readonly isShowModal = this.profileDetailUIInfoService.isShowModal;
 

@@ -2,12 +2,13 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
+import { PROFILE_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: отметить новости профиля просмотренными (с дедупликацией в storage). */
 @Injectable({ providedIn: "root" })
 export class ReadProfileNewsUseCase {
-  private readonly profileNewsRepositoryPort = inject(ProfileNewsRepositoryPort);
+  private readonly profileNewsRepositoryPort = inject(PROFILE_NEWS_REPOSITORY);
 
   execute(
     userId: number,

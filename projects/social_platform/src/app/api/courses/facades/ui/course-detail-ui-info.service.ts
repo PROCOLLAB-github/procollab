@@ -5,6 +5,7 @@ import { CourseDetail, CourseLesson, CourseStructure } from "@domain/courses/cou
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
 import { SeenModulesStoragePort } from "@domain/courses/ports/seen-modules-storage.port";
 
+/** Состояние интерфейса детальной страницы курса: детали, структура, текущий урок и просмотренные модули. */
 @Injectable()
 export class CourseDetailUIInfoService {
   private readonly seenModulesStorage = inject(SeenModulesStoragePort);

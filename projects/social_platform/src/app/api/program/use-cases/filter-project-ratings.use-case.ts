@@ -8,6 +8,7 @@ import { ProjectRatingRepositoryPort } from "@domain/project/ports/project-ratin
 import { ProjectRate } from "@domain/project/project-rate";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: рейтинг проектов программы с фильтрами; ошибка → `filter_project_ratings_error`. */
 @Injectable({ providedIn: "root" })
 export class FilterProjectRatingsUseCase {
   private readonly projectRatingRepositoryPort = inject(ProjectRatingRepositoryPort);

@@ -18,7 +18,10 @@ import { NewProjectComponent } from "./new-project/new-project.component";
 import { FeedFilterComponent } from "@ui/widgets/feed-filter/feed-filter.component";
 import { FeedInfoService } from "@api/feed/facades/feed-info.service";
 import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 
+/** Страница ленты активности. */
 @Component({
   selector: "app-feed",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,7 +36,7 @@ import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
     OpenVacancyComponent,
     IconComponent,
   ],
-  providers: [FeedInfoService, FeedUIInfoService],
+  providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
   standalone: true,
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -43,6 +46,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly feedUIInfoService = inject(FeedUIInfoService);
 
   protected readonly feedItems = this.feedUIInfoService.feedItems;
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit() {
     this.feedInfoService.initializationFeedNews(this.feedRoot!);

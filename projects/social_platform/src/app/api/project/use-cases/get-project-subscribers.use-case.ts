@@ -6,6 +6,7 @@ import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project
 import { ProjectSubscriber } from "@domain/project/project-subscriber.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: подписчики проекта; ошибка → `get_project_subscribers_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectSubscribersUseCase {
   private readonly projectSubscriptionRepositoryPort = inject(ProjectSubscriptionRepositoryPort);

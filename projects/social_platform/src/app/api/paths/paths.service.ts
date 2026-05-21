@@ -3,12 +3,14 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs";
+import { AppRoutes } from "./app-routes";
 
+/** Отслеживание текущего маршрута/сегментов пути для навигационной логики. */
 @Injectable({ providedIn: "root" })
 export class PathsService {
   private readonly router = inject(Router);
 
-  readonly basePath = signal("/office/");
+  readonly basePath = signal(AppRoutes.office.root);
   readonly url = signal(this.router.url);
 
   constructor() {
@@ -17,7 +19,7 @@ export class PathsService {
     });
   }
 
-  readonly isAllVacanciesPage = computed(() => this.url().includes("/vacancies/all"));
+  readonly isAllVacanciesPage = computed(() => this.url().includes(AppRoutes.office.vacancies()));
 
-  readonly isMyVacanciesPage = computed(() => this.url().includes("/vacancies/my"));
+  readonly isMyVacanciesPage = computed(() => this.url().includes(AppRoutes.office.vacanciesMy()));
 }

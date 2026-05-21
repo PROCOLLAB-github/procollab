@@ -31,7 +31,7 @@ export interface CourseDetail {
   partnerProgramId: number;
   progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
   percent: number;
-  analyticsStub: any;
+  analyticsStub: unknown;
 }
 
 export interface CourseLessons {
@@ -84,7 +84,7 @@ export interface Task {
   checkType: string | null;
   informationalType: string | null;
   questionType: string | null;
-  answerType: string | null;
+  answerType: "text" | "text_and_files" | "single_choice" | "multiple_choice" | "files" | null;
   bodyText: string;
   videoUrl: string | null;
   imageUrl: string | null;

@@ -177,10 +177,14 @@
   } @if (listType() !== 'members' && listType() !== 'projects' && appWidth >= 1000) {
   <div class="page__tooltip">
     <div class="tooltip">
-      <app-tooltip color="grey" iconSize="40" (show)="isHintExpertsVisible.set(true)"></app-tooltip>
+      <app-tooltip
+        color="grey"
+        iconSize="40"
+        (show)="isHintExpertsVisible()['base'] = true"
+      ></app-tooltip>
 
-      @if (isHintExpertsVisible()) {
-      <div class="tooltip__wrapper" (mouseleave)="isHintExpertsVisible.set(false)">
+      @if (isHintExpertsVisible()['base']) {
+      <div class="tooltip__wrapper" (mouseleave)="isHintExpertsVisible()['base'] = false">
         <p class="tooltip__text text-body-10">
           Нажмите, чтобы открыть подсказку и узнать больше о процессе оценивания проектов
         </p>

@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { Resource, ResourceDto } from "@domain/project/resource.model";
 
+/** Сценарий: добавить ресурс проекта; ошибка → `create_project_resource_error`. */
 @Injectable({ providedIn: "root" })
 export class CreateResourceUseCase {
   private readonly projectResourceRepositoryPort = inject(ProjectResourceRepositoryPort);

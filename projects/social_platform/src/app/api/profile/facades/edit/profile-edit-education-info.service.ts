@@ -7,6 +7,7 @@ import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 import { transformYearStringToNumber } from "@utils/transformYear";
 
+/** Фасад редактирования образования профиля. */
 @Injectable()
 export class ProfileEditEducationInfoService {
   private readonly fb = inject(FormBuilder);
@@ -74,6 +75,18 @@ export class ProfileEditEducationInfoService {
     if (!this.showEducationFields()) {
       this.showEducationFields.set(true);
       this.resetSelectedIds();
+      return;
+    }
+
+    const educationOverflow =
+      (this.profileForm.get("organizationName")?.value?.length ?? 0) > 100 ||
+      (this.profileForm.get("description")?.value?.length ?? 0) > 400;
+
+    if (educationOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
       return;
     }
 

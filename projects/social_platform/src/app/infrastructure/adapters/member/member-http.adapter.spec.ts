@@ -39,16 +39,4 @@ describe("MemberHttpAdapter", () => {
     const params = api.get.calls.mostRecent().args[1];
     expect(params?.get("city")).toBe("msk");
   });
-
-  it("getMentors идёт в /auth/public-users/ c user_type=2,3,4", () => {
-    setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
-
-    adapter.getMentors(0, 10).subscribe();
-
-    const params = api.get.calls.mostRecent().args[1];
-    expect(params?.get("user_type")).toBe("2,3,4");
-    expect(params?.get("limit")).toBe("10");
-    expect(params?.get("offset")).toBe("0");
-  });
 });

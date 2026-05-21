@@ -34,12 +34,12 @@ import { nanoid } from "nanoid";
 import { DropdownComponent } from "@ui/primitives/dropdown/dropdown.component";
 import { priorityInfoList } from "@core/consts/lists/priority-info-list.const";
 import { ClickOutsideModule } from "ng-click-outside";
-import { actionTypeList } from "@core/consts/lists/actiion-type-list.const";
+import { actionTypeList } from "@core/consts/lists/action-type-list.const";
 import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { map, Subscription } from "rxjs";
 import { TaskDetail } from "@domain/kanban/task.model";
-import { daysUntil } from "@utils/days-untit";
+import { daysUntil } from "@utils/days-until";
 import { KanbanBoardService } from "@api/kanban/kanban-board.service";
 import { getPriorityType } from "@utils/getPriorityType";
 import { getActionType } from "@utils/getActionType";
@@ -54,13 +54,14 @@ import {
   CdkVirtualForOf,
   CdkVirtualScrollViewport,
 } from "@angular/cdk/scrolling";
-import { TagDto } from "@api/kanban/dto/tag.model.dto";
-import { PerformerDto } from "@api/kanban/dto/performer.model.dto";
+import { TagDto } from "@domain/kanban/dto/tag.model.dto";
+import { PerformerDto } from "@domain/kanban/dto/performer.model.dto";
 import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 
+/** Канбан (модуль отключён): детальная карточка задачи. */
 @Component({
   selector: "app-task-detail",
   templateUrl: "./task-detail.component.html",
@@ -332,14 +333,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(
-      "IS CREATOR" + " " + this.isCreator(),
-      "IS LEADER" + " " + this.isLeader(),
-      "IS PERFORMER" + " " + this.isPerformer(),
-      "IS RESPONSIBLE" + " " + this.isResponsible(),
-      "IS EXTERNAL" + " " + this.isExternal()
-    );
-
     this.updateDescriptionState();
   }
 

@@ -3,7 +3,19 @@
 import { ElementRef, Injectable, signal } from "@angular/core";
 import { expandElement } from "@utils/expand-element";
 
-@Injectable({ providedIn: "root" })
+export type ReadAllKey =
+  | "achievements"
+  | "vacancies"
+  | "members"
+  | "projects"
+  | "programs"
+  | "links"
+  | "education"
+  | "languages"
+  | "workExperience";
+
+/** Хранит состояния раскрытия длинных блоков текста и списков. */
+@Injectable()
 export class ExpandService {
   readonly readFullDescription = signal(false);
   readonly descriptionExpandable = signal(false);
@@ -11,23 +23,35 @@ export class ExpandService {
   readonly readFullSkills = signal(false);
   readonly skillsExpandable = signal(false);
 
-  readonly readAllAchievements = signal<boolean>(false); // Флаг показа всех достижений
+  readonly readAll = signal<Record<ReadAllKey, boolean>>({
+    achievements: false,
+    vacancies: false,
+    members: false,
+    projects: false,
+    programs: false,
+    links: false,
+    education: false,
+    languages: false,
+    workExperience: false,
+  });
 
-  readonly readAllVacancies = signal<boolean>(false); // Флаг показа всех вакансий
+  isReadAll(key: ReadAllKey): boolean {
+    return this.readAll()[key];
+  }
 
-  readonly readAllMembers = signal<boolean>(false); // Флаг показа всех участников
+  toggleReadAll(key: ReadAllKey): void {
+    this.readAll.update(state => ({
+      ...state,
+      [key]: !state[key],
+    }));
+  }
 
-  readonly readAllProjects = signal<boolean>(false);
-
-  readonly readAllPrograms = signal<boolean>(false);
-
-  readonly readAllLinks = signal<boolean>(false);
-
-  readonly readAllEducation = signal<boolean>(false);
-
-  readonly readAllLanguages = signal<boolean>(false);
-
-  readonly readAllWorkExperience = signal<boolean>(false);
+  setReadAll(key: ReadAllKey, value: boolean): void {
+    this.readAll.update(state => ({
+      ...state,
+      [key]: value,
+    }));
+  }
 
   onExpand(
     type: "description" | "skills",

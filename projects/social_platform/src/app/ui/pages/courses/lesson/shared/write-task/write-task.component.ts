@@ -12,7 +12,6 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { TruncateHtmlPipe } from "@core/lib/pipes/truncate-html.pipe";
 import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 import { IconComponent } from "@ui/primitives";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
@@ -23,8 +22,9 @@ import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 import { animateContentHeight } from "@utils/animate-content-height";
 import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncateHtmlPipe, TruncatePipe } from "@corelib";
 
+/** Поле ответа для текстовой задачи и задачи с текстом + файлами. */
 @Component({
   selector: "app-write-task",
   standalone: true,

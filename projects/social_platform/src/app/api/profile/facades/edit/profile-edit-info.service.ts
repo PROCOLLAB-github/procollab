@@ -1,26 +1,28 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { concatMap, Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { Achievement } from "@domain/auth/user.model";
 import dayjs from "dayjs";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { NavigationService } from "../../../paths/navigation.service";
-import { EditStep, ProjectStepService } from "../../../project/project-step.service";
+import { ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ActivatedRoute } from "@angular/router";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
+import { EditStep } from "@core/lib/models/edit-step";
+import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
 
+/** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
 export class ProfileEditInfoService {
   private readonly profileFormService = inject(ProfileFormService);
-  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly route = inject(ActivatedRoute);
   private readonly navigationService = inject(NavigationService);
   private readonly navService = inject(NavService);
   private readonly projectStepService = inject(ProjectStepService);
+  private readonly saveProfileUseCase = inject(SaveProfileUseCase);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -110,6 +112,28 @@ export class ProfileEditInfoService {
       }
     });
 
+    const lengthLimits: { field: string; limit: number }[] = [
+      { field: "city", limit: 100 },
+      { field: "aboutMe", limit: 300 },
+      { field: "organizationName", limit: 100 },
+      { field: "description", limit: 400 },
+      { field: "organization", limit: 50 },
+      { field: "descriptionWork", limit: 400 },
+    ];
+
+    const hasLengthOverflow = lengthLimits.some(({ field, limit }) => {
+      const value = this.profileForm.get(field)?.value;
+      return typeof value === "string" && value.length > limit;
+    });
+
+    if (hasLengthOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
+      return;
+    }
+
     const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality", "city"].every(
       name => this.profileForm.get(name)?.valid
     );
@@ -147,19 +171,16 @@ export class ProfileEditInfoService {
       about_me: this.profileForm.value.aboutMe || "",
       avatar: this.profileForm.value.avatar || null,
       cover_image_address: this.profileForm.value.coverImageAddress || null,
-      phone_number:
-        typeof this.profileForm.value.phoneNumber === "string"
-          ? this.profileForm.value.phoneNumber.replace(/^([87])/, "+7")
-          : this.profileForm.value.phoneNumber,
+      phoneNumber: this.profileForm.value.phoneNumber
+        ? this.profileForm.value.phoneNumber.replace(/^\+?[87]/, "+7")
+        : null,
       speciality: this.profileForm.value.speciality,
-      skills_ids: this.profileForm.value.skills?.map((s: Skill) => s.id) || [],
+      skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
     };
 
     // Добавляем birthday если он указан
     if (this.profileForm.value.birthday) {
-      newProfile.birthday = dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format(
-        "YYYY-MM-DD"
-      );
+      newProfile.birthday = this.profileForm.value.birthday || undefined;
     }
 
     // Добавляем специфичные для типа пользователя поля
@@ -181,41 +202,39 @@ export class ProfileEditInfoService {
       newProfile.user_languages = this.profileForm.value.userLanguages;
     }
 
-    this.authRepository
-      .updateProfile(newProfile)
-      .pipe(
-        concatMap(() => this.authRepository.fetchProfile()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: profile => {
-          this.profileFormSubmitting$.set(success(undefined));
-          this.navigationService.profileRedirect(profile.id);
-        },
-        error: error => {
+    this.saveProfileUseCase
+      .execute(newProfile)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        if (!result.ok) {
           this.profileFormSubmitting$.set(failure("profile_edit_error"));
           this.isModalErrorSkillsChoose.set(true);
-          if (error.error?.phone_number) {
-            this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);
-          } else if (error.error?.language) {
-            this.isModalErrorSkillChooseText.set(error.error.language);
-          } else if (error.error?.achievements) {
-            this.isModalErrorSkillChooseText.set(error.error.achievements[0]);
-          } else if (error.error?.work_experience?.[2]) {
-            const errorText = error.error.work_experience[2].entry_year
-              ? error.error.work_experience[2].entry_year
-              : error.error.work_experience[2].completion_year;
-            this.isModalErrorSkillChooseText.set(errorText);
-          } else if (error.error?.first_name?.[0]) {
-            this.isModalErrorSkillChooseText.set(error.error.first_name?.[0]);
-          } else if (error.error?.last_name?.[0]) {
-            this.isModalErrorSkillChooseText.set(error.error.last_name?.[0]);
-          } else if (error.error?.[0]) {
-            this.isModalErrorSkillChooseText.set(error.error[0]);
-          } else {
-            this.isModalErrorSkillChooseText.set("Ошибка при сохранении профиля");
-          }
-        },
+          this.isModalErrorSkillChooseText.set(this.resolveSaveErrorText(result.error.cause));
+          return;
+        }
+
+        this.profileFormSubmitting$.set(success(undefined));
+        this.navigationService.profileRedirect(result.value.id);
       });
+  }
+
+  /**
+   * Достаёт человекочитаемый текст ошибки из тела ответа бэка.
+   */
+  private resolveSaveErrorText(cause?: { error?: any }): string {
+    const body = cause?.error;
+    if (!body) return "Ошибка при сохранении профиля";
+
+    if (body.phone_number) return body.phone_number[0];
+    if (body.language) return body.language;
+    if (body.achievements) return body.achievements[0];
+    if (body.work_experience?.[2]) {
+      return body.work_experience[2].entry_year ?? body.work_experience[2].completion_year;
+    }
+    if (body.first_name?.[0]) return body.first_name[0];
+    if (body.last_name?.[0]) return body.last_name[0];
+    if (body[0]) return body[0];
+
+    return "Ошибка при сохранении профиля";
   }
 }

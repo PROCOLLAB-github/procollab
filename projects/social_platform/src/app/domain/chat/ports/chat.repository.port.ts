@@ -10,7 +10,8 @@ import { ChatFile, ChatMessage } from "../chat-message.model";
  */
 export abstract class ChatRepositoryPort {
   abstract loadMessages(
-    projectId: number,
+    id: number,
+    type: "directs" | "projects",
     offset?: number,
     limit?: number
   ): Observable<ApiPagination<ChatMessage>>;

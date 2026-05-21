@@ -5,10 +5,10 @@ import { CommonModule } from "@angular/common";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { Router, RouterLink } from "@angular/router";
-import { DayjsPipe } from "@corelib";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, DayjsPipe } from "@corelib";
 import { FeedProject } from "@domain/feed/feed-item.model";
+import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
@@ -55,6 +55,8 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 })
 export class NewProjectComponent {
   @Input() feedItem!: FeedProject;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    *

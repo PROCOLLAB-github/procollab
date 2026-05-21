@@ -8,6 +8,7 @@ import { Collaborator } from "@domain/project/collaborator.model";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { catchError, map, Observable, of, switchMap } from "rxjs";
 
+/** Пускает в канбан только участника проекта. */
 export const KanbanBoardGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot
 ): Observable<UrlTree | boolean> => {

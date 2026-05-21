@@ -24,18 +24,19 @@ import { AbstractControl } from "@angular/forms";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
-import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
+/** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
 @Injectable()
 export class MembersInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly navService = inject(NavService);
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
   private readonly authRepository = inject(AuthRepositoryPort);
   private readonly navigationService = inject(NavigationService);
@@ -45,7 +46,7 @@ export class MembersInfoService {
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
 
   private readonly membersTake = this.membersUIInfoService.membersTake; // Количество участников на странице
-  private readonly profileId = this.projectsDetailUIInfoService.profileId;
+  private readonly profileId = this.profileDetailUIInfoService.profileId;
 
   private readonly members = this.membersUIInfoService.members; // Массив участников для отображения
 
@@ -84,7 +85,7 @@ export class MembersInfoService {
       )
       .subscribe({
         next: user => {
-          this.projectsDetailUIInfoService.applySetLoggedUserId("profile", user.id);
+          this.profileDetailUIInfoService.applySetLoggedUserId("profile", user.id);
         },
       });
   }
@@ -193,6 +194,9 @@ export class MembersInfoService {
     fromEvent(target, "scroll")
       .pipe(
         throttleTime(500),
+        // concatMap (а не merge/switchMap): подгрузки идут строго последовательно,
+        // иначе параллельные скроллы посчитают одинаковый skip (= текущая длина
+        // списка) и придут дубли страниц.
         concatMap(() => this.onScroll(target, membersRoot)),
         takeUntil(this.destroy$)
       )

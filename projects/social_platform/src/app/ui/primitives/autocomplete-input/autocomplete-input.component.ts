@@ -21,7 +21,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { debounce, distinctUntilChanged, fromEvent, map, of, timer } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { LoaderComponent } from "@ui/primitives/loader/loader.component";
+import { LoaderComponent } from "../loader/loader.component";
 
 /**
  * Компонент автодополнения с поиском и выбором из списка предложений.

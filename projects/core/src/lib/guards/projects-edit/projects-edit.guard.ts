@@ -6,6 +6,9 @@ import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 
+/**
+ * Блокирует редактирование проекта, уже поданного в партнёрскую программу.
+ */
 export const ProjectEditRequiredGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot
 ): Observable<boolean | UrlTree> => {
@@ -13,6 +16,7 @@ export const ProjectEditRequiredGuard: CanActivateFn = (
   const projectRepository = inject(ProjectRepositoryPort);
 
   const projectId = Number(route.paramMap.get("projectId"));
+
   if (isNaN(projectId)) {
     return of(router.createUrlTree(["/office/projects/my"]));
   }

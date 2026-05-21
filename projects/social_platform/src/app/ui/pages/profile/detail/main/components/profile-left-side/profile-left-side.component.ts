@@ -3,12 +3,13 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { YearsFromBirthdayPipe } from "@corelib";
+import { YearsFromBirthdayPipe, TruncatePipe } from "@corelib";
 import { IconComponent } from "@ui/primitives";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { ExpandService } from "@api/expand/expand.service";
 import { User } from "@domain/auth/user.model";
+import { AppRoutes } from "@api/paths/app-routes";
 
+/** Левая колонка профиля: аватар и основные данные. */
 @Component({
   selector: "app-profile-left-side",
   templateUrl: "./profile-left-side.component.html",
@@ -20,7 +21,9 @@ import { User } from "@domain/auth/user.model";
 export class ProfileLeftSideComponent {
   @Input() user!: WritableSignal<User | undefined>;
 
-  private readonly expandService = inject(ExpandService);
+  protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllPrograms = this.expandService.readAllPrograms;
+  protected readonly readAllPrograms = this.expandService.readAll()["programs"];
+
+  protected readonly AppRoutes = AppRoutes;
 }

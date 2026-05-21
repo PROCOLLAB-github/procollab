@@ -7,7 +7,7 @@ import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter"
 import { EventBus } from "@domain/shared/event-bus";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
-import { CreateVacancyDto } from "@api/project/dto/create-vacancy.model";
+import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
 import { vacancyCreated } from "@domain/vacancy/events/vacancy-created.event";
 import { vacancyUpdated } from "@domain/vacancy/events/vacancy-updated.event";
 import { vacancyDelete } from "@domain/vacancy/events/vacancy-deleted.event";

@@ -6,12 +6,11 @@ import { map, Observable, tap } from "rxjs";
 import { Industry } from "@domain/industry/industry.model";
 import { plainToInstance } from "class-transformer";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
-import { EntityCache } from "@domain/shared/entity-cache";
 
+/** Репозиторий отраслей: signal-кеш `industries`, наполняется в `getAll` (`plainToInstance`); `getOne` — синхронный поиск в кеше. */
 @Injectable({ providedIn: "root" })
 export class IndustryRepository implements IndustryRepositoryPort {
   private readonly industryAdapter = inject(IndustryHttpAdapter);
-  private readonly entityCache = new EntityCache<Industry>();
 
   readonly industries = signal<Industry[]>([]);
 

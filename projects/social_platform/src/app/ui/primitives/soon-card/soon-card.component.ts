@@ -2,9 +2,10 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { ButtonComponent } from "@ui/primitives";
-import { IconComponent } from "@uilib";
+import { ButtonComponent } from "../button/button.component";
+import { IconComponent } from "../icon/icon.component";
 
+/** Примитив: карточка-заглушка «скоро». */
 @Component({
   selector: "app-soon-card",
   templateUrl: "./soon-card.component.html",

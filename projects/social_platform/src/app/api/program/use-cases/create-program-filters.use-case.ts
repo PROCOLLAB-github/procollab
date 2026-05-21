@@ -8,6 +8,7 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
 
+/** Сценарий: применить фильтры проектов программы; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class CreateProgramFiltersUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

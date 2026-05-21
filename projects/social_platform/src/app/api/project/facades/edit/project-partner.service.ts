@@ -8,6 +8,7 @@ import { LoggerService } from "@corelib";
 import { CreatePartnerUseCase } from "../../use-cases/create-partner.use-case";
 import { DeletePartnerUseCase } from "../../use-cases/delete-partner.use-case";
 
+/** Фасад партнёров проекта: создание/удаление партнёров. */
 @Injectable({
   providedIn: "root",
 })

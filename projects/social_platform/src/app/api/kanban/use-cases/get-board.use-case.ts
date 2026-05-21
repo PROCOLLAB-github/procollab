@@ -8,6 +8,7 @@ import { Board } from "@domain/kanban/board.model";
 
 export type GetBoardError = { kind: "not_found" } | { kind: "server_error" };
 
+/** Сценарий (kanban, модуль отключён): доска проекта по projectId. */
 @Injectable({ providedIn: "root" })
 export class GetBoardUseCase {
   private readonly kanbanRepository = inject(KanbanRepositoryPort);

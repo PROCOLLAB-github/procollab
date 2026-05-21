@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { removeProjectCollaborator } from "@domain/project/events/remove-project-collaborator.event";
 import { EventBus } from "@domain/shared/event-bus";
 
+/** Сценарий: удалить участника проекта; эмитит `RemoveProjectCollaborator`. */
 @Injectable({ providedIn: "root" })
 export class RemoveProjectCollaboratorUseCase {
   private readonly projectCollaboratorsRepositoryPort = inject(ProjectCollaboratorsRepositoryPort);

@@ -8,6 +8,7 @@ import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@corelib";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 
+/** Обрабатывает экспорт файлов программы и состояние загрузки export-кнопок. */
 @Injectable()
 export class ExportFileInfoService {
   private readonly exportFileService = inject(ExportFileService);

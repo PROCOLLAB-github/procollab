@@ -5,7 +5,7 @@ import { of, throwError } from "rxjs";
 import { RegisterUseCase } from "./register.use-case";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
-import { RegisterResponse } from "@domain/auth/http.model";
+import { RegisterResponse } from "@core/lib/models/auth/http.model";
 
 describe("RegisterUseCase", () => {
   let useCase: RegisterUseCase;

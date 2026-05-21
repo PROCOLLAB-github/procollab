@@ -10,9 +10,9 @@ import {
   Output,
   SimpleChanges,
 } from "@angular/core";
-import { IconComponent } from "../icon/icon.component";
 import { tagColors } from "@core/consts/other/tag-colors.const";
 import { NgStyle } from "@angular/common";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент тега для отображения статусов, категорий или меток.

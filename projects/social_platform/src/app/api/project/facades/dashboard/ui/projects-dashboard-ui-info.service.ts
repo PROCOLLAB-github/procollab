@@ -6,6 +6,7 @@ import { Project } from "@domain/project/project.model";
 import { ProgramDetailListUIInfoService } from "../../../../program/facades/detail/ui/program-detail-list-ui-info.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
+/** UI-проекция дашборда проектов: computed-сигналы перечня. */
 @Injectable()
 export class ProjectsDashboardUIInfoService {
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);

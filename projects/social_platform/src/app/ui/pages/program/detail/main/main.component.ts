@@ -13,24 +13,24 @@ import {
 } from "@angular/core";
 import { isFailure } from "@domain/shared/async-state";
 import { RouterModule } from "@angular/router";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
-import { FeedNews } from "@domain/project/project-news.model";
+import { TruncatePipe, UserLinksPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { FeedNews } from "@domain/news/project-news.model";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramDetailMainService } from "@api/program/facades/detail/program-detail-main-info.service";
 import { ExpandService } from "@api/expand/expand.service";
 import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
+import { AppRoutes } from "@api/paths/app-routes";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 
+/** Страница основной вкладки программы с описанием, ссылками и новостями. */
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
@@ -52,7 +52,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
     NewsCardComponent,
     ProgramLinksComponent,
   ],
-  providers: [ProgramDetailMainService],
+  providers: [ProgramDetailMainService, ExpandService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -80,6 +80,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly program = this.programDetailMainUIInfoService.program;
   protected readonly news = this.newsInfoService.news;
+
+  protected readonly AppRoutes = AppRoutes;
 
   protected readonly showProgramModal = this.programDetailMainUIInfoService.showProgramModal;
   protected readonly showProgramModalErrorMessage =

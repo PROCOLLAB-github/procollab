@@ -4,8 +4,9 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { Goal } from "@domain/project/goals.model";
-import { GoalFormData } from "./dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 
+/** HTTP-адаптер целей проекта: `/projects/<id>/goals`. */
 @Injectable({ providedIn: "root" })
 export class ProjectGoalsHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

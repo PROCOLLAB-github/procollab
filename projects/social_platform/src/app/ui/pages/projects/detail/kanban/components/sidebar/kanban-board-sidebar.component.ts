@@ -12,6 +12,7 @@ import { CreateBoardFormComponent } from "../create-board-form/create-board-form
 import { Project } from "@domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 
+/** Канбан (модуль отключён): боковая панель досок. */
 @Component({
   selector: "app-kanban-board-sidebar",
   templateUrl: "./kanban-board-sidebar.component.html",
@@ -72,7 +73,6 @@ export class KanbanBoardSidebarComponent {
   onContextSelect(option: any, state: boolean) {
     switch (option) {
       case 1: {
-        console.log(option);
         break;
       }
 
@@ -87,9 +87,6 @@ export class KanbanBoardSidebarComponent {
       }
 
       case 5: {
-        if (!this.isFirstBoard()) {
-          console.log("edited");
-        }
         break;
       }
     }
@@ -121,7 +118,6 @@ export class KanbanBoardSidebarComponent {
     switch (type) {
       case "project": {
         this.router.navigate(["office/projects/" + projectBoardInfo.id + "/kanban/board/"]);
-        console.log(projectBoardInfo.id);
         break;
       }
 

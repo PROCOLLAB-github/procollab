@@ -6,6 +6,7 @@ import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.
 import { Project } from "@domain/project/project.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: подать проект на конкурс программы; ошибка → `submit_competitive_project_error`. */
 @Injectable({ providedIn: "root" })
 export class SubmitCompetitiveProjectUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

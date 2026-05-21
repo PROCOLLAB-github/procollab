@@ -21,7 +21,7 @@ describe("ChatHttpAdapter", () => {
     setup();
     api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
-    adapter.loadMessages(42, 20, 10).subscribe();
+    adapter.loadMessages(42, "projects", 20, 10).subscribe();
 
     const [url, params] = api.get.calls.mostRecent().args;
     expect(url).toBe("/chats/projects/42/messages/");
@@ -33,7 +33,7 @@ describe("ChatHttpAdapter", () => {
     setup();
     api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
-    adapter.loadMessages(42).subscribe();
+    adapter.loadMessages(42, "projects").subscribe();
 
     const params = api.get.calls.mostRecent().args[1];
     expect(params?.has("offset")).toBeFalse();

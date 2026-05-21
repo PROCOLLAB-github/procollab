@@ -5,6 +5,9 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree } from "@angular
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
 
+/**
+ * Разрешает редактирование только собственного профиля.
+ */
 export const ProfileEditRequiredGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot
 ): Observable<boolean | UrlTree> => {

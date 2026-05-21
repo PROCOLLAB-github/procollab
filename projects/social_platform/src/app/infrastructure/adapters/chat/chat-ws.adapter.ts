@@ -19,6 +19,7 @@ import {
 } from "@domain/chat/chat.model";
 import { Observable } from "rxjs";
 
+/** Низкоуровневый адаптер chat WebSocket: подключение, команды и подписки на события. */
 @Injectable({ providedIn: "root" })
 export class ChatWsAdapter {
   private readonly websocketService = inject(WebsocketService);
@@ -28,6 +29,7 @@ export class ChatWsAdapter {
     const tokens = this.tokenService.getTokens();
     if (!tokens) throw new Error("No token provided");
 
+    // WebsocketService сам добавляет Bearer subprotocol из TokenService.
     return this.websocketService.connect("/chat/");
   }
 

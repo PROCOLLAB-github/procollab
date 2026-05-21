@@ -11,12 +11,11 @@ import {
 } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MembersComponent } from "@ui/pages/members/members.component";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { SearchesService } from "@api/searches/searches.service";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { LoggerService } from "@corelib";
 
 /**
@@ -63,7 +62,6 @@ export class MembersFiltersComponent {
    */
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly skillsInfoService = inject(SkillsInfoService);
   private readonly searchesService = inject(SearchesService);
   private readonly loggerService = inject(LoggerService);
 
@@ -77,7 +75,7 @@ export class MembersFiltersComponent {
    * Сигнал с опциями навыков для автодополнения
    * Обновляется при поиске навыков
    */
-  protected readonly skillsOptions = this.skillsInfoService.inlineSkills;
+  protected readonly skillsOptions = this.searchesService.inlineSkills;
 
   /**
    * Обработчик выбора специальности из списка автодополнения
@@ -126,7 +124,7 @@ export class MembersFiltersComponent {
    * @param query - Поисковый запрос
    */
   onSearchSkill(query: string): void {
-    this.skillsInfoService.onSearchSkill(query);
+    this.searchesService.onSearchSkill(query);
   }
 
   /**

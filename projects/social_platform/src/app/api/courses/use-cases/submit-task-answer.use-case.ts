@@ -6,6 +6,7 @@ import { CoursesRepositoryPort } from "@domain/courses/ports/courses.repository.
 import { TaskAnswerResponse } from "@domain/courses/courses.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: отправить ответ на задачу урока; ошибка → `submit_answer_error`. */
 @Injectable({ providedIn: "root" })
 export class SubmitTaskAnswerUseCase {
   private readonly coursesRepository = inject(CoursesRepositoryPort);

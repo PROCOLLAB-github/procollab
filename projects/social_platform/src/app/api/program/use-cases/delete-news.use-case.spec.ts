@@ -3,34 +3,35 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { DeleteNewsUseCase } from "./delete-news.use-case";
-import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROGRAM_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("DeleteNewsUseCase", () => {
   let useCase: DeleteNewsUseCase;
-  let repo: jasmine.SpyObj<ProgramNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProgramNewsRepositoryPort>("ProgramNewsRepositoryPort", [
-      "deleteNews",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["delete"]);
     TestBed.configureTestingModule({
-      providers: [DeleteNewsUseCase, { provide: ProgramNewsRepositoryPort, useValue: repo }],
+      providers: [DeleteNewsUseCase, { provide: PROGRAM_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(DeleteNewsUseCase);
   }
 
   it("делегирует (programId, newsId) в репозиторий", () => {
     setup();
-    repo.deleteNews.and.returnValue(of(undefined));
+    repo.delete.and.returnValue(of(undefined));
 
     useCase.execute(1, 42).subscribe();
 
-    expect(repo.deleteNews).toHaveBeenCalledOnceWith(1, 42);
+    expect(repo.delete).toHaveBeenCalledOnceWith("1", 42);
   });
 
   it("при успехе возвращает ok с удалённым newsId", done => {
     setup();
-    repo.deleteNews.and.returnValue(of(undefined));
+    repo.delete.and.returnValue(of(undefined));
 
     useCase.execute(1, 42).subscribe(result => {
       expect(result.ok).toBeTrue();
@@ -41,7 +42,7 @@ describe("DeleteNewsUseCase", () => {
 
   it("при ошибке возвращает fail { kind: 'unknown' }", done => {
     setup();
-    repo.deleteNews.and.returnValue(throwError(() => new Error("boom")));
+    repo.delete.and.returnValue(throwError(() => new Error("boom")));
 
     useCase.execute(1, 42).subscribe(result => {
       expect(result.ok).toBeFalse();

@@ -17,6 +17,7 @@ import { FetchProfileNewsUseCase } from "../../use-cases/fetch-profile-news.use-
 import { ReadProfileNewsUseCase } from "../../use-cases/read-profile-news.use-case";
 import { ToggleProfileNewsLikeUseCase } from "../../use-cases/toggle-profile-news-like.use-case";
 
+/** Фасад профиля (детали): новости профиля — CRUD, лайк, отметка прочтения по видимости. */
 @Injectable()
 export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
@@ -75,7 +76,7 @@ export class ProfileDetailInfoService {
 
   initCheckDescription(descEl?: ElementRef): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", !!this.user()?.aboutMe, descEl);
+      this.expandService.checkExpandable("description", !!this.user()?.personal.aboutMe, descEl);
     }, 150);
   }
 
@@ -161,7 +162,7 @@ export class ProfileDetailInfoService {
   private initializationProfileVields(): void {
     this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
       next: user => {
-        this.projectsDetailUIInfoService.applySetLoggedUserId("logged", user.id);
+        this.profileDetailUIInfoService.applySetLoggedUserId("logged", user.id);
       },
     });
 

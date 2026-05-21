@@ -5,6 +5,7 @@ import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { Resource, ResourceDto } from "@domain/project/resource.model";
 
+/** HTTP-адаптер ресурсов проекта: `/projects/<id>/resources`. */
 @Injectable({ providedIn: "root" })
 export class ProjectResourceHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

@@ -6,6 +6,7 @@ import { CoursesRepositoryPort } from "@domain/courses/ports/courses.repository.
 import { CourseDetail } from "@domain/courses/courses.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: получить детали курса по id; ошибка → `get_course_detail_error`. */
 @Injectable({ providedIn: "root" })
 export class GetCourseDetailUseCase {
   private readonly coursesRepository = inject(CoursesRepositoryPort);

@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
+/** Сценарий: установить новый пароль по токену сброса; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class SetPasswordUseCase {
   private readonly authRepositoryPort = inject(AuthRepositoryPort);

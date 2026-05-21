@@ -7,6 +7,7 @@ import { Subject } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 
+/** Фасад редактирования опыта работы профиля. */
 @Injectable()
 export class ProfileEditExperienceInfoService {
   private readonly fb = inject(FormBuilder);
@@ -67,6 +68,18 @@ export class ProfileEditExperienceInfoService {
     if (!this.showWorkFields()) {
       this.showWorkFields.set(true);
       this.resetSelectedIds();
+      return;
+    }
+
+    const workOverflow =
+      (this.profileForm.get("organization")?.value?.length ?? 0) > 50 ||
+      (this.profileForm.get("descriptionWork")?.value?.length ?? 0) > 400;
+
+    if (workOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей"
+      );
       return;
     }
 

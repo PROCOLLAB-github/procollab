@@ -6,17 +6,18 @@ import { forkJoin, map, Observable, of, tap } from "rxjs";
 import { StorageService } from "@api/storage/storage.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProfileNews } from "@domain/profile/profile-news.model";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
 import { ProfileNewsHttpAdapter } from "../../adapters/profile/profile-news-http.adapter";
+import { NewsRepositoryPort } from "@domain/news/port/news.repository.port";
 
+/** Репозиторий новостей профиля с дедупликацией событий чтения в sessionStorage. */
 @Injectable({ providedIn: "root" })
-export class ProfileNewsRepository implements ProfileNewsRepositoryPort {
+export class ProfileNewsRepository implements NewsRepositoryPort<ProfileNews> {
   private readonly profileNewsAdapter = inject(ProfileNewsHttpAdapter);
   private readonly storageService = inject(StorageService);
 
-  fetchNews(id: number): Observable<ApiPagination<ProfileNews>> {
+  fetchNews(id: string): Observable<ApiPagination<ProfileNews>> {
     return this.profileNewsAdapter
-      .fetchNews(String(id))
+      .fetchNews(id)
       .pipe(map(page => ({ ...page, results: plainToInstance(ProfileNews, page.results) })));
   }
 
@@ -35,6 +36,7 @@ export class ProfileNewsRepository implements ProfileNewsRepositoryPort {
   readNews(userId: number, newsIds: number[]): Observable<void[]> {
     const cachedReadNews = this.storageService.getItem<number[]>("readNews", sessionStorage) ?? [];
     const readNews = new Set<number>(cachedReadNews);
+    // Повторные просмотры не отправляются на бэк в рамках текущей сессии браузера.
     const unreadIds = newsIds.filter(id => !readNews.has(id));
 
     if (unreadIds.length === 0) {

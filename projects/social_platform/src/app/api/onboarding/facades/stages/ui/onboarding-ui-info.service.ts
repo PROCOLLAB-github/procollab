@@ -3,6 +3,7 @@
 import { computed, Injectable, signal } from "@angular/core";
 import { AsyncState, initial, isLoading } from "@domain/shared/async-state";
 
+/** UI-проекция онбординга: общие computed-сигналы шагов. */
 @Injectable()
 export class OnboardingUIInfoService {
   readonly stageSubmitting$ = signal<AsyncState<void>>(initial());

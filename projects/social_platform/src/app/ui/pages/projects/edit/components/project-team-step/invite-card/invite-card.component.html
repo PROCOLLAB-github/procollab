@@ -11,7 +11,7 @@
     </div>
 
     <div class="invite__user">
-      <app-avatar [url]="invite.user.avatar" [size]="40"></app-avatar>
+      <app-avatar [url]="invite.user.personal.avatar" [size]="40"></app-avatar>
       <h3 class="text-body-12 invite__role">
         {{ invite.user.firstName | truncate: 15 }} {{ invite.user.lastName | truncate: 15 }}
       </h3>

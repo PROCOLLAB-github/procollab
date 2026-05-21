@@ -20,15 +20,16 @@ import {
 } from "@ui/primitives";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { SwitchComponent } from "@ui/primitives/switch/switch.component";
-import { ControlErrorPipe } from "@corelib";
+import { ControlErrorPipe, ToSelectOptionsPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ToSelectOptionsPipe } from "@core/lib/pipes/transformers/options-transform.pipe";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
 
+/** Шаг редактирования проекта: дополнительные поля программы. */
 @Component({
   selector: "app-project-additional-step",
   templateUrl: "./project-additional-step.component.html",
@@ -64,6 +65,8 @@ export class ProjectAdditionalStepComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
+  protected readonly AppRoutes = AppRoutes;
+
   // Геттеры для получения данных из сервиса
   protected readonly additionalForm = this.projectAdditionalService.getAdditionalForm();
 
@@ -86,15 +89,13 @@ export class ProjectAdditionalStepComponent implements OnInit {
   protected readonly tooltipPosition = this.tooltipInfoService.tooltipPosition;
 
   /** Состояние видимости подсказки */
-  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
+  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
 
   protected readonly errorMessage = ErrorMessage;
 
   /** Показать подсказку */
-  toggleTooltip(option: "show" | "hide"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip()
-      : this.tooltipInfoService.hideTooltip();
+  toggleTooltip(): void {
+    this.tooltipInfoService.toggleTooltip("base");
   }
 
   /**

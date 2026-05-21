@@ -12,6 +12,9 @@ import {
 import { Observable, tap } from "rxjs";
 import { LoggerService } from "../services";
 
+/**
+ * Логирует HTTP-метод, URL, статус и длительность запроса.
+ */
 @Injectable()
 export class LoggingInterceptor implements HttpInterceptor {
   constructor(private readonly logger: LoggerService) {}

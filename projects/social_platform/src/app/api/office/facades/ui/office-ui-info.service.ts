@@ -3,6 +3,7 @@
 import { Injectable, signal } from "@angular/core";
 import { Invite } from "@domain/invite/invite.model";
 
+/** UI-состояние офиса: приглашения, пункты навигации и модалки верификации. */
 @Injectable()
 export class OfficeUIInfoService {
   readonly invites = signal<Invite[]>([]);
@@ -49,7 +50,7 @@ export class OfficeUIInfoService {
       { name: "программы", icon: "program", link: "program" },
       { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
       { name: "курсы", icon: "trajectories", link: "courses" },
-      { name: "чаты", icon: "message", link: "chats" },
+      // { name: "чаты", icon: "message", link: "chats" },
     ]);
   }
 }

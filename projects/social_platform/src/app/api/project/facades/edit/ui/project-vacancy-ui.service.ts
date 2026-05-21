@@ -5,8 +5,8 @@ import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { workExperienceList } from "@core/consts/lists/work-experience-list.const";
 import { workFormatList } from "@core/consts/lists/work-format-list.const";
-import { workScheludeList } from "@core/consts/lists/work-schelude-list.const";
-import { Skill } from "@domain/skills/skill";
+import { workScheduledList } from "@core/consts/lists/work-scheduled-list.const";
+import { Skill } from "@domain/skills/skill.model";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { AsyncState, initial, isLoading } from "@domain/shared/async-state";
 import { ProjectFormService } from "../project-form.service";
@@ -15,7 +15,8 @@ import { stripNullish } from "@utils/stripNull";
 import { ProjectsEditUIInfoService } from "./projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "../../../../toggle-fields/toggle-fields-info.service";
 
-@Injectable({ providedIn: "root" })
+/** UI-состояние вакансий проекта в форме редактирования. */
+@Injectable()
 export class ProjectVacancyUIService {
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);
@@ -26,7 +27,7 @@ export class ProjectVacancyUIService {
   /** Константы для выпадающих списков */
   public readonly workExperienceList = workExperienceList;
   public readonly workFormatList = workFormatList;
-  public readonly workScheludeList = workScheludeList;
+  public readonly workScheduledList = workScheduledList;
   public readonly rolesMembersList = rolesMembersList;
 
   /** Сигналы для выбранных значений селектов */
@@ -163,9 +164,9 @@ export class ProjectVacancyUIService {
     this.workFormatList.find(f => f.value === item.workFormat) &&
       this.selectedWorkFormatId.set(this.workFormatList.find(f => f.value === item.workFormat)!.id);
 
-    this.workScheludeList.find(s => s.value === item.workSchedule) &&
+    this.workScheduledList.find(s => s.value === item.workSchedule) &&
       this.selectedWorkScheduleId.set(
-        this.workScheludeList.find(s => s.value === item.workSchedule)!.id
+        this.workScheduledList.find(s => s.value === item.workSchedule)!.id
       );
 
     this.rolesMembersList.find(r => r.value === item.specialization) &&

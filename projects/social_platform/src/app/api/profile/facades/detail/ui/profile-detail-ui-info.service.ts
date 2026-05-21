@@ -1,16 +1,15 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
 import { User } from "@domain/auth/user.model";
-import { ProjectsDetailUIInfoService } from "../../../../project/facades/detail/ui/projects-detail-ui.service";
 
+/** Состояние интерфейса детальной страницы профиля и карточек направлений пользователя. */
 @Injectable()
 export class ProfileDetailUIInfoService {
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
-
   readonly user = signal<User | undefined>(undefined);
-  readonly loggedUserId = this.projectsDetailUIInfoService.loggedUserId;
+  readonly loggedUserId = signal<number>(0);
+  readonly profileId = signal<number>(0); // ID текущего пользователя.
 
   readonly isProfileEmpty = signal<boolean | undefined>(undefined);
   readonly isProfileFill = signal<boolean>(false);
@@ -22,7 +21,17 @@ export class ProfileDetailUIInfoService {
     const userWithProgress = data["data"]["user"];
     this.initializationDirections(userWithProgress);
     this.user.set(userWithProgress);
-    this.isProfileFill.set(userWithProgress.progress! < 100);
+
+    if (
+      this.user()?.id !== undefined &&
+      this.user()!.relations.progress! < 100 &&
+      !this.hasSeenProfileFillModal(this.user()!.id)
+    ) {
+      this.isProfileFill.set(true);
+      this.markSeenProfileFillModal(this.user()!.id);
+    } else {
+      this.isProfileFill.set(false);
+    }
   }
 
   applyProfileEmpty(): void {
@@ -31,10 +40,14 @@ export class ProfileDetailUIInfoService {
         this.user()?.firstName &&
         this.user()?.lastName &&
         this.user()?.email &&
-        this.user()?.avatar &&
-        this.user()?.birthday
+        this.user()?.personal.avatar &&
+        this.user()?.personal.birthday
       )
     );
+  }
+
+  applySetLoggedUserId(type: "logged" | "profile", profileId: number): void {
+    type === "logged" ? this.loggedUserId.set(profileId) : this.profileId.set(profileId);
   }
 
   applyOpenWorkInfoModal(): void {
@@ -47,9 +60,29 @@ export class ProfileDetailUIInfoService {
         2,
         ["навыки", "достижения"],
         ["squiz", "medal"],
-        [user.skills, user.achievements],
+        [user.relations.skills, user.relations.achievements],
         ["array", "array"]
-      )!
+      )!.filter(item => !Array.isArray(item.about) || item.about.length > 0)
     );
+  }
+
+  private getProfileFillSeenKey(userId: number): string {
+    return `profile_${userId}_fill_modal_seen`;
+  }
+
+  private hasSeenProfileFillModal(userId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getProfileFillSeenKey(userId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenProfileFillModal(userId: number): void {
+    try {
+      localStorage.setItem(this.getProfileFillSeenKey(userId), "1");
+    } catch (e) {
+      // ignore storage errors
+    }
   }
 }

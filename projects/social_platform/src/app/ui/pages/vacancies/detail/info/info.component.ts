@@ -10,6 +10,7 @@ import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-in
 import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 import { VacanciesRightSideComponent } from "./components/vacancies-right-side/vacancies-right-side.component";
 import { VacanciesLeftSideComponent } from "./components/vacancies-left-side/vacancies-left-side.component";
+import { AppRoutes } from "@api/paths/app-routes";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
@@ -33,7 +34,6 @@ import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.comp
  * Интеграция с сервисами:
  * - VacancyService - получение данных вакансии через резолвер
  * - ProjectService - загрузка информации о проекте
- * - SubscriptionPlansService - получение планов подписки
  * - AuthService - информация о текущем пользователе
  *
  * Жизненный цикл:
@@ -74,6 +74,8 @@ export class VacancyInfoComponent implements OnInit {
   private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
 
   protected readonly vacancy = this.vacancyDetailUIInfoService.vacancy;
+
+  protected readonly AppRoutes = AppRoutes;
 
   /** Флаг отображения модального окна с результатом */
   protected readonly resultModal = this.vacancyDetailUIInfoService.resultModal;

@@ -11,14 +11,13 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/primitives";
-import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { expandElement } from "@utils/expand-element";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { AdvertCardComponent } from "./advert-card/advert-card.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
@@ -53,7 +52,6 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
     ParseBreaksPipe,
     TruncatePipe,
     AvatarComponent,
-    AdvertCardComponent,
   ],
   templateUrl: "./open-vacancy.component.html",
   styleUrl: "./open-vacancy.component.scss",
@@ -61,6 +59,7 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 })
 export class OpenVacancyComponent implements AfterViewInit {
   @Input() feedItem!: Vacancy;
+  protected readonly AppRoutes = AppRoutes;
 
   /**
    *

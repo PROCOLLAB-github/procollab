@@ -9,6 +9,7 @@ import {
   TaskAnswerResponse,
 } from "../courses.model";
 
+/** Порт репозитория курсов: курсы, детали, структура, урок, отправка ответа на задачу. */
 export abstract class CoursesRepositoryPort {
   abstract getCourses(): Observable<CourseCard[]>;
 

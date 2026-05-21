@@ -6,8 +6,9 @@ import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
-import { CreateVacancyDto } from "@api/project/dto/create-vacancy.model";
+import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
 
+/** HTTP-адаптер вакансий: `/vacancies`, `/projects` (поиск, CRUD, отклики, accept/reject). */
 @Injectable({ providedIn: "root" })
 export class VacancyHttpAdapter {
   private readonly VACANCIES_URL = "/vacancies";

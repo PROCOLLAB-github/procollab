@@ -6,6 +6,7 @@ import { UpdateInviteCommand } from "@domain/invite/commands/update-invite.comma
 import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: изменить роль/специализацию приглашения; ошибка → `update_invite_error`. */
 @Injectable({ providedIn: "root" })
 export class UpdateInviteUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);

@@ -3,11 +3,11 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { IconComponent } from "@uilib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
+import { TruncatePipe, UserLinksPipe } from "@corelib";
 import { ExpandService } from "@api/expand/expand.service";
 import { Project } from "@domain/project/project.model";
 
+/** Правая колонка детали проекта: команда, вакансии. */
 @Component({
   selector: "app-projects-right-side",
   templateUrl: "./projects-right-side.component.html",
@@ -19,7 +19,7 @@ import { Project } from "@domain/project/project.model";
 export class ProjectsRightSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
-  private readonly expandService = inject(ExpandService);
+  protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllAchievements = this.expandService.readAllAchievements; // Флаг показа всех достижений
+  protected readonly readAllAchievements = this.expandService.readAll()["achievements"]; // Флаг показа всех достижений
 }

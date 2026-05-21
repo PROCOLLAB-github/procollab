@@ -12,6 +12,7 @@ import { toAsyncState } from "@domain/shared/to-async-state";
 import { PasswordError } from "@domain/auth/results/password.result";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Управляет сбросом и установкой пароля, а также состоянием форм пароля. */
 @Injectable()
 export class AuthPasswordService {
   private readonly route = inject(ActivatedRoute);
@@ -27,13 +28,11 @@ export class AuthPasswordService {
 
   private readonly destroy$ = new Subject<void>();
 
-  // ResetPassword-Confirmation Component
   readonly email = this.route.queryParams.pipe(
     map(r => r["email"]),
     takeUntil(this.destroy$)
   );
 
-  // ResetPassword Component
   readonly password$ = this.authUIInfoService.password$;
 
   readonly credsSubmitInitiated = this.authUIInfoService.credsSubmitInitiated;
@@ -41,12 +40,10 @@ export class AuthPasswordService {
   init(): void {
     const token = this.route.snapshot.queryParamMap.get("token");
     if (!token) {
-      // Handle the case where token is not present
       this.logger.error("Token is missing");
     }
   }
 
-  // ResetPassword Component
   onSubmitResetPassword(): void {
     if (
       !this.validationService.getFormValidation(this.resetForm) ||
@@ -74,7 +71,6 @@ export class AuthPasswordService {
       .subscribe({ next: result => this.password$.set(result) });
   }
 
-  // SetPassword Component
   onSubmitSetPassword(): void {
     this.credsSubmitInitiated.set(true);
     const token = this.route.snapshot.queryParamMap.get("token");

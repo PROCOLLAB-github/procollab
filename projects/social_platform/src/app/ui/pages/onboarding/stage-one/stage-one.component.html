@@ -8,12 +8,12 @@
         [text]="
           'Дизайнер, веб-разработчик, инженер? Определяйтесь и пишите, кем вы хотите стать или кем уже стали P.S. Дальше можно будет изменить выбор.'
         "
-        [isVisible]="isHintAuthVisible()"
+        [isVisible]="isHintAuthVisible('auth')"
         [position]="'right'"
         [tooltipWidth]="300"
         customClass="tooltip__hint"
-        (show)="toggleTooltip('show', 'auth')"
-        (hide)="toggleTooltip('hide', 'auth')"
+        (show)="toggleTooltip('auth')"
+        (hide)="toggleTooltip('auth')"
       ></app-tooltip>
     </div>
 
@@ -68,12 +68,12 @@
             [text]="
               'Это наша база со всеми специальностями. Если не найдете свою, пишите в @procollab_support – мы обязательно добавим вашу профессию, а вы получите +респект'
             "
-            [isVisible]="isHintLibVisible()"
+            [isVisible]="isHintLibVisible('lib')"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="tooltip__hint"
-            (show)="toggleTooltip('show', 'lib')"
-            (hide)="toggleTooltip('hide', 'lib')"
+            (show)="toggleTooltip('lib')"
+            (hide)="toggleTooltip('lib')"
           ></app-tooltip>
         </div>
       </div>

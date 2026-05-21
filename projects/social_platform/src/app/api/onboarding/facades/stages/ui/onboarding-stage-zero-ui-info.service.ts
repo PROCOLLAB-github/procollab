@@ -10,8 +10,12 @@ import {
   educationUserType,
 } from "@core/consts/lists/education-info-list.const";
 import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
-import { User } from "@domain/auth/user.model";
+import { User, UserInput } from "@domain/auth/user.model";
 
+/**
+ * Состояние интерфейса первого шага онбординга: FormArray для образования, опыта,
+ * языков и достижений, а также справочники и состояния редактирования.
+ */
 @Injectable()
 export class OnboardingStageZeroUIInfoService {
   private readonly fb = inject(FormBuilder);
@@ -57,7 +61,7 @@ export class OnboardingStageZeroUIInfoService {
     userLanguages: this.fb.array([]),
     achievements: this.fb.array([]),
 
-    // education
+    // Поля временной формы образования.
     organizationName: [""],
     entryYear: [null],
     completionYear: [null],
@@ -65,7 +69,7 @@ export class OnboardingStageZeroUIInfoService {
     educationStatus: [null],
     educationLevel: [null],
 
-    // work
+    // Поля временной формы опыта работы.
     organizationNameWork: [""],
     entryYearWork: [null],
     completionYearWork: [null],
@@ -86,7 +90,7 @@ export class OnboardingStageZeroUIInfoService {
     this.profile.set(p);
   }
 
-  applyInitStageZero(fv: Partial<User>): void {
+  applyInitStageZero(fv: UserInput): void {
     this.stageForm.patchValue({
       avatar: fv.avatar,
       city: fv.city,
@@ -95,14 +99,14 @@ export class OnboardingStageZeroUIInfoService {
     });
   }
 
-  applyInitFormValues(fv: Partial<User>): void {
+  applyInitFormValues(fv: UserInput): void {
     this.stageForm.patchValue({
       avatar: fv.avatar ?? "",
       city: fv.city ?? "",
     });
   }
 
-  applyInitWorkExperience(formValues: Partial<User>): void {
+  applyInitWorkExperience(formValues: UserInput): void {
     this.workExperience.clear();
     formValues.workExperience?.forEach(work => {
       this.workExperience.push(
@@ -122,7 +126,7 @@ export class OnboardingStageZeroUIInfoService {
     });
   }
 
-  applyInitEducation(formValues: Partial<User>): void {
+  applyInitEducation(formValues: UserInput): void {
     this.education.clear();
     formValues?.education?.forEach(edu => {
       this.education.push(
@@ -143,7 +147,7 @@ export class OnboardingStageZeroUIInfoService {
     });
   }
 
-  applyInitUserLanguages(formValues: Partial<User>): void {
+  applyInitUserLanguages(formValues: UserInput): void {
     this.userLanguages.clear();
     formValues.userLanguages?.forEach(lang => {
       this.userLanguages.push(
@@ -155,7 +159,7 @@ export class OnboardingStageZeroUIInfoService {
     });
   }
 
-  applyInitAchievements(formValues: Partial<User>): void {
+  applyInitAchievements(formValues: UserInput): void {
     formValues.achievements?.length &&
       formValues.achievements?.forEach(achievement =>
         this.addAchievement(achievement.id, achievement.title, achievement.status)

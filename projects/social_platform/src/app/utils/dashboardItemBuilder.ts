@@ -2,20 +2,20 @@
 
 import { Project } from "@domain/project/project.model";
 
-export interface DashboardItem {
+export interface DashboardItem<TItem = Project> {
   sectionName: string;
   title: string;
   iconName: string;
-  arrayItems: Project[];
+  arrayItems: TItem[];
 }
 
-export const dashboardItemBuilder = (
+export const dashboardItemBuilder = <TItem = Project>(
   amount: number,
   sections: string[],
   titles: string[],
   icons: string[],
-  arrays: Project[][]
-): DashboardItem[] => {
+  arrays: TItem[][]
+): DashboardItem<TItem>[] => {
   if (amount <= 0) return [];
 
   return Array.from({ length: amount }, (_, i) => ({

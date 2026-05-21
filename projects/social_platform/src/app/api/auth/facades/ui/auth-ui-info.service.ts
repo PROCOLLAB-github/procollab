@@ -9,12 +9,13 @@ import { PasswordError } from "@domain/auth/results/password.result";
 import { RegisterError } from "@domain/auth/results/register.result";
 import { AsyncState, initial, isFailure, isLoading } from "@domain/shared/async-state";
 
+/** Хранит формы и состояние auth-страниц: логин, регистрация и сброс пароля. */
 @Injectable()
 export class AuthUIInfoService {
   private readonly fb = inject(FormBuilder);
   private readonly validationService = inject(ValidationService);
 
-  // login
+  // Состояние логина.
   readonly showPasswordRepeat = signal<boolean>(false);
   readonly showPassword = signal<boolean>(false);
 
@@ -22,7 +23,7 @@ export class AuthUIInfoService {
   readonly loginIsSubmitting = computed(() => isLoading(this.login$()));
   readonly errorWrongAuth = computed(() => isFailure(this.login$()));
 
-  // password
+  // Состояние сброса пароля.
   readonly credsSubmitInitiated = signal<boolean>(false);
   readonly password$ = signal<AsyncState<void, PasswordError>>(initial());
   readonly isSubmitting = computed(() => isLoading(this.password$()));
@@ -32,7 +33,7 @@ export class AuthUIInfoService {
   });
   readonly errorRequest = computed(() => isFailure(this.password$()));
 
-  // register
+  // Состояние регистрации.
   readonly registerAgreement = signal<boolean>(false);
   readonly ageAgreement = signal<boolean>(false);
   readonly infoSubmitInitiated = signal<boolean>(false);
@@ -42,13 +43,13 @@ export class AuthUIInfoService {
   readonly isUserCreationModalError = computed(() => isFailure(this.register$()));
   readonly step = signal<"credentials" | "info">("credentials");
 
-  // login
+  // Форма логина.
   readonly loginForm = this.fb.group({
     email: ["", [Validators.required, Validators.email]],
     password: ["", [Validators.required]],
   });
 
-  // register
+  // Форма регистрации.
   readonly registerForm = this.fb.group(
     {
       firstName: ["", [Validators.required, this.validationService.useLanguageValidator()]],
@@ -76,7 +77,7 @@ export class AuthUIInfoService {
     email: ["", [Validators.required, Validators.email]],
   });
 
-  // set password
+  // Форма установки нового пароля.
   readonly passwordForm = this.fb.group(
     {
       password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
@@ -85,7 +86,7 @@ export class AuthUIInfoService {
     { validators: [this.validationService.useMatchValidator("password", "passwordRepeated")] }
   );
 
-  // Login Component
+  // Переключает видимость пароля в формах логина и регистрации.
   toggleShowPassword(section: "login" | "register", type?: "repeat" | "first") {
     if (section === "login") {
       this.showPassword.set(!this.showPassword());

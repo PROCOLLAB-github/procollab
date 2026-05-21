@@ -6,7 +6,7 @@ import { AuthRepository } from "./auth.repository";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
 import { TokenService } from "@corelib";
 import { User } from "@domain/auth/user.model";
-import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProjectDto } from "../../adapters/project/dto/project.dto";
 
@@ -115,13 +115,16 @@ describe("AuthRepository", () => {
   it("updateProfile делегирует в adapter.saveProfile и пушит в profile$", done => {
     setup();
     const updated = { id: 1, firstName: "A" } as User;
+    adapter.getProfile.and.returnValue(of({ id: 1 } as User));
     adapter.saveProfile.and.returnValue(of(updated));
+    repository.fetchProfile().subscribe();
 
     repository.updateProfile({ firstName: "A" }).subscribe();
 
     repository.profile.subscribe(profile => {
-      expect(profile).toBe(updated);
-      expect(adapter.saveProfile).toHaveBeenCalledOnceWith({ firstName: "A" });
+      expect(profile).toBeInstanceOf(User);
+      expect(profile.firstName).toBe("A");
+      expect(adapter.saveProfile).toHaveBeenCalledOnceWith({ firstName: "A", id: 1 });
       done();
     });
   });

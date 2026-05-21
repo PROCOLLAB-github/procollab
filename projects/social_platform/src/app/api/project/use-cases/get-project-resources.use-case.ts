@@ -6,6 +6,7 @@ import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-res
 import { Resource } from "@domain/project/resource.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: ресурсы проекта; ошибка → `get_project_resources_error`. */
 @Injectable({ providedIn: "root" })
 export class GetProjectResourcesUseCase {
   private readonly projectResourceRepositoryPort = inject(ProjectResourceRepositoryPort);

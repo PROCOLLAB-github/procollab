@@ -1,7 +1,7 @@
 /** @format */
 
 import { Program } from "../program/program.model";
-import { FeedNews } from "../project/project-news.model";
+import { FeedNews } from "../news/project-news.model";
 import { Vacancy } from "../vacancy/vacancy.model";
 
 /**

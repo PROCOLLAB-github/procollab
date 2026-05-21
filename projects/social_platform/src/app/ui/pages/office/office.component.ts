@@ -26,7 +26,8 @@ import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.servi
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ChatStateService } from "@api/chat/chat-state.service";
-import { ChatInfoService } from "@api/chat/facades/chat-info.service";
+import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -58,7 +59,7 @@ import { ChatInfoService } from "@api/chat/facades/chat-info.service";
     ProfileControlPanelComponent,
     ProgramSidebarCardComponent,
   ],
-  providers: [OfficeInfoService, OfficeUIInfoService],
+  providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit, OnDestroy {
@@ -67,6 +68,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly getActualProgramsUseCase = inject(GetActualProgramsUseCase);
   public readonly authRepository = inject(AuthInfoService);
+  private readonly authRegisterService = inject(AuthRegisterService);
   public readonly chatStateService = inject(ChatStateService);
   private readonly profile = toSignal(this.authRepository.profile, { initialValue: null });
 
@@ -132,6 +134,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.officeInfoService.onLogout();
+  }
+
+  downloadPolicy(event: Event): void {
+    event.stopPropagation();
+    this.authRegisterService.downloadPolicy();
   }
 
   private tryShowRegisteredProgramModal(): void {

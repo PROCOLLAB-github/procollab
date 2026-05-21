@@ -16,11 +16,3 @@ export interface GoalDto {
   responsibleInfo: ResponsibleInfo;
   isDone: boolean;
 }
-
-export class GoalFormData {
-  id?: number;
-  title!: string;
-  completionDate!: string;
-  responsible!: number;
-  isDone!: boolean;
-}

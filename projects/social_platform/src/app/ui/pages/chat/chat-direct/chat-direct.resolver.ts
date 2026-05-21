@@ -2,14 +2,14 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ChatDirectService } from "@api/chat/chat-direct/chat-direct.service";
 import { ChatItem } from "@domain/chat/chat-item.model";
+import { ChatGroupsRepositoryPort } from "@domain/chat/ports/chat-groups.port";
 
 /**
  * Резолвер для загрузки данных конкретного прямого чата
  *
  * Извлекает chatId из параметров маршрута и загружает
- * информацию о чате через ChatDirectService
+ * информацию о чате через ChatGroupsRepositoryPort
  *
  * @param route - Снимок активного маршрута с параметрами
  * @returns {Observable<ChatItem>} Observable с данными чата
@@ -19,9 +19,9 @@ import { ChatItem } from "@domain/chat/chat-item.model";
  * Извлекает chatId из параметров маршрута и вызывает getDirect()
  */
 export const ChatDirectResolver: ResolveFn<ChatItem> = (route: ActivatedRouteSnapshot) => {
-  const chatDirectService = inject(ChatDirectService);
+  const chatGroupsRepository = inject(ChatGroupsRepositoryPort);
 
   const chatId = route.params["chatId"];
 
-  return chatDirectService.getDirect(chatId);
+  return chatGroupsRepository.getChat(chatId);
 };

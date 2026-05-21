@@ -3,7 +3,7 @@
 import { ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, fromEvent, map, of, Subject, takeUntil, tap, throttleTime } from "rxjs";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { LoadingService } from "@ui/services/loading/loading.service";
 import { ExpandService } from "../../../expand/expand.service";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
@@ -16,6 +16,10 @@ import { DeleteNewsUseCase } from "../../use-cases/delete-news.use-case";
 import { ToggleLikeUseCase } from "../../use-cases/toggle-like.use-case";
 import { EditNewsUseCase } from "../../use-cases/edit-news.use-case";
 
+/**
+ * Координирует основную вкладку программы: данные резолвера, новости,
+ * раскрытие описания, пагинацию и действия пользователя с новостями.
+ */
 @Injectable()
 export class ProgramDetailMainService {
   private readonly router = inject(Router);
@@ -89,6 +93,7 @@ export class ProgramDetailMainService {
           this.programDetailMainUIInfoService.applyFormatingProgramData(program);
         }),
         concatMap(program => {
+          // Новости программы доступны только участникам программы.
           if (program.isUserMember) {
             return this.fetchNews(0, this.fetchLimit());
           } else {
@@ -112,10 +117,10 @@ export class ProgramDetailMainService {
 
           const news = result.value;
 
-          if (news.results.length) {
-            this.newsInfoService.applySetNews(news);
-            this.programDetailMainUIInfoService.applyInitProgram(news);
+          this.newsInfoService.applySetNews(news);
+          this.programDetailMainUIInfoService.applyInitProgram(news);
 
+          if (news.results.length) {
             setTimeout(() => {
               this.setupNewsObserver();
             }, 100);
@@ -182,11 +187,9 @@ export class ProgramDetailMainService {
   }
 
   private onNewsInVew(entries: IntersectionObserverEntry[]): void {
-    const ids = entries.map(e => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return e.target.dataset.id;
-    });
+    const ids = entries
+      .map(e => Number((e.target as HTMLElement).dataset["id"]))
+      .filter(id => Number.isFinite(id));
     this.readNewsUseCase
       .execute(this.route.snapshot.params["programId"], ids)
       .pipe(takeUntil(this.destroy$))

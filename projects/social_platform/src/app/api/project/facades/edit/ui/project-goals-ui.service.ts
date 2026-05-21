@@ -3,6 +3,7 @@
 import { computed, Injectable, signal } from "@angular/core";
 import { FormArray } from "@angular/forms";
 
+/** UI-состояние целей проекта в форме редактирования. */
 @Injectable({ providedIn: "root" })
 export class ProjectGoalsUIService {
   readonly goalLeaderShowModal = signal<boolean>(false);

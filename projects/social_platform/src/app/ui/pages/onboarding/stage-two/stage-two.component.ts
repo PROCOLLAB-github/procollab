@@ -10,12 +10,12 @@ import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.comp
 import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";
 import { OnboardingStageTwoInfoService } from "@api/onboarding/facades/stages/onboarding-stage-two-info.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
+import { SearchesService } from "@api/searches/searches.service";
 
 /**
  * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
@@ -85,19 +85,19 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
-  private readonly skillsService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
 
   protected readonly stageForm = this.onboardingStageTwoUIInfoService.stageForm;
 
-  protected readonly nestedSkills$ = this.skillsService.getSkillsNested();
+  protected readonly nestedSkills$ = this.searchesService.getSkillsNested();
 
   protected readonly searchedSkills = this.onboardingStageTwoUIInfoService.searchedSkills;
 
   // Для управления открытыми группами навыков
   protected readonly openSkillGroup = this.onboardingStageTwoUIInfoService.openSkillGroup;
 
-  protected readonly isHintAuthVisible = this.tooltipInfoService.isHintAuthVisible;
-  protected readonly isHintLibVisible = this.tooltipInfoService.isHintLibVisible;
+  protected readonly isHintAuthVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintLibVisible = this.tooltipInfoService.isVisible;
 
   protected readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
   protected readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
@@ -139,10 +139,8 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     this.onboardingStageTwoInfoService.destroy();
   }
 
-  toggleTooltip(option: "show" | "hide", type: "auth" | "lib"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip(type)
-      : this.tooltipInfoService.hideTooltip(type);
+  toggleTooltip(key: "auth" | "lib"): void {
+    this.tooltipInfoService.toggleTooltip(key);
   }
 
   onSkipRegistration(): void {

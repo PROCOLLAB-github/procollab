@@ -7,6 +7,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: страница ленты (offset/limit/type); ошибка → `fetch_feed_error`. */
 @Injectable({ providedIn: "root" })
 export class FetchFeedUseCase {
   private readonly feedRepositoryPort = inject(FeedRepositoryPort);

@@ -6,6 +6,7 @@ import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { ProjectCountDto, ProjectDto, ProjectListDto } from "./dto/project.dto";
 
+/** HTTP-адаптер проектов: `/projects`, `/auth/users` (CRUD, счётчики, проекты лидера). */
 @Injectable({ providedIn: "root" })
 export class ProjectHttpAdapter {
   private readonly PROJECTS_URL = "/projects";

@@ -16,7 +16,6 @@ import {
   CamelcaseInterceptor,
   LoggingInterceptor,
   PRODUCTION,
-  SKILLS_API_URL,
 } from "@corelib";
 import { environment } from "@environment";
 import { registerLocaleData } from "@angular/common";
@@ -73,10 +72,6 @@ export const APP_CONFIG: ApplicationConfig = {
     {
       provide: API_URL,
       useValue: environment.apiUrl,
-    },
-    {
-      provide: SKILLS_API_URL,
-      useValue: environment.skillsApiUrl,
     },
     { provide: PRODUCTION, useValue: environment.production },
     {

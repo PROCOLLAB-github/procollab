@@ -27,7 +27,7 @@ import { OnboardingStageThreeComponent } from "@ui/pages/onboarding/stage-three/
  * - stage-0: Базовая информация профиля (фото, город, образование, опыт работы)
  * - stage-1: Выбор специализации пользователя
  * - stage-2: Выбор навыков пользователя
- * - stage-3: Выбор типа пользователя (ментор/менти)
+ * - stage-3: Выбор типа пользователя (участник, инвестор, ментор, эксперт)
  */
 export const ONBOARDING_ROUTES: Routes = [
   {

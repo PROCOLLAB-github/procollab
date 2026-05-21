@@ -7,6 +7,7 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
 
+/** HTTP-адаптер участников: `/auth/public-users` (фильтр user_type разделяет members/mentors). */
 @Injectable({ providedIn: "root" })
 export class MemberHttpAdapter {
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";
@@ -22,12 +23,5 @@ export class MemberHttpAdapter {
       allParams = allParams.appendAll(otherParams);
     }
     return this.apiService.get<ApiPagination<User>>(`${this.AUTH_PUBLIC_USERS_URL}/`, allParams);
-  }
-
-  getMentors(skip: number, take: number): Observable<ApiPagination<User>> {
-    return this.apiService.get<ApiPagination<User>>(
-      `${this.AUTH_PUBLIC_USERS_URL}/`,
-      new HttpParams({ fromObject: { user_type: "2,3,4", limit: take, offset: skip } })
-    );
   }
 }

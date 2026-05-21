@@ -15,11 +15,11 @@ import { RouterLink } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/primitives";
-import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe, TruncatePipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА
@@ -59,6 +59,7 @@ import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
+  protected readonly AppRoutes = AppRoutes;
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
   @Input() type: "vacancies" | "project" = "project";
 

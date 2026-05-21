@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "../project/facades/detail/ui/projects-detail-ui.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
+/** Состояние детали задачи канбана (модуль отключён): открытие/закрытие/удаление карточки. */
 @Injectable({
   providedIn: "root",
 })

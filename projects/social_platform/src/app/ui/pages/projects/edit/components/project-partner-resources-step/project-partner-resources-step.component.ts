@@ -14,6 +14,7 @@ import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit
 import { ProjectPartnerService } from "@api/project/facades/edit/project-partner.service";
 import { ProjectResourceService } from "@api/project/facades/edit/project-resources.service";
 
+/** Шаг редактирования проекта: партнёры и ресурсы. */
 @Component({
   selector: "app-project-partner-resources-step",
   templateUrl: "./project-partner-resources-step.component.html",

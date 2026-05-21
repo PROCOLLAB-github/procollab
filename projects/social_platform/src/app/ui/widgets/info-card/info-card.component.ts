@@ -11,21 +11,20 @@ import {
 } from "@angular/core";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { AsyncPipe, CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { YearsFromBirthdayPipe } from "@corelib";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { YearsFromBirthdayPipe, TruncatePipe } from "@corelib";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";
 import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-case";
 import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-project-subscription.use-case";
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -39,7 +38,6 @@ import { AppRoutes } from "@api/paths/app-routes";
     CommonModule,
     AvatarComponent,
     IconComponent,
-    AsyncPipe,
     ModalComponent,
     ButtonComponent,
     ClickOutsideModule,
@@ -59,6 +57,8 @@ export class InfoCardComponent {
   public readonly industryRepository = inject(IndustryInfoService);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
+
+  protected readonly AppRoutes = AppRoutes;
 
   @Input() info?: any;
   @Input() type: "invite" | "projects" | "members" | "rating" = "projects";

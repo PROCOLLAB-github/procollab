@@ -68,7 +68,21 @@
     }
 
     &--point {
-      color: var(--accent);
+      opacity: 0;
+      transition:
+        opacity 0.2s ease-in-out,
+        color 0.2s ease-in-out;
+
+      &:hover {
+        p {
+          color: var(--accent);
+        }
+
+        &--point {
+          color: var(--accent);
+          opacity: 1;
+        }
+      }
     }
   }
 }

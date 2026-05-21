@@ -2,12 +2,13 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
+import { PROFILE_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: удалить новость профиля; ошибка → `delete_profile_news_error`. */
 @Injectable({ providedIn: "root" })
 export class DeleteProfileNewsUseCase {
-  private readonly profileNewsRepositoryPort = inject(ProfileNewsRepositoryPort);
+  private readonly profileNewsRepositoryPort = inject(PROFILE_NEWS_REPOSITORY);
 
   execute(
     userId: string,

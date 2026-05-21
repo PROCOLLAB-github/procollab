@@ -10,6 +10,7 @@ import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-cri
 import { ProjectRatingHttpAdapter } from "../../adapters/project/project-rating-http.adapter";
 import { ProjectRatingRepositoryPort } from "@domain/project/ports/project-rating.repository.port";
 
+/** Репозиторий оценки проектов программы: список, фильтры, выставление оценок. */
 @Injectable({ providedIn: "root" })
 export class ProjectRatingRepository implements ProjectRatingRepositoryPort {
   private readonly projectRatingAdapter = inject(ProjectRatingHttpAdapter);

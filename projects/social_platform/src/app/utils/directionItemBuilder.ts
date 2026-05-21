@@ -1,19 +1,19 @@
 /** @format */
 
-export interface DirectionItem {
+export interface DirectionItem<TAbout = any> {
   direction: string;
   icon: string;
-  about: string;
+  about: TAbout;
   type: string;
 }
 
-export const directionItemBuilder = (
+export const directionItemBuilder = <TAbout>(
   amount: number,
   directions: string[],
   icons: string[],
-  abouts: string[] | any[],
+  abouts: TAbout[],
   types: string[]
-) => {
+): DirectionItem<TAbout>[] | undefined => {
   if (amount <= 0) return;
 
   return Array.from({ length: amount }, (_, i) => ({

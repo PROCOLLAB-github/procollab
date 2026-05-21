@@ -8,11 +8,13 @@ import {
   Input,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { EditStep, ProjectStepService } from "@api/project/project-step.service";
+import { ProjectStepService } from "@api/project/project-step.service";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { Navigation } from "@domain/other/navigation.model";
+import { EditStep } from "@core/lib/models/edit-step";
 
+/** Навигация по шагам формы проекта. */
 @Component({
   selector: "app-project-navigation",
   templateUrl: "./project-navigation.component.html",

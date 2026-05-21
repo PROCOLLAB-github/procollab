@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { ApiService } from "@corelib";
 import { ProjectNewsHttpAdapter } from "./project-news-http.adapter";
-import { FeedNews } from "@domain/project/project-news.model";
+import { FeedNews } from "@domain/news/project-news.model";
 
 describe("ProjectNewsHttpAdapter", () => {
   let adapter: ProjectNewsHttpAdapter;

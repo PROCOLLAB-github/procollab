@@ -16,6 +16,7 @@ import { ExpandService } from "@api/expand/expand.service";
 import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 
+/** Левая колонка детали вакансии. */
 @Component({
   selector: "app-vacancies-left-side",
   templateUrl: "./vacancies-left-side.component.html",

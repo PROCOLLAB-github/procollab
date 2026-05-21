@@ -11,14 +11,15 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { AvatarComponent } from "../avatar/avatar.component";
-import { IconComponent } from "@uilib";
 import { getPriorityType } from "@utils/getPriorityType";
-import { TagComponent } from "../tag/tag.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { TagDto } from "@api/kanban/dto/tag.model.dto";
+import { TagDto } from "@domain/kanban/dto/tag.model.dto";
 import { CreateTagFormComponent } from "@ui/pages/projects/detail/kanban/components/create-tag-form/create-tag-form.component";
+import { TagComponent } from "../tag/tag.component";
+import { AvatarComponent } from "../avatar/avatar.component";
+import { IconComponent } from "../icon/icon.component";
 
+/** Примитив: выпадающий список. */
 @Component({
   selector: "app-dropdown",
   standalone: true,

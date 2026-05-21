@@ -13,6 +13,7 @@ import { VacancyFilterComponent } from "@ui/widgets/vacancy-filter/vacancy-filte
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
 
+/** Раздел вакансий: shell с router-outlet. */
 @Component({
   selector: "app-vacancies",
   templateUrl: "./vacancies.component.html",

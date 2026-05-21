@@ -42,6 +42,7 @@ export class DetailInfoService {
   readonly userType = signal<number | undefined>(undefined);
   readonly profile = this.detailProfileInfoService.profile;
   readonly queryCourseId = signal<number | null>(null);
+  readonly isProfileFill = this.profileDetailUIInfoService.isProfileFill;
 
   // Сигналы для работы с модальными окнами с текстом
   readonly errorMessageModal = signal("");
@@ -212,7 +213,7 @@ export class DetailInfoService {
         )
         .subscribe({
           next: user => {
-            this.userType.set(user!.userType);
+            this.userType.set(user!.personal.userType);
             this.profile.set(user);
           },
         });

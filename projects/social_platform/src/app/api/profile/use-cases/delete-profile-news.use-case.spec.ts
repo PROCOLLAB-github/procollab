@@ -3,16 +3,19 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { DeleteProfileNewsUseCase } from "./delete-profile-news.use-case";
-import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROFILE_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("DeleteProfileNewsUseCase", () => {
   let useCase: DeleteProfileNewsUseCase;
-  let repo: jasmine.SpyObj<ProfileNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProfileNewsRepositoryPort>("ProfileNewsRepositoryPort", ["delete"]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["delete"]);
     TestBed.configureTestingModule({
-      providers: [DeleteProfileNewsUseCase, { provide: ProfileNewsRepositoryPort, useValue: repo }],
+      providers: [DeleteProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(DeleteProfileNewsUseCase);
   }

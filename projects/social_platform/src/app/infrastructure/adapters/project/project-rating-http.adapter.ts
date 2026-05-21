@@ -8,6 +8,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProjectRate } from "@domain/project/project-rate";
 import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-criterion-output";
 
+/** HTTP-адаптер оценки проектов программы: `/rate-project` (список, фильтры, выставление оценок). */
 @Injectable({ providedIn: "root" })
 export class ProjectRatingHttpAdapter {
   private readonly RATE_PROJECT_URL = "/rate-project";

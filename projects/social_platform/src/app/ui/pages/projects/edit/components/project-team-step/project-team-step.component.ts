@@ -18,6 +18,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
+/** Шаг редактирования проекта: команда. */
 @Component({
   selector: "app-project-team-step",
   templateUrl: "./project-team-step.component.html",
@@ -35,14 +36,14 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     TooltipComponent,
     ModalComponent,
   ],
-  providers: [ToggleFieldsInfoService],
+  providers: [ToggleFieldsInfoService, ProjectTeamUIService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
   private readonly projectTeamService = inject(ProjectTeamService);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
-  private readonly tooltipInfoService = inject(TooltipInfoService);
+  protected readonly tooltipInfoService = inject(TooltipInfoService);
   private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
 
   // Константы для селектов
@@ -71,14 +72,14 @@ export class ProjectTeamStepComponent implements OnInit {
   /** Наличие подсказки */
   protected readonly haveHint = this.tooltipInfoService.haveHint;
 
-  protected readonly isHintTeamVisible = this.tooltipInfoService.isHintTeamVisible;
+  protected isHintTeamVisible = this.tooltipInfoService.isVisible;
   protected readonly isHintTeamModal = this.projectTeamUIService.isHintTeamModal;
 
   /** Позиция подсказки */
   protected readonly tooltipPosition = this.tooltipInfoService.tooltipPosition;
 
   /** Состояние видимости подсказки */
-  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
+  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
 
   protected readonly errorMessage = ErrorMessage;
 
@@ -88,10 +89,8 @@ export class ProjectTeamStepComponent implements OnInit {
   }
 
   /** Показать подсказку */
-  toggleTooltip(option: "show" | "hide"): void {
-    option === "show"
-      ? this.tooltipInfoService.showTooltip()
-      : this.tooltipInfoService.hideTooltip();
+  toggleTooltip(key: "base" | "team"): void {
+    this.tooltipInfoService.toggleTooltip(key);
   }
 
   /**
@@ -157,7 +156,7 @@ export class ProjectTeamStepComponent implements OnInit {
 
   openHintModal(event: Event): void {
     event.preventDefault();
-    this.tooltipInfoService.hideTooltip("team");
+    this.tooltipInfoService.toggleTooltip("team");
     this.projectTeamUIService.applyOpenHintModal();
   }
 }

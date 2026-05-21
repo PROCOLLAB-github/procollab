@@ -7,6 +7,7 @@ import { User, UserRole } from "@domain/auth/user.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
 
+/** Фасад auth-сессии: реэкспорт сигналов профиля/ролей из `AuthRepositoryPort` для UI. */
 @Injectable({ providedIn: "root" })
 export class AuthInfoService {
   private readonly authRepository = inject(AuthRepositoryPort);

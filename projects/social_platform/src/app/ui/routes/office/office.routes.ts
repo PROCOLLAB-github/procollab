@@ -51,10 +51,10 @@ export const OFFICE_ROUTES: Routes = [
         path: "program",
         loadChildren: () => import("../program/program.routes").then(c => c.PROGRAM_ROUTES),
       },
-      {
-        path: "chats",
-        loadChildren: () => import("../chat/chat.routes").then(c => c.CHAT_ROUTES),
-      },
+      // {
+      //   path: "chats",
+      //   loadChildren: () => import("../chat/chat.routes").then(c => c.CHAT_ROUTES),
+      // },
       {
         path: "courses",
         loadChildren: () => import("../courses/courses.routes").then(c => c.COURSES_ROUTES),
@@ -85,10 +85,6 @@ export const OFFICE_ROUTES: Routes = [
         loadChildren: () =>
           import("../vacancy/vacancies-detail.routes").then(c => c.VACANCIES_DETAIL_ROUTES),
       },
-      // {
-      //   path: "chats",
-      //   loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
-      // },
       {
         path: "**",
         redirectTo: "/error/404",

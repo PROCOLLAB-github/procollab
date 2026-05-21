@@ -11,7 +11,10 @@ import { Program, ProgramDataSchema } from "@domain/program/program.model";
 import { ProgramCreate } from "@domain/program/program-create.model";
 import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
+import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
+import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 
+/** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
   private readonly PROGRAMS_URL = "/programs";
@@ -134,8 +137,18 @@ export class ProgramHttpAdapter {
    * @param programId идентификатор программы
    * @param body тело заявки
    */
-  applyProjectToProgram(programId: number, body: any): Observable<any> {
-    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/apply/`, body);
+  applyProjectToProgram(
+    programId: number,
+    dto: ApplyToProgramDTO
+  ): Observable<ApplyToProgramResponse> {
+    const payload = {
+      project: dto.project,
+      program_field_values: dto.programFieldValues.map(({ fieldId, valueText }) => ({
+        field_id: fieldId,
+        value_text: valueText,
+      })),
+    };
+    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/apply/`, payload);
   }
 
   /**

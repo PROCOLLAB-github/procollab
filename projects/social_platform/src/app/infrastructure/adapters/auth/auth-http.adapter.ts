@@ -3,13 +3,14 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
 import { Observable } from "rxjs";
-import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
-import { User } from "@domain/auth/user.model";
+import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
+import { User, UserRaw } from "@domain/auth/user.model";
 import { ProjectDto } from "../project/dto/project.dto";
 import { LoginCommand } from "@domain/auth/commands/login.command";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
+/** HTTP-адаптер auth: `/api/token`, `/auth`, `/auth/users` (логин/регистрация/профиль/роли). */
 @Injectable({ providedIn: "root" })
 export class AuthHttpAdapter {
   private readonly API_TOKEN_URL = "/api/token";
@@ -107,7 +108,7 @@ export class AuthHttpAdapter {
    * @param newProfile Частичные данные профиля для обновления
    * @returns Observable с обновленными данными профиля
    */
-  saveProfile(newProfile: Partial<User>): Observable<User> {
+  saveProfile(newProfile: Partial<UserRaw>): Observable<User> {
     return this.apiService.patch<User>(`${this.AUTH_USERS_URL}/${newProfile.id}/`, newProfile);
   }
 

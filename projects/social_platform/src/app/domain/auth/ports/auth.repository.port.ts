@@ -1,8 +1,11 @@
 /** @format */
 
 import { Observable } from "rxjs";
-import { User, UserRole } from "../user.model";
-import { LoginResponse, RegisterResponse } from "../http.model";
+import { User, UserInput, UserRole } from "../user.model";
+import {
+  LoginResponse,
+  RegisterResponse,
+} from "../../../../../../core/src/lib/models/auth/http.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { Project } from "../../project/project.model";
 import { LoginCommand } from "../commands/login.command";
@@ -27,7 +30,7 @@ export abstract class AuthRepositoryPort {
   abstract resendEmail(email: string): Observable<User>;
   abstract fetchUser(id: number): Observable<User>;
   abstract fetchProfile(): Observable<User>;
-  abstract updateProfile(data: Partial<User>): Observable<User>;
+  abstract updateProfile(data: UserInput): Observable<User>;
   abstract updateOnboardingStage(stage: number | null): Observable<User>;
   abstract updateAvatar(url: string): Observable<User>;
   abstract fetchLeaderProjects(): Observable<ApiPagination<Project>>;

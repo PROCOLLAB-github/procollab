@@ -12,8 +12,8 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IconComponent } from "@ui/primitives";
 import { ClickOutsideModule } from "ng-click-outside";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент поля поиска с возможностью раскрытия/сворачивания.

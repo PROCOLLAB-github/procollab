@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
+/** Сценарий: выйти из проекта; ошибка → `leave_project_error`. */
 @Injectable({ providedIn: "root" })
 export class LeaveProjectUseCase {
   private readonly projectCollaboratorsRepositoryPort = inject(ProjectCollaboratorsRepositoryPort);

@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { GetSkillsNestedUseCase } from "./get-skills-nested.use-case";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
-import { SkillsGroup } from "@domain/skills/skills-group";
+import { SkillsGroup } from "@domain/skills/skills-group.model";
 
 describe("GetSkillsNestedUseCase", () => {
   let useCase: GetSkillsNestedUseCase;

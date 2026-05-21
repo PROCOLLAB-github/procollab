@@ -23,7 +23,7 @@
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
       [contentId]="item.content.contentObject.id"
-      [resourceLink]="['/office/profile', item.content.contentObject.id]"
+      [resourceLink]="[AppRoutes.profile.detail(item.content.contentObject.id)]"
       (like)="onLike($event)"
     ></app-news-card>
     } @else if ( item.content.contentObject && !item.content.contentObject.hasOwnProperty("email") )
@@ -33,7 +33,7 @@
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
       [contentId]="item.content.contentObject.id"
-      [resourceLink]="['/office/projects', item.content.contentObject.id]"
+      [resourceLink]="[AppRoutes.projects.detail(item.content.contentObject.id)]"
       (like)="onLike($event)"
     ></app-news-card>
     } } } } @else {

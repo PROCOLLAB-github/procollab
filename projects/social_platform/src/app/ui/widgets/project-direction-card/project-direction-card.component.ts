@@ -14,18 +14,18 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, Subscription, switchMap } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { Achievement } from "@domain/auth/user.model";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { FileModel } from "@domain/file/file.model";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { DayjsPipe } from "@corelib";
 import { ButtonComponent } from "@ui/primitives";
-import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe, DayjsPipe } from "@corelib";
 import { Goal } from "@domain/project/goals.model";
-import { ProfileService } from "@api/auth/profile.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
+
+/** Универсальная карточка направлений профиля/проекта: навыки, достижения, цели и партнёры. */
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
@@ -56,7 +56,6 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly achievementsService = inject(ProfileService);
   private readonly updateGoalUseCase = inject(UpdateGoalUseCase);
   private readonly logger = inject(LoggerService);
 
@@ -73,7 +72,8 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   listType?: "profile" | "project";
 
   // Поля для работы с достижениями
-  achievements: Pick<Achievement, "id" | "year">[] = [];
+  private allAchievements: Achievement[] = [];
+  years: { id: number; year: number }[] = [];
   files: FileModel[] = [];
   achievementsInfo = signal<Achievement[]>([]);
   currentYear = 0;
@@ -97,13 +97,12 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
       this.listType = data["listType"];
     });
 
-    if (this.profileInfoType === "achievements") {
-      if (Array.isArray(this.about)) {
-        this.about = Array.from(
-          new Map(this.about.map(a => [a.year, { id: a.id, year: a.year }])).values()
-        );
-      }
-      this.getAchievementsByYear();
+    if (this.profileInfoType === "achievements" && Array.isArray(this.about)) {
+      this.allAchievements = this.about as Achievement[];
+      this.years = Array.from(
+        new Map(this.allAchievements.map(a => [a.year, { id: a.id, year: a.year }])).values()
+      );
+      this.subscribeYearQueryParam();
     }
 
     this.subscriptions.push(listTypeSub$);
@@ -187,35 +186,22 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
     this.isOpenInfo = false;
   }
 
-  private getAchievementsByYear(): void {
-    const infoParamSub$ = this.route.queryParams
-      .pipe(
-        map(p => p["year"]),
-        switchMap(year => {
-          if (year) {
-            this.isOpenInfo = true;
-            this.currentYear = year;
-            return this.achievementsService
-              .getAchievements()
-              .pipe(
-                map((achievements: Achievement[]) =>
-                  achievements.filter((achievement: Achievement) => +achievement.year === +year)
-                )
-              );
-          } else {
-            this.isOpenInfo = false;
-            this.achievementsInfo.set([]);
-            return [];
-          }
-        })
-      )
-      .subscribe({
-        next: achievements => {
-          this.achievementsInfo.set(achievements);
+  private subscribeYearQueryParam(): void {
+    const infoParamSub$ = this.route.queryParams.pipe(map(p => p["year"])).subscribe(year => {
+      if (!year) {
+        this.isOpenInfo = false;
+        this.achievementsInfo.set([]);
+        this.files = [];
+        return;
+      }
 
-          this.files = achievements.flatMap(a => (a.files ?? []) as FileModel[]);
-        },
-      });
+      this.isOpenInfo = true;
+      this.currentYear = +year;
+
+      const filtered = this.allAchievements.filter(a => +a.year === +year);
+      this.achievementsInfo.set(filtered);
+      this.files = filtered.flatMap(a => (a.files ?? []) as FileModel[]);
+    });
 
     this.subscriptions.push(infoParamSub$);
   }

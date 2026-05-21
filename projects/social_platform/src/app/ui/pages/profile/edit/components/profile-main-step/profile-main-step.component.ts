@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { SearchesService } from "@api/searches/searches.service";
 import { IconComponent } from "@uilib";
 
+/** Основной шаг редактирования профиля: личные данные, аватар и ключевые навыки. */
 @Component({
   selector: "app-profile-main-step",
   templateUrl: "./profile-main-step.component.html",

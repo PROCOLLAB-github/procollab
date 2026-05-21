@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ChatRealtimePort } from "@domain/chat/ports/chat-realtime.port";
 
+/** Событие (WS): поток «пользователь оффлайн». */
 @Injectable({ providedIn: "root" })
 export class ObserveSetOfflineUseCase {
   private readonly chatRealtime = inject(ChatRealtimePort);

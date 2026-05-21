@@ -1,6 +1,6 @@
 /** @format */
 
-import { EditStep } from "projects/social_platform/src/app/api/project/project-step.service";
+import { EditStep } from "@core/lib/models/edit-step";
 
 export const navProfileItems = [
   {

@@ -4,15 +4,16 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { Invite } from "@domain/invite/invite.model";
-import { Project } from "@domain/project/project.model";
+import { InviteProjectSummary } from "@domain/project/invite-project-summary.model";
 
+/** UI-проекция проектов: общие computed-сигналы. */
 @Injectable()
 export class ProjectsUIInfoService {
   private readonly fb = inject(FormBuilder);
 
   readonly myInvites = computed(() => this.allInvites().slice(0, 1));
 
-  readonly allInvites = signal<Project[]>([]);
+  readonly allInvites = signal<InviteProjectSummary[]>([]);
 
   readonly searchForm = this.fb.group({
     search: [""],

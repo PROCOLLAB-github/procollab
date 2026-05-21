@@ -3,18 +3,19 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { ToggleLikeUseCase } from "./toggle-like.use-case";
-import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROGRAM_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("ToggleLikeUseCase", () => {
   let useCase: ToggleLikeUseCase;
-  let repo: jasmine.SpyObj<ProgramNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProgramNewsRepositoryPort>("ProgramNewsRepositoryPort", [
-      "toggleLike",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["toggleLike"]);
     TestBed.configureTestingModule({
-      providers: [ToggleLikeUseCase, { provide: ProgramNewsRepositoryPort, useValue: repo }],
+      providers: [ToggleLikeUseCase, { provide: PROGRAM_NEWS_REPOSITORY, useValue: repo }],
     });
     useCase = TestBed.inject(ToggleLikeUseCase);
   }

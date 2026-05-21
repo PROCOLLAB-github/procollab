@@ -2,12 +2,13 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
 import { fail, ok, Result } from "@domain/shared/result.type";
+import { PROJECT_NEWS_REPOSITORY } from "@domain/news/port/news.repository.port";
 
+/** Сценарий: отметить новости проекта просмотренными; ошибка → `read_project_news_error`. */
 @Injectable({ providedIn: "root" })
 export class ReadProjectNewsUseCase {
-  private readonly projectNewsRepositoryPort = inject(ProjectNewsRepositoryPort);
+  private readonly projectNewsRepositoryPort = inject(PROJECT_NEWS_REPOSITORY);
 
   execute(
     projectId: number,

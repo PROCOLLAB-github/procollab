@@ -5,8 +5,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { catchError, concatMap, first, map, Observable, skip, Subject, takeUntil } from "rxjs";
 import dayjs from "dayjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
-import { User } from "@domain/auth/user.model";
-import { Specialization } from "@domain/specializations/specialization";
+import { User, UserRolesData } from "@domain/auth/user.model";
+import { Specialization } from "@domain/specializations/specialization.model";
 import { SelectComponent } from "@ui/primitives";
 import { generateOptionsList } from "@utils/generate-options-list";
 import {
@@ -17,6 +17,7 @@ import { languageLevelsList, languageNamesList } from "@core/consts/lists/langua
 import { error } from "console";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
+/** Реактивная форма профиля: построение `FormGroup`, справочники (роли, годы, образование), inline-специализации. */
 @Injectable({ providedIn: "root" })
 export class ProfileFormService {
   private readonly fb = inject(FormBuilder);
@@ -41,6 +42,13 @@ export class ProfileFormService {
 
   readonly languageList = languageNamesList;
   readonly languageLevelList = languageLevelsList;
+
+  private readonly userTypeMap: Record<number, keyof UserRolesData> = {
+    1: "member",
+    2: "mentor",
+    3: "expert",
+    4: "investor",
+  };
 
   destroy(): void {
     this.destroy$.next();
@@ -144,22 +152,22 @@ export class ProfileFormService {
           firstName: profile.firstName ?? "",
           lastName: profile.lastName ?? "",
           email: profile.email ?? "",
-          userType: profile.userType ?? 1,
-          birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
-          city: profile.city ?? "",
-          coverImageAddress: profile.coverImageAddress ?? "",
-          phoneNumber: profile.phoneNumber ?? "",
-          additionalRole: profile.v2Speciality?.name ?? "",
-          speciality: profile.speciality ?? "",
-          skills: profile.skills ?? [],
-          avatar: profile.avatar ?? "",
-          aboutMe: profile.aboutMe ?? "",
-          isMospolytechStudent: profile.isMospolytechStudent ?? false,
-          studyGroup: profile.studyGroup ?? "",
+          userType: profile.personal.userType ?? 1,
+          birthday: profile.personal.birthday ?? "",
+          city: profile.personal.city ?? "",
+          coverImageAddress: profile.personal.coverImageAddress ?? "",
+          phoneNumber: profile.personal.phoneNumber ?? "",
+          additionalRole: profile.personal.v2Speciality?.name ?? "",
+          speciality: profile.personal.speciality ?? "",
+          skills: profile.relations.skills ?? [],
+          avatar: profile.personal.avatar ?? "",
+          aboutMe: profile.personal.aboutMe ?? "",
+          isMospolytechStudent: profile.personal.isMospolytechStudent ?? false,
+          studyGroup: profile.personal.studyGroup ?? "",
         });
 
         this.workExperience.clear();
-        profile.workExperience.forEach(work => {
+        profile.relations.workExperience.forEach(work => {
           this.workExperience.push(
             this.fb.group(
               {
@@ -177,7 +185,7 @@ export class ProfileFormService {
         });
 
         this.education.clear();
-        profile.education.forEach(edu => {
+        profile.relations.education.forEach(edu => {
           this.education.push(
             this.fb.group(
               {
@@ -196,7 +204,7 @@ export class ProfileFormService {
         });
 
         this.userLanguages.clear();
-        profile.userLanguages.forEach(lang => {
+        profile.relations.userLanguages.forEach(lang => {
           this.userLanguages.push(
             this.fb.group({
               language: lang.language,
@@ -206,7 +214,7 @@ export class ProfileFormService {
         });
 
         this.achievements.clear();
-        profile.achievements.forEach(achievement => {
+        profile.relations.achievements.forEach(achievement => {
           this.achievements.push(
             this.fb.group({
               id: [achievement.id],
@@ -218,19 +226,20 @@ export class ProfileFormService {
           );
         });
 
-        profile.links.length && profile.links.forEach(l => this.addLink(l));
+        profile.personal.links.length && profile.personal.links.forEach(l => this.addLink(l));
 
-        if ([2, 3, 4].includes(profile.userType)) {
+        if ([2, 3, 4].includes(profile.personal.userType)) {
           this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          profile[this.userTypeMap[profile.userType]].preferredIndustries.forEach(
-            (industry: string) => this.addPreferredIndustry(industry)
+          const role = profile.roles[this.userTypeMap[profile.personal.userType]] as
+            | { preferredIndustries?: string[] }
+            | undefined;
+          role?.preferredIndustries?.forEach((industry: string) =>
+            this.addPreferredIndustry(industry)
           );
         }
 
-        if ([1, 3, 4].includes(profile.userType)) {
-          const userTypeData = profile.member ?? profile.mentor ?? profile.expert;
+        if ([1, 3, 4].includes(profile.personal.userType)) {
+          const userTypeData = profile.roles.member ?? profile.roles.mentor ?? profile.roles.expert;
           this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
           this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject);
         }

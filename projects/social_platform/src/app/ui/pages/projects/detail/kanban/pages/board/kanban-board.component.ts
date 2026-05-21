@@ -30,6 +30,7 @@ import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-in
 import { Column } from "@domain/kanban/column.model";
 import { TaskPreview } from "@domain/kanban/task.model";
 
+/** Канбан (модуль отключён): страница доски с колонками. */
 @Component({
   selector: "app-kanban-board",
   templateUrl: "./kanban-board.component.html",

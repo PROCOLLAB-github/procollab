@@ -6,11 +6,12 @@ import { SelectComponent, InputComponent, ButtonComponent } from "@ui/primitives
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
-import { ControlErrorPipe } from "@corelib";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ProfileEditExperienceInfoService } from "@api/profile/facades/edit/profile-edit-experience-info.service";
 import { IconComponent } from "@uilib";
+import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
+/** Шаг редактирования профиля: опыт работы. */
 @Component({
   selector: "app-profile-experience-step",
   templateUrl: "./profile-experience-step.component.html",
@@ -24,6 +25,7 @@ import { IconComponent } from "@uilib";
     ButtonComponent,
     ControlErrorPipe,
     ReactiveFormsModule,
+    TruncatePipe,
   ],
   standalone: true,
 })

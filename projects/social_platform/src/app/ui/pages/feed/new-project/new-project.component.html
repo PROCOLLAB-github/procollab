@@ -56,7 +56,7 @@
       size="big"
       style="flex-grow: 1"
       customTypographyClass="text-body-12"
-      [routerLink]="'/office/projects/' + feedItem.id"
+      [routerLink]="AppRoutes.projects.detail(feedItem.id)"
       >перейти в проект</app-button
     >
   </div>

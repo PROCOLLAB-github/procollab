@@ -11,15 +11,16 @@ import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.c
 import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
 import { IconComponent } from "@uilib";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
-import { Skill } from "@domain/skills/skill";
+import { Skill } from "@domain/skills/skill.model";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
 import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-vacancy-ui.service";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
+import { SearchesService } from "@api/searches/searches.service";
 
+/** Шаг редактирования проекта: вакансии. */
 @Component({
   selector: "app-project-vacancy-step",
   templateUrl: "./project-vacancy-step.component.html",
@@ -40,14 +41,14 @@ import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy
     ModalComponent,
     SkillsGroupComponent,
   ],
-  providers: [ProjectsEditInfoService, ProjectVacancyService],
+  providers: [ProjectsEditInfoService, ProjectVacancyService, ProjectVacancyUIService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyStepComponent implements OnInit {
   private readonly projectVacancyInfoService = inject(ProjectVacancyService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
-  private readonly skillsInfoService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
   private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class ProjectVacancyStepComponent implements OnInit {
 
   protected readonly experienceList = this.projectVacancyUIService.workExperienceList;
   protected readonly formatList = this.projectVacancyUIService.workFormatList;
-  protected readonly scheludeList = this.projectVacancyUIService.workScheludeList;
+  protected readonly scheludeList = this.projectVacancyUIService.workScheduledList;
   protected readonly rolesMembersList = this.projectVacancyUIService.rolesMembersList;
 
   protected readonly selectedRequiredExperienceId =
@@ -131,7 +132,7 @@ export class ProjectVacancyStepComponent implements OnInit {
    * @param newSkill - новый навык
    */
   onAddSkill(newSkill: Skill): void {
-    this.skillsInfoService.onAddSkill(newSkill, this.vacancyForm);
+    this.searchesService.onAddSkill(newSkill, this.vacancyForm);
   }
 
   /**
@@ -139,7 +140,7 @@ export class ProjectVacancyStepComponent implements OnInit {
    * @param oddSkill - навык для удаления
    */
   onRemoveSkill(oddSkill: Skill): void {
-    this.skillsInfoService.onRemoveSkill(oddSkill, this.vacancyForm);
+    this.searchesService.onRemoveSkill(oddSkill, this.vacancyForm);
   }
 
   /**
@@ -147,7 +148,7 @@ export class ProjectVacancyStepComponent implements OnInit {
    * @param toggledSkill - навык для переключения
    */
   onToggleSkill(toggledSkill: Skill): void {
-    this.skillsInfoService.onToggleSkill(toggledSkill, this.vacancyForm);
+    this.searchesService.onToggleSkill(toggledSkill, this.vacancyForm);
   }
 
   /**

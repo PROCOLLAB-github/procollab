@@ -9,6 +9,7 @@ import { Project } from "@domain/project/project.model";
 import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-program-fields.model";
 import { ProjectProgramRepositoryPort } from "@domain/project/ports/project-program.repository.port";
 
+/** Репозиторий связи проект↔программа: подача проекта и доп. поля программы. */
 @Injectable({ providedIn: "root" })
 export class ProjectProgramRepository implements ProjectProgramRepositoryPort {
   private readonly projectProgramAdapter = inject(ProjectProgramHttpAdapter);

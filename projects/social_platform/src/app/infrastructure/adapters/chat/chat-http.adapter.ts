@@ -7,13 +7,15 @@ import { ChatFile, ChatMessage } from "@domain/chat/chat-message.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Observable } from "rxjs";
 
+/** HTTP-адаптер чата (REST): история сообщений, файлы, флаг непрочитанных. */
 @Injectable({ providedIn: "root" })
 export class ChatHttpAdapter {
   private readonly apiService = inject(ApiService);
   private readonly chatsUrl = "/chats";
 
   loadMessages(
-    projectId: number,
+    id: number,
+    type: "directs" | "projects",
     offset?: number,
     limit?: number
   ): Observable<ApiPagination<ChatMessage>> {
@@ -22,7 +24,7 @@ export class ChatHttpAdapter {
     if (limit !== undefined) queries = queries.set("limit", limit);
 
     return this.apiService.get<ApiPagination<ChatMessage>>(
-      `${this.chatsUrl}/projects/${projectId}/messages/`,
+      `${this.chatsUrl}/${type}/${id}/messages/`,
       queries
     );
   }

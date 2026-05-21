@@ -1,8 +1,8 @@
 /** @format */
 
 import { Observable } from "rxjs";
-import { Skill } from "../skill";
-import { SkillsGroup } from "../skills-group";
+import { Approve, Skill } from "../skill.model";
+import { SkillsGroup } from "../skills-group.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 
 /**
@@ -16,4 +16,6 @@ export abstract class SkillsRepositoryPort {
     limit: number,
     offset: number
   ): Observable<ApiPagination<Skill>>;
+  abstract approveSkill(userId: number, skillId: number): Observable<Approve>;
+  abstract unapproveSkill(userId: number, skillId: number): Observable<void>;
 }

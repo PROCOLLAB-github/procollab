@@ -3,20 +3,21 @@
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { ToggleProjectNewsLikeUseCase } from "./toggle-project-news-like.use-case";
-import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
+import {
+  NewsRepositoryPort,
+  PROJECT_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
 
 describe("ToggleProjectNewsLikeUseCase", () => {
   let useCase: ToggleProjectNewsLikeUseCase;
-  let repo: jasmine.SpyObj<ProjectNewsRepositoryPort>;
+  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectNewsRepositoryPort>("ProjectNewsRepositoryPort", [
-      "toggleLike",
-    ]);
+    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["toggleLike"]);
     TestBed.configureTestingModule({
       providers: [
         ToggleProjectNewsLikeUseCase,
-        { provide: ProjectNewsRepositoryPort, useValue: repo },
+        { provide: PROJECT_NEWS_REPOSITORY, useValue: repo },
       ],
     });
     useCase = TestBed.inject(ToggleProjectNewsLikeUseCase);

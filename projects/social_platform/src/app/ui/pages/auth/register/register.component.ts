@@ -6,16 +6,13 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe, TokenService } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
-import * as dayjs from "dayjs";
-import * as cpf from "dayjs/plugin/customParseFormat";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
-
-dayjs.extend(cpf);
+import { AppRoutes } from "@api/paths/app-routes";
 
 /**
  * Компонент регистрации нового пользователя
@@ -56,6 +53,7 @@ export class RegisterComponent implements OnInit {
   private readonly authRegisterService = inject(AuthRegisterService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
   private readonly tokenService = inject(TokenService);
+  protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
     this.tokenService.clearTokens();

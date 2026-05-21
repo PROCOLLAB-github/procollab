@@ -5,6 +5,7 @@ import { ApiService } from "@corelib";
 import { TaskDetail } from "@domain/kanban/task.model";
 import { Observable } from "rxjs";
 
+/** HTTP-сервис канбан-доски (модуль отключён): доска/колонки/задачи по id. */
 @Injectable({
   providedIn: "root",
 })

@@ -4,9 +4,9 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { SpecializationsRepository } from "./specializations.repository";
 import { SpecializationsHttpAdapter } from "../../adapters/specializations/specializations-http.adapter";
-import { SpecializationsGroup } from "@domain/specializations/specializations-group";
+import { SpecializationsGroup } from "@domain/specializations/specializations-group.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { Specialization } from "@domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization.model";
 
 describe("SpecializationsRepository", () => {
   let repository: SpecializationsRepository;

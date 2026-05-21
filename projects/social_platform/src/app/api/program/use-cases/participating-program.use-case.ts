@@ -8,6 +8,7 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Program } from "@domain/program/program.model";
 
+/** Сценарий: программы, в которых участвует пользователь (первые 20 + фильтр); ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class ParticipatingProgramUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);

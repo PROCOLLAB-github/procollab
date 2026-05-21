@@ -2,9 +2,10 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { NonNullableFormBuilder } from "@angular/forms";
-import { User } from "@domain/auth/user.model";
-import { Skill } from "@domain/skills/skill";
+import { UserInput } from "@domain/auth/user.model";
+import { Skill } from "@domain/skills/skill.model";
 
+/** UI-состояние этапа 2 онбординга: выбор навыков, раскрытие групп. */
 @Injectable()
 export class OnboardingStageTwoUIInfoService {
   private readonly nnFb = inject(NonNullableFormBuilder);
@@ -48,7 +49,7 @@ export class OnboardingStageTwoUIInfoService {
     this.stageForm.patchValue({ skills: skills ?? [] });
   }
 
-  applyInitSkills(fv: Partial<User>): void {
+  applyInitSkills(fv: UserInput): void {
     this.stageForm.patchValue({ skills: fv.skills });
   }
 

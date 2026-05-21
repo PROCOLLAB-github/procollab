@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { rejectInvite } from "@domain/invite/events/reject-invite.event";
 
+/** Сценарий: отклонить приглашение; эмитит `RejectInvite`; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class RejectInviteUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);

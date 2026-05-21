@@ -8,20 +8,9 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
+import { EditStep } from "@core/lib/models/edit-step";
 
-/** Тип шага редактирования проекта */
-export type EditStep =
-  | "main"
-  | "contacts"
-  | "achievements"
-  | "vacancies"
-  | "team"
-  | "additional"
-  | "education"
-  | "experience"
-  | "skills"
-  | "settings";
-
+/** Состояние шагов мастера проекта и навигация между ними. */
 @Injectable({
   providedIn: "root",
 })
