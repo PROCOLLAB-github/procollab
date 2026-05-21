@@ -265,6 +265,12 @@ export class ChatDirectInfoService {
       chatType: this.chatType,
       chatId: this.getChatId(),
     });
+
+    // Бэк по edit_message тоже шлёт ack без тела — без локального апдейта отредактированный текст
+    // не появляется до перезагрузки. Подменяем текст в списке сразу.
+    this.chatDirectUIInfoService.messages.update(list =>
+      list.map(m => (m.id === message.id ? { ...m, text: message.text, isEdited: true } : m))
+    );
   }
 
   /**

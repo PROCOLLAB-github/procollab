@@ -86,11 +86,12 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   set editingMessage(message: ChatMessage | undefined) {
     this._editingMessage = message;
 
-    if (message !== undefined) {
-      this.value.text = message.text;
-    } else {
-      this.value.text = "";
-    }
+    // Иммутабельно перезаписываем value и пропагируем в форму — иначе textarea (OnPush) не обновится,
+    // и при submit форма будет пустая (форма не знает что мы подставили текст).
+    const newText = message !== undefined ? message.text : "";
+    this.value = { ...this.value, text: newText };
+    this.onChange(this.value);
+    this.cdr.markForCheck();
   }
 
   /**

@@ -57,6 +57,8 @@ export class ChatDirectUIInfoService {
   }
 
   editMessahesEvent(result: OnEditChatMessageDto): void {
+    // Бэк может прислать ack без тела — игнорим, локальный optimistic-апдейт в onEditMessage уже отработал.
+    if (!result?.message) return;
     this.messages.update(list => list.map(m => (m.id === result.message.id ? result.message : m)));
   }
 
