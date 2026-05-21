@@ -19,6 +19,7 @@ import { FeedFilterComponent } from "@ui/widgets/feed-filter/feed-filter.compone
 import { FeedInfoService } from "@api/feed/facades/feed-info.service";
 import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 
 /** Страница ленты активности. */
 @Component({
@@ -35,7 +36,7 @@ import { AppRoutes } from "@api/paths/app-routes";
     OpenVacancyComponent,
     IconComponent,
   ],
-  providers: [FeedInfoService, FeedUIInfoService],
+  providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
   standalone: true,
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {

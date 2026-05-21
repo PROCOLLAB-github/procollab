@@ -16,6 +16,7 @@ import { ProjectDetailResolver } from "@ui/pages/projects/detail/detail.resolver
 import { NewsDetailComponent } from "@ui/pages/projects/detail/news-detail/news-detail.component";
 import { NewsDetailResolver } from "@ui/pages/projects/detail/news-detail/news-detail.resolver";
 import { ProjectChatResolver } from "@ui/pages/projects/detail/chat/chat.resolver";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 /**
  * Конфигурация маршрутов для детального просмотра проекта
@@ -33,6 +34,7 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
   {
     path: "",
     component: DeatilComponent,
+    providers: [ProgramDetailMainUIInfoService],
     resolve: {
       data: ProjectDetailResolver,
     },

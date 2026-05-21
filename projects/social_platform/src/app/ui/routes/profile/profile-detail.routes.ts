@@ -6,6 +6,7 @@ import { ProfileMainComponent } from "../../pages/profile/detail/main/main.compo
 import { ProfileMainResolver } from "../../pages/profile/detail/main/main.resolver";
 import { DeatilComponent } from "@ui/widgets/detail/detail.component";
 import { ProfileNewsComponent } from "@ui/pages/profile/detail/profile-news/profile-news.component";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 /**
  * Конфигурация маршрутов для детального просмотра профиля пользователя
@@ -25,6 +26,7 @@ export const PROFILE_DETAIL_ROUTES: Routes = [
   {
     path: "",
     component: DeatilComponent,
+    providers: [ProgramDetailMainUIInfoService],
     resolve: {
       data: ProfileDetailResolver,
     },

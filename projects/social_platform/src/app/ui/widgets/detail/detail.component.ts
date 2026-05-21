@@ -31,6 +31,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 import { ChatStateService } from "@api/chat/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 
 /** Виджет детального просмотра сущности. */
 @Component({
@@ -54,6 +55,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   ],
   providers: [
     ProfileDetailUIInfoService,
+    ProjectTeamUIService,
     DetailInfoService,
     DetailProfileInfoService,
     DetailProjectInfoService,

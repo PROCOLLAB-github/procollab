@@ -117,10 +117,10 @@ export class ProgramDetailMainService {
 
           const news = result.value;
 
-          if (news.results.length) {
-            this.newsInfoService.applySetNews(news);
-            this.programDetailMainUIInfoService.applyInitProgram(news);
+          this.newsInfoService.applySetNews(news);
+          this.programDetailMainUIInfoService.applyInitProgram(news);
 
+          if (news.results.length) {
             setTimeout(() => {
               this.setupNewsObserver();
             }, 100);
