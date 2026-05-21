@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ChatMessage } from "@domain/chat/chat-message.model";
+import { User } from "@domain/auth/user.model";
 import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
@@ -43,6 +44,10 @@ export class ChatDirectInfoService {
 
   // Сохраняем тип чата для использования в методах
   private chatType: "direct" | "project" = "direct";
+
+  // Текущий профиль кешируется для построения отправленного сообщения локально
+  // (бэк отдаёт ack без тела, поэтому показать сообщение в UI без перезагрузки можно только так)
+  private currentUser?: User;
 
   /** Список пользователей, которые сейчас печатают */
   readonly typingPersons = this.chatDirectUIInfoService.typingPersons;
@@ -106,6 +111,7 @@ export class ChatDirectInfoService {
   private initializationProfile(): void {
     this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(u => {
       this.currentUserId.set(u.id);
+      this.currentUser = u;
     });
   }
 
@@ -224,6 +230,29 @@ export class ChatDirectInfoService {
       chatType: this.chatType,
       chatId: this.getChatId(),
     });
+
+    // Бэк отдаёт по WS только ack-фрейм без тела, поэтому сразу добавляем сообщение локально.
+    // На reload реальное сообщение из истории придёт по HTTP — это локальное затрётся при следующей загрузке чата.
+    if (this.currentUser && message.text) {
+      const optimistic: ChatMessage = {
+        id: -Date.now(),
+        author: this.currentUser,
+        text: message.text,
+        replyTo:
+          message.replyTo != null
+            ? this.messages().find(m => m.id === message.replyTo) ?? null
+            : null,
+        files: [],
+        isEdited: false,
+        isRead: false,
+        isDeleted: false,
+        createdAt: new Date().toISOString(),
+      };
+      this.chatDirectUIInfoService.applyMessageEvent({
+        chatId: this.getChatId(),
+        message: optimistic,
+      });
+    }
   }
 
   /**

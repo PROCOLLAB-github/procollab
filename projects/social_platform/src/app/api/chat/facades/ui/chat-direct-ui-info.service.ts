@@ -83,7 +83,9 @@ export class ChatDirectUIInfoService {
   }
 
   applyMessageEvent(result: OnChatMessageDto): void {
-    this.messages.update(() => [...this.messages(), result.message]);
+    // Бэк иногда шлёт ack-фрейм без поля message — игнорим, чтобы не пушить undefined в список.
+    if (!result?.message) return;
+    this.messages.update(list => [...list, result.message]);
   }
 
   applyInitMessagesEvent(messages: ApiPagination<ChatMessage>): void {

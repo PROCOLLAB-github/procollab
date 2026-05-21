@@ -81,7 +81,7 @@
     <textarea
       autosize
       (input)="onInput($event)"
-      (keydown.enter)="submit.emit()"
+      (keydown.enter)="$event.preventDefault(); submit.emit()"
       (keydown.tab)="onTextareaKeydown($event)"
       (blur)="onBlur()"
       (resized)="resize.emit()"

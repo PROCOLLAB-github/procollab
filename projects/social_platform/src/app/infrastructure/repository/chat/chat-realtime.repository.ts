@@ -15,6 +15,7 @@ import { plainToInstance } from "class-transformer";
 import { map } from "rxjs";
 import { WebsocketService } from "@core/public-api";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { mapChatMessage } from "./chat.repository";
 
 /**
  * Реализация ChatRealtimePort поверх WebSocket-адаптера.
@@ -59,15 +60,17 @@ export class ChatRealtimeRepository implements ChatRealtimePort {
   }
 
   onMessage() {
-    return this.chatWsAdapter
-      .onMessage()
-      .pipe(map(message => plainToInstance(OnChatMessageDto, message)));
+    return this.chatWsAdapter.onMessage().pipe(
+      map(message => plainToInstance(OnChatMessageDto, message)),
+      map(dto => ({ ...dto, message: mapChatMessage(dto.message) }) as OnChatMessageDto)
+    );
   }
 
   onEditMessage() {
-    return this.chatWsAdapter
-      .onEditMessage()
-      .pipe(map(message => plainToInstance(OnEditChatMessageDto, message)));
+    return this.chatWsAdapter.onEditMessage().pipe(
+      map(message => plainToInstance(OnEditChatMessageDto, message)),
+      map(dto => ({ ...dto, message: mapChatMessage(dto.message) }) as OnEditChatMessageDto)
+    );
   }
 
   onDeleteMessage() {

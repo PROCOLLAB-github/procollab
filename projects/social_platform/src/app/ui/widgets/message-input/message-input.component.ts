@@ -2,6 +2,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   EventEmitter,
@@ -60,6 +61,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   /**
    * Конструктор компонента
@@ -216,6 +218,9 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
       if (!value.filesUrl.length) {
         this.attachFiles = [];
       }
+
+      // OnPush не перерисует textarea без явного markForCheck — без этого поле не очищается после submit
+      this.cdr.markForCheck();
     });
   }
 
