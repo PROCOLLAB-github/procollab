@@ -91,7 +91,6 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
     ModalComponent,
     TruncatePipe,
   ],
-  providers: [ProgramDetailMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
