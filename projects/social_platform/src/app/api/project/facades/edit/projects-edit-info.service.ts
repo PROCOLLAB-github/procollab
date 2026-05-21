@@ -329,7 +329,6 @@ export class ProjectsEditInfoService {
       }
     }
 
-    this.submitMode.set(null);
     this.updateFormUseCase
       .execute({ id: projectId, data: payload })
       .pipe(
