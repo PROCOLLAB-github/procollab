@@ -47,7 +47,7 @@ export class VacancyHttpAdapter {
    */
   getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {
     const params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
-    return this.apiService.get<VacancyResponse[]>(`${this.VACANCIES_URL}/responses/self`, params);
+    return this.apiService.get<VacancyResponse[]>(`${this.VACANCIES_URL}/responses/self/`, params);
   }
 
   /**
@@ -55,7 +55,7 @@ export class VacancyHttpAdapter {
    * Возвращает сырой HTTP-ответ без доменного маппинга.
    */
   getOne(vacancyId: number): Observable<Vacancy> {
-    return this.apiService.get<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}`);
+    return this.apiService.get<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}/`);
   }
 
   /**
@@ -77,14 +77,14 @@ export class VacancyHttpAdapter {
     vacancyId: number,
     vacancy: Partial<Vacancy> | CreateVacancyDto
   ): Observable<Vacancy> {
-    return this.apiService.patch<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}`, { ...vacancy });
+    return this.apiService.patch<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}/`, { ...vacancy });
   }
 
   /**
    * Удаляет вакансию.
    */
   deleteVacancy(vacancyId: number): Observable<void> {
-    return this.apiService.delete(`${this.VACANCIES_URL}/${vacancyId}`);
+    return this.apiService.delete(`${this.VACANCIES_URL}/${vacancyId}/`);
   }
 
   /**

@@ -18,7 +18,7 @@ export class ProjectCollaboratorsHttpAdapter {
    * @returns Observable<void> - завершается при успешном удалении коллаборатора
    */
   deleteCollaborator(projectId: number, userId: number): Observable<void> {
-    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/collaborators?id=${userId}`);
+    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/collaborators?id=${userId}/`);
   }
 
   /**
@@ -42,6 +42,6 @@ export class ProjectCollaboratorsHttpAdapter {
    * @returns Observable<void> - завершается при успешном выходе из проекта
    */
   deleteLeave(projectId: number): Observable<void> {
-    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/collaborators/leave`);
+    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/collaborators/leave/`);
   }
 }

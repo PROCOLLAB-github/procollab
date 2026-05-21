@@ -8,6 +8,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 import { CreateProjectUseCase } from "../use-cases/create-project.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
+import { InviteInfoService } from "@api/invite/invite-info.service";
 
 /** Координирует верхний уровень раздела проектов: табы, поиск и создание проекта. */
 @Injectable()
@@ -15,6 +16,7 @@ export class ProjectsInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly inviteInfoService = inject(InviteInfoService);
   private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
   private readonly createProjectUseCase = inject(CreateProjectUseCase);
 
@@ -33,14 +35,7 @@ export class ProjectsInfoService {
   initializationProjects(): void {
     this.navService.setNavTitle("Проекты");
 
-    this.route.data
-      .pipe(map(r => r["data"]))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: invites => {
-          this.projectsUIInfoService.applySetProjectsInvites(invites);
-        },
-      });
+    this.inviteInfoService.ensureLoaded();
 
     this.searchForm
       .get("search")

@@ -21,6 +21,7 @@ import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
 import { SwipeService } from "@api/swipe/swipe.service";
 import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
+import { InviteInfoService } from "@api/invite/invite-info.service";
 
 /**
  * Главный компонент модуля проектов
@@ -59,6 +60,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   private readonly projectsInfoService = inject(ProjectsInfoService);
   private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
+  private readonly inviteInfoService = inject(InviteInfoService);
   private readonly swipeService = inject(SwipeService);
 
   ngOnInit(): void {
@@ -93,15 +95,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.swipeService.onSwipeEnd(event, this.filterBody);
   }
 
-  acceptOrRejectInvite(inviteId: number): void {
-    this.projectsUIInfoService.applyAcceptOrRejectInvite(inviteId);
-  }
-
   closeFilter(): void {
     this.swipeService.closeFilter();
   }
 
   addProject(): void {
     this.projectsInfoService.addProject();
+  }
+
+  acceptOrRejectInvite(inviteId: number): void {
+    this.inviteInfoService.markInviteHandled(inviteId);
   }
 }

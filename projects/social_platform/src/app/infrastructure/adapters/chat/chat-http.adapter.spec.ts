@@ -49,12 +49,12 @@ describe("ChatHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledOnceWith("/chats/projects/42/files");
   });
 
-  it("hasUnreads идёт в GET /chats/has-unreads", () => {
+  it("hasUnreads идёт в GET /chats/has-unreads/", () => {
     setup();
     api.get.and.returnValue(of({ hasUnreads: true }));
 
     adapter.hasUnreads().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/chats/has-unreads");
+    expect(api.get).toHaveBeenCalledOnceWith("/chats/has-unreads/");
   });
 });

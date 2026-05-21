@@ -18,7 +18,7 @@ export class SpecializationsHttpAdapter {
    * Получает специализации в виде иерархической структуры (группы и подгруппы).
    */
   getSpecializationsNested(): Observable<SpecializationsGroup[]> {
-    return this.apiService.get(`${this.AUTH_USERS_SPECIALIZATIONS_URL}/nested`);
+    return this.apiService.get(`${this.AUTH_USERS_SPECIALIZATIONS_URL}/nested/`);
   }
 
   /**
@@ -34,7 +34,7 @@ export class SpecializationsHttpAdapter {
     offset: number
   ): Observable<ApiPagination<Specialization>> {
     return this.apiService.get(
-      `${this.AUTH_USERS_SPECIALIZATIONS_URL}/inline`,
+      `${this.AUTH_USERS_SPECIALIZATIONS_URL}/inline/`,
       new HttpParams({ fromObject: { limit, offset, name__icontains: search } })
     );
   }

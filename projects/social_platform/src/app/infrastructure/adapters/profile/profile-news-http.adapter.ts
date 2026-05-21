@@ -33,7 +33,7 @@ export class ProfileNewsHttpAdapter {
    * @param newsId идентификатор новости
    */
   fetchNewsDetail(userId: string, newsId: string): Observable<ProfileNews> {
-    return this.apiService.get<ProfileNews>(`${this.AUTH_USERS_URL}/${userId}/news/${newsId}`);
+    return this.apiService.get<ProfileNews>(`${this.AUTH_USERS_URL}/${userId}/news/${newsId}/`);
   }
 
   /**

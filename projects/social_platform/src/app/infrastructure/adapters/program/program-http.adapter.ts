@@ -96,7 +96,7 @@ export class ProgramHttpAdapter {
    * @param params query-параметры пагинации/фильтрации
    */
   getAllProjects(programId: number, params?: HttpParams): Observable<ApiPagination<Project>> {
-    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects`, params);
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/`, params);
   }
 
   /**

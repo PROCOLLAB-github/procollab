@@ -72,7 +72,7 @@ export class ProgramNewsHttpAdapter {
    */
   editNews(programId: number, newsId: number, newsItem: Partial<FeedNews>): Observable<FeedNews> {
     return this.apiService.patch<FeedNews>(
-      `${this.PROGRAMS_URL}/${programId}/news/${newsId}`,
+      `${this.PROGRAMS_URL}/${programId}/news/${newsId}/`,
       newsItem
     );
   }
@@ -84,6 +84,6 @@ export class ProgramNewsHttpAdapter {
    * @param newsId идентификатор новости
    */
   deleteNews(programId: number, newsId: number): Observable<void> {
-    return this.apiService.delete(`${this.PROGRAMS_URL}/${programId}/news/${newsId}`);
+    return this.apiService.delete(`${this.PROGRAMS_URL}/${programId}/news/${newsId}/`);
   }
 }
