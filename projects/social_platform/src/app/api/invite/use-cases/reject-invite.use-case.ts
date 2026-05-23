@@ -15,7 +15,12 @@ export class RejectInviteUseCase {
 
   execute(inviteId: number): Observable<Result<void, { kind: "unknown" }>> {
     return this.inviteRepositoryPort.rejectInvite(inviteId).pipe(
-      tap(invite => this.eventBus.emit(rejectInvite(invite.id, invite.project.id, invite.user.id))),
+      tap(invite => {
+        // best-effort: тонкий ответ reject не должен ронять успешную операцию.
+        if (invite?.project && invite?.user) {
+          this.eventBus.emit(rejectInvite(invite.id, invite.project.id, invite.user.id));
+        }
+      }),
       map(() => ok<void>(undefined)),
       catchError(() => of(fail({ kind: "unknown" as const })))
     );
