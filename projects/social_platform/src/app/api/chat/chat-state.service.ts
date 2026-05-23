@@ -3,15 +3,10 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-/** Глобальное состояние чата: непрочитанные, онлайн-статусы пользователей, сброс. */
+/** Глобальное состояние чата: онлайн-статусы пользователей, сброс. */
 @Injectable({ providedIn: "root" })
 export class ChatStateService {
-  readonly unread$ = new BehaviorSubject(false);
   readonly userOnlineStatusCache = new BehaviorSubject<Record<number, boolean>>({});
-
-  setUnread(unread: boolean): void {
-    this.unread$.next(unread);
-  }
 
   setOnlineStatus(userId: number, status: boolean): void {
     this.userOnlineStatusCache.next({

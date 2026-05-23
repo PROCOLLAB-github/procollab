@@ -5,7 +5,6 @@ import { ResolveEnd, ResolveStart, Router, RouterOutlet } from "@angular/router"
 import {
   debounceTime,
   filter,
-  forkJoin,
   fromEvent,
   map,
   merge,
@@ -52,10 +51,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    forkJoin([this.authRepository.fetchUserRoles(), this.authRepository.fetchChangeableRoles()])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(noop);
-
     const showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
       map(() => true)

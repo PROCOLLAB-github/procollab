@@ -74,8 +74,8 @@
             <ul class="page__invites--list">
               @for (invite of myInvites(); track invite.id) {
               <app-info-card
-                (onRejectingInvite)="acceptOrRejectInvite($event)"
-                (onAcceptingInvite)="acceptOrRejectInvite($event)"
+                (onRejectingInvite)="onRejectInvite($event)"
+                (onAcceptingInvite)="onAcceptInvite($event)"
                 type="invite"
                 [info]="invite"
               ></app-info-card>

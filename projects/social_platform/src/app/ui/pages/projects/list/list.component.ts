@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { IconComponent } from "@ui/primitives";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsListInfoService } from "@api/project/facades/list/projects-list-info.service";

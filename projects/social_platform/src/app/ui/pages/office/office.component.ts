@@ -6,12 +6,13 @@ import {
   OnInit,
   OnDestroy,
   signal,
+  effect,
   inject,
   ChangeDetectionStrategy,
   DestroyRef,
 } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
-import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/primitives";
 import { DeleteConfirmComponent } from "./delete-confirm/delete-confirm.component";
@@ -25,9 +26,10 @@ import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ChatStateService } from "@api/chat/chat-state.service";
+import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
 import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
+import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -65,11 +67,10 @@ import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 export class OfficeComponent implements OnInit, OnDestroy {
   private readonly officeInfoService = inject(OfficeInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly getActualProgramsUseCase = inject(GetActualProgramsUseCase);
-  public readonly authRepository = inject(AuthInfoService);
   private readonly authRegisterService = inject(AuthRegisterService);
-  public readonly chatStateService = inject(ChatStateService);
+  public readonly chatUnreadState = inject(ChatUnreadStateService);
+  private readonly programShellInfoService = inject(ProgramShellInfoService);
+  public readonly authRepository = inject(AuthInfoService);
   private readonly profile = toSignal(this.authRepository.profile, { initialValue: null });
 
   readonly invites = this.officeInfoService.invites;
@@ -83,12 +84,20 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   readonly inviteErrorModal = this.officeUIInfoService.inviteErrorModal;
 
-  readonly programs = signal<Program[]>([]);
+  readonly programs = this.programShellInfoService.actualPrograms;
 
   readonly navItems = this.officeUIInfoService.navItems;
   protected readonly AppRoutes = AppRoutes;
 
   protected currentYear = signal(new Date().getFullYear());
+
+  // effect в field initializer — здесь есть injection-контекст (в ngOnInit его нет → NG0203).
+  private readonly registeredProgramEffect = effect(() => {
+    const programs = this.programs();
+    if (programs && programs.length) {
+      this.tryShowRegisteredProgramModal();
+    }
+  });
 
   ngOnInit(): void {
     this.officeInfoService.initializationOffice();
@@ -97,23 +106,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
       this.waitVerificationAccepted.set(true);
     }
 
-    this.getActualProgramsUseCase
-      .execute()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            return;
-          }
-
-          const programs = result.value.results;
-          const resultPrograms = programs.filter(
-            (program: Program) => Date.now() < Date.parse(program.datetimeRegistrationEnds)
-          );
-          this.programs.set(resultPrograms.slice(0, 3));
-          this.tryShowRegisteredProgramModal();
-        },
-      });
+    this.programShellInfoService.ensureLoaded();
   }
 
   ngOnDestroy(): void {
@@ -133,6 +126,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
+    this.programShellInfoService.invalidate();
     this.officeInfoService.onLogout();
   }
 

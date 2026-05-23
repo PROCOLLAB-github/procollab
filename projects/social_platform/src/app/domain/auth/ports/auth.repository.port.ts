@@ -39,4 +39,5 @@ export abstract class AuthRepositoryPort {
   abstract downloadCV(): Observable<Blob>;
   abstract resetPassword(email: string): Observable<void>;
   abstract setPassword(password: string, token: string): Observable<void>;
+  abstract resetProfileCache(): void;
 }

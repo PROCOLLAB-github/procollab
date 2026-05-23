@@ -10,7 +10,7 @@ import { ChatUIInfoService } from "./ui/chat-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ChatStateService } from "../chat-state.service";
+import { ChatUnreadStateService } from "../chat-unread-state.service";
 import { ObserveMessagesUseCase } from "../use-cases/observe-messages.use-case";
 
 /** Управляет списком личных/групповых чатов и глобальным индикатором непрочитанных. */
@@ -20,7 +20,7 @@ export class ChatInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authRepository = inject(AuthRepositoryPort);
-  private readonly chatStateService = inject(ChatStateService);
+  private readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly observeMessagesUseCase = inject(ObserveMessagesUseCase);
   private readonly chatUIInfoService = inject(ChatUIInfoService);
   private readonly logger = inject(LoggerService);
@@ -48,7 +48,7 @@ export class ChatInfoService {
     this.navService.setNavTitle("Чат");
 
     setTimeout(() => {
-      this.chatStateService.setUnread(false);
+      this.chatUnreadState.markRead();
     });
 
     this.initializationChatMessage();

@@ -132,7 +132,9 @@ describe("AuthRepository", () => {
   it("updateOnboardingStage вызывает setOnboardingStage с id текущего профиля", done => {
     setup();
     adapter.getProfile.and.returnValue(of({ id: 9 } as User));
-    adapter.setOnboardingStage.and.returnValue(of({ id: 9, onboardingStage: 3 } as User));
+    adapter.setOnboardingStage.and.returnValue(
+      of({ id: 9, onboardingStage: 3 } as unknown as User)
+    );
     repository.fetchProfile().subscribe();
 
     repository.updateOnboardingStage(3).subscribe(() => {
@@ -144,7 +146,7 @@ describe("AuthRepository", () => {
   it("updateAvatar вызывает saveAvatar с id текущего профиля", done => {
     setup();
     adapter.getProfile.and.returnValue(of({ id: 9 } as User));
-    adapter.saveAvatar.and.returnValue(of({ id: 9, avatar: "url" } as User));
+    adapter.saveAvatar.and.returnValue(of({ id: 9, avatar: "url" } as unknown as User));
     repository.fetchProfile().subscribe();
 
     repository.updateAvatar("url").subscribe(() => {
@@ -166,6 +168,28 @@ describe("AuthRepository", () => {
     repository.fetchLeaderProjects().subscribe(res => {
       expect(res.results.length).toBe(1);
       done();
+    });
+  });
+
+  it("resetProfileCache очищает replay-кэш профиля для новых подписчиков", done => {
+    setup();
+    adapter.getProfile.and.returnValues(of({ id: 1 } as User), of({ id: 2 } as User));
+
+    repository.fetchProfile().subscribe(() => {
+      repository.resetProfileCache();
+
+      let replayedProfile: User | undefined;
+      const subscription = repository.profile.subscribe(profile => {
+        replayedProfile = profile;
+      });
+
+      expect(replayedProfile).toBeUndefined();
+
+      repository.fetchProfile().subscribe(() => {
+        expect(replayedProfile?.id).toBe(2);
+        subscription.unsubscribe();
+        done();
+      });
     });
   });
 

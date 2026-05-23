@@ -34,6 +34,7 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
+import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 
 /**
  * Управляет списками проектов: табами, фильтрами URL, поиском,
@@ -49,11 +50,18 @@ export class ProjectsListInfoService {
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly programDetailListInfoService = inject(ProgramDetailListInfoService);
+  private readonly inviteInfoService = inject(InviteInfoService);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
   private readonly projectsCount = signal<number>(0);
+
+  readonly count = computed(() => {
+    if (this.isInvites()) return this.inviteInfoService.invites().length;
+    return this.projectsCount();
+  });
+
   private readonly currentPage = signal<number>(1);
   private readonly projectsPerFetch = signal<number>(ProjectsListInfoService.PROJECTS_PAGE_SIZE);
 
@@ -63,7 +71,11 @@ export class ProjectsListInfoService {
 
   readonly projects$ = signal<AsyncState<Array<Project | InviteProjectSummary>>>(initial());
 
-  readonly projects = computed(() => {
+  readonly projects = computed<Array<Project | InviteProjectSummary>>(() => {
+    if (this.isInvites()) {
+      return inviteToProjectMapper(this.inviteInfoService.invites());
+    }
+
     const state = this.projects$();
     if (isSuccess(state)) return state.data;
     if (isLoading(state)) return state.previous ?? [];
@@ -132,12 +144,7 @@ export class ProjectsListInfoService {
         takeUntil(this.destroy$)
       )
       .subscribe(projects => {
-        if (this.isInvites()) {
-          this.projects$.set(success(inviteToProjectMapper(projects ?? [])));
-          this.projectsCount.set(projects?.length ?? 0);
-          return;
-        }
-
+        if (!projects) return;
         this.projectsCount.set(projects.count);
         this.projects$.set(success(projects.results ?? []));
       });
@@ -272,12 +279,5 @@ export class ProjectsListInfoService {
       next: "",
       previous: "",
     };
-  }
-
-  sliceInvitesArray(inviteId: number): void {
-    this.projects$.update(state =>
-      isSuccess(state) ? success(state.data.filter(p => p.inviteId !== inviteId)) : state
-    );
-    this.projectsCount.update(() => Math.max(0, this.projectsCount() - 1));
   }
 }

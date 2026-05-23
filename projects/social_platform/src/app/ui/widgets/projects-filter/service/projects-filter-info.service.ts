@@ -7,13 +7,13 @@ import { optionsListElement } from "@utils/generate-options-list";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
 @Injectable()
 export class ProjectsFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly industryRepository = inject(IndustryInfoService);
+  private readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
