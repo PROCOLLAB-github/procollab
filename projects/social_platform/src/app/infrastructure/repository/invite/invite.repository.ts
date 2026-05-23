@@ -10,6 +10,7 @@ import { EventBus } from "@domain/shared/event-bus";
 import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 import { RejectInvite } from "@domain/invite/events/reject-invite.event";
 import { RevokeInvite } from "@domain/invite/events/revoke-invite.event";
+import { userFromRaw } from "@utils/userRaw";
 
 /** Репозиторий приглашений с локальным счётчиком входящих инвайтов. */
 @Injectable({ providedIn: "root" })
@@ -96,7 +97,18 @@ export class InviteRepository implements InviteRepositoryPort {
    * Получает приглашения текущего пользователя и маппит их в доменную модель `Invite`.
    */
   getMy(): Observable<Invite[]> {
-    return this.inviteAdapter.getMy().pipe(map(invites => plainToInstance(Invite, invites)));
+    return this.inviteAdapter.getMy().pipe(
+      map(invites =>
+        (invites ?? []).map(raw => {
+          // Бэк отдаёт sender/user плоско (без personal) — прогоняем через userFromRaw,
+          // иначе sender.personal.avatar в карточке инвайта undefined.
+          const invite = plainToInstance(Invite, raw);
+          invite.sender = userFromRaw(raw.sender);
+          invite.user = userFromRaw(raw.user);
+          return invite;
+        })
+      )
+    );
   }
 
   /**

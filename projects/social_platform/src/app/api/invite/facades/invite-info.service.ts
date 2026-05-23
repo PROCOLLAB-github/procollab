@@ -12,11 +12,11 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
-import { RejectInviteUseCase } from "./use-cases/reject-invite.use-case";
-import { Observable, finalize, share, shareReplay, tap } from "rxjs";
-import { GetMyInvitesUseCase } from "./use-cases/get-my-invites.use-case";
-import { AcceptInviteUseCase } from "./use-cases/accept-invite.use-case";
+import { Observable, finalize, shareReplay, tap } from "rxjs";
 import { InviteResult } from "@domain/invite/results/invite.result";
+import { RejectInviteUseCase } from "../use-cases/reject-invite.use-case";
+import { AcceptInviteUseCase } from "../use-cases/accept-invite.use-case";
+import { GetMyInvitesUseCase } from "../use-cases/get-my-invites.use-case";
 
 @Injectable({ providedIn: "root" })
 export class InviteInfoService {
@@ -24,7 +24,7 @@ export class InviteInfoService {
   private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
   private readonly getMyInvitesUseCase = inject(GetMyInvitesUseCase);
 
-  private readonly invites$ = signal<AsyncState<Invite[]>>(initial());
+  private readonly invites$ = signal<AsyncState<Invite[], unknown>>(initial());
 
   readonly invites = computed(() => {
     const state = this.invites$();
@@ -35,18 +35,17 @@ export class InviteInfoService {
   });
 
   readonly isLoading = computed(() => isLoading(this.invites$()));
-  readonly isError = computed(() => isFailure(this.invites$()));
 
   // In-flight dedup: если уже идёт fetch — не стартуем второй.
   private inflight: Observable<unknown> | null = null;
 
   ensureLoaded(): void {
-    const state = this.invites$();
-    if (isLoading(state) || isSuccess(state)) return;
+    if (this.isLoading() || isSuccess(this.invites$())) return;
     this.fetch();
   }
 
   refresh(): void {
+    this.inflight = null;
     this.fetch();
   }
 
@@ -62,18 +61,19 @@ export class InviteInfoService {
     const prev = isSuccess(state) ? state.data : undefined;
     this.invites$.set(loading(prev));
 
-    this.inflight = this.getMyInvitesUseCase.execute().pipe(
+    const request$ = this.getMyInvitesUseCase.execute().pipe(
       finalize(() => (this.inflight = null)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
+    this.inflight = request$;
 
-    this.inflight.subscribe({
-      next: (result: any) => {
+    request$.subscribe({
+      next: result => {
         if (!result.ok) {
           this.invites$.set(failure(result.error, prev));
           return;
         }
-        const active = result.value.filter((i: Invite) => i.isAccepted === null);
+        const active = result.value.filter(i => i.isAccepted === null);
         this.invites$.set(success(active));
       },
       error: err => this.invites$.set(failure(err, prev)),
@@ -81,35 +81,25 @@ export class InviteInfoService {
   }
 
   rejectInviteAction(inviteId: number): Observable<InviteResult> {
-    const before = this.invites$();
-    this.removeFromState(inviteId);
+    this.removeFromState(inviteId); // оптимистично убираем
 
     return this.rejectInviteUseCase.execute(inviteId).pipe(
       tap(result => {
-        if (!result.ok) this.invites$.set(before);
+        // На ошибке (в т.ч. 409 «уже обработан») ре-синк с сервером, а не revert:
+        // иначе стухший инвайт возвращается в список и «не пропадает».
+        if (!result.ok) this.refresh();
       })
     );
   }
 
   acceptInviteAction(inviteId: number): Observable<InviteResult> {
-    const before = this.invites$();
     this.removeFromState(inviteId);
 
     return this.acceptInviteUseCase.execute(inviteId).pipe(
       tap(result => {
-        if (!result.ok) this.invites$.set(before); // revert при ошибке
+        if (!result.ok) this.refresh();
       })
     );
-  }
-
-  /**
-   * Синхронизация state'а после того, как внешний код (info-card)
-   * уже выполнил accept/reject HTTP самостоятельно.
-   * TODO: убрать после рефакторинга info-card — там HTTP делается
-   *       параллельно нашему action-методу, что концептуально неверно.
-   */
-  markInviteHandled(inviteId: number): void {
-    this.removeFromState(inviteId);
   }
 
   private removeFromState(inviteId: number): void {

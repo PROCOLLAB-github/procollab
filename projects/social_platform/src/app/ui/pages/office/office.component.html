@@ -43,7 +43,7 @@
               <app-profile-control-panel
                 [invites]="invites()"
                 [hasNotifications]="false"
-                [hasUnreads]="!!(chatStateService.unread$ | async)"
+                [hasUnreads]="chatUnreadState.hasUnreads()"
                 [user]="user"
                 (acceptInvite)="onAcceptInvite($event)"
                 (rejectInvite)="onRejectInvite($event)"

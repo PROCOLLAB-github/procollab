@@ -1,30 +1,31 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { inject, Injectable, Injector, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ValidationService } from "@corelib";
+
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { saveFile } from "@utils/export-file";
-import { ApiPagination } from "@domain/other/api-pagination.model";
+
 import { SendForUserUseCase } from "@api/invite/use-cases/send-for-user.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "@domain/auth/user.model";
 import { Project } from "@domain/project/project.model";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, filter, take, takeUntil } from "rxjs";
 import { DownloadCvUseCase } from "@api/auth/use-cases/download-cv.use-case";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class DetailProfileInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly snackbarService = inject(SnackbarService);
-  private readonly validationService = inject(ValidationService);
   private readonly sendForUserUseCase = inject(SendForUserUseCase);
   private readonly downloadCvUseCase = inject(DownloadCvUseCase);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
-  private readonly authRepository = inject(AuthInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly injector = inject(Injector);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -46,6 +47,28 @@ export class DetailProfileInfoService {
   readonly selectedProjectId = signal<number | null>(null);
   readonly memberProjects = signal<Project[]>([]);
 
+  initializationLeaderProjects(): void {
+    const viewedId = Number(this.route.snapshot.params["id"]);
+
+    // Профиль текущего юзера грузится асинхронно (office init), поэтому ждём его
+    // реактивно, а не читаем сигнал синхронно — иначе гонка даёт null и запрос не идёт.
+    toObservable(this.profileInfoService.profile, { injector: this.injector })
+      .pipe(
+        filter((user): user is User => !!user),
+        take(1),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(currentUser => {
+        // На своём профиле кнопка «пригласить» не показывается — грузить не нужно.
+        if (currentUser.id === viewedId) return;
+        this.profileInfoService.ensureLeaderProjectsLoaded();
+      });
+
+    toObservable(this.profileInfoService.leaderProjects, { injector: this.injector })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(projects => this.profileProjects.set(projects));
+  }
+
   initializationProfile(): void {
     this.route.data.pipe(takeUntil(this.destroy$)).subscribe({
       next: r => {
@@ -55,17 +78,6 @@ export class DetailProfileInfoService {
 
     const isProfileFill = this.profileDetailUIInfoService.isProfileFill();
     this.isProfileFill.set(isProfileFill);
-  }
-
-  initializationLeaderProjects(): void {
-    this.authRepository
-      .fetchLeaderProjects()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (projects: ApiPagination<Project>) => {
-          this.profileProjects.set(projects.results);
-        },
-      });
   }
 
   destroy(): void {

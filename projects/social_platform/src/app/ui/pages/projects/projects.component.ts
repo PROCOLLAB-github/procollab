@@ -21,7 +21,8 @@ import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
 import { SwipeService } from "@api/swipe/swipe.service";
 import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
-import { InviteInfoService } from "@api/invite/invite-info.service";
+import { InviteInfoService } from "@api/invite/facades/invite-info.service";
+import { OfficeInfoService } from "@api/office/facades/office-info.service";
 
 /**
  * Главный компонент модуля проектов
@@ -60,7 +61,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   private readonly projectsInfoService = inject(ProjectsInfoService);
   private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
-  private readonly inviteInfoService = inject(InviteInfoService);
+  private readonly officeInfoService = inject(OfficeInfoService);
   private readonly swipeService = inject(SwipeService);
 
   ngOnInit(): void {
@@ -103,7 +104,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.projectsInfoService.addProject();
   }
 
-  acceptOrRejectInvite(inviteId: number): void {
-    this.inviteInfoService.markInviteHandled(inviteId);
+  onAcceptInvite(inviteId: number): void {
+    this.officeInfoService.onAcceptInvite(inviteId);
+  }
+  
+  onRejectInvite(inviteId: number): void {
+    this.officeInfoService.onRejectInvite(inviteId);
   }
 }

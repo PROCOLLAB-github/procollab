@@ -3,7 +3,16 @@
 import { inject, Injectable } from "@angular/core";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
 import { User, UserInput, UserRole } from "@domain/auth/user.model";
-import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
+import {
+  BehaviorSubject,
+  concatMap,
+  map,
+  Observable,
+  ReplaySubject,
+  switchAll,
+  take,
+  tap,
+} from "rxjs";
 import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { plainToInstance } from "class-transformer";
 import { TokenService } from "@corelib";
@@ -22,17 +31,24 @@ export class AuthRepository implements AuthRepositoryPort {
   private readonly tokenService = inject(TokenService);
   private readonly chatStateService = inject(ChatStateService);
 
+  private profileLoaded = false;
+
   /** Поток данных профиля пользователя */
-  private profile$ = new ReplaySubject<User>(1);
-  profile = this.profile$.asObservable();
+  private profileSubject = new ReplaySubject<User>(1);
+  private readonly profileStore$ = new BehaviorSubject<ReplaySubject<User>>(this.profileSubject);
+  profile = this.profileStore$.pipe(switchAll());
 
   /** Поток доступных ролей пользователей */
-  private roles$ = new ReplaySubject<UserRole[]>(1);
-  roles = this.roles$.asObservable();
+  private rolesSubject = new ReplaySubject<UserRole[]>(1);
+  private readonly rolesStore$ = new BehaviorSubject<ReplaySubject<UserRole[]>>(this.rolesSubject);
+  roles = this.rolesStore$.pipe(switchAll());
 
   /** Поток ролей, которые может изменить текущий пользователь */
-  private changeableRoles$ = new ReplaySubject<UserRole[]>(1);
-  changeableRoles = this.changeableRoles$.asObservable();
+  private changeableRolesSubject = new ReplaySubject<UserRole[]>(1);
+  private readonly changeableRolesStore$ = new BehaviorSubject<ReplaySubject<UserRole[]>>(
+    this.changeableRolesSubject
+  );
+  changeableRoles = this.changeableRolesStore$.pipe(switchAll());
 
   login({ email, password }: LoginCommand): Observable<LoginResponse> {
     return this.authAdapter
@@ -64,9 +80,16 @@ export class AuthRepository implements AuthRepositoryPort {
   }
 
   fetchProfile(): Observable<User> {
+    if (this.profileLoaded) {
+      return this.profile.pipe(take(1)); // отдаём из ReplaySubject, БЕЗ HTTP
+    }
+
     return this.authAdapter.getProfile().pipe(
       map(user => userFromRaw(user)),
-      tap(profile => this.profile$.next(profile))
+      tap(profile => {
+        this.profileSubject.next(profile);
+        this.profileLoaded = true;
+      })
     );
   }
 
@@ -75,7 +98,7 @@ export class AuthRepository implements AuthRepositoryPort {
     const saveProfile = (profileData: UserInput) =>
       this.authAdapter.saveProfile(userToRaw(profileData)).pipe(
         map(user => userFromRaw(user)),
-        tap(user => this.profile$.next(user))
+        tap(user => this.profileSubject.next(user))
       );
 
     if (rawData.id !== undefined) {
@@ -93,7 +116,7 @@ export class AuthRepository implements AuthRepositoryPort {
       take(1),
       concatMap(profile => this.authAdapter.setOnboardingStage(stage, profile.id)),
       map(user => userFromRaw(user)),
-      tap(user => this.profile$.next(user))
+      tap(user => this.profileSubject.next(user))
     );
   }
 
@@ -102,7 +125,7 @@ export class AuthRepository implements AuthRepositoryPort {
       take(1),
       concatMap(profile => this.authAdapter.saveAvatar(url, profile.id)),
       map(user => userFromRaw(user)),
-      tap(user => this.profile$.next(user))
+      tap(user => this.profileSubject.next(user))
     );
   }
 
@@ -120,7 +143,7 @@ export class AuthRepository implements AuthRepositoryPort {
     return this.authAdapter.getUserRoles().pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
       map(roles => plainToInstance(UserRole, roles)),
-      tap(roles => this.roles$.next(roles))
+      tap(roles => this.rolesSubject.next(roles))
     );
   }
 
@@ -128,7 +151,7 @@ export class AuthRepository implements AuthRepositoryPort {
     return this.authAdapter.getChangeableRoles().pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
       map(roles => plainToInstance(UserRole, roles)),
-      tap(roles => this.changeableRoles$.next(roles))
+      tap(roles => this.changeableRolesSubject.next(roles))
     );
   }
 
@@ -138,5 +161,17 @@ export class AuthRepository implements AuthRepositoryPort {
 
   setPassword(password: string, token: string): Observable<void> {
     return this.authAdapter.setPassword(password, token);
+  }
+
+  resetProfileCache(): void {
+    this.profileLoaded = false;
+
+    this.profileSubject = new ReplaySubject<User>(1);
+    this.rolesSubject = new ReplaySubject<UserRole[]>(1);
+    this.changeableRolesSubject = new ReplaySubject<UserRole[]>(1);
+
+    this.profileStore$.next(this.profileSubject);
+    this.rolesStore$.next(this.rolesSubject);
+    this.changeableRolesStore$.next(this.changeableRolesSubject);
   }
 }

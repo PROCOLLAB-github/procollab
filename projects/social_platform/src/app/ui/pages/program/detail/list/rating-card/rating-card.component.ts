@@ -41,7 +41,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
 /**
  * Компонент карточки оценки проекта
@@ -98,7 +98,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly AppRoutes = AppRoutes;
 
   constructor(
-    public industryRepository: IndustryInfoService,
+    public industryRepository: IndustryRepositoryPort,
     private readonly rateProjectUseCase: RateProjectUseCase,
     private readonly authRepository: AuthInfoService,
     private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,

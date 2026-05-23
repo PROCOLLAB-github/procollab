@@ -8,7 +8,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 import { CreateProjectUseCase } from "../use-cases/create-project.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
-import { InviteInfoService } from "@api/invite/invite-info.service";
+import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 
 /** Координирует верхний уровень раздела проектов: табы, поиск и создание проекта. */
 @Injectable()

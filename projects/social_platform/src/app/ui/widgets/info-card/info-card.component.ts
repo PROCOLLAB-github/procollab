@@ -19,12 +19,10 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { YearsFromBirthdayPipe, TruncatePipe } from "@corelib";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AcceptInviteUseCase } from "@api/invite/use-cases/accept-invite.use-case";
-import { RejectInviteUseCase } from "@api/invite/use-cases/reject-invite.use-case";
 import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-project-subscription.use-case";
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -50,11 +48,9 @@ import { IndustryInfoService } from "@api/industry/facades/industry-info.service
 })
 export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
-  private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly addProjectSubscriptionUseCase = inject(AddProjectSubscriptionUseCase);
   private readonly deleteProjectSubscriptionUseCase = inject(DeleteProjectSubscriptionUseCase);
-  public readonly industryRepository = inject(IndustryInfoService);
+  public readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 
@@ -142,21 +138,7 @@ export class InfoCardComponent {
     }
 
     this.stopEventPropagation(event);
-
-    this.rejectInviteUseCase
-      .execute(inviteId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            this.logger.error("Error rejecting invite:", result.error);
-            this.inviteErrorModal = true;
-            return;
-          }
-
-          this.onRejectingInvite.emit(inviteId || this.info!.inviteId);
-        },
-      });
+    this.onRejectingInvite.emit(inviteId);
   }
 
   /**
@@ -169,21 +151,7 @@ export class InfoCardComponent {
     }
 
     this.stopEventPropagation(event);
-
-    this.acceptInviteUseCase
-      .execute(inviteId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            this.logger.error("Error accepting invite:", result.error);
-            this.inviteErrorModal = true;
-            return;
-          }
-
-          this.onAcceptingInvite.emit(inviteId || this.info!.inviteId);
-        },
-      });
+    this.onAcceptingInvite.emit(inviteId);
   }
 
   /**

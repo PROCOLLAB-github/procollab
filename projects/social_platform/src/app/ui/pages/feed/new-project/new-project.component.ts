@@ -9,7 +9,7 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { TruncatePipe, DayjsPipe } from "@corelib";
 import { FeedProject } from "@domain/feed/feed-item.model";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -65,5 +65,5 @@ export class NewProjectComponent {
    * Инициализирует компонент с доступом к сервису маршрутизации
    * для возможной навигации к детальной странице проекта
    */
-  constructor(public readonly industryRepository: IndustryInfoService) {}
+  constructor(public readonly industryRepository: IndustryRepositoryPort) {}
 }

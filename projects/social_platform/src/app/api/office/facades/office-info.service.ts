@@ -5,15 +5,16 @@ import { Subject, takeUntil, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
-import { CheckUnreadsUseCase } from "@api/chat/use-cases/check-unreads.use-case";
+import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
+import { InviteInfoService } from "@api/invite/facades/invite-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { IndustryStateInfoService } from "@api/industry/facades/industry-state-info.service";
 import { ConnectChatUseCase } from "@api/chat/use-cases/connect-chat.use-case";
 import { ObserveSetOfflineUseCase } from "@api/chat/use-cases/observe-set-offline.use-case";
 import { ObserveSetOnlineUseCase } from "@api/chat/use-cases/observe-set-online.use-case";
 import { ChatStateService } from "@api/chat/chat-state.service";
-import { InviteInfoService } from "@api/invite/invite-info.service";
 
 /**
  * Стартовый сервис офисной оболочки: прогревает справочники, собирает навигацию,
@@ -21,17 +22,18 @@ import { InviteInfoService } from "@api/invite/invite-info.service";
  */
 @Injectable()
 export class OfficeInfoService {
-  private readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly authRepository = inject(AuthRepositoryPort);
   private readonly inviteInfoService = inject(InviteInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly industryStateInfoService = inject(IndustryStateInfoService);
 
-  private readonly checkUnreadsUseCase = inject(CheckUnreadsUseCase);
+  private readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly connectChatUseCase = inject(ConnectChatUseCase);
   private readonly observeSetOfflineUseCase = inject(ObserveSetOfflineUseCase);
   private readonly observeSetOnlineUseCase = inject(ObserveSetOnlineUseCase);
+  private readonly chatStateService = inject(ChatStateService);
 
   private readonly router = inject(Router);
-  private readonly chatStateService = inject(ChatStateService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -40,8 +42,10 @@ export class OfficeInfoService {
   private readonly destroy$ = new Subject<void>();
 
   initializationOffice(): void {
+    this.profileInfoService.ensureProfileLoaded();
+
     // Справочник отраслей нужен многим дочерним страницам синхронно через сигнал.
-    this.industryRepository.getAll().pipe(takeUntil(this.destroy$)).subscribe();
+    this.industryStateInfoService.ensureLoaded();
 
     this.initializationNavItems();
 
@@ -50,16 +54,7 @@ export class OfficeInfoService {
     this.initializationStatus();
 
     if (!this.router.url.includes("chats")) {
-      this.checkUnreadsUseCase
-        .execute()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(result => {
-          if (!result.ok) {
-            return;
-          }
-
-          this.chatStateService.setUnread(result.value);
-        });
+      this.chatUnreadState.ensureLoaded();
     }
 
     this.officeUIInfoService.applyVerificationModal();
@@ -146,6 +141,11 @@ export class OfficeInfoService {
   }
 
   onLogout() {
+    this.inviteInfoService.invalidate();
+    this.profileInfoService.invalidateProfile();
+    this.profileInfoService.invalidateLeaderProjects();
+    this.chatUnreadState.invalidate();
+
     this.authRepository
       .logout()
       .pipe(

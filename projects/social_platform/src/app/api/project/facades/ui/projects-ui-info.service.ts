@@ -3,7 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
-import { InviteInfoService } from "@api/invite/invite-info.service";
+import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 
 /** UI-проекция проектов: общие computed-сигналы. */
 @Injectable()
