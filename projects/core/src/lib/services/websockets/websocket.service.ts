@@ -1,6 +1,6 @@
 /** @format */
 import { inject, Injectable } from "@angular/core";
-import { catchError, EMPTY, filter, map, Observable, Observer, retry, Subject, tap } from "rxjs";
+import { filter, map, Observable, Observer, retry, Subject, timer } from "rxjs";
 import { environment } from "@environment";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
@@ -76,14 +76,19 @@ export class WebsocketService {
         this.messages$.next(message);
       };
     }).pipe(
+      // Resilient reconnect: НЕ сдаёмся насовсем по исчерпании попыток.
+      // Первые maxAttempts — частые попытки (быстрое восстановление после idle-close сервера);
+      // дальше — реже (бэкофф) + сигнал connectionLost$ для UX, но переподключение продолжается бесконечно.
+      // resetOnSuccess сбрасывает счётчик после каждого успешного onopen.
       retry({
-        count: environment.websocketReconnectionMaxAttempts,
-        delay: environment.websocketReconnectionInterval,
+        delay: (_error, retryCount) => {
+          if (retryCount >= environment.websocketReconnectionMaxAttempts) {
+            this._connectionLost$.next();
+            return timer(Math.max(environment.websocketReconnectionInterval, 5000));
+          }
+          return timer(environment.websocketReconnectionInterval);
+        },
         resetOnSuccess: true,
-      }),
-      catchError(() => {
-        this._connectionLost$.next();
-        return EMPTY;
       })
     );
   }
@@ -93,9 +98,9 @@ export class WebsocketService {
    *
    * @param type - тип сообщения
    * @param content - содержимое сообщения (любой объект)
-   * @throws Error если WebSocket не открыт
    *
-   * Автоматически преобразует ключи content в snake_case перед отправкой
+   * Если сокет не OPEN — сообщение копится в outboundQueue и отправляется на следующем onopen
+   * (не бросает исключение). Автоматически преобразует ключи content в snake_case.
    */
   public send(type: string, content: any): void {
     const payload = JSON.stringify({
