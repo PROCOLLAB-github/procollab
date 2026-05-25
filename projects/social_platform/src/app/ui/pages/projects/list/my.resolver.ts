@@ -41,16 +41,18 @@ import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use
 export const ProjectsMyResolver: ResolveFn<ApiPagination<Project>> = () => {
   const getMyProjectsUseCase = inject(GetMyProjectsUseCase);
 
-  return getMyProjectsUseCase.execute(new HttpParams({ fromObject: { limit: 16 } })).pipe(
-    map(result =>
-      result.ok
-        ? result.value
-        : {
-            count: 0,
-            results: [],
-            next: "",
-            previous: "",
-          }
-    )
-  );
+  return getMyProjectsUseCase
+    .execute(new HttpParams({ fromObject: { offset: 0, limit: 16 } }))
+    .pipe(
+      map(result =>
+        result.ok
+          ? result.value
+          : {
+              count: 0,
+              results: [],
+              next: "",
+              previous: "",
+            }
+      )
+    );
 };

@@ -28,7 +28,6 @@ import { GetMyProjectsUseCase } from "../../use-cases/get-my-projects.use-case";
 import {
   AsyncState,
   initial,
-  isFailure,
   isLoading,
   isSuccess,
   loading,
