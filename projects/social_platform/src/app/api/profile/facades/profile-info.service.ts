@@ -4,8 +4,24 @@ import { Injectable, computed, signal, inject } from "@angular/core";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { User, UserRole } from "@domain/auth/user.model";
 import { Project } from "@domain/project/project.model";
-import { AsyncState, failure, initial, isFailure, isLoading, isSuccess, loading, success } from "@domain/shared/async-state";
-import { Observable, finalize, forkJoin, shareReplay, tap } from "rxjs";
+import {
+  AsyncState,
+  failure,
+  initial,
+  isFailure,
+  isLoading,
+  isSuccess,
+  loading,
+  success,
+} from "@domain/shared/async-state";
+import { Observable, finalize, forkJoin, shareReplay } from "rxjs";
+import { plainToInstance } from "class-transformer";
+import { clearCacheKey, readCache, writeCache } from "@utils/cache";
+
+const ROLES_CACHE_KEY = "users:roles";
+const CHANGEABLE_ROLES_CACHE_KEY = "users:changeableRoles";
+const CACHE_VERSION = 1;
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 
 @Injectable({ providedIn: "root" })
 export class ProfileInfoService {
@@ -15,7 +31,6 @@ export class ProfileInfoService {
   private readonly leaderProjects$ = signal<AsyncState<Project[]>>(initial());
 
   private readonly authRepository = inject(AuthRepositoryPort);
-  
 
   readonly profile = computed(() => {
     const state = this.profile$();
@@ -51,9 +66,7 @@ export class ProfileInfoService {
 
   readonly isLoading = computed(() => {
     return (
-      isLoading(this.profile$()) ||
-      isLoading(this.roles$()) ||
-      isLoading(this.changeableRoles$())
+      isLoading(this.profile$()) || isLoading(this.roles$()) || isLoading(this.changeableRoles$())
     );
   });
 
@@ -65,7 +78,30 @@ export class ProfileInfoService {
   private leaderInflight: Observable<unknown> | null = null;
 
   ensureProfileLoaded(): void {
-    if (this.isLoading() || (isSuccess(this.profile$()) && isSuccess(this.roles$()) && isSuccess(this.changeableRoles$()))) return;
+    if (
+      this.isLoading() ||
+      (isSuccess(this.profile$()) && isSuccess(this.roles$()) && isSuccess(this.changeableRoles$()))
+    )
+      return;
+
+    // Попытаться hydrat'ить редко меняемые справочники из localStorage
+    const rolesCached = readCache<UserRole[]>(
+      ROLES_CACHE_KEY,
+      CACHE_VERSION,
+      CACHE_TTL,
+      raw => plainToInstance(UserRole, raw as object[]) as UserRole[]
+    );
+
+    const changeableCached = readCache<UserRole[]>(
+      CHANGEABLE_ROLES_CACHE_KEY,
+      CACHE_VERSION,
+      CACHE_TTL,
+      raw => plainToInstance(UserRole, raw as object[]) as UserRole[]
+    );
+
+    if (rolesCached) this.roles$.set(success(rolesCached));
+    if (changeableCached) this.changeableRoles$.set(success(changeableCached));
+
     this.fetchProfile();
   }
 
@@ -93,24 +129,27 @@ export class ProfileInfoService {
       profile: this.authRepository.fetchProfile(),
       roles: this.authRepository.fetchUserRoles(),
       changeableRoles: this.authRepository.fetchChangeableRoles(),
-    })
-      .pipe(
-        finalize(() => (this.profileInflight = null)),
-        shareReplay({ bufferSize: 1, refCount: true })
-      )
+    }).pipe(
+      finalize(() => (this.profileInflight = null)),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
 
     this.profileInflight.subscribe({
       next: (result: any) => {
-        this.profile$.set(success(result.profile))
-        this.roles$.set(success(result.roles))
-        this.changeableRoles$.set(success(result.changeableRoles))
+        this.profile$.set(success(result.profile));
+        this.roles$.set(success(result.roles));
+        this.changeableRoles$.set(success(result.changeableRoles));
+        try {
+          writeCache(ROLES_CACHE_KEY, CACHE_VERSION, result.roles);
+          writeCache(CHANGEABLE_ROLES_CACHE_KEY, CACHE_VERSION, result.changeableRoles);
+        } catch {}
       },
-      error: (error) => {
-        this.profile$.set(failure(error, prevProfile))
-        this.roles$.set(failure(error, prevRoles))
-        this.changeableRoles$.set(failure(error, prevChagableRoles))
-      }
-    })
+      error: error => {
+        this.profile$.set(failure(error, prevProfile));
+        this.roles$.set(failure(error, prevRoles));
+        this.changeableRoles$.set(failure(error, prevChagableRoles));
+      },
+    });
   }
 
   private fetchLeaderProjects(): void {
@@ -119,17 +158,16 @@ export class ProfileInfoService {
     const leaderProjects = this.leaderProjects$();
     const prevLeaderProjects = isSuccess(leaderProjects) ? leaderProjects.data : undefined;
     this.leaderProjects$.set(loading(prevLeaderProjects));
-    
-    this.leaderInflight = this.authRepository.fetchLeaderProjects()
-      .pipe(
-        finalize(() => (this.leaderInflight = null)),
-        shareReplay({ bufferSize: 1, refCount: true })
-      )
-    
+
+    this.leaderInflight = this.authRepository.fetchLeaderProjects().pipe(
+      finalize(() => (this.leaderInflight = null)),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+
     this.leaderInflight.subscribe({
       next: (result: any) => this.leaderProjects$.set(success(result.results)),
       error: error => this.leaderProjects$.set(failure(error, prevLeaderProjects)),
-    })
+    });
   }
 
   refreshProfile(): void {
@@ -148,6 +186,8 @@ export class ProfileInfoService {
     this.profile$.set(initial());
     this.roles$.set(initial());
     this.changeableRoles$.set(initial());
+    clearCacheKey(ROLES_CACHE_KEY, CACHE_VERSION);
+    clearCacheKey(CHANGEABLE_ROLES_CACHE_KEY, CACHE_VERSION);
   }
 
   invalidateLeaderProjects(): void {
