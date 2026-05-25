@@ -107,7 +107,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onAcceptInvite(inviteId: number): void {
     this.officeInfoService.onAcceptInvite(inviteId);
   }
-  
+
   onRejectInvite(inviteId: number): void {
     this.officeInfoService.onRejectInvite(inviteId);
   }

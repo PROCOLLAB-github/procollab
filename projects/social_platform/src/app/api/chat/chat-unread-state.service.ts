@@ -1,7 +1,16 @@
 /** @format */
 
 import { Injectable, computed, inject, signal } from "@angular/core";
-import { AsyncState, failure, initial, isFailure, isLoading, isSuccess, loading, success } from "@domain/shared/async-state";
+import {
+  AsyncState,
+  failure,
+  initial,
+  isFailure,
+  isLoading,
+  isSuccess,
+  loading,
+  success,
+} from "@domain/shared/async-state";
 import { CheckUnreadsUseCase } from "./use-cases/check-unreads.use-case";
 import { Observable, finalize, shareReplay } from "rxjs";
 
@@ -27,7 +36,7 @@ export class ChatUnreadStateService {
     if (isLoading(this.hasUnreads$()) || isSuccess(this.hasUnreads$())) return;
     this.fetch();
   }
-  
+
   refresh() {
     this.inflight = null;
     this.fetch();
@@ -44,7 +53,7 @@ export class ChatUnreadStateService {
       finalize(() => {
         this.inflight = null;
       }),
-      shareReplay({ bufferSize: 1, refCount: true }),
+      shareReplay({ bufferSize: 1, refCount: true })
     );
     this.inflight = request$;
 

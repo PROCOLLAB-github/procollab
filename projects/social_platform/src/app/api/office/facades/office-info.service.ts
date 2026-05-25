@@ -15,6 +15,8 @@ import { ConnectChatUseCase } from "@api/chat/use-cases/connect-chat.use-case";
 import { ObserveSetOfflineUseCase } from "@api/chat/use-cases/observe-set-offline.use-case";
 import { ObserveSetOnlineUseCase } from "@api/chat/use-cases/observe-set-online.use-case";
 import { ChatStateService } from "@api/chat/chat-state.service";
+import { EventBus } from "@domain/shared/event-bus";
+import { loggedOut } from "@domain/auth/events/logged-out.event";
 
 /**
  * Стартовый сервис офисной оболочки: прогревает справочники, собирает навигацию,
@@ -26,6 +28,7 @@ export class OfficeInfoService {
   private readonly inviteInfoService = inject(InviteInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly industryStateInfoService = inject(IndustryStateInfoService);
+  private readonly eventBus = inject(EventBus);
 
   private readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly connectChatUseCase = inject(ConnectChatUseCase);
@@ -141,6 +144,7 @@ export class OfficeInfoService {
   }
 
   onLogout() {
+    this.eventBus.emit(loggedOut());
     this.inviteInfoService.invalidate();
     this.profileInfoService.invalidateProfile();
     this.profileInfoService.invalidateLeaderProjects();

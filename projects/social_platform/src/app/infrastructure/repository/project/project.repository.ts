@@ -20,6 +20,7 @@ import { AcceptVacancyResponse } from "@domain/vacancy/events/accept-vacancy-res
 import { RejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-response.event";
 import { EntityCache } from "@domain/shared/entity-cache";
 import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
+import { LoggedOut } from "@domain/auth/events/logged-out.event";
 
 /**
  * Репозиторий проектов с локальным кешем деталей и счётчиками списков.
@@ -101,6 +102,12 @@ export class ProjectRepository implements ProjectRepositoryPort {
     this.eventBus.on<RejectVacancyResponse>("RejectVacancyResponse").subscribe({
       next: event => {
         this.invalidate(event.payload.projectId);
+      },
+    });
+
+    this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
+      next: () => {
+        this.entityCache.clear();
       },
     });
   }

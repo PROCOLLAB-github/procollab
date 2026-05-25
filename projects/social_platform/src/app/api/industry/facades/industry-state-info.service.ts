@@ -13,7 +13,13 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
+import { clearCacheKey, readCache, writeCache } from "@utils/cache";
+import { plainToInstance } from "class-transformer";
 import { Observable, finalize, shareReplay } from "rxjs";
+
+const INDUSTRIES_CACHE_KEY = "industries";
+const INDUSTRIES_CACHE_VERSION = 1;
+const TTL_24H = 24 * 60 * 60 * 1000;
 
 /**
  * Стейт справочника отраслей: идемпотентная загрузка (`ensureLoaded`),
@@ -40,6 +46,22 @@ export class IndustryStateInfoService {
 
   ensureLoaded(): void {
     if (this.isLoading() || isSuccess(this.industries$())) return;
+
+    const cached = readCache<Industry[]>(
+      INDUSTRIES_CACHE_KEY,
+      INDUSTRIES_CACHE_VERSION,
+      TTL_24H,
+      raw => plainToInstance(Industry, raw as object[]) as Industry[]
+    );
+
+    if (cached) {
+      // мгновенно показываем данные из кеша
+      this.industries$.set(success(cached));
+      // и в фоне инициируем обновление (fetch() сам ставит loading(prev), UI всё ещё видит prev)
+      this.fetch();
+      return;
+    }
+
     this.fetch();
   }
 
@@ -51,6 +73,7 @@ export class IndustryStateInfoService {
   invalidate(): void {
     this.inflight = null;
     this.industries$.set(initial());
+    clearCacheKey(INDUSTRIES_CACHE_KEY, INDUSTRIES_CACHE_VERSION);
   }
 
   /** Синхронный поиск отрасли в загруженном справочнике. */
@@ -72,7 +95,10 @@ export class IndustryStateInfoService {
     this.inflight = request$;
 
     request$.subscribe({
-      next: industries => this.industries$.set(success(industries)),
+      next: industries => {
+        this.industries$.set(success(industries));
+        writeCache(INDUSTRIES_CACHE_KEY, INDUSTRIES_CACHE_VERSION, industries);
+      },
       error: error => this.industries$.set(failure(error)),
     });
   }

@@ -16,8 +16,6 @@ export class AcceptInviteUseCase {
   execute(inviteId: number): Observable<Result<void, { kind: "unknown" }>> {
     return this.inviteRepositoryPort.acceptInvite(inviteId).pipe(
       tap(invite => {
-        // Эмит события — best-effort side-effect. Тонкий ответ accept (без project/user)
-        // не должен превращать успешный приём в ошибку и показывать ложную модалку.
         if (invite?.project && invite?.user) {
           this.eventBus.emit(
             acceptInvite(invite.id, invite.project.id, invite.user.id, invite.role)

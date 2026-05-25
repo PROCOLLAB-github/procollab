@@ -42,7 +42,11 @@ describe("OfficeComponent", () => {
     }
 
     const stubPrograms = [
-      { id: 1, isUserMember: true, datetimeRegistrationEnds: new Date(Date.now() + 86400000).toISOString() },
+      {
+        id: 1,
+        isUserMember: true,
+        datetimeRegistrationEnds: new Date(Date.now() + 86400000).toISOString(),
+      },
     ];
 
     const programStub: Partial<ProgramShellInfoService> = {

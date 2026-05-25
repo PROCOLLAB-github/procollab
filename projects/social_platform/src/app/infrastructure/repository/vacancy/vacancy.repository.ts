@@ -13,6 +13,7 @@ import { EventBus } from "@domain/shared/event-bus";
 import { VacancyCreated } from "@domain/vacancy/events/vacancy-created.event";
 import { VacancyUpdated } from "@domain/vacancy/events/vacancy-updated.event";
 import { VacancyDelete } from "@domain/vacancy/events/vacancy-deleted.event";
+import { LoggedOut } from "@domain/auth/events/logged-out.event";
 
 /** Репозиторий вакансий с кешем деталей и инвалидацией по событиям вакансий. */
 @Injectable({ providedIn: "root" })
@@ -22,9 +23,6 @@ export class VacancyRepository implements VacancyRepositoryPort {
   private readonly entityCache = new EntityCache<Vacancy>();
 
   constructor() {
-    // События вакансий инвалидируют кеш после изменений из разных экранов.
-    // Вакансия привязана к проекту напрямую: на создание сбрасываем по projectId,
-    // т.к. модель проекта содержит массив вакансий и должна перечитаться.
     this.eventBus.on<VacancyCreated>("VacancyCreated").subscribe(event => {
       this.invalidate(event.payload.projectId);
     });
@@ -35,6 +33,12 @@ export class VacancyRepository implements VacancyRepositoryPort {
 
     this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => {
       this.invalidate(event.payload.vacancyId);
+    });
+
+    this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
+      next: () => {
+        this.entityCache.clear();
+      },
     });
   }
 

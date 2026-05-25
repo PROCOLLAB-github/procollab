@@ -8,17 +8,73 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ProjectNewsHttpAdapter } from "../../adapters/project/project-news-http.adapter";
 import { NewsRepositoryPort } from "@domain/news/port/news.repository.port";
+import { EventBus } from "@domain/shared/event-bus";
+import { EntityCache } from "@domain/shared/entity-cache";
+import {
+  AddNews,
+  DeleteNews,
+  EditNews,
+  ReadNews,
+  ToggleLike,
+} from "@domain/project/events/project-news.event";
+import { LoggedOut } from "@domain/auth/events/logged-out.event";
 
 /** Репозиторий новостей проекта с дедупликацией событий чтения в sessionStorage. */
 @Injectable({ providedIn: "root" })
 export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
   private readonly projectNewsAdapter = inject(ProjectNewsHttpAdapter);
   private readonly storageService = inject(StorageService);
+  private readonly eventBus = inject(EventBus);
+  private readonly newsCache = new EntityCache<ApiPagination<FeedNews>>();
+
+  constructor() {
+    this.initializeEventListeners();
+  }
+
+  private initializeEventListeners(): void {
+    this.eventBus.on<AddNews>("AddNews").subscribe({
+      next: event => {
+        this.newsCache.invalidate(Number(event.payload.projectId));
+      },
+    });
+
+    this.eventBus.on<DeleteNews>("DeleteNews").subscribe({
+      next: event => {
+        this.newsCache.invalidate(Number(event.payload.projectId));
+      },
+    });
+
+    this.eventBus.on<EditNews>("EditNews").subscribe({
+      next: event => {
+        this.newsCache.invalidate(Number(event.payload.projectId));
+      },
+    });
+
+    this.eventBus.on<ToggleLike>("ToggleLike").subscribe({
+      next: event => {
+        this.newsCache.invalidate(Number(event.payload.projectId));
+      },
+    });
+
+    this.eventBus.on<ReadNews>("ReadNews").subscribe({
+      next: event => {
+        this.newsCache.invalidate(Number(event.payload.projectId));
+      },
+    });
+
+    this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
+      next: () => {
+        this.newsCache.clear();
+      },
+    });
+  }
 
   fetchNews(projectId: string): Observable<ApiPagination<FeedNews>> {
-    return this.projectNewsAdapter
-      .fetchNews(projectId)
-      .pipe(map(page => ({ ...page, results: plainToInstance(FeedNews, page.results) })));
+    return this.newsCache.getOrFetch(Number(projectId), () =>
+      this.projectNewsAdapter
+        .fetchNews(projectId)
+        .pipe(map(page => ({ ...page, results: plainToInstance(FeedNews, page.results) })))
+    );
   }
 
   fetchNewsDetail(projectId: string, newsId: string): Observable<FeedNews> {
