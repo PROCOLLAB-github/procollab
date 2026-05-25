@@ -54,10 +54,10 @@ export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
     switchMap(user =>
       forkJoin({
         all: getAllProjectsUseCase
-          .execute(new HttpParams({ fromObject: { limit: 16 } }))
+          .execute(new HttpParams({ fromObject: { offset: 0, limit: 16 } }))
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
         my: getMyProjectsUseCase
-          .execute(new HttpParams({ fromObject: { limit: 16 } }))
+          .execute(new HttpParams({ fromObject: { offset: 0, limit: 16 } }))
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
         subs: getProjectSubscriptionsUseCase
           .execute(user.id)
