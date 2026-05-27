@@ -32,6 +32,9 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
     resolve: {
       data: ProgramDetailResolver,
     },
+    // Перезапуск резолвера при смене :programId в SPA-навигации между программами
+    // (иначе остаются данные предыдущей программы).
+    runGuardsAndResolvers: "always",
     data: { listType: "program" },
     children: [
       {

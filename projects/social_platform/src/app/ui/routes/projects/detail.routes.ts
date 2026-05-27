@@ -38,6 +38,9 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
     resolve: {
       data: ProjectDetailResolver,
     },
+    // Перезапуск резолвера при смене :projectId в SPA-навигации между проектами
+    // (иначе остаются данные предыдущего проекта).
+    runGuardsAndResolvers: "always",
     data: { listType: "project" },
     children: [
       {

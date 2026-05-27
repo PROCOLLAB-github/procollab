@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="office">
-  @if (authRepository.profile | async; as user) {
+  @if (profile()) {
   <div class="office__wrapper">
     <img
       alt="background-image"
@@ -39,12 +39,12 @@
             <div class="office__top">
               <app-nav></app-nav>
 
-              @if (user !== undefined && invites !== undefined) {
+              @if (profile() !== undefined && invites() !== undefined) {
               <app-profile-control-panel
                 [invites]="invites()"
                 [hasNotifications]="false"
                 [hasUnreads]="chatUnreadState.hasUnreads()"
-                [user]="user"
+                [user]="profile()"
                 (acceptInvite)="onAcceptInvite($event)"
                 (rejectInvite)="onRejectInvite($event)"
                 (logout)="onLogout()"

@@ -1,11 +1,12 @@
 /** @format */
 
-import { ElementRef, inject, Injectable } from "@angular/core";
+import { ElementRef, inject, Injectable, Injector } from "@angular/core";
 import {
   catchError,
   concatMap,
   distinctUntilChanged,
   EMPTY,
+  filter,
   fromEvent,
   map,
   of,
@@ -21,7 +22,6 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
 import { ProjectRate } from "@domain/project/project-rate";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
 import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
 import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
@@ -32,12 +32,19 @@ import Fuse from "fuse.js";
 import { Project } from "@domain/project/project.model";
 import { User } from "@domain/auth/user.model";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
+import { toObservable } from "@angular/core/rxjs-interop";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад списка программы: проекты/участники/подписки/рейтинги с фильтрами и пагинацией по скроллу. */
 @Injectable()
 export class ProgramDetailListInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
+  private readonly injector = inject(Injector);
+
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
 
   private readonly createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
@@ -46,15 +53,11 @@ export class ProgramDetailListInfoService {
   private readonly filterProjectRatingsUseCase = inject(FilterProjectRatingsUseCase);
   private readonly getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
 
-  private readonly authRepository = inject(AuthRepositoryPort);
-
-  private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
-  private readonly logger = inject(LoggerService);
-
   private readonly destroy$ = new Subject<void>();
 
   private readonly listType = this.programDetailListUIInfoService.listType;
   private readonly searchParamName = this.programDetailListUIInfoService.searchParamName;
+  private readonly profile = this.profileInfoService.profile;
 
   private readonly listPage = this.programDetailListUIInfoService.listPage;
   private readonly itemsPerPage = this.programDetailListUIInfoService.itemsPerPage;
@@ -134,9 +137,10 @@ export class ProgramDetailListInfoService {
   }
 
   setupProfile(): void {
-    this.authRepository.profile
+    toObservable(this.profile, { injector: this.injector })
       .pipe(
-        switchMap(p => this.getProjectSubscriptionsUseCase.execute(p.id)),
+        filter(profile => !!profile),
+        switchMap(p => this.getProjectSubscriptionsUseCase.execute(p!.id)),
         takeUntil(this.destroy$)
       )
       .subscribe({

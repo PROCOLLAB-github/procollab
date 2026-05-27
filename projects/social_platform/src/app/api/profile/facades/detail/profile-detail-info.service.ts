@@ -8,35 +8,34 @@ import { ExpandService } from "../../../expand/expand.service";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";
 import { NewsInfoService } from "../../../news/news-info.service";
-import { ProjectsDetailUIInfoService } from "../../../project/facades/detail/ui/projects-detail-ui.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { AddProfileNewsUseCase } from "../../use-cases/add-profile-news.use-case";
 import { DeleteProfileNewsUseCase } from "../../use-cases/delete-profile-news.use-case";
 import { EditProfileNewsUseCase } from "../../use-cases/edit-profile-news.use-case";
 import { FetchProfileNewsUseCase } from "../../use-cases/fetch-profile-news.use-case";
 import { ReadProfileNewsUseCase } from "../../use-cases/read-profile-news.use-case";
 import { ToggleProfileNewsLikeUseCase } from "../../use-cases/toggle-profile-news-like.use-case";
+import { ProfileInfoService } from "../profile-info.service";
 
 /** Фасад профиля (детали): новости профиля — CRUD, лайк, отметка прочтения по видимости. */
 @Injectable()
 export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly expandService = inject(ExpandService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly newsInfoService = inject(NewsInfoService);
+
   private readonly addProfileNewsUseCase = inject(AddProfileNewsUseCase);
   private readonly deleteProfileNewsUseCase = inject(DeleteProfileNewsUseCase);
   private readonly editProfileNewsUseCase = inject(EditProfileNewsUseCase);
   private readonly fetchProfileNewsUseCase = inject(FetchProfileNewsUseCase);
   private readonly readProfileNewsUseCase = inject(ReadProfileNewsUseCase);
   private readonly toggleProfileNewsLikeUseCase = inject(ToggleProfileNewsLikeUseCase);
-  private readonly expandService = inject(ExpandService);
-  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
-  private readonly newsInfoService = inject(NewsInfoService);
 
   private observer?: IntersectionObserver;
   private readonly destroy$ = new Subject<void>();
 
-  private readonly user = this.profileDetailUIInfoService.user;
+  private readonly profile = this.profileInfoService.profile;
   private readonly news = this.newsInfoService.news;
 
   destroy(): void {
@@ -76,7 +75,7 @@ export class ProfileDetailInfoService {
 
   initCheckDescription(descEl?: ElementRef): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", !!this.user()?.personal.aboutMe, descEl);
+      this.expandService.checkExpandable("description", !!this.profile()?.personal.aboutMe, descEl);
     }, 150);
   }
 
@@ -160,12 +159,7 @@ export class ProfileDetailInfoService {
   }
 
   private initializationProfileVields(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
-      next: user => {
-        this.profileDetailUIInfoService.applySetLoggedUserId("logged", user.id);
-      },
-    });
-
+    this.profileDetailUIInfoService.applySetLoggedUserId("logged", this.profile()!.id);
     this.profileDetailUIInfoService.applyProfileEmpty();
   }
 

@@ -10,9 +10,9 @@ import { User } from "@domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
-import { GetProfileUseCase } from "@api/auth/use-cases/get-profile.use-case";
 import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /**
  * Координирует первый шаг онбординга: профильные поля, вложенные FormArray,
@@ -24,13 +24,14 @@ export class OnboardingStageZeroInfoService {
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
   private readonly validationService = inject(ValidationService);
-  private readonly getProfileUseCase = inject(GetProfileUseCase);
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly router = inject(Router);
   private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
   private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
 
   private readonly destroy$ = new Subject<void>();
 
+  private readonly profile = this.profileInfoService.profile;
   private readonly stageForm = this.onboardingStageZeroUIInfoService.stageForm;
   private readonly achievements = this.onboardingStageZeroUIInfoService.achievements;
   private readonly education = this.onboardingStageZeroUIInfoService.education;
@@ -41,15 +42,9 @@ export class OnboardingStageZeroInfoService {
   private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
 
   initializationStageZero(): void {
-    this.getProfileUseCase
-      .execute()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
-          if (!result.ok) return;
-          this.onboardingStageZeroUIInfoService.applySetProfile(result.value);
-        },
-      });
+    if (this.profile()) {
+      this.onboardingStageZeroUIInfoService.applySetProfile(this.profile()!);
+    }
 
     this.onboardingService.formValue$.pipe(takeUntil(this.destroy$)).subscribe(fv => {
       this.onboardingStageZeroUIInfoService.applyInitStageZero(fv);
@@ -123,7 +118,7 @@ export class OnboardingStageZeroInfoService {
       .execute(newStageForm as Partial<User>)
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(1) : of(result)
+          result.ok ? this.updateOnboardingStageUseCase.execute(1, this.profile()!.id) : of(result)
         ),
         takeUntil(this.destroy$)
       )
@@ -135,6 +130,7 @@ export class OnboardingStageZeroInfoService {
             return;
           }
 
+          this.profileInfoService.applyProfileUpdated(result.value);
           this.completeRegistration(1);
         },
       });

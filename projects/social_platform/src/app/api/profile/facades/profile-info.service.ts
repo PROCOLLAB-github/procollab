@@ -182,7 +182,6 @@ export class ProfileInfoService {
 
   invalidateProfile(): void {
     this.profileInflight = null;
-    this.authRepository.resetProfileCache();
     this.profile$.set(initial());
     this.roles$.set(initial());
     this.changeableRoles$.set(initial());
@@ -193,5 +192,9 @@ export class ProfileInfoService {
   invalidateLeaderProjects(): void {
     this.leaderInflight = null;
     this.leaderProjects$.set(initial());
+  }
+
+  applyProfileUpdated(profile: User): void {
+    this.profile$.set(success(profile));
   }
 }

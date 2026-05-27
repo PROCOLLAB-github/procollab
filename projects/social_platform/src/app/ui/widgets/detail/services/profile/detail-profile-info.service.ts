@@ -31,7 +31,7 @@ export class DetailProfileInfoService {
 
   readonly inviteForm = this.projectTeamUIService.inviteForm;
 
-  readonly profile = signal<User | undefined>(undefined);
+  readonly profile = this.profileInfoService.profile;
   readonly profileProjects = signal<User["relations"]["projects"]>([]);
   readonly isSended = signal<boolean>(false);
   readonly isProfileFill = signal<boolean>(false);
@@ -210,9 +210,5 @@ export class DetailProfileInfoService {
           }
         },
       });
-  }
-
-  applySetProfile(profile: User): void {
-    this.profile.set(profile);
   }
 }

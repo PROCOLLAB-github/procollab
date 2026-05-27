@@ -29,6 +29,7 @@ import { PluralizePipe } from "@corelib";
 import { ChatMessageComponent } from "./chat-message/chat-message.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /**
  * Компонент окна чата
@@ -53,18 +54,11 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly fb = inject(FormBuilder);
+  private readonly modalService = inject(ModalService);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
-  /**
-   * Конструктор компонента
-   * @param fb - FormBuilder для создания формы сообщения
-   * @param modalService - сервис для отображения модальных окон
-   * @param authService - сервис аутентификации для получения данных пользователя
-   */
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly modalService: ModalService,
-    private readonly authRepository: AuthInfoService
-  ) {
+  constructor() {
     // Создание формы для ввода сообщения
     this.messageForm = this.fb.group({
       messageControl: [{ text: "", filesUrl: [] }], // Контрол с текстом и файлами
@@ -91,7 +85,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     this._messages = value;
 
     // Автопрокрутка к низу для новых сообщений от текущего пользователя или при первой загрузке
-    if ((diff.length === 1 && diff[0]?.author.id === this.profile?.id) || noMessages) {
+    if ((diff.length === 1 && diff[0]?.author.id === this.profile()?.id) || noMessages) {
       this.scrollToBottom();
     }
 
@@ -137,11 +131,6 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
    * Подписывается на профиль пользователя и настраивает отслеживание печатания
    */
   ngOnInit(): void {
-    // Подписка на профиль текущего пользователя
-    this.authRepository.profile.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(p => {
-      this.profile = p;
-    });
-
     // Инициализация отслеживания печатания
     this.initTypingSend();
   }
@@ -184,9 +173,9 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /** Наблюдатель пересечений для отметок о прочтении */
-  observer?: IntersectionObserver;
+  protected observer?: IntersectionObserver;
   /** Профиль текущего пользователя */
-  profile?: User;
+  protected readonly profile = this.profileInfoService.profile;
 
   /**
    * Базовое значение контрола сообщения

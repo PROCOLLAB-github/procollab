@@ -8,7 +8,6 @@ import { ProjectsMyResolver } from "../../pages/projects/list/my.resolver";
 import { ProjectsAllResolver } from "../../pages/projects/list/all.resolver";
 import { ProjectEditComponent } from "../../pages/projects/edit/edit.component";
 import { ProjectEditResolver } from "../../pages/projects/edit/edit.resolver";
-import { ProjectsSubscriptionsResolver } from "../../pages/projects/list/subscriptions.resolver";
 import { ProjectEditRequiredGuard } from "../../../../../../core/src/lib/guards/projects-edit/projects-edit.guard";
 import { DashboardProjectsComponent } from "../../pages/projects/dashboard/dashboard.component";
 
@@ -62,9 +61,6 @@ export const PROJECTS_ROUTES: Routes = [
       {
         path: "subscriptions",
         component: ProjectsListComponent,
-        resolve: {
-          data: ProjectsSubscriptionsResolver,
-        },
       },
       {
         path: "invites",

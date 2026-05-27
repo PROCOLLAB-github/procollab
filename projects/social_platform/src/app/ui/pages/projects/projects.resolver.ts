@@ -1,6 +1,6 @@
 /** @format */
 
-import { inject } from "@angular/core";
+import { inject, Injector } from "@angular/core";
 import { forkJoin, map, switchMap } from "rxjs";
 import { ResolveFn } from "@angular/router";
 import { HttpParams } from "@angular/common/http";
@@ -10,6 +10,8 @@ import { GetAllProjectsUseCase } from "@api/project/use-cases/get-all-projects.u
 import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
 import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 /**
  * Resolver для загрузки данных о количестве проектов
@@ -39,7 +41,8 @@ export interface DashboardProjectsData {
 }
 
 export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
-  const authRepository = inject(AuthInfoService);
+  const injector = inject(Injector);
+  const profileInfoService = inject(ProfileInfoService);
   const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   const getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   const getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
@@ -50,7 +53,7 @@ export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
     results: [],
   });
 
-  return authRepository.profile.pipe(
+  return toObservable(profileInfoService.profile, { injector }).pipe(
     switchMap(user =>
       forkJoin({
         all: getAllProjectsUseCase
@@ -60,7 +63,7 @@ export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
           .execute(new HttpParams({ fromObject: { offset: 0, limit: 16 } }))
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
         subs: getProjectSubscriptionsUseCase
-          .execute(user.id)
+          .execute(user!.id)
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
       })
     )

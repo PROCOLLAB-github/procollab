@@ -13,18 +13,22 @@ import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboard
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Координирует шаг выбора навыков и сохранение второго этапа. */
 @Injectable()
 export class OnboardingStageTwoInfoService {
+  private readonly router = inject(Router);
+  private readonly validationService = inject(ValidationService);
+  private readonly searchesService = inject(SearchesService);
+
   private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
   private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
+
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);
-  private readonly validationService = inject(ValidationService);
-  private readonly router = inject(Router);
-  private readonly searchesService = inject(SearchesService);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -32,6 +36,8 @@ export class OnboardingStageTwoInfoService {
 
   private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
   private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
+
+  private readonly profile = this.profileInfoService.profile;
 
   destroy(): void {
     this.destroy$.next();
@@ -76,7 +82,7 @@ export class OnboardingStageTwoInfoService {
       .execute({ skillsIds: skills.map((skill: Skill) => skill.id) })
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(2) : of(result)
+          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result)
         ),
         takeUntil(this.destroy$)
       )
@@ -86,6 +92,7 @@ export class OnboardingStageTwoInfoService {
           this.onboardingStageTwoUIInfoService.applySubmitErrorModal(result.error.cause);
           return;
         }
+        this.profileInfoService.applyProfileUpdated(result.value);
         this.completeRegistration(3);
       });
   }

@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
-import { Subject, takeUntil, tap } from "rxjs";
+import { inject, Injectable, Injector } from "@angular/core";
+import { filter, Subject, takeUntil, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
@@ -18,6 +18,7 @@ import { ChatStateService } from "@api/chat/chat-state.service";
 import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 /**
  * Стартовый сервис офисной оболочки: прогревает справочники, собирает навигацию,
@@ -25,12 +26,17 @@ import { ProgramShellInfoService } from "@api/program/facades/program-shell-info
  */
 @Injectable()
 export class OfficeInfoService {
+  private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
+  private readonly injector = inject(Injector);
+  private readonly eventBus = inject(EventBus);
+
   private readonly authRepository = inject(AuthRepositoryPort);
   private readonly inviteInfoService = inject(InviteInfoService);
-  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly industryStateInfoService = inject(IndustryStateInfoService);
   private readonly programShellInfoService = inject(ProgramShellInfoService);
-  private readonly eventBus = inject(EventBus);
+  private readonly officeUIInfoService = inject(OfficeUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
   private readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly connectChatUseCase = inject(ConnectChatUseCase);
@@ -38,11 +44,8 @@ export class OfficeInfoService {
   private readonly observeSetOnlineUseCase = inject(ObserveSetOnlineUseCase);
   private readonly chatStateService = inject(ChatStateService);
 
-  private readonly router = inject(Router);
-  private readonly officeUIInfoService = inject(OfficeUIInfoService);
-  private readonly logger = inject(LoggerService);
-
   readonly invites = this.inviteInfoService.invites;
+  private readonly profile = this.profileInfoService.profile;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -66,25 +69,24 @@ export class OfficeInfoService {
   }
 
   private initializationNavItems(): void {
-    this.authRepository.profile
+    toObservable(this.profile, { injector: this.injector })
       .pipe(
-        tap(profile => {
-          this.officeUIInfoService.applyCreateNavItems(profile.id);
-
-          if (!profile?.doesCompleted()) {
-            this.router
-              .navigateByUrl(AppRoutes.onboarding.root())
-              .then(() => this.logger.debug("Route changed from OfficeComponent"));
-          } else if (
-            profile?.relations.verificationDate === null &&
-            localStorage.getItem("waitVerificationAccepted") !== "true"
-          ) {
-            this.officeUIInfoService.applyOpenVerificationModal();
-          }
-        }),
+        filter(profile => !!profile),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe(profile => {
+        this.officeUIInfoService.applyCreateNavItems(profile!.id);
+        if (!profile!.doesCompleted()) {
+          this.router
+            .navigateByUrl(AppRoutes.onboarding.root())
+            .then(() => this.logger.debug("Route changed from OfficeComponent"));
+        } else if (
+          profile!.relations.verificationDate === null &&
+          localStorage.getItem("waitVerificationAccepted") !== "true"
+        ) {
+          this.officeUIInfoService.applyOpenVerificationModal();
+        }
+      });
   }
 
   private initializationStatus(): void {

@@ -2,11 +2,10 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { TaskDetail } from "@domain/kanban/task.model";
-import { User } from "@domain/auth/user.model";
-import { filter, Observable, of, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "../project/facades/detail/ui/projects-detail-ui.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Состояние детали задачи канбана (модуль отключён): открытие/закрытие/удаление карточки. */
 @Injectable({
@@ -56,48 +55,41 @@ export class KanbanBoardDetailInfoService {
     // }
   );
 
-  readonly currentUser = signal<User | null>(null);
-
-  private readonly authRepository = inject(AuthRepositoryPort);
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly router = inject(Router);
-  readonly route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
 
   private deleteTaskSubject = new Subject<number>();
-
-  constructor() {
-    this.authRepository.profile
-      .pipe(filter(Boolean))
-      .subscribe(profile => this.currentUser.set(profile));
-  }
+  private readonly profile = this.profileInfoService.profile;
 
   setTaskDetailInfo(detail: TaskDetail | undefined) {
     this.taskDetail.set(detail);
   }
 
-  leaderId = this.projectsDetailUIInfoService.leaderId;
-  collaborators = this.projectsDetailUIInfoService.collaborators;
+  protected readonly leaderId = this.projectsDetailUIInfoService.leaderId;
+  protected readonly collaborators = this.projectsDetailUIInfoService.collaborators;
 
   isLeader = computed(() => {
-    const user = this.currentUser();
+    const user = this.profile();
     const leader = this.leaderId();
     return !!user && user.id === leader;
   });
 
   isCreator = computed(() => {
-    const user = this.currentUser();
+    const user = this.profile();
     const task = this.taskDetail();
     return !!user && user.id === task?.creator?.id;
   });
 
   isPerformer = computed(() => {
-    const user = this.currentUser();
+    const user = this.profile();
     const task = this.taskDetail();
     return !!user && !!task?.performers?.some(p => p.id === user.id);
   });
 
   isResponsible = computed(() => {
-    const user = this.currentUser();
+    const user = this.profile();
     const task = this.taskDetail();
     return !!user && user.id === task?.responsible?.id;
   });

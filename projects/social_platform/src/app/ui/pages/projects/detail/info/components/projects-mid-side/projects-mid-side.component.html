@@ -21,9 +21,9 @@
     }
   </div>
 
-  @if (authRepository.profile | async; as profile) {
+  @if (profile()) {
   <div #newsEl class="project__news news">
-    @if (project()!.leader === profile.id) {
+    @if (project()!.leader === profile()!.id) {
     <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
     }
 
@@ -34,7 +34,7 @@
         [icon]="directionItem.icon"
         [about]="directionItem.about"
         [type]="directionItem.type"
-        [isOwner]="profile.id === project()!.leader"
+        [isOwner]="profile()!.id === project()!.leader"
         [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
       ></app-project-direction-card>
       }
@@ -46,7 +46,7 @@
       [resourceLink]="[AppRoutes.projects.detail(n.id)]"
       [attr.data-id]="n.id"
       [feedItem]="n"
-      [isOwner]="profile.id === project()!.leader"
+      [isOwner]="profile()!.id === project()!.leader"
       (delete)="onDeleteNews($event)"
       (like)="onLike($event)"
       (edited)="onEditNews($event, n.id)"

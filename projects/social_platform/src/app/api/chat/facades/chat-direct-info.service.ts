@@ -3,10 +3,8 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ChatMessage } from "@domain/chat/chat-message.model";
-import { User } from "@domain/auth/user.model";
 import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { LoadProjectFilesUseCase } from "../use-cases/load-project-files.use-case";
 import { LoadMessagesUseCase } from "../use-cases/load-messages.use-case";
@@ -20,13 +18,14 @@ import { EditMessageUseCase } from "../use-cases/edit-message.use-case";
 import { DeleteMessageUseCase } from "../use-cases/delete-message.use-case";
 import { StartTypingUseCase } from "../use-cases/start-typing.use-case";
 import { ReadMessageUseCase } from "../use-cases/read-message.use-case";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад личного чата: загрузка истории/файлов и подписки realtime (печать, read, edit/delete), отправка сообщений. */
 @Injectable()
 export class ChatDirectInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly chatDirectUIInfoService = inject(ChatDirectUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly loadProjectFilesUseCase = inject(LoadProjectFilesUseCase);
   private readonly loadMessagesUseCase = inject(LoadMessagesUseCase);
   private readonly observeMessagesUseCase = inject(ObserveMessagesUseCase);
@@ -45,10 +44,6 @@ export class ChatDirectInfoService {
   // Сохраняем тип чата для использования в методах
   private chatType: "direct" | "project" = "direct";
 
-  // Текущий профиль кешируется для построения отправленного сообщения локально
-  // (бэк отдаёт ack без тела, поэтому показать сообщение в UI без перезагрузки можно только так)
-  private currentUser?: User;
-
   /** Список пользователей, которые сейчас печатают */
   readonly typingPersons = this.chatDirectUIInfoService.typingPersons;
 
@@ -66,6 +61,8 @@ export class ChatDirectInfoService {
 
   /** Флаг процесса загрузки сообщений */
   readonly fetching = this.chatDirectUIInfoService.fetching;
+
+  private readonly profile = this.profileInfoService.profile;
 
   initializationChatDirect(type: "direct" | "project"): void {
     this.chatType = type; // Сохраняем тип чата
@@ -86,7 +83,7 @@ export class ChatDirectInfoService {
     this.initEditEvent();
     this.initReadEvent();
 
-    this.initializationProfile();
+    this.profileInfoService.ensureProfileLoaded();
   }
 
   /**
@@ -106,13 +103,6 @@ export class ChatDirectInfoService {
 
         this.chatFiles.set(result.value);
       });
-  }
-
-  private initializationProfile(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(u => {
-      this.currentUserId.set(u.id);
-      this.currentUser = u;
-    });
   }
 
   destroy(): void {
@@ -233,10 +223,10 @@ export class ChatDirectInfoService {
 
     // Бэк отдаёт по WS только ack-фрейм без тела, поэтому сразу добавляем сообщение локально.
     // На reload реальное сообщение из истории придёт по HTTP — это локальное затрётся при следующей загрузке чата.
-    if (this.currentUser && message.text) {
+    if (this.profile() && message.text) {
       const optimistic: ChatMessage = {
         id: -Date.now(),
-        author: this.currentUser,
+        author: this.profile()!,
         text: message.text,
         replyTo:
           message.replyTo != null

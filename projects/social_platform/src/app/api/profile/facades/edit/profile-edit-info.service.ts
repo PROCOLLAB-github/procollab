@@ -13,15 +13,19 @@ import { ActivatedRoute } from "@angular/router";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 import { EditStep } from "@core/lib/models/edit-step";
 import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
+import { ProfileInfoService } from "../profile-info.service";
 
 /** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
 export class ProfileEditInfoService {
-  private readonly profileFormService = inject(ProfileFormService);
   private readonly route = inject(ActivatedRoute);
   private readonly navigationService = inject(NavigationService);
   private readonly navService = inject(NavService);
+
+  private readonly profileFormService = inject(ProfileFormService);
   private readonly projectStepService = inject(ProjectStepService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+
   private readonly saveProfileUseCase = inject(SaveProfileUseCase);
 
   private readonly destroy$ = new Subject<void>();
@@ -213,6 +217,7 @@ export class ProfileEditInfoService {
           return;
         }
 
+        this.profileInfoService.applyProfileUpdated(result.value);
         this.profileFormSubmitting$.set(success(undefined));
         this.navigationService.profileRedirect(result.value.id);
       });
