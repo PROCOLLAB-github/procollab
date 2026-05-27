@@ -25,18 +25,7 @@ import { MembersUIInfoService } from "@api/member/facades/ui/members-ui-info.ser
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
-/**
- * Компонент для отображения списка участников с возможностью поиска и фильтрации
- *
- * Основные функции:
- * - Отображение списка участников в виде карточек
- * - Поиск участников по имени
- * - Фильтрация по навыкам, специальности, возрасту и принадлежности к МосПолитеху
- * - Бесконечная прокрутка для подгрузки дополнительных участников
- * - Синхронизация фильтров с URL параметрами
- *
- * @component MembersComponent
- */
+/** Список участников с поиском, фильтрацией и бесконечной прокруткой. */
 @Component({
   selector: "app-members",
   templateUrl: "./members.component.html",
@@ -73,24 +62,10 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly appWidth = window.innerWidth; // Ширина окна браузера
   protected readonly AppRoutes = AppRoutes;
 
-  /**
-   * Инициализация компонента
-   *
-   * Выполняет:
-   * - Очистку URL параметров
-   * - Установку заголовка навигации
-   * - Загрузку начальных данных из резолвера
-   * - Настройку подписок на изменения форм и URL параметров
-   */
   ngOnInit(): void {
     this.membersInfoService.initializationMembers();
   }
 
-  /**
-   * Инициализация после создания представления
-   *
-   * Настраивает обработчик события прокрутки для реализации бесконечной прокрутки
-   */
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body") as HTMLElement;
     if (target && this.membersRoot) {
@@ -98,9 +73,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  /**
-   * Очистка ресурсов при уничтожении компонента
-   */
   ngOnDestroy(): void {
     this.membersInfoService.destroy();
   }

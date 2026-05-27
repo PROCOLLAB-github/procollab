@@ -79,10 +79,6 @@ export class ProfileDetailInfoService {
     }, 150);
   }
 
-  /**
-   * Добавление новой новости в профиль
-   * @param news - объект с текстом и файлами новости
-   */
   onAddNews(news: { text: string; files: string[] }) {
     return this.addProfileNewsUseCase.execute(this.route.snapshot.params["id"], news).pipe(
       tap(result => {
@@ -94,10 +90,6 @@ export class ProfileDetailInfoService {
     );
   }
 
-  /**
-   * Удаление новости из профиля
-   * @param newsId - идентификатор удаляемой новости
-   */
   onDeleteNews(newsId: number): void {
     this.newsInfoService.applyDeleteNews(newsId);
 
@@ -107,10 +99,6 @@ export class ProfileDetailInfoService {
       .subscribe({ next: () => {} });
   }
 
-  /**
-   * Переключение лайка новости
-   * @param newsId - идентификатор новости для лайка/дизлайка
-   */
   onLike(newsId: number) {
     const item = this.news().find(n => n.id === newsId);
     if (!item) return;
@@ -125,11 +113,6 @@ export class ProfileDetailInfoService {
       });
   }
 
-  /**
-   * Редактирование существующей новости
-   * @param news - обновленные данные новости
-   * @param newsItemId - идентификатор редактируемой новости
-   */
   onEditNews(news: ProfileNews, newsItemId: number) {
     return this.editProfileNewsUseCase
       .execute(this.route.snapshot.params["id"], newsItemId, news)
@@ -142,11 +125,6 @@ export class ProfileDetailInfoService {
       );
   }
 
-  /**
-   * Обработчик появления новостей в области видимости
-   * Отмечает новости как просмотренные при скролле
-   * @param entries - массив элементов, попавших в область видимости
-   */
   onNewsInView(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
       return Number((e.target as HTMLElement).dataset["id"]);

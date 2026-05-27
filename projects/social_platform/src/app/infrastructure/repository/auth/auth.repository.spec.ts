@@ -100,56 +100,45 @@ describe("AuthRepository", () => {
     });
   });
 
-  it("fetchProfile мапит в User и пушит в profile$", done => {
+  it("fetchProfile мапит ответ в User", done => {
     setup();
     adapter.getProfile.and.returnValue(of({ id: 1 } as User));
 
-    repository.fetchProfile().subscribe();
-
-    repository.profile.subscribe(profile => {
+    repository.fetchProfile().subscribe(profile => {
       expect(profile).toBeInstanceOf(User);
       done();
     });
   });
 
-  it("updateProfile делегирует в adapter.saveProfile и пушит в profile$", done => {
+  it("updateProfile делегирует в adapter.saveProfile", done => {
     setup();
-    const updated = { id: 1, firstName: "A" } as User;
-    adapter.getProfile.and.returnValue(of({ id: 1 } as User));
-    adapter.saveProfile.and.returnValue(of(updated));
-    repository.fetchProfile().subscribe();
+    const data = { id: 1, firstName: "A" } as never;
+    adapter.saveProfile.and.returnValue(of({ id: 1, firstName: "A" } as User));
 
-    repository.updateProfile({ firstName: "A" }).subscribe();
-
-    repository.profile.subscribe(profile => {
+    repository.updateProfile(data).subscribe(profile => {
+      expect(adapter.saveProfile).toHaveBeenCalledOnceWith(data);
       expect(profile).toBeInstanceOf(User);
-      expect(profile.firstName).toBe("A");
-      expect(adapter.saveProfile).toHaveBeenCalledOnceWith({ firstName: "A", id: 1 });
       done();
     });
   });
 
-  it("updateOnboardingStage вызывает setOnboardingStage с id текущего профиля", done => {
+  it("updateOnboardingStage вызывает setOnboardingStage с переданным userId", done => {
     setup();
-    adapter.getProfile.and.returnValue(of({ id: 9 } as User));
     adapter.setOnboardingStage.and.returnValue(
       of({ id: 9, onboardingStage: 3 } as unknown as User)
     );
-    repository.fetchProfile().subscribe();
 
-    repository.updateOnboardingStage(3).subscribe(() => {
+    repository.updateOnboardingStage(3, 9).subscribe(() => {
       expect(adapter.setOnboardingStage).toHaveBeenCalledOnceWith(3, 9);
       done();
     });
   });
 
-  it("updateAvatar вызывает saveAvatar с id текущего профиля", done => {
+  it("updateAvatar вызывает saveAvatar с переданным userId", done => {
     setup();
-    adapter.getProfile.and.returnValue(of({ id: 9 } as User));
     adapter.saveAvatar.and.returnValue(of({ id: 9, avatar: "url" } as unknown as User));
-    repository.fetchProfile().subscribe();
 
-    repository.updateAvatar("url").subscribe(() => {
+    repository.updateAvatar("url", 9).subscribe(() => {
       expect(adapter.saveAvatar).toHaveBeenCalledOnceWith("url", 9);
       done();
     });
@@ -171,28 +160,6 @@ describe("AuthRepository", () => {
     });
   });
 
-  it("resetProfileCache очищает replay-кэш профиля для новых подписчиков", done => {
-    setup();
-    adapter.getProfile.and.returnValues(of({ id: 1 } as User), of({ id: 2 } as User));
-
-    repository.fetchProfile().subscribe(() => {
-      repository.resetProfileCache();
-
-      let replayedProfile: User | undefined;
-      const subscription = repository.profile.subscribe(profile => {
-        replayedProfile = profile;
-      });
-
-      expect(replayedProfile).toBeUndefined();
-
-      repository.fetchProfile().subscribe(() => {
-        expect(replayedProfile?.id).toBe(2);
-        subscription.unsubscribe();
-        done();
-      });
-    });
-  });
-
   it("downloadCV делегирует в adapter.downloadCV", () => {
     setup();
     adapter.downloadCV.and.returnValue(of(new Blob()));
@@ -200,12 +167,11 @@ describe("AuthRepository", () => {
     expect(adapter.downloadCV).toHaveBeenCalledOnceWith();
   });
 
-  it("fetchUserRoles конвертирует [[id, name]] в UserRole[] и пушит в roles$", done => {
+  it("fetchUserRoles конвертирует [[id, name]] в UserRole[]", done => {
     setup();
     adapter.getUserRoles.and.returnValue(of([[1, "Админ"]]));
 
-    repository.fetchUserRoles().subscribe();
-    repository.roles.subscribe(roles => {
+    repository.fetchUserRoles().subscribe(roles => {
       expect(roles.length).toBe(1);
       expect(roles[0].id).toBe(1);
       expect(roles[0].name).toBe("Админ");
@@ -213,12 +179,11 @@ describe("AuthRepository", () => {
     });
   });
 
-  it("fetchChangeableRoles конвертирует [[id, name]] и пушит в changeableRoles$", done => {
+  it("fetchChangeableRoles конвертирует [[id, name]] в UserRole[]", done => {
     setup();
     adapter.getChangeableRoles.and.returnValue(of([[2, "Ментор"]]));
 
-    repository.fetchChangeableRoles().subscribe();
-    repository.changeableRoles.subscribe(roles => {
+    repository.fetchChangeableRoles().subscribe(roles => {
       expect(roles.length).toBe(1);
       expect(roles[0].id).toBe(2);
       expect(roles[0].name).toBe("Ментор");

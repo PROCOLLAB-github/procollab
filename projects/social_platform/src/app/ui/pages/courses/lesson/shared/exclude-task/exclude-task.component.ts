@@ -20,26 +20,7 @@ import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
-/**
- * Компо��ент задачи на исключение лишнего
- * Позволяет пользователю выбрать несколько вариантов из предложенных (множественный выбор)
- *
- * Входные параметры:
- * @Input data - данные вопроса типа ExcludeQuestion
- * @Input hint - текст подсказки
- * @Input success - флаг успешного выполнения
- * @Input error - объект ошибки для сброса состояния
- *
- * Выходные события:
- * @Output update - событие обновления с массивом ID выбранных ответов
- *
- * Функциональность:
- * - Отображает вопрос и варианты ответов в виде тегов
- * - Поддерживает множественный выбор вариантов
- * - Поддерживает встроенные видео и файлы
- * - Извлекает YouTube ссылки из описания
- * - Визуально выделяет выбранные варианты
- */
+/** Задача на исключение лишнего с множественным выбором. */
 @Component({
   selector: "app-exclude-task",
   standalone: true,
@@ -51,11 +32,11 @@ export class ExcludeTaskComponent implements OnInit {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  @Input({ required: true }) data!: Task; // Данные вопроса
-  @Input() hint!: string; // Текст подсказки
-  @Output() update = new EventEmitter<number[]>(); // Событие обновления выбранных ответов
+  @Input({ required: true }) data!: Task;
+  @Input() hint!: string;
+  @Output() update = new EventEmitter<number[]>();
 
-  @Input() success = false; // Флаг успешного выполнения
+  @Input() success = false;
   @Input() disabled = false;
 
   @Input()
@@ -98,18 +79,11 @@ export class ExcludeTaskComponent implements OnInit {
     });
   }
 
-  /**
-   * Обработчик выбора/отмены выбора варианта ответа
-   * Добавляет или удаляет ID из массива выбранных ответов
-   * @param id - ID варианта ответа
-   */
   onSelect(id: number) {
     if (this.disabled) return;
     if (this.result().includes(id)) {
-      // Если вариант уже выбран, убираем его из списка
       this.result.set(this.result().filter(i => i !== id));
     } else {
-      // Если вариант не выбран, добавляем его в список
       this.result.set([...this.result(), id]);
     }
 

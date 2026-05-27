@@ -40,18 +40,7 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
 import { AppRoutes } from "@api/paths/app-routes";
 import { EditStep } from "@core/lib/models/edit-step";
 
-/**
- * Компонент редактирования проекта
- *
- * Функциональность:
- * - Многошаговое редактирование проекта (основная информация, контакты, достижения, вакансии, команда)
- * - Управление формами для проекта, вакансий и приглашений
- * - Загрузка файлов (презентация, обложка, аватар)
- * - Создание и редактирование вакансий с навыками
- * - Приглашение участников в команду
- * - Управление достижениями, ссылками и целями проекта
- * - Сохранение как черновик или публикация
- */
+/** Многошаговое редактирование проекта. */
 @Component({
   selector: "app-edit",
   templateUrl: "./edit.component.html",
@@ -164,17 +153,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectGoalService.reset();
   }
 
-  /**
-   * Навигация между шагами редактирования
-   * @param step - название шага
-   */
   navigateStep(step: EditStep): void {
     this.projectStepService.navigateToStep(step);
   }
 
-  /**
-   * Удаление проекта с проверкой удаления у пользователя
-   */
   deleteProject(): void {
     if (!confirm("Вы точно хотите удалить проект?")) {
       return;
@@ -183,23 +165,14 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectsEditInfoService.deleteProject();
   }
 
-  /**
-   * Сохранение проекта как опубликованного с проверкой доп. полей
-   */
   saveProjectAsPublished(): void {
     this.projectsEditInfoService.saveProjectAsPublished();
   }
 
-  /**
-   * Сохранение проекта как черновика
-   */
   saveProjectAsDraft(): void {
     this.projectsEditInfoService.saveProjectAsDraft();
   }
 
-  /**
-   * Отправка формы проекта
-   */
   submitProjectForm(): void {
     this.projectsEditInfoService.submitProjectForm();
   }

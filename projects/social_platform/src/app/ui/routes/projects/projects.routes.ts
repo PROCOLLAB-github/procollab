@@ -11,29 +11,7 @@ import { ProjectEditResolver } from "../../pages/projects/edit/edit.resolver";
 import { ProjectEditRequiredGuard } from "../../../../../../core/src/lib/guards/projects-edit/projects-edit.guard";
 import { DashboardProjectsComponent } from "../../pages/projects/dashboard/dashboard.component";
 
-/**
- * Конфигурация маршрутов для модуля проектов
- *
- * Определяет структуру навигации:
- *
- * Основные маршруты:
- * - '' (root) - ProjectsComponent с дочерними маршрутами:
- *   - 'my' - список собственных проектов
- *   - 'subscriptions' - список проектов по подписке
- *   - 'all' - список всех проектов
- * - ':projectId/edit' - редактирование проекта
- * - ':projectId' - детальная информация о проекте (lazy loading)
- *
- * Каждый маршрут имеет свой resolver для предварительной загрузки данных:
- * - ProjectsResolver - загружает счетчики проектов
- * - ProjectsMyResolver - загружает собственные проекты
- * - ProjectsAllResolver - загружает все проекты
- * - ProjectsSubscriptionsResolver - загружает проекты по подписке
- * - ProjectEditResolver - загружает данные для редактирования
- *
- * Использует lazy loading для детальной информации о проекте
- * для оптимизации загрузки приложения.
- */
+/** Маршруты модуля проектов: dashboard, список, редактирование, детали (lazy). */
 export const PROJECTS_ROUTES: Routes = [
   {
     path: "",

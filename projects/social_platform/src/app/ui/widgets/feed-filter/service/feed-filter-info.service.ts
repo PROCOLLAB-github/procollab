@@ -34,19 +34,7 @@ export class FeedFilterInfoService {
     this.destroy$.complete();
   }
 
-  /**
-   * ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА С МГНОВЕННЫМ ОБНОВЛЕНИЕМ URL
-   *
-   * ЧТО ПРИНИМАЕТ:
-   * @param id - id для фильтра
-   * @param keyword - значение фильтра для переключения
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Добавляет фильтр, если он не активен
-   * - Удаляет фильтр, если он уже активен
-   * - Обрабатывает переключение между projects и projects/1
-   * - Мгновенно обновляет URL параметры
-   */
+  /** Переключает фильтр (добавляет/удаляет) с мгновенным обновлением URL. */
   setFilter(keyword: string): void {
     this.includedFilters.update(included => {
       if (keyword.startsWith("project/")) {
@@ -80,36 +68,17 @@ export class FeedFilterInfoService {
     this.updateUrl();
   }
 
-  /**
-   * СБРОС ВСЕХ ФИЛЬТРОВ
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Очищает все активные фильтры
-   * - Мгновенно обновляет URL
-   * - Возвращает ленту к состоянию по умолчанию
-   */
+  /** Сбрасывает все фильтры. */
   resetFilter(): void {
     this.includedFilters.set("");
     this.updateUrl();
   }
 
-  /**
-   * ЗАКРЫТИЕ ВЫПАДАЮЩЕГО МЕНЮ
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Закрывает выпадающее меню при клике вне его области
-   * - Используется директивой ClickOutside
-   */
+  /** Закрывает выпадающее меню (ClickOutside). */
   onClickOutside(): void {
     this.filterOpen.set(false);
   }
 
-  /**
-   * ОБНОВЛЕНИЕ URL С ТЕКУЩИМИ ФИЛЬТРАМИ
-   *
-   * Приватный метод для обновления URL параметров.
-   * Вызывается автоматически при любом изменении фильтров.
-   */
   private updateUrl(): void {
     const includesParam = this.includedFilters().length > 0 ? this.includedFilters() : null;
 

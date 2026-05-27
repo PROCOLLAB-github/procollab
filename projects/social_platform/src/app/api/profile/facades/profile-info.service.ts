@@ -23,6 +23,7 @@ const CHANGEABLE_ROLES_CACHE_KEY = "users:changeableRoles";
 const CACHE_VERSION = 1;
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 
+/** Facade текущего профиля: AsyncState для user / roles / changeableRoles / leaderProjects. */
 @Injectable({ providedIn: "root" })
 export class ProfileInfoService {
   private readonly profile$ = signal<AsyncState<User>>(initial());

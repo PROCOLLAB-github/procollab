@@ -5,10 +5,7 @@ import { Approve, Skill } from "../skill.model";
 import { SkillsGroup } from "../skills-group.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 
-/**
- * Порт репозитория навыков.
- * Реализуется в infrastructure/repository/skills/skills.repository.ts
- */
+/** Порт репозитория навыков */
 export abstract class SkillsRepositoryPort {
   abstract getSkillsNested(): Observable<SkillsGroup[]>;
   abstract getSkillsInline(

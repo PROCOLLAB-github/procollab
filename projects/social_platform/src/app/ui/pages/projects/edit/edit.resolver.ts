@@ -14,28 +14,7 @@ import { GetProjectGoalsUseCase } from "@api/project/use-cases/get-project-goals
 import { GetProjectPartnersUseCase } from "@api/project/use-cases/get-project-partners.use-case";
 import { GetProjectResourcesUseCase } from "@api/project/use-cases/get-project-resources.use-case";
 
-/**
- * Resolver для загрузки данных редактирования проекта
- *
- * Функциональность:
- * - Загружает данные проекта по ID из параметров маршрута
- * - Получает список приглашений для проекта
- * - Объединяет данные в единый массив для компонента
- *
- * Принимает:
- * - ActivatedRouteSnapshot с параметром projectId
- *
- * Возвращает:
- * - Observable<[Project, Invite[]]> с данными:
- *   - Project: полная информация о проекте
- *   - Invite[]: массив приглашений в проект
- *
- * Используется перед загрузкой ProjectEditComponent для предварительной
- * загрузки всех необходимых данных для редактирования.
- *
- * Применяет forkJoin для параллельной загрузки данных проекта и приглашений,
- * что оптимизирует время загрузки страницы.
- */
+/** Предзагружает данные проекта, целей, партнёров, ресурсов и приглашений для редактирования. */
 export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resource[], Invite[]]> = (
   route: ActivatedRouteSnapshot
 ) => {

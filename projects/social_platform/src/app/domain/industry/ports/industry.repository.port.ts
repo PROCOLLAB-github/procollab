@@ -4,10 +4,7 @@ import { Signal } from "@angular/core";
 import { Observable } from "rxjs";
 import { Industry } from "../industry.model";
 
-/**
- * Порт репозитория отраслей.
- * Реализуется в infrastructure/repository/industry/industry.repository.ts
- */
+/** Порт репозитория отраслей */
 export abstract class IndustryRepositoryPort {
   abstract readonly industries: Signal<Industry[]>;
 

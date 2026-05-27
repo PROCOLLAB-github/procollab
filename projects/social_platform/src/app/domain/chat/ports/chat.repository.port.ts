@@ -4,10 +4,7 @@ import { Observable } from "rxjs";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { ChatFile, ChatMessage } from "../chat-message.model";
 
-/**
- * Порт для HTTP-операций чата (REST API).
- * Загрузка истории сообщений, файлов, проверка непрочитанных.
- */
+/** Порт HTTP-операций чата (REST API) */
 export abstract class ChatRepositoryPort {
   abstract loadMessages(
     id: number,

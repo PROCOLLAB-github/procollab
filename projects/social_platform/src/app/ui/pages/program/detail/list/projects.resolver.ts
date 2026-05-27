@@ -9,28 +9,7 @@ import { Project } from "@domain/project/project.model";
 import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
 import { CreateProgramFiltersUseCase } from "@api/program/use-cases/create-program-filters.use-case";
 
-/**
- * Резолвер для предзагрузки проектов программы
- *
- * Загружает первую страницу проектов программы перед отображением компонента.
- * Это обеспечивает мгновенное отображение данных без состояния загрузки.
- *
- * Принимает:
- * @param {ActivatedRouteSnapshot} route - Снимок маршрута с параметрами
- *
- * Использует:
- * @param {ProgramService} programService - Инжектируемый сервис программ
- *
- * Логика:
- * - Извлекает programId из родительского маршрута
- * - Загружает первые 21 проект программы (offset: 0, limit: 21)
- *
- * Возвращает:
- * @returns {Observable<ApiPagination<Project>>} Поток с пагинированными проектами
- *
- * Используется в:
- * Конфигурации маршрута projects для предзагрузки данных
- */
+/** Предзагружает проекты программы с фильтрацией. */
 export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
   route: ActivatedRouteSnapshot
 ) => {

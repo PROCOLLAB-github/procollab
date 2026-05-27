@@ -12,27 +12,7 @@ import {
 import { IconComponent } from "@ui/primitives";
 import { Specialization } from "@domain/specializations/specialization.model";
 
-/**
- * Компонент группы специализаций с возможностью сворачивания/разворачивания
- *
- * Функциональность:
- * - Отображает заголовок группы специализаций
- * - Показывает/скрывает список специализаций при клике на заголовок
- * - Позволяет выбирать специализацию из списка
- * - Использует Angular Signals для реактивности
- * - Использует OnPush стратегию для оптимизации производительности
- * - Поддерживает disabled состояние когда открыты другие группы
- *
- * Входные параметры:
- * @Input title - заголовок группы специализаций (обязательный)
- * @Input options - массив специализаций для отображения (обязательный)
- * @Input disabled - флаг отключения взаимодействия с группой
- * @Input hasOpenGroups - флаг наличия открытых групп для адаптации ширины
- *
- * Выходные события:
- * @Output selectOption - событие выбора специализации, передает выбранную специализацию
- * @Output groupToggled - событие переключения видимости группы
- */
+/** Компонент группы специализаций с возможностью сворачивания и выбора. */
 @Component({
   selector: "app-specializations-group",
   standalone: true,
@@ -51,10 +31,6 @@ export class SpecializationsGroupComponent {
 
   contentVisible = signal(false);
 
-  /**
-   * Переключение видимости содержимого группы
-   * Теперь учитывает disabled состояние
-   */
   toggleContentVisible() {
     if (this.disabled) {
       return;
@@ -64,11 +40,6 @@ export class SpecializationsGroupComponent {
     this.groupToggled.emit(this.contentVisible());
   }
 
-  /**
-   * Обработчик выбора специализации
-   * Эмитит событие с выбранной специализацией
-   * Теперь учитывает disabled состояние
-   */
   onSelectOption(opt: Specialization) {
     if (this.disabled) {
       return;

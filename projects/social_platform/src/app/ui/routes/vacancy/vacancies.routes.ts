@@ -5,16 +5,7 @@ import { VacanciesListComponent } from "@ui/pages/vacancies/list/list.component"
 import { VacanciesComponent } from "@ui/pages/vacancies/vacancies.component";
 import { VacanciesResolver } from "@ui/pages/vacancies/vacancies.resolver";
 
-/**
- * Маршруты для модуля вакансий
- * Определяет структуру навигации и загрузку данных для страниц вакансий
- *
- * Структура маршрутов:
- * - /vacancies - корневой компонент с навигацией
- *   - /vacancies/all - список всех вакансий
- *   - /vacancies/my - список откликов пользователя
- * - /vacancies/:vacancyId - детальная информация о вакансии
- */
+/** Маршруты для модуля вакансий. */
 export const VACANCIES_ROUTES: Routes = [
   {
     path: "",

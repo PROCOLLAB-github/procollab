@@ -98,11 +98,6 @@ export class ProjectAdditionalStepComponent implements OnInit {
     this.tooltipInfoService.toggleTooltip("base");
   }
 
-  /**
-   * Переключение значения для checkbox и radio полей
-   * @param fieldType - тип поля
-   * @param fieldName - имя поля
-   */
   toggleAdditionalFormValues(
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
     fieldName: string

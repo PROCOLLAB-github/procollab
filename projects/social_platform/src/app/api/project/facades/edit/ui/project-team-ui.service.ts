@@ -24,9 +24,6 @@ export class ProjectTeamUIService {
 
   readonly invitesFill = computed(() => this.invites().some(inv => inv.isAccepted === null));
 
-  /**
-   * Создает форму приглашения с контролами role, link и specialization, устанавливая валидаторы.
-   */
   readonly inviteForm = this.fb.group({
     role: ["", [Validators.required]],
     link: [
@@ -52,34 +49,20 @@ export class ProjectTeamUIService {
     return this.inviteForm.get("specialization");
   }
 
-  /**
-   * Сбрасывает ошибку отсутствия пользователя при изменении ссылки.
-   */
   applyClearLinkError(): void {
     if (this.inviteNotExistingError()) {
       this.inviteNotExistingError.set(null);
     }
   }
 
-  /**
-   * Устанавливает список приглашений.
-   * @param invites массив Invite
-   */
   applySetInvites(invites: Invite[]): void {
     this.invites.set(invites);
   }
 
-  /**
-   * Устанавливает список команды
-   * @param collaborators массив Collaborator
-   */
   applySetCollaborators(collaborators: Collaborator[]): void {
     this.collaborators.set(collaborators);
   }
 
-  /**
-   * Открывает модальное окно для отправки приглашения.
-   */
   applyOpenInviteModal(): void {
     this.isInviteModalOpen.set(true);
   }
@@ -88,9 +71,6 @@ export class ProjectTeamUIService {
     this.isHintTeamModal.set(true);
   }
 
-  /**
-   * Закрывает модальное окно для отправки приглашения.
-   */
   applyCloseInviteModal(): void {
     this.isInviteModalOpen.set(false);
   }
@@ -117,33 +97,18 @@ export class ProjectTeamUIService {
     this.invites.update(list => list.filter(i => i.id !== invitationId));
   }
 
-  /**
-   * Удаляет участника по идентификатору.
-   * @param collaboratorId идентификатор приглашения
-   */
   applyRemoveCollaborator(collaboratorId: number): void {
     this.collaborators.update(list => list.filter(i => i.userId !== collaboratorId));
   }
 
-  /**
-   * Проверяет валидность формы приглашения.
-   * @returns boolean true если форма валидна
-   */
   applyValidateInviteForm(): boolean {
     return this.inviteForm.valid;
   }
 
-  /**
-   * Возвращает текущее значение формы приглашения.
-   * @returns any объект значений формы
-   */
   applyGetInviteFormValue(): any {
     return this.inviteForm.value;
   }
 
-  /**
-   * Сбрасывает форму приглашения и очищает ошибки.
-   */
   resetInviteForm(): void {
     this.inviteForm.reset();
     Object.keys(this.inviteForm.controls).forEach(name => {

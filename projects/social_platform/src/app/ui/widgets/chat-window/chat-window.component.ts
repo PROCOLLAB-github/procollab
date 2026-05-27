@@ -31,11 +31,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
-/**
- * Компонент окна чата
- * Отображает список сообщений с виртуальной прокруткой и поле ввода нового сообщения
- * Поддерживает редактирование, ответы на сообщения, отметки о прочтении и индикацию печатания
- */
+/** Окно чата: список сообщений с виртуальной прокруткой и поле ввода. */
 @Component({
   selector: "app-chat-window",
   templateUrl: "./chat-window.component.html",
@@ -59,21 +55,13 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly profileInfoService = inject(ProfileInfoService);
 
   constructor() {
-    // Создание формы для ввода сообщения
     this.messageForm = this.fb.group({
-      messageControl: [{ text: "", filesUrl: [] }], // Контрол с текстом и файлами
+      messageControl: [{ text: "", filesUrl: [] }],
     });
   }
 
-  /** Приватное поле для хранения сообщений */
   private _messages: ChatMessage[] = [];
 
-  /**
-   * Сеттер для списка сообщений чата
-   * Обновляет список сообщений и автоматически прокручивает к низу при новых сообщениях
-   * Настраивает наблюдатель для отметок о прочтении
-   * @param value - массив сообщений чата
-   */
   @Input({ required: true }) set messages(value: ChatMessage[]) {
     const messagesIds = this._messages.map(m => m.id);
     // Находим новые сообщения
@@ -98,48 +86,25 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Геттер для получения списка сообщений
-   * @returns массив сообщений чата
-   */
   get messages(): ChatMessage[] {
     return this._messages;
   }
 
-  /**
-   * Список пользователей, которые сейчас печатают
-   */
   @Input()
   typingPersons: { firstName: string; lastName: string; userId: number }[] = [];
 
-  // События компонента
-  /** Событие отправки нового сообщения */
   @Output() submit = new EventEmitter<any>();
-  /** Событие редактирования сообщения */
   @Output() edit = new EventEmitter<any>();
-  /** Событие удаления сообщения */
   @Output() delete = new EventEmitter<number>();
-  /** Событие начала печатания */
   @Output() type = new EventEmitter<void>();
-  /** Событие запроса дополнительных сообщений */
   @Output() fetch = new EventEmitter<void>();
-  /** Событие прочтения сообщения */
   @Output() read = new EventEmitter<number>();
 
-  /**
-   * Инициализация компонента
-   * Подписывается на профиль пользователя и настраивает отслеживание печатания
-   */
   ngOnInit(): void {
     // Инициализация отслеживания печатания
     this.initTypingSend();
   }
 
-  /**
-   * Инициализация после отрисовки представления
-   * Настраивает обработчик прокрутки для загрузки истории сообщений
-   * Создает наблюдатель для отметок о прочтении
-   */
   ngAfterViewInit(): void {
     if (this.viewport) {
       // Подписка на события прокрутки для загрузки истории
@@ -165,47 +130,26 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Очистка ресурсов при уничтожении компонента
-   */
   ngOnDestroy(): void {
     this.observer?.disconnect();
   }
 
-  /** Наблюдатель пересечений для отметок о прочтении */
   protected observer?: IntersectionObserver;
-  /** Профиль текущего пользователя */
   protected readonly profile = this.profileInfoService.profile;
 
-  /**
-   * Базовое значение контрола сообщения
-   */
   private readonly messageControlBaseValue = {
     text: "",
     filesUrl: [],
   };
 
-  /** Форма для ввода сообщения */
   messageForm: FormGroup;
-  /** Сообщение, которое редактируется */
   editingMessage?: ChatMessage;
-  /** Сообщение, на которое отвечаем */
   replyMessage?: ChatMessage;
 
-  /**
-   * Элемент виртуальной прокрутки для оптимизации отображения большого количества сообщений
-   */
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
-
-  /**
-   * Компонент ввода сообщения
-   */
   @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
 
-  /**
-   * Инициализация отслеживания печатания
-   * Отправляет событие печатания при изменении текста с задержкой
-   */
+  /** Отправляет событие печатания при изменении текста с задержкой. */
   private initTypingSend(): void {
     this.messageForm
       .get("messageControl")
@@ -219,14 +163,8 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(noop);
   }
 
-  /**
-   * Прокрутка к низу списка сообщений
-   * Использует двойной setTimeout для корректной работы с виртуальной прокруткой
-   */
+  /** Прокрутка к низу (двойной setTimeout для виртуальной прокрутки). */
   private scrollToBottom(): void {
-    // Sadly but it's work only this way
-    // It seems that when first scrollTo works
-    // It didn't render all elements so bottom 0 is not actual bottom of all comments
     setTimeout(() => {
       this.viewport?.scrollTo({ bottom: 0 });
 
@@ -236,27 +174,16 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Обработчик изменения размера поля ввода
-   * Автоматически прокручивает к низу если пользователь находится внизу чата
-   */
   onInputResize(): void {
     if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50) this.scrollToBottom();
   }
 
-  /**
-   * Установка фокуса на поле ввода
-   */
   private focusOnInput(): void {
     setTimeout(() => {
       this.messageInputComponent?.nativeElement.querySelector("textarea").focus();
     });
   }
 
-  /**
-   * Обработчик начала редактирования сообщения
-   * @param messageId - идентификатор редактируемого сообщения
-   */
   onEditMessage(messageId: number): void {
     this.replyMessage = undefined;
     this.editingMessage = this.messages.find(message => message.id === messageId);
@@ -264,10 +191,6 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     this.focusOnInput();
   }
 
-  /**
-   * Обработчик ответа на сообщение
-   * @param messageId - идентификатор сообщения для ответа
-   */
   onReplyMessage(messageId: number): void {
     this.editingMessage = undefined;
     this.replyMessage = this.messages.find(message => message.id === messageId);
@@ -275,18 +198,11 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     this.focusOnInput();
   }
 
-  /**
-   * Отмена редактирования или ответа
-   */
   onCancelInput(): void {
     this.replyMessage = undefined;
     this.editingMessage = undefined;
   }
 
-  /**
-   * Обработчик отправки сообщения
-   * Различает между редактированием существующего сообщения и отправкой нового
-   */
   onSubmitMessage() {
     if (!this.messageForm.get("messageControl")?.value.text) return;
 
@@ -313,11 +229,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     this.messageForm.get("messageControl")?.setValue(this.messageControlBaseValue);
   }
 
-  /**
-   * Обработчик удаления сообщения
-   * Показывает модальное окно подтверждения перед удалением
-   * @param messageId - идентификатор удаляемого сообщения
-   */
+  /** Удаляет сообщение с модалкой подтверждения. */
   onDeleteMessage(messageId: number): void {
     const deletedMessage = this.messages.find(message => message.id === messageId);
 
@@ -329,11 +241,6 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  /**
-   * Обработчик отметки сообщений как прочитанных
-   * Вызывается наблюдателем пересечений когда сообщение становится видимым
-   * @param entries - массив элементов, пересекающихся с областью видимости
-   */
   onReadMessage(entries: IntersectionObserverEntry[]): void {
     entries.forEach(e => {
       const element = e.target as HTMLElement;

@@ -9,11 +9,7 @@ import { UpdateInviteUseCase } from "../../../invite/use-cases/update-invite.use
 import { RevokeInviteUseCase } from "../../../invite/use-cases/revoke-invite.use-case";
 import { loading } from "@domain/shared/async-state";
 
-/**
- * Сервис для управления приглашениями участников команды проекта.
- * Предоставляет функциональность для создания и валидации формы приглашения,
- * отправки, редактирования и удаления приглашений, управления состоянием модального окна и ошибок.
- */
+/** Сервис для управления приглашениями участников команды проекта. */
 @Injectable()
 export class ProjectTeamService {
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
@@ -34,10 +30,6 @@ export class ProjectTeamService {
     this.destroy$.complete();
   }
 
-  /**
-   * Отправляет приглашение пользователю по ссылке.
-   * @returns результат отправки
-   */
   public submitInvite(projectId: number): void {
     this.inviteSubmitInitiated.set(true);
     // Проверка валидности формы
@@ -72,10 +64,6 @@ export class ProjectTeamService {
       });
   }
 
-  /**
-   * Обновляет параметры существующего приглашения.
-   * @param params объект с inviteId, role и specialization
-   */
   public editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
     const { inviteId, role, specialization } = params;
     this.updateInviteUseCase
@@ -90,10 +78,6 @@ export class ProjectTeamService {
       });
   }
 
-  /**
-   * Удаляет приглашение по идентификатору.
-   * @param invitationId идентификатор приглашения
-   */
   public removeInvitation(invitationId: number): void {
     this.revokeInviteUseCase
       .execute(invitationId)
@@ -105,10 +89,6 @@ export class ProjectTeamService {
       });
   }
 
-  /**
-   * Настроивает динамическую валидацию для поля link:
-   * сбрасывает валидаторы при пустом значении и очищает ошибку.
-   */
   public setupDynamicValidation(): void {
     this.inviteForm
       .get("link")

@@ -23,14 +23,6 @@ export class IndustryRepository implements IndustryRepositoryPort {
     );
   }
 
-  /**
-   * Находит конкретную отрасль в переданном массиве по идентификатору
-   * Вспомогательный метод для поиска отрасли без дополнительных запросов к серверу
-   *
-   * @param industries - массив отраслей для поиска
-   * @param industryId - идентификатор искомой отрасли
-   * @returns Industry | undefined - найденная отрасль или undefined, если не найдена
-   */
   getOne(industryId: number): Industry | undefined {
     return this.industries().find(industry => industry.id === industryId);
   }

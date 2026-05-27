@@ -7,18 +7,7 @@ import { Project } from "@domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 
-/**
- * Резолвер для загрузки данных проекта для чата
- *
- * Принимает:
- * - ActivatedRouteSnapshot с родительским параметром projectId
- *
- * Возвращает:
- * - Observable<Project> - данные проекта для отображения в чате
- *
- * Использует:
- * - ProjectService для получения данных проекта по ID
- */
+/** Предзагружает данные проекта для чата. */
 export const ProjectChatResolver: ResolveFn<Project> = (route: ActivatedRouteSnapshot) => {
   const getProjectUseCase = inject(GetProjectUseCase);
   const projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

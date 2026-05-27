@@ -8,20 +8,7 @@ import { ButtonComponent, InputComponent } from "@ui/primitives";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
 
-/**
- * Компонент запроса сброса пароля
- *
- * Назначение: Позволяет пользователю запросить сброс пароля по email
- * Принимает: Email адрес пользователя через форму
- * Возвращает: Перенаправление на страницу подтверждения или отображение ошибки
- *
- * Функциональность:
- * - Форма с полем email для запроса сброса пароля
- * - Валидация email адреса
- * - Отправка запроса на сервер
- * - Обработка ошибок (неверный email)
- * - Перенаправление на страницу подтверждения при успехе
- */
+/** Форма запроса сброса пароля по email. */
 @Component({
   selector: "app-reset-password",
   templateUrl: "./reset-password.component.html",

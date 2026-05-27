@@ -1,10 +1,4 @@
-/**
- * Сервис для управления шагами редактирования проекта.
- * Обеспечивает хранение текущего шага, навигацию между шагами и синхронизацию
- * состояния с URL-параметрами маршрута.
- *
- * @format
- */
+/** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
@@ -15,15 +9,9 @@ import { EditStep } from "@core/lib/models/edit-step";
   providedIn: "root",
 })
 export class ProjectStepService {
-  /** Сигнал, содержащий текущий шаг редактирования */
   readonly currentStep = signal<EditStep>("main");
-  /** Ссылка на Router для изменения URL */
   private readonly router = inject(Router);
 
-  /**
-   * Устанавливает новый шаг и синхронизирует его с query-параметрами URL.
-   * @param step новый шаг редактирования
-   */
   public navigateToStep(step: EditStep): void {
     this.currentStep.set(step);
     this.router.navigate([], {
@@ -32,11 +20,6 @@ export class ProjectStepService {
     });
   }
 
-  /**
-   * Устанавливает шаг из параметра маршрута. Если передан некорректный шаг,
-   * по умолчанию выбирает 'main' и обновляет URL.
-   * @param step строка из URL или валидный EditStep
-   */
   public setStepFromRoute(step: string | EditStep): void {
     const validSteps: EditStep[] = [
       "main",

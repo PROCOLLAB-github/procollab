@@ -52,88 +52,48 @@ import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service"
 export class VacancyFilterComponent implements OnInit {
   private readonly vacancyFilterInfoService = inject(VacancyFilterInfoService);
 
-  /**
-   * Сеттер для значения поиска
-   * @param value - новое значение поиска
-   */
   @Input() set searchValue(value: string | undefined) {
     this.vacancyFilterInfoService.applyInitSearchValue(value);
   }
 
-  /**
-   * Геттер для получения значения поиска
-   * @returns текущее значение поиска
-   */
   get searchValue() {
     return this.vacancyFilterInfoService.searchValue();
   }
 
-  /** Событие изменения значения поиска */
   @Output() searchValueChange = new EventEmitter<string>();
 
-  /** Состояние открытия фильтра (для мобильной версии) */
   protected readonly filterOpen = this.vacancyFilterInfoService.filterOpen;
 
-  // Сигналы для текущих значений фильтров
-  /** Текущий фильтр по опыту */
   protected readonly currentExperience = this.vacancyFilterInfoService.currentExperience;
-  /** Текущий фильтр по формату работы */
   protected readonly currentWorkFormat = this.vacancyFilterInfoService.currentWorkFormat;
-  /** Текущий фильтр по графику работы */
   protected readonly currentWorkSchedule = this.vacancyFilterInfoService.currentWorkSchedule;
-  /** Текущая зарплата */
   protected readonly currentSalary = this.vacancyFilterInfoService.currentSalary;
 
-  /** Опции фильтра по опыту работы */
   protected readonly workExperienceFilterOptions = workExperienceFilter;
 
-  /** Опции фильтра по формату работы */
   protected readonly workFormatFilterOptions = workFormatFilter;
 
-  /** Опции фильтра по графику работы */
   protected readonly workScheduleFilterOptions = workScheduleFilter;
 
   protected readonly AppRoutes = AppRoutes;
 
-  /**
-   * Инициализация компонента
-   */
   ngOnInit() {
     // Подписка на изменения параметров запроса
     this.vacancyFilterInfoService.initializationVacancyFilters();
   }
 
-  /**
-   * Установка фильтра по опыту работы
-   * @param event - событие клика
-   * @param experienceId - идентификатор выбранного опыта
-   */
   setExperienceFilter(event: Event, experienceId: string): void {
     this.vacancyFilterInfoService.setExperienceFilter(event, experienceId);
   }
 
-  /**
-   * Установка фильтра по формату работы
-   * @param event - событие клика
-   * @param formatId - идентификатор выбранного формата
-   */
   setWorkFormatFilter(event: Event, formatId: string): void {
     this.vacancyFilterInfoService.setWorkFormatFilter(event, formatId);
   }
 
-  /**
-   * Установка фильтра по графику работы
-   * @param event - событие клика
-   * @param scheduleId - идентификатор выбранного графика
-   */
   setWorkScheduleFilter(event: Event, scheduleId: string): void {
     this.vacancyFilterInfoService.setWorkScheduleFilter(event, scheduleId);
   }
 
-  /**
-   * Сброс всех фильтров
-   * Очищает все параметры фильтрации и обновляет URL
-   */
   resetFilter(): void {
     this.vacancyFilterInfoService.applyResetCurrentFilters();
 
@@ -142,18 +102,10 @@ export class VacancyFilterComponent implements OnInit {
     this.vacancyFilterInfoService.resetFilter();
   }
 
-  /**
-   * Обработчик изменения значения поиска
-   * @param value - новое значение поиска
-   */
   onSearchValueChanged(value: string) {
     this.searchValueChange.emit(value);
   }
 
-  /**
-   * Обработчик клика вне компонента
-   * Закрывает мобильное меню фильтров
-   */
   onClickOutside(): void {
     this.vacancyFilterInfoService.onClickOutside();
   }

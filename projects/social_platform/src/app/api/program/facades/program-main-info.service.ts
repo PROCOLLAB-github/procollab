@@ -61,9 +61,6 @@ export class ProgramMainInfoService {
     this.destroy$.complete();
   }
 
-  /**
-   * Переключает состояние чекбокса "участвую"
-   */
   onTogglePparticipating(): void {
     const newValue = !this.isPparticipating();
     this.isPparticipating.set(newValue);

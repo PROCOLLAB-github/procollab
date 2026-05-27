@@ -36,14 +36,8 @@ export class ChatDirectUIInfoService {
 
   readonly isAsideMobileShown = signal<boolean>(false);
 
-  /**
-   * Количество сообщений, загружаемых за один запрос
-   */
   readonly messagesPerFetch = 20;
 
-  /**
-   * Общее количество сообщений в чате (приходит с сервера)
-   */
   readonly messagesTotalCount = signal<number>(0);
 
   readMessagesEvent(result: OnReadChatMessageDto): void {

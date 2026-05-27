@@ -21,24 +21,7 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { AppRoutes } from "@api/paths/app-routes";
 
-/**
- * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА
- *
- * Этот компонент отображает информацию об вакансии проекта в виде карточки
- *
- * НАЗНАЧЕНИЕ:
- * - Отображение информации об вакансии
- *
- * @params
- * - vacancy: Vacancy - объект с данными вакансии (обязательный)
- *
- * ФУНКЦИОНАЛЬНОСТЬ:
- * - Отображение информации вакансии
- * - Ссылка на вакансию
- *
- * @returns
- * - HTML-разметка карточки вакансии
- */
+/** Компонент карточки вакансии проекта с возможностью раскрытия описания. */
 @Component({
   selector: "app-project-vacancy-card",
   standalone: true,
@@ -60,7 +43,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 })
 export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   protected readonly AppRoutes = AppRoutes;
-  @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
+  @Input({ required: true }) vacancy!: Vacancy;
   @Input() type: "vacancies" | "project" = "project";
 
   @ViewChild("descEl") descEl?: ElementRef;
@@ -68,16 +51,9 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   private readonly cdRef = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    if (this.type === "project") {
-      this.endSliceOfSkills = 5;
-    } else {
-      this.endSliceOfSkills = 3;
-    }
+    this.endSliceOfSkills = this.type === "project" ? 5 : 3;
   }
 
-  /**
-   * Проверка возможности расширения описания после инициализации представления
-   */
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
@@ -85,16 +61,10 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
     this.cdRef.detectChanges();
   }
 
-  descriptionExpandable!: boolean; // Флаг необходимости кнопки "подробнее"
-  readFullDescription = false; // Флаг показа всех вакансий
+  descriptionExpandable!: boolean;
+  readFullDescription = false;
   endSliceOfSkills = 0;
 
-  /**
-   * Раскрытие/сворачивание описания профиля
-   * @param elem - DOM элемент описания
-   * @param expandedClass - CSS класс для раскрытого состояния
-   * @param isExpanded - текущее состояние (раскрыто/свернуто)
-   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;

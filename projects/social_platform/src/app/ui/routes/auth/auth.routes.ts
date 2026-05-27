@@ -10,18 +10,7 @@ import { RegisterComponent } from "@ui/pages/auth/register/register.component";
 import { EmailVerificationComponent } from "@ui/pages/auth/email-verification/email-verification.component";
 import { ConfirmEmailComponent } from "@ui/pages/auth/confirm-email/confirm-email.component";
 
-/**
- * Конфигурация маршрутов для модуля аутентификации
- *
- * Назначение: Определяет все маршруты для страниц аутентификации
- * Принимает: Не принимает параметров
- * Возвращает: Массив конфигураций маршрутов Angular
- *
- * Функциональность:
- * - Настраивает маршруты для входа, регистрации, сброса пароля
- * - Определяет дочерние маршруты для AuthComponent
- * - Настраивает редиректы и компоненты для каждого пути
- */
+/** Конфигурация маршрутов для модуля аутентификации. */
 export const AUTH_ROUTES: Routes = [
   {
     path: "",

@@ -68,10 +68,6 @@ export class ProfileMidSideComponent {
 
   protected readonly AppRoutes = AppRoutes;
 
-  /**
-   * Добавление новой новости в профиль
-   * @param news - объект с текстом и файлами новости
-   */
   onAddNews(news: { text: string; files: string[] }): void {
     this.profileDetailInfoService
       .onAddNews(news)
@@ -81,27 +77,14 @@ export class ProfileMidSideComponent {
       });
   }
 
-  /**
-   * Удаление новости из профиля
-   * @param newsId - идентификатор удаляемой новости
-   */
   onDeleteNews(newsId: number): void {
     this.profileDetailInfoService.onDeleteNews(newsId);
   }
 
-  /**
-   * Переключение лайка новости
-   * @param newsId - идентификатор новости для лайка/дизлайка
-   */
   onLike(newsId: number) {
     this.profileDetailInfoService.onLike(newsId);
   }
 
-  /**
-   * Редактирование существующей новости
-   * @param news - обновленные данные новости
-   * @param newsItemId - идентификатор редактируемой новости
-   */
   onEditNews(news: ProfileNews, newsItemId: number) {
     this.profileDetailInfoService
       .onEditNews(news, newsItemId)
@@ -111,21 +94,10 @@ export class ProfileMidSideComponent {
       });
   }
 
-  /**
-   * Обработчик появления новостей в области видимости
-   * Отмечает новости как просмотренные при скролле
-   * @param entries - массив элементов, попавших в область видимости
-   */
   onNewsInView(entries: IntersectionObserverEntry[]): void {
     this.profileDetailInfoService.onNewsInView(entries);
   }
 
-  /**
-   * Раскрытие/сворачивание описания профиля
-   * @param elem - DOM элемент описания
-   * @param expandedClass - CSS класс для раскрытого состояния
-   * @param isExpanded - текущее состояние (раскрыто/свернуто)
-   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     this.expandService.onExpand("description", elem, expandedClass, isExpanded);
   }

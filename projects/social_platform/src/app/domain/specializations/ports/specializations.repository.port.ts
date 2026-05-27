@@ -5,10 +5,7 @@ import { Specialization } from "../specialization.model";
 import { SpecializationsGroup } from "../specializations-group.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 
-/**
- * Порт репозитория специализаций.
- * Реализуется в infrastructure/repository/specializations/specializations.repository.ts
- */
+/** Порт репозитория специализаций */
 export abstract class SpecializationsRepositoryPort {
   abstract getSpecializationsNested(): Observable<SpecializationsGroup[]>;
   abstract getSpecializationsInline(

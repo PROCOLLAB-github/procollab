@@ -15,7 +15,7 @@ import { RegisterCommand } from "@domain/auth/commands/register.command";
 import { ChatStateService } from "@api/chat/chat-state.service";
 import { userFromRaw, userToRaw } from "@utils/userRaw";
 
-/** Репозиторий auth: HTTP через `AuthHttpAdapter`, `plainToInstance`; потоки profile/roles держит в ReplaySubject. */
+/** Репозиторий auth: HTTP вызовы через `AuthHttpAdapter`, без кеша (fetchProfile() каждый раз ходит на сервер). */
 @Injectable({ providedIn: "root" })
 export class AuthRepository implements AuthRepositoryPort {
   private readonly authAdapter = inject(AuthHttpAdapter);

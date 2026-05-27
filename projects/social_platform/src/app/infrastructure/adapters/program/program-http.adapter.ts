@@ -21,13 +21,6 @@ export class ProgramHttpAdapter {
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";
   private readonly apiService = inject(ApiService);
 
-  /**
-   * Получает список программ с пагинацией и дополнительными фильтрами.
-   *
-   * @param skip смещение
-   * @param take лимит
-   * @param params дополнительные query-параметры
-   */
   getAll(skip: number, take: number, params?: HttpParams): Observable<ApiPagination<Program>> {
     let httpParams = new HttpParams().set("limit", take).set("offset", skip);
 
@@ -43,41 +36,20 @@ export class ProgramHttpAdapter {
     return this.apiService.get(`${this.PROGRAMS_URL}/`, httpParams);
   }
 
-  /**
-   * Получает детальную информацию о программе.
-   *
-   * @param programId идентификатор программы
-   */
   getOne(programId: number): Observable<Program> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
   }
 
-  /**
-   * Создает новую программу.
-   *
-   * @param program данные программы
-   */
   create(program: ProgramCreate): Observable<Program> {
     return this.apiService.post(`${this.PROGRAMS_URL}/`, program);
   }
 
-  /**
-   * Получает схему полей регистрации/анкеты программы.
-   *
-   * @param programId идентификатор программы
-   */
   getDataSchema(programId: number): Observable<{ dataSchema: ProgramDataSchema }> {
     return this.apiService.get<{ dataSchema: ProgramDataSchema }>(
       `${this.PROGRAMS_URL}/${programId}/schema/`
     );
   }
 
-  /**
-   * Регистрирует пользователя в программе.
-   *
-   * @param programId идентификатор программы
-   * @param additionalData заполненные дополнительные поля
-   */
   register(
     programId: number,
     additionalData: Record<string, string>
@@ -85,23 +57,10 @@ export class ProgramHttpAdapter {
     return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/register/`, additionalData);
   }
 
-  /**
-   * Получает проекты программы.
-   *
-   * @param programId идентификатор программы
-   * @param params query-параметры пагинации/фильтрации
-   */
   getAllProjects(programId: number, params?: HttpParams): Observable<ApiPagination<Project>> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/`, params);
   }
 
-  /**
-   * Получает участников программы.
-   *
-   * @param programId идентификатор программы
-   * @param skip смещение
-   * @param take лимит
-   */
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get(
       `${this.AUTH_PUBLIC_USERS_URL}/`,
@@ -109,30 +68,14 @@ export class ProgramHttpAdapter {
     );
   }
 
-  /**
-   * Получает метаданные фильтров программы.
-   *
-   * @param programId идентификатор программы
-   */
   getProgramFilters(programId: number): Observable<PartnerProgramFields[]> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/filters/`);
   }
 
-  /**
-   * Получает дополнительные поля для подачи проекта в программу.
-   *
-   * @param programId идентификатор программы
-   */
   getProgramProjectAdditionalFields(programId: number): Observable<ProjectAdditionalFields> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/apply/`);
   }
 
-  /**
-   * Отправляет заявку проекта в программу.
-   *
-   * @param programId идентификатор программы
-   * @param body тело заявки
-   */
   applyProjectToProgram(
     programId: number,
     dto: ApplyToProgramDTO
@@ -147,13 +90,6 @@ export class ProgramHttpAdapter {
     return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/apply/`, payload);
   }
 
-  /**
-   * Создает отфильтрованный список проектов программы по переданным фильтрам.
-   *
-   * @param programId идентификатор программы
-   * @param filters объект фильтров
-   * @param params query-параметры пагинации
-   */
   createProgramFilters(
     programId: number,
     filters: Record<string, string[]>,
@@ -166,11 +102,6 @@ export class ProgramHttpAdapter {
     return this.apiService.post(url, { filters });
   }
 
-  /**
-   * Подтверждает подачу конкурсного проекта.
-   *
-   * @param relationId идентификатор связи project-program
-   */
   submitCompettetiveProject(relationId: number): Observable<Project> {
     return this.apiService.post(
       `${this.PROGRAMS_URL}/partner-program-projects/${relationId}/submit/`,

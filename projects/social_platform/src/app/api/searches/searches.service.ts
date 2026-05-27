@@ -21,10 +21,6 @@ export class SearchesService {
 
   private readonly destroy$ = new Subject<void>();
 
-  /**
-   * Выбор специальности из автокомплита
-   * @param speciality - выбранная специальность
-   */
   onSelectSpec(form: FormGroup, speciality: Specialization): void {
     form.patchValue({ speciality: speciality.name });
   }
@@ -44,10 +40,6 @@ export class SearchesService {
     return this.skillsRepository.getSkillsNested();
   }
 
-  /**
-   * Переключение навыка (добавление/удаление)
-   * @param toggledSkill - навык для переключения
-   */
   onToggleSkill(toggledSkill: Skill, form: FormGroup): void {
     const { skills }: { skills: Skill[] } = form.value;
 
@@ -60,10 +52,6 @@ export class SearchesService {
     }
   }
 
-  /**
-   * Добавление нового навыка
-   * @param newSkill - новый навык для добавления
-   */
   onAddSkill(newSkill: Skill, form: FormGroup): void {
     const { skills }: { skills: Skill[] } = form.value;
 
@@ -74,10 +62,6 @@ export class SearchesService {
     form.patchValue({ skills: [newSkill, ...skills] });
   }
 
-  /**
-   * Удаление навыка
-   * @param oddSkill - навык для удаления
-   */
   onRemoveSkill(oddSkill: Skill, form: FormGroup): void {
     const { skills }: { skills: Skill[] } = form.value;
 

@@ -27,7 +27,6 @@ export class ProjectResourceService {
 
   private readonly destroy$ = new Subject<void>();
 
-  /** Флаг инициализации сервиса */
   private initialized = false;
 
   constructor() {
@@ -43,10 +42,6 @@ export class ProjectResourceService {
     });
   }
 
-  /**
-   * Инициализирует сигнал resourceItems из данных FormArray
-   * Вызывается при первом обращении к данным
-   */
   public initializePartnerItems(resourceFormArray: FormArray): void {
     if (this.initialized) return;
 
@@ -57,20 +52,12 @@ export class ProjectResourceService {
     this.initialized = true;
   }
 
-  /**
-   * Принудительно синхронизирует сигнал с FormArray
-   * Полезно вызывать после загрузки данных с сервера
-   */
   public syncResourceItems(resourceFormArray: FormArray): void {
     if (resourceFormArray) {
       this.resourceItems.set(resourceFormArray.value);
     }
   }
 
-  /**
-   * Инициализирует ресурсы из данных проекта
-   * Заполняет FormArray целей данными из проекта
-   */
   public initializeResourcesFromProject(resources: Resource[]): void {
     const resourcesFormArray = this.resources;
 
@@ -102,17 +89,10 @@ export class ProjectResourceService {
 
   readonly hasResources = computed(() => this.resourceItems().length > 0);
 
-  /**
-   * Возвращает форму партнеров и ресурсов.
-   * @returns FormGroup экземпляр формы целей
-   */
   public getForm(): FormGroup {
     return this.resourceForm;
   }
 
-  /**
-   * Получает FormArray партнеров и ресурсов
-   */
   public get resources(): FormArray {
     return this.resourceForm.get("resources") as FormArray;
   }
@@ -129,12 +109,6 @@ export class ProjectResourceService {
     return this.resourceForm.get("partnerCompany") as FormControl;
   }
 
-  /**
-   * Добавляет нового ресурса или сохраняет изменения существующей.
-   * @param type - тип ресурса (опционально)
-   * @param description - описание ресурса (опционально)
-   * @param partnerCompany - ссылка на партнера (опционально)
-   */
   public addResource(type?: string, description?: string, partnerCompany?: string): void {
     const resourcesFormArray = this.resources;
 
@@ -166,10 +140,6 @@ export class ProjectResourceService {
     resourcesFormArray.push(resourceItem);
   }
 
-  /**
-   * Удаляет ресурс по указанному индексу.
-   * @param index индекс удаляемого партнера
-   */
   public removeResource(index: number, resourceId: number, projectId: number): void {
     const resourceFormArray = this.resources;
 
@@ -186,9 +156,6 @@ export class ProjectResourceService {
       .subscribe();
   }
 
-  /**
-   * Сбрасывает все ошибки валидации во всех контролах FormArray ресурса.
-   */
   public clearAllResourceErrors(): void {
     const resources = this.resources;
 
@@ -201,10 +168,6 @@ export class ProjectResourceService {
     });
   }
 
-  /**
-   * Получает данные все ресурсы для отправки на сервер
-   * @returns массив объектов ресурсов
-   */
   public getResourcesData(): any[] {
     return this.resources.value.map((resource: Resource) => ({
       id: resource.id ?? null,
@@ -214,11 +177,6 @@ export class ProjectResourceService {
     }));
   }
 
-  /**
-   * Сохраняет только новых ресурсов (у которых id === null) — отправляет POST.
-   * После ответов присваивает полученные id в соответствующие FormGroup.
-   * Возвращает Observable массива результатов (в порядке отправки).
-   */
   public saveResources(projectId: number) {
     const resources = this.getResourcesData();
 

@@ -16,12 +16,9 @@ import {
 } from "../chat.model";
 
 /**
- * Порт для real-time операций чата (WebSocket).
- * Отправка/получение сообщений, отслеживание статусов, набор текста.
- *
- * Этот порт будет ключевым для CQRS+event-driven (тема 4 плана обучения):
- * - Commands: sendMessage, editMessage, deleteMessage, readMessage, startTyping
- * - Events: onMessage, onEditMessage, onDeleteMessage, onReadMessage, onTyping, onSetOnline/Offline
+ * Порт real-time операций чата (WebSocket).
+ * Commands: sendMessage, editMessage, deleteMessage, readMessage, startTyping
+ * Events: onMessage, onEdit, onDelete, onRead, onTyping, onSetOnline/Offline
  */
 export abstract class ChatRealtimePort {
   /** Установить WebSocket соединение */

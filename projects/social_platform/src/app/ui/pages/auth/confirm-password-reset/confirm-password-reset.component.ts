@@ -4,18 +4,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { AsyncPipe } from "@angular/common";
 import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
 
-/**
- * Компонент подтверждения сброса пароля
- *
- * Назначение: Отображает страницу с инструкциями после запроса сброса пароля
- * Принимает: email адрес через query параметры маршрута
- * Возвращает: Информационное сообщение о отправке письма для сброса пароля
- *
- * Функциональность:
- * - Получает email из query параметров
- * - Отображает подтверждение отправки письма для сброса пароля
- * - Информирует пользователя о следующих шагах
- */
+/** Страница подтверждения отправки письма для сброса пароля. */
 @Component({
   selector: "app-confirm-password-reset",
   templateUrl: "./confirm-password-reset.component.html",

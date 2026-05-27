@@ -6,31 +6,7 @@ import { of, switchMap } from "rxjs";
 import { FeedNews } from "@domain/news/project-news.model";
 import { GetProjectNewsDetailUseCase } from "@api/project/use-cases/get-project-news-detail.use-case";
 
-/**
- * РЕЗОЛВЕР ДЛЯ ЗАГРУЗКИ ДЕТАЛЬНОЙ ИНФОРМАЦИИ О НОВОСТИ
- *
- * Этот резолвер загружает детальную информацию о конкретной новости проекта
- * перед отображением компонента детальной новости.
- *
- * НАЗНАЧЕНИЕ:
- * - Загружает детальные данные новости до инициализации компонента
- * - Обеспечивает доступность данных в момент создания компонента
- * - Предотвращает отображение пустого состояния во время загрузки
- *
- * @params
- * - route: ActivatedRouteSnapshot - снимок активного маршрута с параметрами
- *
- * ИЗВЛЕКАЕМЫЕ ДАННЫЕ:
- * - projectId - ID проекта из родительского маршрута
- * - newsId - ID новости из параметров текущего маршрута
- *
- * @returns
- * - Observable<FeedNews> - объект с детальной информацией о новости
- *
- * ОСОБЕННОСТИ:
- * - Использует иерархию маршрутов (parent/child)
- * - Извлекает параметры из разных уровней маршрутизации
- */
+/** Предзагружает детальную информацию о новости проекта. */
 export const NewsDetailResolver: ResolveFn<FeedNews> = (route: ActivatedRouteSnapshot) => {
   const getProjectNewsDetailUseCase = inject(GetProjectNewsDetailUseCase);
 

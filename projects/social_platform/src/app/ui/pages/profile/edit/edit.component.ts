@@ -47,27 +47,7 @@ import { EditStep } from "@core/lib/models/edit-step";
 import { GetSpecializationsNestedUseCase } from "@api/specializations/use-cases/get-specializations-nested.use-case";
 import { map } from "rxjs";
 
-/**
- * Компонент редактирования профиля пользователя
- *
- * Этот компонент предоставляет полнофункциональную форму для редактирования профиля пользователя
- * с поддержкой множественных разделов (основная информация, образование, опыт работы, достижения, навыки).
- *
- * Основные возможности:
- * - Редактирование основной информации (имя, фамилия, дата рождения, город, телефон)
- * - Управление образованием (добавление, редактирование, удаление записей об образовании)
- * - Управление опытом работы (добавление, редактирование, удаление записей о работе)
- * - Управление языками (добавление, редактирование, удаление языковых навыков)
- * - Управление достижениями (добавление, редактирование, удаление достижений)
- * - Управление навыками через автокомплит и модальные окна с группировкой
- * - Загрузка и обновление аватара пользователя
- * - Пошаговая навигация между разделами формы
- * - Валидация всех полей формы с отображением ошибок
- *
- * @implements OnInit - для инициализации компонента и подписок
- * @implements OnDestroy - для очистки подписок
- * @implements AfterViewInit - для работы с DOM после инициализации представления
- */
+/** Многошаговая форма редактирования профиля пользователя. */
 @Component({
   selector: "app-profile-edit",
   templateUrl: "./edit.component.html",
@@ -120,26 +100,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly profileForm = this.profileFormService.getForm();
 
-  /**
-   * Инициализация компонента
-   * Настраивает форму, подписки на изменения, валидацию и заголовок навигации
-   */
   ngOnInit(): void {
     this.profileEditInfoService.initializationEditInfo();
   }
 
-  /**
-   * Инициализация после создания представления
-   * Загружает данные профиля пользователя и заполняет форму
-   */
   ngAfterViewInit() {
     this.profileFormService.initializeProfileData();
   }
 
-  /**
-   * Очистка ресурсов при уничтожении компонента
-   * Отписывается от всех активных подписок
-   */
   ngOnDestroy(): void {
     this.profileFormService.destroy();
   }
@@ -190,10 +158,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly navProfileItems = navProfileItems;
 
-  /**
-   * Навигация между шагами редактирования профиля
-   * @param step - название шага ('main' | 'education' | 'experience' | 'achievements' | 'skills' | 'settings)
-   */
   navigateStep(step: EditStep) {
     this.projectStepService.navigateToStep(step);
   }
@@ -258,66 +222,33 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   // Для управления открытыми группами специализаций
   protected readonly openSpecializationGroup =
     this.onboardingStageOneUIInfoService.openSpecializationGroup;
-
-  /**
-   * Проверяет, есть ли открытые группы специализаций
-   */
   protected readonly hasOpenSpecializationsGroups =
     this.onboardingStageOneUIInfoService.hasOpenSpecializationsGroups;
 
-  /**
-   * Проверяет, должна ли группа специализаций быть отключена
-   * @param groupName - название группы для проверки
-   */
   isSpecializationGroupDisabled(groupName: string): boolean {
     return this.onboardingStageOneUIInfoService.isSpecializationGroupDisabled(groupName);
   }
 
-  /**
-   * Обработчик переключения группы специализаций
-   * @param isOpen - флаг открытия/закрытия группы
-   * @param groupName - название группы
-   */
   onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
     this.onboardingStageOneUIInfoService.onSpecializationsGroupToggled(isOpen, groupName);
   }
 
-  /**
-   * Сохранение профиля пользователя
-   * Валидирует всю форму и отправляет данные на сервер
-   */
   saveProfile(): void {
     this.profileEditInfoService.saveProfile();
   }
 
-  /**
-   * Выбор специальности из автокомплита
-   * @param speciality - выбранная специальность
-   */
   onSelectSpec(speciality: Specialization): void {
     this.onboardingStageOneInfoService.onSelectSpec(speciality);
   }
 
-  /**
-   * Переключение навыка (добавление/удаление)
-   * @param toggledSkill - навык для переключения
-   */
   onToggleSkill(toggledSkill: Skill): void {
     this.searchesService.onToggleSkill(toggledSkill, this.profileForm);
   }
 
-  /**
-   * Добавление нового навыка
-   * @param newSkill - новый навык для добавления
-   */
   onAddSkill(newSkill: Skill): void {
     this.searchesService.onAddSkill(newSkill, this.profileForm);
   }
 
-  /**
-   * Удаление навыка
-   * @param oddSkill - навык для удаления
-   */
   onRemoveSkill(oddSkill: Skill): void {
     this.searchesService.onRemoveSkill(oddSkill, this.profileForm);
   }

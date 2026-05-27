@@ -69,19 +69,10 @@ export class ProjectsMidSideComponent {
   protected readonly readFullDescription = this.expandService.readFullDescription; // Флаг развернутого описания
   protected readonly descriptionExpandable = this.expandService.descriptionExpandable; // Флаг необходимости кнопки "Читать полностью"
 
-  /**
-   * Обработчик появления новостей в области видимости
-   * Отмечает новости как просмотренные
-   * @param entries - массив элементов, попавших в область видимости
-   */
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     this.projectsDetailService.onNewsInVew(entries);
   }
 
-  /**
-   * Добавление новой новости
-   * @param news - объект с текстом и файлами новости
-   */
   onAddNews(news: { text: string; files: string[] }): void {
     this.projectsDetailService
       .onAddNews(news)
@@ -91,27 +82,14 @@ export class ProjectsMidSideComponent {
       });
   }
 
-  /**
-   * Удаление новости
-   * @param newsId - ID удаляемой новости
-   */
   onDeleteNews(newsId: number): void {
     this.projectsDetailService.onDeleteNews(newsId);
   }
 
-  /**
-   * Переключение лайка новости
-   * @param newsId - ID новости для лайка
-   */
   onLike(newsId: number) {
     this.projectsDetailService.onLike(newsId);
   }
 
-  /**
-   * Редактирование новости
-   * @param news - обновленные данные новости
-   * @param newsItemId - ID редактируемой новости
-   */
   onEditNews(news: FeedNews, newsItemId: number) {
     this.projectsDetailService
       .onEditNews(news, newsItemId)
@@ -121,28 +99,14 @@ export class ProjectsMidSideComponent {
       });
   }
 
-  /**
-   * Удаление участника из проекта
-   * @param id - ID удаляемого участника
-   */
   onRemoveMember(id: Collaborator["userId"]) {
     this.projectsDetailService.onRemoveMember(id);
   }
 
-  /**
-   * Передача лидерства другому участнику
-   * @param id - ID нового лидера
-   */
   onTransferOwnership(id: Collaborator["userId"]) {
     this.projectsDetailService.onTransferOwnership(id);
   }
 
-  /**
-   * Раскрытие/сворачивание описания профиля
-   * @param elem - DOM элемент описания
-   * @param expandedClass - CSS класс для раскрытого состояния
-   * @param isExpanded - текущее состояние (раскрыто/свернуто)
-   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     this.expandService.onExpand("description", elem, expandedClass, isExpanded);
   }

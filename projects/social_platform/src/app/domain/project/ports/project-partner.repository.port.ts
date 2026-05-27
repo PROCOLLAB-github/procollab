@@ -3,10 +3,7 @@
 import { Observable } from "rxjs";
 import { Partner, PartnerDto } from "../partner.model";
 
-/**
- * Порт репозитория партнёров проекта.
- * Реализуется в infrastructure/repository/project/project-partner.repository.ts
- */
+/** Порт репозитория партнёров проекта */
 export abstract class ProjectPartnerRepositoryPort {
   abstract fetchAll(projectId: number): Observable<Partner[]>;
   abstract createPartner(projectId: number, params: PartnerDto): Observable<Partner>;

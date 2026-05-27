@@ -259,10 +259,6 @@ export class ProfileFormService {
       });
   }
 
-  /**
-   * Возвращает основную форму проекта.
-   * @returns FormGroup экземпляр формы проекта
-   */
   public getForm(): FormGroup {
     return this.profileForm;
   }
@@ -370,11 +366,6 @@ export class ProfileFormService {
     this.links.removeAt(i);
   }
 
-  /**
-   * Изменение типа пользователя
-   * @param typeId - новый тип пользователя
-   * @returns Observable<void> - результат операции изменения типа
-   */
   changeUserType(typeId: number): Observable<void> {
     return this.authRepository
       .updateProfile({

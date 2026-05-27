@@ -4,31 +4,8 @@ import { Program } from "../program/program.model";
 import { FeedNews } from "../news/project-news.model";
 import { Vacancy } from "../vacancy/vacancy.model";
 
-/**
- * МОДЕЛИ ДАННЫХ ДЛЯ ЭЛЕМЕНТОВ ЛЕНТЫ
- *
- * Этот файл содержит TypeScript интерфейсы и типы для элементов ленты новостей.
- * Определяет структуру данных для проектов, вакансий и новостей.
- *
- * ОСНОВНЫЕ ТИПЫ:
- * - FeedProject: данные проекта в ленте
- * - FeedItemType: возможные типы элементов ленты
- * - FeedItem: объединенный тип для всех элементов ленты
- */
-/**
- * ИНТЕРФЕЙС ПРОЕКТА В ЛЕНТЕ
- *
- * Описывает структуру данных проекта, отображаемого в ленте новостей
- *
- * ПОЛЯ:
- * @property id - уникальный идентификатор проекта
- * @property name - название проекта
- * @property shortDescription - краткое описание проекта
- * @property industry - ID отрасли проекта
- * @property imageAddress - URL изображения проекта
- * @property viewsCount - количество просмотров проекта
- * @property leader - ID руководителя проекта
- */
+/** Модели данных для элементов ленты */
+/** Интерфейс проекта в ленте */
 export interface FeedProject {
   id: number;
   name: string;
@@ -43,27 +20,10 @@ export interface FeedProject {
   } | null;
 }
 
-/**
- * ТИП ЭЛЕМЕНТА ЛЕНТЫ
- *
- * Определяет возможные типы контента в ленте:
- * - "vacancy": вакансия
- * - "news": новость
- * - "project": проект
- */
+/** Тип элемента ленты */
 export type FeedItemType = "vacancy" | "news" | "project";
 
-/**
- * ОБЪЕДИНЕННЫЙ ТИП ЭЛЕМЕНТА ЛЕНТЫ
- *
- * Дискриминированное объединение типов для всех возможных элементов ленты.
- * Каждый элемент имеет поле typeModel для определения типа и соответствующий content.
- *
- * ВАРИАНТЫ:
- * - Проект: typeModel = "project", content = FeedProject
- * - Вакансия: typeModel = "vacancy", content = Vacancy
- * - Новость: typeModel = "news", content = FeedNews с дополнительным contentObject
- */
+/** Объединенный тип элемента ленты */
 export type FeedItem =
   | ({ typeModel: FeedItemType } & {
       typeModel: "project";

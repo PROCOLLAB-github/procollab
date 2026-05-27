@@ -20,25 +20,7 @@ import { TruncatePipe, DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corel
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
-/**
- *
- * Отображает карточку активной вакансии в ленте новостей с полным функционалом.
- * Поддерживает развертывание/свертывание длинного контента и интерактивные элементы.
- *
- * - Отображение полной информации о вакансии
- * - Развертывание/свертывание описания и списка навыков
- * - Навигация к детальной странице вакансии
- * - Форматирование текста с поддержкой ссылок и переносов строк
- * - Отображение тегов и навыков
- *
- * - Кнопки "Показать полностью" / "Свернуть"
- * - Теги навыков и требований
- * - Ссылки на детальную страницу
- *
- * - DayjsPipe: форматирование дат
- * - ParseLinksPipe: преобразование ссылок в кликабельные элементы
- * - ParseBreaksPipe: обработка переносов строк
- */
+/** Карточка вакансии в ленте с поддержкой разворачивания контента. */
 @Component({
   selector: "app-open-vacancy",
   standalone: true,
@@ -61,13 +43,6 @@ export class OpenVacancyComponent implements AfterViewInit {
   @Input() feedItem!: Vacancy;
   protected readonly AppRoutes = AppRoutes;
 
-  /**
-   *
-   * @ViewChild skillsEl - ссылка на элемент со списком навыков
-   * @ViewChild descEl - ссылка на элемент с описанием вакансии
-   *
-   * Используются для определения необходимости показа кнопок развертывания
-   */
   @ViewChild("skillsEl") skillsEl?: ElementRef;
   @ViewChild("descEl") descEl?: ElementRef;
 
@@ -98,32 +73,11 @@ export class OpenVacancyComponent implements AfterViewInit {
   readFullDescription = false; // Развернуто ли описание
   readFullSkills = false; // Развернут ли список навыков
 
-  /**
-   *
-   * @param elem - DOM элемент для анимации
-   * @param expandedClass - CSS класс для развернутого состояния
-   * @param isExpanded - текущее состояние (развернуто/свернуто)
-   *
-   * - Переключает визуальное состояние описания
-   * - Применяет анимацию развертывания/свертывания
-   * - Обновляет флаг состояния
-   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
 
-  /**
-   *
-   * @param elem - DOM элемент для анимации
-   * @param expandedClass - CSS класс для развернутого состояния
-   * @param isExpanded - текущее состояние (развернуто/свернуто)
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Переключает визуальное состояние списка навыков
-   * - Применяет анимацию развертывания/свертывания
-   * - Обновляет флаг состояния
-   */
   onExpandSkills(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullSkills = !isExpanded;

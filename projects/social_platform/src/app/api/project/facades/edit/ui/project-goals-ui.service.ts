@@ -14,18 +14,11 @@ export class ProjectGoalsUIService {
 
   readonly hasGoals = computed(() => this.goalItems().length > 0);
 
-  /**
-   * Обработчик изменения радио-кнопки для выбора лидера
-   * @param event - событие изменения
-   */
   applyOnLeaderRadioChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.selectedLeaderId.set(target.value);
   }
 
-  /**
-   * Добавляет лидера на определенную цель
-   */
   applyAddLeaderToGoal(goals: FormArray): void {
     const goalIndex = this.activeGoalIndex();
     const leaderId = this.selectedLeaderId();
@@ -40,10 +33,6 @@ export class ProjectGoalsUIService {
     this.applyCloseGoalLeaderModal();
   }
 
-  /**
-   * Открывает модальное окно выбора лидера для конкретной цели
-   * @param index - индекс цели
-   */
   applyOpenGoalLeaderModal(goals: FormArray, index: number): void {
     this.activeGoalIndex.set(index);
 
@@ -53,19 +42,12 @@ export class ProjectGoalsUIService {
     this.goalLeaderShowModal.set(true);
   }
 
-  /**
-   * Закрывает модальное окно выбора лидера
-   */
   applyCloseGoalLeaderModal(): void {
     this.goalLeaderShowModal.set(false);
     this.activeGoalIndex.set(null);
     this.selectedLeaderId.set("");
   }
 
-  /**
-   * Переключает состояние модального окна выбора лидера
-   * @param index - индекс цели (опционально)
-   */
   applyToggleGoalLeaderModal(goals: FormArray, index?: number): void {
     if (this.goalLeaderShowModal()) {
       this.applyCloseGoalLeaderModal();

@@ -10,8 +10,9 @@ import {
 } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
-import { EditStep, ProjectStepService } from "@api/project/project-step.service";
-import { Navigation } from "@domain/other/navigation.model";
+import { ProjectStepService } from "@api/project/project-step.service";
+import { Navigation } from "@core/lib/models/navigation.model";
+import { EditStep } from "@core/public-api";
 
 /** Виджет навигации по разделам проекта. */
 @Component({

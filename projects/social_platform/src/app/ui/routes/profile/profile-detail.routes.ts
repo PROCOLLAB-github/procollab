@@ -8,20 +8,7 @@ import { DeatilComponent } from "@ui/widgets/detail/detail.component";
 import { ProfileNewsComponent } from "@ui/pages/profile/detail/profile-news/profile-news.component";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
-/**
- * Конфигурация маршрутов для детального просмотра профиля пользователя
- *
- * Определяет иерархическую структуру маршрутов:
- * - Корневой маршрут "" - основной компонент профиля с резолвером данных
- * - Дочерний маршрут "" - главная страница профиля (информация, навыки, новости)
- * - Дочерний маршрут "news/:newsId" - просмотр конкретной новости профиля
- * - Дочерний маршрут "projects" - список проектов пользователя
- *
- * Каждый маршрут использует соответствующие резолверы для предварительной загрузки данных,
- * что обеспечивает плавную навигацию без задержек загрузки.
- *
- * @type {Routes} - массив конфигураций маршрутов Angular
- */
+/** Маршруты детальной страницы профиля: информация, новости, проекты. */
 export const PROFILE_DETAIL_ROUTES: Routes = [
   {
     path: "",

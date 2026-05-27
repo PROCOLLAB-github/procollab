@@ -21,15 +21,7 @@ import { TruncatePipe } from "@corelib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
 
-/**
- * Компонент карточки участника команды или проект
- *
- * Функциональность:
- * - Отображает информацию о участнике (роль, специализация)
- *
- * Входные параметры:
- * @Input invite - объект участника (обязательный)
- */
+/** Карточка участника команды проекта. */
 @Component({
   selector: "app-collaborator-card",
   templateUrl: "./collaborator-card.component.html",

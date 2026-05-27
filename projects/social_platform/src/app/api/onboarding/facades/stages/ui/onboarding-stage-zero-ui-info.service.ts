@@ -12,10 +12,7 @@ import {
 import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
 import { User, UserInput } from "@domain/auth/user.model";
 
-/**
- * Состояние интерфейса первого шага онбординга: FormArray для образования, опыта,
- * языков и достижений, а также справочники и состояния редактирования.
- */
+/** Состояние интерфейса первого шага онбординга: FormArray и справочники. */
 @Injectable()
 export class OnboardingStageZeroUIInfoService {
   private readonly fb = inject(FormBuilder);

@@ -53,15 +53,6 @@ export class MembersInfoService {
 
   private readonly destroy$ = new Subject<void>();
 
-  /**
-   * Инициализация компонента
-   *
-   * Выполняет:
-   * - Очистку URL параметров
-   * - Установку заголовка навигации
-   * - Загрузку начальных данных из резолвера
-   * - Настройку подписок на изменения форм и URL параметровК
-   */
   initializationMembers(): void {
     // Устанавливаем заголовок страницы
     this.navService.setNavTitle("Участники");
@@ -134,11 +125,6 @@ export class MembersInfoService {
     this.destroy$.complete();
   }
 
-  /**
-   * Обработчик события прокрутки для бесконечной прокрутки
-   *
-   * @returns Observable с дополнительными участниками или пустой объект
-   */
   private onScroll(target: HTMLElement, membersRoot: ElementRef<HTMLUListElement>) {
     // Проверяем, есть ли еще участники для загрузки
     const total = this.membersUIInfoService.membersTotalCount();
@@ -188,12 +174,6 @@ export class MembersInfoService {
       .subscribe();
   }
 
-  /**
-   * Сохраняет значение элемента формы в URL параметрах
-   *
-   * @param control - Элемент управления формы
-   * @param queryName - Имя параметра в URL
-   */
   private saveControlValue(control: AbstractControl | null, queryName: string): void {
     if (!control) return;
 
@@ -210,14 +190,6 @@ export class MembersInfoService {
       });
   }
 
-  /**
-   * Выполняет запрос на получение участников с заданными параметрами
-   *
-   * @param skip - Количество записей для пропуска (для пагинации)
-   * @param take - Количество записей для получения
-   * @param params - Дополнительные параметры фильтрации
-   * @returns Observable<User[]> - Массив участников
-   */
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
     return this.getMembersUseCase.execute(skip, take, params).pipe(
       map(result => (result.ok ? result.value : this.emptyMembersPagination())),

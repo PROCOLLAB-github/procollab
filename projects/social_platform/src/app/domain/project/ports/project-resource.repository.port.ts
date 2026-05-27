@@ -3,10 +3,7 @@
 import { Observable } from "rxjs";
 import { Resource, ResourceDto } from "../resource.model";
 
-/**
- * Порт репозитория ресурсов проекта.
- * Реализуется в infrastructure/repository/project/project-resource.repository.ts
- */
+/** Порт репозитория ресурсов проекта */
 export abstract class ProjectResourceRepositoryPort {
   abstract fetchAll(projectId: number): Observable<Resource[]>;
   abstract createResource(

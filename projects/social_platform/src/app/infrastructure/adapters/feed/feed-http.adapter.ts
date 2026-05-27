@@ -14,14 +14,6 @@ export class FeedHttpAdapter {
 
   private readonly apiService = inject(ApiService);
 
-  /**
-   * Получает элементы ленты с пагинацией и фильтрацией
-   *
-   * @param offset - смещение для пагинации
-   * @param limit - количество элементов
-   * @param type - строка фильтра типов, объединённых через "|" (например "vacancy|news|project")
-   * @returns Observable<ApiPagination<FeedItem>>
-   */
   fetchFeed(offset: number, limit: number, type: string): Observable<ApiPagination<FeedItem>> {
     return this.apiService.get<ApiPagination<FeedItem>>(
       `${this.FEED_URL}/`,

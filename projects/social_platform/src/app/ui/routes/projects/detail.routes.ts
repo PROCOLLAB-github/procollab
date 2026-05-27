@@ -18,18 +18,7 @@ import { NewsDetailResolver } from "@ui/pages/projects/detail/news-detail/news-d
 import { ProjectChatResolver } from "@ui/pages/projects/detail/chat/chat.resolver";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
-/**
- * Конфигурация маршрутов для детального просмотра проекта
- *
- * Определяет:
- * - Главный маршрут с резолвером для загрузки данных проекта
- * - Дочерние маршруты для разных разделов проекта:
- *   - "" (пустой) - информация о проекте с возможностью просмотра новостей
- *   - "responses" - отклики на вакансии проекта
- *   - "chat" - чат проекта
- *
- * Каждый дочерний маршрут имеет свой резолвер для предзагрузки данных
- */
+/** Маршруты детальной страницы проекта: info, chat, team, vacancies, news. */
 export const PROJECT_DETAIL_ROUTES: Routes = [
   {
     path: "",

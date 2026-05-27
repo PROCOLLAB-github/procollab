@@ -2,10 +2,7 @@
 
 import { DomainEvent } from "../../shared/domain-event";
 
-/**
- * Событие принятия отклика на вакансию
- * Излучается когда рекрутер одобряет отклик кандидата на вакансию
- */
+/** Событие принятия отклика на вакансию */
 export interface AcceptVacancyResponse extends DomainEvent {
   readonly type: "AcceptVacancyResponse";
   readonly payload: {

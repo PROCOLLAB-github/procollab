@@ -17,44 +17,7 @@ import { OnboardingStageTwoInfoService } from "@api/onboarding/facades/stages/on
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { SearchesService } from "@api/searches/searches.service";
 
-/**
- * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
- *
- * Назначение: Этап выбора навыков пользователя из каталога доступных навыков
- *
- * Что делает:
- * - Отображает интерфейс для поиска и выбора навыков
- * - Управляет корзиной выбранных навыков
- * - Предоставляет группированный каталог навыков
- * - Поддерживает поиск навыков в реальном времени
- * - Валидирует выбранные навыки перед отправкой
- * - Сохраняет навыки в профиле и переходит к следующему этапу
- * - Обрабатывает ошибки валидации от сервера
- *
- * Что принимает:
- * - Данные групп навыков через ActivatedRoute (из StageTwoResolver)
- * - Текущее состояние формы из OnboardingService
- * - Пользовательские действия (поиск, добавление/удаление навыков)
- * - Результаты поиска от SkillsService
- *
- * Что возвращает:
- * - Интерфейс с поиском навыков и автокомплитом
- * - Группированный каталог навыков для выбора
- * - Корзину выбранных навыков с возможностью удаления
- * - Модальное окно с ошибками валидации
- * - Навигацию на следующий этап (stage-3)
- *
- * Особенности работы с навыками:
- * - Предотвращение дублирования навыков в корзине
- * - Переключение состояния навыка (добавить/удалить) одним действием
- * - Отправка только ID навыков на сервер (skillsIds)
- * - Обработка серверных ошибок с отображением в модальном окне
- *
- * Состояния компонента:
- * - searchedSkills: результаты поиска навыков
- * - stageSubmitting: флаг процесса отправки
- * - isChooseSkill: флаг отображения модального окна с ошибкой
- */
+/** Этап онбординга — выбор навыков с каталогом и корзиной. */
 @Component({
   selector: "app-stage-two",
   templateUrl: "./stage-two.component.html",
@@ -105,24 +68,13 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   protected readonly isChooseSkill = this.onboardingStageTwoUIInfoService.isChooseSkill;
   protected readonly isChooseSkillText = this.onboardingStageTwoUIInfoService.isChooseSkillText;
 
-  /**
-   * Проверяет, есть ли открытые группы навыков
-   */
+  //
   protected readonly hasOpenSkillsGroups = this.onboardingStageTwoUIInfoService.hasOpenSkillsGroups;
 
-  /**
-   * Обработчик переключения группы навыков
-   * @param skillName - название навыка
-   * @param isOpen - флаг открытия/закрытия группы
-   */
   onSkillGroupToggled(isOpen: boolean, skillName: string): void {
     this.onboardingStageTwoUIInfoService.onSkillGroupToggled(isOpen, skillName);
   }
 
-  /**
-   * Проверяет, должна ли группа навыков быть отключена
-   * @param skillName - название навыка
-   */
   isSkillGroupDisabled(skillName: string): boolean {
     return this.onboardingStageTwoUIInfoService.isSkillGroupDisabled(skillName);
   }

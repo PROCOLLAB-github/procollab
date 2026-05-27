@@ -21,11 +21,7 @@ const INDUSTRIES_CACHE_KEY = "industries";
 const INDUSTRIES_CACHE_VERSION = 1;
 const TTL_24H = 24 * 60 * 60 * 1000;
 
-/**
- * Стейт справочника отраслей: идемпотентная загрузка (`ensureLoaded`),
- * сигнал `industries` и синхронный `getOne(id)`.
- * Единый источник для UI/api-слоя вместо прямого доступа к `IndustryRepository`.
- */
+/** Стейт справочника отраслей: идемпотентная загрузка, сигнал, синхронный поиск. */
 @Injectable({ providedIn: "root" })
 export class IndustryStateInfoService {
   private readonly industryRepository = inject(IndustryRepositoryPort);
@@ -76,7 +72,7 @@ export class IndustryStateInfoService {
     clearCacheKey(INDUSTRIES_CACHE_KEY, INDUSTRIES_CACHE_VERSION);
   }
 
-  /** Синхронный поиск отрасли в загруженном справочнике. */
+  /** Поиск отрасли в загруженном справочнике. */
   getOne(industryId: number): Industry | undefined {
     return this.industries().find(industry => industry.id === industryId);
   }

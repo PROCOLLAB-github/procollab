@@ -12,13 +12,7 @@ import { CreateGoalsUseCase } from "../../use-cases/create-goals.use-case";
 import { UpdateGoalUseCase } from "../../use-cases/update-goal.use-case";
 import { DeleteGoalUseCase } from "../../use-cases/delete-goal.use-case";
 
-/**
- * Сервис для управления целями проекта
- * Предоставляет полный набор методов для работы с целями:
- * - инициализация, добавление, редактирование, удаление
- * - валидация и очистка ошибок
- * - управление состоянием модального окна выбора лидера
- */
+/** Сервис для управления целями проекта. */
 @Injectable({
   providedIn: "root",
 })
@@ -34,7 +28,6 @@ export class ProjectGoalService {
 
   private readonly destroy$ = new Subject<void>();
 
-  /** Флаг инициализации сервиса */
   private initialized = false;
   private readonly goalItems = this.projectGoalsUIService.goalItems;
 
@@ -51,10 +44,6 @@ export class ProjectGoalService {
     });
   }
 
-  /**
-   * Инициализирует сигнал goalItems из данных FormArray
-   * Вызывается при первом обращении к данным
-   */
   public initializeGoalItems(goalFormArray: FormArray): void {
     if (this.initialized) return;
 
@@ -64,20 +53,12 @@ export class ProjectGoalService {
     this.initialized = true;
   }
 
-  /**
-   * Принудительно синхронизирует сигнал с FormArray
-   * Полезно вызывать после загрузки данных с сервера
-   */
   public syncGoalItems(goalFormArray: FormArray): void {
     if (goalFormArray) {
       this.goalItems.set(goalFormArray.value);
     }
   }
 
-  /**
-   * Инициализирует цели из данных проекта
-   * Заполняет FormArray целей данными из проекта
-   */
   public initializeGoalsFromProject(goals: Goal[]): void {
     const goalsFormArray = this.goals;
 
@@ -108,48 +89,26 @@ export class ProjectGoalService {
     this.destroy$.complete();
   }
 
-  /**
-   * Возвращает форму целей.
-   * @returns FormGroup экземпляр формы целей
-   */
   public getForm(): FormGroup {
     return this.goalForm;
   }
 
-  /**
-   * Получает FormArray целей
-   */
   public get goals(): FormArray {
     return this.goalForm.get("goals") as FormArray;
   }
 
-  /**
-   * Получает FormControl для поля ввода названия цели
-   */
   public get goalName(): FormControl {
     return this.goalForm.get("title") as FormControl;
   }
 
-  /**
-   * Получает FormControl для поля ввода даты цели
-   */
   public get goalDate(): FormControl {
     return this.goalForm.get("completionDate") as FormControl;
   }
 
-  /**
-   * Получает FormControl для поля лидера(исполнителя/ответственного) цели
-   */
   public get goalLeader(): FormControl {
     return this.goalForm.get("responsible") as FormControl;
   }
 
-  /**
-   * Добавляет новую цель или сохраняет изменения существующей.
-   * @param goalName - название цели (опционально)
-   * @param goalDate - дата цели (опционально)
-   * @param goalLeader - лидер цели (опционально)
-   */
   public addGoal(goalName?: string, goalDate?: string, goalLeader?: string): void {
     const goalFormArray = this.goals;
 
@@ -183,10 +142,6 @@ export class ProjectGoalService {
     this.syncGoalItems(goalFormArray);
   }
 
-  /**
-   * Удаляет цель по указанному индексу.
-   * @param index индекс удаляемой цели
-   */
   public removeGoal(index: number, goalId: number, projectId: number): void {
     const goalFormArray = this.goals;
 
@@ -203,11 +158,6 @@ export class ProjectGoalService {
       });
   }
 
-  /**
-   * Получает выбранного лидера для конкретной цели
-   * @param goalIndex - индекс цели
-   * @param collaborators - список коллабораторов
-   */
   public getSelectedLeaderForGoal(goalIndex: number, collaborators: any[]) {
     const goalFormGroup = this.goals.at(goalIndex);
     const leaderId = goalFormGroup?.get("responsible")?.value;
@@ -217,9 +167,6 @@ export class ProjectGoalService {
     return collaborators.find(collab => collab.userId.toString() === leaderId.toString());
   }
 
-  /**
-   * Сбрасывает все ошибки валидации во всех контролах FormArray цели.
-   */
   public clearAllGoalsErrors(): void {
     const goals = this.goals;
 
@@ -232,10 +179,6 @@ export class ProjectGoalService {
     });
   }
 
-  /**
-   * Получает данные всех целей для отправки на сервер
-   * @returns массив объектов целей
-   */
   public getGoalsData(): any[] {
     return this.goals.value.map((g: any) => ({
       id: g.id ?? null,
@@ -249,11 +192,6 @@ export class ProjectGoalService {
     }));
   }
 
-  /**
-   * Сохраняет только новые цели (у которых id === null) — отправляет POST.
-   * После ответов присваивает полученные id в соответствующие FormGroup.
-   * Возвращает Observable массива результатов (в порядке отправки).
-   */
   public saveGoals(projectId: number, newGoals: Goal[]) {
     const goalIndexes = this.goals.controls
       .map((_, idx) => idx)
@@ -311,19 +249,12 @@ export class ProjectGoalService {
     return forkJoin(requests);
   }
 
-  /**
-   * Сбрасывает состояние сервиса
-   * Полезно при смене проекта или очистке формы
-   */
   public reset(): void {
     this.goalItems.set([]);
     this.initialized = false;
     this.projectGoalsUIService.applyCloseGoalLeaderModal();
   }
 
-  /**
-   * Очищает FormArray целей
-   */
   public clearGoalsFormArray(): void {
     const goalFormArray = this.goals;
 

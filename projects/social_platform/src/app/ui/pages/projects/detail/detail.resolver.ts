@@ -9,19 +9,7 @@ import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/proj
 import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 import { GetProjectSubscribersUseCase } from "@api/project/use-cases/get-project-subscribers.use-case";
 
-/**
- * Резолвер для загрузки данных проекта и его подписчиков
- *
- * Принимает:
- * - ActivatedRouteSnapshot с параметром projectId
- *
- * Возвращает:
- * - Observable<[Project, ProjectSubscriber[]]> - кортеж с данными проекта и списком подписчиков
- *
- * Использует:
- * - ProjectService для получения данных проекта
- * - SubscriptionService для получения списка подписчиков
- */
+/** Предзагружает данные проекта и его подписчиков. */
 export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = (
   route: ActivatedRouteSnapshot
 ) => {

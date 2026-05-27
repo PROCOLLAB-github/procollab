@@ -100,23 +100,14 @@ export class ProjectTeamStepComponent implements OnInit {
     this.toggleFieldsInfoService.showFields();
   }
 
-  /**
-   * Открытие модального окна приглашения
-   */
   openInviteModal(): void {
     this.projectTeamUIService.applyOpenInviteModal();
   }
 
-  /**
-   * Закрытие модального окна приглашения
-   */
   closeInviteModal(): void {
     this.projectTeamUIService.applyCloseInviteModal();
   }
 
-  /**
-   * Отправка приглашения
-   */
   submitInvite(): void {
     if (this.link?.value!.trim() || this.role?.value!.trim()) {
       this.projectTeamService.submitInvite(this.projectId());
@@ -127,23 +118,14 @@ export class ProjectTeamStepComponent implements OnInit {
     this.toggleFieldsInfoService.showFields();
   }
 
-  /**
-   * Редактирование приглашения
-   */
   editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
     this.projectTeamUIService.applyEditInvitation(params);
   }
 
-  /**
-   * Удаление приглашения
-   */
   removeInvitation(invitationId: number): void {
     this.projectTeamUIService.applyRemoveInvitation(invitationId);
   }
 
-  /**
-   * Обработка изменения состояния модального окна
-   */
   onModalOpenChange(open: boolean): void {
     if (!open) {
       this.closeInviteModal();

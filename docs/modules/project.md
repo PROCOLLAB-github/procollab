@@ -47,16 +47,17 @@
 | `project-rate.ts`, `project-rating-criterion.ts`, `project-rating-criterion-output.ts`, `project-rating-criterion-type.ts` | (rating models)                                                | Структуры для модуля оценки проектов экспертами.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `project-subscriber.model.ts`                                                                                              | `ProjectSubscriber`                                            | Подписчик на проект.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `step.model.ts`                                                                                                            | (steps for edit flow)                                          | Шаги пошагового редактирования.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `skill.model.ts`, `skills-group.model.ts`, `specialization.model.ts`, `specializations-group.model.ts`                     | (re-export wrappers)                                           | Локальные wrapper'ы вокруг `domain/skills` и `domain/specializations` — атавизм.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ### Commands
 
 ```ts
 interface UpdateFormCommand {
   id: number;
-  data: Partial<ProjectDto>;
+  data: Partial<Project>;
 }
 ```
+
+> `Partial<Project>` (а не DTO) — порт говорит на языке домена; маппинг в `ProjectDto` живёт в `ProjectRepository.update()` → `ProjectHttpAdapter.putUpdate()`.
 
 ### Domain events
 
@@ -144,18 +145,18 @@ project-subscription.providers.ts
 
 `ProjectsEditInfoService` (root-facade координатор) + `ProjectsEditUIInfoService`. Каждый шаг имеет свой service:
 
-| Step                | Facade                                                                            | Что                                                                 |
-| ------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Main                | `ProjectFormService` (root) + `ProjectFormFactory` + `ProjectFormAutosaveService` | Корневая `FormGroup` + autosave (debounce + `update(id, partial)`). |
-| Contacts            | `ProjectContactsService`                                                          | Шаг "контакты".                                                     |
-| Achievements        | `ProjectAchievementsService` + `ProjectAchievementUIService`                      | FormArray.                                                          |
-| Goals               | `ProjectGoalService` + `ProjectGoalsUIService`                                    | FormArray + responsible-picker.                                     |
-| Partner & Resources | `ProjectPartnerService` + `ProjectResourceService`                                | Раздельные FormArrays для партнёров и ресурсов.                     |
-| Vacancy             | `ProjectVacancyService` + `ProjectVacancyUIService`                               | Управление вакансиями проекта (CRUD через `Vacancy` модуль).        |
-| Team                | `ProjectTeamService` + `ProjectTeamUIService`                                     | Команда: invites + members.                                         |
-| Additional          | `ProjectAdditionalService`                                                        | Дополнительные поля партнёрской программы.                          |
+| Step                | Facade                                                                            | Что                                                                                                                                           |
+| ------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Main                | `ProjectFormService` (root) + `ProjectFormFactory` + `ProjectFormAutosaveService` | Корневая `FormGroup` + autosave cleanup для файловых полей (`presentationAddress` / `coverImageAddress`) с offline-очередью в `localStorage`. |
+| Contacts            | `ProjectContactsService`                                                          | Шаг "контакты".                                                                                                                               |
+| Achievements        | `ProjectAchievementsService` + `ProjectAchievementUIService`                      | FormArray.                                                                                                                                    |
+| Goals               | `ProjectGoalService` + `ProjectGoalsUIService`                                    | FormArray + responsible-picker.                                                                                                               |
+| Partner & Resources | `ProjectPartnerService` + `ProjectResourceService`                                | Раздельные FormArrays для партнёров и ресурсов.                                                                                               |
+| Vacancy             | `ProjectVacancyService` + `ProjectVacancyUIService`                               | Управление вакансиями проекта (CRUD через `Vacancy` модуль).                                                                                  |
+| Team                | `ProjectTeamService` + `ProjectTeamUIService`                                     | Команда: invites + members.                                                                                                                   |
+| Additional          | `ProjectAdditionalService`                                                        | Дополнительные поля партнёрской программы.                                                                                                    |
 
-> `ProjectFormAutosaveService` — отдельный сервис, который слушает `valueChanges` корневой формы через `debounceTime` и сам дёргает `update()`. Это предотвращает потерю данных, если пользователь закрыл вкладку посреди шага.
+> `ProjectFormAutosaveService` — отдельный сервис: `bindDraftCleanupAutosave(control, field, destroy$)` слушает `valueChanges` указанного поля, при очистке (`!value`) дёргает `UpdateFormUseCase` с `draft: true`. На `network`-ошибке кладёт патч в `localStorage`-очередь и проигрывает её на событие `window.online` (или сразу, если `navigator.onLine === true` при старте). Дедуп очереди по `(projectId, field)`.
 
 ### Cross-cutting (старые)
 

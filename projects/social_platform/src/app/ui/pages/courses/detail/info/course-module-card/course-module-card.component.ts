@@ -9,21 +9,7 @@ import { CircleProgressBarComponent } from "./circle-progress-bar/circle-progres
 import { CourseDetail, CourseModule } from "@domain/courses/courses.model";
 import { RouterLink } from "@angular/router";
 
-/**
- * Компонент карточки навыка
- *
- * Отображает краткую информацию о навыке в виде карточки
- *
- * @Input skill - Объект с данными навыка (обязательный)
- * @Input type - Тип отображения карточки: 'personal' | 'base' (по умолчанию 'base')
- *
- * Функциональность:
- * - Отображение основной информации о навыке
- * - Поддержка двух визуальных стилей
- * - Индикация статуса навыка (подписка, просрочка, выполнение)
- * - Плюрализация для количества уровней
- * - Раскрывающийся список тем и действий
- */
+/** Карточка модуля курса с прогрессом и списком уроков. */
 @Component({
   selector: "app-course-module-card",
   standalone: true,

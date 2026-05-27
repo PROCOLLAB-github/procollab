@@ -11,11 +11,7 @@ import { Project } from "../../project/project.model";
 import { LoginCommand } from "../commands/login.command";
 import { RegisterCommand } from "../commands/register.command";
 
-/**
- * Порт репозитория аутентификации.
- * Определяет контракт для работы с данными пользователя.
- * Реализуется в infrastructure/repository/auth/auth.repository.ts
- */
+/** Порт репозитория аутентификации */
 export abstract class AuthRepositoryPort {
   abstract login(data: LoginCommand): Observable<LoginResponse>;
   abstract logout(): Observable<void>;

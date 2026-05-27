@@ -24,13 +24,11 @@ export class ProjectVacancyUIService {
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
   private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
 
-  /** Константы для выпадающих списков */
   public readonly workExperienceList = workExperienceList;
   public readonly workFormatList = workFormatList;
   public readonly workScheduledList = workScheduledList;
   public readonly rolesMembersList = rolesMembersList;
 
-  /** Сигналы для выбранных значений селектов */
   public readonly selectedRequiredExperienceId = signal<number | undefined>(undefined);
   public readonly selectedWorkFormatId = signal<number | undefined>(undefined);
   public readonly selectedWorkScheduleId = signal<number | undefined>(undefined);
@@ -58,42 +56,22 @@ export class ProjectVacancyUIService {
     specialization: this.fb.control<string | null>(null),
   });
 
-  /**
-   * Устанавливает список вакансий.
-   * @param vacancies массив объектов Vacancy
-   */
   applySetVacancies(vacancies: Vacancy[]): void {
     this.vacancies.set(vacancies);
   }
 
-  /**
-   * Проставляет значения в форму вакансии.
-   * @param values частичные поля Vacancy для патчинга
-   */
   applyPatchFormValues(values: Partial<Vacancy>): void {
     this.vacancyForm.patchValue(values);
   }
 
-  /**
-   * Проверяет валидность формы вакансии.
-   * @returns true если форма валидна
-   */
   applyValidateForm(): boolean {
     return !this.validationService.getFormValidation(this.vacancyForm);
   }
 
-  /**
-   * Проверяет на "грязность" формы вакансии.
-   * @returns true если "грязная" форма
-   */
   isDirty(): boolean {
     return this.vacancyForm.dirty;
   }
 
-  /**
-   * Возвращает очищенные от nullish значения формы.
-   * @returns объект значений формы без null и undefined
-   */
   getFormValue(): any {
     return stripNullish(this.vacancyForm.value);
   }
@@ -145,11 +123,6 @@ export class ProjectVacancyUIService {
     this.applyResetVacancyForm();
   }
 
-  /**
-   * Инициализирует редактирование вакансии по индексу в массиве:
-   * заполняет форму, выставляет сигналы и переключает режим редактирования.
-   * @param index индекс вакансии в списке vacancies
-   */
   applyEditVacancy(index: number): void {
     const item = this.vacancies()[index];
     if (!item) {
@@ -190,11 +163,6 @@ export class ProjectVacancyUIService {
     this.toggleFieldsInfoService.showFields();
   }
 
-  /**
-   * Сбрасывает форму вакансии к начальному состоянию:
-   * очищает значения, валидаторы и состояния контролов,
-   * сбрасывает сигналы выбранных селектов.
-   */
   applyResetVacancyForm(): void {
     this.vacancyForm.reset();
     Object.keys(this.vacancyForm.controls).forEach(name => {

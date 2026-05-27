@@ -13,13 +13,6 @@ export class ProgramNewsHttpAdapter {
   private readonly PROGRAMS_URL = "/programs";
   private readonly apiService = inject(ApiService);
 
-  /**
-   * Загружает новости программы с пагинацией.
-   *
-   * @param limit лимит записей
-   * @param offset смещение
-   * @param programId идентификатор программы
-   */
   fetchNews(programId: number, limit: number, offset: number): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get(
       `${this.PROGRAMS_URL}/${programId}/news/`,
@@ -27,12 +20,6 @@ export class ProgramNewsHttpAdapter {
     );
   }
 
-  /**
-   * Отмечает новость программы как прочитанную.
-   *
-   * @param programId идентификатор программы
-   * @param newsId идентификатор новости
-   */
   setNewsViewed(programId: string, newsId: number): Observable<void> {
     return this.apiService.post<void>(
       `${this.PROGRAMS_URL}/${programId}/news/${newsId}/set_viewed/`,
@@ -40,36 +27,16 @@ export class ProgramNewsHttpAdapter {
     );
   }
 
-  /**
-   * Переключает лайк новости программы.
-   *
-   * @param programId идентификатор программы
-   * @param newsId идентификатор новости
-   * @param state новое состояние лайка
-   */
   toggleLike(programId: string, newsId: number, state: boolean): Observable<void> {
     return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/news/${newsId}/set_liked/`, {
       is_liked: state,
     });
   }
 
-  /**
-   * Добавляет новость программы.
-   *
-   * @param programId идентификатор программы
-   * @param obj объект с текстом и файлами
-   */
   addNews(programId: number, obj: { text: string; files: string[] }): Observable<FeedNews> {
     return this.apiService.post<FeedNews>(`${this.PROGRAMS_URL}/${programId}/news/`, obj);
   }
 
-  /**
-   * Редактирует новость программы.
-   *
-   * @param programId идентификатор программы
-   * @param newsId идентификатор новости
-   * @param newsItem данные обновления
-   */
   editNews(programId: number, newsId: number, newsItem: Partial<FeedNews>): Observable<FeedNews> {
     return this.apiService.patch<FeedNews>(
       `${this.PROGRAMS_URL}/${programId}/news/${newsId}/`,
@@ -77,12 +44,6 @@ export class ProgramNewsHttpAdapter {
     );
   }
 
-  /**
-   * Удаляет новость программы.
-   *
-   * @param programId идентификатор программы
-   * @param newsId идентификатор новости
-   */
   deleteNews(programId: number, newsId: number): Observable<void> {
     return this.apiService.delete(`${this.PROGRAMS_URL}/${programId}/news/${newsId}/`);
   }

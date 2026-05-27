@@ -15,9 +15,6 @@ export class ProjectAchievementUIService {
   private readonly editIndex = this.projectFormService.editIndex;
   private readonly projectForm = this.projectFormService.getForm();
 
-  /**
-   * Скрывает поля ввода и очищает их
-   */
   hideFields(): void {
     this.toggleFieldsInfoService.hideFields();
     this.clearInputFields();

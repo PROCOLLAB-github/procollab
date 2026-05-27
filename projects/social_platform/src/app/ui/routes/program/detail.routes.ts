@@ -11,19 +11,7 @@ import { ProgramRegisterComponent } from "@ui/pages/program/detail/register/regi
 import { ProgramRegisterResolver } from "@ui/pages/program/detail/register/register.resolver";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
-/**
- * Маршруты для детальной страницы программы
- *
- * Определяет структуру навигации внутри детальной страницы программы:
- * - Основная информация (по умолчанию)
- * - Список проектов программы
- * - Список участников программы
- * - Страница регистрации в программе
- *
- * Все маршруты используют резолверы для предзагрузки данных.
- *
- * @returns {Routes} Конфигурация маршрутов для детальной страницы программы
- */
+/** Маршруты детальной страницы программы: информация, проекты, участники, регистрация. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
   {
     path: "",

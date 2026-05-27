@@ -25,7 +25,6 @@ export class ProjectPartnerService {
 
   private readonly destroy$ = new Subject<void>();
 
-  /** Флаг инициализации сервиса */
   private initialized = false;
 
   constructor() {
@@ -42,10 +41,6 @@ export class ProjectPartnerService {
     });
   }
 
-  /**
-   * Инициализирует сигнал partnerItems из данных FormArray
-   * Вызывается при первом обращении к данным
-   */
   public initializePartnerItems(partnerFormArray: FormArray): void {
     if (this.initialized) return;
 
@@ -56,20 +51,12 @@ export class ProjectPartnerService {
     this.initialized = true;
   }
 
-  /**
-   * Принудительно синхронизирует сигнал с FormArray
-   * Полезно вызывать после загрузки данных с сервера
-   */
   public syncPartnerItems(partnerFormArray: FormArray): void {
     if (partnerFormArray) {
       this.partnerItems.set(partnerFormArray.value);
     }
   }
 
-  /**
-   * Инициализирует партнера из данных проекта
-   * Заполняет FormArray целей данными из проекта
-   */
   public initializePartnerFromProject(partners: Partner[]): void {
     const partnerFormArray = this.partners;
 
@@ -106,17 +93,10 @@ export class ProjectPartnerService {
 
   readonly hasPartners = computed(() => this.partnerItems().length > 0);
 
-  /**
-   * Возвращает форму партнеров и ресурсов.
-   * @returns FormGroup экземпляр формы целей
-   */
   public getForm(): FormGroup {
     return this.partnerForm;
   }
 
-  /**
-   * Получает FormArray партнеров и ресурсов
-   */
   public get partners(): FormArray {
     return this.partnerForm.get("partners") as FormArray;
   }
@@ -137,13 +117,6 @@ export class ProjectPartnerService {
     return this.partnerForm.get("decisionMaker") as FormControl;
   }
 
-  /**
-   * Добавляет нового партнера или сохраняет изменения существующей.
-   * @param name - название партнера (опционально)
-   * @param inn - инн (опционально)
-   * @param contribution - вклад партнера (опционально)
-   * @param decisionMaker - ссылка на профиль представителя компании (опционально)
-   */
   public addPartner(
     name?: string,
     inn?: string,
@@ -184,10 +157,6 @@ export class ProjectPartnerService {
     partnerFormArray.push(partnerItem);
   }
 
-  /**
-   * Удаляет партнера по указанному индексу.
-   * @param index индекс удаляемого партнера
-   */
   public removePartner(index: number, partnersId: number, projectId: number): void {
     const partnerFormArray = this.partners;
 
@@ -208,9 +177,6 @@ export class ProjectPartnerService {
       });
   }
 
-  /**
-   * Сбрасывает все ошибки валидации во всех контролах FormArray партнера.
-   */
   public clearAllPartnerErrors(): void {
     const partners = this.partners;
 
@@ -223,10 +189,6 @@ export class ProjectPartnerService {
     });
   }
 
-  /**
-   * Получает данные всех партнеров для отправки на сервер
-   * @returns массив объектов партнеров
-   */
   public getPartnersData(): any[] {
     return this.partners.value.map((partner: any) => ({
       id: partner.id ?? null,
@@ -237,11 +199,6 @@ export class ProjectPartnerService {
     }));
   }
 
-  /**
-   * Сохраняет только новых партнеров (у которых id === null) — отправляет POST.
-   * После ответов присваивает полученные id в соответствующие FormGroup.
-   * Возвращает Observable массива результатов (в порядке отправки).
-   */
   public savePartners(projectId: number) {
     const partners = this.getPartnersData();
 

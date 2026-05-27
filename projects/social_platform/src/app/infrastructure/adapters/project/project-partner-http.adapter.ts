@@ -11,39 +11,15 @@ export class ProjectPartnerHttpAdapter {
   private readonly PROJECTS_URL = "/projects";
   private readonly apiService = inject(ApiService);
 
-  /**
-   *
-   * @param id
-   * @param params
-   * @returns Создать или привязать компанию к проекту.
-   * Если компания с таким ИНН уже существует — создаёт или обновляет связь ProjectCompany.
-   * Если компании нет — создаёт новую и тут же привязывает.
-   */
+  /** Если компания с таким ИНН уже существует — создаёт или обновляет связь ProjectCompany. */
   addPartner(id: number, params: PartnerDto): Observable<Partner> {
     return this.apiService.post(`${this.PROJECTS_URL}/${id}/companies/`, params);
   }
 
-  /**
-   * Получить список всех компаний-партнёров (связей ProjectCompany) конкретного проекта.
-   *
-   * @param id
-   *
-   * @returns данные компании
-   * @returns вклад
-   * @returns ответственного
-   */
   getPartners(id: number): Observable<Partner[]> {
     return this.apiService.get(`${this.PROJECTS_URL}/${id}/companies/list/`);
   }
 
-  /**
-   * @param projectId
-   * @param companyId
-   *
-   * @returns Обновить информацию о связи проекта с компанией.
-   * Можно изменить вклад (contribution) и/или ответственное лицо (decision_maker).
-   * Компания остаётся без изменений.
-   */
   editParter(
     projectId: number,
     companyId: number,
@@ -55,12 +31,7 @@ export class ProjectPartnerHttpAdapter {
     );
   }
 
-  /**
-   * @param projectId
-   * @param companyId
-   *
-   * @returns Удалить связь проекта с компанией. Компания в базе остаётся, удаляется только запись ProjectCompany.
-   */
+  /** Компания в базе остаётся, удаляется только запись ProjectCompany. */
   deletePartner(projectId: number, companyId: number): Observable<void> {
     return this.apiService.delete<void>(
       `${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`

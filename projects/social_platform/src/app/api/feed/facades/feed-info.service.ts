@@ -25,10 +25,7 @@ import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.cons
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 
-/**
- * Координирует глобальную ленту: стартовые данные из резолвера, фильтры URL,
- * бесконечную пагинацию, отметку просмотров и лайки новостей владельцев.
- */
+/** Координирует глобальную ленту: данные резолвера, фильтры, пагинация, просмотры, лайки. */
 @Injectable()
 export class FeedInfoService {
   private readonly route = inject(ActivatedRoute);

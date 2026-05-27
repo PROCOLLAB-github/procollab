@@ -3,17 +3,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 
-/**
- * Основной компонент модуля аутентификации
- *
- * Назначение: Корневой компонент для всех страниц аутентификации (вход, регистрация, сброс пароля)
- * Принимает: Не принимает входных параметров
- * Возвращает: Рендерит router-outlet для дочерних компонентов аутентификации
- *
- * Функциональность:
- * - Предоставляет общий layout для страниц аутентификации
- * - Содержит router-outlet для отображения дочерних компонентов
- */
+/** Корневой компонент страниц аутентификации с router-outlet. */
 @Component({
   selector: "app-auth",
   templateUrl: "./auth.component.html",

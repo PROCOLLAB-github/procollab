@@ -6,12 +6,7 @@ import { AsyncState, failure, loading, success } from "./async-state";
 
 /**
  * Превращает Observable<Result<T,E>> в Observable<AsyncState<T,E>>
- *
- * Автоматически:
- * - Начинает с loading
- * - ok → success
- * - fail → failure
- * - HTTP-ошибка → failure
+ * loading → success/failure, HTTP-ошибка → failure
  */
 export function toAsyncState<T, E = string>(
   previous?: T

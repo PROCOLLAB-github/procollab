@@ -13,26 +13,7 @@ import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { TruncatePipe } from "@corelib";
 
-/**
- * Компонент карточки вакансии
- *
- * Функциональность:
- * - Отображает информацию о вакансии (название, описание, требуемые навыки)
- * - Формирует строку навыков из массива требуемых навыков
- * - Предоставляет кнопки для редактирования и удаления вакансии
- * - Предотвращает всплытие событий при клике на кнопки действий
- * - Отображает данные в JSON формате для отладки
- *
- * Входные параметры:
- * @Input vacancy - объект вакансии (опциональный)
- *
- * Выходные события:
- * @Output remove - событие удаления вакансии, передает ID вакансии
- * @Output edit - событие редактирования вакансии, передает ID вакансии
- *
- * Внутренние свойства:
- * - skillString - строка с перечислением требуемых навыков через разделитель
- */
+/** Компонент карточки вакансии с кнопками редактирования и удаления. */
 @Component({
   selector: "app-vacancy-card",
   templateUrl: "./vacancy-card.component.html",
@@ -52,10 +33,6 @@ export class VacancyCardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  /**
-   * Обработчик удаления вакансии
-   * Предотвращает всплытие события и эмитит событие удаления
-   */
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
@@ -63,10 +40,6 @@ export class VacancyCardComponent implements OnInit {
     this.remove.emit(this.vacancy?.id);
   }
 
-  /**
-   * Обработчик редактирования вакансии
-   * Предотвращает всплытие события и эмитит событие редактирования
-   */
   onEdit(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();

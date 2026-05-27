@@ -24,18 +24,7 @@ import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-fi
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 
-/**
- * Главный компонент модуля проектов
- * Управляет отображением списка проектов, поиском и созданием новых проектов
- *
- * Принимает:
- * - Счетчики проектов через резолвер
- * - Параметры поиска из URL
- *
- * Возвращает:
- * - Интерфейс управления проектами с поиском и фильтрацией
- * - Навигацию между разделами "Мои", "Все", "Подписки"
- */
+/** Контейнер модуля проектов с поиском, фильтрацией и навигацией по разделам. */
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",

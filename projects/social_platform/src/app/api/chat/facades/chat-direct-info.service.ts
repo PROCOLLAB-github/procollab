@@ -86,12 +86,6 @@ export class ChatDirectInfoService {
     this.profileInfoService.ensureProfileLoaded();
   }
 
-  /**
-   * Инициализирует загрузку файлов чата
-   * Для прямых чатов: загружает файлы из прямого чата
-   * Для чатов проектов: загружает файлы из проекта
-   *
-   */
   initializationChatFiles(): void {
     this.loadProjectFilesUseCase
       .execute(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
@@ -112,18 +106,12 @@ export class ChatDirectInfoService {
     this.chatDirectUIInfoService.clearTypingTimeouts();
   }
 
-  /**
-   * Получает ID чата в зависимости от типа
-   */
   private getChatId(): string {
     return this.chatType === "direct"
       ? this.chat()?.id ?? ""
       : this.route.parent?.snapshot.paramMap.get("projectId") ?? "";
   }
 
-  /**
-   * Загружает сообщения чата с сервера с поддержкой пагинации
-   */
   private fetchMessages(type: "direct" | "project"): Observable<ApiPagination<ChatMessage>> {
     return this.loadMessagesUseCase
       .execute(
@@ -191,9 +179,6 @@ export class ChatDirectInfoService {
       });
   }
 
-  /**
-   * Обработчик запроса на загрузку дополнительных сообщений
-   */
   onFetchMessages(): void {
     if (
       (this.messages().length < this.chatDirectUIInfoService.messagesTotalCount() ||
@@ -209,9 +194,6 @@ export class ChatDirectInfoService {
     }
   }
 
-  /**
-   * Обработчик отправки нового сообщения
-   */
   onSubmitMessage(message: any): void {
     this.sendMessageUseCase.execute({
       replyTo: message.replyTo,
@@ -245,9 +227,6 @@ export class ChatDirectInfoService {
     }
   }
 
-  /**
-   * Обработчик редактирования сообщения
-   */
   onEditMessage(message: ChatMessage): void {
     this.editMessageUseCase.execute({
       text: message.text,
@@ -263,9 +242,6 @@ export class ChatDirectInfoService {
     );
   }
 
-  /**
-   * Обработчик удаления сообщения
-   */
   onDeleteMessage(messageId: number): void {
     this.deleteMessageUseCase.execute({
       chatId: this.getChatId(),
@@ -274,10 +250,6 @@ export class ChatDirectInfoService {
     });
   }
 
-  /**
-   * Обработчик события печатания
-   * Использует сохранённый chatType
-   */
   onType(): void {
     this.startTypingUseCase.execute({
       chatType: this.chatType,
@@ -285,10 +257,6 @@ export class ChatDirectInfoService {
     });
   }
 
-  /**
-   * Обработчик прочтения сообщения
-   * Использует сохранённый chatType
-   */
   onReadMessage(messageId: number): void {
     this.readMessageUseCase.execute({
       chatType: this.chatType,

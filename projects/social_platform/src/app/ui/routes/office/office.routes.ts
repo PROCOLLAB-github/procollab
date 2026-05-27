@@ -6,17 +6,7 @@ import { ProfileEditComponent } from "../../pages/profile/edit/edit.component";
 import { MembersComponent } from "@ui/pages/members/members.component";
 import { MembersResolver } from "@ui/pages/members/members.resolver";
 
-/**
- * Конфигурация маршрутов для модуля офиса
- * Определяет все доступные пути и их компоненты в рабочем пространстве
- *
- * Принимает:
- * - URL пути от роутера Angular
- *
- * Возвращает:
- * - Конфигурацию маршрутов с ленивой загрузкой модулей
- * - Резолверы для предзагрузки данных
- */
+/** Конфигурация маршрутов для модуля офиса. */
 export const OFFICE_ROUTES: Routes = [
   {
     path: "onboarding",

@@ -7,21 +7,7 @@ import { GetMembersUseCase } from "@api/member/use-cases/get-members.use-case";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
 
-/**
- * Резолвер для предварительной загрузки данных участников перед переходом на страницу
- *
- * Этот резолвер выполняется Angular Router'ом перед активацией маршрута /members
- * и загружает первую страницу участников (20 записей) для отображения
- *
- * @returns Promise<ApiPagination<User>> - Возвращает промис с пагинированным списком пользователей
- */
-/**
- * Функция-резолвер для загрузки участников
- *
- * @param route - Не используется, но доступен объект ActivatedRouteSnapshot
- * @param state - Не используется, но доступен объект RouterStateSnapshot
- * @returns Observable<ApiPagination<User>> - Наблюдаемый объект с данными участников
- */
+/** Предзагружает список участников. */
 export const MembersResolver: ResolveFn<ApiPagination<User>> = () => {
   const getMembersUseCase = inject(GetMembersUseCase);
 

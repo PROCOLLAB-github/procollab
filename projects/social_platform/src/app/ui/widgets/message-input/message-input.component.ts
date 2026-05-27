@@ -25,17 +25,7 @@ import { UpperCasePipe } from "@angular/common";
 import { FormatedFileSizePipe } from "@corelib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-/**
- * Компонент ввода сообщений для чата
- * Предоставляет расширенный интерфейс для ввода текстовых сообщений с поддержкой:
- * - Автоматического изменения размера текстового поля
- * - Прикрепления файлов через выбор или drag&drop
- * - Редактирования существующих сообщений
- * - Ответов на сообщения
- * - Масок ввода для специальных форматов
- *
- * Реализует ControlValueAccessor для интеграции с Angular Forms
- */
+/** Компонент ввода сообщений для чата с поддержкой файлов, редактирования и ControlValueAccessor. */
 @Component({
   selector: "app-message-input",
   templateUrl: "./message-input.component.html",
@@ -63,25 +53,14 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  /**
-   * Конструктор компонента
-   * @param fileService - сервис для работы с файлами (загрузка, удаление)
-   */
   constructor(private readonly fileService: FileService) {}
 
-  /** Текст placeholder для поля ввода */
   @Input() placeholder = "";
-  /** Маска для форматирования ввода */
   @Input() mask = "";
 
   /** Приватное поле для хранения редактируемого сообщения */
   private _editingMessage?: ChatMessage;
 
-  /**
-   * Сеттер для сообщения, которое редактируется
-   * При установке сообщения для редактирования, его текст загружается в поле ввода
-   * @param message - сообщение для редактирования или undefined для отмены
-   */
   @Input()
   set editingMessage(message: ChatMessage | undefined) {
     this._editingMessage = message;
@@ -94,48 +73,26 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     this.cdr.markForCheck();
   }
 
-  /**
-   * Геттер для получения редактируемого сообщения
-   * @returns сообщение для редактирования или undefined
-   */
   get editingMessage(): ChatMessage | undefined {
     return this._editingMessage;
   }
 
-  /** Сообщение, на которое отвечаем */
   @Input() replyMessage?: ChatMessage;
 
-  /**
-   * Сеттер для значения компонента
-   * @param value - объект с текстом и массивом URL файлов
-   */
   @Input()
   set appValue(value: MessageInputComponent["value"]) {
     this.value = value;
   }
 
-  /**
-   * Геттер для получения значения компонента
-   * @returns объект с текстом и массивом URL файлов
-   */
   get appValue(): MessageInputComponent["value"] {
     return this.value;
   }
 
-  // События компонента
-  /** Событие изменения значения */
   @Output() appValueChange = new EventEmitter<MessageInputComponent["value"]>();
-  /** Событие отправки сообщения */
   @Output() submit = new EventEmitter<void>();
-  /** Событие изменения размера поля ввода */
   @Output() resize = new EventEmitter<void>();
-  /** Событие отмены редактирования/ответа */
   @Output() cancel = new EventEmitter<void>();
 
-  /**
-   * Инициализация компонента
-   * Настраивает обработчики drag&drop для загрузки файлов
-   */
   ngOnInit(): void {
     // Обработчик события dragover для всего документа
     fromEvent<DragEvent>(document, "dragover")
@@ -148,27 +105,14 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
       .subscribe(this.handleDrop.bind(this));
   }
 
-  /**
-   * Очистка ресурсов при уничтожении компонента
-   */
   ngOnDestroy(): void {}
 
-  /**
-   * Обработчик события dragover
-   * Предотвращает стандартное поведение и показывает модальное окно для drop
-   * @param event - событие dragover
-   */
   private handleDragOver(event: DragEvent): void {
     event.stopPropagation();
     event.preventDefault();
     this.showDropModal = true;
   }
 
-  /**
-   * Обработчик события drop
-   * Обрабатывает перетаскиваемые файлы и скрывает модальное окно
-   * @param event - событие drop
-   */
   private handleDrop(event: DragEvent): void {
     event.stopPropagation();
     event.preventDefault();
@@ -186,10 +130,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   /** Значение компонента: текст и массив URL файлов */
   value: { text: string; filesUrl: string[] } = { text: "", filesUrl: [] };
 
-  /**
-   * Обработчик ввода текста
-   * @param event - событие ввода
-   */
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     const newValue = { ...this.value, text: value };
@@ -199,18 +139,11 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     this.value = newValue;
   }
 
-  /**
-   * Обработчик потери фокуса
-   */
   onBlur(): void {
     this.onTouch();
   }
 
   // Методы ControlValueAccessor
-  /**
-   * Установка значения в компонент (ControlValueAccessor)
-   * @param value - значение для установки
-   */
   writeValue(value: MessageInputComponent["value"]): void {
     setTimeout(() => {
       this.value = value;
@@ -229,10 +162,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   // eslint-disable-next-line no-use-before-define
   onChange: (value: MessageInputComponent["value"]) => void = () => {};
 
-  /**
-   * Регистрация функции обратного вызова для изменений (ControlValueAccessor)
-   * @param fn - функция для вызова при изменении значения
-   */
   registerOnChange(fn: (v: MessageInputComponent["value"]) => void): void {
     this.onChange = fn;
   }
@@ -240,10 +169,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   /** Функция обратного вызова для уведомления о касании */
   onTouch: () => void = () => {};
 
-  /**
-   * Регистрация функции обратного вызова для касания (ControlValueAccessor)
-   * @param fn - функция для вызова при касании компонента
-   */
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
@@ -251,19 +176,10 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   /** Флаг отключения компонента */
   disabled = false;
 
-  /**
-   * Установка состояния отключения (ControlValueAccessor)
-   * @param isDisabled - флаг отключения
-   */
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
 
-  /**
-   * Обработчик нажатия клавиш в textarea
-   * Обрабатывает Tab для вставки символа табуляции
-   * @param event - событие клавиатуры
-   */
   onTextareaKeydown(event: any) {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -287,10 +203,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     loading: boolean;
   }[] = [];
 
-  /**
-   * Обработчик загрузки файлов через input
-   * @param evt - событие выбора файлов
-   */
   onUpload(evt: Event) {
     const files = (evt.currentTarget as HTMLInputElement).files;
 
@@ -301,11 +213,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     this.addFiles(files);
   }
 
-  /**
-   * Добавление файлов для загрузки
-   * Создает записи в массиве attachFiles и запускает загрузку на сервер
-   * @param files - список файлов для загрузки
-   */
   private addFiles(files: FileList): void {
     // Создание записей для каждого файла
     for (let i = 0; i < files.length; i++) {
@@ -350,11 +257,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     }
   }
 
-  /**
-   * Удаление файла
-   * Удаляет файл с сервера и из списка прикрепленных файлов
-   * @param idx - индекс файла в массиве attachFiles
-   */
   onDeleteFile(idx: number): void {
     const file = this.attachFiles[idx];
     if (!file || !file.link) return;
