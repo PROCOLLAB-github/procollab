@@ -63,12 +63,18 @@ export class KanbanBoardDetailInfoService {
   private deleteTaskSubject = new Subject<number>();
   private readonly profile = this.profileInfoService.profile;
 
+  readonly currentUser = computed(() => {
+    const p = this.profile();
+    if (!p) return undefined;
+    return { id: p.id, avatar: p.personal.avatar, firstName: p.firstName, lastName: p.lastName };
+  });
+
   setTaskDetailInfo(detail: TaskDetail | undefined) {
     this.taskDetail.set(detail);
   }
 
-  protected readonly leaderId = this.projectsDetailUIInfoService.leaderId;
-  protected readonly collaborators = this.projectsDetailUIInfoService.collaborators;
+  readonly leaderId = this.projectsDetailUIInfoService.leaderId;
+  readonly collaborators = this.projectsDetailUIInfoService.collaborators;
 
   isLeader = computed(() => {
     const user = this.profile();
