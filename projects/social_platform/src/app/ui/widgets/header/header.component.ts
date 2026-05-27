@@ -16,24 +16,7 @@ import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 import { NotificationService } from "@ui/services/notification/notification.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
-/**
- * Компонент заголовка приложения
- *
- * Функциональность:
- * - Отображает верхнюю панель приложения с уведомлениями
- * - Управляет отображением панели уведомлений
- * - Показывает индикатор наличия уведомлений (красный шарик)
- * - Отображает информацию о профиле пользователя
- * - Закрывает панель уведомлений при клике вне её области
- * - Пробрасывает события принятия/отклонения приглашений в родительский компонент
- *
- * Входные параметры:
- * @Input invites - массив приглашений пользователя
- *
- * Исходящие события:
- * @Output acceptInvite - id приглашения, которое нужно принять
- * @Output rejectInvite - id приглашения, которое нужно отклонить
- */
+/** Компонент заголовка приложения с панелью уведомлений и инвайтами. */
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",

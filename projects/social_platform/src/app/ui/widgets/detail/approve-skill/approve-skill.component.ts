@@ -16,13 +16,7 @@ import { Skill } from "@domain/skills/skill.model";
 import { ApproveskillInfoService } from "./services/approve-skill-info.service";
 import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.service";
 
-/**
- * @params skill - информация о навыке (обязательно)
- *
- * Компонент на основе полученных данных о навыке
- * выполняет логику подтверждения навыка
- * с помощью сервисов связанных с навыками пользователя
- */
+/** Компонент подтверждения навыка пользователя. */
 @Component({
   selector: "app-approve-skill",
   styleUrl: "./approve-skill.component.scss",
@@ -36,15 +30,12 @@ export class ApproveSkillComponent implements OnInit, OnDestroy {
   private readonly approveskillInfoService = inject(ApproveskillInfoService);
   private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
 
-  // Указатель на то что пользватель подтвердил навык
   isUserApproveSkill(skill: Skill): boolean {
     return this.approveskillInfoService.isUserApproveSkill(skill);
   }
 
-  // переменные для работы с модальным окном для вывода ошибки с подтверждением своего навыка
   protected readonly approveOwnSkillModal = this.approveSkillUIInfoService.approveOwnSkillModal;
 
-  // Получение данных о конкретном навыке
   @Input({ required: true }) skill!: Skill;
 
   ngOnInit(): void {
@@ -55,12 +46,6 @@ export class ApproveSkillComponent implements OnInit, OnDestroy {
     this.approveskillInfoService.destroy();
   }
 
-  /**
-   * Подтверждение или отмена подтверждения навыка пользователя
-   * @param skillId - идентификатор навыка
-   * @param event - событие клика для предотвращения всплытия
-   * @param skill - объект навыка для обновления
-   */
   onToggleApprove(skillId: number, event: Event, skill: Skill) {
     this.approveskillInfoService.onToggleApprove(skillId, event, skill);
   }

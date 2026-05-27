@@ -3,10 +3,7 @@
 import { Observable } from "rxjs";
 import { Invite } from "../invite.model";
 
-/**
- * Порт репозитория приглашений.
- * Реализуется в infrastructure/repository/invite/invite.repository.ts
- */
+/** Порт репозитория приглашений */
 export abstract class InviteRepositoryPort {
   abstract sendForUser(
     userId: number,

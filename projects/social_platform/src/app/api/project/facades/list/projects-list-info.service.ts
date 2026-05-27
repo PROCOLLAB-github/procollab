@@ -37,10 +37,7 @@ import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
-/**
- * Управляет списками проектов: табами, фильтрами URL, поиском,
- * пагинацией и преобразованием инвайтов в карточки списка.
- */
+/** Управляет списками проектов: табы, фильтры URL, поиск, пагинация, инвайты. */
 @Injectable()
 export class ProjectsListInfoService {
   private static readonly PROJECTS_PAGE_SIZE = 16;

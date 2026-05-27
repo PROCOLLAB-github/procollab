@@ -11,19 +11,7 @@ import { Task } from "@domain/courses/courses.model";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { TruncatePipe, TruncateHtmlPipe } from "@corelib";
 
-/**
- * Компонент информационного слайда с видео/изображением
- * Отображает информационный контент с поддержкой различных медиа-форматов
- *
- * Входные параметры:
- * @Input data - данные информационной задачи типа Task
- *
- * Функциональность:
- * - Отображает текст и описание слайда
- * - Поддерживает видео в iframe (YouTube, RuTube, Google Drive, прямые видео-файлы)
- * - Автоматически определяет тип контента по URL/расширению файла
- * - Адаптивная компоновка для разных типов медиа
- */
+/** Информационный слайд задачи с видео и текстом. */
 @Component({
   selector: "app-info-task",
   standalone: true,
@@ -32,9 +20,9 @@ import { TruncatePipe, TruncateHtmlPipe } from "@corelib";
   styleUrl: "./info-task.component.scss",
 })
 export class InfoTaskComponent implements OnInit {
-  @Input({ required: true }) data!: Task; // Данные информационной задачи
+  @Input({ required: true }) data!: Task;
 
-  private readonly sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
+  private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
 
   readFullDescription = false;

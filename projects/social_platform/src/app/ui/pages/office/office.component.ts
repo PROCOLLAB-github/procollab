@@ -31,18 +31,7 @@ import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
-/**
- * Главный компонент офиса - корневой компонент рабочего пространства
- * Управляет общим состоянием приложения, навигацией и модальными окнами
- *
- * Принимает:
- * - Данные о приглашениях через резолвер
- * - События от сервисов (auth, chat, invite)
- *
- * Возвращает:
- * - Рендерит основной интерфейс офиса с сайдбаром, навигацией и роутер-аутлетом
- * - Управляет модальными окнами для верификации и приглашений
- */
+/** Корневой компонент рабочего пространства с навигацией и управлением состоянием. */
 @Component({
   selector: "app-office",
   templateUrl: "./office.component.html",

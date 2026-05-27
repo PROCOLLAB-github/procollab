@@ -92,11 +92,6 @@ export class ProjectsFilterInfoService {
     });
   }
 
-  /**
-   * Обработчик фильтрации по отрасли
-   * @param event - событие клика
-   * @param industryId - ID отрасли (undefined для сброса)
-   */
   onFilterByIndustry(industryId?: number | null): void {
     this.router
       .navigate([], {
@@ -107,10 +102,6 @@ export class ProjectsFilterInfoService {
       .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
-  /**
-   * Обработчик фильтрации по количеству участников
-   * @param count - количество участников (undefined для сброса)
-   */
   onFilterByMembersCount(count?: number): void {
     this.router
       .navigate([], {
@@ -123,10 +114,6 @@ export class ProjectsFilterInfoService {
       .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
-  /**
-   * Обработчик фильтрации по наличию вакансий
-   * @param has - наличие вакансий
-   */
   onFilterVacancies(has: boolean): void {
     this.router
       .navigate([], {
@@ -139,10 +126,6 @@ export class ProjectsFilterInfoService {
       .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
-  /**
-   * Обработчик фильтрации по принадлежности к МосПолитех
-   * @param isMospolytech - принадлежность к программе
-   */
   onFilterMospolytech(isMospolytech: boolean): void {
     this.router
       .navigate([], {
@@ -156,11 +139,6 @@ export class ProjectsFilterInfoService {
       .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
-  /**
-   * Обработчик фильтрации по типу проекта
-   * @param event - событие клика
-   * @param tagId - ID типа проекта (null для сброса)
-   */
   onFilterProjectType(event: Event, tagId?: number | null): void {
     event.stopPropagation();
 
@@ -171,10 +149,6 @@ export class ProjectsFilterInfoService {
     });
   }
 
-  /**
-   * Сброс всех активных фильтров
-   * Очищает все query параметры и возвращает к состоянию по умолчанию
-   */
   clearFilters(): void {
     this.currentFilterTag.set(2);
 

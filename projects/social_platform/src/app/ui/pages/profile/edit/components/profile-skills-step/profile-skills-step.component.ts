@@ -78,18 +78,10 @@ export class ProfileSkillsStepComponent {
     this.profileEditSkillsInfoService.removeLanguage(index);
   }
 
-  /**
-   * Переключение навыка (добавление/удаление)
-   * @param toggledSkill - навык для переключения
-   */
   protected onToggleSkill(toggledSkill: Skill): void {
     this.searchesService.onToggleSkill(toggledSkill, this.profileForm);
   }
 
-  /**
-   * Добавление нового навыка
-   * @param newSkill - новый навык для добавления
-   */
   protected onAddSkill(newSkill: Skill): void {
     this.searchesService.onAddSkill(newSkill, this.profileForm);
   }

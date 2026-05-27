@@ -38,18 +38,10 @@ export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
     this.projectsDetailWorkSectionInfoService.destroy();
   }
 
-  /**
-   * Принятие отклика на вакансию
-   * @param responseId - ID отклика для принятия
-   */
   acceptResponse(responseId: number) {
     this.projectsDetailWorkSectionInfoService.acceptResponse(responseId);
   }
 
-  /**
-   * Отклонение отклика на вакансию
-   * @param responseId - ID отклика для отклонения
-   */
   rejectResponse(responseId: number) {
     this.projectsDetailWorkSectionInfoService.rejectResponse(responseId);
   }

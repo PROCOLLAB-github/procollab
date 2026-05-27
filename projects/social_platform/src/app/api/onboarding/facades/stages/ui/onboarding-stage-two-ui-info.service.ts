@@ -21,26 +21,14 @@ export class OnboardingStageTwoUIInfoService {
     skills: this.nnFb.control<Skill[]>([]),
   });
 
-  /**
-   * Проверяет, есть ли открытые группы навыков
-   */
   hasOpenSkillsGroups(): boolean {
     return this.openSkillGroup() !== null;
   }
 
-  /**
-   * Обработчик переключения группы навыков
-   * @param skillName - название навыка
-   * @param isOpen - флаг открытия/закрытия группы
-   */
   onSkillGroupToggled(isOpen: boolean, skillName: string): void {
     this.openSkillGroup.set(isOpen ? skillName : null);
   }
 
-  /**
-   * Проверяет, должна ли группа навыков быть отключена
-   * @param skillName - название навыка
-   */
   isSkillGroupDisabled(skillName: string): boolean {
     return this.openSkillGroup() !== null && this.openSkillGroup() !== skillName;
   }

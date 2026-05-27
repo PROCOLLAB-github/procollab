@@ -5,16 +5,7 @@ import { ResolveFn } from "@angular/router";
 import { ChatListItem } from "@domain/chat/chat-item.model";
 import { ChatGroupsRepositoryPort } from "@domain/chat/ports/chat-groups.port";
 
-/**
- * Резолвер для загрузки групповых чатов (проектных чатов)
- * Предзагружает список проектных чатов для пользователя
- *
- * Принимает:
- * - Контекст маршрута через Angular DI
- *
- * Возвращает:
- * - Observable<ChatListItem[]> - список элементов групповых чатов
- */
+/** Предзагружает список групповых чатов пользователя. */
 export const ChatGroupsResolver: ResolveFn<ChatListItem[]> = () => {
   const chatGroupsRepository = inject(ChatGroupsRepositoryPort);
 

@@ -15,35 +15,7 @@ import { OnboardingStageOneInfoService } from "@api/onboarding/facades/stages/on
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 
-/**
- * КОМПОНЕНТ ПЕРВОГО ЭТАПА ОНБОРДИНГА
- *
- * Назначение: Этап выбора специализации пользователя из предложенных вариантов
- *
- * Что делает:
- * - Отображает форму для ввода/выбора специализации
- * - Предоставляет автокомплит для поиска специализаций
- * - Показывает группированные специализации из базы данных
- * - Валидирует введенные данные
- * - Сохраняет специализацию в профиле и переходит к следующему этапу
- * - Предоставляет возможность пропустить этап
- *
- * Что принимает:
- * - Данные специализаций через ActivatedRoute (из StageOneResolver)
- * - Текущее состояние формы из OnboardingService
- * - Пользовательский ввод в поле специализации
- * - Поисковые запросы для автокомплита
- *
- * Что возвращает:
- * - Интерфейс с полем ввода специализации
- * - Список предложенных специализаций для выбора
- * - Навигацию на следующий этап (stage-2) или финальный (stage-3)
- *
- * Особенности:
- * - Использует сигналы Angular для реактивного состояния
- * - Поддерживает поиск специализаций в реальном времени
- * - Интегрирован с сервисом специализаций для получения данных
- */
+/** Этап онбординга — выбор специализации с автокомплитом и группированным списком. */
 @Component({
   selector: "app-stage-one",
   templateUrl: "./stage-one.component.html",
@@ -108,25 +80,14 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     this.tooltipInfoService.toggleTooltip(key);
   }
 
-  /**
-   * Проверяет, есть ли открытые группы специализаций
-   */
+  //
   protected readonly hasOpenSpecializationsGroups =
     this.onboardingStageOneUIInfoService.hasOpenSpecializationsGroups;
 
-  /**
-   * Обработчик переключения группы специализаций
-   * @param isOpen - флаг открытия/закрытия группы
-   * @param groupName - название группы
-   */
+  //
   onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
     this.onboardingStageOneUIInfoService.onSpecializationsGroupToggled(isOpen, groupName);
   }
-
-  /**
-   * Проверяет, должна ли группа специализаций быть отключена
-   * @param groupName - название группы для проверки
-   */
   isSpecializationGroupDisabled(groupName: string): boolean {
     return this.onboardingStageOneUIInfoService.isSpecializationGroupDisabled(groupName);
   }

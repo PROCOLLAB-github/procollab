@@ -52,7 +52,7 @@ class AnalyticsService {
 
 ## expand
 
-`api/expand/expand.service.ts` — `providedIn: "root"`. Контейнер для всех "раскрыть/свернуть" сигналов в детальных страницах. Обёртка над `expandElement` хелпером (`@utils/expand-element`).
+`api/expand/expand.service.ts` — `@Injectable()` (**page-scoped**). Контейнер для всех "раскрыть/свернуть" сигналов в детальных страницах; провайдится в `providers: []` каждой detail-страницы (`profile/main`, `projects/info|team|vacancies`, `program/main`, `vacancies/detail`), чтобы состояние не утекало между навигациями. Обёртка над `expandElement` хелпером (`@utils/expand-element`).
 
 **Сигналы** (все `signal<boolean>`):
 

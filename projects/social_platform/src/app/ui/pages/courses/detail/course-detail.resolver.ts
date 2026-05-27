@@ -8,6 +8,7 @@ import { GetCourseDetailUseCase } from "@api/courses/use-cases/get-course-detail
 import { GetCourseStructureUseCase } from "@api/courses/use-cases/get-course-structure.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 
+/** Резолвер: загружает детали курса и его структуру; редиректит на список, если курс недоступен. */
 export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
   const getCourseDetailUseCase = inject(GetCourseDetailUseCase);
   const getCourseStructureUseCase = inject(GetCourseStructureUseCase);

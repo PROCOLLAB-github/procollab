@@ -85,9 +85,6 @@ export class DetailProfileInfoService {
     this.destroy$.complete();
   }
 
-  /**
-   * Копирование ссылки на профиль в буфер обмена
-   */
   onCopyLink(profileId: number): void {
     let fullUrl = "";
 
@@ -101,9 +98,6 @@ export class DetailProfileInfoService {
     );
   }
 
-  /**
-   * Обработчик изменения радио-кнопки для выбора проекта
-   */
   onProjectRadioChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.selectedProjectId.set(+target.value);
@@ -113,10 +107,6 @@ export class DetailProfileInfoService {
     }
   }
 
-  /**
-   * Открывает модалку для отправки приглашения пользователю
-   * Проверяет какие отрендерить проекты где profile.id === leader
-   */
   inviteUser(): void {
     if (!this.profileProjects().length) {
       this.showNoProjectsModal.set(true);
@@ -168,10 +158,6 @@ export class DetailProfileInfoService {
 
   openSkills: Record<number, boolean> = {};
 
-  /**
-   * Открытие модального окна с информацией о подтверждениях навыка
-   * @param skillId - идентификатор навыка
-   */
   onOpenSkill(skillId: number) {
     this.openSkills[skillId] = !this.openSkills[skillId];
   }
@@ -180,10 +166,6 @@ export class DetailProfileInfoService {
     this.openSkills[skillId] = false;
   }
 
-  /**
-   * Отправка CV пользователя на email
-   * Проверяет ограничения по времени и отправляет CV на почту пользователя
-   */
   downloadCV() {
     this.isSended.set(true);
     this.downloadCvUseCase

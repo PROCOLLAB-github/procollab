@@ -50,10 +50,6 @@ export class ProgramRepository implements ProgramRepositoryPort {
     return this.programAdapter.create(program);
   }
 
-  /**
-   * Возвращает схему полей программы.
-   * Маппит вложенный ответ адаптера `{ dataSchema }` в доменный тип `ProgramDataSchema`.
-   */
   getDataSchema(programId: number): Observable<ProgramDataSchema> {
     return this.programAdapter.getDataSchema(programId).pipe(map(response => response.dataSchema));
   }

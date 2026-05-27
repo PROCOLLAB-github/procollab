@@ -12,12 +12,7 @@ import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-
 import { DeleteVacancyUseCase } from "../../../vacancy/use-cases/delete-vacancy.use-case";
 import { failure, initial, loading } from "@domain/shared/async-state";
 
-/**
- * Сервис для управления вакансиями проекта.
- * Обеспечивает создание, валидацию, отправку,
- * редактирование и удаление вакансий, а также работу с формой вакансии
- * и синхронизацию с API.
- */
+/** Сервис для управления вакансиями проекта. */
 @Injectable()
 export class ProjectVacancyService {
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
@@ -49,11 +44,6 @@ export class ProjectVacancyService {
     this.destroy$.complete();
   }
 
-  /**
-   * Отправляет форму вакансии: настраивает валидаторы, проверяет форму,
-   * создаёт вакансию через API и сбрасывает форму.
-   * @returns Promise<boolean> - true при успехе, false при ошибке валидации или API
-   */
   public submitVacancy(projectId: number) {
     // Настройка валидаторов для обязательных полей
     this.vacancyForm.get("role")?.setValidators([Validators.required]);
@@ -135,10 +125,6 @@ export class ProjectVacancyService {
       });
   }
 
-  /**
-   * Удаляет вакансию по её идентификатору с подтверждением пользователя.
-   * @param vacancyId идентификатор вакансии для удаления
-   */
   public removeVacancy(vacancyId: number): void {
     if (!confirm("Вы точно хотите удалить вакансию?")) return;
     this.deleteVacancyUseCase

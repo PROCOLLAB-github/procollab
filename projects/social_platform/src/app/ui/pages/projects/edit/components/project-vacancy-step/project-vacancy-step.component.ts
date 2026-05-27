@@ -99,69 +99,38 @@ export class ProjectVacancyStepComponent implements OnInit {
 
   protected readonly errorMessage = ErrorMessage;
 
-  /**
-   * Отображение блока вакансий
-   */
   createVacancyBlock(): void {
     this.toggleFieldsInfoService.showFields();
   }
 
-  /**
-   * Отправка формы вакансии
-   */
   submitVacancy(): void {
     this.projectVacancyInfoService.submitVacancy(this.projectId());
   }
 
-  /**
-   * Удаление вакансии
-   */
   removeVacancy(vacancyId: number): void {
     this.projectVacancyInfoService.removeVacancy(vacancyId);
   }
 
-  /**
-   * Редактирование вакансии
-   */
   editVacancy(index: number): void {
     this.projectVacancyUIService.applyEditVacancy(index);
   }
 
-  /**
-   * Добавление навыка
-   * @param newSkill - новый навык
-   */
   onAddSkill(newSkill: Skill): void {
     this.searchesService.onAddSkill(newSkill, this.vacancyForm);
   }
 
-  /**
-   * Удаление навыка
-   * @param oddSkill - навык для удаления
-   */
   onRemoveSkill(oddSkill: Skill): void {
     this.searchesService.onRemoveSkill(oddSkill, this.vacancyForm);
   }
 
-  /**
-   * Переключение навыка в списке выбранных
-   * @param toggledSkill - навык для переключения
-   */
   onToggleSkill(toggledSkill: Skill): void {
     this.searchesService.onToggleSkill(toggledSkill, this.vacancyForm);
   }
 
-  /**
-   * Поиск навыков
-   * @param query - поисковый запрос
-   */
   onSearchSkill(query: string): void {
     this.projectsEditInfoService.onSearchSkill(query);
   }
 
-  /**
-   * Переключение модального окна групп навыков
-   */
   onToggleSkillsGroupsModal(): void {
     this.skillsGroupsModalOpen.update(open => !open);
   }

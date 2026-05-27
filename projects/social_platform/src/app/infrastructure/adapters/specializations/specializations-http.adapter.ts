@@ -21,13 +21,6 @@ export class SpecializationsHttpAdapter {
     return this.apiService.get(`${this.AUTH_USERS_SPECIALIZATIONS_URL}/nested/`);
   }
 
-  /**
-   * Получает специализации в виде плоского списка с поддержкой поиска и пагинации.
-   *
-   * @param search строка поиска
-   * @param limit максимальное количество результатов
-   * @param offset смещение
-   */
   getSpecializationsInline(
     search: string,
     limit: number,

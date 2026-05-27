@@ -6,16 +6,7 @@ import { ButtonComponent } from "@ui/primitives";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AppRoutes } from "@api/paths/app-routes";
 
-/**
- * Компонент завершения задачи
- * Отображает результаты выполнения задачи: прогресс, статистику, баллы
- *
- * Функциональность:
- * - Показывает круговую диаграмму прогресса
- * - Отображает количество правильных ответов
- * - Показывает заработанные баллы
- * - Предоставляет навигацию к следующему заданию или в меню навыков
- */
+/** Страница завершения задачи с результатами. */
 @Component({
   selector: "app-complete",
   standalone: true,
@@ -24,8 +15,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   styleUrl: "./complete.component.scss",
 })
 export class TaskCompleteComponent implements OnInit {
-  route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
-  router = inject(Router); // Сервис для навигации
+  route = inject(ActivatedRoute);
+  router = inject(Router);
   courseId = signal<number | null>(null);
 
   protected appWidth = window.innerWidth;

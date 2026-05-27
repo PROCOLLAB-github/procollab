@@ -21,28 +21,7 @@ import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.servic
 import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
-/**
- * Компонент чата проекта
- *
- * Функциональность:
- * - Отображение чата проекта с сообщениями участников
- * - Отправка, редактирование и удаление сообщений
- * - Показ индикатора набора текста
- * - Загрузка файлов чата
- * - Пагинация сообщений при прокрутке
- * - Мобильная версия с переключением между чатом и боковой панелью
- *
- * Принимает:
- * - Данные проекта через ActivatedRoute
- * - WebSocket события через chat use-case слой
- * - Профиль пользователя через AuthService
- *
- * Предоставляет:
- * - Список сообщений чата
- * - Список участников проекта
- * - Файлы, загруженные в чат
- * - Интерфейс для отправки сообщений
- */
+/** Чат проекта с сообщениями, файлами и управлением. */
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
@@ -53,7 +32,6 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
-  /** Ссылка на компонент ввода сообщений */
   @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
 
   private readonly navService = inject(NavService);

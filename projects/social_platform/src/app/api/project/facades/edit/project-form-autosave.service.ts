@@ -16,10 +16,7 @@ interface QueuedPatch {
 
 const QUEUE_KEY = "project-autosave-queue";
 
-/**
- * Автосохраняет очистку файловых полей проекта и повторяет изменения,
- * если запрос не прошёл из-за сети.
- */
+/** Автосохраняет очистку файловых полей, повторяет при сетевой ошибке. */
 @Injectable({ providedIn: "root" })
 export class ProjectFormAutosaveService {
   private readonly route = inject(ActivatedRoute);

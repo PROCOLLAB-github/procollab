@@ -11,25 +11,7 @@ import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-in
 import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "@api/expand/expand.service";
 
-/**
- * Компонент детального просмотра вакансии
- *
- * Функциональность:
- * - Получает данные вакансии из резолвера через ActivatedRoute
- * - Отображает навигационную панель с кнопкой "Назад"
- * - Содержит router-outlet для дочерних компонентов (информация о вакансии)
- * - Управляет подписками для предотвращения утечек памяти
- *
- * Жизненный цикл:
- * - OnInit: подписывается на данные маршрута и извлекает объект вакансии
- * - OnDestroy: отписывается от всех активных подписок
- *
- * @property {Vacancy} vacancy - объект вакансии, полученный из резолвера
- * @property {Subscription[]} subscriptions$ - массив подписок для управления памятью
- *
- * @selector app-vacancies-detail
- * @standalone true - автономный компонент
- */
+/** Контейнер детальной страницы вакансии с навигацией и router-outlet. */
 @Component({
   selector: "app-vacancies-detail",
   templateUrl: "./vacancies-detail.component.html",

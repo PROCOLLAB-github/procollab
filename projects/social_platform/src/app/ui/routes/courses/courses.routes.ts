@@ -5,13 +5,7 @@ import { CoursesListComponent } from "../../pages/courses/list/list.component";
 import { CoursesComponent } from "../../pages/courses/courses.component";
 import { CoursesResolver } from "../../pages/courses/courses.resolver";
 
-/**
- * Конфигурация маршрутов для модуля карьерных траекторий
- * Определяет структуру навигации:
- * - "" - редирект на "all"
- * - "all" - список всех доступных траекторий
- * - ":courseId" - детальная информация о конкретном курсе
- */
+/** Конфигурация маршрутов для модуля карьерных траекторий. */
 
 export const COURSES_ROUTES: Routes = [
   {

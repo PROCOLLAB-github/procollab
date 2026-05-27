@@ -4,12 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { WebsocketService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 
-/**
- * Слушает потерю WebSocket-соединения и показывает пользователю toast.
- *
- * Активируется при first inject (например, в AppComponent), дальше
- * живёт всё время жизни приложения и реагирует на `connectionLost$`.
- */
+/** Слушает потерю WebSocket-соединения и показывает пользователю toast. */
 @Injectable({ providedIn: "root" })
 export class ConnectionStatusToastService {
   private readonly websocketService = inject(WebsocketService);

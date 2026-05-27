@@ -16,39 +16,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
 import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 
-/**
- * Компонент отображения детальной информации о вакансии
- *
- * Основная функциональность:
- * - Отображение полной информации о вакансии (описание, навыки, условия)
- * - Показ информации о проекте, к которому относится вакансия
- * - Кнопки действий: "Откликнуться" и "Прокачать себя"
- * - Модальное окно с предложением подписки на обучение
- * - Адаптивное отображение с возможностью сворачивания/разворачивания контента
- *
- * Управление контентом:
- * - Автоматическое определение необходимости кнопки "Читать полностью"
- * - Сворачивание длинного описания и списка навыков
- * - Парсинг ссылок и переносов строк в описании
- *
- * Интеграция с сервисами:
- * - VacancyService - получение данных вакансии через резолвер
- * - ProjectService - загрузка информации о проекте
- * - AuthService - информация о текущем пользователе
- *
- * Жизненный цикл:
- * - OnInit: загрузка данных вакансии и проекта, подписка на планы
- * - AfterViewInit: определение необходимости кнопок "Читать полностью"
- * - OnDestroy: отписка от всех активных подписок
- *
- * @property {Vacancy} vacancy - объект вакансии с полной информацией
- * @property {Project} project - объект проекта, к которому относится вакансия
- * @property {boolean} readFullDescription - состояние развернутого описания
- * @property {boolean} readFullSkills - состояние развернутого списка навыков
- *
- * @selector app-detail
- * @standalone true - автономный компонент
- */
+/** Отображает детальную информацию о вакансии с возможностью отклика. */
 @Component({
   selector: "app-detail",
   templateUrl: "./info.component.html",
@@ -102,10 +70,6 @@ export class VacancyInfoComponent implements OnInit {
     this.vacancyDetailUIInfoService.applyResponseModalOpen();
   }
 
-  /**
-   * Обработчик отправки формы
-   * Валидирует форму и отправляет отклик на сервер
-   */
   onSubmit(): void {
     this.vacancyDetailInfoService.submitVacancyResponse();
   }

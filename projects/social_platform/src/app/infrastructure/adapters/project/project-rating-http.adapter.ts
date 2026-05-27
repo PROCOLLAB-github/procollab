@@ -14,23 +14,10 @@ export class ProjectRatingHttpAdapter {
   private readonly RATE_PROJECT_URL = "/rate-project";
   private readonly apiService = inject(ApiService);
 
-  /**
-   * Получает список проектов программы для оценки.
-   *
-   * @param programId идентификатор программы
-   * @param params query-параметры пагинации/фильтрации
-   */
   getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}/`, params);
   }
 
-  /**
-   * Получает список проектов программы с фильтрами.
-   *
-   * @param programId идентификатор программы
-   * @param filters фильтры
-   * @param params query-параметры пагинации/дополнительной фильтрации
-   */
   postFilters(
     programId: number,
     filters: Record<string, string[]>,
@@ -43,12 +30,6 @@ export class ProjectRatingHttpAdapter {
     return this.apiService.post(url, { filters });
   }
 
-  /**
-   * Отправляет оценки по критериям для проекта.
-   *
-   * @param projectId идентификатор проекта
-   * @param scores массив оценок критериев
-   */
   rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
     return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}/`, scores);
   }

@@ -10,18 +10,7 @@ import { Goal } from "./goals.model";
 import { Partner } from "./partner.model";
 import { Resource } from "./resource.model";
 
-/**
- * Основная модель проекта и связанные классы
- * Представляет проект со всей необходимой информацией
- *
- * Project содержит:
- * - Основную информацию (название, описание, цели)
- * - Участников и вакансии
- * - Медиа-файлы и ссылки
- *
- * ProjectCount - счетчики проектов по категориям
- * ProjectStep - этапы развития проекта
- */
+/** Основная модель проекта и связанные классы */
 
 export class PartnerProgramInfo {
   id!: number;

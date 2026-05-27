@@ -2,10 +2,7 @@
 
 import { DomainEvent } from "../../shared/domain-event";
 
-/**
- * Событие принятия приглашения в проект
- * Излучается когда пользователь принимает приглашение присоединиться к проекту
- */
+/** Событие принятия приглашения в проект */
 export interface AcceptInvite extends DomainEvent {
   readonly type: "AcceptInvite";
   readonly payload: {

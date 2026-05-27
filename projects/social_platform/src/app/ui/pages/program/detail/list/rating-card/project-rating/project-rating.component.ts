@@ -29,17 +29,7 @@ import { ControlErrorPipe } from "@corelib";
 import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 
-/**
- * Компонент рейтинга проекта
- * Предоставляет интерфейс для оценки проекта по различным критериям
- * Поддерживает три типа критериев:
- * - int: числовая оценка в диапазоне (например, от 1 до 10)
- * - bool: булевая оценка (да/нет)
- * - str: текстовый комментарий
- *
- * Реализует ControlValueAccessor для интеграции с Angular Forms
- * и Validator для валидации введенных данных
- */
+/** Оценка проекта по числовым, булевым и текстовым критериям через ControlValueAccessor. */
 @Component({
   selector: "app-project-rating",
   standalone: true,
@@ -67,12 +57,6 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
   ],
 })
 export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, Validator {
-  /**
-   * Сеттер для критериев оценки
-   * При установке новых критериев создает соответствующие FormControl'ы
-   * и настраивает отслеживание изменений
-   * @param val - массив критериев для оценки проекта
-   */
   @Input({ required: true })
   set criteria(val: ProjectRatingCriterion[]) {
     if (!val) return;
@@ -81,10 +65,6 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     this.trackFormValueChange();
   }
 
-  /**
-   * Геттер для получения текущих критериев
-   * @returns массив критериев оценки
-   */
   get criteria(): ProjectRatingCriterion[] {
     return this._criteria();
   }
@@ -113,10 +93,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
 
   errorMessage = ErrorMessage;
 
-  /**
-   * Объект с функциями-создателями FormControl для разных типов критериев
-   * Каждый тип критерия имеет свою логику создания контрола и валидации
-   */
+  /** Creates FormControls per criterion type. */
   controlCreators: Record<string, (val: number | string) => FormControl> = {
     // Числовой критерий - обязательное поле
     int: val => new FormControl<number>(<number>val, [Validators.required]),
@@ -129,44 +106,23 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   /** Сигнал для хранения подписок */
   subscriptions$ = signal<Subscription[]>([]);
 
-  // Методы ControlValueAccessor
-  /** Функция обратного вызова для уведомления об изменениях */
   onChange: (val: unknown) => void = noop;
-  /** Функция обратного вызова для уведомления о касании */
   onTouched: () => void = noop;
 
-  /**
-   * Установка значения в компонент (ControlValueAccessor)
-   * @param val - значения для установки в форму
-   */
   writeValue(val: typeof this.form.value): void {
     if (val) {
       this.form.patchValue(val);
     }
   }
 
-  /**
-   * Регистрация функции обратного вызова для изменений (ControlValueAccessor)
-   * @param fn - функция для вызова при изменении значений
-   */
   registerOnChange(fn: (v: unknown) => void): void {
     this.onChange = fn;
   }
 
-  /**
-   * Регистрация функции обратного вызова для касания (ControlValueAccessor)\
-   * @param fn - функция для вызова при касании компонента
-   */
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  /**
-   * Валидация формы (Validator)
-   * Проверяет, что все обязательные критерии заполнены
-   * @param _ - контрол для валидации (не используется)
-   * @returns объект с ошибками валидации или null если валидация прошла
-   */
   validate(_: AbstractControl): ValidationErrors | null {
     let output: ValidationErrors | null = null;
 
@@ -181,18 +137,10 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     return output;
   }
 
-  /**
-   * Очистка ресурсов при уничтожении компонента
-   */
   ngOnDestroy(): void {
     this.subscriptions$().forEach(subscription => subscription.unsubscribe());
   }
 
-  /**
-   * Создание FormControl'ов для каждого критерия
-   * Использует соответствующий создатель контрола в зависимости от типа критерия
-   * @param criteria - массив критериев для создания контролов
-   */
   private createFormControls(criteria: ProjectRatingCriterion[]): void {
     const formGroupControls: Record<string, FormControl> = {};
 
@@ -208,10 +156,6 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     }
   }
 
-  /**
-   * Настройка отслеживания изменений в форме
-   * Подписывается на изменения значений и уведомляет родительский компонент
-   */
   private trackFormValueChange(): void {
     const trackChanged$ = this.form.valueChanges.subscribe(val => {
       this.onChange(val);

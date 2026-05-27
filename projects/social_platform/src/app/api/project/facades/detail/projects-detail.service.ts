@@ -132,11 +132,6 @@ export class ProjectsDetailService {
       });
   }
 
-  /**
-   * Обработчик появления новостей в области видимости
-   * Отмечает новости как просмотренные
-   * @param entries - массив элементов, попавших в область видимости
-   */
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     const projectId = Number(this.project()?.id);
     if (!projectId) {
@@ -154,10 +149,6 @@ export class ProjectsDetailService {
     this.readProjectNewsUseCase.execute(projectId, ids).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
-  /**
-   * Добавление новой новости
-   * @param news - объект с текстом и файлами новости
-   */
   onAddNews(news: { text: string; files: string[] }): Observable<void> {
     return this.addProjectNewsUseCase.execute(this.projectId()!.toString(), news).pipe(
       tap(result => {
@@ -171,10 +162,6 @@ export class ProjectsDetailService {
     );
   }
 
-  /**
-   * Удаление новости
-   * @param newsId - ID удаляемой новости
-   */
   onDeleteNews(newsId: number): void {
     this.deleteProjectNewsUseCase
       .execute(this.projectId()!.toString(), newsId)
@@ -188,10 +175,6 @@ export class ProjectsDetailService {
       });
   }
 
-  /**
-   * Переключение лайка новости
-   * @param newsId - ID новости для лайка
-   */
   onLike(newsId: number): void {
     const item = this.news().find(n => n.id === newsId);
     if (!item) return;
@@ -208,11 +191,6 @@ export class ProjectsDetailService {
       });
   }
 
-  /**
-   * Редактирование новости
-   * @param news - обновленные данные новости
-   * @param newsItemId - ID редактируемой новости
-   */
   onEditNews(news: FeedNews, newsItemId: number): Observable<void> {
     return this.editProjectNewsUseCase.execute(this.projectId()!.toString(), newsItemId, news).pipe(
       tap(result => {
@@ -226,10 +204,6 @@ export class ProjectsDetailService {
     );
   }
 
-  /**
-   * Удаление участника из проекта
-   * @param id - ID удаляемого участника
-   */
   onRemoveMember(id: Collaborator["userId"]) {
     this.removeProjectCollaboratorUseCase
       .execute(this.projectId()!, id)
@@ -243,10 +217,6 @@ export class ProjectsDetailService {
       });
   }
 
-  /**
-   * Передача лидерства другому участнику
-   * @param id - ID нового лидера
-   */
   onTransferOwnership(id: Collaborator["userId"]) {
     this.transferProjectOwnershipUseCase
       .execute(this.projectId()!, id)

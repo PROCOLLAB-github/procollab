@@ -127,14 +127,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
   protected readonly AppRoutes = AppRoutes;
 
-  /**
-   * Проверяет, есть ли ссылки для отображения
-   */
   protected readonly hasLinks = this.projectContactsService.hasLinks;
-
-  /**
-   * Проверяет, есть ли цели для отображения
-   */
   protected readonly hasGoals = this.projectGoalsUIService.hasGoals;
 
   ngOnInit(): void {}
@@ -144,32 +137,18 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     this.projectGoalService.destroy();
   }
 
-  /**
-   * Добавление ссылки
-   */
   addLink(): void {
     this.projectContactsService.addLink(this.links);
   }
 
-  /**
-   * Редактирование ссылки
-   * @param index - индекс ссылки
-   */
   editLink(index: number): void {
     this.projectContactsService.editLink(index, this.links, this.projectForm);
   }
 
-  /**
-   * Удаление ссылки
-   * @param index - индекс ссылки
-   */
   removeLink(index: number): void {
     this.projectContactsService.removeLink(index, this.links);
   }
 
-  /**
-   * Добавление цели
-   */
   addGoal(goalName?: string, goalDate?: string, goalLeader?: string): void {
     this.goals.push(
       this.fb.group({
@@ -182,38 +161,22 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     this.projectGoalService.addGoal(goalName, goalDate, goalLeader);
   }
 
-  /**
-   * Удаление цели
-   * @param index - индекс цели
-   */
   removeGoal(index: number, goalId: number): void {
     this.projectGoalService.removeGoal(index, goalId, this.projectId());
   }
 
-  /**
-   * Получить выбранного лидера для конкретной цели
-   */
   getSelectedLeaderForGoal(goalIndex: number) {
     return this.projectGoalService.getSelectedLeaderForGoal(goalIndex, this.collaborators());
   }
 
-  /**
-   * Обработчик изменения радио-кнопки для выбора лидера
-   */
   onLeaderRadioChange(event: Event): void {
     this.projectGoalsUIService.applyOnLeaderRadioChange(event);
   }
 
-  /**
-   * Добавление лидера на определенную цель
-   */
   addLeader(): void {
     this.projectGoalsUIService.applyAddLeaderToGoal(this.goals);
   }
 
-  /**
-   * Переключатель для модалки выбора лидера
-   */
   toggleGoalLeaderModal(index?: number): void {
     this.projectGoalsUIService.applyToggleGoalLeaderModal(this.goals, index);
   }

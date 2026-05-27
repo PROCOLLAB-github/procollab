@@ -3,10 +3,7 @@
 import { Result } from "@domain/shared/result.type";
 import { Invite } from "@domain/invite/invite.model";
 
-/**
- * Все возможные ошибки операций с инвайтами.
- * Расширяй по мере появления конкретных кейсов (expired, already_accepted, и т.п.).
- */
+/** Ошибки операций с инвайтами */
 export type InviteError =
   | { kind: "unknown"; cause?: unknown }
   | { kind: "get_invites_error"; cause?: unknown };

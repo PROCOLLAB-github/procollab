@@ -18,6 +18,7 @@ import { RejectInviteUseCase } from "../use-cases/reject-invite.use-case";
 import { AcceptInviteUseCase } from "../use-cases/accept-invite.use-case";
 import { GetMyInvitesUseCase } from "../use-cases/get-my-invites.use-case";
 
+/** Facade приглашений: список «моих» инвайтов + accept/reject через use-case'ы. */
 @Injectable({ providedIn: "root" })
 export class InviteInfoService {
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);

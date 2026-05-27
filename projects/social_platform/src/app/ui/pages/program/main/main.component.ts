@@ -9,40 +9,7 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
 import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
-/**
- * Главный компонент списка программ
- *
- * Отображает список всех доступных программ с функциональностью поиска.
- * Поддерживает фильтрацию программ по названию в реальном времени.
- *
- * Принимает:
- * @param {ActivatedRoute} route - Для получения данных из резолвера и query параметров
- * @param {NavService} navService - Для установки заголовка навигации
- *
- * Данные:
- * @property {Program[]} programs - Полный массив программ
- * @property {Program[]} searchedPrograms - Отфильтрованный массив программ
- * @property {number} programCount - Общее количество программ
- *
- * Поиск:
- * - Использует библиотеку Fuse.js для нечеткого поиска
- * - Поиск происходит по полю "name" программы
- * - Реагирует на изменения query параметра "search"
- * - Обновляет searchedPrograms при изменении поискового запроса
- *
- * Жизненный цикл:
- * - OnInit:
- *   - Устанавливает заголовок "Программы"
- *   - Подписывается на изменения query параметров для поиска
- *   - Загружает данные из резолвера
- * - OnDestroy: Отписывается от всех подписок
- *
- * Подписки:
- * @property {Subscription[]} subscriptions$ - Массив подписок для очистки
- *
- * Возвращает:
- * HTML шаблон со списком карточек программ и результатами поиска
- */
+/** Отображает список программ с поиском и фильтрацией. */
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",

@@ -7,21 +7,7 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedItem } from "@domain/feed/feed-item.model";
 import { FetchFeedUseCase } from "@api/feed/use-cases/fetch-feed.use-case";
 
-/**
- * резолвер ленты новостей
- *
- * Этот резолвер предназначен для предварительной загрузки данных ленты новостей
- * перед отображением компонента. Выполняется автоматически при навигации на маршрут.
- *
- * ЧТО ДЕЛАЕТ:
- * - Загружает первую страницу ленты новостей (20 элементов)
- * - Получает параметры фильтрации из URL (includes)
- * - Возвращает пагинированный список элементов ленты
- *
- * @param route - объект маршрута с параметрами запроса
- *
- * @returns Observable<ApiPagination<FeedItem>> - пагинированный список элементов ленты
- */
+/** Предзагружает ленту новостей. */
 export const FeedResolver: ResolveFn<ApiPagination<FeedItem>> = route => {
   const fetchFeedUseCase = inject(FetchFeedUseCase);
 

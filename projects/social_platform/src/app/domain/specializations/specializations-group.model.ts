@@ -2,14 +2,7 @@
 
 import type { Specialization } from "./specialization.model";
 
-/**
- * Модель группы специализаций
- * Представляет категорию специализаций с вложенным списком
- *
- * Содержит:
- * - Название группы специализаций
- * - Массив специализаций в данной группе
- */
+/** Модель группы специализаций */
 export interface SpecializationsGroup {
   id: number;
   name: string;

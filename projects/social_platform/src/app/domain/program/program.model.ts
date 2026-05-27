@@ -1,37 +1,6 @@
 /** @format */
 
-/**
- * Основная модель программы в системе
- *
- * Содержит полную информацию о программе, включая метаданные,
- * даты проведения, статистику и права пользователя.
- *
- * Свойства:
- * @param {number} id - Уникальный идентификатор программы
- * @param {string} imageAddress - URL основного изображения
- * @param {string} coverImageAddress - URL обложки программы
- * @param {string} presentationAddress - URL презентации программы
- * @param {string} advertisementImageAddress - URL рекламного изображения
- * @param {string} name - Название программы
- * @param {string} description - Полное описание программы
- * @param {string} city - Город проведения программы
- * @param {string} tag - Тег/категория программы
- * @param {number} year - Год проведения программы
- * @param {string[]} links - Массив полезных ссылок
- * @param {Array<{title: string; url: string}>} materials - Материалы программы
- * @param {string} shortDescription - Краткое описание программы
- * @param {string} datetimeRegistrationEnds - Дата окончания регистрации
- * @param {string} datetimeStarted - Дата начала программы
- * @param {string} datetimeFinished - Дата окончания программы
- * @param {number} viewsCount - Количество просмотров
- * @param {number} likesCount - Количество лайков
- * @param {boolean} isUserLiked - Лайкнул ли текущий пользователь
- * @param {boolean} isUserManager - Является ли пользователь менеджером программы
- * @param {boolean} isUserMember - Является ли пользователь участником программы
- *
- * Методы:
- * @method static default() - Возвращает объект программы с дефолтными значениями
- */
+/** Основная модель программы */
 export class Program {
   id!: number;
   imageAddress!: string;
@@ -94,15 +63,7 @@ export class Program {
   }
 }
 
-/**
- * Схема данных программы для динамических полей
- *
- * Определяет структуру дополнительных полей программы,
- * которые могут быть настроены администратором.
- *
- * @param {string} key - Ключ поля
- * @param {object} value - Объект с типом, названием и плейсхолдером поля
- */
+/** Схема данных программы для динамических полей */
 export class ProgramDataSchema {
   [key: string]: {
     type: "text";

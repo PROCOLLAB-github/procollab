@@ -18,19 +18,7 @@ import { Skill } from "@domain/skills/skill.model";
 import { SearchesService } from "@api/searches/searches.service";
 import { LoggerService } from "@corelib";
 
-/**
- * Компонент фильтров для списка участников
- *
- * Предоставляет интерфейс для фильтрации участников по следующим критериям:
- * - Ключевой навык (с автодополнением)
- * - Специальность (с автодополнением)
- * - Возрастной диапазон (слайдер)
- * - Принадлежность к МосПолитеху (чекбокс)
- *
- * Все изменения фильтров синхронизируются с URL параметрами
- *
- * @component MembersFiltersComponent
- */
+/** Фильтры для списка участников с синхронизацией через URL. */
 @Component({
   selector: "app-members-filters",
   standalone: true,
@@ -40,107 +28,49 @@ import { LoggerService } from "@corelib";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersFiltersComponent {
-  /**
-   * Форма фильтрации, передаваемая из родительского компонента
-   * Содержит поля: keySkill, speciality, age, isMosPolytechStudent
-   */
   @Input({ required: true }) filterForm!: MembersComponent["filterForm"];
 
-  /**
-   * Событие, генерируемое при изменении фильтров
-   * (В данный момент не используется, но может быть полезно для будущих расширений)
-   */
   @Output() filtersChanged = new EventEmitter();
 
-  /**
-   * Конструктор компонента
-   *
-   * @param route - Сервис для работы с активным маршрутом
-   * @param router - Сервис для навигации и управления URL параметрами
-   * @param specsService - Сервис для получения списка специальностей
-   * @param skillsService - Сервис для получения списка навыков
-   */
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly searchesService = inject(SearchesService);
   private readonly loggerService = inject(LoggerService);
 
-  /**
-   * Сигнал с опциями специальностей для автодополнения
-   * Обновляется при поиске специальностей
-   */
   protected readonly specsOptions = this.searchesService.inlineSpecs;
 
-  /**
-   * Сигнал с опциями навыков для автодополнения
-   * Обновляется при поиске навыков
-   */
   protected readonly skillsOptions = this.searchesService.inlineSkills;
 
-  /**
-   * Обработчик выбора специальности из списка автодополнения
-   *
-   * @param speciality - Выбранная специальность
-   */
   onSelectSpec(speciality: Specialization): void {
     this.filterForm.patchValue({ speciality: speciality.name });
   }
 
-  /**
-   * Очищает поле специальности
-   */
   onClearSpecField(): void {
     this.filterForm.patchValue({ speciality: "" });
   }
 
-  /**
-   * Выполняет поиск специальностей по запросу для автодополнения
-   *
-   * @param query - Поисковый запрос
-   */
   onSearchSpec(query: string): void {
     this.searchesService.onSearchSpec(query);
   }
 
-  /**
-   * Обработчик выбора навыка из списка автодополнения
-   *
-   * @param skill - Выбранный навык
-   */
   onSelectSkill(skill: Skill): void {
     this.filterForm.patchValue({ keySkill: skill.name });
   }
 
-  /**
-   * Очищает поле навыка
-   */
   onClearSkillField(): void {
     this.filterForm.patchValue({ keySkill: "" });
   }
 
-  /**
-   * Выполняет поиск навыков по запросу для автодополнения
-   *
-   * @param query - Поисковый запрос
-   */
   onSearchSkill(query: string): void {
     this.searchesService.onSearchSkill(query);
   }
 
-  /**
-   * Переключает состояние чекбокса "Студент МосПолитеха"
-   */
   onToggleStudentMosPolitech(): void {
     this.filterForm.patchValue({
       isMosPolytechStudent: !this.filterForm.get("isMosPolytechStudent")?.value,
     });
   }
 
-  /**
-   * Очищает все фильтры
-   *
-   * Удаляет все параметры фильтрации из URL и сбрасывает форму к начальному состоянию
-   */
   clearFilters(): void {
     this.router
       .navigate([], {

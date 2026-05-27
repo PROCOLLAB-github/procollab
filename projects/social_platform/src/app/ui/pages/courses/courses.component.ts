@@ -8,11 +8,7 @@ import { SearchComponent } from "@ui/primitives/search/search.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 
-/**
- * Главный компонент модуля отслеживания карьерных траекторий
- * Служит контейнером для дочерних компонентов и маршрутизации
- * Отображает навигационную панель с вкладками "Траектории" и "Моя траектория"
- */
+/** Контейнер модуля карьерных траекторий. */
 @Component({
   selector: "app-track-career",
   standalone: true,

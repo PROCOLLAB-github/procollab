@@ -13,26 +13,7 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { toObservable } from "@angular/core/rxjs-interop";
 
-/**
- * Resolver для загрузки данных о количестве проектов
- *
- * Функциональность:
- * - Загружает количество проектов пользователя в разных категориях
- * - Получает количество подписок пользователя
- * - Объединяет данные в единый объект ProjectCount
- *
- * Принимает:
- * - Не принимает параметры (использует текущего пользователя)
- *
- * Возвращает:
- * - Observable<ProjectCount> с данными:
- *   - my: количество собственных проектов
- *   - all: общее количество проектов в системе
- *   - subs: количество подписок пользователя
- *
- * Используется перед загрузкой ProjectsComponent для предварительной
- * загрузки необходимых данных.
- */
+/** Resolver: предзагружает количество проектов (my/all/subs). */
 
 export interface DashboardProjectsData {
   all: ApiPagination<Project>;

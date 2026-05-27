@@ -27,29 +27,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
-/**
- * Компонент сообщения в чате с контекстным меню и файловыми вложениями.
- * Отображает сообщение пользователя с возможностью ответа, редактирования и удаления.
- *
- * Входящие параметры:
- * - chatMessage: объект сообщения чата с текстом, автором, временем и вложениями
- *
- * События:
- * - reply: ответ на сообщение (передает ID сообщения)
- * - edit: редактирование сообщения (передает ID сообщения)
- * - delete: удаление сообщения (передает ID сообщения)
- *
- * Функциональность:
- * - Отображение аватара и информации об авторе
- * - Контекстное меню по правому клику
- * - Копирование текста сообщения в буфер обмена
- * - Отображение файловых вложений
- * - Форматирование времени отправки
- *
- * Использование:
- * - В списках сообщений чата
- * - Комментарии и обсуждения
- */
+/** Компонент сообщения чата с контекстным меню и файловыми вложениями. */
 @Component({
   selector: "app-chat-message",
   templateUrl: "./chat-message.component.html",
@@ -66,21 +44,14 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly profile = this.profileInfoSerivce.profile;
 
-  /** Объект сообщения чата */
   @Input({ required: true }) chatMessage!: ChatMessage;
 
-  /** Событие ответа на сообщение */
   @Output() reply = new EventEmitter<number>();
-
-  /** Событие редактирования сообщения */
   @Output() edit = new EventEmitter<number>();
-
-  /** Событие удаления сообщения */
   @Output() delete = new EventEmitter<number>();
 
   ngOnInit(): void {}
 
-  /** Инициализация overlay для контекстного меню */
   ngAfterViewInit(): void {
     this.overlayRef = this.overlay.create({
       hasBackdrop: false,
@@ -88,24 +59,17 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.portal = new DomPortal(this.contextMenu);
   }
 
-  /** Очистка ресурсов overlay */
   ngOnDestroy(): void {
     this.overlayRef?.detach();
   }
 
-  /** Ссылка на элемент контекстного меню */
   @ViewChild("contextMenu") contextMenu!: ElementRef<HTMLUListElement>;
 
-  /** Ссылка на overlay */
   private overlayRef?: OverlayRef;
-
-  /** Portal для контекстного меню */
   private portal?: DomPortal;
 
-  /** Состояние открытия контекстного меню */
   isOpen = false;
 
-  /** Обработчик открытия контекстного меню по правому клику */
   onOpenContextmenu(event: MouseEvent) {
     event.preventDefault();
 
@@ -131,13 +95,11 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.contextMenu.nativeElement.focus();
   }
 
-  /** Закрытие контекстного меню */
   onCloseContextmenu() {
     this.isOpen = false;
     this.overlayRef?.detach();
   }
 
-  /** Копирование содержимого сообщения в буфер обмена */
   onCopyContent(event: MouseEvent) {
     event.stopPropagation();
 
@@ -150,7 +112,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /** Обработчик удаления сообщения */
   onDelete(event: MouseEvent) {
     event.stopPropagation();
 
@@ -160,7 +121,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.overlayRef?.detach();
   }
 
-  /** Обработчик ответа на сообщение */
   onReply(event: MouseEvent) {
     event.stopPropagation();
 
@@ -170,7 +130,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.overlayRef?.detach();
   }
 
-  /** Обработчик редактирования сообщения */
   onEdit(event: MouseEvent) {
     event.stopPropagation();
 

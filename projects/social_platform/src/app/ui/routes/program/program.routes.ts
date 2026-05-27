@@ -3,18 +3,7 @@
 import { Routes } from "@angular/router";
 import { ProgramComponent } from "../../pages/program/program.component";
 import { ProgramMainComponent } from "../../pages/program/main/main.component";
-/**
- * Конфигурация маршрутов для модуля "Программы"
- *
- * Описание маршрутов:
- * - "" - корневой маршрут программ с дочерними маршрутами
- *   - "" - редирект на "/all"
- *   - "all" - список всех программ (данные загружает facade)
- * - ":programId" - детальная страница программы (ленивая загрузка)
- * - ":programId/projects-rating" - страница оценки проектов программы (ленивая загрузка)
- *
- * @returns {Routes} Массив конфигураций маршрутов для Angular Router
- */
+/** Конфигурация маршрутов для модуля "Программы". */
 export const PROGRAM_ROUTES: Routes = [
   {
     path: "",

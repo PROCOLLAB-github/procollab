@@ -22,10 +22,7 @@ import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
 import { GetVacanciesUseCase } from "../use-cases/get-vacancies.use-case";
 import { failure, isSuccess, loading, success } from "@domain/shared/async-state";
 
-/**
- * Управляет списками вакансий: тип списка из URL, фильтры в URL-параметрах,
- * поиск, пагинация и синхронизация состояния интерфейса через VacancyUIInfoService.
- */
+/** Управляет списками вакансий: тип списка, фильтры, поиск, пагинация. */
 @Injectable()
 export class VacancyInfoService {
   private readonly router = inject(Router);

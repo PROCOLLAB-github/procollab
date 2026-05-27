@@ -53,11 +53,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
     });
   }
 
-  /**
-   * Получает вакансии и маппит сырой HTTP-ответ в доменную модель `Vacancy`.
-   * Если запрос — это «первая страница проекта без фильтров», результат кешируется
-   * по projectId и переиспользуется при повторных заходах на проект.
-   */
+  /** Первая страница проекта без фильтров кешируется по projectId. */
   getForProject(
     limit: number,
     offset: number,
@@ -96,36 +92,24 @@ export class VacancyRepository implements VacancyRepositoryPort {
       : fetch$;
   }
 
-  /**
-   * Получает мои отклики и маппит их в доменную модель `VacancyResponse`.
-   */
   getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {
     return this.vacancyAdapter
       .getMyVacancies(limit, offset)
       .pipe(map(responses => plainToInstance(VacancyResponse, responses)));
   }
 
-  /**
-   * Получает одну вакансию и маппит ее в доменную модель `Vacancy`.
-   */
   getOne(vacancyId: number): Observable<Vacancy> {
     return this.entityCache.getOrFetch(vacancyId, () =>
       this.vacancyAdapter.getOne(vacancyId).pipe(map(vacancy => plainToInstance(Vacancy, vacancy)))
     );
   }
 
-  /**
-   * Создает вакансию и маппит ответ в доменную модель `Vacancy`.
-   */
   postVacancy(projectId: number, vacancy: CreateVacancyDto): Observable<Vacancy> {
     return this.vacancyAdapter
       .postVacancy(projectId, vacancy)
       .pipe(map(createdVacancy => plainToInstance(Vacancy, createdVacancy)));
   }
 
-  /**
-   * Обновляет вакансию и маппит ответ в доменную модель `Vacancy`.
-   */
   updateVacancy(
     vacancyId: number,
     vacancy: Partial<Vacancy> | CreateVacancyDto
@@ -146,9 +130,6 @@ export class VacancyRepository implements VacancyRepositoryPort {
       .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
 
-  /**
-   * Получает отклики проекта и маппит ответ в доменную модель `VacancyResponse`.
-   */
   responsesByProject(projectId: number): Observable<VacancyResponse[]> {
     return this.vacancyAdapter
       .responsesByProject(projectId)

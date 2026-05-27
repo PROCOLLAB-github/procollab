@@ -5,16 +5,7 @@ import { ChatGroupsResolver } from "@ui/pages/chat/chat-groups.resolver";
 import { ChatComponent } from "@ui/pages/chat/chat.component";
 import { ChatResolver } from "@ui/pages/chat/chat.resolver";
 
-/**
- * Маршруты для модуля чатов
- * Определяет пути для прямых чатов, групповых чатов и конкретных диалогов
- *
- * Принимает:
- * - URL пути чатов
- *
- * Возвращает:
- * - Конфигурацию маршрутов с соответствующими резолверами
- */
+/** Маршруты для модуля чатов. */
 export const CHAT_ROUTES: Routes = [
   {
     path: "",

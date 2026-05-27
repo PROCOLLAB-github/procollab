@@ -12,11 +12,7 @@ import { SendProjectAdditionalFieldsUseCase } from "../../use-cases/send-project
 import { SubmitCompetitiveProjectUseCase } from "../../use-cases/submit-competitive-project.use-case";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 
-/**
- * Сервис для управления дополнительными полями проекта в партнерской программе.
- * Предоставляет методы для инициализации формы, валидации, переключения значений,
- * подготовки к отправке и работы со статусами отправки и ошибок.
- */
+/** Сервис дополнительных полей проекта в партнерской программе. */
 @Injectable()
 export class ProjectAdditionalService {
   private additionalForm!: FormGroup;
@@ -38,25 +34,14 @@ export class ProjectAdditionalService {
     this.additionalForm = this.fb.group({});
   }
 
-  /**
-   * Возвращает форму дополнительных полей.
-   */
   public getAdditionalForm(): FormGroup {
     return this.additionalForm;
   }
 
-  /**
-   * Возвращает массив сохраненных значений полей.
-   */
   public getPartnerProgramFieldsValues(): PartnerProgramFieldsValues[] {
     return this.partnerProgramFieldsValues;
   }
 
-  /**
-   * Инициализирует форму дополнительных полей согласно конфигурации и значениям.
-   * @param fields описание полей партнерской программы
-   * @param values сохраненные значения полей
-   */
   public initializeAdditionalForm(
     fields: PartnerProgramFields[],
     values: PartnerProgramFieldsValues[] = []
@@ -83,11 +68,6 @@ export class ProjectAdditionalService {
     this.additionalForm.updateValueAndValidity();
   }
 
-  /**
-   * Переключает значение для checkbox и radio полей.
-   * @param fieldType тип поля (checkbox | radio и др.)
-   * @param fieldName имя контрола в форме
-   */
   public toggleAdditionalFormValues(
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
     fieldName: string
@@ -100,10 +80,6 @@ export class ProjectAdditionalService {
     }
   }
 
-  /**
-   * Проверяет обязательные поля на валидность и помечает их как touched.
-   * @returns true если есть невалидные обязательные поля
-   */
   public validateRequiredFields(): boolean {
     this.additionalForm.updateValueAndValidity();
     this.partnerProgramFields()
@@ -115,9 +91,6 @@ export class ProjectAdditionalService {
       .some(f => this.additionalForm.get(f.name)?.invalid);
   }
 
-  /**
-   * Убирает валидаторы с заполненных обязательных полей перед отправкой.
-   */
   public prepareFieldsForSubmit(): void {
     this.partnerProgramFields()
       .filter(f => f.isRequired)
@@ -130,11 +103,6 @@ export class ProjectAdditionalService {
       });
   }
 
-  /**
-   * Отправляет значения дополнительных полей на сервер.
-   * @param projectId идентификатор проекта
-   * @returns Observable<any> результат запроса
-   */
   public sendAdditionalFieldsValues(projectId: number): Observable<any> {
     this.isSend$.set(loading());
     const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
@@ -149,45 +117,24 @@ export class ProjectAdditionalService {
     return this.sendProjectAdditionalFieldsUseCase.execute(projectId, newFieldsFormValues);
   }
 
-  /**
-   * Сабмитит проект привязанный к конкурсной программе
-   * @param relationId идентификатор связи
-   * @returns Observable<any> результат запроса
-   */
   public submitCompettetiveProject(relationId: number): Observable<any> {
     return this.submitCompetitiveProjectUseCase.execute(relationId);
   }
 
-  /**
-   * Сбрасывает флаг процесса отправки.
-   */
   public resetSendingState(): void {
     this.isSend$.set(initial());
   }
 
-  /**
-   * Устанавливает сообщение и флаг ошибки при привязке проекта.
-   * @param error объект с массивом полей non_field_errors
-   */
   public setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.errorAssignProjectToProgramModalMessage.set(error);
     this.isSend$.set(failure("assign_error"));
   }
 
-  /**
-   * Сбрасывает сообщение и флаг ошибки при привязке проекта.
-   */
   public clearAssignProjectToProgramError(): void {
     this.errorAssignProjectToProgramModalMessage.set(null);
     this.isSend$.set(initial());
   }
 
-  /**
-   * Вычисляет начальное значение контрола по сохраненным данным или типу поля.
-   * @param field описание поля
-   * @param values массив сохраненных значений
-   * @returns первоначальное значение контрола
-   */
   private getInitialValue(field: PartnerProgramFields, values: PartnerProgramFieldsValues[]): any {
     const saved = values.find(v => v.fieldName === field.name);
     if (!saved) {
@@ -201,10 +148,6 @@ export class ProjectAdditionalService {
     return saved.value;
   }
 
-  /**
-   * Добавляет валидаторы по типу текстового поля.
-   * @param field описание поля для обработки валидаторов
-   */
   private addFieldTypeValidators(field: PartnerProgramFields): void {
     const control = this.additionalForm.get(field.name);
     if (!control) return;

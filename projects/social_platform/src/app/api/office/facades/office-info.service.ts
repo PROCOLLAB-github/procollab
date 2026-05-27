@@ -20,10 +20,7 @@ import { loggedOut } from "@domain/auth/events/logged-out.event";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { toObservable } from "@angular/core/rxjs-interop";
 
-/**
- * Стартовый сервис офисной оболочки: прогревает справочники, собирает навигацию,
- * подключает чатовые статусы и обрабатывает приглашения пользователя.
- */
+/** Стартовый сервис офисной оболочки: справочники, навигация, чат-статусы, приглашения. */
 @Injectable()
 export class OfficeInfoService {
   private readonly router = inject(Router);

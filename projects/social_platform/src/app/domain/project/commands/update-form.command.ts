@@ -1,8 +1,9 @@
 /** @format */
 
-import { ProjectDto } from "@infrastructure/adapters/project/dto/project.dto";
+import { Project } from "@domain/project/project.model";
 
+/** Команда: что обновить у проекта с указанным id. */
 export interface UpdateFormCommand {
   id: number;
-  data: Partial<ProjectDto>;
+  data: Partial<Project>;
 }

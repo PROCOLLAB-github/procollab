@@ -11,7 +11,7 @@ import {
 import { ProjectStepService } from "@api/project/project-step.service";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
-import { Navigation } from "@domain/other/navigation.model";
+import { Navigation } from "@core/lib/models/navigation.model";
 import { EditStep } from "@core/lib/models/edit-step";
 
 /** Навигация по шагам формы проекта. */

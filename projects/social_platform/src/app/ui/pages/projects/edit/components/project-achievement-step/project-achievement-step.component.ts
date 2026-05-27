@@ -56,9 +56,7 @@ export class ProjectAchievementStepComponent implements OnInit {
 
   protected readonly editIndex = this.projectFormService.editIndex;
 
-  /**
-   * Проверяет, есть ли достижения для отображения
-   */
+  /** Проверяет, есть ли достижения для отображения. */
   protected readonly hasAchievements = this.projectAchievementService.hasAchievements;
 
   protected readonly errorMessage = ErrorMessage;
@@ -67,9 +65,6 @@ export class ProjectAchievementStepComponent implements OnInit {
     this.projectAchievementService.syncAchievementsItems(this.achievements);
   }
 
-  /**
-   * Добавление достижения
-   */
   addAchievement(id?: number, achievementsName?: string, achievementsDate?: string): void {
     const currentYear = new Date().getFullYear();
     this.achievements.push(
@@ -91,19 +86,11 @@ export class ProjectAchievementStepComponent implements OnInit {
     this.projectAchievementService.addAchievement(this.achievements);
   }
 
-  /**
-   * Редактирование достижения
-   * @param index - индекс достижения
-   */
   editAchievement(index: number): void {
     this.toggleFieldsInfoService.showFields();
     this.projectAchievementService.editAchievement(index, this.achievements);
   }
 
-  /**
-   * Удаление достижения
-   * @param index - индекс достижения
-   */
   removeAchievement(index: number): void {
     this.projectAchievementService.removeAchievement(index, this.achievements);
   }

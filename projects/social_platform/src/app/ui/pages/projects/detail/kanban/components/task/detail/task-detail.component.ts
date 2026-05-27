@@ -59,7 +59,7 @@ import { PerformerDto } from "@domain/kanban/dto/performer.model.dto";
 import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
 import { Skill } from "@domain/skills/skill.model";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
-import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
+import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 
 /** Канбан (модуль отключён): детальная карточка задачи. */
 @Component({
@@ -100,7 +100,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Ссылка на viewport для автопрокрутки */
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
-  private readonly skillsRepository = inject(SkillsInfoService);
+  private readonly skillsRepository = inject(SkillsRepositoryPort);
   private readonly kanbanBoardService = inject(KanbanBoardService);
   private readonly kanbanBoardDetailInfoService = inject(KanbanBoardDetailInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
@@ -336,9 +336,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateDescriptionState();
   }
 
-  /**
-   * Проверка возможности расширения описания после инициализации представления
-   */
   ngAfterViewInit(): void {
     const todayDate = new Date();
 
@@ -556,18 +553,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => this.checkDescriptionHeigth(), 0);
   }
 
-  /**
-   * Раскрытие/сворачивание описания профиля
-   * @param elem - DOM элемент описания
-   * @param expandedClass - CSS класс для раскрытого состояния
-   * @param isExpanded - текущее состояние (раскрыто/свернуто)
-   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
 
-  /** Обработчик загрузки файла */
   onUpdate(event: Event): void {
     const input = event.currentTarget as HTMLInputElement;
     const file = input.files?.[0];
@@ -594,10 +584,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Обработчик загрузки файлов через input
-   * @param evt - событие выбора файлов
-   */
   onUpload(evt: Event) {
     const files = (evt.currentTarget as HTMLInputElement).files;
 
@@ -608,13 +594,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.addFiles(files);
   }
 
-  /**
-   * Добавление файлов для загрузки
-   * Создает записи в массиве attachFiles и запускает загрузку на сервер
-   * @param files - список файлов для загрузки
-   */
   private addFiles(files: FileList): void {
-    // Создание записей для каждого файла
     for (let i = 0; i < files.length; i++) {
       this.attachFiles.push({
         name: files[i].name,
@@ -624,7 +604,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    // Загрузка каждого файла на сервер
     for (let i = 0; i < files.length; i++) {
       this.fileService
         .uploadFile(files[i])
@@ -645,10 +624,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Переключение навыка в списке выбранных
-   * @param toggledSkill - навык для переключения
-   */
   onToggleSkill(toggledSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.taskDetailForm.value;
     const isPresent = skills.some(skill => skill.id === toggledSkill.id);
@@ -671,24 +646,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.openGroupIndex !== null && this.openGroupIndex !== skillsGroupId;
   }
 
-  /**
-   * Переключение модального окна групп навыков
-   */
   toggleSkillsGroupsModal(): void {
     this.skillsGroupsModalOpen.update(open => !open);
   }
 
-  /**
-   * Обработчик отправки формы
-   * Валидирует форму и отправляет результат на сервер
-   */
   onSubmit(): void {
-    // Проверка валидности формы
     if (!this.validationService.getFormValidation(this.sendResultForm)) {
       return;
     }
 
-    // Установка флага загрузки
     this.sendFormIsSubmitting = true;
 
     // TODO: Отправка отклика на сервер
@@ -698,9 +664,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showResultModal = false;
   }
 
-  /**
-   * Отправка сообщения
-   */
   onSubmitMessage(): void {
     const text = this.messageForm.get("text")?.value?.trim();
 
@@ -736,16 +699,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Установка сообщения для ответа (заготовка)
-   */
   onReplyMessage(messageId: number): void {
     this.replyMessage = this.messages().find(message => message.id === messageId);
   }
 
-  /**
-   * Отмена ответа
-   */
   onCancelReply(): void {
     this.replyMessage = undefined;
   }
@@ -760,10 +717,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Добавление навыка
-   * @param newSkill - новый навык
-   */
   private onAddSkill(newSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.taskDetailForm.value;
     const isPresent = skills.some(skill => skill.id === newSkill.id);
@@ -774,9 +727,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdRef.markForCheck();
   }
 
-  /**
-   * Прокрутка к низу списка сообщений
-   */
   private scrollToBottom(): void {
     setTimeout(() => {
       this.viewport?.scrollTo({ bottom: 0 });
@@ -787,10 +737,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Удаление навыка
-   * @param oddSkill - навык для удаления
-   */
   private onRemoveSkill(oddSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.taskDetailForm.value;
 

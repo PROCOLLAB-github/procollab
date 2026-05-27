@@ -202,9 +202,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.tooltipInfoService.toggleTooltip("base");
   }
 
-  /**
-   * Обработчик изменения радио-кнопки для выбора проекта
-   */
   onProjectRadioChange(event: Event): void {
     this.detailProfileInfoService.onProjectRadioChange(event);
   }
@@ -213,38 +210,22 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProgramInfoService.addNewProject(programId);
   }
 
-  /**
-   * Закрытие модального окна выхода из проекта
-   */
   onCloseLeaveProjectModal(): void {
     this.detailProjectInfoService.onCloseLeaveProjectModal();
   }
 
-  /**
-   * Закрытие модального окна для невозможности редактировать проект
-   */
   onUnableEditingProject(): void {
     this.detailProjectInfoService.onUnableEditingProject();
   }
 
-  /**
-   * Выход из проекта
-   */
   onLeave() {
     this.detailProjectInfoService.onLeave();
   }
 
-  /**
-   * Копирование ссылки на профиль в буфер обмена
-   */
   onCopyLink(profileId: number): void {
     this.detailProfileInfoService.onCopyLink(profileId);
   }
 
-  /**
-   * Открытие модального окна с информацией о подтверждениях навыка
-   * @param skillId - идентификатор навыка
-   */
   onOpenSkill(skillId: number) {
     this.openSkills[skillId] = !this.openSkills[skillId];
   }
@@ -253,18 +234,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.openSkills[skillId] = false;
   }
 
-  /**
-   * Отправка CV пользователя на email
-   * Проверяет ограничения по времени и отправляет CV на почту пользователя
-   */
   downloadCV() {
     this.detailProfileInfoService.downloadCV();
   }
 
-  /**
-   * Открывает модалку для отправки приглашения пользователю
-   * Проверяет какие отрендерить проекты где profile.id === leader
-   */
   inviteUser(): void {
     this.detailProfileInfoService.inviteUser();
   }
@@ -273,9 +246,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProfileInfoService.sendInvite();
   }
 
-  /**
-   * Перенаправляет на страницу с информацией в завивисимости от listType
-   */
   redirectDetailInfo(): void {
     this.detailInfoService.redirectDetailInfo();
   }
@@ -284,9 +254,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProjectInfoService.routingToMyProjects();
   }
 
-  /**
-   * Проверка завершения программы перед регистрацией
-   */
   checkPrograRegistrationEnded(event: Event, program: Program): void {
     this.detailProgramInfoService.checkPrograRegistrationEnded(event, program);
   }

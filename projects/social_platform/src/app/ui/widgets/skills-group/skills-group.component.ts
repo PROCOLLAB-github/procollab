@@ -11,28 +11,7 @@ import {
 import { IconComponent } from "@ui/primitives";
 import { Skill } from "@domain/skills/skill.model";
 
-/**
- * Компонент группы навыков с возможностью множественного выбора
- *
- * Функциональность:
- * - Отображает заголовок группы навыков
- * - Показывает/скрывает список навыков при клике на заголовок
- * - Поддерживает множественный выбор навыков с чекбоксами
- * - Синхронизирует состояние выбранных навыков с внешним состоянием
- * - Использует Angular Signals для реактивности
- * - Использует OnPush стратегию для оптимизации производительности
- * - Поддерживает disabled состояние когда открыты другие группы
- *
- * Входные параметры:
- * @Input options - массив доступных навыков (обязательный)
- * @Input selected - массив выбранных навыков (обязательный)
- * @Input title - заголовок группы навыков (обязательный)
- * @Input disabled - флаг отключения взаимодействия с группой
- *
- * Выходные события:
- * @Output optionToggled - событие переключения навыка, передает навык который был включен/выключен
- * @Output groupToggled - событие переключения видимости группы
- */
+/** Компонент группы навыков с множественным выбором через чекбоксы и сворачиванием. */
 @Component({
   selector: "app-skills-group",
   standalone: true,
@@ -42,10 +21,6 @@ import { Skill } from "@domain/skills/skill.model";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkillsGroupComponent {
-  /**
-   * Сеттер для опций навыков
-   * Обновляет внутренний сигнал с массивом навыков
-   */
   @Input({ required: true }) set options(value: Skill[]) {
     this._options.set(value);
   }
@@ -54,10 +29,6 @@ export class SkillsGroupComponent {
     return this._options();
   }
 
-  /**
-   * Сеттер для выбранных навыков
-   * Обновляет состояние выбора для каждого навыка в списке опций
-   */
   @Input({ required: true }) set selected(value: Skill[]) {
     this._selected.set(value);
 
@@ -82,10 +53,6 @@ export class SkillsGroupComponent {
   _selected = signal<Skill[]>([]);
   contentVisible = signal(false);
 
-  /**
-   * Переключение видимости содержимого группы
-   * Теперь учитывает disabled состояние
-   */
   toggleContentVisible() {
     if (this.disabled) {
       return;
@@ -95,10 +62,6 @@ export class SkillsGroupComponent {
     this.groupToggled.emit(this.contentVisible());
   }
 
-  /**
-   * Обработка клика по опции навыка
-   * Теперь учитывает disabled состояние
-   */
   onOptionClick(opt: Skill) {
     if (this.disabled) {
       return;

@@ -4,27 +4,16 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ProjectFormService } from "./project-form.service";
 
-/**
- * Сервис для управления достижениями проекта.
- * Предоставляет методы для добавления, редактирования, удаления достижений,
- * а также очистки ошибок валидации.
- */
+/** Сервис для управления достижениями проекта. */
 @Injectable({
   providedIn: "root",
 })
 export class ProjectAchievementsService {
-  /** FormBuilder для создания FormGroup элементов */
   private readonly fb = inject(FormBuilder);
-  /** Сервис для управления индексом редактируемого достижения */
   private readonly projectFormService = inject(ProjectFormService);
-  /** Сигнал для хранения списка достижений (массив объектов) */
   public readonly achievementsItems = signal<any[]>([]);
   private initialized = false;
 
-  /**
-   * Инициализирует сигнал achievementsItems из данных FormArray
-   * Вызывается при первом обращении к данным
-   */
   private initializeAchievementsItems(achievementsFormArray: FormArray): void {
     if (this.initialized) return;
 
@@ -35,10 +24,6 @@ export class ProjectAchievementsService {
     this.initialized = true;
   }
 
-  /**
-   * Принудительно синхронизирует сигнал с FormArray
-   * Полезно вызывать после загрузки данных с сервера
-   */
   public syncAchievementsItems(achievementsFormArray: FormArray): void {
     if (achievementsFormArray) {
       this.achievementsItems.set(achievementsFormArray.value);
@@ -53,10 +38,6 @@ export class ProjectAchievementsService {
 
   private readonly projectForm = this.projectFormService.getForm();
 
-  /**
-   * Добавляет новое достижение или сохраняет изменения существующего.
-   * @param achievementsFormArray FormArray, содержащий формы достижений
-   */
   public addAchievement(achievementsFormArray: FormArray): void {
     // Инициализируем сигнал при первом вызове
     this.initializeAchievementsItems(achievementsFormArray);
@@ -103,11 +84,6 @@ export class ProjectAchievementsService {
     this.projectForm.get("status")?.setValue("");
   }
 
-  /**
-   * Инициализирует редактирование существующего достижения.
-   * @param index индекс достижения в списке
-   * @param achievementsFormArray FormArray достижений
-   */
   public editAchievement(index: number, achievementsFormArray: FormArray): void {
     // Инициализируем сигнал при необходимости
     this.initializeAchievementsItems(achievementsFormArray);
@@ -124,21 +100,12 @@ export class ProjectAchievementsService {
     this.projectFormService.editIndex.set(index);
   }
 
-  /**
-   * Удаляет достижение по указанному индексу.
-   * @param index индекс удаляемого достижения
-   * @param achievementsFormArray FormArray достижений
-   */
   public removeAchievement(index: number, achievementsFormArray: FormArray): void {
     // Удаляем из сигнала и из FormArray
     this.achievementsItems.update(items => items.filter((_, i) => i !== index));
     achievementsFormArray.removeAt(index);
   }
 
-  /**
-   * Сбрасывает все ошибки валидации во всех контролах FormArray достижений.
-   * @param achievements FormArray достижений
-   */
   public clearAllAchievementsErrors(achievements: FormArray): void {
     achievements.controls.forEach(control => {
       if (control instanceof FormGroup) {
@@ -149,10 +116,6 @@ export class ProjectAchievementsService {
     });
   }
 
-  /**
-   * Сбрасывает состояние сервиса
-   * Полезно при смене проекта или очистке формы
-   */
   public reset(): void {
     this.achievementsItems.set([]);
     this.initialized = false;

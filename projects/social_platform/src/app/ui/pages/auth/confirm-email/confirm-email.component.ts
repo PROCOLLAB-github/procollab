@@ -4,19 +4,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { AuthEmailService } from "@api/auth/facades/auth-email.service";
 
-/**
- * Компонент подтверждения email адреса
- *
- * Назначение: Обрабатывает подтверждение email через ссылку из письма
- * Принимает: Access и refresh токены из query параметров URL
- * Возвращает: Перенаправление в офис при успешном подтверждении
- *
- * Функциональность:
- * - Получает токены из query параметров URL
- * - Сохраняет токены в TokenService
- * - Перенаправляет пользователя в офис при успешной аутентификации
- * - Автоматически выполняется при переходе по ссылке из письма
- */
+/** Обрабатывает подтверждение email через токены из URL. */
 @Component({
   selector: "app-confirm-email",
   templateUrl: "./confirm-email.component.html",

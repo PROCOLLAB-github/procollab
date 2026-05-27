@@ -60,10 +60,6 @@ export class ProfileEditExperienceInfoService {
     this.selectedComplitionYearWorkId.set(undefined);
   }
 
-  /**
-   * Добавление записи об опыте работы
-   * Валидирует форму и добавляет новую запись в массив опыта работы
-   */
   addWork() {
     if (!this.showWorkFields()) {
       this.showWorkFields.set(true);

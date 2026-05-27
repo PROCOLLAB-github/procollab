@@ -5,21 +5,7 @@ import { ErrorCodeComponent } from "@ui/pages/error/error-code/error-code.compon
 import { ErrorComponent } from "@ui/pages/error/error.component";
 import { ErrorNotFoundComponent } from "@ui/pages/error/not-found/error-not-found.component";
 
-/**
- * Конфигурация маршрутов для модуля ошибок
- *
- * Назначение:
- * - Определяет структуру маршрутов для обработки различных типов ошибок
- * - Настраивает вложенные маршруты с ErrorComponent как родительским
- *
- * Маршруты:
- * - "" (root): ErrorComponent - главный контейнер
- *   - "404": ErrorNotFoundComponent - страница "не найдено"
- *   - ":code": ErrorCodeComponent - страница с динамическим кодом ошибки
- *
- * Принимает: Нет параметров (экспортируемая константа)
- * Возвращает: Routes[] - массив конфигурации маршрутов для Angular Router
- */
+/** Конфигурация маршрутов для модуля ошибок. */
 export const ERROR_ROUTES: Routes = [
   {
     path: "",

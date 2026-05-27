@@ -98,12 +98,6 @@ export class ApproveskillInfoService {
       });
   }
 
-  /**
-   * Подтверждение или отмена подтверждения навыка пользователя
-   * @param skillId - идентификатор навыка
-   * @param event - событие клика для предотвращения всплытия
-   * @param skill - объект навыка для обновления
-   */
   onToggleApprove(skillId: number, event: Event, skill: Skill) {
     event.stopPropagation();
     const userId = this.route.snapshot.params["id"];

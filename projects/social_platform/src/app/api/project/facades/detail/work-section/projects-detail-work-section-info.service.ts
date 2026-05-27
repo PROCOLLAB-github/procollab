@@ -42,10 +42,6 @@ export class ProjectsDetailWorkSectionInfoService {
     this.destroy$.complete();
   }
 
-  /**
-   * Принятие отклика на вакансию
-   * @param responseId - ID отклика для принятия
-   */
   acceptResponse(responseId: number) {
     this.acceptResponseUseCase
       .execute(responseId)
@@ -57,10 +53,6 @@ export class ProjectsDetailWorkSectionInfoService {
       });
   }
 
-  /**
-   * Отклонение отклика на вакансию
-   * @param responseId - ID отклика для отклонения
-   */
   rejectResponse(responseId: number) {
     this.rejectResponseUseCase
       .execute(responseId)

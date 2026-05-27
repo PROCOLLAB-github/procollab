@@ -7,10 +7,7 @@ import { User } from "@domain/auth/user.model";
 /** Состояние интерфейса детальной страницы профиля и карточек направлений пользователя. */
 @Injectable()
 export class ProfileDetailUIInfoService {
-  /**
-   * Просматриваемый профиль (тот, чью страницу мы открыли) — это НЕ logged-in user.
-   * Заполняется в applyInitProfile из data резолвера.
-   */
+  /** Просматриваемый профиль (НЕ logged-in user), заполняется из резолвера. */
   readonly user = signal<User | undefined>(undefined);
   readonly loggedUserId = signal<number>(0);
   readonly profileId = signal<number>(0); // ID текущего пользователя.

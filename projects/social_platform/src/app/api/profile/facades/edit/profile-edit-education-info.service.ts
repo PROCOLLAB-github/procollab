@@ -67,10 +67,6 @@ export class ProfileEditEducationInfoService {
     this.selectedEducationLevelId.set(undefined);
   }
 
-  /**
-   * Добавление записи об образовании
-   * Валидирует форму и добавляет новую запись в массив образования
-   */
   addEducation() {
     if (!this.showEducationFields()) {
       this.showEducationFields.set(true);
@@ -158,10 +154,6 @@ export class ProfileEditEducationInfoService {
     this.editEducationClick.set(false);
   }
 
-  /**
-   * Редактирование записи об образовании
-   * @param index - индекс записи в массиве образования
-   */
   editEducation(index: number) {
     this.editEducationClick.set(true);
     this.showEducationFields.set(true);
@@ -206,10 +198,6 @@ export class ProfileEditEducationInfoService {
     this.editIndex.set(index);
   }
 
-  /**
-   * Удаление записи об образовании
-   * @param i - индекс записи для удаления
-   */
   removeEducation(i: number) {
     this.educationItems.update(items => items.filter((_, index) => index !== i));
 

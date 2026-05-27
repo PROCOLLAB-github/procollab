@@ -15,10 +15,6 @@ export class VacancyHttpAdapter {
   private readonly PROJECTS_URL = "/projects";
   private readonly apiService = inject(ApiService);
 
-  /**
-   * Получает список вакансий с фильтрацией и поиском.
-   * Возвращает сырой HTTP-ответ без доменного маппинга.
-   */
   getForProject(
     limit: number,
     offset: number,
@@ -41,27 +37,15 @@ export class VacancyHttpAdapter {
     return this.apiService.get<Vacancy[]>(`${this.VACANCIES_URL}/`, params);
   }
 
-  /**
-   * Получает список откликов текущего пользователя.
-   * Возвращает сырой HTTP-ответ без доменного маппинга.
-   */
   getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {
     const params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
     return this.apiService.get<VacancyResponse[]>(`${this.VACANCIES_URL}/responses/self/`, params);
   }
 
-  /**
-   * Получает вакансию по идентификатору.
-   * Возвращает сырой HTTP-ответ без доменного маппинга.
-   */
   getOne(vacancyId: number): Observable<Vacancy> {
     return this.apiService.get<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}/`);
   }
 
-  /**
-   * Создает вакансию для проекта.
-   * Возвращает сырой HTTP-ответ без доменного маппинга.
-   */
   postVacancy(projectId: number, vacancy: CreateVacancyDto): Observable<Vacancy> {
     return this.apiService.post<Vacancy>(`${this.VACANCIES_URL}/`, {
       ...vacancy,
@@ -69,10 +53,6 @@ export class VacancyHttpAdapter {
     });
   }
 
-  /**
-   * Обновляет вакансию.
-   * Возвращает сырой HTTP-ответ без доменного маппинга.
-   */
   updateVacancy(
     vacancyId: number,
     vacancy: Partial<Vacancy> | CreateVacancyDto
@@ -80,16 +60,10 @@ export class VacancyHttpAdapter {
     return this.apiService.patch<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}/`, { ...vacancy });
   }
 
-  /**
-   * Удаляет вакансию.
-   */
   deleteVacancy(vacancyId: number): Observable<void> {
     return this.apiService.delete(`${this.VACANCIES_URL}/${vacancyId}/`);
   }
 
-  /**
-   * Отправляет отклик на вакансию и возвращает данные созданного отклика.
-   */
   sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/${vacancyId}/responses/`,
@@ -97,17 +71,10 @@ export class VacancyHttpAdapter {
     );
   }
 
-  /**
-   * Получает отклики по проекту.
-   * Возвращает сырой HTTP-ответ без доменного маппинга.
-   */
   responsesByProject(projectId: number): Observable<VacancyResponse[]> {
     return this.apiService.get<VacancyResponse[]>(`${this.PROJECTS_URL}/${projectId}/responses/`);
   }
 
-  /**
-   * Принимает отклик и возвращает обновленные данные отклика.
-   */
   acceptResponse(responseId: number): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/responses/${responseId}/accept/`,
@@ -115,9 +82,6 @@ export class VacancyHttpAdapter {
     );
   }
 
-  /**
-   * Отклоняет отклик и возвращает обновленные данные отклика.
-   */
   rejectResponse(responseId: number): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/responses/${responseId}/decline/`,

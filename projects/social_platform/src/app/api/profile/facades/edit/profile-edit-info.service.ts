@@ -79,10 +79,6 @@ export class ProfileEditInfoService {
     return this.openGroupIndex() !== null && this.openGroupIndex() !== index;
   }
 
-  /**
-   * Сохранение профиля пользователя
-   * Валидирует всю форму и отправляет данные на сервер
-   */
   saveProfile(): void {
     this.profileForm.markAllAsTouched();
     this.profileForm.updateValueAndValidity();
@@ -223,9 +219,6 @@ export class ProfileEditInfoService {
       });
   }
 
-  /**
-   * Достаёт человекочитаемый текст ошибки из тела ответа бэка.
-   */
   private resolveSaveErrorText(cause?: { error?: any }): string {
     const body = cause?.error;
     if (!body) return "Ошибка при сохранении профиля";

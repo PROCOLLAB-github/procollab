@@ -26,6 +26,7 @@ const PROGRAM_ACTUAL_CACHE_KEY = "programs:actual";
 const CACHE_VERSION = 1;
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 
+/** Facade shell-страницы программ: список программ, актуальные, статус участия (с 24h TTL-кешем). */
 @Injectable({
   providedIn: "root",
 })

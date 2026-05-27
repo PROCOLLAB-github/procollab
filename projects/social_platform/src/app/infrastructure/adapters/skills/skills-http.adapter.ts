@@ -22,13 +22,6 @@ export class SkillsHttpAdapter {
     return this.apiService.get(`${this.CORE_SKILLS_URL}/nested/`);
   }
 
-  /**
-   * Получает навыки в виде плоского списка с поиском и пагинацией.
-   *
-   * @param search строка поиска
-   * @param limit максимальное количество результатов
-   * @param offset смещение
-   */
   getSkillsInline(search: string, limit: number, offset: number): Observable<ApiPagination<Skill>> {
     return this.apiService.get(
       `${this.CORE_SKILLS_URL}/inline/`,

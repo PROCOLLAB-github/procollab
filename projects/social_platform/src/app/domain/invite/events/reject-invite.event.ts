@@ -2,10 +2,7 @@
 
 import { DomainEvent } from "../../shared/domain-event";
 
-/**
- * Событие отклонения приглашения в проект
- * Излучается когда пользователь отклоняет приглашение присоединиться к проекту
- */
+/** Событие отклонения приглашения в проект */
 export interface RejectInvite extends DomainEvent {
   readonly type: "RejectInvite";
   readonly payload: {

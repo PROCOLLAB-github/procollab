@@ -3,12 +3,9 @@
 import { DomainEvent } from "../../shared/domain-event";
 
 /**
- * Событие отзыва приглашения в проект
- * Излучается когда инициатор отзывает отправленное приглашение.
- *
- * Payload — минимальный: бэк на revoke возвращает 204, информация о projectId/userId
- * на момент эмита недоступна. Слушатели, которым нужны эти данные, должны
- * резолвить их сами по `inviteId` через свой кеш.
+ * Событие отзыва приглашения.
+ * Payload минимальный — бэк возвращает 204, projectId/userId на момент эмита недоступны.
+ * Слушатели резолвят их по `inviteId` через свой кеш.
  */
 export interface RevokeInvite extends DomainEvent {
   readonly type: "RevokeInvite";

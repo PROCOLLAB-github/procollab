@@ -5,10 +5,7 @@ import { Vacancy } from "../vacancy.model";
 import { VacancyResponse } from "../vacancy-response.model";
 import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
 
-/**
- * Порт репозитория вакансий.
- * Реализуется в infrastructure/repository/vacancy/vacancy.repository.ts
- */
+/** Порт репозитория вакансий */
 export abstract class VacancyRepositoryPort {
   abstract getForProject(
     limit: number,

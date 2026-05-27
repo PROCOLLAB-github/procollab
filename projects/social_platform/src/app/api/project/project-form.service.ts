@@ -13,10 +13,7 @@ import { PartnerProgramFields } from "@domain/program/partner-program-fields.mod
 import { stripNullish } from "@utils/stripNull";
 import { Project } from "@domain/project/project.model";
 import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
-/**
- * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
- * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
- */
+/** Управляет основной формой проекта и формой дополнительных полей партнерской программы. */
 @Injectable({ providedIn: "root" })
 export class ProjectFormService {
   private projectForm!: FormGroup;
@@ -53,10 +50,6 @@ export class ProjectFormService {
     draft: [null],
   }));
 
-  /**
-   * Создает и настраивает основную форму проекта с набором контролов и валидаторов.
-   * Подписывается на изменения полей 'presentationAddress' и 'coverImageAddress' для автосохранения при очищении.
-   */
   private initializeForm(): void {
     this.projectForm = this.fb.group({
       imageAddress: [""],
@@ -82,10 +75,6 @@ export class ProjectFormService {
     });
   }
 
-  /**
-   * Заполняет основную форму данными существующего проекта.
-   * @param project экземпляр Project с текущими данными
-   */
   public initializeProjectData(project: Project): void {
     // Заполняем простые поля
     this.projectForm.patchValue({
@@ -112,10 +101,6 @@ export class ProjectFormService {
     this.populateAchievementsFormArray(project.achievements || []);
   }
 
-  /**
-   * Заполняет FormArray ссылок данными из проекта
-   * @param links массив ссылок из проекта
-   */
   private populateLinksFormArray(links: string[]): void {
     const linksFormArray = this.projectForm.get("links") as FormArray;
 
@@ -128,10 +113,6 @@ export class ProjectFormService {
     });
   }
 
-  /**
-   * Заполняет FormArray достижений данными из проекта
-   * @param achievements массив достижений из проекта
-   */
   private populateAchievementsFormArray(achievements: any[]): void {
     const achievementsFormArray = this.projectForm.get("achievements") as FormArray;
     const currentYear = new Date().getFullYear();
@@ -158,34 +139,18 @@ export class ProjectFormService {
     });
   }
 
-  /**
-   * Возвращает основную форму проекта.
-   * @returns FormGroup экземпляр формы проекта
-   */
   public getForm(): FormGroup {
     return this.projectForm;
   }
 
-  /**
-   * Патчит частичные значения в основную форму.
-   * @param values объект с частичными значениями Project
-   */
   public patchFormValues(values: Partial<Project>): void {
     this.projectForm.patchValue(values);
   }
 
-  /**
-   * Проверяет валидность основной формы проекта.
-   * @returns true если все контролы валидны
-   */
   public validateForm(): boolean {
     return this.projectForm.valid;
   }
 
-  /**
-   * Получает текущее значение формы без null или undefined.
-   * @returns объект значений формы без nullish
-   */
   public getFormValue(): any {
     const value = stripNullish(this.projectForm.value);
 
@@ -265,9 +230,6 @@ export class ProjectFormService {
     return this.projectForm.get("links") as FormArray;
   }
 
-  /**
-   * Очищает все ошибки валидации в основной форме и в массиве достижений.
-   */
   public clearAllValidationErrors(): void {
     Object.keys(this.projectForm.controls).forEach(ctrl => {
       this.projectForm.get(ctrl)?.setErrors(null);
@@ -275,10 +237,6 @@ export class ProjectFormService {
     this.clearAchievementsErrors(this.achievements);
   }
 
-  /**
-   * Инициализирует форму дополнительных полей программы партнерства.
-   * @param partnerProgramFields массив метаданных полей
-   */
   public initializeAdditionalForm(partnerProgramFields: PartnerProgramFields[]): void {
     this.additionalForm = this.fb.group({});
     partnerProgramFields.forEach(field => {
@@ -293,42 +251,24 @@ export class ProjectFormService {
     this.additionalForm.updateValueAndValidity();
   }
 
-  /**
-   * Возвращает форму дополнительных полей.
-   * @returns FormGroup экземпляр дополнительной формы
-   */
   public getAdditionalForm(): FormGroup {
     return this.additionalForm;
   }
 
-  /**
-   * Проверяет валидность дополнительной формы.
-   * @returns true если форма инициализирована и валидна
-   */
   public validateAdditionalForm(): boolean {
     return this.additionalForm?.valid ?? true;
   }
 
-  /**
-   * Возвращает очищенные значения дополнительной формы.
-   * @returns объект значений без nullish
-   */
   public getAdditionalFormValue(): any {
     return this.additionalForm ? stripNullish(this.additionalForm.value) : {};
   }
 
-  /**
-   * Сбрасывает основную и дополнительную формы в первоначальное состояние.
-   */
   public resetForms(): void {
     this.projectForm.reset();
     this.additionalForm?.reset();
     this.clearFormArrays();
   }
 
-  /**
-   * Очищает все FormArray в форме
-   */
   private clearFormArrays(): void {
     const linksArray = this.links;
     const achievementsArray = this.achievements;
@@ -342,10 +282,6 @@ export class ProjectFormService {
     }
   }
 
-  /**
-   * Проверяет валидность обеих форм (основной и дополнительной) включая цели.
-   * @returns true если все формы валидны
-   */
   public validateAllForms(): boolean {
     const mainFormValid = this.validateForm();
     const additionalFormValid = this.validateAdditionalForm();
@@ -353,10 +289,6 @@ export class ProjectFormService {
     return mainFormValid && additionalFormValid;
   }
 
-  /**
-   * Удаляет ошибки валидации внутри массива достижений.
-   * @param achievements FormArray достижений
-   */
   private clearAchievementsErrors(achievements: FormArray): void {
     achievements.controls.forEach(group => {
       if (group instanceof FormGroup) {

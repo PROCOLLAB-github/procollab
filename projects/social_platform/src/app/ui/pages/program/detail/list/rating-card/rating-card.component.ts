@@ -39,39 +39,11 @@ import { ProjectRate } from "@domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
-/**
- * Компонент карточки оценки проекта
- *
- * Отображает детальную информацию о проекте и форму для его оценки экспертами.
- * Поддерживает навигацию между проектами и различные типы критериев оценки.
- *
- * Принимает:
- * @Input project: ProjectRate | null - Текущий проект для оценки
- *
- * Функциональность:
- * - Отображение информации о проекте (название, описание, изображения)
- * - Форма оценки с различными типами критериев
- * - Возможность развернуть/свернуть описание проекта
- * - Отправка оценки и обработка результата
- * - Поддержка переоценки для пользователей, которые уже оценили
- * - Блокировка оценки при достижении лимита (только для тех, кто не оценивал)
- * - Адаптивный дизайн для мобильных устройств
- *
- * Состояния:
- * @property {FormControl} form - Реактивная форма для оценки
- * @property {Signal<boolean>} submitLoading - Состояние загрузки при отправке
- * @property {Signal<boolean>} readFullDescription - Развернуто ли описание
- * @property {Signal<boolean>} descriptionExpandable - Можно ли развернуть описание
- * @property {Signal<boolean>} projectRated - Оценен ли проект (временно)
- * @property {Signal<boolean>} projectConfirmed - Подтверждена ли оценка окончательно
- * @property {Signal<boolean>} locallyRatedByCurrentUser - Оценил ли пользователь локально
- * @property {Signal<number>} ratedCount - Количество оценок проекта
- */
+/** Карточка оценки проекта экспертом: форма с критериями, навигация, переоценка. */
 @Component({
   selector: "app-rating-card",
   templateUrl: "./rating-card.component.html",
@@ -188,9 +160,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.readFullDescription.set(!isExpanded);
   }
 
-  /**
-   * Подтверждение оценки проекта
-   */
   confirmRateProject(): void {
     this.form.markAsTouched();
     if (this.form.invalid) return;
@@ -246,11 +215,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  /**
-   * Переоценка проекта
-   * Сбрасываем статусы, но НЕ удаляем пользователя из списка оценивших
-   * После этого пользователь может заново оценить проект
-   */
+  /** Сбрасывает статусы для переоценки (не удаляет из списка оценивших). */
   redoRating(): void {
     this.projectRated.set(false);
     this.projectConfirmed.set(false);
@@ -282,12 +247,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return isExpertFromBackend || isExpertLocally;
   }
 
-  /**
-   * Проверяет, может ли пользователь оценить проект
-   * Условия:
-   * 1. Программа не завершена
-   * 2. Либо лимит не достигнут, либо пользователь уже оценивал (может переоценить)
-   */
+  /** Проверяет, может ли пользователь оценить проект (программа не завершена + лимит не достигнут). */
   get canRate(): boolean {
     if (this.programDateFinished()) return false;
 
@@ -297,9 +257,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return true;
   }
 
-  /**
-   * Текст кнопки в зависимости от состояния
-   */
   get rateButtonText(): string {
     if (this.programDateFinished()) return "программа завершена";
     if (this.projectConfirmed() && this.userRatedThisProject) return "проект оценен";
@@ -308,36 +265,19 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return "оценить проект";
   }
 
-  /**
-   * Показывать ли форму оценки
-   */
   get showRatingForm(): boolean {
     return !this.projectRated() && this.canEdit;
   }
 
-  /**
-   * Показывать ли статус "оценено"
-   */
   get showRatedStatus(): boolean {
     return this.projectRated() || this.projectConfirmed();
   }
 
-  /**
-   * Показывать ли кнопку редактирования
-   * Только если пользователь оценил проект, программа не завершена
-   */
   get showEditButton(): boolean {
     return this.projectConfirmed() && !this.programDateFinished() && this.userRatedThisProject;
   }
 
-  /**
-   * Проверяет, можно ли открыть модальное окно оценки
-   * Модальное окно открывается только для:
-   * 1. Первой оценки (когда пользователь не оценивал и лимит не превышен)
-   * 2. Переоценки (когда пользователь нажал кнопку редактирования)
-   *
-   * НЕ открывается когда проект уже оценен и пользователь просто кликает на зеленую кнопку
-   */
+  /** Модалка открывается только для первой оценки или переоценки. */
   get canOpenModal(): boolean {
     // Если проект подтвержден и оценен - НЕ открываем модалку по клику на кнопку
     if (this.projectConfirmed() && this.userRatedThisProject) return false;
@@ -346,9 +286,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.canRate;
   }
 
-  /**
-   * Проверяет, оценил ли текущий пользователь этот проект
-   */
   get userRatedThisProject(): boolean {
     const profile = this.profile();
     const project = this.project;
@@ -372,45 +309,25 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return project.ratedExperts.some(user => user.id === currentUser.id);
   }
 
-  /**
-   * Должна ли кнопка быть неактивной
-   */
   get isButtonDisabled(): boolean {
-    // Если лимит достигнут и пользователь не оценивал - блокируем
     if (this.isLimitReached && !this.userRatedThisProject) return true;
-
-    // Если программа завершена - блокируем
     if (this.programDateFinished()) return true;
-
-    // В остальных случаях проверяем canRate
     return !this.canRate;
   }
 
-  /**
-   * Цвет кнопки
-   */
   get buttonColor(): "green" | "primary" {
     if (this.userRatedThisProject) return "green";
     return "primary";
   }
 
-  /**
-   * Прозрачность кнопки
-   */
   get buttonOpacity(): string {
     return this.isButtonDisabled ? "0.5" : "1";
   }
 
-  /**
-   * Проверяет, достигнут ли лимит оценок
-   */
   get isLimitReached(): boolean {
     return !!this.project && this.project.ratedCount >= this.project.maxRates;
   }
 
-  /**
-   * Показывать ли состояние "подтверждено"
-   */
   get showConfirmedState(): boolean {
     return (
       (this.projectConfirmed() && !this.canEdit) ||
@@ -418,19 +335,12 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  /**
-   * Обработка клика по кнопке оценки
-   */
   handleRateButtonClick(): void {
-    // Открываем модальное окно только если можно оценить
     if (this.canOpenModal) {
       this.showConfirmRateModal.set(true);
     }
   }
 
-  /**
-   * Дополнительная проверка для визуального состояния кнопки
-   */
   get buttonTooltip(): string {
     if (this.programDateFinished()) return "Программа завершена";
     if (this.isLimitReached && !this.userRatedThisProject) {
@@ -440,10 +350,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return "Нажмите для оценки проекта";
   }
 
-  /**
-   * Должна ли форма в модалке быть отключена
-   * Форма отключена для просмотра, пользователь подтверждает без изменений
-   */
   get isModalFormDisabled(): boolean {
     return true; // Всегда disabled в модалке для подтверждения
   }

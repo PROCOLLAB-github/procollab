@@ -10,10 +10,7 @@ import { SubmitTaskAnswerUseCase } from "../use-cases/submit-task-answer.use-cas
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { failure, loading, success } from "@domain/shared/async-state";
 
-/**
- * Управляет прохождением урока: выбором задачи, сборкой ответа,
- * отправкой решения и переходом к результатам/следующей задаче.
- */
+/** Управляет прохождением урока: задачи, ответы, отправка, навигация. */
 @Injectable()
 export class LessonInfoService {
   private readonly router = inject(Router);

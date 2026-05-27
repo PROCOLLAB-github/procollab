@@ -151,9 +151,6 @@ export class ProjectsEditInfoService {
 
   readonly openGroupIds = signal<Set<number>>(new Set());
 
-  /**
-   * Проверяет, есть ли открытые группы навыков
-   */
   readonly hasOpenSkillsGroups = computed(() => this.openGroupIds().size > 0);
 
   initializationEditInfo(): void {
@@ -180,10 +177,6 @@ export class ProjectsEditInfoService {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
   }
 
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
   assignProjectToProgram(): void {
     this.assignProjectProgramUseCase
       .execute(
@@ -219,9 +212,6 @@ export class ProjectsEditInfoService {
     });
   }
 
-  /**
-   * Удаление проекта с проверкой удаления у пользователя
-   */
   deleteProject(): void {
     const programId = this.projectForm.get("partnerProgramId")?.value;
 
@@ -243,9 +233,6 @@ export class ProjectsEditInfoService {
       });
   }
 
-  /**
-   * Сохранение проекта как опубликованного с проверкой доп. полей
-   */
   saveProjectAsPublished(): void {
     this.projectForm.get("draft")?.patchValue(false);
     this.submitMode.set("published");
@@ -275,9 +262,6 @@ export class ProjectsEditInfoService {
     this.projectsEditUIInfoService.applySendDescision();
   }
 
-  /**
-   * Сохранение проекта как черновика
-   */
   saveProjectAsDraft(): void {
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
@@ -295,9 +279,6 @@ export class ProjectsEditInfoService {
     }
   }
 
-  /**
-   * Отправка формы проекта
-   */
   submitProjectForm(): void {
     const isDraft = this.projectForm.get("draft")?.value === true;
 
@@ -418,10 +399,6 @@ export class ProjectsEditInfoService {
       );
   }
 
-  /**
-   * Поиск навыков
-   * @param query - поисковый запрос
-   */
   onSearchSkill(query: string): void {
     this.searchesService.onSearchSkill(query);
   }
@@ -462,11 +439,6 @@ export class ProjectsEditInfoService {
       });
   }
 
-  /**
-   * Валидация дополнительных полей для публикации
-   * Делегирует валидацию сервису
-   * @returns true если есть ошибки валидации
-   */
   private validateAdditionalFields(): boolean {
     const partnerProgramFields = this.projectAdditionalService.partnerProgramFields();
 
@@ -487,9 +459,6 @@ export class ProjectsEditInfoService {
     return false;
   }
 
-  /**
-   * Очистка всех ошибок валидации
-   */
   private clearAllValidationErrors(): void {
     // Очистка основной формы
     this.projectFormService.clearAllValidationErrors();
@@ -569,11 +538,6 @@ export class ProjectsEditInfoService {
     }
   }
 
-  /**
-   * Отправка дополнительных полей через сервис
-   * @param projectId - ID проекта
-   * @param relationId - ID связи проекта и конкурсной программы
-   */
   private sendAdditionalFields(projectId: number, relationId: number): void {
     const isDraft = this.projectForm.get("draft")?.value === true;
 

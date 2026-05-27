@@ -92,9 +92,6 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     this.projectResourceService.destroy();
   }
 
-  /**
-   * Добавление партнера
-   */
   addPartner(name?: string, inn?: string, contribution?: string, decisionMaker?: string): void {
     this.partners.push(
       this.fb.group({
@@ -108,17 +105,10 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     this.projectPartnerService.addPartner(name, inn, contribution, decisionMaker);
   }
 
-  /**
-   * Удаление партнера
-   * @param index - индекс партнера
-   */
   removePartner(index: number, partnersId: number) {
     this.projectPartnerService.removePartner(index, partnersId, this.projectId());
   }
 
-  /**
-   * Добавление ресурса
-   */
   addResource(type?: string, description?: string, partnerCompany?: string): void {
     this.resources.push(
       this.fb.group({
@@ -131,10 +121,6 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     this.projectResourceService.addResource(type, description, partnerCompany);
   }
 
-  /**
-   * Удаление ресурса
-   * @param index - индекс ресурса
-   */
   removeResource(index: number, resourceId: number) {
     this.projectResourceService.removeResource(index, resourceId, this.projectId());
   }

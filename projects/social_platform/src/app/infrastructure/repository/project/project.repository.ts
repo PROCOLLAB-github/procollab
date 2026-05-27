@@ -22,10 +22,7 @@ import { EntityCache } from "@domain/shared/entity-cache";
 import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
 
-/**
- * Репозиторий проектов с локальным кешем деталей и счётчиками списков.
- * Инвалидирует кеш по доменным событиям проекта, инвайтов и откликов на вакансии.
- */
+/** Репозиторий проектов с локальным кешем деталей, инвалидируемым по доменным событиям. */
 @Injectable({ providedIn: "root" })
 export class ProjectRepository implements ProjectRepositoryPort {
   private readonly entityCache = new EntityCache<Project>();
@@ -131,8 +128,8 @@ export class ProjectRepository implements ProjectRepositoryPort {
     );
   }
 
-  update(id: number, data: Partial<ProjectDto>): Observable<Project> {
-    return this.projectAdapter.putUpdate(id, data).pipe(
+  update(id: number, data: Partial<Project>): Observable<Project> {
+    return this.projectAdapter.putUpdate(id, data as Partial<ProjectDto>).pipe(
       map(project => plainToInstance(Project, project)),
       tap(() => this.invalidate(id))
     );

@@ -10,7 +10,7 @@
 - Регистрация (`/auth/register`) — двухшаговая форма (credentials → info), на финале пользователь получает письмо с подтверждением.
 - Подтверждение email (`/auth/verification/email`, `/auth/verification`) — verification flow с counter'ом для resend.
 - Сброс пароля (`/auth/reset_password/send_email`, `/auth/reset_password`, `/auth/reset_password/confirm`) — three-step flow.
-- Хранение текущего профиля + ролей пользователя в `AuthRepository` (`ReplaySubject`).
+- Хранение текущего профиля + ролей — в `ProfileInfoService` (`AsyncState` + signal). `AuthRepository` — pass-through HTTP без кеша.
 - Скачивание CV пользователя.
 - Связанные операции профиля: сохранение edit-формы через `SaveProfileUseCase`, подтверждение навыков через skills use-case'ы.
 
@@ -22,17 +22,23 @@
 
 ### `user.model.ts`
 
-| Класс            | Описание                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `User`           | Полная модель пользователя — id, email, имена, аватар, ссылки, ключевые навыки + Skill[], `userType` (число), специальность, `v2Speciality`, города/регионы, телефон, программы, проекты, подписки, тип онбординга. Ролевые ветки: `member?`, `mentor?`, `expert?`, `investor?` (опциональные блоки с `usefulToProject`/`preferredIndustries`). Подписочный блок: `isSubscribed`, `lastSubscriptionType`, `subscriptionDateOver`, `isAutopayAllowed`. |
-| `Achievement`    | id, title, status, year, files (`string[] \| FileModel[]`).                                                                                                                                                                                                                                                                                                                                                                                           |
-| `Education`      | organizationName, entryYear, completionYear, description, educationStatus, educationLevel.                                                                                                                                                                                                                                                                                                                                                            |
-| `WorkExperience` | organizationName, entryYear, completionYear, description, jobPosition.                                                                                                                                                                                                                                                                                                                                                                                |
-| `UserLanguages`  | language, languageLevel.                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `UserRole`       | id, name.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Класс              | Описание                                                                                                                                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `User`             | Composition root: identity (`id`, `email`, `firstName`, `lastName`) + 4 вложенных блока — `personal: UserPersonal`, `roles: UserRolesData`, `relations: UserRelations`, `subscription: UserSubscription`.                                              |
+| `UserPersonal`     | `onboardingStage`, `patronymic`, `aboutMe`, `birthday`, `avatar`, `links`, `coverImageAddress?`, `speciality`, `userType`, `v2Speciality`, `city`, `phoneNumber`, `region`, `isMospolytechStudent?`, `studyGroup?`.                                    |
+| `UserRolesData`    | Опциональные ролевые блоки: `member?`, `mentor?`, `expert?`, `investor?` (с `usefulToProject`/`preferredIndustries`).                                                                                                                                  |
+| `UserRelations`    | Коллекции и метаданные: `education[]`, `userLanguages[]`, `workExperience[]`, `achievements[]`, `programs[]`, `projects[]`, `subscribedProjects[]`, `keySkills`, `skills`, `skillsIds`, `progress?`, `isOnline`, `isActive`, `time*`, `verification*`. |
+| `UserSubscription` | `isSubscribed`, `lastSubscribeDate`, `subscriptionDateOver`, `lastSubscriptionType`, `isAutopayAllowed`.                                                                                                                                               |
+| `UserInput`        | Плоский input-shape для `updateProfile` — все поля опциональны (используется в фасадах при сборе command).                                                                                                                                             |
+| `Achievement`      | id, title, status, year, files (`string[] \| FileModel[]`).                                                                                                                                                                                            |
+| `Education`        | organizationName, entryYear, completionYear, description, educationStatus, educationLevel.                                                                                                                                                             |
+| `WorkExperience`   | organizationName, entryYear, completionYear, description, jobPosition.                                                                                                                                                                                 |
+| `UserLanguages`    | language, languageLevel.                                                                                                                                                                                                                               |
+| `UserRole`         | id, name.                                                                                                                                                                                                                                              |
 
-`User.doesCompleted()` — `onboardingStage === null` (онбординг завершён).
-`User.default()` — статичный заглушка-конструктор для тестов.
+`User.doesCompleted()` — `personal.onboardingStage === null` (онбординг завершён).
+
+> Бэк отдаёт плоский JSON — раскладку в nested-структуру делает маппер на границе адаптера (`AuthHttpAdapter` → `plainToInstance(User, raw)` + `@Type` декораторы подсекций).
 
 ### `tokens.model.ts`
 
@@ -45,16 +51,21 @@ class Tokens {
 
 ### `http.model.ts`
 
+HTTP-модели живут в `@core/lib/models/auth/` (переиспользуются `TokenService` из core без cross-library импорта):
+
 ```ts
+// core/src/lib/models/auth/http.model.ts
 class LoginResponse {
   access!: string;
   refresh!: string;
 }
+class RegisterResponse extends LoginResponse {}
+
+// core/src/lib/models/auth/refresh-response.model.ts
 class RefreshResponse {
   access!: string;
   refresh!: string;
 }
-class RegisterResponse extends LoginResponse {}
 ```
 
 ### `register.model.ts`
@@ -126,11 +137,6 @@ type PasswordError =
 
 ```ts
 abstract class AuthRepositoryPort {
-  // Стримы (у репозитория хранится ReplaySubject)
-  readonly profile: Observable<User>;
-  readonly roles: Observable<UserRole[]>;
-  readonly changeableRoles: Observable<UserRole[]>;
-
   // Auth flow
   login(data: LoginCommand): Observable<LoginResponse>;
   logout(): Observable<void>;
@@ -139,12 +145,12 @@ abstract class AuthRepositoryPort {
   resetPassword(email: string): Observable<void>;
   setPassword(password: string, token: string): Observable<void>;
 
-  // Profile
+  // Profile (no cache — каждый вызов идёт в HTTP)
   fetchUser(id: number): Observable<User>;
   fetchProfile(): Observable<User>;
-  updateProfile(data: Partial<User>): Observable<User>;
-  updateOnboardingStage(stage: number | null): Observable<User>;
-  updateAvatar(url: string): Observable<User>;
+  updateProfile(data: UserInput): Observable<User>;
+  updateOnboardingStage(stage: number | null, userId: number): Observable<User>;
+  updateAvatar(url: string, userId: number): Observable<User>;
   fetchLeaderProjects(): Observable<ApiPagination<Project>>;
 
   // Roles
@@ -183,7 +189,7 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 | Facade                | Provided                                    | Что хранит                                                                                                                                                                                                                                                                                                                                                                                                                                                | Ключевые методы                                                                                                                                                                                                                                 |
 | --------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthInfoService`     | `root`                                      | `profile`, `roles`, `changeableRoles` (стримы из репозитория)                                                                                                                                                                                                                                                                                                                                                                                             | `fetchProfile()`, `fetchUser(id)`, `fetchLeaderProjects()`, `fetchUserRoles()`, `fetchChangeableRoles()`, `logout()`                                                                                                                            |
+| `AuthInfoService`     | `root`                                      | `profile`, `roles`, `changeableRoles` — computed-сигналы из `ProfileInfoService` (реэкспорт); `logout()` дёргает репозиторий + чистит кеши                                                                                                                                                                                                                                                                                                                | `fetchProfile()`, `fetchUser(id)`, `fetchLeaderProjects()`, `fetchUserRoles()`, `fetchChangeableRoles()`, `logout()`                                                                                                                            |
 | `AuthUIInfoService`   | страница (`providers: [AuthUIInfoService]`) | `loginForm`, `registerForm`, `resetForm`, `passwordForm` ReactiveForms; сигналы `login$ / register$ / password$` (`AsyncState`); UI-флаги `showPassword`, `showPasswordRepeat`, `registerAgreement`, `ageAgreement`, `step` (`"credentials" \| "info"`), `credsSubmitInitiated`, `infoSubmitInitiated`; computed `loginIsSubmitting`, `errorWrongAuth`, `errorRequest`, `errorServer`, `registerIsSubmitting`, `isUserCreationModalError`, `isSubmitting` | `toggleShowPassword(section, type?)`, `prepareFormValues(form)` (форматирует birthday через dayjs `DD.MM.YYYY` → ISO)                                                                                                                           |
 | `AuthLoginService`    | страница                                    | — (всё через `AuthUIInfoService`)                                                                                                                                                                                                                                                                                                                                                                                                                         | `onSubmit()` — валидирует форму, дёргает `LoginUseCase`, при `ok` сохраняет токены, навигирует на `AppRoutes.office.root()` (или `AppRoutes.program.root()` если `?redirect=program`)                                                           |
 | `AuthRegisterService` | страница                                    | computed `serverErrors` (плоский массив строк из `validation_error`)                                                                                                                                                                                                                                                                                                                                                                                      | `onSendForm()` — валидирует, дёргает `RegisterUseCase`, при `ok` навигирует на `/auth/verification/email?adress=<email>`. `downloadPolicy()` — JS-загрузка `/assets/downloads/auth/shared/privacy_policy_2022.docx`                             |
@@ -204,13 +210,10 @@ Profile-edit хранит достижения в общей форме проф
 
 **Особенности**:
 
-- Хранит три `ReplaySubject<T>(1)`:
-  - `profile$` — обновляется в `fetchProfile()`, `updateProfile()`, `updateOnboardingStage()`, `updateAvatar()`.
-  - `roles$` — обновляется в `fetchUserRoles()`.
-  - `changeableRoles$` — обновляется в `fetchChangeableRoles()`.
+- Чистый pass-through HTTP: **не хранит кеш**, не держит стримов. Кеширование вынесено в `ProfileInfoService` (сигналы `AsyncState`).
 - Всё, что приходит с бэка как `User` — пропущено через `plainToInstance(User, json)` (`class-transformer`).
 - `logout()` после успеха очищает токены через `tokenService.clearTokens()`.
-- `updateOnboardingStage` / `updateAvatar` сначала тянут текущий профиль из стрима (`take(1)`), потом дёргают endpoint с `profile.id`.
+- `updateOnboardingStage` / `updateAvatar` принимают `userId` параметром (не читают из стрима).
 - `fetchUserRoles` / `fetchChangeableRoles` принимают сырой формат `[[id, name], ...]` от бэка и трансформируют в `UserRole[]`.
 
 Делегирует HTTP в `AuthHttpAdapter`.
@@ -280,17 +283,18 @@ Profile-edit хранит достижения в общей форме проф
 
 ## Consumers (за пределами модуля)
 
-| Где                                                          | Что использует                                                                                                                                          |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `core/lib/services/tokens/token.service.ts`                  | `Tokens`, `RefreshResponse` (через глубокий импорт — архитектурный долг).                                                                               |
-| `core/lib/services/validation/validation.service.ts`         | `PasswordValidationErrors` (то же самое).                                                                                                               |
-| `core/lib/guards/auth/auth-required.guard.ts`                | `AuthRepositoryPort` (`fetchProfile()` для проверки сессии).                                                                                            |
-| `core/lib/guards/profile-edit/profile-edit.guard.ts`         | `AuthRepositoryPort` (для `profile.id` сравнения).                                                                                                      |
-| `core/lib/services/error/...`                                | использует `LoggerService` параллельно с auth-flow редиректами.                                                                                         |
-| `app.component.ts`                                           | `AuthRepositoryPort.fetchUserRoles()` + `fetchChangeableRoles()` в `forkJoin` при старте; `tokenService.getTokens()` для решения redirect login/office. |
-| `widgets/header`, `widgets/detail`, `widgets/info-card`      | `AuthRepositoryPort.profile` (или через `AuthInfoService`) для отображения текущего пользователя.                                                       |
-| `pages/profile/edit`                                         | `SaveProfileUseCase` для сохранения формы; `AuthRepositoryPort.updateProfile()` используется для смены типа пользователя.                               |
-| `pages/onboarding`                                           | `AuthRepositoryPort.updateOnboardingStage()`.                                                                                                           |
-| Любой компонент в `office` через `app-profile-control-panel` | `logout()` через `AuthInfoService.logout()`.                                                                                                            |
+| Где                                                          | Что использует                                                                                                                                               |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `core/lib/services/tokens/token.service.ts`                  | `Tokens`, `RefreshResponse` (из `@core/public-api` — **чистый импорт, без долга**).                                                                          |
+| `core/lib/services/validation/validation.service.ts`         | `PasswordValidationErrors` (через глубокий импорт — архитектурный долг).                                                                                     |
+| `core/lib/guards/auth/auth-required.guard.ts`                | `AuthRepositoryPort.fetchProfile()` для проверки сессии (в core, не может импортировать `ProfileInfoService`).                                               |
+| `core/lib/guards/profile-edit/profile-edit.guard.ts`         | `AuthRepositoryPort.fetchProfile()` для `profile.id` сравнения.                                                                                              |
+| `core/lib/guards/kanban/kanban.guard.ts`                     | `AuthRepositoryPort.fetchProfile()` для `userId` сравнения.                                                                                                  |
+| `core/lib/services/error/...`                                | использует `LoggerService` параллельно с auth-flow редиректами.                                                                                              |
+| `app.component.ts`                                           | `tokenService.getTokens()` для решения redirect login/office (forkJoin ролей вынесен в `OfficeComponent.init` → `ProfileInfoService.ensureProfileLoaded()`). |
+| `widgets/chat-window`, `widgets/detail`, `widgets/info-card` | `ProfileInfoService.profile` (сигнал) для отображения текущего пользователя.                                                                                 |
+| `pages/profile/edit`                                         | `SaveProfileUseCase` для сохранения формы; `ProfileInfoService.refreshProfile()` после успеха.                                                               |
+| `pages/onboarding`                                           | `AuthRepositoryPort.updateOnboardingStage(stage, userId)`.                                                                                                   |
+| Любой компонент в `office` через `app-profile-control-panel` | `logout()` через `AuthInfoService.logout()`.                                                                                                                 |
 
 ---

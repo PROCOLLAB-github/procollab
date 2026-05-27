@@ -86,7 +86,7 @@
 
 ### `ProjectNavigationComponent` (`app-project-navigation`)
 
-Stepper для редактирования (профиля и проекта). Принимает массив `navItems: Navigation[]` (тип из `@domain/other/navigation.model.ts`) и эмитит `stepChange: EditStep` при клике. Готовые наборы шагов — в `core/consts/navigation/nav-{profile,project}-items.const.ts`.
+Stepper для редактирования (профиля и проекта). Принимает массив `navItems: Navigation[]` (тип из `@core/lib/models/navigation.model.ts`) и эмитит `stepChange: EditStep` при клике. Готовые наборы шагов — в `core/consts/navigation/nav-{profile,project}-items.const.ts`.
 
 ### `HeaderComponent` (`app-header`)
 

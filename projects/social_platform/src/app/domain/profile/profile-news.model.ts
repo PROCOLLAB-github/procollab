@@ -3,27 +3,7 @@
 import * as dayjs from "dayjs";
 import { FileModel } from "@domain/file/file.model";
 
-/**
- * Модель данных для новости профиля пользователя
- *
- * Представляет структуру новости, которую пользователь может публиковать в своем профиле.
- * Содержит всю необходимую информацию для отображения и взаимодействия с новостью.
- *
- * Поля модели:
- * @property {number} id - уникальный идентификатор новости
- * @property {string} name - заголовок/название новости
- * @property {string} imageAddress - URL изображения новости
- * @property {string} text - текстовое содержимое новости
- * @property {string} datetimeCreated - дата и время создания новости (ISO строка)
- * @property {string} datetimeUpdated - дата и время последнего обновления (ISO строка)
- * @property {number} viewsCount - количество просмотров новости
- * @property {number} likesCount - количество лайков новости
- * @property {FileModel[]} files - массив прикрепленных файлов
- * @property {boolean} isUserLiked - флаг, указывающий лайкнул ли текущий пользователь новость
- *
- * Методы:
- * @method default() - статический метод для создания объекта с тестовыми данными
- */
+/** Модель новости профиля пользователя */
 export class ProfileNews {
   id!: number;
   name!: string;

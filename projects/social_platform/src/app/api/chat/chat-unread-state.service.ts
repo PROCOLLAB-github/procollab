@@ -14,6 +14,7 @@ import {
 import { CheckUnreadsUseCase } from "./use-cases/check-unreads.use-case";
 import { Observable, finalize, shareReplay } from "rxjs";
 
+/** Состояние «есть ли непрочитанные сообщения» (app-wide, кеширует Observable + AsyncState). */
 @Injectable({
   providedIn: "root",
 })

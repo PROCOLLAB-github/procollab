@@ -34,10 +34,6 @@ export class ProfileEditAchievementsInfoService {
     this.destroy$.complete();
   }
 
-  /**
-   * Добавление записи об достижении
-   * Валидирует форму и добавляет новую запись в массив достижений
-   */
   addAchievement(): void {
     if (!this.showAchievementsFields()) {
       this.showAchievementsFields.set(true);
@@ -108,10 +104,6 @@ export class ProfileEditAchievementsInfoService {
     this.editAchievementsClick.set(false);
   }
 
-  /**
-   * Редактирование записи об достижений
-   * @param index - индекс записи в массиве достижений
-   */
   editAchievements(index: number) {
     this.editAchievementsClick.set(true);
     this.showAchievementsFields.set(true);
@@ -132,10 +124,6 @@ export class ProfileEditAchievementsInfoService {
     this.editIndex.set(index);
   }
 
-  /**
-   * Удаление записи об достижении
-   * @param i - индекс записи для удаления
-   */
   removeAchievement(i: number): void {
     this.achievementItems.update(items => items.filter((_, index) => index !== i));
     this.achievements.removeAt(i);
