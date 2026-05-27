@@ -17,6 +17,7 @@ import { ObserveSetOnlineUseCase } from "@api/chat/use-cases/observe-set-online.
 import { ChatStateService } from "@api/chat/chat-state.service";
 import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
+import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 
 /**
  * Стартовый сервис офисной оболочки: прогревает справочники, собирает навигацию,
@@ -28,6 +29,7 @@ export class OfficeInfoService {
   private readonly inviteInfoService = inject(InviteInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly industryStateInfoService = inject(IndustryStateInfoService);
+  private readonly programShellInfoService = inject(ProgramShellInfoService);
   private readonly eventBus = inject(EventBus);
 
   private readonly chatUnreadState = inject(ChatUnreadStateService);
@@ -149,6 +151,7 @@ export class OfficeInfoService {
     this.profileInfoService.invalidateProfile();
     this.profileInfoService.invalidateLeaderProjects();
     this.chatUnreadState.invalidate();
+    this.programShellInfoService.invalidatePrograms();
 
     this.authRepository
       .logout()

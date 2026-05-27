@@ -72,6 +72,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly programDetailListInfoService = inject(ProgramDetailListInfoService);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
+  private readonly programProjectsFilterInfoService = inject(ProgramProjectsFilterInfoService);
   private readonly exportFileInfoService = inject(ExportFileInfoService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
   private readonly swipeService = inject(SwipeService);
@@ -102,6 +103,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.programDetailListInfoService.initializationListData();
+    this.programProjectsFilterInfoService.initializationProgramProjectsFilter();
   }
 
   ngAfterViewInit(): void {
@@ -162,10 +164,11 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Сброс всех активных фильтров
-   * Очищает все query параметры и возвращает к состоянию по умолчанию
+   * Сброс всех активных фильтров. Делегируем в filter-сервис, который полностью очищает
+   * query (navigateByUrl на pathname без query). Mobile-кнопка "сбросить" и (clear) от
+   * filter-component используют один и тот же путь — гонок navigate'ов нет.
    */
   onClearFilters(): void {
-    this.programDetailListInfoService.onClearFilters();
+    this.programProjectsFilterInfoService.clearFilters();
   }
 }

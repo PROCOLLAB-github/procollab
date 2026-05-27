@@ -7,6 +7,7 @@ import { HttpParams } from "@angular/common/http";
 import { catchError, EMPTY, map } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
+import { CreateProgramFiltersUseCase } from "@api/program/use-cases/create-program-filters.use-case";
 
 /**
  * Резолвер для предзагрузки проектов программы
@@ -34,16 +35,23 @@ export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
   route: ActivatedRouteSnapshot
 ) => {
   const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
+  const createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
   const programId = route.parent?.params["programId"];
   const router = inject(Router);
+  const qp = route.queryParams;
+  const filters: Record<string, any> = {};
+  Object.keys(qp).forEach(k => {
+    if (qp[k] !== undefined && qp[k] !== "" && k !== "search") {
+      filters[k] = Array.isArray(qp[k]) ? qp[k] : [qp[k]];
+    }
+  });
 
-  return getAllProjectsUseCase
-    .execute(
-      programId,
-      new HttpParams({
-        fromObject: { offset: 0, limit: 21 },
-      })
-    )
+  const params = new HttpParams({ fromObject: { offset: 0, limit: 21 } });
+  const req$ =
+    Object.keys(filters).length > 0
+      ? createProgramFiltersUseCase.execute(programId, filters, params)
+      : getAllProjectsUseCase.execute(programId, params);
+  return req$
     .pipe(
       map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
     )

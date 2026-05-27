@@ -1,16 +1,16 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { inject, Injectable, OnDestroy, signal } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 import { GetProgramFiltersUseCase } from "@api/program/use-cases/get-program-filters.use-case";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
+import { debounceTime, distinctUntilChanged, shareReplay, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 @Injectable()
-export class ProgramProjectsFilterInfoService {
+export class ProgramProjectsFilterInfoService implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
@@ -26,31 +26,37 @@ export class ProgramProjectsFilterInfoService {
   protected readonly listType = this.programDetailListUIInfoService.listType;
 
   private readonly destroy$ = new Subject<void>();
+  private initialized = false;
 
   initializationProgramProjectsFilter(): void {
+    // Идемпотентность: ProgramListComponent — провайдер сервиса, повторный вход возможен
+    // только при необычных потоках (HMR/тесты). Один guard вместо inflight+filters проверок.
+    if (this.initialized) return;
+    if (this.listType() !== "projects" && this.listType() !== "rating") return;
+
+    this.initialized = true;
+
     const programId = this.route.parent?.snapshot.params["programId"];
+    this.getProgramFiltersUseCase
+      .execute(Number(programId))
+      .pipe(shareReplay({ bufferSize: 1, refCount: true }), takeUntil(this.destroy$))
+      .subscribe({
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error loading program filters:", result.error.cause);
+            this.initialized = false; // дать шанс ретраю на следующий init
+            return;
+          }
 
-    if (this.listType() === "projects" || this.listType() === "rating") {
-      this.getProgramFiltersUseCase
-        .execute(Number(programId))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: result => {
-            if (!result.ok) {
-              this.logger.error("Error loading program filters:", result.error.cause);
-              return;
-            }
-
-            this.filters.set(result.value);
-            this.initializeFilterForm();
-            this.restoreFiltersFromUrl();
-            this.subscribeToFormChanges();
-          },
-        });
-    }
+          this.filters.set(result.value);
+          this.initializeFilterForm();
+          this.restoreFiltersFromUrl();
+          this.subscribeToFormChanges();
+        },
+      });
   }
 
-  destroy(): void {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -86,17 +92,14 @@ export class ProgramProjectsFilterInfoService {
    * Очищает все query параметры и возвращает к состоянию по умолчанию
    */
   clearFilters(): void {
-    this.filterForm.reset();
+    // Полный сброс формы без эмита valueChanges — иначе через debounce уйдёт ещё один navigate.
+    this.filterForm.reset({}, { emitEvent: false });
 
-    this.router
-      .navigate([], {
-        queryParams: {
-          is_rated_by_expert: undefined,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => this.logger.info("Query change from ProjectsComponent"));
+    // navigateByUrl на pathname без query — самый надёжный способ очистить query целиком.
+    // router.navigate({ queryParams: {} }) в некоторых конфигурациях не сериализуется в очистку
+    // (Router считает пустой объект "ничего не менять"), отсюда и эффект "сброс не работает".
+    const path = this.router.url.split("?")[0];
+    this.router.navigateByUrl(path).then(() => this.logger.info("Filters cleared"));
   }
 
   private initializeFilterForm(): void {

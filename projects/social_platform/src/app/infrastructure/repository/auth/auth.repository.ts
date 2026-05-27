@@ -81,7 +81,7 @@ export class AuthRepository implements AuthRepositoryPort {
 
   fetchProfile(): Observable<User> {
     if (this.profileLoaded) {
-      return this.profile.pipe(take(1)); // отдаём из ReplaySubject, БЕЗ HTTP
+      return this.profile.pipe(take(1));
     }
 
     return this.authAdapter.getProfile().pipe(

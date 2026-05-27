@@ -43,10 +43,6 @@ export class ProgramHttpAdapter {
     return this.apiService.get(`${this.PROGRAMS_URL}/`, httpParams);
   }
 
-  getActualPrograms(): Observable<ApiPagination<Program>> {
-    return this.apiService.get(`${this.PROGRAMS_URL}/`);
-  }
-
   /**
    * Получает детальную информацию о программе.
    *

@@ -23,7 +23,7 @@ export class DetailInfoService {
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly authRepository = inject(AuthInfoService);
+  private readonly authInfoService = inject(AuthInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly location = inject(Location);
@@ -174,7 +174,7 @@ export class DetailInfoService {
   }
 
   private isInProfileInfo(): void {
-    this.authRepository.profile
+    this.authInfoService.profile
       .pipe(
         filter(profile => !!profile),
         takeUntil(this.destroy$)
@@ -206,7 +206,7 @@ export class DetailInfoService {
       const program = this.programDetailMainUIInfoService.program;
       this.info.set(program());
 
-      this.authRepository.profile
+      this.authInfoService.profile
         .pipe(
           filter(user => !!user),
           takeUntil(this.destroy$)
@@ -218,19 +218,25 @@ export class DetailInfoService {
           },
         });
 
-      this.getMyProjectsUseCase
-        .execute()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: result => {
-            if (!result.ok) {
-              this.memberProjects.set([]);
-              return;
-            }
+      if (this.isUserMember() && (this.isUserExpert() || this.isUserManager())) return;
 
-            this.memberProjects.set(result.value.results.filter(project => !project.draft));
-          },
-        });
+      if (this.isUserMember()) {
+        if (!this.isProjectAssigned()) {
+          this.getMyProjectsUseCase
+            .execute()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: result => {
+                if (!result.ok) {
+                  this.memberProjects.set([]);
+                  return;
+                }
+
+                this.memberProjects.set(result.value.results.filter(project => !project.draft));
+              },
+            });
+        }
+      }
     } else {
       this.detailProfileInfoService.initializationProfile();
       const user = this.profileDetailUIInfoService.user();

@@ -16,19 +16,30 @@ import { EntityCache } from "@domain/shared/entity-cache";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 import { userFromRaw } from "@utils/userRaw";
+import { EventBus } from "@domain/shared/event-bus";
+import { LoggedOut } from "@domain/auth/events/logged-out.event";
 
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
   private readonly programAdapter = inject(ProgramHttpAdapter);
   private readonly entityCache = new EntityCache<Program>();
+  private readonly eventBus = inject(EventBus);
+
+  constructor() {
+    this.initializeEvents();
+  }
+
+  private initializeEvents(): void {
+    this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
+      next: () => {
+        this.entityCache.clear();
+      },
+    });
+  }
 
   getAll(skip: number, take: number, params?: HttpParams): Observable<ApiPagination<Program>> {
     return this.programAdapter.getAll(skip, take, params);
-  }
-
-  getActualPrograms(): Observable<ApiPagination<Program>> {
-    return this.programAdapter.getActualPrograms();
   }
 
   getOne(programId: number): Observable<Program> {

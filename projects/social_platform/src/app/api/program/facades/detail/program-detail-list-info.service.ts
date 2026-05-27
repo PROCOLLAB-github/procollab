@@ -62,6 +62,8 @@ export class ProgramDetailListInfoService {
 
   private readonly searchForm = this.programDetailListUIInfoService.searchForm;
 
+  private isFirstLoad = true;
+
   initializationListData(): void {
     this.route.data
       .pipe(
@@ -100,20 +102,12 @@ export class ProgramDetailListInfoService {
   }
 
   /**
-   * Сброс всех активных фильтров
-   * Очищает все query параметры и возвращает к состоянию по умолчанию
+   * Сброс фильтров делается централизованно в ProgramProjectsFilterInfoService.clearFilters
+   * (один navigate с queryParams: {} — полная очистка URL). Этот метод оставлен для
+   * совместимости с template-биндингами `(click)/(clear)` и сознательно НЕ запускает
+   * router.navigate, иначе получим race трёх navigate'ов и пустой список после сброса.
    */
-  onClearFilters(): void {
-    this.router
-      .navigate([], {
-        queryParams: {
-          search: undefined,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => this.logger.info("Query change from ProjectsComponent"));
-  }
+  onClearFilters(): void {}
 
   private setupSearch(): void {
     this.searchForm
@@ -210,18 +204,27 @@ export class ProgramDetailListInfoService {
               map(result => {
                 if (!result.ok) {
                   this.logger.error("Error creating program filters:", result.error);
-                  return this.emptyPage<Project>();
+                  return this.prefetchedProjects() ?? this.emptyPage<Project>();
                 }
 
                 return result.value;
               })
             );
           }
+
+          if (this.isFirstLoad && !q["search"]) {
+            this.isFirstLoad = false;
+            const prefetched = this.prefetchedProjects();
+            if (prefetched) {
+              return of(prefetched);
+            }
+          }
+
           return this.getAllProjectsUseCase.execute(programId, params).pipe(
             map(result => {
               if (!result.ok) {
                 this.logger.error("Error fetching initial projects:", result.error);
-                return this.emptyPage<Project>();
+                return this.prefetchedProjects() ?? this.emptyPage<Project>();
               }
 
               return result.value;
@@ -443,6 +446,13 @@ export class ProgramDetailListInfoService {
         return;
       }
 
+      // Для projects search — плоский query-param, не filter-ключ.
+      // Если уйдёт в filters body — бэк возвращает 400 (search не входит в список фильтр-полей).
+      if (this.listType() === "projects" && key === "search") {
+        extraParams["search"] = value;
+        return;
+      }
+
       filters[key] = Array.isArray(value) ? value : [value];
     });
 
@@ -461,6 +471,10 @@ export class ProgramDetailListInfoService {
       keys: searchKeys,
     });
     return fuse.search(search).map(r => r.item);
+  }
+
+  private prefetchedProjects(): ApiPagination<Project> | undefined {
+    return this.route.snapshot.data["data"] as ApiPagination<Project> | undefined;
   }
 
   private emptyPage<T>(): ApiPagination<T> {

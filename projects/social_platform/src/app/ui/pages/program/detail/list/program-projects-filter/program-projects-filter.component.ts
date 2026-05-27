@@ -1,14 +1,6 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  OnInit,
-  OnDestroy,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Output } from "@angular/core";
 import { SwitchComponent } from "@ui/primitives/switch/switch.component";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
 import { ToSelectOptionsPipe } from "@corelib";
@@ -58,7 +50,7 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProgramProjectsFilterComponent implements OnInit, OnDestroy {
+export class ProgramProjectsFilterComponent {
   @Output() clear = new EventEmitter<void>();
 
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
@@ -71,14 +63,6 @@ export class ProgramProjectsFilterComponent implements OnInit, OnDestroy {
 
   // Массив фильтров по дополнительным полям привязанным к конкретной программе
   protected readonly filters = this.programProjectsFilterInfoService.filters;
-
-  ngOnInit(): void {
-    this.programProjectsFilterInfoService.initializationProgramProjectsFilter();
-  }
-
-  ngOnDestroy(): void {
-    this.programProjectsFilterInfoService.destroy();
-  }
 
   /**
    * Переключение значения для checkbox и radio полей

@@ -117,10 +117,7 @@
             (touchmove)="onSwipeMove($event)"
             (touchend)="onSwipeEnd($event)"
           ></div>
-          <app-program-projects-filter
-            (closeFilter)="closeFilter()"
-            (clear)="onClearFilters()"
-          ></app-program-projects-filter>
+          <app-program-projects-filter (closeFilter)="closeFilter()"></app-program-projects-filter>
 
           @if (listType() === 'projects') {
           <div class="page__export" style="margin-top: 0">
@@ -241,7 +238,6 @@
   >
     <app-program-projects-filter
       (closeFilter)="isFilterOpen.set(false)"
-      (clear)="onClearFilters()"
     ></app-program-projects-filter>
 
     <app-button

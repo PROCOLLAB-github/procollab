@@ -21,29 +21,42 @@ export class VacancyRepository implements VacancyRepositoryPort {
   private readonly vacancyAdapter = inject(VacancyHttpAdapter);
   private readonly eventBus = inject(EventBus);
   private readonly entityCache = new EntityCache<Vacancy>();
+  // Кеш первой страницы вакансий проекта (limit=20, offset=0, без фильтров) по projectId.
+  // На info-resolver'е и shell-точках это самый частый вызов — кешируем его, остальные
+  // (с фильтрами/пагинацией/поиском) идут напрямую без кеша.
+  private readonly projectVacanciesCache = new EntityCache<Vacancy[]>();
 
   constructor() {
     this.eventBus.on<VacancyCreated>("VacancyCreated").subscribe(event => {
       this.invalidate(event.payload.projectId);
+      this.projectVacanciesCache.invalidate(event.payload.projectId);
     });
 
     this.eventBus.on<VacancyUpdated>("VacancyUpdated").subscribe(event => {
       this.invalidate(event.payload.vacancyId);
+      // Событие содержит только vacancyId — точечно инвалидировать project нельзя,
+      // безопаснее очистить весь кеш проектных листов (вакансия могла изменить поля,
+      // которые рендерятся в списке).
+      this.projectVacanciesCache.clear();
     });
 
     this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => {
       this.invalidate(event.payload.vacancyId);
+      this.projectVacanciesCache.clear();
     });
 
     this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
       next: () => {
         this.entityCache.clear();
+        this.projectVacanciesCache.clear();
       },
     });
   }
 
   /**
    * Получает вакансии и маппит сырой HTTP-ответ в доменную модель `Vacancy`.
+   * Если запрос — это «первая страница проекта без фильтров», результат кешируется
+   * по projectId и переиспользуется при повторных заходах на проект.
    */
   getForProject(
     limit: number,
@@ -55,7 +68,17 @@ export class VacancyRepository implements VacancyRepositoryPort {
     salary?: string,
     searchValue?: string
   ): Observable<Vacancy[]> {
-    return this.vacancyAdapter
+    const isDefaultFirstPage =
+      projectId !== undefined &&
+      limit === 20 &&
+      offset === 0 &&
+      !requiredExperience &&
+      !workFormat &&
+      !workSchedule &&
+      !salary &&
+      !searchValue;
+
+    const fetch$ = this.vacancyAdapter
       .getForProject(
         limit,
         offset,
@@ -67,6 +90,10 @@ export class VacancyRepository implements VacancyRepositoryPort {
         searchValue
       )
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
+
+    return isDefaultFirstPage
+      ? this.projectVacanciesCache.getOrFetch(projectId!, () => fetch$)
+      : fetch$;
   }
 
   /**
