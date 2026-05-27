@@ -41,7 +41,7 @@ export class ChatRealtimeRepository implements ChatRealtimePort {
   }
 
   editMessage(message: Parameters<ChatRealtimePort["editMessage"]>[0]): void {
-    this.chatWsAdapter.editMessage(message)
+    this.chatWsAdapter.editMessage(message);
   }
 
   deleteMessage(message: Parameters<ChatRealtimePort["deleteMessage"]>[0]): void {
@@ -57,12 +57,12 @@ export class ChatRealtimeRepository implements ChatRealtimePort {
   }
 
   onMessage() {
-  return this.chatWsAdapter.onMessage().pipe(
-    map(message => plainToInstance(OnChatMessageDto, message)),
-    filter(dto => !!dto.message),
-    map(dto => ({ ...dto, message: mapChatMessage(dto.message)! } as OnChatMessageDto))
-  );
-}
+    return this.chatWsAdapter.onMessage().pipe(
+      map(message => plainToInstance(OnChatMessageDto, message)),
+      filter(dto => !!dto.message),
+      map(dto => ({ ...dto, message: mapChatMessage(dto.message)! } as OnChatMessageDto))
+    );
+  }
 
   onEditMessage() {
     return this.chatWsAdapter.onEditMessage().pipe(

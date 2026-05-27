@@ -17,7 +17,9 @@ export class ChatRepository implements ChatRepositoryPort {
     return this.chatHttpAdapter.loadMessages(id, type, offset, limit).pipe(
       map(page => ({
         ...page,
-        results: page.results.map(mapChatMessage).filter((message): message is ChatMessage => message !== null),
+        results: page.results
+          .map(mapChatMessage)
+          .filter((message): message is ChatMessage => message !== null),
       }))
     );
   }
