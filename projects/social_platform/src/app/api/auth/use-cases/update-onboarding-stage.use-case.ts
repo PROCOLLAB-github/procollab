@@ -12,9 +12,10 @@ export class UpdateOnboardingStageUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);
 
   execute(
-    stage: number | null
+    stage: number | null,
+    userId: number
   ): Observable<Result<User, { kind: "server_error"; cause?: unknown }>> {
-    return this.authRepository.updateOnboardingStage(stage).pipe(
+    return this.authRepository.updateOnboardingStage(stage, userId).pipe(
       map(profile => ok<User>(profile)),
       catchError(error => of(fail({ kind: "server_error", cause: error } as const)))
     );

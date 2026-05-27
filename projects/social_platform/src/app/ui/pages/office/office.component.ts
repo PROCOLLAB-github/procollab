@@ -29,6 +29,7 @@ import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
 import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -69,23 +70,24 @@ export class OfficeComponent implements OnInit, OnDestroy {
   private readonly authRegisterService = inject(AuthRegisterService);
   public readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly programShellInfoService = inject(ProgramShellInfoService);
-  public readonly authRepository = inject(AuthInfoService);
-  private readonly profile = toSignal(this.authRepository.profile, { initialValue: null });
+  private readonly profileInfoService = inject(ProfileInfoService);
 
-  readonly invites = this.officeInfoService.invites;
+  protected readonly profile = this.profileInfoService.profile;
 
-  readonly waitVerificationModal = this.officeUIInfoService.waitVerificationModal;
-  readonly waitVerificationAccepted = this.officeUIInfoService.waitVerificationAccepted;
+  protected readonly invites = this.officeInfoService.invites;
 
-  showRegisteredProgramModal = signal<boolean>(false);
+  protected readonly waitVerificationModal = this.officeUIInfoService.waitVerificationModal;
+  protected readonly waitVerificationAccepted = this.officeUIInfoService.waitVerificationAccepted;
 
-  registeredProgramToShow?: Program | null = null;
+  protected readonly showRegisteredProgramModal = signal<boolean>(false);
 
-  readonly inviteErrorModal = this.officeUIInfoService.inviteErrorModal;
+  protected registeredProgramToShow?: Program | null = null;
 
-  readonly programs = this.programShellInfoService.actualPrograms;
+  protected readonly inviteErrorModal = this.officeUIInfoService.inviteErrorModal;
 
-  readonly navItems = this.officeUIInfoService.navItems;
+  protected readonly programs = this.programShellInfoService.actualPrograms;
+
+  protected readonly navItems = this.officeUIInfoService.navItems;
   protected readonly AppRoutes = AppRoutes;
 
   protected currentYear = signal(new Date().getFullYear());

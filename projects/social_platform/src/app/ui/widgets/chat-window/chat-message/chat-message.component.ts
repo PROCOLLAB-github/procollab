@@ -25,6 +25,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /**
  * Компонент сообщения в чате с контекстным меню и файловыми вложениями.
@@ -54,24 +55,16 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
   templateUrl: "./chat-message.component.html",
   styleUrl: "./chat-message.component.scss",
   standalone: true,
-  imports: [
-    ClickOutsideModule,
-    AvatarComponent,
-    FileItemComponent,
-    IconComponent,
-    AsyncPipe,
-    DayjsPipe,
-  ],
+  imports: [ClickOutsideModule, AvatarComponent, FileItemComponent, IconComponent, DayjsPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly overlay = inject(Overlay);
+  private readonly profileInfoSerivce = inject(ProfileInfoService);
 
-  constructor(
-    private readonly snackbarService: SnackbarService,
-    private readonly overlay: Overlay,
-    public readonly authRepository: AuthInfoService
-  ) {}
+  protected readonly profile = this.profileInfoSerivce.profile;
 
   /** Объект сообщения чата */
   @Input({ required: true }) chatMessage!: ChatMessage;

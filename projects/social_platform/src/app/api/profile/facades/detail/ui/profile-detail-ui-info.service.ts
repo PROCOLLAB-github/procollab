@@ -7,6 +7,10 @@ import { User } from "@domain/auth/user.model";
 /** Состояние интерфейса детальной страницы профиля и карточек направлений пользователя. */
 @Injectable()
 export class ProfileDetailUIInfoService {
+  /**
+   * Просматриваемый профиль (тот, чью страницу мы открыли) — это НЕ logged-in user.
+   * Заполняется в applyInitProfile из data резолвера.
+   */
   readonly user = signal<User | undefined>(undefined);
   readonly loggedUserId = signal<number>(0);
   readonly profileId = signal<number>(0); // ID текущего пользователя.
@@ -18,17 +22,17 @@ export class ProfileDetailUIInfoService {
   readonly isShowModal = signal<boolean>(false);
 
   applyInitProfile(data: any): void {
-    const userWithProgress = data["data"]["user"];
-    this.initializationDirections(userWithProgress);
+    const userWithProgress = data["data"]["user"] as User;
     this.user.set(userWithProgress);
+    this.initializationDirections(userWithProgress);
 
     if (
-      this.user()?.id !== undefined &&
-      this.user()!.relations.progress! < 100 &&
-      !this.hasSeenProfileFillModal(this.user()!.id)
+      userWithProgress?.id !== undefined &&
+      userWithProgress.relations.progress! < 100 &&
+      !this.hasSeenProfileFillModal(userWithProgress.id)
     ) {
       this.isProfileFill.set(true);
-      this.markSeenProfileFillModal(this.user()!.id);
+      this.markSeenProfileFillModal(userWithProgress.id);
     } else {
       this.isProfileFill.set(false);
     }

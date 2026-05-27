@@ -6,15 +6,17 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { User, UserRole } from "@domain/auth/user.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Project } from "@domain/project/project.model";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад auth-сессии: реэкспорт сигналов профиля/ролей из `AuthRepositoryPort` для UI. */
 @Injectable({ providedIn: "root" })
 export class AuthInfoService {
   private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
-  readonly profile = this.authRepository.profile;
-  readonly roles = this.authRepository.roles;
-  readonly changeableRoles = this.authRepository.changeableRoles;
+  readonly profile = this.profileInfoService.profile;
+  readonly roles = this.profileInfoService.roles;
+  readonly changeableRoles = this.profileInfoService.changeableRoles;
 
   fetchProfile(): Observable<User> {
     return this.authRepository.fetchProfile();

@@ -23,7 +23,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { FeedNews } from "@domain/news/project-news.model";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Центральная колонка детали проекта: описание, новости. */
 @Component({
@@ -53,10 +53,10 @@ export class ProjectsMidSideComponent {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  protected readonly authRepository = inject(AuthInfoService);
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly expandService = inject(ExpandService);
 
   protected readonly directions = this.projectsDetailUIInfoService.directions;
@@ -64,6 +64,7 @@ export class ProjectsMidSideComponent {
   protected readonly AppRoutes = AppRoutes;
 
   // Состояние компонента
+  protected readonly profile = this.profileInfoService.profile;
   protected readonly news = this.newsInfoService.news; // Массив новостей
   protected readonly readFullDescription = this.expandService.readFullDescription; // Флаг развернутого описания
   protected readonly descriptionExpandable = this.expandService.descriptionExpandable; // Флаг необходимости кнопки "Читать полностью"

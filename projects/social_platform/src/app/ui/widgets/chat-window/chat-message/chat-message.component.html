@@ -58,7 +58,7 @@
     <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
   </div>
 </div>
-@if (authRepository.profile | async; as profile) {
+@if (profile()) {
 <ul
   #contextMenu
   class="message__contextmenu contextmenu"
@@ -67,7 +67,7 @@
 >
   <li class="contextmenu__item text-body-10" (click)="onCopyContent($event)">скопировать</li>
   <li class="contextmenu__item text-body-10" (click)="onReply($event)">ответить</li>
-  @if (profile.id === chatMessage.author.id) {
+  @if (profile()!.id === chatMessage.author.id) {
   <ng-container>
     <li class="contextmenu__item text-body-10" (click)="onEdit($event)">редактировать</li>
     <li class="contextmenu__item contextmenu__item--red text-body-10" (click)="onDelete($event)">

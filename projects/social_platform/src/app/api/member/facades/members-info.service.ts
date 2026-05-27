@@ -8,7 +8,6 @@ import {
   debounceTime,
   distinctUntilChanged,
   EMPTY,
-  filter,
   fromEvent,
   map,
   skip,
@@ -25,30 +24,29 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
 @Injectable()
 export class MembersInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly navService = inject(NavService);
-  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly membersUIInfoService = inject(MembersUIInfoService);
-  private readonly authRepository = inject(AuthRepositoryPort);
-  private readonly navigationService = inject(NavigationService);
   private readonly logger = inject(LoggerService);
+  private readonly navService = inject(NavService);
+  private readonly navigationService = inject(NavigationService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly membersUIInfoService = inject(MembersUIInfoService);
   private readonly getMembersUseCase = inject(GetMembersUseCase);
 
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
-
   private readonly membersTake = this.membersUIInfoService.membersTake; // Количество участников на странице
-  private readonly profileId = this.profileDetailUIInfoService.profileId;
 
-  private readonly members = this.membersUIInfoService.members; // Массив участников для отображения
+  private readonly profile = this.profileInfoService.profile;
+  private readonly profileId = this.profileDetailUIInfoService.profileId;
 
   private readonly searchForm = this.membersUIInfoService.searchForm;
   private readonly filterForm = this.membersUIInfoService.filterForm;
@@ -68,26 +66,13 @@ export class MembersInfoService {
     // Устанавливаем заголовок страницы
     this.navService.setNavTitle("Участники");
 
-    this.initializationProfile();
+    this.profileDetailUIInfoService.applySetLoggedUserId("profile", this.profile()!.id);
 
     this.initializationControls();
 
     // Подписываемся на изменения URL параметров для обновления списка участников
     // (skip(1) пропускает начальное значение — данные уже загружены resolver'ом)
     this.initializationQueryParams();
-  }
-
-  private initializationProfile(): void {
-    this.authRepository.profile
-      .pipe(
-        filter(user => !!user),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: user => {
-          this.profileDetailUIInfoService.applySetLoggedUserId("profile", user.id);
-        },
-      });
   }
 
   private initializationControls(): void {

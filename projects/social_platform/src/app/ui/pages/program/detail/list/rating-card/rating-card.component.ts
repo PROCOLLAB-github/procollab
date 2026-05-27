@@ -42,6 +42,7 @@ import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /**
  * Компонент карточки оценки проекта
@@ -96,15 +97,12 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
   protected readonly AppRoutes = AppRoutes;
-
-  constructor(
-    public industryRepository: IndustryRepositoryPort,
-    private readonly rateProjectUseCase: RateProjectUseCase,
-    private readonly authRepository: AuthInfoService,
-    private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,
-    private readonly breakpointObserver: BreakpointObserver,
-    private readonly cdRef: ChangeDetectorRef
-  ) {}
+  protected industryRepository = inject(IndustryRepositoryPort);
+  private readonly rateProjectUseCase = inject(RateProjectUseCase);
+  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly cdRef = inject(ChangeDetectorRef);
 
   @Input({ required: true }) set project(proj: ProjectRate | null) {
     if (!proj) return;
@@ -121,7 +119,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   _currentIndex = signal<number>(0);
   _projects = signal<ProjectRate[]>([]);
 
-  profile = signal<any | null>(null);
+  protected readonly profile = this.profileInfoService.profile;
 
   form = new FormControl();
 
@@ -159,14 +157,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectRated.set(isScored);
       this.ratedCount.set(this.project.ratedCount);
     }
-
-    const profileId$ = this.authRepository.profile.subscribe({
-      next: profile => {
-        this.profile.set(profile);
-      },
-    });
-
-    this.subscriptions$().push(profileId$);
   }
 
   ngAfterViewInit(): void {
@@ -239,8 +229,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             // Проверяем, первый ли раз пользователь оценивает
-            if (!project.ratedExperts.includes(profile.id)) {
-              project.ratedExperts = [...project.ratedExperts, profile.id];
+            if (!project.ratedExperts.some(user => user.id === profile.id)) {
+              project.ratedExperts = [...project.ratedExperts, profile];
               isFirstTimeRating = true;
             }
           }
@@ -367,8 +357,19 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return (
       this.locallyRatedByCurrentUser() ||
-      (Array.isArray(project.ratedExperts) && project.ratedExperts.includes(profile.id))
+      (Array.isArray(project.ratedExperts) && this.isRatedByCurrentUser)
     );
+  }
+
+  get isRatedByCurrentUser(): boolean {
+    const currentUser = this.profile();
+    const project = this.project;
+
+    if (!currentUser || !project) {
+      return false;
+    }
+
+    return project.ratedExperts.some(user => user.id === currentUser.id);
   }
 
   /**

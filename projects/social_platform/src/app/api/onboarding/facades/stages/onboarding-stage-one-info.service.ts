@@ -14,18 +14,23 @@ import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-cas
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Координирует шаг выбора специализаций и сохранение первого этапа. */
 @Injectable()
 export class OnboardingStageOneInfoService {
-  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
-  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
-  private readonly onboardingService = inject(OnboardingService);
-  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
-  private readonly validationService = inject(ValidationService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
+
+  private readonly onboardingService = inject(OnboardingService);
+  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+
+  private readonly validationService = inject(ValidationService);
   private readonly searchesService = inject(SearchesService);
 
   private readonly destroy$ = new Subject<void>();
@@ -40,6 +45,8 @@ export class OnboardingStageOneInfoService {
   readonly nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
     map(r => r["data"])
   );
+
+  private readonly profile = this.profileInfoService.profile;
 
   destroy(): void {
     this.destroy$.next();
@@ -82,7 +89,7 @@ export class OnboardingStageOneInfoService {
       .execute(this.stageForm.value)
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(2) : of(result)
+          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result)
         ),
         takeUntil(this.destroy$)
       )
@@ -91,6 +98,7 @@ export class OnboardingStageOneInfoService {
           this.stageSubmitting.set(failure("submit_error"));
           return;
         }
+        this.profileInfoService.applyProfileUpdated(result.value);
         this.completeRegistration(2);
       });
   }

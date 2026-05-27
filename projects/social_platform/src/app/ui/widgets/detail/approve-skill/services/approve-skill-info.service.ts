@@ -1,6 +1,6 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, Injector } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Approve, Skill } from "@domain/skills/skill.model";
 import { map, of, Subject, switchMap, takeUntil } from "rxjs";
@@ -11,6 +11,8 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 import { UnapproveSkillUseCase } from "@api/skills/use-cases/unapprove-skill.use-case";
 import { ApproveSkillUseCase } from "@api/skills/use-cases/approve-skill.use-case";
 import { ok } from "@domain/shared/result.type";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class ApproveskillInfoService {
@@ -18,19 +20,18 @@ export class ApproveskillInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly unapproveSkillUseCase = inject(UnapproveSkillUseCase);
   private readonly approveSkillUseCase = inject(ApproveSkillUseCase);
+  private readonly injector = inject(Injector);
 
   private readonly destroy$ = new Subject<void>();
 
   private readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
+  private readonly profile = this.profileInfoService.profile;
 
   init(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
-      next: profile => {
-        this.profileDetailUIInfoService.applySetLoggedUserId("logged", profile.id);
-      },
-    });
+    this.profileDetailUIInfoService.applySetLoggedUserId("logged", this.profile()!.id);
   }
 
   destroy(): void {
@@ -63,17 +64,17 @@ export class ApproveskillInfoService {
           if (!result.ok) return of(result);
           if (result.value.confirmedBy) return of(result);
 
-          return this.authRepository.profile.pipe(
+          return toObservable(this.profile, { injector: this.injector }).pipe(
             map(profile =>
               ok({
                 ...result.value,
                 confirmedBy: {
-                  id: profile.id,
-                  firstName: profile.firstName,
-                  lastName: profile.lastName,
-                  avatar: profile.personal.avatar,
-                  speciality: profile.personal.speciality,
-                  v2Speciality: profile.personal.v2Speciality,
+                  id: profile!.id,
+                  firstName: profile!.firstName,
+                  lastName: profile!.lastName,
+                  avatar: profile!.personal.avatar,
+                  speciality: profile!.personal.speciality,
+                  v2Speciality: profile!.personal.v2Speciality,
                 },
               } as Approve)
             )

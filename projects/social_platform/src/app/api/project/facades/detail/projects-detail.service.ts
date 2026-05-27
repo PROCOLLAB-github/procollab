@@ -20,10 +20,20 @@ import { DeleteProjectNewsUseCase } from "../../use-cases/delete-project-news.us
 import { ToggleProjectNewsLikeUseCase } from "../../use-cases/toggle-project-news-like.use-case";
 import { EditProjectNewsUseCase } from "../../use-cases/edit-project-news.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад детали проекта: участники (удаление/передача владения) и новости проекта (CRUD, лайк, read по видимости). */
 @Injectable()
 export class ProjectsDetailService {
+  private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly newsInfoService = inject(NewsInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+
+  private readonly navService = inject(NavService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly expandService = inject(ExpandService);
+
   private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
   private readonly transferProjectOwnershipUseCase = inject(TransferProjectOwnershipUseCase);
   private readonly fetchProjectNewsUseCase = inject(FetchProjectNewsUseCase);
@@ -32,19 +42,13 @@ export class ProjectsDetailService {
   private readonly deleteProjectNewsUseCase = inject(DeleteProjectNewsUseCase);
   private readonly toggleProjectNewsLikeUseCase = inject(ToggleProjectNewsLikeUseCase);
   private readonly editProjectNewsUseCase = inject(EditProjectNewsUseCase);
-  private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
-  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly authRepository = inject(AuthRepositoryPort);
-  private readonly navService = inject(NavService);
-  private readonly route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
-  private readonly expandService = inject(ExpandService);
-  private readonly newsInfoService = inject(NewsInfoService);
 
   private observer?: IntersectionObserver;
   private readonly destroy$ = new Subject<void>();
 
   private readonly project = this.projectsDetailUIService.project;
   private readonly projectId = this.projectsDetailUIService.projectId;
+  private readonly profile = this.profileInfoService.profile;
 
   private readonly news = this.newsInfoService.news;
 
@@ -60,19 +64,7 @@ export class ProjectsDetailService {
   }
 
   initializationTeam(): void {
-    this.authRepository.profile
-      .pipe(
-        filter(profile => !!profile),
-        map(profile => profile.id),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: profileId => {
-          if (profileId) {
-            this.profileDetailUIInfoService.applySetLoggedUserId("logged", profileId);
-          }
-        },
-      });
+    this.profileDetailUIInfoService.applySetLoggedUserId("logged", this.profile()!.id);
   }
 
   initializationProjectInfo(): void {
@@ -86,7 +78,7 @@ export class ProjectsDetailService {
     this.initializationNews();
 
     // Получение ID текущего пользователя
-    this.initializationProfile();
+    this.profileDetailUIInfoService.applySetLoggedUserId("profile", this.profile()!.id);
   }
 
   initializationNews(): void {
@@ -114,12 +106,6 @@ export class ProjectsDetailService {
           });
         });
       });
-  }
-
-  initializationProfile(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
-      this.profileDetailUIInfoService.applySetLoggedUserId("profile", profile.id);
-    });
   }
 
   initCheckDescription(): void {

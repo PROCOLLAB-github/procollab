@@ -2,17 +2,13 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { DetailProfileInfoService } from "@ui/widgets/detail/services/profile/detail-profile-info.service";
 import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 @Injectable()
 export class FeedFilterInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthInfoService);
-  private readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
@@ -24,10 +20,6 @@ export class FeedFilterInfoService {
   readonly includedFilters = signal<string>("");
 
   initializationFeedFilter(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
-      this.detailProfileInfoService.applySetProfile(profile);
-    });
-
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
       if (queries["includes"]) {
         this.includedFilters.set(queries["includes"]);

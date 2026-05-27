@@ -1,9 +1,9 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { UserInput } from "@domain/auth/user.model";
 import { BehaviorSubject, EMPTY, of, take } from "rxjs";
-import { GetProfileUseCase } from "@api/auth/use-cases/get-profile.use-case";
 
 /**
  * СЕРВИС УПРАВЛЕНИЯ СОСТОЯНИЕМ ОНБОРДИНГА
@@ -42,29 +42,21 @@ import { GetProfileUseCase } from "@api/auth/use-cases/get-profile.use-case";
   providedIn: "root",
 })
 export class OnboardingService {
-  private readonly getProfileUseCase = inject(GetProfileUseCase);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly profile = this.profileInfoService.profile;
 
   constructor() {
-    this.getProfileUseCase
-      .execute()
-      .pipe(take(1))
-      .subscribe({
-        next: result => {
-          if (!result.ok) return;
+    this._formValue$.next({
+      avatar: this.profile()?.personal.avatar,
+      city: this.profile()?.personal.city,
+      education: this.profile()?.relations.education,
+      workExperience: this.profile()?.relations.workExperience,
+      speciality: this.profile()?.personal.speciality,
+      skills: this.profile()?.relations.skills,
+      userType: this.profile()?.personal.userType,
+    });
 
-          this._formValue$.next({
-            avatar: result.value.personal.avatar,
-            city: result.value.personal.city,
-            education: result.value.relations.education,
-            workExperience: result.value.relations.workExperience,
-            speciality: result.value.personal.speciality,
-            skills: result.value.relations.skills,
-            userType: result.value.personal.userType,
-          });
-
-          this._currentStage$.next(result.value.personal.onboardingStage as number);
-        },
-      });
+    this._currentStage$.next(this.profile()?.personal.onboardingStage as number);
   }
 
   private _formValue$ = new BehaviorSubject<UserInput>({});

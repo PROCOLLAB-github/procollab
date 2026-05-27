@@ -34,6 +34,8 @@ import {
   success,
 } from "@domain/shared/async-state";
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /**
  * Управляет списками проектов: табами, фильтрами URL, поиском,
@@ -46,9 +48,11 @@ export class ProjectsListInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
   private readonly projectsInfoService = inject(ProjectsInfoService);
+  private readonly inviteInfoService = inject(InviteInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
-  private readonly inviteInfoService = inject(InviteInfoService);
+  private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
@@ -83,6 +87,7 @@ export class ProjectsListInfoService {
   private readonly isAll = this.projectsInfoService.isAll;
   private readonly isSubs = this.projectsInfoService.isSubs;
   private readonly isInvites = this.projectsInfoService.isInvites;
+  private readonly profile = this.profileInfoService.profile;
 
   initializationProjectsList(): void {
     this.navService.setNavTitle("Проекты");
@@ -132,16 +137,16 @@ export class ProjectsListInfoService {
         });
     }
 
-    this.route.data
-      .pipe(
-        map(r => r["data"]),
-        take(1),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(projects => {
-        if (!projects) return;
-        this.projectsCount.set(projects.count);
-        this.projects$.set(success(projects.results ?? []));
+    this.getProjectSubscriptionsUseCase
+      .execute(this.profile()!.id)
+      .pipe(take(1), takeUntil(this.destroy$))
+      .subscribe({
+        next: result => {
+          if (!result.ok) return;
+
+          this.projectsCount.set(result.value.count);
+          this.projects$.set(success(result.value.results ?? []));
+        },
       });
   }
 

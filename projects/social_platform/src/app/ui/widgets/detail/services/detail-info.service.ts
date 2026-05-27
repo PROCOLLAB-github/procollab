@@ -1,8 +1,10 @@
 /** @format */
 
 import { Location } from "@angular/common";
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, Injector, signal } from "@angular/core";
+import { toObservable } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
+import { User } from "@domain/auth/user.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
@@ -23,13 +25,13 @@ export class DetailInfoService {
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly authInfoService = inject(AuthInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly location = inject(Location);
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly detailProjectInfoService = inject(DetailProjectInfoService);
   private readonly detailProgramInfoService = inject(DetailProgramInfoService);
+  private readonly injector = inject(Injector);
 
   private readonly destroy$ = new Subject<void>();
   private unsubscribeUrlChange?: () => void;
@@ -37,10 +39,20 @@ export class DetailInfoService {
   readonly info = signal<any | undefined>(undefined);
   readonly listType = signal<"project" | "program" | "profile">("project");
   readonly projectForm = this.projectFormService.getForm();
-  readonly isInProject = signal<boolean | undefined>(undefined);
   readonly memberProjects = this.detailProfileInfoService.memberProjects;
-  readonly userType = signal<number | undefined>(undefined);
   readonly profile = this.detailProfileInfoService.profile;
+  // userType вытягивается реактивно из текущего профиля: подписка раньше делалась
+  // через authRepository.profile.pipe(...).subscribe(set), после миграции на сигнал
+  // это просто computed — обновляется автоматически когда profile() придёт.
+  readonly userType = computed(() => this.profile()?.personal.userType);
+  readonly isInProject = computed<boolean | undefined>(() => {
+    if (this.listType() !== "project" || !this.info()) return undefined;
+    const myId = this.profile()?.id;
+    if (myId === undefined) return undefined;
+    return !!this.info()
+      ?.collaborators?.map((person: Collaborator) => person.userId)
+      .includes(myId);
+  });
   readonly queryCourseId = signal<number | null>(null);
   readonly isProfileFill = this.profileDetailUIInfoService.isProfileFill;
 
@@ -173,27 +185,6 @@ export class DetailInfoService {
     this.detailProjectInfoService.applyUpdateStage("kanban", currentUrl.includes("/kanban"));
   }
 
-  private isInProfileInfo(): void {
-    this.authInfoService.profile
-      .pipe(
-        filter(profile => !!profile),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: profile => {
-          this.detailProfileInfoService.applySetProfile(profile);
-
-          if (this.info() && this.listType() === "project") {
-            this.isInProject.set(
-              this.info()
-                ?.collaborators?.map((person: Collaborator) => person.userId)
-                .includes(profile.id)
-            );
-          }
-        },
-      });
-  }
-
   private initializeInfo() {
     if (this.listType() === "project") {
       const project = this.projectsDetailUIInfoService.project;
@@ -201,22 +192,10 @@ export class DetailInfoService {
 
       this.detailProjectInfoService.applySetIsDisabled(this.info()?.partnerProgram?.isSubmitted);
 
-      this.isInProfileInfo();
+      // isInProject теперь computed — пересчитается сам когда profile() и info() готовы.
     } else if (this.listType() === "program") {
       const program = this.programDetailMainUIInfoService.program;
       this.info.set(program());
-
-      this.authInfoService.profile
-        .pipe(
-          filter(user => !!user),
-          takeUntil(this.destroy$)
-        )
-        .subscribe({
-          next: user => {
-            this.userType.set(user!.personal.userType);
-            this.profile.set(user);
-          },
-        });
 
       if (this.isUserMember() && (this.isUserExpert() || this.isUserManager())) return;
 
@@ -239,11 +218,12 @@ export class DetailInfoService {
       }
     } else {
       this.detailProfileInfoService.initializationProfile();
-      const user = this.profileDetailUIInfoService.user();
-
-      this.info.set(user);
-
-      this.isInProfileInfo();
+      toObservable(this.profileDetailUIInfoService.user, { injector: this.injector })
+        .pipe(
+          filter((user): user is User => !!user),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(user => this.info.set(user));
 
       this.detailProfileInfoService.initializationLeaderProjects();
     }

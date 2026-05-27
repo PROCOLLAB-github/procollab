@@ -30,6 +30,10 @@ export const PROFILE_DETAIL_ROUTES: Routes = [
     resolve: {
       data: ProfileDetailResolver,
     },
+    // Без этого Angular Router не перезапускает резолвер при смене :id в SPA-навигации
+    // между профилями (тот же компонент, разные params) — на экране остаются данные
+    // предыдущего юзера, applyInitProfile не вызывается.
+    runGuardsAndResolvers: "always",
     data: { listType: "profile" },
     children: [
       {

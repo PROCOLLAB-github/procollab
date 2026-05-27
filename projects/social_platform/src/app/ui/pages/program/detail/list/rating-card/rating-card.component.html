@@ -75,11 +75,9 @@
       <app-project-rating
         [criteria]="project.criterias"
         [formControl]="form"
-        [currentUserId]="profile().id"
+        [currentUserId]="profile()!.id"
         [disabled]="
-          (projectRated() || projectConfirmed()) &&
-          project.ratedExperts.includes(profile().id) &&
-          !programDateFinished()
+          (projectRated() || projectConfirmed()) && isRatedByCurrentUser && !programDateFinished()
         "
       ></app-project-rating>
       @if (form | controlError: "required"; as error) {

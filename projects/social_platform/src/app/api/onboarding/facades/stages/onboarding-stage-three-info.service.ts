@@ -11,21 +11,26 @@ import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-cas
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад этапа 3 онбординга: обновление профиля и продвижение этапа онбординга. */
 @Injectable()
 export class OnboardingStageThreeInfoService {
+  private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
+
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
+
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
-  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
-  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
-  private readonly router = inject(Router);
-  private readonly logger = inject(LoggerService);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
   private readonly destroy$ = new Subject<void>();
 
   private readonly userRole = this.onboardingStageThreeUIInfoService.userRole;
+  private readonly profile = this.profileInfoService.profile;
 
   private readonly stageTouched = this.onboardingUIInfoService.stageTouched;
   private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
@@ -53,10 +58,13 @@ export class OnboardingStageThreeInfoService {
       .execute({ userType: this.userRole() })
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(null) : of(result)
+          result.ok
+            ? this.updateOnboardingStageUseCase.execute(null, this.profile()!.id)
+            : of(result)
         ),
         tap(result => {
           if (!result.ok) return;
+          this.profileInfoService.applyProfileUpdated(result.value);
           this.router
             .navigateByUrl(AppRoutes.office.root())
             .then(() => this.logger.debug("Route changed from OnboardingStageThree"));
