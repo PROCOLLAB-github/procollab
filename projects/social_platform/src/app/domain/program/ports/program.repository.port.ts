@@ -20,8 +20,6 @@ export abstract class ProgramRepositoryPort {
     params?: HttpParams
   ): Observable<ApiPagination<Program>>;
 
-  abstract getActualPrograms(): Observable<ApiPagination<Program>>;
-
   abstract getOne(programId: number): Observable<Program>;
 
   abstract create(program: ProgramCreate): Observable<Program>;

@@ -14,7 +14,6 @@ import {
   AddNews,
   DeleteNews,
   EditNews,
-  ReadNews,
   ToggleLike,
 } from "@domain/project/events/project-news.event";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
@@ -56,11 +55,11 @@ export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
       },
     });
 
-    this.eventBus.on<ReadNews>("ReadNews").subscribe({
-      next: event => {
-        this.newsCache.invalidate(Number(event.payload.projectId));
-      },
-    });
+    // ReadNews помечает серверный счётчик "просмотрено" — контент новостей не меняется
+    // (текст/файлы/лайки/автор). Инвалидация кеша на него убивала бенефит кеширования:
+    // IntersectionObserver на скролле эмитил ReadNews → кеш сбрасывался → следующий
+    // вход на проект делал лишний HTTP. Сейчас счётчик "прочитано" обновится при
+    // естественной инвалидации (Add/Edit/Delete/Like) или со следующим деплоем.
 
     this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
       next: () => {

@@ -20,7 +20,6 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { NavComponent } from "./nav/nav.component";
 import { SnackbarComponent } from "./snackbar/snackbar.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
-import { GetActualProgramsUseCase } from "@api/program/use-cases/get-actual-programs.use-case";
 import { Program } from "@domain/program/program.model";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
@@ -106,7 +105,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
       this.waitVerificationAccepted.set(true);
     }
 
-    this.programShellInfoService.ensureLoaded();
+    this.programShellInfoService.ensureProgramsLoaded();
   }
 
   ngOnDestroy(): void {
@@ -126,7 +125,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.programShellInfoService.invalidate();
+    this.programShellInfoService.invalidatePrograms();
     this.officeInfoService.onLogout();
   }
 

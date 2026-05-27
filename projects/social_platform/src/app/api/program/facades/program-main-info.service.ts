@@ -9,7 +9,7 @@ import { HttpParams } from "@angular/common/http";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import Fuse from "fuse.js";
-import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
+import { ProgramShellInfoService } from "./program-shell-info.service";
 
 /** Фасад главной вкладки программы: участие в программе (`ParticipatingProgramUseCase`). */
 @Injectable()
@@ -17,8 +17,8 @@ export class ProgramMainInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly participatingProgramUseCase = inject(ParticipatingProgramUseCase);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
+  private readonly programShellInfoService = inject(ProgramShellInfoService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -39,8 +39,8 @@ export class ProgramMainInfoService {
         switchMap(([{ filter, search }]) => {
           this.isPparticipating.set(filter["participating"] === "true");
 
-          return this.participatingProgramUseCase
-            .execute(new HttpParams({ fromObject: filter }))
+          return this.programShellInfoService
+            .ensureProgramsLoaded(new HttpParams({ fromObject: filter }))
             .pipe(map(result => ({ result, search })));
         }),
         takeUntil(this.destroy$)

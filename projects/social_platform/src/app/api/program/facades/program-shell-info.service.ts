@@ -12,70 +12,119 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
-import { Observable, finalize, shareReplay } from "rxjs";
-import { GetActualProgramsUseCase } from "../use-cases/get-actual-programs.use-case";
+import { Observable, finalize, shareReplay, of, tap, EMPTY } from "rxjs";
+import { readCache, writeCache } from "@utils/cache";
+import { plainToInstance } from "class-transformer";
+import { HttpParams } from "@angular/common/http";
+import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
+import { Result, ok } from "@domain/shared/result.type";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { GetProgramsUseCase } from "../use-cases/get-programs.use-case";
+
+const PROGRAM_CACHE_KEY = "programs";
+const PROGRAM_ACTUAL_CACHE_KEY = "programs:actual";
+const CACHE_VERSION = 1;
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 
 @Injectable({
   providedIn: "root",
 })
 export class ProgramShellInfoService {
-  private readonly getActualProgramsUseCase = inject(GetActualProgramsUseCase);
-  private readonly actualPrograms$ = signal<AsyncState<Program[], unknown>>(initial());
+  private readonly getProgramsUseCase = inject(GetProgramsUseCase);
+  private readonly participatingProgramUseCase = inject(ParticipatingProgramUseCase);
 
-  readonly actualPrograms = computed(() => {
-    const state = this.actualPrograms$();
+  private readonly programs$ = signal<AsyncState<Program[], unknown>>(initial());
+
+  readonly programs = computed(() => {
+    const state = this.programs$();
     if (isSuccess(state)) return state.data;
     if (isLoading(state)) return state.previous ?? [];
     if (isFailure(state)) return state.previous ?? [];
     return [];
   });
 
-  private inflight: Observable<unknown> | null = null;
+  readonly actualPrograms = computed(() => {
+    return this.programs()
+      .filter(p => Date.now() < Date.parse(p.datetimeRegistrationEnds))
+      .slice(0, 3);
+  });
 
-  ensureLoaded() {
-    if (isSuccess(this.actualPrograms$()) || isLoading(this.actualPrograms$())) return;
-    this.fetch();
+  private programsInflight: Observable<Result<ApiPagination<Program>, unknown>> | null = null;
+
+  ensureProgramsLoaded(filter?: HttpParams): Observable<Result<ApiPagination<Program>, unknown>> {
+    if (filter && filter.keys().length > 0) {
+      if (this.programsInflight) return this.programsInflight;
+      return this.fetchPrograms(filter);
+    }
+
+    if (isSuccess(this.programs$())) {
+      const data = this.programs();
+      return of(
+        ok<ApiPagination<Program>>({ count: data.length, results: data, next: "", previous: "" })
+      );
+    }
+
+    const cached = readCache<Program[] | null>(
+      PROGRAM_CACHE_KEY,
+      CACHE_VERSION,
+      CACHE_TTL,
+      raw => plainToInstance(Program, raw as object[]) as Program[]
+    );
+
+    if (cached) {
+      this.programs$.set(success(cached));
+
+      this.fetchPrograms();
+      return of(
+        ok<ApiPagination<Program>>({
+          count: cached.length,
+          results: cached,
+          next: "",
+          previous: "",
+        })
+      );
+    }
+
+    return this.fetchPrograms();
   }
 
-  refresh(): void {
-    this.inflight = null;
-    this.fetch();
+  refreshPrograms(): void {
+    this.programsInflight = null;
+    this.fetchPrograms();
   }
 
-  invalidate(): void {
-    this.inflight = null;
-    this.actualPrograms$.set(initial());
+  invalidatePrograms(): void {
+    this.programsInflight = null;
+    this.programs$.set(initial());
   }
 
-  private fetch() {
-    if (this.inflight) return;
+  private fetchPrograms(filter?: HttpParams): Observable<Result<ApiPagination<Program>, unknown>> {
+    if (this.programsInflight) return EMPTY;
 
-    const state = this.actualPrograms$();
+    const state = this.programs$();
     const prev = isSuccess(state) ? state.data : undefined;
-    this.actualPrograms$.set(loading(prev));
+    this.programs$.set(loading(prev));
 
-    const request$ = this.getActualProgramsUseCase.execute().pipe(
-      finalize(() => (this.inflight = null)),
+    const source$ = this.participatingProgramUseCase.execute(filter);
+
+    const request$ = source$.pipe(
+      tap(result => {
+        if (!result.ok) return;
+        this.programs$.set(success(result.value.results));
+        try {
+          writeCache(PROGRAM_CACHE_KEY, CACHE_VERSION, result.value.results);
+        } catch {}
+      }),
+      finalize(() => (this.programsInflight = null)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
-    this.inflight = request$;
+
+    this.programsInflight = request$;
 
     request$.subscribe({
-      next: result => {
-        if (!result.ok) {
-          this.actualPrograms$.set(failure(result.error, prev));
-          return;
-        }
-
-        const programs = result.value.results;
-        const resultPrograms = programs.filter(
-          program => Date.now() < Date.parse(program.datetimeRegistrationEnds)
-        );
-        this.actualPrograms$.set(success(resultPrograms.slice(0, 3)));
-      },
-      error: err => {
-        this.actualPrograms$.set(failure(err, prev));
-      },
+      error: error => this.programs$.set(failure(error, prev)),
     });
+
+    return request$;
   }
 }

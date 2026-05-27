@@ -228,7 +228,7 @@
               проекты-участники
             </app-button>
           </a>
-          } @if (!isUserManager && !isUserExpert && appWidth > 1000) {
+          } @if (!isUserManager() && !isUserExpert() && appWidth > 1000) {
           <a class="info__more">
             <app-button
               appearance="outline"

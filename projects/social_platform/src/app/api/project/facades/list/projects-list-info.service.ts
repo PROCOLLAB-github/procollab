@@ -8,15 +8,15 @@ import {
   EMPTY,
   fromEvent,
   map,
-  of,
+  skip,
   Subject,
+  take,
   takeUntil,
   tap,
   throttleTime,
 } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ProjectsInfoService } from "../projects-info.service";
-import { ProgramDetailListInfoService } from "../../../program/facades/detail/program-detail-list-info.service";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
@@ -48,7 +48,6 @@ export class ProjectsListInfoService {
   private readonly projectsInfoService = inject(ProjectsInfoService);
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
-  private readonly programDetailListInfoService = inject(ProgramDetailListInfoService);
   private readonly inviteInfoService = inject(InviteInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -83,17 +82,12 @@ export class ProjectsListInfoService {
 
   private readonly isAll = this.projectsInfoService.isAll;
   private readonly isSubs = this.projectsInfoService.isSubs;
-  private readonly isDashboard = this.projectsInfoService.isDashboard;
   private readonly isInvites = this.projectsInfoService.isInvites;
 
   initializationProjectsList(): void {
     this.navService.setNavTitle("Проекты");
 
     this.projectsInfoService.initializationRouterEvents();
-
-    if (this.isDashboard() || this.isSubs()) {
-      this.programDetailListInfoService.setupProfile();
-    }
 
     this.route.queryParams
       .pipe(
@@ -110,6 +104,7 @@ export class ProjectsListInfoService {
     if (this.isAll()) {
       this.route.queryParams
         .pipe(
+          skip(1),
           distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
           concatMap(q => {
             const prev = this.projects();
@@ -140,6 +135,7 @@ export class ProjectsListInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
+        take(1),
         takeUntil(this.destroy$)
       )
       .subscribe(projects => {
