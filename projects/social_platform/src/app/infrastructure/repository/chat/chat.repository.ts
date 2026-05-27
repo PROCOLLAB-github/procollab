@@ -17,7 +17,7 @@ export class ChatRepository implements ChatRepositoryPort {
     return this.chatHttpAdapter.loadMessages(id, type, offset, limit).pipe(
       map(page => ({
         ...page,
-        results: page.results.map(mapChatMessage),
+        results: page.results.map(mapChatMessage).filter((message): message is ChatMessage => message !== null),
       }))
     );
   }
@@ -33,7 +33,8 @@ export class ChatRepository implements ChatRepositoryPort {
   }
 }
 
-export function mapChatMessage(message: ChatMessage): ChatMessage {
+export function mapChatMessage(message: ChatMessage | null | undefined): ChatMessage | null {
+  if (!message) return null;
   return {
     ...message,
     author: message.author ? userFromRaw(message.author) : message.author,

@@ -70,7 +70,10 @@ export class ChatDirectInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        tap(chat => this.chat.set(chat)),
+        tap(chat => {
+          this.chat.set(chat);
+          this.chatDirectUIInfoService.currentChatId.set(this.getChatId());
+        }),
         switchMap(() => this.fetchMessages(type)),
         takeUntil(this.destroy$)
       )
