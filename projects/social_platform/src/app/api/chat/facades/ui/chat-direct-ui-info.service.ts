@@ -30,6 +30,7 @@ export class ChatDirectUIInfoService {
 
   /** ID текущего пользователя */
   readonly currentUserId = signal<number | undefined>(undefined);
+  readonly currentChatId = signal<string | undefined>(undefined);
 
   /** Флаг процесса загрузки сообщений */
   readonly fetching = signal<boolean>(false);
@@ -79,8 +80,8 @@ export class ChatDirectUIInfoService {
   }
 
   applyMessageEvent(result: OnChatMessageDto): void {
-    // Бэк иногда шлёт ack-фрейм без поля message — игнорим, чтобы не пушить undefined в список.
     if (!result?.message) return;
+    if (String(result.chatId) !== this.currentChatId()) return;
     this.messages.update(list => [...list, result.message]);
   }
 
