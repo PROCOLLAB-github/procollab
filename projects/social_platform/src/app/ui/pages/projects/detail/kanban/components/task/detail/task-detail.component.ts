@@ -255,8 +255,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get responsiblePickOpenOptions() {
-    return this.collaborators()?.length
-      ? this.collaborators()!.map(collaborator => ({
+    const collabs = this.collaborators();
+    return collabs?.length
+      ? collabs.map(collaborator => ({
           id: collaborator.userId,
           label: collaborator.firstName + " " + collaborator.lastName[0],
           value: collaborator.userId,
@@ -266,8 +267,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get goalPickOptions() {
-    return this.goals()?.length
-      ? this.goals()!.map(goal => ({
+    const items = this.goals();
+    return items?.length
+      ? items.map(goal => ({
           id: goal.id,
           label: goal.title,
           value: goal.id,
@@ -313,7 +315,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       days = daysUntil(deadline);
     }
 
-    const color = status === "закончена" ? "red" : this.getColorByDays(days!);
+    const color = status === "закончена" ? "red" : this.getColorByDays(days ?? 0);
 
     return {
       text: status,
