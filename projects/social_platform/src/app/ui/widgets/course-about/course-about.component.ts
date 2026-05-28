@@ -1,17 +1,9 @@
 /** @format */
 
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  Input,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { expandElement } from "@utils/expand-element";
+import { ExpandService } from "@api/expand/expand.service";
 
 /** Виджет «о курсе»: описание курса в модалке/блоке. */
 @Component({
@@ -20,24 +12,29 @@ import { expandElement } from "@utils/expand-element";
   styleUrl: "./course-about.component.scss",
   standalone: true,
   imports: [IconComponent, ParseBreaksPipe, ParseLinksPipe],
+  providers: [ExpandService],
 })
 export class CourseAboutComponent implements AfterViewInit {
   @Input({ required: true }) description!: string;
-  @ViewChild("descEl") descEl?: ElementRef;
+  @ViewChild("descEl") private descEl?: ElementRef;
 
-  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly expandService = inject(ExpandService);
 
-  descriptionExpandable = false;
-  readFullDescription = false;
+  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
+  protected readonly readFullDescription = this.expandService.readFullDescription;
 
   ngAfterViewInit(): void {
-    const el = this.descEl?.nativeElement;
-    this.descriptionExpandable = el?.clientHeight < el?.scrollHeight;
-    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.expandService.checkExpandable("description", true, this.descEl);
+    });
   }
 
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+  protected onExpandDescription(elem: HTMLElement): void {
+    this.expandService.onExpand(
+      "description",
+      elem,
+      "expanded",
+      this.expandService.readFullDescription()
+    );
   }
 }

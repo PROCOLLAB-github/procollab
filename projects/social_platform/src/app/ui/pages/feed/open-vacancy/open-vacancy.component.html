@@ -21,7 +21,7 @@
         {{ project.name | truncate: 30 }}
       </p>
 
-      @if (industryRepository.getOne(project.industry); as industry) {
+      @if (industryRepositoryGetOne(project.industry); as industry) {
       <app-tag class="card__industry" color="complete">
         {{ industry.name }}
       </app-tag>
@@ -59,7 +59,7 @@
           }
         </div>
         } @if (skillsLength > 8) {
-        <div class="read-more text-body-10" (click)="readFullSkills = !readFullSkills">
+        <div class="read-more text-body-10" (click)="toggleSkills()">
           {{ readFullSkills ? "cкрыть" : "подробнее" }}
         </div>
         } }
@@ -73,12 +73,9 @@
             #descEl
             [innerHTML]="vacancy.description | parseLinks | parseBreaks"
           ></p>
-          @if (descriptionExpandable) {
-          <div
-            class="read-more text-body-10"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-          >
-            {{ readFullDescription ? "скрыть" : "подробнее" }}
+          @if (descriptionExpandable()) {
+          <div class="read-more text-body-10" (click)="onExpandDescription(descEl)">
+            {{ readFullDescription() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>

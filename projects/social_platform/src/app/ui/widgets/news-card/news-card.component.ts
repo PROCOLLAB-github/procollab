@@ -28,7 +28,6 @@ import {
 } from "@corelib";
 import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
-import { expandElement } from "@utils/expand-element";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CarouselComponent } from "./carousel/carousel.component";
 import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
@@ -40,6 +39,7 @@ import { FileItemComponent } from "@ui/primitives/file-item/file-item.component"
 import { FileModel } from "@domain/file/file.model";
 import { catchError, forkJoin, noop, Observable, of, take, tap } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ExpandService } from "@api/expand/expand.service";
 
 /** Виджет карточки новости: отображение, лайк, режим редактирования. */
 @Component({
@@ -65,9 +65,11 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     ImgCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ExpandService],
 })
 export class NewsCardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly expandService = inject(ExpandService);
 
   constructor(
     private readonly snackbarService: SnackbarService,
@@ -94,8 +96,6 @@ export class NewsCardComponent implements OnInit {
 
   placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
 
-  newsTextExpandable!: boolean;
-  readMore = false;
   editMode = false;
   editForm: FormGroup;
 
@@ -195,9 +195,9 @@ export class NewsCardComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    const newsTextElem = this.newsTextEl?.nativeElement;
-    this.newsTextExpandable = newsTextElem?.clientHeight < newsTextElem?.scrollHeight;
-    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.expandService.checkExpandable("description", true, this.newsTextEl);
+    });
   }
 
   onCopyLink(): void {
@@ -423,8 +423,15 @@ export class NewsCardComponent implements OnInit {
     this.loggerService.info("Лайк на изображении с индексом: ", index);
   }
 
-  onExpandNewsText(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readMore = !isExpanded;
+  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
+  protected readonly readFullDescription = this.expandService.readFullDescription;
+
+  protected onExpandNewsText(elem: HTMLElement): void {
+    this.expandService.onExpand(
+      "description",
+      elem,
+      "expanded",
+      this.expandService.readFullDescription()
+    );
   }
 }

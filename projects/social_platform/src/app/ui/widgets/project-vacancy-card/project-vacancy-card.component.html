@@ -56,12 +56,9 @@
     @if (vacancy.description) {
     <div class="text-body-10 about__text">
       <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
-      @if (descriptionExpandable) {
-      <div
-        class="read-more text-body-10"
-        (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-      >
-        {{ readFullDescription ? "cкрыть" : "подробнее" }}
+      @if (descriptionExpandable()) {
+      <div class="read-more text-body-10" (click)="onExpandDescription(descEl)">
+        {{ readFullDescription() ? "cкрыть" : "подробнее" }}
       </div>
       }
     </div>
