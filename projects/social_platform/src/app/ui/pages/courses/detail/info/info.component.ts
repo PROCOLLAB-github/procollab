@@ -1,19 +1,9 @@
 /** @format */
 
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, HostListener, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { IconComponent } from "@uilib";
-import { expandElement } from "@utils/expand-element";
 import { CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -27,10 +17,7 @@ import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.comp
   selector: "app-detail",
   standalone: true,
   imports: [
-    IconComponent,
     RouterModule,
-    ParseBreaksPipe,
-    ParseLinksPipe,
     CommonModule,
     SoonCardComponent,
     ModalComponent,
@@ -41,9 +28,7 @@ import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.comp
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
 })
-export class CourseInfoComponent implements OnInit, AfterViewInit {
-  @ViewChild("descEl") descEl?: ElementRef;
-
+export class CourseInfoComponent {
   protected appWidth = window.innerWidth;
 
   @HostListener("window:resize")
@@ -51,7 +36,6 @@ export class CourseInfoComponent implements OnInit, AfterViewInit {
     this.appWidth = window.innerWidth;
   }
 
-  private readonly cdRef = inject(ChangeDetectorRef);
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
   protected readonly courseStructure = this.courseDetailUIInfoService.courseStructure;
@@ -59,20 +43,4 @@ export class CourseInfoComponent implements OnInit, AfterViewInit {
   protected readonly courseModules = this.courseDetailUIInfoService.courseModules;
   protected readonly isCompleteModule = this.courseDetailUIInfoService.isCompleteModule;
   protected readonly isCourseCompleted = this.courseDetailUIInfoService.isCourseCompleted;
-
-  protected descriptionExpandable?: boolean;
-  protected readFullDescription!: boolean;
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-    this.cdRef.detectChanges();
-  }
-
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
-  }
 }

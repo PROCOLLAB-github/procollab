@@ -2,13 +2,9 @@
 
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
-  OnDestroy,
-  OnInit,
-  signal,
   ViewChild,
   inject,
   ChangeDetectionStrategy,
@@ -16,17 +12,6 @@ import {
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
-import { expandElement } from "@utils/expand-element";
-import {
-  debounceTime,
-  filter,
-  finalize,
-  fromEvent,
-  map,
-  Observable,
-  Subscription,
-  tap,
-} from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { ProjectRatingComponent } from "./project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
@@ -34,14 +19,12 @@ import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TruncatePipe, ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { HttpResponse } from "@angular/common/http";
 import { ProjectRate } from "@domain/project/project-rate";
-import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
-import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { RatingCardService } from "./services/rating-card.service";
+import { ExpandService } from "@api/expand/expand.service";
+import { map } from "rxjs";
 
 /** Карточка оценки проекта экспертом: форма с критериями, навигация, переоценка. */
 @Component({
@@ -65,292 +48,98 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
     TruncatePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [RatingCardService, ExpandService],
 })
-export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly logger = inject(LoggerService);
-  protected readonly AppRoutes = AppRoutes;
-  protected industryRepository = inject(IndustryRepositoryPort);
-  private readonly rateProjectUseCase = inject(RateProjectUseCase);
-  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
-  private readonly profileInfoService = inject(ProfileInfoService);
+export class RatingCardComponent implements AfterViewInit {
+  private readonly ratingCardService = inject(RatingCardService);
+  private readonly expandService = inject(ExpandService);
   private readonly breakpointObserver = inject(BreakpointObserver);
-  private readonly cdRef = inject(ChangeDetectorRef);
+
+  protected readonly AppRoutes = AppRoutes;
+  private readonly industryRepository = inject(IndustryRepositoryPort);
+
+  @ViewChild("descEl") private descEl?: ElementRef;
 
   @Input({ required: true }) set project(proj: ProjectRate | null) {
-    if (!proj) return;
-    this._project.set(proj);
+    this.ratingCardService.initProject(proj);
   }
 
   get project(): ProjectRate | null {
-    return this._project();
+    return this.ratingCardService.project();
   }
 
-  @ViewChild("descEl") descEl?: ElementRef;
-
-  _project = signal<ProjectRate | null>(null);
-  _currentIndex = signal<number>(0);
-  _projects = signal<ProjectRate[]>([]);
-
-  protected readonly profile = this.profileInfoService.profile;
-
-  form = new FormControl();
-
-  submitLoading = signal(false);
-  confirmLoading = signal(false);
-
-  readFullDescription = signal(false);
-
-  descriptionExpandable = signal(false);
-
-  projectRated = signal(false);
-
-  projectConfirmed = signal(false);
-
-  showConfirmRateModal = signal(false);
-
-  locallyRatedByCurrentUser = signal(false);
-
-  isProjectCriterias = signal(0);
-  ratedCount = signal(0);
-
-  readonly programDateFinished = this.programDetailMainUIInfoService.registerDateExpired;
-  readonly program = this.programDetailMainUIInfoService.program;
-
-  desktopMode$: Observable<boolean> = this.breakpointObserver
+  protected readonly desktopMode$ = this.breakpointObserver
     .observe("(min-width: 1000px)")
     .pipe(map(result => result.matches));
 
-  subscriptions$ = signal<Subscription[]>([]);
+  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
+  protected readonly readFullDescription = this.expandService.readFullDescription;
 
-  ngOnInit(): void {
-    if (this.project) {
-      const isScored = this.project?.scored || false;
-      this.projectConfirmed.set(isScored);
-      this.projectRated.set(isScored);
-      this.ratedCount.set(this.project.ratedCount);
-    }
-  }
+  protected readonly ratedCount = this.ratingCardService.ratedCount;
+  protected readonly isProjectCriterias = this.ratingCardService.isProjectCriterias;
+  protected readonly form = this.ratingCardService.form;
+  protected readonly profile = this.ratingCardService.profile;
+  protected readonly projectRated = this.ratingCardService.projectRated;
+  protected readonly projectConfirmed = this.ratingCardService.projectConfirmed;
+  protected readonly isRatedByCurrentUser = this.ratingCardService.isRatedByCurrentUser;
+  protected readonly programDateFinished = this.ratingCardService.programDateFinished;
+  protected readonly showRatingForm = this.ratingCardService.showRatingForm;
+  protected readonly showRatedStatus = this.ratingCardService.showRatedStatus;
+  protected readonly showConfirmedState = this.ratingCardService.showConfirmedState;
+  protected readonly submitLoading = this.ratingCardService.submitLoading;
+  protected readonly confirmLoading = this.ratingCardService.confirmLoading;
+  protected readonly isButtonDisabled = this.ratingCardService.isButtonDisabled;
+  protected readonly buttonOpacity = this.ratingCardService.buttonOpacity;
+  protected readonly buttonColor = this.ratingCardService.buttonColor;
+  protected readonly buttonTooltip = this.ratingCardService.buttonTooltip;
+  protected readonly rateButtonText = this.ratingCardService.rateButtonText;
+  protected readonly showEditButton = this.ratingCardService.showEditButton;
+  protected readonly showConfirmRateModal = this.ratingCardService.showConfirmRateModal;
+
+  protected readonly industryRepositoryGetOne = (id: number) => this.industryRepository.getOne(id);
 
   ngAfterViewInit(): void {
-    if (this.project) {
-      this.isProjectCriterias.set(
-        this.project?.criterias.filter(criteria => !(criteria.type === "str")).length
-      );
-    }
-
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable.set(descElement?.clientHeight < descElement?.scrollHeight);
-    this.cdRef.detectChanges();
-
-    const resizeSub$ = fromEvent(window, "resize")
-      .pipe(debounceTime(50))
-      .subscribe(() => {
-        this.descriptionExpandable.set(descElement?.clientHeight < descElement?.scrollHeight);
-      });
-
-    this.subscriptions$().push(resizeSub$);
+    setTimeout(() => {
+      this.expandService.checkExpandable("description", true, this.descEl);
+    });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions$().forEach($ => $.unsubscribe());
+  protected onExpandDescription(elem: HTMLElement): void {
+    this.expandService.onExpand(
+      "description",
+      elem,
+      "expanded",
+      this.expandService.readFullDescription()
+    );
   }
 
-  expandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription.set(!isExpanded);
-  }
-
-  confirmRateProject(): void {
-    this.form.markAsTouched();
-    if (this.form.invalid) return;
-
-    const fv = this.form.getRawValue();
-    const project = this.project as ProjectRate;
-
-    this.submitLoading.set(true);
-
-    this.rateProjectUseCase
-      .execute(project.id, project.criterias, fv)
-      .pipe(finalize(() => this.submitLoading.set(false)))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            if (result.error.cause instanceof HttpResponse) {
-              if (result.error.cause.status === 400) {
-                this.logger.error("Ошибка: достигнут максимальный лимит оценок");
-              }
-            }
-            return;
-          }
-
-          const profile = this.profile();
-          const project = this.project as ProjectRate;
-
-          this.locallyRatedByCurrentUser.set(true);
-          this.projectRated.set(true);
-          this.projectConfirmed.set(true);
-
-          let isFirstTimeRating = false;
-
-          if (profile) {
-            if (!Array.isArray(project.ratedExperts)) {
-              project.ratedExperts = [];
-            }
-
-            // Проверяем, первый ли раз пользователь оценивает
-            if (!project.ratedExperts.some(user => user.id === profile.id)) {
-              project.ratedExperts = [...project.ratedExperts, profile];
-              isFirstTimeRating = true;
-            }
-          }
-
-          // Увеличиваем счетчик только при первой оценке
-          if (isFirstTimeRating) {
-            this.ratedCount.update(count => count + 1);
-          }
-
-          this._project.set({ ...project });
-          this.showConfirmRateModal.set(false);
-        },
-      });
-  }
-
-  /** Сбрасывает статусы для переоценки (не удаляет из списка оценивших). */
-  redoRating(): void {
-    this.projectRated.set(false);
-    this.projectConfirmed.set(false);
-    // locallyRatedByCurrentUser остается true, так как пользователь уже в списке оценивших
-    // После сброса статусов кнопка станет "оценить проект" и откроет модалку
-  }
-
-  openPresentation(url: string) {
+  protected openPresentation(url: string): void {
     if (url) {
       window.open(url, "_blank");
     }
   }
 
-  get canEdit(): boolean {
-    return !this.programDateFinished();
-  }
-
-  get isCurrentUserExpert(): boolean {
-    const currentProfile = this.profile();
-    const project = this.project;
-
-    if (!currentProfile || !project) return false;
-
-    const isExpertFromBackend =
-      !!project.scoredExpertId && project.scoredExpertId === currentProfile.id;
-
-    const isExpertLocally = this.locallyRatedByCurrentUser();
-
-    return isExpertFromBackend || isExpertLocally;
-  }
-
-  /** Проверяет, может ли пользователь оценить проект (программа не завершена + лимит не достигнут). */
-  get canRate(): boolean {
-    if (this.programDateFinished()) return false;
-
-    // Если лимит достигнут, но пользователь уже оценивал - разрешаем переоценку
-    if (this.isLimitReached && !this.userRatedThisProject) return false;
-
-    return true;
-  }
-
-  get rateButtonText(): string {
-    if (this.programDateFinished()) return "программа завершена";
-    if (this.projectConfirmed() && this.userRatedThisProject) return "проект оценен";
-    if (this.isLimitReached && !this.userRatedThisProject) return "лимит оценок достигнут";
-
-    return "оценить проект";
-  }
-
-  get showRatingForm(): boolean {
-    return !this.projectRated() && this.canEdit;
-  }
-
-  get showRatedStatus(): boolean {
-    return this.projectRated() || this.projectConfirmed();
-  }
-
-  get showEditButton(): boolean {
-    return this.projectConfirmed() && !this.programDateFinished() && this.userRatedThisProject;
-  }
-
-  /** Модалка открывается только для первой оценки или переоценки. */
-  get canOpenModal(): boolean {
-    // Если проект подтвержден и оценен - НЕ открываем модалку по клику на кнопку
-    if (this.projectConfirmed() && this.userRatedThisProject) return false;
-
-    // В остальных случаях проверяем canRate
-    return this.canRate;
-  }
-
-  get userRatedThisProject(): boolean {
-    const profile = this.profile();
-    const project = this.project;
-
-    if (!profile || !project) return false;
-
-    return (
-      this.locallyRatedByCurrentUser() ||
-      (Array.isArray(project.ratedExperts) && this.isRatedByCurrentUser)
-    );
-  }
-
-  get isRatedByCurrentUser(): boolean {
-    const currentUser = this.profile();
-    const project = this.project;
-
-    if (!currentUser || !project) {
-      return false;
-    }
-
-    return project.ratedExperts.some(user => user.id === currentUser.id);
-  }
-
-  get isButtonDisabled(): boolean {
-    if (this.isLimitReached && !this.userRatedThisProject) return true;
-    if (this.programDateFinished()) return true;
-    return !this.canRate;
-  }
-
-  get buttonColor(): "green" | "primary" {
-    if (this.userRatedThisProject) return "green";
-    return "primary";
-  }
-
-  get buttonOpacity(): string {
-    return this.isButtonDisabled ? "0.5" : "1";
-  }
-
-  get isLimitReached(): boolean {
-    return !!this.project && this.project.ratedCount >= this.project.maxRates;
-  }
-
-  get showConfirmedState(): boolean {
-    return (
-      (this.projectConfirmed() && !this.canEdit) ||
-      (this.isLimitReached && !this.userRatedThisProject)
-    );
-  }
-
-  handleRateButtonClick(): void {
-    if (this.canOpenModal) {
-      this.showConfirmRateModal.set(true);
+  protected handleRateButtonClick(): void {
+    if (this.ratingCardService.canOpenModal()) {
+      this.ratingCardService.showConfirmRateModal.set(true);
     }
   }
 
-  get buttonTooltip(): string {
-    if (this.programDateFinished()) return "Программа завершена";
-    if (this.isLimitReached && !this.userRatedThisProject) {
-      return "Достигнут максимальный лимит оценок";
-    }
-    if (this.userRatedThisProject) return "Нажмите для переоценки";
-    return "Нажмите для оценки проекта";
+  protected confirmRateProject(): void {
+    this.ratingCardService.form().markAsTouched();
+    if (this.ratingCardService.form().invalid) return;
+    this.ratingCardService.confirmRateProject();
   }
 
-  get isModalFormDisabled(): boolean {
-    return true; // Всегда disabled в модалке для подтверждения
+  protected redoRating(): void {
+    this.ratingCardService.redoRating();
+  }
+
+  protected toggleConfirmRateModal(): void {
+    this.ratingCardService.showConfirmRateModal.set(!this.ratingCardService.showConfirmRateModal());
+  }
+
+  protected closeConfirmRateModal(): void {
+    this.ratingCardService.showConfirmRateModal.set(false);
   }
 }

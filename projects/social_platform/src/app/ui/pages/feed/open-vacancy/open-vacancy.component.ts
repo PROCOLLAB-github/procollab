@@ -3,9 +3,9 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   Input,
   ViewChild,
 } from "@angular/core";
@@ -14,11 +14,11 @@ import { ButtonComponent } from "@ui/primitives";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
-import { expandElement } from "@utils/expand-element";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { TruncatePipe, DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { ExpandService } from "@api/expand/expand.service";
 
 /** Карточка вакансии в ленте с поддержкой разворачивания контента. */
 @Component({
@@ -38,48 +38,40 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
   templateUrl: "./open-vacancy.component.html",
   styleUrl: "./open-vacancy.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ExpandService],
 })
 export class OpenVacancyComponent implements AfterViewInit {
   @Input() feedItem!: Vacancy;
+
+  private readonly expandService = inject(ExpandService);
   protected readonly AppRoutes = AppRoutes;
+  private readonly industryRepository = inject(IndustryRepositoryPort);
 
-  @ViewChild("skillsEl") skillsEl?: ElementRef;
-  @ViewChild("descEl") descEl?: ElementRef;
+  @ViewChild("skillsEl") private skillsEl?: ElementRef;
+  @ViewChild("descEl") private descEl?: ElementRef;
 
-  constructor(
-    public readonly router: Router,
-    private readonly cdRef: ChangeDetectorRef,
-    public readonly industryRepository: IndustryRepositoryPort
-  ) {}
+  readFullSkills = false;
+
+  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
+  protected readonly readFullDescription = this.expandService.readFullDescription;
+  protected readonly industryRepositoryGetOne = (id: number) => this.industryRepository.getOne(id);
 
   ngAfterViewInit(): void {
-    // Проверяем, превышает ли описание доступную высоту
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-
-    // Проверяем, превышает ли список навыков доступную высоту
-    const skillsElement = this.skillsEl?.nativeElement;
-    this.skillsExpandable = skillsElement?.clientHeight < skillsElement?.scrollHeight;
-
-    // Обновляем UI после изменения флагов
-    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.expandService.checkExpandable("description", true, this.descEl);
+    });
   }
 
-  // Флаги для определения возможности развертывания контента
-  descriptionExpandable!: boolean; // Можно ли развернуть описание
-  skillsExpandable!: boolean; // Можно ли развернуть список навыков
-
-  // Состояние развертывания контента
-  readFullDescription = false; // Развернуто ли описание
-  readFullSkills = false; // Развернут ли список навыков
-
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+  protected onExpandDescription(elem: HTMLElement): void {
+    this.expandService.onExpand(
+      "description",
+      elem,
+      "expanded",
+      this.expandService.readFullDescription()
+    );
   }
 
-  onExpandSkills(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullSkills = !isExpanded;
+  protected toggleSkills(): void {
+    this.readFullSkills = !this.readFullSkills;
   }
 }
