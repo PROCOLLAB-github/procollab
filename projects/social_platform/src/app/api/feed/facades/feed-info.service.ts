@@ -23,7 +23,7 @@ import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.const";
 
-const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
+const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news", "partnerprogram"];
 
 /** Координирует глобальную ленту: данные резолвера, фильтры, пагинация, просмотры, лайки. */
 @Injectable()

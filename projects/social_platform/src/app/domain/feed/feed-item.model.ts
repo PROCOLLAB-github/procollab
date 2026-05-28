@@ -21,7 +21,7 @@ export interface FeedProject {
 }
 
 /** Тип элемента ленты */
-export type FeedItemType = "vacancy" | "news" | "project";
+export type FeedItemType = "vacancy" | "news" | "project" | "partnerprogram";
 
 /** Объединенный тип элемента ленты */
 export type FeedItem =
