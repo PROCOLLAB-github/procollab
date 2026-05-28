@@ -22,7 +22,7 @@ export const feedFilter = [
   {
     id: 4,
     name: "новости программ",
-    value: "projects/1",
+    value: "partnerprogram",
     icon: "procollab",
   },
   {
