@@ -1,6 +1,5 @@
 /** @format */
 
-import { Program } from "../program/program.model";
 import { FeedNews } from "../news/project-news.model";
 import { Vacancy } from "../vacancy/vacancy.model";
 
@@ -14,14 +13,10 @@ export interface FeedProject {
   imageAddress: string;
   viewsCount: number;
   leader: number;
-  partnerProgram: {
-    id: Program["id"];
-    name: Program["name"];
-  } | null;
 }
 
 /** Тип элемента ленты */
-export type FeedItemType = "vacancy" | "news" | "project" | "partnerprogram";
+export type FeedItemType = "vacancy" | "news" | "project";
 
 /** Объединенный тип элемента ленты */
 export type FeedItem =

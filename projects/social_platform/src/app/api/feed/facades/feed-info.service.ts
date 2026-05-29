@@ -10,6 +10,7 @@ import {
   Observable,
   skip,
   Subject,
+  switchMap,
   takeUntil,
   tap,
   throttleTime,
@@ -23,7 +24,7 @@ import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.const";
 
-const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news", "partnerprogram"];
+const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 
 /** Координирует глобальную ленту: данные резолвера, фильтры, пагинация, просмотры, лайки. */
 @Injectable()
@@ -39,7 +40,7 @@ export class FeedInfoService {
 
   readonly feedItems = this.feedUIInfoService.feedItems;
 
-  private readonly includes = signal<FeedItemType[]>([]);
+  private readonly includes = signal<FeedItemType[] | string>([]);
 
   initializationFeedNews(feedRoot: ElementRef<HTMLElement>): void {
     this.route.data
@@ -56,6 +57,8 @@ export class FeedInfoService {
           root: document.querySelector(".office__body"),
           threshold: 0,
         });
+
+        queueMicrotask(() => this.observeFeedItems());
       });
 
     this.route.queryParams
@@ -65,7 +68,7 @@ export class FeedInfoService {
           this.includes.set(includes);
         }),
         skip(1),
-        concatMap(includes => {
+        switchMap(includes => {
           this.feedUIInfoService.totalItemsCount.set(0);
           this.feedUIInfoService.feedPage.set(0);
 
@@ -82,6 +85,8 @@ export class FeedInfoService {
       )
       .subscribe(feed => {
         this.feedUIInfoService.applyFeedFilters(feed);
+
+        queueMicrotask(() => this.observeFeedItems());
 
         setTimeout(() => {
           feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
@@ -110,8 +115,9 @@ export class FeedInfoService {
         this.includes()
       ).pipe(
         tap((feedChunk: FeedItem[]) => {
-          const existingIds = new Set(this.feedItems().map(item => item.content.id));
-          const uniqueNewItems = feedChunk.filter(item => !existingIds.has(item.content.id));
+          const keyOf = (item: FeedItem) => `${item.typeModel}:${item.content.id}`;
+          const existingIds = new Set(this.feedItems().map(keyOf));
+          const uniqueNewItems = feedChunk.filter(item => !existingIds.has(keyOf(item)));
 
           if (uniqueNewItems.length > 0) {
             this.feedUIInfoService.feedPage.update(page => page + uniqueNewItems.length);
@@ -141,9 +147,15 @@ export class FeedInfoService {
     }
   }
 
-  private onFetch(offset: number, limit: number, includes: FeedItemType[] = DEFAULT_FEED_TYPES) {
+  private onFetch(
+    offset: number,
+    limit: number,
+    includes: FeedItemType[] | string = DEFAULT_FEED_TYPES
+  ) {
     const type =
-      includes.length === 0
+      typeof includes === "string"
+        ? includes || DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
+        : includes.length === 0
         ? DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
         : includes.join(FILTER_SPLIT_SYMBOL);
 

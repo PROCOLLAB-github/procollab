@@ -4,6 +4,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   inject,
   OnDestroy,
@@ -47,6 +48,15 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly feedItems = this.feedUIInfoService.feedItems;
   protected readonly AppRoutes = AppRoutes;
+
+  /** Ссылка-маршрут для карточки новости в зависимости от типа источника. */
+  protected resourceLink(content: any): (string | number)[] {
+    if (content.contentObject && "email" in content.contentObject) {
+      return [AppRoutes.profile.detail(content.contentObject.id)];
+    }
+
+    return [AppRoutes.projects.detail(content.contentObject.id)];
+  }
 
   ngOnInit() {
     this.feedInfoService.initializationFeedNews(this.feedRoot!);
