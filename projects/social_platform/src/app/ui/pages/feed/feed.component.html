@@ -16,27 +16,16 @@
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
     ></app-new-project>
-    } @else if (item.typeModel === "news") { @if (item.content.contentObject &&
-    item.content.contentObject.hasOwnProperty("email")) {
+    } @else if (item.typeModel === "news") {
     <app-news-card
       class="page__item"
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
       [contentId]="item.content.contentObject.id"
-      [resourceLink]="[AppRoutes.profile.detail(item.content.contentObject.id)]"
+      [resourceLink]="resourceLink(item.content)"
       (like)="onLike($event)"
     ></app-news-card>
-    } @else if ( item.content.contentObject && !item.content.contentObject.hasOwnProperty("email") )
-    {
-    <app-news-card
-      class="page__item"
-      [attr.data-id]="item.content.id"
-      [feedItem]="item.content"
-      [contentId]="item.content.contentObject.id"
-      [resourceLink]="[AppRoutes.projects.detail(item.content.contentObject.id)]"
-      (like)="onLike($event)"
-    ></app-news-card>
-    } } } } @else {
+    } } } @else {
     <div class="page__feed--no-items">
       <i appIcon icon="empty-chat" appSquare="38"></i>
       <p class="text-body-12">в данном разделе пока нет новостей</p>
