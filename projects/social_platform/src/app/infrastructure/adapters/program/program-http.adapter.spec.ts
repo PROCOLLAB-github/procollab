@@ -44,15 +44,6 @@ describe("ProgramHttpAdapter", () => {
     expect(params?.get("status")).toBe("open");
   });
 
-  it("getActualPrograms идёт в GET /programs/", () => {
-    setup();
-    api.get.and.returnValue(of(pagination<Program>()));
-
-    adapter.getActualPrograms().subscribe();
-
-    expect(api.get).toHaveBeenCalledOnceWith("/programs/");
-  });
-
   it("getOne идёт в GET /programs/:id/", () => {
     setup();
     api.get.and.returnValue(of({} as Program));
@@ -131,14 +122,17 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledOnceWith("/programs/5/projects/apply/");
   });
 
-  it("applyProjectToProgram идёт в POST /programs/:id/projects/apply/ c body", () => {
+  it("applyProjectToProgram идёт в POST /programs/:id/projects/apply/ c трансформированным телом", () => {
     setup();
-    api.post.and.returnValue(of({}));
-    const body = { projectId: 42 };
+    api.post.and.returnValue(of({ projectId: 1, programLinkId: 2 }));
+    const dto = { project: { id: 42 } as Project, programFieldValues: [] };
 
-    adapter.applyProjectToProgram(5, body).subscribe();
+    adapter.applyProjectToProgram(5, dto).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/programs/5/projects/apply/", body);
+    expect(api.post).toHaveBeenCalledOnceWith("/programs/5/projects/apply/", {
+      project: dto.project,
+      program_field_values: [],
+    });
   });
 
   it("createProgramFilters идёт в POST /programs/:id/projects/filter/ с query и body", () => {

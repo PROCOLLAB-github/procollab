@@ -20,20 +20,19 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
 
 /** Шаг редактирования проекта: достижения. */
 @Component({
-  selector: "app-project-achievement-step",
-  templateUrl: "./project-achievement-step.component.html",
-  styleUrl: "./project-achievement-step.component.scss",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputComponent,
-    ButtonComponent,
-    IconComponent,
-    ControlErrorPipe,
-  ],
-  providers: [ToggleFieldsInfoService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-achievement-step",
+    templateUrl: "./project-achievement-step.component.html",
+    styleUrl: "./project-achievement-step.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        InputComponent,
+        ButtonComponent,
+        IconComponent,
+        ControlErrorPipe,
+    ],
+    providers: [ToggleFieldsInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectAchievementStepComponent implements OnInit {
   @Input() projSubmitInitiated = false;

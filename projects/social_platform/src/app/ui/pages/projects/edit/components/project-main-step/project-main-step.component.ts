@@ -34,29 +34,28 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 
 /** Шаг редактирования проекта: основная информация. */
 @Component({
-  selector: "app-project-main-step",
-  templateUrl: "./project-main-step.component.html",
-  styleUrl: "./project-main-step.component.scss",
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AvatarControlComponent,
-    InputComponent,
-    SelectComponent,
-    IconComponent,
-    TextareaComponent,
-    ButtonComponent,
-    UploadFileComponent,
-    AsyncPipe,
-    ControlErrorPipe,
-    ModalComponent,
-    AvatarComponent,
-    FormsModule,
-    RouterLink,
-  ],
-  providers: [ProjectTeamUIService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-main-step",
+    templateUrl: "./project-main-step.component.html",
+    styleUrl: "./project-main-step.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AvatarControlComponent,
+        InputComponent,
+        SelectComponent,
+        IconComponent,
+        TextareaComponent,
+        ButtonComponent,
+        UploadFileComponent,
+        AsyncPipe,
+        ControlErrorPipe,
+        ModalComponent,
+        AvatarComponent,
+        FormsModule,
+        RouterLink,
+    ],
+    providers: [ProjectTeamUIService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectMainStepComponent implements OnInit, OnDestroy {
   @Input() projSubmitInitiated = false;

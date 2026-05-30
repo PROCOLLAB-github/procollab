@@ -18,18 +18,17 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /** Компонент заголовка приложения с панелью уведомлений и инвайтами. */
 @Component({
-  selector: "app-header",
-  templateUrl: "./header.component.html",
-  styleUrl: "./header.component.scss",
-  standalone: true,
-  imports: [
-    ClickOutsideModule,
-    IconComponent,
-    InviteManageCardComponent,
-    ProfileInfoComponent,
-    AsyncPipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-header",
+    templateUrl: "./header.component.html",
+    styleUrl: "./header.component.scss",
+    imports: [
+        ClickOutsideModule,
+        IconComponent,
+        InviteManageCardComponent,
+        ProfileInfoComponent,
+        AsyncPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
   private readonly notificationService = inject(NotificationService);

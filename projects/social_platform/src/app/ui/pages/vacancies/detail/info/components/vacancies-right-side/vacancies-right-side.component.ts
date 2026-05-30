@@ -20,23 +20,22 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Правая колонка детали вакансии. */
 @Component({
-  selector: "app-vacancies-right-side",
-  templateUrl: "./vacancies-right-side.component.html",
-  styleUrl: "./vacancies-right-side.component.scss",
-  imports: [
-    CommonModule,
-    AvatarComponent,
-    ButtonComponent,
-    ReactiveFormsModule,
-    RouterModule,
-    UserLinksPipe,
-    TruncatePipe,
-    CapitalizePipe,
-    IconComponent,
-    SalaryTransformPipe,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-vacancies-right-side",
+    templateUrl: "./vacancies-right-side.component.html",
+    styleUrl: "./vacancies-right-side.component.scss",
+    imports: [
+        CommonModule,
+        AvatarComponent,
+        ButtonComponent,
+        ReactiveFormsModule,
+        RouterModule,
+        UserLinksPipe,
+        TruncatePipe,
+        CapitalizePipe,
+        IconComponent,
+        SalaryTransformPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VacanciesRightSideComponent {
   protected readonly AppRoutes = AppRoutes;

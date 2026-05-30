@@ -3,17 +3,17 @@
 import { TestBed } from "@angular/core/testing";
 
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { FileService } from "../file.service";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { FileService } from "./file.service";
+import { API_URL } from "../../providers";
 
 describe("FileService", () => {
   let service: FileService;
 
   beforeEach(() => {
-    const authSpy = jasmine.createSpyObj(["getTokens"]);
+    // FileService → ApiService → токен API_URL. AuthService больше не используется.
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: API_URL, useValue: "" }],
     });
     service = TestBed.inject(FileService);
   });

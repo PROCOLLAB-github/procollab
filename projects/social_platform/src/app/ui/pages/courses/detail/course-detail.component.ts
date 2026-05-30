@@ -13,20 +13,19 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 /** Shell детальной страницы курса со структурой модулей и дочерним router-outlet. */
 @Component({
-  selector: "app-course-detail",
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    AvatarComponent,
-    ButtonComponent,
-    LoaderComponent,
-    CourseAboutComponent,
-    ModalComponent,
-  ],
-  templateUrl: "./course-detail.component.html",
-  styleUrl: "./course-detail.component.scss",
-  providers: [CourseDetailInfoService, CourseDetailUIInfoService],
+    selector: "app-course-detail",
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        AvatarComponent,
+        ButtonComponent,
+        LoaderComponent,
+        CourseAboutComponent,
+        ModalComponent,
+    ],
+    templateUrl: "./course-detail.component.html",
+    styleUrl: "./course-detail.component.scss",
+    providers: [CourseDetailInfoService, CourseDetailUIInfoService]
 })
 export class CourseDetailComponent implements OnInit, OnDestroy {
   private readonly courseDetailInfoService = inject(CourseDetailInfoService);

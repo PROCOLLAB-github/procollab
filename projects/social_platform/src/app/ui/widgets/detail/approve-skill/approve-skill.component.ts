@@ -18,13 +18,12 @@ import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.serv
 
 /** Компонент подтверждения навыка пользователя. */
 @Component({
-  selector: "app-approve-skill",
-  styleUrl: "./approve-skill.component.scss",
-  templateUrl: "./approve-skill.component.html",
-  standalone: true,
-  imports: [CommonModule, ButtonComponent, ModalComponent, ApproveSkillPeopleComponent],
-  providers: [ApproveskillInfoService, ApproveSkillUIInfoService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-approve-skill",
+    styleUrl: "./approve-skill.component.scss",
+    templateUrl: "./approve-skill.component.html",
+    imports: [CommonModule, ButtonComponent, ModalComponent, ApproveSkillPeopleComponent],
+    providers: [ApproveskillInfoService, ApproveSkillUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApproveSkillComponent implements OnInit, OnDestroy {
   private readonly approveskillInfoService = inject(ApproveskillInfoService);

@@ -27,27 +27,26 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Компонент ввода сообщений для чата с поддержкой файлов, редактирования и ControlValueAccessor. */
 @Component({
-  selector: "app-message-input",
-  templateUrl: "./message-input.component.html",
-  styleUrl: "./message-input.component.scss",
-  providers: [
-    {
-      // Регистрация как ControlValueAccessor для работы с формами
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MessageInputComponent),
-      multi: true,
-    },
-  ],
-  standalone: true,
-  imports: [
-    IconComponent,
-    NgxMaskModule,
-    AutosizeModule,
-    FileTypePipe,
-    FormatedFileSizePipe,
-    UpperCasePipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-message-input",
+    templateUrl: "./message-input.component.html",
+    styleUrl: "./message-input.component.scss",
+    providers: [
+        {
+            // Регистрация как ControlValueAccessor для работы с формами
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => MessageInputComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        IconComponent,
+        NgxMaskModule,
+        AutosizeModule,
+        FileTypePipe,
+        FormatedFileSizePipe,
+        UpperCasePipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private readonly destroyRef = inject(DestroyRef);

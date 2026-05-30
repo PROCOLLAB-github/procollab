@@ -28,12 +28,11 @@ import { IconComponent } from "../icon/icon.component";
  * @Output retry - событие повторной попытки загрузки изображения
  */
 @Component({
-  selector: "app-img-card",
-  templateUrl: "./img-card.component.html",
-  styleUrl: "./img-card.component.scss",
-  standalone: true,
-  imports: [IconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-img-card",
+    templateUrl: "./img-card.component.html",
+    styleUrl: "./img-card.component.scss",
+    imports: [IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImgCardComponent implements OnInit {
   constructor() {}

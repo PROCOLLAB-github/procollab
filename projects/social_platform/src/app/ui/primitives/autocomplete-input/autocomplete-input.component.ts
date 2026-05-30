@@ -50,28 +50,27 @@ import { LoaderComponent } from "../loader/loader.component";
  * - Выбранное значение через ControlValueAccessor
  */
 @Component({
-  selector: "app-autocomplete-input",
-  standalone: true,
-  imports: [CommonModule, IconComponent, ClickOutsideModule, LoaderComponent],
-  templateUrl: "./autocomplete-input.component.html",
-  styleUrl: "./autocomplete-input.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AutoCompleteInputComponent),
-      multi: true,
-    },
-  ],
-  animations: [
-    trigger("dropdownAnimation", [
-      transition(":enter", [
-        style({ opacity: 0, transform: "scaleY(0.8)" }),
-        animate(".12s cubic-bezier(0, 0, 0.2, 1)"),
-      ]),
-      transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
-    ]),
-  ],
+    selector: "app-autocomplete-input",
+    imports: [CommonModule, IconComponent, ClickOutsideModule, LoaderComponent],
+    templateUrl: "./autocomplete-input.component.html",
+    styleUrl: "./autocomplete-input.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AutoCompleteInputComponent),
+            multi: true,
+        },
+    ],
+    animations: [
+        trigger("dropdownAnimation", [
+            transition(":enter", [
+                style({ opacity: 0, transform: "scaleY(0.8)" }),
+                animate(".12s cubic-bezier(0, 0, 0.2, 1)"),
+            ]),
+            transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
+        ]),
+    ]
 })
 export class AutoCompleteInputComponent<T> {
   /** Массив предложений для отображения */

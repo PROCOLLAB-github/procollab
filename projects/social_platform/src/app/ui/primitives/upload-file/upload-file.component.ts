@@ -38,19 +38,18 @@ import { IconComponent } from "../icon/icon.component";
  * - Возможность удаления загруженного файла
  */
 @Component({
-  selector: "app-upload-file",
-  templateUrl: "./upload-file.component.html",
-  styleUrl: "./upload-file.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => UploadFileComponent),
-      multi: true,
-    },
-  ],
-  standalone: true,
-  imports: [IconComponent, LoaderComponent],
+    selector: "app-upload-file",
+    templateUrl: "./upload-file.component.html",
+    styleUrl: "./upload-file.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => UploadFileComponent),
+            multi: true,
+        },
+    ],
+    imports: [IconComponent, LoaderComponent]
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   private readonly fileService = inject(FileService);

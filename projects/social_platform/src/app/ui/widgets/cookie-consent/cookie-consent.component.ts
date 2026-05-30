@@ -6,11 +6,10 @@ import { ButtonComponent, CheckboxComponent } from "@ui/primitives";
 
 /** Виджет согласия на cookie. */
 @Component({
-  selector: "app-cookie-consent",
-  templateUrl: "./cookie-consent.component.html",
-  styleUrl: "./cookie-consent.component.scss",
-  standalone: true,
-  imports: [CheckboxComponent, ButtonComponent],
+    selector: "app-cookie-consent",
+    templateUrl: "./cookie-consent.component.html",
+    styleUrl: "./cookie-consent.component.scss",
+    imports: [CheckboxComponent, ButtonComponent]
 })
 export class CookieConsentComponent implements OnInit {
   visible = false;

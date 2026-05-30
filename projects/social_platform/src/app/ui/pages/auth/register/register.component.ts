@@ -16,23 +16,22 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Двухэтапная форма регистрации нового пользователя. */
 @Component({
-  selector: "app-login",
-  templateUrl: "./register.component.html",
-  styleUrl: "./register.component.scss",
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputComponent,
-    CheckboxComponent,
-    ButtonComponent,
-    ModalComponent,
-    RouterLink,
-    IconComponent,
-    ControlErrorPipe,
-  ],
-  providers: [AuthRegisterService, AuthUIInfoService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-login",
+    templateUrl: "./register.component.html",
+    styleUrl: "./register.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        InputComponent,
+        CheckboxComponent,
+        ButtonComponent,
+        ModalComponent,
+        RouterLink,
+        IconComponent,
+        ControlErrorPipe,
+    ],
+    providers: [AuthRegisterService, AuthUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit {
   private readonly authRegisterService = inject(AuthRegisterService);

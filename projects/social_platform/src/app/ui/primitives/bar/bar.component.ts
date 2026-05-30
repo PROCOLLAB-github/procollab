@@ -34,12 +34,11 @@ interface BarLinks {
 
 /** Примитив: индикатор-полоса (progress/bar). */
 @Component({
-  selector: "app-bar",
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, BackComponent],
-  templateUrl: "./bar.component.html",
-  styleUrl: "./bar.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-bar",
+    imports: [CommonModule, RouterLink, RouterLinkActive, BackComponent],
+    templateUrl: "./bar.component.html",
+    styleUrl: "./bar.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BarComponent {
   constructor() {}

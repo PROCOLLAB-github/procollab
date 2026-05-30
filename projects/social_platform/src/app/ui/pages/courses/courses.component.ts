@@ -10,18 +10,17 @@ import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component"
 
 /** Контейнер модуля карьерных траекторий. */
 @Component({
-  selector: "app-track-career",
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    BackComponent,
-    SearchComponent,
-    ReactiveFormsModule,
-    SoonCardComponent,
-  ],
-  templateUrl: "./courses.component.html",
-  styleUrl: "./courses.component.scss",
+    selector: "app-track-career",
+    imports: [
+        CommonModule,
+        RouterModule,
+        BackComponent,
+        SearchComponent,
+        ReactiveFormsModule,
+        SoonCardComponent,
+    ],
+    templateUrl: "./courses.component.html",
+    styleUrl: "./courses.component.scss"
 })
 export class CoursesComponent {
   private readonly fb = inject(FormBuilder);

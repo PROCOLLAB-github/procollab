@@ -3,11 +3,17 @@
 import { TestBed } from "@angular/core/testing";
 import { ApplyProjectToProgramUseCase } from "./apply-project-to-program.use-case";
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
+import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
+import { Project } from "@domain/project/project.model";
 import { of, throwError } from "rxjs";
 
 describe("ApplyProjectToProgramUseCase", () => {
   let useCase: ApplyProjectToProgramUseCase;
   let repo: jasmine.SpyObj<ProgramRepositoryPort>;
+
+  const dto = { project: {} as Project, programFieldValues: [] } as ApplyToProgramDTO;
+  const response: ApplyToProgramResponse = { projectId: 1, programLinkId: 2 };
 
   function setup(): void {
     repo = jasmine.createSpyObj<ProgramRepositoryPort>("ProgramRepositoryPort", [
@@ -19,24 +25,22 @@ describe("ApplyProjectToProgramUseCase", () => {
     useCase = TestBed.inject(ApplyProjectToProgramUseCase);
   }
 
-  it("делегирует (programId, body) в репозиторий", () => {
+  it("делегирует (programId, dto) в репозиторий", () => {
     setup();
-    repo.applyProjectToProgram.and.returnValue(of({}));
-    const body = { id: 1, name: "proj 1", files: [""] };
+    repo.applyProjectToProgram.and.returnValue(of(response));
 
-    useCase.execute(1, body).subscribe();
+    useCase.execute(1, dto).subscribe();
 
-    expect(repo.applyProjectToProgram).toHaveBeenCalledOnceWith(1, body);
+    expect(repo.applyProjectToProgram).toHaveBeenCalledOnceWith(1, dto);
   });
 
-  it("при успехе возвращает ok с поданным проектом", done => {
+  it("при успехе возвращает ok с ответом репозитория", done => {
     setup();
-    const project = { id: 1, name: "proj 1" };
-    repo.applyProjectToProgram.and.returnValue(of(project));
+    repo.applyProjectToProgram.and.returnValue(of(response));
 
-    useCase.execute(1, project).subscribe(result => {
+    useCase.execute(1, dto).subscribe(result => {
       expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(project);
+      if (result.ok) expect(result.value).toBe(response);
       done();
     });
   });
@@ -46,7 +50,7 @@ describe("ApplyProjectToProgramUseCase", () => {
     const err = new Error("boom");
     repo.applyProjectToProgram.and.returnValue(throwError(() => err));
 
-    useCase.execute(1, {}).subscribe(result => {
+    useCase.execute(1, dto).subscribe(result => {
       expect(result.ok).toBeFalse();
       if (!result.ok) {
         expect(result.error.kind).toBe("apply_project_to_program_error");

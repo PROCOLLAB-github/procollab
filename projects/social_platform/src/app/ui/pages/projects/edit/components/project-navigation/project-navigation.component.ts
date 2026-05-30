@@ -16,12 +16,11 @@ import { EditStep } from "@core/lib/models/edit-step";
 
 /** Навигация по шагам формы проекта. */
 @Component({
-  selector: "app-project-navigation",
-  templateUrl: "./project-navigation.component.html",
-  styleUrl: "project-navigation.component.scss",
-  standalone: true,
-  imports: [IconComponent, CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-navigation",
+    templateUrl: "./project-navigation.component.html",
+    styleUrl: "project-navigation.component.scss",
+    imports: [IconComponent, CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectNavigationComponent {
   @Input() navItems!: Navigation[];

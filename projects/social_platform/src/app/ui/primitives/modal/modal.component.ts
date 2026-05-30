@@ -39,12 +39,11 @@ import { CommonModule } from "@angular/common";
  * - Модальные диалоги, формы, галереи изображений
  */
 @Component({
-  selector: "app-modal",
-  templateUrl: "./modal.component.html",
-  styleUrl: "./modal.component.scss",
-  standalone: true,
-  imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-modal",
+    templateUrl: "./modal.component.html",
+    styleUrl: "./modal.component.scss",
+    imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

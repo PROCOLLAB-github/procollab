@@ -29,12 +29,11 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Компонент сообщения чата с контекстным меню и файловыми вложениями. */
 @Component({
-  selector: "app-chat-message",
-  templateUrl: "./chat-message.component.html",
-  styleUrl: "./chat-message.component.scss",
-  standalone: true,
-  imports: [ClickOutsideModule, AvatarComponent, FileItemComponent, IconComponent, DayjsPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-chat-message",
+    templateUrl: "./chat-message.component.html",
+    styleUrl: "./chat-message.component.scss",
+    imports: [ClickOutsideModule, AvatarComponent, FileItemComponent, IconComponent, DayjsPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);

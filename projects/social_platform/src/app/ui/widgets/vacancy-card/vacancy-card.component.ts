@@ -15,12 +15,11 @@ import { TruncatePipe } from "@corelib";
 
 /** Компонент карточки вакансии с кнопками редактирования и удаления. */
 @Component({
-  selector: "app-vacancy-card",
-  templateUrl: "./vacancy-card.component.html",
-  styleUrl: "./vacancy-card.component.scss",
-  standalone: true,
-  imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-vacancy-card",
+    templateUrl: "./vacancy-card.component.html",
+    styleUrl: "./vacancy-card.component.scss",
+    imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}

@@ -20,7 +20,6 @@ describe("ProgramRepository", () => {
   function setup(): void {
     adapter = jasmine.createSpyObj<ProgramHttpAdapter>("ProgramHttpAdapter", [
       "getAll",
-      "getActualPrograms",
       "getOne",
       "create",
       "getDataSchema",
@@ -52,13 +51,6 @@ describe("ProgramRepository", () => {
     adapter.getAll.and.returnValue(of(page<Program>()));
     repository.getAll(0, 10, params).subscribe();
     expect(adapter.getAll).toHaveBeenCalledOnceWith(0, 10, params);
-  });
-
-  it("getActualPrograms делегирует в adapter", () => {
-    setup();
-    adapter.getActualPrograms.and.returnValue(of(page<Program>()));
-    repository.getActualPrograms().subscribe();
-    expect(adapter.getActualPrograms).toHaveBeenCalledOnceWith();
   });
 
   it("getOne кеширует результат: повторный вызов не бьёт adapter", () => {
@@ -128,9 +120,10 @@ describe("ProgramRepository", () => {
 
   it("applyProjectToProgram делегирует в adapter", () => {
     setup();
-    adapter.applyProjectToProgram.and.returnValue(of({}));
-    repository.applyProjectToProgram(1, { foo: "bar" }).subscribe();
-    expect(adapter.applyProjectToProgram).toHaveBeenCalledOnceWith(1, { foo: "bar" });
+    const dto = { project: {} as Project, programFieldValues: [] };
+    adapter.applyProjectToProgram.and.returnValue(of({ projectId: 1, programLinkId: 2 }));
+    repository.applyProjectToProgram(1, dto).subscribe();
+    expect(adapter.applyProjectToProgram).toHaveBeenCalledOnceWith(1, dto);
   });
 
   it("createProgramFilters делегирует в adapter", () => {

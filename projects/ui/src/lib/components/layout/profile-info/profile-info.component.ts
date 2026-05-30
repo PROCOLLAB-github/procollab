@@ -27,12 +27,11 @@ import { AvatarComponent, IconComponent } from "@uilib";
  * \`\`\`
  */
 @Component({
-  selector: "app-profile-info",
-  templateUrl: "./profile-info.component.html",
-  styleUrl: "./profile-info.component.scss",
-  standalone: true,
-  imports: [RouterLink, AvatarComponent, IconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-profile-info",
+    templateUrl: "./profile-info.component.html",
+    styleUrl: "./profile-info.component.scss",
+    imports: [RouterLink, AvatarComponent, IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileInfoComponent implements OnInit {
   constructor(readonly router: Router) {}

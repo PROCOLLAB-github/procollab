@@ -23,12 +23,11 @@ import { LoggerService } from "@corelib";
  * \`\`\`
  */
 @Component({
-  selector: "app-back",
-  templateUrl: "./back.component.html",
-  styleUrl: "./back.component.scss",
-  standalone: true,
-  imports: [IconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-back",
+    templateUrl: "./back.component.html",
+    styleUrl: "./back.component.scss",
+    imports: [IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BackComponent implements OnInit {
   private readonly router = inject(Router);

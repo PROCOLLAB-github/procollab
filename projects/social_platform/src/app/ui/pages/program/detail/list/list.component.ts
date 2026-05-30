@@ -36,31 +36,30 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 /** Вкладка списка программы: проекты/участники с фильтрами. */
 @Component({
-  selector: "app-list",
-  templateUrl: "./list.component.html",
-  styleUrl: "./list.component.scss",
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    ProgramProjectsFilterComponent,
-    SearchComponent,
-    RatingCardComponent,
-    InfoCardComponent,
-    ButtonComponent,
-    IconComponent,
-    TooltipComponent,
-    ModalComponent,
-  ],
-  providers: [
-    ProgramDetailListInfoService,
-    ProgramDetailListUIInfoService,
-    ProgramProjectsFilterInfoService,
-    ExportFileInfoService,
-    SwipeService,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-list",
+    templateUrl: "./list.component.html",
+    styleUrl: "./list.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        RouterModule,
+        ProgramProjectsFilterComponent,
+        SearchComponent,
+        RatingCardComponent,
+        InfoCardComponent,
+        ButtonComponent,
+        IconComponent,
+        TooltipComponent,
+        ModalComponent,
+    ],
+    providers: [
+        ProgramDetailListInfoService,
+        ProgramDetailListUIInfoService,
+        ProgramProjectsFilterInfoService,
+        ExportFileInfoService,
+        SwipeService,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLUListElement>;

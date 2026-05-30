@@ -32,29 +32,28 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
 
 /** Страница основной вкладки программы с описанием, ссылками и новостями. */
 @Component({
-  selector: "app-main",
-  templateUrl: "./main.component.html",
-  styleUrl: "./main.component.scss",
-  imports: [
-    IconComponent,
-    ButtonComponent,
-    UserLinksPipe,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-    ModalComponent,
-    MatProgressBarModule,
-    SoonCardComponent,
-    NewsFormComponent,
-    ModalComponent,
-    MatProgressBarModule,
-    TruncatePipe,
-    RouterModule,
-    NewsCardComponent,
-    ProgramLinksComponent,
-  ],
-  providers: [ProgramDetailMainService, ExpandService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-main",
+    templateUrl: "./main.component.html",
+    styleUrl: "./main.component.scss",
+    imports: [
+        IconComponent,
+        ButtonComponent,
+        UserLinksPipe,
+        ParseBreaksPipe,
+        ParseLinksPipe,
+        ModalComponent,
+        MatProgressBarModule,
+        SoonCardComponent,
+        NewsFormComponent,
+        ModalComponent,
+        MatProgressBarModule,
+        TruncatePipe,
+        RouterModule,
+        NewsCardComponent,
+        ProgramLinksComponent,
+    ],
+    providers: [ProgramDetailMainService, ExpandService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;

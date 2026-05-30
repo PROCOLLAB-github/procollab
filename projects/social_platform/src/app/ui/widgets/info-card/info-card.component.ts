@@ -28,23 +28,22 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
  */
 @Component({
-  selector: "app-info-card",
-  templateUrl: "./info-card.component.html",
-  styleUrl: "./info-card.component.scss",
-  standalone: true,
-  imports: [
-    CommonModule,
-    AvatarComponent,
-    IconComponent,
-    ModalComponent,
-    ButtonComponent,
-    ClickOutsideModule,
-    TagComponent,
-    YearsFromBirthdayPipe,
-    TruncatePipe,
-    RouterLink,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-info-card",
+    templateUrl: "./info-card.component.html",
+    styleUrl: "./info-card.component.scss",
+    imports: [
+        CommonModule,
+        AvatarComponent,
+        IconComponent,
+        ModalComponent,
+        ButtonComponent,
+        ClickOutsideModule,
+        TagComponent,
+        YearsFromBirthdayPipe,
+        TruncatePipe,
+        RouterLink,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);

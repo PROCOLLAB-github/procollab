@@ -33,12 +33,11 @@ import { TruncatePipe, DayjsPipe } from "@corelib";
  * \`\`\`
  */
 @Component({
-  selector: "app-invite-manage-card",
-  templateUrl: "./invite-manage-card.component.html",
-  styleUrl: "./invite-manage-card.component.scss",
-  standalone: true,
-  imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe, TruncatePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-invite-manage-card",
+    templateUrl: "./invite-manage-card.component.html",
+    styleUrl: "./invite-manage-card.component.scss",
+    imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe, TruncatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InviteManageCardComponent implements OnInit {
   constructor() {}

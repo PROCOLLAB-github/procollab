@@ -22,11 +22,10 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
 /** Задача на исключение лишнего с множественным выбором. */
 @Component({
-  selector: "app-exclude-task",
-  standalone: true,
-  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, CheckboxComponent, ImagePreviewDirective],
-  templateUrl: "./exclude-task.component.html",
-  styleUrl: "./exclude-task.component.scss",
+    selector: "app-exclude-task",
+    imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, CheckboxComponent, ImagePreviewDirective],
+    templateUrl: "./exclude-task.component.html",
+    styleUrl: "./exclude-task.component.scss"
 })
 export class ExcludeTaskComponent implements OnInit {
   private readonly sanitizer = inject(DomSanitizer);

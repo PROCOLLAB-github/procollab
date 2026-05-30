@@ -23,20 +23,19 @@ import { SearchesService } from "@api/searches/searches.service";
 
 /** Шаг редактирования профиля: навыки. */
 @Component({
-  selector: "app-profile-skills-step",
-  templateUrl: "./profile-skills-step.component.html",
-  styleUrl: "./profile-skills-step.component.scss",
-  imports: [
-    CommonModule,
-    AutoCompleteInputComponent,
-    SkillsBasketComponent,
-    SelectComponent,
-    ButtonComponent,
-    ReactiveFormsModule,
-    ControlErrorPipe,
-    IconComponent,
-  ],
-  standalone: true,
+    selector: "app-profile-skills-step",
+    templateUrl: "./profile-skills-step.component.html",
+    styleUrl: "./profile-skills-step.component.scss",
+    imports: [
+        CommonModule,
+        AutoCompleteInputComponent,
+        SkillsBasketComponent,
+        SelectComponent,
+        ButtonComponent,
+        ReactiveFormsModule,
+        ControlErrorPipe,
+        IconComponent,
+    ]
 })
 export class ProfileSkillsStepComponent {
   @Input() isLanguageDirty!: boolean;

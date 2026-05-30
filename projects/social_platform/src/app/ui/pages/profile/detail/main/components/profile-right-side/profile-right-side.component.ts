@@ -13,20 +13,19 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Правая колонка профиля: дополнительные блоки. */
 @Component({
-  selector: "app-profile-right-side",
-  templateUrl: "./profile-right-side.component.html",
-  styleUrl: "./profile-right-side.component.scss",
-  imports: [
-    CommonModule,
-    IconComponent,
-    RouterModule,
-    NgTemplateOutlet,
-    UserLinksPipe,
-    TruncatePipe,
-    ModalComponent,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-profile-right-side",
+    templateUrl: "./profile-right-side.component.html",
+    styleUrl: "./profile-right-side.component.scss",
+    imports: [
+        CommonModule,
+        IconComponent,
+        RouterModule,
+        NgTemplateOutlet,
+        UserLinksPipe,
+        TruncatePipe,
+        ModalComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileRightSideComponent {
   @Input() user!: WritableSignal<User | undefined>;

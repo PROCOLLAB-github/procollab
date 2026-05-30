@@ -5,7 +5,7 @@ import { of, throwError } from "rxjs";
 import { UpdateGoalUseCase } from "./update-goal.use-case";
 import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 import { Goal } from "@domain/project/goals.model";
-import { GoalFormData } from "@infrastructure/adapters/project/dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 
 describe("UpdateGoalUseCase", () => {
   let useCase: UpdateGoalUseCase;

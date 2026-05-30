@@ -8,11 +8,10 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Страница завершения задачи с результатами. */
 @Component({
-  selector: "app-complete",
-  standalone: true,
-  imports: [CommonModule, ButtonComponent],
-  templateUrl: "./complete.component.html",
-  styleUrl: "./complete.component.scss",
+    selector: "app-complete",
+    imports: [CommonModule, ButtonComponent],
+    templateUrl: "./complete.component.html",
+    styleUrl: "./complete.component.scss"
 })
 export class TaskCompleteComponent implements OnInit {
   route = inject(ActivatedRoute);

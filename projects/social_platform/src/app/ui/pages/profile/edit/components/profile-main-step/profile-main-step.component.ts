@@ -17,24 +17,23 @@ import { IconComponent } from "@uilib";
 
 /** Основной шаг редактирования профиля: личные данные, аватар и ключевые навыки. */
 @Component({
-  selector: "app-profile-main-step",
-  templateUrl: "./profile-main-step.component.html",
-  styleUrl: "./profile-main-step.component.scss",
-  imports: [
-    CommonModule,
-    IconComponent,
-    InputComponent,
-    ButtonComponent,
-    TextareaComponent,
-    AutosizeModule,
-    AutoCompleteInputComponent,
-    SelectComponent,
-    UploadFileComponent,
-    AvatarControlComponent,
-    ControlErrorPipe,
-    ReactiveFormsModule,
-  ],
-  standalone: true,
+    selector: "app-profile-main-step",
+    templateUrl: "./profile-main-step.component.html",
+    styleUrl: "./profile-main-step.component.scss",
+    imports: [
+        CommonModule,
+        IconComponent,
+        InputComponent,
+        ButtonComponent,
+        TextareaComponent,
+        AutosizeModule,
+        AutoCompleteInputComponent,
+        SelectComponent,
+        UploadFileComponent,
+        AvatarControlComponent,
+        ControlErrorPipe,
+        ReactiveFormsModule,
+    ]
 })
 export class ProfileMainStepComponent {
   @Output() openSpecsGroupsModal = new EventEmitter<void>();

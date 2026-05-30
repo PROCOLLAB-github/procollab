@@ -6,11 +6,10 @@ import { UserLinksPipe, TruncatePipe } from "@corelib";
 
 /** Виджет ссылок программы (контакты/материалы). */
 @Component({
-  selector: "app-program-links",
-  templateUrl: "./program-links.component.html",
-  styleUrl: "./program-links.component.scss",
-  standalone: true,
-  imports: [IconComponent, UserLinksPipe, TruncatePipe],
+    selector: "app-program-links",
+    templateUrl: "./program-links.component.html",
+    styleUrl: "./program-links.component.scss",
+    imports: [IconComponent, UserLinksPipe, TruncatePipe]
 })
 export class ProgramLinksComponent {
   @Input({ required: true }) title!: string;

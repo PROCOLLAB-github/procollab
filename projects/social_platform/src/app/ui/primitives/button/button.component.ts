@@ -27,12 +27,11 @@ import { LoaderComponent } from "../loader/loader.component";
  * - Показывает tooltip при наведении, если указан tooltipText
  */
 @Component({
-  selector: "app-button",
-  templateUrl: "./button.component.html",
-  styleUrl: "./button.component.scss",
-  standalone: true,
-  imports: [CommonModule, LoaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-button",
+    templateUrl: "./button.component.html",
+    styleUrl: "./button.component.scss",
+    imports: [CommonModule, LoaderComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent implements OnInit {
   constructor() {}

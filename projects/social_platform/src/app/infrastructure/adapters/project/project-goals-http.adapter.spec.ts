@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { ApiService } from "@corelib";
 import { ProjectGoalsHttpAdapter } from "./project-goals-http.adapter";
 import { Goal } from "@domain/project/goals.model";
-import { GoalFormData } from "./dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 
 describe("ProjectGoalsHttpAdapter", () => {
   let adapter: ProjectGoalsHttpAdapter;

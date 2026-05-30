@@ -11,12 +11,11 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Левая колонка профиля: аватар и основные данные. */
 @Component({
-  selector: "app-profile-left-side",
-  templateUrl: "./profile-left-side.component.html",
-  styleUrl: "./profile-left-side.component.scss",
-  imports: [CommonModule, RouterModule, IconComponent, YearsFromBirthdayPipe, TruncatePipe],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-profile-left-side",
+    templateUrl: "./profile-left-side.component.html",
+    styleUrl: "./profile-left-side.component.scss",
+    imports: [CommonModule, RouterModule, IconComponent, YearsFromBirthdayPipe, TruncatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileLeftSideComponent {
   @Input() user!: WritableSignal<User | undefined>;

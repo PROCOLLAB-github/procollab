@@ -23,12 +23,11 @@ import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-
 
 /** Карточка участника команды проекта. */
 @Component({
-  selector: "app-collaborator-card",
-  templateUrl: "./collaborator-card.component.html",
-  styleUrl: "./collaborator-card.component.scss",
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-collaborator-card",
+    templateUrl: "./collaborator-card.component.html",
+    styleUrl: "./collaborator-card.component.scss",
+    imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CollaboratorCardComponent implements OnInit {
   private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);

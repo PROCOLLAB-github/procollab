@@ -13,21 +13,20 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Шаг редактирования профиля: опыт работы. */
 @Component({
-  selector: "app-profile-experience-step",
-  templateUrl: "./profile-experience-step.component.html",
-  styleUrl: "./profile-experience-step.component.scss",
-  imports: [
-    CommonModule,
-    SelectComponent,
-    InputComponent,
-    IconComponent,
-    TextareaComponent,
-    ButtonComponent,
-    ControlErrorPipe,
-    ReactiveFormsModule,
-    TruncatePipe,
-  ],
-  standalone: true,
+    selector: "app-profile-experience-step",
+    templateUrl: "./profile-experience-step.component.html",
+    styleUrl: "./profile-experience-step.component.scss",
+    imports: [
+        CommonModule,
+        SelectComponent,
+        InputComponent,
+        IconComponent,
+        TextareaComponent,
+        ButtonComponent,
+        ControlErrorPipe,
+        ReactiveFormsModule,
+        TruncatePipe,
+    ]
 })
 export class ProfileExperienceStepComponent {
   @Input() isWorkDirty!: boolean;

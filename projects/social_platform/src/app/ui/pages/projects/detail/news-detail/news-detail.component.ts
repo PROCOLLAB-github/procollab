@@ -12,12 +12,11 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Детальный просмотр новости проекта в модальном окне. */
 @Component({
-  selector: "app-news-detail",
-  templateUrl: "./news-detail.component.html",
-  styleUrl: "./news-detail.component.scss",
-  standalone: true,
-  imports: [ModalComponent, AsyncPipe, NewsCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-news-detail",
+    templateUrl: "./news-detail.component.html",
+    styleUrl: "./news-detail.component.scss",
+    imports: [ModalComponent, AsyncPipe, NewsCardComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewsDetailComponent implements OnInit {
   private readonly logger = inject(LoggerService);

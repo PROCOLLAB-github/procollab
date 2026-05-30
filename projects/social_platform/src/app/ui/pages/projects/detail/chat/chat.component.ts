@@ -23,13 +23,12 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Чат проекта с сообщениями, файлами и управлением. */
 @Component({
-  selector: "app-chat",
-  templateUrl: "./chat.component.html",
-  styleUrl: "./chat.component.scss",
-  standalone: true,
-  imports: [AvatarComponent, IconComponent, ChatWindowComponent, RouterLink, FileItemComponent],
-  providers: [ChatDirectInfoService, ChatDirectUIInfoService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-chat",
+    templateUrl: "./chat.component.html",
+    styleUrl: "./chat.component.scss",
+    imports: [AvatarComponent, IconComponent, ChatWindowComponent, RouterLink, FileItemComponent],
+    providers: [ChatDirectInfoService, ChatDirectUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
   @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;

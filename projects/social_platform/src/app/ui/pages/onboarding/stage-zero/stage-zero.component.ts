@@ -18,29 +18,28 @@ import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-con
 
 /** Начальный этап онбординга — сбор базовой информации профиля (фото, город, образование, опыт, языки, достижения). */
 @Component({
-  selector: "app-stage-zero",
-  templateUrl: "./stage-zero.component.html",
-  styleUrl: "./stage-zero.component.scss",
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    InputComponent,
-    ButtonComponent,
-    IconComponent,
-    ControlErrorPipe,
-    SelectComponent,
-    ModalComponent,
-    CommonModule,
-    TooltipComponent,
-    AvatarControlComponent,
-  ],
-  providers: [
-    OnboardingStageZeroInfoService,
-    OnboardingStageZeroUIInfoService,
-    OnboardingUIInfoService,
-    TooltipInfoService,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-stage-zero",
+    templateUrl: "./stage-zero.component.html",
+    styleUrl: "./stage-zero.component.scss",
+    imports: [
+        ReactiveFormsModule,
+        InputComponent,
+        ButtonComponent,
+        IconComponent,
+        ControlErrorPipe,
+        SelectComponent,
+        ModalComponent,
+        CommonModule,
+        TooltipComponent,
+        AvatarControlComponent,
+    ],
+    providers: [
+        OnboardingStageZeroInfoService,
+        OnboardingStageZeroUIInfoService,
+        OnboardingUIInfoService,
+        TooltipInfoService,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   private readonly onboardingStageZeroInfoService = inject(OnboardingStageZeroInfoService);

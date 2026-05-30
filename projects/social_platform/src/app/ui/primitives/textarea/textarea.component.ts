@@ -36,19 +36,18 @@ import { IconComponent } from "../icon/icon.component";
  * - Введенный многострочный текст через ControlValueAccessor
  */
 @Component({
-  selector: "app-textarea",
-  templateUrl: "./textarea.component.html",
-  styleUrl: "./textarea.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => TextareaComponent),
-      multi: true,
-    },
-  ],
-  imports: [AutosizeModule, IconComponent, TooltipComponent, NgStyle],
-  standalone: true,
+    selector: "app-textarea",
+    templateUrl: "./textarea.component.html",
+    styleUrl: "./textarea.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => TextareaComponent),
+            multi: true,
+        },
+    ],
+    imports: [AutosizeModule, IconComponent, TooltipComponent, NgStyle]
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   private readonly cdr = inject(ChangeDetectorRef);

@@ -19,13 +19,12 @@ import { ExpandService } from "@api/expand/expand.service";
  * Компонент страницы команды в деательной информации о проекте
  */
 @Component({
-  selector: "app-project-eam",
-  templateUrl: "./team.component.html",
-  styleUrl: "./team.component.scss",
-  imports: [CommonModule, InfoCardComponent],
-  standalone: true,
-  providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-eam",
+    templateUrl: "./team.component.html",
+    styleUrl: "./team.component.scss",
+    imports: [CommonModule, InfoCardComponent],
+    providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectTeamComponent implements OnInit, OnDestroy {
   private readonly projectsDetailService = inject(ProjectsDetailService);

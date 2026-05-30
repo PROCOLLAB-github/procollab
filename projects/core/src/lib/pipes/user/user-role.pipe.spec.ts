@@ -1,15 +1,16 @@
 /** @format */
 
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { UserRolePipe } from "../user-role.pipe";
 import { of } from "rxjs";
+import { UserRolePipe } from "./user-role.pipe";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 describe("UserRolePipe", () => {
   it("create an instance", () => {
-    const authSpy = {
-      roles: of([]),
-    };
-    const pipe = new UserRolePipe(authSpy as unknown as AuthService);
+    // Пайп зависит от AuthRepositoryPort.fetchUserRoles() (вызывается в инициализаторе поля).
+    const repoStub = {
+      fetchUserRoles: () => of([]),
+    } as unknown as AuthRepositoryPort;
+    const pipe = new UserRolePipe(repoStub);
     expect(pipe).toBeTruthy();
   });
 });

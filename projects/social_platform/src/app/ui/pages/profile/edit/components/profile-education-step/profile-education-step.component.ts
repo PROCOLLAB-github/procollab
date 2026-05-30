@@ -13,21 +13,20 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Шаг редактирования образования в общей форме профиля. */
 @Component({
-  selector: "app-profile-education-step",
-  templateUrl: "./profile-education-step.component.html",
-  styleUrl: "./profile-education-step.component.scss",
-  imports: [
-    CommonModule,
-    IconComponent,
-    SelectComponent,
-    ButtonComponent,
-    InputComponent,
-    ReactiveFormsModule,
-    ControlErrorPipe,
-    TruncatePipe,
-  ],
-  providers: [ProfileDetailUIInfoService],
-  standalone: true,
+    selector: "app-profile-education-step",
+    templateUrl: "./profile-education-step.component.html",
+    styleUrl: "./profile-education-step.component.scss",
+    imports: [
+        CommonModule,
+        IconComponent,
+        SelectComponent,
+        ButtonComponent,
+        InputComponent,
+        ReactiveFormsModule,
+        ControlErrorPipe,
+        TruncatePipe,
+    ],
+    providers: [ProfileDetailUIInfoService]
 })
 export class ProfileEducationStepComponent {
   @Input() isEducationDirty!: boolean;

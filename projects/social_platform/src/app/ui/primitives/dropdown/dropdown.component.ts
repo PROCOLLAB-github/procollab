@@ -21,20 +21,19 @@ import { IconComponent } from "../icon/icon.component";
 
 /** Примитив: выпадающий список. */
 @Component({
-  selector: "app-dropdown",
-  standalone: true,
-  imports: [
-    CommonModule,
-    OverlayModule,
-    AvatarComponent,
-    IconComponent,
-    TagComponent,
-    ClickOutsideModule,
-    CreateTagFormComponent,
-  ],
-  templateUrl: "./dropdown.component.html",
-  styleUrl: "./dropdown.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-dropdown",
+    imports: [
+        CommonModule,
+        OverlayModule,
+        AvatarComponent,
+        IconComponent,
+        TagComponent,
+        ClickOutsideModule,
+        CreateTagFormComponent,
+    ],
+    templateUrl: "./dropdown.component.html",
+    styleUrl: "./dropdown.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DropdownComponent {
   /** Состояние для определения списка элементов */

@@ -9,12 +9,11 @@ import { Program } from "@domain/program/program.model";
 
 /** Карточка программы в боковой панели офиса. */
 @Component({
-  selector: "app-program-sidebar-card",
-  templateUrl: "./program-sidebar-card.component.html",
-  styleUrl: "./program-sidebar-card.component.scss",
-  imports: [CommonModule, IconComponent, AvatarComponent, TruncatePipe],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-program-sidebar-card",
+    templateUrl: "./program-sidebar-card.component.html",
+    styleUrl: "./program-sidebar-card.component.scss",
+    imports: [CommonModule, IconComponent, AvatarComponent, TruncatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgramSidebarCardComponent {
   @Input() program!: Program;

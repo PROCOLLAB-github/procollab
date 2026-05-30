@@ -33,20 +33,19 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Окно чата: список сообщений с виртуальной прокруткой и поле ввода. */
 @Component({
-  selector: "app-chat-window",
-  templateUrl: "./chat-window.component.html",
-  styleUrl: "./chat-window.component.scss",
-  standalone: true,
-  imports: [
-    CdkVirtualScrollViewport,
-    CdkFixedSizeVirtualScroll,
-    CdkVirtualForOf,
-    ChatMessageComponent,
-    ReactiveFormsModule,
-    MessageInputComponent,
-    PluralizePipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-chat-window",
+    templateUrl: "./chat-window.component.html",
+    styleUrl: "./chat-window.component.scss",
+    imports: [
+        CdkVirtualScrollViewport,
+        CdkFixedSizeVirtualScroll,
+        CdkVirtualForOf,
+        ChatMessageComponent,
+        ReactiveFormsModule,
+        MessageInputComponent,
+        PluralizePipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);

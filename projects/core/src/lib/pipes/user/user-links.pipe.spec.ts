@@ -1,6 +1,6 @@
 /** @format */
 
-import { UserLinksPipe } from "../user-links.pipe";
+import { UserLinksPipe } from "./user-links.pipe";
 
 describe("UserLinksPipe", () => {
   it("create an instance", () => {

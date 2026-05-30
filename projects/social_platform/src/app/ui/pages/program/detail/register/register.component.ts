@@ -15,19 +15,18 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Форма регистрации пользователя в программе с динамическими полями на основе схемы. */
 @Component({
-  selector: "app-register",
-  templateUrl: "./register.component.html",
-  styleUrl: "./register.component.scss",
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    InputComponent,
-    ButtonComponent,
-    KeyValuePipe,
-    ControlErrorPipe,
-    BarComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-register",
+    templateUrl: "./register.component.html",
+    styleUrl: "./register.component.scss",
+    imports: [
+        ReactiveFormsModule,
+        InputComponent,
+        ButtonComponent,
+        KeyValuePipe,
+        ControlErrorPipe,
+        BarComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgramRegisterComponent implements OnInit {
   private readonly logger = inject(LoggerService);

@@ -13,11 +13,10 @@ import { TruncatePipe, TruncateHtmlPipe } from "@corelib";
 
 /** Информационный слайд задачи с видео и текстом. */
 @Component({
-  selector: "app-info-task",
-  standalone: true,
-  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective, FileItemComponent],
-  templateUrl: "./info-task.component.html",
-  styleUrl: "./info-task.component.scss",
+    selector: "app-info-task",
+    imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective, FileItemComponent],
+    templateUrl: "./info-task.component.html",
+    styleUrl: "./info-task.component.scss"
 })
 export class InfoTaskComponent implements OnInit {
   @Input({ required: true }) data!: Task;

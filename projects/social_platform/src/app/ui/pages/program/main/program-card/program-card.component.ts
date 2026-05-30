@@ -8,12 +8,11 @@ import { Program } from "@domain/program/program.model";
 
 /** Карточка программы с краткой информацией для списков. */
 @Component({
-  selector: "app-program-card",
-  templateUrl: "./program-card.component.html",
-  styleUrl: "./program-card.component.scss",
-  standalone: true,
-  imports: [AvatarComponent, IconComponent, DatePipe, NgClass],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-program-card",
+    templateUrl: "./program-card.component.html",
+    styleUrl: "./program-card.component.scss",
+    imports: [AvatarComponent, IconComponent, DatePipe, NgClass],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgramCardComponent implements OnInit {
   constructor() {}

@@ -1,6 +1,6 @@
 /** @format */
 
-import { FormControlPipe } from "../form-control.pipe";
+import { FormControlPipe } from "./form-control.pipe";
 
 describe("FormControlPipe", () => {
   it("create an instance", () => {

@@ -9,20 +9,19 @@ import { Skill } from "@domain/skills/skill.model";
 
 /** Компонент корзины навыков с ControlValueAccessor для форм. */
 @Component({
-  selector: "app-skills-basket",
-  templateUrl: "./skills-basket.component.html",
-  styleUrl: "./skills-basket.component.scss",
-  imports: [CommonModule, IconComponent],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      // Регистрация как ControlValueAccessor для работы с формами
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SkillsBasketComponent),
-      multi: true,
-    },
-  ],
+    selector: "app-skills-basket",
+    templateUrl: "./skills-basket.component.html",
+    styleUrl: "./skills-basket.component.scss",
+    imports: [CommonModule, IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            // Регистрация как ControlValueAccessor для работы с формами
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SkillsBasketComponent),
+            multi: true,
+        },
+    ]
 })
 export class SkillsBasketComponent {
   @Input() error = false;

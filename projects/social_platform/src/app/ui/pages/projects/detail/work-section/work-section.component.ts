@@ -10,13 +10,12 @@ import { ProjectsDetailWorkSectionUIInfoService } from "@api/project/facades/det
 
 /** Секция откликов проекта: список и обработка откликов. */
 @Component({
-  selector: "app-work-section",
-  templateUrl: "./work-section.component.html",
-  styleUrl: "./work-section.component.scss",
-  imports: [CommonModule, IconComponent, ButtonComponent, RouterLink],
-  providers: [ProjectsDetailWorkSectionInfoService, ProjectsDetailWorkSectionUIInfoService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-work-section",
+    templateUrl: "./work-section.component.html",
+    styleUrl: "./work-section.component.scss",
+    imports: [CommonModule, IconComponent, ButtonComponent, RouterLink],
+    providers: [ProjectsDetailWorkSectionInfoService, ProjectsDetailWorkSectionUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
   private readonly projectsDetailWorkSectionInfoService = inject(

@@ -20,22 +20,21 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Карточка приглашения в команду с редактированием и удалением. */
 @Component({
-  selector: "app-invite-card",
-  templateUrl: "./invite-card.component.html",
-  styleUrl: "./invite-card.component.scss",
-  standalone: true,
-  imports: [
-    IconComponent,
-    ButtonComponent,
-    ModalComponent,
-    SelectComponent,
-    ControlErrorPipe,
-    TruncatePipe,
-    ReactiveFormsModule,
-    InputComponent,
-    AvatarComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-invite-card",
+    templateUrl: "./invite-card.component.html",
+    styleUrl: "./invite-card.component.scss",
+    imports: [
+        IconComponent,
+        ButtonComponent,
+        ModalComponent,
+        SelectComponent,
+        ControlErrorPipe,
+        TruncatePipe,
+        ReactiveFormsModule,
+        InputComponent,
+        AvatarComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InviteCardComponent implements OnInit {
   constructor(private readonly fb: FormBuilder) {

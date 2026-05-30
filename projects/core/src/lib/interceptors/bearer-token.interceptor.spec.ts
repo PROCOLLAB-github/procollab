@@ -5,19 +5,14 @@ import { TestBed } from "@angular/core/testing";
 import { BearerTokenInterceptor } from "./bearer-token.interceptor";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 
 describe("BearerTokenInterceptor", () => {
   beforeEach(() => {
-    const authSpy = jasmine.createSpyObj("AuthService", [
-      "getTokens",
-      "memTokens",
-      "refreshTokens",
-    ]);
-
+    // SUT зависит от TokenService и LoggerService (providedIn: "root") и Router
+    // (даёт RouterTestingModule). AuthService удалён при миграции на TokenService.
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [BearerTokenInterceptor, { provide: AuthService, useValue: authSpy }],
+      providers: [BearerTokenInterceptor],
     });
   });
 

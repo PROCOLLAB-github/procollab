@@ -27,22 +27,21 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Центральная колонка профиля: о себе, навыки, новости. */
 @Component({
-  selector: "app-profile-mid-side",
-  templateUrl: "./profile-mid-side.component.html",
-  styleUrl: "./profile-mid-side.component.scss",
-  imports: [
-    CommonModule,
-    IconComponent,
-    RouterModule,
-    NewsCardComponent,
-    ButtonComponent,
-    NewsFormComponent,
-    ProjectDirectionCard,
-    ParseLinksPipe,
-    ParseBreaksPipe,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-profile-mid-side",
+    templateUrl: "./profile-mid-side.component.html",
+    styleUrl: "./profile-mid-side.component.scss",
+    imports: [
+        CommonModule,
+        IconComponent,
+        RouterModule,
+        NewsCardComponent,
+        ButtonComponent,
+        NewsFormComponent,
+        ProjectDirectionCard,
+        ParseLinksPipe,
+        ParseBreaksPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileMidSideComponent {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;

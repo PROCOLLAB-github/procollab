@@ -13,12 +13,11 @@ import { Skill } from "@domain/skills/skill.model";
 
 /** Компонент группы навыков с множественным выбором через чекбоксы и сворачиванием. */
 @Component({
-  selector: "app-skills-group",
-  standalone: true,
-  imports: [CommonModule, IconComponent],
-  templateUrl: "./skills-group.component.html",
-  styleUrl: "./skills-group.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-skills-group",
+    imports: [CommonModule, IconComponent],
+    templateUrl: "./skills-group.component.html",
+    styleUrl: "./skills-group.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillsGroupComponent {
   @Input({ required: true }) set options(value: Skill[]) {
