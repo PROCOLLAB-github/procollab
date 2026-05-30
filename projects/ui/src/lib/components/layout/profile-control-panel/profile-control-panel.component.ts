@@ -30,19 +30,18 @@ import { User } from "@domain/auth/user.model";
  * \`\`\`
  */
 @Component({
-  selector: "app-profile-control-panel",
-  standalone: true,
-  imports: [
-    CommonModule,
-    InviteManageCardComponent,
-    ProfileInfoComponent,
-    ClickOutsideModule,
-    IconComponent,
-    EmptyManageCardComponent,
-  ],
-  templateUrl: "./profile-control-panel.component.html",
-  styleUrl: "./profile-control-panel.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-profile-control-panel",
+    imports: [
+        CommonModule,
+        InviteManageCardComponent,
+        ProfileInfoComponent,
+        ClickOutsideModule,
+        IconComponent,
+        EmptyManageCardComponent,
+    ],
+    templateUrl: "./profile-control-panel.component.html",
+    styleUrl: "./profile-control-panel.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileControlPanelComponent {
   /** Данные текущего пользователя */

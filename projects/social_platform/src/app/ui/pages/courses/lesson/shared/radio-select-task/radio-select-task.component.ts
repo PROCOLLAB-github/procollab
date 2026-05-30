@@ -22,11 +22,10 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
 /** Компонент задачи с одним вариантом ответа и локальным сбросом выбора при ошибке. */
 @Component({
-  selector: "app-radio-select-task",
-  standalone: true,
-  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
-  templateUrl: "./radio-select-task.component.html",
-  styleUrl: "./radio-select-task.component.scss",
+    selector: "app-radio-select-task",
+    imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
+    templateUrl: "./radio-select-task.component.html",
+    styleUrl: "./radio-select-task.component.scss"
 })
 export class RadioSelectTaskComponent implements OnInit {
   private readonly cdRef = inject(ChangeDetectorRef);

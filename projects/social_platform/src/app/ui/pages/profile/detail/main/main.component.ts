@@ -20,18 +20,17 @@ import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-m
 
 /** Главная страница профиля: информация, новости, навыки, проекты. */
 @Component({
-  selector: "app-profile-main",
-  templateUrl: "./main.component.html",
-  styleUrl: "./main.component.scss",
-  imports: [
-    CommonModule,
-    ProfileLeftSideComponent,
-    ProfileRightSideComponent,
-    ProfileMidSideComponent,
-  ],
-  providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
+    selector: "app-profile-main",
+    templateUrl: "./main.component.html",
+    styleUrl: "./main.component.scss",
+    imports: [
+        CommonModule,
+        ProfileLeftSideComponent,
+        ProfileRightSideComponent,
+        ProfileMidSideComponent,
+    ],
+    providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("descEl") descEl?: ElementRef;

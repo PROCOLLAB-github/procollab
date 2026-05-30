@@ -24,13 +24,12 @@ import { AppRoutes } from "@api/paths/app-routes";
  * @styleUrl ./chat-direct.component.scss
  */
 @Component({
-  selector: "app-chat-direct",
-  templateUrl: "./chat-direct.component.html",
-  styleUrl: "./chat-direct.component.scss",
-  imports: [RouterLink, AvatarComponent, ChatWindowComponent, BackComponent],
-  providers: [ChatDirectInfoService, ChatDirectUIInfoService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-chat-direct",
+    templateUrl: "./chat-direct.component.html",
+    styleUrl: "./chat-direct.component.scss",
+    imports: [RouterLink, AvatarComponent, ChatWindowComponent, BackComponent],
+    providers: [ChatDirectInfoService, ChatDirectUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatDirectComponent implements OnInit, OnDestroy {
   private readonly ChatDirectInfoService = inject(ChatDirectInfoService);

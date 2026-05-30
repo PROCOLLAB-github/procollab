@@ -3,7 +3,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
-import Cookies, { CookieAttributes } from "js-cookie";
+import Cookies, { type CookieAttributes } from "js-cookie";
 import { PRODUCTION } from "../../providers/production.provide";
 import { ApiService } from "../api/api.service";
 import { environment } from "@environment";

@@ -43,29 +43,28 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Виджет карточки новости: отображение, лайк, режим редактирования. */
 @Component({
-  selector: "app-news-card",
-  templateUrl: "./news-card.component.html",
-  styleUrl: "./news-card.component.scss",
-  standalone: true,
-  imports: [
-    ClickOutsideModule,
-    RouterLink,
-    IconComponent,
-    TextareaComponent,
-    ReactiveFormsModule,
-    FileUploadItemComponent,
-    FileItemComponent,
-    ButtonComponent,
-    DayjsPipe,
-    FormControlPipe,
-    TruncatePipe,
-    ParseLinksPipe,
-    ParseBreaksPipe,
-    CarouselComponent,
-    ImgCardComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ExpandService],
+    selector: "app-news-card",
+    templateUrl: "./news-card.component.html",
+    styleUrl: "./news-card.component.scss",
+    imports: [
+        ClickOutsideModule,
+        RouterLink,
+        IconComponent,
+        TextareaComponent,
+        ReactiveFormsModule,
+        FileUploadItemComponent,
+        FileItemComponent,
+        ButtonComponent,
+        DayjsPipe,
+        FormControlPipe,
+        TruncatePipe,
+        ParseLinksPipe,
+        ParseBreaksPipe,
+        CarouselComponent,
+        ImgCardComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ExpandService]
 })
 export class NewsCardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

@@ -20,12 +20,11 @@ import { LoggerService } from "@corelib";
 
 /** Фильтры для списка участников с синхронизацией через URL. */
 @Component({
-  selector: "app-members-filters",
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AutoCompleteInputComponent],
-  templateUrl: "./members-filters.component.html",
-  styleUrl: "./members-filters.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-members-filters",
+    imports: [CommonModule, ReactiveFormsModule, AutoCompleteInputComponent],
+    templateUrl: "./members-filters.component.html",
+    styleUrl: "./members-filters.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MembersFiltersComponent {
   @Input({ required: true }) filterForm!: MembersComponent["filterForm"];

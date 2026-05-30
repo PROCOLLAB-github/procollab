@@ -6,11 +6,10 @@ import { IconComponent } from "@ui/primitives";
 
 /** Круглый SVG-прогресс-бар. */
 @Component({
-  selector: "app-circle-progress-bar",
-  standalone: true,
-  imports: [CommonModule, IconComponent],
-  templateUrl: "./circle-progress-bar.component.html",
-  styleUrl: "./circle-progress-bar.component.scss",
+    selector: "app-circle-progress-bar",
+    imports: [CommonModule, IconComponent],
+    templateUrl: "./circle-progress-bar.component.html",
+    styleUrl: "./circle-progress-bar.component.scss"
 })
 export class CircleProgressBarComponent {
   @Input() progress = 0;

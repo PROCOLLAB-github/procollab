@@ -13,13 +13,12 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Контейнер детальной страницы вакансии с навигацией и router-outlet. */
 @Component({
-  selector: "app-vacancies-detail",
-  templateUrl: "./vacancies-detail.component.html",
-  styleUrl: "./vacancies-detail.component.scss",
-  imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
-  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService, ExpandService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-vacancies-detail",
+    templateUrl: "./vacancies-detail.component.html",
+    styleUrl: "./vacancies-detail.component.scss",
+    imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
+    providers: [VacancyDetailInfoService, VacancyDetailUIInfoService, ExpandService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VacanciesDetailComponent implements OnInit, OnDestroy {
   private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);

@@ -29,12 +29,11 @@ import { ConnectionStatusToastService } from "@api/connection-status/connection-
  * Содержит router-outlet для отображения различных страниц приложения.
  */
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
-  standalone: true,
-  imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-root",
+    templateUrl: "./app.component.html",
+    styleUrls: ["./app.component.scss"],
+    imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   private readonly logger = inject(LoggerService);

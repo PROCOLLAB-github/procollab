@@ -33,12 +33,11 @@ import { IconComponent } from "../icon/icon.component";
  * - Автоматическое скачивание файла по клику
  */
 @Component({
-  selector: "app-file-item",
-  templateUrl: "./file-item.component.html",
-  styleUrl: "./file-item.component.scss",
-  standalone: true,
-  imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-file-item",
+    templateUrl: "./file-item.component.html",
+    styleUrl: "./file-item.component.scss",
+    imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileItemComponent implements OnInit {
   private readonly fileService = inject(FileService);

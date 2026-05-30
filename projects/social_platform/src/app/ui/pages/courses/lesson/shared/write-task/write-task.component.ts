@@ -26,19 +26,18 @@ import { TruncateHtmlPipe, TruncatePipe } from "@corelib";
 
 /** Поле ответа для текстовой задачи и задачи с текстом + файлами. */
 @Component({
-  selector: "app-write-task",
-  standalone: true,
-  imports: [
-    CommonModule,
-    TruncatePipe,
-    TruncateHtmlPipe,
-    UploadFileComponent,
-    IconComponent,
-    FileItemComponent,
-    ImagePreviewDirective,
-  ],
-  templateUrl: "./write-task.component.html",
-  styleUrl: "./write-task.component.scss",
+    selector: "app-write-task",
+    imports: [
+        CommonModule,
+        TruncatePipe,
+        TruncateHtmlPipe,
+        UploadFileComponent,
+        IconComponent,
+        FileItemComponent,
+        ImagePreviewDirective,
+    ],
+    templateUrl: "./write-task.component.html",
+    styleUrl: "./write-task.component.scss"
 })
 export class WriteTaskComponent implements OnInit {
   private readonly fileService = inject(FileService);

@@ -17,19 +17,18 @@ import { TruncatePipe } from "@corelib";
  * @Input trajectory - объект траектории для отображения
  */
 @Component({
-  selector: "app-course",
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TruncatePipe,
-    IconComponent,
-    AvatarComponent,
-    ButtonComponent,
-    IconComponent,
-  ],
-  templateUrl: "./course.component.html",
-  styleUrl: "./course.component.scss",
+    selector: "app-course",
+    imports: [
+        CommonModule,
+        RouterModule,
+        TruncatePipe,
+        IconComponent,
+        AvatarComponent,
+        ButtonComponent,
+        IconComponent,
+    ],
+    templateUrl: "./course.component.html",
+    styleUrl: "./course.component.scss"
 })
 export class CourseComponent implements OnInit {
   @Input() course!: CourseCard;

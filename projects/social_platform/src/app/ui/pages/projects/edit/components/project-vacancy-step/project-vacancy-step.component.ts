@@ -22,27 +22,26 @@ import { SearchesService } from "@api/searches/searches.service";
 
 /** Шаг редактирования проекта: вакансии. */
 @Component({
-  selector: "app-project-vacancy-step",
-  templateUrl: "./project-vacancy-step.component.html",
-  styleUrl: "./project-vacancy-step.component.scss",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputComponent,
-    ButtonComponent,
-    IconComponent,
-    ControlErrorPipe,
-    SelectComponent,
-    AutoCompleteInputComponent,
-    SkillsBasketComponent,
-    VacancyCardComponent,
-    TextareaComponent,
-    ModalComponent,
-    SkillsGroupComponent,
-  ],
-  providers: [ProjectsEditInfoService, ProjectVacancyService, ProjectVacancyUIService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-vacancy-step",
+    templateUrl: "./project-vacancy-step.component.html",
+    styleUrl: "./project-vacancy-step.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        InputComponent,
+        ButtonComponent,
+        IconComponent,
+        ControlErrorPipe,
+        SelectComponent,
+        AutoCompleteInputComponent,
+        SkillsBasketComponent,
+        VacancyCardComponent,
+        TextareaComponent,
+        ModalComponent,
+        SkillsGroupComponent,
+    ],
+    providers: [ProjectsEditInfoService, ProjectVacancyService, ProjectVacancyUIService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectVacancyStepComponent implements OnInit {
   private readonly projectVacancyInfoService = inject(ProjectVacancyService);

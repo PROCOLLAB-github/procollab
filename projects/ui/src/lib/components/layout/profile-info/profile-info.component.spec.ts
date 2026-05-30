@@ -2,7 +2,6 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProfileInfoComponent } from "./profile-info.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
@@ -11,9 +10,9 @@ describe("ProfileInfoComponent", () => {
   let fixture: ComponentFixture<ProfileInfoComponent>;
 
   beforeEach(async () => {
+    // Компонент зависит только от Router. AuthService удалён.
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, ProfileInfoComponent],
-      providers: [AuthService],
     }).compileComponents();
   });
 

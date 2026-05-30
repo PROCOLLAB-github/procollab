@@ -9,17 +9,16 @@ import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboa
 
 /** Финальный этап онбординга — выбор роли пользователя. */
 @Component({
-  selector: "app-stage-three",
-  templateUrl: "./stage-three.component.html",
-  styleUrl: "./stage-three.component.scss",
-  imports: [UserTypeCardComponent, ButtonComponent],
-  providers: [
-    OnboardingStageThreeInfoService,
-    OnboardingStageThreeUIInfoService,
-    OnboardingUIInfoService,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-stage-three",
+    templateUrl: "./stage-three.component.html",
+    styleUrl: "./stage-three.component.scss",
+    imports: [UserTypeCardComponent, ButtonComponent],
+    providers: [
+        OnboardingStageThreeInfoService,
+        OnboardingStageThreeUIInfoService,
+        OnboardingUIInfoService,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OnboardingStageThreeComponent implements OnInit, OnDestroy {
   private readonly onboardingStageThreeInfoService = inject(OnboardingStageThreeInfoService);

@@ -52,7 +52,8 @@ body {
 // Be sure that you only ever include this mixin once!
 
 // stylelint-disable
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 .mat-progress-bar {
   z-index: 200;

@@ -18,12 +18,11 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /** Карточка отклика на вакансию с информацией о кандидате и действиями. */
 @Component({
-  selector: "app-response-card",
-  templateUrl: "./response-card.component.html",
-  styleUrl: "./response-card.component.scss",
-  standalone: true,
-  imports: [IconComponent, FileItemComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-response-card",
+    templateUrl: "./response-card.component.html",
+    styleUrl: "./response-card.component.scss",
+    imports: [IconComponent, FileItemComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResponseCardComponent implements OnInit {
   private readonly authRepository = inject(AuthInfoService);

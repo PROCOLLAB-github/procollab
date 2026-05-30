@@ -18,24 +18,23 @@ import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.comp
 
 /** Отображает детальную информацию о вакансии с возможностью отклика. */
 @Component({
-  selector: "app-detail",
-  templateUrl: "./info.component.html",
-  styleUrl: "./info.component.scss",
-  imports: [
-    IconComponent,
-    ButtonComponent,
-    ModalComponent,
-    RouterModule,
-    ReactiveFormsModule,
-    VacanciesRightSideComponent,
-    VacanciesLeftSideComponent,
-    TextareaComponent,
-    ControlErrorPipe,
-    UploadFileComponent,
-  ],
-  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-detail",
+    templateUrl: "./info.component.html",
+    styleUrl: "./info.component.scss",
+    imports: [
+        IconComponent,
+        ButtonComponent,
+        ModalComponent,
+        RouterModule,
+        ReactiveFormsModule,
+        VacanciesRightSideComponent,
+        VacanciesLeftSideComponent,
+        TextareaComponent,
+        ControlErrorPipe,
+        UploadFileComponent,
+    ],
+    providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VacancyInfoComponent implements OnInit {
   private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);

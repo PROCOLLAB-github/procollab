@@ -20,20 +20,19 @@ import { ProjectsMidSideComponent } from "./components/projects-mid-side/project
 
 /** Детальная информация о проекте: команда, новости, вакансии, подписка. */
 @Component({
-  selector: "app-detail",
-  templateUrl: "./info.component.html",
-  styleUrl: "./info.component.scss",
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    RouterOutlet,
-    CommonModule,
-    ProjectsLeftSideComponent,
-    ProjectsRightSideComponent,
-    ProjectsMidSideComponent,
-  ],
-  providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-detail",
+    templateUrl: "./info.component.html",
+    styleUrl: "./info.component.scss",
+    imports: [
+        RouterOutlet,
+        RouterOutlet,
+        CommonModule,
+        ProjectsLeftSideComponent,
+        ProjectsRightSideComponent,
+        ProjectsMidSideComponent,
+    ],
+    providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly projectsDetailService = inject(ProjectsDetailService);

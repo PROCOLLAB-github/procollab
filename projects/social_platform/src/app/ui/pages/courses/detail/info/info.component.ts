@@ -14,19 +14,18 @@ import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.comp
 
 /** Информационная вкладка курса с описанием, модулями и about-модалкой. */
 @Component({
-  selector: "app-detail",
-  standalone: true,
-  imports: [
-    RouterModule,
-    CommonModule,
-    SoonCardComponent,
-    ModalComponent,
-    ButtonComponent,
-    CourseModuleCardComponent,
-    CourseAboutComponent,
-  ],
-  templateUrl: "./info.component.html",
-  styleUrl: "./info.component.scss",
+    selector: "app-detail",
+    imports: [
+        RouterModule,
+        CommonModule,
+        SoonCardComponent,
+        ModalComponent,
+        ButtonComponent,
+        CourseModuleCardComponent,
+        CourseAboutComponent,
+    ],
+    templateUrl: "./info.component.html",
+    styleUrl: "./info.component.scss"
 })
 export class CourseInfoComponent {
   protected appWidth = window.innerWidth;

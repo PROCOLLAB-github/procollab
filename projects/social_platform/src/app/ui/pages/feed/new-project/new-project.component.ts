@@ -13,21 +13,20 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
 
 /** Карточка нового проекта в ленте новостей. */
 @Component({
-  selector: "app-new-project",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ButtonComponent,
-    AvatarComponent,
-    RouterLink,
-    DayjsPipe,
-    TruncatePipe,
-    IconComponent,
-    TagComponent,
-  ],
-  templateUrl: "./new-project.component.html",
-  styleUrl: "./new-project.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-new-project",
+    imports: [
+        CommonModule,
+        ButtonComponent,
+        AvatarComponent,
+        RouterLink,
+        DayjsPipe,
+        TruncatePipe,
+        IconComponent,
+        TagComponent,
+    ],
+    templateUrl: "./new-project.component.html",
+    styleUrl: "./new-project.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewProjectComponent {
   @Input() feedItem!: FeedProject;

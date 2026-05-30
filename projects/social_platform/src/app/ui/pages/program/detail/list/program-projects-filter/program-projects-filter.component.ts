@@ -11,19 +11,18 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
 
 /** Фильтрация списка проектов с синхронизацией состояния через URL. */
 @Component({
-  selector: "app-program-projects-filter",
-  templateUrl: "./program-projects-filter.component.html",
-  styleUrl: "./program-projects-filter.component.scss",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CheckboxComponent,
-    SwitchComponent,
-    SelectComponent,
-    ToSelectOptionsPipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-program-projects-filter",
+    templateUrl: "./program-projects-filter.component.html",
+    styleUrl: "./program-projects-filter.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        CheckboxComponent,
+        SwitchComponent,
+        SelectComponent,
+        ToSelectOptionsPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgramProjectsFilterComponent {
   @Output() clear = new EventEmitter<void>();

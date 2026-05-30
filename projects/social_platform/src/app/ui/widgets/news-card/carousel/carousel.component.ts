@@ -13,12 +13,11 @@ import { IconComponent } from "@uilib";
 
 /** Компонент карусели для просмотра изображений с навигацией и лайками. */
 @Component({
-  selector: "app-carousel",
-  imports: [IconComponent],
-  templateUrl: "./carousel.component.html",
-  styleUrls: ["./carousel.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-carousel",
+    imports: [IconComponent],
+    templateUrl: "./carousel.component.html",
+    styleUrls: ["./carousel.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselComponent implements OnInit {
   @Input() images: Array<FileModel | string> = [];

@@ -7,12 +7,11 @@ import { IconComponent } from "../icon/icon.component";
 
 /** Примитив: карточка-заглушка «скоро». */
 @Component({
-  selector: "app-soon-card",
-  templateUrl: "./soon-card.component.html",
-  styleUrl: "./soon-card.component.scss",
-  imports: [CommonModule, IconComponent, ButtonComponent],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-soon-card",
+    templateUrl: "./soon-card.component.html",
+    styleUrl: "./soon-card.component.scss",
+    imports: [CommonModule, IconComponent, ButtonComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SoonCardComponent {
   @Input({ required: true }) title!: string;

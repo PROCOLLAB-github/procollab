@@ -20,12 +20,11 @@ import { IconComponent } from "../icon/icon.component";
  * - hide: скрыть подсказку
  */
 @Component({
-  selector: "app-tooltip",
-  templateUrl: "./tooltip.component.html",
-  styleUrl: "./tooltip.component.scss",
-  standalone: true,
-  imports: [CommonModule, IconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-tooltip",
+    templateUrl: "./tooltip.component.html",
+    styleUrl: "./tooltip.component.scss",
+    imports: [CommonModule, IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TooltipComponent {
   /** Текст подсказки */

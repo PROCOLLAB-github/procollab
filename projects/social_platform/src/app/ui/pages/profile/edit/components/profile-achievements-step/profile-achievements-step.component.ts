@@ -15,24 +15,23 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Шаг редактирования достижений в общей форме профиля. */
 @Component({
-  selector: "app-profile-achievements-step",
-  templateUrl: "./profile-achievements-step.component.html",
-  styleUrl: "./profile-achievements-step.component.scss",
-  imports: [
-    CommonModule,
-    InputComponent,
-    IconComponent,
-    SelectComponent,
-    TextareaComponent,
-    UploadFileComponent,
-    ButtonComponent,
-    FileItemComponent,
-    ReactiveFormsModule,
-    ControlErrorPipe,
-    TruncatePipe,
-  ],
-  providers: [ProfileEditAchievementsInfoService],
-  standalone: true,
+    selector: "app-profile-achievements-step",
+    templateUrl: "./profile-achievements-step.component.html",
+    styleUrl: "./profile-achievements-step.component.scss",
+    imports: [
+        CommonModule,
+        InputComponent,
+        IconComponent,
+        SelectComponent,
+        TextareaComponent,
+        UploadFileComponent,
+        ButtonComponent,
+        FileItemComponent,
+        ReactiveFormsModule,
+        ControlErrorPipe,
+        TruncatePipe,
+    ],
+    providers: [ProfileEditAchievementsInfoService]
 })
 export class ProfileAchievementsStepComponent {
   @Input() isAchievementsDirty!: boolean;

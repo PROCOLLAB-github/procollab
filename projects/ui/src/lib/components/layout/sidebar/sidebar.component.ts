@@ -46,12 +46,11 @@ export interface NavItem {
  * \`\`\`
  */
 @Component({
-  selector: "ui-sidebar",
-  templateUrl: "./sidebar.component.html",
-  styleUrl: "./sidebar.component.scss",
-  standalone: true,
-  imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "ui-sidebar",
+    templateUrl: "./sidebar.component.html",
+    styleUrl: "./sidebar.component.scss",
+    imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   /** Массив элементов навигации */

@@ -6,10 +6,9 @@ import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { RouterLink } from "@angular/router";
 
 @Component({
-  selector: "app-empty-manage-card",
-  templateUrl: "./empty-manage-card.component.html",
-  styleUrl: "./empty-manage-card.component.scss",
-  imports: [CommonModule, ButtonComponent, IconComponent, RouterLink],
-  standalone: true,
+    selector: "app-empty-manage-card",
+    templateUrl: "./empty-manage-card.component.html",
+    styleUrl: "./empty-manage-card.component.scss",
+    imports: [CommonModule, ButtonComponent, IconComponent, RouterLink]
 })
 export class EmptyManageCardComponent {}

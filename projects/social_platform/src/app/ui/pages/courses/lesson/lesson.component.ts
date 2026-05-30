@@ -16,22 +16,21 @@ import { LessonUIInfoService } from "@api/courses/facades/ui/lesson-ui-info.serv
 
 /** Страница прохождения урока, выбирающая компонент задачи по текущему типу ответа. */
 @Component({
-  selector: "app-lesson",
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    ButtonComponent,
-    InfoTaskComponent,
-    WriteTaskComponent,
-    ExcludeTaskComponent,
-    RadioSelectTaskComponent,
-    FileTaskComponent,
-    LoaderComponent,
-  ],
-  templateUrl: "./lesson.component.html",
-  styleUrl: "./lesson.component.scss",
-  providers: [LessonInfoService, LessonUIInfoService],
+    selector: "app-lesson",
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        ButtonComponent,
+        InfoTaskComponent,
+        WriteTaskComponent,
+        ExcludeTaskComponent,
+        RadioSelectTaskComponent,
+        FileTaskComponent,
+        LoaderComponent,
+    ],
+    templateUrl: "./lesson.component.html",
+    styleUrl: "./lesson.component.scss",
+    providers: [LessonInfoService, LessonUIInfoService]
 })
 export class LessonComponent implements OnInit, OnDestroy {
   private readonly lessonInfoService = inject(LessonInfoService);

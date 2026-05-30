@@ -22,24 +22,23 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Компонент карточки вакансии проекта с возможностью раскрытия описания. */
 @Component({
-  selector: "app-project-vacancy-card",
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    IconComponent,
-    ButtonComponent,
-    ParseLinksPipe,
-    ParseBreaksPipe,
-    TruncatePipe,
-    TagComponent,
-    AvatarComponent,
-    DayjsPipe,
-  ],
-  templateUrl: "./project-vacancy-card.component.html",
-  styleUrl: "./project-vacancy-card.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ExpandService],
+    selector: "app-project-vacancy-card",
+    imports: [
+        CommonModule,
+        RouterLink,
+        IconComponent,
+        ButtonComponent,
+        ParseLinksPipe,
+        ParseBreaksPipe,
+        TruncatePipe,
+        TagComponent,
+        AvatarComponent,
+        DayjsPipe,
+    ],
+    templateUrl: "./project-vacancy-card.component.html",
+    styleUrl: "./project-vacancy-card.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ExpandService]
 })
 export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   private readonly expandService = inject(ExpandService);

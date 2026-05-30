@@ -21,12 +21,11 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Отображает новость профиля в модальном окне. */
 @Component({
-  selector: "app-profile-news",
-  standalone: true,
-  imports: [CommonModule, ModalComponent, NewsCardComponent],
-  templateUrl: "./profile-news.component.html",
-  styleUrl: "./profile-news.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-profile-news",
+    imports: [CommonModule, ModalComponent, NewsCardComponent],
+    templateUrl: "./profile-news.component.html",
+    styleUrl: "./profile-news.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileNewsComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);

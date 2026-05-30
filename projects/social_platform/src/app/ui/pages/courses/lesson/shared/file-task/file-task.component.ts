@@ -26,19 +26,18 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
 /** Файловый ответ на задачу курса с превью вложений и сбросом при ошибке. */
 @Component({
-  selector: "app-file-task",
-  standalone: true,
-  imports: [
-    CommonModule,
-    TruncatePipe,
-    TruncateHtmlPipe,
-    UploadFileComponent,
-    IconComponent,
-    FileItemComponent,
-    ImagePreviewDirective,
-  ],
-  templateUrl: "./file-task.component.html",
-  styleUrl: "./file-task.component.scss",
+    selector: "app-file-task",
+    imports: [
+        CommonModule,
+        TruncatePipe,
+        TruncateHtmlPipe,
+        UploadFileComponent,
+        IconComponent,
+        FileItemComponent,
+        ImagePreviewDirective,
+    ],
+    templateUrl: "./file-task.component.html",
+    styleUrl: "./file-task.component.scss"
 })
 export class FileTaskComponent implements OnInit {
   private readonly fileService = inject(FileService);

@@ -22,23 +22,22 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Карточка вакансии в ленте с поддержкой разворачивания контента. */
 @Component({
-  selector: "app-open-vacancy",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ButtonComponent,
-    RouterLink,
-    TagComponent,
-    DayjsPipe,
-    ParseLinksPipe,
-    ParseBreaksPipe,
-    TruncatePipe,
-    AvatarComponent,
-  ],
-  templateUrl: "./open-vacancy.component.html",
-  styleUrl: "./open-vacancy.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ExpandService],
+    selector: "app-open-vacancy",
+    imports: [
+        CommonModule,
+        ButtonComponent,
+        RouterLink,
+        TagComponent,
+        DayjsPipe,
+        ParseLinksPipe,
+        ParseBreaksPipe,
+        TruncatePipe,
+        AvatarComponent,
+    ],
+    templateUrl: "./open-vacancy.component.html",
+    styleUrl: "./open-vacancy.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ExpandService]
 })
 export class OpenVacancyComponent implements AfterViewInit {
   @Input() feedItem!: Vacancy;

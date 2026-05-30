@@ -8,12 +8,11 @@ import { Skill } from "@domain/skills/skill.model";
 
 /** Виджет: люди, подтвердившие навык. */
 @Component({
-  selector: "app-approve-skill-people",
-  templateUrl: "./approve-skill-people.component.html",
-  styleUrl: "./approve-skill-people.component.scss",
-  imports: [CommonModule, AvatarComponent, PluralizePipe],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-approve-skill-people",
+    templateUrl: "./approve-skill-people.component.html",
+    styleUrl: "./approve-skill-people.component.scss",
+    imports: [CommonModule, AvatarComponent, PluralizePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApproveSkillPeopleComponent {
   @Input({ required: true }) approves!: Skill["approves"];

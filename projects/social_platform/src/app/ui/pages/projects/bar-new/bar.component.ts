@@ -7,12 +7,11 @@ import { IconComponent } from "@uilib";
 
 /** Горизонтальный список навигационных ссылок с индикаторами активности. */
 @Component({
-  selector: "app-bar-new",
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, IconComponent],
-  templateUrl: "./bar.component.html",
-  styleUrl: "./bar.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-bar-new",
+    imports: [CommonModule, RouterLink, RouterLinkActive, IconComponent],
+    templateUrl: "./bar.component.html",
+    styleUrl: "./bar.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BarNewComponent {
   constructor() {}

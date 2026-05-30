@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { ProjectGoalsRepository } from "./project-goals.repository";
 import { ProjectGoalsHttpAdapter } from "../../adapters/project/project-goals-http.adapter";
 import { Goal } from "@domain/project/goals.model";
-import { GoalFormData } from "../../adapters/project/dto/project-goal.dto";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
 
 describe("ProjectGoalsRepository", () => {
   let repository: ProjectGoalsRepository;

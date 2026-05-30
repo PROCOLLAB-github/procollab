@@ -28,12 +28,11 @@ import { IconComponent } from "../icon/icon.component";
  * - Контент передается через ng-content
  */
 @Component({
-  selector: "app-tag",
-  templateUrl: "./tag.component.html",
-  styleUrl: "./tag.component.scss",
-  standalone: true,
-  imports: [IconComponent, NgStyle],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-tag",
+    templateUrl: "./tag.component.html",
+    styleUrl: "./tag.component.scss",
+    imports: [IconComponent, NgStyle],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TagComponent implements OnInit, OnChanges {
   constructor() {}

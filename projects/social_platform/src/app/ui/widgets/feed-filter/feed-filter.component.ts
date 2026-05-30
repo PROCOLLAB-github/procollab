@@ -12,22 +12,21 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 
 /** Компонент фильтрации ленты по типам контента с мгновенной синхронизацией через URL. */
 @Component({
-  selector: "app-feed-filter",
-  standalone: true,
-  imports: [CommonModule, ClickOutsideModule, IconComponent],
-  templateUrl: "./feed-filter.component.html",
-  styleUrl: "./feed-filter.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger("dropdownAnimation", [
-      transition(":enter", [
-        style({ opacity: 0, transform: "scaleY(0.8)" }),
-        animate(".12s cubic-bezier(0, 0, 0.2, 1)"),
-      ]),
-      transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
-    ]),
-  ],
-  providers: [FeedFilterInfoService, ProfileDetailUIInfoService, DetailProfileInfoService],
+    selector: "app-feed-filter",
+    imports: [CommonModule, ClickOutsideModule, IconComponent],
+    templateUrl: "./feed-filter.component.html",
+    styleUrl: "./feed-filter.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger("dropdownAnimation", [
+            transition(":enter", [
+                style({ opacity: 0, transform: "scaleY(0.8)" }),
+                animate(".12s cubic-bezier(0, 0, 0.2, 1)"),
+            ]),
+            transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
+        ]),
+    ],
+    providers: [FeedFilterInfoService, ProfileDetailUIInfoService, DetailProfileInfoService]
 })
 export class FeedFilterComponent implements OnInit, OnDestroy {
   private readonly feedFilterInfoService = inject(FeedFilterInfoService);

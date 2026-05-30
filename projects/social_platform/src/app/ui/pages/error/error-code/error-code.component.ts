@@ -7,12 +7,11 @@ import { AsyncPipe } from "@angular/common";
 
 /** Отображает страницу ошибки с динамическим кодом из URL. */
 @Component({
-  selector: "app-code",
-  templateUrl: "./error-code.component.html",
-  styleUrl: "./error-code.component.scss",
-  standalone: true,
-  imports: [RouterLink, AsyncPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-code",
+    templateUrl: "./error-code.component.html",
+    styleUrl: "./error-code.component.scss",
+    imports: [RouterLink, AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorCodeComponent implements OnInit {
   // Observable с кодом ошибки, извлеченным из URL параметра 'code'

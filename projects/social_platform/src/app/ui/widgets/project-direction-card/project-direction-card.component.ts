@@ -27,22 +27,21 @@ import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
 
 /** Универсальная карточка направлений профиля/проекта: навыки, достижения, цели и партнёры. */
 @Component({
-  selector: "app-project-direction-card",
-  templateUrl: "./project-direction-card.component.html",
-  styleUrl: "./project-direction-card.component.scss",
-  imports: [
-    CommonModule,
-    IconComponent,
-    ModalComponent,
-    TagComponent,
-    FileItemComponent,
-    AvatarComponent,
-    DayjsPipe,
-    TruncatePipe,
-    ButtonComponent,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-direction-card",
+    templateUrl: "./project-direction-card.component.html",
+    styleUrl: "./project-direction-card.component.scss",
+    imports: [
+        CommonModule,
+        IconComponent,
+        ModalComponent,
+        TagComponent,
+        FileItemComponent,
+        AvatarComponent,
+        DayjsPipe,
+        TruncatePipe,
+        ButtonComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectDirectionCard implements OnInit, OnDestroy {
   @Input() direction!: string;

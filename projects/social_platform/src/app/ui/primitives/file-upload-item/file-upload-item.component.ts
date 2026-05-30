@@ -31,12 +31,11 @@ import { IconComponent } from "../icon/icon.component";
  * - retry: событие повторной попытки загрузки
  */
 @Component({
-  selector: "app-file-upload-item",
-  templateUrl: "./file-upload-item.component.html",
-  styleUrl: "./file-upload-item.component.scss",
-  standalone: true,
-  imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-file-upload-item",
+    templateUrl: "./file-upload-item.component.html",
+    styleUrl: "./file-upload-item.component.scss",
+    imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileUploadItemComponent implements OnInit {
   constructor() {}

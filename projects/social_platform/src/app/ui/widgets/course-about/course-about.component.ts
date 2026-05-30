@@ -7,12 +7,11 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Виджет «о курсе»: описание курса в модалке/блоке. */
 @Component({
-  selector: "app-course-about",
-  templateUrl: "./course-about.component.html",
-  styleUrl: "./course-about.component.scss",
-  standalone: true,
-  imports: [IconComponent, ParseBreaksPipe, ParseLinksPipe],
-  providers: [ExpandService],
+    selector: "app-course-about",
+    templateUrl: "./course-about.component.html",
+    styleUrl: "./course-about.component.scss",
+    imports: [IconComponent, ParseBreaksPipe, ParseLinksPipe],
+    providers: [ExpandService]
 })
 export class CourseAboutComponent implements AfterViewInit {
   @Input({ required: true }) description!: string;

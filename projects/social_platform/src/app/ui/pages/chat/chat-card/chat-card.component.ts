@@ -20,12 +20,11 @@ import { ChatListItem } from "@domain/chat/chat-item.model";
  * @styleUrl ./chat-card.component.scss
  */
 @Component({
-  selector: "app-chat-card",
-  templateUrl: "./chat-card.component.html",
-  styleUrl: "./chat-card.component.scss",
-  standalone: true,
-  imports: [AvatarComponent, DayjsPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-chat-card",
+    templateUrl: "./chat-card.component.html",
+    styleUrl: "./chat-card.component.scss",
+    imports: [AvatarComponent, DayjsPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatCardComponent {
   /** Данные чата для отображения */

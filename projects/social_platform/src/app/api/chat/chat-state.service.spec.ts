@@ -14,12 +14,8 @@ describe("ChatStateService", () => {
     service = TestBed.inject(ChatStateService);
   });
 
-  it("обновляет unread state", () => {
-    service.setUnread(true);
-
-    expect(service.unread$.value).toBe(true);
-  });
-
+  // Тест unread удалён: unread-состояние переехало в ChatUnreadStateService,
+  // ChatStateService теперь отвечает только за онлайн-статусы пользователей.
   it("обновляет online status cache без потери предыдущих значений", () => {
     service.setOnlineStatus(1, true);
     service.setOnlineStatus(2, false);

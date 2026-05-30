@@ -11,12 +11,11 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
 
 /** Левая колонка детали проекта. */
 @Component({
-  selector: "app-projects-left-side",
-  templateUrl: "./projects-left-side.component.html",
-  styleUrl: "./projects-left-side.component.scss",
-  imports: [CommonModule, RouterModule, IconComponent, TruncatePipe],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-projects-left-side",
+    templateUrl: "./projects-left-side.component.html",
+    styleUrl: "./projects-left-side.component.scss",
+    imports: [CommonModule, RouterModule, IconComponent, TruncatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;

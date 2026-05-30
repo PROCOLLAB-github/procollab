@@ -31,26 +31,25 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Шаг редактирования проекта: дополнительные поля программы. */
 @Component({
-  selector: "app-project-additional-step",
-  templateUrl: "./project-additional-step.component.html",
-  styleUrl: "./project-additional-step.component.scss",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputComponent,
-    IconComponent,
-    CheckboxComponent,
-    SwitchComponent,
-    SelectComponent,
-    TextareaComponent,
-    ControlErrorPipe,
-    ToSelectOptionsPipe,
-    ButtonComponent,
-    RouterLink,
-    TooltipComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-additional-step",
+    templateUrl: "./project-additional-step.component.html",
+    styleUrl: "./project-additional-step.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        InputComponent,
+        IconComponent,
+        CheckboxComponent,
+        SwitchComponent,
+        SelectComponent,
+        TextareaComponent,
+        ControlErrorPipe,
+        ToSelectOptionsPipe,
+        ButtonComponent,
+        RouterLink,
+        TooltipComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectAdditionalStepComponent implements OnInit {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);

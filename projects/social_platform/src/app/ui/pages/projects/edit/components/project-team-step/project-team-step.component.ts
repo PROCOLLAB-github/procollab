@@ -20,24 +20,23 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 /** Шаг редактирования проекта: команда. */
 @Component({
-  selector: "app-project-team-step",
-  templateUrl: "./project-team-step.component.html",
-  styleUrl: "./project-team-step.component.scss",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputComponent,
-    ButtonComponent,
-    IconComponent,
-    ControlErrorPipe,
-    InviteCardComponent,
-    CollaboratorCardComponent,
-    TooltipComponent,
-    ModalComponent,
-  ],
-  providers: [ToggleFieldsInfoService, ProjectTeamUIService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-project-team-step",
+    templateUrl: "./project-team-step.component.html",
+    styleUrl: "./project-team-step.component.scss",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        InputComponent,
+        ButtonComponent,
+        IconComponent,
+        ControlErrorPipe,
+        InviteCardComponent,
+        CollaboratorCardComponent,
+        TooltipComponent,
+        ModalComponent,
+    ],
+    providers: [ToggleFieldsInfoService, ProjectTeamUIService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectTeamStepComponent implements OnInit {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);

@@ -31,30 +31,29 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 
 /** Оценка проекта по числовым, булевым и текстовым критериям через ControlValueAccessor. */
 @Component({
-  selector: "app-project-rating",
-  standalone: true,
-  imports: [
-    CommonModule,
-    TextareaComponent,
-    RangeCriterionInputComponent,
-    BooleanCriterionComponent,
-    ReactiveFormsModule,
-  ],
-  templateUrl: "./project-rating.component.html",
-  styleUrl: "./project-rating.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProjectRatingComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProjectRatingComponent),
-      multi: true,
-    },
-  ],
+    selector: "app-project-rating",
+    imports: [
+        CommonModule,
+        TextareaComponent,
+        RangeCriterionInputComponent,
+        BooleanCriterionComponent,
+        ReactiveFormsModule,
+    ],
+    templateUrl: "./project-rating.component.html",
+    styleUrl: "./project-rating.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ProjectRatingComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => ProjectRatingComponent),
+            multi: true,
+        },
+    ]
 })
 export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, Validator {
   @Input({ required: true })

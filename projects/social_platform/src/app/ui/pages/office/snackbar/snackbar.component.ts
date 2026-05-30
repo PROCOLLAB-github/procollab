@@ -30,13 +30,12 @@ import { IconComponent } from "@uilib";
  * Не принимает входящих параметров - работает через сервис SnackbarService
  */
 @Component({
-  selector: "app-snackbar",
-  templateUrl: "./snackbar.component.html",
-  styleUrl: "./snackbar.component.scss",
-  animations: [AnimationService.slideInOut],
-  imports: [CommonModule, IconComponent],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-snackbar",
+    templateUrl: "./snackbar.component.html",
+    styleUrl: "./snackbar.component.scss",
+    animations: [AnimationService.slideInOut],
+    imports: [CommonModule, IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SnackbarComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);

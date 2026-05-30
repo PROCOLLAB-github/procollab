@@ -27,19 +27,18 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Центральная колонка детали проекта: описание, новости. */
 @Component({
-  selector: "app-projects-mid-side",
-  templateUrl: "./projects-mid-side.component.html",
-  styleUrl: "./projects-mid-side.component.scss",
-  imports: [
-    CommonModule,
-    NewsFormComponent,
-    ProjectDirectionCard,
-    NewsCardComponent,
-    ParseLinksPipe,
-    ParseBreaksPipe,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-projects-mid-side",
+    templateUrl: "./projects-mid-side.component.html",
+    styleUrl: "./projects-mid-side.component.scss",
+    imports: [
+        CommonModule,
+        NewsFormComponent,
+        ProjectDirectionCard,
+        NewsCardComponent,
+        ParseLinksPipe,
+        ParseBreaksPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsMidSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;

@@ -37,19 +37,18 @@ import { IconComponent } from "../icon/icon.component";
  * - Закрытие при клике вне компонента
  */
 @Component({
-  selector: "app-select",
-  templateUrl: "./select.component.html",
-  styleUrl: "./select.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectComponent),
-      multi: true,
-    },
-  ],
-  standalone: true,
-  imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent],
+    selector: "app-select",
+    templateUrl: "./select.component.html",
+    styleUrl: "./select.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SelectComponent),
+            multi: true,
+        },
+    ],
+    imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent]
 })
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */

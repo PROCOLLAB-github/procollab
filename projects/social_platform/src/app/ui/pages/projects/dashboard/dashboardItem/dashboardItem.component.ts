@@ -17,12 +17,11 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Карточка проекта в дашборде. */
 @Component({
-  selector: "app-dashboard-item",
-  templateUrl: "./dashboardItem.component.html",
-  styleUrl: "./dashboardItem.component.scss",
-  standalone: true,
-  imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-dashboard-item",
+    templateUrl: "./dashboardItem.component.html",
+    styleUrl: "./dashboardItem.component.scss",
+    imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardItemComponent implements OnInit {
   @Input() title!: string;

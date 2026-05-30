@@ -14,12 +14,11 @@ import { Specialization } from "@domain/specializations/specialization.model";
 
 /** Компонент группы специализаций с возможностью сворачивания и выбора. */
 @Component({
-  selector: "app-specializations-group",
-  standalone: true,
-  imports: [CommonModule, IconComponent],
-  templateUrl: "./specializations-group.component.html",
-  styleUrl: "./specializations-group.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-specializations-group",
+    imports: [CommonModule, IconComponent],
+    templateUrl: "./specializations-group.component.html",
+    styleUrl: "./specializations-group.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpecializationsGroupComponent {
   @Input({ required: true }) title!: string;

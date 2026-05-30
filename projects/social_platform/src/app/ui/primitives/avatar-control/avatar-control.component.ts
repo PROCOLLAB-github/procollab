@@ -39,27 +39,26 @@ import { IconComponent } from "../icon/icon.component";
  * - URL загруженного изображения через ControlValueAccessor
  */
 @Component({
-  selector: "app-avatar-control",
-  templateUrl: "./avatar-control.component.html",
-  styleUrl: "./avatar-control.component.scss",
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AvatarControlComponent),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    LoaderComponent,
-    IconComponent,
-    CommonModule,
-    ImageCropperComponent,
-    ModalComponent,
-    ButtonComponent,
-    TooltipComponent,
-  ],
+    selector: "app-avatar-control",
+    templateUrl: "./avatar-control.component.html",
+    styleUrl: "./avatar-control.component.scss",
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AvatarControlComponent),
+            multi: true,
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        LoaderComponent,
+        IconComponent,
+        CommonModule,
+        ImageCropperComponent,
+        ModalComponent,
+        ButtonComponent,
+        TooltipComponent,
+    ]
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   private readonly destroyRef = inject(DestroyRef);
