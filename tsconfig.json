@@ -35,6 +35,7 @@
       "core": ["./dist/core"],
       "ui": ["./dist/ui"]
     },
+    "skipLibCheck": true,
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
