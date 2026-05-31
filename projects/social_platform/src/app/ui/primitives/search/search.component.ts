@@ -2,10 +2,12 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   forwardRef,
+  inject,
   Input,
   OnInit,
   Output,
@@ -90,6 +92,7 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
 
   /** Состояние раскрытия поля */
   open = false;
+  private readonly cdRef = inject(ChangeDetectorRef);
 
   /** Переключение состояния раскрытия поля поиска */
   onSwitchSearch(value: boolean): void {
@@ -98,6 +101,7 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
     if (value) {
       setTimeout(() => {
         this.inputEl?.nativeElement.focus();
+        this.cdRef.markForCheck();
       });
     }
   }
@@ -121,6 +125,7 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
   writeValue(value: string): void {
     setTimeout(() => {
       this.value = value;
+      this.cdRef.markForCheck();
     });
   }
 

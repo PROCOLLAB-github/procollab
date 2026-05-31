@@ -12,7 +12,7 @@ import type { Invite } from "projects/social_platform/src/app/domain/invite/invi
 import { ButtonComponent } from "../../primitives/button/button.component";
 import { RouterLink } from "@angular/router";
 import { AvatarComponent } from "../../primitives/avatar/avatar.component";
-import { TruncatePipe, DayjsPipe } from "@corelib";
+import { TruncatePipe } from "@corelib";
 
 /**
  * Компонент карточки управления приглашением
@@ -36,7 +36,7 @@ import { TruncatePipe, DayjsPipe } from "@corelib";
     selector: "app-invite-manage-card",
     templateUrl: "./invite-manage-card.component.html",
     styleUrl: "./invite-manage-card.component.scss",
-    imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe, TruncatePipe],
+    imports: [AvatarComponent, RouterLink, ButtonComponent, TruncatePipe],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InviteManageCardComponent implements OnInit {

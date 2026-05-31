@@ -11,7 +11,6 @@ import {
 import { Router, RouterLink } from "@angular/router";
 import { User } from "@domain/auth/user.model";
 import { AvatarComponent } from "../../primitives/avatar/avatar.component";
-import { IconComponent } from "../../primitives/icon/icon.component";
 
 /**
  * Компонент отображения информации о профиле пользователя
@@ -31,7 +30,7 @@ import { IconComponent } from "../../primitives/icon/icon.component";
     selector: "app-profile-info",
     templateUrl: "./profile-info.component.html",
     styleUrl: "./profile-info.component.scss",
-    imports: [RouterLink, AvatarComponent, IconComponent],
+    imports: [RouterLink, AvatarComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileInfoComponent implements OnInit {
