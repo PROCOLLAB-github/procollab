@@ -56,10 +56,6 @@ export class LoginComponent implements OnInit {
     this.tokenService.clearTokens();
   }
 
-  ngOnDestroy(): void {
-    this.authLoginService.destroy();
-  }
-
   toggleTooltip(): void {
     this.tooltipInfoService.toggleTooltip("login");
   }

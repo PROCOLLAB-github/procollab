@@ -1,13 +1,13 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService } from "@corelib";
-import { filter, interval, map, Subject, takeUntil } from "rxjs";
+import { filter, interval, map } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ResendEmailUseCase } from "../use-cases/resend-email.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Координирует подтверждение email, сохранение токенов из URL и таймер повторной отправки. */
 @Injectable()
@@ -17,8 +17,7 @@ export class AuthEmailService {
   private readonly resendEmailUseCase = inject(ResendEmailUseCase);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
-
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly userEmail = signal<string | undefined>(undefined);
 
@@ -26,7 +25,7 @@ export class AuthEmailService {
   private timerStarted = false;
 
   initializationTokens(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queries => {
       const { access_token: accessToken, refresh_token: refreshToken } = queries;
       this.tokenService.memTokens({ access: accessToken, refresh: refreshToken });
 
@@ -42,16 +41,11 @@ export class AuthEmailService {
     this.route.queryParams
       .pipe(
         map(r => r["adress"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(address => {
         this.userEmail.set(address);
       });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   onResend(): void {
@@ -59,7 +53,7 @@ export class AuthEmailService {
 
     this.resendEmailUseCase
       .execute(this.userEmail()!)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 
@@ -76,6 +70,6 @@ export class AuthEmailService {
   timer$ = interval(1000).pipe(
     filter(() => this.counter() > 0),
     map(() => this.counter.update(c => c - 1)),
-    takeUntil(this.destroy$)
+    takeUntilDestroyed()
   );
 }

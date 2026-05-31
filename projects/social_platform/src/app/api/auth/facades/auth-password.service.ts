@@ -1,9 +1,9 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ValidationService } from "@corelib";
-import { map, Subject, takeUntil, tap } from "rxjs";
+import { map, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ResetPasswordUseCase } from "../use-cases/reset-password.use-case";
@@ -11,6 +11,7 @@ import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
 import { toAsyncState } from "@domain/shared/to-async-state";
 import { PasswordError } from "@domain/auth/results/password.result";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Управляет сбросом и установкой пароля, а также состоянием форм пароля. */
 @Injectable()
@@ -22,15 +23,15 @@ export class AuthPasswordService {
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly passwordForm = this.authUIInfoService.passwordForm;
   private readonly resetForm = this.authUIInfoService.resetForm;
 
-  private readonly destroy$ = new Subject<void>();
 
   readonly email = this.route.queryParams.pipe(
     map(r => r["email"]),
-    takeUntil(this.destroy$)
+    takeUntilDestroyed()
   );
 
   readonly password$ = this.authUIInfoService.password$;
@@ -66,7 +67,7 @@ export class AuthPasswordService {
           }
         }),
         toAsyncState<void, PasswordError>(),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({ next: result => this.password$.set(result) });
   }
@@ -95,13 +96,8 @@ export class AuthPasswordService {
           }
         }),
         toAsyncState<void, PasswordError>(),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({ next: result => this.password$.set(result) });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

@@ -1,8 +1,8 @@
 /** @format */
 
-import { computed, inject, Injectable } from "@angular/core";
+import { computed, DestroyRef, inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject, takeUntil, tap } from "rxjs";
+import { tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { ValidationService } from "@corelib";
 import { RegisterUseCase } from "../use-cases/register.use-case";
@@ -10,14 +10,18 @@ import { toAsyncState } from "@domain/shared/to-async-state";
 import { RegisterError } from "@domain/auth/results/register.result";
 import { isFailure } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Координирует двухшаговую регистрацию и маппинг серверных ошибок валидации. */
 @Injectable()
 export class AuthRegisterService {
-  private readonly registerUseCase = inject(RegisterUseCase);
-  private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
+
+  private readonly registerUseCase = inject(RegisterUseCase);
+
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly registerForm = this.authUIInfoService.registerForm;
 
@@ -42,13 +46,6 @@ export class AuthRegisterService {
     return [];
   });
 
-  private readonly destroy$ = new Subject<void>();
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   onSendForm(): void {
     if (
       !this.validationService.getFormValidation(this.registerForm) ||
@@ -70,7 +67,7 @@ export class AuthRegisterService {
           }
         }),
         toAsyncState<void, RegisterError>(),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(state => this.register$.set(state));
   }

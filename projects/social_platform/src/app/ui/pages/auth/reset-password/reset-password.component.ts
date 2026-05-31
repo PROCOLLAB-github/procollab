@@ -23,10 +23,6 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.authPasswordService.destroy();
-  }
-
   protected readonly resetForm = this.authUIInfoService.resetForm;
   protected readonly isSubmitting = this.authUIInfoService.isSubmitting;
   protected readonly errorServer = this.authUIInfoService.errorServer;

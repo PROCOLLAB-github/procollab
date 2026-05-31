@@ -35,10 +35,6 @@ export class SetPasswordComponent implements OnInit {
     this.authPasswordService.init();
   }
 
-  ngOnDestroy(): void {
-    this.authPasswordService.destroy();
-  }
-
   toggleShowPassword() {
     this.authUIInfoService.toggleShowPassword("login");
   }
