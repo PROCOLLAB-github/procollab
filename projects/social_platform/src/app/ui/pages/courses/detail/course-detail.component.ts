@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, HostListener, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -25,7 +25,8 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     ],
     templateUrl: "./course-detail.component.html",
     styleUrl: "./course-detail.component.scss",
-    providers: [CourseDetailInfoService, CourseDetailUIInfoService]
+    providers: [CourseDetailInfoService, CourseDetailUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseDetailComponent implements OnInit {
   private readonly courseDetailInfoService = inject(CourseDetailInfoService);

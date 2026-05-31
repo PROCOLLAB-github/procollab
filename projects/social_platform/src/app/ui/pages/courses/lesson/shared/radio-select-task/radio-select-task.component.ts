@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -25,7 +26,8 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
     selector: "app-radio-select-task",
     imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
     templateUrl: "./radio-select-task.component.html",
-    styleUrl: "./radio-select-task.component.scss"
+    styleUrl: "./radio-select-task.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RadioSelectTaskComponent implements OnInit {
   private readonly cdRef = inject(ChangeDetectorRef);

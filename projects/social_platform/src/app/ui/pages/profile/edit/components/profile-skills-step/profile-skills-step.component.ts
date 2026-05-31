@@ -35,7 +35,8 @@ import { SearchesService } from "@api/searches/searches.service";
         ReactiveFormsModule,
         ControlErrorPipe,
         IconComponent,
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileSkillsStepComponent {
   @Input() isLanguageDirty!: boolean;

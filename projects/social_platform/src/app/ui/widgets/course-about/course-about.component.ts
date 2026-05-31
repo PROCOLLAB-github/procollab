@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, Input, ViewChild } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ExpandService } from "@api/expand/expand.service";
@@ -11,7 +11,8 @@ import { ExpandService } from "@api/expand/expand.service";
     templateUrl: "./course-about.component.html",
     styleUrl: "./course-about.component.scss",
     imports: [IconComponent, ParseBreaksPipe, ParseLinksPipe],
-    providers: [ExpandService]
+    providers: [ExpandService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseAboutComponent implements AfterViewInit {
   @Input({ required: true }) description!: string;

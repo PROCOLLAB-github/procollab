@@ -26,7 +26,8 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
         ControlErrorPipe,
         ReactiveFormsModule,
         TruncatePipe,
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileExperienceStepComponent {
   @Input() isWorkDirty!: boolean;

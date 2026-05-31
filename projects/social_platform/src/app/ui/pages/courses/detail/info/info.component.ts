@@ -1,9 +1,7 @@
 /** @format */
 
-import { Component, HostListener, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -25,7 +23,8 @@ import { CourseAboutComponent } from "@ui/widgets/course-about/course-about.comp
         CourseAboutComponent,
     ],
     templateUrl: "./info.component.html",
-    styleUrl: "./info.component.scss"
+    styleUrl: "./info.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseInfoComponent {
   protected appWidth = window.innerWidth;

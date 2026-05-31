@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -37,7 +38,8 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
         ImagePreviewDirective,
     ],
     templateUrl: "./file-task.component.html",
-    styleUrl: "./file-task.component.scss"
+    styleUrl: "./file-task.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileTaskComponent implements OnInit {
   private readonly fileService = inject(FileService);

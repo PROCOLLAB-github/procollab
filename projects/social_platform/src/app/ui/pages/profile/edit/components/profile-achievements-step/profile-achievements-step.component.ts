@@ -31,7 +31,8 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
         ControlErrorPipe,
         TruncatePipe,
     ],
-    providers: [ProfileEditAchievementsInfoService]
+    providers: [ProfileEditAchievementsInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileAchievementsStepComponent {
   @Input() isAchievementsDirty!: boolean;

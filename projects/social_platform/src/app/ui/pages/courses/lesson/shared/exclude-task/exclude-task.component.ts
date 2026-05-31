@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -25,7 +26,8 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
     selector: "app-exclude-task",
     imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, CheckboxComponent, ImagePreviewDirective],
     templateUrl: "./exclude-task.component.html",
-    styleUrl: "./exclude-task.component.scss"
+    styleUrl: "./exclude-task.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExcludeTaskComponent implements OnInit {
   private readonly sanitizer = inject(DomSanitizer);

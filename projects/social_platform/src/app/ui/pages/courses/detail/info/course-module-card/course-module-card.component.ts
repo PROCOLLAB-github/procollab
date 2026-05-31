@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AvatarComponent } from "@uilib";
 import { PluralizePipe } from "@corelib";
@@ -21,7 +21,8 @@ import { RouterLink } from "@angular/router";
         AvatarComponent,
     ],
     templateUrl: "./course-module-card.component.html",
-    styleUrl: "./course-module-card.component.scss"
+    styleUrl: "./course-module-card.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseModuleCardComponent {
   @Input({ required: true }) courseModule!: CourseModule;

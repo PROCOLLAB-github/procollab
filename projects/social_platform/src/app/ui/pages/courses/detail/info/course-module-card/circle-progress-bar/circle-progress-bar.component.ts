@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@ui/primitives";
 
@@ -9,7 +9,8 @@ import { IconComponent } from "@ui/primitives";
     selector: "app-circle-progress-bar",
     imports: [CommonModule, IconComponent],
     templateUrl: "./circle-progress-bar.component.html",
-    styleUrl: "./circle-progress-bar.component.scss"
+    styleUrl: "./circle-progress-bar.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CircleProgressBarComponent {
   @Input() progress = 0;
