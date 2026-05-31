@@ -1,9 +1,9 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ProjectFormService } from "./project-form.service";
-import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
+import { catchError, forkJoin, map, of, tap } from "rxjs";
 import { Goal } from "@domain/project/goals.model";
 import { ProjectGoalsUIService } from "./ui/project-goals-ui.service";
 import { LoggerService } from "@corelib";
@@ -11,6 +11,7 @@ import { GoalFormData } from "@domain/project/goal-form-data.model";
 import { CreateGoalsUseCase } from "../../use-cases/create-goals.use-case";
 import { UpdateGoalUseCase } from "../../use-cases/update-goal.use-case";
 import { DeleteGoalUseCase } from "../../use-cases/delete-goal.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Сервис для управления целями проекта. */
 @Injectable({
@@ -18,16 +19,17 @@ import { DeleteGoalUseCase } from "../../use-cases/delete-goal.use-case";
 })
 export class ProjectGoalService {
   private readonly fb = inject(FormBuilder);
-  private goalForm!: FormGroup;
+  private readonly loggerService = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly projectFormService = inject(ProjectFormService);
   private readonly projectGoalsUIService = inject(ProjectGoalsUIService);
-  private readonly loggerService = inject(LoggerService);
+
   private readonly createGoalsUseCase = inject(CreateGoalsUseCase);
   private readonly updateGoalUseCase = inject(UpdateGoalUseCase);
   private readonly deleteGoalUseCase = inject(DeleteGoalUseCase);
 
-  private readonly destroy$ = new Subject<void>();
-
+  private goalForm!: FormGroup;
   private initialized = false;
   private readonly goalItems = this.projectGoalsUIService.goalItems;
 
@@ -82,11 +84,6 @@ export class ProjectGoalService {
     } else {
       this.goalItems.set([]);
     }
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public getForm(): FormGroup {
@@ -150,7 +147,7 @@ export class ProjectGoalService {
 
     this.deleteGoalUseCase
       .execute(projectId, goalId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           this.loggerService.error("Error deleting goal:", result.error.cause);

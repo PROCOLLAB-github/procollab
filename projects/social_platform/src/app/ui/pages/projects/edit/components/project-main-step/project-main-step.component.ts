@@ -5,7 +5,6 @@ import {
   Input,
   inject,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -57,7 +56,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     providers: [ProjectTeamUIService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectMainStepComponent implements OnInit, OnDestroy {
+export class ProjectMainStepComponent implements OnInit {
   @Input() projSubmitInitiated = false;
 
   private readonly fb = inject(FormBuilder);
@@ -130,11 +129,6 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   protected readonly hasGoals = this.projectGoalsUIService.hasGoals;
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.projectsEditInfoService.destroy();
-    this.projectGoalService.destroy();
-  }
 
   addLink(): void {
     this.projectContactsService.addLink(this.links);

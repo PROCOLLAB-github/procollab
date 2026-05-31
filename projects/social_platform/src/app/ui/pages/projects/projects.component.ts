@@ -5,7 +5,6 @@ import {
   Component,
   ElementRef,
   inject,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -21,7 +20,6 @@ import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
 import { SwipeService } from "@api/swipe/swipe.service";
 import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
-import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 
 /** Контейнер модуля проектов с поиском, фильтрацией и навигацией по разделам. */
@@ -44,7 +42,7 @@ import { OfficeInfoService } from "@api/office/facades/office-info.service";
     providers: [ProjectsInfoService, ProjectsUIInfoService, SwipeService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
+export class ProjectsComponent implements OnInit {
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
 
   private readonly projectsInfoService = inject(ProjectsInfoService);
@@ -54,10 +52,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.projectsInfoService.initializationProjects();
-  }
-
-  ngOnDestroy(): void {
-    this.projectsInfoService.destroy();
   }
 
   protected readonly searchForm = this.projectsUIInfoService.searchForm;

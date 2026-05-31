@@ -1,6 +1,6 @@
 /** @format */
 
-import { computed, ElementRef, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import {
   concatMap,
@@ -9,9 +9,7 @@ import {
   fromEvent,
   map,
   skip,
-  Subject,
   take,
-  takeUntil,
   tap,
   throttleTime,
 } from "rxjs";
@@ -36,6 +34,7 @@ import {
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Управляет списками проектов: табы, фильтры URL, поиск, пагинация, инвайты. */
 @Injectable()
@@ -44,15 +43,16 @@ export class ProjectsListInfoService {
 
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
+  private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly projectsInfoService = inject(ProjectsInfoService);
   private readonly inviteInfoService = inject(InviteInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
+
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
-  private readonly logger = inject(LoggerService);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly projectsCount = signal<number>(0);
 
@@ -94,7 +94,7 @@ export class ProjectsListInfoService {
     this.route.queryParams
       .pipe(
         map(q => q["name__contains"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(search => {
         if (search !== this.currentSearchQuery()) {
@@ -126,7 +126,7 @@ export class ProjectsListInfoService {
 
             return this.fetchAllProjects(reqQuery);
           }),
-          takeUntil(this.destroy$)
+          takeUntilDestroyed(this.destroyRef)
         )
         .subscribe(projects => {
           this.projects$.set(success(projects.results));
@@ -136,7 +136,7 @@ export class ProjectsListInfoService {
 
     this.getProjectSubscriptionsUseCase
       .execute(this.profile()!.id)
-      .pipe(take(1), takeUntil(this.destroy$))
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) return;
@@ -152,14 +152,9 @@ export class ProjectsListInfoService {
       .pipe(
         throttleTime(300),
         concatMap(() => this.onScroll(target, listRoot)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private buildFilterQuery(q: Params): Record<string, string> {

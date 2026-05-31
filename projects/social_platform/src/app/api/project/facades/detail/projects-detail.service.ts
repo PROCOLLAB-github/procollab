@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, Subject, takeUntil, tap } from "rxjs";
+import { DestroyRef, inject, Injectable } from "@angular/core";
+import { filter, map, Observable, tap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ActivatedRoute } from "@angular/router";
@@ -10,7 +10,6 @@ import { ExpandService } from "../../../expand/expand.service";
 import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { User } from "@domain/auth/user.model";
-import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { RemoveProjectCollaboratorUseCase } from "../../use-cases/remove-project-collaborator.use-case";
 import { TransferProjectOwnershipUseCase } from "../../use-cases/transfer-project-ownership.use-case";
 import { FetchProjectNewsUseCase } from "../../use-cases/fetch-project-news.use-case";
@@ -21,18 +20,20 @@ import { ToggleProjectNewsLikeUseCase } from "../../use-cases/toggle-project-new
 import { EditProjectNewsUseCase } from "../../use-cases/edit-project-news.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад детали проекта: участники (удаление/передача владения) и новости проекта (CRUD, лайк, read по видимости). */
 @Injectable()
 export class ProjectsDetailService {
-  private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
-  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly navService = inject(NavService);
+  private readonly expandService = inject(ExpandService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
-
-  private readonly navService = inject(NavService);
-  private readonly route = inject(ActivatedRoute);
-  private readonly expandService = inject(ExpandService);
+  private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 
   private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
   private readonly transferProjectOwnershipUseCase = inject(TransferProjectOwnershipUseCase);
@@ -44,7 +45,6 @@ export class ProjectsDetailService {
   private readonly editProjectNewsUseCase = inject(EditProjectNewsUseCase);
 
   private observer?: IntersectionObserver;
-  private readonly destroy$ = new Subject<void>();
 
   private readonly project = this.projectsDetailUIService.project;
   private readonly projectId = this.projectsDetailUIService.projectId;
@@ -58,9 +58,6 @@ export class ProjectsDetailService {
 
   destroy(): void {
     this.observer?.disconnect();
-
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   initializationTeam(): void {
@@ -84,7 +81,7 @@ export class ProjectsDetailService {
   initializationNews(): void {
     this.fetchProjectNewsUseCase
       .execute(String(this.project()?.id))
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           return;
@@ -120,7 +117,7 @@ export class ProjectsDetailService {
 
     this.removeProjectCollaboratorUseCase
       .execute(this.projectId()!, userId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -146,7 +143,7 @@ export class ProjectsDetailService {
       return;
     }
 
-    this.readProjectNewsUseCase.execute(projectId, ids).pipe(takeUntil(this.destroy$)).subscribe();
+    this.readProjectNewsUseCase.execute(projectId, ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
   onAddNews(news: { text: string; files: string[] }): Observable<void> {
@@ -158,14 +155,14 @@ export class ProjectsDetailService {
       }),
       filter(result => result.ok),
       map(() => undefined),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     );
   }
 
   onDeleteNews(newsId: number): void {
     this.deleteProjectNewsUseCase
       .execute(this.projectId()!.toString(), newsId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           return;
@@ -181,7 +178,7 @@ export class ProjectsDetailService {
 
     this.toggleProjectNewsLikeUseCase
       .execute(this.projectId()!.toString(), newsId, !item.isUserLiked)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           return;
@@ -200,14 +197,14 @@ export class ProjectsDetailService {
       }),
       filter(result => result.ok),
       map(() => undefined),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     );
   }
 
   onRemoveMember(id: Collaborator["userId"]) {
     this.removeProjectCollaboratorUseCase
       .execute(this.projectId()!, id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           return;
@@ -220,7 +217,7 @@ export class ProjectsDetailService {
   onTransferOwnership(id: Collaborator["userId"]) {
     this.transferProjectOwnershipUseCase
       .execute(this.projectId()!, id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           return;

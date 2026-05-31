@@ -146,8 +146,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.projectsEditInfoService.destroy();
-
     // Сброс состояния ProjectGoalService при уничтожении компонента
     this.projectGoalService.reset();
   }

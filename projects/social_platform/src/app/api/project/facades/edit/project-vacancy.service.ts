@@ -1,9 +1,8 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
-import { Subject, takeUntil } from "rxjs";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { CreateVacancyDto } from "../../../../domain/vacancy/dto/create-vacancy.model";
 import { ProjectFormService } from "./project-form.service";
@@ -11,18 +10,21 @@ import { UpdateVacancyUseCase } from "../../../vacancy/use-cases/update-vacancy.
 import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-case";
 import { DeleteVacancyUseCase } from "../../../vacancy/use-cases/delete-vacancy.use-case";
 import { failure, initial, loading } from "@domain/shared/async-state";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Сервис для управления вакансиями проекта. */
 @Injectable()
 export class ProjectVacancyService {
-  private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly validationService = inject(ValidationService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly projectFormService = inject(ProjectFormService);
+
   private readonly updateVacancyUseCase = inject(UpdateVacancyUseCase);
   private readonly postVacancyUseCase = inject(PostVacancyUseCase);
   private readonly deleteVacancyUseCase = inject(DeleteVacancyUseCase);
 
-  private readonly destroy$ = new Subject<void>();
 
   private readonly vacancyForm = this.projectVacancyUIService.vacancyForm;
   private readonly selectedSkills = this.projectVacancyUIService.selectedSkills;
@@ -33,15 +35,10 @@ export class ProjectVacancyService {
   constructor() {
     this.vacancyForm
       .get("skills")
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(skills => {
         this.selectedSkills.set(skills ?? []);
       });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public submitVacancy(projectId: number) {
@@ -95,7 +92,7 @@ export class ProjectVacancyService {
 
       this.updateVacancyUseCase
         .execute(editedVacancy.id, payload)
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: result => {
             if (!result.ok) {
@@ -112,7 +109,7 @@ export class ProjectVacancyService {
     // Вызов API для создания вакансии
     this.postVacancyUseCase
       .execute(projectId, payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -129,7 +126,7 @@ export class ProjectVacancyService {
     if (!confirm("Вы точно хотите удалить вакансию?")) return;
     this.deleteVacancyUseCase
       .execute(vacancyId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 

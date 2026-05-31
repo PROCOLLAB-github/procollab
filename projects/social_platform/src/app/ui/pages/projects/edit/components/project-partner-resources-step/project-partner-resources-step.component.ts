@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { IconComponent } from "@uilib";
@@ -31,7 +31,7 @@ import { ProjectResourceService } from "@api/project/facades/edit/project-resour
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectPartnerResourcesStepComponent implements OnDestroy {
+export class ProjectPartnerResourcesStepComponent {
   private readonly fb = inject(FormBuilder);
 
   private readonly projectPartnerService = inject(ProjectPartnerService);
@@ -84,11 +84,6 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     });
 
     return partnerOptions;
-  }
-
-  ngOnDestroy(): void {
-    this.projectPartnerService.destroy();
-    this.projectResourceService.destroy();
   }
 
   addPartner(name?: string, inn?: string, contribution?: string, decisionMaker?: string): void {

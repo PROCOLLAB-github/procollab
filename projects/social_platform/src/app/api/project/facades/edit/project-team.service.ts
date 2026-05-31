@@ -1,21 +1,21 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ValidationService } from "@corelib";
-import { Subject, takeUntil } from "rxjs";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { SendForUserUseCase } from "../../../invite/use-cases/send-for-user.use-case";
 import { UpdateInviteUseCase } from "../../../invite/use-cases/update-invite.use-case";
 import { RevokeInviteUseCase } from "../../../invite/use-cases/revoke-invite.use-case";
 import { loading } from "@domain/shared/async-state";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Сервис для управления приглашениями участников команды проекта. */
 @Injectable()
 export class ProjectTeamService {
-  private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly validationService = inject(ValidationService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly projectTeamUIService = inject(ProjectTeamUIService);
 
   private readonly sendForUserUseCase = inject(SendForUserUseCase);
   private readonly updateInviteUseCase = inject(UpdateInviteUseCase);
@@ -24,11 +24,6 @@ export class ProjectTeamService {
   private readonly inviteForm = this.projectTeamUIService.inviteForm;
   private readonly inviteSubmitInitiated = this.projectTeamUIService.inviteSubmitInitiated;
   private readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   public submitInvite(projectId: number): void {
     this.inviteSubmitInitiated.set(true);
@@ -51,7 +46,7 @@ export class ProjectTeamService {
         role: this.inviteForm.get("role")?.value ?? "",
         specialization: this.inviteForm.get("specialization")?.value ?? "",
       })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -68,7 +63,7 @@ export class ProjectTeamService {
     const { inviteId, role, specialization } = params;
     this.updateInviteUseCase
       .execute({ inviteId, role, specialization })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) return;
@@ -81,7 +76,7 @@ export class ProjectTeamService {
   public removeInvitation(invitationId: number): void {
     this.revokeInviteUseCase
       .execute(invitationId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 
@@ -92,7 +87,7 @@ export class ProjectTeamService {
   public setupDynamicValidation(): void {
     this.inviteForm
       .get("link")
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         if (value === "") {
           this.inviteForm.get("link")?.clearValidators();

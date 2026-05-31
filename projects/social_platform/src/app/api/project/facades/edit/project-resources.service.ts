@@ -1,13 +1,14 @@
 /** @format */
 
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
+import { catchError, forkJoin, map, of, tap } from "rxjs";
 import { Resource, ResourceDto } from "@domain/project/resource.model";
 import { LoggerService } from "@corelib";
 import { DeleteResourceUseCase } from "../../use-cases/delete-resource.use-case";
 import { CreateResourceUseCase } from "../../use-cases/create-resource.use-case";
 import { UpdateResourceUseCase } from "../../use-cases/update-resource.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад ресурсов проекта: создание/обновление/удаление ресурсов. */
 @Injectable({
@@ -16,6 +17,8 @@ import { UpdateResourceUseCase } from "../../use-cases/update-resource.use-case"
 export class ProjectResourceService {
   private readonly fb = inject(FormBuilder);
   private readonly loggerService = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly deleteResourceUseCase = inject(DeleteResourceUseCase);
   private readonly createResourceUseCase = inject(CreateResourceUseCase);
   private readonly updateResourceUseCase = inject(UpdateResourceUseCase);
@@ -25,7 +28,6 @@ export class ProjectResourceService {
     Partial<{ id: null; type: string; description: string; partnerCompany: string }>[]
   >([]);
 
-  private readonly destroy$ = new Subject<void>();
 
   private initialized = false;
 
@@ -80,11 +82,6 @@ export class ProjectResourceService {
     } else {
       this.resourceItems.set([]);
     }
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   readonly hasResources = computed(() => this.resourceItems().length > 0);
@@ -152,7 +149,7 @@ export class ProjectResourceService {
 
     this.deleteResourceUseCase
       .execute(projectId, resourceId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
 
