@@ -1,26 +1,28 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { filter, map, Subject, takeUntil } from "rxjs";
+import { filter, map } from "rxjs";
 import { CourseLesson, Task } from "@domain/courses/courses.model";
 import { LessonUIInfoService } from "./ui/lesson-ui-info.service";
 import { CourseDetailUIInfoService } from "./ui/course-detail-ui-info.service";
 import { SubmitTaskAnswerUseCase } from "../use-cases/submit-task-answer.use-case";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { failure, loading, success } from "@domain/shared/async-state";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Управляет прохождением урока: задачи, ответы, отправка, навигация. */
 @Injectable()
 export class LessonInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly submitTaskAnswerUseCase = inject(SubmitTaskAnswerUseCase);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly snackbarService = inject(SnackbarService);
+
+  private readonly submitTaskAnswerUseCase = inject(SubmitTaskAnswerUseCase);
   private readonly lessonUIInfoService = inject(LessonUIInfoService);
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
-  private readonly destroy$ = new Subject<void>();
 
   init(): void {
     this.loadLessonData();
@@ -29,8 +31,6 @@ export class LessonInfoService {
 
   destroy(): void {
     this.courseDetailUIInfoService.currentLesson.set(undefined);
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   onAnswerChange(value: any): void {
@@ -69,7 +69,7 @@ export class LessonInfoService {
 
     this.submitTaskAnswerUseCase
       .execute(task.id, answerText, optionIds, fileIds)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           this.lessonUIInfoService.loader.set(false);
@@ -127,7 +127,7 @@ export class LessonInfoService {
       .pipe(
         map(data => data["data"] as CourseLesson | null),
         filter((lessonInfo): lessonInfo is CourseLesson => !!lessonInfo),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: lessonInfo => {
@@ -181,7 +181,7 @@ export class LessonInfoService {
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
         this.lessonUIInfoService.isComplete.set(this.router.url.includes("results"));
