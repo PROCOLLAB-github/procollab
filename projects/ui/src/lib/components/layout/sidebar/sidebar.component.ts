@@ -11,7 +11,7 @@ import {
   type OnInit,
 } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { IconComponent } from "@uilib";
+import { IconComponent } from "../../primitives/icon/icon.component";
 import { CommonModule } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 

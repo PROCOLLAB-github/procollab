@@ -10,7 +10,8 @@ import {
 } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { User } from "@domain/auth/user.model";
-import { AvatarComponent, IconComponent } from "@uilib";
+import { AvatarComponent } from "../../primitives/avatar/avatar.component";
+import { IconComponent } from "../../primitives/icon/icon.component";
 
 /**
  * Компонент отображения информации о профиле пользователя
