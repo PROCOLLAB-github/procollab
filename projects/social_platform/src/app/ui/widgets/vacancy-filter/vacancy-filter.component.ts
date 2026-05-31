@@ -108,8 +108,4 @@ export class VacancyFilterComponent implements OnInit {
   onClickOutside(): void {
     this.vacancyFilterInfoService.onClickOutside();
   }
-
-  ngOnDestroy() {
-    this.vacancyFilterInfoService.destroy();
-  }
 }

@@ -6,7 +6,6 @@ import {
   Component,
   inject,
   Input,
-  OnDestroy,
   OnInit,
 } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
@@ -25,7 +24,7 @@ import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.serv
     providers: [ApproveskillInfoService, ApproveSkillUIInfoService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ApproveSkillComponent implements OnInit, OnDestroy {
+export class ApproveSkillComponent implements OnInit {
   private readonly approveskillInfoService = inject(ApproveskillInfoService);
   private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
 
@@ -39,10 +38,6 @@ export class ApproveSkillComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.approveskillInfoService.init();
-  }
-
-  ngOnDestroy(): void {
-    this.approveskillInfoService.destroy();
   }
 
   onToggleApprove(skillId: number, event: Event, skill: Skill) {

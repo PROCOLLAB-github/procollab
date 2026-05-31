@@ -2,7 +2,7 @@
 
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
 import { ClickOutsideModule } from "ng-click-outside";
 import { feedFilter } from "@core/consts/filters/feed-filter.const";
@@ -28,7 +28,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
     ],
     providers: [FeedFilterInfoService, ProfileDetailUIInfoService, DetailProfileInfoService]
 })
-export class FeedFilterComponent implements OnInit, OnDestroy {
+export class FeedFilterComponent implements OnInit {
   private readonly feedFilterInfoService = inject(FeedFilterInfoService);
 
   // Состояние выпадающего меню фильтров
@@ -41,10 +41,6 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.feedFilterInfoService.initializationFeedFilter();
-  }
-
-  ngOnDestroy(): void {
-    this.feedFilterInfoService.destroy();
   }
 
   setFilter(keyword: string): void {

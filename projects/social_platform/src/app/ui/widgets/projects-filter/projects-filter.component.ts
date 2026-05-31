@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { SelectComponent } from "@ui/primitives";
 import { ReactiveFormsModule } from "@angular/forms";
 import { tagsFilter } from "@core/consts/filters/tags-filter.const";
@@ -15,7 +15,7 @@ import { ProjectsFilterInfoService } from "./service/projects-filter-info.servic
     providers: [ProjectsFilterInfoService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectsFilterComponent implements OnInit, OnDestroy {
+export class ProjectsFilterComponent implements OnInit {
   private readonly projectsFilterInfoService = inject(ProjectsFilterInfoService);
 
   // Константы для фильтрации по типу проекта
@@ -27,24 +27,9 @@ export class ProjectsFilterComponent implements OnInit, OnDestroy {
   protected readonly currentIndustry = this.projectsFilterInfoService.currentIndustry;
   protected readonly industries = this.projectsFilterInfoService.industries;
 
-  // Состояние остальных фильтров
-  // protected readonly hasVacancies = this.projectsFilterInfoService.hasVacancies;
-  // protected readonly isMospolytech = this.projectsFilterInfoService.isMospolytech;
-
-  // Опции для фильтра по количеству участников
-  // membersCountOptions = [1, 2, 3, 4, 5, 6];
-  // protected readonly currentMembersCount = this.projectsFilterInfoService.currentMembersCount;
-
-  // Текущий тип проекта (по умолчанию - все проекты)
-  // protected readonly currentFilterTag = this.projectsFilterInfoService.currentFilterTag;
-
   ngOnInit(): void {
     // Подписка на данные об отраслях
     this.projectsFilterInfoService.initializationProjectsFilter();
-  }
-
-  ngOnDestroy(): void {
-    this.projectsFilterInfoService.destroy();
   }
 
   onFilterByIndustry(industryId?: number | null): void {

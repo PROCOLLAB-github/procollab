@@ -1,8 +1,8 @@
 /** @format */
 
 import { Location } from "@angular/common";
-import { computed, inject, Injectable, Injector, signal } from "@angular/core";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { computed, DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { User } from "@domain/auth/user.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
@@ -10,30 +10,32 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { Collaborator } from "@domain/project/collaborator.model";
-import { filter, Subject, takeUntil } from "rxjs";
+import { filter } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
 import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class DetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
-  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
+  private readonly injector = inject(Injector);
+  private readonly location = inject(Location);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly projectFormService = inject(ProjectFormService);
+  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly location = inject(Location);
+
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly detailProjectInfoService = inject(DetailProjectInfoService);
   private readonly detailProgramInfoService = inject(DetailProgramInfoService);
-  private readonly injector = inject(Injector);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
+
   private unsubscribeUrlChange?: () => void;
 
   readonly info = signal<any | undefined>(undefined);
@@ -105,13 +107,13 @@ export class DetailInfoService {
   });
 
   initializationDetail(): void {
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
+    this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => {
       this.listType.set(data["listType"]);
       this.initializeBackPath();
       this.initializeInfo();
     });
 
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       const courseId = params["courseId"];
       this.queryCourseId.set(courseId ? Number(courseId) : null);
     });
@@ -203,7 +205,7 @@ export class DetailInfoService {
         if (!this.isProjectAssigned()) {
           this.getMyProjectsUseCase
             .execute()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
               next: result => {
                 if (!result.ok) {
@@ -221,7 +223,7 @@ export class DetailInfoService {
       toObservable(this.profileDetailUIInfoService.user, { injector: this.injector })
         .pipe(
           filter((user): user is User => !!user),
-          takeUntil(this.destroy$)
+          takeUntilDestroyed(this.destroyRef)
         )
         .subscribe(user => this.info.set(user));
 
@@ -231,7 +233,5 @@ export class DetailInfoService {
 
   destroy(): void {
     this.unsubscribeUrlChange?.();
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }
