@@ -1,7 +1,6 @@
 /** @format */
 
-import { ErrorHandler, inject, Injectable, NgZone } from "@angular/core";
-import { ErrorService } from "./error.service";
+import { ErrorHandler, inject, Injectable } from "@angular/core";
 import { LoggerService } from "../logger/logger.service";
 
 /**
@@ -24,7 +23,6 @@ import { LoggerService } from "../logger/logger.service";
  *
  * Зависимости:
  * - ErrorService - для навигации на страницы ошибок
- * - NgZone - для выполнения операций в Angular зоне
  *
  * Примечание:
  * - Код для обработки HTTP ошибок закомментирован
@@ -33,8 +31,6 @@ import { LoggerService } from "../logger/logger.service";
 @Injectable()
 export class GlobalErrorHandlerService implements ErrorHandler {
   private readonly logger = inject(LoggerService);
-
-  constructor(private readonly errorService: ErrorService, private readonly zone: NgZone) {}
 
   handleError(err: any): void {
     const error = err.rejection ? err.rejection : err;

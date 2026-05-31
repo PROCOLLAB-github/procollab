@@ -9,9 +9,9 @@ import {
   Output,
 } from "@angular/core";
 import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { ButtonComponent } from "@ui/primitives";
+import { ButtonComponent } from "../../primitives/button/button.component";
 import { RouterLink } from "@angular/router";
-import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { AvatarComponent } from "../../primitives/avatar/avatar.component";
 import { TruncatePipe, DayjsPipe } from "@corelib";
 
 /**
