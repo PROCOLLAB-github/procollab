@@ -3,10 +3,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
+  input,
+  output,
 } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
 
@@ -34,15 +32,11 @@ import { IconComponent } from "../icon/icon.component";
     imports: [IconComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImgCardComponent implements OnInit {
-  constructor() {}
+export class ImgCardComponent {
+  src = input("");
+  error = input(false);
+  loading = input(false);
 
-  @Input() src = "";
-  @Input() error = false;
-  @Input() loading = false;
-
-  @Output() cancel = new EventEmitter<void>();
-  @Output() retry = new EventEmitter<void>();
-
-  ngOnInit(): void {}
+  cancel = output<void>();
+  retry = output<void>();
 }

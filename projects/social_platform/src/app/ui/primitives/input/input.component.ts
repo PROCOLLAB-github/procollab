@@ -6,11 +6,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   forwardRef,
-  Input,
-  Output,
-  ViewChild,
+  input,
+  model,
+  output,
+  viewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
@@ -48,45 +48,38 @@ import { IconComponent } from "../icon/icon.component";
 export class InputComponent implements ControlValueAccessor {
   constructor(private readonly cdr: ChangeDetectorRef) {}
 
-  @Input() placeholder = "";
-  @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
-  @Input() size: "small" | "big" = "small";
-  @Input() hasBorder = true;
-  @Input() haveHint = false;
-  @Input() tooltipText?: string;
-  @Input() tooltipPosition: "left" | "right" = "right";
-  @Input() tooltipWidth = 250;
-  @Input() error = false;
-  @Input() mask = "";
-  @Input() name = "";
-  @Input() checked = false;
-  @Input() maxLength?: number;
+  placeholder = input("");
+  type = input<"text" | "password" | "email" | "tel" | "date" | "radio">("text");
+  size = input<"small" | "big">("small");
+  hasBorder = input(true);
+  haveHint = input(false);
+  tooltipText = input<string>();
+  tooltipPosition = input<"left" | "right">("right");
+  tooltipWidth = input(250);
+  error = input(false);
+  mask = input("");
+  name = input("");
+  checked = input(false);
+  maxLength = input<number>();
 
-  @Input()
-  set appValue(value: string | null) {
-    this.value = value ?? "";
-  }
+  // Two-way binding через model()
+  appValue = model<string>("");
 
-  get appValue(): string {
-    return this.value;
-  }
-
-  @ViewChild("nativeInput") nativeInput?: ElementRef<HTMLInputElement>;
+  nativeInput = viewChild<ElementRef<HTMLInputElement>>("nativeInput");
 
   isTooltipVisible = false;
   isLengthOverflow = false;
 
-  @Output() appValueChange = new EventEmitter<string>();
-  @Output() enter = new EventEmitter<void>();
-  @Output() change = new EventEmitter<Event>();
+  enter = output<void>();
+  change = output<Event>();
 
   /** Обработчик для radвариант io */
   onRadioChange(event: Event): void {
-    if (this.type === "radio") {
+    if (this.type() === "radio") {
       const target = event.target as HTMLInputElement;
       this.value = target.value;
       this.onChange(this.value);
-      this.appValueChange.emit(this.value);
+      this.appValue.set(this.value);
       this.change.emit(event);
       this.onTouch();
     }
@@ -94,7 +87,7 @@ export class InputComponent implements ControlValueAccessor {
 
   /** Обработчик изменения даты в datepicker */
   onDateChange(event: any): void {
-    if (this.type === "date" && event.value) {
+    if (this.type() === "date" && event.value) {
       const date = event.value as Date;
 
       const year = date.getFullYear();
@@ -104,7 +97,7 @@ export class InputComponent implements ControlValueAccessor {
 
       this.value = formattedDate;
       this.onChange(formattedDate);
-      this.appValueChange.emit(formattedDate);
+      this.appValue.set(formattedDate);
       this.onTouch();
     }
   }
@@ -120,11 +113,11 @@ export class InputComponent implements ControlValueAccessor {
   onInput(event: Event): void {
     const nextValue = (event.target as HTMLInputElement).value ?? "";
 
-    this.isLengthOverflow = !!this.maxLength && nextValue.length > this.maxLength;
+    this.isLengthOverflow = !!this.maxLength() && nextValue.length > this.maxLength()!;
 
     this.value = nextValue;
     this.onChange(nextValue);
-    this.appValueChange.emit(nextValue);
+    this.appValue.set(nextValue);
   }
 
   onBlur(): void {
@@ -135,7 +128,7 @@ export class InputComponent implements ControlValueAccessor {
 
   // Геттер для преобразования строковой даты в объект Date для datepicker
   get dateValue(): Date | null {
-    if (!this.value || this.type !== "date") return null;
+    if (!this.value || this.type() !== "date") return null;
 
     const parts = this.value.split("-");
     if (parts.length === 3) {
@@ -149,7 +142,7 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   get showErrorIcon(): boolean {
-    if (this.error && !this.maxLength) {
+    if (this.error() && !this.maxLength()) {
       return true;
     }
 
@@ -159,6 +152,7 @@ export class InputComponent implements ControlValueAccessor {
   writeValue(value: string | null): void {
     setTimeout(() => {
       this.value = value ?? "";
+      this.appValue.set(this.value);
       this.cdr.markForCheck();
     });
   }
@@ -183,8 +177,8 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   focusInput(): void {
-    if (document.activeElement !== this.nativeInput?.nativeElement) {
-      this.nativeInput?.nativeElement.focus();
+    if (document.activeElement !== this.nativeInput()?.nativeElement) {
+      this.nativeInput()?.nativeElement.focus();
     }
   }
 

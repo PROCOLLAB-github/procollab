@@ -4,12 +4,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   forwardRef,
   inject,
-  Input,
-  OnInit,
-  Output,
+  input,
+  model,
+  output,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { AutosizeModule } from "ngx-autosize";
@@ -49,58 +48,48 @@ import { IconComponent } from "../icon/icon.component";
     ],
     imports: [AutosizeModule, IconComponent, TooltipComponent, NgStyle]
 })
-export class TextareaComponent implements OnInit, ControlValueAccessor {
+export class TextareaComponent implements ControlValueAccessor {
   private readonly cdr = inject(ChangeDetectorRef);
 
   /** Текст подсказки */
-  @Input() placeholder = "";
+  placeholder = input("");
 
   /** Тип поля (наследуется от базового компонента) */
-  @Input() type: "text" | "password" | "email" = "text";
+  type = input<"text" | "password" | "email">("text");
 
   /** Наличие подсказки */
-  @Input() haveHint = false;
+  haveHint = input(false);
 
   /** Текст для подсказки */
-  @Input() tooltipText?: string;
+  tooltipText = input<string>();
 
   /** Позиция подсказки */
-  @Input() tooltipPosition: "left" | "right" = "right";
+  tooltipPosition = input<"left" | "right">("right");
 
   /** Ширина подсказки */
-  @Input() tooltipWidth = 250;
+  tooltipWidth = input(250);
 
-  @Input() maxLength?: number;
+  maxLength = input<number>();
 
   /** Состояние ошибки */
-  @Input() error = false;
+  error = input(false);
 
-  @Input() size: "small" | "big" = "small";
+  size = input<"small" | "big">("small");
 
   /** Маска (наследуется, но не используется) */
-  @Input() mask = "";
+  mask = input("");
 
   /** Двустороннее связывание текста */
-  @Input() set text(value: string) {
-    this.value = value ?? "";
-  }
-
-  get text(): string {
-    return this.value;
-  }
+  text = model("");
 
   /** Событие изменения текста */
-  @Output() textChange = new EventEmitter<string>();
-
-  constructor() {}
-
-  ngOnInit(): void {}
+  textChange = output<string>();
 
   /** Обработчик ввода текста */
   onInput(event: Event): void {
     const nextValue = (event.target as HTMLInputElement).value ?? "";
 
-    if (this.maxLength && nextValue.length > this.maxLength) {
+    if (this.maxLength() && nextValue.length > this.maxLength()!) {
       this.isLengthOverflow = true;
     } else {
       this.isLengthOverflow = false;
@@ -108,7 +97,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
     this.value = nextValue;
     this.onChange(nextValue);
-    this.textChange.emit(nextValue);
+    this.text.set(nextValue);
   }
 
   /** Обработчик потери фокуса */
@@ -136,6 +125,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   // Методы ControlValueAccessor
   writeValue(value: string): void {
     this.value = value ?? "";
+    this.text.set(this.value);
     this.cdr.markForCheck();
     this.isLengthOverflow = false;
   }

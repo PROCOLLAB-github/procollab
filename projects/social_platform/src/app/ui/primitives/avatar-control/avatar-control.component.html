@@ -2,11 +2,11 @@
 
 <div
   [ngStyle]="{
-    border: (type === 'project' || type === 'profile') ? '0.5px solid var(--accent)' : 'none',
+    border: (type() === 'project' || type() === 'profile') ? '0.5px solid var(--accent)' : 'none',
   }"
   class="control"
-  [style.width]="size + 'px'"
-  [style.height]="size + 'px'"
+  [style.width]="size() + 'px'"
+  [style.height]="size() + 'px'"
 >
   <input
     [id]="controlId"
@@ -16,14 +16,14 @@
     accept="image/*"
     (change)="onFileSelected($event)"
   />
-  <label [for]="controlId" class="control__label" [class.control__label--error]="error">
+  <label [for]="controlId" class="control__label" [class.control__label--error]="error()">
     @if (loading) {
     <div class="control__loader">
       <app-loader type="circle" color="accent" size="20px"></app-loader>
     </div>
     } @if (value) {
     <img [src]="value" alt="avatar" class="control__img" loading="lazy" decoding="async" />
-    } @if(type === 'avatar') {
+    } @if(type() === 'avatar') {
     <img
       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"
       alt="avatar"
@@ -37,13 +37,13 @@
     </div>
   </label>
 
-  @if (haveHint && tooltipText) {
+  @if (haveHint() && tooltipText()) {
   <div class="control__tooltip-wrapper">
     <app-tooltip
-      [text]="tooltipText"
+      [text]="tooltipText()!"
       [isVisible]="isTooltipVisible"
-      [position]="tooltipPosition"
-      [tooltipWidth]="tooltipWidth"
+      [position]="tooltipPosition()"
+      [tooltipWidth]="tooltipWidth()"
       customClass="control__tooltip-icon"
       (show)="showTooltip()"
       (hide)="hideTooltip()"
@@ -74,7 +74,7 @@
         [resizeToWidth]="600"
         [cropperMinWidth]="100"
         [cropperMinHeight]="100"
-        [roundCropper]="type === 'avatar'"
+        [roundCropper]="type() === 'avatar'"
         [canvasRotation]="0"
         [transform]="{}"
         [alignImage]="'center'"

@@ -10,7 +10,7 @@ import {
   EventEmitter,
   forwardRef,
   inject,
-  Input,
+  input,
   Output,
   signal,
   ViewChild,
@@ -78,31 +78,38 @@ export class AutoCompleteInputComponent<T> {
     return this._suggestions();
   }
 
-  set suggestions(val: T[]) {
+  suggestions(val: T[]) {
     this._suggestions.set(val);
     this.handleSuggestionsChange(val);
   }
 
   /** Режим отображения выбранного поля */
-  @Input() fieldToDisplayMode: "text" | "chip" = "text";
+  // @Input() fieldToDisplayMode: "text" | "chip" = "text";
+  readonly fieldToDisplayMode = input<"text" | "chip">("text");
 
   /** Поле объекта для отображения */
-  @Input() fieldToDisplay!: keyof T;
+  // @Input() fieldToDisplay!: keyof T;
+  readonly fieldToDisplay = input.required<keyof T>();
 
   /** Поле для получения значения */
-  @Input() valueField!: string;
+  // @Input() valueField!: string;
+  readonly valueField = input.required<string>();
 
   /** Принудительный выбор из списка */
-  @Input() forceSelect = false;
+  // @Input() forceSelect = false;
+  readonly forceSelect = input<boolean>(false);
 
   /** Очистка поля после выбора */
-  @Input() clearInputOnSelect = false;
+  // @Input() clearInputOnSelect = false;
+  readonly clearInputOnSelect = input<boolean>(false);
 
   /** Задержка поиска в мс */
-  @Input() delay = 300;
+  // @Input() delay = 300;
+  readonly delay = input<number>(300);
 
   /** Placeholder для поля ввода */
-  @Input() placeholder = "";
+  // @Input() placeholder = "";
+  readonly placeholder = input<string>()
 
   /** Иконка поиска */
   @Input() searchIcon = "search";
@@ -158,7 +165,7 @@ export class AutoCompleteInputComponent<T> {
     fromEvent<Event>(this.inputElem.nativeElement, "input")
       .pipe(
         map(e => (e.target as HTMLInputElement).value.trim()),
-        debounce(val => (val ? timer(this.delay) : of({}))),
+        debounce(val => (val ? timer(this.delay()) : of({}))),
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -180,7 +187,7 @@ export class AutoCompleteInputComponent<T> {
 
   // Методы ControlValueAccessor
   writeValue(value: any): void {
-    this.value.set(value?.[this.valueField] ?? value);
+    this.value.set(value?.[this.valueField()] ?? value);
     this.handleProgrammaticInputValueChange(value);
   }
 
@@ -209,7 +216,7 @@ export class AutoCompleteInputComponent<T> {
   onUpdate(event: Event, value: any): void {
     event.stopPropagation();
 
-    const newValue = value?.[this.valueField] ?? value;
+    const newValue = value?.[this.valueField()] ?? value;
 
     this.value.set(newValue);
     this.onChange(newValue);
@@ -232,13 +239,13 @@ export class AutoCompleteInputComponent<T> {
   onClickOutside(): void {
     const value = this.findExistingSuggestion(this.suggestions);
 
-    if (this.forceSelect && this.isOpen() && value) {
-      const newValue = value?.[this.valueField] ?? value;
+    if (this.forceSelect() && this.isOpen() && value) {
+      const newValue = value?.[this.valueField()] ?? value;
 
       this.handleProgrammaticInputValueChange(newValue);
       this.value.set(newValue);
       this.onChange(newValue);
-    } else if (this.forceSelect && this.isOpen() && !value) {
+    } else if (this.forceSelect() && this.isOpen() && !value) {
       this.inputValue.set("");
       this.value.set(null);
       this.onChange(null);
@@ -286,10 +293,10 @@ export class AutoCompleteInputComponent<T> {
 
   /** Обработчик программного изменения значения поля ввода */
   handleProgrammaticInputValueChange(appValue: any): void {
-    if (this.fieldToDisplayMode === "chip" || this.clearInputOnSelect) {
+    if (this.fieldToDisplayMode() === "chip" || this.clearInputOnSelect()) {
       this.inputValue.set("");
     } else {
-      this.inputValue.set(appValue?.[this.fieldToDisplay] ?? appValue);
+      this.inputValue.set(appValue?.[this.fieldToDisplay()] ?? appValue);
     }
   }
 
@@ -299,7 +306,7 @@ export class AutoCompleteInputComponent<T> {
       return suggestions.find(s => String(s).toLowerCase() === this.inputValue().toLowerCase());
     }
     return suggestions.find(
-      s => String(s[this.fieldToDisplay]).toLowerCase() === this.inputValue().toLocaleLowerCase()
+      s => String(s[this.fieldToDisplay()]).toLowerCase() === this.inputValue().toLocaleLowerCase()
     );
   }
 }

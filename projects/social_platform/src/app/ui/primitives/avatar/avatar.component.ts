@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 /**
  * Компонент для отображения аватара пользователя.
@@ -28,37 +28,33 @@ import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent {
   /** URL изображения аватара */
-  @Input({ required: true }) url = "";
+  url = input.required<string>();
 
   /** Размер аватара в пикселях */
-  @Input() size = 50;
+  size = input(50);
 
   /** Отображать рамку */
-  @Input() hasBorder = false;
+  hasBorder = input(false);
 
-  @Input() borderColor: "dark-grey" | "white" | "black" | "accent" = "white";
+  borderColor = input<"dark-grey" | "white" | "black" | "accent">("white");
 
   /** Показывать индикатор онлайн статуса */
-  @Input() isOnline = false;
+  isOnline = input(false);
 
   /** Значение прогресса (0-100) */
-  @Input() progress?: number;
+  progress = input<number>();
 
   /** Размер индикатора онлайн статуса */
-  @Input() onlineBadgeSize = 16;
+  onlineBadgeSize = input(16);
 
   /** Толщина рамки индикатора */
-  @Input() onlineBadgeBorder = 3;
+  onlineBadgeBorder = input(3);
 
   /** Смещение индикатора от края */
-  @Input() onlineBadgeOffset = 0;
+  onlineBadgeOffset = input(0);
 
   /** URL placeholder изображения по умолчанию */
   placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

@@ -4,8 +4,8 @@
   @if (loading) {
   <app-loader size="25px" color="accent"></app-loader>
   } @else if (!value) {
-  <div class="control" [class.control--error]="error">
-    <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
+  <div class="control" [class.control--error]="error()">
+    <input [id]="controlId" hidden type="file" [accept]="accept()" (change)="onUpdate($event)" />
     <label [for]="controlId">
       <div class="control__empty">
         <ng-content select="[emptyPlaceholder]"></ng-content>

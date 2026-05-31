@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { BackComponent } from "@uilib";
@@ -41,17 +41,15 @@ interface BarLinks {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BarComponent {
-  constructor() {}
-
   /** Массив навигационных ссылок */
-  @Input() links!: BarLinks[];
+  links = input.required<BarLinks[]>();
 
   /** Показывать индикатор в виде шарика */
-  @Input() ballHave?: boolean = false;
+  ballHave = input(false);
 
   /** Маршрут для кнопки "Назад" */
-  @Input() backRoute?: string;
+  backRoute = input<string>();
 
   /** Показывать кнопку "Назад" */
-  @Input() backHave?: boolean;
+  backHave = input<boolean>();
 }

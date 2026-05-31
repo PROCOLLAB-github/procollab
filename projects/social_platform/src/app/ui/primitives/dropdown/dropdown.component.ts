@@ -6,10 +6,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
+  input,
+  model,
+  output,
+  viewChild,
 } from "@angular/core";
 import { getPriorityType } from "@utils/getPriorityType";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -37,39 +37,39 @@ import { IconComponent } from "../icon/icon.component";
 })
 export class DropdownComponent {
   /** Состояние для определения списка элементов */
-  @Input() options: {
+  options = input<{
     id: number;
     label: string;
     value: string | number | boolean | null;
     additionalInfo?: any;
-  }[] = [];
+  }[]>([]);
 
-  @Input() type: "icons" | "avatars" | "shapes" | "tags" | "goals" | "text" = "text";
+  type = input<"icons" | "avatars" | "shapes" | "tags" | "goals" | "text">("text");
 
   /** Состояние для открытия списка выпадающего */
-  @Input() isOpen = false;
+  isOpen = false;
 
   /** режим создания тега */
-  @Input() creatingTag = false;
+  creatingTag = model(false);
 
   /** Состояние для выделения элемента списка выпадающего */
-  @Input() highlightedIndex = -1;
+  highlightedIndex = input(-1);
 
-  @Input() colorText: "grey" | "red" = "grey";
+  colorText = input<"grey" | "red">("grey");
 
-  @Input() editingTag: TagDto | null = null;
+  editingTag = input<TagDto | null>(null);
 
-  @Output() updateTag = new EventEmitter<TagDto>();
+  updateTag = output<TagDto>();
 
   /** Событие для выбора элемента */
-  @Output() select = new EventEmitter<number>();
+  select = output<number>();
 
   /** Событие для логики при клике вне списка выпадающего */
-  @Output() outside = new EventEmitter<void>();
+  outside = output<void>();
 
-  @Output() tagInfo = new EventEmitter<{ name: string; color: string }>();
+  tagInfo = output<{ name: string; color: string }>();
 
-  @ViewChild("dropdown", { static: true }) dropdown!: ElementRef;
+  dropdown = viewChild<ElementRef>("dropdown");
 
   getPriorityType = getPriorityType;
 
@@ -103,17 +103,17 @@ export class DropdownComponent {
 
   startCreatingTag(event: Event) {
     event.stopPropagation();
-    this.creatingTag = true;
+    this.creatingTag.set(true);
   }
 
   onConfirmUpdateTag(tagData: TagDto): void {
     this.updateTag.emit(tagData);
-    this.creatingTag = false;
+    this.creatingTag.set(false);
   }
 
   onConfirmCreateTag(tagInfo: { name: string; color: string }): void {
     this.tagInfo.emit(tagInfo);
-    this.creatingTag = false;
+    this.creatingTag.set(false);
   }
 
   getTextColor(colorText: "grey" | "red") {

@@ -3,12 +3,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
+  computed,
+  effect,
+  input,
+  output,
 } from "@angular/core";
 import { tagColors } from "@core/consts/other/tag-colors.const";
 import { NgStyle } from "@angular/common";
@@ -34,40 +32,28 @@ import { IconComponent } from "../icon/icon.component";
     imports: [IconComponent, NgStyle],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagComponent implements OnInit, OnChanges {
-  constructor() {}
-
+export class TagComponent {
   /** Цветовая схема тега */
-  @Input() color:
-    | "primary"
-    | "secondary"
-    | "accent"
-    | "accent-medium"
-    | "blue-dark"
-    | "cyan"
-    | "red"
-    | "complete"
-    | "complete-dark"
-    | "soft" = "primary";
+  color = input<"primary" | "secondary" | "accent" | "accent-medium" | "blue-dark" | "cyan" | "red" | "complete" | "complete-dark" | "soft">("primary");
 
-  @Input() type?: "days" | "overdue" | "answer";
+  type = input<"days" | "overdue" | "answer">();
 
   /** Стиль отображения */
-  @Input() appearance: "inline" | "outline" = "inline";
+  appearance = input<"inline" | "outline">("inline");
 
   /** Возможность редактирования */
-  @Input() canEdit?: boolean;
+  canEdit = input<boolean>();
 
   /** Возможность удаления */
-  @Input() canDelete?: boolean;
+  canDelete = input<boolean>();
 
-  @Input() isKanbanTag = false;
+  isKanbanTag = input(false);
 
   /** Событие для возможности удаления */
-  @Output() delete = new EventEmitter<void>();
+  delete = output<void>();
 
   /** Событие для возможности редактирования */
-  @Output() edit = new EventEmitter<void>();
+  edit = output<void>();
 
   get tagColors() {
     return tagColors;
@@ -75,14 +61,10 @@ export class TagComponent implements OnInit, OnChanges {
 
   additionalTagColor = "";
 
-  ngOnInit(): void {
-    this.mappingAdditionalTagColors();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["color"]) {
+  constructor() {
+    effect(() => {
       this.mappingAdditionalTagColors();
-    }
+    });
   }
 
   /** Метод для вызова удаления элемента */
@@ -100,12 +82,12 @@ export class TagComponent implements OnInit, OnChanges {
   }
 
   private mappingAdditionalTagColors(): void {
-    if (!this.isKanbanTag) {
+    if (!this.isKanbanTag()) {
       this.additionalTagColor = "";
       return;
     }
 
-    const found = tagColors.find(tagColor => tagColor.name === this.color);
+    const found = tagColors.find(tagColor => tagColor.name === this.color());
     if (found) {
       this.additionalTagColor = found.color;
     }

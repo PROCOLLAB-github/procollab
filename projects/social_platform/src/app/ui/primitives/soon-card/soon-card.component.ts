@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { ButtonComponent } from "../button/button.component";
 import { IconComponent } from "../icon/icon.component";
 
@@ -14,7 +14,6 @@ import { IconComponent } from "../icon/icon.component";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SoonCardComponent {
-  @Input({ required: true }) title!: string;
-
-  @Input({ required: true }) description!: string;
+  title = input.required<string>();
+  description = input.required<string>();
 }

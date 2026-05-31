@@ -1,13 +1,6 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  type OnInit,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, model } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
 
 /**
@@ -30,14 +23,9 @@ import { IconComponent } from "../icon/icon.component";
     imports: [IconComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CheckboxComponent implements OnInit {
+export class CheckboxComponent {
   /** Состояние чекбокса */
-  @Input({ required: true }) checked = false;
+  checked = model(false);
 
-  @Input() size?: string;
-
-  /** Событие изменения состояния */
-  @Output() checkedChange = new EventEmitter<boolean>();
-
-  ngOnInit(): void {}
+  size = input<string>();
 }

@@ -12,14 +12,14 @@
   (overlayOutsideClick)="isOpen = false"
 >
   <ul class="field__options" (click)="$event.stopPropagation()">
-    @for (option of options; track option.id; let index = $index) {
+    @for (option of options(); track option.id; let index = $index) {
     <li
       class="field__option"
-      [class.field__option--highlighted]="index === highlightedIndex"
+      [class.field__option--highlighted]="index === highlightedIndex()"
       (click)="onSelect($event, option.id)"
     >
       <div class="field__option--additional">
-        @if (option.additionalInfo) { @switch (type) { @case('icons') {
+        @if (option.additionalInfo) { @switch (type()) { @case('icons') {
         <i appIcon [icon]="option.additionalInfo" appSquare="10"></i>
 
         } @case ('avatars') {
@@ -44,19 +44,19 @@
         } } }
       </div>
 
-      @if (type !== 'tags' && type !== 'goals') {
-      <p class="text-body-12" [style]="getTextColor(colorText)">{{ option.label }}</p>
+      @if (type() !== 'tags' && type() !== 'goals') {
+      <p class="text-body-12" [style]="getTextColor(colorText())">{{ option.label }}</p>
       }
 
       <span class="field__option--point text-body-16">•</span>
     </li>
-    } @if (type === 'tags') { @if (!creatingTag) {
+    } @if (type() === 'tags') { @if (!creatingTag()) {
     <li class="field__option field__option--add-object" (click)="startCreatingTag($event)">
       <i appIcon icon="plus" appSquare="5"></i>
     </li>
     } @else {
     <app-create-tag-form
-      [editingTag]="editingTag"
+      [editingTag]="editingTag()"
       (createTag)="onConfirmCreateTag($event)"
       (updateTag)="onConfirmUpdateTag($event)"
     ></app-create-tag-form>

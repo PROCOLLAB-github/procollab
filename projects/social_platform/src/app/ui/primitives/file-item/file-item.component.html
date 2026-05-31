@@ -3,7 +3,7 @@
 @if (name && link) {
 <div class="file">
   <div class="file__left">
-    @if (mode === 'preview') {
+    @if (mode() === 'preview') {
     <i appIcon icon="file" appSquare="12" class="file__icon file__icon--file"></i>
     } @else {
     <i
@@ -20,16 +20,16 @@
         <span (click)="onDownloadFile()">{{ name }}</span>
       </div>
 
-      @if (type) {
+      @if (type()) {
       <div class="file__meta text-body-6">
-        {{ type.includes("/") ? (type | fileType) : (type | uppercase) }}
-        {{ size | formatedFileSize }}
+        {{ type()!.includes("/") ? (type()! | fileType) : (type()! | uppercase) }}
+        {{ size() | formatedFileSize }}
       </div>
       }
     </div>
   </div>
 
-  @if (canDelete) {
+  @if (canDelete()) {
   <i
     appIcon
     icon="basket"

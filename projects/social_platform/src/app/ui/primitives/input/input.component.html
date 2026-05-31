@@ -2,38 +2,38 @@
 
 <div
   class="field"
-  [class.field--error]="error"
-  [style.width]="size === 'small' ? '70px' : '100%'"
+  [class.field--error]="error()"
+  [style.width]="size() === 'small' ? '70px' : '100%'"
   (click)="focusInput()"
 >
   <div class="field__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
 
-  @if (type === 'radio') {
+  @if (type() === 'radio') {
   <input
     type="radio"
-    [name]="name"
-    [value]="appValue"
-    [checked]="checked"
+    [name]="name()"
+    [value]="appValue()"
+    [checked]="checked()"
     (change)="onRadioChange($event)"
     class="field__input"
   />
-  } @else if (type === 'date') {
+  } @else if (type() === 'date') {
   <input
     matInput
     [matDatepicker]="picker"
     [value]="dateValue"
     (dateChange)="onDateChange($event)"
     (click)="picker.open()"
-    [placeholder]="placeholder"
+    [placeholder]="placeholder()"
     class="field__input"
-    [class.field__input--error]="error"
-    [class.field__input--small]="size === 'small'"
-    [class.field__input--small--error]="size === 'small' && error"
-    [class.field__input--big]="size === 'big'"
-    [class.field__input--with-tooltip]="size !== 'small' && haveHint"
-    [class.field__input--border]="hasBorder"
+    [class.field__input--error]="error()"
+    [class.field__input--small]="size() === 'small'"
+    [class.field__input--small--error]="size() === 'small' && error()"
+    [class.field__input--big]="size() === 'big'"
+    [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
+    [class.field__input--border]="hasBorder()"
     readonly
   />
   <mat-datepicker #picker></mat-datepicker>
@@ -44,27 +44,27 @@
     (input)="onInput($event)"
     (keydown.enter)="onEnter($event)"
     (blur)="onBlur()"
-    [placeholder]="placeholder"
-    [type]="type"
-    [mask]="mask"
-    [name]="name"
+    [placeholder]="placeholder()"
+    [type]="type()"
+    [mask]="mask()"
+    [name]="name()"
     [dropSpecialCharacters]="true"
     class="field__input"
-    [class.field__input--error]="error"
+    [class.field__input--error]="error()"
     [class.field__input--overflow]="isLengthOverflow"
-    [class.field__input--small]="size === 'small'"
-    [class.field__input--small--error]="size === 'small' && error"
-    [class.field__input--big]="size === 'big'"
-    [class.field__input--with-tooltip]="size !== 'small' && haveHint"
-    [class.field__input--border]="hasBorder"
+    [class.field__input--small]="size() === 'small'"
+    [class.field__input--small--error]="size() === 'small' && error()"
+    [class.field__input--big]="size() === 'big'"
+    [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
+    [class.field__input--border]="hasBorder()"
   />
-  @if (maxLength) {
+  @if (maxLength()) {
   <div class="field__counter">
     <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
       <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
         value.length
       }}</span>
-      / {{ maxLength }}
+      / {{ maxLength() }}
     </p>
   </div>
   } } @if (showErrorIcon) {
@@ -74,16 +74,16 @@
     icon="error"
     appSquare="20"
     [ngStyle]="{
-      right: size === 'small' ? '6px' : '16px'
+      right: size() === 'small' ? '6px' : '16px'
     }"
   ></i>
-  } @else if (haveHint && tooltipText) {
-  <div class="field__tooltip-wrapper" [class.field__tooltip-wrapper--small]="size === 'small'">
+  } @else if (haveHint() && tooltipText()) {
+  <div class="field__tooltip-wrapper" [class.field__tooltip-wrapper--small]="size() === 'small'">
     <app-tooltip
-      [text]="tooltipText"
+      [text]="tooltipText()!"
       [isVisible]="isTooltipVisible"
-      [position]="tooltipPosition"
-      [tooltipWidth]="tooltipWidth"
+      [position]="tooltipPosition()"
+      [tooltipWidth]="tooltipWidth()"
       customClass="field__tooltip-icon"
       (show)="showTooltip()"
       (hide)="hideTooltip()"
@@ -94,7 +94,7 @@
   <div
     class="field__right-icon"
     [ngStyle]="{
-      right: error ? '60px' : haveHint ? '50px' : '24px'
+      right: error() ? '60px' : haveHint() ? '50px' : '24px'
     }"
   >
     <ng-content></ng-content>
