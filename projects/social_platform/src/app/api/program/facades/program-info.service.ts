@@ -1,22 +1,22 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
-import { Subject, takeUntil } from "rxjs";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад программы: загрузка/очистка данных программы. */
 @Injectable()
 export class ProgramInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly navService = inject(NavService);
   private readonly router = inject(Router);
-  private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
+  private readonly navService = inject(NavService);
   private readonly loggerService = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
 
   private readonly searchForm = this.programMainUIInfoService.searchForm;
 
@@ -29,7 +29,7 @@ export class ProgramInfoService {
   private initilizationSearchValue(): void {
     this.searchForm
       .get("search")
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(search => {
         this.router
           .navigate([], {
@@ -39,10 +39,5 @@ export class ProgramInfoService {
           })
           .then(() => this.loggerService.debug("QueryParams changed from ProjectsComponent"));
       });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

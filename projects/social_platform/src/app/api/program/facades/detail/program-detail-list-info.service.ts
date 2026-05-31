@@ -1,6 +1,6 @@
 /** @format */
 
-import { ElementRef, inject, Injectable, Injector } from "@angular/core";
+import { DestroyRef, ElementRef, inject, Injectable, Injector } from "@angular/core";
 import {
   catchError,
   concatMap,
@@ -10,9 +10,7 @@ import {
   fromEvent,
   map,
   of,
-  Subject,
   switchMap,
-  takeUntil,
   tap,
   throttleTime,
 } from "rxjs";
@@ -32,7 +30,7 @@ import Fuse from "fuse.js";
 import { Project } from "@domain/project/project.model";
 import { User } from "@domain/auth/user.model";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Фасад списка программы: проекты/участники/подписки/рейтинги с фильтрами и пагинацией по скроллу. */
@@ -42,6 +40,7 @@ export class ProgramDetailListInfoService {
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
@@ -52,8 +51,6 @@ export class ProgramDetailListInfoService {
   private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
   private readonly filterProjectRatingsUseCase = inject(FilterProjectRatingsUseCase);
   private readonly getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly listType = this.programDetailListUIInfoService.listType;
   private readonly searchParamName = this.programDetailListUIInfoService.searchParamName;
@@ -72,7 +69,7 @@ export class ProgramDetailListInfoService {
       .pipe(
         tap(data => this.listType.set(data["listType"])),
         switchMap(r => of(r["data"])),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(data => {
         this.programDetailListUIInfoService.list$.set(success(data.results));
@@ -94,14 +91,9 @@ export class ProgramDetailListInfoService {
           this.logger.error("Scroll error:", err);
           return of({});
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   /**
@@ -115,7 +107,7 @@ export class ProgramDetailListInfoService {
   private setupSearch(): void {
     this.searchForm
       .get("search")
-      ?.valueChanges.pipe(throttleTime(200), takeUntil(this.destroy$))
+      ?.valueChanges.pipe(throttleTime(200), takeUntilDestroyed(this.destroyRef))
       .subscribe(search => {
         this.router
           .navigate([], {
@@ -129,7 +121,7 @@ export class ProgramDetailListInfoService {
     this.route.queryParams
       .pipe(
         map(q => q["search"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(search => {
         this.programDetailListUIInfoService.searchedList.set(this.applySearch(search));
@@ -141,7 +133,7 @@ export class ProgramDetailListInfoService {
       .pipe(
         filter(profile => !!profile),
         switchMap(p => this.getProjectSubscriptionsUseCase.execute(p!.id)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: result => {
@@ -239,7 +231,7 @@ export class ProgramDetailListInfoService {
           this.logger.error("Error in setupFilters:", err);
           return of(this.emptyPage<ProjectRate | Project>());
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(result => {
         if (!result) return;
@@ -338,7 +330,7 @@ export class ProgramDetailListInfoService {
               this.listPage.update(p => p - 1);
               return of(this.emptyPage<ProjectRate>());
             }),
-            takeUntil(this.destroy$)
+            takeUntilDestroyed(this.destroyRef)
           );
         }
 
@@ -362,7 +354,7 @@ export class ProgramDetailListInfoService {
             this.listPage.update(p => p - 1);
             return of(this.emptyPage<ProjectRate>());
           }),
-          takeUntil(this.destroy$)
+          takeUntilDestroyed(this.destroyRef)
         );
       }
 
@@ -392,7 +384,7 @@ export class ProgramDetailListInfoService {
             this.listPage.update(p => p - 1);
             return of(this.emptyPage<Project>());
           }),
-          takeUntil(this.destroy$)
+          takeUntilDestroyed(this.destroyRef)
         );
       }
 
@@ -417,7 +409,7 @@ export class ProgramDetailListInfoService {
             this.listPage.update(p => p - 1);
             return of(this.emptyPage<User>());
           }),
-          takeUntil(this.destroy$)
+          takeUntilDestroyed(this.destroyRef)
         );
       }
 

@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -24,7 +24,7 @@ import { AppRoutes } from "@api/paths/app-routes";
     providers: [ProgramMainInfoService, ProgramMainUIInfoService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProgramMainComponent implements OnInit, OnDestroy {
+export class ProgramMainComponent implements OnInit {
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
   private readonly programMainInfoService = inject(ProgramMainInfoService);
 
@@ -42,9 +42,5 @@ export class ProgramMainComponent implements OnInit, OnDestroy {
    */
   onTogglePparticipating(): void {
     this.programMainInfoService.onTogglePparticipating();
-  }
-
-  ngOnDestroy(): void {
-    this.programMainInfoService.destroy();
   }
 }

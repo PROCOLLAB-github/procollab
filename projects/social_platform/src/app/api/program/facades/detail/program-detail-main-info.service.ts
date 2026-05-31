@@ -1,8 +1,8 @@
 /** @format */
 
-import { ElementRef, inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, fromEvent, map, of, Subject, takeUntil, tap, throttleTime } from "rxjs";
+import { concatMap, fromEvent, map, of, tap, throttleTime } from "rxjs";
 import { FeedNews } from "@domain/news/project-news.model";
 import { LoadingService } from "@ui/services/loading/loading.service";
 import { ExpandService } from "../../../expand/expand.service";
@@ -15,6 +15,7 @@ import { AddNewsUseCase } from "../../use-cases/add-news.use-case";
 import { DeleteNewsUseCase } from "../../use-cases/delete-news.use-case";
 import { ToggleLikeUseCase } from "../../use-cases/toggle-like.use-case";
 import { EditNewsUseCase } from "../../use-cases/edit-news.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Координирует основную вкладку программы: данные резолвера, новости, пагинация. */
 @Injectable()
@@ -23,17 +24,19 @@ export class ProgramDetailMainService {
   private readonly route = inject(ActivatedRoute);
   private readonly loadingService = inject(LoadingService);
   private readonly expandService = inject(ExpandService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly newsInfoService = inject(NewsInfoService);
+  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
+
   private readonly fetchNewsUseCase = inject(FetchNewsUseCase);
   private readonly readNewsUseCase = inject(ReadNewsUseCase);
   private readonly addNewsUseCase = inject(AddNewsUseCase);
   private readonly deleteNewsUseCase = inject(DeleteNewsUseCase);
   private readonly toggleLikeUseCase = inject(ToggleLikeUseCase);
   private readonly editNewsUseCase = inject(EditNewsUseCase);
-  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
 
   private observer?: IntersectionObserver;
-  private readonly destroy$ = new Subject<void>();
 
   private readonly totalNewsCount = this.programDetailMainUIInfoService.totalNewsCount;
   readonly fetchLimit = signal(10);
@@ -56,7 +59,7 @@ export class ProgramDetailMainService {
         tap(programId => {
           this.programId.set(programId);
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
@@ -77,7 +80,7 @@ export class ProgramDetailMainService {
             });
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
@@ -102,7 +105,7 @@ export class ProgramDetailMainService {
             );
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: result => {
@@ -142,16 +145,13 @@ export class ProgramDetailMainService {
       .pipe(
         throttleTime(2000),
         concatMap(() => this.onScroll()),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
 
   destroy(): void {
     this.observer?.disconnect();
-
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private onScroll() {
@@ -189,7 +189,7 @@ export class ProgramDetailMainService {
       .filter(id => Number.isFinite(id));
     this.readNewsUseCase
       .execute(this.route.snapshot.params["programId"], ids)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
 
@@ -208,7 +208,7 @@ export class ProgramDetailMainService {
 
     this.deleteNewsUseCase
       .execute(this.route.snapshot.params["programId"], newsId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) return;
@@ -224,7 +224,7 @@ export class ProgramDetailMainService {
 
     this.toggleLikeUseCase
       .execute(this.route.snapshot.params["programId"], newsId, !item.isUserLiked)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 

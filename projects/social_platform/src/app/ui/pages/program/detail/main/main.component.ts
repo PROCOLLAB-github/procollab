@@ -19,7 +19,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
-import { TruncatePipe, UserLinksPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramDetailMainService } from "@api/program/facades/detail/program-detail-main-info.service";
@@ -38,7 +38,6 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
     imports: [
         IconComponent,
         ButtonComponent,
-        UserLinksPipe,
         ParseBreaksPipe,
         ParseLinksPipe,
         ModalComponent,
@@ -47,7 +46,6 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
         NewsFormComponent,
         ModalComponent,
         MatProgressBarModule,
-        TruncatePipe,
         RouterModule,
         NewsCardComponent,
         ProgramLinksComponent,

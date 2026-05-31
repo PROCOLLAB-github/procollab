@@ -1,26 +1,27 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
-import { combineLatest, distinctUntilChanged, map, Subject, switchMap, takeUntil } from "rxjs";
+import { combineLatest, distinctUntilChanged, map, switchMap } from "rxjs";
 import { Program } from "@domain/program/program.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import Fuse from "fuse.js";
 import { ProgramShellInfoService } from "./program-shell-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import Fuse from "fuse.js";
 
 /** Фасад главной вкладки программы: участие в программе (`ParticipatingProgramUseCase`). */
 @Injectable()
 export class ProgramMainInfoService {
-  private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly navService = inject(NavService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
   private readonly programShellInfoService = inject(ProgramShellInfoService);
-
-  private readonly destroy$ = new Subject<void>();
 
   readonly isPparticipating = this.programMainUIInfoService.isPparticipating;
 
@@ -43,7 +44,7 @@ export class ProgramMainInfoService {
             .ensureProgramsLoaded(new HttpParams({ fromObject: filter }))
             .pipe(map(result => ({ result, search })));
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(({ result, search }) => {
         if (!result.ok) {
@@ -54,11 +55,6 @@ export class ProgramMainInfoService {
 
         this.programMainUIInfoService.applyPrograms(programs, result.value.count);
       });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   onTogglePparticipating(): void {

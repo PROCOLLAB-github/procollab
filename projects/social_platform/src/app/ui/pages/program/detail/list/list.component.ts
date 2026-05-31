@@ -9,7 +9,6 @@ import {
   ElementRef,
   HostListener,
   inject,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -61,7 +60,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ProgramListComponent implements OnInit, AfterViewInit {
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLUListElement>;
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
 
@@ -112,10 +111,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.logger.error(".office__body element not found");
     }
-  }
-
-  ngOnDestroy(): void {
-    this.programDetailListInfoService.destroy();
   }
 
   routerLink(linkId: number): string {

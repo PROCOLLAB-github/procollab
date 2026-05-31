@@ -1,22 +1,26 @@
 /** @format */
 
-import { inject, Injectable, OnDestroy, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 import { GetProgramFiltersUseCase } from "@api/program/use-cases/get-program-filters.use-case";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
-import { debounceTime, distinctUntilChanged, shareReplay, Subject, takeUntil } from "rxjs";
+import { debounceTime, distinctUntilChanged, shareReplay } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
-export class ProgramProjectsFilterInfoService implements OnDestroy {
+export class ProgramProjectsFilterInfoService {
+  private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly fb = inject(FormBuilder);
-  private readonly getProgramFiltersUseCase = inject(GetProgramFiltersUseCase);
-  private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
+
+  private readonly getProgramFiltersUseCase = inject(GetProgramFiltersUseCase);
 
   filterForm: FormGroup = this.fb.group({});
 
@@ -25,7 +29,6 @@ export class ProgramProjectsFilterInfoService implements OnDestroy {
 
   protected readonly listType = this.programDetailListUIInfoService.listType;
 
-  private readonly destroy$ = new Subject<void>();
   private initialized = false;
 
   initializationProgramProjectsFilter(): void {
@@ -39,7 +42,7 @@ export class ProgramProjectsFilterInfoService implements OnDestroy {
     const programId = this.route.parent?.snapshot.params["programId"];
     this.getProgramFiltersUseCase
       .execute(Number(programId))
-      .pipe(shareReplay({ bufferSize: 1, refCount: true }), takeUntil(this.destroy$))
+      .pipe(shareReplay({ bufferSize: 1, refCount: true }), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -54,11 +57,6 @@ export class ProgramProjectsFilterInfoService implements OnDestroy {
           this.subscribeToFormChanges();
         },
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   /**
@@ -132,7 +130,7 @@ export class ProgramProjectsFilterInfoService implements OnDestroy {
   }
 
   private restoreFiltersFromUrl(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queries => {
       Object.keys(queries).forEach(key => {
         const control = this.filterForm.get(key);
         if (control && queries[key] !== undefined) {
@@ -149,7 +147,7 @@ export class ProgramProjectsFilterInfoService implements OnDestroy {
 
   private subscribeToFormChanges(): void {
     this.filterForm.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe(formValue => {
         this.updateQueryParams(formValue);
       });
