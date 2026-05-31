@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
 import { UserTypeCardComponent } from "./user-type-card/user-type-card.component";
 import { OnboardingStageThreeUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-three-ui-info.service";
@@ -20,7 +20,7 @@ import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboa
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OnboardingStageThreeComponent implements OnInit, OnDestroy {
+export class OnboardingStageThreeComponent implements OnInit {
   private readonly onboardingStageThreeInfoService = inject(OnboardingStageThreeInfoService);
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
@@ -31,10 +31,6 @@ export class OnboardingStageThreeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.onboardingStageThreeInfoService.initializationFormValues();
-  }
-
-  ngOnDestroy(): void {
-    this.onboardingStageThreeInfoService.destroy();
   }
 
   onSetRole(role: number) {

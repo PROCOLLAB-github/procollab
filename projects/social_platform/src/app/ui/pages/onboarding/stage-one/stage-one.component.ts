@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ButtonComponent } from "@ui/primitives";
@@ -37,7 +37,7 @@ import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OnboardingStageOneComponent implements OnInit, OnDestroy {
+export class OnboardingStageOneComponent implements OnInit {
   private readonly onboardingStageOneInfoService = inject(OnboardingStageOneInfoService);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
@@ -69,10 +69,6 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.onboardingStageOneInfoService.initializationSpeciality();
-  }
-
-  ngOnDestroy(): void {
-    this.onboardingStageOneInfoService.destroy();
   }
 
   toggleTooltip(key: "auth" | "lib"): void {

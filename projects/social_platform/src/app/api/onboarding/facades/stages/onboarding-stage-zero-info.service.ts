@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
-import { concatMap, of, Subject, takeUntil } from "rxjs";
+import { DestroyRef, inject, Injectable } from "@angular/core";
+import { concatMap, of } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { Router } from "@angular/router";
@@ -13,20 +13,22 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Координирует первый шаг онбординга: профильные поля, FormArray, сохранение этапа. */
 @Injectable()
 export class OnboardingStageZeroInfoService {
+  private readonly router = inject(Router);
+  private readonly validationService = inject(ValidationService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
-  private readonly validationService = inject(ValidationService);
   private readonly profileInfoService = inject(ProfileInfoService);
-  private readonly router = inject(Router);
+
   private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
   private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly profile = this.profileInfoService.profile;
   private readonly stageForm = this.onboardingStageZeroUIInfoService.stageForm;
@@ -43,13 +45,13 @@ export class OnboardingStageZeroInfoService {
       this.onboardingStageZeroUIInfoService.applySetProfile(this.profile()!);
     }
 
-    this.onboardingService.formValue$.pipe(takeUntil(this.destroy$)).subscribe(fv => {
+    this.onboardingService.formValue$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
       this.onboardingStageZeroUIInfoService.applyInitStageZero(fv);
     });
   }
 
   initializationFormValues(): void {
-    this.onboardingService.formValue$.pipe(takeUntil(this.destroy$)).subscribe(formValues => {
+    this.onboardingService.formValue$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(formValues => {
       this.onboardingStageZeroUIInfoService.applyInitFormValues(formValues);
 
       this.onboardingStageZeroUIInfoService.applyInitWorkExperience(formValues);
@@ -57,11 +59,6 @@ export class OnboardingStageZeroInfoService {
       this.onboardingStageZeroUIInfoService.applyInitUserLanguages(formValues);
       this.onboardingStageZeroUIInfoService.applyInitAchievements(formValues);
     });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   onSkipRegistration(): void {
@@ -78,7 +75,7 @@ export class OnboardingStageZeroInfoService {
 
     this.updateProfileUseCase
       .execute(onboardingSkipInfo as Partial<User>)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -117,7 +114,7 @@ export class OnboardingStageZeroInfoService {
         concatMap(result =>
           result.ok ? this.updateOnboardingStageUseCase.execute(1, this.profile()!.id) : of(result)
         ),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: result => {

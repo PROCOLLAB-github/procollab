@@ -1,8 +1,8 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { Specialization } from "@domain/specializations/specialization.model";
-import { concatMap, map, Observable, of, Subject, take, takeUntil } from "rxjs";
+import { concatMap, map, Observable, of, take } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -15,25 +15,25 @@ import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboard
 import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Координирует шаг выбора специализаций и сохранение первого этапа. */
 @Injectable()
 export class OnboardingStageOneInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
-  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
+  private readonly validationService = inject(ValidationService);
+  private readonly searchesService = inject(SearchesService);
 
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
 
-  private readonly validationService = inject(ValidationService);
-  private readonly searchesService = inject(SearchesService);
-
-  private readonly destroy$ = new Subject<void>();
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
 
   private stageForm = this.onboardingStageOneUIInfoService.stageForm;
 
@@ -48,24 +48,20 @@ export class OnboardingStageOneInfoService {
 
   private readonly profile = this.profileInfoService.profile;
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   initializationFormValues(): void {
-    this.onboardingService.formValue$.pipe(take(1), takeUntil(this.destroy$)).subscribe(fv => {
+    this.onboardingService.formValue$.pipe(take(1),
+    takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
       this.onboardingStageOneUIInfoService.applyInitFormValues(fv);
     });
 
-    this.stageForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.stageForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       // Общий OnboardingService хранит черновик между переходами по шагам.
       this.onboardingService.setFormValue(value);
     });
   }
 
   initializationSpeciality(): void {
-    this.onboardingService.formValue$.pipe(takeUntil(this.destroy$)).subscribe(fv => {
+    this.onboardingService.formValue$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
       this.onboardingStageOneUIInfoService.applyInitSpeciality(fv);
     });
   }
@@ -91,7 +87,7 @@ export class OnboardingStageOneInfoService {
         concatMap(result =>
           result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result)
         ),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(result => {
         if (!result.ok) {
