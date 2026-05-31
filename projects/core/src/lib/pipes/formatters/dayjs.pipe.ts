@@ -1,9 +1,9 @@
 /** @format */
 
 import { Pipe, type PipeTransform } from "@angular/core";
-import * as dayjs from "dayjs";
-import * as relativeTime from "dayjs/plugin/relativeTime";
-import * as isToday from "dayjs/plugin/isToday";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import isToday from "dayjs/plugin/isToday";
 import "dayjs/locale/ru";
 
 // Подключаем необходимые плагины dayjs

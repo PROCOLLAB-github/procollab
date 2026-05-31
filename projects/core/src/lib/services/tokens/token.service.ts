@@ -3,7 +3,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
-import Cookies, { type CookieAttributes } from "js-cookie";
+import Cookies from "js-cookie";
 import { PRODUCTION } from "../../providers/production.provide";
 import { ApiService } from "../api/api.service";
 import { environment } from "@environment";
@@ -84,7 +84,7 @@ export class TokenService {
    * - Используются дефолтные настройки браузера
    * - Cookies привязаны к текущему домену
    */
-  getCookieOptions(): CookieAttributes {
+  getCookieOptions(): Parameters<typeof Cookies.set>[2] {
     if (this.production) {
       return {
         domain: ".procollab.ru", // Домен для production окружения

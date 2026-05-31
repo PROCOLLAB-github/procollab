@@ -2,7 +2,7 @@
 import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, Observer, retry, Subject, timer } from "rxjs";
 import { environment } from "@environment";
-import * as snakecaseKeys from "snakecase-keys";
+import snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
 import { TokenService } from "../tokens/token.service";
 

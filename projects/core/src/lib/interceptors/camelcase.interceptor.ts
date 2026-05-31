@@ -9,7 +9,7 @@ import {
   HttpResponse,
 } from "@angular/common/http";
 import { map, type Observable } from "rxjs";
-import * as snakecaseKeys from "snakecase-keys";
+import snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
 import { LoggerService } from "../services/logger/logger.service";
 

@@ -1,7 +1,7 @@
 /** @format */
 
 import { User } from "@domain/auth/user.model";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 /** Модели для системы чатов */
 export class ChatFile {

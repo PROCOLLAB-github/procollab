@@ -19,7 +19,7 @@ import { fromEvent, map } from "rxjs";
 import { FileService } from "@core/lib/services/file/file.service";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
-import { NgxMaskModule } from "ngx-mask";
+import { NgxMaskDirective } from "ngx-mask";
 import { IconComponent } from "@ui/primitives";
 import { UpperCasePipe } from "@angular/common";
 import { FormatedFileSizePipe } from "@corelib";
@@ -40,7 +40,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     ],
     imports: [
         IconComponent,
-        NgxMaskModule,
+        NgxMaskDirective,
         AutosizeModule,
         FileTypePipe,
         FormatedFileSizePipe,

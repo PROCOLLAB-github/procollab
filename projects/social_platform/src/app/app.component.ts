@@ -32,7 +32,7 @@ import { ConnectionStatusToastService } from "@api/connection-status/connection-
     selector: "app-root",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
-    imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
+    imports: [MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
