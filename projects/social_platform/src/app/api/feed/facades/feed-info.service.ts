@@ -1,6 +1,6 @@
 /** @format */
 
-import { ElementRef, inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   concatMap,
@@ -9,9 +9,7 @@ import {
   map,
   Observable,
   skip,
-  Subject,
   switchMap,
-  takeUntil,
   tap,
   throttleTime,
 } from "rxjs";
@@ -23,6 +21,7 @@ import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
 import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.const";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 
@@ -30,13 +29,15 @@ const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 @Injectable()
 export class FeedInfoService {
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly feedUIInfoService = inject(FeedUIInfoService);
+
   private readonly fetchFeedUseCase = inject(FetchFeedUseCase);
   private readonly readFeedNewsUseCase = inject(ReadFeedNewsUseCase);
   private readonly toggleFeedLikeUseCase = inject(ToggleFeedLikeUseCase);
-  private readonly feedUIInfoService = inject(FeedUIInfoService);
 
   private observer?: IntersectionObserver;
-  private readonly destroy$ = new Subject<void>();
 
   readonly feedItems = this.feedUIInfoService.feedItems;
 
@@ -46,7 +47,7 @@ export class FeedInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedUIInfoService.applyInitializationFeedNewsEvent(feed);
@@ -81,7 +82,7 @@ export class FeedInfoService {
             includes ?? DEFAULT_FEED_TYPES
           );
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(feed => {
         this.feedUIInfoService.applyFeedFilters(feed);
@@ -141,7 +142,7 @@ export class FeedInfoService {
         .pipe(
           throttleTime(100),
           concatMap(() => this.onScroll(target, feedRoot)),
-          takeUntil(this.destroy$)
+          takeUntilDestroyed(this.destroyRef)
         )
         .subscribe();
     }
@@ -187,7 +188,7 @@ export class FeedInfoService {
       // У ленты нет своей ручки чтения, поэтому просмотр уходит владельцу новости.
       this.readFeedNewsUseCase
         .execute("project", news.content.contentObject.id, [news.content.id])
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe();
     });
 
@@ -196,7 +197,7 @@ export class FeedInfoService {
       // Профильная новость определяется по форме contentObject с email.
       this.readFeedNewsUseCase
         .execute("profile", news.content.contentObject.id, [news.content.id])
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe();
     });
   }
@@ -215,7 +216,7 @@ export class FeedInfoService {
           newsId,
           !item.content.isUserLiked
         )
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {
           if (!result.ok) return;
 
@@ -229,7 +230,7 @@ export class FeedInfoService {
           newsId,
           !item.content.isUserLiked
         )
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {
           if (!result.ok) return;
 
@@ -248,7 +249,5 @@ export class FeedInfoService {
 
   destroy(): void {
     this.observer?.disconnect();
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

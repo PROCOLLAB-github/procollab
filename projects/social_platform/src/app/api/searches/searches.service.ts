@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { Observable, of, Subject, take, takeUntil } from "rxjs";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { Observable, of, take } from "rxjs";
 import { Specialization } from "@domain/specializations/specialization.model";
 import { FormGroup } from "@angular/forms";
 import { Skill } from "@domain/skills/skill.model";
@@ -9,17 +9,19 @@ import { SkillsGroup } from "@domain/skills/skills-group.model";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 import { GetSpecializationsInlineUseCase } from "@api/specializations/use-cases/get-specializations-inline.use-case";
 import { fail } from "@domain/shared/result.type";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Сервис подбора навыков/специализаций для форм: поиск, добавление/удаление, inline-специализации. */
 @Injectable({ providedIn: "root" })
 export class SearchesService {
   private readonly skillsRepository = inject(SkillsRepositoryPort);
+
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly getSpecializationsInlineUseCase = inject(GetSpecializationsInlineUseCase);
 
   readonly inlineSpecs = signal<Specialization[]>([]);
   readonly inlineSkills = signal<Skill[]>([]);
-
-  private readonly destroy$ = new Subject<void>();
 
   onSelectSpec(form: FormGroup, speciality: Specialization): void {
     form.patchValue({ speciality: speciality.name });
@@ -28,7 +30,7 @@ export class SearchesService {
   onSearchSpec(query: string): void {
     this.getSpecializationsInlineUseCase
       .execute(query, 1000, 0)
-      .pipe(take(1), takeUntil(this.destroy$))
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return of(fail(null));
 

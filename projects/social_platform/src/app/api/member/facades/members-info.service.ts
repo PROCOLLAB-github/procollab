@@ -1,6 +1,6 @@
 /** @format */
 
-import { ElementRef, inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import {
@@ -11,10 +11,8 @@ import {
   fromEvent,
   map,
   skip,
-  Subject,
   switchMap,
   take,
-  takeUntil,
   tap,
   throttleTime,
 } from "rxjs";
@@ -28,6 +26,7 @@ import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
 @Injectable()
@@ -37,9 +36,12 @@ export class MembersInfoService {
   private readonly logger = inject(LoggerService);
   private readonly navService = inject(NavService);
   private readonly navigationService = inject(NavigationService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
+
   private readonly getMembersUseCase = inject(GetMembersUseCase);
 
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
@@ -50,8 +52,6 @@ export class MembersInfoService {
 
   private readonly searchForm = this.membersUIInfoService.searchForm;
   private readonly filterForm = this.membersUIInfoService.filterForm;
-
-  private readonly destroy$ = new Subject<void>();
 
   initializationMembers(): void {
     // Устанавливаем заголовок страницы
@@ -71,7 +71,7 @@ export class MembersInfoService {
       .pipe(
         take(1),
         map(r => r["data"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((members: ApiPagination<User>) => {
         this.membersUIInfoService.applyMembersPagination(members);
@@ -91,7 +91,7 @@ export class MembersInfoService {
         skip(1), // Пропускаем первое значение
         distinctUntilChanged(), // Игнорируем одинаковые значения
         debounceTime(100), // Задержка для предотвращения частых запросов
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
         switchMap(params => {
           // Формируем параметры для API запроса
           const fetchParams: Record<string, string> = {};
@@ -118,11 +118,6 @@ export class MembersInfoService {
       .subscribe(members => {
         this.membersUIInfoService.members$.set(success(members.results));
       });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private onScroll(target: HTMLElement, membersRoot: ElementRef<HTMLUListElement>) {
@@ -169,7 +164,7 @@ export class MembersInfoService {
         // иначе параллельные скроллы посчитают одинаковый skip (= текущая длина
         // списка) и придут дубли страниц.
         concatMap(() => this.onScroll(target, membersRoot)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
@@ -178,7 +173,7 @@ export class MembersInfoService {
     if (!control) return;
 
     control.valueChanges
-      .pipe(throttleTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(throttleTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.router
           .navigate([], {
@@ -193,7 +188,7 @@ export class MembersInfoService {
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
     return this.getMembersUseCase.execute(skip, take, params).pipe(
       map(result => (result.ok ? result.value : this.emptyMembersPagination())),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     );
   }
 

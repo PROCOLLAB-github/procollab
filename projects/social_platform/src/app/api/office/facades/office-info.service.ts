@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable, Injector } from "@angular/core";
-import { filter, Subject, takeUntil, tap } from "rxjs";
+import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
+import { filter, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
@@ -18,7 +18,7 @@ import { ChatStateService } from "@api/chat/chat-state.service";
 import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 
 /** Стартовый сервис офисной оболочки: справочники, навигация, чат-статусы, приглашения. */
 @Injectable()
@@ -27,6 +27,7 @@ export class OfficeInfoService {
   private readonly logger = inject(LoggerService);
   private readonly injector = inject(Injector);
   private readonly eventBus = inject(EventBus);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly authRepository = inject(AuthRepositoryPort);
   private readonly inviteInfoService = inject(InviteInfoService);
@@ -44,7 +45,6 @@ export class OfficeInfoService {
   readonly invites = this.inviteInfoService.invites;
   private readonly profile = this.profileInfoService.profile;
 
-  private readonly destroy$ = new Subject<void>();
 
   initializationOffice(): void {
     this.profileInfoService.ensureProfileLoaded();
@@ -69,7 +69,7 @@ export class OfficeInfoService {
     toObservable(this.profile, { injector: this.injector })
       .pipe(
         filter(profile => !!profile),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(profile => {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
@@ -87,19 +87,19 @@ export class OfficeInfoService {
   }
 
   private initializationStatus(): void {
-    this.connectChatUseCase.execute().pipe(takeUntil(this.destroy$)).subscribe();
+    this.connectChatUseCase.execute().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
     // События входа/выхода из сети обновляют общий кеш для карточек и detail-виджетов.
     this.observeSetOfflineUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(evt => {
         this.chatStateService.setOnlineStatus(evt.userId, false);
       });
 
     this.observeSetOnlineUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(evt => {
         this.chatStateService.setOnlineStatus(evt.userId, true);
       });
@@ -109,15 +109,10 @@ export class OfficeInfoService {
     this.inviteInfoService.ensureLoaded();
   }
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   onRejectInvite(inviteId: number): void {
     this.inviteInfoService
       .rejectInviteAction(inviteId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           this.officeUIInfoService.applyOpenInviteErrorModal();
@@ -131,7 +126,7 @@ export class OfficeInfoService {
 
     this.inviteInfoService
       .acceptInviteAction(inviteId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           this.officeUIInfoService.applyOpenInviteErrorModal();
@@ -160,7 +155,7 @@ export class OfficeInfoService {
             .navigateByUrl(AppRoutes.auth.login())
             .then(() => this.logger.debug("Route changed from OfficeComponent"));
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }

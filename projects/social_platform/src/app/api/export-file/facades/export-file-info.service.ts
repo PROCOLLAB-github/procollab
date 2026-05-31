@@ -1,37 +1,32 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ExportFileService } from "../export-file.service";
 import { saveFile } from "@utils/export-file";
 import { ProgramDetailMainUIInfoService } from "../../program/facades/detail/ui/program-detail-main-ui-info.service";
-import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@corelib";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Обрабатывает экспорт файлов программы и состояние загрузки export-кнопок. */
 @Injectable()
 export class ExportFileInfoService {
+  private readonly loggerService = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly exportFileService = inject(ExportFileService);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
-  private readonly loggerService = inject(LoggerService);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly program = this.programDetailMainUIInfoService.program;
 
   readonly loadingExports$ = signal<AsyncState<void>>(initial());
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   downloadProjects(): void {
     this.loadingExports$.set(loading());
 
     this.exportFileService
       .exportAllProjects(this.program()!.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: blob => {
           saveFile(blob, "all", this.program()?.name);
@@ -49,7 +44,7 @@ export class ExportFileInfoService {
 
     this.exportFileService
       .exportSubmittedProjects(this.program()!.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: blob => {
           saveFile(blob, "submitted", this.program()?.name);
@@ -66,7 +61,7 @@ export class ExportFileInfoService {
 
     this.exportFileService
       .exportProgramRates(this.program()!.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: blob => {
           saveFile(blob, "rates", this.program()?.name);

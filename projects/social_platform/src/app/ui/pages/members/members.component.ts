@@ -6,7 +6,6 @@ import {
   Component,
   ElementRef,
   inject,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -44,7 +43,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
     ],
     providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService]
 })
-export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MembersComponent implements OnInit, AfterViewInit {
   @ViewChild("membersRoot") membersRoot?: ElementRef<HTMLUListElement>; // Ссылка на корневой элемент списка
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>; // Ссылка на элемент фильтра
 
@@ -70,10 +69,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     if (target && this.membersRoot) {
       this.membersInfoService.initScroll(target, this.membersRoot);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.membersInfoService.destroy();
   }
 
   redirectToProfile(): void {
