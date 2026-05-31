@@ -1,9 +1,10 @@
 /** @format */
 
+import { DestroyRef } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of, Subject } from "rxjs";
+import { of } from "rxjs";
 import { UpdateFormUseCase } from "../../use-cases/update-form.use-case";
 import { ProjectFormAutosaveService } from "./project-form-autosave.service";
 import { Project } from "@domain/project/project.model";
@@ -35,9 +36,9 @@ describe("ProjectFormAutosaveService", () => {
 
   it("отправляет draft autosave при очистке presentationAddress", () => {
     const control = new FormControl("https://example.com/presentation");
-    const destroy$ = new Subject<void>();
+    const destroyRef = TestBed.inject(DestroyRef);
 
-    service.bindDraftCleanupAutosave(control, "presentationAddress", destroy$);
+    service.bindDraftCleanupAutosave(control, "presentationAddress", destroyRef);
     control.setValue("");
 
     expect(updateFormUseCase.execute).toHaveBeenCalledOnceWith({
@@ -51,9 +52,9 @@ describe("ProjectFormAutosaveService", () => {
 
   it("не отправляет autosave для непустого значения", () => {
     const control = new FormControl("");
-    const destroy$ = new Subject<void>();
+    const destroyRef = TestBed.inject(DestroyRef);
 
-    service.bindDraftCleanupAutosave(control, "coverImageAddress", destroy$);
+    service.bindDraftCleanupAutosave(control, "coverImageAddress", destroyRef);
     control.setValue("https://example.com/cover.png");
 
     expect(updateFormUseCase.execute).not.toHaveBeenCalled();
@@ -61,11 +62,13 @@ describe("ProjectFormAutosaveService", () => {
 
   it("останавливает подписку после destroy", () => {
     const control = new FormControl("https://example.com/cover.png");
-    const destroy$ = new Subject<void>();
+    const destroyRef = TestBed.inject(DestroyRef);
 
-    service.bindDraftCleanupAutosave(control, "coverImageAddress", destroy$);
-    destroy$.next();
-    destroy$.complete();
+    service.bindDraftCleanupAutosave(control, "coverImageAddress", destroyRef);
+
+    // Уничтожаем TestBed чтобы триггерить DestroyRef
+    TestBed.resetTestingModule();
+
     control.setValue("");
 
     expect(updateFormUseCase.execute).not.toHaveBeenCalled();
