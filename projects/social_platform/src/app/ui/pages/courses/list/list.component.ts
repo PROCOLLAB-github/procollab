@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { CourseComponent } from "./course/course.component";
@@ -17,7 +17,7 @@ import { AppRoutes } from "@api/paths/app-routes";
     styleUrl: "./list.component.scss",
     providers: [CoursesListInfoService, CoursesListUIInfoService]
 })
-export class CoursesListComponent implements OnInit, OnDestroy {
+export class CoursesListComponent implements OnInit {
   private readonly coursesListInfoService = inject(CoursesListInfoService);
   private readonly coursesListUIInfoService = inject(CoursesListUIInfoService);
 
@@ -28,9 +28,5 @@ export class CoursesListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.coursesListInfoService.init();
-  }
-
-  ngOnDestroy(): void {
-    this.coursesListInfoService.destroy();
   }
 }

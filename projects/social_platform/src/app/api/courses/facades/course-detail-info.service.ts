@@ -1,30 +1,26 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { filter, map, Subject, takeUntil } from "rxjs";
+import { filter, map } from "rxjs";
 import { CourseDetail, CourseStructure } from "@domain/courses/courses.model";
 import { CourseDetailUIInfoService } from "./ui/course-detail-ui-info.service";
 import { loading, success } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Координирует детальную страницу курса, структуру модулей и навигацию к программе. */
 @Injectable()
 export class CourseDetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
   init(): void {
     this.loadCourseData();
     this.trackNavigation();
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   redirectDetailInfo(courseId?: number): void {
@@ -49,7 +45,7 @@ export class CourseDetailInfoService {
       .pipe(
         map(data => data["data"]),
         filter(data => !!data),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(([detail, structure]: [CourseDetail | null, CourseStructure | null]) => {
         if (!detail || !structure) return;
@@ -66,7 +62,7 @@ export class CourseDetailInfoService {
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.courseDetailUIInfoService.isTaskDetail.set(this.router.url.includes("lesson"));

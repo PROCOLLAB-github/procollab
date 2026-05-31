@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, HostListener, inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, inject, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -27,7 +27,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     styleUrl: "./course-detail.component.scss",
     providers: [CourseDetailInfoService, CourseDetailUIInfoService]
 })
-export class CourseDetailComponent implements OnInit, OnDestroy {
+export class CourseDetailComponent implements OnInit {
   private readonly courseDetailInfoService = inject(CourseDetailInfoService);
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
@@ -50,10 +50,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.courseDetailInfoService.init();
-  }
-
-  ngOnDestroy(): void {
-    this.courseDetailInfoService.destroy();
   }
 
   redirectDetailInfo(courseId?: number): void {
