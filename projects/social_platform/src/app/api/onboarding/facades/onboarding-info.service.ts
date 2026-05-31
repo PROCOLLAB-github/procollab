@@ -1,26 +1,26 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
 import { OnboardingService } from "../onboarding.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад онбординга: текущий/активный этап, навигация по шагам. */
 @Injectable()
 export class OnboardingInfoService {
   private readonly router = inject(Router);
-  private readonly onboardingService = inject(OnboardingService);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly onboardingService = inject(OnboardingService);
 
   readonly stage = signal<number>(0);
   readonly activeStage = signal<number>(0);
 
-  private readonly destroy$ = new Subject<void>();
-
   initializationOnboarding(): void {
-    this.onboardingService.currentStage$.pipe(takeUntil(this.destroy$)).subscribe(s => {
+    this.onboardingService.currentStage$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(s => {
       if (s === null) {
         this.router
           .navigateByUrl(AppRoutes.office.root())
@@ -41,12 +41,7 @@ export class OnboardingInfoService {
 
     this.updateStage();
 
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(this.updateStage.bind(this));
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.updateStage.bind(this));
   }
 
   updateStage(): void {

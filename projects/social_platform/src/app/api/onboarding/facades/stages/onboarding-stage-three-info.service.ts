@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
-import { concatMap, of, Subject, take, takeUntil, tap } from "rxjs";
+import { DestroyRef, inject, Injectable } from "@angular/core";
+import { concatMap, of, take, tap } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { Router } from "@angular/router";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
@@ -12,22 +12,22 @@ import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboard
 import { loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад этапа 3 онбординга: обновление профиля и продвижение этапа онбординга. */
 @Injectable()
 export class OnboardingStageThreeInfoService {
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
-
-  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
-  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
+  private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
 
   private readonly userRole = this.onboardingStageThreeUIInfoService.userRole;
   private readonly profile = this.profileInfoService.profile;
@@ -35,13 +35,8 @@ export class OnboardingStageThreeInfoService {
   private readonly stageTouched = this.onboardingUIInfoService.stageTouched;
   private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   initializationFormValues(): void {
-    this.onboardingService.formValue$.pipe(take(1), takeUntil(this.destroy$)).subscribe(fv => {
+    this.onboardingService.formValue$.pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
       this.onboardingStageThreeUIInfoService.applyInitFormValues(fv);
     });
   }
@@ -69,7 +64,7 @@ export class OnboardingStageThreeInfoService {
             .navigateByUrl(AppRoutes.office.root())
             .then(() => this.logger.debug("Route changed from OnboardingStageThree"));
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }

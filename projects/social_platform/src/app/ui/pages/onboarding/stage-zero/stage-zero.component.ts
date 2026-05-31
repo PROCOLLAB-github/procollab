@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
@@ -13,7 +13,7 @@ import { generateOptionsList } from "@utils/generate-options-list";
 import { OnboardingStageZeroInfoService } from "@api/onboarding/facades/stages/onboarding-stage-zero-info.service";
 import { OnboardingStageZeroUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-zero-ui-info.service";
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
-import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { TooltipInfoService, TooltipKey } from "@api/tooltip/tooltip-info.service";
 import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-control.component";
 
 /** Начальный этап онбординга — сбор базовой информации профиля (фото, город, образование, опыт, языки, достижения). */
@@ -41,7 +41,7 @@ import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-con
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
+export class OnboardingStageZeroComponent implements OnInit {
   private readonly onboardingStageZeroInfoService = inject(OnboardingStageZeroInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
@@ -155,21 +155,9 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.onboardingStageZeroInfoService.initializationFormValues();
   }
 
-  ngOnDestroy(): void {
-    this.onboardingStageZeroInfoService.destroy();
-  }
-
   toggleTooltip(
     key:
-      | "photo"
-      | "city"
-      | "education"
-      | "educationDescription"
-      | "work"
-      | "workName"
-      | "workDescription"
-      | "achievements"
-      | "language"
+      TooltipKey
   ): void {
     this.tooltipInfoService.toggleTooltip(key);
   }

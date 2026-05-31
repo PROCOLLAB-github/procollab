@@ -1,9 +1,7 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { Subscription } from "rxjs";
-import { OnboardingService } from "@api/onboarding/onboarding.service";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
 import { OnboardingInfoService } from "@api/onboarding/facades/onboarding-info.service";
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 
@@ -16,19 +14,14 @@ import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboa
     imports: [RouterOutlet],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OnboardingComponent implements OnInit, OnDestroy {
+export class OnboardingComponent implements OnInit {
   private readonly onboardingInfoService = inject(OnboardingInfoService);
-  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
 
   protected readonly stage = this.onboardingInfoService.stage;
   protected readonly activeStage = this.onboardingInfoService.activeStage;
 
   ngOnInit(): void {
     this.onboardingInfoService.initializationOnboarding();
-  }
-
-  ngOnDestroy(): void {
-    this.onboardingInfoService.destroy();
   }
 
   updateStage(): void {
