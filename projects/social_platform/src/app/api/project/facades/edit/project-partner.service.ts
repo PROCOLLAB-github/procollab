@@ -1,12 +1,13 @@
 /** @format */
 
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
+import { catchError, forkJoin, map, of, tap } from "rxjs";
 import { Partner, PartnerDto } from "@domain/project/partner.model";
 import { LoggerService } from "@corelib";
 import { CreatePartnerUseCase } from "../../use-cases/create-partner.use-case";
 import { DeletePartnerUseCase } from "../../use-cases/delete-partner.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад партнёров проекта: создание/удаление партнёров. */
 @Injectable({
@@ -14,17 +15,18 @@ import { DeletePartnerUseCase } from "../../use-cases/delete-partner.use-case";
 })
 export class ProjectPartnerService {
   private readonly fb = inject(FormBuilder);
-  private partnerForm!: FormGroup;
   private readonly loggerService = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly createPartnerUseCase = inject(CreatePartnerUseCase);
   private readonly deletePartnerUseCase = inject(DeletePartnerUseCase);
 
   public readonly partnerItems = signal<
-    Partial<{ id: null; name: string; inn: string; contribution: string; decisionMaker: string }>[]
+  Partial<{ id: null; name: string; inn: string; contribution: string; decisionMaker: string }>[]
   >([]);
 
-  private readonly destroy$ = new Subject<void>();
 
+  private partnerForm!: FormGroup;
   private initialized = false;
 
   constructor() {
@@ -84,11 +86,6 @@ export class ProjectPartnerService {
     } else {
       this.partnerItems.set([]);
     }
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   readonly hasPartners = computed(() => this.partnerItems().length > 0);
@@ -169,7 +166,7 @@ export class ProjectPartnerService {
 
     this.deletePartnerUseCase
       .execute(projectId, partnersId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           this.loggerService.error("Failed to delete partner", result.error.cause);

@@ -1,6 +1,6 @@
 /** @format */
 
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
 import {
   EMPTY,
@@ -9,9 +9,7 @@ import {
   map,
   Observable,
   of,
-  Subject,
   switchMap,
-  takeUntil,
   tap,
 } from "rxjs";
 import { Project } from "@domain/project/project.model";
@@ -23,7 +21,7 @@ import { Invite } from "@domain/invite/invite.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { SkillsRepositoryPort as SkillsService } from "@domain/skills/ports/skills.repository.port";
 import { ProjectFormService } from "./project-form.service";
 import { ProjectGoalService } from "./project-goals.service";
@@ -60,37 +58,33 @@ export class ProjectsEditInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly searchesService = inject(SearchesService);
-
-  private readonly projectStepService = inject(ProjectStepService);
-  private readonly assignProjectProgramUseCase = inject(AssignProjectProgramUseCase);
-  private readonly deleteProjectUseCase = inject(DeleteProjectUseCase);
-  private readonly updateFormUseCase = inject(UpdateFormUseCase);
-
-  private readonly projectTeamUIService = inject(ProjectTeamUIService);
-  private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
-  private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
-
-  private readonly industryRepository = inject(IndustryRepositoryPort);
-  private readonly skillsService = inject(SkillsService);
   private readonly navService = inject(NavService);
   private readonly validationService = inject(ValidationService);
   private readonly snackBarService = inject(SnackbarService);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
+  private readonly projectStepService = inject(ProjectStepService);
+  private readonly projectTeamUIService = inject(ProjectTeamUIService);
+  private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
+  private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
-
   private readonly projectVacancyService = inject(ProjectVacancyService);
   private readonly projectGoalsService = inject(ProjectGoalService);
+
+  private readonly industryRepository = inject(IndustryRepositoryPort);
+  private readonly skillsService = inject(SkillsService);
 
   private readonly projectPartnerService = inject(ProjectPartnerService);
   private readonly projectResourceService = inject(ProjectResourceService);
 
   private readonly projectAchievementsService = inject(ProjectAchievementsService);
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
-
   private readonly projectContactsService = inject(ProjectContactsService);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly assignProjectProgramUseCase = inject(AssignProjectProgramUseCase);
+  private readonly deleteProjectUseCase = inject(DeleteProjectUseCase);
+  private readonly updateFormUseCase = inject(UpdateFormUseCase);
 
   // Текущий шаг редактирования
   readonly editingStep = this.projectStepService.currentStep;
@@ -127,7 +121,7 @@ export class ProjectsEditInfoService {
     map(industries =>
       industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
     ),
-    takeUntil(this.destroy$)
+    takeUntilDestroyed(this.destroyRef)
   );
 
   readonly profileId = signal<number>(+this.route.snapshot.params["projectId"]);
@@ -167,11 +161,6 @@ export class ProjectsEditInfoService {
     this.loadProgramTagsAndProject();
   }
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   // Методы для управления состоянием ошибок через сервис
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
@@ -183,7 +172,7 @@ export class ProjectsEditInfoService {
         Number(this.route.snapshot.paramMap.get("projectId")),
         this.projectForm.get("partnerProgramId")?.value
       )
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: r => {
           if (!r.ok) {
@@ -217,7 +206,7 @@ export class ProjectsEditInfoService {
 
     this.deleteProjectUseCase
       .execute(Number(this.route.snapshot.paramMap.get("projectId")))
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -358,7 +347,7 @@ export class ProjectsEditInfoService {
     this.route.data
       .pipe(
         map(d => d["data"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(
         ([project, goals, partners, resources, invites]: [
@@ -409,7 +398,7 @@ export class ProjectsEditInfoService {
       this.projectStepService.setStepFromRoute(stepFromUrl);
     }
 
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       const step = params["editingStep"] as EditStep;
       this.fromProgram.set(params["fromProgram"]);
 
@@ -432,7 +421,7 @@ export class ProjectsEditInfoService {
       .pipe(
         distinctUntilChanged(),
         map(d => d["data"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(([project]: [Project]) => {
         this.leaderId.set(project.leader);
@@ -543,7 +532,7 @@ export class ProjectsEditInfoService {
 
     this.projectAdditionalService
       .sendAdditionalFieldsValues(projectId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -556,7 +545,7 @@ export class ProjectsEditInfoService {
           if (!isDraft) {
             this.projectAdditionalService
               .submitCompettetiveProject(relationId)
-              .pipe(takeUntil(this.destroy$))
+              .pipe(takeUntilDestroyed(this.destroyRef))
               .subscribe(submitResult => {
                 if (!submitResult.ok) {
                   this.logger.error(

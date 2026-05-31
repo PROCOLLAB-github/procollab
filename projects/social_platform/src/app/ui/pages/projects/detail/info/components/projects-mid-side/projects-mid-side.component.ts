@@ -38,6 +38,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
         ParseLinksPipe,
         ParseBreaksPipe,
     ],
+    providers: [ProjectsDetailService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsMidSideComponent {

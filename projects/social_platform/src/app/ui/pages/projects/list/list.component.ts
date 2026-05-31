@@ -6,11 +6,10 @@ import {
   Component,
   ElementRef,
   inject,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { IconComponent } from "@ui/primitives";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsListInfoService } from "@api/project/facades/list/projects-list-info.service";
@@ -39,7 +38,7 @@ import { AppRoutes } from "@api/paths/app-routes";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProjectsListComponent implements OnInit, AfterViewInit {
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLUListElement>;
 
@@ -70,10 +69,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (target || this.listRoot) {
       this.projectsListInfoService.initScroll(target, this.listRoot!);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.projectsListInfoService.destroy();
   }
 
   onAcceptInvite(event: number): void {

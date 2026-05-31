@@ -1,24 +1,27 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { map, Subject, takeUntil } from "rxjs";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { map } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { ProjectsDetailWorkSectionUIInfoService } from "./ui/projects-detail-work-section-ui-info.service";
 import { AcceptResponseUseCase } from "../../../../vacancy/use-cases/accept-response.use-case";
 import { RejectResponseUseCase } from "../../../../vacancy/use-cases/reject-response.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад секции откликов проекта: принятие/отклонение отклика. */
 @Injectable()
 export class ProjectsDetailWorkSectionInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
-  private readonly rejectResponseUseCase = inject(RejectResponseUseCase);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly projectsDetailWorkSectionUIInfoService = inject(
     ProjectsDetailWorkSectionUIInfoService
   );
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
+  private readonly rejectResponseUseCase = inject(RejectResponseUseCase);
+
 
   readonly projectId = signal<number | undefined>(undefined);
 
@@ -26,7 +29,7 @@ export class ProjectsDetailWorkSectionInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (responses: VacancyResponse[]) => {
@@ -37,15 +40,10 @@ export class ProjectsDetailWorkSectionInfoService {
     this.projectId.set(this.route.parent?.snapshot.params["projectId"]);
   }
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   acceptResponse(responseId: number) {
     this.acceptResponseUseCase
       .execute(responseId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 
@@ -56,7 +54,7 @@ export class ProjectsDetailWorkSectionInfoService {
   rejectResponse(responseId: number) {
     this.rejectResponseUseCase
       .execute(responseId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 

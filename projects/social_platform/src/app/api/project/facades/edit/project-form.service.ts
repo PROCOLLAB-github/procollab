@@ -1,6 +1,6 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -11,7 +11,6 @@ import {
 } from "@angular/forms";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { stripNullish } from "@utils/stripNull";
-import { Subject } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { createProjectAchievementGroup, createProjectForm } from "./project-form.factory";
 import { ProjectFormAutosaveService } from "./project-form-autosave.service";
@@ -20,12 +19,14 @@ import { ProjectFormAutosaveService } from "./project-form-autosave.service";
 export class ProjectFormService {
   private projectForm!: FormGroup;
   private additionalForm!: FormGroup;
+
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly projectFormAutosaveService = inject(ProjectFormAutosaveService);
+
   public editIndex = signal<number | null>(null);
   public relationId = signal<number>(0);
-
-  private readonly destroy$ = new Subject<void>();
 
   constructor() {
     this.initializeForm();
@@ -36,12 +37,12 @@ export class ProjectFormService {
     this.projectFormAutosaveService.bindDraftCleanupAutosave(
       this.presentationAddress,
       "presentationAddress",
-      this.destroy$
+      this.destroyRef
     );
     this.projectFormAutosaveService.bindDraftCleanupAutosave(
       this.coverImageAddress,
       "coverImageAddress",
-      this.destroy$
+      this.destroyRef
     );
   }
 
@@ -100,11 +101,6 @@ export class ProjectFormService {
       );
       achievementsFormArray.push(achievementGroup);
     });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public getForm(): FormGroup {

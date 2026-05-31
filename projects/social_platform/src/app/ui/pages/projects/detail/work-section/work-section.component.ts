@@ -1,10 +1,9 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
 import { IconComponent } from "@uilib";
-import { RouterLink } from "@angular/router";
 import { ProjectsDetailWorkSectionInfoService } from "@api/project/facades/detail/work-section/projects-detail-work-section-info.service";
 import { ProjectsDetailWorkSectionUIInfoService } from "@api/project/facades/detail/work-section/ui/projects-detail-work-section-ui-info.service";
 
@@ -13,11 +12,11 @@ import { ProjectsDetailWorkSectionUIInfoService } from "@api/project/facades/det
     selector: "app-work-section",
     templateUrl: "./work-section.component.html",
     styleUrl: "./work-section.component.scss",
-    imports: [CommonModule, IconComponent, ButtonComponent, RouterLink],
+    imports: [CommonModule, IconComponent, ButtonComponent],
     providers: [ProjectsDetailWorkSectionInfoService, ProjectsDetailWorkSectionUIInfoService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
+export class ProjectWorkSectionComponent implements OnInit {
   private readonly projectsDetailWorkSectionInfoService = inject(
     ProjectsDetailWorkSectionInfoService
   );
@@ -31,10 +30,6 @@ export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.projectsDetailWorkSectionInfoService.initializationWorkSection();
-  }
-
-  ngOnDestroy(): void {
-    this.projectsDetailWorkSectionInfoService.destroy();
   }
 
   acceptResponse(responseId: number) {

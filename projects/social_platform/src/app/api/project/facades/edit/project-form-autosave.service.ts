@@ -1,10 +1,11 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { AbstractControl } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, filter, fromEvent, Observable, Subject, takeUntil, tap } from "rxjs";
+import { concatMap, filter, fromEvent, tap } from "rxjs";
 import { UpdateFormUseCase } from "../../use-cases/update-form.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 type AutosaveField = "presentationAddress" | "coverImageAddress";
 
@@ -35,7 +36,7 @@ export class ProjectFormAutosaveService {
   bindDraftCleanupAutosave(
     control: AbstractControl | null,
     field: AutosaveField,
-    destroy$: Observable<void> | Subject<void>
+    destroyRef: DestroyRef
   ): void {
     if (!control) return;
 
@@ -58,7 +59,7 @@ export class ProjectFormAutosaveService {
               })
             );
         }),
-        takeUntil(destroy$)
+        takeUntilDestroyed(destroyRef)
       )
       .subscribe();
   }
