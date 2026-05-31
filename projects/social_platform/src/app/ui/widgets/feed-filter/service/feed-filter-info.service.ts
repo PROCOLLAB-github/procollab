@@ -1,17 +1,16 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class FeedFilterInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly logger = inject(LoggerService);
-
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   // Состояние выпадающего меню фильтров
   readonly filterOpen = signal(false);
@@ -20,18 +19,13 @@ export class FeedFilterInfoService {
   readonly includedFilters = signal<string>("");
 
   initializationFeedFilter(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queries => {
       if (queries["includes"]) {
         this.includedFilters.set(queries["includes"]);
       } else {
         this.includedFilters.set("");
       }
     });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   /** Переключает фильтр (добавляет/удаляет) с мгновенным обновлением URL. */

@@ -1,33 +1,32 @@
 /** @format */
 
-import { inject, Injectable, Injector, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { saveFile } from "@utils/export-file";
-
 import { SendForUserUseCase } from "@api/invite/use-cases/send-for-user.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "@domain/auth/user.model";
 import { Project } from "@domain/project/project.model";
-import { Subject, filter, take, takeUntil } from "rxjs";
+import { filter, take } from "rxjs";
 import { DownloadCvUseCase } from "@api/auth/use-cases/download-cv.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class DetailProfileInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly snackbarService = inject(SnackbarService);
-  private readonly sendForUserUseCase = inject(SendForUserUseCase);
-  private readonly downloadCvUseCase = inject(DownloadCvUseCase);
-  private readonly projectTeamUIService = inject(ProjectTeamUIService);
-  private readonly profileInfoService = inject(ProfileInfoService);
-  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly projectTeamUIService = inject(ProjectTeamUIService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+
+  private readonly downloadCvUseCase = inject(DownloadCvUseCase);
+  private readonly sendForUserUseCase = inject(SendForUserUseCase);
 
   readonly inviteForm = this.projectTeamUIService.inviteForm;
 
@@ -56,7 +55,7 @@ export class DetailProfileInfoService {
       .pipe(
         filter((user): user is User => !!user),
         take(1),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(currentUser => {
         // На своём профиле кнопка «пригласить» не показывается — грузить не нужно.
@@ -65,12 +64,12 @@ export class DetailProfileInfoService {
       });
 
     toObservable(this.profileInfoService.leaderProjects, { injector: this.injector })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(projects => this.profileProjects.set(projects));
   }
 
   initializationProfile(): void {
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe({
+    this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: r => {
         this.profileDetailUIInfoService.applyInitProfile(r);
       },
@@ -78,11 +77,6 @@ export class DetailProfileInfoService {
 
     const isProfileFill = this.profileDetailUIInfoService.isProfileFill();
     this.isProfileFill.set(isProfileFill);
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   onCopyLink(profileId: number): void {
@@ -132,7 +126,7 @@ export class DetailProfileInfoService {
         projectId: this.selectedProjectId()!,
         role: role!,
       })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -170,7 +164,7 @@ export class DetailProfileInfoService {
     this.isSended.set(true);
     this.downloadCvUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           this.isSended.set(false);

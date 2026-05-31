@@ -1,20 +1,21 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, map, Subject, takeUntil } from "rxjs";
+import { concatMap, map } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { LeaveProjectUseCase } from "@api/project/use-cases/leave-project.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class DetailProjectInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly leaveProjectUseCase = inject(LeaveProjectUseCase);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly leaveProjectUseCase = inject(LeaveProjectUseCase);
 
   readonly isTeamPage = signal<boolean>(false);
   readonly isVacanciesPage = signal<boolean>(false);
@@ -28,11 +29,6 @@ export class DetailProjectInfoService {
   readonly isEditDisableModal = signal<boolean>(false); // Флаг недоступности редактирования для модалки
   readonly openSupport = signal<boolean>(false); // Флаг модального окна поддержки
   readonly leaderLeaveModal = signal<boolean>(false); // Флаг модального окна предупреждения лидера
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   applySetIsDisabled(isSubmitted: boolean): void {
     this.isEditDisable.set(isSubmitted ?? false);
@@ -64,7 +60,7 @@ export class DetailProjectInfoService {
       .pipe(
         map(r => r["data"][0]),
         concatMap(p => this.leaveProjectUseCase.execute(p.id)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(result => {
         if (!result.ok) {

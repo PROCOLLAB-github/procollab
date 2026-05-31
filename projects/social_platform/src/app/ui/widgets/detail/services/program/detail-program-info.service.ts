@@ -1,28 +1,30 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ApplyProjectToProgramUseCase } from "@api/program/use-cases/apply-project-to-program.use-case";
 import {
   PartnerProgramFields,
   ProjectNewAdditionalProgramFields,
 } from "@domain/program/partner-program-fields.model";
-import { Subject, takeUntil } from "rxjs";
+
 import { Router } from "@angular/router";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { Program } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class DetailProgramInfoService {
   private readonly router = inject(Router);
-  private readonly applyProjectToProgramUseCase = inject(ApplyProjectToProgramUseCase);
-  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
-  private readonly projectFormService = inject(ProjectFormService);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly projectFormService = inject(ProjectFormService);
+  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
+
+  private readonly applyProjectToProgramUseCase = inject(ApplyProjectToProgramUseCase);
 
   readonly isProjectsPage = signal<boolean>(false);
   readonly isMembersPage = signal<boolean>(false);
@@ -52,7 +54,7 @@ export class DetailProgramInfoService {
 
     this.applyProjectToProgramUseCase
       .execute(programId, body)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -114,10 +116,5 @@ export class DetailProgramInfoService {
         this.isProjectsRatingPage.set(isStage);
         break;
     }
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

@@ -187,9 +187,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.detailInfoService.destroy();
-    this.detailProfileInfoService.destroy();
-    this.detailProgramInfoService.destroy();
-    this.detailProjectInfoService.destroy();
   }
 
   // Методы для управления состоянием ошибок через сервис

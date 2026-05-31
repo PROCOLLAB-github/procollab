@@ -1,19 +1,20 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { map, Subject, takeUntil, tap } from "rxjs";
+import { map, tap } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { GetVacanciesUseCase } from "@api/vacancy/use-cases/get-vacancies.use-case";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class VacancyFilterInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly getVacanciesUseCase = inject(GetVacanciesUseCase);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly getVacanciesUseCase = inject(GetVacanciesUseCase);
 
   readonly filterOpen = signal(false);
 
@@ -21,14 +22,14 @@ export class VacancyFilterInfoService {
 
   private readonly totalItemsCount = signal(0);
 
-  currentExperience = signal<string | undefined>(undefined);
-  currentWorkFormat = signal<string | undefined>(undefined);
-  currentWorkSchedule = signal<string | undefined>(undefined);
-  currentSalary = signal<string | undefined>(undefined);
+  readonly currentExperience = signal<string | undefined>(undefined);
+  readonly currentWorkFormat = signal<string | undefined>(undefined);
+  readonly currentWorkSchedule = signal<string | undefined>(undefined);
+  readonly currentSalary = signal<string | undefined>(undefined);
 
   initializationVacancyFilters(): void {
     // Подписка на изменения параметров запроса
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queries => {
       // Синхронизация текущих значений фильтров с URL
       this.currentExperience.set(queries["required_experience"]);
       this.currentWorkFormat.set(queries["work_format"]);
@@ -36,11 +37,6 @@ export class VacancyFilterInfoService {
       this.currentSalary.set(queries["salary"]);
       this.applyParamsSearchValue(queries);
     });
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   applyInitSearchValue(value?: string): void {

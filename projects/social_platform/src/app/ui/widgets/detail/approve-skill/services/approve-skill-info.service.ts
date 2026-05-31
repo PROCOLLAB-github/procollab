@@ -1,42 +1,36 @@
 /** @format */
 
-import { inject, Injectable, Injector } from "@angular/core";
+import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Approve, Skill } from "@domain/skills/skill.model";
-import { map, of, Subject, switchMap, takeUntil } from "rxjs";
+import { map, of, switchMap } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ApproveSkillUIInfoService } from "./approve-skill-ui-info.service";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { UnapproveSkillUseCase } from "@api/skills/use-cases/unapprove-skill.use-case";
 import { ApproveSkillUseCase } from "@api/skills/use-cases/approve-skill.use-case";
 import { ok } from "@domain/shared/result.type";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class ApproveskillInfoService {
-  private readonly authRepository = inject(AuthInfoService);
   private readonly route = inject(ActivatedRoute);
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly profileInfoService = inject(ProfileInfoService);
   private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly profileInfoService = inject(ProfileInfoService);
+
   private readonly unapproveSkillUseCase = inject(UnapproveSkillUseCase);
   private readonly approveSkillUseCase = inject(ApproveSkillUseCase);
-  private readonly injector = inject(Injector);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
   private readonly profile = this.profileInfoService.profile;
 
   init(): void {
     this.profileDetailUIInfoService.applySetLoggedUserId("logged", this.profile()!.id);
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   // Указатель на то что пользватель подтвердил навык
@@ -80,7 +74,7 @@ export class ApproveskillInfoService {
             )
           );
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: result => {

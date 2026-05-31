@@ -1,11 +1,11 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { optionsListElement } from "@utils/generate-options-list";
-import { toObservable } from "@angular/core/rxjs-interop";
-import { map, Subject, takeUntil } from "rxjs";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
@@ -13,10 +13,10 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
 export class ProjectsFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly industryRepository = inject(IndustryRepositoryPort);
 
   // Подписки для управления жизненным циклом
   readonly industryControl = new FormControl(null);
@@ -38,11 +38,6 @@ export class ProjectsFilterInfoService {
   // Создаём observable в контексте инжекции (field initializer), чтобы toObservable не падал NG0203 при вызове из ngOnInit
   private readonly industries$ = toObservable(this.industryRepository.industries);
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   initializationProjectsFilter(): void {
     this.initializationIndustries();
 
@@ -62,7 +57,7 @@ export class ProjectsFilterInfoService {
             value: industry.name,
           }))
         ),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(industries => {
         this.industries.set(industries);
@@ -70,14 +65,14 @@ export class ProjectsFilterInfoService {
   }
 
   private initializationIndustryControl(): void {
-    this.industryControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.industryControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       const industryId = this.industries().find(industry => industry.value === value);
       this.onFilterByIndustry(industryId?.id);
     });
   }
 
   private initializationCurrentParams(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queries => {
       this.currentIndustry.set(parseInt(queries["industry"]));
       this.currentMembersCount.set(parseInt(queries["membersCount"]));
       this.hasVacancies.set(queries["anyVacancies"] === "true");
