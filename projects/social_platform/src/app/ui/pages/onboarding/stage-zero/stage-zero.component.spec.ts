@@ -6,9 +6,10 @@ import { OnboardingStageZeroComponent } from "./stage-zero.component";
 import { of } from "rxjs";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { NgxMaskModule } from "ngx-mask";
+import { provideNgxMask } from "ngx-mask";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 describe("StageZeroComponent", () => {
   let component: OnboardingStageZeroComponent;
@@ -21,15 +22,28 @@ describe("StageZeroComponent", () => {
       setOnboardingStage: of({}),
     };
 
+    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
+      "fetchProfile",
+      "fetchUserRoles",
+      "fetchChangeableRoles",
+    ], {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+    });
+
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        RouterTestingModule,
-        NgxMaskModule.forRoot(),
         HttpClientTestingModule,
         OnboardingStageZeroComponent,
       ],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [
+        { provide: AuthRepository, useValue: authSpy },
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        provideNgxMask(),
+        provideRouter([]),
+      ],
     }).compileComponents();
   });
 

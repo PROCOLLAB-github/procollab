@@ -31,14 +31,14 @@ describe("SwitchComponent", () => {
   });
 
   it('should apply the "switch--active" class when checked is true', () => {
-    component.checked = true;
+    fixture.componentRef.setInput("checked", true);
     fixture.detectChanges();
     const switchElement = fixture.nativeElement.querySelector(".switch");
     expect(switchElement.classList.contains("switch--active")).toBe(true);
   });
 
   it('should not apply the "switch--active" class when checked is false', () => {
-    component.checked = false;
+    fixture.componentRef.setInput("checked", false);
     fixture.detectChanges();
     const switchElement = fixture.nativeElement.querySelector(".switch");
     expect(switchElement.classList.contains("switch--active")).toBe(false);

@@ -5,10 +5,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ChatWindowComponent } from "./chat-window.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { NgxMaskModule } from "ngx-mask";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { provideNgxMask } from "ngx-mask";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { API_URL } from "@corelib";
 
 describe("ChatWindowComponent", () => {
   let component: ChatWindowComponent;
@@ -16,18 +17,24 @@ describe("ChatWindowComponent", () => {
 
   beforeEach(async () => {
     const authSpy = {
-      profile: of({}),
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+      fetchLeaderProjects: of({ results: [], count: 0 }),
     };
 
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        RouterTestingModule,
         HttpClientTestingModule,
-        NgxMaskModule.forRoot(),
         ChatWindowComponent,
       ],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [
+        { provide: AuthRepositoryPort, useValue: authSpy },
+        { provide: API_URL, useValue: "" },
+        provideNgxMask(),
+        provideRouter([]),
+      ],
     }).compileComponents();
   });
 

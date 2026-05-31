@@ -1,9 +1,9 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { FileUploadItemComponent } from "./file-upload-item.component";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 describe("FileUploadItemComponent", () => {
   let component: FileUploadItemComponent;
@@ -11,7 +11,8 @@ describe("FileUploadItemComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FileUploadItemComponent],
+      imports: [CommonModule, FileUploadItemComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

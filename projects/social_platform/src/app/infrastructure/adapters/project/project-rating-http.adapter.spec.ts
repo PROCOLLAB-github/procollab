@@ -34,7 +34,7 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.getAll(5, params).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/rate-project/5", params);
+    expect(api.get).toHaveBeenCalledOnceWith("/rate-project/5/", params);
   });
 
   it("postFilters идёт в POST /rate-project/:programId c query и body", () => {
@@ -44,7 +44,7 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.postFilters(5, { status: ["open"] }, params).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/5?limit=10", {
+    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/5/?limit=10", {
       filters: { status: ["open"] },
     });
   });
@@ -55,7 +55,7 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.postFilters(5, {}).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/5", { filters: {} });
+    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/5/", { filters: {} });
   });
 
   it("rate идёт в POST /rate-project/rate/:projectId c массивом оценок", () => {
@@ -65,6 +65,6 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.rate(42, scores).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/rate/42", scores);
+    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/rate/42/", scores);
   });
 });

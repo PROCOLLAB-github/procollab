@@ -2,13 +2,20 @@
 
 import { TestBed } from "@angular/core/testing";
 import { ChatResolver } from "./chat.resolver";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, provideRouter } from "@angular/router";
+import { of } from "rxjs";
+import { ChatGroupsRepositoryPort } from "@domain/chat/ports/chat-groups.port";
 
 describe("ChatResolver", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ChatGroupsRepositoryPort,
+          useValue: { getChats: () => of([]), getChat: () => of({}) },
+        },
+      ],
     });
   });
 

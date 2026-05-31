@@ -23,7 +23,7 @@ describe("SpecializationsHttpAdapter", () => {
 
     adapter.getSpecializationsNested().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/auth/users/specializations/nested");
+    expect(api.get).toHaveBeenCalledOnceWith("/auth/users/specializations/nested/");
   });
 
   it("getSpecializationsInline идёт в /inline c limit/offset/name__icontains", () => {
@@ -33,7 +33,7 @@ describe("SpecializationsHttpAdapter", () => {
     adapter.getSpecializationsInline("dev", 10, 5).subscribe();
 
     const [url, params] = api.get.calls.mostRecent().args;
-    expect(url).toBe("/auth/users/specializations/inline");
+    expect(url).toBe("/auth/users/specializations/inline/");
     expect(params?.get("limit")).toBe("10");
     expect(params?.get("offset")).toBe("5");
     expect(params?.get("name__icontains")).toBe("dev");

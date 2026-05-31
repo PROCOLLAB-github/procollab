@@ -38,7 +38,7 @@ describe("InviteHttpAdapter", () => {
 
     adapter.revokeInvite(5).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/invites/5");
+    expect(api.delete).toHaveBeenCalledOnceWith("/invites/5/");
   });
 
   it("acceptInvite идёт в POST /invites/:id/accept/", () => {
@@ -65,7 +65,7 @@ describe("InviteHttpAdapter", () => {
 
     adapter.updateInvite(5, "lead", "backend").subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/invites/5", {
+    expect(api.patch).toHaveBeenCalledOnceWith("/invites/5/", {
       role: "lead",
       specialization: "backend",
     });

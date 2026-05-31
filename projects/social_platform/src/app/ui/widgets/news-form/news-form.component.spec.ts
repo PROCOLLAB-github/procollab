@@ -9,6 +9,7 @@ import { ProjectNewsRepository as ProjectNewsService } from "@infrastructure/rep
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { API_URL } from "@corelib";
 
 describe("NewsFormComponent", () => {
   let component: NewsFormComponent;
@@ -30,6 +31,7 @@ describe("NewsFormComponent", () => {
       providers: [
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
         { provide: AuthRepository, useValue: authSpy },
+        { provide: API_URL, useValue: "" },
       ],
     }).compileComponents();
   });

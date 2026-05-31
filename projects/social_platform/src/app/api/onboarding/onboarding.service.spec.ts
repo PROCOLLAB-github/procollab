@@ -4,16 +4,24 @@ import { TestBed } from "@angular/core/testing";
 
 import { of } from "rxjs";
 import { OnboardingService } from "./onboarding.service";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 describe("OnboardingService", () => {
   let service: OnboardingService;
 
-  const authSpy = jasmine.createSpyObj({}, { profile: of({}) });
+  const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
+    "fetchProfile",
+    "fetchUserRoles",
+    "fetchChangeableRoles",
+  ], {
+    fetchProfile: of({}),
+    fetchUserRoles: of([]),
+    fetchChangeableRoles: of([]),
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [{ provide: AuthRepositoryPort, useValue: authPortSpy }],
     });
     service = TestBed.inject(OnboardingService);
   });

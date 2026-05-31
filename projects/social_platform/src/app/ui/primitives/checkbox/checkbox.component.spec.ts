@@ -34,7 +34,7 @@ describe("CheckboxComponent", () => {
   });
 
   it('should add the "field--checked" class when checked is true', () => {
-    component.checked = true;
+    fixture.componentRef.setInput("checked", true);
     fixture.detectChanges();
 
     const field = fixture.debugElement.query(By.css(".field"));
@@ -42,7 +42,7 @@ describe("CheckboxComponent", () => {
   });
 
   it('should not add the "field--checked" class when checked is false', () => {
-    component.checked = false;
+    fixture.componentRef.setInput("checked", false);
     fixture.detectChanges();
 
     const field = fixture.debugElement.query(By.css(".field"));

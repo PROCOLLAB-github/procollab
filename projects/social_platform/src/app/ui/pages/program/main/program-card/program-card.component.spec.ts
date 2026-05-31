@@ -1,7 +1,6 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { ProgramCardComponent } from "./program-card.component";
 
 describe("ProgramCardComponent", () => {
@@ -12,11 +11,14 @@ describe("ProgramCardComponent", () => {
     await TestBed.configureTestingModule({
       imports: [ProgramCardComponent],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ProgramCardComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("program", {
+      id: 1,
+      name: "Test Program",
+      datetimeRegistrationEnds: new Date(Date.now() + 86400000).toISOString(),
+    });
     fixture.detectChanges();
   });
 

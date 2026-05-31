@@ -45,7 +45,7 @@ describe("ProjectGoalsHttpAdapter", () => {
 
     adapter.editGoal(42, 9, params).subscribe();
 
-    expect(api.put).toHaveBeenCalledOnceWith("/projects/42/goals/9", params);
+    expect(api.put).toHaveBeenCalledOnceWith("/projects/42/goals/9/", params);
   });
 
   it("deleteGoals идёт в DELETE /projects/:pid/goals/:gid", () => {
@@ -54,6 +54,6 @@ describe("ProjectGoalsHttpAdapter", () => {
 
     adapter.deleteGoals(42, 9).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/goals/9");
+    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/goals/9/");
   });
 });

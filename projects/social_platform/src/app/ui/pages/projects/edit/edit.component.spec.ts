@@ -1,31 +1,140 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { ProjectEditComponent } from "./edit.component";
-import { RouterTestingModule } from "@angular/router/testing";
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { NgxMaskModule } from "ngx-mask";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { provideRouter } from "@angular/router";
+import { ReactiveFormsModule, FormBuilder } from "@angular/forms";
+import { provideNgxMask } from "ngx-mask";
+import { signal } from "@angular/core";
+import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
+import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
+import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-vacancy-ui.service";
+import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
+import { ProjectGoalService } from "@api/project/facades/edit/project-goals.service";
+import { ProjectAchievementsService } from "@api/project/facades/edit/project-achievements.service";
+import { ProjectPartnerService } from "@api/project/facades/edit/project-partner.service";
+import { ProjectResourceService } from "@api/project/facades/edit/project-resources.service";
+import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { ProjectStepService } from "@api/project/project-step.service";
 
 describe("ProjectEditComponent", () => {
   let component: ProjectEditComponent;
   let fixture: ComponentFixture<ProjectEditComponent>;
 
   beforeEach(async () => {
-    const authSpy = {};
+    const fb = new FormBuilder();
+    const projectsEditInfoServiceSpy = {
+      initializationEditInfo: jasmine.createSpy("initializationEditInfo"),
+      loadProgramTagsAndProject: jasmine.createSpy("loadProgramTagsAndProject"),
+      destroy: jasmine.createSpy("destroy"),
+      deleteProject: jasmine.createSpy("deleteProject"),
+      saveProjectAsPublished: jasmine.createSpy("saveProjectAsPublished"),
+      saveProjectAsDraft: jasmine.createSpy("saveProjectAsDraft"),
+      submitProjectForm: jasmine.createSpy("submitProjectForm"),
+      closeSendingDescisionModal: jasmine.createSpy("closeSendingDescisionModal"),
+      projectForm: fb.group({ name: [""] }),
+      additionalForm: fb.group({}),
+      profileId: signal(0),
+      projSubmitInitiated: signal(false),
+      projFormIsSubmittingAsPublished: signal(false),
+      projFormIsSubmittingAsDraft: signal(false),
+    };
+
+    const projectsEditUIInfoServiceSpy = {
+      fromProgram: signal(false),
+      fromProgramOpen: signal(false),
+      isCompetitive: signal(false),
+      isProjectAssignToProgram: signal(false),
+      isProjectBoundToProgram: signal(false),
+      isCompleted: signal(false),
+      isSendDescisionLate: signal(false),
+      isSendDescisionToPartnerProgramProject: signal(false),
+      errorModalMessage: signal(""),
+      onEditClicked: signal(false),
+      warningModalSeen: signal(false),
+      applyCloseWarningModal: jasmine.createSpy("applyCloseWarningModal"),
+    };
+
+    const projectStepServiceSpy = {
+      currentStep: signal(0),
+      navigateToStep: jasmine.createSpy("navigateToStep"),
+    };
+
+    const projectVacancyUIServiceSpy = {
+      vacancyForm: fb.group({}),
+    };
+
+    const projectGoalServiceSpy = {
+      reset: jasmine.createSpy("reset"),
+    };
+
+    const emptySpy = { execute: jasmine.createSpy("execute") };
 
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        NgxMaskModule.forRoot(),
-        ProjectEditComponent,
-      ],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
-    }).compileComponents();
+      imports: [ReactiveFormsModule, ProjectEditComponent],
+      providers: [provideNgxMask(), provideRouter([])],
+    })
+      .overrideComponent(ProjectEditComponent, {
+        remove: {
+          providers: [
+            ProjectsEditInfoService,
+            ProjectsEditUIInfoService,
+            ProjectStepService,
+            ProjectVacancyUIService,
+            ProjectGoalService,
+            ProjectFormService,
+            ProjectVacancyService,
+            ProjectTeamService,
+            ProjectTeamUIService,
+            ProjectAdditionalService,
+            ProjectAchievementsService,
+            ProjectPartnerService,
+            ProjectResourceService,
+            TooltipInfoService,
+            ToggleFieldsInfoService,
+          ],
+        },
+        add: {
+          providers: [
+            {
+              provide: ProjectsEditInfoService,
+              useValue: projectsEditInfoServiceSpy,
+            },
+            {
+              provide: ProjectsEditUIInfoService,
+              useValue: projectsEditUIInfoServiceSpy,
+            },
+            {
+              provide: ProjectStepService,
+              useValue: projectStepServiceSpy,
+            },
+            {
+              provide: ProjectVacancyUIService,
+              useValue: projectVacancyUIServiceSpy,
+            },
+            {
+              provide: ProjectGoalService,
+              useValue: projectGoalServiceSpy,
+            },
+            { provide: ProjectFormService, useValue: emptySpy },
+            { provide: ProjectVacancyService, useValue: emptySpy },
+            { provide: ProjectTeamService, useValue: emptySpy },
+            { provide: ProjectTeamUIService, useValue: emptySpy },
+            { provide: ProjectAdditionalService, useValue: emptySpy },
+            { provide: ProjectAchievementsService, useValue: emptySpy },
+            { provide: ProjectPartnerService, useValue: emptySpy },
+            { provide: ProjectResourceService, useValue: emptySpy },
+            { provide: TooltipInfoService, useValue: emptySpy },
+            { provide: ToggleFieldsInfoService, useValue: emptySpy },
+          ],
+        },
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {

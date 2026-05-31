@@ -45,7 +45,7 @@ describe("UploadFileComponent", () => {
     spyOn(component, "onTouch");
     spyOn(component, "onChange");
 
-    component.value = "http://example.com/image.png";
+    component.writeValue("http://example.com/image.png");
     fixture.detectChanges();
 
     const button = fixture.nativeElement.querySelector(".file__basket");

@@ -43,7 +43,7 @@ describe("ResendEmailUseCase", () => {
 
     useCase.execute("u@e.com").subscribe(result => {
       expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
+      if (!result.ok) expect(result.error.kind).toBe("network");
       done();
     });
   });

@@ -23,7 +23,7 @@ describe("SkillsHttpAdapter", () => {
 
     adapter.getSkillsNested().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/core/skills/nested");
+    expect(api.get).toHaveBeenCalledOnceWith("/core/skills/nested/");
   });
 
   it("getSkillsInline идёт в GET /core/skills/inline c limit/offset/name__icontains", () => {
@@ -33,7 +33,7 @@ describe("SkillsHttpAdapter", () => {
     adapter.getSkillsInline("ang", 10, 5).subscribe();
 
     const [url, params] = api.get.calls.mostRecent().args;
-    expect(url).toBe("/core/skills/inline");
+    expect(url).toBe("/core/skills/inline/");
     expect(params?.get("limit")).toBe("10");
     expect(params?.get("offset")).toBe("5");
     expect(params?.get("name__icontains")).toBe("ang");

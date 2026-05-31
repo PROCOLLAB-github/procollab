@@ -1,19 +1,51 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideRouter } from "@angular/router";
+import { signal } from "@angular/core";
 import { ProgramProjectsFilterComponent } from "./program-projects-filter.component";
+import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProgramProjectsFilterInfoService } from "./service/program-projects-filter-info.service";
 
 describe("ProjectsFilterComponent", () => {
   let component: ProgramProjectsFilterComponent;
   let fixture: ComponentFixture<ProgramProjectsFilterComponent>;
 
   beforeEach(async () => {
+    const programDetailListUIInfoServiceSpy = {
+      listType: signal("projects"),
+    };
+
+    const programProjectsFilterInfoServiceSpy = {
+      filterForm: signal(null),
+      filters: signal([]),
+      toggleAdditionalFormValues: jasmine.createSpy("toggleAdditionalFormValues"),
+      setValue: jasmine.createSpy("setValue"),
+      clearFilters: jasmine.createSpy("clearFilters"),
+    };
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-    }).compileComponents();
+      imports: [ProgramProjectsFilterComponent],
+      providers: [provideRouter([])],
+    })
+      .overrideComponent(ProgramProjectsFilterComponent, {
+        remove: {
+          providers: [ProgramDetailListUIInfoService, ProgramProjectsFilterInfoService],
+        },
+        add: {
+          providers: [
+            {
+              provide: ProgramDetailListUIInfoService,
+              useValue: programDetailListUIInfoServiceSpy,
+            },
+            {
+              provide: ProgramProjectsFilterInfoService,
+              useValue: programProjectsFilterInfoServiceSpy,
+            },
+          ],
+        },
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {

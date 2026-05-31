@@ -1,25 +1,25 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-
 import { ProjectInfoResolver } from "./info.resolver";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot, provideRouter } from "@angular/router";
 import { of } from "rxjs";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
-import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
+import { GetVacanciesUseCase } from "@api/vacancy/use-cases/get-vacancies.use-case";
 
 describe("ProjectInfoResolver", () => {
   const mockRoute = {
     paramMap: convertToParamMap({ projectId: 1 }),
   } as unknown as ActivatedRouteSnapshot;
-  beforeEach(() => {
-    const authSpy = {
-      profile: of({}),
-    };
 
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [
+        provideRouter([]),
+        {
+          provide: GetVacanciesUseCase,
+          useValue: { execute: () => of({ ok: true, value: [] }) },
+        },
+      ],
     });
   });
 

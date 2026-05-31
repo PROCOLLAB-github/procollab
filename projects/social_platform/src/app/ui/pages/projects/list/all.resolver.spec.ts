@@ -1,18 +1,27 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-
 import { ProjectsAllResolver } from "./all.resolver";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, provideRouter } from "@angular/router";
 import { of } from "rxjs";
-import { ProjectRepository } from "@infrastructure/repository/project/project.repository";
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { GetAllProjectsUseCase } from "@api/project/use-cases/get-all-projects.use-case";
 
 describe("ProjectsAllResolver", () => {
   beforeEach(() => {
-    const projectSpy = jasmine.createSpyObj({ getAll: of([]) });
-
     TestBed.configureTestingModule({
-      providers: [{ provide: ProjectRepository, useValue: projectSpy }],
+      providers: [
+        provideRouter([]),
+        {
+          provide: GetAllProjectsUseCase,
+          useValue: {
+            execute: () =>
+              of({
+                ok: true,
+                value: { count: 0, results: [], next: "", previous: "" },
+              }),
+          },
+        },
+      ],
     });
   });
 

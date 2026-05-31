@@ -1,7 +1,6 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { RadioSelectTaskComponent } from "./radio-select-task.component";
 
 describe("RadioSelectTaskComponent", () => {
@@ -15,6 +14,11 @@ describe("RadioSelectTaskComponent", () => {
 
     fixture = TestBed.createComponent(RadioSelectTaskComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("data", {
+      id: 1,
+      text: "Test",
+      options: [],
+    });
     fixture.detectChanges();
   });
 

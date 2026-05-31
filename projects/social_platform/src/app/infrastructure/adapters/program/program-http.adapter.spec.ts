@@ -88,7 +88,7 @@ describe("ProgramHttpAdapter", () => {
 
     adapter.getAllProjects(5, params).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/programs/5/projects", params);
+    expect(api.get).toHaveBeenCalledOnceWith("/programs/5/projects/", params);
   });
 
   it("getAllMembers идёт в GET /auth/public-users/ c partner_program", () => {

@@ -24,21 +24,18 @@ describe("SaveProfileUseCase", () => {
     useCase = TestBed.inject(SaveProfileUseCase);
   }
 
-  it("делегирует command в updateProfile, затем дочитывает профиль через fetchProfile", () => {
+  it("делегирует command в updateProfile", () => {
     setup();
-    repo.updateProfile.and.returnValue(of({} as User));
-    repo.fetchProfile.and.returnValue(of(freshUser));
+    repo.updateProfile.and.returnValue(of(freshUser));
 
     useCase.execute(command).subscribe();
 
     expect(repo.updateProfile).toHaveBeenCalledOnceWith(command);
-    expect(repo.fetchProfile).toHaveBeenCalledOnceWith();
   });
 
-  it("при успехе возвращает ok со свежим профилем из fetchProfile", done => {
+  it("при успехе возвращает ok со профилем из updateProfile", done => {
     setup();
-    repo.updateProfile.and.returnValue(of({} as User));
-    repo.fetchProfile.and.returnValue(of(freshUser));
+    repo.updateProfile.and.returnValue(of(freshUser));
 
     useCase.execute(command).subscribe(result => {
       expect(result.ok).toBe(true);
@@ -47,7 +44,7 @@ describe("SaveProfileUseCase", () => {
     });
   });
 
-  it("при ошибке updateProfile возвращает fail { kind: 'profile_edit_error' } с cause и не зовёт fetchProfile", done => {
+  it("при ошибке updateProfile возвращает fail { kind: 'profile_edit_error' } с cause", done => {
     setup();
     const boom = { error: { phone_number: ["плохой номер"] } };
     repo.updateProfile.and.returnValue(throwError(() => boom));
@@ -58,19 +55,6 @@ describe("SaveProfileUseCase", () => {
         expect(result.error.kind).toBe("profile_edit_error");
         expect(result.error.cause).toBe(boom);
       }
-      expect(repo.fetchProfile).not.toHaveBeenCalled();
-      done();
-    });
-  });
-
-  it("при ошибке fetchProfile возвращает fail { kind: 'profile_edit_error' }", done => {
-    setup();
-    repo.updateProfile.and.returnValue(of({} as User));
-    repo.fetchProfile.and.returnValue(throwError(() => new Error("boom")));
-
-    useCase.execute(command).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("profile_edit_error");
       done();
     });
   });

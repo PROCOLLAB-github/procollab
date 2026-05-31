@@ -1,7 +1,7 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-import { of } from "rxjs";
+import { of, Subject } from "rxjs";
 import { ChatRealtimeRepository } from "./chat-realtime.repository";
 import { ChatWsAdapter } from "../../adapters/chat/chat-ws.adapter";
 import {
@@ -12,10 +12,14 @@ import {
   OnReadChatMessageDto,
   TypingInChatEventDto,
 } from "@domain/chat/chat.model";
+import { WebsocketService } from "@core/public-api";
+import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 
 describe("ChatRealtimeRepository", () => {
   let repository: ChatRealtimeRepository;
   let adapter: jasmine.SpyObj<ChatWsAdapter>;
+  let websocketService: jasmine.SpyObj<WebsocketService>;
+  let snackbarService: jasmine.SpyObj<SnackbarService>;
 
   beforeEach(() => {
     adapter = jasmine.createSpyObj<ChatWsAdapter>("ChatWsAdapter", [
@@ -43,8 +47,19 @@ describe("ChatRealtimeRepository", () => {
     adapter.onSetOnline.and.returnValue(of({} as OnChangeStatus));
     adapter.onSetOffline.and.returnValue(of({} as OnChangeStatus));
 
+    websocketService = jasmine.createSpyObj<WebsocketService>("WebsocketService", [], {
+      connectionLost$: of(undefined),
+    });
+
+    snackbarService = jasmine.createSpyObj<SnackbarService>("SnackbarService", ["error"]);
+
     TestBed.configureTestingModule({
-      providers: [ChatRealtimeRepository, { provide: ChatWsAdapter, useValue: adapter }],
+      providers: [
+        ChatRealtimeRepository,
+        { provide: ChatWsAdapter, useValue: adapter },
+        { provide: WebsocketService, useValue: websocketService },
+        { provide: SnackbarService, useValue: snackbarService },
+      ],
     });
 
     repository = TestBed.inject(ChatRealtimeRepository);

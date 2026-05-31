@@ -11,6 +11,7 @@ import { AuthRepository } from "@infrastructure/repository/auth/auth.repository"
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { DayjsPipe } from "projects/core";
 import { FeedNews } from "@domain/news/project-news.model";
+import { API_URL } from "@corelib";
 
 describe("NewsCardComponent", () => {
   let component: NewsCardComponent;
@@ -33,6 +34,7 @@ describe("NewsCardComponent", () => {
       providers: [
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
         { provide: AuthRepository, useValue: authSpy },
+        { provide: API_URL, useValue: "" },
       ],
     }).compileComponents();
   });

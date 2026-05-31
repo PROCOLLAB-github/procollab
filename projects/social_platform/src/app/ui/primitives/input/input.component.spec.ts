@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { InputComponent } from "@ui/primitives";
-import { NgxMaskModule } from "ngx-mask";
+import { provideNgxMask } from "ngx-mask";
 
 describe("InputComponent", () => {
   let component: InputComponent;
@@ -11,7 +11,8 @@ describe("InputComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, InputComponent, NgxMaskModule.forRoot()],
+      imports: [FormsModule, InputComponent],
+      providers: [provideNgxMask()],
     }).compileComponents();
   });
 
@@ -27,11 +28,35 @@ describe("InputComponent", () => {
 
   it("should set the value of the input element", () => {
     const fixture = TestBed.createComponent(InputComponent);
-    const inputEl = fixture.nativeElement.querySelector("input");
-    const component = fixture.componentInstance;
-    component.appValue = "test";
+    fixture.componentRef.setInput("appValue", "test");
     fixture.detectChanges();
+    const inputEl = fixture.nativeElement.querySelector("input");
     expect(inputEl.value).toBe("test");
+  });
+
+  it("should set the input type", () => {
+    const input = fixture.nativeElement.querySelector("input");
+    expect(input.type).toBe("text");
+    fixture.componentRef.setInput("type", "email");
+    fixture.detectChanges();
+    expect(input.type).toBe("email");
+  });
+
+  it("should set the input placeholder", () => {
+    const input = fixture.nativeElement.querySelector("input");
+    expect(input.placeholder).toBe("");
+    const testPlaceholder = "test placeholder";
+    fixture.componentRef.setInput("placeholder", testPlaceholder);
+    fixture.detectChanges();
+    expect(input.placeholder).toBe(testPlaceholder);
+  });
+
+  it("should set the error class when error input is true", () => {
+    const field = fixture.nativeElement.querySelector(".field");
+    expect(field.classList).not.toContain("field--error");
+    fixture.componentRef.setInput("error", true);
+    fixture.detectChanges();
+    expect(field.classList).toContain("field--error");
   });
 
   it("should emit the input value on input", () => {
@@ -66,27 +91,27 @@ describe("InputComponent", () => {
     expect(component.onTouch).toHaveBeenCalled();
   });
 
-  it("should set the input type", () => {
+  it("should set the input type via setInput", () => {
     const input = fixture.nativeElement.querySelector("input");
     expect(input.type).toBe("text");
-    component.type = "email";
+    fixture.componentRef.setInput("type", "email");
     fixture.detectChanges();
     expect(input.type).toBe("email");
   });
 
-  it("should set the input placeholder", () => {
+  it("should set the input placeholder via setInput", () => {
     const input = fixture.nativeElement.querySelector("input");
     expect(input.placeholder).toBe("");
     const testPlaceholder = "test placeholder";
-    component.placeholder = testPlaceholder;
+    fixture.componentRef.setInput("placeholder", testPlaceholder);
     fixture.detectChanges();
     expect(input.placeholder).toBe(testPlaceholder);
   });
 
-  it("should set the error class when error input is true", () => {
+  it("should set the error class when error input is true via setInput", () => {
     const field = fixture.nativeElement.querySelector(".field");
     expect(field.classList).not.toContain("field--error");
-    component.error = true;
+    fixture.componentRef.setInput("error", true);
     fixture.detectChanges();
     expect(field.classList).toContain("field--error");
   });

@@ -59,13 +59,13 @@ describe("ButtonComponent", () => {
   });
 
   it("should show the content when loader input is false", () => {
-    component.loader = false;
+    fixture.componentRef.setInput("loader", false);
     fixture.detectChanges();
 
     let loader = fixture.debugElement.query(By.css("app-loader"));
     expect(loader).toBeFalsy();
 
-    component.loader = true;
+    fixture.componentRef.setInput("loader", true);
     fixture.detectChanges();
 
     loader = fixture.debugElement.query(By.css("app-loader"));
