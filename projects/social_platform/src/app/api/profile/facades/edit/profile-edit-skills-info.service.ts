@@ -1,8 +1,7 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { Subject } from "rxjs";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 import { ProfileFormService } from "./profile-form.service";
 
@@ -10,10 +9,10 @@ import { ProfileFormService } from "./profile-form.service";
 @Injectable()
 export class ProfileEditSkillsInfoService {
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly profileFormService = inject(ProfileFormService);
-
-  private readonly destroy$ = new Subject<void>();
 
   protected readonly editIndex = this.profileEditInfoService.editIndex;
 
@@ -30,11 +29,6 @@ export class ProfileEditSkillsInfoService {
 
   readonly selectedLanguageId = signal<number | undefined>(undefined);
   readonly selectedLanguageLevelId = signal<number | undefined>(undefined);
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   addLanguage() {
     if (!this.showLanguageFields()) {

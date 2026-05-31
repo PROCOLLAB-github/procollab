@@ -2,7 +2,6 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { Subject } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
 import { transformYearStringToNumber } from "@utils/transformYear";
@@ -11,10 +10,9 @@ import { transformYearStringToNumber } from "@utils/transformYear";
 @Injectable()
 export class ProfileEditEducationInfoService {
   private readonly fb = inject(FormBuilder);
+
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly profileForm = this.profileFormService.getForm();
 
@@ -38,11 +36,6 @@ export class ProfileEditEducationInfoService {
   private readonly isModalErrorSkillsChoose = this.profileEditInfoService.isModalErrorSkillsChoose;
   private readonly isModalErrorSkillChooseText =
     this.profileEditInfoService.isModalErrorSkillChooseText;
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   private normalizeYear(value: unknown): number | null {
     if (value === null || value === undefined || value === "") {

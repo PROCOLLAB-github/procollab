@@ -6,7 +6,6 @@ import {
   Component,
   computed,
   inject,
-  OnDestroy,
   OnInit,
   signal,
 } from "@angular/core";
@@ -46,6 +45,7 @@ import { SearchesService } from "@api/searches/searches.service";
 import { EditStep } from "@core/lib/models/edit-step";
 import { GetSpecializationsNestedUseCase } from "@api/specializations/use-cases/get-specializations-nested.use-case";
 import { map } from "rxjs";
+import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/profile-edit-achievements-info.service";
 
 /** Многошаговая форма редактирования профиля пользователя. */
 @Component({
@@ -71,20 +71,21 @@ import { map } from "rxjs";
         ProfileSkillsStepComponent,
     ],
     providers: [
-        ProfileEditInfoService,
-        OnboardingStageOneUIInfoService,
-        OnboardingStageOneInfoService,
-        OnboardingUIInfoService,
-        ProfileEditEducationInfoService,
-        ProfileEditExperienceInfoService,
-        ProfileEditSkillsInfoService,
-        ProjectVacancyUIService,
-        ProjectsEditUIInfoService,
-        ToggleFieldsInfoService,
+      OnboardingStageOneUIInfoService,
+      OnboardingStageOneInfoService,
+      OnboardingUIInfoService,
+      ProfileEditInfoService,
+      ProfileEditAchievementsInfoService,
+      ProfileEditEducationInfoService,
+      ProfileEditExperienceInfoService,
+      ProfileEditSkillsInfoService,
+      ProjectVacancyUIService,
+      ProjectsEditUIInfoService,
+      ToggleFieldsInfoService,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ProfileEditComponent implements OnInit, AfterViewInit {
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly projectStepService = inject(ProjectStepService);
@@ -105,10 +106,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.profileFormService.initializeProfileData();
-  }
-
-  ngOnDestroy(): void {
-    this.profileFormService.destroy();
   }
 
   readonly editingStep = this.projectStepService.currentStep;

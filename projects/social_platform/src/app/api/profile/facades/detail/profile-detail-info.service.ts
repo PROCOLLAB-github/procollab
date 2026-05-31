@@ -1,7 +1,7 @@
 /** @format */
 
-import { ElementRef, inject, Injectable } from "@angular/core";
-import { concatMap, filter, map, Subject, takeUntil, tap } from "rxjs";
+import { DestroyRef, ElementRef, inject, Injectable } from "@angular/core";
+import { concatMap, filter, map, tap } from "rxjs";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 import { ActivatedRoute } from "@angular/router";
 import { ExpandService } from "../../../expand/expand.service";
@@ -15,11 +15,14 @@ import { FetchProfileNewsUseCase } from "../../use-cases/fetch-profile-news.use-
 import { ReadProfileNewsUseCase } from "../../use-cases/read-profile-news.use-case";
 import { ToggleProfileNewsLikeUseCase } from "../../use-cases/toggle-profile-news-like.use-case";
 import { ProfileInfoService } from "../profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад профиля (детали): новости профиля — CRUD, лайк, отметка прочтения по видимости. */
 @Injectable()
 export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly expandService = inject(ExpandService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
@@ -33,15 +36,12 @@ export class ProfileDetailInfoService {
   private readonly toggleProfileNewsLikeUseCase = inject(ToggleProfileNewsLikeUseCase);
 
   private observer?: IntersectionObserver;
-  private readonly destroy$ = new Subject<void>();
 
   private readonly profile = this.profileInfoService.profile;
   private readonly news = this.newsInfoService.news;
 
   destroy(): void {
     this.observer?.disconnect();
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   initializationProfile(): void {
@@ -61,7 +61,7 @@ export class ProfileDetailInfoService {
           };
         }),
         filter(data => !!data["data"]["user"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: data => {
@@ -86,7 +86,7 @@ export class ProfileDetailInfoService {
 
         this.newsInfoService.applyAddNews(result.value);
       }),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     );
   }
 
@@ -95,7 +95,7 @@ export class ProfileDetailInfoService {
 
     this.deleteProfileNewsUseCase
       .execute(this.route.snapshot.params["id"], newsId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({ next: () => {} });
   }
 
@@ -105,7 +105,7 @@ export class ProfileDetailInfoService {
 
     this.toggleProfileNewsLikeUseCase
       .execute(this.route.snapshot.params["id"], newsId, !item.isUserLiked)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) return;
 
@@ -132,7 +132,7 @@ export class ProfileDetailInfoService {
 
     this.readProfileNewsUseCase
       .execute(Number(this.route.snapshot.params["id"]), ids)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
 
@@ -146,7 +146,7 @@ export class ProfileDetailInfoService {
       .pipe(
         map(r => r["id"]),
         concatMap(userId => this.fetchProfileNewsUseCase.execute(Number(userId))),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(result => {
         if (!result.ok) return;

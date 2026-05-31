@@ -1,10 +1,8 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ProfileFormService } from "./profile-form.service";
 import { Achievement } from "@domain/auth/user.model";
-import dayjs from "dayjs";
 import { Skill } from "@domain/skills/skill.model";
 import { NavigationService } from "../../../paths/navigation.service";
 import { ProjectStepService } from "../../../project/project-step.service";
@@ -14,6 +12,7 @@ import { AsyncState, failure, initial, loading, success } from "@domain/shared/a
 import { EditStep } from "@core/lib/models/edit-step";
 import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
 import { ProfileInfoService } from "../profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
@@ -21,14 +20,13 @@ export class ProfileEditInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly navigationService = inject(NavigationService);
   private readonly navService = inject(NavService);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly profileFormService = inject(ProfileFormService);
   private readonly projectStepService = inject(ProjectStepService);
   private readonly profileInfoService = inject(ProfileInfoService);
 
   private readonly saveProfileUseCase = inject(SaveProfileUseCase);
-
-  private readonly destroy$ = new Subject<void>();
 
   private readonly profileForm = this.profileFormService.getForm();
 
@@ -51,11 +49,6 @@ export class ProfileEditInfoService {
     3: "expert",
     4: "investor",
   };
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   initializationEditInfo(): void {
     this.navService.setNavTitle("Редактирование профиля");
@@ -204,7 +197,7 @@ export class ProfileEditInfoService {
 
     this.saveProfileUseCase
       .execute(newProfile)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           this.profileFormSubmitting$.set(failure("profile_edit_error"));
