@@ -1,9 +1,9 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ChatMessage } from "@domain/chat/chat-message.model";
-import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
+import { map, Observable, switchMap, tap } from "rxjs";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { LoadProjectFilesUseCase } from "../use-cases/load-project-files.use-case";
@@ -19,6 +19,7 @@ import { DeleteMessageUseCase } from "../use-cases/delete-message.use-case";
 import { StartTypingUseCase } from "../use-cases/start-typing.use-case";
 import { ReadMessageUseCase } from "../use-cases/read-message.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад личного чата: загрузка истории/файлов и подписки realtime (печать, read, edit/delete), отправка сообщений. */
 @Injectable()
@@ -26,6 +27,8 @@ export class ChatDirectInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly chatDirectUIInfoService = inject(ChatDirectUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly loadProjectFilesUseCase = inject(LoadProjectFilesUseCase);
   private readonly loadMessagesUseCase = inject(LoadMessagesUseCase);
   private readonly observeMessagesUseCase = inject(ObserveMessagesUseCase);
@@ -39,7 +42,6 @@ export class ChatDirectInfoService {
   private readonly startTypingUseCase = inject(StartTypingUseCase);
   private readonly readMessageUseCase = inject(ReadMessageUseCase);
 
-  private readonly destroy$ = new Subject<void>();
 
   // Сохраняем тип чата для использования в методах
   private chatType: "direct" | "project" = "direct";
@@ -75,7 +77,7 @@ export class ChatDirectInfoService {
           this.chatDirectUIInfoService.currentChatId.set(this.getChatId());
         }),
         switchMap(() => this.fetchMessages(type)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
 
@@ -92,7 +94,7 @@ export class ChatDirectInfoService {
   initializationChatFiles(): void {
     this.loadProjectFilesUseCase
       .execute(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           return;
@@ -103,9 +105,6 @@ export class ChatDirectInfoService {
   }
 
   destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-
     this.chatDirectUIInfoService.clearTypingTimeouts();
   }
 
@@ -140,7 +139,7 @@ export class ChatDirectInfoService {
   private initMessageEvent(): void {
     this.observeMessagesUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.chatDirectUIInfoService.applyMessageEvent(result);
       });
@@ -149,7 +148,7 @@ export class ChatDirectInfoService {
   private initTypingEvent(): void {
     this.observeTypingUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.chatDirectUIInfoService.applyTypingEvent();
       });
@@ -158,7 +157,7 @@ export class ChatDirectInfoService {
   private initEditEvent(): void {
     this.observeEditMessageUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.chatDirectUIInfoService.editMessahesEvent(result);
       });
@@ -167,7 +166,7 @@ export class ChatDirectInfoService {
   private initDeleteEvent(): void {
     this.observeDeleteMessageUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.chatDirectUIInfoService.deleteMessagesEvent(result);
       });
@@ -176,7 +175,7 @@ export class ChatDirectInfoService {
   private initReadEvent(): void {
     this.observeReadMessageUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.chatDirectUIInfoService.readMessagesEvent(result);
       });
@@ -190,7 +189,7 @@ export class ChatDirectInfoService {
     ) {
       this.fetching.set(true);
       this.fetchMessages(this.chatType)
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.fetching.set(false);
         });

@@ -1,11 +1,11 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ChatListItem } from "@domain/chat/chat-item.model";
-import { combineLatest, map, Observable, Subject, takeUntil } from "rxjs";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { map, Observable } from "rxjs";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { ChatUIInfoService } from "./ui/chat-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -19,13 +19,14 @@ export class ChatInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly navService = inject(NavService);
+  private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly chatUIInfoService = inject(ChatUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
-  private readonly logger = inject(LoggerService);
-  private readonly observeMessagesUseCase = inject(ObserveMessagesUseCase);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly observeMessagesUseCase = inject(ObserveMessagesUseCase);
 
   private readonly chatsData = this.chatUIInfoService.chatsData;
   private readonly profile = this.profileInfoService.profile;
@@ -39,7 +40,7 @@ export class ChatInfoService {
       }))
     ),
     map(chats => chats.sort((a, b) => Number(b.isUnread) - Number(a.isUnread))),
-    takeUntil(this.destroy$)
+    takeUntilDestroyed()
   );
 
   initializationChats(): void {
@@ -54,22 +55,17 @@ export class ChatInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(chats => {
         this.chatsData.set(chats);
       });
   }
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   private initializationChatMessage(): void {
     this.observeMessagesUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.chatUIInfoService.applyInitializationMessages(result);
       });
