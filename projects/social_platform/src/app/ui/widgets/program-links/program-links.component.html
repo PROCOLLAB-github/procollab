@@ -5,7 +5,7 @@
     <h3 class="links__title text-body-12">{{ title }}</h3>
     <i appIcon [icon]="icon" class="links__icon" appSquare="12"></i>
   </div>
-  @if (links?.length) {
+  @if (links.length) {
   <ul class="links__list">
     @for (link of links; track $index) {
     <li class="links__item text-body-10">

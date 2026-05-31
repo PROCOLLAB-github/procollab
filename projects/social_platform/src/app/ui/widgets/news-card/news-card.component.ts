@@ -161,6 +161,7 @@ export class NewsCardComponent implements OnInit {
     this.route.params.pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe({
       next: q => {
         this.profileId.set(q["id"]);
+        this.cdRef.markForCheck();
       },
     });
 
@@ -196,6 +197,7 @@ export class NewsCardComponent implements OnInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.expandService.checkExpandable("description", true, this.newsTextEl);
+      this.cdRef.markForCheck();
     });
   }
 
@@ -356,6 +358,7 @@ export class NewsCardComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.imagesEditList.splice(fileIdx, 1);
+          this.cdRef.markForCheck();
         });
     } else {
       this.imagesEditList.splice(fileIdx, 1);
@@ -373,6 +376,7 @@ export class NewsCardComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.filesEditList.splice(fileIdx, 1);
+          this.cdRef.markForCheck();
         });
     } else {
       this.filesEditList.splice(fileIdx, 1);
@@ -394,6 +398,7 @@ export class NewsCardComponent implements OnInit {
           fileObj.src = file.url;
           fileObj.loading = false;
           fileObj.tempFile = null;
+          this.cdRef.markForCheck();
         },
         error: () => {
           fileObj.error = true;
@@ -412,6 +417,7 @@ export class NewsCardComponent implements OnInit {
 
       setTimeout(() => {
         this.showLikes[imgIdx] = false;
+        this.cdRef.markForCheck();
       }, 1000);
     }
 

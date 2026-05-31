@@ -2,8 +2,10 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
+  inject,
   Input,
   type OnInit,
   Output,
@@ -22,6 +24,8 @@ import { IconComponent } from "@uilib";
 export class CarouselComponent implements OnInit {
   @Input() images: Array<FileModel | string> = [];
   @Output() like: EventEmitter<number> = new EventEmitter<number>();
+
+  private readonly cdRef = inject(ChangeDetectorRef);
 
   currentIndex = 0;
   lastTouch = 0;
@@ -48,6 +52,7 @@ export class CarouselComponent implements OnInit {
       this.showLike = true;
       setTimeout(() => {
         this.showLike = false;
+        this.cdRef.markForCheck();
       }, 1000);
     }
     this.lastTouch = now;

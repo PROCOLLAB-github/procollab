@@ -96,12 +96,22 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     // Обработчик события dragover для всего документа
     fromEvent<DragEvent>(document, "dragover")
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(this.handleDragOver.bind(this));
+      .subscribe({
+        next: (e) => {
+          this.handleDragOver(e);
+          this.cdr.markForCheck();
+        }
+      });
 
     // Обработчик события drop для всего документа
     fromEvent<DragEvent>(document, "drop")
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(this.handleDrop.bind(this));
+      .subscribe({
+        next: (e) => {
+          this.handleDrop(e);
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   ngOnDestroy(): void {}
@@ -146,6 +156,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   writeValue(value: MessageInputComponent["value"]): void {
     setTimeout(() => {
       this.value = value;
+      this.cdr.markForCheck();
 
       // Очистка списка файлов если нет URL файлов
       if (!value.filesUrl.length) {
@@ -238,18 +249,22 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
               ...this.value,
               filesUrl: [...this.value.filesUrl, url],
             };
+            this.cdr.markForCheck();
 
             this.onChange(this.value);
+            this.cdr.markForCheck();
 
             // Обновление метаданных файла
             setTimeout(() => {
               this.attachFiles[i].loading = false;
               this.attachFiles[i].link = url;
+              this.cdr.markForCheck();
             });
           },
           complete: () => {
             setTimeout(() => {
               this.attachFiles[i].loading = false;
+              this.cdr.markForCheck();
             });
           },
         });
@@ -266,9 +281,11 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
       .subscribe(() => {
         // Удаление из массива прикрепленных файлов
         this.attachFiles.splice(idx, 1);
+        this.cdr.markForCheck();
         // Удаление URL из значения компонента
         this.value.filesUrl.splice(idx, 1);
         this.onChange(this.value);
+        this.cdr.markForCheck();
       });
   }
 
