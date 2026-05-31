@@ -2,8 +2,8 @@
 
 import { Pipe, type PipeTransform } from "@angular/core";
 import { PluralizePipe } from "./pluralize.pipe";
-import * as RelativeTime from "dayjs/plugin/relativeTime";
-import * as dayjs from "dayjs";
+import RelativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
 
 dayjs.extend(RelativeTime);
 

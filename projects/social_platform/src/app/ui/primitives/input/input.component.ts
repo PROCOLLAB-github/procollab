@@ -14,7 +14,7 @@ import {
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
-import { NgxMaskModule } from "ngx-mask";
+import { NgxMaskDirective } from "ngx-mask";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatInputModule } from "@angular/material/input";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -35,7 +35,7 @@ import { IconComponent } from "../icon/icon.component";
     ],
     imports: [
         CommonModule,
-        NgxMaskModule,
+        NgxMaskDirective,
         IconComponent,
         TooltipComponent,
         MatDatepickerModule,

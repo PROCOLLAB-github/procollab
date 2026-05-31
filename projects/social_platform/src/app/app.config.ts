@@ -3,7 +3,7 @@
 import { ApplicationConfig, ErrorHandler, importProvidersFrom, LOCALE_ID } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
-import { NgxMaskModule } from "ngx-mask";
+import { provideNgxMask } from "ngx-mask";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { GlobalErrorHandlerService } from "@core/lib/services/error/global-error-handler.service";
@@ -48,12 +48,8 @@ registerLocaleData(localeRu, "ru-RU");
 export const APP_CONFIG: ApplicationConfig = {
   providers: [
     { provide: LOCALE_ID, useValue: "ru-RU" },
-    importProvidersFrom(
-      BrowserModule,
-      ReactiveFormsModule,
-      NgxMaskModule.forRoot(),
-      MatProgressBarModule
-    ),
+    importProvidersFrom(BrowserModule, ReactiveFormsModule, MatProgressBarModule),
+    provideNgxMask(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CamelcaseInterceptor,

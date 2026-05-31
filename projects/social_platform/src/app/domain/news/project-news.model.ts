@@ -1,6 +1,6 @@
 /** @format */
 
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { FileModel } from "@domain/file/file.model";
 
 /** Модель новости проекта */

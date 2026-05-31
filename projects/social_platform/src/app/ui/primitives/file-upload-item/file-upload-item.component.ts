@@ -10,7 +10,7 @@ import {
 } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { LoaderComponent } from "../loader/loader.component";
-import { UpperCasePipe } from "@angular/common";
+import { NgIf, UpperCasePipe } from "@angular/common";
 import { FormatedFileSizePipe } from "@corelib";
 import { IconComponent } from "../icon/icon.component";
 
@@ -34,7 +34,7 @@ import { IconComponent } from "../icon/icon.component";
     selector: "app-file-upload-item",
     templateUrl: "./file-upload-item.component.html",
     styleUrl: "./file-upload-item.component.scss",
-    imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
+    imports: [IconComponent, LoaderComponent, NgIf, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileUploadItemComponent implements OnInit {
