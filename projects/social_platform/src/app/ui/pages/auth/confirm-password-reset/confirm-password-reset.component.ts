@@ -19,8 +19,4 @@ export class ConfirmPasswordResetComponent implements OnInit {
   protected readonly email = this.authPasswordService.email;
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.authPasswordService.destroy();
-  }
 }

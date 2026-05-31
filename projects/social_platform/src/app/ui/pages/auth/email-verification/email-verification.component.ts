@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
 import { AuthEmailService } from "@api/auth/facades/auth-email.service";
 import { CommonModule } from "@angular/common";
@@ -14,7 +14,7 @@ import { CommonModule } from "@angular/common";
     imports: [CommonModule, IconComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmailVerificationComponent implements OnInit, OnDestroy {
+export class EmailVerificationComponent implements OnInit {
   private readonly authEmailService = inject(AuthEmailService);
 
   protected readonly counter = this.authEmailService.counter;
@@ -23,10 +23,6 @@ export class EmailVerificationComponent implements OnInit, OnDestroy {
     this.authEmailService.initializationEmail();
 
     this.authEmailService.initializationTimer();
-  }
-
-  ngOnDestroy(): void {
-    this.authEmailService.destroy();
   }
 
   onResend(): void {

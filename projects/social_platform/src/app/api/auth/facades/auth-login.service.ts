@@ -1,9 +1,9 @@
 /** @format */
 
-import { inject, Injectable } from "@angular/core";
+import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService, ValidationService } from "@corelib";
-import { Subject, takeUntil, tap } from "rxjs";
+import { tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { LoginUseCase } from "../use-cases/login.use-case";
@@ -11,6 +11,7 @@ import { toAsyncState } from "@domain/shared/to-async-state";
 import { LoginResult, LoginError } from "@domain/auth/results/login.result";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад входа: форма логина, `LoginUseCase`, состояние отправки и редирект. */
 @Injectable()
@@ -23,19 +24,13 @@ export class AuthLoginService {
   private readonly loginUseCase = inject(LoginUseCase);
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly logger = inject(LoggerService);
-
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly loginForm = this.authUIInfoService.loginForm;
 
   // Login Component
   readonly showPassword = this.authUIInfoService.showPassword;
   readonly login$ = this.authUIInfoService.login$;
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   onSubmit() {
     const redirectType = this.route.snapshot.queryParams["redirect"];
@@ -65,7 +60,7 @@ export class AuthLoginService {
           }
         }),
         toAsyncState<LoginResult, LoginError>(),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(state => this.login$.set(state));
   }

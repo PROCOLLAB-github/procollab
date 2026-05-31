@@ -43,10 +43,6 @@ export class RegisterComponent implements OnInit {
     this.tokenService.clearTokens();
   }
 
-  ngOnDestroy(): void {
-    this.authRegisterService.destroy();
-  }
-
   protected readonly registerForm = this.authUIInfoService.registerForm;
   protected readonly registerIsSubmitting = this.authUIInfoService.registerIsSubmitting;
 
