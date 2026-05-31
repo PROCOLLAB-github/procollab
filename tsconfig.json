@@ -6,63 +6,34 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "paths": {
-      "@core/*": [
-        "projects/core/src/*"
-      ],
-      "@domain/*": [
-        "projects/social_platform/src/app/domain/*"
-      ],
-      "@infrastructure/*": [
-        "projects/social_platform/src/app/infrastructure/*"
-      ],
-      "@api/*": [
-        "projects/social_platform/src/app/api/*"
-      ],
-      "@ui/*": [
-        "projects/social_platform/src/app/ui/*"
-      ],
-      "@pages/*": [
-        "projects/social_platform/src/app/ui/pages/*"
-      ],
-      "@utils/*": [
-        "projects/social_platform/src/app/utils/*"
-      ],
-      "@environment": [
-        "projects/social_platform/src/environments/environment.ts"
-      ],
-      "@uilib": [
-        "./projects/ui/src/public-api.ts"
-      ],
-      "uilib/models": [
-        "./projects/ui/src/models/*"
-      ],
-      "@corelib": [
-        "./projects/core/src/public-api.ts"
-      ],
-      "core": [
-        "./dist/core"
-      ],
-      "ui": [
-        "./dist/ui"
-      ]
+      "@core/*": ["projects/core/src/*"],
+      "@domain/*": ["projects/social_platform/src/app/domain/*"],
+      "@infrastructure/*": ["projects/social_platform/src/app/infrastructure/*"],
+      "@api/*": ["projects/social_platform/src/app/api/*"],
+      "@ui/*": ["projects/social_platform/src/app/ui/*"],
+      "@pages/*": ["projects/social_platform/src/app/ui/pages/*"],
+      "@utils/*": ["projects/social_platform/src/app/utils/*"],
+      "@testing/*": ["projects/social_platform/src/app/testing/*"],
+      "@environment": ["projects/social_platform/src/environments/environment.ts"],
+      "@uilib": ["./projects/ui/src/public-api.ts"],
+      "uilib/models": ["./projects/ui/src/models/*"],
+      "@corelib": ["./projects/core/src/public-api.ts"],
+      "core": ["./dist/core"],
+      "ui": ["./dist/ui"]
     },
     "skipLibCheck": true,
     "useDefineForClassFields": false

@@ -24,7 +24,7 @@
   ],
   "private": true,
   "engines": {
-    "node": "~18.16"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@angular/animations": "^20.3.23",
@@ -51,13 +51,14 @@
     "ng-click-outside": "^9.0.1",
     "ngx-autosize": "^2.0.4",
     "ngx-image-cropper": "^9.1.5",
-    "ngx-mask": "^13.0.3",
+    "ngx-mask": "^19.0.7",
     "rxjs": "~7.5.0",
     "snakecase-keys": "^5.4.2",
     "tslib": "^2.3.0",
     "zone.js": "^0.15.1"
   },
   "devDependencies": {
+    "@angular/build": "^20.3.26",
     "@angular-devkit/build-angular": "^20.3.26",
     "@angular/cli": "^20.3.26",
     "@angular/compiler-cli": "^20.3.23",
