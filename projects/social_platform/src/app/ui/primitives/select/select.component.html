@@ -3,11 +3,11 @@
 <div class="field" (clickOutside)="onClickOutside()">
   <div
     class="text-body-12 field__input"
-    [class.field__input--error]="error"
+    [class.field__input--error]="error()"
     [class.field__input--placeholder]="!selectedId && selectedId !== 0"
     [class.field__input--open]="isOpen"
-    [class.field__input--small]="size === 'small'"
-    [class.field__input--big]="size === 'big'"
+    [class.field__input--small]="size() === 'small'"
+    [class.field__input--big]="size() === 'big'"
     [class.field__input--disabled]="disabled"
     (click)="isOpen = !isOpen; highlightedIndex = -1"
   >
@@ -15,10 +15,10 @@
       selectedId === -1
         ? "Ничего"
         : selectedId || selectedId === 0
-        ? getLabel(selectedId) || placeholder
-        : placeholder
+        ? getLabel(selectedId) || placeholder()
+        : placeholder()
     }}
-    @if (error) {
+    @if (error()) {
     <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
     } @else {
     <i
@@ -31,10 +31,10 @@
     ></i>
     }
   </div>
-  @if (!isDisabled) {
+  @if (!disabled) {
   <app-dropdown
     [isOpen]="isOpen"
-    [options]="options"
+    [options]="options()"
     [highlightedIndex]="highlightedIndex"
     (select)="onUpdate($event)"
     (outside)="hideDropdown()"

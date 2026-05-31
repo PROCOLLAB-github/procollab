@@ -9,8 +9,9 @@ import {
   forwardRef,
   HostListener,
   Input,
+  input,
   Renderer2,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -52,21 +53,21 @@ import { IconComponent } from "../icon/icon.component";
 })
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
-  @Input() placeholder = "";
+  placeholder = input("");
 
   /** ID выбранной опции */
   @Input() selectedId?: number;
 
-  @Input() size: "small" | "big" = "small";
+  size = input<"small" | "big">("small");
 
   /** Массив доступных опций */
-  @Input({ required: true }) options: {
+  options = input.required<{
     value: string | number | boolean | null;
     label: string;
     id: number;
-  }[] = [];
+  }[]>();
 
-  @Input() error = false;
+  error = input(false);
 
   @Input() set isDisabled(value: boolean) {
     this.setDisabledState(value);
@@ -85,7 +86,7 @@ export class SelectComponent implements ControlValueAccessor {
   constructor(private readonly renderer: Renderer2, private readonly cdr: ChangeDetectorRef) {}
 
   /** Ссылка на элемент выпадающего списка */
-  @ViewChild("dropdown") dropdown!: ElementRef<HTMLUListElement>;
+  dropdown = viewChild<ElementRef<HTMLUListElement>>("dropdown");
 
   /** Обработчик клавиатурных событий для навигации */
   @HostListener("document:keydown", ["$event"])
@@ -103,13 +104,13 @@ export class SelectComponent implements ControlValueAccessor {
       if (i > 0) this.highlightedIndex--;
     }
     if (event.code === "ArrowDown") {
-      if (i < this.options.length - 1) {
+      if (i < this.options().length - 1) {
         this.highlightedIndex++;
       }
     }
     if (event.code === "Enter") {
       if (i >= 0) {
-        this.onUpdate(this.options[this.highlightedIndex].id);
+        this.onUpdate(this.options()[this.highlightedIndex].id);
       }
     }
     if (event.code === "Escape") {
@@ -123,7 +124,8 @@ export class SelectComponent implements ControlValueAccessor {
 
   /** Автоматический скролл к выделенному элементу */
   trackHighlightScroll(): void {
-    const ddElem = this.dropdown.nativeElement;
+    const ddElem = this.dropdown()?.nativeElement;
+    if (!ddElem) return;
 
     const highlightedElem = ddElem.children[this.highlightedIndex];
 
@@ -147,7 +149,7 @@ export class SelectComponent implements ControlValueAccessor {
       return;
     }
 
-    const optionByValue = this.options.find(option => option.value === value);
+    const optionByValue = this.options().find(option => option.value === value);
     if (optionByValue) {
       this.selectedId = optionByValue.id;
       this.cdr.markForCheck();
@@ -156,7 +158,7 @@ export class SelectComponent implements ControlValueAccessor {
 
     const yearValue = this.extractYear(value);
     if (yearValue !== null) {
-      const yearOption = this.options.find(option => this.extractYear(option.value) === yearValue);
+      const yearOption = this.options().find(option => this.extractYear(option.value) === yearValue);
       if (yearOption) {
         this.selectedId = yearOption.id;
         this.cdr.markForCheck();
@@ -165,7 +167,7 @@ export class SelectComponent implements ControlValueAccessor {
     }
 
     if (typeof value === "number") {
-      this.selectedId = this.options.some(option => option.id === value) ? value : undefined;
+      this.selectedId = this.options().some(option => option.id === value) ? value : undefined;
       this.cdr.markForCheck();
       return;
     }
@@ -175,7 +177,7 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   getIdByValue(value: string | number): number | undefined {
-    return this.options.find(el => el.value === value)?.id;
+    return this.options().find(el => el.value === value)?.id;
   }
 
   private extractYear(value: unknown): number | null {
@@ -224,24 +226,24 @@ export class SelectComponent implements ControlValueAccessor {
     if (this.disabled) return;
 
     this.selectedId = id;
-    this.onChange(this.getValue(id) ?? this.options[0].value);
+    this.onChange(this.getValue(id) ?? this.options()[0].value);
 
     this.hideDropdown();
   }
 
   /** Получение текста метки по ID опции */
   getLabel(optionId: number): string | undefined {
-    return this.options.find(el => el.id === optionId)?.label;
+    return this.options().find(el => el.id === optionId)?.label;
   }
 
   /** Получение значения по ID опции */
   getValue(optionId: number): string | number | null | undefined | boolean {
-    return this.options.find(el => el.id === optionId)?.value;
+    return this.options().find(el => el.id === optionId)?.value;
   }
 
   /** Получение ID по тексту метки */
   getId(label: string): number | undefined {
-    return this.options.find(el => el.label === label)?.id;
+    return this.options().find(el => el.label === label)?.id;
   }
 
   /** Скрытие выпадающего списка */

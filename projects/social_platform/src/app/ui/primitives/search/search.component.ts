@@ -4,14 +4,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
-  EventEmitter,
   forwardRef,
   inject,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
+  input,
+  model,
+  output,
+  viewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -27,7 +25,7 @@ import { IconComponent } from "../icon/icon.component";
  * - type: тип поля ввода ("text" | "password" | "email")
  * - error: состояние ошибки для стилизации
  * - mask: маска для форматирования ввода
- * - openable: возможность сворачивания ��оля (по умолчанию true)
+ * - openable: возможность сворачивания поля (по умолчанию true)
  * - appValue: значение поля (двустороннее связывание)
  *
  * События:
@@ -51,56 +49,46 @@ import { IconComponent } from "../icon/icon.component";
     ],
     imports: [ClickOutsideModule, IconComponent]
 })
-export class SearchComponent implements OnInit, ControlValueAccessor {
+export class SearchComponent implements ControlValueAccessor {
   /** Текст подсказки */
-  @Input() placeholder = "";
+  placeholder = input("");
 
   /** Тип поля ввода */
-  @Input() type: "text" | "password" | "email" = "text";
+  type = input<"text" | "password" | "email">("text");
 
   /** Состояние ошибки */
-  @Input() error = false;
+  error = input(false);
 
   /** Маска для форматирования */
-  @Input() mask = "";
+  mask = input("");
 
   /** Возможность сворачивания поля */
-  @Input() openable = true;
+  openable = input(true);
 
   /** Двустороннее связывание значения */
-  @Input()
-  set appValue(value: string) {
-    this.value = value;
-  }
-
-  get appValue(): string {
-    return this.value;
-  }
-
-  /** Событие изменения значения */
-  @Output() appValueChange = new EventEmitter<string>();
+  appValue = model("");
 
   /** Событие нажатия Enter */
-  @Output() enter = new EventEmitter<void>();
-
-  ngOnInit(): void {
-    this.open = !this.openable;
-  }
+  enter = output<void>();
 
   /** Ссылка на поле ввода */
-  @ViewChild("inputEl") inputEl?: ElementRef<HTMLInputElement>;
+  inputEl = viewChild<ElementRef<HTMLInputElement>>("inputEl");
 
   /** Состояние раскрытия поля */
   open = false;
   private readonly cdRef = inject(ChangeDetectorRef);
 
+  constructor() {
+    this.open = !this.openable();
+  }
+
   /** Переключение состояния раскрытия поля поиска */
   onSwitchSearch(value: boolean): void {
-    if (this.openable) this.open = value;
+    if (this.openable()) this.open = value;
 
     if (value) {
       setTimeout(() => {
-        this.inputEl?.nativeElement.focus();
+        this.inputEl()?.nativeElement.focus();
         this.cdRef.markForCheck();
       });
     }
@@ -110,7 +98,7 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.onChange(value);
-    this.appValueChange.emit(value);
+    this.appValue.set(value);
   }
 
   /** Обработчик потери фокуса */
@@ -125,6 +113,7 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
   writeValue(value: string): void {
     setTimeout(() => {
       this.value = value;
+      this.appValue.set(value);
       this.cdRef.markForCheck();
     });
   }
