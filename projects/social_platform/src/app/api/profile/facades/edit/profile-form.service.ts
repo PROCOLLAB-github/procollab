@@ -1,8 +1,8 @@
 /** @format */
 
-import { inject, Injectable, Injector, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { concatMap, filter, first, map, Observable, skip, Subject, takeUntil } from "rxjs";
+import { concatMap, filter, first, map, Observable, skip } from "rxjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User, UserRolesData } from "@domain/auth/user.model";
 import { Specialization } from "@domain/specializations/specialization.model";
@@ -15,7 +15,7 @@ import {
 import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProfileInfoService } from "../profile-info.service";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 
 /** Реактивная форма профиля: построение `FormGroup`, справочники (роли, годы, образование), inline-специализации. */
 @Injectable({ providedIn: "root" })
@@ -25,7 +25,7 @@ export class ProfileFormService {
   private readonly authRepository = inject(AuthRepositoryPort);
   private readonly profileInfoService = inject(ProfileInfoService);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   private profileForm!: FormGroup;
 
@@ -55,11 +55,6 @@ export class ProfileFormService {
     4: "investor",
   };
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   constructor() {
     this.initializeProfileForm();
 
@@ -67,7 +62,7 @@ export class ProfileFormService {
       .pipe(
         filter(roles => !!roles),
         map(roles => roles!.map(role => ({ id: role.id, value: role.id, label: role.name }))),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: roles => {
@@ -134,7 +129,7 @@ export class ProfileFormService {
       ?.valueChanges.pipe(
         skip(1),
         concatMap(this.changeUserType.bind(this)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
 
@@ -143,7 +138,7 @@ export class ProfileFormService {
       ?.valueChanges.pipe(
         skip(1),
         concatMap(url => this.authRepository.updateAvatar(url, this.profile()!.id)),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(user => this.profileInfoService.applyProfileUpdated(user));
   }
@@ -153,7 +148,7 @@ export class ProfileFormService {
       .pipe(
         filter((profile): profile is User => !!profile),
         first(),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: profile => {
@@ -376,7 +371,7 @@ export class ProfileFormService {
       })
       .pipe(
         map(() => location.reload()),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       );
   }
 }

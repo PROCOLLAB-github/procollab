@@ -1,29 +1,24 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { Project } from "@domain/project/project.model";
 import { ActivatedRoute } from "@angular/router";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад вкладки проектов профиля: проекты пользователя и подписки. */
 @Injectable()
 export class ProfileDetailProjectsInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly user = this.profileDetailUIInfoService.user;
   readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
   readonly subs = signal<Project[] | undefined>(undefined);
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   initializationProfileProjects(): void {
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe({
+    this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: ({ data }) => {
         this.applyInitProfileProjects(data);
       },
