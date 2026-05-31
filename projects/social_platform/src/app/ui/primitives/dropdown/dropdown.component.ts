@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Input,
   input,
   model,
   output,
@@ -47,7 +48,7 @@ export class DropdownComponent {
   type = input<"icons" | "avatars" | "shapes" | "tags" | "goals" | "text">("text");
 
   /** Состояние для открытия списка выпадающего */
-  isOpen = false;
+  @Input() isOpen = false;
 
   /** режим создания тега */
   creatingTag = model(false);
