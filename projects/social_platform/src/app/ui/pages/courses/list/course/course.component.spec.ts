@@ -14,6 +14,14 @@ describe("CourseComponent", () => {
 
     fixture = TestBed.createComponent(CourseComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("course", {
+      id: 1,
+      name: "Test",
+      description: "",
+      accessType: "free",
+      actionState: "active",
+      skills: [],
+    });
     fixture.detectChanges();
   });
 

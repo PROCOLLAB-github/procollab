@@ -2,18 +2,51 @@
 
 import { TestBed } from "@angular/core/testing";
 import { ProjectsResolver } from "./projects.resolver";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, provideRouter } from "@angular/router";
+import { signal } from "@angular/core";
 import { of } from "rxjs";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { GetAllProjectsUseCase } from "@api/project/use-cases/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 
 describe("ProjectsResolver", () => {
   beforeEach(() => {
-    const authSpy = jasmine.createSpyObj("authService", {}, { profile: of({}) });
-
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [
+        provideRouter([]),
+        { provide: ProfileInfoService, useValue: { profile: signal(null) } },
+        {
+          provide: GetAllProjectsUseCase,
+          useValue: {
+            execute: () =>
+              of({
+                ok: true,
+                value: { count: 0, results: [], next: "", previous: "" },
+              }),
+          },
+        },
+        {
+          provide: GetMyProjectsUseCase,
+          useValue: {
+            execute: () =>
+              of({
+                ok: true,
+                value: { count: 0, results: [], next: "", previous: "" },
+              }),
+          },
+        },
+        {
+          provide: GetProjectSubscriptionsUseCase,
+          useValue: {
+            execute: () =>
+              of({
+                ok: true,
+                value: { count: 0, results: [], next: "", previous: "" },
+              }),
+          },
+        },
+      ],
     });
   });
 

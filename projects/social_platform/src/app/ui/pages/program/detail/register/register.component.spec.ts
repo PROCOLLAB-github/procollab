@@ -4,7 +4,7 @@ import { TestBed, ComponentFixture } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
-import { NgxMaskModule } from "ngx-mask";
+import { provideNgxMask } from "ngx-mask";
 import { ValidationService } from "@corelib";
 import { ProgramRegisterComponent } from "./register.component";
 import { RegisterProgramUseCase } from "@api/program/use-cases/register-program.use-case";
@@ -54,12 +54,13 @@ describe("ProgramRegisterComponent", () => {
     validationSpy.getFormValidation.and.returnValue(formValid);
 
     await TestBed.configureTestingModule({
-      imports: [ProgramRegisterComponent, NgxMaskModule.forRoot()],
+      imports: [ProgramRegisterComponent],
       providers: [
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: makeFakeRoute(programId, schema) },
         { provide: RegisterProgramUseCase, useValue: useCaseSpy },
         { provide: ValidationService, useValue: validationSpy },
+        provideNgxMask(),
       ],
     }).compileComponents();
 

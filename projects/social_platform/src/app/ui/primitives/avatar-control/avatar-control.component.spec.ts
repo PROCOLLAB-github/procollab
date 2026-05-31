@@ -4,18 +4,25 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AvatarControlComponent } from "./avatar-control.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { API_URL } from "@corelib";
+import { of } from "rxjs";
 
 describe("AvatarControlComponent", () => {
   let component: AvatarControlComponent;
   let fixture: ComponentFixture<AvatarControlComponent>;
 
   beforeEach(async () => {
-    const autSpy = jasmine.createSpyObj(["getTokens"]);
+    const authSpy = {
+      fetchProfile: of({}),
+    };
 
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, AvatarControlComponent],
-      providers: [{ provide: AuthRepository, useValue: autSpy }],
+      providers: [
+        { provide: AuthRepositoryPort, useValue: authSpy },
+        { provide: API_URL, useValue: "" },
+      ],
     }).compileComponents();
   });
 

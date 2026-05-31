@@ -35,7 +35,7 @@ describe("ProfileNewsHttpAdapter", () => {
 
     adapter.fetchNewsDetail("7", "9").subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/auth/users/7/news/9");
+    expect(api.get).toHaveBeenCalledOnceWith("/auth/users/7/news/9/");
   });
 
   it("addNews идёт в POST /auth/users/:id/news/ с body", () => {

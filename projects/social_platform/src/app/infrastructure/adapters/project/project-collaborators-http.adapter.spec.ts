@@ -23,7 +23,7 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
 
     adapter.deleteCollaborator(42, 7).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/collaborators?id=7");
+    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/collaborators?id=7/");
   });
 
   it("patchSwitchLeader идёт в PATCH /projects/:pid/collaborators/:uid/switch-leader/", () => {
@@ -41,6 +41,6 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
 
     adapter.deleteLeave(42).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/collaborators/leave");
+    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/collaborators/leave/");
   });
 });

@@ -3,16 +3,26 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProjectsFilterComponent } from "./projects-filter.component";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { of } from "rxjs";
 
 describe("ProjectsFilterComponent", () => {
   let component: ProjectsFilterComponent;
   let fixture: ComponentFixture<ProjectsFilterComponent>;
 
   beforeEach(async () => {
+    const industrySpy = {
+      industries: of([]),
+    };
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule, ProjectsFilterComponent],
+      imports: [HttpClientTestingModule, ProjectsFilterComponent],
+      providers: [
+        { provide: IndustryRepositoryPort, useValue: industrySpy },
+        provideRouter([]),
+      ],
     }).compileComponents();
   });
 

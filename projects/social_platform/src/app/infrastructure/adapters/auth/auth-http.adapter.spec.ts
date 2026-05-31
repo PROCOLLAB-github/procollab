@@ -123,7 +123,7 @@ describe("AuthHttpAdapter", () => {
 
     adapter.saveAvatar("https://x/a.png", 7).subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/auth/users/7", { avatar: "https://x/a.png" });
+    expect(api.patch).toHaveBeenCalledOnceWith("/auth/users/7/", { avatar: "https://x/a.png" });
   });
 
   it("saveProfile идёт в PATCH /auth/users/:id/ с частичными данными", () => {

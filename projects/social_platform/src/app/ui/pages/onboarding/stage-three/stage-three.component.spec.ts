@@ -6,7 +6,8 @@ import { OnboardingStageThreeComponent } from "./stage-three.component";
 import { of } from "rxjs";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { OnboardingService } from "@api/onboarding/onboarding.service";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 describe("StageThreeComponent", () => {
   let component: OnboardingStageThreeComponent;
@@ -19,11 +20,19 @@ describe("StageThreeComponent", () => {
     });
     const onboardingSpy = jasmine.createSpyObj({}, { formValue$: of({}) });
 
+    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
+      "updateProfile",
+    ], {
+      updateProfile: of({}),
+    });
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, OnboardingStageThreeComponent],
+      imports: [OnboardingStageThreeComponent],
       providers: [
         { provide: AuthRepository, useValue: authSpy },
         { provide: OnboardingService, useValue: onboardingSpy },
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        provideRouter([]),
       ],
     }).compileComponents();
   });

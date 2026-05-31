@@ -3,9 +3,11 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { OnboardingComponent } from "./onboarding.component";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
 import { of } from "rxjs";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 describe("OnboardingComponent", () => {
   let component: OnboardingComponent;
@@ -16,9 +18,23 @@ describe("OnboardingComponent", () => {
       profile: of({}),
     };
 
+    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
+      "fetchProfile",
+      "fetchUserRoles",
+      "fetchChangeableRoles",
+    ], {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+    });
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, OnboardingComponent],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      imports: [OnboardingComponent, HttpClientTestingModule],
+      providers: [
+        { provide: AuthRepository, useValue: authSpy },
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        provideRouter([]),
+      ],
     }).compileComponents();
   });
 

@@ -1,23 +1,67 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { of } from "rxjs";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { signal } from "@angular/core";
+import { of } from "rxjs";
 import { ProfileMainComponent } from "./main.component";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { API_URL } from "@corelib";
 
 describe("MainComponent", () => {
   let component: ProfileMainComponent;
   let fixture: ComponentFixture<ProfileMainComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthRepository", {}, { profile: of({}) });
+    const profileDetailInfoServiceSpy = {
+      initializationProfile: jasmine.createSpy("initializationProfile"),
+      initCheckDescription: jasmine.createSpy("initCheckDescription"),
+      destroy: jasmine.createSpy("destroy"),
+    };
+
+    const profileDetailUIInfoServiceSpy = {
+      user: signal({ id: 1, firstName: "Test", personal: { birthday: "2000-01-01", links: [] }, relations: { progress: 100, skills: [], achievements: [], userLanguages: [], programs: [], education: [], workExperience: [], projects: [] } } as any),
+      loggedUserId: signal(1),
+      profileId: signal(1),
+      isProfileEmpty: signal(false),
+      isProfileFill: signal(false),
+      directions: signal([]),
+      isShowModal: signal(false),
+    };
+
+    const expandServiceSpy = {
+      descriptionExpandable: signal(false),
+      readFullDescription: signal(""),
+      readAll: signal(""),
+      onExpand: jasmine.createSpy("onExpand"),
+    };
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule, ProfileMainComponent],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
-    }).compileComponents();
+      imports: [HttpClientTestingModule, ProfileMainComponent],
+      providers: [
+        provideRouter([]),
+        { provide: AuthRepositoryPort, useValue: { fetchProfile: of({}), fetchUserRoles: of([]), fetchChangeableRoles: of([]), fetchLeaderProjects: of({}) } },
+        { provide: ExpandService, useValue: expandServiceSpy },
+        { provide: ProfileInfoService, useValue: { profile: signal(null) } },
+        { provide: API_URL, useValue: "" },
+      ],
+    })
+      .overrideComponent(ProfileMainComponent, {
+        remove: { providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService] },
+        add: {
+          providers: [
+            { provide: ProfileDetailInfoService, useValue: profileDetailInfoServiceSpy },
+            { provide: ProfileDetailUIInfoService, useValue: profileDetailUIInfoServiceSpy },
+            { provide: ExpandService, useValue: expandServiceSpy },
+          ],
+        },
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {

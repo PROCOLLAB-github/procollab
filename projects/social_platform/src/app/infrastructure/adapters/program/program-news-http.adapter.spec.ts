@@ -22,7 +22,7 @@ describe("ProgramNewsHttpAdapter", () => {
     setup();
     api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
-    adapter.fetchNews(10, 20, 5).subscribe();
+    adapter.fetchNews(5, 10, 20).subscribe();
 
     const [url, params] = api.get.calls.mostRecent().args;
     expect(url).toBe("/programs/5/news/");
@@ -65,7 +65,7 @@ describe("ProgramNewsHttpAdapter", () => {
 
     adapter.editNews(5, 9, patch).subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/programs/5/news/9", patch);
+    expect(api.patch).toHaveBeenCalledOnceWith("/programs/5/news/9/", patch);
   });
 
   it("deleteNews идёт в DELETE /programs/:pid/news/:nid", () => {
@@ -74,6 +74,6 @@ describe("ProgramNewsHttpAdapter", () => {
 
     adapter.deleteNews(5, 9).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/programs/5/news/9");
+    expect(api.delete).toHaveBeenCalledOnceWith("/programs/5/news/9/");
   });
 });

@@ -1,16 +1,22 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-
 import { ChatDirectResolver } from "./chat-direct.resolver";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, provideRouter } from "@angular/router";
+import { of } from "rxjs";
+import { ChatGroupsRepositoryPort } from "@domain/chat/ports/chat-groups.port";
 
 describe("ChatDirectResolver", () => {
   const mockRoute = { params: { chatId: 1 } } as unknown as ActivatedRouteSnapshot;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ChatGroupsRepositoryPort,
+          useValue: { getChats: () => of([]), getChat: () => of({}) },
+        },
+      ],
     });
   });
 

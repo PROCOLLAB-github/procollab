@@ -4,17 +4,17 @@ import { TestBed } from "@angular/core/testing";
 
 import { AuthRequiredGuard } from "./auth-required.guard";
 import { RouterTestingModule } from "@angular/router/testing";
-import { of } from "rxjs";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { TokenService } from "../../services/tokens/token.service";
 
 describe("AuthRequiredGuard", () => {
   beforeEach(() => {
-    const authSpy = jasmine.createSpyObj("AuthService", { getTokens: {}, getProfile: of({}) });
+    const tokenSpy = jasmine.createSpyObj("TokenService", ["getTokens"]);
+    tokenSpy.getTokens.and.returnValue(null);
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      providers: [{ provide: AuthInfoService, useValue: authSpy }],
+      providers: [{ provide: TokenService, useValue: tokenSpy }],
     });
   });
 

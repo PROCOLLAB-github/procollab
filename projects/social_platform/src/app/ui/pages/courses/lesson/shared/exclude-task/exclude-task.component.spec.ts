@@ -1,7 +1,6 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { ExcludeTaskComponent } from "./exclude-task.component";
 
 describe("ExcludeTaskComponent", () => {
@@ -15,6 +14,11 @@ describe("ExcludeTaskComponent", () => {
 
     fixture = TestBed.createComponent(ExcludeTaskComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("data", {
+      id: 1,
+      text: "Test",
+      options: [],
+    });
     fixture.detectChanges();
   });
 

@@ -3,15 +3,30 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AppComponent } from "./app.component";
-import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { of } from "rxjs";
+import { TokenService } from "@corelib";
+import { LoadingService } from "@ui/services/loading/loading.service";
 
 describe("AppComponent", () => {
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthRepository", ["getTokens"]);
+    const authPortSpy = {
+      fetchProfile: of({} as any),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+      fetchLeaderProjects: of({} as any),
+    };
+
+    const tokenSpy = { getTokens: jasmine.createSpy("getTokens").and.returnValue(null) };
+    const loadingSpy = { show: jasmine.createSpy("show"), hide: jasmine.createSpy("hide"), isLoading$: of(false) };
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, AppComponent],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        { provide: TokenService, useValue: tokenSpy },
+        { provide: LoadingService, useValue: loadingSpy },
+      ],
     }).compileComponents();
   });
 

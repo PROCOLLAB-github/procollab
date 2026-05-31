@@ -35,7 +35,7 @@ describe("ProjectNewsHttpAdapter", () => {
 
     adapter.fetchNewsDetail("42", "9").subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/news/9");
+    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/news/9/");
   });
 
   it("addNews идёт в POST /projects/:id/news/ с body", () => {

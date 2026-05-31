@@ -46,7 +46,7 @@ describe("ChatHttpAdapter", () => {
 
     adapter.loadProjectFiles(42).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/chats/projects/42/files");
+    expect(api.get).toHaveBeenCalledOnceWith("/chats/projects/42/files/");
   });
 
   it("hasUnreads идёт в GET /chats/has-unreads/", () => {

@@ -3,6 +3,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { RangeCriterionInputComponent } from "./range-criterion-input.component";
+import { provideRouter } from "@angular/router";
+import { provideNgxMask } from "ngx-mask";
 
 describe("RangeCriterionInputComponent", () => {
   let component: RangeCriterionInputComponent;
@@ -11,6 +13,7 @@ describe("RangeCriterionInputComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, RangeCriterionInputComponent],
+      providers: [provideRouter([]), provideNgxMask()],
     }).compileComponents();
   });
 
@@ -53,6 +56,7 @@ describe("RangeCriterionInputComponent", () => {
     const field = fixture.nativeElement.querySelector(".field");
     expect(field.classList).not.toContain("field--error");
     component.error = true;
+    fixture.componentRef.setInput("error", true);
     fixture.detectChanges();
     expect(field.classList).toContain("field--error");
   });

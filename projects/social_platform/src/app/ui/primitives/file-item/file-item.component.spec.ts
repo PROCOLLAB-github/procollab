@@ -4,6 +4,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { FileItemComponent } from "./file-item.component";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { API_URL } from "@corelib";
 
 describe("FileItemComponent", () => {
   let component: FileItemComponent;
@@ -11,7 +13,8 @@ describe("FileItemComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FileItemComponent, FileTypePipe],
+      imports: [HttpClientTestingModule, FileItemComponent, FileTypePipe],
+      providers: [{ provide: API_URL, useValue: "" }],
     }).compileComponents();
   });
 

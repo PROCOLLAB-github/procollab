@@ -8,9 +8,14 @@ import { ProfileEditComponent } from "./edit.component";
 import { of } from "rxjs";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { NgxMaskModule } from "ngx-mask";
+import { provideNgxMask } from "ngx-mask";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { SpecializationsRepositoryPort } from "@domain/specializations/ports/specializations.repository.port";
+import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
+import { API_URL } from "@corelib";
 
 describe("ProfileEditComponent", () => {
   let component: ProfileEditComponent;
@@ -22,15 +27,42 @@ describe("ProfileEditComponent", () => {
       changeableRoles: of([]),
     };
 
+    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
+      "fetchProfile",
+      "fetchUserRoles",
+      "fetchChangeableRoles",
+    ], {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+    });
+
+    const specializationsSpy = {
+      getSpecializationsNested: () => of([]),
+      getSpecializationsInline: () => of({ count: 0, results: [], next: "", previous: "" }),
+    };
+
+    const skillsSpy = {
+      getSkillsNested: () => of([]),
+      getSkillsInline: () => of({ count: 0, results: [], next: "", previous: "" }),
+    };
+
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        NgxMaskModule.forRoot(),
         ProfileEditComponent,
       ],
-      providers: [{ provide: AuthRepository, useValue: authSpy }],
+      providers: [
+        { provide: AuthRepository, useValue: authSpy },
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        { provide: SpecializationsRepositoryPort, useValue: specializationsSpy },
+        { provide: SkillsRepositoryPort, useValue: skillsSpy },
+        { provide: ProjectRepositoryPort, useValue: {} },
+        { provide: API_URL, useValue: "" },
+        provideNgxMask(),
+        provideRouter([]),
+      ],
     }).compileComponents();
   });
 

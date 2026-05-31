@@ -11,7 +11,7 @@ import { ModalComponent } from "./modal.component";
       <div class="content">Hello, world!</div>
     </app-modal>
   `,
-  imports: [OverlayModule],
+  imports: [OverlayModule, ModalComponent],
 })
 class TestHostComponent {
   @ViewChild(ModalComponent) modalComponent!: ModalComponent;
@@ -27,8 +27,7 @@ describe("ModalComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OverlayModule, ModalComponent],
-      declarations: [TestHostComponent],
+      imports: [OverlayModule, ModalComponent, TestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

@@ -2,15 +2,21 @@
 
 import { TestBed } from "@angular/core/testing";
 import { ProgramRegisterResolver } from "./register.resolver";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, provideRouter } from "@angular/router";
+import { of } from "rxjs";
+import { GetProgramDataSchemaUseCase } from "@api/program/use-cases/get-program-data-schema.use-case";
 
 describe("ProgramRegisterResolver", () => {
   const mockRoute = { params: { programId: 1 } } as unknown as ActivatedRouteSnapshot;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        provideRouter([]),
+        {
+          provide: GetProgramDataSchemaUseCase,
+          useValue: { execute: () => of({ ok: true, value: {} }) },
+        },
+      ],
     });
   });
 

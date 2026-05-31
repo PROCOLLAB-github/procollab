@@ -1,4 +1,3 @@
-/** @format */
 /// <reference types="jasmine" />
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -6,38 +5,49 @@ import { signal } from "@angular/core";
 import { VacanciesListComponent } from "./list.component";
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
+import { provideRouter } from "@angular/router";
 
 describe("VacanciesListComponent", () => {
   let component: VacanciesListComponent;
   let fixture: ComponentFixture<VacanciesListComponent>;
   let vacancyInfoService: jasmine.SpyObj<VacancyInfoService>;
-  let vacancyUIInfoService: jasmine.SpyObj<VacancyUIInfoService>;
+  let vacancyUIInfoService: any;
 
   beforeEach(async () => {
     const infServiceSpy = jasmine.createSpyObj<VacancyInfoService>("VacancyInfoService", [
       "init",
       "initScroll",
+      "destroy",
     ]);
 
-    const uiServiceSpy = jasmine.createSpyObj<VacancyUIInfoService>("VacancyUIInfoService", [], {
+    const uiServiceSpy = {
       listType: signal("all"),
-      vacancyList: signal([]), // Пустой список по умолчанию
+      vacancyList: signal([]),
       responsesList: signal([]),
       isMyModal: signal(false),
-    });
+    };
 
     await TestBed.configureTestingModule({
       imports: [VacanciesListComponent],
       providers: [
-        { provide: VacancyInfoService, useValue: infServiceSpy },
-        { provide: VacancyUIInfoService, useValue: uiServiceSpy },
+        provideRouter([]),
       ],
-    }).compileComponents();
+    })
+      .overrideComponent(VacanciesListComponent, {
+        remove: {
+          providers: [VacancyInfoService, VacancyUIInfoService],
+        },
+        add: {
+          providers: [
+            { provide: VacancyInfoService, useValue: infServiceSpy },
+            { provide: VacancyUIInfoService, useValue: uiServiceSpy },
+          ],
+        },
+      })
+      .compileComponents();
 
-    vacancyInfoService = TestBed.inject(VacancyInfoService) as jasmine.SpyObj<VacancyInfoService>;
-    vacancyUIInfoService = TestBed.inject(
-      VacancyUIInfoService
-    ) as jasmine.SpyObj<VacancyUIInfoService>;
+    vacancyInfoService = infServiceSpy;
+    vacancyUIInfoService = uiServiceSpy;
 
     fixture = TestBed.createComponent(VacanciesListComponent);
     component = fixture.componentInstance;
