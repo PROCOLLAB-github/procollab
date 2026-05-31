@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
@@ -17,7 +17,7 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
     providers: [ProgramInfoService, ProgramMainUIInfoService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProgramComponent implements OnInit, OnDestroy {
+export class ProgramComponent implements OnInit {
   private readonly programInfoService = inject(ProgramInfoService);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
 
@@ -25,9 +25,5 @@ export class ProgramComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.programInfoService.initializationPrograms();
-  }
-
-  ngOnDestroy(): void {
-    this.programInfoService.destroy();
   }
 }
