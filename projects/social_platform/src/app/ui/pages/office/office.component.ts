@@ -1,18 +1,14 @@
 /** @format */
 
-import { AsyncPipe } from "@angular/common";
 import {
   Component,
   OnInit,
-  OnDestroy,
   signal,
   effect,
   inject,
   ChangeDetectionStrategy,
-  DestroyRef,
 } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
-import { toSignal } from "@angular/core/rxjs-interop";
 import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/primitives";
 import { DeleteConfirmComponent } from "./delete-confirm/delete-confirm.component";
@@ -23,7 +19,6 @@ import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { Program } from "@domain/program/program.model";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
 import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
@@ -44,7 +39,6 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
         ButtonComponent,
         DeleteConfirmComponent,
         SnackbarComponent,
-        AsyncPipe,
         RouterLink,
         ProfileControlPanelComponent,
         ProgramSidebarCardComponent,
@@ -52,7 +46,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
     providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OfficeComponent implements OnInit, OnDestroy {
+export class OfficeComponent implements OnInit {
   private readonly officeInfoService = inject(OfficeInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly authRegisterService = inject(AuthRegisterService);
@@ -67,10 +61,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
   protected readonly waitVerificationModal = this.officeUIInfoService.waitVerificationModal;
   protected readonly waitVerificationAccepted = this.officeUIInfoService.waitVerificationAccepted;
 
-  protected readonly showRegisteredProgramModal = signal<boolean>(false);
-
-  protected registeredProgramToShow?: Program | null = null;
-
   protected readonly inviteErrorModal = this.officeUIInfoService.inviteErrorModal;
 
   protected readonly programs = this.programShellInfoService.actualPrograms;
@@ -80,8 +70,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   protected currentYear = signal(new Date().getFullYear());
 
-  // effect в field initializer — здесь есть injection-контекст (в ngOnInit его нет → NG0203).
-  private readonly registeredProgramEffect = effect(() => {
+  protected readonly showRegisteredProgramModal = signal<boolean>(false);
+
+  protected registeredProgramToShow?: Program | null = null;
+
+  private readonly _ = effect(() => {
     const programs = this.programs();
     if (programs && programs.length) {
       this.tryShowRegisteredProgramModal();
@@ -96,10 +89,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
     }
 
     this.programShellInfoService.ensureProgramsLoaded();
-  }
-
-  ngOnDestroy(): void {
-    this.officeInfoService.destroy();
   }
 
   onAcceptWaitVerification() {

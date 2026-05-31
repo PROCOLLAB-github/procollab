@@ -2,7 +2,7 @@
 
 import { Injectable, signal } from "@angular/core";
 
-type TooltipKey =
+export type TooltipKey =
   | "base"
   | "photo"
   | "city"
