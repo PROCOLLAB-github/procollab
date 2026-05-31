@@ -61,10 +61,6 @@ export class VacancyInfoComponent implements OnInit {
     this.vacancyDetailInfoService.initializeDetailInfoQueryParams();
   }
 
-  ngOnDestroy(): void {
-    this.vacancyDetailInfoService.destroy();
-  }
-
   onOpenResponseModal(): void {
     this.vacancyDetailUIInfoService.applyResponseModalOpen();
   }

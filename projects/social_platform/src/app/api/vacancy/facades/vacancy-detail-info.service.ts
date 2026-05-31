@@ -1,13 +1,14 @@
 /** @format */
 
-import { ElementRef, inject, Injectable } from "@angular/core";
+import { DestroyRef, ElementRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { filter, map, Subject, takeUntil } from "rxjs";
+import { filter, map } from "rxjs";
 import { ValidationService } from "@corelib";
 import { VacancyDetailUIInfoService } from "./ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "../../expand/expand.service";
 import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
 import { loading } from "@domain/shared/async-state";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Управляет детальной страницей вакансии, раскрытием текста и отправкой отклика. */
 @Injectable()
@@ -19,7 +20,7 @@ export class VacancyDetailInfoService {
   private readonly validationService = inject(ValidationService);
   private readonly expandService = inject(ExpandService);
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly vacancy = this.vacancyDetailUIInfoService.vacancy;
   private readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
@@ -30,7 +31,7 @@ export class VacancyDetailInfoService {
       .pipe(
         map(r => r["data"]),
         filter(Boolean),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(vacancy => {
         this.vacancyDetailUIInfoService.applySetVacancies(vacancy);
@@ -38,7 +39,7 @@ export class VacancyDetailInfoService {
   }
 
   initializeDetailInfoQueryParams(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe({
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: r => {
         this.vacancyDetailUIInfoService.applyNoResponseOpenModal(r);
       },
@@ -55,11 +56,6 @@ export class VacancyDetailInfoService {
     setTimeout(() => {
       this.expandService.checkExpandable("skills", !!this.vacancy()?.requiredSkills.length, descEl);
     }, 150);
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   submitVacancyResponse(): void {
