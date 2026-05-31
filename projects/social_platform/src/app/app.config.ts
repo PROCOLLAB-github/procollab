@@ -6,7 +6,6 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideNgxMask } from "ngx-mask";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
-import { GlobalErrorHandlerService } from "@core/lib/services/error/global-error-handler.service";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { provideRouter, withRouterConfig } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
@@ -20,6 +19,7 @@ import {
 import { environment } from "@environment";
 import { registerLocaleData } from "@angular/common";
 import localeRu from "@angular/common/locales/ru";
+import { createErrorHandler } from "@sentry/angular";
 import { AUTH_PROVIDERS } from "./infrastructure/di/auth.providers";
 import { FEED_PROVIDERS } from "./infrastructure/di/feed.providers";
 import { INDUSTRY_PROVIDERS } from "./infrastructure/di/industry.providers";
@@ -72,7 +72,12 @@ export const APP_CONFIG: ApplicationConfig = {
     { provide: PRODUCTION, useValue: environment.production },
     {
       provide: ErrorHandler,
-      useClass: GlobalErrorHandlerService,
+      useFactory: () => {
+        const handler = createErrorHandler({
+          logErrors: !environment.production,
+        });
+        return handler;
+      },
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(
