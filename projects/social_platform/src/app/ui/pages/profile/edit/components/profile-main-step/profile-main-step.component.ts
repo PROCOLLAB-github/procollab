@@ -33,7 +33,8 @@ import { IconComponent } from "@uilib";
         AvatarControlComponent,
         ControlErrorPipe,
         ReactiveFormsModule,
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileMainStepComponent {
   @Output() openSpecsGroupsModal = new EventEmitter<void>();

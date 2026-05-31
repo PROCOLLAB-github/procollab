@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit, signal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -25,10 +25,10 @@ import { TruncatePipe } from "@corelib";
         IconComponent,
         AvatarComponent,
         ButtonComponent,
-        IconComponent,
     ],
     templateUrl: "./course.component.html",
-    styleUrl: "./course.component.scss"
+    styleUrl: "./course.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseComponent implements OnInit {
   @Input() course!: CourseCard;

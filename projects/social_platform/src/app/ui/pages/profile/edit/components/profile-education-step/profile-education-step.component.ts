@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { IconComponent } from "@uilib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
@@ -26,7 +26,8 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
         ControlErrorPipe,
         TruncatePipe,
     ],
-    providers: [ProfileDetailUIInfoService]
+    providers: [ProfileDetailUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileEducationStepComponent {
   @Input() isEducationDirty!: boolean;

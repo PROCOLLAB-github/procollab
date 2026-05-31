@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { AnalyticsService } from "@api/analytics/analytics.service";
 import { ButtonComponent, CheckboxComponent } from "@ui/primitives";
 
@@ -9,7 +9,8 @@ import { ButtonComponent, CheckboxComponent } from "@ui/primitives";
     selector: "app-cookie-consent",
     templateUrl: "./cookie-consent.component.html",
     styleUrl: "./cookie-consent.component.scss",
-    imports: [CheckboxComponent, ButtonComponent]
+    imports: [CheckboxComponent, ButtonComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CookieConsentComponent implements OnInit {
   visible = false;

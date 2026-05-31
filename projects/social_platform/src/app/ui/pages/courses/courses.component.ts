@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { BackComponent } from "@uilib";
 import { SearchComponent } from "@ui/primitives/search/search.component";
@@ -20,7 +20,8 @@ import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component"
         SoonCardComponent,
     ],
     templateUrl: "./courses.component.html",
-    styleUrl: "./courses.component.scss"
+    styleUrl: "./courses.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesComponent {
   private readonly fb = inject(FormBuilder);

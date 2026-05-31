@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { CourseComponent } from "./course/course.component";
@@ -15,7 +15,8 @@ import { AppRoutes } from "@api/paths/app-routes";
     imports: [CommonModule, RouterModule, CourseComponent, LoaderComponent],
     templateUrl: "./list.component.html",
     styleUrl: "./list.component.scss",
-    providers: [CoursesListInfoService, CoursesListUIInfoService]
+    providers: [CoursesListInfoService, CoursesListUIInfoService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesListComponent implements OnInit {
   private readonly coursesListInfoService = inject(CoursesListInfoService);
