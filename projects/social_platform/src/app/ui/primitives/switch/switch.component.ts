@@ -1,13 +1,6 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, model } from "@angular/core";
 
 /**
  * Компонент переключателя (switch) для булевых значений.
@@ -33,12 +26,7 @@ import {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SwitchComponent implements OnInit {
+export class SwitchComponent {
   /** Состояние переключателя */
-  @Input({ required: true }) checked!: boolean;
-
-  /** Событие изменения состояния */
-  @Output() checkedChange = new EventEmitter<boolean>();
-
-  ngOnInit(): void {}
+  checked = model(false);
 }

@@ -5,12 +5,10 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  EventEmitter,
   forwardRef,
   inject,
-  Input,
-  OnInit,
-  Output,
+  input,
+  output,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "@core/lib/services/file/file.service";
@@ -51,29 +49,27 @@ import { IconComponent } from "../icon/icon.component";
     ],
     imports: [IconComponent, LoaderComponent]
 })
-export class UploadFileComponent implements OnInit, ControlValueAccessor {
+export class UploadFileComponent implements ControlValueAccessor {
   private readonly fileService = inject(FileService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
 
   /** Ограничения по типу файлов */
-  @Input() accept = "";
+  accept = input("");
 
   /** Состояние ошибки */
-  @Input() error = false;
+  error = input(false);
 
   /** Режим: после загрузки сбросить в пустое состояние и не показывать "файл успешно загружен" */
-  @Input() resetAfterUpload = false;
+  resetAfterUpload = input(false);
 
   /** Событие с данными загруженного файла (url + метаданные оригинального файла) */
-  @Output() uploaded = new EventEmitter<{
+  uploaded = output<{
     url: string;
     name: string;
     size: number;
     mimeType: string;
   }>();
-
-  ngOnInit(): void {}
 
   /** Уникальный ID для элемента input */
   controlId = nanoid(3);

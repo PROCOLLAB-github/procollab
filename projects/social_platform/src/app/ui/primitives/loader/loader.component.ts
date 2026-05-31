@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 /**
  * Компонент индикатора загрузки с настраиваемым внешним видом.
@@ -23,20 +23,16 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoaderComponent implements OnInit {
-  constructor() {}
-
+export class LoaderComponent {
   /** Скорость анимации */
-  @Input() speed = "1s";
+  speed = input("1s");
 
   /** Размер индикатора */
-  @Input() size = "15px";
+  size = input("15px");
 
   /** Цвет индикатора */
-  @Input() color = "white";
+  color = input("white");
 
   /** Тип анимации */
-  @Input() type: "wave" | "circle" = "circle";
-
-  ngOnInit(): void {}
+  type = input<"wave" | "circle">("circle");
 }

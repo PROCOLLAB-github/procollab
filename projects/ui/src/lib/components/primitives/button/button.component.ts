@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
 
@@ -11,18 +11,14 @@ import { LoaderComponent } from "../loader/loader.component";
     imports: [CommonModule, LoaderComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ButtonComponent implements OnInit {
-  constructor() {}
-
-  @Input() color: "primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white" = "primary";
-  @Input() loader = false;
-  @Input() size: "extra-small" | "small" | "medium" | "big" = "small";
-  @Input() hasBorder = true;
-  @Input() type: "submit" | "reset" | "button" | "icon" = "button";
-  @Input() appearance: "inline" | "outline" = "inline";
-  @Input() backgroundColor?: string;
-  @Input() disabled = false;
-  @Input() customTypographyClass?: string;
-
-  ngOnInit(): void {}
+export class ButtonComponent {
+  color = input<"primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white">("primary");
+  loader = input(false);
+  size = input<"extra-small" | "small" | "medium" | "big">("small");
+  hasBorder = input(true);
+  type = input<"submit" | "reset" | "button" | "icon">("button");
+  appearance = input<"inline" | "outline">("inline");
+  backgroundColor = input<string>();
+  disabled = input(false);
+  customTypographyClass = input<string>();
 }

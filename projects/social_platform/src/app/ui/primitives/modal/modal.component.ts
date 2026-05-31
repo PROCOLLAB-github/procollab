@@ -7,10 +7,9 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  OnInit,
-  Output,
+  output,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from "@angular/core";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
@@ -45,19 +44,19 @@ import { CommonModule } from "@angular/common";
     imports: [CommonModule],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ModalComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly overlay: Overlay,
     private readonly viewContainerRef: ViewContainerRef
   ) {}
 
   /** Цветовая схема модального окна */
-  @Input() color?: "primary" | "gradient" = "primary";
+  color = input<"primary" | "gradient">("primary");
 
   /** Дополнительный CSS-класс для modal__body */
-  @Input() bodyClass?: string;
+  bodyClass = input<string>();
 
-  /** Состояние открытия модального окна */
+  /** Состояние открытия модального окна — setter input, нельзя конвертировать в signal */
   @Input({ required: true }) set open(value: boolean) {
     setTimeout(() => {
       if (value) this.overlayRef?.attach(this.portal);
@@ -70,15 +69,14 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /** Событие изменения состояния открытия */
-  @Output() openChange = new EventEmitter<boolean>();
-
-  ngOnInit(): void {}
+  openChange = output<boolean>();
 
   /** Инициализация overlay после загрузки представления */
   ngAfterViewInit(): void {
-    if (this.modalTemplate) {
+    const tpl = this.modalTemplate();
+    if (tpl) {
       this.overlayRef = this.overlay.create({});
-      this.portal = new TemplatePortal(this.modalTemplate, this.viewContainerRef);
+      this.portal = new TemplatePortal(tpl, this.viewContainerRef);
     }
   }
 
@@ -88,7 +86,7 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /** Ссылка на шаблон модального окна */
-  @ViewChild("modalTemplate") modalTemplate?: TemplateRef<HTMLElement>;
+  modalTemplate = viewChild<TemplateRef<HTMLElement>>("modalTemplate");
 
   /** Portal для проекции контента */
   portal?: TemplatePortal;

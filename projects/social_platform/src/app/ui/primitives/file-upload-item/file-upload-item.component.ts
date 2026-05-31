@@ -3,10 +3,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
+  input,
+  output,
 } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { LoaderComponent } from "../loader/loader.component";
@@ -37,32 +35,28 @@ import { IconComponent } from "../icon/icon.component";
     imports: [IconComponent, LoaderComponent, NgIf, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FileUploadItemComponent implements OnInit {
-  constructor() {}
-
+export class FileUploadItemComponent {
   /** MIME-тип файла */
-  @Input() type = "file";
+  type = input("file");
 
   /** Имя файла */
-  @Input() name = "";
+  name = input("");
 
   /** Размер файла в байтах */
-  @Input() size = 0;
+  size = input(0);
 
   /** Ссылка на файл */
-  @Input() link = "";
+  link = input("");
 
   /** Состояние загрузки */
-  @Input() loading = false;
+  loading = input(false);
 
   /** Текст ошибки */
-  @Input() error = "";
+  error = input("");
 
   /** Событие удаления файла */
-  @Output() delete = new EventEmitter<void>();
+  delete = output<void>();
 
   /** Событие повторной попытки загрузки */
-  @Output() retry = new EventEmitter<void>();
-
-  ngOnInit(): void {}
+  retry = output<void>();
 }

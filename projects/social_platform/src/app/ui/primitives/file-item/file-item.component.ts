@@ -4,11 +4,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   Input,
-  OnInit,
-  Output,
+  input,
+  output,
 } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { UpperCasePipe } from "@angular/common";
@@ -39,31 +38,29 @@ import { IconComponent } from "../icon/icon.component";
     imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FileItemComponent implements OnInit {
+export class FileItemComponent {
   private readonly fileService = inject(FileService);
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() canDelete = false;
+  canDelete = input(false);
 
   /** Режим отображения: 'default' — скачивание + удаление через сервис, 'preview' — только просмотр + удаление через Output */
-  @Input() mode: "default" | "preview" = "default";
+  mode = input<"default" | "preview">("default");
 
   /** Событие удаления файла (используется в режиме preview) */
-  @Output() deleted = new EventEmitter<void>();
+  deleted = output<void>();
 
   /** MIME-тип файла */
-  @Input() type = "file";
+  type = input("file");
 
   /** Название файла */
   @Input() name = "";
 
   /** Размер файла в байтах */
-  @Input() size = 0;
+  size = input(0);
 
   /** Ссылка для скачивания */
   @Input() link = "";
-
-  ngOnInit(): void {}
 
   /** Функция скачивания файла через создание временной ссылки */
   onDownloadFile(): void {
@@ -85,7 +82,7 @@ export class FileItemComponent implements OnInit {
   onDeleteFile(): void {
     if (!this.link) return;
 
-    if (this.mode === "preview") {
+    if (this.mode() === "preview") {
       this.deleted.emit();
       return;
     }

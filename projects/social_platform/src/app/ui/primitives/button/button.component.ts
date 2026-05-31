@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
 
@@ -17,14 +17,10 @@ import { LoaderComponent } from "../loader/loader.component";
  * - backgroundColor: кастомный цвет фона
  * - disabled: состояние блокировки кнопки
  * - customTypographyClass: кастомный CSS класс для типографики
- * - tooltipText: текст подсказки
- * - tooltipPosition: позиция подсказки
- * - tooltipWidth: ширина подсказки
  *
  * Использование:
  * - Вставлять контент кнопки через ng-content
  * - Автоматически показывает лоадер при loader=true
- * - Показывает tooltip при наведении, если указан tooltipText
  */
 @Component({
     selector: "app-button",
@@ -33,35 +29,31 @@ import { LoaderComponent } from "../loader/loader.component";
     imports: [CommonModule, LoaderComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ButtonComponent implements OnInit {
-  constructor() {}
-
+export class ButtonComponent {
   /** Цветовая схема кнопки */
-  @Input() color: "primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white" = "primary";
+  color = input<"primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white">("primary");
 
   /** Показывать индикатор загрузки */
-  @Input() loader = false;
+  loader = input(false);
 
   /** Размер кнопки */
-  @Input() size: "extra-small" | "small" | "medium" | "big" = "small";
+  size = input<"extra-small" | "small" | "medium" | "big">("small");
 
   /** Отображать рамку */
-  @Input() hasBorder = true;
+  hasBorder = input(true);
 
   /** Тип HTML кнопки */
-  @Input() type: "submit" | "reset" | "button" | "icon" = "button";
+  type = input<"submit" | "reset" | "button" | "icon">("button");
 
   /** Стиль отображения */
-  @Input() appearance: "inline" | "outline" = "inline";
+  appearance = input<"inline" | "outline">("inline");
 
   /** Кастомный цвет фона */
-  @Input() backgroundColor?: string;
+  backgroundColor = input<string>();
 
   /** Состояние блокировки */
-  @Input() disabled = false;
+  disabled = input(false);
 
   /** Кастомный класс типографики */
-  @Input() customTypographyClass?: string;
-
-  ngOnInit(): void {}
+  customTypographyClass = input<string>();
 }

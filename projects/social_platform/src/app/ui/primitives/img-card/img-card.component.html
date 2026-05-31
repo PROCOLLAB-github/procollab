@@ -1,9 +1,9 @@
 <!-- @format -->
 
-<div class="file" [class.file--loading]="loading" [class.file--error]="error">
-  @if (src && !loading && !error) {
-  <img [src]="src" alt="user-generated content" class="file__img" loading="lazy" decoding="async" />
-  } @if (error) {
+<div class="file" [class.file--loading]="loading()" [class.file--error]="error()">
+  @if (src() && !loading() && !error()) {
+  <img [src]="src()" alt="user-generated content" class="file__img" loading="lazy" decoding="async" />
+  } @if (error()) {
   <div class="file__error loading-error">
     <div class="loading-error__message text-body-12">
       <i appIcon icon="error" appSquare="14"></i>
@@ -17,7 +17,7 @@
       (click)="retry.emit()"
     ></i>
   </div>
-  } @if (loading) {
+  } @if (loading()) {
   <svg
     class="file__loader"
     xmlns="http://www.w3.org/2000/svg"

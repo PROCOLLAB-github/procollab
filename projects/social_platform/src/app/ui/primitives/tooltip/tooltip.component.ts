@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
+import { Component, input, output, ChangeDetectionStrategy } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
 
 /**
@@ -28,29 +28,29 @@ import { IconComponent } from "../icon/icon.component";
 })
 export class TooltipComponent {
   /** Текст подсказки */
-  @Input() text = "";
+  text = input("");
 
   /** Состояние видимости */
-  @Input() isVisible = false;
+  isVisible = input(false);
 
   /** Позиция подсказки */
-  @Input() position: "left" | "right" = "right";
+  position = input<"left" | "right">("right");
 
   /** Размер иконки */
-  @Input() iconSize = "16";
+  iconSize = input("16");
 
   /** Ширина подсказки */
-  @Input() tooltipWidth = 250;
+  tooltipWidth = input(250);
 
   /** Дополнительные CSS классы */
-  @Input() customClass = "";
+  customClass = input("");
 
   /** Цвет иконки */
-  @Input() color: "accent" | "grey" = "accent";
+  color = input<"accent" | "grey">("accent");
 
   /** Событие показа подсказки */
-  @Output() show = new EventEmitter<void>();
+  show = output<void>();
 
   /** Событие скрытия подсказки */
-  @Output() hide = new EventEmitter<void>();
+  hide = output<void>();
 }
