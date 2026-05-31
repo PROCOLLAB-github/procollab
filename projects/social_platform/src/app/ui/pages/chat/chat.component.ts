@@ -28,7 +28,7 @@ import { ChatUIInfoService } from "@api/chat/facades/ui/chat-ui-info.service";
     providers: [ChatInfoService, ChatUIInfoService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit {
   private readonly chatInfoService = inject(ChatInfoService);
   private readonly ChatUIInfoService = inject(ChatUIInfoService);
 
@@ -37,10 +37,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.chatInfoService.initializationChats();
-  }
-
-  ngOnDestroy(): void {
-    this.chatInfoService.destroy();
   }
 
   onGotoChat(id: string | number) {
