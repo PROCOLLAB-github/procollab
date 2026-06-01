@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy, output } from "@angular/core";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/primitives";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { AutosizeModule } from "ngx-autosize";
@@ -37,7 +37,7 @@ import { IconComponent } from "@uilib";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainStepComponent {
-  @Output() openSpecsGroupsModal = new EventEmitter<void>();
+  readonly openSpecsGroupsModal = output<void>();
 
   private readonly profileFormService = inject(ProfileFormService);
   private readonly searchesService = inject(SearchesService);

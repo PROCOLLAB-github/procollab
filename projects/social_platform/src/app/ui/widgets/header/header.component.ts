@@ -7,6 +7,7 @@ import {
   inject,
   input,
   Input,
+  output,
   Output,
 } from "@angular/core";
 import { Invite } from "@domain/invite/invite.model";
@@ -37,8 +38,8 @@ export class HeaderComponent {
 
   readonly invites = input<Invite[]>([]);
 
-  @Output() acceptInvite = new EventEmitter<number>();
-  @Output() rejectInvite = new EventEmitter<number>();
+  readonly acceptInvite = output<number>();
+  readonly rejectInvite = output<number>();
 
   showBall = this.notificationService.hasNotifications;
   showNotifications = false;

@@ -6,6 +6,7 @@ import {
   EventEmitter,
   input,
   Input,
+  output,
   Output,
   signal,
 } from "@angular/core";
@@ -47,8 +48,8 @@ export class SkillsGroupComponent {
   readonly hasOpenGroups = input<boolean>(false);
   readonly disabled = input<boolean>(false);
 
-  @Output() groupToggled = new EventEmitter<boolean>();
-  @Output() optionToggled = new EventEmitter<Skill>();
+  readonly groupToggled = output<boolean>();
+  readonly optionToggled = output<Skill>();
 
   _options = signal<(Skill & { checked?: boolean })[]>([]);
   _selected = signal<Skill[]>([]);

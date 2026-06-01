@@ -8,6 +8,7 @@ import {
   inject,
   input,
   Input,
+  viewChild,
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -47,8 +48,7 @@ export class OpenVacancyComponent implements AfterViewInit {
   protected readonly AppRoutes = AppRoutes;
   private readonly industryRepository = inject(IndustryRepositoryPort);
 
-  @ViewChild("skillsEl") private skillsEl?: ElementRef;
-  @ViewChild("descEl") private descEl?: ElementRef;
+  private descEl = viewChild<ElementRef>("descEl");
 
   readFullSkills = false;
 
@@ -58,7 +58,7 @@ export class OpenVacancyComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.descEl);
+      this.expandService.checkExpandable("description", true, this.descEl());
     });
   }
 

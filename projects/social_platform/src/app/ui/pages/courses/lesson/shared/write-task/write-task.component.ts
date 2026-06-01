@@ -9,6 +9,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
   signal,
 } from "@angular/core";
@@ -52,7 +53,7 @@ export class WriteTaskComponent implements OnInit {
   readonly disabled = input<boolean>(false);
   readonly type = input<"text" | "text-file">("text");
 
-  @Output() update = new EventEmitter<{ text: string; fileUrls?: string[] }>();
+  readonly update = output<{ text: string; fileUrls?: string[] }>();
 
   readonly maxLength = 1000;
 

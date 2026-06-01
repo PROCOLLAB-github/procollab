@@ -9,6 +9,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
   signal,
 } from "@angular/core";
@@ -55,7 +56,7 @@ export class RadioSelectTaskComponent implements OnInit {
     return this._error();
   }
 
-  @Output() update = new EventEmitter<{ answerId: number }>();
+  readonly update = output<{ answerId: number }>();
 
   result = signal<{ answerId: number | null }>({ answerId: null });
   _error = signal<boolean>(false);

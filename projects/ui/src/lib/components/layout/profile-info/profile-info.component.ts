@@ -1,14 +1,6 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  input,
-  Input,
-  type OnInit,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, type OnInit, output } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { User } from "@domain/auth/user.model";
 import { AvatarComponent } from "../../primitives/avatar/avatar.component";
@@ -45,5 +37,5 @@ export class ProfileInfoComponent implements OnInit {
   readonly user = input.required<User>();
 
   /** Событие выхода из системы */
-  @Output() logout = new EventEmitter<void>();
+  readonly logout = output<void>();
 }

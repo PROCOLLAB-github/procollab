@@ -9,6 +9,7 @@ import {
   inject,
   Input,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
@@ -59,7 +60,7 @@ export class VacancyFilterComponent implements OnInit {
     return this.vacancyFilterInfoService.searchValue();
   }
 
-  @Output() searchValueChange = new EventEmitter<string>();
+  readonly searchValueChange = output<string>();
 
   protected readonly filterOpen = this.vacancyFilterInfoService.filterOpen;
 

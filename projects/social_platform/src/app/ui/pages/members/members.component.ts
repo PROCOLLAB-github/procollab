@@ -7,7 +7,7 @@ import {
   ElementRef,
   inject,
   OnInit,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -44,8 +44,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
   providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService],
 })
 export class MembersComponent implements OnInit, AfterViewInit {
-  @ViewChild("membersRoot") membersRoot?: ElementRef<HTMLUListElement>; // Ссылка на корневой элемент списка
-  @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>; // Ссылка на элемент фильтра
+  readonly membersRoot = viewChild<ElementRef<HTMLUListElement> | undefined>("membersRoot"); // Ссылка на корневой элемент списка
 
   private readonly membersInfoService = inject(MembersInfoService);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
@@ -66,8 +65,8 @@ export class MembersComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body") as HTMLElement;
-    if (target && this.membersRoot) {
-      this.membersInfoService.initScroll(target, this.membersRoot);
+    if (target && this.membersRoot()) {
+      this.membersInfoService.initScroll(target, this.membersRoot()!);
     }
   }
 

@@ -8,6 +8,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { IconComponent } from "@uilib";
@@ -31,7 +32,7 @@ export class DashboardItemComponent implements OnInit {
   readonly sectionName = input.required<string>();
   readonly profileProjSubsIds = input<number[]>();
 
-  @Output() addProjectClick = new EventEmitter<void>();
+  readonly addProjectClick = output<void>();
 
   appereance: "base" | "subs" | "my" = "base";
   protected readonly AppRoutes = AppRoutes;

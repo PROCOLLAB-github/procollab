@@ -8,6 +8,7 @@ import {
   inject,
   input,
   Input,
+  output,
   Output,
 } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -29,8 +30,7 @@ import { LoggerService } from "@corelib";
 })
 export class MembersFiltersComponent {
   readonly filterForm = input.required<MembersComponent["filterForm"]>();
-
-  @Output() filtersChanged = new EventEmitter();
+  readonly filtersChanged = output();
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);

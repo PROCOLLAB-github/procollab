@@ -8,6 +8,7 @@ import {
   Output,
   EventEmitter,
   input,
+  output,
 } from "@angular/core";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
 import { ProfileInfoComponent } from "../profile-info/profile-info.component";
@@ -66,13 +67,13 @@ export class ProfileControlPanelComponent {
   readonly hasUnreads = input<boolean>(false);
 
   /** Событие принятия приглашения (передает ID приглашения) */
-  @Output() acceptInvite = new EventEmitter<number>();
+  readonly acceptInvite = output<number>();
 
   /** Событие отклонения приглашения (передает ID приглашения) */
-  @Output() rejectInvite = new EventEmitter<number>();
+  readonly rejectInvite = output<number>();
 
   /** Событие выхода из системы */
-  @Output() logout = new EventEmitter();
+  readonly logout = output();
 
   /**
    * Проверяет наличие неотвеченных приглашений

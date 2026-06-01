@@ -7,6 +7,7 @@ import {
   input,
   Input,
   type OnInit,
+  output,
   Output,
 } from "@angular/core";
 import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
@@ -41,16 +42,14 @@ import { TruncatePipe } from "@corelib";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteManageCardComponent implements OnInit {
-  constructor() {}
-
   /** Данные приглашения для отображения */
   readonly invite = input.required<Invite>();
 
   /** Событие принятия приглашения (передает ID приглашения) */
-  @Output() accept = new EventEmitter<number>();
+  readonly accept = output<number>();
 
   /** Событие отклонения приглашения (передает ID приглашения) */
-  @Output() reject = new EventEmitter<number>();
+  readonly reject = output<number>();
 
   ngOnInit(): void {}
 }

@@ -9,6 +9,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  viewChild,
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -40,7 +41,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
   providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild("feedRoot") feedRoot?: ElementRef<HTMLElement>;
+  readonly feedRoot = viewChild<ElementRef<HTMLElement>>("feedRoot");
 
   private readonly feedInfoService = inject(FeedInfoService);
   private readonly feedUIInfoService = inject(FeedUIInfoService);
@@ -58,13 +59,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.feedInfoService.initializationFeedNews(this.feedRoot!);
+    this.feedInfoService.initializationFeedNews(this.feedRoot()!);
   }
 
   ngAfterViewInit() {
     const target = document.querySelector(".office__body") as HTMLElement;
     if (target || this.feedRoot) {
-      this.feedInfoService.initScroll(target, this.feedRoot!);
+      this.feedInfoService.initScroll(target, this.feedRoot()!);
     }
   }
 

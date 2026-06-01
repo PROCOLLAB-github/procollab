@@ -7,6 +7,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
   signal,
 } from "@angular/core";
@@ -52,8 +53,8 @@ export class InviteCardComponent implements OnInit {
 
   readonly invite = input.required<Invite>();
 
-  @Output() remove = new EventEmitter<number>();
-  @Output() edit = new EventEmitter<{ inviteId: number; role: string; specialization: string }>();
+  readonly remove = output<number>();
+  readonly edit = output<{ inviteId: number; role: string; specialization: string }>();
 
   ngOnInit(): void {
     if (this.invite()) {

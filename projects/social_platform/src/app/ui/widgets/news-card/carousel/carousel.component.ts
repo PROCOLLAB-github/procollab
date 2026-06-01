@@ -8,6 +8,7 @@ import {
   inject,
   input,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { FileModel } from "@domain/file/file.model";
@@ -23,7 +24,7 @@ import { IconComponent } from "@uilib";
 })
 export class CarouselComponent implements OnInit {
   readonly images = input<Array<FileModel | string>>([]);
-  @Output() like: EventEmitter<number> = new EventEmitter<number>();
+  readonly like = output<number>();
 
   private readonly cdRef = inject(ChangeDetectorRef);
 

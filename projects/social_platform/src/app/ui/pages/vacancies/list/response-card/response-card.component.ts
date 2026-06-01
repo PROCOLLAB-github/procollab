@@ -9,6 +9,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
@@ -30,8 +31,8 @@ export class ResponseCardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly response = input.required<VacancyResponse>();
-  @Output() reject = new EventEmitter<number>();
-  @Output() accept = new EventEmitter<number>();
+  readonly reject = output<number>();
+  readonly accept = output<number>();
 
   profileId!: number;
 

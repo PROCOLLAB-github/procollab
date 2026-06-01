@@ -7,6 +7,7 @@ import {
   EventEmitter,
   inject,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -33,7 +34,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
  * - Возможность удаления и повторной загрузки файлов
  *
  * Выходные события:
- * @Output addNews - событие добавления новости, передает объект с текстом и массивом URL файлов
+ * output addNews - событие добавления новости, передает объект с текстом и массивом URL файлов
  *
  * Внутренние свойства:
  * - messageForm - форма с полем текста новости (обязательное)
@@ -67,7 +68,7 @@ export class NewsFormComponent implements OnInit {
     });
   }
 
-  @Output() addNews = new EventEmitter<{ text: string; files: string[] }>();
+  readonly addNews = output<{ text: string; files: string[] }>();
 
   ngOnInit(): void {}
 
