@@ -6,6 +6,7 @@ import {
   ElementRef,
   inject,
   OnInit,
+  viewChild,
   ViewChild,
 } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
@@ -43,7 +44,7 @@ import { OfficeInfoService } from "@api/office/facades/office-info.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
-  @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
+  readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
 
   private readonly projectsInfoService = inject(ProjectsInfoService);
   private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
@@ -71,11 +72,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   onSwipeMove(event: TouchEvent): void {
-    this.swipeService.onSwipeMove(event, this.filterBody);
+    this.swipeService.onSwipeMove(event, this.filterBody()!);
   }
 
   onSwipeEnd(event: TouchEvent): void {
-    this.swipeService.onSwipeEnd(event, this.filterBody);
+    this.swipeService.onSwipeEnd(event, this.filterBody()!);
   }
 
   closeFilter(): void {

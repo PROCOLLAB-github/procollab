@@ -9,6 +9,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  viewChild,
   ViewChild,
 } from "@angular/core";
 import { isFailure } from "@domain/shared/async-state";
@@ -54,9 +55,9 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
-  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(NewsCardComponent) ProgramNewsCardComponent?: NewsCardComponent;
-  @ViewChild("descEl") descEl?: ElementRef;
+  readonly newsFormComponent = viewChild<NewsFormComponent | undefined>(NewsFormComponent);
+  readonly ProgramNewsCardComponent = viewChild<NewsCardComponent | undefined>(NewsCardComponent);
+  readonly descEl = viewChild<ElementRef | undefined>("descEl");
 
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly programDetailMainService = inject(ProgramDetailMainService);
@@ -98,14 +99,14 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.programDetailMainService.initializationProgramDetailMain(this.descEl);
+    this.programDetailMainService.initializationProgramDetailMain(this.descEl());
   }
 
   ngAfterViewInit() {
     const target = document.querySelector(".office__body") as HTMLElement;
 
     if (target || this.descEl) {
-      this.programDetailMainService.initScroll(target, this.descEl);
+      this.programDetailMainService.initScroll(target, this.descEl());
     }
   }
 
@@ -118,7 +119,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       .onAddNews(news)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.newsFormComponent?.onResetForm(),
+        next: () => this.newsFormComponent()?.onResetForm(),
       });
   }
 
@@ -135,7 +136,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       .onEdit(news, newsId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.ProgramNewsCardComponent?.onCloseEditMode(),
+        next: () => this.ProgramNewsCardComponent()?.onCloseEditMode(),
       });
   }
 

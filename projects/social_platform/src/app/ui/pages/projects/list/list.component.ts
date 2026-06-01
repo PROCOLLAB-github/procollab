@@ -7,7 +7,7 @@ import {
   ElementRef,
   inject,
   OnInit,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "@ui/primitives";
@@ -39,8 +39,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit {
-  @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
-  @ViewChild("listRoot") listRoot?: ElementRef<HTMLUListElement>;
+  readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
+  readonly listRoot = viewChild<ElementRef<HTMLUListElement>>("listRoot");
 
   private readonly projectsListInfoService = inject(ProjectsListInfoService);
   private readonly projectsInfoService = inject(ProjectsInfoService);
@@ -66,8 +66,8 @@ export class ProjectsListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body") as HTMLElement;
-    if (target || this.listRoot) {
-      this.projectsListInfoService.initScroll(target, this.listRoot!);
+    if (target || this.listRoot()) {
+      this.projectsListInfoService.initScroll(target, this.listRoot()!);
     }
   }
 
@@ -84,11 +84,11 @@ export class ProjectsListComponent implements OnInit, AfterViewInit {
   }
 
   onSwipeMove(event: TouchEvent): void {
-    this.swipeService.onSwipeMove(event, this.filterBody);
+    this.swipeService.onSwipeMove(event, this.filterBody()!);
   }
 
   onSwipeEnd(event: TouchEvent): void {
-    this.swipeService.onSwipeEnd(event, this.filterBody);
+    this.swipeService.onSwipeEnd(event, this.filterBody()!);
   }
 
   closeFilter(): void {

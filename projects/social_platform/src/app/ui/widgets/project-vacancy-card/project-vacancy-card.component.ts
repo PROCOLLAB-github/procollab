@@ -9,7 +9,7 @@ import {
   input,
   Input,
   OnInit,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
@@ -48,7 +48,7 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   readonly vacancy = input.required<Vacancy>();
   readonly type = input<"vacancies" | "project">("project");
 
-  @ViewChild("descEl") private descEl?: ElementRef;
+  private readonly descEl = viewChild<ElementRef>("descEl");
 
   endSliceOfSkills = 0;
 
@@ -61,7 +61,7 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.descEl);
+      this.expandService.checkExpandable("description", true, this.descEl());
     });
   }
 

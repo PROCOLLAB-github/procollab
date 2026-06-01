@@ -8,7 +8,7 @@ import {
   inject,
   input,
   Input,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
@@ -25,7 +25,7 @@ import { ExpandService } from "@api/expand/expand.service";
 })
 export class CourseAboutComponent implements AfterViewInit {
   readonly description = input.required<string>();
-  @ViewChild("descEl") private descEl?: ElementRef;
+  private readonly descEl = viewChild<ElementRef>("descEl");
 
   private readonly expandService = inject(ExpandService);
 
@@ -34,7 +34,7 @@ export class CourseAboutComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.descEl);
+      this.expandService.checkExpandable("description", true, this.descEl());
     });
   }
 

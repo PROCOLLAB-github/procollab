@@ -68,7 +68,7 @@
     }
   </ul>
   } @if (descriptionExpandable() && !editMode) {
-  <div class="read-more text-body-10" (click)="onExpandNewsText(newsTextEl?.nativeElement)">
+  <div class="read-more text-body-10" (click)="onExpandNewsText(newsTextEl()?.nativeElement)">
     {{ readFullDescription() ? "скрыть" : "подробнее" }}
   </div>
   } @if (!editMode) {

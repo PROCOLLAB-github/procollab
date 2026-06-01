@@ -7,7 +7,7 @@ import {
   ElementRef,
   inject,
   input,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
@@ -26,8 +26,8 @@ import { Vacancy } from "@domain/vacancy/vacancy.model";
 export class VacanciesLeftSideComponent {
   readonly vacancy = input.required<Vacancy | undefined>();
 
-  @ViewChild("skillsEl") skillsEl?: ElementRef;
-  @ViewChild("descEl") descEl?: ElementRef;
+  readonly skillsEl = viewChild<ElementRef>("skillsEl");
+  readonly descEl = viewChild<ElementRef>("descEl");
 
   private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);
   private readonly expandService = inject(ExpandService);
@@ -39,10 +39,10 @@ export class VacanciesLeftSideComponent {
   protected readonly readFullSkills = this.expandService.readFullSkills;
 
   ngAfterViewInit(): void {
-    const descElement = this.descEl?.nativeElement;
+    const descElement = this.descEl()?.nativeElement;
     this.vacancyDetailInfoService.initCheckDescription(descElement);
 
-    const skillsElement = this.skillsEl?.nativeElement;
+    const skillsElement = this.skillsEl()?.nativeElement;
     this.vacancyDetailInfoService.initCheckSkills(skillsElement);
   }
 
