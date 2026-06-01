@@ -8,12 +8,12 @@ import { ProjectsFilterInfoService } from "./service/projects-filter-info.servic
 
 /** Компонент фильтрации проектов с синхронизацией фильтров через URL query-параметры. */
 @Component({
-    selector: "app-projects-filter",
-    templateUrl: "./projects-filter.component.html",
-    styleUrl: "./projects-filter.component.scss",
-    imports: [SelectComponent, ReactiveFormsModule],
-    providers: [ProjectsFilterInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-projects-filter",
+  templateUrl: "./projects-filter.component.html",
+  styleUrl: "./projects-filter.component.scss",
+  imports: [SelectComponent, ReactiveFormsModule],
+  providers: [ProjectsFilterInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsFilterComponent implements OnInit {
   private readonly projectsFilterInfoService = inject(ProjectsFilterInfoService);

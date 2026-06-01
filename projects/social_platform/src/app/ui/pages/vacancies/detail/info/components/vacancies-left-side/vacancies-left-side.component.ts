@@ -6,9 +6,8 @@ import {
   Component,
   ElementRef,
   inject,
-  Input,
+  input,
   ViewChild,
-  WritableSignal,
 } from "@angular/core";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
@@ -18,14 +17,14 @@ import { Vacancy } from "@domain/vacancy/vacancy.model";
 
 /** Левая колонка детали вакансии. */
 @Component({
-    selector: "app-vacancies-left-side",
-    templateUrl: "./vacancies-left-side.component.html",
-    styleUrl: "./vacancies-left-side.component.scss",
-    imports: [CommonModule, ParseBreaksPipe, ParseLinksPipe, TagComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-vacancies-left-side",
+  templateUrl: "./vacancies-left-side.component.html",
+  styleUrl: "./vacancies-left-side.component.scss",
+  imports: [CommonModule, ParseBreaksPipe, ParseLinksPipe, TagComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesLeftSideComponent {
-  @Input() vacancy!: WritableSignal<Vacancy | undefined>;
+  readonly vacancy = input.required<Vacancy | undefined>();
 
   @ViewChild("skillsEl") skillsEl?: ElementRef;
   @ViewChild("descEl") descEl?: ElementRef;

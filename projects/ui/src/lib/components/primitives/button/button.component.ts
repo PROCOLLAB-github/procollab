@@ -5,11 +5,11 @@ import { CommonModule } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
 
 @Component({
-    selector: "app-button",
-    templateUrl: "./button.component.html",
-    styleUrl: "./button.component.scss",
-    imports: [CommonModule, LoaderComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-button",
+  templateUrl: "./button.component.html",
+  styleUrl: "./button.component.scss",
+  imports: [CommonModule, LoaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
   color = input<"primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white">("primary");

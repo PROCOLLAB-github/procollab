@@ -1,40 +1,40 @@
 <!-- @format -->
 
-@if (program) {
+@if (program()) {
 <div class="card">
   <div class="card__photo">
-    <app-avatar [url]="program.imageAddress" [size]="100"></app-avatar>
+    <app-avatar [url]="program().imageAddress" [size]="100"></app-avatar>
   </div>
 
   <div class="card__info">
-    <p class="text-body-10 card__name" style="padding-left: 25px">{{ program.name }}</p>
+    <p class="text-body-10 card__name" style="padding-left: 25px">{{ program().name }}</p>
 
     <p
       class="text-body-10 card__description card__registration"
       [ngClass]="{
         'card__registration--ended': registerDateExpired,
-        'card__registration--participating': !registerDateExpired && program.isUserMember,
+        'card__registration--participating': !registerDateExpired && program().isUserMember,
         'card__registration--actual':
-          !registerDateExpired && (!program.isUserMember || !program.isUserManager)
+          !registerDateExpired && (!program().isUserMember || !program().isUserManager)
       }"
     >
       <!-- ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM") -->
       {{
         registerDateExpired
           ? "регистрация завершена"
-          : program.isUserMember
+          : program().isUserMember
           ? "ты уже участвуешь!"
-          : "Регистрация до " + (program.datetimeRegistrationEnds | date: "dd MMMM")
+          : "Регистрация до " + (program().datetimeRegistrationEnds | date: "dd MMMM")
       }}
     </p>
 
     <div class="card__dates">
       <p class="text-body-10 card__description" style="padding-left: 25px">
-        {{ program.datetimeStarted | date: "dd.MM.yyyy" }}
+        {{ program().datetimeStarted | date: "dd.MM.yyyy" }}
       </p>
       <p class="text-body-10 card__description">-</p>
       <p class="text-body-10 card__description">
-        {{ program.datetimeFinished | date: "dd.MM.yyyy" }}
+        {{ program().datetimeFinished | date: "dd.MM.yyyy" }}
       </p>
       <!-- TODO: изменить когда на бэке для программ будет возможность для регионов поле -->
       <p class="text-body-10 card__description">• для всей России</p>

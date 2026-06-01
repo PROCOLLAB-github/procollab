@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   forwardRef,
   inject,
   input,
@@ -36,18 +37,18 @@ import { IconComponent } from "../icon/icon.component";
  * - Введенный текст поиска через ControlValueAccessor
  */
 @Component({
-    selector: "app-search",
-    templateUrl: "./search.component.html",
-    styleUrl: "./search.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SearchComponent),
-            multi: true,
-        },
-    ],
-    imports: [ClickOutsideModule, IconComponent]
+  selector: "app-search",
+  templateUrl: "./search.component.html",
+  styleUrl: "./search.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SearchComponent),
+      multi: true,
+    },
+  ],
+  imports: [ClickOutsideModule, IconComponent],
 })
 export class SearchComponent implements ControlValueAccessor {
   /** Текст подсказки */

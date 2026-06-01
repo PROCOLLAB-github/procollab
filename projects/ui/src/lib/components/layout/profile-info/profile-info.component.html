@@ -1,9 +1,13 @@
 <!-- @format -->
 
-@if (user) {
-<a class="user" [routerLink]="['/office/profile', user.id]">
+@if (user()) {
+<a class="user" [routerLink]="['/office/profile', user().id]">
   <div class="user__row">
-    <app-avatar class="user__avatar" [size]="avatarSize" [url]="user.personal.avatar"></app-avatar>
+    <app-avatar
+      class="user__avatar"
+      [size]="avatarSize"
+      [url]="user().personal.avatar"
+    ></app-avatar>
   </div>
 </a>
 }

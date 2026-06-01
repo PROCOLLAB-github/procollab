@@ -4,10 +4,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   Input,
-  Output,
+  input,
+  output,
 } from "@angular/core";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -28,22 +28,22 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
  */
 @Component({
-    selector: "app-info-card",
-    templateUrl: "./info-card.component.html",
-    styleUrl: "./info-card.component.scss",
-    imports: [
-        CommonModule,
-        AvatarComponent,
-        IconComponent,
-        ModalComponent,
-        ButtonComponent,
-        ClickOutsideModule,
-        TagComponent,
-        YearsFromBirthdayPipe,
-        TruncatePipe,
-        RouterLink,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-info-card",
+  templateUrl: "./info-card.component.html",
+  styleUrl: "./info-card.component.scss",
+  imports: [
+    CommonModule,
+    AvatarComponent,
+    IconComponent,
+    ModalComponent,
+    ButtonComponent,
+    ClickOutsideModule,
+    TagComponent,
+    YearsFromBirthdayPipe,
+    TruncatePipe,
+    RouterLink,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -55,20 +55,20 @@ export class InfoCardComponent {
 
   protected readonly AppRoutes = AppRoutes;
 
-  @Input() info?: any;
-  @Input() type: "invite" | "projects" | "members" | "rating" = "projects";
-  @Input() appereance: "my" | "subs" | "base" | "empty" = "base";
-  @Input() section: "projects" | "subscriptions" | "other" = "projects";
-  @Input() canDelete?: boolean | null = false;
+  readonly info = input<any>();
+  readonly type = input<"invite" | "projects" | "members" | "rating">("projects");
+  readonly appereance = input<"my" | "subs" | "base" | "empty">("base");
+  readonly section = input<"projects" | "subscriptions" | "other">("projects");
+  readonly canDelete = input<boolean | null>(false);
   @Input() isSubscribed?: boolean | null = false;
-  @Input() profileId?: number;
-  @Input() leaderId?: number;
-  @Input() loggedUserId?: number;
+  readonly profileId = input<number>();
+  readonly leaderId = input<number>();
+  readonly loggedUserId = input<number>();
 
-  @Output() onAcceptingInvite = new EventEmitter<number>();
-  @Output() onRejectingInvite = new EventEmitter<number>();
-  @Output() onCreate = new EventEmitter<void>();
-  @Output() onRemoveCollaborator = new EventEmitter<number>();
+  readonly onAcceptingInvite = output<number>();
+  readonly onRejectingInvite = output<number>();
+  readonly onCreate = output();
+  readonly onRemoveCollaborator = output<number>();
 
   // Состояние компонента
   isUnsubscribeModalOpen = false;
@@ -87,7 +87,9 @@ export class InfoCardComponent {
    * Определяет, нужно ли показывать информацию о проекте
    */
   shouldShowProjectInfo(): boolean {
-    return this.type === "projects" && this.appereance !== "subs" && this.appereance !== "empty";
+    return (
+      this.type() === "projects" && this.appereance() !== "subs" && this.appereance() !== "empty"
+    );
   }
 
   /**
@@ -95,11 +97,11 @@ export class InfoCardComponent {
    */
   shouldShowSubscriptionBadge(): boolean {
     return (
-      this.appereance !== "empty" &&
+      this.appereance() !== "empty" &&
       this.haveBadge &&
-      this.appereance === "base" &&
-      this.type !== "invite" &&
-      this.type !== "members"
+      this.appereance() === "base" &&
+      this.type() !== "invite" &&
+      this.type() !== "members"
     );
   }
 
@@ -108,12 +110,12 @@ export class InfoCardComponent {
    */
   getAvatarUrl(): string {
     const currentImageAddress =
-      this.appereance === "empty" && this.section === "projects"
+      this.appereance() === "empty" && this.section() === "projects"
         ? "/assets/images/projects/shared/add-project.svg"
-        : this.appereance === "empty" && this.section === "subscriptions"
+        : this.appereance() === "empty" && this.section() === "subscriptions"
         ? "/assets/images/projects/shared/empty-subscriptions.svg"
         : "";
-    return this.info?.imageAddress || this.info?.avatar || currentImageAddress;
+    return this.info()?.imageAddress || this.info()?.avatar || currentImageAddress;
   }
 
   /**
@@ -121,9 +123,9 @@ export class InfoCardComponent {
    */
   toggleSubscription(event: Event): void {
     if (this.isSubscribed) {
-      this.onSubscribe(event, this.profileId!);
+      this.onSubscribe(event, this.profileId()!);
     } else {
-      this.onSubscribe(event, this.profileId!);
+      this.onSubscribe(event, this.profileId()!);
     }
   }
 
@@ -131,7 +133,7 @@ export class InfoCardComponent {
    * Обработка отклонения приглашения
    */
   onRejectInvite(event: Event, inviteId: number): void {
-    if (!this.info || !inviteId) {
+    if (!this.info() || !inviteId) {
       this.logger.warn("Cannot reject invite: missing project or inviteId");
       return;
     }
@@ -144,7 +146,7 @@ export class InfoCardComponent {
    * Обработка принятия приглашения
    */
   onAcceptInvite(event: Event, inviteId: number): void {
-    if (!this.info || !inviteId) {
+    if (!this.info() || !inviteId) {
       this.logger.warn("Cannot accept invite: missing project or inviteId");
       return;
     }

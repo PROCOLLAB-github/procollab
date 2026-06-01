@@ -24,20 +24,20 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 
 /** Страница ленты активности. */
 @Component({
-    selector: "app-feed",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: "./feed.component.html",
-    styleUrl: "./feed.component.scss",
-    imports: [
-        CommonModule,
-        IconComponent,
-        NewProjectComponent,
-        FeedFilterComponent,
-        NewsCardComponent,
-        OpenVacancyComponent,
-        IconComponent,
-    ],
-    providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService]
+  selector: "app-feed",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: "./feed.component.html",
+  styleUrl: "./feed.component.scss",
+  imports: [
+    CommonModule,
+    IconComponent,
+    NewProjectComponent,
+    FeedFilterComponent,
+    NewsCardComponent,
+    OpenVacancyComponent,
+    IconComponent,
+  ],
+  providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("feedRoot") feedRoot?: ElementRef<HTMLElement>;

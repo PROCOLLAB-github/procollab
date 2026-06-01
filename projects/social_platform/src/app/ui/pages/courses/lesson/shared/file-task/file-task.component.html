@@ -2,9 +2,9 @@
 
 <div class="file-task" [class.file-task--hasVideo]="cachedVideoUrl">
   <div class="file-task__header">
-    <p class="text-body-12 file-task__task">задание {{ data.order }}</p>
-    @if ((!data.videoUrl && !data.imageUrl) && data.attachmentUrl) {
-    <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+    <p class="text-body-12 file-task__task">задание {{ data().order }}</p>
+    @if ((!data().videoUrl && !data().imageUrl) && data().attachmentUrl) {
+    <p class="file-task__text text-body-12-bold">{{ data().title | truncate: 80 }}</p>
     }
     <div
       class="file-task__description text-body-12"
@@ -19,18 +19,18 @@
         allowfullscreen
         allowtransparency="true"
       ></iframe>
-      } @if (data.imageUrl) {
-      <img appImagePreview class="file-task__image" [src]="data.imageUrl" />
+      } @if (data().imageUrl) {
+      <img appImagePreview class="file-task__image" [src]="data().imageUrl" />
       }
-      <div class="file-task__file-text" [class.file-task__image-text]="data.imageUrl">
-        @if (data.imageUrl) {
-        <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+      <div class="file-task__file-text" [class.file-task__image-text]="data().imageUrl">
+        @if (data().imageUrl) {
+        <p class="file-task__text text-body-12-bold">{{ data().title | truncate: 80 }}</p>
         }
         <div
           #descEl
           class="file-task__desc text-body-12"
           [innerHTML]="
-            readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+            readFullDescription ? data().bodyText : (data().bodyText | truncateHtml: truncateLimit)
           "
         ></div>
 
@@ -41,31 +41,31 @@
         }
       </div>
 
-      @if (data.attachmentUrl) {
+      @if (data().attachmentUrl) {
       <app-file-item
         mode="preview"
         [type]="'file'"
         name="файл с заданием"
         [size]="0"
-        [link]="data.attachmentUrl"
+        [link]="data().attachmentUrl"
       ></app-file-item>
       }
     </div>
 
-    @if (hint.length) {
-    <div class="file-task__hint" [innerHTML]="hint"></div>
+    @if (hint().length) {
+    <div class="file-task__hint" [innerHTML]="hint()"></div>
     }
   </div>
 
   <div
     class="file-task__content"
-    [class.file-task__content--success]="success"
+    [class.file-task__content--success]="success()"
     [class.file-task__content--error]="error"
   >
     <p class="file-task__label text-body-12">ответ</p>
-    <p class="file-task__title text-body-12-bold">{{ data.answerTitle | truncate: 80 }}</p>
+    <p class="file-task__title text-body-12-bold">{{ data().answerTitle | truncate: 80 }}</p>
 
-    @if (!disabled) {
+    @if (!disabled()) {
     <div class="file-task__files">
       <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">
         <div emptyPlaceholder class="file-task__upload">

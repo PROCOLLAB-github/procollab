@@ -2,7 +2,12 @@
 
 import { TestBed } from "@angular/core/testing";
 import { ProjectEditResolver } from "./edit.resolver";
-import { provideRouter, ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
+import {
+  provideRouter,
+  ActivatedRouteSnapshot,
+  convertToParamMap,
+  RouterStateSnapshot,
+} from "@angular/router";
 import { of } from "rxjs";
 import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 import { GetProjectGoalsUseCase } from "@api/project/use-cases/get-project-goals.use-case";

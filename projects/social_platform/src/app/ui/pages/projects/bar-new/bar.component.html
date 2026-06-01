@@ -3,7 +3,7 @@
 <section class="bar">
   <nav class="bar__nav">
     <ul class="bar__tabs">
-      @for (link of links; track $index) {
+      @for (link of links(); track $index) {
       <a
         class="bar__link"
         [routerLinkActiveOptions]="

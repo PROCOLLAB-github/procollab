@@ -12,7 +12,9 @@ import { of } from "rxjs";
 import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
 
 const vacancyRepositorySpy = {
-  getVacancies: jasmine.createSpy("getVacancies").and.returnValue(of({ results: [], count: 0, next: "", previous: "" })),
+  getVacancies: jasmine
+    .createSpy("getVacancies")
+    .and.returnValue(of({ results: [], count: 0, next: "", previous: "" })),
   getOne: jasmine.createSpy("getOne").and.returnValue(of({})),
 };
 
@@ -46,7 +48,10 @@ describe("VacanciesComponent", () => {
       providers: [
         provideRouter([]),
         { provide: VacancyFilterInfoService, useValue: vacancyFilterInfoServiceSpy },
-        { provide: VacancyRepositoryPort, useValue: { getVacancies: () => of({ results: [], count: 0, next: "", previous: "" }) } },
+        {
+          provide: VacancyRepositoryPort,
+          useValue: { getVacancies: () => of({ results: [], count: 0, next: "", previous: "" }) },
+        },
       ],
     })
       .overrideComponent(VacanciesComponent, {

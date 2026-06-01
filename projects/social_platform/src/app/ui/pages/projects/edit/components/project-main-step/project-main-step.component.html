@@ -19,9 +19,9 @@
           [size]="68"
           formControlName="imageAddress"
           type="project"
-          [error]="(imageAddress | controlError) && projSubmitInitiated"
+          [error]="(imageAddress | controlError) && projSubmitInitiated()"
         ></app-avatar-control>
-        @if ((imageAddress | controlError: "required") && projSubmitInitiated) {
+        @if ((imageAddress | controlError: "required") && projSubmitInitiated()) {
         <div class="text-body-10 error">
           {{ errorMessage.EMPTY_AVATAR }}
         </div>
@@ -97,11 +97,11 @@
           size="big"
           id="name"
           formControlName="name"
-          [error]="(name | controlError) || projSubmitInitiated"
+          [error]="(name | controlError) || projSubmitInitiated()"
           placeholder="название"
           [maxLength]="256"
         ></app-input>
-        @if ((name | controlError: "required") || projSubmitInitiated) {
+        @if ((name | controlError: "required") || projSubmitInitiated()) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -114,11 +114,11 @@
           size="big"
           id="region"
           formControlName="region"
-          [error]="(region | controlError) || projSubmitInitiated"
+          [error]="(region | controlError) || projSubmitInitiated()"
           placeholder="введите регион"
           [maxLength]="256"
         ></app-input>
-        @if ((region | controlError: "required") || projSubmitInitiated) {
+        @if ((region | controlError: "required") || projSubmitInitiated()) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -160,10 +160,10 @@
           [tooltipWidth]="300"
           type="date"
           formControlName="implementationDeadline"
-          [error]="(implementationDeadline | controlError) && projSubmitInitiated"
+          [error]="(implementationDeadline | controlError) && projSubmitInitiated()"
           placeholder="25.01.25"
         ></app-input>
-        @if ((implementationDeadline | controlError: "required") && projSubmitInitiated) {
+        @if ((implementationDeadline | controlError: "required") && projSubmitInitiated()) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -180,11 +180,11 @@
       size="big"
       id="problem"
       formControlName="problem"
-      [error]="(problem | controlError) || projSubmitInitiated"
+      [error]="(problem | controlError) || projSubmitInitiated()"
       placeholder="улучшить качество жизни студентов"
       [maxLength]="1000"
     ></app-input>
-    @if ((problem | controlError: "required") || projSubmitInitiated) {
+    @if ((problem | controlError: "required") || projSubmitInitiated()) {
     <div class="text-body-10 error">
       {{ errorMessage.VALIDATION_REQUIRED }}
     </div>
@@ -203,12 +203,12 @@
       "
       [tooltipPosition]="'left'"
       [tooltipWidth]="350"
-      [error]="(description | controlError) || projSubmitInitiated"
+      [error]="(description | controlError) || projSubmitInitiated()"
       formControlName="description"
       placeholder="проект начал свое существование с 2020 года"
       [maxLength]="800"
     ></app-textarea>
-    @if ((description | controlError: "required") || projSubmitInitiated) {
+    @if ((description | controlError: "required") || projSubmitInitiated()) {
     <div class="text-body-10 error">
       {{ errorMessage.VALIDATION_REQUIRED }}
     </div>
@@ -252,12 +252,12 @@
         "
         [tooltipPosition]="'left'"
         [tooltipWidth]="350"
-        [error]="(targetAudience | controlError) || projSubmitInitiated"
+        [error]="(targetAudience | controlError) || projSubmitInitiated()"
         formControlName="targetAudience"
         placeholder="студенты 2–4 курсов IT и бизнес-направлений"
         [maxLength]="500"
       ></app-textarea>
-      @if ((targetAudience | controlError: "required") || projSubmitInitiated) {
+      @if ((targetAudience | controlError: "required") || projSubmitInitiated()) {
       <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
@@ -430,7 +430,7 @@
               [formControlName]="$index"
               placeholder="@eeeasycarrer"
             ></app-input>
-            @if (control.invalid && (control.touched || projSubmitInitiated)) {
+            @if (control.invalid && (control.touched || projSubmitInitiated())) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>

@@ -1,14 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  Input,
-  OnInit,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
@@ -20,28 +13,27 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
 
 /** Шаг редактирования проекта: достижения. */
 @Component({
-    selector: "app-project-achievement-step",
-    templateUrl: "./project-achievement-step.component.html",
-    styleUrl: "./project-achievement-step.component.scss",
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        InputComponent,
-        ButtonComponent,
-        IconComponent,
-        ControlErrorPipe,
-    ],
-    providers: [ToggleFieldsInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-project-achievement-step",
+  templateUrl: "./project-achievement-step.component.html",
+  styleUrl: "./project-achievement-step.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    IconComponent,
+    ControlErrorPipe,
+  ],
+  providers: [ToggleFieldsInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAchievementStepComponent implements OnInit {
-  @Input() projSubmitInitiated = false;
+  readonly projSubmitInitiated = input<boolean>(false);
 
   private readonly projectAchievementService = inject(ProjectAchievementsService);
   private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly fb = inject(FormBuilder);
-  private readonly cdr = inject(ChangeDetectorRef);
 
   // Получаем форму из сервиса
   protected readonly projectForm = this.projectFormService.getForm();

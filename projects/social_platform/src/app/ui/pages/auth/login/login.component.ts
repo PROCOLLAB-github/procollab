@@ -16,22 +16,22 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Форма входа пользователя в систему. */
 @Component({
-    selector: "app-login",
-    templateUrl: "./login.component.html",
-    styleUrl: "./login.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        RouterLink,
-        InputComponent,
-        ButtonComponent,
-        IconComponent,
-        ControlErrorPipe,
-        TooltipComponent,
-        ClickOutsideModule,
-    ],
-    providers: [AuthLoginService, AuthUIInfoService, TooltipInfoService]
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrl: "./login.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    InputComponent,
+    ButtonComponent,
+    IconComponent,
+    ControlErrorPipe,
+    TooltipComponent,
+    ClickOutsideModule,
+  ],
+  providers: [AuthLoginService, AuthUIInfoService, TooltipInfoService],
 })
 export class LoginComponent implements OnInit {
   private readonly authLoginService = inject(AuthLoginService);

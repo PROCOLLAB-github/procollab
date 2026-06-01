@@ -6,12 +6,12 @@ import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
 
 /** Страница подтверждения отправки письма для сброса пароля. */
 @Component({
-    selector: "app-confirm-password-reset",
-    templateUrl: "./confirm-password-reset.component.html",
-    styleUrl: "./confirm-password-reset.component.scss",
-    providers: [AuthPasswordService],
-    imports: [AsyncPipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-confirm-password-reset",
+  templateUrl: "./confirm-password-reset.component.html",
+  styleUrl: "./confirm-password-reset.component.scss",
+  providers: [AuthPasswordService],
+  imports: [AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmPasswordResetComponent implements OnInit {
   private readonly authPasswordService = inject(AuthPasswordService);

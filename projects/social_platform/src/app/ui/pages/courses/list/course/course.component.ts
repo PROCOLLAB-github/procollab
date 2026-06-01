@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, OnInit, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, Input, OnInit, signal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -17,21 +17,21 @@ import { TruncatePipe } from "@corelib";
  * @Input trajectory - объект траектории для отображения
  */
 @Component({
-    selector: "app-course",
-    imports: [
-        CommonModule,
-        RouterModule,
-        TruncatePipe,
-        IconComponent,
-        AvatarComponent,
-        ButtonComponent,
-    ],
-    templateUrl: "./course.component.html",
-    styleUrl: "./course.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-course",
+  imports: [
+    CommonModule,
+    RouterModule,
+    TruncatePipe,
+    IconComponent,
+    AvatarComponent,
+    ButtonComponent,
+  ],
+  templateUrl: "./course.component.html",
+  styleUrl: "./course.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseComponent implements OnInit {
-  @Input() course!: CourseCard;
+  readonly course = input.required<CourseCard>();
 
   ngOnInit(): void {
     this.accessType();
@@ -44,7 +44,7 @@ export class CourseComponent implements OnInit {
   protected readonly isSubs = signal<boolean>(false);
 
   private accessType() {
-    switch (this.course.accessType) {
+    switch (this.course().accessType) {
       case "program_members": {
         this.isMember.set(true);
         break;
@@ -57,7 +57,7 @@ export class CourseComponent implements OnInit {
   }
 
   private actions() {
-    switch (this.course.actionState) {
+    switch (this.course().actionState) {
       case "lock": {
         this.isLock.set(true);
         break;

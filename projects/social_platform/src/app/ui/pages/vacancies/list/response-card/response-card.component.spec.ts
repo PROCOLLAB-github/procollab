@@ -14,7 +14,9 @@ describe("ResponseCardComponent", () => {
     const authPortSpy = {
       login: jasmine.createSpy("login").and.returnValue(of({} as any)),
       logout: jasmine.createSpy("logout").and.returnValue(of(undefined)),
-      fetchProfile: jasmine.createSpy("fetchProfile").and.returnValue(of({ id: 1, firstName: "Test" })),
+      fetchProfile: jasmine
+        .createSpy("fetchProfile")
+        .and.returnValue(of({ id: 1, firstName: "Test" })),
       fetchUser: jasmine.createSpy("fetchUser").and.returnValue(of({} as any)),
       fetchUserRoles: jasmine.createSpy("fetchUserRoles").and.returnValue(of([])),
       fetchChangeableRoles: jasmine.createSpy("fetchChangeableRoles").and.returnValue(of([])),
@@ -23,10 +25,7 @@ describe("ResponseCardComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [ResponseCardComponent],
-      providers: [
-        provideRouter([]),
-        { provide: AuthRepositoryPort, useValue: authPortSpy },
-      ],
+      providers: [provideRouter([]), { provide: AuthRepositoryPort, useValue: authPortSpy }],
     }).compileComponents();
   });
 

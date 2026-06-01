@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  input,
   Input,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -25,8 +26,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
   standalone: true,
 })
 export class RangeCriterionInputComponent implements ControlValueAccessor {
-  @Input() max = 10;
-  @Input() error = false;
+  readonly max = input<number>(10);
+  readonly error = input<boolean>(false);
 
   value!: number | null;
 
@@ -55,7 +56,7 @@ export class RangeCriterionInputComponent implements ControlValueAccessor {
 
   onBlur(): void {
     if (this.value) {
-      const val = Math.min(this.value, this.max);
+      const val = Math.min(this.value, this.max());
 
       this.value = val;
       this.onChange(val);

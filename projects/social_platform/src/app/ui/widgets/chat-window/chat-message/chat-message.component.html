@@ -2,7 +2,7 @@
 
 <div
   class="message"
-  [class.message--unread]="!chatMessage.isRead"
+  [class.message--unread]="!chatMessage().isRead"
   (contextmenu)="onOpenContextmenu($event)"
   (clickOutside)="onCloseContextmenu()"
   clickOutsideEvents="contextmenu"
@@ -11,32 +11,33 @@
     <app-avatar
       class="message__avatar"
       [size]="30"
-      [isOnline]="chatMessage.author.relations.isOnline"
+      [isOnline]="chatMessage().author.relations.isOnline"
       [onlineBadgeBorder]="2"
       [onlineBadgeSize]="10"
-      [url]="chatMessage.author.personal.avatar"
+      [url]="chatMessage().author.personal.avatar"
     ></app-avatar>
     <div class="message__info">
       <div class="message__top">
         <div class="message__name text-body-10">
-          {{ chatMessage.author.firstName }} {{ chatMessage.author.lastName }}
+          {{ chatMessage().author.firstName }} {{ chatMessage().author.lastName }}
         </div>
         <div class="message__time text-body-10">
-          {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
+          {{ chatMessage().createdAt | dayjs: "format":"HH:mm" }}
         </div>
       </div>
-      @if (chatMessage.replyTo) {
+      @if (chatMessage().replyTo) {
       <div class="message__reply reply">
         <div class="reply__name text-body-10">
-          {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
+          {{ chatMessage().replyTo?.author?.firstName }}
+          {{ chatMessage().replyTo?.author?.lastName }}
         </div>
         <p class="reply__message text-body-10">
-          {{ chatMessage.replyTo.text }}
+          {{ chatMessage().replyTo?.text }}
         </p>
       </div>
       }
       <ul class="message__files">
-        @for (file of chatMessage.files; track chatMessage.id) {
+        @for (file of chatMessage().files; track chatMessage().id) {
         <li class="message__file">
           <app-file-item
             [name]="file.name"
@@ -47,7 +48,7 @@
         </li>
         }
       </ul>
-      <div class="message__content text-body-10">{{ chatMessage.text }}</div>
+      <div class="message__content text-body-10">{{ chatMessage().text }}</div>
     </div>
   </div>
   <div
@@ -67,7 +68,7 @@
 >
   <li class="contextmenu__item text-body-10" (click)="onCopyContent($event)">скопировать</li>
   <li class="contextmenu__item text-body-10" (click)="onReply($event)">ответить</li>
-  @if (profile()!.id === chatMessage.author.id) {
+  @if (profile()!.id === chatMessage().author.id) {
   <ng-container>
     <li class="contextmenu__item text-body-10" (click)="onEdit($event)">редактировать</li>
     <li class="contextmenu__item contextmenu__item--red text-body-10" (click)="onDelete($event)">

@@ -32,11 +32,11 @@ import { IconComponent } from "../icon/icon.component";
  * - Автоматическое скачивание файла по клику
  */
 @Component({
-    selector: "app-file-item",
-    templateUrl: "./file-item.component.html",
-    styleUrl: "./file-item.component.scss",
-    imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-file-item",
+  templateUrl: "./file-item.component.html",
+  styleUrl: "./file-item.component.scss",
+  imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileItemComponent {
   private readonly fileService = inject(FileService);
@@ -51,7 +51,7 @@ export class FileItemComponent {
   deleted = output<void>();
 
   /** MIME-тип файла */
-  type = input("file");
+  type = input<string>("file");
 
   /** Название файла */
   @Input() name = "";
@@ -60,11 +60,13 @@ export class FileItemComponent {
   size = input(0);
 
   /** Ссылка для скачивания */
-  @Input() link = "";
+  @Input() link: string | null = "";
 
   /** Функция скачивания файла через создание временной ссылки */
   onDownloadFile(): void {
     const link = document.createElement("a");
+
+    if (!this.link) return;
 
     link.setAttribute("href", this.link);
     link.setAttribute("download", this.name);

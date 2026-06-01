@@ -23,27 +23,27 @@ import { IconComponent } from "../icon/icon.component";
 
 /** Примитив: текстовое поле ввода с ControlValueAccessor. */
 @Component({
-    selector: "app-input",
-    templateUrl: "./input.component.html",
-    styleUrl: "./input.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => InputComponent),
-            multi: true,
-        },
-    ],
-    imports: [
-        CommonModule,
-        NgxMaskDirective,
-        IconComponent,
-        TooltipComponent,
-        MatDatepickerModule,
-        MatInputModule,
-        MatNativeDateModule,
-        MatFormFieldModule,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-input",
+  templateUrl: "./input.component.html",
+  styleUrl: "./input.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true,
+    },
+  ],
+  imports: [
+    CommonModule,
+    NgxMaskDirective,
+    IconComponent,
+    TooltipComponent,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements ControlValueAccessor {
   constructor(private readonly cdr: ChangeDetectorRef) {}

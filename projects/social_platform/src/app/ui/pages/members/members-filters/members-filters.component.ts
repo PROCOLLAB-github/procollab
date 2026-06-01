@@ -6,6 +6,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   Output,
 } from "@angular/core";
@@ -20,14 +21,14 @@ import { LoggerService } from "@corelib";
 
 /** Фильтры для списка участников с синхронизацией через URL. */
 @Component({
-    selector: "app-members-filters",
-    imports: [CommonModule, ReactiveFormsModule, AutoCompleteInputComponent],
-    templateUrl: "./members-filters.component.html",
-    styleUrl: "./members-filters.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-members-filters",
+  imports: [CommonModule, ReactiveFormsModule, AutoCompleteInputComponent],
+  templateUrl: "./members-filters.component.html",
+  styleUrl: "./members-filters.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersFiltersComponent {
-  @Input({ required: true }) filterForm!: MembersComponent["filterForm"];
+  readonly filterForm = input.required<MembersComponent["filterForm"]>();
 
   @Output() filtersChanged = new EventEmitter();
 
@@ -41,11 +42,11 @@ export class MembersFiltersComponent {
   protected readonly skillsOptions = this.searchesService.inlineSkills;
 
   onSelectSpec(speciality: Specialization): void {
-    this.filterForm.patchValue({ speciality: speciality.name });
+    this.filterForm().patchValue({ speciality: speciality.name });
   }
 
   onClearSpecField(): void {
-    this.filterForm.patchValue({ speciality: "" });
+    this.filterForm().patchValue({ speciality: "" });
   }
 
   onSearchSpec(query: string): void {
@@ -53,11 +54,11 @@ export class MembersFiltersComponent {
   }
 
   onSelectSkill(skill: Skill): void {
-    this.filterForm.patchValue({ keySkill: skill.name });
+    this.filterForm().patchValue({ keySkill: skill.name });
   }
 
   onClearSkillField(): void {
-    this.filterForm.patchValue({ keySkill: "" });
+    this.filterForm().patchValue({ keySkill: "" });
   }
 
   onSearchSkill(query: string): void {
@@ -65,8 +66,8 @@ export class MembersFiltersComponent {
   }
 
   onToggleStudentMosPolitech(): void {
-    this.filterForm.patchValue({
-      isMosPolytechStudent: !this.filterForm.get("isMosPolytechStudent")?.value,
+    this.filterForm().patchValue({
+      isMosPolytechStudent: !this.filterForm().get("isMosPolytechStudent")?.value,
     });
   }
 
@@ -84,6 +85,6 @@ export class MembersFiltersComponent {
       })
       .then(() => this.loggerService.info("Query change from ProjectsComponent"));
 
-    this.filterForm.reset();
+    this.filterForm().reset();
   }
 }

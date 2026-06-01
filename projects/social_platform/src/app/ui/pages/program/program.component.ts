@@ -10,12 +10,12 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
 
 /** Контейнер модуля программ с поиском и навигацией. */
 @Component({
-    selector: "app-program",
-    templateUrl: "./program.component.html",
-    styleUrl: "./program.component.scss",
-    imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BackComponent],
-    providers: [ProgramInfoService, ProgramMainUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-program",
+  templateUrl: "./program.component.html",
+  styleUrl: "./program.component.scss",
+  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BackComponent],
+  providers: [ProgramInfoService, ProgramMainUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramComponent implements OnInit {
   private readonly programInfoService = inject(ProgramInfoService);

@@ -6,8 +6,8 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
-  type OnInit,
+  input,
+  OnInit,
   Output,
 } from "@angular/core";
 import { FileModel } from "@domain/file/file.model";
@@ -15,14 +15,14 @@ import { IconComponent } from "@uilib";
 
 /** Компонент карусели для просмотра изображений с навигацией и лайками. */
 @Component({
-    selector: "app-carousel",
-    imports: [IconComponent],
-    templateUrl: "./carousel.component.html",
-    styleUrls: ["./carousel.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-carousel",
+  imports: [IconComponent],
+  templateUrl: "./carousel.component.html",
+  styleUrls: ["./carousel.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselComponent implements OnInit {
-  @Input() images: Array<FileModel | string> = [];
+  readonly images = input<Array<FileModel | string>>([]);
   @Output() like: EventEmitter<number> = new EventEmitter<number>();
 
   private readonly cdRef = inject(ChangeDetectorRef);

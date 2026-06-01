@@ -18,7 +18,11 @@ describe("AppComponent", () => {
     };
 
     const tokenSpy = { getTokens: jasmine.createSpy("getTokens").and.returnValue(null) };
-    const loadingSpy = { show: jasmine.createSpy("show"), hide: jasmine.createSpy("hide"), isLoading$: of(false) };
+    const loadingSpy = {
+      show: jasmine.createSpy("show"),
+      hide: jasmine.createSpy("hide"),
+      isLoading$: of(false),
+    };
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, AppComponent],

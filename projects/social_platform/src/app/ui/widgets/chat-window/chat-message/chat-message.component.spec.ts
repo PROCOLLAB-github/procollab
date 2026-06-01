@@ -36,7 +36,16 @@ describe("ChatMessageComponent", () => {
     component = fixture.componentInstance;
     component.chatMessage = {
       id: 1,
-      author: { id: 1, firstName: "Test", lastName: "User", isOnline: false, relations: { isOnline: false, progress: 100 }, personal: { avatar: "" }, skills: [], specializations: [] },
+      author: {
+        id: 1,
+        firstName: "Test",
+        lastName: "User",
+        isOnline: false,
+        relations: { isOnline: false, progress: 100 },
+        personal: { avatar: "" },
+        skills: [],
+        specializations: [],
+      },
       isEdited: false,
       isRead: false,
       isDeleted: false,

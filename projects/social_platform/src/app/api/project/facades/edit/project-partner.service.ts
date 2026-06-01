@@ -22,9 +22,8 @@ export class ProjectPartnerService {
   private readonly deletePartnerUseCase = inject(DeletePartnerUseCase);
 
   public readonly partnerItems = signal<
-  Partial<{ id: null; name: string; inn: string; contribution: string; decisionMaker: string }>[]
+    Partial<{ id: null; name: string; inn: string; contribution: string; decisionMaker: string }>[]
   >([]);
-
 
   private partnerForm!: FormGroup;
   private initialized = false;

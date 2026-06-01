@@ -25,7 +25,21 @@ describe("MainComponent", () => {
     };
 
     const profileDetailUIInfoServiceSpy = {
-      user: signal({ id: 1, firstName: "Test", personal: { birthday: "2000-01-01", links: [] }, relations: { progress: 100, skills: [], achievements: [], userLanguages: [], programs: [], education: [], workExperience: [], projects: [] } } as any),
+      user: signal({
+        id: 1,
+        firstName: "Test",
+        personal: { birthday: "2000-01-01", links: [] },
+        relations: {
+          progress: 100,
+          skills: [],
+          achievements: [],
+          userLanguages: [],
+          programs: [],
+          education: [],
+          workExperience: [],
+          projects: [],
+        },
+      } as any),
       loggedUserId: signal(1),
       profileId: signal(1),
       isProfileEmpty: signal(false),
@@ -45,14 +59,24 @@ describe("MainComponent", () => {
       imports: [HttpClientTestingModule, ProfileMainComponent],
       providers: [
         provideRouter([]),
-        { provide: AuthRepositoryPort, useValue: { fetchProfile: of({}), fetchUserRoles: of([]), fetchChangeableRoles: of([]), fetchLeaderProjects: of({}) } },
+        {
+          provide: AuthRepositoryPort,
+          useValue: {
+            fetchProfile: of({}),
+            fetchUserRoles: of([]),
+            fetchChangeableRoles: of([]),
+            fetchLeaderProjects: of({}),
+          },
+        },
         { provide: ExpandService, useValue: expandServiceSpy },
         { provide: ProfileInfoService, useValue: { profile: signal(null) } },
         { provide: API_URL, useValue: "" },
       ],
     })
       .overrideComponent(ProfileMainComponent, {
-        remove: { providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService] },
+        remove: {
+          providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService],
+        },
         add: {
           providers: [
             { provide: ProfileDetailInfoService, useValue: profileDetailInfoServiceSpy },

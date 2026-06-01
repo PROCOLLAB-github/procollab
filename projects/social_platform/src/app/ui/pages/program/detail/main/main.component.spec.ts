@@ -58,12 +58,20 @@ describe("MainComponent", () => {
     })
       .overrideComponent(ProgramDetailMainComponent, {
         remove: {
-          providers: [ProgramDetailMainService, ExpandService, NewsInfoService, ProjectAdditionalService],
+          providers: [
+            ProgramDetailMainService,
+            ExpandService,
+            NewsInfoService,
+            ProjectAdditionalService,
+          ],
         },
         add: {
           providers: [
             { provide: ProgramDetailMainService, useValue: programDetailMainServiceSpy },
-            { provide: ProgramDetailMainUIInfoService, useValue: programDetailMainUIInfoServiceSpy },
+            {
+              provide: ProgramDetailMainUIInfoService,
+              useValue: programDetailMainUIInfoServiceSpy,
+            },
             { provide: ExpandService, useValue: expandServiceSpy },
             { provide: NewsInfoService, useValue: newsInfoServiceSpy },
             { provide: ProjectAdditionalService, useValue: projectAdditionalServiceSpy },

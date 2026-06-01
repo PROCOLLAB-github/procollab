@@ -24,11 +24,7 @@ describe("ChatWindowComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        ChatWindowComponent,
-      ],
+      imports: [ReactiveFormsModule, HttpClientTestingModule, ChatWindowComponent],
       providers: [
         { provide: AuthRepositoryPort, useValue: authSpy },
         { provide: API_URL, useValue: "" },

@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -13,23 +13,14 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
 
 /** Карточка нового проекта в ленте новостей. */
 @Component({
-    selector: "app-new-project",
-    imports: [
-        CommonModule,
-        ButtonComponent,
-        AvatarComponent,
-        RouterLink,
-        DayjsPipe,
-        TruncatePipe,
-        IconComponent,
-        TagComponent,
-    ],
-    templateUrl: "./new-project.component.html",
-    styleUrl: "./new-project.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-new-project",
+  imports: [CommonModule, ButtonComponent, AvatarComponent, RouterLink, TruncatePipe, TagComponent],
+  templateUrl: "./new-project.component.html",
+  styleUrl: "./new-project.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewProjectComponent {
-  @Input() feedItem!: FeedProject;
+  readonly feedItem = input.required<FeedProject>();
 
   protected readonly AppRoutes = AppRoutes;
 

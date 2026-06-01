@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   type OnInit,
   Output,
@@ -33,17 +34,17 @@ import { TruncatePipe } from "@corelib";
  * \`\`\`
  */
 @Component({
-    selector: "app-invite-manage-card",
-    templateUrl: "./invite-manage-card.component.html",
-    styleUrl: "./invite-manage-card.component.scss",
-    imports: [AvatarComponent, RouterLink, ButtonComponent, TruncatePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-invite-manage-card",
+  templateUrl: "./invite-manage-card.component.html",
+  styleUrl: "./invite-manage-card.component.scss",
+  imports: [AvatarComponent, RouterLink, ButtonComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteManageCardComponent implements OnInit {
   constructor() {}
 
   /** Данные приглашения для отображения */
-  @Input({ required: true }) invite!: Invite;
+  readonly invite = input.required<Invite>();
 
   /** Событие принятия приглашения (передает ID приглашения) */
   @Output() accept = new EventEmitter<number>();

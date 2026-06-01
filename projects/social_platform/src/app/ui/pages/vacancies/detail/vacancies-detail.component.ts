@@ -10,12 +10,12 @@ import { RouterOutlet } from "@angular/router";
 
 /** Контейнер детальной страницы вакансии с навигацией и router-outlet. */
 @Component({
-    selector: "app-vacancies-detail",
-    templateUrl: "./vacancies-detail.component.html",
-    styleUrl: "./vacancies-detail.component.scss",
-    imports: [CommonModule, RouterOutlet, BackComponent],
-    providers: [VacancyDetailInfoService, VacancyDetailUIInfoService, ExpandService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-vacancies-detail",
+  templateUrl: "./vacancies-detail.component.html",
+  styleUrl: "./vacancies-detail.component.scss",
+  imports: [CommonModule, RouterOutlet, BackComponent],
+  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService, ExpandService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesDetailComponent implements OnInit {
   private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);

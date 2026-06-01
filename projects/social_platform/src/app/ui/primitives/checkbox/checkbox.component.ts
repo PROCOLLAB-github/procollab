@@ -17,11 +17,11 @@ import { IconComponent } from "../icon/icon.component";
  * - boolean значение через событие checkedChange
  */
 @Component({
-    selector: "app-checkbox",
-    templateUrl: "./checkbox.component.html",
-    styleUrl: "./checkbox.component.scss",
-    imports: [IconComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-checkbox",
+  templateUrl: "./checkbox.component.html",
+  styleUrl: "./checkbox.component.scss",
+  imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxComponent {
   /** Состояние чекбокса */

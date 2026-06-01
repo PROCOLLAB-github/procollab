@@ -6,6 +6,7 @@ import {
   Component,
   ElementRef,
   inject,
+  input,
   Input,
   OnInit,
   ViewChild,
@@ -22,30 +23,30 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Компонент карточки вакансии проекта с возможностью раскрытия описания. */
 @Component({
-    selector: "app-project-vacancy-card",
-    imports: [
-        CommonModule,
-        RouterLink,
-        IconComponent,
-        ButtonComponent,
-        ParseLinksPipe,
-        ParseBreaksPipe,
-        TruncatePipe,
-        TagComponent,
-        AvatarComponent,
-        DayjsPipe,
-    ],
-    templateUrl: "./project-vacancy-card.component.html",
-    styleUrl: "./project-vacancy-card.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [ExpandService]
+  selector: "app-project-vacancy-card",
+  imports: [
+    CommonModule,
+    RouterLink,
+    IconComponent,
+    ButtonComponent,
+    ParseLinksPipe,
+    ParseBreaksPipe,
+    TruncatePipe,
+    TagComponent,
+    AvatarComponent,
+    DayjsPipe,
+  ],
+  templateUrl: "./project-vacancy-card.component.html",
+  styleUrl: "./project-vacancy-card.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ExpandService],
 })
 export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   private readonly expandService = inject(ExpandService);
 
   protected readonly AppRoutes = AppRoutes;
-  @Input({ required: true }) vacancy!: Vacancy;
-  @Input() type: "vacancies" | "project" = "project";
+  readonly vacancy = input.required<Vacancy>();
+  readonly type = input<"vacancies" | "project">("project");
 
   @ViewChild("descEl") private descEl?: ElementRef;
 
@@ -55,7 +56,7 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   protected readonly readFullDescription = this.expandService.readFullDescription;
 
   ngOnInit(): void {
-    this.endSliceOfSkills = this.type === "project" ? 5 : 3;
+    this.endSliceOfSkills = this.type() === "project" ? 5 : 3;
   }
 
   ngAfterViewInit(): void {

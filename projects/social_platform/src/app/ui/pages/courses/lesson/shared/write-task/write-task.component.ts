@@ -6,6 +6,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   OnInit,
   Output,
@@ -27,29 +28,29 @@ import { TruncateHtmlPipe, TruncatePipe } from "@corelib";
 
 /** Поле ответа для текстовой задачи и задачи с текстом + файлами. */
 @Component({
-    selector: "app-write-task",
-    imports: [
-        CommonModule,
-        TruncatePipe,
-        TruncateHtmlPipe,
-        UploadFileComponent,
-        IconComponent,
-        FileItemComponent,
-        ImagePreviewDirective,
-    ],
-    templateUrl: "./write-task.component.html",
-    styleUrl: "./write-task.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-write-task",
+  imports: [
+    CommonModule,
+    TruncatePipe,
+    TruncateHtmlPipe,
+    UploadFileComponent,
+    IconComponent,
+    FileItemComponent,
+    ImagePreviewDirective,
+  ],
+  templateUrl: "./write-task.component.html",
+  styleUrl: "./write-task.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WriteTaskComponent implements OnInit {
   private readonly fileService = inject(FileService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  @Input({ required: true }) data!: Task;
-  @Input() type: "text" | "text-file" = "text";
-  @Input() success = false;
-  @Input() disabled = false;
+  readonly data = input.required<Task>();
+  readonly success = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
+  readonly type = input<"text" | "text-file">("text");
 
   @Output() update = new EventEmitter<{ text: string; fileUrls?: string[] }>();
 
@@ -62,15 +63,15 @@ export class WriteTaskComponent implements OnInit {
   private currentText = "";
 
   get truncateLimit(): number {
-    return this.type === "text-file" ? 650 : 700;
+    return this.type() === "text-file" ? 650 : 700;
   }
 
   get descriptionExpandable(): boolean {
-    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+    return isHtmlTextTruncated(this.data()?.bodyText, this.truncateLimit);
   }
 
   ngOnInit(): void {
-    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    const iframeUrl = resolveVideoUrlForIframe(this.data()?.videoUrl);
     this.cachedVideoUrl = iframeUrl
       ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
       : null;
@@ -129,7 +130,7 @@ export class WriteTaskComponent implements OnInit {
   }
 
   private emitUpdate() {
-    if (this.type === "text-file") {
+    if (this.type() === "text-file") {
       this.update.emit({
         text: this.currentText,
         fileUrls: this.uploadedFiles().map(f => f.link),

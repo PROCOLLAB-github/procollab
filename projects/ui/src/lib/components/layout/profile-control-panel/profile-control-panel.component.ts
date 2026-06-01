@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  input,
+} from "@angular/core";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
 import { ProfileInfoComponent } from "../profile-info/profile-info.component";
 import { IconComponent } from "../../primitives/icon/icon.component";
@@ -32,31 +39,31 @@ import { User } from "@domain/auth/user.model";
  * \`\`\`
  */
 @Component({
-    selector: "app-profile-control-panel",
-    imports: [
-        CommonModule,
-        InviteManageCardComponent,
-        ProfileInfoComponent,
-        ClickOutsideModule,
-        IconComponent,
-        EmptyManageCardComponent,
-    ],
-    templateUrl: "./profile-control-panel.component.html",
-    styleUrl: "./profile-control-panel.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-profile-control-panel",
+  imports: [
+    CommonModule,
+    InviteManageCardComponent,
+    ProfileInfoComponent,
+    ClickOutsideModule,
+    IconComponent,
+    EmptyManageCardComponent,
+  ],
+  templateUrl: "./profile-control-panel.component.html",
+  styleUrl: "./profile-control-panel.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileControlPanelComponent {
   /** Данные текущего пользователя */
-  @Input({ required: true }) user!: User | null;
+  readonly user = input.required<User | null>();
 
   /** Массив приглашений пользователя */
-  @Input({ required: true }) invites!: Invite[];
+  readonly invites = input.required<Invite[]>();
 
   /** Флаг наличия уведомлений */
-  @Input({ required: true }) hasNotifications = false;
+  readonly hasNotifications = input<boolean>(false);
 
   /** Флаг наличия непрочитанных сообщений */
-  @Input({ required: true }) hasUnreads = false;
+  readonly hasUnreads = input<boolean>(false);
 
   /** Событие принятия приглашения (передает ID приглашения) */
   @Output() acceptInvite = new EventEmitter<number>();
@@ -72,7 +79,7 @@ export class ProfileControlPanelComponent {
    * @returns true если есть приглашения без ответа
    */
   get hasInvites(): boolean {
-    return !!this.invites.filter(invite => invite.isAccepted === null).length;
+    return !!this.invites().filter(invite => invite.isAccepted === null).length;
   }
 
   /** Флаг отображения панели уведомлений */

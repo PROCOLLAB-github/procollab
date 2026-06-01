@@ -5,6 +5,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   Output,
 } from "@angular/core";
@@ -18,23 +19,23 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /** Компонент заголовка приложения с панелью уведомлений и инвайтами. */
 @Component({
-    selector: "app-header",
-    templateUrl: "./header.component.html",
-    styleUrl: "./header.component.scss",
-    imports: [
-        ClickOutsideModule,
-        IconComponent,
-        InviteManageCardComponent,
-        ProfileInfoComponent,
-        AsyncPipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-header",
+  templateUrl: "./header.component.html",
+  styleUrl: "./header.component.scss",
+  imports: [
+    ClickOutsideModule,
+    IconComponent,
+    InviteManageCardComponent,
+    ProfileInfoComponent,
+    AsyncPipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
   private readonly notificationService = inject(NotificationService);
   public readonly authService = inject(AuthInfoService);
 
-  @Input() invites: Invite[] = [];
+  readonly invites = input<Invite[]>([]);
 
   @Output() acceptInvite = new EventEmitter<number>();
   @Output() rejectInvite = new EventEmitter<number>();
@@ -43,7 +44,7 @@ export class HeaderComponent {
   showNotifications = false;
 
   get hasInvites(): boolean {
-    return !!this.invites.filter(invite => invite.isAccepted === null).length;
+    return !!this.invites().filter(invite => invite.isAccepted === null).length;
   }
 
   onClickOutside() {

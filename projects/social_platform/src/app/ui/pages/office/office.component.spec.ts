@@ -29,15 +29,13 @@ describe("OfficeComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const officeInfoServiceSpy = jasmine.createSpyObj("OfficeInfoService", [
-      "initializationOffice",
-      "destroy",
-      "onRejectInvite",
-      "onAcceptInvite",
-      "onLogout",
-    ], {
-      invites: signal([]),
-    });
+    const officeInfoServiceSpy = jasmine.createSpyObj(
+      "OfficeInfoService",
+      ["initializationOffice", "destroy", "onRejectInvite", "onAcceptInvite", "onLogout"],
+      {
+        invites: signal([]),
+      }
+    );
 
     const officeUIInfoServiceSpy = {
       waitVerificationModal: signal(false),
@@ -61,7 +59,9 @@ describe("OfficeComponent", () => {
 
     const programShellInfoServiceSpy = {
       actualPrograms: signal([]),
-      ensureProgramsLoaded: jasmine.createSpy("ensureProgramsLoaded").and.returnValue(of({ ok: true, value: { results: [], count: 0 } })),
+      ensureProgramsLoaded: jasmine
+        .createSpy("ensureProgramsLoaded")
+        .and.returnValue(of({ ok: true, value: { results: [], count: 0 } })),
       invalidatePrograms: jasmine.createSpy("invalidatePrograms"),
     };
 
@@ -71,14 +71,16 @@ describe("OfficeComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, OfficeComponent],
-      providers: [
-        { provide: AuthRepositoryPort, useValue: authPortSpy },
-        provideRouter([]),
-      ],
+      providers: [{ provide: AuthRepositoryPort, useValue: authPortSpy }, provideRouter([])],
     })
       .overrideComponent(OfficeComponent, {
         remove: {
-          providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
+          providers: [
+            OfficeInfoService,
+            OfficeUIInfoService,
+            AuthUIInfoService,
+            AuthRegisterService,
+          ],
         },
         add: {
           providers: [

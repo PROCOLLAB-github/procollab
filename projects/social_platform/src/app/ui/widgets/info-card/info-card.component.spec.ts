@@ -19,7 +19,10 @@ describe("ProjectCardComponent", () => {
       imports: [InfoCardComponent],
       providers: [
         { provide: IndustryRepositoryPort, useValue: industrySpy },
-        { provide: ProjectSubscriptionRepositoryPort, useValue: { addSubscription: of({}), deleteSubscription: of({}) } },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { addSubscription: of({}), deleteSubscription: of({}) },
+        },
         { provide: EventBus, useValue: { emit: () => {} } },
         provideRouter([]),
       ],

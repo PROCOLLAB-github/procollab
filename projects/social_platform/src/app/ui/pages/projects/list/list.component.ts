@@ -23,20 +23,20 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Отображает список проектов с поиском, фильтрацией и бесконечной прокруткой. */
 @Component({
-    selector: "app-list",
-    templateUrl: "./list.component.html",
-    styleUrl: "./list.component.scss",
-    imports: [IconComponent, RouterLink, InfoCardComponent],
-    providers: [
-        ProjectsListInfoService,
-        ProjectsInfoService,
-        ProgramDetailListInfoService,
-        ProgramDetailListUIInfoService,
-        OfficeInfoService,
-        OfficeUIInfoService,
-        SwipeService,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-list",
+  templateUrl: "./list.component.html",
+  styleUrl: "./list.component.scss",
+  imports: [IconComponent, RouterLink, InfoCardComponent],
+  providers: [
+    ProjectsListInfoService,
+    ProjectsInfoService,
+    ProgramDetailListInfoService,
+    ProgramDetailListUIInfoService,
+    OfficeInfoService,
+    OfficeUIInfoService,
+    SwipeService,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit {
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;

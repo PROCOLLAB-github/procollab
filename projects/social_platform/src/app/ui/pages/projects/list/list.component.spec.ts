@@ -35,13 +35,13 @@ describe("ProjectsListComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const projectsListInfoServiceSpy = jasmine.createSpyObj("ProjectsListInfoService", [
-      "initializationProjectsList",
-      "initScroll",
-      "destroy",
-    ], {
-      projects: signal([]),
-    });
+    const projectsListInfoServiceSpy = jasmine.createSpyObj(
+      "ProjectsListInfoService",
+      ["initializationProjectsList", "initScroll", "destroy"],
+      {
+        projects: signal([]),
+      }
+    );
 
     const projectsInfoServiceSpy = {
       isAll: signal(false),
@@ -99,7 +99,10 @@ describe("ProjectsListComponent", () => {
             { provide: ProjectsListInfoService, useValue: projectsListInfoServiceSpy },
             { provide: ProjectsInfoService, useValue: projectsInfoServiceSpy },
             { provide: ProgramDetailListInfoService, useValue: programDetailListInfoServiceSpy },
-            { provide: ProgramDetailListUIInfoService, useValue: programDetailListUIInfoServiceSpy },
+            {
+              provide: ProgramDetailListUIInfoService,
+              useValue: programDetailListUIInfoServiceSpy,
+            },
             { provide: OfficeInfoService, useValue: officeInfoServiceSpy },
             { provide: OfficeUIInfoService, useValue: officeUIInfoServiceSpy },
             { provide: SwipeService, useValue: swipeServiceSpy },

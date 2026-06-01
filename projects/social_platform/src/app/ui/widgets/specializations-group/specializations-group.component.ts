@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   Output,
   signal,
@@ -14,24 +15,25 @@ import { Specialization } from "@domain/specializations/specialization.model";
 
 /** Компонент группы специализаций с возможностью сворачивания и выбора. */
 @Component({
-    selector: "app-specializations-group",
-    imports: [CommonModule, IconComponent],
-    templateUrl: "./specializations-group.component.html",
-    styleUrl: "./specializations-group.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-specializations-group",
+  imports: [CommonModule, IconComponent],
+  templateUrl: "./specializations-group.component.html",
+  styleUrl: "./specializations-group.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpecializationsGroupComponent {
-  @Input({ required: true }) title!: string;
-  @Input({ required: true }) options!: Specialization[];
-  @Input() hasOpenGroups = false;
-  @Input() disabled = false;
+  readonly title = input.required<string>();
+  readonly options = input.required<Specialization[]>();
+  readonly hasOpenGroups = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
+
   @Output() selectOption = new EventEmitter<Specialization>();
   @Output() groupToggled = new EventEmitter<boolean>();
 
   contentVisible = signal(false);
 
   toggleContentVisible() {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 
@@ -40,7 +42,7 @@ export class SpecializationsGroupComponent {
   }
 
   onSelectOption(opt: Specialization) {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 

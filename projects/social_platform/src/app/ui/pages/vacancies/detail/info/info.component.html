@@ -3,10 +3,10 @@
 @if (vacancy()) {
 <div class="vacancy">
   <div class="vacancy__split">
-    <app-vacancies-left-side [vacancy]="vacancy"></app-vacancies-left-side>
+    <app-vacancies-left-side [vacancy]="vacancy()"></app-vacancies-left-side>
 
     <app-vacancies-right-side
-      [vacancy]="vacancy"
+      [vacancy]="vacancy()"
       (sendResponse)="onOpenResponseModal()"
     ></app-vacancies-right-side>
   </div>

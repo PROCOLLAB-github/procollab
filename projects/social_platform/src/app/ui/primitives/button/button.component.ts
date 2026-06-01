@@ -23,11 +23,11 @@ import { LoaderComponent } from "../loader/loader.component";
  * - Автоматически показывает лоадер при loader=true
  */
 @Component({
-    selector: "app-button",
-    templateUrl: "./button.component.html",
-    styleUrl: "./button.component.scss",
-    imports: [CommonModule, LoaderComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-button",
+  templateUrl: "./button.component.html",
+  styleUrl: "./button.component.scss",
+  imports: [CommonModule, LoaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
   /** Цветовая схема кнопки */

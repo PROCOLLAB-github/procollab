@@ -1,20 +1,20 @@
 <!-- @format -->
-<div class="card" [id]="feedItem.id">
+<div class="card" [id]="feedItem().id">
   <div class="card__head">
-    <a class="card__title" [routerLink]="resourceLink">
+    <a class="card__title" [routerLink]="resourceLink()">
       <img
         class="card__avatar"
-        [src]="feedItem.imageAddress || placeholderUrl"
-        [alt]="feedItem.name"
+        [src]="feedItem().imageAddress || placeholderUrl"
+        [alt]="feedItem().name"
       />
       <div class="card__info" style="display: flex; flex-direction: column">
-        <div class="card__name text-body-10">{{ feedItem.name | truncate: 30 }}</div>
+        <div class="card__name text-body-10">{{ feedItem().name | truncate: 30 }}</div>
         <div class="card__date text-body-10">
-          {{ feedItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
+          {{ feedItem().datetimeCreated | dayjs: "format":"DD.MM.YY" }}
         </div>
       </div>
     </a>
-    @if (isOwner) {
+    @if (isOwner()) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
       <div class="card__dots" (click)="menuOpen = true">
         <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
@@ -24,16 +24,20 @@
         @if (!editMode) {
         <li class="card__option text-body-10" (click)="editMode = true">редактировать</li>
         }
-        <li class="card__option text-body-10" (click)="delete.emit(feedItem.id)">удалить</li>
+        <li class="card__option text-body-10" (click)="delete.emit(feedItem().id)">удалить</li>
       </ul>
       }
     </div>
     }
   </div>
-  @if (feedItem.text) {
+  @if (feedItem().text) {
   <div class="card__text text-body-10">
     @if (!editMode) {
-    <p class="text-body-10" #newsTextEl [innerHTML]="feedItem.text | parseLinks | parseBreaks"></p>
+    <p
+      class="text-body-10"
+      #newsTextEl
+      [innerHTML]="feedItem().text | parseLinks | parseBreaks"
+    ></p>
     } @else { @if (editForm.get("text"); as text) {
     <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
     } }
@@ -89,11 +93,11 @@
     <div class="footer__left">
       <div
         class="footer__item footer__like text-body-10"
-        [class.footer__like--active]="feedItem.isUserLiked"
-        (click)="like.emit(feedItem.id)"
+        [class.footer__like--active]="feedItem().isUserLiked"
+        (click)="like.emit(feedItem().id)"
       >
         <i appIcon icon="like" appSquare="12"></i>
-        {{ feedItem.likesCount > 0 ? feedItem.likesCount : "" }}
+        {{ feedItem().likesCount > 0 ? feedItem().likesCount : "" }}
       </div>
 
       <!--<div class="footer__share share">
@@ -108,7 +112,7 @@
     <div class="footer__right">
       <div class="card__views text-body-10">
         <i appIcon icon="eye" appSquare="12"></i>
-        {{ feedItem.viewsCount }}
+        {{ feedItem().viewsCount }}
       </div>
     </div>
   </div>

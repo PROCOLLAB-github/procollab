@@ -49,10 +49,11 @@ export class OnboardingStageOneInfoService {
   private readonly profile = this.profileInfoService.profile;
 
   initializationFormValues(): void {
-    this.onboardingService.formValue$.pipe(take(1),
-    takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
-      this.onboardingStageOneUIInfoService.applyInitFormValues(fv);
-    });
+    this.onboardingService.formValue$
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(fv => {
+        this.onboardingStageOneUIInfoService.applyInitFormValues(fv);
+      });
 
     this.stageForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       // Общий OnboardingService хранит черновик между переходами по шагам.

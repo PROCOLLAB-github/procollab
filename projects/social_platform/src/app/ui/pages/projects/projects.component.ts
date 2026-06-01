@@ -24,23 +24,23 @@ import { OfficeInfoService } from "@api/office/facades/office-info.service";
 
 /** Контейнер модуля проектов с поиском, фильтрацией и навигацией по разделам. */
 @Component({
-    selector: "app-projects",
-    templateUrl: "./projects.component.html",
-    styleUrl: "./projects.component.scss",
-    imports: [
-        IconComponent,
-        ReactiveFormsModule,
-        SearchComponent,
-        ButtonComponent,
-        RouterOutlet,
-        BarNewComponent,
-        BackComponent,
-        SoonCardComponent,
-        ProjectsFilterComponent,
-        InfoCardComponent,
-    ],
-    providers: [ProjectsInfoService, ProjectsUIInfoService, SwipeService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-projects",
+  templateUrl: "./projects.component.html",
+  styleUrl: "./projects.component.scss",
+  imports: [
+    IconComponent,
+    ReactiveFormsModule,
+    SearchComponent,
+    ButtonComponent,
+    RouterOutlet,
+    BarNewComponent,
+    BackComponent,
+    SoonCardComponent,
+    ProjectsFilterComponent,
+    InfoCardComponent,
+  ],
+  providers: [ProjectsInfoService, ProjectsUIInfoService, SwipeService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;

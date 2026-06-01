@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   OnInit,
   Output,
@@ -17,18 +18,18 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Карточка проекта в дашборде. */
 @Component({
-    selector: "app-dashboard-item",
-    templateUrl: "./dashboardItem.component.html",
-    styleUrl: "./dashboardItem.component.scss",
-    imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-dashboard-item",
+  templateUrl: "./dashboardItem.component.html",
+  styleUrl: "./dashboardItem.component.scss",
+  imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardItemComponent implements OnInit {
-  @Input() title!: string;
-  @Input() arrayItems!: Project[];
-  @Input() iconName!: string;
-  @Input() sectionName!: string;
-  @Input() profileProjSubsIds?: number[];
+  readonly title = input.required<string>();
+  readonly arrayItems = input.required<Project[]>();
+  readonly iconName = input.required<string>();
+  readonly sectionName = input.required<string>();
+  readonly profileProjSubsIds = input<number[]>();
 
   @Output() addProjectClick = new EventEmitter<void>();
 
@@ -36,7 +37,7 @@ export class DashboardItemComponent implements OnInit {
   protected readonly AppRoutes = AppRoutes;
 
   ngOnInit(): void {
-    switch (this.iconName) {
+    switch (this.iconName()) {
       case "favourities":
         this.appereance = "subs";
         break;

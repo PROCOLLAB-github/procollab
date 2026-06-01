@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   type OnInit,
   Output,
@@ -27,11 +28,11 @@ import { AvatarComponent } from "../../primitives/avatar/avatar.component";
  * \`\`\`
  */
 @Component({
-    selector: "app-profile-info",
-    templateUrl: "./profile-info.component.html",
-    styleUrl: "./profile-info.component.scss",
-    imports: [RouterLink, AvatarComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-profile-info",
+  templateUrl: "./profile-info.component.html",
+  styleUrl: "./profile-info.component.scss",
+  imports: [RouterLink, AvatarComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileInfoComponent implements OnInit {
   constructor(readonly router: Router) {}
@@ -41,7 +42,7 @@ export class ProfileInfoComponent implements OnInit {
   avatarSize = window.innerWidth < 920 ? 42 : 33;
 
   /** Данные пользователя для отображения */
-  @Input({ required: true }) user!: User;
+  readonly user = input.required<User>();
 
   /** Событие выхода из системы */
   @Output() logout = new EventEmitter<void>();

@@ -1,12 +1,6 @@
 /** @format */
 
-import {
-  Component,
-  Input,
-  inject,
-  OnInit,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+import { Component, Input, inject, OnInit, ChangeDetectionStrategy, input } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { directionProjectList } from "@core/consts/lists/direction-project-list.const";
@@ -33,31 +27,31 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
 
 /** Шаг редактирования проекта: основная информация. */
 @Component({
-    selector: "app-project-main-step",
-    templateUrl: "./project-main-step.component.html",
-    styleUrl: "./project-main-step.component.scss",
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        AvatarControlComponent,
-        InputComponent,
-        SelectComponent,
-        IconComponent,
-        TextareaComponent,
-        ButtonComponent,
-        UploadFileComponent,
-        AsyncPipe,
-        ControlErrorPipe,
-        ModalComponent,
-        AvatarComponent,
-        FormsModule,
-        RouterLink,
-    ],
-    providers: [ProjectTeamUIService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-project-main-step",
+  templateUrl: "./project-main-step.component.html",
+  styleUrl: "./project-main-step.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AvatarControlComponent,
+    InputComponent,
+    SelectComponent,
+    IconComponent,
+    TextareaComponent,
+    ButtonComponent,
+    UploadFileComponent,
+    AsyncPipe,
+    ControlErrorPipe,
+    ModalComponent,
+    AvatarComponent,
+    FormsModule,
+    RouterLink,
+  ],
+  providers: [ProjectTeamUIService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMainStepComponent implements OnInit {
-  @Input() projSubmitInitiated = false;
+  readonly projSubmitInitiated = input<boolean>(false);
 
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);

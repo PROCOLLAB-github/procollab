@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Input,
+  input,
   QueryList,
   ViewChildren,
   type OnInit,
@@ -46,18 +46,18 @@ export interface NavItem {
  * \`\`\`
  */
 @Component({
-    selector: "ui-sidebar",
-    templateUrl: "./sidebar.component.html",
-    styleUrl: "./sidebar.component.scss",
-    imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "ui-sidebar",
+  templateUrl: "./sidebar.component.html",
+  styleUrl: "./sidebar.component.scss",
+  imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   /** Массив элементов навигации */
-  @Input() navItems: NavItem[] = [];
+  readonly navItems = input<NavItem[]>([]);
 
   /** Путь к изображению логотипа (обязательный параметр) */
-  @Input({ required: true }) logoSrc!: string;
+  readonly logoSrc = input.required<string>();
 
   ngOnInit(): void {
     this.checkExternalActiveState();
@@ -94,7 +94,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       elementRef.nativeElement.classList.contains("sidebar-nav__item--active")
     );
 
-    const activeExternalIndex = this.navItems.findIndex(item => item.isExternal && item.isActive);
+    const activeExternalIndex = this.navItems().findIndex(item => item.isExternal && item.isActive);
 
     if (activeRouterElement) {
       this.barPosition = activeRouterElement.nativeElement.offsetTop;
@@ -108,7 +108,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   checkExternalActiveState(): void {
     const currentUrl = window.location.href;
 
-    this.navItems.forEach(item => {
+    this.navItems().forEach(item => {
       if (item.isExternal) {
         if (item.link === "skills" && currentUrl.includes("skills.procollab.ru")) {
           item.isActive = true;
@@ -127,7 +127,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
    */
   handleItemClick(item: NavItem): void {
     if (item.isExternal) {
-      this.navItems.forEach(navItem => {
+      this.navItems().forEach(navItem => {
         if (navItem.isExternal) {
           navItem.isActive = false;
         }

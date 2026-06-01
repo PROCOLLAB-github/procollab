@@ -36,9 +36,11 @@ export class OnboardingStageThreeInfoService {
   private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
 
   initializationFormValues(): void {
-    this.onboardingService.formValue$.pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
-      this.onboardingStageThreeUIInfoService.applyInitFormValues(fv);
-    });
+    this.onboardingService.formValue$
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(fv => {
+        this.onboardingStageThreeUIInfoService.applyInitFormValues(fv);
+      });
   }
 
   onSubmit() {

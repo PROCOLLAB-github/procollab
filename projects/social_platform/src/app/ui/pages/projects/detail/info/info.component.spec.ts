@@ -55,11 +55,7 @@ describe("ProjectInfoComponent", () => {
     });
 
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        ReactiveFormsModule,
-        ProjectInfoComponent,
-      ],
+      imports: [HttpClientTestingModule, ReactiveFormsModule, ProjectInfoComponent],
       providers: [
         provideRouter([]),
         { provide: AuthRepository, useValue: authSpy },

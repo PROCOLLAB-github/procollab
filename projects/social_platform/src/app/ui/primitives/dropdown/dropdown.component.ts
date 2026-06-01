@@ -22,28 +22,30 @@ import { IconComponent } from "../icon/icon.component";
 
 /** Примитив: выпадающий список. */
 @Component({
-    selector: "app-dropdown",
-    imports: [
-        CommonModule,
-        OverlayModule,
-        AvatarComponent,
-        IconComponent,
-        TagComponent,
-        ClickOutsideModule,
-        CreateTagFormComponent,
-    ],
-    templateUrl: "./dropdown.component.html",
-    styleUrl: "./dropdown.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-dropdown",
+  imports: [
+    CommonModule,
+    OverlayModule,
+    AvatarComponent,
+    IconComponent,
+    TagComponent,
+    ClickOutsideModule,
+    CreateTagFormComponent,
+  ],
+  templateUrl: "./dropdown.component.html",
+  styleUrl: "./dropdown.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownComponent {
   /** Состояние для определения списка элементов */
-  options = input<{
-    id: number;
-    label: string;
-    value: string | number | boolean | null;
-    additionalInfo?: any;
-  }[]>([]);
+  options = input<
+    {
+      id: number;
+      label: string;
+      value: string | number | boolean | null;
+      additionalInfo?: any;
+    }[]
+  >([]);
 
   type = input<"icons" | "avatars" | "shapes" | "tags" | "goals" | "text">("text");
 

@@ -9,16 +9,16 @@ import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/p
 
 /** Дашборд проектов пользователя. */
 @Component({
-    selector: "app-dashboard",
-    templateUrl: "./dashboard.component.html",
-    styleUrl: "./dashboard.component.scss",
-    imports: [CommonModule, DashboardItemComponent],
-    providers: [
-        ProjectsDashboardInfoService,
-        ProjectsDashboardUIInfoService,
-        ProgramDetailListUIInfoService,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrl: "./dashboard.component.scss",
+  imports: [CommonModule, DashboardItemComponent],
+  providers: [
+    ProjectsDashboardInfoService,
+    ProjectsDashboardUIInfoService,
+    ProgramDetailListUIInfoService,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardProjectsComponent implements OnInit {
   private readonly projectsDashboardInfoService = inject(ProjectsDashboardInfoService);

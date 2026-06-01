@@ -2,16 +2,16 @@
 
 <div
   class="card"
-  [class.card__empty]="appereance === 'empty'"
+  [class.card__empty]="appereance() === 'empty'"
   (click)="
-    appereance === 'empty' && section === 'projects'
+    appereance() === 'empty' && section() === 'projects'
       ? onCreateProject($event)
-      : appereance === 'empty' && section === 'subscriptions'
+      : appereance() === 'empty' && section() === 'subscriptions'
       ? redirectToProjects()
       : null
   "
 >
-  <div class="card__body" [class.card__body--empty]="appereance === 'empty'">
+  <div class="card__body" [class.card__body--empty]="appereance() === 'empty'">
     @if (shouldShowProjectInfo()) {
     <div class="card__info">
       <div class="card__info--vacancies">
@@ -38,10 +38,10 @@
 
     <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
 
-    <div class="card__content" [class.card__content--empty]="appereance === 'empty'">
+    <div class="card__content" [class.card__content--empty]="appereance() === 'empty'">
       <div class="card__head">
         <div>
-          @if (appereance === 'empty') {
+          @if (appereance() === 'empty') {
           <ng-container *ngTemplateOutlet="emptyCardContent"></ng-container>
           } @else {
           <ng-container *ngTemplateOutlet="regularCardHeader"></ng-container>
@@ -49,12 +49,12 @@
         </div>
       </div>
 
-      @if (appereance !== 'empty') {
+      @if (appereance() !== 'empty') {
       <ng-container *ngTemplateOutlet="cardDescription"></ng-container>
       }
 
       <div class="card__footer">
-        @if (appereance === 'empty') { @if (section === 'projects') {
+        @if (appereance() === 'empty') { @if (section() === 'projects') {
         <i appIcon icon="main" appSquare="22" class="card__empty--icon"></i>
         } } @else {
         <ng-container *ngTemplateOutlet="cardActions"></ng-container>
@@ -67,7 +67,7 @@
 </div>
 
 <ng-template #emptyCardContent>
-  <p class="text-body-12 card__name">{{ info?.name }}</p>
+  <p class="text-body-12 card__name">{{ info()?.name }}</p>
   <img
     src="/assets/images/projects/shared/arrow.svg"
     class="card__empty--image"
@@ -75,7 +75,7 @@
     loading="lazy"
     decoding="async"
   />
-  @if (section === 'subscriptions') {
+  @if (section() === 'subscriptions') {
   <p class="card__empty--name text-body-10" style="margin-left: 5px">перейти к проектам</p>
   } @else {
   <p class="card__empty--name text-body-10">Создайте первый проект</p>
@@ -83,22 +83,22 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (type === 'projects' || type === 'invite') { @if (info.name) {
-  <p class="text-body-12 card__name">{{ info.name | truncate: 12 }}</p>
+  @if (type() === 'projects' || type() === 'invite') { @if (info().name) {
+  <p class="text-body-12 card__name">{{ info().name | truncate: 12 }}</p>
   }
   <p class="text-body-6 card__industry">
-    @if (industryRepository.getOne(info?.industry!); as industry) {
+    @if (industryRepository.getOne(info()?.industry!); as industry) {
     <span>{{ industry?.name }}</span>
     }
   </p>
   } @else {
-  <p class="text-body-12 card__name">{{ info?.firstName | truncate: 10 }}</p>
-  <p class="text-body-12 card__name">{{ info?.lastName | truncate: 10 }}</p>
-  @if (info?.speciality) {
+  <p class="text-body-12 card__name">{{ info()?.firstName | truncate: 10 }}</p>
+  <p class="text-body-12 card__name">{{ info()?.lastName | truncate: 10 }}</p>
+  @if (info()?.speciality) {
   <p class="text-body-6 card__additional-info">
-    {{ info?.speciality | truncate: 20 }}
-    @if (info?.speciality && info?.birthday) { • } @if (info?.birthday) {
-    {{ info?.birthday! | yearsFromBirthday }}
+    {{ info()?.speciality | truncate: 20 }}
+    @if (info()?.speciality && info()?.birthday) { • } @if (info()?.birthday) {
+    {{ info()?.birthday! | yearsFromBirthday }}
     }
   </p>
   } }
@@ -107,17 +107,17 @@
 <ng-template #cardDescription>
   <div
     class="card__description"
-    [style.max-height]="type === 'members' ? '50px' : '24px'"
-    [class.invite-description]="type === 'invite'"
+    [style.max-height]="type() === 'members' ? '50px' : '24px'"
+    [class.invite-description]="type() === 'invite'"
   >
-    @if (type === 'invite') {
+    @if (type() === 'invite') {
     <p class="text-body-6 card__user">вас приглашает</p>
-    <p class="text-body-10 card__user--invite">{{ info?.shortDescription }}</p>
-    } @else if (type === 'projects') {
-    <p class="text-body-6">{{ info?.shortDescription }}</p>
-    } @else { @if (info?.skills && info?.skills?.length) {
+    <p class="text-body-10 card__user--invite">{{ info()?.shortDescription }}</p>
+    } @else if (type() === 'projects') {
+    <p class="text-body-6">{{ info()?.shortDescription }}</p>
+    } @else { @if (info()?.skills && info()?.skills?.length) {
     <ul class="card__skills">
-      @for ( skill of info?.skills?.slice(0, 3); track skill.id ) {
+      @for ( skill of info()?.skills?.slice(0, 3); track skill.id ) {
       <li class="card__skill">
         <app-tag [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'">{{
           skill.name | truncate: 10
@@ -131,9 +131,9 @@
 
 <ng-template #cardActions>
   <div class="card__info">
-    @if (type === 'projects') {
+    @if (type() === 'projects') {
     <div class="card__info--program">
-      @if (info.partnerProgram || info.draft) { @if (info.partnerProgram && info.draft) {
+      @if (info().partnerProgram || info().draft) { @if (info().partnerProgram && info().draft) {
       <div
         class="card__info--program-icon"
         (mouseenter)="programProjectHovered = true"
@@ -144,12 +144,12 @@
 
       @if (programProjectHovered) {
       <div class="card__info--project-partner">
-        <p class="text-body-6">проект привязан к программе {{ info.partnerProgram.name }}</p>
+        <p class="text-body-6">проект привязан к программе {{ info().partnerProgram.name }}</p>
       </div>
       } }
 
       <app-button
-        [routerLink]="AppRoutes.projects.detail(info?.id)"
+        [routerLink]="AppRoutes.projects.detail(info()?.id)"
         customTypographyClass="text-body-6"
         size="extra-small"
         class="card__info--text"
@@ -162,20 +162,21 @@
         (mouseenter)="iconHovered = true"
         (mouseleave)="iconHovered = false"
       >
-        <i appIcon [icon]="info.draft ? 'box' : 'program'" appSquare="8"></i>
+        <i appIcon [icon]="info().draft ? 'box' : 'program'" appSquare="8"></i>
       </div>
 
       @if (iconHovered) {
       <div class="card__info--project-partner">
         <p class="text-body-6">
-          @if (info.draft) { проект пока еще не опубликовали. } @else { проект привязан к программе
-          {{ info.partnerProgram.name }}
+          @if (info().draft) { проект пока еще не опубликовали. } @else { проект привязан к
+          программе
+          {{ info().partnerProgram.name }}
           }
         </p>
       </div>
       } } @else {
       <app-button
-        [routerLink]="AppRoutes.projects.detail(info?.id)"
+        [routerLink]="AppRoutes.projects.detail(info()?.id)"
         customTypographyClass="text-body-6"
         size="extra-small"
         class="card__info--text"
@@ -184,8 +185,8 @@
       </app-button>
       }
     </div>
-    } @else if (type === 'members') { @if (leaderId === loggedUserId && loggedUserId !==
-    info?.userId) {
+    } @else if (type() === 'members') { @if (leaderId() === loggedUserId() && loggedUserId() !==
+    info()?.userId) {
     <div class="card__info--program">
       <app-button
         customTypographyClass="text-body-6"
@@ -199,13 +200,13 @@
         size="extra-small"
         color="red"
         appearance="outline"
-        (click)="removeCollaboratorFromProject(info?.userId)"
+        (click)="removeCollaboratorFromProject(info()?.userId)"
         >удалить</app-button
       >
     </div>
     } @else {
     <app-button
-      [routerLink]="AppRoutes.profile.detail(info?.userId)"
+      [routerLink]="AppRoutes.profile.detail(info()?.userId)"
       customTypographyClass="text-body-6"
       size="extra-small"
       class="card__info--text"
@@ -215,20 +216,20 @@
     } } @else {
     <div class="card__invite-actions">
       <app-button
-        (click)="onAcceptInvite($event, info?.inviteId!)"
+        (click)="onAcceptInvite($event, info()?.inviteId!)"
         customTypographyClass="text-body-6"
         size="extra-small"
         appearance="inline"
-        [disabled]="!info?.inviteId"
+        [disabled]="!info()?.inviteId"
       >
         принять
       </app-button>
       <app-button
-        (click)="onRejectInvite($event, info?.inviteId!)"
+        (click)="onRejectInvite($event, info()?.inviteId!)"
         customTypographyClass="text-body-6"
         size="extra-small"
         appearance="outline"
-        [disabled]="!info?.inviteId"
+        [disabled]="!info()?.inviteId"
       >
         отклонить
       </app-button>
@@ -241,14 +242,14 @@
   <app-modal [(open)]="isUnsubscribeModalOpen">
     <div class="unsubscribe-modal">
       <h3>Вы действительно хотите отписаться от проекта?</h3>
-      <app-avatar [url]="info?.imageAddress" [size]="70"></app-avatar>
+      <app-avatar [url]="info()?.imageAddress" [size]="70"></app-avatar>
       <div class="unsubscribe-modal__buttons">
         <app-button
           color="red"
           size="big"
           customTypographyClass="unsubscribe-modal-btn__typography"
-          (click)="onUnsubscribe($event, info?.id!)"
-          [disabled]="!info?.id"
+          (click)="onUnsubscribe($event, info()?.id!)"
+          [disabled]="!info()?.id"
         >
           отписаться
         </app-button>

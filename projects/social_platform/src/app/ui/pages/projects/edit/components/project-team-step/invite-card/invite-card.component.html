@@ -1,19 +1,19 @@
 <!-- @format -->
 
-@if (invite) {
+@if (invite()) {
 <div class="invite">
   <div class="invite__info">
     <div class="invite__top">
-      <p class="text-body-12">{{ invite.role | truncate: 30 }}</p>
-      @if(invite.isAccepted === null) {
+      <p class="text-body-12">{{ invite().role | truncate: 30 }}</p>
+      @if(invite().isAccepted === null) {
       <p class="text-body-12 invite__status">• приглашение отправлено</p>
       }
     </div>
 
     <div class="invite__user">
-      <app-avatar [url]="invite.user.personal.avatar" [size]="40"></app-avatar>
+      <app-avatar [url]="invite().user.personal.avatar" [size]="40"></app-avatar>
       <h3 class="text-body-12 invite__role">
-        {{ invite.user.firstName | truncate: 15 }} {{ invite.user.lastName | truncate: 15 }}
+        {{ invite().user.firstName | truncate: 15 }} {{ invite().user.lastName | truncate: 15 }}
       </h3>
     </div>
   </div>

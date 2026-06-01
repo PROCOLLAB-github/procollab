@@ -11,12 +11,12 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Страница списка курсов. */
 @Component({
-    selector: "app-list",
-    imports: [CommonModule, RouterModule, CourseComponent, LoaderComponent],
-    templateUrl: "./list.component.html",
-    styleUrl: "./list.component.scss",
-    providers: [CoursesListInfoService, CoursesListUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-list",
+  imports: [CommonModule, RouterModule, CourseComponent, LoaderComponent],
+  templateUrl: "./list.component.html",
+  styleUrl: "./list.component.scss",
+  providers: [CoursesListInfoService, CoursesListUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesListComponent implements OnInit {
   private readonly coursesListInfoService = inject(CoursesListInfoService);

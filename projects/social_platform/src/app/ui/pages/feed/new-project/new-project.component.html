@@ -5,7 +5,7 @@
     <app-avatar
       class="card__avatar"
       [size]="88"
-      [url]="feedItem.imageAddress"
+      [url]="feedItem().imageAddress"
       [hasBorder]="true"
     ></app-avatar>
 
@@ -19,7 +19,7 @@
 
       <div class="card__info--additional">
         <p class="text-body-6 project__industry">
-          @if (industryRepository.getOne(feedItem.industry); as industry) {
+          @if (industryRepository.getOne(feedItem().industry); as industry) {
           <app-tag class="card__industry" color="complete">
             {{ industry.name }}
           </app-tag>
@@ -33,7 +33,7 @@
         </div> -->
       </div>
 
-      <p class="card__description text-body-10">{{ feedItem.shortDescription }}</p>
+      <p class="card__description text-body-10">{{ feedItem().shortDescription }}</p>
     </div>
   </div>
 
@@ -56,7 +56,7 @@
       size="big"
       style="flex-grow: 1"
       customTypographyClass="text-body-12"
-      [routerLink]="AppRoutes.projects.detail(feedItem.id)"
+      [routerLink]="AppRoutes.projects.detail(feedItem().id)"
       >перейти в проект</app-button
     >
   </div>

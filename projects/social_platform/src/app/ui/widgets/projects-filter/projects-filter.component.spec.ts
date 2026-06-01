@@ -19,10 +19,7 @@ describe("ProjectsFilterComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, ProjectsFilterComponent],
-      providers: [
-        { provide: IndustryRepositoryPort, useValue: industrySpy },
-        provideRouter([]),
-      ],
+      providers: [{ provide: IndustryRepositoryPort, useValue: industrySpy }, provideRouter([])],
     }).compileComponents();
   });
 

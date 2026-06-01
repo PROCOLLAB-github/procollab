@@ -7,12 +7,12 @@ import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboa
 
 /** Контейнер и координатор этапов онбординга — управляет навигацией и последовательностью прохождения. */
 @Component({
-    selector: "app-onboarding",
-    templateUrl: "./onboarding.component.html",
-    styleUrl: "./onboarding.component.scss",
-    providers: [OnboardingInfoService, OnboardingUIInfoService],
-    imports: [RouterOutlet],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-onboarding",
+  templateUrl: "./onboarding.component.html",
+  styleUrl: "./onboarding.component.scss",
+  providers: [OnboardingInfoService, OnboardingUIInfoService],
+  imports: [RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingComponent implements OnInit {
   private readonly onboardingInfoService = inject(OnboardingInfoService);

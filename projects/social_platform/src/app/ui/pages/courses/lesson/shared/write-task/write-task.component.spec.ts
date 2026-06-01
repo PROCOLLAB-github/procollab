@@ -13,7 +13,10 @@ describe("WriteTaskComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [WriteTaskComponent, HttpClientTestingModule],
-      providers: [{ provide: API_URL, useValue: "" }, { provide: PRODUCTION, useValue: false }],
+      providers: [
+        { provide: API_URL, useValue: "" },
+        { provide: PRODUCTION, useValue: false },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(WriteTaskComponent);

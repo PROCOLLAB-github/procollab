@@ -7,6 +7,7 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
+  input,
   Input,
   OnInit,
   Output,
@@ -23,11 +24,11 @@ import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-
 
 /** Карточка участника команды проекта. */
 @Component({
-    selector: "app-collaborator-card",
-    templateUrl: "./collaborator-card.component.html",
-    styleUrl: "./collaborator-card.component.scss",
-    imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-collaborator-card",
+  templateUrl: "./collaborator-card.component.html",
+  styleUrl: "./collaborator-card.component.scss",
+  imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollaboratorCardComponent implements OnInit {
   private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
@@ -45,14 +46,14 @@ export class CollaboratorCardComponent implements OnInit {
   inviteForm: FormGroup;
   errorMessage = ErrorMessage;
 
-  @Input({ required: true }) collaborator!: Collaborator;
+  readonly collaborator = input.required<Collaborator>();
   @Output() collaboratorRemoved = new EventEmitter<number>();
 
   ngOnInit(): void {
-    if (this.collaborator) {
+    if (this.collaborator()) {
       this.inviteForm.patchValue({
-        role: this.collaborator.role,
-        specialization: this.collaborator.skills,
+        role: this.collaborator().role,
+        specialization: this.collaborator().skills,
       });
     }
   }

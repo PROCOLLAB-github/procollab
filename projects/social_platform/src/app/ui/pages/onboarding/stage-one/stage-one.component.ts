@@ -17,25 +17,25 @@ import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 
 /** Этап онбординга — выбор специализации с автокомплитом и группированным списком. */
 @Component({
-    selector: "app-stage-one",
-    templateUrl: "./stage-one.component.html",
-    styleUrl: "./stage-one.component.scss",
-    imports: [
-        ReactiveFormsModule,
-        ButtonComponent,
-        ControlErrorPipe,
-        AutoCompleteInputComponent,
-        SpecializationsGroupComponent,
-        CommonModule,
-        TooltipComponent,
-    ],
-    providers: [
-        OnboardingStageOneInfoService,
-        OnboardingStageOneUIInfoService,
-        OnboardingUIInfoService,
-        TooltipInfoService,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-stage-one",
+  templateUrl: "./stage-one.component.html",
+  styleUrl: "./stage-one.component.scss",
+  imports: [
+    ReactiveFormsModule,
+    ButtonComponent,
+    ControlErrorPipe,
+    AutoCompleteInputComponent,
+    SpecializationsGroupComponent,
+    CommonModule,
+    TooltipComponent,
+  ],
+  providers: [
+    OnboardingStageOneInfoService,
+    OnboardingStageOneUIInfoService,
+    OnboardingUIInfoService,
+    TooltipInfoService,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingStageOneComponent implements OnInit {
   private readonly onboardingStageOneInfoService = inject(OnboardingStageOneInfoService);

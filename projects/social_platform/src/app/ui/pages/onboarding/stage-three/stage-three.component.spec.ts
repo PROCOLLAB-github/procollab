@@ -20,9 +20,7 @@ describe("StageThreeComponent", () => {
     });
     const onboardingSpy = jasmine.createSpyObj({}, { formValue$: of({}) });
 
-    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
-      "updateProfile",
-    ], {
+    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", ["updateProfile"], {
       updateProfile: of({}),
     });
 

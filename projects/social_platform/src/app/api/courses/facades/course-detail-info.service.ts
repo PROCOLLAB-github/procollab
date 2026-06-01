@@ -62,7 +62,7 @@ export class CourseDetailInfoService {
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
         this.courseDetailUIInfoService.isTaskDetail.set(this.router.url.includes("lesson"));

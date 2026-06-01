@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Input,
   ChangeDetectionStrategy,
+  input,
 } from "@angular/core";
 import { ProjectStepService } from "@api/project/project-step.service";
 import { IconComponent } from "@uilib";
@@ -16,14 +17,14 @@ import { EditStep } from "@core/lib/models/edit-step";
 
 /** Навигация по шагам формы проекта. */
 @Component({
-    selector: "app-project-navigation",
-    templateUrl: "./project-navigation.component.html",
-    styleUrl: "project-navigation.component.scss",
-    imports: [IconComponent, CommonModule],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-project-navigation",
+  templateUrl: "./project-navigation.component.html",
+  styleUrl: "project-navigation.component.scss",
+  imports: [IconComponent, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectNavigationComponent {
-  @Input() navItems!: Navigation[];
+  readonly navItems = input.required<Navigation[]>();
   @Output() stepChange = new EventEmitter<EditStep>();
 
   private stepService = inject(ProjectStepService);

@@ -45,7 +45,6 @@ export class OfficeInfoService {
   readonly invites = this.inviteInfoService.invites;
   private readonly profile = this.profileInfoService.profile;
 
-
   initializationOffice(): void {
     this.profileInfoService.ensureProfileLoaded();
 

@@ -1,13 +1,6 @@
 /** @format */
 
-import {
-  Component,
-  OnInit,
-  signal,
-  effect,
-  inject,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+import { Component, OnInit, signal, effect, inject, ChangeDetectionStrategy } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -28,23 +21,23 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Корневой компонент рабочего пространства с навигацией и управлением состоянием. */
 @Component({
-    selector: "app-office",
-    templateUrl: "./office.component.html",
-    styleUrl: "./office.component.scss",
-    imports: [
-        SidebarComponent,
-        NavComponent,
-        RouterOutlet,
-        ModalComponent,
-        ButtonComponent,
-        DeleteConfirmComponent,
-        SnackbarComponent,
-        RouterLink,
-        ProfileControlPanelComponent,
-        ProgramSidebarCardComponent,
-    ],
-    providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-office",
+  templateUrl: "./office.component.html",
+  styleUrl: "./office.component.scss",
+  imports: [
+    SidebarComponent,
+    NavComponent,
+    RouterOutlet,
+    ModalComponent,
+    ButtonComponent,
+    DeleteConfirmComponent,
+    SnackbarComponent,
+    RouterLink,
+    ProfileControlPanelComponent,
+    ProgramSidebarCardComponent,
+  ],
+  providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit {
   private readonly officeInfoService = inject(OfficeInfoService);

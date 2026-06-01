@@ -23,7 +23,6 @@ export class LessonInfoService {
   private readonly lessonUIInfoService = inject(LessonUIInfoService);
   private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
-
   init(): void {
     this.loadLessonData();
     this.trackNavigation();

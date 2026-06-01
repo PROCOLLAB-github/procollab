@@ -21,12 +21,12 @@ import { ChatUIInfoService } from "@api/chat/facades/ui/chat-ui-info.service";
  * - Навигацию к конкретным чатам
  */
 @Component({
-    selector: "app-chat",
-    templateUrl: "./chat.component.html",
-    styleUrl: "./chat.component.scss",
-    imports: [ChatCardComponent, AsyncPipe, BarComponent, BackComponent],
-    providers: [ChatInfoService, ChatUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-chat",
+  templateUrl: "./chat.component.html",
+  styleUrl: "./chat.component.scss",
+  imports: [ChatCardComponent, AsyncPipe, BarComponent, BackComponent],
+  providers: [ChatInfoService, ChatUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit {
   private readonly chatInfoService = inject(ChatInfoService);

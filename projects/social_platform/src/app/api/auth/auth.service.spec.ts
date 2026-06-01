@@ -18,7 +18,10 @@ describe("AuthRepository", () => {
         ApiService,
         { provide: API_URL, useValue: "" },
         { provide: PRODUCTION, useValue: false },
-        { provide: ChatStateService, useValue: jasmine.createSpyObj("ChatStateService", ["reset"]) },
+        {
+          provide: ChatStateService,
+          useValue: jasmine.createSpyObj("ChatStateService", ["reset"]),
+        },
       ],
     });
     service = TestBed.inject(AuthRepository);

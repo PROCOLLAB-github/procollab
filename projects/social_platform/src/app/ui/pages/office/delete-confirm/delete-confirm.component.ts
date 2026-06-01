@@ -19,11 +19,11 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
  * Не принимает входящих параметров - получает данные через ModalService
  */
 @Component({
-    selector: "app-delete-confirm",
-    templateUrl: "./delete-confirm.component.html",
-    styleUrl: "./delete-confirm.component.scss",
-    imports: [ModalComponent, IconComponent, ButtonComponent, AsyncPipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-delete-confirm",
+  templateUrl: "./delete-confirm.component.html",
+  styleUrl: "./delete-confirm.component.scss",
+  imports: [ModalComponent, IconComponent, ButtonComponent, AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteConfirmComponent implements OnInit {
   constructor(public readonly modalService: ModalService) {}
