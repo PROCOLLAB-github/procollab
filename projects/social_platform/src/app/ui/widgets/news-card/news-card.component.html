@@ -42,7 +42,7 @@
     <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
     } }
   </div>
-  } @if (editMode) {
+  } @defer (when editMode) {
   <ul>
     @for (f of imagesEditList; track f.id) {
     <app-img-card

@@ -60,24 +60,34 @@
 
     <div class="profile__wrapper">
       @if(editingStep() === 'main'){
+      @defer {
       <app-profile-main-step
         (openSpecsGroupsModal)="openSpecializationGroup()"
       ></app-profile-main-step>
+      }
       } @if (editingStep() === 'education') {
+      @defer {
       <app-profile-education-step
         [isEducationDirty]="isEducationDirty"
       ></app-profile-education-step>
+      }
       } @if (editingStep() === 'experience') {
+      @defer {
       <app-profile-experience-step [isWorkDirty]="isWorkDirty"></app-profile-experience-step>
+      }
       } @if(editingStep() === 'achievements'){
+      @defer {
       <app-profile-achievements-step
         [isAchievementsDirty]="isAchievementsDirty"
       ></app-profile-achievements-step>
+      }
       } @if (editingStep() === 'skills') {
+      @defer {
       <app-profile-skills-step
         [isLanguageDirty]="isLanguageDirty"
         (openSkillsGroupsModal)="toggleSkillsGroupsModal()"
       ></app-profile-skills-step>
+      }
       } @else if (editingStep() === 'settings') {
       <div class="profile__wrapper--settings">
         <app-button
@@ -137,6 +147,7 @@
   </div>
 </app-modal>
 
+@defer (when specsGroupsModalOpen()) {
 <app-modal
   [open]="specsGroupsModalOpen()"
   (openChange)="specsGroupsModalOpen.set(!specsGroupsModalOpen())"
@@ -170,7 +181,9 @@
     >
   </div>
 </app-modal>
+}
 
+@defer (when skillsGroupsModalOpen()) {
 <app-modal [open]="skillsGroupsModalOpen()" class="modal">
   <div class="modal__wrapper">
     <h4 class="text-heading-4">библиотека навыков</h4>
@@ -201,3 +214,4 @@
     >
   </div>
 </app-modal>
+}

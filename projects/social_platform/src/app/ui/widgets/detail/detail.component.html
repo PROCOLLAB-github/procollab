@@ -278,6 +278,7 @@
           </app-button>
           }
 
+          @defer (when isAssignProjectToProgramModalOpen()) {
           <app-modal
             [open]="isAssignProjectToProgramModalOpen()"
             (openChange)="
@@ -298,7 +299,9 @@
               <p class="text-body-12 cancel__text">{{ assignProjectToProgramModalMessage() }}.</p>
             </div>
           </app-modal>
+          }
 
+          @defer (when isProgramEndedModalOpen()) {
           <app-modal
             [open]="isProgramEndedModalOpen()"
             (openChange)="isProgramEndedModalOpen.set(!isProgramEndedModalOpen())"
@@ -311,7 +314,9 @@
               <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
             </div>
           </app-modal>
+          }
 
+          @defer (when isProgramSubmissionProjectsEndedModalOpen()) {
           <app-modal
             [open]="isProgramSubmissionProjectsEndedModalOpen()"
             (openChange)="
@@ -328,7 +333,9 @@
               <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
             </div>
           </app-modal>
+          }
 
+          @defer (when isContactsModalOpen()) {
           <app-modal
             [open]="isContactsModalOpen()"
             (openChange)="isContactsModalOpen.set(!isContactsModalOpen())"
@@ -340,7 +347,9 @@
               [links]="contactLinks()"
             ></app-program-links>
           </app-modal>
+          }
 
+          @defer (when isMaterialsModalOpen()) {
           <app-modal
             [open]="isMaterialsModalOpen()"
             (openChange)="isMaterialsModalOpen.set(!isMaterialsModalOpen())"
@@ -352,6 +361,7 @@
               [links]="materialLinks()"
             ></app-program-links>
           </app-modal>
+          }
           } }
         </ng-template>
 
@@ -437,6 +447,7 @@
           </app-button>
           } }
 
+          @defer (when isEditDisableModal()) {
           <app-modal [(open)]="isEditDisableModal">
             <div
               class="unsubscribe-modal"
@@ -472,7 +483,9 @@
               >
             </div>
           </app-modal>
+          }
 
+          @defer (when isLeaveProjectModalOpen()) {
           <app-modal [(open)]="isLeaveProjectModalOpen">
             <div class="cancel" style="padding: 14px 24px">
               <div class="cancel__top">
@@ -502,6 +515,7 @@
               </div>
             </div>
           </app-modal>
+          }
           } @else {
           <app-button
             [routerLink]="AppRoutes.projects.vacancies(info().id)"
@@ -591,33 +605,35 @@
           </a>
           }
 
-          <app-modal
-            [open]="showApproveSkillModal()"
-            (openChange)="showApproveSkillModal.set(!showApproveSkillModal())"
-          >
-            @if (info().skills.length) {
-            <ul class="approve">
-              <div class="lists__section">
-                <h3 class="text-body-12 lists__title">подтвердить владение навыком</h3>
-                <i
-                  appIcon
-                  icon="squiz"
-                  class="lists__icon"
-                  style="margin-top: 1px"
-                  appSquare="12"
-                ></i>
-              </div>
+          @defer (when showApproveSkillModal()) {
+            <app-modal
+              [open]="showApproveSkillModal()"
+              (openChange)="showApproveSkillModal.set(!showApproveSkillModal())"
+            >
+              @if (info().skills.length) {
+              <ul class="approve">
+                <div class="lists__section">
+                  <h3 class="text-body-12 lists__title">подтвердить владение навыком</h3>
+                  <i
+                    appIcon
+                    icon="squiz"
+                    class="lists__icon"
+                    style="margin-top: 1px"
+                    appSquare="12"
+                  ></i>
+                </div>
 
-              @for (skill of info().skills; track skill.id) {
-              <li (click)="onOpenSkill(skill.id)">
-                <app-approve-skill [skill]="skill"></app-approve-skill>
-              </li>
+                @for (skill of info().skills; track skill.id) {
+                <li (click)="onOpenSkill(skill.id)">
+                  <app-approve-skill [skill]="skill"></app-approve-skill>
+                </li>
+                }
+              </ul>
               }
-            </ul>
-            }
-          </app-modal>
+            </app-modal>
+          }
 
-          @if (!showNoProjectsModal() && showSendInviteModal()) {
+          @defer (when !showNoProjectsModal() && showSendInviteModal()) {
           <app-modal
             [open]="showSendInviteModal()"
             (openChange)="showSendInviteModal.set(!showSendInviteModal())"
@@ -687,6 +703,7 @@
           </app-modal>
           }
 
+          @defer (when showNoProjectsModal()) {
           <app-modal
             [open]="showNoProjectsModal()"
             (openChange)="showNoProjectsModal.set(!showNoProjectsModal())"
@@ -707,7 +724,9 @@
               >
             </div>
           </app-modal>
+          }
 
+          @defer (when showActiveInviteModal()) {
           <app-modal
             [open]="showActiveInviteModal()"
             (openChange)="showActiveInviteModal.set(!showActiveInviteModal())"
@@ -730,7 +749,9 @@
               >
             </div>
           </app-modal>
+          }
 
+          @defer (when showNoInProgramModal()) {
           <app-modal
             [open]="showNoInProgramModal()"
             (openChange)="showNoInProgramModal.set(!showNoInProgramModal())"
@@ -754,7 +775,9 @@
               >
             </div>
           </app-modal>
+          }
 
+          @defer (when showSuccessInviteModal()) {
           <app-modal
             [open]="showSuccessInviteModal()"
             (openChange)="showSuccessInviteModal.set(!showSuccessInviteModal())"
@@ -778,8 +801,10 @@
               >
             </div>
           </app-modal>
+          }
 
           } @if (profile()) { @if (profile()!.id === info().id) {
+          @defer (when isProfileFill()) {
           <app-modal [open]="isProfileFill()" (openChange)="isProfileFill.set(!isProfileFill())">
             <div class="cancel">
               <img
@@ -810,8 +835,10 @@
               </a>
             </div>
           </app-modal>
+          }
           } }
 
+          @defer (when isDelayModalOpen()) {
           <app-modal
             [open]="isDelayModalOpen()"
             (openChange)="isDelayModalOpen.set(!isDelayModalOpen())"
@@ -832,6 +859,7 @@
               </p>
             </div>
           </app-modal>
+          }
         </ng-template>
 
         <router-outlet></router-outlet>

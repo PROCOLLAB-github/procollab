@@ -46,28 +46,40 @@
 
       <div class="project__inner">
         @if (editingStep() === "main") {
+        @defer {
         <app-project-main-step
           style="width: 100%"
           [projSubmitInitiated]="projSubmitInitiated()"
         ></app-project-main-step>
+        }
         } @else if (editingStep() === "contacts") {
+        @defer {
         <app-project-partner-resources-step
           style="width: 100%"
         ></app-project-partner-resources-step>
+        }
         } @else if (editingStep() === "achievements") {
+        @defer {
         <app-project-achievement-step
           style="width: 100%"
           [projSubmitInitiated]="projSubmitInitiated()"
         ></app-project-achievement-step>
+        }
         } @else if (editingStep() === "vacancies"){
+        @defer {
         <app-project-vacancy-step style="width: 100%"></app-project-vacancy-step>
+        }
         } @else if (editingStep() === "team") {
+        @defer {
         <app-project-team-step style="width: 100%"></app-project-team-step>
+        }
         } @else if (editingStep() === "additional") {
+        @defer {
         <app-project-additional-step
           #additionalStepComponent
           style="width: 100%"
         ></app-project-additional-step>
+        }
         }
       </div>
     </form>
@@ -104,6 +116,7 @@
   </main>
 </div>
 
+@defer (when isCompleted()) {
 <app-modal [open]="isCompleted()" (openChange)="isCompleted.set(!isCompleted())">
   <div class="cancel">
     <div class="cancel__top">
@@ -125,7 +138,9 @@
     </p>
   </div>
 </app-modal>
+}
 
+@defer (when isSendDescisionLate()) {
 <app-modal
   [open]="isSendDescisionLate()"
   (openChange)="isSendDescisionLate.set(!isSendDescisionLate())"
@@ -139,7 +154,9 @@
     <p class="text-body-12">Срок подачи проектов в программу завершён</p>
   </div>
 </app-modal>
+}
 
+@defer (when fromProgramOpen()) {
 <app-modal [open]="fromProgramOpen()" (openChange)="fromProgramOpen.set(false)">
   <div class="cancel" style="width: 605px; padding: 0px 24px">
     <div class="cancel__top">
@@ -178,7 +195,9 @@
     >
   </div>
 </app-modal>
+}
 
+@defer (when isSendDescisionToPartnerProgramProject()) {
 <app-modal
   [open]="isSendDescisionToPartnerProgramProject()"
   (openChange)="
@@ -225,3 +244,4 @@
     </div>
   </div>
 </app-modal>
+}

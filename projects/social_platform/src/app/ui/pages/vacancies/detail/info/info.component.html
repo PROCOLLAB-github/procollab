@@ -25,6 +25,7 @@
   </div>
 </app-modal>
 
+@defer (when openModal()) {
 <app-modal [open]="openModal()" (openChange)="closeSendResponseModal()">
   <div class="cancel">
     <div class="lists__section">
@@ -110,4 +111,5 @@
     </form>
   </div>
 </app-modal>
+}
 }
