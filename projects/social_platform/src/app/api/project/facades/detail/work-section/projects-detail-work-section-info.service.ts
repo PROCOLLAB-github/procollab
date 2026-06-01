@@ -22,7 +22,6 @@ export class ProjectsDetailWorkSectionInfoService {
   private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
   private readonly rejectResponseUseCase = inject(RejectResponseUseCase);
 
-
   readonly projectId = signal<number | undefined>(undefined);
 
   initializationWorkSection(): void {

@@ -10,7 +10,13 @@ import { LoggerService } from "../services/logger/logger.service";
 
 describe("BearerTokenInterceptor", () => {
   beforeEach(() => {
-    const tokenServiceSpy = jasmine.createSpyObj("TokenService", ["getTokens", "refreshTokens", "clearTokens", "memTokens", "getCookieOptions"]);
+    const tokenServiceSpy = jasmine.createSpyObj("TokenService", [
+      "getTokens",
+      "refreshTokens",
+      "clearTokens",
+      "memTokens",
+      "getCookieOptions",
+    ]);
     const loggerSpy = jasmine.createSpyObj("LoggerService", ["log", "error", "warn"]);
 
     TestBed.configureTestingModule({

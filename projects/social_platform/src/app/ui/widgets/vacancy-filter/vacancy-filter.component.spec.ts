@@ -19,10 +19,7 @@ describe("FeedComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [VacancyFilterComponent, HttpClientTestingModule],
-      providers: [
-        { provide: VacancyRepositoryPort, useValue: vacancyRepoSpy },
-        provideRouter([]),
-      ],
+      providers: [{ provide: VacancyRepositoryPort, useValue: vacancyRepoSpy }, provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VacancyFilterComponent);

@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input, Input } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { IconComponent } from "@uilib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
@@ -13,24 +13,24 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Шаг редактирования образования в общей форме профиля. */
 @Component({
-    selector: "app-profile-education-step",
-    templateUrl: "./profile-education-step.component.html",
-    styleUrl: "./profile-education-step.component.scss",
-    imports: [
-        CommonModule,
-        IconComponent,
-        SelectComponent,
-        ButtonComponent,
-        InputComponent,
-        ReactiveFormsModule,
-        ControlErrorPipe,
-        TruncatePipe,
-    ],
-    providers: [ProfileDetailUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-profile-education-step",
+  templateUrl: "./profile-education-step.component.html",
+  styleUrl: "./profile-education-step.component.scss",
+  imports: [
+    CommonModule,
+    IconComponent,
+    SelectComponent,
+    ButtonComponent,
+    InputComponent,
+    ReactiveFormsModule,
+    ControlErrorPipe,
+    TruncatePipe,
+  ],
+  providers: [ProfileDetailUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileEducationStepComponent {
-  @Input() isEducationDirty!: boolean;
+  readonly isEducationDirty = input.required<boolean>();
 
   protected readonly errorMessage = ErrorMessage;
 

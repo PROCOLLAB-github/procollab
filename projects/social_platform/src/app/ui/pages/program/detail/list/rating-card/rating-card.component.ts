@@ -28,26 +28,26 @@ import { map } from "rxjs";
 
 /** Карточка оценки проекта экспертом: форма с критериями, навигация, переоценка. */
 @Component({
-    selector: "app-rating-card",
-    templateUrl: "./rating-card.component.html",
-    styleUrl: "./rating-card.component.scss",
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        AvatarComponent,
-        IconComponent,
-        ButtonComponent,
-        ParseLinksPipe,
-        ParseBreaksPipe,
-        ProjectRatingComponent,
-        ControlErrorPipe,
-        RouterLink,
-        TagComponent,
-        ModalComponent,
-        TruncatePipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [RatingCardService, ExpandService]
+  selector: "app-rating-card",
+  templateUrl: "./rating-card.component.html",
+  styleUrl: "./rating-card.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AvatarComponent,
+    IconComponent,
+    ButtonComponent,
+    ParseLinksPipe,
+    ParseBreaksPipe,
+    ProjectRatingComponent,
+    ControlErrorPipe,
+    RouterLink,
+    TagComponent,
+    ModalComponent,
+    TruncatePipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [RatingCardService, ExpandService],
 })
 export class RatingCardComponent implements AfterViewInit {
   private readonly ratingCardService = inject(RatingCardService);

@@ -22,22 +22,18 @@ describe("StageZeroComponent", () => {
       setOnboardingStage: of({}),
     };
 
-    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
-      "fetchProfile",
-      "fetchUserRoles",
-      "fetchChangeableRoles",
-    ], {
-      fetchProfile: of({}),
-      fetchUserRoles: of([]),
-      fetchChangeableRoles: of([]),
-    });
+    const authPortSpy = jasmine.createSpyObj(
+      "AuthRepositoryPort",
+      ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles"],
+      {
+        fetchProfile: of({}),
+        fetchUserRoles: of([]),
+        fetchChangeableRoles: of([]),
+      }
+    );
 
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        OnboardingStageZeroComponent,
-      ],
+      imports: [ReactiveFormsModule, HttpClientTestingModule, OnboardingStageZeroComponent],
       providers: [
         { provide: AuthRepository, useValue: authSpy },
         { provide: AuthRepositoryPort, useValue: authPortSpy },

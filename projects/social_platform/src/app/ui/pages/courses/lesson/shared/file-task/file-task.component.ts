@@ -6,6 +6,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   OnInit,
   Output,
@@ -27,29 +28,29 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
 /** Файловый ответ на задачу курса с превью вложений и сбросом при ошибке. */
 @Component({
-    selector: "app-file-task",
-    imports: [
-        CommonModule,
-        TruncatePipe,
-        TruncateHtmlPipe,
-        UploadFileComponent,
-        IconComponent,
-        FileItemComponent,
-        ImagePreviewDirective,
-    ],
-    templateUrl: "./file-task.component.html",
-    styleUrl: "./file-task.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-file-task",
+  imports: [
+    CommonModule,
+    TruncatePipe,
+    TruncateHtmlPipe,
+    UploadFileComponent,
+    IconComponent,
+    FileItemComponent,
+    ImagePreviewDirective,
+  ],
+  templateUrl: "./file-task.component.html",
+  styleUrl: "./file-task.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileTaskComponent implements OnInit {
   private readonly fileService = inject(FileService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  @Input({ required: true }) data!: Task;
-  @Input() success = false;
-  @Input() hint = "";
-  @Input() disabled = false;
+  readonly data = input.required<Task>();
+  readonly success = input<boolean>(false);
+  readonly hint = input<string>("");
+  readonly disabled = input<boolean>(false);
 
   @Input()
   set error(value: boolean) {
@@ -78,11 +79,11 @@ export class FileTaskComponent implements OnInit {
   readonly truncateLimit = 700;
 
   get descriptionExpandable(): boolean {
-    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+    return isHtmlTextTruncated(this.data()?.bodyText, this.truncateLimit);
   }
 
   ngOnInit(): void {
-    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    const iframeUrl = resolveVideoUrlForIframe(this.data()?.videoUrl);
     this.cachedVideoUrl = iframeUrl
       ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
       : null;

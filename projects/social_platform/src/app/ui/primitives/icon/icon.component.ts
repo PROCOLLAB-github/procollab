@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, Input, OnInit } from "@angular/core";
 
 /**
  * Компонент для отображения SVG иконок с настраиваемыми параметрами.
@@ -83,7 +83,7 @@ export class IconComponent implements OnInit {
   }
 
   /** Имя иконки для отображения */
-  @Input({ required: true }) icon!: string;
+  readonly icon = input.required<string>();
 
   square?: string;
   viewBox?: string;

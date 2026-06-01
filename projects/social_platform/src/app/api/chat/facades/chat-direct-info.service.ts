@@ -42,7 +42,6 @@ export class ChatDirectInfoService {
   private readonly startTypingUseCase = inject(StartTypingUseCase);
   private readonly readMessageUseCase = inject(ReadMessageUseCase);
 
-
   // Сохраняем тип чата для использования в методах
   private chatType: "direct" | "project" = "direct";
 

@@ -23,10 +23,10 @@ import { TagDto } from "@domain/kanban/dto/tag.model.dto";
 
 /** Канбан (модуль отключён): форма создания тега. */
 @Component({
-    selector: "app-create-tag-form",
-    templateUrl: "./create-tag-form.component.html",
-    styleUrl: "./create-tag-form.component.scss",
-    imports: [CommonModule, FormsModule, ReactiveFormsModule]
+  selector: "app-create-tag-form",
+  templateUrl: "./create-tag-form.component.html",
+  styleUrl: "./create-tag-form.component.scss",
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class CreateTagFormComponent implements OnInit, OnChanges {
   @Input() editingTag: TagDto | null = null;

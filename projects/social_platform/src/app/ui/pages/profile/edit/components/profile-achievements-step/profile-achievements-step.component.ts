@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input, Input } from "@angular/core";
 import { InputComponent, SelectComponent, ButtonComponent } from "@ui/primitives";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
@@ -15,27 +15,27 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Шаг редактирования достижений в общей форме профиля. */
 @Component({
-    selector: "app-profile-achievements-step",
-    templateUrl: "./profile-achievements-step.component.html",
-    styleUrl: "./profile-achievements-step.component.scss",
-    imports: [
-        CommonModule,
-        InputComponent,
-        IconComponent,
-        SelectComponent,
-        TextareaComponent,
-        UploadFileComponent,
-        ButtonComponent,
-        FileItemComponent,
-        ReactiveFormsModule,
-        ControlErrorPipe,
-        TruncatePipe,
-    ],
-    providers: [ProfileEditAchievementsInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-profile-achievements-step",
+  templateUrl: "./profile-achievements-step.component.html",
+  styleUrl: "./profile-achievements-step.component.scss",
+  imports: [
+    CommonModule,
+    InputComponent,
+    IconComponent,
+    SelectComponent,
+    TextareaComponent,
+    UploadFileComponent,
+    ButtonComponent,
+    FileItemComponent,
+    ReactiveFormsModule,
+    ControlErrorPipe,
+    TruncatePipe,
+  ],
+  providers: [ProfileEditAchievementsInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileAchievementsStepComponent {
-  @Input() isAchievementsDirty!: boolean;
+  readonly isAchievementsDirty = input.required<boolean>();
   protected readonly errorMessage = ErrorMessage;
 
   private readonly profileFormService = inject(ProfileFormService);

@@ -10,12 +10,12 @@ import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
 
 /** Форма запроса сброса пароля по email. */
 @Component({
-    selector: "app-reset-password",
-    templateUrl: "./reset-password.component.html",
-    styleUrl: "./reset-password.component.scss",
-    providers: [AuthPasswordService, AuthUIInfoService],
-    imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-reset-password",
+  templateUrl: "./reset-password.component.html",
+  styleUrl: "./reset-password.component.scss",
+  providers: [AuthPasswordService, AuthUIInfoService],
+  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent implements OnInit {
   private readonly authUIInfoService = inject(AuthUIInfoService);

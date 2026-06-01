@@ -41,7 +41,11 @@ export class ProjectsInfoService {
 
     this.searchForm
       .get("search")
-      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(search => {
         this.router
           .navigate([], {

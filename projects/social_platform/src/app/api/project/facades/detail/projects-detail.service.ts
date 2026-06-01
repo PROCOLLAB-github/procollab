@@ -143,7 +143,10 @@ export class ProjectsDetailService {
       return;
     }
 
-    this.readProjectNewsUseCase.execute(projectId, ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    this.readProjectNewsUseCase
+      .execute(projectId, ids)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 
   onAddNews(news: { text: string; files: string[] }): Observable<void> {

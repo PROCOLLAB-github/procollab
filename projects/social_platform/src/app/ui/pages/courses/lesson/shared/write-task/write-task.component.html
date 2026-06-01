@@ -2,9 +2,9 @@
 
 <div class="write-task" [class.write-task--hasVideo]="cachedVideoUrl">
   <div class="write-task__header">
-    <p class="text-body-12 write-task__task">задание {{ data.order }}</p>
-    @if (!cachedVideoUrl && !data.imageUrl) {
-    <p class="write-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+    <p class="text-body-12 write-task__task">задание {{ data().order }}</p>
+    @if (!cachedVideoUrl && !data().imageUrl) {
+    <p class="write-task__text text-body-12-bold">{{ data().title | truncate: 80 }}</p>
     }
     <div
       class="write-task__description text-body-12"
@@ -19,30 +19,30 @@
         allowfullscreen
         allowtransparency="true"
       ></iframe>
-      } @else if (data.imageUrl) {
+      } @else if (data().imageUrl) {
       <div class="write-task__block">
-        <img appImagePreview class="write-task__image" [src]="data.imageUrl" />
-        <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
+        <img appImagePreview class="write-task__image" [src]="data().imageUrl" />
+        <p class="text-body-12-bold">{{ data().title | truncate: 50 }}</p>
       </div>
       }
       <p
         #descEl
         class="write-task__desc"
         [innerHTML]="
-          readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+          readFullDescription ? data().bodyText : (data().bodyText | truncateHtml: truncateLimit)
         "
       ></p>
       @if (descriptionExpandable) {
       <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
         {{ readFullDescription ? "скрыть" : "подробнее" }}
       </div>
-      } @if (type === 'text-file' && data.attachmentUrl) {
+      } @if (type() === 'text-file' && data().attachmentUrl) {
       <app-file-item
         mode="preview"
-        [type]="'file'"
+        type="file"
         name="файл с заданием"
         [size]="0"
-        [link]="data.attachmentUrl"
+        [link]="data().attachmentUrl"
       ></app-file-item>
       }
     </div>
@@ -52,13 +52,13 @@
     <p class="write-task__input text-body-12">ответ</p>
     <div class="write-task__input write-task__input--textarea">
       <textarea
-        [style.minHeight]="type === 'text-file' ? '125px' : ''"
+        [style.minHeight]="type() === 'text-file' ? '125px' : ''"
         class="write-task__textarea text-body-12"
         rows="2"
         attr.maxlength="{{ maxLength }}"
         (input)="onKeyUp($event)"
         placeholder="ваш ответ"
-        [disabled]="disabled"
+        [disabled]="disabled()"
       ></textarea>
       <div class="write-task__counter">
         <p class="text-body-10">
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    @if (type === 'text-file' && !disabled) {
+    @if (type() === 'text-file' && !disabled) {
     <div class="write-task__files">
       <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">
         <div emptyPlaceholder class="write-task__upload">

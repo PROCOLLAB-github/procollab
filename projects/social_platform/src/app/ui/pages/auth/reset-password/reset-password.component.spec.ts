@@ -28,10 +28,7 @@ describe("ResetPasswordComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        ResetPasswordComponent,
-      ],
+      imports: [ReactiveFormsModule, ResetPasswordComponent],
       providers: [
         { provide: AuthRepository, useValue: authSpy },
         { provide: AuthRepositoryPort, useValue: authPortSpy },

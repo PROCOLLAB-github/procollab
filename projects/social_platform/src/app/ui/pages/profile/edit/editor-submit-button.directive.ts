@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, Directive, input, Input, OnDestroy, ViewContainerRef } from "@angular/core";
 import { containerSm } from "@utils/responsive";
 import { fromEvent, Subscription } from "rxjs";
 
@@ -21,7 +21,7 @@ export class EditorSubmitButtonDirective implements AfterViewInit, OnDestroy {
   constructor(private readonly viewRef: ViewContainerRef) {}
 
   /** Селектор контейнера для отслеживания позиции */
-  @Input() containerSelector = "profile";
+  readonly containerSelector = input<string>("profile");
 
   /** Инициализация отслеживания скролла после загрузки представления */
   ngAfterViewInit(): void {
@@ -41,7 +41,7 @@ export class EditorSubmitButtonDirective implements AfterViewInit, OnDestroy {
   /** Инициализация отслеживания скролла и позиционирования кнопки */
   initSaveButtonScroller(): void {
     const scroller = document.querySelector(".office__body");
-    const container = document.querySelector(this.containerSelector);
+    const container = document.querySelector(this.containerSelector());
     const topBar = document.querySelector(".office__top");
     if (!scroller || !container || !topBar) return;
 

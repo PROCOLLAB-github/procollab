@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, Input, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-loader",
@@ -10,12 +10,10 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoaderComponent implements OnInit {
-  constructor() {}
-
-  @Input() speed = "1s";
-  @Input() size = "15px";
-  @Input() color = "white";
-  @Input() type: "wave" | "circle" = "circle";
+  readonly speed = input<string>("1s");
+  readonly size = input<string>("15px");
+  readonly color = input<string>("white");
+  readonly type = input<"wave" | "circle">("circle");
 
   ngOnInit(): void {}
 }

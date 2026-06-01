@@ -29,7 +29,10 @@ describe("VacancyCardComponent", () => {
 
     fixture = TestBed.createComponent(InviteCardComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput("invite", { id: 1, user: { id: 1, firstName: "Test", lastName: "User", personal: { avatar: "" } } });
+    fixture.componentRef.setInput("invite", {
+      id: 1,
+      user: { id: 1, firstName: "Test", lastName: "User", personal: { avatar: "" } },
+    });
     fixture.detectChanges();
   });
 

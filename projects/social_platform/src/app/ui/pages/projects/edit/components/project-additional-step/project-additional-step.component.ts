@@ -9,6 +9,7 @@ import {
   inject,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
+  input,
 } from "@angular/core";
 import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -31,25 +32,25 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Шаг редактирования проекта: дополнительные поля программы. */
 @Component({
-    selector: "app-project-additional-step",
-    templateUrl: "./project-additional-step.component.html",
-    styleUrl: "./project-additional-step.component.scss",
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        InputComponent,
-        IconComponent,
-        CheckboxComponent,
-        SwitchComponent,
-        SelectComponent,
-        TextareaComponent,
-        ControlErrorPipe,
-        ToSelectOptionsPipe,
-        ButtonComponent,
-        RouterLink,
-        TooltipComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-project-additional-step",
+  templateUrl: "./project-additional-step.component.html",
+  styleUrl: "./project-additional-step.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputComponent,
+    IconComponent,
+    CheckboxComponent,
+    SwitchComponent,
+    SelectComponent,
+    TextareaComponent,
+    ControlErrorPipe,
+    ToSelectOptionsPipe,
+    ButtonComponent,
+    RouterLink,
+    TooltipComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAdditionalStepComponent implements OnInit {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
@@ -57,7 +58,7 @@ export class ProjectAdditionalStepComponent implements OnInit {
 
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  @Input() isProjectAssignToProgram?: boolean;
+  readonly isProjectAssignToProgram = input<boolean>();
 
   ngOnInit(): void {
     // Инициализация уже должна быть выполнена в родительском компоненте

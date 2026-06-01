@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnDestroy,
   OnInit,
   signal,
@@ -27,31 +27,31 @@ import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
 
 /** Универсальная карточка направлений профиля/проекта: навыки, достижения, цели и партнёры. */
 @Component({
-    selector: "app-project-direction-card",
-    templateUrl: "./project-direction-card.component.html",
-    styleUrl: "./project-direction-card.component.scss",
-    imports: [
-        CommonModule,
-        IconComponent,
-        ModalComponent,
-        TagComponent,
-        FileItemComponent,
-        AvatarComponent,
-        DayjsPipe,
-        TruncatePipe,
-        ButtonComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-project-direction-card",
+  templateUrl: "./project-direction-card.component.html",
+  styleUrl: "./project-direction-card.component.scss",
+  imports: [
+    CommonModule,
+    IconComponent,
+    ModalComponent,
+    TagComponent,
+    FileItemComponent,
+    AvatarComponent,
+    DayjsPipe,
+    TruncatePipe,
+    ButtonComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectDirectionCard implements OnInit, OnDestroy {
-  @Input() direction!: string;
-  @Input() icon!: string;
-  @Input() about!: string | any[];
-  @Input() type!: string;
-  @Input() isOwner!: boolean;
+  readonly direction = input.required<string>();
+  readonly icon = input.required<string>();
+  readonly about = input.required<string | any[]>();
+  readonly type = input.required<string>();
+  readonly isOwner = input<boolean>();
 
-  @Input() profileInfoType?: "skills" | "achievements";
-  @Input() projectInfoType?: "goals" | "partners";
+  readonly profileInfoType = input<"skills" | "achievements" | undefined>();
+  readonly projectInfoType = input<"goals" | "partners" | undefined>();
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -78,7 +78,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   currentYear = 0;
 
   mouseHover(goalId: number): void {
-    if (this.isOwner) {
+    if (this.isOwner()) {
       if (goalId) {
         this.goalCompleteHoverId = goalId;
       }
@@ -86,7 +86,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   }
 
   mouseLeave(): void {
-    if (this.isOwner) {
+    if (this.isOwner()) {
       this.goalCompleteHoverId = null;
     }
   }
@@ -96,7 +96,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
       this.listType = data["listType"];
     });
 
-    if (this.profileInfoType === "achievements" && Array.isArray(this.about)) {
+    if (this.profileInfoType() === "achievements" && Array.isArray(this.about)) {
       this.allAchievements = this.about as Achievement[];
       this.years = Array.from(
         new Map(this.allAchievements.map(a => [a.year, { id: a.id, year: a.year }])).values()

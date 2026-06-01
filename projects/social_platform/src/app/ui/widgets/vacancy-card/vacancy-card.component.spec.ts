@@ -15,7 +15,15 @@ describe("VacancyCardComponent", () => {
       imports: [VacancyCardComponent],
       providers: [
         provideNgxMask(),
-        { provide: AuthRepositoryPort, useValue: { fetchProfile: () => of({}), fetchUserRoles: () => of([]), fetchChangeableRoles: () => of([]), fetchLeaderProjects: () => of({}) } },
+        {
+          provide: AuthRepositoryPort,
+          useValue: {
+            fetchProfile: () => of({}),
+            fetchUserRoles: () => of([]),
+            fetchChangeableRoles: () => of([]),
+            fetchLeaderProjects: () => of({}),
+          },
+        },
       ],
     }).compileComponents();
 

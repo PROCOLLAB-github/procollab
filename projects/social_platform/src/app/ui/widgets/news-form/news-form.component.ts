@@ -41,18 +41,18 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
  * - filesList - массив объектов файлов с состояниями загрузки
  */
 @Component({
-    selector: "app-news-form",
-    templateUrl: "./news-form.component.html",
-    styleUrl: "./news-form.component.scss",
-    imports: [
-        ReactiveFormsModule,
-        AutosizeModule,
-        IconComponent,
-        FileUploadItemComponent,
-        ImgCardComponent,
-        TextareaComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-news-form",
+  templateUrl: "./news-form.component.html",
+  styleUrl: "./news-form.component.scss",
+  imports: [
+    ReactiveFormsModule,
+    AutosizeModule,
+    IconComponent,
+    FileUploadItemComponent,
+    ImgCardComponent,
+    TextareaComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsFormComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

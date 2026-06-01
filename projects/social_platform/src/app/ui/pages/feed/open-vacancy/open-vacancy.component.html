@@ -1,6 +1,6 @@
 <!-- @format -->
 
-@if (feedItem) {
+@if (feedItem()) {
 <div class="card">
   <div class="card__inner">
     <img
@@ -8,7 +8,7 @@
       alt="vacancy-card-background"
       src="/assets/images/office/feed/vacancy-card/vacancies-card-background.svg"
     />
-    @if (feedItem.project; as project) {
+    @if (feedItem().project; as project) {
     <div class="card__project">
       <app-avatar
         [size]="65"
@@ -27,7 +27,7 @@
       </app-tag>
       }
     </div>
-    } @if (feedItem; as vacancy) {
+    } @if (feedItem(); as vacancy) {
     <div class="card__vacancy">
       <div class="lists__section">
         <h3 class="text-body-10 lists__title">
@@ -65,7 +65,7 @@
         } }
       </div>
 
-      @if (feedItem.description) {
+      @if (feedItem().description) {
       <div class="card__description">
         <div class="text-body-6 about__text">
           <p
@@ -85,18 +85,18 @@
     }
   </div>
 
-  @if (feedItem) {
+  @if (feedItem()) {
   <div class="card__actions">
     <app-button
       customTypographyClass="text-body-12"
-      [routerLink]="AppRoutes.projects.detail(feedItem.project!.id)"
+      [routerLink]="AppRoutes.projects.detail(feedItem().project!.id)"
       appearance="outline"
       size="medium"
       >перейти в проект</app-button
     >
     <app-button
       customTypographyClass="text-body-12"
-      [routerLink]="AppRoutes.office.vacancy(feedItem.id)"
+      [routerLink]="AppRoutes.office.vacancy(feedItem().id)"
       appearance="inline"
       size="big"
       >откликнуться на вакансию</app-button

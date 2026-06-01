@@ -53,8 +53,19 @@ describe("MembersComponent", () => {
       imports: [MembersComponent],
       providers: [
         { provide: AuthRepositoryPort, useValue: authPortSpy },
-        { provide: SkillsRepositoryPort, useValue: { getSkillsNested: () => of([]), getSkillsInline: () => of({ results: [], count: 0, next: "", previous: "" }) } },
-        { provide: SpecializationsRepositoryPort, useValue: { getSpecializationsInline: () => of({ results: [], count: 0, next: "", previous: "" }) } },
+        {
+          provide: SkillsRepositoryPort,
+          useValue: {
+            getSkillsNested: () => of([]),
+            getSkillsInline: () => of({ results: [], count: 0, next: "", previous: "" }),
+          },
+        },
+        {
+          provide: SpecializationsRepositoryPort,
+          useValue: {
+            getSpecializationsInline: () => of({ results: [], count: 0, next: "", previous: "" }),
+          },
+        },
         provideRouter([]),
       ],
     })

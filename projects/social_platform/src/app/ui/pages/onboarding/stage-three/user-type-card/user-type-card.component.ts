@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 /** Карточка выбора типа пользователя на этапе онбординга. */
 @Component({
@@ -10,9 +10,6 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserTypeCardComponent implements OnInit {
-  @Input() isActive = false;
-  constructor() {}
-
-  ngOnInit(): void {}
+export class UserTypeCardComponent {
+  readonly isActive = input<boolean>(false);
 }

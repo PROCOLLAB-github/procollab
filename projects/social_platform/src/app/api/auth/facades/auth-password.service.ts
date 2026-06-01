@@ -28,7 +28,6 @@ export class AuthPasswordService {
   private readonly passwordForm = this.authUIInfoService.passwordForm;
   private readonly resetForm = this.authUIInfoService.resetForm;
 
-
   readonly email = this.route.queryParams.pipe(
     map(r => r["email"]),
     takeUntilDestroyed()

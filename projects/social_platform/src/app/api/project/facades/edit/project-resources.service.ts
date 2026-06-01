@@ -28,7 +28,6 @@ export class ProjectResourceService {
     Partial<{ id: null; type: string; description: string; partnerCompany: string }>[]
   >([]);
 
-
   private initialized = false;
 
   constructor() {

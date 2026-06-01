@@ -1,13 +1,6 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, input, output } from "@angular/core";
 import { tagColors } from "@core/consts/other/tag-colors.const";
 import { NgStyle } from "@angular/common";
 import { IconComponent } from "../icon/icon.component";
@@ -26,15 +19,26 @@ import { IconComponent } from "../icon/icon.component";
  * - Контент передается через ng-content
  */
 @Component({
-    selector: "app-tag",
-    templateUrl: "./tag.component.html",
-    styleUrl: "./tag.component.scss",
-    imports: [IconComponent, NgStyle],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-tag",
+  templateUrl: "./tag.component.html",
+  styleUrl: "./tag.component.scss",
+  imports: [IconComponent, NgStyle],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagComponent {
   /** Цветовая схема тега */
-  color = input<"primary" | "secondary" | "accent" | "accent-medium" | "blue-dark" | "cyan" | "red" | "complete" | "complete-dark" | "soft">("primary");
+  color = input<
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "accent-medium"
+    | "blue-dark"
+    | "cyan"
+    | "red"
+    | "complete"
+    | "complete-dark"
+    | "soft"
+  >("primary");
 
   type = input<"days" | "overdue" | "answer">();
 

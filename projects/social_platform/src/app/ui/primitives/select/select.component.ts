@@ -38,18 +38,18 @@ import { IconComponent } from "../icon/icon.component";
  * - Закрытие при клике вне компонента
  */
 @Component({
-    selector: "app-select",
-    templateUrl: "./select.component.html",
-    styleUrl: "./select.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SelectComponent),
-            multi: true,
-        },
-    ],
-    imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent]
+  selector: "app-select",
+  templateUrl: "./select.component.html",
+  styleUrl: "./select.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SelectComponent),
+      multi: true,
+    },
+  ],
+  imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent],
 })
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
@@ -61,11 +61,13 @@ export class SelectComponent implements ControlValueAccessor {
   size = input<"small" | "big">("small");
 
   /** Массив доступных опций */
-  options = input.required<{
-    value: string | number | boolean | null;
-    label: string;
-    id: number;
-  }[]>();
+  options = input.required<
+    {
+      value: string | number | boolean | null;
+      label: string;
+      id: number;
+    }[]
+  >();
 
   error = input(false);
 
@@ -158,7 +160,9 @@ export class SelectComponent implements ControlValueAccessor {
 
     const yearValue = this.extractYear(value);
     if (yearValue !== null) {
-      const yearOption = this.options().find(option => this.extractYear(option.value) === yearValue);
+      const yearOption = this.options().find(
+        option => this.extractYear(option.value) === yearValue
+      );
       if (yearOption) {
         this.selectedId = yearOption.id;
         this.cdr.markForCheck();

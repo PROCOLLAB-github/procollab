@@ -41,7 +41,9 @@ export class OnboardingInfoService {
 
     this.updateStage();
 
-    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.updateStage.bind(this));
+    this.router.events
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(this.updateStage.bind(this));
   }
 
   updateStage(): void {

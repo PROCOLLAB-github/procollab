@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   OnInit,
   Output,
@@ -15,16 +16,15 @@ import { TruncatePipe } from "@corelib";
 
 /** Компонент карточки вакансии с кнопками редактирования и удаления. */
 @Component({
-    selector: "app-vacancy-card",
-    templateUrl: "./vacancy-card.component.html",
-    styleUrl: "./vacancy-card.component.scss",
-    imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-vacancy-card",
+  templateUrl: "./vacancy-card.component.html",
+  styleUrl: "./vacancy-card.component.scss",
+  imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyCardComponent implements OnInit {
-  constructor() {}
+  readonly vacancy = input<Vacancy | undefined>();
 
-  @Input() vacancy?: Vacancy;
   @Output() remove = new EventEmitter<number>();
   @Output() edit = new EventEmitter<number>();
 
@@ -36,13 +36,13 @@ export class VacancyCardComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
 
-    this.remove.emit(this.vacancy?.id);
+    this.remove.emit(this.vacancy()?.id);
   }
 
   onEdit(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
 
-    this.edit.emit(this.vacancy?.id);
+    this.edit.emit(this.vacancy()?.id);
   }
 }

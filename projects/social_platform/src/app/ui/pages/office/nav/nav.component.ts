@@ -52,19 +52,19 @@ import { InviteInfoService } from "@api/invite/facades/invite-info.service";
  * - authService - аутентификация и профиль пользователя
  */
 @Component({
-    selector: "app-nav",
-    templateUrl: "./nav.component.html",
-    styleUrl: "./nav.component.scss",
-    imports: [
-        CommonModule,
-        IconComponent,
-        RouterLink,
-        RouterLinkActive,
-        InviteManageCardComponent,
-        ProfileInfoComponent,
-        AsyncPipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-nav",
+  templateUrl: "./nav.component.html",
+  styleUrl: "./nav.component.scss",
+  imports: [
+    CommonModule,
+    IconComponent,
+    RouterLink,
+    RouterLinkActive,
+    InviteManageCardComponent,
+    ProfileInfoComponent,
+    AsyncPipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent implements OnInit, OnDestroy {
   private readonly logger = inject(LoggerService);

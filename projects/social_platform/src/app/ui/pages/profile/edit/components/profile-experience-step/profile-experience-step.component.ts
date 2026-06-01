@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input, Input } from "@angular/core";
 import { SelectComponent, InputComponent, ButtonComponent } from "@ui/primitives";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
@@ -13,24 +13,24 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Шаг редактирования профиля: опыт работы. */
 @Component({
-    selector: "app-profile-experience-step",
-    templateUrl: "./profile-experience-step.component.html",
-    styleUrl: "./profile-experience-step.component.scss",
-    imports: [
-        CommonModule,
-        SelectComponent,
-        InputComponent,
-        IconComponent,
-        TextareaComponent,
-        ButtonComponent,
-        ControlErrorPipe,
-        ReactiveFormsModule,
-        TruncatePipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-profile-experience-step",
+  templateUrl: "./profile-experience-step.component.html",
+  styleUrl: "./profile-experience-step.component.scss",
+  imports: [
+    CommonModule,
+    SelectComponent,
+    InputComponent,
+    IconComponent,
+    TextareaComponent,
+    ButtonComponent,
+    ControlErrorPipe,
+    ReactiveFormsModule,
+    TruncatePipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileExperienceStepComponent {
-  @Input() isWorkDirty!: boolean;
+  readonly isWorkDirty = input.required<boolean>();
 
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditExperienceInfoService = inject(ProfileEditExperienceInfoService);

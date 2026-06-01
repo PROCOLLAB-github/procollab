@@ -25,28 +25,28 @@ import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service"
  * Использует сигналы для управления состоянием полей зарплаты
  */
 @Component({
-    selector: "app-vacancy-filter",
-    imports: [
-        CommonModule,
-        CheckboxComponent,
-        ClickOutsideModule,
-        IconComponent,
-        ButtonComponent,
-        RouterLink,
-    ],
-    templateUrl: "./vacancy-filter.component.html",
-    styleUrl: "./vacancy-filter.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger("dropdownAnimation", [
-            transition(":enter", [
-                style({ opacity: 0, transform: "scaleY(0.8)" }),
-                animate(".12s cubic-bezier(0, 0, 0.2, 1)"),
-            ]),
-            transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
-        ]),
-    ],
-    providers: [VacancyFilterInfoService]
+  selector: "app-vacancy-filter",
+  imports: [
+    CommonModule,
+    CheckboxComponent,
+    ClickOutsideModule,
+    IconComponent,
+    ButtonComponent,
+    RouterLink,
+  ],
+  templateUrl: "./vacancy-filter.component.html",
+  styleUrl: "./vacancy-filter.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger("dropdownAnimation", [
+      transition(":enter", [
+        style({ opacity: 0, transform: "scaleY(0.8)" }),
+        animate(".12s cubic-bezier(0, 0, 0.2, 1)"),
+      ]),
+      transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
+    ]),
+  ],
+  providers: [VacancyFilterInfoService],
 })
 export class VacancyFilterComponent implements OnInit {
   private readonly vacancyFilterInfoService = inject(VacancyFilterInfoService);

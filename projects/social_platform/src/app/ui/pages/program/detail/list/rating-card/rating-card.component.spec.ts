@@ -27,15 +27,15 @@ describe("RatingCardComponent", () => {
       program: of({}),
     });
 
-    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
-      "fetchProfile",
-      "fetchUserRoles",
-      "fetchChangeableRoles",
-    ], {
-      fetchProfile: of({}),
-      fetchUserRoles: of([]),
-      fetchChangeableRoles: of([]),
-    });
+    const authPortSpy = jasmine.createSpyObj(
+      "AuthRepositoryPort",
+      ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles"],
+      {
+        fetchProfile: of({}),
+        fetchUserRoles: of([]),
+        fetchChangeableRoles: of([]),
+      }
+    );
 
     const industrySpy = {
       industries: signal([]),

@@ -1,6 +1,13 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, HostListener, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { Task } from "@domain/courses/courses.model";
@@ -16,22 +23,22 @@ import { LessonUIInfoService } from "@api/courses/facades/ui/lesson-ui-info.serv
 
 /** Страница прохождения урока, выбирающая компонент задачи по текущему типу ответа. */
 @Component({
-    selector: "app-lesson",
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        ButtonComponent,
-        InfoTaskComponent,
-        WriteTaskComponent,
-        ExcludeTaskComponent,
-        RadioSelectTaskComponent,
-        FileTaskComponent,
-        LoaderComponent,
-    ],
-    templateUrl: "./lesson.component.html",
-    styleUrl: "./lesson.component.scss",
-    providers: [LessonInfoService, LessonUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-lesson",
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ButtonComponent,
+    InfoTaskComponent,
+    WriteTaskComponent,
+    ExcludeTaskComponent,
+    RadioSelectTaskComponent,
+    FileTaskComponent,
+    LoaderComponent,
+  ],
+  templateUrl: "./lesson.component.html",
+  styleUrl: "./lesson.component.scss",
+  providers: [LessonInfoService, LessonUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LessonComponent implements OnInit, OnDestroy {
   private readonly lessonInfoService = inject(LessonInfoService);

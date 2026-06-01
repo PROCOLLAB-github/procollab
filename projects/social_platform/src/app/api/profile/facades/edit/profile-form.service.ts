@@ -35,7 +35,9 @@ export class ProfileFormService {
   private readonly changeableRoles = this.profileInfoService.changeableRoles;
   private readonly profile = this.profileInfoService.profile;
 
-  readonly roles = signal<{ value: string | number | boolean | null; label: string; id: number }[]>([]);
+  readonly roles = signal<{ value: string | number | boolean | null; label: string; id: number }[]>(
+    []
+  );
 
   readonly newPreferredIndustryTitle = signal<string>("");
 

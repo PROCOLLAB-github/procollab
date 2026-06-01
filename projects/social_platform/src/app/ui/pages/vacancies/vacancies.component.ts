@@ -15,19 +15,19 @@ import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.se
 
 /** Раздел вакансий: shell с router-outlet. */
 @Component({
-    selector: "app-vacancies",
-    templateUrl: "./vacancies.component.html",
-    styleUrl: "./vacancies.component.scss",
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        BackComponent,
-        SearchComponent,
-        VacancyFilterComponent,
-        ReactiveFormsModule,
-    ],
-    providers: [VacancyInfoService, VacancyUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-vacancies",
+  templateUrl: "./vacancies.component.html",
+  styleUrl: "./vacancies.component.scss",
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    BackComponent,
+    SearchComponent,
+    VacancyFilterComponent,
+    ReactiveFormsModule,
+  ],
+  providers: [VacancyInfoService, VacancyUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesComponent implements OnInit {
   private readonly vacancyInfoService = inject(VacancyInfoService);

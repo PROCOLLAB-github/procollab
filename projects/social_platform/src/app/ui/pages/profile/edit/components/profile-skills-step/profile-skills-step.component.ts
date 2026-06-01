@@ -8,6 +8,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
+  input,
 } from "@angular/core";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
@@ -23,23 +24,23 @@ import { SearchesService } from "@api/searches/searches.service";
 
 /** Шаг редактирования профиля: навыки. */
 @Component({
-    selector: "app-profile-skills-step",
-    templateUrl: "./profile-skills-step.component.html",
-    styleUrl: "./profile-skills-step.component.scss",
-    imports: [
-        CommonModule,
-        AutoCompleteInputComponent,
-        SkillsBasketComponent,
-        SelectComponent,
-        ButtonComponent,
-        ReactiveFormsModule,
-        ControlErrorPipe,
-        IconComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-profile-skills-step",
+  templateUrl: "./profile-skills-step.component.html",
+  styleUrl: "./profile-skills-step.component.scss",
+  imports: [
+    CommonModule,
+    AutoCompleteInputComponent,
+    SkillsBasketComponent,
+    SelectComponent,
+    ButtonComponent,
+    ReactiveFormsModule,
+    ControlErrorPipe,
+    IconComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileSkillsStepComponent {
-  @Input() isLanguageDirty!: boolean;
+  readonly isLanguageDirty = input.required<boolean>();
 
   @Output() openSkillsGroupsModal = new EventEmitter<void>();
 

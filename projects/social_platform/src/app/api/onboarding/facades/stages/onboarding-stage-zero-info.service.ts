@@ -51,14 +51,16 @@ export class OnboardingStageZeroInfoService {
   }
 
   initializationFormValues(): void {
-    this.onboardingService.formValue$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(formValues => {
-      this.onboardingStageZeroUIInfoService.applyInitFormValues(formValues);
+    this.onboardingService.formValue$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(formValues => {
+        this.onboardingStageZeroUIInfoService.applyInitFormValues(formValues);
 
-      this.onboardingStageZeroUIInfoService.applyInitWorkExperience(formValues);
-      this.onboardingStageZeroUIInfoService.applyInitEducation(formValues);
-      this.onboardingStageZeroUIInfoService.applyInitUserLanguages(formValues);
-      this.onboardingStageZeroUIInfoService.applyInitAchievements(formValues);
-    });
+        this.onboardingStageZeroUIInfoService.applyInitWorkExperience(formValues);
+        this.onboardingStageZeroUIInfoService.applyInitEducation(formValues);
+        this.onboardingStageZeroUIInfoService.applyInitUserLanguages(formValues);
+        this.onboardingStageZeroUIInfoService.applyInitAchievements(formValues);
+      });
   }
 
   onSkipRegistration(): void {

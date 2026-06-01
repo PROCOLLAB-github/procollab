@@ -2,7 +2,12 @@
 
 import { TestBed } from "@angular/core/testing";
 import { ProjectChatResolver } from "./chat.resolver";
-import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot, provideRouter } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  convertToParamMap,
+  RouterStateSnapshot,
+  provideRouter,
+} from "@angular/router";
 import { of } from "rxjs";
 import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";

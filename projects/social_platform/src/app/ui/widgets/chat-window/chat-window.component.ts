@@ -24,28 +24,26 @@ import { MessageInputComponent } from "@ui/widgets/message-input/message-input.c
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { filter, fromEvent, noop, skip, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/primitives/modal/modal.service";
-import { User } from "@domain/auth/user.model";
 import { PluralizePipe } from "@corelib";
 import { ChatMessageComponent } from "./chat-message/chat-message.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Окно чата: список сообщений с виртуальной прокруткой и поле ввода. */
 @Component({
-    selector: "app-chat-window",
-    templateUrl: "./chat-window.component.html",
-    styleUrl: "./chat-window.component.scss",
-    imports: [
-        CdkVirtualScrollViewport,
-        CdkFixedSizeVirtualScroll,
-        CdkVirtualForOf,
-        ChatMessageComponent,
-        ReactiveFormsModule,
-        MessageInputComponent,
-        PluralizePipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-chat-window",
+  templateUrl: "./chat-window.component.html",
+  styleUrl: "./chat-window.component.scss",
+  imports: [
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
+    ChatMessageComponent,
+    ReactiveFormsModule,
+    MessageInputComponent,
+    PluralizePipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);

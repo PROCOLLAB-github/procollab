@@ -1,3 +1,5 @@
+/** @format */
+
 /// <reference types="jasmine" />
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -29,9 +31,7 @@ describe("VacanciesListComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [VacanciesListComponent],
-      providers: [
-        provideRouter([]),
-      ],
+      providers: [provideRouter([])],
     })
       .overrideComponent(VacanciesListComponent, {
         remove: {

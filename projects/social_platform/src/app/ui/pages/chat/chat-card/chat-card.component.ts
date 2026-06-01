@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { DayjsPipe } from "@corelib";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ChatListItem } from "@domain/chat/chat-item.model";
@@ -20,19 +20,19 @@ import { ChatListItem } from "@domain/chat/chat-item.model";
  * @styleUrl ./chat-card.component.scss
  */
 @Component({
-    selector: "app-chat-card",
-    templateUrl: "./chat-card.component.html",
-    styleUrl: "./chat-card.component.scss",
-    imports: [AvatarComponent, DayjsPipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-chat-card",
+  templateUrl: "./chat-card.component.html",
+  styleUrl: "./chat-card.component.scss",
+  imports: [AvatarComponent, DayjsPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatCardComponent {
   /** Данные чата для отображения */
-  @Input({ required: true }) chat!: ChatListItem;
+  readonly chat = input.required<ChatListItem>();
 
   /** Флаг последнего элемента в списке (для стилизации) */
-  @Input() isLast = false;
+  readonly isLast = input<boolean>(false);
 
   /** Флаг непрочитанного сообщения — передаётся из фасада через родительский компонент */
-  @Input() isUnread = false;
+  readonly isUnread = input<boolean>(false);
 }

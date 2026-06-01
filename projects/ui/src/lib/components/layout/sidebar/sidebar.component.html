@@ -2,7 +2,7 @@
 
 <div class="sidebar">
   <a (click)="redirectToHome()" class="sidebar__logo">
-    <img [src]="logoSrc" alt="logo" loading="lazy" decoding="async" />
+    <img [src]="logoSrc()" alt="logo" loading="lazy" decoding="async" />
   </a>
   <nav class="sidebar-nav sidebar__nav">
     <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">
@@ -11,7 +11,7 @@
         [style.opacity]="showBar ? 1 : 0"
         [style.transform]="'translateY(' + barPosition + 'px)'"
       ></div>
-      @for (item of navItems; track $index) {
+      @for (item of navItems(); track $index) {
       <a
         #navItem
         (click)="handleItemClick(item)"

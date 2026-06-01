@@ -11,18 +11,18 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Отображает список программ с поиском и фильтрацией. */
 @Component({
-    selector: "app-main",
-    templateUrl: "./main.component.html",
-    styleUrl: "./main.component.scss",
-    imports: [
-        RouterLink,
-        ProgramCardComponent,
-        CheckboxComponent,
-        SelectComponent,
-        ClickOutsideModule,
-    ],
-    providers: [ProgramMainInfoService, ProgramMainUIInfoService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-main",
+  templateUrl: "./main.component.html",
+  styleUrl: "./main.component.scss",
+  imports: [
+    RouterLink,
+    ProgramCardComponent,
+    CheckboxComponent,
+    SelectComponent,
+    ClickOutsideModule,
+  ],
+  providers: [ProgramMainInfoService, ProgramMainUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramMainComponent implements OnInit {
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);

@@ -12,12 +12,12 @@ import { ExpandService } from "@api/expand/expand.service";
  * Компонент страницы вакансий в деательной информации о проекте
  */
 @Component({
-    selector: "app-vacancies",
-    templateUrl: "./vacancies.component.html",
-    styleUrl: "./vacancies.component.scss",
-    imports: [CommonModule, ProjectVacancyCardComponent],
-    providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-vacancies",
+  templateUrl: "./vacancies.component.html",
+  styleUrl: "./vacancies.component.scss",
+  imports: [CommonModule, ProjectVacancyCardComponent],
+  providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacanciesComponent implements OnInit, OnDestroy {
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

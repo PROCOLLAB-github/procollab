@@ -9,15 +9,15 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 describe("OnboardingService", () => {
   let service: OnboardingService;
 
-  const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", [
-    "fetchProfile",
-    "fetchUserRoles",
-    "fetchChangeableRoles",
-  ], {
-    fetchProfile: of({}),
-    fetchUserRoles: of([]),
-    fetchChangeableRoles: of([]),
-  });
+  const authPortSpy = jasmine.createSpyObj(
+    "AuthRepositoryPort",
+    ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles"],
+    {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+    }
+  );
 
   beforeEach(() => {
     TestBed.configureTestingModule({

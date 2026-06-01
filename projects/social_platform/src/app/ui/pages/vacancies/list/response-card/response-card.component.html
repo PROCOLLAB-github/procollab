@@ -1,6 +1,6 @@
 <!-- @format -->
 
-@if (response) {
+@if (response()) {
 <section class="response">
   <div class="response__section"></div>
 
@@ -10,16 +10,16 @@
       <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
     </div>
 
-    <p class="text-body-10">{{ response.whyMe }}</p>
+    <p class="text-body-10">{{ response().whyMe }}</p>
 
-    @if(response.accompanyingFile){
+    @if(response().accompanyingFile){
     <app-file-item
       class="response__file"
       [canDelete]="true"
-      [link]="response.accompanyingFile.link"
-      [name]="response.accompanyingFile.name"
-      [type]="response.accompanyingFile.mimeType"
-      [size]="response.accompanyingFile.size"
+      [link]="response().accompanyingFile.link"
+      [name]="response().accompanyingFile.name"
+      [type]="response().accompanyingFile.mimeType"
+      [size]="response().accompanyingFile.size"
     ></app-file-item>
     }
   </div>

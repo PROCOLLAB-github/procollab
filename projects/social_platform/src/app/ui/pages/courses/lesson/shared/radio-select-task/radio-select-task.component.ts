@@ -6,6 +6,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   OnInit,
   Output,
@@ -23,19 +24,19 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 
 /** Компонент задачи с одним вариантом ответа и локальным сбросом выбора при ошибке. */
 @Component({
-    selector: "app-radio-select-task",
-    imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
-    templateUrl: "./radio-select-task.component.html",
-    styleUrl: "./radio-select-task.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-radio-select-task",
+  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
+  templateUrl: "./radio-select-task.component.html",
+  styleUrl: "./radio-select-task.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioSelectTaskComponent implements OnInit {
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  @Input({ required: true }) data!: Task;
-  @Input() success = false;
-  @Input() hint = "";
-  @Input() disabled = false;
+  readonly data = input.required<Task>();
+  readonly success = input<boolean>(false);
+  readonly hint = input<string>("");
+  readonly disabled = input<boolean>(false);
 
   @Input()
   set error(value: boolean) {
@@ -63,13 +64,13 @@ export class RadioSelectTaskComponent implements OnInit {
   readonly truncateLimit = 700;
 
   get descriptionExpandable(): boolean {
-    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+    return isHtmlTextTruncated(this.data()?.bodyText, this.truncateLimit);
   }
 
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
-    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    const iframeUrl = resolveVideoUrlForIframe(this.data()?.videoUrl);
     this.cachedVideoUrl = iframeUrl
       ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
       : null;
@@ -83,7 +84,7 @@ export class RadioSelectTaskComponent implements OnInit {
   }
 
   onSelect(id: number) {
-    if (this.disabled) return;
+    if (this.disabled()) return;
     this.result.set({ answerId: id });
     this.update.emit({ answerId: id });
   }

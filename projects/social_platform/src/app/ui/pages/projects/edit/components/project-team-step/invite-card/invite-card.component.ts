@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   OnInit,
   Output,
@@ -20,21 +21,21 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
 
 /** Карточка приглашения в команду с редактированием и удалением. */
 @Component({
-    selector: "app-invite-card",
-    templateUrl: "./invite-card.component.html",
-    styleUrl: "./invite-card.component.scss",
-    imports: [
-        IconComponent,
-        ButtonComponent,
-        ModalComponent,
-        SelectComponent,
-        ControlErrorPipe,
-        TruncatePipe,
-        ReactiveFormsModule,
-        InputComponent,
-        AvatarComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-invite-card",
+  templateUrl: "./invite-card.component.html",
+  styleUrl: "./invite-card.component.scss",
+  imports: [
+    IconComponent,
+    ButtonComponent,
+    ModalComponent,
+    SelectComponent,
+    ControlErrorPipe,
+    TruncatePipe,
+    ReactiveFormsModule,
+    InputComponent,
+    AvatarComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteCardComponent implements OnInit {
   constructor(private readonly fb: FormBuilder) {
@@ -49,16 +50,16 @@ export class InviteCardComponent implements OnInit {
   inviteForm: FormGroup;
   errorMessage = ErrorMessage;
 
-  @Input({ required: true }) invite!: Invite;
+  readonly invite = input.required<Invite>();
 
   @Output() remove = new EventEmitter<number>();
   @Output() edit = new EventEmitter<{ inviteId: number; role: string; specialization: string }>();
 
   ngOnInit(): void {
-    if (this.invite) {
+    if (this.invite()) {
       this.inviteForm.patchValue({
-        role: this.invite.role,
-        specialization: this.invite.specialization,
+        role: this.invite().role,
+        specialization: this.invite().specialization,
       });
     }
   }
@@ -71,7 +72,7 @@ export class InviteCardComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
 
-    this.remove.emit(this.invite?.id);
+    this.remove.emit(this.invite()?.id);
   }
 
   onEdit(event: MouseEvent): void {
@@ -80,7 +81,7 @@ export class InviteCardComponent implements OnInit {
     this.isEditInviteModal.set(false);
 
     this.edit.emit({
-      inviteId: this.invite?.id,
+      inviteId: this.invite()?.id,
       role: this.inviteForm.value.role,
       specialization: this.inviteForm.value.specialization,
     });

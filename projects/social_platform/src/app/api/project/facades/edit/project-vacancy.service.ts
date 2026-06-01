@@ -25,7 +25,6 @@ export class ProjectVacancyService {
   private readonly postVacancyUseCase = inject(PostVacancyUseCase);
   private readonly deleteVacancyUseCase = inject(DeleteVacancyUseCase);
 
-
   private readonly vacancyForm = this.projectVacancyUIService.vacancyForm;
   private readonly selectedSkills = this.projectVacancyUIService.selectedSkills;
 

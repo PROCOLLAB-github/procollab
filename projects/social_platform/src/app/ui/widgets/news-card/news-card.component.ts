@@ -8,7 +8,7 @@ import {
   ElementRef,
   EventEmitter,
   inject,
-  Input,
+  input,
   OnInit,
   Output,
   signal,
@@ -43,28 +43,28 @@ import { ExpandService } from "@api/expand/expand.service";
 
 /** Виджет карточки новости: отображение, лайк, режим редактирования. */
 @Component({
-    selector: "app-news-card",
-    templateUrl: "./news-card.component.html",
-    styleUrl: "./news-card.component.scss",
-    imports: [
-        ClickOutsideModule,
-        RouterLink,
-        IconComponent,
-        TextareaComponent,
-        ReactiveFormsModule,
-        FileUploadItemComponent,
-        FileItemComponent,
-        ButtonComponent,
-        DayjsPipe,
-        FormControlPipe,
-        TruncatePipe,
-        ParseLinksPipe,
-        ParseBreaksPipe,
-        CarouselComponent,
-        ImgCardComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [ExpandService]
+  selector: "app-news-card",
+  templateUrl: "./news-card.component.html",
+  styleUrl: "./news-card.component.scss",
+  imports: [
+    ClickOutsideModule,
+    RouterLink,
+    IconComponent,
+    TextareaComponent,
+    ReactiveFormsModule,
+    FileUploadItemComponent,
+    FileItemComponent,
+    ButtonComponent,
+    DayjsPipe,
+    FormControlPipe,
+    TruncatePipe,
+    ParseLinksPipe,
+    ParseBreaksPipe,
+    CarouselComponent,
+    ImgCardComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ExpandService],
 })
 export class NewsCardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
@@ -84,10 +84,10 @@ export class NewsCardComponent implements OnInit {
     });
   }
 
-  @Input({ required: true }) feedItem!: FeedNews;
-  @Input({ required: true }) resourceLink!: (string | number)[];
-  @Input({ required: false }) contentId?: number;
-  @Input() isOwner?: boolean;
+  readonly feedItem = input.required<FeedNews>();
+  readonly resourceLink = input.required<(string | number)[]>();
+  readonly contentId = input<number | undefined>();
+  readonly isOwner = input<boolean | undefined>();
 
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
@@ -128,10 +128,10 @@ export class NewsCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.editForm.setValue({
-      text: this.feedItem.text,
+      text: this.feedItem().text,
     });
 
-    const processedFiles = this.feedItem.files.map(file => {
+    const processedFiles = this.feedItem().files.map(file => {
       if (typeof file === "string") {
         return {
           link: file,
@@ -146,7 +146,7 @@ export class NewsCardComponent implements OnInit {
       return file;
     });
 
-    this.showLikes = this.feedItem.files.map(() => false);
+    this.showLikes = this.feedItem().files.map(() => false);
 
     this.imagesViewList = processedFiles.filter(f => {
       const [type] = (f.mimeType || "").split("/");
@@ -202,15 +202,15 @@ export class NewsCardComponent implements OnInit {
   }
 
   onCopyLink(): void {
-    const isProject = this.resourceLink[0].toString().includes("projects");
-    const isProfile = this.resourceLink[0].toString().includes("profile");
+    const isProject = this.resourceLink()[0].toString().includes("projects");
+    const isProfile = this.resourceLink()[0].toString().includes("profile");
     let fullUrl = "";
 
     if (isProject) {
-      fullUrl = `${location.origin}/office/projects/${this.contentId}/news/${this.feedItem.id}`;
+      fullUrl = `${location.origin}/office/projects/${this.contentId()}/news/${this.feedItem().id}`;
     } else {
-      fullUrl = `${location.origin}/office/profile/${this.profileId() || this.contentId}/news/${
-        this.feedItem.id
+      fullUrl = `${location.origin}/office/profile/${this.profileId() || this.contentId()}/news/${
+        this.feedItem().id
       }`;
     }
 
@@ -256,9 +256,9 @@ export class NewsCardComponent implements OnInit {
         user: 0,
       }));
 
-    this.feedItem.text = this.editForm.value.text;
+    this.feedItem().text = this.editForm.value.text;
 
-    this.feedItem.files = [...this.imagesViewList, ...this.filesViewList];
+    this.feedItem().files = [...this.imagesViewList, ...this.filesViewList];
 
     this.edited.emit({
       ...this.editForm.value,
@@ -275,7 +275,7 @@ export class NewsCardComponent implements OnInit {
     this.initEditLists();
 
     this.editForm.setValue({
-      text: this.feedItem.text,
+      text: this.feedItem().text,
     });
   }
 
@@ -412,7 +412,7 @@ export class NewsCardComponent implements OnInit {
 
   onTouchImg(_event: TouchEvent, imgIdx: number) {
     if (Date.now() - this.lastTouch < 300) {
-      this.like.emit(this.feedItem.id);
+      this.like.emit(this.feedItem().id);
       this.showLikes[imgIdx] = true;
 
       setTimeout(() => {

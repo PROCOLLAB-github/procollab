@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   Output,
   signal,
@@ -13,11 +14,11 @@ import { Skill } from "@domain/skills/skill.model";
 
 /** Компонент группы навыков с множественным выбором через чекбоксы и сворачиванием. */
 @Component({
-    selector: "app-skills-group",
-    imports: [CommonModule, IconComponent],
-    templateUrl: "./skills-group.component.html",
-    styleUrl: "./skills-group.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-skills-group",
+  imports: [CommonModule, IconComponent],
+  templateUrl: "./skills-group.component.html",
+  styleUrl: "./skills-group.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkillsGroupComponent {
   @Input({ required: true }) set options(value: Skill[]) {
@@ -42,9 +43,10 @@ export class SkillsGroupComponent {
     return this._selected();
   }
 
-  @Input({ required: true }) title!: string;
-  @Input() hasOpenGroups = false;
-  @Input() disabled = false;
+  readonly title = input.required<string>();
+  readonly hasOpenGroups = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
+
   @Output() groupToggled = new EventEmitter<boolean>();
   @Output() optionToggled = new EventEmitter<Skill>();
 
@@ -53,7 +55,7 @@ export class SkillsGroupComponent {
   contentVisible = signal(false);
 
   toggleContentVisible() {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 
@@ -62,7 +64,7 @@ export class SkillsGroupComponent {
   }
 
   onOptionClick(opt: Skill) {
-    if (this.disabled) {
+    if (this.disabled()) {
       return;
     }
 

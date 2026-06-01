@@ -6,12 +6,12 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
   inject,
+  input,
 } from "@angular/core";
 import { ChatMessage } from "@domain/chat/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -20,20 +20,18 @@ import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { DayjsPipe } from "@corelib";
 import { IconComponent } from "@ui/primitives";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
-import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Компонент сообщения чата с контекстным меню и файловыми вложениями. */
 @Component({
-    selector: "app-chat-message",
-    templateUrl: "./chat-message.component.html",
-    styleUrl: "./chat-message.component.scss",
-    imports: [ClickOutsideModule, AvatarComponent, FileItemComponent, IconComponent, DayjsPipe],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-chat-message",
+  templateUrl: "./chat-message.component.html",
+  styleUrl: "./chat-message.component.scss",
+  imports: [ClickOutsideModule, AvatarComponent, FileItemComponent, IconComponent, DayjsPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
@@ -43,7 +41,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly profile = this.profileInfoSerivce.profile;
 
-  @Input({ required: true }) chatMessage!: ChatMessage;
+  readonly chatMessage = input.required<ChatMessage>();
 
   @Output() reply = new EventEmitter<number>();
   @Output() edit = new EventEmitter<number>();
@@ -105,7 +103,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isOpen = false;
     this.overlayRef?.detach();
 
-    navigator.clipboard.writeText(this.chatMessage.text).then(() => {
+    navigator.clipboard.writeText(this.chatMessage().text).then(() => {
       this.snackbarService.success("Сообщение скопированно");
       this.logger.debug("Text copied in ChatMessageComponent");
     });
@@ -114,7 +112,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   onDelete(event: MouseEvent) {
     event.stopPropagation();
 
-    this.delete.emit(this.chatMessage.id);
+    this.delete.emit(this.chatMessage().id);
 
     this.isOpen = false;
     this.overlayRef?.detach();
@@ -123,7 +121,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   onReply(event: MouseEvent) {
     event.stopPropagation();
 
-    this.reply.emit(this.chatMessage.id);
+    this.reply.emit(this.chatMessage().id);
 
     this.isOpen = false;
     this.overlayRef?.detach();
@@ -132,7 +130,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   onEdit(event: MouseEvent) {
     event.stopPropagation();
 
-    this.edit.emit(this.chatMessage.id);
+    this.edit.emit(this.chatMessage().id);
 
     this.isOpen = false;
     this.overlayRef?.detach();

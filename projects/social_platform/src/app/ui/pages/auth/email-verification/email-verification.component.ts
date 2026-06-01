@@ -7,12 +7,12 @@ import { CommonModule } from "@angular/common";
 
 /** Страница ожидания подтверждения email с возможностью повторной отправки. */
 @Component({
-    selector: "app-email-verification",
-    templateUrl: "./email-verification.component.html",
-    styleUrl: "./email-verification.component.scss",
-    providers: [AuthEmailService],
-    imports: [CommonModule, IconComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-email-verification",
+  templateUrl: "./email-verification.component.html",
+  styleUrl: "./email-verification.component.scss",
+  providers: [AuthEmailService],
+  imports: [CommonModule, IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailVerificationComponent implements OnInit {
   private readonly authEmailService = inject(AuthEmailService);

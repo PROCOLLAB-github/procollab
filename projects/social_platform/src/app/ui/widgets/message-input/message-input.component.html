@@ -65,14 +65,14 @@
     </div>
     <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
-  } @if (replyMessage) {
+  } @if (replyMessage()) {
   <div class="message-input__action action">
     <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
     <div class="action__text">
       <div class="action__name text-body-12">
-        {{ replyMessage.author.firstName }} {{ replyMessage.author.lastName }}
+        {{ replyMessage()?.author?.firstName }} {{ replyMessage()?.author?.lastName }}
       </div>
-      <div class="action__info text-body-14">{{ replyMessage.text }}</div>
+      <div class="action__info text-body-14">{{ replyMessage()?.text }}</div>
     </div>
     <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
@@ -85,9 +85,9 @@
       (keydown.tab)="onTextareaKeydown($event)"
       (blur)="onBlur()"
       (resized)="resize.emit()"
-      [mask]="mask"
+      [mask]="mask()"
       [dropSpecialCharacters]="true"
-      [placeholder]="placeholder"
+      [placeholder]="placeholder()"
       rows="1"
       [value]="value.text"
       class="message-input__field text-body-12"

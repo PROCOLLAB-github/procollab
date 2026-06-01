@@ -16,20 +16,20 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Страница списка вакансий. */
 @Component({
-    selector: "app-vacancies-list",
-    templateUrl: "./list.component.html",
-    styleUrl: "./list.component.scss",
-    imports: [
-        CommonModule,
-        ResponseCardComponent,
-        ProjectVacancyCardComponent,
-        ButtonComponent,
-        IconComponent,
-        ModalComponent,
-        RouterLink,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [VacancyInfoService, VacancyUIInfoService]
+  selector: "app-vacancies-list",
+  templateUrl: "./list.component.html",
+  styleUrl: "./list.component.scss",
+  imports: [
+    CommonModule,
+    ResponseCardComponent,
+    ProjectVacancyCardComponent,
+    ButtonComponent,
+    IconComponent,
+    ModalComponent,
+    RouterLink,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [VacancyInfoService, VacancyUIInfoService],
 })
 export class VacanciesListComponent {
   private readonly vacancyInfoService = inject(VacancyInfoService);

@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule, NgTemplateOutlet } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  WritableSignal,
+} from "@angular/core";
 import { IconComponent } from "@ui/primitives";
 import { UserLinksPipe, TruncatePipe } from "@corelib";
 import { ExpandService } from "@api/expand/expand.service";
@@ -13,22 +20,22 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Правая колонка профиля: дополнительные блоки. */
 @Component({
-    selector: "app-profile-right-side",
-    templateUrl: "./profile-right-side.component.html",
-    styleUrl: "./profile-right-side.component.scss",
-    imports: [
-        CommonModule,
-        IconComponent,
-        RouterModule,
-        NgTemplateOutlet,
-        UserLinksPipe,
-        TruncatePipe,
-        ModalComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-profile-right-side",
+  templateUrl: "./profile-right-side.component.html",
+  styleUrl: "./profile-right-side.component.scss",
+  imports: [
+    CommonModule,
+    IconComponent,
+    RouterModule,
+    NgTemplateOutlet,
+    UserLinksPipe,
+    TruncatePipe,
+    ModalComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileRightSideComponent {
-  @Input() user!: WritableSignal<User | undefined>;
+  readonly user = input.required<User | undefined>();
 
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   protected readonly expandService = inject(ExpandService);

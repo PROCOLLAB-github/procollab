@@ -32,7 +32,6 @@ export class OnboardingStageTwoInfoService {
   private readonly updateProfileUseCase = inject(UpdateProfileUseCase);
   private readonly updateOnboardingStageUseCase = inject(UpdateOnboardingStageUseCase);
 
-
   private readonly stageForm = this.onboardingStageTwoUIInfoService.stageForm;
 
   private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;

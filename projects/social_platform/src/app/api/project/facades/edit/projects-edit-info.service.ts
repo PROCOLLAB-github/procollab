@@ -2,16 +2,7 @@
 
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
-import {
-  EMPTY,
-  distinctUntilChanged,
-  forkJoin,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from "rxjs";
+import { EMPTY, distinctUntilChanged, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Goal } from "@domain/project/goals.model";

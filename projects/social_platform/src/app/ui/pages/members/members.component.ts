@@ -26,22 +26,22 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 
 /** Список участников с поиском, фильтрацией и бесконечной прокруткой. */
 @Component({
-    selector: "app-members",
-    templateUrl: "./members.component.html",
-    styleUrl: "./members.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        SearchComponent,
-        CommonModule,
-        RouterLink,
-        MembersFiltersComponent,
-        InfoCardComponent,
-        BackComponent,
-        ButtonComponent,
-        SoonCardComponent,
-    ],
-    providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService]
+  selector: "app-members",
+  templateUrl: "./members.component.html",
+  styleUrl: "./members.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    SearchComponent,
+    CommonModule,
+    RouterLink,
+    MembersFiltersComponent,
+    InfoCardComponent,
+    BackComponent,
+    ButtonComponent,
+    SoonCardComponent,
+  ],
+  providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService],
 })
 export class MembersComponent implements OnInit, AfterViewInit {
   @ViewChild("membersRoot") membersRoot?: ElementRef<HTMLUListElement>; // Ссылка на корневой элемент списка

@@ -16,20 +16,20 @@ import { ProjectResourceService } from "@api/project/facades/edit/project-resour
 
 /** Шаг редактирования проекта: партнёры и ресурсы. */
 @Component({
-    selector: "app-project-partner-resources-step",
-    templateUrl: "./project-partner-resources-step.component.html",
-    styleUrl: "./project-partner-resources-step.component.scss",
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        IconComponent,
-        ButtonComponent,
-        InputComponent,
-        ControlErrorPipe,
-        TextareaComponent,
-        SelectComponent,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-project-partner-resources-step",
+  templateUrl: "./project-partner-resources-step.component.html",
+  styleUrl: "./project-partner-resources-step.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IconComponent,
+    ButtonComponent,
+    InputComponent,
+    ControlErrorPipe,
+    TextareaComponent,
+    SelectComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectPartnerResourcesStepComponent {
   private readonly fb = inject(FormBuilder);

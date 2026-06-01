@@ -4,11 +4,11 @@
   <div class="control-panel__actions">
     <div class="control-panel__action" (click)="showNotifications = true">
       <div (clickOutside)="onClickOutside()" class="control-panel__bell">
-        @if (hasNotifications || hasInvites) {
+        @if (hasNotifications() || hasInvites) {
         <div class="attention"></div>
         }
         <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
-        @if (invites.length) {
+        @if (invites().length) {
         <div class="control-panel__bell--hasInvites"></div>
         }
       </div>
@@ -16,7 +16,7 @@
     @if (showNotifications) {
     <div class="control-panel__notifications notifications">
       <ul class="notifications__invites">
-        @for (invite of invites; track invite.id) {
+        @for (invite of invites(); track invite.id) {
         <li class="notifications__invite">
           <app-invite-manage-card
             [invite]="invite"
@@ -36,10 +36,10 @@
       </div>
     </a>
   </div>
-  @if (user) {
+  @if (user()) {
   <app-profile-info
     class="control-panel__profile"
-    [user]="user"
+    [user]="user()!"
     (logout)="logout.emit()"
   ></app-profile-info>
   }

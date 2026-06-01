@@ -41,7 +41,15 @@ describe("ChatDirectComponent", () => {
       providers: [
         provideRouter([]),
         provideNgxMask(),
-        { provide: AuthRepositoryPort, useValue: { fetchProfile: of({}), fetchUserRoles: of([]), fetchChangeableRoles: of([]), fetchLeaderProjects: of({}) } },
+        {
+          provide: AuthRepositoryPort,
+          useValue: {
+            fetchProfile: of({}),
+            fetchUserRoles: of([]),
+            fetchChangeableRoles: of([]),
+            fetchLeaderProjects: of({}),
+          },
+        },
         { provide: API_URL, useValue: "" },
       ],
     })

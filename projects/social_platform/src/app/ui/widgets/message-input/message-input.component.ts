@@ -5,13 +5,13 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  EventEmitter,
   forwardRef,
   inject,
   Input,
+  input,
   OnDestroy,
   OnInit,
-  Output,
+  output,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "@domain/chat/chat-message.model";
@@ -27,26 +27,26 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Компонент ввода сообщений для чата с поддержкой файлов, редактирования и ControlValueAccessor. */
 @Component({
-    selector: "app-message-input",
-    templateUrl: "./message-input.component.html",
-    styleUrl: "./message-input.component.scss",
-    providers: [
-        {
-            // Регистрация как ControlValueAccessor для работы с формами
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MessageInputComponent),
-            multi: true,
-        },
-    ],
-    imports: [
-        IconComponent,
-        NgxMaskDirective,
-        AutosizeModule,
-        FileTypePipe,
-        FormatedFileSizePipe,
-        UpperCasePipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-message-input",
+  templateUrl: "./message-input.component.html",
+  styleUrl: "./message-input.component.scss",
+  providers: [
+    {
+      // Регистрация как ControlValueAccessor для работы с формами
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MessageInputComponent),
+      multi: true,
+    },
+  ],
+  imports: [
+    IconComponent,
+    NgxMaskDirective,
+    AutosizeModule,
+    FileTypePipe,
+    FormatedFileSizePipe,
+    UpperCasePipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private readonly destroyRef = inject(DestroyRef);
@@ -54,8 +54,8 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
 
   constructor(private readonly fileService: FileService) {}
 
-  @Input() placeholder = "";
-  @Input() mask = "";
+  readonly placeholder = input("");
+  readonly mask = input("");
 
   /** Приватное поле для хранения редактируемого сообщения */
   private _editingMessage?: ChatMessage;
@@ -76,7 +76,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     return this._editingMessage;
   }
 
-  @Input() replyMessage?: ChatMessage;
+  readonly replyMessage = input<ChatMessage>();
 
   @Input()
   set appValue(value: MessageInputComponent["value"]) {
@@ -87,30 +87,30 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     return this.value;
   }
 
-  @Output() appValueChange = new EventEmitter<MessageInputComponent["value"]>();
-  @Output() submit = new EventEmitter<void>();
-  @Output() resize = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  readonly appValueChange = output<MessageInputComponent["value"]>();
+  readonly submit = output();
+  readonly resize = output();
+  readonly cancel = output();
 
   ngOnInit(): void {
     // Обработчик события dragover для всего документа
     fromEvent<DragEvent>(document, "dragover")
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (e) => {
+        next: e => {
           this.handleDragOver(e);
           this.cdr.markForCheck();
-        }
+        },
       });
 
     // Обработчик события drop для всего документа
     fromEvent<DragEvent>(document, "drop")
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (e) => {
+        next: e => {
           this.handleDrop(e);
           this.cdr.markForCheck();
-        }
+        },
       });
   }
 

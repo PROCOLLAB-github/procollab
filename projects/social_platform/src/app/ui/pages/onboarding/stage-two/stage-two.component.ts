@@ -19,28 +19,28 @@ import { SearchesService } from "@api/searches/searches.service";
 
 /** Этап онбординга — выбор навыков с каталогом и корзиной. */
 @Component({
-    selector: "app-stage-two",
-    templateUrl: "./stage-two.component.html",
-    styleUrl: "./stage-two.component.scss",
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        IconComponent,
-        ButtonComponent,
-        ModalComponent,
-        ControlErrorPipe,
-        AutoCompleteInputComponent,
-        SkillsGroupComponent,
-        SkillsBasketComponent,
-        TooltipComponent,
-    ],
-    providers: [
-        OnboardingStageTwoInfoService,
-        OnboardingStageTwoUIInfoService,
-        OnboardingUIInfoService,
-        TooltipInfoService,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-stage-two",
+  templateUrl: "./stage-two.component.html",
+  styleUrl: "./stage-two.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IconComponent,
+    ButtonComponent,
+    ModalComponent,
+    ControlErrorPipe,
+    AutoCompleteInputComponent,
+    SkillsGroupComponent,
+    SkillsBasketComponent,
+    TooltipComponent,
+  ],
+  providers: [
+    OnboardingStageTwoInfoService,
+    OnboardingStageTwoUIInfoService,
+    OnboardingUIInfoService,
+    TooltipInfoService,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingStageTwoComponent implements OnInit {
   private readonly onboardingStageTwoInfoService = inject(OnboardingStageTwoInfoService);

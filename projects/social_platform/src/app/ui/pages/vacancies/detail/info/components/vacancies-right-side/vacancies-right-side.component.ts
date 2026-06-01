@@ -6,6 +6,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   Output,
   WritableSignal,
@@ -20,26 +21,27 @@ import { AppRoutes } from "@api/paths/app-routes";
 
 /** Правая колонка детали вакансии. */
 @Component({
-    selector: "app-vacancies-right-side",
-    templateUrl: "./vacancies-right-side.component.html",
-    styleUrl: "./vacancies-right-side.component.scss",
-    imports: [
-        CommonModule,
-        AvatarComponent,
-        ButtonComponent,
-        ReactiveFormsModule,
-        RouterModule,
-        UserLinksPipe,
-        TruncatePipe,
-        CapitalizePipe,
-        IconComponent,
-        SalaryTransformPipe,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-vacancies-right-side",
+  templateUrl: "./vacancies-right-side.component.html",
+  styleUrl: "./vacancies-right-side.component.scss",
+  imports: [
+    CommonModule,
+    AvatarComponent,
+    ButtonComponent,
+    ReactiveFormsModule,
+    RouterModule,
+    UserLinksPipe,
+    TruncatePipe,
+    CapitalizePipe,
+    IconComponent,
+    SalaryTransformPipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesRightSideComponent {
   protected readonly AppRoutes = AppRoutes;
-  @Input() vacancy!: WritableSignal<Vacancy | undefined>;
+
+  readonly vacancy = input.required<Vacancy | undefined>();
   @Output() sendResponse = new EventEmitter<void>();
 
   onSendResponseClick(): void {

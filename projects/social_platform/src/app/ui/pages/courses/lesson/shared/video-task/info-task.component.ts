@@ -1,6 +1,13 @@
 /** @format */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  input,
+  OnInit,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
@@ -13,14 +20,14 @@ import { TruncatePipe, TruncateHtmlPipe } from "@corelib";
 
 /** Информационный слайд задачи с видео и текстом. */
 @Component({
-    selector: "app-info-task",
-    imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective, FileItemComponent],
-    templateUrl: "./info-task.component.html",
-    styleUrl: "./info-task.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-info-task",
+  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective, FileItemComponent],
+  templateUrl: "./info-task.component.html",
+  styleUrl: "./info-task.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoTaskComponent implements OnInit {
-  @Input({ required: true }) data!: Task;
+  readonly data = input.required<Task>();
 
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
@@ -30,11 +37,11 @@ export class InfoTaskComponent implements OnInit {
   readonly truncateLimit = 700;
 
   get descriptionExpandable(): boolean {
-    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+    return isHtmlTextTruncated(this.data()?.bodyText, this.truncateLimit);
   }
 
   ngOnInit(): void {
-    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    const iframeUrl = resolveVideoUrlForIframe(this.data()?.videoUrl);
     this.cachedVideoUrl = iframeUrl
       ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
       : null;
