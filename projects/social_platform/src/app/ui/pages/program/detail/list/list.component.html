@@ -191,6 +191,7 @@
     </div>
   </div>
 
+  @defer (when isHintExpertsModal()) {
   <app-modal [open]="isHintExpertsModal()" (openChange)="isHintExpertsModal.set(false)">
     <div class="cancel">
       <div class="cancel__top">
@@ -231,6 +232,7 @@
   </app-modal>
   }
 
+  @defer (when isFilterOpen()) {
   <app-modal
     [open]="isFilterOpen()"
     (openChange)="isFilterOpen.set($event)"
@@ -249,4 +251,6 @@
       применить фильтр
     </app-button>
   </app-modal>
+  }
+  }
 </div>
