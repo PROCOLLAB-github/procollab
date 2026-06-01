@@ -8,6 +8,7 @@ import {
   Input,
   ChangeDetectionStrategy,
   input,
+  output,
 } from "@angular/core";
 import { ProjectStepService } from "@api/project/project-step.service";
 import { IconComponent } from "@uilib";
@@ -25,7 +26,7 @@ import { EditStep } from "@core/lib/models/edit-step";
 })
 export class ProjectNavigationComponent {
   readonly navItems = input.required<Navigation[]>();
-  @Output() stepChange = new EventEmitter<EditStep>();
+  readonly stepChange = output<EditStep>();
 
   private stepService = inject(ProjectStepService);
 

@@ -8,6 +8,7 @@ import {
   inject,
   input,
   Input,
+  output,
   Output,
   WritableSignal,
 } from "@angular/core";
@@ -42,7 +43,7 @@ export class VacanciesRightSideComponent {
   protected readonly AppRoutes = AppRoutes;
 
   readonly vacancy = input.required<Vacancy | undefined>();
-  @Output() sendResponse = new EventEmitter<void>();
+  readonly sendResponse = output<void>();
 
   onSendResponseClick(): void {
     this.sendResponse.emit();

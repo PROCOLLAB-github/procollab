@@ -12,6 +12,7 @@ import {
   ViewChild,
   inject,
   input,
+  output,
 } from "@angular/core";
 import { ChatMessage } from "@domain/chat/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -43,9 +44,9 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly chatMessage = input.required<ChatMessage>();
 
-  @Output() reply = new EventEmitter<number>();
-  @Output() edit = new EventEmitter<number>();
-  @Output() delete = new EventEmitter<number>();
+  readonly reply = output<number>();
+  readonly edit = output<number>();
+  readonly delete = output<number>();
 
   ngOnInit(): void {}
 

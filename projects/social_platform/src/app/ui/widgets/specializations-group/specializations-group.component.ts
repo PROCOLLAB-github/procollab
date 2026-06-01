@@ -7,6 +7,7 @@ import {
   EventEmitter,
   input,
   Input,
+  output,
   Output,
   signal,
 } from "@angular/core";
@@ -27,8 +28,8 @@ export class SpecializationsGroupComponent {
   readonly hasOpenGroups = input<boolean>(false);
   readonly disabled = input<boolean>(false);
 
-  @Output() selectOption = new EventEmitter<Specialization>();
-  @Output() groupToggled = new EventEmitter<boolean>();
+  readonly selectOption = output<Specialization>();
+  readonly groupToggled = output<boolean>();
 
   contentVisible = signal(false);
 

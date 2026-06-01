@@ -11,6 +11,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  output,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -90,12 +91,12 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   typingPersons: { firstName: string; lastName: string; userId: number }[] = [];
 
-  @Output() submit = new EventEmitter<any>();
-  @Output() edit = new EventEmitter<any>();
-  @Output() delete = new EventEmitter<number>();
-  @Output() type = new EventEmitter<void>();
-  @Output() fetch = new EventEmitter<void>();
-  @Output() read = new EventEmitter<number>();
+  readonly submit = output<any>();
+  readonly edit = output<any>();
+  readonly delete = output<number>();
+  readonly type = output<void>();
+  readonly fetch = output<void>();
+  readonly read = output<number>();
 
   ngOnInit(): void {
     // Инициализация отслеживания печатания

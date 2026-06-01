@@ -10,6 +10,7 @@ import {
   inject,
   input,
   OnInit,
+  output,
   Output,
   signal,
   ViewChild,
@@ -89,9 +90,9 @@ export class NewsCardComponent implements OnInit {
   readonly contentId = input<number | undefined>();
   readonly isOwner = input<boolean | undefined>();
 
-  @Output() delete = new EventEmitter<number>();
-  @Output() like = new EventEmitter<number>();
-  @Output() edited = new EventEmitter<FeedNews>();
+  readonly delete = output<number>();
+  readonly like = output<number>();
+  readonly edited = output<FeedNews>();
 
   placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
 

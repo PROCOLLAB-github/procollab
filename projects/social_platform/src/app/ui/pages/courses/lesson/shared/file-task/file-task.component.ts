@@ -9,6 +9,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
   signal,
 } from "@angular/core";
@@ -70,7 +71,7 @@ export class FileTaskComponent implements OnInit {
     return this._error();
   }
 
-  @Output() update = new EventEmitter<string[]>();
+  readonly update = output<string[]>();
 
   _error = signal<boolean>(false);
   uploadedFiles = signal<FileModel[]>([]);

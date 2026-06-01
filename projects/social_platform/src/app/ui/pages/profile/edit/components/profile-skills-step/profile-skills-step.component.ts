@@ -9,6 +9,7 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   input,
+  output,
 } from "@angular/core";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
@@ -42,7 +43,7 @@ import { SearchesService } from "@api/searches/searches.service";
 export class ProfileSkillsStepComponent {
   readonly isLanguageDirty = input.required<boolean>();
 
-  @Output() openSkillsGroupsModal = new EventEmitter<void>();
+  readonly openSkillsGroupsModal = output<void>();
 
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditSkillsInfoService = inject(ProfileEditSkillsInfoService);

@@ -7,6 +7,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
@@ -25,8 +26,8 @@ import { TruncatePipe } from "@corelib";
 export class VacancyCardComponent implements OnInit {
   readonly vacancy = input<Vacancy | undefined>();
 
-  @Output() remove = new EventEmitter<number>();
-  @Output() edit = new EventEmitter<number>();
+  readonly remove = output<number>();
+  readonly edit = output<number>();
 
   skillString = "";
 
@@ -36,13 +37,13 @@ export class VacancyCardComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
 
-    this.remove.emit(this.vacancy()?.id);
+    this.remove.emit(this.vacancy()!.id);
   }
 
   onEdit(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
 
-    this.edit.emit(this.vacancy()?.id);
+    this.edit.emit(this.vacancy()!.id);
   }
 }

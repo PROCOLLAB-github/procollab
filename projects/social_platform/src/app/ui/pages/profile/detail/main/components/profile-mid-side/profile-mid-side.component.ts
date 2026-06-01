@@ -5,11 +5,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   inject,
   input,
-  Input,
-  ViewChild,
-  WritableSignal,
+  viewChild,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
@@ -45,8 +44,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMidSideComponent {
-  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
+  readonly newsFormComponent = viewChild(NewsFormComponent);
+  readonly newsCardComponent = viewChild(NewsCardComponent);
 
   readonly user = input.required<User | undefined>();
 
@@ -73,7 +72,7 @@ export class ProfileMidSideComponent {
       .onAddNews(news)
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
-        next: () => this.newsFormComponent?.onResetForm(),
+        next: () => this.newsFormComponent()?.onResetForm(),
       });
   }
 
@@ -90,7 +89,7 @@ export class ProfileMidSideComponent {
       .onEditNews(news, newsItemId)
       .pipe(takeUntilDestroyed())
       .subscribe({
-        next: () => this.newsCardComponent?.onCloseEditMode(),
+        next: () => this.newsCardComponent()?.onCloseEditMode(),
       });
   }
 

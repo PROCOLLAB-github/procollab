@@ -10,6 +10,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
@@ -47,7 +48,7 @@ export class CollaboratorCardComponent implements OnInit {
   errorMessage = ErrorMessage;
 
   readonly collaborator = input.required<Collaborator>();
-  @Output() collaboratorRemoved = new EventEmitter<number>();
+  readonly collaboratorRemoved = output<number>();
 
   ngOnInit(): void {
     if (this.collaborator()) {
