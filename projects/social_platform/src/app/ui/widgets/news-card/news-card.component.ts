@@ -13,6 +13,7 @@ import {
   output,
   Output,
   signal,
+  viewChild,
   ViewChild,
 } from "@angular/core";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -125,7 +126,7 @@ export class NewsCardComponent implements OnInit {
     tempFile: File | null;
   }[] = [];
 
-  @ViewChild("newsTextEl") newsTextEl?: ElementRef;
+  readonly newsTextEl = viewChild<ElementRef>("newsTextEl");
 
   ngOnInit(): void {
     this.editForm.setValue({
@@ -197,7 +198,7 @@ export class NewsCardComponent implements OnInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.newsTextEl);
+      this.expandService.checkExpandable("description", true, this.newsTextEl());
       this.cdRef.markForCheck();
     });
   }

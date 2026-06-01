@@ -3,11 +3,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   inject,
   OnDestroy,
   OnInit,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
 import { RouterLink } from "@angular/router";
@@ -26,12 +25,12 @@ import { AppRoutes } from "@api/paths/app-routes";
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.scss",
-  imports: [AvatarComponent, IconComponent, ChatWindowComponent, RouterLink, FileItemComponent],
+  imports: [AvatarComponent, IconComponent, ChatWindowComponent, RouterLink, FileItemComponent, MessageInputComponent],
   providers: [ChatDirectInfoService, ChatDirectUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
-  @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
+  readonly messageInputComponent = viewChild(MessageInputComponent)
 
   private readonly navService = inject(NavService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

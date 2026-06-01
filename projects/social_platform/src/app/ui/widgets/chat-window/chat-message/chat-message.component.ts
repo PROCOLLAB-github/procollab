@@ -9,10 +9,10 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
   inject,
   input,
   output,
+  viewChild,
 } from "@angular/core";
 import { ChatMessage } from "@domain/chat/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -54,14 +54,14 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.overlayRef = this.overlay.create({
       hasBackdrop: false,
     });
-    this.portal = new DomPortal(this.contextMenu);
+    this.portal = new DomPortal(this.contextMenu()!);
   }
 
   ngOnDestroy(): void {
     this.overlayRef?.detach();
   }
 
-  @ViewChild("contextMenu") contextMenu!: ElementRef<HTMLUListElement>;
+  readonly contextMenu = viewChild<ElementRef<HTMLUListElement>>("contextMenu");
 
   private overlayRef?: OverlayRef;
   private portal?: DomPortal;
@@ -73,7 +73,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isOpen = true;
 
-    const contextMenuHeight = this.contextMenu.nativeElement.offsetHeight;
+    const contextMenuHeight = this.contextMenu()!.nativeElement.offsetHeight;
 
     const positionX = event.clientX;
     const positionY =
@@ -90,7 +90,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     !this.overlayRef?.hasAttached() && this.overlayRef?.attach(this.portal);
 
-    this.contextMenu.nativeElement.focus();
+    this.contextMenu()!.nativeElement.focus();
   }
 
   onCloseContextmenu() {

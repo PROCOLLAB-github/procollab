@@ -6,9 +6,8 @@ import {
   Component,
   ElementRef,
   input,
-  QueryList,
-  ViewChildren,
   type OnInit,
+  viewChildren,
 } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { IconComponent } from "../../primitives/icon/icon.component";
@@ -69,7 +68,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     });
   }
 
-  @ViewChildren("navItem") navItemElements!: QueryList<ElementRef<HTMLElement>>;
+  readonly navItemElements = viewChildren<ElementRef<HTMLElement>>("navItem");
 
   /** Позиция анимированной полосы (индекс элемента навигации) */
   barPosition = 0;
@@ -86,9 +85,9 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   }
 
   initializeBarPosition(): void {
-    if (!this.navItemElements) return;
+    if (!this.navItemElements()) return;
 
-    const navElements = this.navItemElements.toArray();
+    const navElements = this.navItemElements();
 
     const activeRouterElement = navElements.find(elementRef =>
       elementRef.nativeElement.classList.contains("sidebar-nav__item--active")

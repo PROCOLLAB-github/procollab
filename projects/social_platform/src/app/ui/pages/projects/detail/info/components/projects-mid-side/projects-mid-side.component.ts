@@ -8,7 +8,7 @@ import {
   inject,
   input,
   Input,
-  ViewChild,
+  viewChild,
   WritableSignal,
 } from "@angular/core";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
@@ -46,13 +46,13 @@ export class ProjectsMidSideComponent {
   readonly project = input.required<Project | undefined>();
 
   // Ссылки на элементы DOM
-  @ViewChild("newsEl") newsEl?: ElementRef;
-  @ViewChild("contentEl") contentEl?: ElementRef;
-  @ViewChild("descEl") descEl?: ElementRef;
+  readonly newsEl = viewChild<ElementRef>("newsEl");
+  readonly contentEl = viewChild<ElementRef>("contentEl");
+  readonly descEl = viewChild<ElementRef>("descEl");
 
   // Ссылки на дочерние компоненты
-  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
+  readonly newsFormComponent = viewChild(NewsFormComponent);
+  readonly newsCardComponent = viewChild(NewsCardComponent);
 
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly newsInfoService = inject(NewsInfoService);
@@ -79,7 +79,7 @@ export class ProjectsMidSideComponent {
       .onAddNews(news)
       .pipe(takeUntilDestroyed())
       .subscribe({
-        next: () => this.newsFormComponent?.onResetForm(),
+        next: () => this.newsFormComponent()?.onResetForm(),
       });
   }
 
@@ -96,7 +96,7 @@ export class ProjectsMidSideComponent {
       .onEditNews(news, newsItemId)
       .pipe(takeUntilDestroyed())
       .subscribe({
-        next: () => this.newsCardComponent?.onCloseEditMode(),
+        next: () => this.newsCardComponent()?.onCloseEditMode(),
       });
   }
 

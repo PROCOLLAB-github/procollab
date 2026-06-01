@@ -8,6 +8,7 @@ import {
   ViewChild,
   inject,
   ChangeDetectionStrategy,
+  viewChild,
 } from "@angular/core";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -57,7 +58,7 @@ export class RatingCardComponent implements AfterViewInit {
   protected readonly AppRoutes = AppRoutes;
   private readonly industryRepository = inject(IndustryRepositoryPort);
 
-  @ViewChild("descEl") private descEl?: ElementRef;
+  private readonly descEl = viewChild<ElementRef | undefined>("descEl");
 
   @Input({ required: true }) set project(proj: ProjectRate | null) {
     this.ratingCardService.initProject(proj);
@@ -99,7 +100,7 @@ export class RatingCardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.descEl);
+      this.expandService.checkExpandable("description", true, this.descEl());
     });
   }
 

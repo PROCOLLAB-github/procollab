@@ -10,6 +10,7 @@ import {
   HostListener,
   inject,
   OnInit,
+  viewChild,
   ViewChild,
 } from "@angular/core";
 import { isLoading } from "@domain/shared/async-state";
@@ -61,8 +62,8 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramListComponent implements OnInit, AfterViewInit {
-  @ViewChild("listRoot") listRoot?: ElementRef<HTMLUListElement>;
-  @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
+  readonly listRoot = viewChild<ElementRef<HTMLUListElement> | undefined>("listRoot");
+  readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
 
   constructor() {
     this.programDetailListInfoService.initializeSearchForm();
@@ -106,8 +107,8 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body") as HTMLElement;
-    if (target || this.listRoot) {
-      this.programDetailListInfoService.initScroll(target, this.listRoot!);
+    if (target || this.listRoot()) {
+      this.programDetailListInfoService.initScroll(target, this.listRoot()!);
     } else {
       this.logger.error(".office__body element not found");
     }
@@ -140,11 +141,11 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
   }
 
   onSwipeMove(event: TouchEvent): void {
-    this.swipeService.onSwipeMove(event, this.filterBody);
+    this.swipeService.onSwipeMove(event, this.filterBody()!);
   }
 
   onSwipeEnd(event: TouchEvent): void {
-    this.swipeService.onSwipeEnd(event, this.filterBody);
+    this.swipeService.onSwipeEnd(event, this.filterBody()!);
   }
 
   closeFilter(): void {

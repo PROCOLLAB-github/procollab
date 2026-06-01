@@ -12,7 +12,7 @@ import {
   OnInit,
   Output,
   signal,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
@@ -96,9 +96,9 @@ import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.por
 export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() delete = new EventEmitter<void>();
 
-  @ViewChild("descEl") descEl?: ElementRef;
+  readonly descEl = viewChild<ElementRef>("descEl");
   /** Ссылка на viewport для автопрокрутки */
-  @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
+  readonly viewport = viewChild(CdkVirtualScrollViewport);
 
   private readonly skillsRepository = inject(SkillsRepositoryPort);
   private readonly kanbanBoardService = inject(KanbanBoardService);
@@ -729,14 +729,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdRef.markForCheck();
   }
 
-  private scrollToBottom(): void {
+  scrollToBottom(): void {
     setTimeout(() => {
-      this.viewport?.scrollTo({ bottom: 0 });
-
-      setTimeout(() => {
-        this.viewport?.scrollTo({ bottom: 0 });
-      }, 50);
-    });
+      this.viewport()?.scrollTo({ bottom: 0 });
+    }, 50);
   }
 
   private onRemoveSkill(oddSkill: Skill): void {
@@ -749,7 +745,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private checkDescriptionHeigth(): void {
-    const descElement = this.descEl?.nativeElement;
+    const descElement = this.descEl()?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();

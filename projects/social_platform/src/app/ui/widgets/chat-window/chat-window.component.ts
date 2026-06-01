@@ -13,7 +13,7 @@ import {
   OnInit,
   output,
   Output,
-  ViewChild,
+  viewChild,
 } from "@angular/core";
 import {
   CdkFixedSizeVirtualScroll,
@@ -104,13 +104,13 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this.viewport) {
+    if (this.viewport()) {
       // Подписка на события прокрутки для загрузки истории
-      fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
+      fromEvent(this.viewport()!.elementRef.nativeElement, "scroll")
         .pipe(
           skip(1), // Пропуск первого события прокрутки
           filter(() => {
-            const offsetTop = this.viewport?.measureScrollOffset("top");
+            const offsetTop = this.viewport()?.measureScrollOffset("top");
             return offsetTop ? offsetTop <= 200 : false; // Загрузка при приближении к верху
           }),
           takeUntilDestroyed(this.destroyRef)
@@ -121,7 +121,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Создание наблюдателя пересечений для отметок о прочтении
       this.observer = new IntersectionObserver(this.onReadMessage.bind(this), {
-        root: this.viewport.elementRef.nativeElement,
+        root: this.viewport()!.elementRef.nativeElement,
         rootMargin: "0px 0px 0px 0px",
         threshold: 0,
       });
@@ -144,8 +144,8 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   editingMessage?: ChatMessage;
   replyMessage?: ChatMessage;
 
-  @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
-  @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
+  readonly viewport = viewChild(CdkVirtualScrollViewport);
+  readonly messageInputComponent = viewChild(MessageInputComponent, { read: ElementRef });
 
   /** Отправляет событие печатания при изменении текста с задержкой. */
   private initTypingSend(): void {
@@ -162,23 +162,19 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /** Прокрутка к низу (двойной setTimeout для виртуальной прокрутки). */
-  private scrollToBottom(): void {
+  scrollToBottom(): void {
     setTimeout(() => {
-      this.viewport?.scrollTo({ bottom: 0 });
-
-      setTimeout(() => {
-        this.viewport?.scrollTo({ bottom: 0 });
-      }, 50);
-    });
+      this.viewport()?.scrollTo({ bottom: 0 });
+    }, 50);
   }
 
   onInputResize(): void {
-    if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50) this.scrollToBottom();
+    if (this.viewport() && this.viewport()!.measureScrollOffset("bottom") < 50) this.scrollToBottom();
   }
 
   private focusOnInput(): void {
     setTimeout(() => {
-      this.messageInputComponent?.nativeElement.querySelector("textarea").focus();
+      this.messageInputComponent()?.nativeElement.querySelector("textarea").focus();
     });
   }
 
