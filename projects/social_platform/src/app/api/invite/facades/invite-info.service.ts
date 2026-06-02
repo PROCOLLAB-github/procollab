@@ -64,7 +64,7 @@ export class InviteInfoService {
 
     const request$ = this.getMyInvitesUseCase.execute().pipe(
       finalize(() => (this.inflight = null)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.inflight = request$;
 
@@ -89,7 +89,7 @@ export class InviteInfoService {
         // На ошибке (в т.ч. 409 «уже обработан») ре-синк с сервером, а не revert:
         // иначе стухший инвайт возвращается в список и «не пропадает».
         if (!result.ok) this.refresh();
-      })
+      }),
     );
   }
 
@@ -99,13 +99,13 @@ export class InviteInfoService {
     return this.acceptInviteUseCase.execute(inviteId).pipe(
       tap(result => {
         if (!result.ok) this.refresh();
-      })
+      }),
     );
   }
 
   private removeFromState(inviteId: number): void {
     this.invites$.update(state =>
-      isSuccess(state) ? success(state.data.filter(i => i.id !== inviteId)) : state
+      isSuccess(state) ? success(state.data.filter(i => i.id !== inviteId)) : state,
     );
   }
 }

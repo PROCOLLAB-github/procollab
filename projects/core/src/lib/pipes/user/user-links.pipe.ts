@@ -45,8 +45,8 @@ export class UserLinksPipe implements PipeTransform {
         value.includes("procollab_media") || value.includes("api.selcdn.ru/v1")
           ? "file"
           : value.includes("@")
-          ? "mail"
-          : "link";
+            ? "mail"
+            : "link";
       return {
         iconName,
         tag: valueTrimed,

@@ -12,18 +12,18 @@
         [style.transform]="'translateY(' + barPosition + 'px)'"
       ></div>
       @for (item of navItems(); track $index) {
-      <a
-        #navItem
-        (click)="handleItemClick(item)"
-        class="sidebar-nav__item text-body-12"
-        [routerLink]="item.isExternal ? null : item.link"
-        (mouseenter)="updateBarPosition(navItem)"
-        [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
-        [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
-      >
-        <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
-        {{ item.name }}
-      </a>
+        <a
+          #navItem
+          (click)="handleItemClick(item)"
+          class="sidebar-nav__item text-body-12"
+          [routerLink]="item.isExternal ? null : item.link"
+          (mouseenter)="updateBarPosition(navItem)"
+          [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
+          [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
+        >
+          <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
+          {{ item.name }}
+        </a>
       }
       <ng-content select="[afterNavItems]"></ng-content>
     </div>

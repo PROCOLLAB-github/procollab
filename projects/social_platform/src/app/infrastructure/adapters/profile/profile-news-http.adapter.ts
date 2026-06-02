@@ -16,7 +16,7 @@ export class ProfileNewsHttpAdapter {
   fetchNews(userId: string): Observable<ApiPagination<ProfileNews>> {
     return this.apiService.get<ApiPagination<ProfileNews>>(
       `${this.AUTH_USERS_URL}/${userId}/news/`,
-      new HttpParams({ fromObject: { limit: 10 } })
+      new HttpParams({ fromObject: { limit: 10 } }),
     );
   }
 
@@ -31,7 +31,7 @@ export class ProfileNewsHttpAdapter {
   setNewsViewed(userId: number, newsId: number): Observable<void> {
     return this.apiService.post<void>(
       `${this.AUTH_USERS_URL}/${userId}/news/${newsId}/set_viewed/`,
-      {}
+      {},
     );
   }
 
@@ -48,11 +48,11 @@ export class ProfileNewsHttpAdapter {
   editNews(
     userId: string,
     newsId: number,
-    newsItem: Partial<ProfileNews>
+    newsItem: Partial<ProfileNews>,
   ): Observable<ProfileNews> {
     return this.apiService.patch<ProfileNews>(
       `${this.AUTH_USERS_URL}/${userId}/news/${newsId}/`,
-      newsItem
+      newsItem,
     );
   }
 }

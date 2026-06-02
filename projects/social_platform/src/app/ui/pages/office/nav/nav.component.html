@@ -15,123 +15,129 @@
     </div>
   </div>
   @if (mobileMenuOpen) {
-  <div class="nav-bar__mobile-menu">
-    <div class="nav-bar__top">
-      <div
-        class="nav-bar__notifications-toggle"
-        [class.nav-bar__notifications-toggle--active]="notificationsOpen"
-        (click)="notificationsOpen = !notificationsOpen"
-      >
-        <i
-          routerLink="chats"
-          appIcon
-          icon="chats"
-          appWidth="23"
-          appHeight="21"
-          appViewBox="0 0 23 21"
-          class="nav-bar__icon"
-        ></i>
+    <div class="nav-bar__mobile-menu">
+      <div class="nav-bar__top">
+        <div
+          class="nav-bar__notifications-toggle"
+          [class.nav-bar__notifications-toggle--active]="notificationsOpen"
+          (click)="notificationsOpen = !notificationsOpen"
+        >
+          <i
+            routerLink="chats"
+            appIcon
+            icon="chats"
+            appWidth="23"
+            appHeight="21"
+            appViewBox="0 0 23 21"
+            class="nav-bar__icon"
+          ></i>
 
-        <i
-          appIcon
-          icon="bell"
-          appWidth="20"
-          appHeight="22"
-          appViewBox="0 0 20 22"
-          class="nav-bar__icon"
-        ></i>
-        @if ((notificationService.hasNotifications | async) || hasInvites) {
-        <div class="attention"></div>
-        }
+          <i
+            appIcon
+            icon="bell"
+            appWidth="20"
+            appHeight="22"
+            appViewBox="0 0 20 22"
+            class="nav-bar__icon"
+          ></i>
+          @if ((notificationService.hasNotifications | async) || hasInvites) {
+            <div class="attention"></div>
+          }
+        </div>
       </div>
+      @if (!notificationsOpen) {
+        <nav class="nav nav--vertical">
+          <ul class="nav__list">
+            <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
+              <li class="text-body-14 nav__item">
+                <i
+                  appIcon
+                  icon="feed"
+                  appSquare="24"
+                  appViewBox="0 0 24 20"
+                  class="nav-bar__icon"
+                ></i>
+                новости
+              </li>
+            </a>
+            <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
+              <li class="text-body-14 nav__item">
+                <i
+                  appIcon
+                  icon="projects"
+                  appSquare="24"
+                  appViewBox="0 0 24 20"
+                  class="nav-bar__icon"
+                ></i>
+                проекты
+              </li>
+            </a>
+            <a class="nav__link" routerLink="members" routerLinkActive="nav__link--active">
+              <li class="text-body-14 nav__item">
+                <i
+                  appIcon
+                  icon="people-bold"
+                  appSquare="24"
+                  appViewBox="0 0 24 18"
+                  class="nav-bar__icon"
+                ></i>
+                участники
+              </li>
+            </a>
+            <a class="nav__link" routerLink="program" routerLinkActive="nav__link--active">
+              <li class="text-body-14 nav__item">
+                <i
+                  appIcon
+                  icon="program"
+                  appSquare="24"
+                  appViewBox="0 0 24 16"
+                  class="nav-bar__icon"
+                ></i>
+                программы
+              </li>
+            </a>
+            <a class="nav__link" routerLink="courses" routerLinkActive="nav__link--active">
+              <li class="text-body-14 nav__item">
+                <i
+                  appIcon
+                  icon="trajectories"
+                  appSquare="24"
+                  appViewBox="0 0 28 20"
+                  class="nav-bar__icon"
+                ></i>
+                курсы
+              </li>
+            </a>
+            <a class="nav__link" routerLink="vacancies" routerLinkActive="nav__link--active">
+              <li class="text-body-14 nav__item">
+                <i
+                  appIcon
+                  icon="search-sidebar"
+                  appSquare="24"
+                  appViewBox="0 0 28 20"
+                  class="nav-bar__icon"
+                ></i>
+                вакансии
+              </li>
+            </a>
+          </ul>
+        </nav>
+      } @else {
+        <div>
+          <h3 class="text-bold-body-16 notifications__title">уведомления</h3>
+          <ul class="notifications__invites">
+            @for (invite of invites(); track invite.id) {
+              <li class="notifications__invite">
+                <app-invite-manage-card
+                  [invite]="invite"
+                  (accept)="onAcceptInvite($event)"
+                  (reject)="onRejectInvite($event)"
+                ></app-invite-manage-card>
+              </li>
+            }
+          </ul>
+        </div>
+      }
     </div>
-    @if (!notificationsOpen) {
-    <nav class="nav nav--vertical">
-      <ul class="nav__list">
-        <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20" class="nav-bar__icon"></i>
-            новости
-          </li>
-        </a>
-        <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i
-              appIcon
-              icon="projects"
-              appSquare="24"
-              appViewBox="0 0 24 20"
-              class="nav-bar__icon"
-            ></i>
-            проекты
-          </li>
-        </a>
-        <a class="nav__link" routerLink="members" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i
-              appIcon
-              icon="people-bold"
-              appSquare="24"
-              appViewBox="0 0 24 18"
-              class="nav-bar__icon"
-            ></i>
-            участники
-          </li>
-        </a>
-        <a class="nav__link" routerLink="program" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i
-              appIcon
-              icon="program"
-              appSquare="24"
-              appViewBox="0 0 24 16"
-              class="nav-bar__icon"
-            ></i>
-            программы
-          </li>
-        </a>
-        <a class="nav__link" routerLink="courses" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i
-              appIcon
-              icon="trajectories"
-              appSquare="24"
-              appViewBox="0 0 28 20"
-              class="nav-bar__icon"
-            ></i>
-            курсы
-          </li>
-        </a>
-        <a class="nav__link" routerLink="vacancies" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i
-              appIcon
-              icon="search-sidebar"
-              appSquare="24"
-              appViewBox="0 0 28 20"
-              class="nav-bar__icon"
-            ></i>
-            вакансии
-          </li>
-        </a>
-      </ul>
-    </nav>
-    } @else {
-    <div>
-      <h3 class="text-bold-body-16 notifications__title">уведомления</h3>
-      <ul class="notifications__invites">
-        @for (invite of invites(); track invite.id) {
-        <li class="notifications__invite">
-          <app-invite-manage-card
-            [invite]="invite"
-            (accept)="onAcceptInvite($event)"
-            (reject)="onRejectInvite($event)"
-          ></app-invite-manage-card>
-        </li>
-        }
-      </ul>
-    </div>
-    }
-  </div>
   }
 </div>

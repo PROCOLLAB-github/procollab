@@ -12,13 +12,13 @@ export class GetProjectResponsesUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);
 
   execute(
-    projectId: number
+    projectId: number,
   ): Observable<
     Result<VacancyResponse[], { kind: "get_project_responses_error"; cause?: unknown }>
   > {
     return this.vacancyRepositoryPort.responsesByProject(projectId).pipe(
       map(responses => ok<VacancyResponse[]>(responses)),
-      catchError(error => of(fail({ kind: "get_project_responses_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_project_responses_error" as const, cause: error }))),
     );
   }
 }

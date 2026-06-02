@@ -57,7 +57,7 @@ export class OnboardingStageThreeInfoService {
         concatMap(result =>
           result.ok
             ? this.updateOnboardingStageUseCase.execute(null, this.profile()!.id)
-            : of(result)
+            : of(result),
         ),
         tap(result => {
           if (!result.ok) return;
@@ -66,7 +66,7 @@ export class OnboardingStageThreeInfoService {
             .navigateByUrl(AppRoutes.office.root())
             .then(() => this.logger.debug("Route changed from OnboardingStageThree"));
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }

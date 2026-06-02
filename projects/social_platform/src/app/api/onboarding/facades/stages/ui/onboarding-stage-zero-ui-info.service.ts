@@ -117,8 +117,8 @@ export class OnboardingStageZeroUIInfoService {
           },
           {
             validators: yearRangeValidators("entryYear", "completionYear"),
-          }
-        )
+          },
+        ),
       );
     });
   }
@@ -138,8 +138,8 @@ export class OnboardingStageZeroUIInfoService {
           },
           {
             validators: yearRangeValidators("entryYear", "completionYear"),
-          }
-        )
+          },
+        ),
       );
     });
   }
@@ -151,7 +151,7 @@ export class OnboardingStageZeroUIInfoService {
         this.fb.group({
           language: lang.language,
           languageLevel: lang.languageLevel,
-        })
+        }),
       );
     });
   }
@@ -159,22 +159,22 @@ export class OnboardingStageZeroUIInfoService {
   applyInitAchievements(formValues: UserInput): void {
     formValues.achievements?.length &&
       formValues.achievements?.forEach(achievement =>
-        this.addAchievement(achievement.id, achievement.title, achievement.status)
+        this.addAchievement(achievement.id, achievement.title, achievement.status),
       );
   }
 
   addEducation() {
     ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.clearValidators()
+      this.stageForm.get(name)?.clearValidators(),
     );
     ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.setValidators([Validators.required])
+      this.stageForm.get(name)?.setValidators([Validators.required]),
     );
     ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.updateValueAndValidity()
+      this.stageForm.get(name)?.updateValueAndValidity(),
     );
     ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.markAsTouched()
+      this.stageForm.get(name)?.markAsTouched(),
     );
 
     const valEntry = this.stageForm.get("entryYear")?.value as string | null;
@@ -283,16 +283,16 @@ export class OnboardingStageZeroUIInfoService {
 
   addWork() {
     ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.clearValidators()
+      this.stageForm.get(name)?.clearValidators(),
     );
     ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.setValidators([Validators.required])
+      this.stageForm.get(name)?.setValidators([Validators.required]),
     );
     ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.updateValueAndValidity()
+      this.stageForm.get(name)?.updateValueAndValidity(),
     );
     ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.markAsTouched()
+      this.stageForm.get(name)?.markAsTouched(),
     );
 
     const valEntry = this.stageForm.get("entryYearWork")?.value as string | null;
@@ -485,7 +485,7 @@ export class OnboardingStageZeroUIInfoService {
         title: [title ?? "", [Validators.required]],
         status: [status ?? "", [Validators.required]],
         id: [id],
-      })
+      }),
     );
   }
 

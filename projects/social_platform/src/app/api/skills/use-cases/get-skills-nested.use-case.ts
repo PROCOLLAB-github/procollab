@@ -16,7 +16,7 @@ export class GetSkillsNestedUseCase {
   execute(): Observable<Result<SkillsGroup[], GetNestedError>> {
     return this.skillsRepository.getSkillsNested().pipe(
       map(groups => ok<SkillsGroup[]>(groups)),
-      catchError(error => of(fail<GetNestedError>({ kind: "server_error", cause: error })))
+      catchError(error => of(fail<GetNestedError>({ kind: "server_error", cause: error }))),
     );
   }
 }

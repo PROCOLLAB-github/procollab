@@ -53,7 +53,7 @@ export class ProjectsDetailService {
   private readonly news = this.newsInfoService.news;
 
   readonly projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(
-    map(r => r["data"][1])
+    map(r => r["data"][1]),
   );
 
   destroy(): void {
@@ -158,7 +158,7 @@ export class ProjectsDetailService {
       }),
       filter(result => result.ok),
       map(() => undefined),
-      takeUntilDestroyed(this.destroyRef)
+      takeUntilDestroyed(this.destroyRef),
     );
   }
 
@@ -200,7 +200,7 @@ export class ProjectsDetailService {
       }),
       filter(result => result.ok),
       map(() => undefined),
-      takeUntilDestroyed(this.destroyRef)
+      takeUntilDestroyed(this.destroyRef),
     );
   }
 

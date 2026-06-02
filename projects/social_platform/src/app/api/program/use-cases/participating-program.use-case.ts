@@ -16,7 +16,7 @@ export class ParticipatingProgramUseCase {
   execute(filter?: HttpParams): Observable<Result<ApiPagination<Program>, { kind: "unknown" }>> {
     return this.programRepositoryPort.getAll(0, 20, filter).pipe(
       map(response => ok<ApiPagination<Program>>(response)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

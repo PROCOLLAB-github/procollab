@@ -14,7 +14,7 @@ export class UpdateProfileUseCase {
   execute(data: UserInput): Observable<Result<User, { kind: "server_error"; cause?: unknown }>> {
     return this.authRepository.updateProfile(data).pipe(
       map(profile => ok<User>(profile)),
-      catchError(error => of(fail({ kind: "server_error", cause: error } as const)))
+      catchError(error => of(fail({ kind: "server_error", cause: error } as const))),
     );
   }
 }

@@ -15,15 +15,15 @@ export class GetProjectSubscriptionsUseCase {
 
   execute(
     userId: number,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<
     Result<ApiPagination<Project>, { kind: "get_project_subscriptions_error"; cause?: unknown }>
   > {
     return this.projectSubscriptionRepositoryPort.getSubscriptions(userId, params).pipe(
       map(subscriptions => ok<ApiPagination<Project>>(subscriptions)),
       catchError(error =>
-        of(fail({ kind: "get_project_subscriptions_error" as const, cause: error }))
-      )
+        of(fail({ kind: "get_project_subscriptions_error" as const, cause: error })),
+      ),
     );
   }
 }

@@ -85,7 +85,10 @@ export class SelectComponent implements ControlValueAccessor {
   /** Индекс подсвеченного элемента при навигации */
   highlightedIndex = -1;
 
-  constructor(private readonly renderer: Renderer2, private readonly cdr: ChangeDetectorRef) {}
+  constructor(
+    private readonly renderer: Renderer2,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   /** Ссылка на элемент выпадающего списка */
   dropdown = viewChild<ElementRef<HTMLUListElement>>("dropdown");
@@ -161,7 +164,7 @@ export class SelectComponent implements ControlValueAccessor {
     const yearValue = this.extractYear(value);
     if (yearValue !== null) {
       const yearOption = this.options().find(
-        option => this.extractYear(option.value) === yearValue
+        option => this.extractYear(option.value) === yearValue,
       );
       if (yearOption) {
         this.selectedId = yearOption.id;

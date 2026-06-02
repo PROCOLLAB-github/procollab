@@ -14,7 +14,7 @@ export interface VacancyUpdated extends DomainEvent {
 
 export function vacancyUpdated(
   vacancyId: number,
-  vacancy: Partial<Vacancy> | CreateVacancyDto
+  vacancy: Partial<Vacancy> | CreateVacancyDto,
 ): VacancyUpdated {
   return {
     type: "VacancyUpdated",

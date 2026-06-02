@@ -72,11 +72,11 @@ export class ProjectAdditionalStepComponent implements OnInit {
 
   protected readonly partnerProgramFields = this.projectAdditionalService.partnerProgramFields;
   protected readonly isSendingDecision = computed(() =>
-    isLoading(this.projectAdditionalService.isSend$())
+    isLoading(this.projectAdditionalService.isSend$()),
   );
 
   protected readonly isAssignProjectToProgramError = computed(() =>
-    isFailure(this.projectAdditionalService.isSend$())
+    isFailure(this.projectAdditionalService.isSend$()),
   );
 
   protected readonly errorAssignProjectToProgramModalMessage =
@@ -100,7 +100,7 @@ export class ProjectAdditionalStepComponent implements OnInit {
 
   toggleAdditionalFormValues(
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
-    fieldName: string
+    fieldName: string,
   ): void {
     this.projectAdditionalService.toggleAdditionalFormValues(fieldType, fieldName);
   }

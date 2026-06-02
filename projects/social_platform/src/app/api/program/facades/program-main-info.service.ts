@@ -33,7 +33,7 @@ export class ProgramMainInfoService {
     combineLatest([
       this.route.queryParams.pipe(
         map(q => ({ filter: this.buildFilterQuery(q), search: q["search"] || "" })),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
       ),
     ])
       .pipe(
@@ -44,7 +44,7 @@ export class ProgramMainInfoService {
             .ensureProgramsLoaded(new HttpParams({ fromObject: filter }))
             .pipe(map(result => ({ result, search })));
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(({ result, search }) => {
         if (!result.ok) {

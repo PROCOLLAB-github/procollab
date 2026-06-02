@@ -55,9 +55,9 @@ export class ProjectsFilterInfoService {
             id: industry.id,
             label: industry.name,
             value: industry.name,
-          }))
+          })),
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(industries => {
         this.industries.set(industries);

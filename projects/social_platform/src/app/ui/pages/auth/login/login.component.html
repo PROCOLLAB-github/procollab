@@ -14,67 +14,76 @@
           />
 
           @if (loginForm.get("email"); as email) {
-          <fieldset class="auth__field">
-            <label for="email" class="field-label">почта*</label>
-            <app-input
-              size="big"
-              [error]="email | controlError"
-              id="email"
-              type="email"
-              formControlName="email"
-              placeholder="example@example.com"
-            ></app-input>
+            <fieldset class="auth__field">
+              <label for="email" class="field-label">почта*</label>
+              <app-input
+                size="big"
+                [error]="email | controlError"
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="example@example.com"
+              ></app-input>
 
-            @if (email | controlError: "email") {
-            <div class="text-body-10 error">
-              {{ errorMessage.VALIDATION_EMAIL }}
-            </div>
-            } @if (email | controlError: "required") {
-            <div class="text-body-10 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          } @if (loginForm.get("password"); as password) {
-          <fieldset class="auth__field">
-            <div class="login__password">
-              <label class="field-label" for="password">пароль</label>
-              <a [routerLink]="AppRoutes.auth.resetPasswordEmail()" class="login__forget">
-                забыли пароль?
-              </a>
-            </div>
-
-            <app-input
-              size="big"
-              [error]="password | controlError"
-              id="password"
-              [type]="showPassword() ? 'text' : 'password'"
-              formControlName="password"
-              placeholder="GJiwoeuhbn120="
-            >
-              @if (showPassword()) {
-              <i appIcon icon="eye" appSquare="18" class="icon" (click)="toggleShowPassword()"></i>
-              } @else {
-              <i
-                appIcon
-                icon="eye-off"
-                appSquare="18"
-                class="icon"
-                (click)="toggleShowPassword()"
-              ></i>
+              @if (email | controlError: "email") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_EMAIL }}
+                </div>
               }
-            </app-input>
+              @if (email | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+            </fieldset>
+          }
+          @if (loginForm.get("password"); as password) {
+            <fieldset class="auth__field">
+              <div class="login__password">
+                <label class="field-label" for="password">пароль</label>
+                <a [routerLink]="AppRoutes.auth.resetPasswordEmail()" class="login__forget">
+                  забыли пароль?
+                </a>
+              </div>
 
-            @if (password | controlError: "required") {
+              <app-input
+                size="big"
+                [error]="password | controlError"
+                id="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="GJiwoeuhbn120="
+              >
+                @if (showPassword()) {
+                  <i
+                    appIcon
+                    icon="eye"
+                    appSquare="18"
+                    class="icon"
+                    (click)="toggleShowPassword()"
+                  ></i>
+                } @else {
+                  <i
+                    appIcon
+                    icon="eye-off"
+                    appSquare="18"
+                    class="icon"
+                    (click)="toggleShowPassword()"
+                  ></i>
+                }
+              </app-input>
+
+              @if (password | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+            </fieldset>
+          }
+          @if (errorWrongAuth()) {
             <div class="text-body-10 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
+              {{ errorMessage.AUTH_WRONG_AUTH }}
             </div>
-            }
-          </fieldset>
-          } @if (errorWrongAuth()) {
-          <div class="text-body-10 error">
-            {{ errorMessage.AUTH_WRONG_AUTH }}
-          </div>
           }
 
           <app-button
@@ -121,28 +130,28 @@
         ></app-tooltip>
 
         @if (isHintLoginVisible()) {
-        <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
-          <p class="tooltip__text text-body-10">
-            Возникли технические сложности или остались вопросы?
-          </p>
-          <p class="tooltip__text text-body-10">
-            Все ответы в нашем боте поддержки
-            <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
-          </p>
+          <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
+            <p class="tooltip__text text-body-10">
+              Возникли технические сложности или остались вопросы?
+            </p>
+            <p class="tooltip__text text-body-10">
+              Все ответы в нашем боте поддержки
+              <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
+            </p>
 
-          <br />
+            <br />
 
-          <p class="tooltip__text text-body-10">
-            Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка –
-            <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
-          </p>
+            <p class="tooltip__text text-body-10">
+              Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка –
+              <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
+            </p>
 
-          <br />
+            <br />
 
-          <p class="tooltip__text text-body-10">
-            Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
-          </p>
-        </div>
+            <p class="tooltip__text text-body-10">
+              Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
+            </p>
+          </div>
         }
       </div>
     </div>

@@ -10,7 +10,7 @@ export class ProjectsDetailWorkSectionUIInfoService {
 
   applyInitVacancies(responses: VacancyResponse[]): void {
     this.vacancies.set(
-      responses.filter((response: VacancyResponse) => response.isApproved === null)
+      responses.filter((response: VacancyResponse) => response.isApproved === null),
     );
   }
 

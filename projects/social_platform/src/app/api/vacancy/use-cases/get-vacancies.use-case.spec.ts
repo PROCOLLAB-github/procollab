@@ -42,7 +42,7 @@ describe("GetVacanciesUseCase", () => {
       "remote",
       "full-time",
       "100000",
-      "dev"
+      "dev",
     );
   });
 

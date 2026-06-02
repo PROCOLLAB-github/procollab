@@ -99,7 +99,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
     if (this.profileInfoType() === "achievements" && Array.isArray(this.about)) {
       this.allAchievements = this.about as Achievement[];
       this.years = Array.from(
-        new Map(this.allAchievements.map(a => [a.year, { id: a.id, year: a.year }])).values()
+        new Map(this.allAchievements.map(a => [a.year, { id: a.id, year: a.year }])).values(),
       );
       this.subscribeYearQueryParam();
     }

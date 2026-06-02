@@ -34,7 +34,7 @@ describe("RatingCardComponent", () => {
         fetchProfile: of({}),
         fetchUserRoles: of([]),
         fetchChangeableRoles: of([]),
-      }
+      },
     );
 
     const industrySpy = {

@@ -419,7 +419,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   onTypeSelect(
     type: "type" | "priority" | "responsible" | "performers" | "goal" | "tags" | "delete",
     state: boolean,
-    typeId?: number
+    typeId?: number,
   ) {
     switch (type) {
       case "type":
@@ -446,7 +446,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
             if (!this.collaborators()) return;
 
             const responsible = this.collaborators()?.find(
-              collaborator => collaborator.userId === typeId
+              collaborator => collaborator.userId === typeId,
             );
             this.taskDetailForm.patchValue({
               responsible: {
@@ -468,7 +468,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
             if (!this.collaborators()) return;
 
             const collaborator = this.collaborators()?.find(
-              collaborator => collaborator.userId === typeId
+              collaborator => collaborator.userId === typeId,
             );
             const currentPerformers: PerformerDto[] =
               this.taskDetailForm.get("performers")?.value || [];
@@ -793,8 +793,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.remainingDaysDeadline.set(
           daysUntil(
-            taskDetailInfo.deadlineDate ? new Date(taskDetailInfo.deadlineDate) : deadlineDefault
-          )
+            taskDetailInfo.deadlineDate ? new Date(taskDetailInfo.deadlineDate) : deadlineDefault,
+          ),
         );
       },
     });

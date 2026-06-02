@@ -109,7 +109,7 @@ export class RatingCardComponent implements AfterViewInit {
       "description",
       elem,
       "expanded",
-      this.expandService.readFullDescription()
+      this.expandService.readFullDescription(),
     );
   }
 

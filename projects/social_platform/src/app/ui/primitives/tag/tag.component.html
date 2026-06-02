@@ -23,9 +23,10 @@
 
   <div class="tag__icons">
     @if (canEdit()) {
-    <i appIcon icon="edit-pen" appSquare="5" (click)="onEdit($event)"></i>
-    } @if (canDelete()) {
-    <i appIcon icon="basket" appSquare="5" (click)="onDelete($event)"></i>
+      <i appIcon icon="edit-pen" appSquare="5" (click)="onEdit($event)"></i>
+    }
+    @if (canDelete()) {
+      <i appIcon icon="basket" appSquare="5" (click)="onDelete($event)"></i>
     }
   </div>
 </div>

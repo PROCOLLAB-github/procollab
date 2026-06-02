@@ -51,7 +51,7 @@ export class VacancyFilterInfoService {
     event.stopPropagation();
     // Переключение фильтра (снятие если уже выбран)
     this.currentExperience.set(
-      experienceId === this.currentExperience() ? undefined : experienceId
+      experienceId === this.currentExperience() ? undefined : experienceId,
     );
 
     // Обновление URL с новым параметром
@@ -80,7 +80,7 @@ export class VacancyFilterInfoService {
   setWorkScheduleFilter(event: Event, scheduleId: string): void {
     event.stopPropagation();
     this.currentWorkSchedule.set(
-      scheduleId === this.currentWorkSchedule() ? undefined : scheduleId
+      scheduleId === this.currentWorkSchedule() ? undefined : scheduleId,
     );
 
     this.router
@@ -135,7 +135,7 @@ export class VacancyFilterInfoService {
         tap(result => {
           this.totalItemsCount.set(result.ok ? result.value.length : 0);
         }),
-        map(result => (result.ok ? result.value : []))
+        map(result => (result.ok ? result.value : [])),
       );
   }
 }

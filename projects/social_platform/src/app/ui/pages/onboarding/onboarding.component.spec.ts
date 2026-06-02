@@ -25,7 +25,7 @@ describe("OnboardingComponent", () => {
         fetchProfile: of({}),
         fetchUserRoles: of([]),
         fetchChangeableRoles: of([]),
-      }
+      },
     );
 
     await TestBed.configureTestingModule({

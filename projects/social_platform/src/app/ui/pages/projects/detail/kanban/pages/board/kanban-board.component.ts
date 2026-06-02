@@ -207,8 +207,8 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       columns.map(column =>
         column.id === this.selectedColumnId
           ? { ...column, tasks: [...column.tasks, newTask] }
-          : column
-      )
+          : column,
+      ),
     );
 
     this.cancelAddingTask();
@@ -229,7 +229,7 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       columns.map(col => ({
         ...col,
         tasks: col.tasks.filter((task: TaskPreview) => task.id !== taskId),
-      }))
+      })),
     );
 
     this.kanbanBoardDetailInfoService.closeDetailTask();
@@ -257,7 +257,7 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
     if (this.selectedColumnId === 0) return;
 
     this.boardColumns.update(columns =>
-      columns.filter(column => column.id !== this.selectedColumnId)
+      columns.filter(column => column.id !== this.selectedColumnId),
     );
   }
 
@@ -268,8 +268,8 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
 
     this.boardColumns.update(columns =>
       columns.map(column =>
-        column.id === this.selectedColumnId ? { ...column, name: title } : column
-      )
+        column.id === this.selectedColumnId ? { ...column, name: title } : column,
+      ),
     );
 
     this.selectedColumnId = null;
@@ -299,7 +299,7 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
         prevColumn.tasks,
         currColumn.tasks,
         event.previousIndex,
-        event.currentIndex
+        event.currentIndex,
       );
     }
 

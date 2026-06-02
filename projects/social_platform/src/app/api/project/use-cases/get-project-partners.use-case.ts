@@ -12,11 +12,11 @@ export class GetProjectPartnersUseCase {
   private readonly projectPartnerRepositoryPort = inject(ProjectPartnerRepositoryPort);
 
   execute(
-    projectId: number
+    projectId: number,
   ): Observable<Result<Partner[], { kind: "get_project_partners_error"; cause?: unknown }>> {
     return this.projectPartnerRepositoryPort.fetchAll(projectId).pipe(
       map(partners => ok<Partner[]>(partners)),
-      catchError(error => of(fail({ kind: "get_project_partners_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_project_partners_error" as const, cause: error }))),
     );
   }
 }

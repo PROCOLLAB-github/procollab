@@ -29,7 +29,7 @@ describe("StageZeroComponent", () => {
         fetchProfile: of({}),
         fetchUserRoles: of([]),
         fetchChangeableRoles: of([]),
-      }
+      },
     );
 
     await TestBed.configureTestingModule({

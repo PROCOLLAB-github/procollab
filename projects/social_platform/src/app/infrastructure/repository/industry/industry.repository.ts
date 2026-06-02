@@ -19,7 +19,7 @@ export class IndustryRepository implements IndustryRepositoryPort {
       map(industries => plainToInstance(Industry, industries)),
       tap(industries => {
         this.industries.set(industries);
-      })
+      }),
     );
   }
 

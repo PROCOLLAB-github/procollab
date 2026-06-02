@@ -13,11 +13,11 @@ export class ApproveSkillUseCase {
 
   execute(
     userId: number,
-    skillId: number
+    skillId: number,
   ): Observable<Result<Approve, { kind: "approve_skill_error"; cause?: unknown }>> {
     return this.skillsRepository.approveSkill(userId, skillId).pipe(
       map(approve => ok<Approve>(approve)),
-      catchError(error => of(fail({ kind: "approve_skill_error", cause: error } as const)))
+      catchError(error => of(fail({ kind: "approve_skill_error", cause: error } as const))),
     );
   }
 }

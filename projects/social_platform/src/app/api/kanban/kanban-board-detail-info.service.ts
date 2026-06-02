@@ -13,7 +13,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 })
 export class KanbanBoardDetailInfoService {
   taskDetail = signal<TaskDetail | undefined>(
-    undefined
+    undefined,
     // {
     //   id: 5,
     //   columnId: 0,

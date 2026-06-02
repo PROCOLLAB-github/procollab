@@ -23,18 +23,18 @@ export class ProjectPartnerHttpAdapter {
   editParter(
     projectId: number,
     companyId: number,
-    params: Pick<PartnerDto, "contribution" | "decisionMaker">
+    params: Pick<PartnerDto, "contribution" | "decisionMaker">,
   ): Observable<Partner[]> {
     return this.apiService.patch(
       `${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`,
-      params
+      params,
     );
   }
 
   /** Компания в базе остаётся, удаляется только запись ProjectCompany. */
   deletePartner(projectId: number, companyId: number): Observable<void> {
     return this.apiService.delete<void>(
-      `${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`
+      `${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`,
     );
   }
 }

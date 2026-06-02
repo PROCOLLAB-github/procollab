@@ -2,61 +2,63 @@
 
 <div class="office">
   @if (profile()) {
-  <div class="office__wrapper">
-    <img
-      alt="background-image"
-      src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
-      class="office__background-image"
-    />
-    <div class="office__body">
-      <div class="office__inner">
-        <div class="office__inner--wrapper">
-          <ui-sidebar
-            class="office__sidebar"
-            logoSrc="/assets/images/shared/logo.svg"
-            [navItems]="navItems()"
-            style="align-self: flex-start"
-          >
-            <div class="office__sidebar--text">
-              <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
-              <span class="text-body-6 office__policy-link" (click)="downloadPolicy($event)">
-                Политика обработки персональных данных
-              </span>
-              <p class="text-body-6">{{ currentYear() }}</p>
-            </div>
+    <div class="office__wrapper">
+      <img
+        alt="background-image"
+        src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
+        class="office__background-image"
+      />
+      <div class="office__body">
+        <div class="office__inner">
+          <div class="office__inner--wrapper">
+            <ui-sidebar
+              class="office__sidebar"
+              logoSrc="/assets/images/shared/logo.svg"
+              [navItems]="navItems()"
+              style="align-self: flex-start"
+            >
+              <div class="office__sidebar--text">
+                <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
+                <span class="text-body-6 office__policy-link" (click)="downloadPolicy($event)">
+                  Политика обработки персональных данных
+                </span>
+                <p class="text-body-6">{{ currentYear() }}</p>
+              </div>
 
-            <div class="office__programs">
-              @if (programs().length) { @for (program of programs(); track program.id) {
-              <app-program-sidebar-card
-                [routerLink]="AppRoutes.program.detail(program.id)"
-                [program]="program"
-              ></app-program-sidebar-card>
-              } }
-            </div>
-          </ui-sidebar>
+              <div class="office__programs">
+                @if (programs().length) {
+                  @for (program of programs(); track program.id) {
+                    <app-program-sidebar-card
+                      [routerLink]="AppRoutes.program.detail(program.id)"
+                      [program]="program"
+                    ></app-program-sidebar-card>
+                  }
+                }
+              </div>
+            </ui-sidebar>
 
-          <div class="office__inner--content">
-            <div class="office__top">
-              <app-nav></app-nav>
+            <div class="office__inner--content">
+              <div class="office__top">
+                <app-nav></app-nav>
 
-              @if (profile() !== undefined && invites() !== undefined) {
-              <app-profile-control-panel
-                [invites]="invites()"
-                [hasNotifications]="false"
-                [hasUnreads]="chatUnreadState.hasUnreads()"
-                [user]="profile()"
-                (acceptInvite)="onAcceptInvite($event)"
-                (rejectInvite)="onRejectInvite($event)"
-                (logout)="onLogout()"
-              ></app-profile-control-panel>
-              }
+                @if (profile() !== undefined && invites() !== undefined) {
+                  <app-profile-control-panel
+                    [invites]="invites()"
+                    [hasNotifications]="false"
+                    [hasUnreads]="chatUnreadState.hasUnreads()"
+                    [user]="profile()"
+                    (acceptInvite)="onAcceptInvite($event)"
+                    (rejectInvite)="onRejectInvite($event)"
+                    (logout)="onLogout()"
+                  ></app-profile-control-panel>
+                }
+              </div>
+              <router-outlet></router-outlet>
             </div>
-            <router-outlet></router-outlet>
           </div>
         </div>
       </div>
     </div>
-  </div>
   }
   <app-modal [open]="waitVerificationModal() && !waitVerificationAccepted()">
     <div class="message-modal">

@@ -67,7 +67,7 @@ export class AuthRegisterService {
           }
         }),
         toAsyncState<void, RegisterError>(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(state => this.register$.set(state));
   }

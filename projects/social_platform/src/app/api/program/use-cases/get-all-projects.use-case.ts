@@ -15,11 +15,11 @@ export class GetAllProjectsUseCase {
 
   execute(
     programId: number,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<Result<ApiPagination<Project>, { kind: "unknown" }>> {
     return this.programRepositoryPort.getAllProjects(programId, params).pipe(
       map(project => ok<ApiPagination<Project>>(project)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

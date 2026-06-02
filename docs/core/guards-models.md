@@ -41,9 +41,9 @@ const profileId = Number(route.paramMap.get("id"));
 authRepository.fetchProfile().pipe(
   map(
     profile =>
-      profile.id === profileId ? true : router.createUrlTree([`/office/profile/${profileId}/`]) // редирект на просмотр
+      profile.id === profileId ? true : router.createUrlTree([`/office/profile/${profileId}/`]), // редирект на просмотр
   ),
-  catchError(() => of(router.createUrlTree(["/auth/login"])))
+  catchError(() => of(router.createUrlTree(["/auth/login"]))),
 );
 ```
 
@@ -67,9 +67,9 @@ projectRepository.getOne(projectId).pipe(
   map(project =>
     project.partnerProgram?.isSubmitted
       ? router.createUrlTree([`/office/projects/${projectId}`]) // редирект на просмотр
-      : true
+      : true,
   ),
-  catchError(() => of(router.createUrlTree([`/office/projects/${projectId}`])))
+  catchError(() => of(router.createUrlTree([`/office/projects/${projectId}`]))),
 );
 ```
 

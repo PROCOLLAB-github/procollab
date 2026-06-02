@@ -10,7 +10,7 @@ import { GetProjectRatingsUseCase } from "@api/program/use-cases/get-project-rat
 
 /** Предзагружает проекты для оценки с критериями и пагинацией. */
 export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
   const router = inject(Router);
@@ -18,10 +18,10 @@ export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
   return getProjectRatingsUseCase
     .execute(
       route.parent?.params["programId"],
-      new HttpParams({ fromObject: { offset: 0, limit: 8 } })
+      new HttpParams({ fromObject: { offset: 0, limit: 8 } }),
     )
     .pipe(
-      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" })),
     )
     .pipe(
       catchError(error => {
@@ -34,6 +34,6 @@ export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
         }
 
         return EMPTY;
-      })
+      }),
     );
 };

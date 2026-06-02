@@ -11,7 +11,7 @@ import { GetProjectSubscribersUseCase } from "@api/project/use-cases/get-project
 
 /** Предзагружает данные проекта и его подписчиков. */
 export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getProjectUseCase = inject(GetProjectUseCase);
   const getProjectSubscribersUseCase = inject(GetProjectSubscribersUseCase);
@@ -33,10 +33,10 @@ export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = 
             subscribersResult =>
               [project, subscribersResult.ok ? subscribersResult.value : []] as [
                 Project,
-                ProjectSubscriber[]
-              ]
-          )
+                ProjectSubscriber[],
+              ],
+          ),
         );
-    })
+    }),
   );
 };

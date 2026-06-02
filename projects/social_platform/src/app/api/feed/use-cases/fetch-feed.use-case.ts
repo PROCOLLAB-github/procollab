@@ -15,11 +15,11 @@ export class FetchFeedUseCase {
   execute(
     offset: number,
     limit: number,
-    type: string
+    type: string,
   ): Observable<Result<ApiPagination<FeedItem>, { kind: "fetch_feed_error"; cause?: unknown }>> {
     return this.feedRepositoryPort.fetchFeed(offset, limit, type).pipe(
       map(feed => ok<ApiPagination<FeedItem>>(feed)),
-      catchError(error => of(fail({ kind: "fetch_feed_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "fetch_feed_error" as const, cause: error }))),
     );
   }
 }

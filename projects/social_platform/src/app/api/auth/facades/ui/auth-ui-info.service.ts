@@ -69,7 +69,7 @@ export class AuthUIInfoService {
       password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
       repeatedPassword: ["", [Validators.required]],
     },
-    { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] }
+    { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] },
   );
 
   // reset password
@@ -83,7 +83,7 @@ export class AuthUIInfoService {
       password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
       passwordRepeated: ["", [Validators.required]],
     },
-    { validators: [this.validationService.useMatchValidator("password", "passwordRepeated")] }
+    { validators: [this.validationService.useMatchValidator("password", "passwordRepeated")] },
   );
 
   // Переключает видимость пароля в формах логина и регистрации.

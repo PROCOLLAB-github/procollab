@@ -16,7 +16,7 @@ export class GetAllProjectsUseCase {
   execute(params?: HttpParams): Observable<Result<ApiPagination<Project>, { kind: "unknown" }>> {
     return this.projectRepositoryPort.getAll(params).pipe(
       map(projects => ok<ApiPagination<Project>>(projects)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

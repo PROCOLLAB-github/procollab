@@ -54,7 +54,7 @@ export class ChatUnreadStateService {
       finalize(() => {
         this.inflight = null;
       }),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.inflight = request$;
 

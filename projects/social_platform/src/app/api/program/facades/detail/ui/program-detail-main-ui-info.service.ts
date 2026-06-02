@@ -12,11 +12,11 @@ export class ProgramDetailMainUIInfoService {
   readonly programId = signal<number | undefined>(undefined);
 
   readonly contactLinks = computed<{ label: string; url: string }[]>(() =>
-    (this.program()?.links ?? []).map(link => ({ label: link, url: link }))
+    (this.program()?.links ?? []).map(link => ({ label: link, url: link })),
   );
 
   readonly materialLinks = computed<{ label: string; url: string }[]>(() =>
-    (this.program()?.materials ?? []).map(m => ({ label: m.title, url: m.url }))
+    (this.program()?.materials ?? []).map(m => ({ label: m.title, url: m.url })),
   );
 
   readonly totalNewsCount = signal(0);
@@ -38,7 +38,7 @@ export class ProgramDetailMainUIInfoService {
       | {
           results: unknown[];
           count: number;
-        }
+        },
   ): void {
     if (news.results?.length) {
       this.totalNewsCount.set(news.count);

@@ -12,13 +12,13 @@ export class SubmitCompetitiveProjectUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);
 
   execute(
-    relationId: number
+    relationId: number,
   ): Observable<Result<Project, { kind: "submit_competitive_project_error"; cause?: unknown }>> {
     return this.programRepositoryPort.submitCompettetiveProject(relationId).pipe(
       map(project => ok<Project>(project)),
       catchError(error =>
-        of(fail({ kind: "submit_competitive_project_error" as const, cause: error }))
-      )
+        of(fail({ kind: "submit_competitive_project_error" as const, cause: error })),
+      ),
     );
   }
 }

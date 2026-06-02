@@ -93,7 +93,7 @@ export class ProjectPartnerResourcesStepComponent {
         inn: [inn, [Validators.required]],
         contribution: [contribution, [Validators.required]],
         decisionMaker: [decisionMaker, Validators.required],
-      })
+      }),
     );
 
     this.projectPartnerService.addPartner(name, inn, contribution, decisionMaker);
@@ -109,7 +109,7 @@ export class ProjectPartnerResourcesStepComponent {
         type: [type, [Validators.required]],
         description: [description, [Validators.required]],
         partnerCompany: [partnerCompany, [Validators.required]],
-      })
+      }),
     );
 
     this.projectResourceService.addResource(type, description, partnerCompany);

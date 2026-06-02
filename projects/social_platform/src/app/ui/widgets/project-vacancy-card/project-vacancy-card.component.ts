@@ -70,7 +70,7 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
       "description",
       elem,
       "expanded",
-      this.expandService.readFullDescription()
+      this.expandService.readFullDescription(),
     );
   }
 }

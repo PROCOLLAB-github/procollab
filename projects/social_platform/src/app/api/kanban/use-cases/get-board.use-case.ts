@@ -21,7 +21,7 @@ export class GetBoardUseCase {
           return of(fail<GetBoardError>({ kind: "not_found" }));
         }
         return of(fail<GetBoardError>({ kind: "server_error" }));
-      })
+      }),
     );
   }
 }

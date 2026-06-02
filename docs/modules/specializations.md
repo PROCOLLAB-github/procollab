@@ -46,7 +46,7 @@ abstract class SpecializationsRepositoryPort {
   getSpecializationsInline(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<ApiPagination<Specialization>>;
 }
 ```

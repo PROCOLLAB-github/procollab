@@ -13,7 +13,7 @@ export class DownloadCvUseCase {
   execute(): Observable<Result<Blob, { kind: "download_cv_error"; cause?: unknown }>> {
     return this.authRepositoryPort.downloadCV().pipe(
       map(file => ok<Blob>(file)),
-      catchError(error => of(fail({ kind: "download_cv_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "download_cv_error" as const, cause: error }))),
     );
   }
 }

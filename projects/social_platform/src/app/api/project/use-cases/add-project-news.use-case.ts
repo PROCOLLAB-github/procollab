@@ -16,12 +16,12 @@ export class AddProjectNewsUseCase {
 
   execute(
     projectId: string,
-    news: { text: string; files: string[] }
+    news: { text: string; files: string[] },
   ): Observable<Result<FeedNews, { kind: "add_project_news_error"; cause?: unknown }>> {
     return this.projectNewsRepositoryPort.addNews(projectId, news).pipe(
       tap(() => this.eventBus.emit(addNews(projectId))),
       map(result => ok<FeedNews>(result)),
-      catchError(error => of(fail({ kind: "add_project_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "add_project_news_error" as const, cause: error }))),
     );
   }
 }

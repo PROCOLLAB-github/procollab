@@ -71,7 +71,7 @@ export class MembersInfoService {
       .pipe(
         take(1),
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((members: ApiPagination<User>) => {
         this.membersUIInfoService.applyMembersPagination(members);
@@ -113,7 +113,7 @@ export class MembersInfoService {
           this.membersUIInfoService.members$.set(loading(prev));
 
           return this.onFetch(0, 20, fetchParams);
-        })
+        }),
       )
       .subscribe(members => {
         this.membersUIInfoService.members$.set(success(members.results));
@@ -141,15 +141,15 @@ export class MembersInfoService {
       return this.onFetch(
         this.membersUIInfoService.members().length,
         this.membersTake(),
-        this.searchParams()
+        this.searchParams(),
       ).pipe(
         tap(membersChunk => {
           this.membersUIInfoService.members$.update(state =>
             isSuccess(state)
               ? success([...state.data, ...membersChunk.results])
-              : success(membersChunk.results)
+              : success(membersChunk.results),
           );
-        })
+        }),
       );
     }
 
@@ -164,7 +164,7 @@ export class MembersInfoService {
         // иначе параллельные скроллы посчитают одинаковый skip (= текущая длина
         // списка) и придут дубли страниц.
         concatMap(() => this.onScroll(target, membersRoot)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -188,7 +188,7 @@ export class MembersInfoService {
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
     return this.getMembersUseCase.execute(skip, take, params).pipe(
       map(result => (result.ok ? result.value : this.emptyMembersPagination())),
-      takeUntilDestroyed(this.destroyRef)
+      takeUntilDestroyed(this.destroyRef),
     );
   }
 

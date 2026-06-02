@@ -14,7 +14,7 @@ export class AcceptResponseUseCase {
   private readonly eventBus = inject(EventBus);
 
   execute(
-    responseId: number
+    responseId: number,
   ): Observable<Result<void, { kind: "accept_response_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.acceptResponse(responseId).pipe(
       switchMap(response =>
@@ -25,14 +25,14 @@ export class AcceptResponseUseCase {
                 response.id,
                 response.vacancy,
                 vacancy.project.id,
-                response.user.id
-              )
-            )
+                response.user.id,
+              ),
+            ),
           ),
-          map(() => ok<void>(undefined))
-        )
+          map(() => ok<void>(undefined)),
+        ),
       ),
-      catchError(error => of(fail({ kind: "accept_response_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "accept_response_error" as const, cause: error }))),
     );
   }
 }

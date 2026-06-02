@@ -1,13 +1,25 @@
 <!-- @format -->
 
 <div class="progress-bar">
-  @if (mode() === 'progress') {
-  <p class="progress-bar__text text-body-12">{{ progress() }}%</p>
-  } @else { @if (appereance() === 'open') {
-  <i appIcon icon="triangle" appSquare="10" class="progress-bar__text progress-bar__text--icon"></i>
+  @if (mode() === "progress") {
+    <p class="progress-bar__text text-body-12">{{ progress() }}%</p>
   } @else {
-  <i appIcon icon="lock" appSquare="10" class="progress-bar__text progress-bar__text--closed"></i>
-  } }
+    @if (appereance() === "open") {
+      <i
+        appIcon
+        icon="triangle"
+        appSquare="10"
+        class="progress-bar__text progress-bar__text--icon"
+      ></i>
+    } @else {
+      <i
+        appIcon
+        icon="lock"
+        appSquare="10"
+        class="progress-bar__text progress-bar__text--closed"
+      ></i>
+    }
+  }
   <div class="">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
       <circle
@@ -32,6 +44,6 @@
   </div>
 
   @if (haveDate()) {
-  <p class="text-body-6 progress-bar__date">c 16.03.26</p>
+    <p class="text-body-6 progress-bar__date">c 16.03.26</p>
   }
 </div>

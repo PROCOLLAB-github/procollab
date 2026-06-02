@@ -17,7 +17,7 @@ export class ReadFeedNewsUseCase {
   execute(
     ownerType: "project" | "profile",
     ownerId: number,
-    newsIds: number[]
+    newsIds: number[],
   ): Observable<Result<void[], { kind: "read_feed_news_error"; cause?: unknown }>> {
     const request$ =
       ownerType === "profile"
@@ -26,7 +26,7 @@ export class ReadFeedNewsUseCase {
 
     return request$.pipe(
       map(result => ok<void[]>(result)),
-      catchError(error => of(fail({ kind: "read_feed_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "read_feed_news_error" as const, cause: error }))),
     );
   }
 }

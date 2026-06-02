@@ -21,10 +21,10 @@
       (click)="filterOpen.set(!filterOpen())"
     ></i>
     @if (filterOpen()) {
-    <div class="select__dropdown" @dropdownAnimation>
-      <ng-container *ngTemplateOutlet="filter"></ng-container>
-      <a class="text-body-12" (click)="resetFilter()">сбросить</a>
-    </div>
+      <div class="select__dropdown" @dropdownAnimation>
+        <ng-container *ngTemplateOutlet="filter"></ng-container>
+        <a class="text-body-12" (click)="resetFilter()">сбросить</a>
+      </div>
     }
   </div>
 </div>
@@ -32,17 +32,17 @@
 <ng-template #filter>
   <div class="filter">
     @for (filterItem of feedFilterOptions; track $index) {
-    <div
-      class="filter__option"
-      [class.filter__option--disable]="filterItem.id === 5"
-      [class.filter__option--active]="filterItem.value === includedFilters()"
-      (click)="setFilter(filterItem.value)"
-    >
-      <div class="filter__option--icon">
-        <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
+      <div
+        class="filter__option"
+        [class.filter__option--disable]="filterItem.id === 5"
+        [class.filter__option--active]="filterItem.value === includedFilters()"
+        (click)="setFilter(filterItem.value)"
+      >
+        <div class="filter__option--icon">
+          <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
+        </div>
+        <p class="text-body-12">{{ filterItem.name }}</p>
       </div>
-      <p class="text-body-12">{{ filterItem.name }}</p>
-    </div>
     }
   </div>
 </ng-template>

@@ -13,11 +13,11 @@ export class GetMyVacanciesUseCase {
 
   execute(
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<Result<VacancyResponse[], { kind: "get_my_vacancies_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.getMyVacancies(limit, offset).pipe(
       map(responses => ok<VacancyResponse[]>(responses)),
-      catchError(error => of(fail({ kind: "get_my_vacancies_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_my_vacancies_error" as const, cause: error }))),
     );
   }
 }

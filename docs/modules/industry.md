@@ -86,7 +86,7 @@ export class IndustryRepository implements IndustryRepositoryPort {
   getAll(): Observable<Industry[]> {
     return this.industryAdapter.fetchAll().pipe(
       map(industries => plainToInstance(Industry, industries)),
-      tap(industries => this.industries.set(industries))
+      tap(industries => this.industries.set(industries)),
     );
   }
 

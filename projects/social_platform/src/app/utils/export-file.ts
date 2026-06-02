@@ -10,7 +10,7 @@ import { saveAs } from "file-saver";
 export const saveFile = (
   blob: Blob,
   type: "all" | "submitted" | "rates" | "cv",
-  name?: string
+  name?: string,
 ): void => {
   const prefixFileName =
     type === "all" ? "projects" : type === "rates" ? "scores" : "projects_review";

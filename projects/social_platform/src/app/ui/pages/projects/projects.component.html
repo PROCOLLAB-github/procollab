@@ -13,9 +13,9 @@
           <app-search formControlName="search"></app-search>
         </form>
 
-        @if(!isDashboard()) {
-        <app-bar-new
-          [links]="[
+        @if (!isDashboard()) {
+          <app-bar-new
+            [links]="[
               {
                 link: '/office/projects/my',
                 linkText: 'мои проекты',
@@ -44,8 +44,8 @@
                 isRouterLinkActiveOptions: false,
               },
             ]"
-        >
-        </app-bar-new>
+          >
+          </app-bar-new>
         }
 
         <router-outlet></router-outlet>
@@ -64,48 +64,50 @@
 
         <div class="page__left">
           @if (isDashboard()) {
-          <div class="page__invites">
-            <div class="page__invites--wrapper">
-              <p class="text-body-12">мои приглашения</p>
-              <i appIcon icon="send" appSquare="12"></i>
-            </div>
+            <div class="page__invites">
+              <div class="page__invites--wrapper">
+                <p class="text-body-12">мои приглашения</p>
+                <i appIcon icon="send" appSquare="12"></i>
+              </div>
 
-            @if (myInvites().length) {
-            <ul class="page__invites--list">
-              @for (invite of myInvites(); track invite.id) {
-              <app-info-card
-                (onRejectingInvite)="onRejectInvite($event)"
-                (onAcceptingInvite)="onAcceptInvite($event)"
-                type="invite"
-                [info]="invite"
-              ></app-info-card>
+              @if (myInvites().length) {
+                <ul class="page__invites--list">
+                  @for (invite of myInvites(); track invite.id) {
+                    <app-info-card
+                      (onRejectingInvite)="onRejectInvite($event)"
+                      (onAcceptingInvite)="onAcceptInvite($event)"
+                      type="invite"
+                      [info]="invite"
+                    ></app-info-card>
+                  }
+                </ul>
+              } @else {
+                <div class="page__invites--no-items">
+                  <p class="text-body-12">пока нет приглашений</p>
+                </div>
               }
-            </ul>
-            } @else {
-            <div class="page__invites--no-items">
-              <p class="text-body-12">пока нет приглашений</p>
             </div>
-            }
-          </div>
-          } @if (isMy() || isDashboard()) {
-          <app-soon-card
-            title="статистика"
-            description="количество проектов, команды, эффективность"
-          >
-          </app-soon-card>
-          } @if (isAll()) {
-          <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
-            <div class="filter__overlay" (click)="isFilterOpen.set(false)"></div>
-            <div class="filter__body" #filterBody>
-              <div
-                class="filter__bar"
-                (touchstart)="onSwipeStart($event)"
-                (touchmove)="onSwipeMove($event)"
-                (touchend)="onSwipeEnd($event)"
-              ></div>
-              <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+          }
+          @if (isMy() || isDashboard()) {
+            <app-soon-card
+              title="статистика"
+              description="количество проектов, команды, эффективность"
+            >
+            </app-soon-card>
+          }
+          @if (isAll()) {
+            <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+              <div class="filter__overlay" (click)="isFilterOpen.set(false)"></div>
+              <div class="filter__body" #filterBody>
+                <div
+                  class="filter__bar"
+                  (touchstart)="onSwipeStart($event)"
+                  (touchmove)="onSwipeMove($event)"
+                  (touchend)="onSwipeEnd($event)"
+                ></div>
+                <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+              </div>
             </div>
-          </div>
           }
         </div>
       </div>

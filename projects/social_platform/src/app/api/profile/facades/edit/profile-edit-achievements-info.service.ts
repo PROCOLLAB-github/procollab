@@ -43,10 +43,10 @@ export class ProfileEditAchievementsInfoService {
 
     ["title", "status", "year"].forEach(name => this.profileForm.get(name)?.clearValidators());
     ["title", "status", "year"].forEach(name =>
-      this.profileForm.get(name)?.setValidators([Validators.required])
+      this.profileForm.get(name)?.setValidators([Validators.required]),
     );
     ["title", "status", "year"].forEach(name =>
-      this.profileForm.get(name)?.updateValueAndValidity()
+      this.profileForm.get(name)?.updateValueAndValidity(),
     );
     ["title", "status", "year"].forEach(name => this.profileForm.get(name)?.markAsTouched());
 

@@ -18,11 +18,11 @@ import { ProjectsDetailWorkSectionUIInfoService } from "@api/project/facades/det
 })
 export class ProjectWorkSectionComponent implements OnInit {
   private readonly projectsDetailWorkSectionInfoService = inject(
-    ProjectsDetailWorkSectionInfoService
+    ProjectsDetailWorkSectionInfoService,
   );
 
   private readonly projectsDetailWorkSectionUIInfoService = inject(
-    ProjectsDetailWorkSectionUIInfoService
+    ProjectsDetailWorkSectionUIInfoService,
   );
 
   protected readonly vacancies = this.projectsDetailWorkSectionUIInfoService.vacancies;

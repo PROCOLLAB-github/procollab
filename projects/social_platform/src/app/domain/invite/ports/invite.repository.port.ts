@@ -9,7 +9,7 @@ export abstract class InviteRepositoryPort {
     userId: number,
     projectId: number,
     role: string,
-    specialization?: string
+    specialization?: string,
   ): Observable<Invite>;
   abstract revokeInvite(invitationId: number): Observable<void>;
   abstract acceptInvite(inviteId: number): Observable<Invite>;
@@ -17,7 +17,7 @@ export abstract class InviteRepositoryPort {
   abstract updateInvite(
     inviteId: number,
     role: string,
-    specialization?: string
+    specialization?: string,
   ): Observable<Invite>;
   abstract getMy(): Observable<Invite[]>;
   abstract getByProject(projectId: number): Observable<Invite[]>;

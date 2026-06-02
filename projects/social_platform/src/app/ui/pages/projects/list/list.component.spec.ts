@@ -40,7 +40,7 @@ describe("ProjectsListComponent", () => {
       ["initializationProjectsList", "initScroll", "destroy"],
       {
         projects: signal([]),
-      }
+      },
     );
 
     const projectsInfoServiceSpy = {

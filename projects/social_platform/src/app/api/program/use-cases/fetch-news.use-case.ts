@@ -15,11 +15,11 @@ export class FetchNewsUseCase {
   execute(
     limit: number,
     offset: number,
-    programId: number
+    programId: number,
   ): Observable<Result<ApiPagination<FeedNews>, { kind: "unknown" }>> {
     return this.programNewsRepositoryPort.fetchNews(String(programId), limit, offset).pipe(
       map(news => ok(news)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

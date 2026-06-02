@@ -17,7 +17,7 @@ export const ProfileDetailResolver: ResolveFn<{ user: User }> = (route: Activate
         const result = Object.assign(new User(), user);
         result.relations.progress = calculateProfileProgress(result);
         return result;
-      })
+      }),
     ),
   });
 };

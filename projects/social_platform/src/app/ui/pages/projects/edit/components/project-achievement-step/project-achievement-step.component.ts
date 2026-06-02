@@ -71,7 +71,7 @@ export class ProjectAchievementStepComponent implements OnInit {
             Validators.pattern(/^\d{4}$/),
           ],
         ],
-      })
+      }),
     );
 
     this.projectAchievementService.addAchievement(this.achievements);

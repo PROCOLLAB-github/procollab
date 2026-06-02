@@ -22,7 +22,7 @@ export class SpecializationsRepository implements SpecializationsRepositoryPort 
   getSpecializationsInline(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<ApiPagination<Specialization>> {
     return this.specializationsAdapter.getSpecializationsInline(search, limit, offset);
   }

@@ -16,11 +16,11 @@
 
         <ul class="page__list">
           @for (member of members(); track member.id) {
-          <a [routerLink]="AppRoutes.profile.detail(member.id)">
-            <li>
-              <app-info-card type="members" [info]="member"></app-info-card>
-            </li>
-          </a>
+            <a [routerLink]="AppRoutes.profile.detail(member.id)">
+              <li>
+                <app-info-card type="members" [info]="member"></app-info-card>
+              </li>
+            </a>
           }
         </ul>
       </div>

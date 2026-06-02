@@ -75,7 +75,7 @@ describe("CoursesRepository", () => {
 
     expect(adapter.postAnswerQuestion).toHaveBeenCalledOnceWith(10, "answer", [1], [2]);
     expect(eventBus.emit).toHaveBeenCalledWith(
-      jasmine.objectContaining({ type: "TaskAnswerSubmitted" })
+      jasmine.objectContaining({ type: "TaskAnswerSubmitted" }),
     );
     // после clear() кеш структуры должен повторно бить adapter
     repository.getCourseStructure(1).subscribe();

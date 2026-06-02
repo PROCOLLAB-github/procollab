@@ -4,7 +4,7 @@
   <span class="text-body-12">{{ skill().name }}</span>
   <div class="approve__approves">
     @if (skill().approves.length > 0) {
-    <app-approve-skill-people [approves]="skill().approves"></app-approve-skill-people>
+      <app-approve-skill-people [approves]="skill().approves"></app-approve-skill-people>
     }
 
     <app-button

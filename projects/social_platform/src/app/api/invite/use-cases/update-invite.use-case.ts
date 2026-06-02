@@ -20,7 +20,7 @@ export class UpdateInviteUseCase {
   > {
     return this.inviteRepositoryPort.updateInvite(inviteId, role, specialization).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "update_invite_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "update_invite_error" as const, cause: error }))),
     );
   }
 }

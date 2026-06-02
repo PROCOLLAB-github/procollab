@@ -3,12 +3,12 @@
 <div class="avatar">
   <div [class.avatar--border]="hasBorder()">
     @if (progress()) {
-    <div
-      class="avatar__progress"
-      [style.--progress]="progress()! + '%'"
-      [style.--progress-width]="'-12px'"
-      [style.--progress-color]="'var(--accent)'"
-    ></div>
+      <div
+        class="avatar__progress"
+        [style.--progress]="progress()! + '%'"
+        [style.--progress-width]="'-12px'"
+        [style.--progress-color]="'var(--accent)'"
+      ></div>
     }
 
     <img
@@ -20,14 +20,14 @@
     />
 
     @if (isOnline()) {
-    <div
-      [style.width]="onlineBadgeSize() + 'px'"
-      [style.height]="onlineBadgeSize() + 'px'"
-      [style.border-width]="onlineBadgeBorder() + 'px'"
-      [style.right]="onlineBadgeOffset() + 'px'"
-      [style.bottom]="onlineBadgeOffset() + 'px'"
-      class="avatar__online"
-    ></div>
+      <div
+        [style.width]="onlineBadgeSize() + 'px'"
+        [style.height]="onlineBadgeSize() + 'px'"
+        [style.border-width]="onlineBadgeBorder() + 'px'"
+        [style.right]="onlineBadgeOffset() + 'px'"
+        [style.bottom]="onlineBadgeOffset() + 'px'"
+        class="avatar__online"
+      ></div>
     }
   </div>
 </div>

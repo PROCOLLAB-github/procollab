@@ -8,69 +8,74 @@
       [style.display]="collaborators().length ? 'grid' : 'none'"
     >
       @for (collaborator of collaborators(); track collaborator.userId) {
-      <li class="invite__item">
-        <app-collaborator-card
-          (collaboratorRemoved)="onCollaboratorRemove($event)"
-          [collaborator]="collaborator"
-        ></app-collaborator-card>
-      </li>
+        <li class="invite__item">
+          <app-collaborator-card
+            (collaboratorRemoved)="onCollaboratorRemove($event)"
+            [collaborator]="collaborator"
+          ></app-collaborator-card>
+        </li>
       }
     </ul>
   </div>
 
   @if (showInputFields()) {
-  <div class="">
-    <div class="" style="display: flex; flex-direction: column; width: 59%">
-      <form [formGroup]="inviteForm">
-        @if (link; as link) {
-        <fieldset class="invite__role">
-          <label class="text-body-12 field-label">ссылка на пользователя внутри procollab</label>
-          <app-input
-            size="big"
-            id="invite_link"
-            formControlName="link"
-            [error]="(link | controlError) && inviteSubmitInitiated()"
-            placeholder="https://app.procollab.ru/office/profile/13"
-          ></app-input>
-          @if ((link | controlError: "required") && inviteSubmitInitiated()) {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          } @if ((link | controlError: "pattern") && inviteSubmitInitiated()) {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_PROFILE_LINK }}
-          </div>
-          } @if (inviteNotExistingError() && inviteSubmitInitiated()) {
-          <div class="text-body-10 error">
-            {{ errorMessage.USER_NOT_EXISTING }} либо<br />
-            {{ errorMessage.USER_IS_LEADER }} либо <br />
-            {{ errorMessage.USER_IS_MEMBER }} либо <br />
-          </div>
+    <div class="">
+      <div class="" style="display: flex; flex-direction: column; width: 59%">
+        <form [formGroup]="inviteForm">
+          @if (link; as link) {
+            <fieldset class="invite__role">
+              <label class="text-body-12 field-label"
+                >ссылка на пользователя внутри procollab</label
+              >
+              <app-input
+                size="big"
+                id="invite_link"
+                formControlName="link"
+                [error]="(link | controlError) && inviteSubmitInitiated()"
+                placeholder="https://app.procollab.ru/office/profile/13"
+              ></app-input>
+              @if ((link | controlError: "required") && inviteSubmitInitiated()) {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+              @if ((link | controlError: "pattern") && inviteSubmitInitiated()) {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_PROFILE_LINK }}
+                </div>
+              }
+              @if (inviteNotExistingError() && inviteSubmitInitiated()) {
+                <div class="text-body-10 error">
+                  {{ errorMessage.USER_NOT_EXISTING }} либо<br />
+                  {{ errorMessage.USER_IS_LEADER }} либо <br />
+                  {{ errorMessage.USER_IS_MEMBER }} либо <br />
+                </div>
+              }
+            </fieldset>
           }
-        </fieldset>
-        } @if (role; as role) {
-        <fieldset class="invite__role">
-          <label class="text-body-12 field-label">роль в проекте</label>
-          <app-input
-            size="big"
-            id="invite_role"
-            [haveHint]="true"
-            [tooltipText]="'Расскажите, кем будет человек, которого вы приглашаете'"
-            [tooltipPosition]="'right'"
-            [tooltipWidth]="300"
-            formControlName="role"
-            [error]="(role | controlError) && inviteSubmitInitiated()"
-            placeholder="напишите роль участника в команде"
-          ></app-input>
-          @if ((role | controlError: "required") && inviteSubmitInitiated()) {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
+          @if (role; as role) {
+            <fieldset class="invite__role">
+              <label class="text-body-12 field-label">роль в проекте</label>
+              <app-input
+                size="big"
+                id="invite_role"
+                [haveHint]="true"
+                [tooltipText]="'Расскажите, кем будет человек, которого вы приглашаете'"
+                [tooltipPosition]="'right'"
+                [tooltipWidth]="300"
+                formControlName="role"
+                [error]="(role | controlError) && inviteSubmitInitiated()"
+                placeholder="напишите роль участника в команде"
+              ></app-input>
+              @if ((role | controlError: "required") && inviteSubmitInitiated()) {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+            </fieldset>
           }
-        </fieldset>
-        }
 
-        <!-- <label class="field-label" style="color: var(--accent)">
+          <!-- <label class="field-label" style="color: var(--accent)">
             Для проектов ПД.МосПолитех
           </label>
           @if (specialization; as specialization) {
@@ -88,10 +93,10 @@
             }
           </fieldset>
           } -->
-      </form>
-    </div>
+        </form>
+      </div>
 
-    <!-- <app-button
+      <!-- <app-button
         size="big"
         customTypographyClass="text-body-12"
         (click)="submitInvite()"
@@ -99,7 +104,7 @@
       >
         Отправить
       </app-button> -->
-  </div>
+    </div>
   }
 
   <div class="invite__link" [style.flex-direction]="!invites().length ? 'row' : 'row-reverse'">
@@ -108,15 +113,17 @@
       [style.overflow-x]="invites().length > 8 ? 'auto' : 'none'"
       [style.display]="invitesFill() ? 'flex' : 'none'"
     >
-      @for (user of invites(); track user.id) { @if (user.isAccepted === null) {
-      <li class="invite__item">
-        <app-invite-card
-          [invite]="user"
-          (edit)="editInvitation($event)"
-          (remove)="removeInvitation($event)"
-        ></app-invite-card>
-      </li>
-      } }
+      @for (user of invites(); track user.id) {
+        @if (user.isAccepted === null) {
+          <li class="invite__item">
+            <app-invite-card
+              [invite]="user"
+              (edit)="editInvitation($event)"
+              (remove)="removeInvitation($event)"
+            ></app-invite-card>
+          </li>
+        }
+      }
     </ul>
     <app-button
       size="big"
@@ -129,22 +136,20 @@
       <i appIcon icon="plus" appSquare="10"></i>
 
       @if (!showInputFields()) {
-      <app-tooltip
-        [text]="
-          'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'
-        "
-        [isVisible]="isTooltipVisible('base')"
-        [position]="'right'"
-        [tooltipWidth]="400"
-        customClass="content__hint"
-        (show)="toggleTooltip('base')"
-        (hide)="toggleTooltip('base')"
-      ></app-tooltip>
+        <app-tooltip
+          [text]="'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'"
+          [isVisible]="isTooltipVisible('base')"
+          [position]="'right'"
+          [tooltipWidth]="400"
+          customClass="content__hint"
+          (show)="toggleTooltip('base')"
+          (hide)="toggleTooltip('base')"
+        ></app-tooltip>
       }
     </app-button>
 
     @if (!invites().length || !collaborators().length) {
-    <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+      <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
     }
   </div>
 
@@ -156,13 +161,13 @@
         (show)="tooltipInfoService.show('team')"
       ></app-tooltip>
 
-      @if (isHintTeamVisible('team')) {
-      <div class="tooltip__wrapper" (mouseleave)="tooltipInfoService.hide('team')">
-        <p class="tooltip__text text-body-10">
-          Напишите зону ответственности участника, приглашаемого в команду
-        </p>
-        <p class="tooltip__text text-body-10" (click)="openHintModal($event)">подробнее</p>
-      </div>
+      @if (isHintTeamVisible("team")) {
+        <div class="tooltip__wrapper" (mouseleave)="tooltipInfoService.hide('team')">
+          <p class="tooltip__text text-body-10">
+            Напишите зону ответственности участника, приглашаемого в команду
+          </p>
+          <p class="tooltip__text text-body-10" (click)="openHintModal($event)">подробнее</p>
+        </div>
       }
     </div>
   </div>

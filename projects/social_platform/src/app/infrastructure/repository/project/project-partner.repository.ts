@@ -27,7 +27,7 @@ export class ProjectPartnerRepository implements ProjectPartnerRepositoryPort {
   updatePartner(
     projectId: number,
     companyId: number,
-    params: Pick<PartnerDto, "contribution" | "decisionMaker">
+    params: Pick<PartnerDto, "contribution" | "decisionMaker">,
   ): Observable<Partner[]> {
     return this.projectPartnerAdapter
       .editParter(projectId, companyId, params)

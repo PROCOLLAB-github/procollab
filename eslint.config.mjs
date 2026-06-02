@@ -1,3 +1,5 @@
+/** @format */
+
 import js from "@eslint/js";
 import ts from "typescript-eslint";
 import prettier from "eslint-config-prettier";
@@ -6,13 +8,7 @@ import globals from "globals";
 
 export default ts.config(
   {
-    ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/coverage/**",
-      "**/.angular/**",
-      "**/*.scss",
-    ],
+    ignores: ["**/node_modules/**", "**/dist/**", "**/coverage/**", "**/.angular/**", "**/*.scss"],
   },
   js.configs.recommended,
   ...ts.configs.recommended,
@@ -117,13 +113,48 @@ export default ts.config(
           default: "disallow",
           rules: [
             { from: { type: "domain" }, allow: { to: { type: ["domain", "core-lib"] } } },
-            { from: { type: "infrastructure" }, allow: { to: { type: ["domain", "infrastructure", "core-lib", "utils"] } } },
-            { from: { type: "api" }, allow: { to: { type: ["domain", "infrastructure", "api", "core-lib", "utils", "env"] } } },
-            { from: { type: "ui" }, allow: { to: { type: ["domain", "infrastructure", "api", "ui", "core-lib", "ui-lib", "utils"] } } },
+            {
+              from: { type: "infrastructure" },
+              allow: { to: { type: ["domain", "infrastructure", "core-lib", "utils"] } },
+            },
+            {
+              from: { type: "api" },
+              allow: {
+                to: { type: ["domain", "infrastructure", "api", "core-lib", "utils", "env"] },
+              },
+            },
+            {
+              from: { type: "ui" },
+              allow: {
+                to: {
+                  type: ["domain", "infrastructure", "api", "ui", "core-lib", "ui-lib", "utils"],
+                },
+              },
+            },
             { from: { type: "utils" }, allow: { to: { type: ["domain", "core-lib", "utils"] } } },
-            { from: { type: "core-lib" }, allow: { to: { type: ["core-lib", "domain", "utils", "env"] } } },
+            {
+              from: { type: "core-lib" },
+              allow: { to: { type: ["core-lib", "domain", "utils", "env"] } },
+            },
             { from: { type: "ui-lib" }, allow: { to: { type: ["core-lib", "domain", "ui-lib"] } } },
-            { from: { type: "root" }, allow: { to: { type: ["domain", "infrastructure", "api", "ui", "core-lib", "ui-lib", "utils", "env", "root"] } } },
+            {
+              from: { type: "root" },
+              allow: {
+                to: {
+                  type: [
+                    "domain",
+                    "infrastructure",
+                    "api",
+                    "ui",
+                    "core-lib",
+                    "ui-lib",
+                    "utils",
+                    "env",
+                    "root",
+                  ],
+                },
+              },
+            },
           ],
         },
       ],
@@ -134,5 +165,5 @@ export default ts.config(
     rules: {
       "boundaries/dependencies": "off",
     },
-  }
+  },
 );

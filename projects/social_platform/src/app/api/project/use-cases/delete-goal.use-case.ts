@@ -12,11 +12,11 @@ export class DeleteGoalUseCase {
 
   execute(
     projectId: number,
-    goalId: number
+    goalId: number,
   ): Observable<Result<void, { kind: "delete_project_goal_error"; cause?: unknown }>> {
     return this.projectGoalsRepositoryPort.deleteGoal(projectId, goalId).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "delete_project_goal_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "delete_project_goal_error" as const, cause: error }))),
     );
   }
 }

@@ -16,11 +16,11 @@ export class CreateProgramFiltersUseCase {
   execute(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<Result<ApiPagination<Project>, { kind: "unknown" }>> {
     return this.programRepositoryPort.createProgramFilters(programId, filters, params).pipe(
       map(project => ok<ApiPagination<Project>>(project)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

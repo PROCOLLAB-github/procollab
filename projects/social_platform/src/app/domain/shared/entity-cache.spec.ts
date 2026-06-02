@@ -121,9 +121,7 @@ describe("EntityCache", () => {
       jasmine.clock().mockDate(new Date(Date.now() + 6000));
 
       let emitted = "";
-      swrCache
-        .getOrFetch(1, () => of("refreshed"))
-        .subscribe(v => (emitted = v));
+      swrCache.getOrFetch(1, () => of("refreshed")).subscribe(v => (emitted = v));
 
       expect(emitted).toBe("initial");
     });
@@ -144,9 +142,7 @@ describe("EntityCache", () => {
       flush();
 
       let latest = "";
-      swrCache
-        .getOrFetch(1, () => of("should-not-happen"))
-        .subscribe(v => (latest = v));
+      swrCache.getOrFetch(1, () => of("should-not-happen")).subscribe(v => (latest = v));
 
       expect(latest).toBe("fresh");
     }));

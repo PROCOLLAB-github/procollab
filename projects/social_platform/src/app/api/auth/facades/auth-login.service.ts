@@ -60,7 +60,7 @@ export class AuthLoginService {
           }
         }),
         toAsyncState<LoginResult, LoginError>(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(state => this.login$.set(state));
   }

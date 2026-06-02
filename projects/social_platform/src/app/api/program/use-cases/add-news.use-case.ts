@@ -13,11 +13,11 @@ export class AddNewsUseCase {
 
   execute(
     programId: number,
-    news: { text: string; files: string[] }
+    news: { text: string; files: string[] },
   ): Observable<Result<FeedNews, { kind: "unknown" }>> {
     return this.programNewsRepositoryPort.addNews(String(programId), news).pipe(
       map(news => ok<FeedNews>(news)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

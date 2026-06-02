@@ -77,9 +77,9 @@ export class OnboardingStageTwoInfoService {
       .execute({ skillsIds: skills.map((skill: Skill) => skill.id) })
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result)
+          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result),
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
         if (!result.ok) {

@@ -17,12 +17,12 @@ export class UpdateVacancyUseCase {
 
   execute(
     vacancyId: number,
-    vacancy: Partial<Vacancy> | CreateVacancyDto
+    vacancy: Partial<Vacancy> | CreateVacancyDto,
   ): Observable<Result<Vacancy, { kind: "update_vacancy_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.updateVacancy(vacancyId, vacancy).pipe(
       tap(() => this.eventBus.emit(vacancyUpdated(vacancyId, vacancy))),
       map(updatedVacancy => ok<Vacancy>(updatedVacancy)),
-      catchError(error => of(fail({ kind: "update_vacancy_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "update_vacancy_error" as const, cause: error }))),
     );
   }
 }

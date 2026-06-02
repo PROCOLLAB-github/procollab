@@ -79,7 +79,7 @@ abstract class VacancyRepositoryPort {
     workFormat?,
     workSchedule?,
     salary?,
-    searchValue?: string
+    searchValue?: string,
   ): Observable<Vacancy[]>;
 
   getMyVacancies(limit, offset): Observable<VacancyResponse[]>; // мои отклики

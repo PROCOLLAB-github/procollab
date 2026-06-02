@@ -16,7 +16,7 @@ export class GetColumnTasksUseCase {
   execute(columnId: number): Observable<Result<Column, GetColumnTasksError>> {
     return this.kanbanRepository.getTasksByColumnId(columnId).pipe(
       map(column => ok<Column>(column)),
-      catchError(() => of(fail<GetColumnTasksError>({ kind: "server_error" })))
+      catchError(() => of(fail<GetColumnTasksError>({ kind: "server_error" }))),
     );
   }
 }

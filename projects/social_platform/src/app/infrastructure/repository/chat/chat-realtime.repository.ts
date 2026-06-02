@@ -60,7 +60,7 @@ export class ChatRealtimeRepository implements ChatRealtimePort {
     return this.chatWsAdapter.onMessage().pipe(
       map(message => plainToInstance(OnChatMessageDto, message)),
       filter(dto => !!dto.message),
-      map(dto => ({ ...dto, message: mapChatMessage(dto.message)! } as OnChatMessageDto))
+      map(dto => ({ ...dto, message: mapChatMessage(dto.message)! }) as OnChatMessageDto),
     );
   }
 
@@ -68,7 +68,7 @@ export class ChatRealtimeRepository implements ChatRealtimePort {
     return this.chatWsAdapter.onEditMessage().pipe(
       map(message => plainToInstance(OnEditChatMessageDto, message)),
       filter(dto => !!dto.message),
-      map(dto => ({ ...dto, message: mapChatMessage(dto.message)! } as OnEditChatMessageDto))
+      map(dto => ({ ...dto, message: mapChatMessage(dto.message)! }) as OnEditChatMessageDto),
     );
   }
 

@@ -1,6 +1,12 @@
 /** @format */
 
-import { ApplicationConfig, ErrorHandler, importProvidersFrom, LOCALE_ID, provideZonelessChangeDetection } from "@angular/core";
+import {
+  ApplicationConfig,
+  ErrorHandler,
+  importProvidersFrom,
+  LOCALE_ID,
+  provideZonelessChangeDetection,
+} from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideNgxMask } from "ngx-mask";
@@ -85,7 +91,7 @@ export const APP_CONFIG: ApplicationConfig = {
       APP_ROUTES,
       withRouterConfig({
         onSameUrlNavigation: "reload",
-      })
+      }),
     ),
     provideAnimations(),
     ...AUTH_PROVIDERS,

@@ -22,7 +22,7 @@ export class ProjectProgramRepository implements ProjectProgramRepositoryPort {
 
   sendNewProjectFieldsValues(
     projectId: number,
-    newValues: ProjectNewAdditionalProgramFields[]
+    newValues: ProjectNewAdditionalProgramFields[],
   ): Observable<Project> {
     return this.projectProgramAdapter
       .sendNewProjectFieldsValues(projectId, newValues)

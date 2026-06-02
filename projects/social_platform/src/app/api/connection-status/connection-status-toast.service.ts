@@ -12,7 +12,7 @@ export class ConnectionStatusToastService {
 
   constructor() {
     this.websocketService.connectionLost$.subscribe(() =>
-      this.snackbarService.error("Соединение с сервером потеряно. Проверьте интернет.")
+      this.snackbarService.error("Соединение с сервером потеряно. Проверьте интернет."),
     );
   }
 }

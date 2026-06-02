@@ -12,13 +12,13 @@ export class GetProgramFiltersUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);
 
   execute(
-    programId: number
+    programId: number,
   ): Observable<
     Result<PartnerProgramFields[], { kind: "get_program_filters_error"; cause?: unknown }>
   > {
     return this.programRepositoryPort.getProgramFilters(programId).pipe(
       map(result => ok<PartnerProgramFields[]>(result)),
-      catchError(error => of(fail({ kind: "get_program_filters_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_program_filters_error" as const, cause: error }))),
     );
   }
 }

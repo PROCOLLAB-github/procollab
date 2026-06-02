@@ -27,7 +27,7 @@ export class SwipeService {
     this.renderer.setStyle(
       filterBody.nativeElement,
       "transform",
-      `translateY(${progress * 100}px)`
+      `translateY(${progress * 100}px)`,
     );
   }
 

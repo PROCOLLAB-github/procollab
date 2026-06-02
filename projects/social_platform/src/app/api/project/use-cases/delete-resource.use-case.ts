@@ -13,7 +13,7 @@ export class DeleteResourceUseCase {
   execute(projectId: number, resourceId: number): Observable<Result<void, { kind: "unknown" }>> {
     return this.projectResourceRepositoryPort.deleteResource(projectId, resourceId).pipe(
       map(() => ok<void>(undefined)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

@@ -50,7 +50,7 @@ describe("VacancyRepository", () => {
         "remote",
         "full",
         "100",
-        "js"
+        "js",
       );
       expect(res[0]).toBeInstanceOf(Vacancy);
       done();

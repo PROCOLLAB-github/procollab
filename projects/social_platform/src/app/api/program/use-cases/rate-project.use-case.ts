@@ -14,13 +14,13 @@ export class RateProjectUseCase {
   execute(
     projectId: number,
     criteria: ProjectRatingCriterion[],
-    outputVals: Record<string, string | number | boolean>
+    outputVals: Record<string, string | number | boolean>,
   ): Observable<Result<void, { kind: "rate_project_error"; cause?: unknown }>> {
     const dto = this.projectRatingRepositoryPort.formValuesToDTO(criteria, outputVals);
 
     return this.projectRatingRepositoryPort.rate(projectId, dto).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "rate_project_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "rate_project_error" as const, cause: error }))),
     );
   }
 }

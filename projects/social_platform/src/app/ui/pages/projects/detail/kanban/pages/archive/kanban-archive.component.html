@@ -8,8 +8,8 @@
   </div>
 
   <div class="kanban__tasks">
-    @for(task of completedTasks(); track task.id) {
-    <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
+    @for (task of completedTasks(); track task.id) {
+      <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
     }
   </div>
 </div>

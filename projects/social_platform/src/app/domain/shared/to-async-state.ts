@@ -9,16 +9,16 @@ import { AsyncState, failure, loading, success } from "./async-state";
  * loading → success/failure, HTTP-ошибка → failure
  */
 export function toAsyncState<T, E = string>(
-  previous?: T
+  previous?: T,
 ): (source: Observable<Result<T, E>>) => Observable<AsyncState<T, E>> {
   return source =>
     source.pipe(
       map(result =>
         result.ok
           ? (success<T>(result.value) as AsyncState<T, E>)
-          : (failure<E>(result.error, previous) as AsyncState<T, E>)
+          : (failure<E>(result.error, previous) as AsyncState<T, E>),
       ),
       startWith(loading(previous) as AsyncState<T, E>),
-      catchError(err => of(failure(err?.message ?? "Unknown error", previous) as AsyncState<T, E>))
+      catchError(err => of(failure(err?.message ?? "Unknown error", previous) as AsyncState<T, E>)),
     );
 }

@@ -9,11 +9,11 @@ import { ProjectNewAdditionalProgramFields } from "../../program/partner-program
 export abstract class ProjectProgramRepositoryPort {
   abstract assignProjectToProgram(
     projectId: number,
-    partnerProgramId: number
+    partnerProgramId: number,
   ): Observable<ProjectAssign>;
 
   abstract sendNewProjectFieldsValues(
     projectId: number,
-    newValues: ProjectNewAdditionalProgramFields[]
+    newValues: ProjectNewAdditionalProgramFields[],
   ): Observable<Project>;
 }

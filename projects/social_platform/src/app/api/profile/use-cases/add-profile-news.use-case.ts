@@ -13,11 +13,11 @@ export class AddProfileNewsUseCase {
 
   execute(
     userId: string,
-    news: { text: string; files: string[] }
+    news: { text: string; files: string[] },
   ): Observable<Result<ProfileNews, { kind: "add_profile_news_error"; cause?: unknown }>> {
     return this.profileNewsRepositoryPort.addNews(userId, news).pipe(
       map(result => ok<ProfileNews>(result)),
-      catchError(error => of(fail({ kind: "add_profile_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "add_profile_news_error" as const, cause: error }))),
     );
   }
 }

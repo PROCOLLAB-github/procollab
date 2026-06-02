@@ -15,11 +15,11 @@ export class UpdateGoalUseCase {
   execute(
     projectId: number,
     goalId: number,
-    goal: GoalFormData
+    goal: GoalFormData,
   ): Observable<Result<Goal, { kind: "update_project_goal_error"; cause?: unknown }>> {
     return this.projectGoalsRepositoryPort.editGoal(projectId, goalId, goal).pipe(
       map(result => ok<Goal>(result)),
-      catchError(error => of(fail({ kind: "update_project_goal_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "update_project_goal_error" as const, cause: error }))),
     );
   }
 }

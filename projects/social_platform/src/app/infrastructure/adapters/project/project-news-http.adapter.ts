@@ -16,7 +16,7 @@ export class ProjectNewsHttpAdapter {
   fetchNews(projectId: string): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get<ApiPagination<FeedNews>>(
       `${this.PROJECTS_URL}/${projectId}/news/`,
-      new HttpParams({ fromObject: { limit: 100 } })
+      new HttpParams({ fromObject: { limit: 100 } }),
     );
   }
 
@@ -31,7 +31,7 @@ export class ProjectNewsHttpAdapter {
   setNewsViewed(projectId: number, newsId: number): Observable<void> {
     return this.apiService.post<void>(
       `${this.PROJECTS_URL}/${projectId}/news/${newsId}/set_viewed/`,
-      {}
+      {},
     );
   }
 
@@ -48,7 +48,7 @@ export class ProjectNewsHttpAdapter {
   editNews(projectId: string, newsId: number, newsItem: Partial<FeedNews>): Observable<FeedNews> {
     return this.apiService.patch<FeedNews>(
       `${this.PROJECTS_URL}/${projectId}/news/${newsId}/`,
-      newsItem
+      newsItem,
     );
   }
 }

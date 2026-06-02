@@ -16,7 +16,7 @@ export class GetIndustriesUseCase {
   execute(): Observable<Result<Industry[], GetIndustriesError>> {
     return this.industryRepository.getAll().pipe(
       map(industries => ok<Industry[]>(industries)),
-      catchError(error => of(fail<GetIndustriesError>({ kind: "server_error", cause: error })))
+      catchError(error => of(fail<GetIndustriesError>({ kind: "server_error", cause: error }))),
     );
   }
 }

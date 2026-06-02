@@ -26,7 +26,7 @@ export class ProjectResourceHttpAdapter {
   editResource(
     projectId: number,
     resourceId: number,
-    params: Omit<ResourceDto, "projectId">
+    params: Omit<ResourceDto, "projectId">,
   ): Observable<Resource> {
     return this.apiService.patch(`${this.PROJECTS_URL}/${projectId}/resources/${resourceId}/`, {
       projectId,
@@ -37,7 +37,7 @@ export class ProjectResourceHttpAdapter {
   /** Удаляется только сам ресурс, проект и компании не затрагиваются. */
   deleteResource(projectId: number, resourceId: number): Observable<void> {
     return this.apiService.delete<void>(
-      `${this.PROJECTS_URL}/${projectId}/resources/${resourceId}/`
+      `${this.PROJECTS_URL}/${projectId}/resources/${resourceId}/`,
     );
   }
 }

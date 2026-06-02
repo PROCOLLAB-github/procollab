@@ -10,17 +10,17 @@
   ></i>
   <div class="search__other" (click)="stopPropagation($event)">
     @if (!open) {
-    <p class="text-body-12 search__text" (click)="onSwitchSearch(true)">Поиск</p>
+      <p class="text-body-12 search__text" (click)="onSwitchSearch(true)">Поиск</p>
     } @else {
-    <div class="search__input">
-      <input
-        #inputEl
-        class="text-body-12"
-        type="text"
-        [placeholder]="placeholder()"
-        (input)="onInput($event)"
-      />
-    </div>
+      <div class="search__input">
+        <input
+          #inputEl
+          class="text-body-12"
+          type="text"
+          [placeholder]="placeholder()"
+          (input)="onInput($event)"
+        />
+      </div>
     }
   </div>
 </div>

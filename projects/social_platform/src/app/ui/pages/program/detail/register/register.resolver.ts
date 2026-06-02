@@ -8,7 +8,7 @@ import { GetProgramDataSchemaUseCase } from "@api/program/use-cases/get-program-
 
 /** Предзагружает схему полей регистрации в программе. */
 export const ProgramRegisterResolver: ResolveFn<ProgramDataSchema> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getProgramDataSchemaUseCase = inject(GetProgramDataSchemaUseCase);
 

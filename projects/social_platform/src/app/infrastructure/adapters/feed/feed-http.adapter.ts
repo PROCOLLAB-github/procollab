@@ -17,7 +17,7 @@ export class FeedHttpAdapter {
   fetchFeed(offset: number, limit: number, type: string): Observable<ApiPagination<FeedItem>> {
     return this.apiService.get<ApiPagination<FeedItem>>(
       `${this.FEED_URL}/`,
-      new HttpParams({ fromObject: { limit, offset, type } })
+      new HttpParams({ fromObject: { limit, offset, type } }),
     );
   }
 }

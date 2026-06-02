@@ -14,7 +14,7 @@ export class GetCoursesUseCase {
   execute(): Observable<Result<CourseCard[], { kind: "get_courses_error"; cause?: unknown }>> {
     return this.coursesRepository.getCourses().pipe(
       map(courses => ok<CourseCard[]>(courses)),
-      catchError(error => of(fail({ kind: "get_courses_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_courses_error" as const, cause: error }))),
     );
   }
 }

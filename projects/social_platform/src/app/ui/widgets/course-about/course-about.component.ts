@@ -43,7 +43,7 @@ export class CourseAboutComponent implements AfterViewInit {
       "description",
       elem,
       "expanded",
-      this.expandService.readFullDescription()
+      this.expandService.readFullDescription(),
     );
   }
 }

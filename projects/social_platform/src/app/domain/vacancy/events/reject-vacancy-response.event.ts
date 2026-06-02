@@ -17,7 +17,7 @@ export function rejectVacancyResponse(
   vacancyResponseId: number,
   vacancyId: number,
   projectId: number,
-  userId: number
+  userId: number,
 ): RejectVacancyResponse {
   return {
     type: "RejectVacancyResponse",

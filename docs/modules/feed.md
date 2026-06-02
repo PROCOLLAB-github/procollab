@@ -43,7 +43,7 @@ abstract class FeedRepositoryPort {
   fetchFeed(
     offset: number,
     limit: number,
-    type: string // "project|vacancy|news" (joined with FILTER_SPLIT_SYMBOL = "|")
+    type: string, // "project|vacancy|news" (joined with FILTER_SPLIT_SYMBOL = "|")
   ): Observable<ApiPagination<FeedItem>>;
 }
 ```

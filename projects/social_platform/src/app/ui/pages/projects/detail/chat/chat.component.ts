@@ -25,12 +25,19 @@ import { AppRoutes } from "@api/paths/app-routes";
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.scss",
-  imports: [AvatarComponent, IconComponent, ChatWindowComponent, RouterLink, FileItemComponent, MessageInputComponent],
+  imports: [
+    AvatarComponent,
+    IconComponent,
+    ChatWindowComponent,
+    RouterLink,
+    FileItemComponent,
+    MessageInputComponent,
+  ],
   providers: [ChatDirectInfoService, ChatDirectUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
-  readonly messageInputComponent = viewChild(MessageInputComponent)
+  readonly messageInputComponent = viewChild(MessageInputComponent);
 
   private readonly navService = inject(NavService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

@@ -10,7 +10,7 @@ export abstract class ChatRepositoryPort {
     id: number,
     type: "directs" | "projects",
     offset?: number,
-    limit?: number
+    limit?: number,
   ): Observable<ApiPagination<ChatMessage>>;
 
   abstract loadProjectFiles(projectId: number): Observable<ChatFile[]>;

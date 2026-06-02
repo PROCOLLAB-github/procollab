@@ -16,7 +16,7 @@ describe("OnboardingService", () => {
       fetchProfile: of({}),
       fetchUserRoles: of([]),
       fetchChangeableRoles: of([]),
-    }
+    },
   );
 
   beforeEach(() => {

@@ -10,7 +10,7 @@ export abstract class ProjectPartnerRepositoryPort {
   abstract updatePartner(
     projectId: number,
     companyId: number,
-    params: Pick<PartnerDto, "contribution" | "decisionMaker">
+    params: Pick<PartnerDto, "contribution" | "decisionMaker">,
   ): Observable<Partner[]>;
   abstract deletePartner(projectId: number, companyId: number): Observable<void>;
 }

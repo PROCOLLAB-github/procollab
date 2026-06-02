@@ -22,7 +22,7 @@ export class ProjectRatingRepository implements ProjectRatingRepositoryPort {
   postFilters(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<ProjectRate>> {
     return this.projectRatingAdapter.postFilters(programId, filters, params);
   }
@@ -38,7 +38,7 @@ export class ProjectRatingRepository implements ProjectRatingRepositoryPort {
   */
   formValuesToDTO(
     criteria: ProjectRatingCriterion[],
-    outputVals: Record<string, string | number | boolean>
+    outputVals: Record<string, string | number | boolean>,
   ): ProjectRatingCriterionOutput[] {
     const output: ProjectRatingCriterionOutput[] = [];
     const normalizedOutputVals = { ...outputVals };

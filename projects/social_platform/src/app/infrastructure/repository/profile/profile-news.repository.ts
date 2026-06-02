@@ -49,9 +49,9 @@ export class ProfileNewsRepository implements NewsRepositoryPort<ProfileNews> {
           tap(() => {
             readNews.add(id);
             this.storageService.setItem("readNews", [...readNews], sessionStorage);
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
   }
 
@@ -66,7 +66,7 @@ export class ProfileNewsRepository implements NewsRepositoryPort<ProfileNews> {
   editNews(
     userId: string,
     newsId: number,
-    newsItem: Partial<ProfileNews>
+    newsItem: Partial<ProfileNews>,
   ): Observable<ProfileNews> {
     return this.profileNewsAdapter
       .editNews(userId, newsId, newsItem)

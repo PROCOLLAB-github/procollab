@@ -55,7 +55,7 @@ export class InviteRepository implements InviteRepositoryPort {
     userId: number,
     projectId: number,
     role: string,
-    specialization?: string
+    specialization?: string,
   ): Observable<Invite> {
     return this.inviteAdapter
       .sendForUser(userId, projectId, role, specialization)
@@ -106,8 +106,8 @@ export class InviteRepository implements InviteRepositoryPort {
           invite.sender = userFromRaw(raw.sender);
           invite.user = userFromRaw(raw.user);
           return invite;
-        })
-      )
+        }),
+      ),
     );
   }
 

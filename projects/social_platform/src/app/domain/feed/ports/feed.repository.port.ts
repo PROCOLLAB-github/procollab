@@ -9,6 +9,6 @@ export abstract class FeedRepositoryPort {
   abstract fetchFeed(
     offset: number,
     limit: number,
-    type: string
+    type: string,
   ): Observable<ApiPagination<FeedItem>>;
 }

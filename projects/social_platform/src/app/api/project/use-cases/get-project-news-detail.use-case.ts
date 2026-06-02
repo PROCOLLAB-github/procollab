@@ -13,13 +13,13 @@ export class GetProjectNewsDetailUseCase {
 
   execute(
     projectId: string,
-    newsId: string
+    newsId: string,
   ): Observable<Result<FeedNews, { kind: "get_project_news_detail_error"; cause?: unknown }>> {
     return this.projectNewsRepositoryPort.fetchNewsDetail(projectId, newsId).pipe(
       map(news => ok<FeedNews>(news)),
       catchError(error =>
-        of(fail({ kind: "get_project_news_detail_error" as const, cause: error }))
-      )
+        of(fail({ kind: "get_project_news_detail_error" as const, cause: error })),
+      ),
     );
   }
 }

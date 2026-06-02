@@ -16,7 +16,7 @@ export class LoadProjectFilesUseCase {
   execute(projectId: number): Observable<Result<ChatFile[], LoadProjectFilesError>> {
     return this.chatRepository.loadProjectFiles(projectId).pipe(
       map(files => ok<ChatFile[]>(files)),
-      catchError(() => of(fail<LoadProjectFilesError>({ kind: "server_error" })))
+      catchError(() => of(fail<LoadProjectFilesError>({ kind: "server_error" }))),
     );
   }
 }

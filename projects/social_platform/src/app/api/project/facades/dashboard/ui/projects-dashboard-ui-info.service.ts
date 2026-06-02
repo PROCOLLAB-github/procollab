@@ -18,7 +18,7 @@ export class ProjectsDashboardUIInfoService {
   applySetDashboardItems(
     all: ApiPagination<Project>,
     my: ApiPagination<Project>,
-    subs: ApiPagination<Project>
+    subs: ApiPagination<Project>,
   ): void {
     this.profileSubs.set(subs.results);
 
@@ -32,7 +32,7 @@ export class ProjectsDashboardUIInfoService {
   private dashBoardItemsBuilder(
     myProjects: Project[],
     subsProjects: Project[],
-    allProjects: Project[]
+    allProjects: Project[],
   ): void {
     this.dashboardItems.set(
       dashboardItemBuilder(
@@ -40,8 +40,8 @@ export class ProjectsDashboardUIInfoService {
         ["my", "subscriptions", "all"],
         ["мои проекты", "мои подписки", "витрина проектов"],
         ["main", "favourities", "folders"],
-        [myProjects, subsProjects, allProjects]
-      )
+        [myProjects, subsProjects, allProjects],
+      ),
     );
   }
 }

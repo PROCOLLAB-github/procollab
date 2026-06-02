@@ -126,7 +126,7 @@ export class LessonInfoService {
       .pipe(
         map(data => data["data"] as CourseLesson | null),
         filter((lessonInfo): lessonInfo is CourseLesson => !!lessonInfo),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: lessonInfo => {
@@ -180,7 +180,7 @@ export class LessonInfoService {
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.lessonUIInfoService.isComplete.set(this.router.url.includes("results"));

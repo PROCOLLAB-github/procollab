@@ -212,7 +212,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   protected readonly roles = this.profileFormService.roles;
 
   protected readonly profileFormSubmitting = computed(() =>
-    isLoading(this.profileEditInfoService.profileFormSubmitting$())
+    isLoading(this.profileEditInfoService.profileFormSubmitting$()),
   );
 
   // Для управления открытыми группами специализаций

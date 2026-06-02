@@ -16,7 +16,7 @@ export class ProjectsDetailWorkSectionInfoService {
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly projectsDetailWorkSectionUIInfoService = inject(
-    ProjectsDetailWorkSectionUIInfoService
+    ProjectsDetailWorkSectionUIInfoService,
   );
 
   private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
@@ -28,7 +28,7 @@ export class ProjectsDetailWorkSectionInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (responses: VacancyResponse[]) => {

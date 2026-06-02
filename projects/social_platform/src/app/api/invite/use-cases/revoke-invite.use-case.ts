@@ -14,12 +14,12 @@ export class RevokeInviteUseCase {
   private readonly eventBus = inject(EventBus);
 
   execute(
-    invitationId: number
+    invitationId: number,
   ): Observable<Result<void, { kind: "revoke_invite_error"; cause?: unknown }>> {
     return this.inviteRepositoryPort.revokeInvite(invitationId).pipe(
       tap(() => this.eventBus.emit(revokeInvite(invitationId))),
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "revoke_invite_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "revoke_invite_error" as const, cause: error }))),
     );
   }
 }

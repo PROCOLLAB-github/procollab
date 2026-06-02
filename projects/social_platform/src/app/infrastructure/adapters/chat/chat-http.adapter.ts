@@ -17,7 +17,7 @@ export class ChatHttpAdapter {
     id: number,
     type: "directs" | "projects",
     offset?: number,
-    limit?: number
+    limit?: number,
   ): Observable<ApiPagination<ChatMessage>> {
     let queries = new HttpParams();
     if (offset !== undefined) queries = queries.set("offset", offset);
@@ -25,7 +25,7 @@ export class ChatHttpAdapter {
 
     return this.apiService.get<ApiPagination<ChatMessage>>(
       `${this.chatsUrl}/${type}/${id}/messages/`,
-      queries
+      queries,
     );
   }
 

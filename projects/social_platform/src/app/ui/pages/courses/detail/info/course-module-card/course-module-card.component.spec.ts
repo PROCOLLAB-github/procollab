@@ -57,7 +57,7 @@ describe("CourseModuleCardComponent", () => {
             { id: 1, order: 1, title: "a", taskCount: 0, percent: 0, isAvailable: true } as never,
             { id: 2, order: 2, title: "b", taskCount: 0, percent: 0, isAvailable: true } as never,
           ],
-        })
+        }),
       );
 
       const level = fixture.debugElement.query(By.css(".skill-card__level"));
@@ -80,7 +80,7 @@ describe("CourseModuleCardComponent", () => {
           lessons: [
             { id: 1, order: 1, title: "a", taskCount: 0, percent: 0, isAvailable: true } as never,
           ],
-        })
+        }),
       );
 
       const toggle = fixture.debugElement.query(By.css(".skill-card__expand"));
@@ -95,7 +95,7 @@ describe("CourseModuleCardComponent", () => {
           lessons: [
             { id: 1, order: 1, title: "a", taskCount: 0, percent: 0, isAvailable: true } as never,
           ],
-        })
+        }),
       );
       expect(component.isExpanded).toBe(false);
 
@@ -129,7 +129,7 @@ describe("CourseModuleCardComponent", () => {
             { id: 2, order: 2, title: "b", taskCount: 2, percent: 0, isAvailable: true } as never,
             { id: 3, order: 3, title: "c", taskCount: 3, percent: 0, isAvailable: true } as never,
           ],
-        })
+        }),
       );
 
       const items = fixture.debugElement.queryAll(By.css(".expandable__item"));

@@ -27,7 +27,7 @@ export const FeedResolver: ResolveFn<ApiPagination<FeedItem>> = route => {
               results: [],
               next: "",
               previous: "",
-            }
-      )
+            },
+      ),
     );
 };

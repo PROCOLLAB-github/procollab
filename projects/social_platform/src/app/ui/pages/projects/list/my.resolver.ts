@@ -24,7 +24,7 @@ export const ProjectsMyResolver: ResolveFn<ApiPagination<Project>> = () => {
               results: [],
               next: "",
               previous: "",
-            }
-      )
+            },
+      ),
     );
 };

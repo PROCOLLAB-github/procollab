@@ -60,7 +60,7 @@ export class DetailProjectInfoService {
       .pipe(
         map(r => r["data"][0]),
         concatMap(p => this.leaveProjectUseCase.execute(p.id)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
         if (!result.ok) {
@@ -80,7 +80,7 @@ export class DetailProjectInfoService {
 
   applyUpdateStage(
     stage: "team" | "vacancies" | "chat" | "work-section" | "gant-diagram" | "kanban",
-    isStage: boolean
+    isStage: boolean,
   ): void {
     switch (stage) {
       case "team":

@@ -14,11 +14,11 @@ export class EditProfileNewsUseCase {
   execute(
     userId: string,
     newsId: number,
-    news: Partial<ProfileNews>
+    news: Partial<ProfileNews>,
   ): Observable<Result<ProfileNews, { kind: "edit_profile_news_error"; cause?: unknown }>> {
     return this.profileNewsRepositoryPort.editNews(userId, newsId, news).pipe(
       map(result => ok<ProfileNews>(result)),
-      catchError(error => of(fail({ kind: "edit_profile_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "edit_profile_news_error" as const, cause: error }))),
     );
   }
 }

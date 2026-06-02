@@ -5,7 +5,7 @@
     <div class="header__right">
       <div (clickOutside)="onClickOutside()" class="header__bell">
         @if ((showBall | async) || hasInvites) {
-        <div class="attention"></div>
+          <div class="attention"></div>
         }
         <i
           appIcon
@@ -16,25 +16,25 @@
           (click)="showNotifications = true"
         ></i>
         @if (showNotifications) {
-        <div class="header__notifications notifications">
-          <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
-          <ul class="notifications__invites">
-            @for (invite of invites; track invite.id) {
-            <li class="notifications__invite">
-              <app-invite-manage-card
-                [invite]="invite"
-                (accept)="onAcceptInvite($event)"
-                (reject)="onRejectInvite($event)"
-              ></app-invite-manage-card>
-            </li>
-            }
-          </ul>
-        </div>
+          <div class="header__notifications notifications">
+            <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+            <ul class="notifications__invites">
+              @for (invite of invites; track invite.id) {
+                <li class="notifications__invite">
+                  <app-invite-manage-card
+                    [invite]="invite"
+                    (accept)="onAcceptInvite($event)"
+                    (reject)="onRejectInvite($event)"
+                  ></app-invite-manage-card>
+                </li>
+              }
+            </ul>
+          </div>
         }
       </div>
       <div class="header__separator"></div>
       @if (authService.profile | async; as user) {
-      <app-profile-info [user]="user"></app-profile-info>
+        <app-profile-info [user]="user"></app-profile-info>
       }
     </div>
   </div>

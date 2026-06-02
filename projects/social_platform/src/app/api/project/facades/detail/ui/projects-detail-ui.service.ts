@@ -35,8 +35,8 @@ export class ProjectsDetailUIInfoService {
           this.project()!.goals,
           this.project()!.partners,
         ],
-        ["string", "string", "string", "array", "array"]
-      ) ?? []
+        ["string", "string", "string", "array", "array"],
+      ) ?? [],
     );
   }
 
@@ -53,7 +53,7 @@ export class ProjectsDetailUIInfoService {
 
   applyMembersManipulation(id: number): void {
     this.project.update(p =>
-      p ? { ...p, collaborators: p.collaborators.filter(c => c.userId !== id) } : p
+      p ? { ...p, collaborators: p.collaborators.filter(c => c.userId !== id) } : p,
     );
   }
 

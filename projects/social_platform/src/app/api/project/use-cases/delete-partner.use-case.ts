@@ -12,11 +12,13 @@ export class DeletePartnerUseCase {
 
   execute(
     projectId: number,
-    partnerId: number
+    partnerId: number,
   ): Observable<Result<void, { kind: "delete_project_partner_error"; cause?: unknown }>> {
     return this.projectPartnerRepositoryPort.deletePartner(projectId, partnerId).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "delete_project_partner_error" as const, cause: error })))
+      catchError(error =>
+        of(fail({ kind: "delete_project_partner_error" as const, cause: error })),
+      ),
     );
   }
 }

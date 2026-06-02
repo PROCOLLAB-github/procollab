@@ -35,7 +35,7 @@ export function isInitial<T, E>(state: AsyncState<T, E>): state is { status: "in
 }
 
 export function isLoading<T, E>(
-  state: AsyncState<T, E>
+  state: AsyncState<T, E>,
 ): state is { status: "loading"; previous?: T } {
   return state.status === "loading";
 }

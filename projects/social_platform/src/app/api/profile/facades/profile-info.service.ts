@@ -90,14 +90,14 @@ export class ProfileInfoService {
       ROLES_CACHE_KEY,
       CACHE_VERSION,
       CACHE_TTL,
-      raw => plainToInstance(UserRole, raw as object[]) as UserRole[]
+      raw => plainToInstance(UserRole, raw as object[]) as UserRole[],
     );
 
     const changeableCached = readCache<UserRole[]>(
       CHANGEABLE_ROLES_CACHE_KEY,
       CACHE_VERSION,
       CACHE_TTL,
-      raw => plainToInstance(UserRole, raw as object[]) as UserRole[]
+      raw => plainToInstance(UserRole, raw as object[]) as UserRole[],
     );
 
     if (rolesCached) this.roles$.set(success(rolesCached));
@@ -132,7 +132,7 @@ export class ProfileInfoService {
       changeableRoles: this.authRepository.fetchChangeableRoles(),
     }).pipe(
       finalize(() => (this.profileInflight = null)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     this.profileInflight.subscribe({
@@ -162,7 +162,7 @@ export class ProfileInfoService {
 
     this.leaderInflight = this.authRepository.fetchLeaderProjects().pipe(
       finalize(() => (this.leaderInflight = null)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     this.leaderInflight.subscribe({

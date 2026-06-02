@@ -12,11 +12,11 @@ export class GetProjectGoalsUseCase {
   private readonly projectGoalsRepositoryPort = inject(ProjectGoalsRepositoryPort);
 
   execute(
-    projectId: number
+    projectId: number,
   ): Observable<Result<Goal[], { kind: "get_project_goals_error"; cause?: unknown }>> {
     return this.projectGoalsRepositoryPort.fetchAll(projectId).pipe(
       map(goals => ok<Goal[]>(goals)),
-      catchError(error => of(fail({ kind: "get_project_goals_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_project_goals_error" as const, cause: error }))),
     );
   }
 }

@@ -25,12 +25,12 @@ export class RegisterUseCase {
             fail<RegisterError>({
               kind: "validation_error",
               errors: (error.error ?? {}) as RegisterFieldErrors,
-            })
+            }),
           );
         }
 
         return of(fail<RegisterError>({ kind: "unknown", cause: error }));
-      })
+      }),
     );
   }
 }

@@ -26,7 +26,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
  */
 export const yearRangeValidators = (
   entryYearValue: string,
-  completionYearValue: string
+  completionYearValue: string,
 ): ValidatorFn => {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     const entryYearControl = formGroup.get(entryYearValue);

@@ -61,7 +61,7 @@ export class ProfileDetailInfoService {
           };
         }),
         filter(data => !!data["data"]["user"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: data => {
@@ -86,7 +86,7 @@ export class ProfileDetailInfoService {
 
         this.newsInfoService.applyAddNews(result.value);
       }),
-      takeUntilDestroyed(this.destroyRef)
+      takeUntilDestroyed(this.destroyRef),
     );
   }
 
@@ -121,7 +121,7 @@ export class ProfileDetailInfoService {
           if (!result.ok) return;
 
           this.newsInfoService.applyEditNews(result.value);
-        })
+        }),
       );
   }
 
@@ -146,7 +146,7 @@ export class ProfileDetailInfoService {
       .pipe(
         map(r => r["id"]),
         concatMap(userId => this.fetchProfileNewsUseCase.execute(Number(userId))),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
         if (!result.ok) return;

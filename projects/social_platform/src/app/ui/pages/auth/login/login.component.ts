@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
   protected readonly showPassword = this.authUIInfoService.showPassword;
   protected readonly isHintLoginVisible = computed(() =>
-    this.tooltipInfoService.isVisible("login")
+    this.tooltipInfoService.isVisible("login"),
   );
   protected readonly AppRoutes = AppRoutes;
 

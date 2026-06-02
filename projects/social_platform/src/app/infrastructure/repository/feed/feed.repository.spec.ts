@@ -22,7 +22,7 @@ describe("FeedRepository", () => {
   it("делегирует fetchFeed(offset, limit, type) в adapter", () => {
     setup();
     adapter.fetchFeed.and.returnValue(
-      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<FeedItem>)
+      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<FeedItem>),
     );
 
     repository.fetchFeed(0, 10, "all").subscribe();

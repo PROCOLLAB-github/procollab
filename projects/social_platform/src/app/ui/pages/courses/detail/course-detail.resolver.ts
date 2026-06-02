@@ -27,6 +27,6 @@ export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
       return getCourseStructureUseCase
         .execute(courseId)
         .pipe(map(structureResult => [detail, structureResult.ok ? structureResult.value : null]));
-    })
+    }),
   );
 };

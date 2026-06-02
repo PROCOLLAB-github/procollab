@@ -23,6 +23,6 @@ export abstract class CoursesRepositoryPort {
     taskId: number,
     answerText?: string,
     optionIds?: number[],
-    fileIds?: number[]
+    fileIds?: number[],
   ): Observable<TaskAnswerResponse>;
 }

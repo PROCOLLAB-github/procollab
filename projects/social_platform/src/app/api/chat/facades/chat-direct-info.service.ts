@@ -76,7 +76,7 @@ export class ChatDirectInfoService {
           this.chatDirectUIInfoService.currentChatId.set(this.getChatId());
         }),
         switchMap(() => this.fetchMessages(type)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
 
@@ -109,8 +109,8 @@ export class ChatDirectInfoService {
 
   private getChatId(): string {
     return this.chatType === "direct"
-      ? this.chat()?.id ?? ""
-      : this.route.parent?.snapshot.paramMap.get("projectId") ?? "";
+      ? (this.chat()?.id ?? "")
+      : (this.route.parent?.snapshot.paramMap.get("projectId") ?? "");
   }
 
   private fetchMessages(type: "direct" | "project"): Observable<ApiPagination<ChatMessage>> {
@@ -119,7 +119,7 @@ export class ChatDirectInfoService {
         +this.getChatId(),
         type === "direct" ? "directs" : "projects",
         this.messages().length > 0 ? this.messages().length : 0,
-        this.chatDirectUIInfoService.messagesPerFetch
+        this.chatDirectUIInfoService.messagesPerFetch,
       )
       .pipe(
         tap(result => {
@@ -130,8 +130,8 @@ export class ChatDirectInfoService {
         map(result =>
           result.ok
             ? result.value
-            : ({ count: 0, results: [], next: "", previous: "" } as ApiPagination<ChatMessage>)
-        )
+            : ({ count: 0, results: [], next: "", previous: "" } as ApiPagination<ChatMessage>),
+        ),
       );
   }
 
@@ -213,7 +213,7 @@ export class ChatDirectInfoService {
         text: message.text,
         replyTo:
           message.replyTo != null
-            ? this.messages().find(m => m.id === message.replyTo) ?? null
+            ? (this.messages().find(m => m.id === message.replyTo) ?? null)
             : null,
         files: [],
         isEdited: false,
@@ -239,7 +239,7 @@ export class ChatDirectInfoService {
     // Бэк по edit_message тоже шлёт ack без тела — без локального апдейта отредактированный текст
     // не появляется до перезагрузки. Подменяем текст в списке сразу.
     this.chatDirectUIInfoService.messages.update(list =>
-      list.map(m => (m.id === message.id ? { ...m, text: message.text, isEdited: true } : m))
+      list.map(m => (m.id === message.id ? { ...m, text: message.text, isEdited: true } : m)),
     );
   }
 

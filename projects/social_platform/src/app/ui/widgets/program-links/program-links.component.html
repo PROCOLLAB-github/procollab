@@ -6,21 +6,21 @@
     <i appIcon [icon]="icon()" class="links__icon" appSquare="12"></i>
   </div>
   @if (links().length) {
-  <ul class="links__list">
-    @for (link of links(); track $index) {
-    <li class="links__item text-body-10">
-      @if (link.url | userLinks; as l) {
-      <a
-        class="links__link"
-        target="_blank"
-        [href]="link.url.includes('@') ? 'mailto:' + link.url : link.url"
-      >
-        <i appIcon [icon]="l.iconName" appSquare="10"></i>
-        <span>{{ link.label | truncate: 30 }}</span>
-      </a>
+    <ul class="links__list">
+      @for (link of links(); track $index) {
+        <li class="links__item text-body-10">
+          @if (link.url | userLinks; as l) {
+            <a
+              class="links__link"
+              target="_blank"
+              [href]="link.url.includes('@') ? 'mailto:' + link.url : link.url"
+            >
+              <i appIcon [icon]="l.iconName" appSquare="10"></i>
+              <span>{{ link.label | truncate: 30 }}</span>
+            </a>
+          }
+        </li>
       }
-    </li>
-    }
-  </ul>
+    </ul>
   }
 </div>

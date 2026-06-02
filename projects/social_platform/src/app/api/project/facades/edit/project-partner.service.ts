@@ -117,7 +117,7 @@ export class ProjectPartnerService {
     name?: string,
     inn?: string,
     contribution?: string,
-    decisionMaker?: string
+    decisionMaker?: string,
   ): void {
     const partnerFormArray = this.partners;
 
@@ -207,7 +207,7 @@ export class ProjectPartnerService {
       .filter(({ partner }) => partner.id === null)
       .filter(
         ({ partner }) =>
-          !!partner.name && !!partner.inn && !!partner.contribution && !!partner.decisionMaker
+          !!partner.name && !!partner.inn && !!partner.contribution && !!partner.decisionMaker,
       )
       .map(({ partner, idx }) => {
         const decisionMakerPath = String(partner.decisionMaker).split("/");
@@ -233,9 +233,9 @@ export class ProjectPartnerService {
           map(result =>
             result.ok
               ? { res: result.value, idx }
-              : { __error: true, err: result.error.cause, original: partner, idx }
+              : { __error: true, err: result.error.cause, original: partner, idx },
           ),
-          catchError(err => of({ __error: true, err, original: partner, idx }))
+          catchError(err => of({ __error: true, err, original: partner, idx })),
         );
       });
 
@@ -265,7 +265,7 @@ export class ProjectPartnerService {
         });
 
         this.syncPartnerItems(this.partners);
-      })
+      }),
     );
   }
 }

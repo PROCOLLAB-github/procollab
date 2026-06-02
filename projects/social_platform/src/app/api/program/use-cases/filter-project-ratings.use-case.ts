@@ -16,13 +16,15 @@ export class FilterProjectRatingsUseCase {
   execute(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<
     Result<ApiPagination<ProjectRate>, { kind: "filter_project_ratings_error"; cause?: unknown }>
   > {
     return this.projectRatingRepositoryPort.postFilters(programId, filters, params).pipe(
       map(rating => ok<ApiPagination<ProjectRate>>(rating)),
-      catchError(error => of(fail({ kind: "filter_project_ratings_error" as const, cause: error })))
+      catchError(error =>
+        of(fail({ kind: "filter_project_ratings_error" as const, cause: error })),
+      ),
     );
   }
 }

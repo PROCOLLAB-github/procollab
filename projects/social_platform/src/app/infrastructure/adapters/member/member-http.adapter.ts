@@ -16,7 +16,7 @@ export class MemberHttpAdapter {
   getMembers(
     skip: number,
     take: number,
-    otherParams?: Record<string, string | number | boolean>
+    otherParams?: Record<string, string | number | boolean>,
   ): Observable<ApiPagination<User>> {
     let allParams = new HttpParams({ fromObject: { user_type: 1, limit: take, offset: skip } });
     if (otherParams) {

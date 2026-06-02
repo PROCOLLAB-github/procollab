@@ -22,7 +22,7 @@ export class RejectInviteUseCase {
         }
       }),
       map(() => ok<void>(undefined)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

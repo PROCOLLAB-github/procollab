@@ -16,11 +16,11 @@ export class GetSpecializationsInlineUseCase {
   execute(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<Result<ApiPagination<Specialization>, GetNestedError>> {
     return this.specializationRepository.getSpecializationsInline(search, limit, offset).pipe(
       map(specs => ok<ApiPagination<Specialization>>(specs)),
-      catchError(error => of(fail({ kind: "server_error", cause: error } as const)))
+      catchError(error => of(fail({ kind: "server_error", cause: error } as const))),
     );
   }
 }

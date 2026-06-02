@@ -47,7 +47,7 @@ describe("ProjectSubscriptionRepository", () => {
     setup();
     const params = new HttpParams();
     adapter.getSubscriptions.and.returnValue(
-      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Project>)
+      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Project>),
     );
     repository.getSubscriptions(10, params).subscribe();
     expect(adapter.getSubscriptions).toHaveBeenCalledOnceWith(10, params);

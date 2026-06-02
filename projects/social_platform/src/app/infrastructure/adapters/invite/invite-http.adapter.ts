@@ -16,7 +16,7 @@ export class InviteHttpAdapter {
     userId: number,
     projectId: number,
     role: string,
-    specialization?: string
+    specialization?: string,
   ): Observable<Invite> {
     return this.apiService.post(`${this.INVITES_URL}/`, {
       user: userId,
@@ -49,7 +49,7 @@ export class InviteHttpAdapter {
   getByProject(projectId: number): Observable<Invite[]> {
     return this.apiService.get<Invite[]>(
       `${this.INVITES_URL}/`,
-      new HttpParams({ fromObject: { project: projectId, user: "any" } })
+      new HttpParams({ fromObject: { project: projectId, user: "any" } }),
     );
   }
 }

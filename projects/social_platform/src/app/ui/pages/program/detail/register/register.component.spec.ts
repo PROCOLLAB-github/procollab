@@ -35,7 +35,7 @@ describe("ProgramRegisterComponent", () => {
       programId?: string;
       schema?: unknown;
       formValid?: boolean;
-    } = {}
+    } = {},
   ): Promise<void> {
     const { programId = "42", schema = SCHEMA, formValid = true } = options;
 

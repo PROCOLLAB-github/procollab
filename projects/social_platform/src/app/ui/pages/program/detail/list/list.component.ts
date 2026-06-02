@@ -84,7 +84,7 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
   protected readonly profileProjSubsIds = this.programDetailListUIInfoService.profileProjSubsIds;
 
   protected readonly loadingExports = computed(() =>
-    isLoading(this.exportFileInfoService.loadingExports$())
+    isLoading(this.exportFileInfoService.loadingExports$()),
   );
 
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;

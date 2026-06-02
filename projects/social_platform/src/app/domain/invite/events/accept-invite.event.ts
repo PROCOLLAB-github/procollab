@@ -17,7 +17,7 @@ export function acceptInvite(
   inviteId: number,
   projectId: number,
   userId: number,
-  role: string
+  role: string,
 ): AcceptInvite {
   return {
     type: "AcceptInvite",

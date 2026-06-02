@@ -15,7 +15,7 @@ export interface TaskAnswerSubmitted extends DomainEvent {
 export function taskAnswerSubmitted(
   taskId: number,
   lessonId: number,
-  response: TaskAnswerResponse
+  response: TaskAnswerResponse,
 ): TaskAnswerSubmitted {
   return {
     type: "TaskAnswerSubmitted",

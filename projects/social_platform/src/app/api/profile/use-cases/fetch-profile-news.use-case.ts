@@ -13,13 +13,13 @@ export class FetchProfileNewsUseCase {
   private readonly profileNewsRepositoryPort = inject(PROFILE_NEWS_REPOSITORY);
 
   execute(
-    userId: number
+    userId: number,
   ): Observable<
     Result<ApiPagination<ProfileNews>, { kind: "fetch_profile_news_error"; cause?: unknown }>
   > {
     return this.profileNewsRepositoryPort.fetchNews(String(userId)).pipe(
       map(news => ok<ApiPagination<ProfileNews>>(news)),
-      catchError(error => of(fail({ kind: "fetch_profile_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "fetch_profile_news_error" as const, cause: error }))),
     );
   }
 }

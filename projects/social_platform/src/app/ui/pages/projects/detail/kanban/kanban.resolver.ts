@@ -19,6 +19,6 @@ export const KanbanBoardResolver = (route: ActivatedRouteSnapshot): any => {
 
       return router.createUrlTree(["/projects", projectId, "kanban", kanbanId]);
     }),
-    catchError(() => of(router.createUrlTree(["/projects"])))
+    catchError(() => of(router.createUrlTree(["/projects"]))),
   );
 };

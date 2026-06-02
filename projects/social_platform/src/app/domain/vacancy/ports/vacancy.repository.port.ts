@@ -15,7 +15,7 @@ export abstract class VacancyRepositoryPort {
     workFormat?: string,
     workSchedule?: string,
     salary?: string,
-    searchValue?: string
+    searchValue?: string,
   ): Observable<Vacancy[]>;
 
   abstract getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]>;
@@ -23,7 +23,7 @@ export abstract class VacancyRepositoryPort {
   abstract postVacancy(projectId: number, vacancy: CreateVacancyDto): Observable<Vacancy>;
   abstract updateVacancy(
     vacancyId: number,
-    vacancy: Partial<Vacancy> | CreateVacancyDto
+    vacancy: Partial<Vacancy> | CreateVacancyDto,
   ): Observable<Vacancy>;
   abstract deleteVacancy(vacancyId: number): Observable<void>;
   abstract sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse>;

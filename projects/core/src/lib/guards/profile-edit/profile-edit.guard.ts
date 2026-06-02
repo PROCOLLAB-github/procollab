@@ -9,7 +9,7 @@ import { catchError, map, Observable, of } from "rxjs";
  * Разрешает редактирование только собственного профиля.
  */
 export const ProfileEditRequiredGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ): Observable<boolean | UrlTree> => {
   const router = inject(Router);
   const authRepository = inject(AuthRepositoryPort);
@@ -18,8 +18,8 @@ export const ProfileEditRequiredGuard: CanActivateFn = (
 
   return authRepository.fetchProfile().pipe(
     map(profile =>
-      profile.id === profileId ? true : router.createUrlTree([`/office/profile/${profileId}/`])
+      profile.id === profileId ? true : router.createUrlTree([`/office/profile/${profileId}/`]),
     ),
-    catchError(() => of(router.createUrlTree(["/auth/login"])))
+    catchError(() => of(router.createUrlTree(["/auth/login"]))),
   );
 };

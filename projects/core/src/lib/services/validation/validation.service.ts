@@ -261,10 +261,10 @@ export class ValidationService {
       return isInvalidDate
         ? { invalidDateFormat: { requiredAge: 100 } }
         : isTooYoung
-        ? { tooYoung: { requiredAge: age } }
-        : isTooOld
-        ? { tooOld: { requiredAge: 100 } }
-        : null;
+          ? { tooYoung: { requiredAge: age } }
+          : isTooOld
+            ? { tooOld: { requiredAge: 100 } }
+            : null;
     };
   }
 

@@ -31,7 +31,10 @@ import { LoggerService } from "../logger/logger.service";
   providedIn: "root",
 })
 export class ErrorService {
-  constructor(private readonly router: Router, private readonly loggerService: LoggerService) {}
+  constructor(
+    private readonly router: Router,
+    private readonly loggerService: LoggerService,
+  ) {}
 
   /**
    * Навигация на страницу ошибки 404

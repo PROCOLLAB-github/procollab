@@ -13,7 +13,7 @@ export function readCache<T>(
   key: string,
   version: number,
   ttlMs: number,
-  revive?: (raw: any) => T
+  revive?: (raw: any) => T,
 ): T | null {
   try {
     if (typeof localStorage === "undefined") return null;

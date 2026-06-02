@@ -21,7 +21,7 @@ export const MembersResolver: ResolveFn<ApiPagination<User>> = () => {
             results: [],
             next: "",
             previous: "",
-          }
-    )
+          },
+    ),
   );
 };

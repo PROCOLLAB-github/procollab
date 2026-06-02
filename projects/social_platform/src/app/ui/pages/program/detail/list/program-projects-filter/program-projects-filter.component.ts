@@ -47,7 +47,7 @@ export class ProgramProjectsFilterComponent {
 
   toggleAdditionalFormValues(
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
-    fieldName: string
+    fieldName: string,
   ): void {
     this.programProjectsFilterInfoService.toggleAdditionalFormValues(fieldType, fieldName);
   }

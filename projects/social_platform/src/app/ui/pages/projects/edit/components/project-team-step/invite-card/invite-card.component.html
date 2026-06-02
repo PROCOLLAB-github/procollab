@@ -1,37 +1,37 @@
 <!-- @format -->
 
 @if (invite()) {
-<div class="invite">
-  <div class="invite__info">
-    <div class="invite__top">
-      <p class="text-body-12">{{ invite().role | truncate: 30 }}</p>
-      @if(invite().isAccepted === null) {
-      <p class="text-body-12 invite__status">• приглашение отправлено</p>
-      }
+  <div class="invite">
+    <div class="invite__info">
+      <div class="invite__top">
+        <p class="text-body-12">{{ invite().role | truncate: 30 }}</p>
+        @if (invite().isAccepted === null) {
+          <p class="text-body-12 invite__status">• приглашение отправлено</p>
+        }
+      </div>
+
+      <div class="invite__user">
+        <app-avatar [url]="invite().user.personal.avatar" [size]="40"></app-avatar>
+        <h3 class="text-body-12 invite__role">
+          {{ invite().user.firstName | truncate: 15 }} {{ invite().user.lastName | truncate: 15 }}
+        </h3>
+      </div>
     </div>
 
-    <div class="invite__user">
-      <app-avatar [url]="invite().user.personal.avatar" [size]="40"></app-avatar>
-      <h3 class="text-body-12 invite__role">
-        {{ invite().user.firstName | truncate: 15 }} {{ invite().user.lastName | truncate: 15 }}
-      </h3>
-    </div>
-  </div>
+    <app-button size="big" color="red" (click)="isRemoveInviteModal.set(true)">
+      <i appIcon icon="basket" appSquare="14" class="invite__cross invite__icon"></i>
+    </app-button>
 
-  <app-button size="big" color="red" (click)="isRemoveInviteModal.set(true)">
-    <i appIcon icon="basket" appSquare="14" class="invite__cross invite__icon"></i>
-  </app-button>
-
-  <!-- <div class="invite__icons"> -->
-  <!-- <i
+    <!-- <div class="invite__icons"> -->
+    <!-- <i
       class="invite__edit invite__icon"
       appIcon
       icon="edit-pen"
       appSquare="24"
       (click)="isEditInviteModal.set(true)"
     ></i> -->
-  <!-- </div> -->
-</div>
+    <!-- </div> -->
+  </div>
 }
 
 <app-modal [open]="isRemoveInviteModal()" (openChange)="isRemoveInviteModal.set(false)">
@@ -58,35 +58,36 @@
     <p class="text-body-12" style="text-align: start; margin-top: 20px">Роль в команде</p>
     <form [formGroup]="inviteForm" class="invite__form">
       @if (inviteForm.get("role"); as role) {
-      <fieldset class="invite__role">
-        <app-input
-          size="big"
-          id="invite_role"
-          formControlName="role"
-          [error]="role | controlError"
-          placeholder="Напишите роль участника в команде"
-        ></app-input>
-        @if ((role | controlError: "required")) {
-        <div class="text-body-10 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
-      } @if (inviteForm.get("specialization"); as specialization) {
-      <fieldset>
-        <app-select
-          size="big"
-          id="specialization"
-          formControlName="specialization"
-          placeholder="Специальность"
-          [options]="rolesMembersList"
-        ></app-select>
-        @if ((specialization | controlError: "required")) {
-        <div class="text-body-10 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
+        <fieldset class="invite__role">
+          <app-input
+            size="big"
+            id="invite_role"
+            formControlName="role"
+            [error]="role | controlError"
+            placeholder="Напишите роль участника в команде"
+          ></app-input>
+          @if (role | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+          }
+        </fieldset>
+      }
+      @if (inviteForm.get("specialization"); as specialization) {
+        <fieldset>
+          <app-select
+            size="big"
+            id="specialization"
+            formControlName="specialization"
+            placeholder="Специальность"
+            [options]="rolesMembersList"
+          ></app-select>
+          @if (specialization | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+          }
+        </fieldset>
       }
       <app-button size="big" customTypographyClass="text-body-12" (click)="onEdit($event)"
         >Сохранить</app-button

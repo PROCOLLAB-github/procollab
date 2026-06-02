@@ -30,7 +30,7 @@ describe("ProjectInfoResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProjectInfoResolver(mockRoute, {} as RouterStateSnapshot)
+      ProjectInfoResolver(mockRoute, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

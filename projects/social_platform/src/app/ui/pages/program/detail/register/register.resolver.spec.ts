@@ -22,7 +22,7 @@ describe("ProgramRegisterResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProgramRegisterResolver(mockRoute, {} as RouterStateSnapshot)
+      ProgramRegisterResolver(mockRoute, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

@@ -7,7 +7,7 @@
     [class.video__body--hasImage]="data().imageUrl"
   >
     @if ((data().videoUrl || data().attachmentUrl) && !data().imageUrl) {
-    <p class="video__task text-body-12">задание {{ data().order }}</p>
+      <p class="video__task text-body-12">задание {{ data().order }}</p>
     }
 
     <div
@@ -16,22 +16,23 @@
       [class.video__wrapper--hasImage]="data().imageUrl"
     >
       @if (cachedVideoUrl) {
-      <iframe
-        [src]="cachedVideoUrl"
-        width="395px"
-        height="222px"
-        frameborder="0"
-        allowfullscreen
-        allowtransparency="true"
-      >
-      </iframe>
-      } @if (data().imageUrl) {
-      <img appImagePreview class="video__img" [src]="data().imageUrl" />
+        <iframe
+          [src]="cachedVideoUrl"
+          width="395px"
+          height="222px"
+          frameborder="0"
+          allowfullscreen
+          allowtransparency="true"
+        >
+        </iframe>
+      }
+      @if (data().imageUrl) {
+        <img appImagePreview class="video__img" [src]="data().imageUrl" />
       }
 
       <div class="video__text-content">
         @if (!data().videoUrl) {
-        <p class="video__task text-body-12">задание {{ data().order }}</p>
+          <p class="video__task text-body-12">задание {{ data().order }}</p>
         }
 
         <p class="video__title text-body-12-bold">
@@ -45,17 +46,18 @@
           "
         ></div>
         @if (descriptionExpandable) {
-        <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
-          {{ readFullDescription ? "скрыть" : "подробнее" }}
-        </div>
-        } @if (data().attachmentUrl) {
-        <app-file-item
-          mode="preview"
-          [type]="'file'"
-          name="файл с заданием"
-          [size]="0"
-          [link]="data().attachmentUrl"
-        ></app-file-item>
+          <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
+            {{ readFullDescription ? "скрыть" : "подробнее" }}
+          </div>
+        }
+        @if (data().attachmentUrl) {
+          <app-file-item
+            mode="preview"
+            [type]="'file'"
+            name="файл с заданием"
+            [size]="0"
+            [link]="data().attachmentUrl"
+          ></app-file-item>
         }
       </div>
     </div>

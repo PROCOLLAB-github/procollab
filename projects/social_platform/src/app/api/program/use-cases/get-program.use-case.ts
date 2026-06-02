@@ -12,11 +12,11 @@ export class GetProgramUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);
 
   execute(
-    programId: number
+    programId: number,
   ): Observable<Result<Program, { kind: "get_program_error"; cause?: unknown }>> {
     return this.programRepositoryPort.getOne(programId).pipe(
       map(program => ok<Program>(program)),
-      catchError(error => of(fail({ kind: "get_program_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_program_error" as const, cause: error }))),
     );
   }
 }

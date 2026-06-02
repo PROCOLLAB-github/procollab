@@ -113,8 +113,8 @@ export class InfoCardComponent {
       this.appereance() === "empty" && this.section() === "projects"
         ? "/assets/images/projects/shared/add-project.svg"
         : this.appereance() === "empty" && this.section() === "subscriptions"
-        ? "/assets/images/projects/shared/empty-subscriptions.svg"
-        : "";
+          ? "/assets/images/projects/shared/empty-subscriptions.svg"
+          : "";
     return this.info()?.imageAddress || this.info()?.avatar || currentImageAddress;
   }
 

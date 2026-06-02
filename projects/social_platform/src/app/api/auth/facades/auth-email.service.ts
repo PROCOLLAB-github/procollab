@@ -41,7 +41,7 @@ export class AuthEmailService {
     this.route.queryParams
       .pipe(
         map(r => r["adress"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(address => {
         this.userEmail.set(address);
@@ -70,6 +70,6 @@ export class AuthEmailService {
   timer$ = interval(1000).pipe(
     filter(() => this.counter() > 0),
     map(() => this.counter.update(c => c - 1)),
-    takeUntilDestroyed()
+    takeUntilDestroyed(),
   );
 }

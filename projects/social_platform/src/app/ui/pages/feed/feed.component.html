@@ -3,33 +3,36 @@
 <div class="page">
   <app-feed-filter class="page__filter"></app-feed-filter>
   <div #feedRoot class="page__feed" [style.column-count]="feedItems().length > 0 ? '2' : '1'">
-    @if (feedItems().length > 0) { @for (item of feedItems(); track item.content.id) { @if
-    (item.typeModel === "vacancy") {
-    <app-open-vacancy
-      class="page__item"
-      [attr.data-id]="item.content.id"
-      [feedItem]="item.content"
-    ></app-open-vacancy>
-    } @else if (item.typeModel === "project") {
-    <app-new-project
-      class="page__item"
-      [attr.data-id]="item.content.id"
-      [feedItem]="item.content"
-    ></app-new-project>
-    } @else if (item.typeModel === "news") {
-    <app-news-card
-      class="page__item"
-      [attr.data-id]="item.content.id"
-      [feedItem]="item.content"
-      [contentId]="item.content.contentObject.id"
-      [resourceLink]="resourceLink(item.content)"
-      (like)="onLike($event)"
-    ></app-news-card>
-    } } } @else {
-    <div class="page__feed--no-items">
-      <i appIcon icon="empty-chat" appSquare="38"></i>
-      <p class="text-body-12">в данном разделе пока нет новостей</p>
-    </div>
+    @if (feedItems().length > 0) {
+      @for (item of feedItems(); track item.content.id) {
+        @if (item.typeModel === "vacancy") {
+          <app-open-vacancy
+            class="page__item"
+            [attr.data-id]="item.content.id"
+            [feedItem]="item.content"
+          ></app-open-vacancy>
+        } @else if (item.typeModel === "project") {
+          <app-new-project
+            class="page__item"
+            [attr.data-id]="item.content.id"
+            [feedItem]="item.content"
+          ></app-new-project>
+        } @else if (item.typeModel === "news") {
+          <app-news-card
+            class="page__item"
+            [attr.data-id]="item.content.id"
+            [feedItem]="item.content"
+            [contentId]="item.content.contentObject.id"
+            [resourceLink]="resourceLink(item.content)"
+            (like)="onLike($event)"
+          ></app-news-card>
+        }
+      }
+    } @else {
+      <div class="page__feed--no-items">
+        <i appIcon icon="empty-chat" appSquare="38"></i>
+        <p class="text-body-12">в данном разделе пока нет новостей</p>
+      </div>
     }
   </div>
 </div>

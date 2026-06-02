@@ -20,9 +20,9 @@
       <div class="card__info--additional">
         <p class="text-body-6 project__industry">
           @if (industryRepository.getOne(feedItem().industry); as industry) {
-          <app-tag class="card__industry" color="complete">
-            {{ industry.name }}
-          </app-tag>
+            <app-tag class="card__industry" color="complete">
+              {{ industry.name }}
+            </app-tag>
           }
         </p>
 

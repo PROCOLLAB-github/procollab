@@ -2,13 +2,13 @@
 
 <div class="programs">
   @if (programs()) {
-  <div class="programs__list">
-    @for (p of programs(); track p.id) {
-    <a [routerLink]="AppRoutes.program.detail(p.id)">
-      <app-program-card [program]="p"></app-program-card>
-    </a>
-    }
-  </div>
+    <div class="programs__list">
+      @for (p of programs(); track p.id) {
+        <a [routerLink]="AppRoutes.program.detail(p.id)">
+          <app-program-card [program]="p"></app-program-card>
+        </a>
+      }
+    </div>
   }
 
   <div class="programs__filter">

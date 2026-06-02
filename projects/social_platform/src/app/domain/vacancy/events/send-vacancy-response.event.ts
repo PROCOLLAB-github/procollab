@@ -18,7 +18,7 @@ export function sendVacancyResponse(
   vacancyId: number,
   projectId: number,
   userId: number,
-  isApproved: boolean
+  isApproved: boolean,
 ): SendVacancyResponse {
   return {
     type: "SendVacancyResponse",

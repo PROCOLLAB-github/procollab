@@ -20,7 +20,7 @@ export class SendForUserUseCase {
   }: SendForUserCommand): Observable<Result<Invite, { kind: "invite_error"; cause?: unknown }>> {
     return this.inviteRepositoryPort.sendForUser(userId, projectId, role, specialization).pipe(
       map(invite => ok<Invite>(invite)),
-      catchError(error => of(fail({ kind: "invite_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "invite_error" as const, cause: error }))),
     );
   }
 }

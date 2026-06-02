@@ -12,11 +12,11 @@ export class SetPasswordUseCase {
 
   execute(
     password: string,
-    token: string
+    token: string,
   ): Observable<Result<void, { kind: "unknown"; cause?: unknown }>> {
     return this.authRepositoryPort.setPassword(password, token).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "unknown" as const, cause: error })))
+      catchError(error => of(fail({ kind: "unknown" as const, cause: error }))),
     );
   }
 }
