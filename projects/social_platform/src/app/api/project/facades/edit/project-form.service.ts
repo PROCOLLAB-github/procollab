@@ -37,12 +37,12 @@ export class ProjectFormService {
     this.projectFormAutosaveService.bindDraftCleanupAutosave(
       this.presentationAddress,
       "presentationAddress",
-      this.destroyRef
+      this.destroyRef,
     );
     this.projectFormAutosaveService.bindDraftCleanupAutosave(
       this.coverImageAddress,
       "coverImageAddress",
-      this.destroyRef
+      this.destroyRef,
     );
   }
 
@@ -97,7 +97,7 @@ export class ProjectFormService {
         this.fb,
         achievement,
         index,
-        currentYear
+        currentYear,
       );
       achievementsFormArray.push(achievementGroup);
     });

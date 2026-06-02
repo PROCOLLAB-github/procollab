@@ -125,7 +125,7 @@ describe("AuthRepository", () => {
   it("updateOnboardingStage вызывает setOnboardingStage с переданным userId", done => {
     setup();
     adapter.setOnboardingStage.and.returnValue(
-      of({ id: 9, onboardingStage: 3 } as unknown as User)
+      of({ id: 9, onboardingStage: 3 } as unknown as User),
     );
 
     repository.updateOnboardingStage(3, 9).subscribe(() => {

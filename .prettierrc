@@ -1,8 +1,10 @@
+# @format
+
 {
   "singleQuote": false,
   "semi": true,
   "printWidth": 100,
   "insertPragma": true,
   "arrowParens": "avoid",
-  "bracketSameLine": false
+  "bracketSameLine": false,
 }

@@ -15,11 +15,11 @@ export class GetMembersUseCase {
   execute(
     skip: number,
     take: number,
-    params?: Record<string, string | number | boolean>
+    params?: Record<string, string | number | boolean>,
   ): Observable<Result<ApiPagination<User>, { kind: "get_members_error"; cause?: unknown }>> {
     return this.memberRepositoryPort.getMembers(skip, take, params).pipe(
       map(members => ok<ApiPagination<User>>(members)),
-      catchError(error => of(fail({ kind: "get_members_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_members_error" as const, cause: error }))),
     );
   }
 }

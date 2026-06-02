@@ -12,11 +12,11 @@ export class ReadProfileNewsUseCase {
 
   execute(
     userId: number,
-    newsIds: number[]
+    newsIds: number[],
   ): Observable<Result<void[], { kind: "read_profile_news_error"; cause?: unknown }>> {
     return this.profileNewsRepositoryPort.readNews(userId, newsIds).pipe(
       map(result => ok<void[]>(result)),
-      catchError(error => of(fail({ kind: "read_profile_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "read_profile_news_error" as const, cause: error }))),
     );
   }
 }

@@ -55,7 +55,7 @@ export class DetailProfileInfoService {
       .pipe(
         filter((user): user is User => !!user),
         take(1),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(currentUser => {
         // На своём профиле кнопка «пригласить» не показывается — грузить не нужно.
@@ -88,7 +88,7 @@ export class DetailProfileInfoService {
     // Копирование в буфер обмена
     navigator.clipboard.writeText(fullUrl).then(
       () => this.snackbarService.success("скопирован URL"),
-      () => this.snackbarService.error("не удалось скопировать ссылку")
+      () => this.snackbarService.error("не удалось скопировать ссылку"),
     );
   }
 

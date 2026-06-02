@@ -17,7 +17,7 @@ export class SubscriptionHttpAdapter {
 
   getSubscribers(projectId: number): Observable<ProjectSubscriber[]> {
     return this.apiService.get<ProjectSubscriber[]>(
-      `${this.PROJECTS_URL}/${projectId}/subscribers/`
+      `${this.PROJECTS_URL}/${projectId}/subscribers/`,
     );
   }
 

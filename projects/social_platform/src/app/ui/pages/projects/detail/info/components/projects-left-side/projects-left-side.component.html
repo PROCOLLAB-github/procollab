@@ -12,7 +12,7 @@
         <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
         <p class="text-body-10 card__industry">
           @if (industryRepository.getOne(project()!.industry); as industry) {
-          <span>{{ industry?.name }}</span>
+            <span>{{ industry?.name }}</span>
           }
         </p>
       </li>

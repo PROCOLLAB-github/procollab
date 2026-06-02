@@ -22,7 +22,7 @@ export class ProjectProgramHttpAdapter {
 
   sendNewProjectFieldsValues(
     projectId: number,
-    newValues: ProjectNewAdditionalProgramFields[]
+    newValues: ProjectNewAdditionalProgramFields[],
   ): Observable<ProjectDto> {
     const payload = newValues.map(({ fieldId, valueText }) => ({
       field_id: fieldId,

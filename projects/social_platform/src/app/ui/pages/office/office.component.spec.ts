@@ -34,7 +34,7 @@ describe("OfficeComponent", () => {
       ["initializationOffice", "destroy", "onRejectInvite", "onAcceptInvite", "onLogout"],
       {
         invites: signal([]),
-      }
+      },
     );
 
     const officeUIInfoServiceSpy = {

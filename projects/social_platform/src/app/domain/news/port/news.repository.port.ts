@@ -29,13 +29,13 @@ export abstract class NewsRepositoryPort<T> {
  * побеждает). Каждый домен инжектит свой токен.
  */
 export const PROJECT_NEWS_REPOSITORY = new InjectionToken<NewsRepositoryPort<FeedNews>>(
-  "PROJECT_NEWS_REPOSITORY"
+  "PROJECT_NEWS_REPOSITORY",
 );
 
 export const PROFILE_NEWS_REPOSITORY = new InjectionToken<NewsRepositoryPort<ProfileNews>>(
-  "PROFILE_NEWS_REPOSITORY"
+  "PROFILE_NEWS_REPOSITORY",
 );
 
 export const PROGRAM_NEWS_REPOSITORY = new InjectionToken<NewsRepositoryPort<FeedNews>>(
-  "PROGRAM_NEWS_REPOSITORY"
+  "PROGRAM_NEWS_REPOSITORY",
 );

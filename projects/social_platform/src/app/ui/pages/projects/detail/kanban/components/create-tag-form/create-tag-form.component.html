@@ -16,16 +16,16 @@
   ></div>
 
   @if (openPickColors) {
-  <div class="create-tag__colors" (click)="$event.stopPropagation()">
-    <div class="create-tag__colors-wrapper">
-      @for (colorItem of tagColors; track $index) {
-      <div
-        class="create-tag__pick-color"
-        (click)="selectTagColor(colorItem.name)"
-        [style.backgroundColor]="colorItem.color"
-      ></div>
-      }
+    <div class="create-tag__colors" (click)="$event.stopPropagation()">
+      <div class="create-tag__colors-wrapper">
+        @for (colorItem of tagColors; track $index) {
+          <div
+            class="create-tag__pick-color"
+            (click)="selectTagColor(colorItem.name)"
+            [style.backgroundColor]="colorItem.color"
+          ></div>
+        }
+      </div>
     </div>
-  </div>
   }
 </form>

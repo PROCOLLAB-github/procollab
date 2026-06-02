@@ -47,7 +47,7 @@ export class FeedInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedUIInfoService.applyInitializationFeedNewsEvent(feed);
@@ -79,10 +79,10 @@ export class FeedInfoService {
           return this.onFetch(
             0,
             this.feedUIInfoService.perFetchTake(),
-            includes ?? DEFAULT_FEED_TYPES
+            includes ?? DEFAULT_FEED_TYPES,
           );
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(feed => {
         this.feedUIInfoService.applyFeedFilters(feed);
@@ -113,7 +113,7 @@ export class FeedInfoService {
       return this.onFetch(
         currentOffset,
         this.feedUIInfoService.perFetchTake(),
-        this.includes()
+        this.includes(),
       ).pipe(
         tap((feedChunk: FeedItem[]) => {
           const keyOf = (item: FeedItem) => `${item.typeModel}:${item.content.id}`;
@@ -125,11 +125,11 @@ export class FeedInfoService {
             this.feedUIInfoService.feedItems$.update(state =>
               isSuccess(state)
                 ? success([...state.data, ...uniqueNewItems])
-                : success(uniqueNewItems)
+                : success(uniqueNewItems),
             );
             queueMicrotask(() => this.observeFeedItems());
           }
-        })
+        }),
       );
     }
 
@@ -142,7 +142,7 @@ export class FeedInfoService {
         .pipe(
           throttleTime(100),
           concatMap(() => this.onScroll(target, feedRoot)),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         )
         .subscribe();
     }
@@ -151,20 +151,20 @@ export class FeedInfoService {
   private onFetch(
     offset: number,
     limit: number,
-    includes: FeedItemType[] | string = DEFAULT_FEED_TYPES
+    includes: FeedItemType[] | string = DEFAULT_FEED_TYPES,
   ) {
     const type =
       typeof includes === "string"
         ? includes || DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
         : includes.length === 0
-        ? DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
-        : includes.join(FILTER_SPLIT_SYMBOL);
+          ? DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
+          : includes.join(FILTER_SPLIT_SYMBOL);
 
     return this.fetchFeedUseCase.execute(offset, limit, type).pipe(
       tap(result => {
         this.feedUIInfoService.totalItemsCount.set(result.ok ? result.value.count : 0);
       }),
-      map(result => (result.ok ? result.value.results : []))
+      map(result => (result.ok ? result.value.results : [])),
     );
   }
 
@@ -177,10 +177,10 @@ export class FeedInfoService {
       .filter(Boolean) as FeedItem[];
 
     const projectNews = items.filter(
-      item => item.typeModel === "news" && !("email" in item.content.contentObject)
+      item => item.typeModel === "news" && !("email" in item.content.contentObject),
     );
     const profileNews = items.filter(
-      item => item.typeModel === "news" && "email" in item.content.contentObject
+      item => item.typeModel === "news" && "email" in item.content.contentObject,
     );
 
     projectNews.forEach(news => {
@@ -214,7 +214,7 @@ export class FeedInfoService {
           "profile",
           item.content.contentObject.id as unknown as string,
           newsId,
-          !item.content.isUserLiked
+          !item.content.isUserLiked,
         )
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {
@@ -228,7 +228,7 @@ export class FeedInfoService {
           "project",
           item.content.contentObject.id as unknown as string,
           newsId,
-          !item.content.isUserLiked
+          !item.content.isUserLiked,
         )
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {

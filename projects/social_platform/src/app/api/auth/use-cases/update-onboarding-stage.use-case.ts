@@ -13,11 +13,11 @@ export class UpdateOnboardingStageUseCase {
 
   execute(
     stage: number | null,
-    userId: number
+    userId: number,
   ): Observable<Result<User, { kind: "server_error"; cause?: unknown }>> {
     return this.authRepository.updateOnboardingStage(stage, userId).pipe(
       map(profile => ok<User>(profile)),
-      catchError(error => of(fail({ kind: "server_error", cause: error } as const)))
+      catchError(error => of(fail({ kind: "server_error", cause: error } as const))),
     );
   }
 }

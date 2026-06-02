@@ -14,7 +14,7 @@ export class GetProjectUseCase {
   execute(id: number): Observable<Result<Project, { kind: "get_project_error"; cause?: unknown }>> {
     return this.projectRepositoryPort.getOne(id).pipe(
       map(project => ok<Project>(project)),
-      catchError(error => of(fail({ kind: "get_project_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_project_error" as const, cause: error }))),
     );
   }
 }

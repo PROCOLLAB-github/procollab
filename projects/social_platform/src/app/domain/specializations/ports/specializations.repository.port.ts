@@ -11,6 +11,6 @@ export abstract class SpecializationsRepositoryPort {
   abstract getSpecializationsInline(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<ApiPagination<Specialization>>;
 }

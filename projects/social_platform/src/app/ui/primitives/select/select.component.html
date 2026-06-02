@@ -15,29 +15,29 @@
       selectedId === -1
         ? "Ничего"
         : selectedId || selectedId === 0
-        ? getLabel(selectedId) || placeholder()
-        : placeholder()
+          ? getLabel(selectedId) || placeholder()
+          : placeholder()
     }}
     @if (error()) {
-    <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+      <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
     } @else {
-    <i
-      class="field__arrow"
-      [class.field__arrow--filpped]="isOpen"
-      appIcon
-      icon="arrow-no-body"
-      appWidth="10"
-      appHeight="8"
-    ></i>
+      <i
+        class="field__arrow"
+        [class.field__arrow--filpped]="isOpen"
+        appIcon
+        icon="arrow-no-body"
+        appWidth="10"
+        appHeight="8"
+      ></i>
     }
   </div>
   @if (!disabled) {
-  <app-dropdown
-    [isOpen]="isOpen"
-    [options]="options()"
-    [highlightedIndex]="highlightedIndex"
-    (select)="onUpdate($event)"
-    (outside)="hideDropdown()"
-  ></app-dropdown>
+    <app-dropdown
+      [isOpen]="isOpen"
+      [options]="options()"
+      [highlightedIndex]="highlightedIndex"
+      (select)="onUpdate($event)"
+      (outside)="hideDropdown()"
+    ></app-dropdown>
   }
 </div>

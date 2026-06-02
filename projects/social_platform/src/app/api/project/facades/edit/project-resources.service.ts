@@ -191,9 +191,9 @@ export class ProjectResourceService {
           map(result =>
             result.ok
               ? { res: result.value, idx }
-              : { __error: true, err: result.error.cause, original: resource, idx }
+              : { __error: true, err: result.error.cause, original: resource, idx },
           ),
-          catchError(err => of({ __error: true, err, original: resource, idx }))
+          catchError(err => of({ __error: true, err, original: resource, idx })),
         );
       });
 
@@ -221,7 +221,7 @@ export class ProjectResourceService {
         });
 
         this.syncResourceItems(this.resources);
-      })
+      }),
     );
   }
 
@@ -243,9 +243,9 @@ export class ProjectResourceService {
           map(result =>
             result.ok
               ? { res: result.value, idx }
-              : { __error: true, err: result.error.cause, original: resource, idx }
+              : { __error: true, err: result.error.cause, original: resource, idx },
           ),
-          catchError(err => of({ __error: true, err, original: resource, idx }))
+          catchError(err => of({ __error: true, err, original: resource, idx })),
         );
       });
 
@@ -275,7 +275,7 @@ export class ProjectResourceService {
         });
 
         this.syncResourceItems(this.resources);
-      })
+      }),
     );
   }
 }

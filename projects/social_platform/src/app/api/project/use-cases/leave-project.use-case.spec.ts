@@ -12,7 +12,7 @@ describe("LeaveProjectUseCase", () => {
   function setup(): void {
     repo = jasmine.createSpyObj<ProjectCollaboratorsRepositoryPort>(
       "ProjectCollaboratorsRepositoryPort",
-      ["deleteLeave"]
+      ["deleteLeave"],
     );
     TestBed.configureTestingModule({
       providers: [

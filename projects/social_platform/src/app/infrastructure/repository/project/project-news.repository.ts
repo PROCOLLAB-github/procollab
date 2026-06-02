@@ -72,7 +72,7 @@ export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
     return this.newsCache.getOrFetch(Number(projectId), () =>
       this.projectNewsAdapter
         .fetchNews(projectId)
-        .pipe(map(page => ({ ...page, results: plainToInstance(FeedNews, page.results) })))
+        .pipe(map(page => ({ ...page, results: plainToInstance(FeedNews, page.results) }))),
     );
   }
 
@@ -104,9 +104,9 @@ export class ProjectNewsRepository implements NewsRepositoryPort<FeedNews> {
           tap(() => {
             readNews.add(id);
             this.storageService.setItem("readNews", [...readNews], sessionStorage);
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
   }
 

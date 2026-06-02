@@ -8,7 +8,7 @@ import { GetProjectResponsesUseCase } from "@api/vacancy/use-cases/get-project-r
 
 /** Предзагружает отклики на вакансии проекта. */
 export const ProjectResponsesResolver: ResolveFn<VacancyResponse[]> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getProjectResponsesUseCase = inject(GetProjectResponsesUseCase);
 

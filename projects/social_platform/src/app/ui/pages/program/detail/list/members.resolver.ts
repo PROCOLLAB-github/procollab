@@ -9,13 +9,13 @@ import { GetAllMembersUseCase } from "@api/program/use-cases/get-all-members.use
 
 /** Предзагружает первую страницу участников программы. */
 export const ProgramMembersResolver: ResolveFn<ApiPagination<User>> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getAllMembersUseCase = inject(GetAllMembersUseCase);
 
   return getAllMembersUseCase
     .execute(route.parent?.params["programId"], 0, 20)
     .pipe(
-      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" })),
     );
 };

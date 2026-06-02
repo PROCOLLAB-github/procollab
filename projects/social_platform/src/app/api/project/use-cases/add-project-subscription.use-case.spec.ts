@@ -15,7 +15,7 @@ describe("AddProjectSubscriptionUseCase", () => {
   function setup(): void {
     repo = jasmine.createSpyObj<ProjectSubscriptionRepositoryPort>(
       "ProjectSubscriptionRepositoryPort",
-      ["addSubscription"]
+      ["addSubscription"],
     );
     bus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
     TestBed.configureTestingModule({

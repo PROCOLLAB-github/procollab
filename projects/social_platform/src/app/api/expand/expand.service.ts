@@ -57,7 +57,7 @@ export class ExpandService {
     type: "description" | "skills",
     elem: HTMLElement,
     expandedClass: string,
-    isExpanded: boolean
+    isExpanded: boolean,
   ): void {
     expandElement(elem, expandedClass, isExpanded);
     type === "description"

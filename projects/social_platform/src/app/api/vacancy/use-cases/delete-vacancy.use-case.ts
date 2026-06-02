@@ -14,12 +14,12 @@ export class DeleteVacancyUseCase {
   private readonly eventBus = inject(EventBus);
 
   execute(
-    vacancyId: number
+    vacancyId: number,
   ): Observable<Result<void, { kind: "delete_vacancy_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.deleteVacancy(vacancyId).pipe(
       tap(() => this.eventBus.emit(vacancyDelete(vacancyId))),
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "delete_vacancy_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "delete_vacancy_error" as const, cause: error }))),
     );
   }
 }

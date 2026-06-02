@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     private authRepository: AuthRepositoryPort,
     private tokenService: TokenService,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
   ) {
     // Инстанциируем listener для toast'а при потере WS-соединения.
     inject(ConnectionStatusToastService);
@@ -52,13 +52,13 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     const showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
-      map(() => true)
+      map(() => true),
     );
 
     const hideLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveEnd),
       debounceTime(200),
-      map(() => false)
+      map(() => false),
     );
 
     merge(hideLoaderEvents, showLoaderEvents)

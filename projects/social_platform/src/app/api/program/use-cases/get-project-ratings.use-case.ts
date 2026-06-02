@@ -15,13 +15,13 @@ export class GetProjectRatingsUseCase {
 
   execute(
     programId: number,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<
     Result<ApiPagination<ProjectRate>, { kind: "get_project_ratings_error"; cause?: unknown }>
   > {
     return this.projectRatingRepositoryPort.getAll(programId, params).pipe(
       map(rating => ok<ApiPagination<ProjectRate>>(rating)),
-      catchError(error => of(fail({ kind: "get_project_ratings_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_project_ratings_error" as const, cause: error }))),
     );
   }
 }

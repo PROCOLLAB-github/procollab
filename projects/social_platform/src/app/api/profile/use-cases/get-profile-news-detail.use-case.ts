@@ -13,13 +13,13 @@ export class GetProfileNewsDetailUseCase {
 
   execute(
     userId: string,
-    newsId: string
+    newsId: string,
   ): Observable<Result<ProfileNews, { kind: "get_profile_news_detail_error"; cause?: unknown }>> {
     return this.profileNewsRepositoryPort.fetchNewsDetail(userId, newsId).pipe(
       map(news => ok<ProfileNews>(news)),
       catchError(error =>
-        of(fail({ kind: "get_profile_news_detail_error" as const, cause: error }))
-      )
+        of(fail({ kind: "get_profile_news_detail_error" as const, cause: error })),
+      ),
     );
   }
 }

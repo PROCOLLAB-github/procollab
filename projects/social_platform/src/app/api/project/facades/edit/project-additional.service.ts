@@ -26,7 +26,7 @@ export class ProjectAdditionalService {
   readonly isSend$ = signal<AsyncState<void>>(initial());
 
   readonly errorAssignProjectToProgramModalMessage = signal<{ non_field_errors: string[] } | null>(
-    null
+    null,
   );
 
   constructor() {
@@ -44,7 +44,7 @@ export class ProjectAdditionalService {
 
   public initializeAdditionalForm(
     fields: PartnerProgramFields[],
-    values: PartnerProgramFieldsValues[] = []
+    values: PartnerProgramFieldsValues[] = [],
   ): void {
     this.partnerProgramFields.set(fields);
     this.partnerProgramFieldsValues = values;
@@ -70,7 +70,7 @@ export class ProjectAdditionalService {
 
   public toggleAdditionalFormValues(
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
-    fieldName: string
+    fieldName: string,
   ): void {
     if (fieldType === "checkbox" || fieldType === "radio") {
       const control = this.additionalForm.get(fieldName);
@@ -110,7 +110,7 @@ export class ProjectAdditionalService {
     this.partnerProgramFields().forEach((field: PartnerProgramFields) => {
       const fieldValue = this.additionalForm.get(field.name)?.value;
       newFieldsFormValues.push(
-        ProjectNewAdditionalProgramFields.fromField(field, String(fieldValue))
+        ProjectNewAdditionalProgramFields.fromField(field, String(fieldValue)),
       );
     });
 

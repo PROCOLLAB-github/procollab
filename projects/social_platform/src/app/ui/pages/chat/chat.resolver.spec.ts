@@ -21,7 +21,7 @@ describe("ChatResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ChatResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+      ChatResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

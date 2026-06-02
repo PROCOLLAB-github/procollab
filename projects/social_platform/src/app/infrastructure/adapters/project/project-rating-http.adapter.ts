@@ -21,7 +21,7 @@ export class ProjectRatingHttpAdapter {
   postFilters(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<ProjectRate>> {
     let url = `${this.RATE_PROJECT_URL}/${programId}/`;
     if (params) {

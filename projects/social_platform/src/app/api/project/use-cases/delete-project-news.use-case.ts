@@ -15,12 +15,12 @@ export class DeleteProjectNewsUseCase {
 
   execute(
     projectId: string,
-    newsId: number
+    newsId: number,
   ): Observable<Result<number, { kind: "delete_project_news_error"; cause?: unknown }>> {
     return this.projectNewsRepositoryPort.delete(projectId, newsId).pipe(
       tap(() => this.eventBus.emit(deleteNews(projectId, String(newsId)))),
       map(() => ok<number>(newsId)),
-      catchError(error => of(fail({ kind: "delete_project_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "delete_project_news_error" as const, cause: error }))),
     );
   }
 }

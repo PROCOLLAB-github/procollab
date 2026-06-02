@@ -12,15 +12,15 @@ export class GetProjectSubscribersUseCase {
   private readonly projectSubscriptionRepositoryPort = inject(ProjectSubscriptionRepositoryPort);
 
   execute(
-    projectId: number
+    projectId: number,
   ): Observable<
     Result<ProjectSubscriber[], { kind: "get_project_subscribers_error"; cause?: unknown }>
   > {
     return this.projectSubscriptionRepositoryPort.getSubscribers(projectId).pipe(
       map(subscribers => ok<ProjectSubscriber[]>(subscribers)),
       catchError(error =>
-        of(fail({ kind: "get_project_subscribers_error" as const, cause: error }))
-      )
+        of(fail({ kind: "get_project_subscribers_error" as const, cause: error })),
+      ),
     );
   }
 }

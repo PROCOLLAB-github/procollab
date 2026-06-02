@@ -21,7 +21,7 @@ export class CoursesListInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(courses => {
         this.coursesListUIInfoService.courses$.set(success(courses));

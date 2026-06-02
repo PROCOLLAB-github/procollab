@@ -44,7 +44,7 @@ export class ProjectsInfoService {
       ?.valueChanges.pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(search => {
         this.router
@@ -63,7 +63,7 @@ export class ProjectsInfoService {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => this.url.set(this.router.url));
   }
@@ -84,7 +84,7 @@ export class ProjectsInfoService {
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }

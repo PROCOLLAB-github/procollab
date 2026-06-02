@@ -28,7 +28,7 @@ import { exponentialBackoff } from "@utils/exponentialBackoff";
 export class ApiService {
   constructor(
     private readonly http: HttpClient,
-    @Inject(API_URL) private readonly apiUrl: string
+    @Inject(API_URL) private readonly apiUrl: string,
   ) {}
 
   private RETRY_COUNT = 3;

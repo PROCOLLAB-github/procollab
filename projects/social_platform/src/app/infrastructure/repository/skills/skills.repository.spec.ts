@@ -35,7 +35,7 @@ describe("SkillsRepository", () => {
   it("делегирует getSkillsInline(search, limit, offset) в adapter", () => {
     setup();
     adapter.getSkillsInline.and.returnValue(
-      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Skill>)
+      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Skill>),
     );
 
     repository.getSkillsInline("js", 10, 20).subscribe();

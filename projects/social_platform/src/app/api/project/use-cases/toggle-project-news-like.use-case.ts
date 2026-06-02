@@ -16,14 +16,14 @@ export class ToggleProjectNewsLikeUseCase {
   execute(
     projectId: string,
     newsId: number,
-    state: boolean
+    state: boolean,
   ): Observable<Result<number, { kind: "toggle_project_news_like_error"; cause?: unknown }>> {
     return this.projectNewsRepositoryPort.toggleLike(projectId, newsId, state).pipe(
       tap(() => this.eventBus.emit(toggleLike(projectId, String(newsId)))),
       map(() => ok<number>(newsId)),
       catchError(error =>
-        of(fail({ kind: "toggle_project_news_like_error" as const, cause: error }))
-      )
+        of(fail({ kind: "toggle_project_news_like_error" as const, cause: error })),
+      ),
     );
   }
 }

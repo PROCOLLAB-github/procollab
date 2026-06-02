@@ -12,7 +12,7 @@ describe("ProjectCollaboratorsRepository", () => {
   function setup(): void {
     adapter = jasmine.createSpyObj<ProjectCollaboratorsHttpAdapter>(
       "ProjectCollaboratorsHttpAdapter",
-      ["deleteCollaborator", "patchSwitchLeader", "deleteLeave"]
+      ["deleteCollaborator", "patchSwitchLeader", "deleteLeave"],
     );
     TestBed.configureTestingModule({
       providers: [

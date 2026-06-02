@@ -14,7 +14,7 @@ export class GetMyInvitesUseCase {
   execute(): Observable<Result<Invite[], { kind: "get_invites_error"; cause?: unknown }>> {
     return this.inviteRepositoryPort.getMy().pipe(
       map(invites => ok<Invite[]>(invites)),
-      catchError(error => of(fail({ kind: "get_invites_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_invites_error" as const, cause: error }))),
     );
   }
 }

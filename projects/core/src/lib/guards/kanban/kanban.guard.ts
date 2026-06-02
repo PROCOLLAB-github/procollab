@@ -10,7 +10,7 @@ import { catchError, map, Observable, of, switchMap } from "rxjs";
 
 /** Пускает в канбан только участника проекта. */
 export const KanbanBoardGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ): Observable<UrlTree | boolean> => {
   const router = inject(Router);
   const projectRepository = inject(ProjectRepositoryPort);
@@ -25,14 +25,14 @@ export const KanbanBoardGuard: CanActivateFn = (
       projectRepository.getOne(projectId).pipe(
         map(project => {
           const isInProject = project.collaborators.some(
-            (collaborator: Collaborator) => collaborator.userId === user.id
+            (collaborator: Collaborator) => collaborator.userId === user.id,
           );
 
           return isInProject ? true : router.createUrlTree([`/office/projects/${projectId}`]);
         }),
-        catchError(() => of(router.createUrlTree(["/office/projects"])))
-      )
+        catchError(() => of(router.createUrlTree(["/office/projects"]))),
+      ),
     ),
-    catchError(() => of(router.createUrlTree(["/auth/login"])))
+    catchError(() => of(router.createUrlTree(["/auth/login"]))),
   );
 };

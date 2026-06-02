@@ -12,13 +12,13 @@ export class AssignProjectProgramUseCase {
 
   execute(
     projectId: number,
-    partnerProgramId: number
+    partnerProgramId: number,
   ): Observable<Result<ProjectAssign, { kind: "unknown"; cause?: unknown }>> {
     return this.projectProgramRepositoryPort
       .assignProjectToProgram(projectId, partnerProgramId)
       .pipe(
         map(project => ok<ProjectAssign>(project)),
-        catchError(error => of(fail({ kind: "unknown" as const, cause: error })))
+        catchError(error => of(fail({ kind: "unknown" as const, cause: error }))),
       );
   }
 }

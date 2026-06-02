@@ -19,27 +19,28 @@
     [class.field__input--overflow]="isLengthOverflow"
   ></textarea>
   @if (maxLength()) {
-  <div class="field__counter">
-    <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
-      <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
-        value.length
-      }}</span>
-      / {{ maxLength() }}
-    </p>
-  </div>
-  } @if (error()) {
-  <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+    <div class="field__counter">
+      <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
+        <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
+          value.length
+        }}</span>
+        / {{ maxLength() }}
+      </p>
+    </div>
+  }
+  @if (error()) {
+    <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
   } @else if (haveHint() && tooltipText()) {
-  <div class="field__tooltip-wrapper">
-    <app-tooltip
-      [text]="tooltipText()!"
-      [isVisible]="isTooltipVisible"
-      [position]="tooltipPosition()"
-      [tooltipWidth]="tooltipWidth()"
-      customClass="field__tooltip-icon"
-      (show)="showTooltip()"
-      (hide)="hideTooltip()"
-    ></app-tooltip>
-  </div>
+    <div class="field__tooltip-wrapper">
+      <app-tooltip
+        [text]="tooltipText()!"
+        [isVisible]="isTooltipVisible"
+        [position]="tooltipPosition()"
+        [tooltipWidth]="tooltipWidth()"
+        customClass="field__tooltip-icon"
+        (show)="showTooltip()"
+        (hide)="hideTooltip()"
+      ></app-tooltip>
+    </div>
   }
 </div>

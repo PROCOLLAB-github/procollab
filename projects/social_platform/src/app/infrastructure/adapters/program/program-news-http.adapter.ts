@@ -16,14 +16,14 @@ export class ProgramNewsHttpAdapter {
   fetchNews(programId: number, limit: number, offset: number): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get(
       `${this.PROGRAMS_URL}/${programId}/news/`,
-      new HttpParams({ fromObject: { limit, offset } })
+      new HttpParams({ fromObject: { limit, offset } }),
     );
   }
 
   setNewsViewed(programId: string, newsId: number): Observable<void> {
     return this.apiService.post<void>(
       `${this.PROGRAMS_URL}/${programId}/news/${newsId}/set_viewed/`,
-      {}
+      {},
     );
   }
 
@@ -40,7 +40,7 @@ export class ProgramNewsHttpAdapter {
   editNews(programId: number, newsId: number, newsItem: Partial<FeedNews>): Observable<FeedNews> {
     return this.apiService.patch<FeedNews>(
       `${this.PROGRAMS_URL}/${programId}/news/${newsId}/`,
-      newsItem
+      newsItem,
     );
   }
 

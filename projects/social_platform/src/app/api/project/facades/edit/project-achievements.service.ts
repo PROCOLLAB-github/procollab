@@ -33,7 +33,7 @@ export class ProjectAchievementsService {
   private readonly achievements = this.projectFormService.achievements;
 
   readonly hasAchievements = computed(
-    () => this.achievementsItems().length > 0 || this.achievements.length > 0
+    () => this.achievementsItems().length > 0 || this.achievements.length > 0,
   );
 
   private readonly projectForm = this.projectFormService.getForm();

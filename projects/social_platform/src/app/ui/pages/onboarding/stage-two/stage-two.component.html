@@ -5,9 +5,7 @@
     <div class="tooltip">
       <h3 class="text-heading-3">Какими навыками вы обладаете?</h3>
       <app-tooltip
-        [text]="
-          'Вспомните все, чему вас учили (читать, считать, программировать) и что вы делали. Постарайтесь не врать, но и не будьте слишком критичны к себе.'
-        "
+        [text]="'Вспомните все, чему вас учили (читать, считать, программировать) и что вы делали. Постарайтесь не врать, но и не будьте слишком критичны к себе.'"
         [isVisible]="isHintAuthVisible('auth')"
         [position]="'right'"
         [tooltipWidth]="300"
@@ -67,9 +65,7 @@
         <div class="tooltip">
           <h4 class="text-heading-4">библиотека</h4>
           <app-tooltip
-            [text]="
-              'База с навыками, которая может пополняться благодаря вам! Если не найдете свой навык, смело пишите на @procollab_support, и мы добавим ваш уникальный навык.'
-            "
+            [text]="'База с навыками, которая может пополняться благодаря вам! Если не найдете свой навык, смело пишите на @procollab_support, и мы добавим ваш уникальный навык.'"
             [isVisible]="isHintLibVisible('lib')"
             [position]="'right'"
             [tooltipWidth]="300"
@@ -82,16 +78,16 @@
       <div class="content__skills-groups">
         <ul class="content__skills-groups-list">
           @for (skillGroup of nestedSkills$ | async; track skillGroup.id) {
-          <li class="content__skills-groups-list-item">
-            <app-skills-group
-              [title]="skillGroup.name"
-              [options]="skillGroup.skills"
-              [selected]="stageForm.getRawValue().skills"
-              [disabled]="isSkillGroupDisabled(skillGroup.name)"
-              (groupToggled)="onSkillGroupToggled($event, skillGroup.name)"
-              (optionToggled)="onOptionToggled($event)"
-            ></app-skills-group>
-          </li>
+            <li class="content__skills-groups-list-item">
+              <app-skills-group
+                [title]="skillGroup.name"
+                [options]="skillGroup.skills"
+                [selected]="stageForm.getRawValue().skills"
+                [disabled]="isSkillGroupDisabled(skillGroup.name)"
+                (groupToggled)="onSkillGroupToggled($event, skillGroup.name)"
+                (optionToggled)="onOptionToggled($event)"
+              ></app-skills-group>
+            </li>
           }
         </ul>
       </div>

@@ -23,7 +23,7 @@ export class VacancyHttpAdapter {
     workFormat?: string,
     workSchedule?: string,
     salary?: string,
-    searchValue?: string
+    searchValue?: string,
   ): Observable<Vacancy[]> {
     let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
 
@@ -55,7 +55,7 @@ export class VacancyHttpAdapter {
 
   updateVacancy(
     vacancyId: number,
-    vacancy: Partial<Vacancy> | CreateVacancyDto
+    vacancy: Partial<Vacancy> | CreateVacancyDto,
   ): Observable<Vacancy> {
     return this.apiService.patch<Vacancy>(`${this.VACANCIES_URL}/${vacancyId}/`, { ...vacancy });
   }
@@ -67,7 +67,7 @@ export class VacancyHttpAdapter {
   sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/${vacancyId}/responses/`,
-      body
+      body,
     );
   }
 
@@ -78,14 +78,14 @@ export class VacancyHttpAdapter {
   acceptResponse(responseId: number): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/responses/${responseId}/accept/`,
-      {}
+      {},
     );
   }
 
   rejectResponse(responseId: number): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/responses/${responseId}/decline/`,
-      {}
+      {},
     );
   }
 }

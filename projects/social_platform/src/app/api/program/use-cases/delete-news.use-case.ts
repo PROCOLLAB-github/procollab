@@ -13,7 +13,7 @@ export class DeleteNewsUseCase {
   execute(programId: number, newsId: number): Observable<Result<number, { kind: "unknown" }>> {
     return this.programNewsRepositoryPort.delete(String(programId), newsId).pipe(
       map(() => ok<number>(newsId)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

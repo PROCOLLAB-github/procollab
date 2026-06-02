@@ -12,7 +12,7 @@ export interface RemoveProjectCollaborator extends DomainEvent {
 
 export function removeProjectCollaborator(
   projectId: number,
-  userId: number
+  userId: number,
 ): RemoveProjectCollaborator {
   return {
     type: "RemoveProjectCollaborator",

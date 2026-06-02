@@ -15,7 +15,7 @@ describe("RemoveProjectCollaboratorUseCase", () => {
   function setup(): void {
     repo = jasmine.createSpyObj<ProjectCollaboratorsRepositoryPort>(
       "ProjectCollaboratorsRepositoryPort",
-      ["deleteCollaborator"]
+      ["deleteCollaborator"],
     );
     bus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
     TestBed.configureTestingModule({

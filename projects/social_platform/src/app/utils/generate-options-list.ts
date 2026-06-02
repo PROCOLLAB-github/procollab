@@ -22,7 +22,7 @@ export interface optionsListElement {
 export const generateOptionsList = (
   amount: number,
   type: "numbers" | "years" | "strings",
-  otherStrings: string[] = []
+  otherStrings: string[] = [],
 ): optionsListElement[] => {
   if (amount <= 0) return [];
 

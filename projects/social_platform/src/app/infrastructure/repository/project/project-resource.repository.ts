@@ -27,7 +27,7 @@ export class ProjectResourceRepository implements ProjectResourceRepositoryPort 
   updateResource(
     projectId: number,
     resourceId: number,
-    params: Omit<ResourceDto, "projectId">
+    params: Omit<ResourceDto, "projectId">,
   ): Observable<Resource> {
     return this.projectResourceAdapter
       .editResource(projectId, resourceId, params)

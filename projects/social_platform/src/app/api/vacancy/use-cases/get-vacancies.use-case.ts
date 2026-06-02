@@ -23,7 +23,7 @@ export class GetVacanciesUseCase {
   private readonly vacancyRepositoryPort = inject(VacancyRepositoryPort);
 
   execute(
-    params: GetVacanciesParams
+    params: GetVacanciesParams,
   ): Observable<Result<Vacancy[], { kind: "get_vacancies_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort
       .getForProject(
@@ -34,11 +34,11 @@ export class GetVacanciesUseCase {
         params.workFormat,
         params.workSchedule,
         params.salary,
-        params.searchValue
+        params.searchValue,
       )
       .pipe(
         map(vacancies => ok<Vacancy[]>(vacancies)),
-        catchError(error => of(fail({ kind: "get_vacancies_error" as const, cause: error })))
+        catchError(error => of(fail({ kind: "get_vacancies_error" as const, cause: error }))),
       );
   }
 }

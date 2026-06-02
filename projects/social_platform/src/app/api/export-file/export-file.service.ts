@@ -15,19 +15,19 @@ export class ExportFileService {
 
   exportProgramRates(programId: number) {
     return this.apiService.getFile(
-      `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_RATES_URL}`
+      `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_RATES_URL}`,
     );
   }
 
   exportAllProjects(programId: number) {
     return this.apiService.getFile(
-      `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_ALL_PROJECTS_URL}`
+      `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_ALL_PROJECTS_URL}`,
     );
   }
 
   exportSubmittedProjects(programId: number) {
     return this.apiService.getFile(
-      `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_SUBMITTED_PROJECTS_URL}`
+      `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_SUBMITTED_PROJECTS_URL}`,
     );
   }
 }

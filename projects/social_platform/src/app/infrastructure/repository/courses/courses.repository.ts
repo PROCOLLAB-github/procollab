@@ -29,13 +29,13 @@ export class CoursesRepository implements CoursesRepositoryPort {
 
   getCourseDetail(courseId: number): Observable<CourseDetail> {
     return this.detailCache.getOrFetch(courseId, () =>
-      this.coursesAdapter.getCourseDetail(courseId)
+      this.coursesAdapter.getCourseDetail(courseId),
     );
   }
 
   getCourseStructure(courseId: number): Observable<CourseStructure> {
     return this.structureCache.getOrFetch(courseId, () =>
-      this.coursesAdapter.getCourseStructure(courseId)
+      this.coursesAdapter.getCourseStructure(courseId),
     );
   }
 
@@ -47,14 +47,14 @@ export class CoursesRepository implements CoursesRepositoryPort {
     taskId: number,
     answerText?: string,
     optionIds?: number[],
-    fileIds?: number[]
+    fileIds?: number[],
   ): Observable<TaskAnswerResponse> {
     return this.coursesAdapter.postAnswerQuestion(taskId, answerText, optionIds, fileIds).pipe(
       tap(response => {
         this.eventBus.emit(taskAnswerSubmitted(taskId, 0, response));
         // Прогресс уроков изменился, структура курса должна быть перечитана.
         this.structureCache.clear();
-      })
+      }),
     );
   }
 }

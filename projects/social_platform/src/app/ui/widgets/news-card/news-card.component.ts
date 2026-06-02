@@ -79,7 +79,7 @@ export class NewsCardComponent implements OnInit {
     private readonly validationService: ValidationService,
     private readonly fileService: FileService,
     private readonly cdRef: ChangeDetectorRef,
-    private readonly loggerService: LoggerService
+    private readonly loggerService: LoggerService,
   ) {
     this.editForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -311,8 +311,8 @@ export class NewsCardComponent implements OnInit {
               fileObj.loading = false;
               fileObj.error = true;
               return of(null);
-            })
-          )
+            }),
+          ),
         );
       } else {
         const fileObj: NewsCardComponent["filesEditList"][0] = {
@@ -338,8 +338,8 @@ export class NewsCardComponent implements OnInit {
               fileObj.loading = false;
               fileObj.error = "Ошибка загрузки";
               return of(null);
-            })
-          )
+            }),
+          ),
         );
       }
     }
@@ -438,7 +438,7 @@ export class NewsCardComponent implements OnInit {
       "description",
       elem,
       "expanded",
-      this.expandService.readFullDescription()
+      this.expandService.readFullDescription(),
     );
   }
 }

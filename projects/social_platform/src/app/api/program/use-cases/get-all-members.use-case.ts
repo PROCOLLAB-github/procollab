@@ -15,11 +15,11 @@ export class GetAllMembersUseCase {
   execute(
     programId: number,
     skip: number,
-    take: number
+    take: number,
   ): Observable<Result<ApiPagination<User>, { kind: "unknown" }>> {
     return this.programRepositoryPort.getAllMembers(programId, skip, take).pipe(
       map(members => ok<ApiPagination<User>>(members)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

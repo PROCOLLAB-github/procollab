@@ -17,7 +17,7 @@ export function acceptVacancyResponse(
   vacancyResponseId: number,
   vacancyId: number,
   projectId: number,
-  userId: number
+  userId: number,
 ): AcceptVacancyResponse {
   return {
     type: "AcceptVacancyResponse",

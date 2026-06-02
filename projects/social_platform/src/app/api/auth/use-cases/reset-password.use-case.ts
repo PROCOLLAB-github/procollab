@@ -12,7 +12,7 @@ export class ResetPasswordUseCase {
   private readonly authRepositoryPort = inject(AuthRepositoryPort);
 
   execute(
-    email: string
+    email: string,
   ): Observable<
     Result<
       void,
@@ -39,7 +39,7 @@ export class ResetPasswordUseCase {
         }
 
         return of(fail({ kind: "network", status: 0, cause: "unknown" } as const));
-      })
+      }),
     );
   }
 }

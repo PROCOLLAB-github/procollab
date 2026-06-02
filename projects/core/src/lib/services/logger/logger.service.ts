@@ -29,7 +29,7 @@ export class LoggerService {
   constructor(
     @Optional()
     @Inject(PRODUCTION)
-    private production?: boolean
+    private production?: boolean,
   ) {
     // Если PRODUCTION inject предоставлен, используем его, иначе проверяем окружение
     if (this.production !== undefined) {

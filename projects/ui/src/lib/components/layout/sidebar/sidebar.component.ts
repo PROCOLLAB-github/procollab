@@ -90,7 +90,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     const navElements = this.navItemElements();
 
     const activeRouterElement = navElements.find(elementRef =>
-      elementRef.nativeElement.classList.contains("sidebar-nav__item--active")
+      elementRef.nativeElement.classList.contains("sidebar-nav__item--active"),
     );
 
     const activeExternalIndex = this.navItems().findIndex(item => item.isExternal && item.isActive);

@@ -61,7 +61,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
     workFormat?: string,
     workSchedule?: string,
     salary?: string,
-    searchValue?: string
+    searchValue?: string,
   ): Observable<Vacancy[]> {
     const isDefaultFirstPage =
       projectId !== undefined &&
@@ -82,7 +82,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
         workFormat,
         workSchedule,
         salary,
-        searchValue
+        searchValue,
       )
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
 
@@ -99,7 +99,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
 
   getOne(vacancyId: number): Observable<Vacancy> {
     return this.entityCache.getOrFetch(vacancyId, () =>
-      this.vacancyAdapter.getOne(vacancyId).pipe(map(vacancy => plainToInstance(Vacancy, vacancy)))
+      this.vacancyAdapter.getOne(vacancyId).pipe(map(vacancy => plainToInstance(Vacancy, vacancy))),
     );
   }
 
@@ -111,7 +111,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
 
   updateVacancy(
     vacancyId: number,
-    vacancy: Partial<Vacancy> | CreateVacancyDto
+    vacancy: Partial<Vacancy> | CreateVacancyDto,
   ): Observable<Vacancy> {
     return this.vacancyAdapter
       .updateVacancy(vacancyId, vacancy)
@@ -145,5 +145,4 @@ export class VacancyRepository implements VacancyRepositoryPort {
       .rejectResponse(responseId)
       .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
-
 }

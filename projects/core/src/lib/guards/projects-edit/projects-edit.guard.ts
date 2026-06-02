@@ -10,7 +10,7 @@ import { catchError, map } from "rxjs/operators";
  * Блокирует редактирование проекта, уже поданного в партнёрскую программу.
  */
 export const ProjectEditRequiredGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ): Observable<boolean | UrlTree> => {
   const router = inject(Router);
   const projectRepository = inject(ProjectRepositoryPort);
@@ -30,6 +30,6 @@ export const ProjectEditRequiredGuard: CanActivateFn = (
     }),
     catchError(() => {
       return of(router.createUrlTree([`/office/projects/${projectId}`]));
-    })
+    }),
   );
 };

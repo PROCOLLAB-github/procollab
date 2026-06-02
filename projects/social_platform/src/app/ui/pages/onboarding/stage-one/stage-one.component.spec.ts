@@ -31,7 +31,7 @@ describe("StageOneComponent", () => {
         fetchUserRoles: of([]),
         fetchChangeableRoles: of([]),
         updateProfile: of({}),
-      }
+      },
     );
 
     const skillsSpy = jasmine.createSpyObj(
@@ -40,7 +40,7 @@ describe("StageOneComponent", () => {
       {
         getSkillsNested: of([]),
         getSkillsInline: of({ count: 0, results: [], next: "", previous: "" }),
-      }
+      },
     );
 
     const specializationsSpy = jasmine.createSpyObj(
@@ -49,7 +49,7 @@ describe("StageOneComponent", () => {
       {
         getSpecializationsNested: of([]),
         getSpecializationsInline: of({ count: 0, results: [], next: "", previous: "" }),
-      }
+      },
     );
 
     await TestBed.configureTestingModule({

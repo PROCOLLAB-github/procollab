@@ -14,11 +14,11 @@ export class EditNewsUseCase {
   execute(
     programId: number,
     newsId: number,
-    newsItem: Partial<FeedNews>
+    newsItem: Partial<FeedNews>,
   ): Observable<Result<FeedNews, { kind: "unknown" }>> {
     return this.programNewsRepositoryPort.editNews(String(programId), newsId, newsItem).pipe(
       map(news => ok<FeedNews>(news)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

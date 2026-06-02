@@ -13,11 +13,11 @@ export class ToggleLikeUseCase {
   execute(
     programId: string,
     newsId: number,
-    state: boolean
+    state: boolean,
   ): Observable<Result<number, { kind: "unknown" }>> {
     return this.programNewsRepositoryPort.toggleLike(programId, newsId, state).pipe(
       map(() => ok<number>(newsId)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

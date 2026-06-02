@@ -35,7 +35,7 @@ export class ProfileFormService {
   private readonly profile = this.profileInfoService.profile;
 
   readonly roles = signal<{ value: string | number | boolean | null; label: string; id: number }[]>(
-    []
+    [],
   );
 
   readonly newPreferredIndustryTitle = signal<string>("");
@@ -63,7 +63,7 @@ export class ProfileFormService {
       .pipe(
         filter(roles => !!roles),
         map(roles => roles!.map(role => ({ id: role.id, value: role.id, label: role.name }))),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: roles => {
@@ -130,7 +130,7 @@ export class ProfileFormService {
       ?.valueChanges.pipe(
         skip(1),
         concatMap(this.changeUserType.bind(this)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
 
@@ -139,7 +139,7 @@ export class ProfileFormService {
       ?.valueChanges.pipe(
         skip(1),
         concatMap(url => this.authRepository.updateAvatar(url, this.profile()!.id)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(user => this.profileInfoService.applyProfileUpdated(user));
   }
@@ -149,7 +149,7 @@ export class ProfileFormService {
       .pipe(
         filter((profile): profile is User => !!profile),
         first(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: profile => {
@@ -186,8 +186,8 @@ export class ProfileFormService {
                 },
                 {
                   validators: yearRangeValidators("entryYear", "completionYear"),
-                }
-              )
+                },
+              ),
             );
           });
 
@@ -205,8 +205,8 @@ export class ProfileFormService {
                 },
                 {
                   validators: yearRangeValidators("entryYear", "completionYear"),
-                }
-              )
+                },
+              ),
             );
           });
 
@@ -216,7 +216,7 @@ export class ProfileFormService {
               this.fb.group({
                 language: lang.language,
                 languageLevel: lang.languageLevel,
-              })
+              }),
             );
           });
 
@@ -229,7 +229,7 @@ export class ProfileFormService {
                 status: [achievement.status, Validators.required],
                 year: [achievement.year, Validators.required],
                 files: [achievement.files ?? []],
-              })
+              }),
             );
           });
 
@@ -241,7 +241,7 @@ export class ProfileFormService {
               | { preferredIndustries?: string[] }
               | undefined;
             role?.preferredIndustries?.forEach((industry: string) =>
-              this.addPreferredIndustry(industry)
+              this.addPreferredIndustry(industry),
             );
           }
 
@@ -372,7 +372,7 @@ export class ProfileFormService {
       })
       .pipe(
         map(() => location.reload()),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       );
   }
 }

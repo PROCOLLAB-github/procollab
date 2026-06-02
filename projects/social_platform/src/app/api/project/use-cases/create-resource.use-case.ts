@@ -13,13 +13,13 @@ export class CreateResourceUseCase {
 
   execute(
     projectId: number,
-    params: Omit<ResourceDto, "projectId">
+    params: Omit<ResourceDto, "projectId">,
   ): Observable<Result<Resource, { kind: "create_project_resource_error"; cause?: unknown }>> {
     return this.projectResourceRepositoryPort.createResource(projectId, params).pipe(
       map(resource => ok<Resource>(resource)),
       catchError(error =>
-        of(fail({ kind: "create_project_resource_error" as const, cause: error }))
-      )
+        of(fail({ kind: "create_project_resource_error" as const, cause: error })),
+      ),
     );
   }
 }

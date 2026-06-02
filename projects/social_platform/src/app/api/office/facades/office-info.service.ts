@@ -68,7 +68,7 @@ export class OfficeInfoService {
     toObservable(this.profile, { injector: this.injector })
       .pipe(
         filter(profile => !!profile),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(profile => {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
@@ -154,7 +154,7 @@ export class OfficeInfoService {
             .navigateByUrl(AppRoutes.auth.login())
             .then(() => this.logger.debug("Route changed from OfficeComponent"));
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }

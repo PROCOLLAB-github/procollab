@@ -15,7 +15,7 @@ export class SendVacancyResponseUseCase {
 
   execute(
     vacancyId: number,
-    body: { whyMe: string }
+    body: { whyMe: string },
   ): Observable<Result<void, { kind: "send_vacancy_response_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.sendResponse(vacancyId, body).pipe(
       switchMap(response =>
@@ -27,14 +27,14 @@ export class SendVacancyResponseUseCase {
                 vacancyId,
                 vacancy.project.id,
                 response.user.id,
-                response.isApproved ?? false
-              )
-            )
+                response.isApproved ?? false,
+              ),
+            ),
           ),
-          map(() => ok<void>(undefined))
-        )
+          map(() => ok<void>(undefined)),
+        ),
       ),
-      catchError(error => of(fail({ kind: "send_vacancy_response_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "send_vacancy_response_error" as const, cause: error }))),
     );
   }
 }

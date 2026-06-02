@@ -142,7 +142,7 @@ export class ProjectMainStepComponent implements OnInit {
         title: [goalName, [Validators.required]],
         completionDate: [goalDate, [Validators.required]],
         responsible: [goalLeader, [Validators.required]],
-      })
+      }),
     );
 
     this.projectGoalService.addGoal(goalName, goalDate, goalLeader);

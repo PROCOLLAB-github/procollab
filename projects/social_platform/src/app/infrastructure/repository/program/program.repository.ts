@@ -56,7 +56,7 @@ export class ProgramRepository implements ProgramRepositoryPort {
 
   register(
     programId: number,
-    additionalData: Record<string, string>
+    additionalData: Record<string, string>,
   ): Observable<ProgramDataSchema> {
     return this.programAdapter.register(programId, additionalData);
   }
@@ -70,7 +70,7 @@ export class ProgramRepository implements ProgramRepositoryPort {
       map(result => ({
         ...result,
         results: result.results.map(user => userFromRaw(user)),
-      }))
+      })),
     );
   }
 
@@ -84,7 +84,7 @@ export class ProgramRepository implements ProgramRepositoryPort {
 
   applyProjectToProgram(
     programId: number,
-    dto: ApplyToProgramDTO
+    dto: ApplyToProgramDTO,
   ): Observable<ApplyToProgramResponse> {
     return this.programAdapter.applyProjectToProgram(programId, dto);
   }
@@ -92,7 +92,7 @@ export class ProgramRepository implements ProgramRepositoryPort {
   createProgramFilters(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<Project>> {
     return this.programAdapter.createProgramFilters(programId, filters, params);
   }

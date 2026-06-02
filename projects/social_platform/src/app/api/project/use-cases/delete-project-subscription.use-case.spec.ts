@@ -15,7 +15,7 @@ describe("DeleteProjectSubscriptionUseCase", () => {
   function setup(): void {
     repo = jasmine.createSpyObj<ProjectSubscriptionRepositoryPort>(
       "ProjectSubscriptionRepositoryPort",
-      ["deleteSubscription"]
+      ["deleteSubscription"],
     );
     bus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
     TestBed.configureTestingModule({

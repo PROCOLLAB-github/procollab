@@ -46,13 +46,13 @@ export class ProgramHttpAdapter {
 
   getDataSchema(programId: number): Observable<{ dataSchema: ProgramDataSchema }> {
     return this.apiService.get<{ dataSchema: ProgramDataSchema }>(
-      `${this.PROGRAMS_URL}/${programId}/schema/`
+      `${this.PROGRAMS_URL}/${programId}/schema/`,
     );
   }
 
   register(
     programId: number,
-    additionalData: Record<string, string>
+    additionalData: Record<string, string>,
   ): Observable<ProgramDataSchema> {
     return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/register/`, additionalData);
   }
@@ -64,7 +64,7 @@ export class ProgramHttpAdapter {
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get(
       `${this.AUTH_PUBLIC_USERS_URL}/`,
-      new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
+      new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } }),
     );
   }
 
@@ -78,7 +78,7 @@ export class ProgramHttpAdapter {
 
   applyProjectToProgram(
     programId: number,
-    dto: ApplyToProgramDTO
+    dto: ApplyToProgramDTO,
   ): Observable<ApplyToProgramResponse> {
     const payload = {
       project: dto.project,
@@ -93,7 +93,7 @@ export class ProgramHttpAdapter {
   createProgramFilters(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<Project>> {
     let url = `${this.PROGRAMS_URL}/${programId}/projects/filter/`;
     if (params) {
@@ -105,7 +105,7 @@ export class ProgramHttpAdapter {
   submitCompettetiveProject(relationId: number): Observable<Project> {
     return this.apiService.post(
       `${this.PROGRAMS_URL}/partner-program-projects/${relationId}/submit/`,
-      {}
+      {},
     );
   }
 }

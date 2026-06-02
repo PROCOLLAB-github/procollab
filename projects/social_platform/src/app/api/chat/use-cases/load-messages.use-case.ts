@@ -18,11 +18,11 @@ export class LoadMessagesUseCase {
     id: number,
     type: "directs" | "projects",
     offset?: number,
-    limit?: number
+    limit?: number,
   ): Observable<Result<ApiPagination<ChatMessage>, LoadMessagesError>> {
     return this.chatRepository.loadMessages(id, type, offset, limit).pipe(
       map(page => ok<ApiPagination<ChatMessage>>(page)),
-      catchError(() => of(fail<LoadMessagesError>({ kind: "server_error" })))
+      catchError(() => of(fail<LoadMessagesError>({ kind: "server_error" }))),
     );
   }
 }

@@ -18,8 +18,8 @@ export class SaveProfileUseCase {
     return this.authRepository.updateProfile(command).pipe(
       map(profile => ok<User>(profile)),
       catchError(error =>
-        of(fail<SaveProfileResultError>({ kind: "profile_edit_error", cause: error }))
-      )
+        of(fail<SaveProfileResultError>({ kind: "profile_edit_error", cause: error })),
+      ),
     );
   }
 }

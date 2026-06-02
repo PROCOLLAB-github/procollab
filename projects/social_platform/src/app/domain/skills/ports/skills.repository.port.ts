@@ -11,7 +11,7 @@ export abstract class SkillsRepositoryPort {
   abstract getSkillsInline(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<ApiPagination<Skill>>;
   abstract approveSkill(userId: number, skillId: number): Observable<Approve>;
   abstract unapproveSkill(userId: number, skillId: number): Observable<void>;

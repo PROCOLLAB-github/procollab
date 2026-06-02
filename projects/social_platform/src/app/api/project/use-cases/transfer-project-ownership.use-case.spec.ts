@@ -12,7 +12,7 @@ describe("TransferProjectOwnershipUseCase", () => {
   function setup(): void {
     repo = jasmine.createSpyObj<ProjectCollaboratorsRepositoryPort>(
       "ProjectCollaboratorsRepositoryPort",
-      ["patchSwitchLeader"]
+      ["patchSwitchLeader"],
     );
     TestBed.configureTestingModule({
       providers: [

@@ -48,7 +48,7 @@ import { CommonModule } from "@angular/common";
 export class ModalComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly overlay: Overlay,
-    private readonly viewContainerRef: ViewContainerRef
+    private readonly viewContainerRef: ViewContainerRef,
   ) {}
 
   /** Цветовая схема модального окна */

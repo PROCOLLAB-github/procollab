@@ -89,7 +89,7 @@ export class ProjectTeamUIService {
   applyEditInvitation(params: { inviteId: number; role: string; specialization: string }): void {
     const { inviteId, role, specialization } = params;
     this.invites.update(list =>
-      list.map(i => (i.id === inviteId ? { ...i, role, specialization } : i))
+      list.map(i => (i.id === inviteId ? { ...i, role, specialization } : i)),
     );
   }
 

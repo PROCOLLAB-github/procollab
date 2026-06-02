@@ -36,7 +36,7 @@ export class ProjectFormAutosaveService {
   bindDraftCleanupAutosave(
     control: AbstractControl | null,
     field: AutosaveField,
-    destroyRef: DestroyRef
+    destroyRef: DestroyRef,
   ): void {
     if (!control) return;
 
@@ -56,10 +56,10 @@ export class ProjectFormAutosaveService {
                 if (!result.ok && result.error.kind === "network") {
                   this.enqueue({ projectId, field, value: "" });
                 }
-              })
+              }),
             );
         }),
-        takeUntilDestroyed(destroyRef)
+        takeUntilDestroyed(destroyRef),
       )
       .subscribe();
   }
@@ -87,7 +87,7 @@ export class ProjectFormAutosaveService {
             if (!result.ok && result.error.kind === "network") {
               this.enqueue({ projectId, field, value });
             }
-          })
+          }),
         )
         .subscribe();
     });

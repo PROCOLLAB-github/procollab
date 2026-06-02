@@ -38,7 +38,7 @@ describe("SpecializationsRepository", () => {
   it("делегирует getSpecializationsInline(search, limit, offset) в adapter", () => {
     setup();
     adapter.getSpecializationsInline.and.returnValue(
-      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Specialization>)
+      of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Specialization>),
     );
 
     repository.getSpecializationsInline("dev", 10, 20).subscribe();

@@ -20,7 +20,7 @@ describe("AuthRequiredGuard", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      AuthRequiredGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+      AuthRequiredGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

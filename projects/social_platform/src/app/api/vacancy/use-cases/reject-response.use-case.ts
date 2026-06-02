@@ -14,7 +14,7 @@ export class RejectResponseUseCase {
   private readonly eventBus = inject(EventBus);
 
   execute(
-    responseId: number
+    responseId: number,
   ): Observable<Result<void, { kind: "reject_response_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.rejectResponse(responseId).pipe(
       switchMap(response =>
@@ -25,14 +25,14 @@ export class RejectResponseUseCase {
                 response.id,
                 response.vacancy,
                 vacancy.project.id,
-                response.user.id
-              )
-            )
+                response.user.id,
+              ),
+            ),
           ),
-          map(() => ok<void>(undefined))
-        )
+          map(() => ok<void>(undefined)),
+        ),
       ),
-      catchError(error => of(fail({ kind: "reject_response_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "reject_response_error" as const, cause: error }))),
     );
   }
 }

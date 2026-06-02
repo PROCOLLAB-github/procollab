@@ -61,7 +61,7 @@ export class NewsFormComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly fileService: FileService
+    private readonly fileService: FileService,
   ) {
     this.messageForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -154,8 +154,8 @@ export class NewsFormComponent implements OnInit {
               fileObj.loading = false;
               fileObj.error = true;
               return of(null);
-            })
-          )
+            }),
+          ),
         );
       } else {
         const fileObj: NewsFormComponent["filesList"][0] = {
@@ -176,8 +176,8 @@ export class NewsFormComponent implements OnInit {
               fileObj.loading = false;
               fileObj.error = "Ошибка загрузки";
               return of(null);
-            })
-          )
+            }),
+          ),
         );
       }
     }

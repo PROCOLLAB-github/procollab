@@ -83,7 +83,7 @@ export class OnboardingStageZeroInfoService {
           if (!result.ok) {
             this.skipSubmitting.set(failure("skip_error"));
             this.onboardingStageZeroUIInfoService.applySkipRegistrationModalError(
-              result.error.cause
+              result.error.cause,
             );
             return;
           }
@@ -114,9 +114,9 @@ export class OnboardingStageZeroInfoService {
       .execute(newStageForm as Partial<User>)
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(1, this.profile()!.id) : of(result)
+          result.ok ? this.updateOnboardingStageUseCase.execute(1, this.profile()!.id) : of(result),
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: result => {
@@ -136,7 +136,7 @@ export class OnboardingStageZeroInfoService {
     this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value as Partial<User>);
     this.router.navigateByUrl(
-      stage === 1 ? AppRoutes.onboarding.stage(1) : AppRoutes.onboarding.stage(3)
+      stage === 1 ? AppRoutes.onboarding.stage(1) : AppRoutes.onboarding.stage(3),
     );
     this.skipSubmitting.set(initial());
   }

@@ -15,7 +15,7 @@ export class CheckUnreadsUseCase {
   execute(): Observable<Result<boolean, CheckUnreadsError>> {
     return this.chatRepository.hasUnreads().pipe(
       map(hasUnreads => ok<boolean>(hasUnreads)),
-      catchError(() => of(fail<CheckUnreadsError>({ kind: "server_error" })))
+      catchError(() => of(fail<CheckUnreadsError>({ kind: "server_error" }))),
     );
   }
 }

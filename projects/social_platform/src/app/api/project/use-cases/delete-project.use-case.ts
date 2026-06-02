@@ -17,7 +17,7 @@ export class DeleteProjectUseCase {
     return this.projectRepositoryPort.deleteOne(id).pipe(
       tap(() => this.eventBus.emit(projectDeleted(id))),
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "unknown" as const, cause: error })))
+      catchError(error => of(fail({ kind: "unknown" as const, cause: error }))),
     );
   }
 }

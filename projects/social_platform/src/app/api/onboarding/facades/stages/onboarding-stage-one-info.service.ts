@@ -43,7 +43,7 @@ export class OnboardingStageOneInfoService {
   readonly inlineSpecializations = this.searchesService.inlineSpecs;
 
   readonly nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
-    map(r => r["data"])
+    map(r => r["data"]),
   );
 
   private readonly profile = this.profileInfoService.profile;
@@ -86,9 +86,9 @@ export class OnboardingStageOneInfoService {
       .execute(this.stageForm.value)
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result)
+          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result),
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
         if (!result.ok) {
@@ -112,7 +112,7 @@ export class OnboardingStageOneInfoService {
     this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value);
     this.router.navigateByUrl(
-      stage === 2 ? AppRoutes.onboarding.stage(stage) : AppRoutes.onboarding.stage(3)
+      stage === 2 ? AppRoutes.onboarding.stage(stage) : AppRoutes.onboarding.stage(3),
     );
     this.skipSubmitting.set(initial());
   }

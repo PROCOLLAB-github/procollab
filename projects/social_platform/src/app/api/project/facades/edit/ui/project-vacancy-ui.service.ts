@@ -131,7 +131,7 @@ export class ProjectVacancyUIService {
     // Установка выбранных значений селектов по сопоставлению
     this.workExperienceList.find(e => e.value === item.requiredExperience) &&
       this.selectedRequiredExperienceId.set(
-        this.workExperienceList.find(e => e.value === item.requiredExperience)!.id
+        this.workExperienceList.find(e => e.value === item.requiredExperience)!.id,
       );
 
     this.workFormatList.find(f => f.value === item.workFormat) &&
@@ -139,12 +139,12 @@ export class ProjectVacancyUIService {
 
     this.workScheduledList.find(s => s.value === item.workSchedule) &&
       this.selectedWorkScheduleId.set(
-        this.workScheduledList.find(s => s.value === item.workSchedule)!.id
+        this.workScheduledList.find(s => s.value === item.workSchedule)!.id,
       );
 
     this.rolesMembersList.find(r => r.value === item.specialization) &&
       this.selectedVacanciesSpecializationId.set(
-        this.rolesMembersList.find(r => r.value === item.specialization)!.id
+        this.rolesMembersList.find(r => r.value === item.specialization)!.id,
       );
 
     // Патчинг формы значениями вакансии

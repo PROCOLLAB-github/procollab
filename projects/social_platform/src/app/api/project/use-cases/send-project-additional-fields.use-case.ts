@@ -14,15 +14,15 @@ export class SendProjectAdditionalFieldsUseCase {
 
   execute(
     projectId: number,
-    newValues: ProjectNewAdditionalProgramFields[]
+    newValues: ProjectNewAdditionalProgramFields[],
   ): Observable<
     Result<Project, { kind: "send_project_additional_fields_error"; cause?: unknown }>
   > {
     return this.projectProgramRepositoryPort.sendNewProjectFieldsValues(projectId, newValues).pipe(
       map(project => ok<Project>(project)),
       catchError(error =>
-        of(fail({ kind: "send_project_additional_fields_error" as const, cause: error }))
-      )
+        of(fail({ kind: "send_project_additional_fields_error" as const, cause: error })),
+      ),
     );
   }
 }

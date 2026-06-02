@@ -37,7 +37,7 @@ export class CoursesHttpAdapter {
     taskId: number,
     answerText?: string,
     optionIds?: number[],
-    fileIds?: number[]
+    fileIds?: number[],
   ): Observable<TaskAnswerResponse> {
     return this.apiService.post<TaskAnswerResponse>(`${this.COURSE_URL}/tasks/${taskId}/answer/`, {
       answerText,

@@ -12,11 +12,11 @@ export class UnapproveSkillUseCase {
 
   execute(
     userId: number,
-    skillId: number
+    skillId: number,
   ): Observable<Result<void, { kind: "unapprove_skill_error"; cause?: unknown }>> {
     return this.skillRepository.unapproveSkill(userId, skillId).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "unapprove_skill_error", cause: error } as const)))
+      catchError(error => of(fail({ kind: "unapprove_skill_error", cause: error } as const))),
     );
   }
 }

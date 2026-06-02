@@ -18,7 +18,7 @@ export class CreateProjectUseCase {
     return this.projectRepositoryPort.postOne().pipe(
       tap(project => this.eventBus.emit(projectCreated(project))),
       map(project => ok<Project>(project)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

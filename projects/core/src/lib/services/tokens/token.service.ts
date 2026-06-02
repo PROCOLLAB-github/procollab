@@ -50,7 +50,10 @@ export class TokenService {
     return this.isDevStage ? "devRefreshToken" : "refreshToken";
   }
 
-  constructor(private apiService: ApiService, @Inject(PRODUCTION) private production: boolean) {}
+  constructor(
+    private apiService: ApiService,
+    @Inject(PRODUCTION) private production: boolean,
+  ) {}
 
   /**
    * Обновляет access токен используя refresh токен

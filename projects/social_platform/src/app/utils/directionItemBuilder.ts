@@ -12,7 +12,7 @@ export const directionItemBuilder = <TAbout>(
   directions: string[],
   icons: string[],
   abouts: TAbout[],
-  types: string[]
+  types: string[],
 ): DirectionItem<TAbout>[] | undefined => {
   if (amount <= 0) return;
 

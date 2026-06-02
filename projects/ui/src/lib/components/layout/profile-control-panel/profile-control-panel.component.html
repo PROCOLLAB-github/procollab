@@ -5,30 +5,30 @@
     <div class="control-panel__action" (click)="showNotifications = true">
       <div (clickOutside)="onClickOutside()" class="control-panel__bell">
         @if (hasNotifications() || hasInvites) {
-        <div class="attention"></div>
+          <div class="attention"></div>
         }
         <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
         @if (invites().length) {
-        <div class="control-panel__bell--hasInvites"></div>
+          <div class="control-panel__bell--hasInvites"></div>
         }
       </div>
     </div>
     @if (showNotifications) {
-    <div class="control-panel__notifications notifications">
-      <ul class="notifications__invites">
-        @for (invite of invites(); track invite.id) {
-        <li class="notifications__invite">
-          <app-invite-manage-card
-            [invite]="invite"
-            (accept)="acceptInvite.emit($event)"
-            (reject)="rejectInvite.emit($event)"
-          ></app-invite-manage-card>
-        </li>
-        } @empty {
-        <app-empty-manage-card></app-empty-manage-card>
-        }
-      </ul>
-    </div>
+      <div class="control-panel__notifications notifications">
+        <ul class="notifications__invites">
+          @for (invite of invites(); track invite.id) {
+            <li class="notifications__invite">
+              <app-invite-manage-card
+                [invite]="invite"
+                (accept)="acceptInvite.emit($event)"
+                (reject)="rejectInvite.emit($event)"
+              ></app-invite-manage-card>
+            </li>
+          } @empty {
+            <app-empty-manage-card></app-empty-manage-card>
+          }
+        </ul>
+      </div>
     }
     <a class="control-panel__action" (click)="logout.emit()">
       <div class="control-panel__bell">
@@ -37,10 +37,10 @@
     </a>
   </div>
   @if (user()) {
-  <app-profile-info
-    class="control-panel__profile"
-    [user]="user()!"
-    (logout)="logout.emit()"
-  ></app-profile-info>
+    <app-profile-info
+      class="control-panel__profile"
+      [user]="user()!"
+      (logout)="logout.emit()"
+    ></app-profile-info>
   }
 </div>

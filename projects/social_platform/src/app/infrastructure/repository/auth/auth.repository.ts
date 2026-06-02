@@ -33,7 +33,7 @@ export class AuthRepository implements AuthRepositoryPort {
       tap(() => {
         this.tokenService.clearTokens();
         this.chatStateService.reset();
-      })
+      }),
     );
   }
 
@@ -63,14 +63,14 @@ export class AuthRepository implements AuthRepositoryPort {
   updateOnboardingStage(stage: number | null, userId: number): Observable<User> {
     return this.authAdapter.setOnboardingStage(stage, userId).pipe(
       take(1),
-      map(user => userFromRaw(user))
+      map(user => userFromRaw(user)),
     );
   }
 
   updateAvatar(url: string, userId: number): Observable<User> {
     return this.authAdapter.saveAvatar(url, userId).pipe(
       take(1),
-      map(user => userFromRaw(user))
+      map(user => userFromRaw(user)),
     );
   }
 
@@ -87,14 +87,14 @@ export class AuthRepository implements AuthRepositoryPort {
   fetchUserRoles(): Observable<UserRole[]> {
     return this.authAdapter.getUserRoles().pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
-      map(roles => plainToInstance(UserRole, roles))
+      map(roles => plainToInstance(UserRole, roles)),
     );
   }
 
   fetchChangeableRoles(): Observable<UserRole[]> {
     return this.authAdapter.getChangeableRoles().pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
-      map(roles => plainToInstance(UserRole, roles))
+      map(roles => plainToInstance(UserRole, roles)),
     );
   }
 

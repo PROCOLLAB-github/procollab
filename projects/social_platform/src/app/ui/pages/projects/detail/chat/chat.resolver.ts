@@ -22,6 +22,6 @@ export const ProjectChatResolver: ResolveFn<Project> = (route: ActivatedRouteSna
       const project = result.value;
       projectsDetailUIInfoService.applySetProject(project);
       return of(project);
-    })
+    }),
   );
 };

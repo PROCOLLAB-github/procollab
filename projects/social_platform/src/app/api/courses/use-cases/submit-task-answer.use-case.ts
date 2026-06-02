@@ -15,11 +15,11 @@ export class SubmitTaskAnswerUseCase {
     taskId: number,
     answerText?: string,
     optionIds?: number[],
-    fileIds?: number[]
+    fileIds?: number[],
   ): Observable<Result<TaskAnswerResponse, { kind: "submit_answer_error"; cause?: unknown }>> {
     return this.coursesRepository.postAnswerQuestion(taskId, answerText, optionIds, fileIds).pipe(
       map(response => ok<TaskAnswerResponse>(response)),
-      catchError(error => of(fail({ kind: "submit_answer_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "submit_answer_error" as const, cause: error }))),
     );
   }
 }

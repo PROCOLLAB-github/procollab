@@ -23,32 +23,32 @@ export class NewsInfoService {
       | {
           results: never[];
           count: number;
-        }
+        },
   ): void {
     this.news$.set(success(news.results));
   }
 
   applyAddNews(newsRes: FeedNews): void {
     this.news$.update(state =>
-      isSuccess(state) ? success([newsRes, ...state.data]) : success([newsRes])
+      isSuccess(state) ? success([newsRes, ...state.data]) : success([newsRes]),
     );
   }
 
   applyUpdateNews(results: FeedNews[]): void {
     this.news$.update(state =>
-      isSuccess(state) ? success([...state.data, ...results]) : success(results)
+      isSuccess(state) ? success([...state.data, ...results]) : success(results),
     );
   }
 
   applyDeleteNews(newsId: number): void {
     this.news$.update(state =>
-      isSuccess(state) ? success(state.data.filter(n => n.id !== newsId)) : state
+      isSuccess(state) ? success(state.data.filter(n => n.id !== newsId)) : state,
     );
   }
 
   applyEditNews(resNews: FeedNews): void {
     this.news$.update(state =>
-      isSuccess(state) ? success(state.data.map(n => (n.id === resNews.id ? resNews : n))) : state
+      isSuccess(state) ? success(state.data.map(n => (n.id === resNews.id ? resNews : n))) : state,
     );
   }
 
@@ -63,10 +63,10 @@ export class NewsInfoService {
                     isUserLiked: !n.isUserLiked,
                     likesCount: n.isUserLiked ? n.likesCount - 1 : n.likesCount + 1,
                   }
-                : n
-            )
+                : n,
+            ),
           )
-        : list
+        : list,
     );
   }
 }

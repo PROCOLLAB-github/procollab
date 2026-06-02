@@ -13,11 +13,11 @@ export class RegisterProgramUseCase {
 
   execute(
     programId: number,
-    additionalData: Record<string, string>
+    additionalData: Record<string, string>,
   ): Observable<Result<ProgramDataSchema, { kind: "register_program_error"; cause?: unknown }>> {
     return this.programRepositoryPort.register(programId, additionalData).pipe(
       map(result => ok<ProgramDataSchema>(result)),
-      catchError(error => of(fail({ kind: "register_program_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "register_program_error" as const, cause: error }))),
     );
   }
 }

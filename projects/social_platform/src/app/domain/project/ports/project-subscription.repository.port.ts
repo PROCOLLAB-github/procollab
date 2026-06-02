@@ -12,7 +12,7 @@ export abstract class ProjectSubscriptionRepositoryPort {
   abstract addSubscription(projectId: number): Observable<void>;
   abstract getSubscriptions(
     userId: number,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<Project>>;
   abstract deleteSubscription(projectId: number): Observable<void>;
 }

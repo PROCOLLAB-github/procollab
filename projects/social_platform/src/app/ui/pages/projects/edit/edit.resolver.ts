@@ -16,7 +16,7 @@ import { GetProjectResourcesUseCase } from "@api/project/use-cases/get-project-r
 
 /** Предзагружает данные проекта, целей, партнёров, ресурсов и приглашений для редактирования. */
 export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resource[], Invite[]]> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getProjectUseCase = inject(GetProjectUseCase);
   const getProjectGoalsUseCase = inject(GetProjectGoalsUseCase);

@@ -217,9 +217,9 @@ export class ProjectGoalService {
         });
       }),
       map(result =>
-        result.ok ? result.value : { __error: true, err: result.error.cause, original: newGoals }
+        result.ok ? result.value : { __error: true, err: result.error.cause, original: newGoals },
       ),
-      catchError(err => of({ __error: true, err, original: newGoals }))
+      catchError(err => of({ __error: true, err, original: newGoals })),
     );
   }
 
@@ -237,9 +237,9 @@ export class ProjectGoalService {
         map(result =>
           result.ok
             ? { res: result.value, idx }
-            : { __error: true, err: result.error.cause, original: item, idx }
+            : { __error: true, err: result.error.cause, original: item, idx },
         ),
-        catchError(err => of({ __error: true, err, original: item, idx }))
+        catchError(err => of({ __error: true, err, original: item, idx })),
       );
     });
 

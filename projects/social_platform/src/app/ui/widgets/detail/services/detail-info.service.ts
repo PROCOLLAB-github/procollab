@@ -68,14 +68,14 @@ export class DetailInfoService {
   readonly isMaterialsModalOpen = signal(false);
 
   readonly contactLinks = computed<{ label: string; url: string }[]>(() =>
-    ((this.info()?.links as string[] | undefined) ?? []).map(link => ({ label: link, url: link }))
+    ((this.info()?.links as string[] | undefined) ?? []).map(link => ({ label: link, url: link })),
   );
 
   readonly materialLinks = computed<{ label: string; url: string }[]>(() =>
     ((this.info()?.materials as { title: string; url: string }[] | undefined) ?? []).map(m => ({
       label: m.title,
       url: m.url,
-    }))
+    })),
   );
 
   readonly isUserManager = computed(() => {
@@ -102,7 +102,7 @@ export class DetailInfoService {
     if (!programId) return false;
 
     return this.memberProjects().some(
-      project => project.leader === this.profile()?.id && project.partnerProgram?.id === programId
+      project => project.leader === this.profile()?.id && project.partnerProgram?.id === programId,
     );
   });
 
@@ -162,14 +162,14 @@ export class DetailInfoService {
 
     this.detailProgramInfoService.applyUpdateStage(
       "projects",
-      currentUrl.includes("/projects") && !currentUrl.includes("/projects-rating")
+      currentUrl.includes("/projects") && !currentUrl.includes("/projects-rating"),
     );
 
     this.detailProgramInfoService.applyUpdateStage("members", currentUrl.includes("/members"));
 
     this.detailProgramInfoService.applyUpdateStage(
       "projects-rating",
-      currentUrl.includes("/projects-rating")
+      currentUrl.includes("/projects-rating"),
     );
 
     this.detailProjectInfoService.applyUpdateStage("team", currentUrl.includes("/team"));
@@ -177,12 +177,12 @@ export class DetailInfoService {
     this.detailProjectInfoService.applyUpdateStage("chat", currentUrl.includes("/chat"));
     this.detailProjectInfoService.applyUpdateStage(
       "work-section",
-      currentUrl.includes("/work-section")
+      currentUrl.includes("/work-section"),
     );
 
     this.detailProjectInfoService.applyUpdateStage(
       "gant-diagram",
-      currentUrl.includes("/gant-diagram")
+      currentUrl.includes("/gant-diagram"),
     );
     this.detailProjectInfoService.applyUpdateStage("kanban", currentUrl.includes("/kanban"));
   }
@@ -223,7 +223,7 @@ export class DetailInfoService {
       toObservable(this.profileDetailUIInfoService.user, { injector: this.injector })
         .pipe(
           filter((user): user is User => !!user),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         )
         .subscribe(user => this.info.set(user));
 

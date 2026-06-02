@@ -17,12 +17,12 @@ export class PostVacancyUseCase {
 
   execute(
     projectId: number,
-    vacancy: CreateVacancyDto
+    vacancy: CreateVacancyDto,
   ): Observable<Result<Vacancy, { kind: "post_vacancy_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.postVacancy(projectId, vacancy).pipe(
       tap(() => this.eventBus.emit(vacancyCreated(projectId, vacancy))),
       map(createdVacancy => ok<Vacancy>(createdVacancy)),
-      catchError(error => of(fail({ kind: "post_vacancy_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "post_vacancy_error" as const, cause: error }))),
     );
   }
 }

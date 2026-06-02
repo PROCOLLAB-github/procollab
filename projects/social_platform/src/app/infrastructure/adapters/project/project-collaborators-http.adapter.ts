@@ -17,7 +17,7 @@ export class ProjectCollaboratorsHttpAdapter {
   patchSwitchLeader(projectId: number, userId: number): Observable<void> {
     return this.apiService.patch(
       `${this.PROJECTS_URL}/${projectId}/collaborators/${userId}/switch-leader/`,
-      {}
+      {},
     );
   }
 

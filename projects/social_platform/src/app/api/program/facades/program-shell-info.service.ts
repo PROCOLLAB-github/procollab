@@ -61,7 +61,7 @@ export class ProgramShellInfoService {
     if (isSuccess(this.programs$())) {
       const data = this.programs();
       return of(
-        ok<ApiPagination<Program>>({ count: data.length, results: data, next: "", previous: "" })
+        ok<ApiPagination<Program>>({ count: data.length, results: data, next: "", previous: "" }),
       );
     }
 
@@ -69,7 +69,7 @@ export class ProgramShellInfoService {
       PROGRAM_CACHE_KEY,
       CACHE_VERSION,
       CACHE_TTL,
-      raw => plainToInstance(Program, raw as object[]) as Program[]
+      raw => plainToInstance(Program, raw as object[]) as Program[],
     );
 
     if (cached) {
@@ -82,7 +82,7 @@ export class ProgramShellInfoService {
           results: cached,
           next: "",
           previous: "",
-        })
+        }),
       );
     }
 
@@ -117,7 +117,7 @@ export class ProgramShellInfoService {
         } catch {}
       }),
       finalize(() => (this.programsInflight = null)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     this.programsInflight = request$;

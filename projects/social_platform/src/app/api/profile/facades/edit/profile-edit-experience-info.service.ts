@@ -66,17 +66,17 @@ export class ProfileEditExperienceInfoService {
     if (workOverflow) {
       this.isModalErrorSkillsChoose.set(true);
       this.isModalErrorSkillChooseText.set(
-        "Превышено допустимое количество символов в одном из полей"
+        "Превышено допустимое количество символов в одном из полей",
       );
       return;
     }
 
     ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.clearValidators());
     ["organization", "jobPosition"].forEach(name =>
-      this.profileForm.get(name)?.setValidators([Validators.required])
+      this.profileForm.get(name)?.setValidators([Validators.required]),
     );
     ["organization", "jobPosition"].forEach(name =>
-      this.profileForm.get(name)?.updateValueAndValidity()
+      this.profileForm.get(name)?.updateValueAndValidity(),
     );
     ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.markAsTouched());
 
@@ -142,7 +142,7 @@ export class ProfileEditExperienceInfoService {
     if (workItem) {
       const entryYear = this.normalizeYear(workItem.entryYearWork ?? workItem.entryYear);
       const completionYear = this.normalizeYear(
-        workItem.completionYearWork ?? workItem.completionYear
+        workItem.completionYearWork ?? workItem.completionYear,
       );
 
       this.yearListEducation.forEach(entryYearWork => {

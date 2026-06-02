@@ -14,13 +14,13 @@ export abstract class ProjectRatingRepositoryPort {
   abstract postFilters(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<ProjectRate>>;
 
   abstract rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void>;
 
   abstract formValuesToDTO(
     criteria: ProjectRatingCriterion[],
-    outputVals: Record<string, string | number | boolean>
+    outputVals: Record<string, string | number | boolean>,
   ): ProjectRatingCriterionOutput[];
 }

@@ -24,7 +24,7 @@ export class NewsDetailComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute, // Сервис для работы с активным маршрутом
-    private readonly router: Router // Сервис для навигации
+    private readonly router: Router, // Сервис для навигации
   ) {}
 
   // Observable с данными новости из резолвера

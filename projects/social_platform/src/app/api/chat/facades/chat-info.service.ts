@@ -37,10 +37,10 @@ export class ChatInfoService {
       chats.map(chat => ({
         ...chat,
         isUnread: this.profile()!.id !== chat.lastMessage.author.id && !chat.lastMessage.isRead,
-      }))
+      })),
     ),
     map(chats => chats.sort((a, b) => Number(b.isUnread) - Number(a.isUnread))),
-    takeUntilDestroyed()
+    takeUntilDestroyed(),
   );
 
   initializationChats(): void {
@@ -55,7 +55,7 @@ export class ChatInfoService {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(chats => {
         this.chatsData.set(chats);

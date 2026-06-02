@@ -6,7 +6,7 @@ import { hexToRgba } from "./hexToRgba";
 export const getPriorityType = (
   priorityId: number,
   type: "background" | "color",
-  opacity = 0.25
+  opacity = 0.25,
 ) => {
   const findedPriority = priorityInfoList.find(priority => priority.priorityType === priorityId);
   const baseColor = findedPriority?.color ?? "var(--light-white)";

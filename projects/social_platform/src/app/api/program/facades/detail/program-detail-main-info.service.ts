@@ -59,7 +59,7 @@ export class ProgramDetailMainService {
         tap(programId => {
           this.programId.set(programId);
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -80,7 +80,7 @@ export class ProgramDetailMainService {
             });
           }
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -101,11 +101,11 @@ export class ProgramDetailMainService {
               ok({
                 results: [],
                 count: 0,
-              })
+              }),
             );
           }
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: result => {
@@ -145,7 +145,7 @@ export class ProgramDetailMainService {
       .pipe(
         throttleTime(2000),
         concatMap(() => this.onScroll()),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -174,7 +174,7 @@ export class ProgramDetailMainService {
         setTimeout(() => {
           this.setupNewsObserver();
         }, 100);
-      })
+      }),
     );
   }
 
@@ -198,7 +198,7 @@ export class ProgramDetailMainService {
       tap(result => {
         if (!result.ok) return;
         this.newsInfoService.applyAddNews(result.value);
-      })
+      }),
     );
   }
 
@@ -238,7 +238,7 @@ export class ProgramDetailMainService {
         if (!newsRes.ok) return;
 
         this.newsInfoService.applyEditNews(newsRes.value);
-      })
+      }),
     );
   }
 

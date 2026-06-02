@@ -21,7 +21,7 @@ export class GetTaskUseCase {
           return of(fail<GetTaskError>({ kind: "not_found" }));
         }
         return of(fail<GetTaskError>({ kind: "server_error" }));
-      })
+      }),
     );
   }
 }

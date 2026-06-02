@@ -43,7 +43,7 @@ export class ProfileDetailUIInfoService {
         this.user()?.email &&
         this.user()?.personal.avatar &&
         this.user()?.personal.birthday
-      )
+      ),
     );
   }
 
@@ -62,8 +62,8 @@ export class ProfileDetailUIInfoService {
         ["навыки", "достижения"],
         ["squiz", "medal"],
         [user.relations.skills, user.relations.achievements],
-        ["array", "array"]
-      )!.filter(item => !Array.isArray(item.about) || item.about.length > 0)
+        ["array", "array"],
+      )!.filter(item => !Array.isArray(item.about) || item.about.length > 0),
     );
   }
 

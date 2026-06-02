@@ -13,11 +13,13 @@ export class CreatePartnerUseCase {
 
   execute(
     projectId: number,
-    partner: PartnerDto
+    partner: PartnerDto,
   ): Observable<Result<Partner, { kind: "create_project_partner_error"; cause?: unknown }>> {
     return this.projectPartnerRepositoryPort.createPartner(projectId, partner).pipe(
       map(result => ok<Partner>(result)),
-      catchError(error => of(fail({ kind: "create_project_partner_error" as const, cause: error })))
+      catchError(error =>
+        of(fail({ kind: "create_project_partner_error" as const, cause: error })),
+      ),
     );
   }
 }

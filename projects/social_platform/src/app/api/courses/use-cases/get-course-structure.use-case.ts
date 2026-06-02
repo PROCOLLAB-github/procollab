@@ -12,11 +12,11 @@ export class GetCourseStructureUseCase {
   private readonly coursesRepository = inject(CoursesRepositoryPort);
 
   execute(
-    courseId: number
+    courseId: number,
   ): Observable<Result<CourseStructure, { kind: "get_course_structure_error"; cause?: unknown }>> {
     return this.coursesRepository.getCourseStructure(courseId).pipe(
       map(structure => ok<CourseStructure>(structure)),
-      catchError(error => of(fail({ kind: "get_course_structure_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_course_structure_error" as const, cause: error }))),
     );
   }
 }

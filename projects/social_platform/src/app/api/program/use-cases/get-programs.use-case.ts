@@ -14,11 +14,11 @@ export class GetProgramsUseCase {
 
   execute(
     skip: number,
-    take: number
+    take: number,
   ): Observable<Result<ApiPagination<Program>, { kind: "get_programs_error"; cause?: unknown }>> {
     return this.programRepositoryPort.getAll(skip, take).pipe(
       map(programs => ok<ApiPagination<Program>>(programs)),
-      catchError(error => of(fail({ kind: "get_programs_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_programs_error" as const, cause: error }))),
     );
   }
 }

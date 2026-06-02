@@ -33,7 +33,7 @@ export function createProjectAchievementGroup(
   fb: FormBuilder,
   achievement: Partial<ProjectAchievement>,
   index: number,
-  currentYear = new Date().getFullYear()
+  currentYear = new Date().getFullYear(),
 ): FormGroup {
   return fb.group({
     id: achievement.id ?? index,

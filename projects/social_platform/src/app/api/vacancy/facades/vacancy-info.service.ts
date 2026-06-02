@@ -82,7 +82,7 @@ export class VacancyInfoService {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.updateListType();
@@ -140,7 +140,7 @@ export class VacancyInfoService {
             roleContains,
             workFormat,
             workSchedule,
-            salary
+            salary,
           );
         }),
         switchMap(params => {
@@ -154,7 +154,7 @@ export class VacancyInfoService {
           const prev = this.vacancyUIInfoService.vacancyList();
           this.vacancyUIInfoService.vacancies$.set(loading(prev));
           return this.onFetch(0, 20);
-        })
+        }),
       )
       .subscribe({
         next: result => this.vacancyUIInfoService.vacancies$.set(success(result)),
@@ -177,14 +177,14 @@ export class VacancyInfoService {
       this.vacancyUIInfoService.loadingMore.set(true);
       return this.onFetch(
         this.vacancyUIInfoService.vacancyPage() * this.vacancyUIInfoService.perFetchTake(),
-        this.vacancyUIInfoService.perFetchTake()
+        this.vacancyUIInfoService.perFetchTake(),
       ).pipe(
         tap((result: Vacancy[]) => {
           this.vacancyUIInfoService.vacancies$.update(state =>
-            isSuccess(state) ? success([...state.data, ...result]) : success(result)
+            isSuccess(state) ? success([...state.data, ...result]) : success(result),
           );
           this.vacancyUIInfoService.loadingMore.set(false);
-        })
+        }),
       );
     }
 
@@ -197,7 +197,7 @@ export class VacancyInfoService {
         .pipe(
           throttleTime(500),
           concatMap(() => this.onScroll(target)),
-          takeUntil(this.destroy$)
+          takeUntil(this.destroy$),
         )
         .subscribe();
     }

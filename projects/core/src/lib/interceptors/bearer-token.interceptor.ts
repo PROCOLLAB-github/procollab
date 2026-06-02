@@ -28,7 +28,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   constructor(
     private readonly tokenService: TokenService,
     private readonly router: Router,
-    private readonly loggerService: LoggerService
+    private readonly loggerService: LoggerService,
   ) {}
 
   /**
@@ -88,7 +88,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
    */
   private handleRequestWithTokens(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -107,7 +107,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
         }
 
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -119,7 +119,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
    */
   private handle401(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
@@ -158,9 +158,9 @@ export class BearerTokenInterceptor implements HttpInterceptor {
           return next.handle(
             request.clone({
               setHeaders: headers,
-            })
+            }),
           );
-        })
+        }),
       );
     }
 
@@ -187,9 +187,9 @@ export class BearerTokenInterceptor implements HttpInterceptor {
         return next.handle(
           request.clone({
             setHeaders: headers,
-          })
+          }),
         );
-      })
+      }),
     );
   }
 }

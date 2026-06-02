@@ -94,7 +94,7 @@ export class RatingCardService {
   readonly showRatedStatus = computed(() => this.projectRated() || this.projectConfirmed());
 
   readonly showEditButton = computed(
-    () => this.projectConfirmed() && !this.programDateFinished() && this.userRatedThisProject()
+    () => this.projectConfirmed() && !this.programDateFinished() && this.userRatedThisProject(),
   );
 
   readonly isButtonDisabled = computed(() => {
@@ -104,7 +104,7 @@ export class RatingCardService {
   });
 
   readonly buttonColor = computed<"green" | "primary">(() =>
-    this.userRatedThisProject() ? "green" : "primary"
+    this.userRatedThisProject() ? "green" : "primary",
   );
 
   readonly buttonOpacity = computed(() => (this.isButtonDisabled() ? "0.5" : "1"));
@@ -112,7 +112,7 @@ export class RatingCardService {
   readonly showConfirmedState = computed(
     () =>
       (this.projectConfirmed() && !this.canEdit()) ||
-      (this.isLimitReached() && !this.userRatedThisProject())
+      (this.isLimitReached() && !this.userRatedThisProject()),
   );
 
   readonly buttonTooltip = computed(() => {

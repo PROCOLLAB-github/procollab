@@ -23,7 +23,7 @@ abstract class MemberRepositoryPort {
   getMembers(
     skip: number,
     take: number,
-    otherParams?: Record<string, string | number | boolean>
+    otherParams?: Record<string, string | number | boolean>,
   ): Observable<ApiPagination<User>>;
 }
 ```

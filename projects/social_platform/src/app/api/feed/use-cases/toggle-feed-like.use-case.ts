@@ -18,7 +18,7 @@ export class ToggleFeedLikeUseCase {
     ownerType: "project" | "profile",
     ownerId: string,
     newsId: number,
-    state: boolean
+    state: boolean,
   ): Observable<Result<void, { kind: "toggle_feed_like_error"; cause?: unknown }>> {
     const request$ =
       ownerType === "profile"
@@ -27,7 +27,7 @@ export class ToggleFeedLikeUseCase {
 
     return request$.pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "toggle_feed_like_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "toggle_feed_like_error" as const, cause: error }))),
     );
   }
 }

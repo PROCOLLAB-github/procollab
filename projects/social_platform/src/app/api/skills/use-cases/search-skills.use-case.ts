@@ -17,11 +17,11 @@ export class SearchSkillsUseCase {
   execute(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<Result<ApiPagination<Skill>, SearchSkillsError>> {
     return this.skillsRepository.getSkillsInline(search, limit, offset).pipe(
       map(page => ok<ApiPagination<Skill>>(page)),
-      catchError(() => of(fail<SearchSkillsError>({ kind: "server_error" })))
+      catchError(() => of(fail<SearchSkillsError>({ kind: "server_error" }))),
     );
   }
 }

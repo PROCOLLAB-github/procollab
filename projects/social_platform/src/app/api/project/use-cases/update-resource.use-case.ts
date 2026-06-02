@@ -14,13 +14,13 @@ export class UpdateResourceUseCase {
   execute(
     projectId: number,
     resourceId: number,
-    params: Omit<ResourceDto, "projectId">
+    params: Omit<ResourceDto, "projectId">,
   ): Observable<Result<Resource, { kind: "update_project_resource_error"; cause?: unknown }>> {
     return this.projectResourceRepositoryPort.updateResource(projectId, resourceId, params).pipe(
       map(resource => ok<Resource>(resource)),
       catchError(error =>
-        of(fail({ kind: "update_project_resource_error" as const, cause: error }))
-      )
+        of(fail({ kind: "update_project_resource_error" as const, cause: error })),
+      ),
     );
   }
 }

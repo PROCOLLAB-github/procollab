@@ -13,13 +13,13 @@ export class ToggleProfileNewsLikeUseCase {
   execute(
     userId: string,
     newsId: number,
-    state: boolean
+    state: boolean,
   ): Observable<Result<void, { kind: "toggle_profile_news_like_error"; cause?: unknown }>> {
     return this.profileNewsRepositoryPort.toggleLike(userId, newsId, state).pipe(
       map(() => ok<void>(undefined)),
       catchError(error =>
-        of(fail({ kind: "toggle_profile_news_like_error" as const, cause: error }))
-      )
+        of(fail({ kind: "toggle_profile_news_like_error" as const, cause: error })),
+      ),
     );
   }
 }

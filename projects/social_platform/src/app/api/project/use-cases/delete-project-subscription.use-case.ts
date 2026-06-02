@@ -14,14 +14,14 @@ export class DeleteProjectSubscriptionUseCase {
   private readonly eventBus = inject(EventBus);
 
   execute(
-    projectId: number
+    projectId: number,
   ): Observable<Result<void, { kind: "delete_project_subscription_error"; cause?: unknown }>> {
     return this.projectSubscriptionRepositoryPort.deleteSubscription(projectId).pipe(
       tap(() => this.eventBus.emit(projectUnSubscribed(projectId))),
       map(() => ok<void>(undefined)),
       catchError(error =>
-        of(fail({ kind: "delete_project_subscription_error" as const, cause: error }))
-      )
+        of(fail({ kind: "delete_project_subscription_error" as const, cause: error })),
+      ),
     );
   }
 }

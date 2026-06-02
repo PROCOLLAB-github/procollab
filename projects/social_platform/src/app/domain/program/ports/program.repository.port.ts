@@ -17,7 +17,7 @@ export abstract class ProgramRepositoryPort {
   abstract getAll(
     skip: number,
     take: number,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<Program>>;
 
   abstract getOne(programId: number): Observable<Program>;
@@ -28,35 +28,35 @@ export abstract class ProgramRepositoryPort {
 
   abstract register(
     programId: number,
-    additionalData: Record<string, string>
+    additionalData: Record<string, string>,
   ): Observable<ProgramDataSchema>;
 
   abstract getAllProjects(
     programId: number,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<Project>>;
 
   abstract getAllMembers(
     programId: number,
     skip: number,
-    take: number
+    take: number,
   ): Observable<ApiPagination<User>>;
 
   abstract getProgramFilters(programId: number): Observable<PartnerProgramFields[]>;
 
   abstract getProgramProjectAdditionalFields(
-    programId: number
+    programId: number,
   ): Observable<ProjectAdditionalFields>;
 
   abstract applyProjectToProgram(
     programId: number,
-    dto: ApplyToProgramDTO
+    dto: ApplyToProgramDTO,
   ): Observable<ApplyToProgramResponse>;
 
   abstract createProgramFilters(
     programId: number,
     filters: Record<string, string[]>,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ApiPagination<Project>>;
 
   abstract submitCompettetiveProject(relationId: number): Observable<Project>;

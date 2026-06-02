@@ -23,7 +23,7 @@ export class UpdateFormUseCase {
           return of(fail<UpdateFormError>({ kind: "network", status: 0 }));
         }
         return of(fail<UpdateFormError>({ kind: "unknown", cause: error }));
-      })
+      }),
     );
   }
 }

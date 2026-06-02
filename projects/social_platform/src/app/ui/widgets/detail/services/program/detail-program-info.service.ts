@@ -45,8 +45,8 @@ export class DetailProgramInfoService {
       newFieldsFormValues.push(
         ProjectNewAdditionalProgramFields.fromField(
           field,
-          field.options.length ? field.options[0] : "'"
-        )
+          field.options.length ? field.options[0] : "'",
+        ),
       );
     });
 

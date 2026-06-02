@@ -31,7 +31,7 @@ describe("StageTwoComponent", () => {
         fetchUserRoles: of([]),
         fetchChangeableRoles: of([]),
         updateProfile: of({}),
-      }
+      },
     );
 
     const skillsSpy = {

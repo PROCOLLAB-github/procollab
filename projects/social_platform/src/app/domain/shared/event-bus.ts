@@ -18,7 +18,7 @@ export class EventBus {
   on<T extends DomainEvent>(type: T["type"]): Observable<T> {
     return this.events$.pipe(
       filter(e => e.type === type),
-      map(e => e as T)
+      map(e => e as T),
     );
   }
 }

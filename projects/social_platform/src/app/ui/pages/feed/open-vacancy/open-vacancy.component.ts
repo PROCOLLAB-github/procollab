@@ -67,7 +67,7 @@ export class OpenVacancyComponent implements AfterViewInit {
       "description",
       elem,
       "expanded",
-      this.expandService.readFullDescription()
+      this.expandService.readFullDescription(),
     );
   }
 

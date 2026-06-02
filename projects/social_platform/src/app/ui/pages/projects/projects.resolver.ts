@@ -46,7 +46,7 @@ export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
         subs: getProjectSubscriptionsUseCase
           .execute(user!.id)
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
-      })
-    )
+      }),
+    ),
   );
 };

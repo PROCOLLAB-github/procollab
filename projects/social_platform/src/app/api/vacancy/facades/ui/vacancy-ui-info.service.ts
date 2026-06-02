@@ -73,7 +73,7 @@ export class VacancyUIInfoService {
     roleContains: any,
     workFormat: any,
     workSchedule: any,
-    salary: any
+    salary: any,
   ): void {
     this.requiredExperience.set(requiredExperience);
     this.roleContains.set(roleContains);

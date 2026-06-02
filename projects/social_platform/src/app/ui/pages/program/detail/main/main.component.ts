@@ -67,7 +67,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly isAssignProjectToProgramError = computed(() =>
-    isFailure(this.projectAdditionalService.isSend$())
+    isFailure(this.projectAdditionalService.isSend$()),
   );
 
   protected readonly errorAssignProjectToProgramModalMessage =

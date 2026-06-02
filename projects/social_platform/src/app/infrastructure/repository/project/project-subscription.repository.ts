@@ -61,7 +61,7 @@ export class ProjectSubscriptionRepository implements ProjectSubscriptionReposit
 
   getSubscribers(projectId: number): Observable<ProjectSubscriber[]> {
     return this.subscribersCache.getOrFetch(projectId, () =>
-      this.subscriptionAdapter.getSubscribers(projectId)
+      this.subscriptionAdapter.getSubscribers(projectId),
     );
   }
 

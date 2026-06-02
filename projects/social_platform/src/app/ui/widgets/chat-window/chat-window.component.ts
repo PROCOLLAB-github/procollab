@@ -113,7 +113,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
             const offsetTop = this.viewport()?.measureScrollOffset("top");
             return offsetTop ? offsetTop <= 200 : false; // Загрузка при приближении к верху
           }),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         )
         .subscribe(() => {
           this.fetch.emit(); // Запрос дополнительных сообщений
@@ -156,7 +156,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
         tap(() => {
           this.type.emit(); // Отправка события печатания
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(noop);
   }
@@ -169,7 +169,8 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onInputResize(): void {
-    if (this.viewport() && this.viewport()!.measureScrollOffset("bottom") < 50) this.scrollToBottom();
+    if (this.viewport() && this.viewport()!.measureScrollOffset("bottom") < 50)
+      this.scrollToBottom();
   }
 
   private focusOnInput(): void {

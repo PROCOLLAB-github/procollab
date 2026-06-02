@@ -34,7 +34,7 @@ describe("ProfileEditComponent", () => {
         fetchProfile: of({}),
         fetchUserRoles: of([]),
         fetchChangeableRoles: of([]),
-      }
+      },
     );
 
     const specializationsSpy = {

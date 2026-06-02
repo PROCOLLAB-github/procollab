@@ -91,7 +91,7 @@ export class AutoCompleteInputComponent<T> {
         map(e => (e.target as HTMLInputElement).value.trim()),
         debounce(val => (val ? timer(this.delay()) : of({}))),
         distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(val => this.handleSearch(val));
   }
@@ -215,7 +215,7 @@ export class AutoCompleteInputComponent<T> {
       return suggestions.find(s => String(s).toLowerCase() === this.inputValue().toLowerCase());
     }
     return suggestions.find(
-      s => String(s[this.fieldToDisplay()]).toLowerCase() === this.inputValue().toLocaleLowerCase()
+      s => String(s[this.fieldToDisplay()]).toLowerCase() === this.inputValue().toLocaleLowerCase(),
     );
   }
 }

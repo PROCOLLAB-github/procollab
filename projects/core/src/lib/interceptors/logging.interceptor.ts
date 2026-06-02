@@ -28,7 +28,7 @@ export class LoggingInterceptor implements HttpInterceptor {
           if (event instanceof HttpResponse) {
             const elapsed = Date.now() - started;
             this.logger.debug(
-              `[HTTP] ${request.method} ${request.urlWithParams} ${event.status} ${elapsed}ms`
+              `[HTTP] ${request.method} ${request.urlWithParams} ${event.status} ${elapsed}ms`,
             );
           }
         },
@@ -36,10 +36,10 @@ export class LoggingInterceptor implements HttpInterceptor {
           const elapsed = Date.now() - started;
           this.logger.error(
             `[HTTP] ${request.method} ${request.urlWithParams} ${error.status} ${elapsed}ms`,
-            error.message
+            error.message,
           );
         },
-      })
+      }),
     );
   }
 }

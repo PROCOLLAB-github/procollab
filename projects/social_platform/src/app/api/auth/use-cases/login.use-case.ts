@@ -21,7 +21,7 @@ export class LoginUseCase {
         }
 
         return of(fail<LoginError>({ kind: "unknown" }));
-      })
+      }),
     );
   }
 }

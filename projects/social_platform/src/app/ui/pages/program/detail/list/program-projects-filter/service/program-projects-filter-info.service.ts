@@ -66,7 +66,7 @@ export class ProgramProjectsFilterInfoService {
    */
   toggleAdditionalFormValues(
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
-    fieldName: string
+    fieldName: string,
   ): void {
     if (fieldType === "checkbox" || fieldType === "radio") {
       const control = this.filterForm.get(fieldName);
@@ -115,8 +115,8 @@ export class ProgramProjectsFilterInfoService {
         this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
           ? true
           : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
-          ? false
-          : null;
+            ? false
+            : null;
 
       formControls["is_rated_by_expert"] = new FormControl(isRatedByExpert);
     }
@@ -179,7 +179,7 @@ export class ProgramProjectsFilterInfoService {
 
   private shouldAddToQueryParams(
     value: any,
-    fieldType?: "text" | "textarea" | "checkbox" | "select" | "radio" | "file"
+    fieldType?: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
   ): boolean {
     if (fieldType === "checkbox" || fieldType === "radio") {
       return value === true;

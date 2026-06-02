@@ -14,6 +14,6 @@ export const ProgramDetailResolver: ResolveFn<Program> = (route: ActivatedRouteS
 
   return getProgramUseCase.execute(route.params["programId"]).pipe(
     map(result => (result.ok ? result.value : new Program())),
-    tap(program => programDetailMainUIInfoService.applyFormatingProgramData(program))
+    tap(program => programDetailMainUIInfoService.applyFormatingProgramData(program)),
   );
 };

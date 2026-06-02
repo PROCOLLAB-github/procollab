@@ -20,7 +20,7 @@ export class ChatRepository implements ChatRepositoryPort {
         results: page.results
           .map(mapChatMessage)
           .filter((message): message is ChatMessage => message !== null),
-      }))
+      })),
     );
   }
 

@@ -24,10 +24,10 @@
   [disabled]="disabled()"
 >
   @if (loader()) {
-  <app-loader [color]="appearance() === 'inline' ? 'white' : 'gray'"></app-loader>
+    <app-loader [color]="appearance() === 'inline' ? 'white' : 'gray'"></app-loader>
   } @else {
-  <ng-container>
-    <ng-content></ng-content>
-  </ng-container>
+    <ng-container>
+      <ng-content></ng-content>
+    </ng-container>
   }
 </button>

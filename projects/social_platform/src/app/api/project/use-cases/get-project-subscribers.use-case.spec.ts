@@ -13,7 +13,7 @@ describe("GetProjectSubscribersUseCase", () => {
   function setup(): void {
     repo = jasmine.createSpyObj<ProjectSubscriptionRepositoryPort>(
       "ProjectSubscriptionRepositoryPort",
-      ["getSubscribers"]
+      ["getSubscribers"],
     );
     TestBed.configureTestingModule({
       providers: [

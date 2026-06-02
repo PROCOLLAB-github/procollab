@@ -74,22 +74,22 @@ export class ProfileEditEducationInfoService {
     if (educationOverflow) {
       this.isModalErrorSkillsChoose.set(true);
       this.isModalErrorSkillChooseText.set(
-        "Превышено допустимое количество символов в одном из полей"
+        "Превышено допустимое количество символов в одном из полей",
       );
       return;
     }
 
     ["organizationName", "educationStatus"].forEach(name =>
-      this.profileForm.get(name)?.clearValidators()
+      this.profileForm.get(name)?.clearValidators(),
     );
     ["organizationName", "educationStatus"].forEach(name =>
-      this.profileForm.get(name)?.setValidators([Validators.required])
+      this.profileForm.get(name)?.setValidators([Validators.required]),
     );
     ["organizationName", "educationStatus"].forEach(name =>
-      this.profileForm.get(name)?.updateValueAndValidity()
+      this.profileForm.get(name)?.updateValueAndValidity(),
     );
     ["organizationName", "educationStatus"].forEach(name =>
-      this.profileForm.get(name)?.markAsTouched()
+      this.profileForm.get(name)?.markAsTouched(),
     );
 
     const entryYear = this.normalizeYear(this.profileForm.get("entryYear")?.value);

@@ -14,7 +14,7 @@ export const dashboardItemBuilder = <TItem = Project>(
   sections: string[],
   titles: string[],
   icons: string[],
-  arrays: TItem[][]
+  arrays: TItem[][],
 ): DashboardItem<TItem>[] => {
   if (amount <= 0) return [];
 

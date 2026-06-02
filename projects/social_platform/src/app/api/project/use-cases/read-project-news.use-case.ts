@@ -15,12 +15,12 @@ export class ReadProjectNewsUseCase {
 
   execute(
     projectId: number,
-    newsIds: number[]
+    newsIds: number[],
   ): Observable<Result<void[], { kind: "read_project_news_error"; cause?: unknown }>> {
     return this.projectNewsRepositoryPort.readNews(projectId, newsIds).pipe(
       tap(() => this.eventBus.emit(readNews(String(projectId)))),
       map(result => ok<void[]>(result)),
-      catchError(error => of(fail({ kind: "read_project_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "read_project_news_error" as const, cause: error }))),
     );
   }
 }

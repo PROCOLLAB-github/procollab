@@ -34,13 +34,13 @@
   </div>
 
   @if (courseModule().lessons.length) {
-  <div class="skill-card__expand" (click)="toggleExpand($event)">
-    @if (isExpanded) {
-    <i appIcon icon="arrow-no-body" class="skill-card__expanded" appSquare="8"></i>
-    } @else {
-    <i appIcon icon="arrow-no-body" appSquare="8"></i>
-    }
-  </div>
+    <div class="skill-card__expand" (click)="toggleExpand($event)">
+      @if (isExpanded) {
+        <i appIcon icon="arrow-no-body" class="skill-card__expanded" appSquare="8"></i>
+      } @else {
+        <i appIcon icon="arrow-no-body" appSquare="8"></i>
+      }
+    </div>
   }
 </div>
 
@@ -48,25 +48,25 @@
   <div class="expandable__content">
     <ul class="expandable__list">
       @for (lesson of courseModule().lessons; track lesson.id) {
-      <li class="expandable__item" [routerLink]="['lesson', lesson.id]">
-        <div class="expandable__item--inner">
-          <span class="topic__number text-body-10"
-            >Урок {{ lesson.order }}.
-            <span class="topic__name text-body-10">{{ lesson.title }}</span></span
-          >
-          <p class="topic__levels text-body-10">
-            {{ lesson.taskCount }}
-            {{ lesson.taskCount | pluralize: ["задание", "задания", "заданий"] }}
-          </p>
-        </div>
+        <li class="expandable__item" [routerLink]="['lesson', lesson.id]">
+          <div class="expandable__item--inner">
+            <span class="topic__number text-body-10"
+              >Урок {{ lesson.order }}.
+              <span class="topic__name text-body-10">{{ lesson.title }}</span></span
+            >
+            <p class="topic__levels text-body-10">
+              {{ lesson.taskCount }}
+              {{ lesson.taskCount | pluralize: ["задание", "задания", "заданий"] }}
+            </p>
+          </div>
 
-        <app-circle-progress-bar
-          style="width: 30px; height: 30px"
-          [progress]="lesson.percent"
-          [appereance]="lesson.isAvailable ? 'open' : 'closed'"
-          mode="button"
-        ></app-circle-progress-bar>
-      </li>
+          <app-circle-progress-bar
+            style="width: 30px; height: 30px"
+            [progress]="lesson.percent"
+            [appereance]="lesson.isAvailable ? 'open' : 'closed'"
+            mode="button"
+          ></app-circle-progress-bar>
+        </li>
       }
     </ul>
   </div>

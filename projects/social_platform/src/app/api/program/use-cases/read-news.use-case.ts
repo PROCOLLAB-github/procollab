@@ -13,7 +13,7 @@ export class ReadNewsUseCase {
   execute(programId: string, newsIds: number[]): Observable<Result<void, { kind: "unknown" }>> {
     return this.programNewsRepositoryPort.readNews(Number(programId), newsIds).pipe(
       map(() => ok<void>(undefined)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

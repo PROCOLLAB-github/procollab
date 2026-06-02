@@ -35,7 +35,7 @@ describe("ProjectChatResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProjectChatResolver(mockRoute, {} as RouterStateSnapshot)
+      ProjectChatResolver(mockRoute, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

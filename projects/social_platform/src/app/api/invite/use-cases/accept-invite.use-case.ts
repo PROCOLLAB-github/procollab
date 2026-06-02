@@ -18,12 +18,12 @@ export class AcceptInviteUseCase {
       tap(invite => {
         if (invite?.project && invite?.user) {
           this.eventBus.emit(
-            acceptInvite(invite.id, invite.project.id, invite.user.id, invite.role)
+            acceptInvite(invite.id, invite.project.id, invite.user.id, invite.role),
           );
         }
       }),
       map(() => ok<void>(undefined)),
-      catchError(() => of(fail({ kind: "unknown" as const })))
+      catchError(() => of(fail({ kind: "unknown" as const }))),
     );
   }
 }

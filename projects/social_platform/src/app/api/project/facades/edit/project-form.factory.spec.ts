@@ -36,7 +36,7 @@ describe("project-form.factory", () => {
       fb,
       { title: "MVP", status: "1999" },
       3,
-      2026
+      2026,
     );
 
     expect(achievement.get("id")?.value).toBe(3);

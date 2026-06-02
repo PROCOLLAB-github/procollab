@@ -37,7 +37,7 @@ export class ProgramRegisterComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
-    private readonly validationService: ValidationService
+    private readonly validationService: ValidationService,
   ) {}
 
   registerForm?: FormGroup;
@@ -48,7 +48,7 @@ export class ProgramRegisterComponent implements OnInit {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(schema => {
         this.schema = schema;

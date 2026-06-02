@@ -13,13 +13,13 @@ export class ApplyProjectToProgramUseCase {
 
   execute(
     programId: number,
-    dto: ApplyToProgramDTO
+    dto: ApplyToProgramDTO,
   ): Observable<Result<any, { kind: "apply_project_to_program_error"; cause?: unknown }>> {
     return this.programRepositoryPort.applyProjectToProgram(programId, dto).pipe(
       map(result => ok<any>(result)),
       catchError(error =>
-        of(fail({ kind: "apply_project_to_program_error" as const, cause: error }))
-      )
+        of(fail({ kind: "apply_project_to_program_error" as const, cause: error })),
+      ),
     );
   }
 }

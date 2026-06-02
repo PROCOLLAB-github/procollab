@@ -16,13 +16,13 @@ export class MemberRepository implements MemberRepositoryPort {
   getMembers(
     skip: number,
     take: number,
-    otherParams?: Record<string, string | number | boolean>
+    otherParams?: Record<string, string | number | boolean>,
   ): Observable<ApiPagination<User>> {
     return this.memberAdapter.getMembers(skip, take, otherParams).pipe(
       map(result => ({
         ...result,
         results: result.results.map(user => userFromRaw(user)),
-      }))
+      })),
     );
   }
 }

@@ -44,7 +44,7 @@ export class ProfileNewsComponent implements OnInit, OnDestroy {
     this.route.data
       .pipe(
         map(r => r["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (r: FeedNews) => {

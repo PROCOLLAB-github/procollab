@@ -30,7 +30,7 @@ export class AuthPasswordService {
 
   readonly email = this.route.queryParams.pipe(
     map(r => r["email"]),
-    takeUntilDestroyed()
+    takeUntilDestroyed(),
   );
 
   readonly password$ = this.authUIInfoService.password$;
@@ -66,7 +66,7 @@ export class AuthPasswordService {
           }
         }),
         toAsyncState<void, PasswordError>(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({ next: result => this.password$.set(result) });
   }
@@ -95,7 +95,7 @@ export class AuthPasswordService {
           }
         }),
         toAsyncState<void, PasswordError>(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({ next: result => this.password$.set(result) });
   }

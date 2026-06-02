@@ -47,7 +47,7 @@ export class IndustryStateInfoService {
       INDUSTRIES_CACHE_KEY,
       INDUSTRIES_CACHE_VERSION,
       TTL_24H,
-      raw => plainToInstance(Industry, raw as object[]) as Industry[]
+      raw => plainToInstance(Industry, raw as object[]) as Industry[],
     );
 
     if (cached) {
@@ -86,7 +86,7 @@ export class IndustryStateInfoService {
 
     const request$ = this.industryRepository.getAll().pipe(
       finalize(() => (this.inflight = null)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.inflight = request$;
 

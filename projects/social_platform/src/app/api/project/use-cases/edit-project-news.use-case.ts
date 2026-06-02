@@ -17,12 +17,12 @@ export class EditProjectNewsUseCase {
   execute(
     projectId: string,
     newsId: number,
-    news: Partial<FeedNews>
+    news: Partial<FeedNews>,
   ): Observable<Result<FeedNews, { kind: "edit_project_news_error"; cause?: unknown }>> {
     return this.projectNewsRepositoryPort.editNews(projectId, newsId, news).pipe(
       tap(() => this.eventBus.emit(editNews(projectId, String(newsId)))),
       map(result => ok<FeedNews>(result)),
-      catchError(error => of(fail({ kind: "edit_project_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "edit_project_news_error" as const, cause: error }))),
     );
   }
 }

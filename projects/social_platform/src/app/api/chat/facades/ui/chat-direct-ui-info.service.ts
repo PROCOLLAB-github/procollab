@@ -48,7 +48,7 @@ export class ChatDirectUIInfoService {
 
   readMessagesEvent(result: OnReadChatMessageDto): void {
     this.messages.update(list =>
-      list.map(m => (m.id === result.messageId ? { ...m, isRead: true } : m))
+      list.map(m => (m.id === result.messageId ? { ...m, isRead: true } : m)),
     );
   }
 

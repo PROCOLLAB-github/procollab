@@ -12,11 +12,11 @@ export class GetCourseDetailUseCase {
   private readonly coursesRepository = inject(CoursesRepositoryPort);
 
   execute(
-    courseId: number
+    courseId: number,
   ): Observable<Result<CourseDetail, { kind: "get_course_detail_error"; cause?: unknown }>> {
     return this.coursesRepository.getCourseDetail(courseId).pipe(
       map(detail => ok<CourseDetail>(detail)),
-      catchError(error => of(fail({ kind: "get_course_detail_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_course_detail_error" as const, cause: error }))),
     );
   }
 }

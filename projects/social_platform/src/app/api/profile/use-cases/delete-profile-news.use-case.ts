@@ -12,11 +12,11 @@ export class DeleteProfileNewsUseCase {
 
   execute(
     userId: string,
-    newsId: number
+    newsId: number,
   ): Observable<Result<void, { kind: "delete_profile_news_error"; cause?: unknown }>> {
     return this.profileNewsRepositoryPort.delete(userId, newsId).pipe(
       map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "delete_profile_news_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "delete_profile_news_error" as const, cause: error }))),
     );
   }
 }

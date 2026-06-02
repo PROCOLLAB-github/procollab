@@ -21,7 +21,7 @@ export class ProgramNewsRepository implements NewsRepositoryPort<FeedNews> {
 
   readNews(programId: number, newsIds: number[]): Observable<void[]> {
     return forkJoin(
-      newsIds.map(id => this.programNewsAdapter.setNewsViewed(String(programId), id))
+      newsIds.map(id => this.programNewsAdapter.setNewsViewed(String(programId), id)),
     );
   }
 

@@ -31,7 +31,7 @@ export class ProjectNewAdditionalProgramFields {
    */
   static fromField(
     field: PartnerProgramFields,
-    value: string | boolean
+    value: string | boolean,
   ): ProjectNewAdditionalProgramFields {
     return { fieldId: field.id, valueText: value };
   }

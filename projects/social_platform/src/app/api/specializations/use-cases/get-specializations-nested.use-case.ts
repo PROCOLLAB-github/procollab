@@ -15,7 +15,9 @@ export class GetSpecializationsNestedUseCase {
   execute(): Observable<Result<SpecializationsGroup[], GetNestedError>> {
     return this.specializationRepository.getSpecializationsNested().pipe(
       map(specs => ok<SpecializationsGroup[]>(specs)),
-      catchError(error => of(fail<GetNestedError>({ kind: "server_error", cause: error } as const)))
+      catchError(error =>
+        of(fail<GetNestedError>({ kind: "server_error", cause: error } as const)),
+      ),
     );
   }
 }
