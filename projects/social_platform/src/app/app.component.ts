@@ -17,7 +17,7 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { LoggerService, TokenService } from "@corelib";
 import { CookieConsentComponent } from "@ui/widgets/cookie-consent/cookie-consent.component";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import { LoadingService } from "@ui/services/loading/loading.service";
+import { LoadingService } from "@api/shared/loading.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ConnectionStatusToastService } from "@api/connection-status/connection-status-toast.service";

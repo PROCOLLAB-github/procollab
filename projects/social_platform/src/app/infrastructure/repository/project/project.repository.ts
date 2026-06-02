@@ -45,7 +45,7 @@ export class ProjectRepository implements ProjectRepositoryPort {
     });
 
     this.eventBus.on<ProjectDeleted>("ProjectDeleted").subscribe(event => {
-      this.invalidate(event.payload.projectId);
+      this.entityCache.invalidate(event.payload.projectId);
       this.count$.next({
         ...this.count$.getValue(),
         my: Math.max(0, this.count$.getValue().my - 1),
@@ -63,7 +63,7 @@ export class ProjectRepository implements ProjectRepositoryPort {
 
     this.eventBus.on<ProjectUnSubscribed>("ProjectUnSubscribed").subscribe({
       next: event => {
-        this.invalidate(event.payload.projectId);
+        this.entityCache.invalidate(event.payload.projectId);
         this.count$.next({
           ...this.count$.getValue(),
           subs: Math.max(0, this.count$.getValue().subs - 1),
@@ -73,32 +73,32 @@ export class ProjectRepository implements ProjectRepositoryPort {
 
     this.eventBus.on<RemoveProjectCollaborator>("RemoveProjectCollaborator").subscribe({
       next: event => {
-        this.invalidate(event.payload.projectId);
+        this.entityCache.invalidate(event.payload.projectId);
       },
     });
 
     this.eventBus.on<AcceptInvite>("AcceptInvite").subscribe({
       next: event => {
-        this.invalidate(event.payload.projectId);
+        this.entityCache.invalidate(event.payload.projectId);
       },
     });
 
     // Слушание событий вакансий - инвалидация кэша проекта
     this.eventBus.on<SendVacancyResponse>("SendVacancyResponse").subscribe({
       next: event => {
-        this.invalidate(event.payload.projectId);
+        this.entityCache.invalidate(event.payload.projectId);
       },
     });
 
     this.eventBus.on<AcceptVacancyResponse>("AcceptVacancyResponse").subscribe({
       next: event => {
-        this.invalidate(event.payload.projectId);
+        this.entityCache.invalidate(event.payload.projectId);
       },
     });
 
     this.eventBus.on<RejectVacancyResponse>("RejectVacancyResponse").subscribe({
       next: event => {
-        this.invalidate(event.payload.projectId);
+        this.entityCache.invalidate(event.payload.projectId);
       },
     });
 
@@ -130,8 +130,7 @@ export class ProjectRepository implements ProjectRepositoryPort {
 
   update(id: number, data: Partial<Project>): Observable<Project> {
     return this.projectAdapter.putUpdate(id, data as Partial<ProjectDto>).pipe(
-      map(project => plainToInstance(Project, project)),
-      tap(() => this.invalidate(id))
+      map(project => plainToInstance(Project, project))
     );
   }
 
@@ -149,7 +148,4 @@ export class ProjectRepository implements ProjectRepositoryPort {
     return this.projectAdapter.deleteOne(id);
   }
 
-  invalidate(id: number): void {
-    this.entityCache.invalidate(id);
-  }
 }

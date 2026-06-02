@@ -19,7 +19,7 @@ import {
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { IconComponent } from "@ui/primitives";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 
 /**

@@ -1,6 +1,6 @@
 /** @format */
 
-import { ApplicationConfig, ErrorHandler, importProvidersFrom, LOCALE_ID } from "@angular/core";
+import { ApplicationConfig, ErrorHandler, importProvidersFrom, LOCALE_ID, provideZonelessChangeDetection } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideNgxMask } from "ngx-mask";
@@ -50,6 +50,7 @@ export const APP_CONFIG: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: "ru-RU" },
     importProvidersFrom(BrowserModule, ReactiveFormsModule, MatProgressBarModule),
     provideNgxMask(),
+    provideZonelessChangeDetection(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CamelcaseInterceptor,

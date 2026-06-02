@@ -2,8 +2,13 @@
 
 import { Injectable, signal } from "@angular/core";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";
 import { ChatItem } from "@domain/chat/chat-item.model";
+
+interface TypingPerson {
+  firstName: string;
+  lastName: string;
+  userId: number;
+}
 import { ChatFile, ChatMessage } from "@domain/chat/chat-message.model";
 import {
   OnChatMessageDto,
@@ -16,7 +21,7 @@ import {
 @Injectable()
 export class ChatDirectUIInfoService {
   /** Список пользователей, которые сейчас печатают */
-  readonly typingPersons = signal<ChatWindowComponent["typingPersons"]>([]);
+  readonly typingPersons = signal<TypingPerson[]>([]);
   private readonly typingTimeouts = new Set<number>();
 
   /** Данные текущего чата */

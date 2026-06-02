@@ -2,7 +2,7 @@
 
 import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import {
   concatMap,
   debounceTime,

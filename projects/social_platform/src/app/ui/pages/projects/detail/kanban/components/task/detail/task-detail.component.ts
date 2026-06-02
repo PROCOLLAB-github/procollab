@@ -47,7 +47,7 @@ import { ActivatedRoute } from "@angular/router";
 import { FileService } from "@core/lib/services/file/file.service";
 import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ChatMessage } from "@domain/chat/chat-message.model";
 import {
   CdkFixedSizeVirtualScroll,

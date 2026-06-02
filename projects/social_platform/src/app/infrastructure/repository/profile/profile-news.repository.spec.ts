@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { ProfileNewsRepository } from "./profile-news.repository";
 import { ProfileNewsHttpAdapter } from "../../adapters/profile/profile-news-http.adapter";
-import { StorageService } from "@api/storage/storage.service";
+import { StorageService } from "@domain/shared/storage.service";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 

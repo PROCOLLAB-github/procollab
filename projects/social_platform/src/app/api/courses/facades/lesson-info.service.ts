@@ -7,7 +7,7 @@ import { CourseLesson, Task } from "@domain/courses/courses.model";
 import { LessonUIInfoService } from "./ui/lesson-ui-info.service";
 import { CourseDetailUIInfoService } from "./ui/course-detail-ui-info.service";
 import { SubmitTaskAnswerUseCase } from "../use-cases/submit-task-answer.use-case";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { failure, loading, success } from "@domain/shared/async-state";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 

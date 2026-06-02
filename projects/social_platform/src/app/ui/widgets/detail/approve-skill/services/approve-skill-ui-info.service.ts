@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { Approve, Skill } from "@domain/skills/skill.model";
 
 @Injectable()

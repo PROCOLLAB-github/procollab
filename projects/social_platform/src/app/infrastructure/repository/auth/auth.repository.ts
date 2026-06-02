@@ -12,7 +12,7 @@ import { Project } from "@domain/project/project.model";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoginCommand } from "@domain/auth/commands/login.command";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
-import { ChatStateService } from "@api/chat/chat-state.service";
+import { ChatStateService } from "@domain/shared/chat-state.service";
 import { userFromRaw, userToRaw } from "@utils/userRaw";
 
 /** Репозиторий auth: HTTP вызовы через `AuthHttpAdapter`, без кеша (fetchProfile() каждый раз ходит на сервер). */

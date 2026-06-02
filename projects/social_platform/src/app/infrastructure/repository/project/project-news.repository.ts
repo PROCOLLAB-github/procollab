@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { forkJoin, map, Observable, of, tap } from "rxjs";
-import { StorageService } from "@api/storage/storage.service";
+import { StorageService } from "@domain/shared/storage.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ProjectNewsHttpAdapter } from "../../adapters/project/project-news-http.adapter";

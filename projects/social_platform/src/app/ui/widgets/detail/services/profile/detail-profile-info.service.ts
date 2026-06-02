@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { saveFile } from "@utils/export-file";
 import { SendForUserUseCase } from "@api/invite/use-cases/send-for-user.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";

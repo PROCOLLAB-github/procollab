@@ -6,7 +6,6 @@ import { concatMap, filter, first, map, Observable, skip } from "rxjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User, UserRolesData } from "@domain/auth/user.model";
 import { Specialization } from "@domain/specializations/specialization.model";
-import { SelectComponent } from "@ui/primitives";
 import { generateOptionsList } from "@utils/generate-options-list";
 import {
   educationUserLevel,

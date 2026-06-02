@@ -16,7 +16,7 @@ import {
   viewChild,
   ViewChild,
 } from "@angular/core";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import {

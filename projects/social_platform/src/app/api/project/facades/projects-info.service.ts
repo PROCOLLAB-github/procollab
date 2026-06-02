@@ -2,7 +2,7 @@
 
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { debounceTime, distinctUntilChanged, filter, tap } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";

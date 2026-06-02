@@ -8,8 +8,6 @@ import { distinctUntilChanged, ReplaySubject } from "rxjs";
   providedIn: "root",
 })
 export class NavService {
-  constructor() {}
-
   navTitle$ = new ReplaySubject<string>(1);
 
   navTitle = this.navTitle$.asObservable().pipe(distinctUntilChanged());

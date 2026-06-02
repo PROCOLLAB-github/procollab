@@ -15,7 +15,7 @@ import {
   viewChild,
 } from "@angular/core";
 import { ChatMessage } from "@domain/chat/chat-message.model";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { DayjsPipe } from "@corelib";
