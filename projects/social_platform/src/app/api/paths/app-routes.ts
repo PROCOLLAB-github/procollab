@@ -32,6 +32,7 @@ export const AppRoutes = {
   projects: {
     all: () => "/office/projects/all",
     my: () => "/office/projects/my",
+    subscriptions: () => "/office/projects/subscriptions",
     detail: (projectId: number | string) => `/office/projects/${projectId}`,
     edit: (projectId: number | string) => `/office/projects/${projectId}/edit`,
     chat: (projectId: number | string) => `/office/projects/${projectId}/chat`,

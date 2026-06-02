@@ -87,7 +87,7 @@ export class ProfileMidSideComponent {
   onEditNews(news: ProfileNews, newsItemId: number) {
     this.profileDetailInfoService
       .onEditNews(news, newsItemId)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: () => this.newsCardComponent()?.onCloseEditMode(),
       });

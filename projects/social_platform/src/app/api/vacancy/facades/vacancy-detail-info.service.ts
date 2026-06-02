@@ -9,6 +9,7 @@ import { ExpandService } from "../../expand/expand.service";
 import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
 import { loading } from "@domain/shared/async-state";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 /** Управляет детальной страницей вакансии, раскрытием текста и отправкой отклика. */
 @Injectable()
@@ -19,6 +20,7 @@ export class VacancyDetailInfoService {
   private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
   private readonly validationService = inject(ValidationService);
   private readonly expandService = inject(ExpandService);
+  private readonly snackbarService = inject(SnackbarService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -31,7 +33,7 @@ export class VacancyDetailInfoService {
       .pipe(
         map(r => r["data"]),
         filter(Boolean),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(vacancy => {
         this.vacancyDetailUIInfoService.applySetVacancies(vacancy);
@@ -71,6 +73,7 @@ export class VacancyDetailInfoService {
         next: result => {
           if (!result.ok) {
             this.vacancyDetailUIInfoService.applyErrorFormSubmit();
+            this.snackbarService.error("Не удалось отправить отклик. Возможно, вакансия закрыта.");
             return;
           }
 

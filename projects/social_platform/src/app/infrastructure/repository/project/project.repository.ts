@@ -117,20 +117,21 @@ export class ProjectRepository implements ProjectRepositoryPort {
 
   getOne(id: number): Observable<Project> {
     return this.entityCache.getOrFetch(id, () =>
-      this.projectAdapter.fetchOne(id).pipe(map(dto => plainToInstance(Project, dto)))
+      this.projectAdapter.fetchOne(id).pipe(map(dto => plainToInstance(Project, dto))),
     );
   }
 
   refreshCount(): Observable<ProjectCount> {
     return this.projectAdapter.fetchCount().pipe(
       map(dto => plainToInstance(ProjectCount, dto)),
-      tap(count => this.count$.next(count))
+      tap(count => this.count$.next(count)),
     );
   }
 
   update(id: number, data: Partial<Project>): Observable<Project> {
     return this.projectAdapter.putUpdate(id, data as Partial<ProjectDto>).pipe(
-      map(project => plainToInstance(Project, project))
+      map(project => plainToInstance(Project, project)),
+      tap(() => this.entityCache.invalidate(id)),
     );
   }
 
@@ -147,5 +148,4 @@ export class ProjectRepository implements ProjectRepositoryPort {
   deleteOne(id: number): Observable<void> {
     return this.projectAdapter.deleteOne(id);
   }
-
 }

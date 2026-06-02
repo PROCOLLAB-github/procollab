@@ -240,7 +240,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
         .uploadFile(files[i])
         .pipe(
           map(r => r.url),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         )
         .subscribe({
           next: url => {
@@ -288,7 +288,4 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
         this.cdr.markForCheck();
       });
   }
-
-  /** Ссылка на модуль для совместимости */
-  protected readonly repl = module;
 }

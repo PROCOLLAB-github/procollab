@@ -7,36 +7,42 @@
   </div>
 
   @if (arrayItems().length) {
-  <ul class="dashboard__list">
-    @for (project of arrayItems(); track project.id) {
-    <a [routerLink]="AppRoutes.projects.detail(project.id)">
-      <app-info-card
-        [isSubscribed]="profileProjSubsIds()?.includes(project.id)"
-        [appereance]="appereance"
-        [info]="project"
-      ></app-info-card>
-    </a>
-    }
-  </ul>
+    <ul class="dashboard__list">
+      @for (project of arrayItems(); track project.id) {
+        <a [routerLink]="AppRoutes.projects.detail(project.id)">
+          <app-info-card
+            [isSubscribed]="profileProjSubsIds()?.includes(project.id)"
+            [appereance]="appereance"
+            [info]="project"
+          ></app-info-card>
+        </a>
+      }
+    </ul>
   } @else {
-  <div>
-    <app-info-card
-      (onCreate)="addProjectClick.emit()"
-      [section]="
-        sectionName() === 'my'
-          ? 'projects'
-          : sectionName() === 'subscriptions'
-          ? 'subscriptions'
-          : 'other'
-      "
-      appereance="empty"
-    ></app-info-card>
-  </div>
+    <div>
+      <app-info-card
+        (onCreate)="addProjectClick.emit()"
+        [section]="
+          sectionName() === 'my'
+            ? 'projects'
+            : sectionName() === 'subscriptions'
+              ? 'subscriptions'
+              : 'other'
+        "
+        appereance="empty"
+      ></app-info-card>
+    </div>
   }
 
   <a
     class="dashboard__link"
-    [routerLink]="sectionName() === 'my' ? AppRoutes.projects.my() : AppRoutes.projects.all()"
+    [routerLink]="
+      sectionName() === 'my'
+        ? AppRoutes.projects.my()
+        : sectionName() === 'subscriptions'
+          ? AppRoutes.projects.subscriptions()
+          : AppRoutes.projects.all()
+    "
   >
     <span style="color: var(--grey-for-text) !important" class="text-body-10">показать раздел</span>
     <i appIcon icon="plus" appSquare="8"></i>

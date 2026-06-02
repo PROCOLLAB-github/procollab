@@ -4,14 +4,14 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
-import { catchError, EMPTY, map } from "rxjs";
+import { catchError, EMPTY, map, of } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
 import { CreateProgramFiltersUseCase } from "@api/program/use-cases/create-program-filters.use-case";
 
 /** Предзагружает проекты программы с фильтрацией. */
 export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   const createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
@@ -32,7 +32,7 @@ export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
       : getAllProjectsUseCase.execute(programId, params);
   return req$
     .pipe(
-      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" })),
     )
     .pipe(
       catchError(error => {
@@ -42,9 +42,11 @@ export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
             queryParamsHandling: "merge",
             replaceUrl: true,
           });
+
+          return EMPTY;
         }
 
-        return EMPTY;
-      })
+        return of<ApiPagination<Project>>({ count: 0, results: [], next: "", previous: "" });
+      }),
     );
 };

@@ -56,7 +56,7 @@ export class ProfileMainStepComponent {
   protected readonly phoneNumber = this.profileFormService.phoneNumber;
 
   protected readonly roles = this.profileFormService.roles;
-  protected readonly inlineSpecs = this.profileFormService.inlineSpecs;
+  protected readonly inlineSpecs = this.searchesService.inlineSpecs;
 
   protected readonly links = this.profileFormService.links;
 
