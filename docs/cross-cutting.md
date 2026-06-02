@@ -2,7 +2,7 @@
 
 # Cross-cutting API services
 
-`projects/social_platform/src/app/api/` содержит **12 пакетов без собственного домена** — это утилиты, shell/onboarding facades и UI-state контейнеры, которые не вписываются в обычную схему `domain/<x>` + `api/<x>` + `infrastructure/<x>`. Документируются здесь скопом.
+`projects/social_platform/src/app/api/` содержит **13 пакетов без собственного домена** — это утилиты, shell/onboarding facades и UI-state контейнеры, которые не вписываются в обычную схему `domain/<x>` + `api/<x>` + `infrastructure/<x>`. Документируются здесь скопом.
 
 | Пакет               | Тип         | Назначение                   |
 | ------------------- | ----------- | ---------------------------- |
@@ -50,6 +50,25 @@ class AnalyticsService {
 
 ---
 
+## connection-status
+
+`api/connection-status/connection-status-toast.service.ts` — `ConnectionStatusToastService`, `providedIn: "root"`. Observability/UX для WebSocket: подписан на `WebsocketService.connectionLost$` и при потере соединения показывает toast через `SnackbarService`.
+
+```ts
+@Injectable({ providedIn: "root" })
+class ConnectionStatusToastService {
+  constructor() {
+    this.websocketService.connectionLost$.subscribe(() =>
+      this.snackbarService.error("Соединение с сервером потеряно. Проверьте интернет."),
+    );
+  }
+}
+```
+
+`connectionLost$` эмитит после исчерпания серии retry-попыток; переподключение при этом продолжается (resilient reconnect), toast лишь уведомляет пользователя. Observability-блок целиком — в [`architecture.md`](social-platform/architecture.md#observability-sentry--globalerrorhandler).
+
+---
+
 ## expand
 
 `api/expand/expand.service.ts` — `@Injectable()` (**page-scoped**). Контейнер для всех "раскрыть/свернуть" сигналов в детальных страницах; провайдится в `providers: []` каждой detail-страницы (`profile/main`, `projects/info|team|vacancies`, `program/main`, `vacancies/detail`), чтобы состояние не утекало между навигациями. Обёртка над `expandElement` хелпером (`@utils/expand-element`).
@@ -57,11 +76,11 @@ class AnalyticsService {
 **Сигналы** (все `signal<boolean>`):
 
 ```ts
-readFullDescription, descriptionExpandable;
-readFullSkills, skillsExpandable;
-readAllAchievements, readAllVacancies, readAllMembers;
-readAllProjects, readAllPrograms, readAllLinks;
-readAllEducation, readAllLanguages, readAllWorkExperience;
+(readFullDescription, descriptionExpandable);
+(readFullSkills, skillsExpandable);
+(readAllAchievements, readAllVacancies, readAllMembers);
+(readAllProjects, readAllPrograms, readAllLinks);
+(readAllEducation, readAllLanguages, readAllWorkExperience);
 ```
 
 **Методы**:

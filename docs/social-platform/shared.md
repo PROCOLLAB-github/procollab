@@ -20,7 +20,7 @@
 | `async-state.ts`    | `AsyncState<T, E>`, `initial`, `loading`, `success`, `failure`, `isInitial`, `isLoading`, `isSuccess`, `isFailure` | Discriminated union для состояния асинхронной операции.                  |
 | `result.type.ts`    | `Result<T, E>`, `ok`, `fail`                                                                                       | Контракт возврата из use-case'ов.                                        |
 | `to-async-state.ts` | `toAsyncState<T, E>`                                                                                               | RxJS-оператор `Observable<Result<T, E>> → Observable<AsyncState<T, E>>`. |
-| `entity-cache.ts`   | `class EntityCache<T>`                                                                                             | In-memory cache с `shareReplay(1)`.                                      |
+| `entity-cache.ts`   | `class EntityCache<T>`                                                                                             | In-memory cache с опциональным TTL и stale-while-revalidate.             |
 | `event-bus.ts`      | `class EventBus` (`@Injectable({ providedIn: "root" })`)                                                           | Глобальный pub/sub на `Subject<DomainEvent>`.                            |
 | `domain-event.ts`   | `interface DomainEvent`                                                                                            | Базовый контракт для domain-событий.                                     |
 
@@ -95,7 +95,10 @@ this.useCase
 
 ```ts
 export class EntityCache<T> {
-  private readonly store = new Map<number, Observable<T>>();
+  private readonly store = new Map<number, { observable: Observable<T>; expiresAt: number }>();
+  private readonly inflight = new Map<number, Subscription>();
+
+  constructor(ttlMs?: number);
 
   getOrFetch(id: number, factory: () => Observable<T>): Observable<T>;
   invalidate(id: number): void;
@@ -103,9 +106,12 @@ export class EntityCache<T> {
 }
 ```
 
-Простой in-memory кеш с `shareReplay(1)`. **Без TTL** — инвалидация только вручную (через `invalidate(id)` / `clear()`) или через подписку на `EventBus`.
+In-memory кеш с опциональным TTL и **stale-while-revalidate**:
 
-Применён к `Project`, `Vacancy`, `Program` и `Courses` репозиториям. Project/Vacancy чистят кеш по domain events, Courses чистит detail/structure cache после отправки ответа, Program кеширует `getOne()` без текущих event-listeners.
+- **без `ttlMs`** — бесконечный кеш, инвалидация только вручную (`invalidate(id)` / `clear()`) или через `EventBus`;
+- **с `ttlMs`** — после истечения TTL `getOrFetch` отдаёт стухшие данные сразу и запускает фоновый re-fetch (`scheduleRevalidate`); по завершении рефетча подписчики получают свежие данные. Параллельные ревалидации одного `id` дедуплицируются через `inflight`.
+
+Записи store унифицированы как `{ observable, expiresAt }` (`expiresAt = Infinity`, если TTL не задан). Применён к `Project`, `Vacancy`, `Program`, `Courses` и news/subscription репозиториям. TTL: `Courses.detailCache` — 10 мин, `Program` — 5 мин; `Project`, `Vacancy`, `project-news`, `project-subscription`, `Courses.structureCache` — без TTL (инвалидация по domain events / вручную).
 
 ### `EventBus`
 
@@ -138,7 +144,7 @@ export interface DomainEvent {
 export const taskAnswerSubmitted = (
   taskId: number,
   moduleId: number,
-  answer: CourseTaskAnswer
+  answer: CourseTaskAnswer,
 ) => ({
   type: "TaskAnswerSubmitted" as const,
   payload: { taskId, moduleId, answer },

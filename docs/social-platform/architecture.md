@@ -28,6 +28,7 @@ projects/social_platform/src/app/
   app.component.*   # корневой компонент
   app.config.ts     # DI-конфигурация приложения (см. ниже)
   app.routes.ts     # корневой Routes массив
+  sentry.config.ts  # initSentry() — инициализация Sentry (вызывается из main.ts)
 ```
 
 ## Правила зависимостей
@@ -42,6 +43,8 @@ ui  ─┬──▶ api ──▶ domain ◀── infrastructure
 - **`api/facades`** инжектят use-cases, выставляют `signal<AsyncState<T,E>>` для UI.
 - **`infrastructure/repository`** реализуют интерфейс порта (`implements XRepositoryPort`), внутри HTTP через `ApiService` + опционально `EntityCache<T>`.
 - **`ui`** импортирует фасады/UI-info из `api`, типы из `domain`, примитивы из `@uilib`/`@ui/primitives`. Никогда не лезет в `infrastructure` напрямую.
+
+> Эти правила **форсятся линтером**, а не только договорённостью. `eslint-plugin-boundaries` (flat-config `eslint.config.mjs`) описывает каждый слой как element type (`domain`, `infrastructure`, `api`, `ui`, `utils`, `testing`, `core-lib`, `ui-lib`, `env`, `root`) и задаёт allow-листы через `boundaries/dependencies` с `default: "disallow"`. Импорт «не туда» или из неизвестного элемента (`boundaries/no-unknown`, `boundaries/no-unknown-files`) — ошибка `lint:ts`. `*.spec.ts` от правил освобождены.
 
 ---
 
@@ -77,7 +80,7 @@ export abstract class CoursesRepositoryPort {
 - `async-state.ts` — `AsyncState<T, E>` дискриминатор и хелперы.
 - `result.type.ts` — `Result<T, E>` для возврата из use-case.
 - `to-async-state.ts` — оператор RxJS `Observable<Result<T,E>>` → `Observable<AsyncState<T,E>>`.
-- `entity-cache.ts` — простой in-memory cache с `shareReplay(1)`.
+- `entity-cache.ts` — in-memory cache с опциональным TTL и stale-while-revalidate.
 - `event-bus.ts` — `EventBus` (`@Injectable({ providedIn: "root" })`) для domain-событий.
 - `domain-event.ts` — базовый интерфейс `DomainEvent`.
 
@@ -109,11 +112,11 @@ export class GetCourseDetailUseCase {
   private readonly coursesRepository = inject(CoursesRepositoryPort);
 
   execute(
-    courseId: number
+    courseId: number,
   ): Observable<Result<CourseDetail, { kind: "get_course_detail_error"; cause?: unknown }>> {
     return this.coursesRepository.getCourseDetail(courseId).pipe(
       map(detail => ok<CourseDetail>(detail)),
-      catchError(error => of(fail({ kind: "get_course_detail_error" as const, cause: error })))
+      catchError(error => of(fail({ kind: "get_course_detail_error" as const, cause: error }))),
     );
   }
 }
@@ -182,7 +185,7 @@ export class CoursesRepository implements CoursesRepositoryPort {
 
   getCourseDetail(courseId: number): Observable<CourseDetail> {
     return this.detailCache.getOrFetch(courseId, () =>
-      this.coursesAdapter.getCourseDetail(courseId)
+      this.coursesAdapter.getCourseDetail(courseId),
     );
   }
 }
@@ -353,10 +356,13 @@ export class EventBus {
 
 ### `EntityCache<T>`
 
-In-memory cache с `shareReplay(1)`. Без TTL — инвалидация только вручную (через `invalidate(id)` / `clear()`) или через подписку на `EventBus`.
+In-memory cache с **опциональным TTL** и **stale-while-revalidate**. `constructor(ttlMs?)`:
+
+- **без `ttlMs`** — бесконечный кеш, инвалидация только вручную (`invalidate(id)` / `clear()`) или по `EventBus`;
+- **с `ttlMs`** — после истечения TTL `getOrFetch` возвращает стухшие данные немедленно и запускает фоновый re-fetch (`scheduleRevalidate`); когда рефетч завершён, подписчики получают свежие данные. Параллельные ревалидации одного `id` дедуплицируются через `inflight`-map.
 
 ```ts
-private readonly detailCache = new EntityCache<CourseDetail>();
+private readonly detailCache = new EntityCache<CourseDetail>(10 * 60 * 1000); // TTL 10 мин
 getCourseDetail(courseId: number): Observable<CourseDetail> {
   return this.detailCache.getOrFetch(courseId, () =>
     this.coursesAdapter.getCourseDetail(courseId)
@@ -364,15 +370,19 @@ getCourseDetail(courseId: number): Observable<CourseDetail> {
 }
 ```
 
-Применён к `Project`, `Vacancy`, `Program` и `Courses` репозиториям. Project/Vacancy чистят кеш по domain events, Courses чистит detail/structure cache после отправки ответа, Program кеширует `getOne()` без текущих event-listeners.
+Store хранит унифицированную запись `{ observable, expiresAt }` (без TTL `expiresAt = Infinity`). Применён к `Project`, `Vacancy`, `Program`, `Courses` и news/subscription репозиториям. TTL включён у `Courses.detailCache` (10 мин) и `Program` (5 мин); `Project`, `Vacancy`, `project-news`, `project-subscription` и `Courses.structureCache` — без TTL: чистятся по domain events (`Project`/`Vacancy` слушают события вакансий) или вручную.
 
 ### `LoggingInterceptor` + `LoggerService`
 
 См. [`docs/core/interceptors-providers.md`](../core/interceptors-providers.md). На каждый HTTP-запрос пишется строка с методом, URL, статусом, elapsed-временем; ошибки идут на уровне `error`, успехи — `debug`.
 
-### `GlobalErrorHandler`
+### Observability: Sentry + `GlobalErrorHandler`
 
-Регистрируется в `app.config.ts` как `{ provide: ErrorHandler, useClass: GlobalErrorHandlerService }`. Перехватывает все необработанные ошибки и Promise rejections, логирует через `LoggerService.error("[GlobalError] ...")`.
+`ErrorHandler` приложения — это **Sentry** `createErrorHandler({ logErrors: !production })` из `@sentry/angular`, зарегистрированный в `app.config.ts` через `useFactory`. Сам Sentry поднимается в `main.ts` **до** bootstrap вызовом `initSentry()` (`app/sentry.config.ts`): только в проде и только при заданном `environment.sentryDns`, с `tracesSampleRate: 0.2` и `replaysOnErrorSampleRate: 1.0`.
+
+Кастомный `GlobalErrorHandlerService` (логировал необработанные ошибки и Promise rejections через `LoggerService.error("[GlobalError] ...")`) остаётся в `core`, но в `app.config.ts` **больше не регистрируется** — его заменил Sentry-handler.
+
+`ConnectionStatusToastService` (`api/connection-status/`) подписан на `WebsocketService.connectionLost$` и показывает пользователю toast при потере WebSocket-соединения. Переподключение при этом продолжается бесконечно (resilient reconnect), сигнал нужен только для UX.
 
 ---
 
@@ -382,8 +392,10 @@ getCourseDetail(courseId: number): Observable<CourseDetail> {
 
 ```ts
 providers: [
-  { provide: LOCALE_ID, useValue: "ru-RU" },
-  importProvidersFrom(BrowserModule, ReactiveFormsModule, NgxMaskModule.forRoot(), MatProgressBarModule),
+  { provide: LOCALE_ID, useValue: "ru-RU" }, // + registerLocaleData(localeRu, "ru-RU")
+  importProvidersFrom(BrowserModule, ReactiveFormsModule, MatProgressBarModule),
+  provideNgxMask(),
+  provideZonelessChangeDetection(), // zoneless: без zone.js, change detection по сигналам/событиям
 
   // HTTP интерсепторы (порядок важен — см. ниже)
   { provide: HTTP_INTERCEPTORS, useClass: CamelcaseInterceptor, multi: true },
@@ -394,8 +406,8 @@ providers: [
   { provide: API_URL, useValue: environment.apiUrl },
   { provide: PRODUCTION, useValue: environment.production },
 
-  // Глобальный обработчик ошибок
-  { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
+  // Глобальный обработчик ошибок — Sentry (@sentry/angular)
+  { provide: ErrorHandler, useFactory: () => createErrorHandler({ logErrors: !environment.production }) },
 
   provideHttpClient(withInterceptorsFromDi()),
   provideRouter(APP_ROUTES, withRouterConfig({ onSameUrlNavigation: "reload" })),
@@ -405,7 +417,7 @@ providers: [
   ...AUTH_PROVIDERS,
   ...FEED_PROVIDERS,
   ...INDUSTRY_PROVIDERS,
-  // ... всего ~20 наборов
+  // ... всего ~24 набора
 ],
 ```
 
@@ -466,7 +478,7 @@ HTTP-интерсепторы в Angular работают по принципу 
 
 ## Точки входа
 
-- `projects/social_platform/src/main.ts` — bootstrap с `bootstrapApplication(AppComponent, APP_CONFIG)`.
+- `projects/social_platform/src/main.ts` — `initSentry()` → (в проде) `enableProdMode()` → bootstrap `bootstrapApplication(AppComponent, APP_CONFIG)`.
 - `app.component.ts` — корневой компонент: `<mat-progress-bar>` (loading) + `<router-outlet>` + `<app-cookie-consent>`. Подписан на router events для отображения loading-bar.
 - `app.config.ts` — все DI-провайдеры (см. выше).
 - `app.routes.ts` — корневой `Routes` массив.
