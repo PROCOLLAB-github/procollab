@@ -23,18 +23,18 @@ import { ErrorService } from "@core/lib/services/error/error.service";
 import { GlobalErrorHandlerService } from "@core/lib/services/error/global-error-handler.service";
 ```
 
-| Сервис                                                    | Файл                                             | Provided | В `@corelib` | Зависит от                                                                    |
-| --------------------------------------------------------- | ------------------------------------------------ | -------- | ------------ | ----------------------------------------------------------------------------- |
-| [`ApiService`](#apiservice)                               | `services/api/api.service.ts`                    | root     | да           | `HttpClient`, `API_URL`                                                       |
-| [`SkillsApiService`](#skillsapiservice)                   | `services/api/skillsApi.service.ts`              | root     | да           | `HttpClient`,                                                                 |
-| [`TokenService`](#tokenservice)                           | `services/tokens/token.service.ts`               | root     | да           | `ApiService`, `PRODUCTION`, `js-cookie`                                       |
-| [`LoggerService`](#loggerservice)                         | `services/logger/logger.service.ts`              | root     | да           | — (опц. `"PRODUCTION"` — см. известный баг)                                   |
-| [`ValidationService`](#validationservice)                 | `services/validation/validation.service.ts`      | root     | да           | `dayjs` (`customParseFormat`, `relativeTime`)                                 |
-| [`YtExtractService`](#ytextractservice)                   | `services/yt-extract.service.ts`                 | root     | да           | —                                                                             |
-| [`FileService`](#fileservice)                             | `services/file/file.service.ts`                  | root     | **нет**      | `ApiService`                                                                  |
-| [`WebsocketService`](#websocketservice)                   | `services/websockets/websocket.service.ts`       | root     | **нет**      | `TokenService`, `@environment`                                                |
-| [`ErrorService`](#errorservice)                           | `services/error/error.service.ts`                | root     | **нет**      | `Router`, `LoggerService`                                                     |
-| [`GlobalErrorHandlerService`](#globalerrorhandlerservice) | `services/error/global-error-handler.service.ts` | manual   | **нет**      | `LoggerService` (+ `ErrorService`/`NgZone` — заинжекчены, но не используются) |
+| Сервис                                                    | Файл                                             | Provided                           | В `@corelib` | Зависит от                                    |
+| --------------------------------------------------------- | ------------------------------------------------ | ---------------------------------- | ------------ | --------------------------------------------- |
+| [`ApiService`](#apiservice)                               | `services/api/api.service.ts`                    | root                               | да           | `HttpClient`, `API_URL`                       |
+| [`SkillsApiService`](#skillsapiservice)                   | `services/api/skillsApi.service.ts`              | root                               | да           | `HttpClient`,                                 |
+| [`TokenService`](#tokenservice)                           | `services/tokens/token.service.ts`               | root                               | да           | `ApiService`, `PRODUCTION`, `js-cookie`       |
+| [`LoggerService`](#loggerservice)                         | `services/logger/logger.service.ts`              | root                               | да           | — (опц. `"PRODUCTION"` — см. известный баг)   |
+| [`ValidationService`](#validationservice)                 | `services/validation/validation.service.ts`      | root                               | да           | `dayjs` (`customParseFormat`, `relativeTime`) |
+| [`YtExtractService`](#ytextractservice)                   | `services/yt-extract.service.ts`                 | root                               | да           | —                                             |
+| [`FileService`](#fileservice)                             | `services/file/file.service.ts`                  | root                               | **нет**      | `ApiService`                                  |
+| [`WebsocketService`](#websocketservice)                   | `services/websockets/websocket.service.ts`       | root                               | **нет**      | `TokenService`, `@environment`                |
+| [`ErrorService`](#errorservice)                           | `services/error/error.service.ts`                | root                               | **нет**      | `Router`, `LoggerService`                     |
+| [`GlobalErrorHandlerService`](#globalerrorhandlerservice) | `services/error/global-error-handler.service.ts` | не регистрируется (заменён Sentry) | **нет**      | `LoggerService`                               |
 
 ---
 
@@ -189,7 +189,8 @@ CRUD для загрузки файлов через основной API.
 **Состояние**
 
 ```ts
-public isConnected: boolean = false;
+public isConnected = false;
+public readonly connectionLost$: Observable<void>; // фейл после исчерпания серии retry-попыток
 private socket: WebSocket | null;
 private messages$: Subject<MessageEvent>;
 ```
@@ -202,6 +203,8 @@ private messages$: Subject<MessageEvent>;
 | `send(type: string, content: any): void`  | Шлёт `JSON.stringify({ type, content: snakecaseKeys(content, { deep: true }) })`. Если сокет не `OPEN` — кидает `Error("WebSocket is not open.")`.                                                                                                                                                                                                                                                |
 | `on<T>(type: string): Observable<T>`      | Парсит `message.data` как JSON, фильтрует по `message.type === type`, возвращает `camelcaseKeys(message.content, { deep: true })`.                                                                                                                                                                                                                                                                |
 | `close(): void`                           | Закрывает сокет, обнуляет ссылку, ставит `isConnected = false`.                                                                                                                                                                                                                                                                                                                                   |
+
+**`connectionLost$`** — публичный `Observable<void>`, эмитит при исчерпании серии retry-попыток. Переподключение при этом **не прекращается** (resilient reconnect: дальше реже, с бэкоффом, бесконечно) — сигнал нужен только для UX. На него подписан `ConnectionStatusToastService` (`@api/connection-status`), показывающий toast о потере связи.
 
 **Известное замечание**: `WebsocketService` импортирует `@environment` напрямую — это `social_platform`. Если когда-нибудь захотим `core` сделать переиспользуемой между приложениями — параметризовать через DI-токены (по аналогии с `API_URL`).
 
@@ -224,7 +227,7 @@ private messages$: Subject<MessageEvent>;
 
 ## GlobalErrorHandlerService
 
-Реализация `ErrorHandler` от Angular для перехвата всех необработанных ошибок (sync + Promise rejections). Регистрируется как `ErrorHandler` в `app.config.ts`.
+Реализация `ErrorHandler` от Angular: ловит необработанные ошибки (sync + Promise rejections) и логирует через `LoggerService`. Инжектит только `LoggerService` (через `inject()`).
 
 ```ts
 handleError(err: any): void {
@@ -237,10 +240,6 @@ handleError(err: any): void {
 }
 ```
 
-**Известные замечания**:
-
-- В конструктор инжектятся `ErrorService` и `NgZone`, но **не используются** — мёртвые зависимости, можно удалить.
-- HTTP-ошибки сюда тоже долетают (если interceptor их не проглатывает), но обработка их специально не различает — всё уходит в `logger.error`.
-- В будущем сюда можно добавить отправку в Sentry; сейчас Sentry поднимается отдельно через DSN из `environment.sentryDns`.
+> **Сейчас не зарегистрирован.** С внедрением observability `app.config.ts` использует `ErrorHandler` от Sentry (`createErrorHandler` из `@sentry/angular`), а `GlobalErrorHandlerService` остаётся в `core` как legacy/запасной вариант, но в провайдеры приложения не подключён. Сам Sentry инициализируется в `main.ts` через `initSentry()` (`app/sentry.config.ts`); конфиг observability разобран в [`docs/social-platform/architecture.md`](../social-platform/architecture.md#observability-sentry--globalerrorhandler).
 
 ---
