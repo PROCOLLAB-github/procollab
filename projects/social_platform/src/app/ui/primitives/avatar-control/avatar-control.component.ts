@@ -66,7 +66,7 @@ export class AvatarControlComponent implements ControlValueAccessor {
     private fileService: FileService,
     private sanitizer: DomSanitizer,
     private readonly loggerService: LoggerService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   /** Размер аватара в пикселях */
@@ -151,6 +151,7 @@ export class AvatarControlComponent implements ControlValueAccessor {
     this.fixImageOrientation(files[0], () => {
       this.imageChangedEvent = event;
       this.showCropperModal = true;
+      this.cdr.markForCheck();
     });
   }
 
@@ -330,11 +331,11 @@ export class AvatarControlComponent implements ControlValueAccessor {
           }),
           concatMap(() => this.fileService.uploadFile(file)),
           map(r => r["url"]),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         )
       : this.fileService.uploadFile(file).pipe(
           map(r => r.url),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         );
 
     source.subscribe(this.updateValue.bind(this));

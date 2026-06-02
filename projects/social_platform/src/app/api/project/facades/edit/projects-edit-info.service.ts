@@ -110,9 +110,9 @@ export class ProjectsEditInfoService {
   // Observables для данных
   readonly industries$ = toObservable(this.industryRepository.industries).pipe(
     map(industries =>
-      industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
+      industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name })),
     ),
-    takeUntilDestroyed(this.destroyRef)
+    takeUntilDestroyed(this.destroyRef),
   );
 
   readonly profileId = signal<number>(+this.route.snapshot.params["projectId"]);
@@ -128,10 +128,10 @@ export class ProjectsEditInfoService {
   readonly projFormIsSubmitting$ = signal<AsyncState<void>>(initial());
 
   readonly projFormIsSubmittingAsDraft = computed(
-    () => this.submitMode() === "draft" && isLoading(this.projFormIsSubmitting$())
+    () => this.submitMode() === "draft" && isLoading(this.projFormIsSubmitting$()),
   );
   readonly projFormIsSubmittingAsPublished = computed(
-    () => this.submitMode() === "published" && isLoading(this.projFormIsSubmitting$())
+    () => this.submitMode() === "published" && isLoading(this.projFormIsSubmitting$()),
   );
 
   readonly openGroupIds = signal<Set<number>>(new Set());
@@ -161,15 +161,20 @@ export class ProjectsEditInfoService {
     this.assignProjectProgramUseCase
       .execute(
         Number(this.route.snapshot.paramMap.get("projectId")),
-        this.projectForm.get("partnerProgramId")?.value
+        this.projectForm.get("partnerProgramId")?.value,
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: r => {
           if (!r.ok) {
             if (r.error.cause instanceof HttpErrorResponse) {
-              if (r.error.cause.status === 400) {
-                this.setAssignProjectToProgramError(r.error.cause.error);
+              if (r.error.cause.status >= 500) {
+                this.setAssignProjectToProgramError({
+                  non_field_errors: ["Произошла ошибка на сервере. Попробуйте позже."],
+                });
+              } else if (r.error.cause.status === 400) {
+                const message = r.error.cause.error?.non_field_errors?.[0];
+                this.snackBarService.error(message ?? "Не удалось привязать проект к программе");
               }
             }
             return;
@@ -303,7 +308,7 @@ export class ProjectsEditInfoService {
           return this.saveOrEditGoals(projectId);
         }),
         switchMap(() => this.savePartners(projectId)),
-        switchMap(() => this.saveOrEditResources(projectId))
+        switchMap(() => this.saveOrEditResources(projectId)),
       )
       .subscribe({
         next: () => {
@@ -338,7 +343,7 @@ export class ProjectsEditInfoService {
     this.route.data
       .pipe(
         map(d => d["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(
         ([project, goals, partners, resources, invites]: [
@@ -346,12 +351,12 @@ export class ProjectsEditInfoService {
           Goal[],
           Partner[],
           Resource[],
-          Invite[]
+          Invite[],
         ]) => {
           // Используем сервис для инициализации данных проекта
           this.projectFormService.initializeProjectData(project);
           this.projectAchievementsService.syncAchievementsItems(
-            this.projectFormService.achievements
+            this.projectFormService.achievements,
           );
           this.projectGoalsService.initializeGoalsFromProject(goals);
           this.projectPartnerService.initializePartnerFromProject(partners);
@@ -364,18 +369,18 @@ export class ProjectsEditInfoService {
 
           if (project.partnerProgram) {
             this.isCompetitive.set(
-              !!project.partnerProgram.programId && project.partnerProgram.canSubmit
+              !!project.partnerProgram.programId && project.partnerProgram.canSubmit,
             );
             this.isProjectAssignToProgram.set(!!project.partnerProgram.programId);
 
             this.projectAdditionalService.initializeAdditionalForm(
               project.partnerProgram?.programFields,
-              project.partnerProgram?.programFieldValues
+              project.partnerProgram?.programFieldValues,
             );
           }
 
           this.projectVacancyUIService.applySetVacancies(project.vacancies);
-        }
+        },
       );
   }
 
@@ -412,7 +417,7 @@ export class ProjectsEditInfoService {
       .pipe(
         distinctUntilChanged(),
         map(d => d["data"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(([project]: [Project]) => {
         this.leaderId.set(project.leader);
@@ -470,7 +475,7 @@ export class ProjectsEditInfoService {
     return forkJoin(requests).pipe(
       tap(() => {
         this.projectGoalsService.syncGoalItems(this.projectGoalsService.goals);
-      })
+      }),
     );
   }
 
@@ -541,7 +546,7 @@ export class ProjectsEditInfoService {
                 if (!submitResult.ok) {
                   this.logger.error(
                     "Error submitting competitive project:",
-                    submitResult.error.cause
+                    submitResult.error.cause,
                   );
                   this.projectAdditionalService.resetSendingState();
                   this.submitMode.set("draft");

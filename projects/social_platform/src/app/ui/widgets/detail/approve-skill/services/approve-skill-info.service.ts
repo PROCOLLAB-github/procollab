@@ -1,6 +1,6 @@
 /** @format */
 
-import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
+import { ChangeDetectorRef, DestroyRef, inject, Injectable, Injector } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Approve, Skill } from "@domain/skills/skill.model";
 import { map, of, switchMap } from "rxjs";
@@ -18,6 +18,7 @@ export class ApproveskillInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
@@ -43,8 +44,10 @@ export class ApproveskillInfoService {
       next: result => {
         if (result.ok) {
           skill.approves = skill.approves.filter(
-            approve => approve.confirmedBy.id !== this.loggedUserId()
+            approve => approve.confirmedBy.id !== this.loggedUserId(),
           );
+
+          this.cdr.markForCheck();
         }
       },
     });
@@ -70,16 +73,17 @@ export class ApproveskillInfoService {
                   speciality: profile!.personal.speciality,
                   v2Speciality: profile!.personal.v2Speciality,
                 },
-              } as Approve)
-            )
+              } as Approve),
+            ),
           );
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: result => {
           if (result.ok) {
             this.approveSkillUIInfoService.applyApprovedSkills(skill, result.value);
+            this.cdr.markForCheck();
           }
         },
         error: err => {

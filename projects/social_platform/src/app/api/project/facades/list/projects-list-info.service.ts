@@ -91,10 +91,21 @@ export class ProjectsListInfoService {
 
     this.projectsInfoService.initializationRouterEvents();
 
+    this.route.data
+      .pipe(
+        map(d => d["data"] as ApiPagination<Project> | undefined),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(page => {
+        if (this.isSubs() || this.isInvites() || !page) return;
+        this.projects$.set(success(page.results ?? []));
+        this.projectsCount.set(page.count ?? 0);
+      });
+
     this.route.queryParams
       .pipe(
         map(q => q["name__contains"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(search => {
         if (search !== this.currentSearchQuery()) {
@@ -126,7 +137,7 @@ export class ProjectsListInfoService {
 
             return this.fetchAllProjects(reqQuery);
           }),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         )
         .subscribe(projects => {
           this.projects$.set(success(projects.results));
@@ -134,17 +145,19 @@ export class ProjectsListInfoService {
         });
     }
 
-    this.getProjectSubscriptionsUseCase
-      .execute(this.profile()!.id)
-      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          if (!result.ok) return;
+    if (this.isSubs()) {
+      this.getProjectSubscriptionsUseCase
+        .execute(this.profile()!.id)
+        .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: result => {
+            if (!result.ok) return;
 
-          this.projectsCount.set(result.value.count);
-          this.projects$.set(success(result.value.results ?? []));
-        },
-      });
+            this.projectsCount.set(result.value.count);
+            this.projects$.set(success(result.value.results ?? []));
+          },
+        });
+    }
   }
 
   initScroll(target: HTMLElement, listRoot: ElementRef<HTMLUListElement>): void {
@@ -152,7 +165,7 @@ export class ProjectsListInfoService {
       .pipe(
         throttleTime(300),
         concatMap(() => this.onScroll(target, listRoot)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -201,14 +214,14 @@ export class ProjectsListInfoService {
     if (diff > 0) {
       return this.onFetch(
         this.currentPage() * this.projectsPerFetch(),
-        this.projectsPerFetch()
+        this.projectsPerFetch(),
       ).pipe(
         tap(chunk => {
           this.currentPage.update(p => p + 1);
           this.projects$.update(state =>
-            isSuccess(state) ? success([...state.data, ...chunk]) : success(chunk)
+            isSuccess(state) ? success([...state.data, ...chunk]) : success(chunk),
           );
-        })
+        }),
       );
     }
 
@@ -230,7 +243,7 @@ export class ProjectsListInfoService {
       tap(projects => {
         this.projectsCount.set(projects.count);
       }),
-      map(projects => projects.results)
+      map(projects => projects.results),
     );
   }
 
@@ -245,7 +258,7 @@ export class ProjectsListInfoService {
         }
 
         return result.value;
-      })
+      }),
     );
   }
 
@@ -260,7 +273,7 @@ export class ProjectsListInfoService {
         }
 
         return result.value;
-      })
+      }),
     );
   }
 

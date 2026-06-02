@@ -26,7 +26,6 @@ import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
 import { GetProjectSubscriptionsUseCase } from "../../../project/use-cases/get-project-subscriptions.use-case";
 import { FilterProjectRatingsUseCase } from "../../use-cases/filter-project-ratings.use-case";
 import { GetProjectRatingsUseCase } from "../../use-cases/get-project-ratings.use-case";
-import Fuse from "fuse.js";
 import { Project } from "@domain/project/project.model";
 import { User } from "@domain/auth/user.model";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
@@ -69,10 +68,10 @@ export class ProgramDetailListInfoService {
       .pipe(
         tap(data => this.listType.set(data["listType"])),
         switchMap(r => of(r["data"])),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(data => {
-        this.programDetailListUIInfoService.list$.set(success(data.results));
+        this.programDetailListUIInfoService.list$.set(success(data?.results ?? []));
       });
 
     this.setupSearch();
@@ -91,7 +90,7 @@ export class ProgramDetailListInfoService {
           this.logger.error("Scroll error:", err);
           return of({});
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -121,10 +120,10 @@ export class ProgramDetailListInfoService {
     this.route.queryParams
       .pipe(
         map(q => q["search"]),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(search => {
-        this.programDetailListUIInfoService.searchedList.set(this.applySearch(search));
+        this.programDetailListUIInfoService.searchQuery.set(search ?? "");
       });
   }
 
@@ -133,7 +132,7 @@ export class ProgramDetailListInfoService {
       .pipe(
         filter(profile => !!profile),
         switchMap(p => this.getProjectSubscriptionsUseCase.execute(p!.id)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: result => {
@@ -154,6 +153,9 @@ export class ProgramDetailListInfoService {
       .pipe(
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
         concatMap(q => {
+          const isFirstLoad = this.isFirstLoad;
+          this.isFirstLoad = false;
+
           const prev = this.programDetailListUIInfoService.list();
           this.programDetailListUIInfoService.list$.set(loading(prev));
 
@@ -180,7 +182,7 @@ export class ProgramDetailListInfoService {
                   }
 
                   return result.value;
-                })
+                }),
               );
             }
             return this.getProjectRatingsUseCase.execute(programId, params).pipe(
@@ -191,7 +193,7 @@ export class ProgramDetailListInfoService {
                 }
 
                 return result.value;
-              })
+              }),
             );
           }
 
@@ -204,12 +206,11 @@ export class ProgramDetailListInfoService {
                 }
 
                 return result.value;
-              })
+              }),
             );
           }
 
-          if (this.isFirstLoad && !q["search"]) {
-            this.isFirstLoad = false;
+          if (isFirstLoad && !q["search"]) {
             const prefetched = this.prefetchedProjects();
             if (prefetched) {
               return of(prefetched);
@@ -224,14 +225,14 @@ export class ProgramDetailListInfoService {
               }
 
               return result.value;
-            })
+            }),
           );
         }),
         catchError(err => {
           this.logger.error("Error in setupFilters:", err);
           return of(this.emptyPage<ProjectRate | Project>());
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
         if (!result) return;
@@ -321,7 +322,7 @@ export class ProgramDetailListInfoService {
               this.programDetailListUIInfoService.list$.update(state =>
                 isSuccess(state)
                   ? success([...state.data, ...result.value.results])
-                  : success(result.value.results)
+                  : success(result.value.results),
               );
               this.programDetailListUIInfoService.loadingMore.set(false);
             }),
@@ -330,7 +331,7 @@ export class ProgramDetailListInfoService {
               this.listPage.update(p => p - 1);
               return of(this.emptyPage<ProjectRate>());
             }),
-            takeUntilDestroyed(this.destroyRef)
+            takeUntilDestroyed(this.destroyRef),
           );
         }
 
@@ -345,7 +346,7 @@ export class ProgramDetailListInfoService {
             this.programDetailListUIInfoService.list$.update(state =>
               isSuccess(state)
                 ? success([...state.data, ...result.value.results])
-                : success(result.value.results)
+                : success(result.value.results),
             );
             this.programDetailListUIInfoService.loadingMore.set(false);
           }),
@@ -354,7 +355,7 @@ export class ProgramDetailListInfoService {
             this.listPage.update(p => p - 1);
             return of(this.emptyPage<ProjectRate>());
           }),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         );
       }
 
@@ -375,7 +376,7 @@ export class ProgramDetailListInfoService {
             this.programDetailListUIInfoService.list$.update(state =>
               isSuccess(state)
                 ? success([...state.data, ...result.value.results])
-                : success(result.value.results)
+                : success(result.value.results),
             );
             this.programDetailListUIInfoService.loadingMore.set(false);
           }),
@@ -384,7 +385,7 @@ export class ProgramDetailListInfoService {
             this.listPage.update(p => p - 1);
             return of(this.emptyPage<Project>());
           }),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         );
       }
 
@@ -400,7 +401,7 @@ export class ProgramDetailListInfoService {
             this.programDetailListUIInfoService.list$.update(state =>
               isSuccess(state)
                 ? success([...state.data, ...result.value.results])
-                : success(result.value.results)
+                : success(result.value.results),
             );
             this.programDetailListUIInfoService.loadingMore.set(false);
           }),
@@ -409,7 +410,7 @@ export class ProgramDetailListInfoService {
             this.listPage.update(p => p - 1);
             return of(this.emptyPage<User>());
           }),
-          takeUntilDestroyed(this.destroyRef)
+          takeUntilDestroyed(this.destroyRef),
         );
       }
 
@@ -442,8 +443,6 @@ export class ProgramDetailListInfoService {
         return;
       }
 
-      // Для projects search — плоский query-param, не filter-ключ.
-      // Если уйдёт в filters body — бэк возвращает 400 (search не входит в список фильтр-полей).
       if (this.listType() === "projects" && key === "search") {
         extraParams["search"] = value;
         return;
@@ -453,20 +452,6 @@ export class ProgramDetailListInfoService {
     });
 
     return { filters, extraParams };
-  }
-
-  private applySearch(search: string) {
-    if (!search) return this.programDetailListUIInfoService.list();
-
-    const searchKeys =
-      this.listType() === "projects" || this.listType() === "rating"
-        ? ["name"]
-        : ["firstName", "lastName"];
-
-    const fuse = new Fuse(this.programDetailListUIInfoService.list(), {
-      keys: searchKeys,
-    });
-    return fuse.search(search).map(r => r.item);
   }
 
   private prefetchedProjects(): ApiPagination<Project> | undefined {

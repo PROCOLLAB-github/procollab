@@ -2,13 +2,12 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { User } from "@domain/auth/user.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
-import { ProjectRate } from "@domain/project/project-rate";
 import { Project } from "@domain/project/project.model";
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import Fuse from "fuse.js";
 
 /** Состояние интерфейса списков программы: проекты, участники, рейтинг, фильтры и пагинация. */
 @Injectable()
@@ -24,13 +23,22 @@ export class ProgramDetailListUIInfoService {
 
   readonly list$ = signal<AsyncState<any[]>>(initial());
   readonly loadingMore = signal(false);
-  readonly searchedList = signal<any[]>([]);
+  readonly searchQuery = signal<string>("");
 
   readonly list = computed(() => {
     const state = this.list$();
     if (isSuccess(state)) return state.data;
     if (isLoading(state)) return state.previous ?? [];
     return [];
+  });
+
+  readonly searchedList = computed<any[]>(() => {
+    const list = this.list();
+    const search = this.searchQuery().trim();
+    if (!search) return list;
+
+    const keys = this.listType() === "members" ? ["firstName", "lastName"] : ["name"];
+    return new Fuse(list, { keys }).search(search).map(r => r.item);
   });
 
   readonly profileSubscriptions = signal<Project[]>([]);
@@ -42,8 +50,8 @@ export class ProgramDetailListUIInfoService {
     return this.listType() === "rating"
       ? 10
       : this.listType() === "projects"
-      ? this.perPage()
-      : this.listTake();
+        ? this.perPage()
+        : this.listTake();
   });
 
   searchParamName = computed(() => {

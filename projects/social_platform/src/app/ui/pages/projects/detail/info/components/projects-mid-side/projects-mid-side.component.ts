@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -54,6 +55,7 @@ export class ProjectsMidSideComponent {
   readonly newsFormComponent = viewChild(NewsFormComponent);
   readonly newsCardComponent = viewChild(NewsCardComponent);
 
+  private readonly destroyRef = inject(DestroyRef);
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
@@ -77,7 +79,7 @@ export class ProjectsMidSideComponent {
   onAddNews(news: { text: string; files: string[] }): void {
     this.projectsDetailService
       .onAddNews(news)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.newsFormComponent()?.onResetForm(),
       });
@@ -94,7 +96,7 @@ export class ProjectsMidSideComponent {
   onEditNews(news: FeedNews, newsItemId: number) {
     this.projectsDetailService
       .onEditNews(news, newsItemId)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.newsCardComponent()?.onCloseEditMode(),
       });

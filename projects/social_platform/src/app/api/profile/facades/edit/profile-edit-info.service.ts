@@ -13,6 +13,7 @@ import { EditStep } from "@core/lib/models/edit-step";
 import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
 import { ProfileInfoService } from "../profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 /** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
@@ -27,6 +28,7 @@ export class ProfileEditInfoService {
   private readonly profileInfoService = inject(ProfileInfoService);
 
   private readonly saveProfileUseCase = inject(SaveProfileUseCase);
+  private readonly snackbarService = inject(SnackbarService);
 
   private readonly profileForm = this.profileFormService.getForm();
 
@@ -122,13 +124,13 @@ export class ProfileEditInfoService {
     if (hasLengthOverflow) {
       this.isModalErrorSkillsChoose.set(true);
       this.isModalErrorSkillChooseText.set(
-        "Превышено допустимое количество символов в одном из полей"
+        "Превышено допустимое количество символов в одном из полей",
       );
       return;
     }
 
     const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality", "city"].every(
-      name => this.profileForm.get(name)?.valid
+      name => this.profileForm.get(name)?.valid,
     );
 
     if (!mainFieldsValid || this.profileFormSubmitting$().status === "loading") {
@@ -149,8 +151,8 @@ export class ProfileEditInfoService {
               .map((file: any) => (typeof file === "string" ? file : file.link))
               .filter(Boolean)
           : achievement.files
-          ? [achievement.files]
-          : [],
+            ? [achievement.files]
+            : [],
     }));
 
     // Построение объекта профиля с только необходимыми полями
@@ -208,6 +210,7 @@ export class ProfileEditInfoService {
 
         this.profileInfoService.applyProfileUpdated(result.value);
         this.profileFormSubmitting$.set(success(undefined));
+        this.snackbarService.success("Профиль сохранён");
         this.navigationService.profileRedirect(result.value.id);
       });
   }
