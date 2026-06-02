@@ -6,7 +6,7 @@ import { Achievement } from "@domain/auth/user.model";
 import { Skill } from "@domain/skills/skill.model";
 import { NavigationService } from "../../../paths/navigation.service";
 import { ProjectStepService } from "../../../project/project-step.service";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { ActivatedRoute } from "@angular/router";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 import { EditStep } from "@core/lib/models/edit-step";

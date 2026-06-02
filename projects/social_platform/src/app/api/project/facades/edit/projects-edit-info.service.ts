@@ -1,7 +1,7 @@
 /** @format */
 
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { EMPTY, distinctUntilChanged, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -11,7 +11,7 @@ import { Resource } from "@domain/project/resource.model";
 import { Invite } from "@domain/invite/invite.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ValidationService } from "@corelib";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { SkillsRepositoryPort as SkillsService } from "@domain/skills/ports/skills.repository.port";
 import { ProjectFormService } from "./project-form.service";

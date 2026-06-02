@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable } from "@angular/core";
 import { filter, map, Observable, tap } from "rxjs";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ActivatedRoute } from "@angular/router";
 import { Collaborator } from "@domain/project/collaborator.model";

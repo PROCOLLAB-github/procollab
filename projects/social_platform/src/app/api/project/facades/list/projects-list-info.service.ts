@@ -13,7 +13,7 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { ProjectsInfoService } from "../projects-info.service";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { HttpParams } from "@angular/common/http";

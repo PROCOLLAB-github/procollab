@@ -9,8 +9,8 @@ import {
   OnInit,
   inject,
 } from "@angular/core";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
-import { Snack } from "@ui/services/snackbar/snack.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
+import { Snack } from "@domain/shared/snack.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AnimationService } from "./animation/animation.service";
 import { CommonModule } from "@angular/common";

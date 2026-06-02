@@ -20,7 +20,7 @@ import { taskAnswerSubmitted } from "@domain/courses/events/task-answer-submitte
 export class CoursesRepository implements CoursesRepositoryPort {
   private readonly coursesAdapter = inject(CoursesHttpAdapter);
   private readonly eventBus = inject(EventBus);
-  private readonly detailCache = new EntityCache<CourseDetail>();
+  private readonly detailCache = new EntityCache<CourseDetail>(10 * 60 * 1000);
   private readonly structureCache = new EntityCache<CourseStructure>();
 
   getCourses(): Observable<CourseCard[]> {

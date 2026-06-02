@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { ProjectNewsRepository } from "./project-news.repository";
 import { ProjectNewsHttpAdapter } from "../../adapters/project/project-news-http.adapter";
-import { StorageService } from "@api/storage/storage.service";
+import { StorageService } from "@domain/shared/storage.service";
 import { FeedNews } from "@domain/news/project-news.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 

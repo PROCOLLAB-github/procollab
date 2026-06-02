@@ -23,7 +23,7 @@ import { LoggedOut } from "@domain/auth/events/logged-out.event";
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
   private readonly programAdapter = inject(ProgramHttpAdapter);
-  private readonly entityCache = new EntityCache<Program>();
+  private readonly entityCache = new EntityCache<Program>(5 * 60 * 1000);
   private readonly eventBus = inject(EventBus);
 
   constructor() {

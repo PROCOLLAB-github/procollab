@@ -8,7 +8,7 @@ import {
   OnInit,
   viewChild,
 } from "@angular/core";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { RouterLink } from "@angular/router";
 import { MessageInputComponent } from "@ui/widgets/message-input/message-input.component";
 import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";

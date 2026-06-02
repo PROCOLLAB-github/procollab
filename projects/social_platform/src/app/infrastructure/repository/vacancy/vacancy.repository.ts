@@ -28,12 +28,11 @@ export class VacancyRepository implements VacancyRepositoryPort {
 
   constructor() {
     this.eventBus.on<VacancyCreated>("VacancyCreated").subscribe(event => {
-      this.invalidate(event.payload.projectId);
       this.projectVacanciesCache.invalidate(event.payload.projectId);
     });
 
     this.eventBus.on<VacancyUpdated>("VacancyUpdated").subscribe(event => {
-      this.invalidate(event.payload.vacancyId);
+      this.entityCache.invalidate(event.payload.vacancyId);
       // Событие содержит только vacancyId — точечно инвалидировать project нельзя,
       // безопаснее очистить весь кеш проектных листов (вакансия могла изменить поля,
       // которые рендерятся в списке).
@@ -41,7 +40,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
     });
 
     this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => {
-      this.invalidate(event.payload.vacancyId);
+      this.entityCache.invalidate(event.payload.vacancyId);
       this.projectVacanciesCache.clear();
     });
 
@@ -120,7 +119,6 @@ export class VacancyRepository implements VacancyRepositoryPort {
   }
 
   deleteVacancy(vacancyId: number): Observable<void> {
-    this.invalidate(vacancyId);
     return this.vacancyAdapter.deleteVacancy(vacancyId);
   }
 
@@ -148,7 +146,4 @@ export class VacancyRepository implements VacancyRepositoryPort {
       .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
 
-  invalidate(vacancyId: number): void {
-    this.entityCache.invalidate(vacancyId);
-  }
 }

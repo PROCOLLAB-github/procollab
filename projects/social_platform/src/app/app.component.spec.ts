@@ -6,7 +6,7 @@ import { AppComponent } from "./app.component";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { of } from "rxjs";
 import { TokenService } from "@corelib";
-import { LoadingService } from "@ui/services/loading/loading.service";
+import { LoadingService } from "@api/shared/loading.service";
 
 describe("AppComponent", () => {
   beforeEach(async () => {

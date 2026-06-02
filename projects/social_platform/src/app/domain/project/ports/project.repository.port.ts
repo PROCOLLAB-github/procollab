@@ -16,5 +16,4 @@ export abstract class ProjectRepositoryPort {
   abstract update(id: number, data: Partial<Project>): Observable<Project>;
   abstract deleteOne(id: number): Observable<void>;
   abstract refreshCount(): Observable<ProjectCount>;
-  abstract invalidate(id: number): void;
 }

@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { WebsocketService } from "@corelib";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 /** Слушает потерю WebSocket-соединения и показывает пользователю toast. */
 @Injectable({ providedIn: "root" })

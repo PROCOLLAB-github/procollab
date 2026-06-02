@@ -24,7 +24,6 @@
               "base": "dist/social_platform"
             },
             "index": "projects/social_platform/src/index.html",
-            "polyfills": ["zone.js"],
             "tsConfig": "projects/social_platform/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

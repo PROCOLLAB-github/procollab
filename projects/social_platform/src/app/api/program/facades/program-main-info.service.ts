@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { combineLatest, distinctUntilChanged, map, switchMap } from "rxjs";
 import { Program } from "@domain/program/program.model";
 import { HttpParams } from "@angular/common/http";

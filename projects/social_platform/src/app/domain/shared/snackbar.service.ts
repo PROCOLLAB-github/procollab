@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { distinctUntilChanged, Subject } from "rxjs";
-import { Snack } from "@ui/services/snackbar/snack.model";
+import { Snack } from "./snack.model";
 import { nanoid } from "nanoid";
 
 /** Сервис для управления всплывающими уведомлениями (snackbar). */
@@ -10,8 +10,6 @@ import { nanoid } from "nanoid";
   providedIn: "root",
 })
 export class SnackbarService {
-  constructor() {}
-
   private readonly snacks$ = new Subject<Snack>();
 
   snacks = this.snacks$.asObservable().pipe(distinctUntilChanged());

@@ -3,7 +3,7 @@
 import { DestroyRef, inject, Injectable } from "@angular/core";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 

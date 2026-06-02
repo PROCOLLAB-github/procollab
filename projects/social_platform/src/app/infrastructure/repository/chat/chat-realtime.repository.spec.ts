@@ -13,7 +13,7 @@ import {
   TypingInChatEventDto,
 } from "@domain/chat/chat.model";
 import { WebsocketService } from "@core/public-api";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 describe("ChatRealtimeRepository", () => {
   let repository: ChatRealtimeRepository;

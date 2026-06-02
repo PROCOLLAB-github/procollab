@@ -28,7 +28,7 @@ import { DetailProgramInfoService } from "./services/program/detail-program-info
 import { DetailProjectInfoService } from "./services/project/detail-project-info.service";
 import { Program } from "@domain/program/program.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
-import { ChatStateService } from "@api/chat/chat-state.service";
+import { ChatStateService } from "@domain/shared/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";

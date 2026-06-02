@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NavService } from "@ui/services/nav/nav.service";
+import { NavService } from "@api/shared/nav.service";
 import { ChatListItem } from "@domain/chat/chat-item.model";
 import { map, Observable } from "rxjs";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";

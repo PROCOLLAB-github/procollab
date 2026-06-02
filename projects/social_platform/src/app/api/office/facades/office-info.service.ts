@@ -14,7 +14,7 @@ import { IndustryStateInfoService } from "@api/industry/facades/industry-state-i
 import { ConnectChatUseCase } from "@api/chat/use-cases/connect-chat.use-case";
 import { ObserveSetOfflineUseCase } from "@api/chat/use-cases/observe-set-offline.use-case";
 import { ObserveSetOnlineUseCase } from "@api/chat/use-cases/observe-set-online.use-case";
-import { ChatStateService } from "@api/chat/chat-state.service";
+import { ChatStateService } from "@domain/shared/chat-state.service";
 import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";

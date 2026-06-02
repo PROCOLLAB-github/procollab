@@ -14,7 +14,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { filter, map } from "rxjs";
 import { WebsocketService } from "@core/public-api";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { mapChatMessage } from "./chat.repository";
 
 /** ChatRealtimePort поверх WebSocket-адаптера: команды проксируются в сокет, входящие события типизируются. */
