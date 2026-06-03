@@ -5,12 +5,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ElementRef,
   inject,
   input,
+  signal,
   viewChild,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { finalize } from "rxjs";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
@@ -60,6 +61,8 @@ export class ProfileMidSideComponent {
   protected readonly directions = this.profileDetailUIInfoService.directions;
   protected readonly news = this.newsInfoService.news;
 
+  protected readonly newsPending = signal(false);
+
   protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
   protected readonly readFullDescription = this.expandService.readFullDescription;
 
@@ -68,9 +71,13 @@ export class ProfileMidSideComponent {
   protected readonly AppRoutes = AppRoutes;
 
   onAddNews(news: { text: string; files: string[] }): void {
+    this.newsPending.set(true);
     this.profileDetailInfoService
       .onAddNews(news)
-      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .pipe(
+        finalize(() => this.newsPending.set(false)),
+        takeUntilDestroyed(this.destroyRef$),
+      )
       .subscribe({
         next: () => this.newsFormComponent()?.onResetForm(),
       });

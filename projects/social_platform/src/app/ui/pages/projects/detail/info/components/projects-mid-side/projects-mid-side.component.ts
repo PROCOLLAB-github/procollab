@@ -8,9 +8,8 @@ import {
   ElementRef,
   inject,
   input,
-  Input,
+  signal,
   viewChild,
-  WritableSignal,
 } from "@angular/core";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
 import { ProjectDirectionCard } from "@ui/widgets/project-direction-card/project-direction-card.component";
@@ -25,6 +24,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { FeedNews } from "@domain/news/project-news.model";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { finalize } from "rxjs";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Центральная колонка детали проекта: описание, новости. */
@@ -69,6 +69,7 @@ export class ProjectsMidSideComponent {
   // Состояние компонента
   protected readonly profile = this.profileInfoService.profile;
   protected readonly news = this.newsInfoService.news; // Массив новостей
+  protected readonly newsPending = signal(false);
   protected readonly readFullDescription = this.expandService.readFullDescription; // Флаг развернутого описания
   protected readonly descriptionExpandable = this.expandService.descriptionExpandable; // Флаг необходимости кнопки "Читать полностью"
 
@@ -77,9 +78,13 @@ export class ProjectsMidSideComponent {
   }
 
   onAddNews(news: { text: string; files: string[] }): void {
+    this.newsPending.set(true);
     this.projectsDetailService
       .onAddNews(news)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        finalize(() => this.newsPending.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: () => this.newsFormComponent()?.onResetForm(),
       });

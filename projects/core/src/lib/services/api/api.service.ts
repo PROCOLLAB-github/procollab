@@ -98,9 +98,8 @@ export class ApiService {
    * apiService.post<User>('/users', { name: 'John', email: 'john@example.com' })
    */
   post<T>(path: string, body: object): Observable<T> {
-    return this.http
-      .post<T>(this.apiUrl + path, body)
-      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<T>;
+    // Без retry: POST неидемпотентен, повтор на 5xx/обрыве плодит дубликаты ресурсов.
+    return this.http.post<T>(this.apiUrl + path, body).pipe(first()) as Observable<T>;
   }
 
   /**

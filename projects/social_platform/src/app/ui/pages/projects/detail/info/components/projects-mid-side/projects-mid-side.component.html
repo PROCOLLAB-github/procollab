@@ -24,7 +24,11 @@
   @if (profile()) {
     <div #newsEl class="project__news news">
       @if (project()!.leader === profile()!.id) {
-        <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+        <app-news-form
+          class="news__form"
+          [pending]="newsPending()"
+          (addNews)="onAddNews($event)"
+        ></app-news-form>
       }
 
       <div class="project__directions">

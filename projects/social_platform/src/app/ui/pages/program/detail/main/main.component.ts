@@ -9,8 +9,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
   viewChild,
-  ViewChild,
 } from "@angular/core";
 import { isFailure } from "@domain/shared/async-state";
 import { RouterModule } from "@angular/router";
@@ -29,6 +29,7 @@ import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { finalize } from "rxjs";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 
 /** Страница основной вкладки программы с описанием, ссылками и новостями. */
@@ -79,6 +80,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly program = this.programDetailMainUIInfoService.program;
   protected readonly news = this.newsInfoService.news;
 
+  protected readonly newsPending = signal(false);
+
   protected readonly AppRoutes = AppRoutes;
 
   protected readonly showProgramModal = this.programDetailMainUIInfoService.showProgramModal;
@@ -115,9 +118,13 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   onAddNews(news: { text: string; files: string[] }): void {
+    this.newsPending.set(true);
     this.programDetailMainService
       .onAddNews(news)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        finalize(() => this.newsPending.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: () => this.newsFormComponent()?.onResetForm(),
       });
