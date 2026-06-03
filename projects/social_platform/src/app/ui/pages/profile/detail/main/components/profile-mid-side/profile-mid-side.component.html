@@ -54,7 +54,11 @@
     } @else {
       <div class="profile__news news">
         @if (loggedUserId() === user()!.id) {
-          <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+          <app-news-form
+            class="news__form"
+            [pending]="newsPending()"
+            (addNews)="onAddNews($event)"
+          ></app-news-form>
         }
         <ul>
           @for (n of news(); track n.id) {

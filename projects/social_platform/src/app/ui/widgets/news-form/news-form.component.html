@@ -17,8 +17,8 @@
       icon="send"
       appSquare="12"
       class="form__send"
-      [style.opacity]="isTextOverflow ? '0.5' : '1'"
-      [style.pointer-events]="isTextOverflow ? 'none' : 'auto'"
+      [style.opacity]="isTextOverflow || pending() ? '0.5' : '1'"
+      [style.pointer-events]="isTextOverflow || pending() ? 'none' : 'auto'"
       (click)="onSubmit()"
     ></i>
   </div>
@@ -48,7 +48,13 @@
   <div class="footer">
     <label class="footer__attach">
       <i appIcon icon="attach" appSquare="12"></i>
-      <input type="file" accept="*/*" multiple (change)="onInputFiles($event)" />
+      <input
+        type="file"
+        accept="*/*"
+        multiple
+        [disabled]="pending()"
+        (change)="onInputFiles($event)"
+      />
     </label>
   </div>
 </form>

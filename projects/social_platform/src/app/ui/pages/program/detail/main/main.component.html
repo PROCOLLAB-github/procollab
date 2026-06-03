@@ -50,7 +50,11 @@
             </div>
             <div class="news">
               @if (program()!.isUserManager) {
-                <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+                <app-news-form
+                  class="news__form"
+                  [pending]="newsPending()"
+                  (addNews)="onAddNews($event)"
+                ></app-news-form>
               }
               @for (n of news(); track n.id) {
                 <app-news-card

@@ -4,11 +4,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  EventEmitter,
+  effect,
   inject,
+  input,
   OnInit,
   output,
-  Output,
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
@@ -66,9 +66,19 @@ export class NewsFormComponent implements OnInit {
     this.messageForm = this.fb.group({
       text: ["", [Validators.required]],
     });
+
+    effect(() => {
+      if (this.pending()) {
+        this.messageForm.disable({ emitEvent: false });
+      } else {
+        this.messageForm.enable({ emitEvent: false });
+      }
+    });
   }
 
   readonly addNews = output<{ text: string; files: string[] }>();
+
+  readonly pending = input(false);
 
   ngOnInit(): void {}
 
@@ -85,6 +95,7 @@ export class NewsFormComponent implements OnInit {
    * Валидирует форму и эмитит событие с данными новости
    */
   onSubmit() {
+    if (this.pending()) return;
     if (this.isTextOverflow) return;
     if (!this.validationService.getFormValidation(this.messageForm)) {
       return;
