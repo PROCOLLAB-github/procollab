@@ -25,6 +25,14 @@ describe("CollaboratorCardComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CollaboratorCardComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("collaborator", {
+      userId: 1,
+      firstName: "Test",
+      lastName: "User",
+      role: "Developer",
+      skills: [],
+      avatar: "",
+    });
     fixture.detectChanges();
   });
 

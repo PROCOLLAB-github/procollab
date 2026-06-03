@@ -15,6 +15,7 @@ describe("BarComponent", () => {
 
     fixture = TestBed.createComponent(BarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("links", []);
     fixture.detectChanges();
   });
 

@@ -17,6 +17,7 @@ describe("SelectComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("options", []);
     fixture.detectChanges();
   });
 

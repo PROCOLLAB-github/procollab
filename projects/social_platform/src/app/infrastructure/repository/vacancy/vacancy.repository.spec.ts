@@ -1,7 +1,7 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-import { of } from "rxjs";
+import { defer, of } from "rxjs";
 import { VacancyRepository } from "./vacancy.repository";
 import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter";
 import { EventBus } from "@domain/shared/event-bus";
@@ -149,13 +149,24 @@ describe("VacancyRepository", () => {
 
   it("VacancyCreated инвалидирует кеш проекта", () => {
     setup();
-    adapter.getOne.and.returnValue(of({ id: 7 } as Vacancy));
-    repository.getOne(7).subscribe();
+    // Считаем реальные подписки (fetch'и), а не вызовы метода: репозиторий строит
+    // observable адаптера и на cache-hit, но подписки на cache-hit не происходит.
+    let fetches = 0;
+    adapter.getForProject.and.callFake(() =>
+      defer(() => {
+        fetches++;
+        return of([{ id: 7 }] as Vacancy[]);
+      }),
+    );
+
+    repository.getForProject(20, 0, 7).subscribe();
+    repository.getForProject(20, 0, 7).subscribe();
+    expect(fetches).toBe(1);
 
     eventBus.emit(vacancyCreated(7, {} as CreateVacancyDto));
 
-    repository.getOne(7).subscribe();
-    expect(adapter.getOne).toHaveBeenCalledTimes(2);
+    repository.getForProject(20, 0, 7).subscribe();
+    expect(fetches).toBe(2);
   });
 
   it("VacancyUpdated инвалидирует кеш вакансии", () => {

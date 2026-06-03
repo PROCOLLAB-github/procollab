@@ -44,7 +44,8 @@ describe("ModalComponent", () => {
   });
 
   it("should create the modal overlay when modalTemplate is available", () => {
-    hostComponent.modalComponent.modalTemplate = {} as any;
+    const mockTplRef = { elementRef: { nativeElement: document.createElement("div") } } as any;
+    (hostComponent.modalComponent as any).modalTemplate = () => mockTplRef;
     hostComponent.modalComponent.ngAfterViewInit();
     expect(hostComponent.modalComponent.overlayRef).toBeTruthy();
   });

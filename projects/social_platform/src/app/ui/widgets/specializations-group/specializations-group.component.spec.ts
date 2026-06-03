@@ -17,6 +17,8 @@ describe("SpecializationsGroupComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SpecializationsGroupComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("title", "Specializations");
+    fixture.componentRef.setInput("options", []);
     fixture.detectChanges();
   });
 

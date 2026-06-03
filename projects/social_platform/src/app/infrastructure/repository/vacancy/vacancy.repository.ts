@@ -119,6 +119,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
   }
 
   deleteVacancy(vacancyId: number): Observable<void> {
+    this.entityCache.invalidate(vacancyId);
     return this.vacancyAdapter.deleteVacancy(vacancyId);
   }
 

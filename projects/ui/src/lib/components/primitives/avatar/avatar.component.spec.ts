@@ -16,6 +16,7 @@ describe("AvatarComponent", () => {
   it("should create", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("url", undefined);
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
@@ -23,6 +24,7 @@ describe("AvatarComponent", () => {
   it("should display placeholder image if no URL is provided", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("url", undefined);
     fixture.detectChanges();
     const img = fixture.nativeElement.querySelector("img");
     expect(img.src).toContain(component.placeholderUrl);
@@ -40,18 +42,20 @@ describe("AvatarComponent", () => {
   it("should have correct size", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("url", undefined);
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector(".avatar");
-    expect(div.style.width).toBe(component.size + "px");
-    expect(div.style.height).toBe(component.size + "px");
+    expect(div.style.width).toBe(component.size() + "px");
+    expect(div.style.height).toBe(component.size() + "px");
     const img = fixture.nativeElement.querySelector("img");
-    expect(img.style.width).toBe(component.size + "px");
-    expect(img.style.height).toBe(component.size + "px");
+    expect(img.style.width).toBe(component.size() + "px");
+    expect(img.style.height).toBe(component.size() + "px");
   });
 
   it("should have border if hasBorder is true", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("url", undefined);
     fixture.componentRef.setInput("hasBorder", true);
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector(".avatar");
@@ -61,6 +65,7 @@ describe("AvatarComponent", () => {
   it("should not have border if hasBorder is false", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("url", undefined);
     fixture.componentRef.setInput("hasBorder", false);
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector(".avatar");

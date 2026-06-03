@@ -17,6 +17,9 @@ describe("SkillsGroupComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SkillsGroupComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("options", []);
+    fixture.componentRef.setInput("selected", []);
+    fixture.componentRef.setInput("title", "Skills");
     fixture.detectChanges();
   });
 

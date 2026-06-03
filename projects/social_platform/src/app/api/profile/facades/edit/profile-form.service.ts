@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { concatMap, filter, first, map, Observable, skip } from "rxjs";
+import { concatMap, filter, map, Observable, skip, take } from "rxjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User, UserRolesData } from "@domain/auth/user.model";
 import { Specialization } from "@domain/specializations/specialization.model";
@@ -148,7 +148,7 @@ export class ProfileFormService {
     toObservable(this.profile, { injector: this.injector })
       .pipe(
         filter((profile): profile is User => !!profile),
-        first(),
+        take(1),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
