@@ -40,9 +40,7 @@
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_TOO_LONG }}
               максимум
-              {{
-                form.get(criterion.id.toString())?.errors?.["maxlength"]?.["requiredLength"]
-              }}
+              {{ form.get(criterion.id.toString())?.errors?.["maxlength"]?.["requiredLength"] }}
               символов
             </div>
           }
