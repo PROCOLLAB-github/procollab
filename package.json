@@ -16,7 +16,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:scss": "stylelint projects/**/*.scss --fix",
-    "docs:json": "compodoc -p ./tsconfig.json -e json -d ."
+    "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
+    "storybook": "ng run social_platform:storybook",
+    "build-storybook": "ng run social_platform:build-storybook"
   },
   "precommit": [
     "lint:scss",
@@ -92,6 +94,12 @@
     "stylelint-config-standard-scss": "^5.0.0",
     "svg-sprite": "^2.0.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.60.0"
+    "typescript-eslint": "^8.60.0",
+    "storybook": "^10.4.2",
+    "@storybook/angular": "^10.4.2",
+    "@angular-devkit/architect": "^0.2003.23",
+    "@angular-devkit/core": "^20.3.23",
+    "@storybook/addon-docs": "^10.4.2",
+    "eslint-plugin-storybook": "^10.4.2"
   }
 }
