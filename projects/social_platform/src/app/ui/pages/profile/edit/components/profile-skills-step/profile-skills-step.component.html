@@ -87,12 +87,12 @@
       appearance="outline"
       [disabled]="
         showLanguageFields() &&
-        !isLanguageDirty &&
+        !isLanguageDirty() &&
         (languageItems().length === 4 || userLanguages.length === 4)
       "
       [ngStyle]="{
-        opacity: showLanguageFields() && !isLanguageDirty ? '0.6' : '1',
-        cursor: showLanguageFields() && !isLanguageDirty ? 'not-allowed' : 'pointer',
+        opacity: showLanguageFields() && !isLanguageDirty() ? '0.6' : '1',
+        cursor: showLanguageFields() && !isLanguageDirty() ? 'not-allowed' : 'pointer',
       }"
       (click)="addLanguage()"
     >

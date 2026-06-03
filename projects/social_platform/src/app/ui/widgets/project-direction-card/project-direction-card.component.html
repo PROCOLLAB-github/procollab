@@ -91,7 +91,7 @@
         @if (projectInfoType() === "goals") {
           <div class="cancel__skill">
             @if (!isShowsConfirmGoal) {
-              @if (about.length > 0) {
+              @if (about().length > 0) {
                 @for (goalItem of about(); track $index) {
                   <li class="cancel__goal lists__item text-body-10" style="gap: 10px">
                     <app-avatar [size]="30" [url]="goalItem.responsibleInfo.avatar"></app-avatar>

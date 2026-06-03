@@ -19,7 +19,7 @@
           <div class="header__notifications notifications">
             <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
             <ul class="notifications__invites">
-              @for (invite of invites; track invite.id) {
+              @for (invite of invites(); track invite.id) {
                 <li class="notifications__invite">
                   <app-invite-manage-card
                     [invite]="invite"

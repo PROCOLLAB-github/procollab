@@ -90,10 +90,10 @@
       customTypographyClass="text-body-12"
       size="big"
       appearance="outline"
-      [disabled]="showAchievementsFields() && !isAchievementsDirty"
+      [disabled]="showAchievementsFields() && !isAchievementsDirty()"
       [ngStyle]="{
-        opacity: showAchievementsFields() && !isAchievementsDirty ? '0.6' : '1',
-        cursor: showAchievementsFields() && !isAchievementsDirty ? 'not-allowed' : 'pointer',
+        opacity: showAchievementsFields() && !isAchievementsDirty() ? '0.6' : '1',
+        cursor: showAchievementsFields() && !isAchievementsDirty() ? 'not-allowed' : 'pointer',
       }"
       (click)="addAchievement()"
     >

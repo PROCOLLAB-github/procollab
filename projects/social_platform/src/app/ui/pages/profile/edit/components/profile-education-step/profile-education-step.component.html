@@ -134,10 +134,10 @@
       customTypographyClass="text-body-12"
       size="big"
       appearance="outline"
-      [disabled]="showEducationFields() && !isEducationDirty"
+      [disabled]="showEducationFields() && !isEducationDirty()"
       [ngStyle]="{
-        opacity: showEducationFields() && !isEducationDirty ? '0.6' : '1',
-        cursor: showEducationFields() && !isEducationDirty ? 'not-allowed' : 'pointer',
+        opacity: showEducationFields() && !isEducationDirty() ? '0.6' : '1',
+        cursor: showEducationFields() && !isEducationDirty() ? 'not-allowed' : 'pointer',
       }"
       class="profile__add-education"
       (click)="addEducation()"

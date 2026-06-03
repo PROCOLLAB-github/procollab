@@ -118,10 +118,10 @@
       customTypographyClass="text-body-12"
       size="big"
       appearance="outline"
-      [disabled]="showWorkFields() && !isWorkDirty"
+      [disabled]="showWorkFields() && !isWorkDirty()"
       [ngStyle]="{
-        opacity: showWorkFields() && !isWorkDirty ? '0.6' : '1',
-        cursor: showWorkFields() && !isWorkDirty ? 'not-allowed' : 'pointer',
+        opacity: showWorkFields() && !isWorkDirty() ? '0.6' : '1',
+        cursor: showWorkFields() && !isWorkDirty() ? 'not-allowed' : 'pointer',
       }"
       class="profile__add-education"
       (click)="addWork()"

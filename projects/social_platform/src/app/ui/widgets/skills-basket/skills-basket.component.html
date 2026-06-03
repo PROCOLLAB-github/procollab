@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="basket" [class.basket--error]="error">
+<div class="basket" [class.basket--error]="error()">
   <div class="basket__content" [class.basket__content--empty]="!value().length">
     @for (skill of value(); track skill.id) {
       <div
