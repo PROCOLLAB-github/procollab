@@ -25,12 +25,13 @@ describe("CheckboxComponent", () => {
   });
 
   it("should emit the checked value when the field is clicked", () => {
-    spyOn(component.checkedChange, "emit");
+    const emitSpy = jasmine.createSpy("checkedChange");
+    component.checked.subscribe(emitSpy);
 
     const field = fixture.debugElement.query(By.css(".field"));
     field.triggerEventHandler("click", null);
 
-    expect(component.checkedChange.emit).toHaveBeenCalledWith(true);
+    expect(emitSpy).toHaveBeenCalledWith(true);
   });
 
   it('should add the "field--checked" class when checked is true', () => {

@@ -27,7 +27,7 @@ describe("SearchComponent", () => {
   });
 
   it("should not call onSwitchSearch when clicked and openable is false", () => {
-    component.openable = false;
+    fixture.componentRef.setInput("openable", false);
     const searchDiv = fixture.nativeElement.querySelector(".search__other");
     searchDiv.dispatchEvent(new Event("click"));
     fixture.detectChanges();

@@ -24,7 +24,7 @@ describe("ButtonComponent", () => {
   });
 
   it("should set the button type", () => {
-    component.type = "submit";
+    fixture.componentRef.setInput("type", "submit");
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css("button")).nativeElement;
@@ -32,7 +32,7 @@ describe("ButtonComponent", () => {
   });
 
   it("should set the button color", () => {
-    component.color = "red";
+    fixture.componentRef.setInput("color", "red");
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css("button")).nativeElement;
@@ -40,7 +40,7 @@ describe("ButtonComponent", () => {
   });
 
   it("should set the button appearance", () => {
-    component.appearance = "outline";
+    fixture.componentRef.setInput("appearance", "outline");
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css("button")).nativeElement;
@@ -48,7 +48,7 @@ describe("ButtonComponent", () => {
   });
 
   it("should show the loader when loader input is true", () => {
-    component.loader = true;
+    fixture.componentRef.setInput("loader", true);
     fixture.detectChanges();
 
     const loader = fixture.debugElement.query(By.css("app-loader"));

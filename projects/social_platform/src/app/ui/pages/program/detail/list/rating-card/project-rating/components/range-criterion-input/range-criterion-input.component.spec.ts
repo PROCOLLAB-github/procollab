@@ -55,7 +55,6 @@ describe("RangeCriterionInputComponent", () => {
   it("should set the error class when error input is true", () => {
     const field = fixture.nativeElement.querySelector(".field");
     expect(field.classList).not.toContain("field--error");
-    component.error = true;
     fixture.componentRef.setInput("error", true);
     fixture.detectChanges();
     expect(field.classList).toContain("field--error");

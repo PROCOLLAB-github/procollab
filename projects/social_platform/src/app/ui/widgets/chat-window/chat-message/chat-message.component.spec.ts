@@ -34,7 +34,7 @@ describe("ChatMessageComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ChatMessageComponent);
     component = fixture.componentInstance;
-    component.chatMessage = {
+    fixture.componentRef.setInput("chatMessage", {
       id: 1,
       author: {
         id: 1,
@@ -53,7 +53,7 @@ describe("ChatMessageComponent", () => {
       text: "",
       createdAt: "",
       files: [],
-    } as unknown as ChatMessage;
+    } as unknown as ChatMessage);
     fixture.detectChanges();
   });
 

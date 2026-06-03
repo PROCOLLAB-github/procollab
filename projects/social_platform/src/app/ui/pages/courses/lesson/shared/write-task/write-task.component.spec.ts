@@ -21,7 +21,7 @@ describe("WriteTaskComponent", () => {
 
     fixture = TestBed.createComponent(WriteTaskComponent);
     component = fixture.componentInstance;
-    component.data = { order: 1, bodyText: "test", videoUrl: "" } as any;
+    fixture.componentRef.setInput("data", { order: 1, bodyText: "test", videoUrl: "" } as any);
     fixture.detectChanges();
   });
 

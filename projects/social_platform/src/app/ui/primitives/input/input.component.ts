@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
   forwardRef,
   input,
@@ -46,7 +47,12 @@ import { IconComponent } from "../icon/icon.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements ControlValueAccessor {
-  constructor(private readonly cdr: ChangeDetectorRef) {}
+  constructor(private readonly cdr: ChangeDetectorRef) {
+    effect(() => {
+      this.value = this.appValue();
+      this.cdr.markForCheck();
+    });
+  }
 
   placeholder = input("");
   type = input<"text" | "password" | "email" | "tel" | "date" | "radio">("text");

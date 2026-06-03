@@ -23,11 +23,12 @@ describe("SwitchComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should emit checkedChange when clicked", async () => {
-    spyOn(component.checkedChange, "emit");
+  it("should emit checkedChange when clicked", () => {
+    const emitSpy = jasmine.createSpy("checkedChange");
+    component.checked.subscribe(emitSpy);
     const switchElement = fixture.nativeElement.querySelector(".switch");
     switchElement.click();
-    expect(component.checkedChange.emit).toHaveBeenCalledWith(true);
+    expect(emitSpy).toHaveBeenCalledWith(true);
   });
 
   it('should apply the "switch--active" class when checked is true', () => {

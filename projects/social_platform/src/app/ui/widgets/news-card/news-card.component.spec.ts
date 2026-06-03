@@ -42,7 +42,8 @@ describe("NewsCardComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewsCardComponent);
     component = fixture.componentInstance;
-    component.feedItem = FeedNews.default();
+    fixture.componentRef.setInput("feedItem", FeedNews.default());
+    fixture.componentRef.setInput("resourceLink", ["office", "projects", 1, "news"]);
     fixture.detectChanges();
   });
 

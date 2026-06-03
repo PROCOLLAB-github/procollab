@@ -60,12 +60,13 @@ describe("InputComponent", () => {
   });
 
   it("should emit the input value on input", () => {
-    spyOn(component.appValueChange, "emit");
+    const emitSpy = jasmine.createSpy("appValueChange");
+    component.appValue.subscribe(emitSpy);
     const testValue = "test";
     const input = fixture.nativeElement.querySelector("input");
     input.value = testValue;
     input.dispatchEvent(new Event("input"));
-    expect(component.appValueChange.emit).toHaveBeenCalledWith(testValue);
+    expect(emitSpy).toHaveBeenCalledWith(testValue);
   });
 
   it("should emit enter event on enter keydown", () => {

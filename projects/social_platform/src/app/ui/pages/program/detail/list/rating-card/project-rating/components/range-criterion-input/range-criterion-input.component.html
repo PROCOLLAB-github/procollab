@@ -1,11 +1,11 @@
 <!-- @format -->
 
-<div class="field" [class.field--error]="error">
+<div class="field" [class.field--error]="error()">
   <input
     type="number"
     [value]="value"
     [min]="0"
-    [max]="max"
+    [max]="max()"
     [step]="1"
     [disabled]="disabled"
     (input)="onInput($event)"
@@ -14,8 +14,8 @@
     (paste)="onPaste($event)"
     (focus)="moveCursorToEnd($event)"
     class="field__input text-body-10"
-    [class.field__input--error]="error"
+    [class.field__input--error]="error()"
   />
   <span class="text-body-10">&nbsp;/</span>
-  <span class="text-body-10">{{ max }}</span>
+  <span class="text-body-10">{{ max() }}</span>
 </div>
