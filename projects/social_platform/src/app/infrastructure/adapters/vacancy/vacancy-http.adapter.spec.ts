@@ -7,10 +7,10 @@ import { of } from "rxjs";
 
 describe("VacancyHttpAdapter", () => {
   let adapter: VacancyHttpAdapter;
-  let apiService: jasmine.SpyObj<ApiService>;
+  let apiService: any;
 
   beforeEach(() => {
-    apiService = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "patch", "delete"]);
+    apiService = { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [VacancyHttpAdapter, { provide: ApiService, useValue: apiService }],
@@ -20,7 +20,7 @@ describe("VacancyHttpAdapter", () => {
   });
 
   it("getForProject вызывает GET /vacancies/ с limit/offset", () => {
-    apiService.get.and.returnValue(of([]));
+    apiService.get.mockReturnValue(of([]));
 
     adapter.getForProject(10, 0).subscribe();
 

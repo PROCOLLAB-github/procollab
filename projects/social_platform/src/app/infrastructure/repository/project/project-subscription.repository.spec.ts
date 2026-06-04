@@ -11,15 +11,15 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("ProjectSubscriptionRepository", () => {
   let repository: ProjectSubscriptionRepository;
-  let adapter: jasmine.SpyObj<SubscriptionHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<SubscriptionHttpAdapter>("SubscriptionHttpAdapter", [
-      "getSubscribers",
-      "addSubscription",
-      "getSubscriptions",
-      "deleteSubscription",
-    ]);
+    adapter = {
+      getSubscribers: vi.fn(),
+      addSubscription: vi.fn(),
+      getSubscriptions: vi.fn(),
+      deleteSubscription: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [
         ProjectSubscriptionRepository,
@@ -31,32 +31,32 @@ describe("ProjectSubscriptionRepository", () => {
 
   it("getSubscribers делегирует в adapter", () => {
     setup();
-    adapter.getSubscribers.and.returnValue(of([] as ProjectSubscriber[]));
+    adapter.getSubscribers.mockReturnValue(of([] as ProjectSubscriber[]));
     repository.getSubscribers(42).subscribe();
-    expect(adapter.getSubscribers).toHaveBeenCalledOnceWith(42);
+    expect(adapter.getSubscribers).toHaveBeenCalledExactlyOnceWith(42);
   });
 
   it("addSubscription делегирует в adapter", () => {
     setup();
-    adapter.addSubscription.and.returnValue(of(undefined));
+    adapter.addSubscription.mockReturnValue(of(undefined));
     repository.addSubscription(42).subscribe();
-    expect(adapter.addSubscription).toHaveBeenCalledOnceWith(42);
+    expect(adapter.addSubscription).toHaveBeenCalledExactlyOnceWith(42);
   });
 
   it("getSubscriptions делегирует в adapter (с params)", () => {
     setup();
     const params = new HttpParams();
-    adapter.getSubscriptions.and.returnValue(
+    adapter.getSubscriptions.mockReturnValue(
       of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Project>),
     );
     repository.getSubscriptions(10, params).subscribe();
-    expect(adapter.getSubscriptions).toHaveBeenCalledOnceWith(10, params);
+    expect(adapter.getSubscriptions).toHaveBeenCalledExactlyOnceWith(10, params);
   });
 
   it("deleteSubscription делегирует в adapter", () => {
     setup();
-    adapter.deleteSubscription.and.returnValue(of(undefined));
+    adapter.deleteSubscription.mockReturnValue(of(undefined));
     repository.deleteSubscription(42).subscribe();
-    expect(adapter.deleteSubscription).toHaveBeenCalledOnceWith(42);
+    expect(adapter.deleteSubscription).toHaveBeenCalledExactlyOnceWith(42);
   });
 });

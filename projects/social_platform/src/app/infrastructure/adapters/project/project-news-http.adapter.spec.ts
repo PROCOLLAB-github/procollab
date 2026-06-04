@@ -8,10 +8,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 
 describe("ProjectNewsHttpAdapter", () => {
   let adapter: ProjectNewsHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "patch", "delete"]);
+    api = { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectNewsHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -20,70 +20,70 @@ describe("ProjectNewsHttpAdapter", () => {
 
   it("fetchNews идёт в GET /projects/:id/news/ c limit=100", () => {
     setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
+    api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
     adapter.fetchNews("42").subscribe();
 
-    const [url, params] = api.get.calls.mostRecent().args;
+    const [url, params] = api.get.mock.lastCall;
     expect(url).toBe("/projects/42/news/");
     expect(params?.get("limit")).toBe("100");
   });
 
   it("fetchNewsDetail идёт в GET /projects/:pid/news/:nid", () => {
     setup();
-    api.get.and.returnValue(of({} as FeedNews));
+    api.get.mockReturnValue(of({} as FeedNews));
 
     adapter.fetchNewsDetail("42", "9").subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/news/9/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/");
   });
 
   it("addNews идёт в POST /projects/:id/news/ с body", () => {
     setup();
-    api.post.and.returnValue(of({} as FeedNews));
+    api.post.mockReturnValue(of({} as FeedNews));
     const body = { text: "t", files: ["f"] };
 
     adapter.addNews("42", body).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/news/", body);
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/news/", body);
   });
 
   it("setNewsViewed идёт в POST /projects/:pid/news/:nid/set_viewed/", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
 
     adapter.setNewsViewed(42, 9).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/news/9/set_viewed/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/set_viewed/", {});
   });
 
   it("deleteNews идёт в DELETE /projects/:pid/news/:nid/", () => {
     setup();
-    api.delete.and.returnValue(of(undefined));
+    api.delete.mockReturnValue(of(undefined));
 
     adapter.deleteNews("42", 9).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/news/9/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/");
   });
 
   it("toggleLike идёт в POST /projects/:pid/news/:nid/set_liked/ c is_liked", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
 
     adapter.toggleLike("42", 9, true).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/news/9/set_liked/", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/set_liked/", {
       is_liked: true,
     });
   });
 
   it("editNews идёт в PATCH /projects/:pid/news/:nid/ c частичными данными", () => {
     setup();
-    api.patch.and.returnValue(of({} as FeedNews));
+    api.patch.mockReturnValue(of({} as FeedNews));
     const patch = { text: "new" };
 
     adapter.editNews("42", 9, patch).subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/projects/42/news/9/", patch);
+    expect(api.patch).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/", patch);
   });
 });

@@ -14,22 +14,22 @@ import { vacancyDelete } from "@domain/vacancy/events/vacancy-deleted.event";
 
 describe("VacancyRepository", () => {
   let repository: VacancyRepository;
-  let adapter: jasmine.SpyObj<VacancyHttpAdapter>;
+  let adapter: any;
   let eventBus: EventBus;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<VacancyHttpAdapter>("VacancyHttpAdapter", [
-      "getForProject",
-      "getMyVacancies",
-      "getOne",
-      "postVacancy",
-      "updateVacancy",
-      "deleteVacancy",
-      "sendResponse",
-      "responsesByProject",
-      "acceptResponse",
-      "rejectResponse",
-    ]);
+    adapter = {
+      getForProject: vi.fn(),
+      getMyVacancies: vi.fn(),
+      getOne: vi.fn(),
+      postVacancy: vi.fn(),
+      updateVacancy: vi.fn(),
+      deleteVacancy: vi.fn(),
+      sendResponse: vi.fn(),
+      responsesByProject: vi.fn(),
+      acceptResponse: vi.fn(),
+      rejectResponse: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [VacancyRepository, { provide: VacancyHttpAdapter, useValue: adapter }],
     });
@@ -37,40 +37,42 @@ describe("VacancyRepository", () => {
     repository = TestBed.inject(VacancyRepository);
   }
 
-  it("getForProject делегирует и мапит в Vacancy[]", done => {
-    setup();
-    adapter.getForProject.and.returnValue(of([{ id: 1 }] as Vacancy[]));
+  it("getForProject делегирует и мапит в Vacancy[]", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getForProject.mockReturnValue(of([{ id: 1 }] as Vacancy[]));
 
-    repository.getForProject(10, 0, 42, "3+", "remote", "full", "100", "js").subscribe(res => {
-      expect(adapter.getForProject).toHaveBeenCalledOnceWith(
-        10,
-        0,
-        42,
-        "3+",
-        "remote",
-        "full",
-        "100",
-        "js",
-      );
-      expect(res[0]).toBeInstanceOf(Vacancy);
-      done();
-    });
-  });
+      repository.getForProject(10, 0, 42, "3+", "remote", "full", "100", "js").subscribe(res => {
+        expect(adapter.getForProject).toHaveBeenCalledExactlyOnceWith(
+          10,
+          0,
+          42,
+          "3+",
+          "remote",
+          "full",
+          "100",
+          "js",
+        );
+        expect(res[0]).toBeInstanceOf(Vacancy);
+        done();
+      });
+    }));
 
-  it("getMyVacancies мапит в VacancyResponse[]", done => {
-    setup();
-    adapter.getMyVacancies.and.returnValue(of([{ id: 1 }] as VacancyResponse[]));
+  it("getMyVacancies мапит в VacancyResponse[]", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getMyVacancies.mockReturnValue(of([{ id: 1 }] as VacancyResponse[]));
 
-    repository.getMyVacancies(10, 0).subscribe(res => {
-      expect(adapter.getMyVacancies).toHaveBeenCalledOnceWith(10, 0);
-      expect(res[0]).toBeInstanceOf(VacancyResponse);
-      done();
-    });
-  });
+      repository.getMyVacancies(10, 0).subscribe(res => {
+        expect(adapter.getMyVacancies).toHaveBeenCalledExactlyOnceWith(10, 0);
+        expect(res[0]).toBeInstanceOf(VacancyResponse);
+        done();
+      });
+    }));
 
   it("getOne кеширует результат", () => {
     setup();
-    adapter.getOne.and.returnValue(of({ id: 42 } as Vacancy));
+    adapter.getOne.mockReturnValue(of({ id: 42 } as Vacancy));
 
     repository.getOne(42).subscribe();
     repository.getOne(42).subscribe();
@@ -78,81 +80,86 @@ describe("VacancyRepository", () => {
     expect(adapter.getOne).toHaveBeenCalledTimes(1);
   });
 
-  it("postVacancy мапит ответ в Vacancy", done => {
-    setup();
-    const dto = {} as CreateVacancyDto;
-    adapter.postVacancy.and.returnValue(of({ id: 1 } as Vacancy));
+  it("postVacancy мапит ответ в Vacancy", () =>
+    new Promise<void>(done => {
+      setup();
+      const dto = {} as CreateVacancyDto;
+      adapter.postVacancy.mockReturnValue(of({ id: 1 } as Vacancy));
 
-    repository.postVacancy(42, dto).subscribe(v => {
-      expect(adapter.postVacancy).toHaveBeenCalledOnceWith(42, dto);
-      expect(v).toBeInstanceOf(Vacancy);
-      done();
-    });
-  });
+      repository.postVacancy(42, dto).subscribe(v => {
+        expect(adapter.postVacancy).toHaveBeenCalledExactlyOnceWith(42, dto);
+        expect(v).toBeInstanceOf(Vacancy);
+        done();
+      });
+    }));
 
-  it("updateVacancy мапит ответ в Vacancy", done => {
-    setup();
-    adapter.updateVacancy.and.returnValue(of({ id: 1 } as Vacancy));
-    const patch = {} as Partial<Vacancy>;
+  it("updateVacancy мапит ответ в Vacancy", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.updateVacancy.mockReturnValue(of({ id: 1 } as Vacancy));
+      const patch = {} as Partial<Vacancy>;
 
-    repository.updateVacancy(42, patch).subscribe(v => {
-      expect(adapter.updateVacancy).toHaveBeenCalledOnceWith(42, patch);
-      expect(v).toBeInstanceOf(Vacancy);
-      done();
-    });
-  });
+      repository.updateVacancy(42, patch).subscribe(v => {
+        expect(adapter.updateVacancy).toHaveBeenCalledExactlyOnceWith(42, patch);
+        expect(v).toBeInstanceOf(Vacancy);
+        done();
+      });
+    }));
 
   it("deleteVacancy инвалидирует кеш и делегирует", () => {
     setup();
-    adapter.getOne.and.returnValue(of({ id: 7 } as Vacancy));
-    adapter.deleteVacancy.and.returnValue(of(undefined));
+    adapter.getOne.mockReturnValue(of({ id: 7 } as Vacancy));
+    adapter.deleteVacancy.mockReturnValue(of(undefined));
     repository.getOne(7).subscribe();
 
     repository.deleteVacancy(7).subscribe();
 
     repository.getOne(7).subscribe();
     expect(adapter.getOne).toHaveBeenCalledTimes(2);
-    expect(adapter.deleteVacancy).toHaveBeenCalledOnceWith(7);
+    expect(adapter.deleteVacancy).toHaveBeenCalledExactlyOnceWith(7);
   });
 
-  it("sendResponse мапит в VacancyResponse", done => {
-    setup();
-    adapter.sendResponse.and.returnValue(of({ id: 1 } as VacancyResponse));
-    repository.sendResponse(5, { whyMe: "x" }).subscribe(r => {
-      expect(adapter.sendResponse).toHaveBeenCalledOnceWith(5, { whyMe: "x" });
-      expect(r).toBeInstanceOf(VacancyResponse);
-      done();
-    });
-  });
+  it("sendResponse мапит в VacancyResponse", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.sendResponse.mockReturnValue(of({ id: 1 } as VacancyResponse));
+      repository.sendResponse(5, { whyMe: "x" }).subscribe(r => {
+        expect(adapter.sendResponse).toHaveBeenCalledExactlyOnceWith(5, { whyMe: "x" });
+        expect(r).toBeInstanceOf(VacancyResponse);
+        done();
+      });
+    }));
 
-  it("responsesByProject мапит в VacancyResponse[]", done => {
-    setup();
-    adapter.responsesByProject.and.returnValue(of([{ id: 1 }] as VacancyResponse[]));
-    repository.responsesByProject(42).subscribe(res => {
-      expect(adapter.responsesByProject).toHaveBeenCalledOnceWith(42);
-      expect(res[0]).toBeInstanceOf(VacancyResponse);
-      done();
-    });
-  });
+  it("responsesByProject мапит в VacancyResponse[]", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.responsesByProject.mockReturnValue(of([{ id: 1 }] as VacancyResponse[]));
+      repository.responsesByProject(42).subscribe(res => {
+        expect(adapter.responsesByProject).toHaveBeenCalledExactlyOnceWith(42);
+        expect(res[0]).toBeInstanceOf(VacancyResponse);
+        done();
+      });
+    }));
 
-  it("acceptResponse/rejectResponse делегируют и мапят", done => {
-    setup();
-    adapter.acceptResponse.and.returnValue(of({ id: 1 } as VacancyResponse));
-    adapter.rejectResponse.and.returnValue(of({ id: 1 } as VacancyResponse));
+  it("acceptResponse/rejectResponse делегируют и мапят", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.acceptResponse.mockReturnValue(of({ id: 1 } as VacancyResponse));
+      adapter.rejectResponse.mockReturnValue(of({ id: 1 } as VacancyResponse));
 
-    repository.acceptResponse(1).subscribe(a => expect(a).toBeInstanceOf(VacancyResponse));
-    repository.rejectResponse(1).subscribe(r => {
-      expect(r).toBeInstanceOf(VacancyResponse);
-      done();
-    });
-  });
+      repository.acceptResponse(1).subscribe(a => expect(a).toBeInstanceOf(VacancyResponse));
+      repository.rejectResponse(1).subscribe(r => {
+        expect(r).toBeInstanceOf(VacancyResponse);
+        done();
+      });
+    }));
 
   it("VacancyCreated инвалидирует кеш проекта", () => {
     setup();
     // Считаем реальные подписки (fetch'и), а не вызовы метода: репозиторий строит
     // observable адаптера и на cache-hit, но подписки на cache-hit не происходит.
     let fetches = 0;
-    adapter.getForProject.and.callFake(() =>
+    adapter.getForProject.mockImplementation(() =>
       defer(() => {
         fetches++;
         return of([{ id: 7 }] as Vacancy[]);
@@ -171,7 +178,7 @@ describe("VacancyRepository", () => {
 
   it("VacancyUpdated инвалидирует кеш вакансии", () => {
     setup();
-    adapter.getOne.and.returnValue(of({ id: 7 } as Vacancy));
+    adapter.getOne.mockReturnValue(of({ id: 7 } as Vacancy));
     repository.getOne(7).subscribe();
 
     eventBus.emit(vacancyUpdated(7, {} as Partial<Vacancy>));
@@ -182,7 +189,7 @@ describe("VacancyRepository", () => {
 
   it("VacancyDelete инвалидирует кеш вакансии", () => {
     setup();
-    adapter.getOne.and.returnValue(of({ id: 7 } as Vacancy));
+    adapter.getOne.mockReturnValue(of({ id: 7 } as Vacancy));
     repository.getOne(7).subscribe();
 
     eventBus.emit(vacancyDelete(7));

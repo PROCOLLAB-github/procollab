@@ -19,20 +19,20 @@ describe("LocalStorageSeenModulesAdapter", () => {
   });
 
   it("isSeen возвращает false пока не помечено", () => {
-    expect(adapter.isSeen(1, 2)).toBeFalse();
+    expect(adapter.isSeen(1, 2)).toBe(false);
   });
 
   it("isSeen возвращает true после markSeen", () => {
     adapter.markSeen(1, 2);
 
-    expect(adapter.isSeen(1, 2)).toBeTrue();
+    expect(adapter.isSeen(1, 2)).toBe(true);
   });
 
   it("разные пары (courseId, moduleId) изолированы", () => {
     adapter.markSeen(1, 2);
 
-    expect(adapter.isSeen(1, 2)).toBeTrue();
-    expect(adapter.isSeen(1, 3)).toBeFalse();
-    expect(adapter.isSeen(2, 2)).toBeFalse();
+    expect(adapter.isSeen(1, 2)).toBe(true);
+    expect(adapter.isSeen(1, 3)).toBe(false);
+    expect(adapter.isSeen(2, 2)).toBe(false);
   });
 });

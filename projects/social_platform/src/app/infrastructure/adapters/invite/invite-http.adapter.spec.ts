@@ -8,10 +8,10 @@ import { Invite } from "@domain/invite/invite.model";
 
 describe("InviteHttpAdapter", () => {
   let adapter: InviteHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "patch", "delete"]);
+    api = { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [InviteHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -20,11 +20,11 @@ describe("InviteHttpAdapter", () => {
 
   it("sendForUser идёт в POST /invites/ с полями user/project/role/specialization", () => {
     setup();
-    api.post.and.returnValue(of({} as Invite));
+    api.post.mockReturnValue(of({} as Invite));
 
     adapter.sendForUser(7, 42, "dev", "frontend").subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/invites/", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/invites/", {
       user: 7,
       project: 42,
       role: "dev",
@@ -34,38 +34,38 @@ describe("InviteHttpAdapter", () => {
 
   it("revokeInvite идёт в DELETE /invites/:id", () => {
     setup();
-    api.delete.and.returnValue(of(undefined));
+    api.delete.mockReturnValue(of(undefined));
 
     adapter.revokeInvite(5).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/invites/5/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/invites/5/");
   });
 
   it("acceptInvite идёт в POST /invites/:id/accept/", () => {
     setup();
-    api.post.and.returnValue(of({} as Invite));
+    api.post.mockReturnValue(of({} as Invite));
 
     adapter.acceptInvite(5).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/invites/5/accept/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/invites/5/accept/", {});
   });
 
   it("rejectInvite идёт в POST /invites/:id/decline/", () => {
     setup();
-    api.post.and.returnValue(of({} as Invite));
+    api.post.mockReturnValue(of({} as Invite));
 
     adapter.rejectInvite(5).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/invites/5/decline/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/invites/5/decline/", {});
   });
 
   it("updateInvite идёт в PATCH /invites/:id с role/specialization", () => {
     setup();
-    api.patch.and.returnValue(of({} as Invite));
+    api.patch.mockReturnValue(of({} as Invite));
 
     adapter.updateInvite(5, "lead", "backend").subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/invites/5/", {
+    expect(api.patch).toHaveBeenCalledExactlyOnceWith("/invites/5/", {
       role: "lead",
       specialization: "backend",
     });
@@ -73,20 +73,20 @@ describe("InviteHttpAdapter", () => {
 
   it("getMy идёт в GET /invites/", () => {
     setup();
-    api.get.and.returnValue(of([]));
+    api.get.mockReturnValue(of([]));
 
     adapter.getMy().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/invites/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/invites/");
   });
 
   it("getByProject идёт в GET /invites/ c project/user=any", () => {
     setup();
-    api.get.and.returnValue(of([]));
+    api.get.mockReturnValue(of([]));
 
     adapter.getByProject(42).subscribe();
 
-    const [url, params] = api.get.calls.mostRecent().args;
+    const [url, params] = api.get.mock.lastCall;
     expect(url).toBe("/invites/");
     expect(params?.get("project")).toBe("42");
     expect(params?.get("user")).toBe("any");

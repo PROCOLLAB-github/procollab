@@ -15,23 +15,23 @@ import { ProgramCreate } from "@domain/program/program-create.model";
 
 describe("ProgramRepository", () => {
   let repository: ProgramRepository;
-  let adapter: jasmine.SpyObj<ProgramHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProgramHttpAdapter>("ProgramHttpAdapter", [
-      "getAll",
-      "getOne",
-      "create",
-      "getDataSchema",
-      "register",
-      "getAllProjects",
-      "getAllMembers",
-      "getProgramFilters",
-      "getProgramProjectAdditionalFields",
-      "applyProjectToProgram",
-      "createProgramFilters",
-      "submitCompettetiveProject",
-    ]);
+    adapter = {
+      getAll: vi.fn(),
+      getOne: vi.fn(),
+      create: vi.fn(),
+      getDataSchema: vi.fn(),
+      register: vi.fn(),
+      getAllProjects: vi.fn(),
+      getAllMembers: vi.fn(),
+      getProgramFilters: vi.fn(),
+      getProgramProjectAdditionalFields: vi.fn(),
+      applyProjectToProgram: vi.fn(),
+      createProgramFilters: vi.fn(),
+      submitCompettetiveProject: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [ProgramRepository, { provide: ProgramHttpAdapter, useValue: adapter }],
     });
@@ -48,14 +48,14 @@ describe("ProgramRepository", () => {
   it("getAll делегирует в adapter", () => {
     setup();
     const params = new HttpParams();
-    adapter.getAll.and.returnValue(of(page<Program>()));
+    adapter.getAll.mockReturnValue(of(page<Program>()));
     repository.getAll(0, 10, params).subscribe();
-    expect(adapter.getAll).toHaveBeenCalledOnceWith(0, 10, params);
+    expect(adapter.getAll).toHaveBeenCalledExactlyOnceWith(0, 10, params);
   });
 
   it("getOne кеширует результат: повторный вызов не бьёт adapter", () => {
     setup();
-    adapter.getOne.and.returnValue(of({ id: 42 } as Program));
+    adapter.getOne.mockReturnValue(of({ id: 42 } as Program));
 
     repository.getOne(42).subscribe();
     repository.getOne(42).subscribe();
@@ -65,79 +65,84 @@ describe("ProgramRepository", () => {
 
   it("create делегирует в adapter", () => {
     setup();
-    adapter.create.and.returnValue(of({ id: 1 } as Program));
+    adapter.create.mockReturnValue(of({ id: 1 } as Program));
     const data = { name: "p" } as ProgramCreate;
     repository.create(data).subscribe();
-    expect(adapter.create).toHaveBeenCalledOnceWith(data);
+    expect(adapter.create).toHaveBeenCalledExactlyOnceWith(data);
   });
 
-  it("getDataSchema разворачивает response.dataSchema", done => {
-    setup();
-    const schema = { city: { name: "Город", placeholder: "" } } as unknown as ProgramDataSchema;
-    adapter.getDataSchema.and.returnValue(of({ dataSchema: schema }));
+  it("getDataSchema разворачивает response.dataSchema", () =>
+    new Promise<void>(done => {
+      setup();
+      const schema = { city: { name: "Город", placeholder: "" } } as unknown as ProgramDataSchema;
+      adapter.getDataSchema.mockReturnValue(of({ dataSchema: schema }));
 
-    repository.getDataSchema(1).subscribe(res => {
-      expect(res).toBe(schema);
-      done();
-    });
-  });
+      repository.getDataSchema(1).subscribe(res => {
+        expect(res).toBe(schema);
+        done();
+      });
+    }));
 
   it("register делегирует в adapter", () => {
     setup();
-    adapter.register.and.returnValue(of({} as ProgramDataSchema));
+    adapter.register.mockReturnValue(of({} as ProgramDataSchema));
     repository.register(1, { city: "Москва" }).subscribe();
-    expect(adapter.register).toHaveBeenCalledOnceWith(1, { city: "Москва" });
+    expect(adapter.register).toHaveBeenCalledExactlyOnceWith(1, { city: "Москва" });
   });
 
   it("getAllProjects делегирует в adapter", () => {
     setup();
     const params = new HttpParams();
-    adapter.getAllProjects.and.returnValue(of(page<Project>()));
+    adapter.getAllProjects.mockReturnValue(of(page<Project>()));
     repository.getAllProjects(1, params).subscribe();
-    expect(adapter.getAllProjects).toHaveBeenCalledOnceWith(1, params);
+    expect(adapter.getAllProjects).toHaveBeenCalledExactlyOnceWith(1, params);
   });
 
   it("getAllMembers делегирует в adapter", () => {
     setup();
-    adapter.getAllMembers.and.returnValue(of(page<User>()));
+    adapter.getAllMembers.mockReturnValue(of(page<User>()));
     repository.getAllMembers(1, 0, 10).subscribe();
-    expect(adapter.getAllMembers).toHaveBeenCalledOnceWith(1, 0, 10);
+    expect(adapter.getAllMembers).toHaveBeenCalledExactlyOnceWith(1, 0, 10);
   });
 
   it("getProgramFilters делегирует в adapter", () => {
     setup();
-    adapter.getProgramFilters.and.returnValue(of([] as PartnerProgramFields[]));
+    adapter.getProgramFilters.mockReturnValue(of([] as PartnerProgramFields[]));
     repository.getProgramFilters(1).subscribe();
-    expect(adapter.getProgramFilters).toHaveBeenCalledOnceWith(1);
+    expect(adapter.getProgramFilters).toHaveBeenCalledExactlyOnceWith(1);
   });
 
   it("getProgramProjectAdditionalFields делегирует в adapter", () => {
     setup();
-    adapter.getProgramProjectAdditionalFields.and.returnValue(of({} as ProjectAdditionalFields));
+    adapter.getProgramProjectAdditionalFields.mockReturnValue(of({} as ProjectAdditionalFields));
     repository.getProgramProjectAdditionalFields(1).subscribe();
-    expect(adapter.getProgramProjectAdditionalFields).toHaveBeenCalledOnceWith(1);
+    expect(adapter.getProgramProjectAdditionalFields).toHaveBeenCalledExactlyOnceWith(1);
   });
 
   it("applyProjectToProgram делегирует в adapter", () => {
     setup();
     const dto = { project: {} as Project, programFieldValues: [] };
-    adapter.applyProjectToProgram.and.returnValue(of({ projectId: 1, programLinkId: 2 }));
+    adapter.applyProjectToProgram.mockReturnValue(of({ projectId: 1, programLinkId: 2 }));
     repository.applyProjectToProgram(1, dto).subscribe();
-    expect(adapter.applyProjectToProgram).toHaveBeenCalledOnceWith(1, dto);
+    expect(adapter.applyProjectToProgram).toHaveBeenCalledExactlyOnceWith(1, dto);
   });
 
   it("createProgramFilters делегирует в adapter", () => {
     setup();
     const params = new HttpParams();
-    adapter.createProgramFilters.and.returnValue(of(page<Project>()));
+    adapter.createProgramFilters.mockReturnValue(of(page<Project>()));
     repository.createProgramFilters(1, { status: ["open"] }, params).subscribe();
-    expect(adapter.createProgramFilters).toHaveBeenCalledOnceWith(1, { status: ["open"] }, params);
+    expect(adapter.createProgramFilters).toHaveBeenCalledExactlyOnceWith(
+      1,
+      { status: ["open"] },
+      params,
+    );
   });
 
   it("submitCompettetiveProject делегирует в adapter", () => {
     setup();
-    adapter.submitCompettetiveProject.and.returnValue(of({} as Project));
+    adapter.submitCompettetiveProject.mockReturnValue(of({} as Project));
     repository.submitCompettetiveProject(42).subscribe();
-    expect(adapter.submitCompettetiveProject).toHaveBeenCalledOnceWith(42);
+    expect(adapter.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(42);
   });
 });

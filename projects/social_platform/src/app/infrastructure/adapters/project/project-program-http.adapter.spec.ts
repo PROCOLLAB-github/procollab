@@ -10,10 +10,10 @@ import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-progr
 
 describe("ProjectProgramHttpAdapter", () => {
   let adapter: ProjectProgramHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["post", "put"]);
+    api = { post: vi.fn(), put: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectProgramHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -22,11 +22,11 @@ describe("ProjectProgramHttpAdapter", () => {
 
   it("assignProjectToProgram идёт в POST /projects/assign-to-program/ c projectId/partnerProgramId", () => {
     setup();
-    api.post.and.returnValue(of({} as ProjectAssign));
+    api.post.mockReturnValue(of({} as ProjectAssign));
 
     adapter.assignProjectToProgram(42, 5).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/assign-to-program/", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/assign-to-program/", {
       projectId: 42,
       partnerProgramId: 5,
     });
@@ -34,11 +34,11 @@ describe("ProjectProgramHttpAdapter", () => {
 
   it("sendNewProjectFieldsValues идёт в PUT /projects/:id/program-fields/ c массивом", () => {
     setup();
-    api.put.and.returnValue(of({} as ProjectDto));
+    api.put.mockReturnValue(of({} as ProjectDto));
     const values = [] as ProjectNewAdditionalProgramFields[];
 
     adapter.sendNewProjectFieldsValues(42, values).subscribe();
 
-    expect(api.put).toHaveBeenCalledOnceWith("/projects/42/program-fields/", values);
+    expect(api.put).toHaveBeenCalledExactlyOnceWith("/projects/42/program-fields/", values);
   });
 });

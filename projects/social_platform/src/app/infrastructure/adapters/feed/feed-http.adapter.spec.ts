@@ -7,10 +7,10 @@ import { FeedHttpAdapter } from "./feed-http.adapter";
 
 describe("FeedHttpAdapter", () => {
   let adapter: FeedHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get"]);
+    api = { get: vi.fn() };
     TestBed.configureTestingModule({
       providers: [FeedHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -19,11 +19,11 @@ describe("FeedHttpAdapter", () => {
 
   it("fetchFeed идёт в GET /feed/ c limit/offset/type", () => {
     setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
+    api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
     adapter.fetchFeed(20, 10, "vacancy|news").subscribe();
 
-    const [url, params] = api.get.calls.mostRecent().args;
+    const [url, params] = api.get.mock.lastCall;
     expect(url).toBe("/feed/");
     expect(params?.get("limit")).toBe("10");
     expect(params?.get("offset")).toBe("20");

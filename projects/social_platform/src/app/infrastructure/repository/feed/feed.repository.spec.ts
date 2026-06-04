@@ -9,10 +9,10 @@ import { FeedItem } from "@domain/feed/feed-item.model";
 
 describe("FeedRepository", () => {
   let repository: FeedRepository;
-  let adapter: jasmine.SpyObj<FeedHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<FeedHttpAdapter>("FeedHttpAdapter", ["fetchFeed"]);
+    adapter = { fetchFeed: vi.fn() };
     TestBed.configureTestingModule({
       providers: [FeedRepository, { provide: FeedHttpAdapter, useValue: adapter }],
     });
@@ -21,12 +21,12 @@ describe("FeedRepository", () => {
 
   it("делегирует fetchFeed(offset, limit, type) в adapter", () => {
     setup();
-    adapter.fetchFeed.and.returnValue(
+    adapter.fetchFeed.mockReturnValue(
       of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<FeedItem>),
     );
 
     repository.fetchFeed(0, 10, "all").subscribe();
 
-    expect(adapter.fetchFeed).toHaveBeenCalledOnceWith(0, 10, "all");
+    expect(adapter.fetchFeed).toHaveBeenCalledExactlyOnceWith(0, 10, "all");
   });
 });

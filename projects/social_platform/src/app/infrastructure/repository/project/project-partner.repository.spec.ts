@@ -8,15 +8,15 @@ import { Partner, PartnerDto } from "@domain/project/partner.model";
 
 describe("ProjectPartnerRepository", () => {
   let repository: ProjectPartnerRepository;
-  let adapter: jasmine.SpyObj<ProjectPartnerHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProjectPartnerHttpAdapter>("ProjectPartnerHttpAdapter", [
-      "addPartner",
-      "getPartners",
-      "editParter",
-      "deletePartner",
-    ]);
+    adapter = {
+      addPartner: vi.fn(),
+      getPartners: vi.fn(),
+      editParter: vi.fn(),
+      deletePartner: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [
         ProjectPartnerRepository,
@@ -26,47 +26,50 @@ describe("ProjectPartnerRepository", () => {
     repository = TestBed.inject(ProjectPartnerRepository);
   }
 
-  it("createPartner мапит ответ в Partner", done => {
-    setup();
-    const params = {} as PartnerDto;
-    adapter.addPartner.and.returnValue(of({ id: 1 } as Partner));
+  it("createPartner мапит ответ в Partner", () =>
+    new Promise<void>(done => {
+      setup();
+      const params = {} as PartnerDto;
+      adapter.addPartner.mockReturnValue(of({ id: 1 } as Partner));
 
-    repository.createPartner(42, params).subscribe(p => {
-      expect(adapter.addPartner).toHaveBeenCalledOnceWith(42, params);
-      expect(p).toBeInstanceOf(Partner);
-      done();
-    });
-  });
-
-  it("fetchAll мапит ответ в Partner[]", done => {
-    setup();
-    adapter.getPartners.and.returnValue(of([{ id: 1 }] as Partner[]));
-
-    repository.fetchAll(42).subscribe(partners => {
-      expect(adapter.getPartners).toHaveBeenCalledOnceWith(42);
-      expect(partners[0]).toBeInstanceOf(Partner);
-      done();
-    });
-  });
-
-  it("updatePartner мапит ответ в Partner[]", done => {
-    setup();
-    adapter.editParter.and.returnValue(of([{ id: 1 }] as Partner[]));
-
-    repository.updatePartner(42, 7, { contribution: "c", decisionMaker: 1 }).subscribe(ps => {
-      expect(adapter.editParter).toHaveBeenCalledOnceWith(42, 7, {
-        contribution: "c",
-        decisionMaker: 1,
+      repository.createPartner(42, params).subscribe(p => {
+        expect(adapter.addPartner).toHaveBeenCalledExactlyOnceWith(42, params);
+        expect(p).toBeInstanceOf(Partner);
+        done();
       });
-      expect(ps[0]).toBeInstanceOf(Partner);
-      done();
-    });
-  });
+    }));
+
+  it("fetchAll мапит ответ в Partner[]", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getPartners.mockReturnValue(of([{ id: 1 }] as Partner[]));
+
+      repository.fetchAll(42).subscribe(partners => {
+        expect(adapter.getPartners).toHaveBeenCalledExactlyOnceWith(42);
+        expect(partners[0]).toBeInstanceOf(Partner);
+        done();
+      });
+    }));
+
+  it("updatePartner мапит ответ в Partner[]", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.editParter.mockReturnValue(of([{ id: 1 }] as Partner[]));
+
+      repository.updatePartner(42, 7, { contribution: "c", decisionMaker: 1 }).subscribe(ps => {
+        expect(adapter.editParter).toHaveBeenCalledExactlyOnceWith(42, 7, {
+          contribution: "c",
+          decisionMaker: 1,
+        });
+        expect(ps[0]).toBeInstanceOf(Partner);
+        done();
+      });
+    }));
 
   it("deletePartner делегирует в adapter", () => {
     setup();
-    adapter.deletePartner.and.returnValue(of(undefined));
+    adapter.deletePartner.mockReturnValue(of(undefined));
     repository.deletePartner(42, 7).subscribe();
-    expect(adapter.deletePartner).toHaveBeenCalledOnceWith(42, 7);
+    expect(adapter.deletePartner).toHaveBeenCalledExactlyOnceWith(42, 7);
   });
 });

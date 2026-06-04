@@ -10,13 +10,10 @@ import { Specialization } from "@domain/specializations/specialization.model";
 
 describe("SpecializationsRepository", () => {
   let repository: SpecializationsRepository;
-  let adapter: jasmine.SpyObj<SpecializationsHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<SpecializationsHttpAdapter>("SpecializationsHttpAdapter", [
-      "getSpecializationsNested",
-      "getSpecializationsInline",
-    ]);
+    adapter = { getSpecializationsNested: vi.fn(), getSpecializationsInline: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         SpecializationsRepository,
@@ -28,21 +25,21 @@ describe("SpecializationsRepository", () => {
 
   it("делегирует getSpecializationsNested в adapter", () => {
     setup();
-    adapter.getSpecializationsNested.and.returnValue(of([] as SpecializationsGroup[]));
+    adapter.getSpecializationsNested.mockReturnValue(of([] as SpecializationsGroup[]));
 
     repository.getSpecializationsNested().subscribe();
 
-    expect(adapter.getSpecializationsNested).toHaveBeenCalledOnceWith();
+    expect(adapter.getSpecializationsNested).toHaveBeenCalledExactlyOnceWith();
   });
 
   it("делегирует getSpecializationsInline(search, limit, offset) в adapter", () => {
     setup();
-    adapter.getSpecializationsInline.and.returnValue(
+    adapter.getSpecializationsInline.mockReturnValue(
       of({ count: 0, results: [], next: "", previous: "" } as ApiPagination<Specialization>),
     );
 
     repository.getSpecializationsInline("dev", 10, 20).subscribe();
 
-    expect(adapter.getSpecializationsInline).toHaveBeenCalledOnceWith("dev", 10, 20);
+    expect(adapter.getSpecializationsInline).toHaveBeenCalledExactlyOnceWith("dev", 10, 20);
   });
 });

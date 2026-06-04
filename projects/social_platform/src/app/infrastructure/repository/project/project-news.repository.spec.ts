@@ -10,20 +10,20 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("ProjectNewsRepository", () => {
   let repository: ProjectNewsRepository;
-  let adapter: jasmine.SpyObj<ProjectNewsHttpAdapter>;
-  let storage: jasmine.SpyObj<StorageService>;
+  let adapter: any;
+  let storage: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProjectNewsHttpAdapter>("ProjectNewsHttpAdapter", [
-      "fetchNews",
-      "fetchNewsDetail",
-      "addNews",
-      "setNewsViewed",
-      "deleteNews",
-      "toggleLike",
-      "editNews",
-    ]);
-    storage = jasmine.createSpyObj<StorageService>("StorageService", ["getItem", "setItem"]);
+    adapter = {
+      fetchNews: vi.fn(),
+      fetchNewsDetail: vi.fn(),
+      addNews: vi.fn(),
+      setNewsViewed: vi.fn(),
+      deleteNews: vi.fn(),
+      toggleLike: vi.fn(),
+      editNews: vi.fn(),
+    };
+    storage = { getItem: vi.fn(), setItem: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ProjectNewsRepository,
@@ -41,80 +41,86 @@ describe("ProjectNewsRepository", () => {
     results: [{ id: 1 } as FeedNews],
   });
 
-  it("fetchNews делегирует в adapter и мапит results в FeedNews", done => {
-    setup();
-    adapter.fetchNews.and.returnValue(of(page()));
+  it("fetchNews делегирует в adapter и мапит results в FeedNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchNews.mockReturnValue(of(page()));
 
-    repository.fetchNews("42").subscribe(res => {
-      expect(adapter.fetchNews).toHaveBeenCalledOnceWith("42");
-      expect(res.results[0]).toBeInstanceOf(FeedNews);
-      done();
-    });
-  });
+      repository.fetchNews("42").subscribe(res => {
+        expect(adapter.fetchNews).toHaveBeenCalledExactlyOnceWith("42");
+        expect(res.results[0]).toBeInstanceOf(FeedNews);
+        done();
+      });
+    }));
 
-  it("fetchNewsDetail мапит в FeedNews", done => {
-    setup();
-    adapter.fetchNewsDetail.and.returnValue(of({ id: 1 } as FeedNews));
-    repository.fetchNewsDetail("p1", "n1").subscribe(n => {
-      expect(adapter.fetchNewsDetail).toHaveBeenCalledOnceWith("p1", "n1");
-      expect(n).toBeInstanceOf(FeedNews);
-      done();
-    });
-  });
+  it("fetchNewsDetail мапит в FeedNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchNewsDetail.mockReturnValue(of({ id: 1 } as FeedNews));
+      repository.fetchNewsDetail("p1", "n1").subscribe(n => {
+        expect(adapter.fetchNewsDetail).toHaveBeenCalledExactlyOnceWith("p1", "n1");
+        expect(n).toBeInstanceOf(FeedNews);
+        done();
+      });
+    }));
 
-  it("addNews мапит в FeedNews", done => {
-    setup();
-    adapter.addNews.and.returnValue(of({ id: 1 } as FeedNews));
-    repository.addNews("p1", { text: "t", files: [] }).subscribe(n => {
-      expect(adapter.addNews).toHaveBeenCalledOnceWith("p1", { text: "t", files: [] });
-      expect(n).toBeInstanceOf(FeedNews);
-      done();
-    });
-  });
+  it("addNews мапит в FeedNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.addNews.mockReturnValue(of({ id: 1 } as FeedNews));
+      repository.addNews("p1", { text: "t", files: [] }).subscribe(n => {
+        expect(adapter.addNews).toHaveBeenCalledExactlyOnceWith("p1", { text: "t", files: [] });
+        expect(n).toBeInstanceOf(FeedNews);
+        done();
+      });
+    }));
 
-  it("readNews вызывает setNewsViewed только для непрочитанных", done => {
-    setup();
-    storage.getItem.and.returnValue([1]);
-    adapter.setNewsViewed.and.returnValue(of(undefined));
+  it("readNews вызывает setNewsViewed только для непрочитанных", () =>
+    new Promise<void>(done => {
+      setup();
+      storage.getItem.mockReturnValue([1]);
+      adapter.setNewsViewed.mockReturnValue(of(undefined));
 
-    repository.readNews(10, [1, 2]).subscribe(() => {
-      expect(adapter.setNewsViewed).toHaveBeenCalledTimes(1);
-      expect(adapter.setNewsViewed).toHaveBeenCalledWith(10, 2);
-      done();
-    });
-  });
+      repository.readNews(10, [1, 2]).subscribe(() => {
+        expect(adapter.setNewsViewed).toHaveBeenCalledTimes(1);
+        expect(adapter.setNewsViewed).toHaveBeenCalledWith(10, 2);
+        done();
+      });
+    }));
 
-  it("readNews возвращает [] если все прочитаны", done => {
-    setup();
-    storage.getItem.and.returnValue([1, 2]);
-    repository.readNews(10, [1, 2]).subscribe(res => {
-      expect(res).toEqual([]);
-      expect(adapter.setNewsViewed).not.toHaveBeenCalled();
-      done();
-    });
-  });
+  it("readNews возвращает [] если все прочитаны", () =>
+    new Promise<void>(done => {
+      setup();
+      storage.getItem.mockReturnValue([1, 2]);
+      repository.readNews(10, [1, 2]).subscribe(res => {
+        expect(res).toEqual([]);
+        expect(adapter.setNewsViewed).not.toHaveBeenCalled();
+        done();
+      });
+    }));
 
   it("delete делегирует в adapter", () => {
     setup();
-    adapter.deleteNews.and.returnValue(of(undefined));
+    adapter.deleteNews.mockReturnValue(of(undefined));
     repository.delete("p1", 5).subscribe();
-    expect(adapter.deleteNews).toHaveBeenCalledOnceWith("p1", 5);
+    expect(adapter.deleteNews).toHaveBeenCalledExactlyOnceWith("p1", 5);
   });
 
   it("toggleLike делегирует в adapter", () => {
     setup();
-    adapter.toggleLike.and.returnValue(of(undefined));
+    adapter.toggleLike.mockReturnValue(of(undefined));
     repository.toggleLike("p1", 5, true).subscribe();
-    expect(adapter.toggleLike).toHaveBeenCalledOnceWith("p1", 5, true);
+    expect(adapter.toggleLike).toHaveBeenCalledExactlyOnceWith("p1", 5, true);
   });
 
-  it("editNews мапит в FeedNews", done => {
-    setup();
-    adapter.editNews.and.returnValue(of({ id: 5 } as FeedNews));
-    repository.editNews("p1", 5, { text: "t" }).subscribe(n => {
-      expect(adapter.editNews).toHaveBeenCalledOnceWith("p1", 5, { text: "t" });
-      expect(n).toBeInstanceOf(FeedNews);
-      done();
-    });
-  });
+  it("editNews мапит в FeedNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.editNews.mockReturnValue(of({ id: 5 } as FeedNews));
+      repository.editNews("p1", 5, { text: "t" }).subscribe(n => {
+        expect(adapter.editNews).toHaveBeenCalledExactlyOnceWith("p1", 5, { text: "t" });
+        expect(n).toBeInstanceOf(FeedNews);
+        done();
+      });
+    }));
 });

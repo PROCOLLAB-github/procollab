@@ -7,13 +7,10 @@ import { ProjectCollaboratorsHttpAdapter } from "../../adapters/project/project-
 
 describe("ProjectCollaboratorsRepository", () => {
   let repository: ProjectCollaboratorsRepository;
-  let adapter: jasmine.SpyObj<ProjectCollaboratorsHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProjectCollaboratorsHttpAdapter>(
-      "ProjectCollaboratorsHttpAdapter",
-      ["deleteCollaborator", "patchSwitchLeader", "deleteLeave"],
-    );
+    adapter = { deleteCollaborator: vi.fn(), patchSwitchLeader: vi.fn(), deleteLeave: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ProjectCollaboratorsRepository,
@@ -25,22 +22,22 @@ describe("ProjectCollaboratorsRepository", () => {
 
   it("deleteCollaborator делегирует в adapter", () => {
     setup();
-    adapter.deleteCollaborator.and.returnValue(of(undefined));
+    adapter.deleteCollaborator.mockReturnValue(of(undefined));
     repository.deleteCollaborator(1, 42).subscribe();
-    expect(adapter.deleteCollaborator).toHaveBeenCalledOnceWith(1, 42);
+    expect(adapter.deleteCollaborator).toHaveBeenCalledExactlyOnceWith(1, 42);
   });
 
   it("patchSwitchLeader делегирует в adapter", () => {
     setup();
-    adapter.patchSwitchLeader.and.returnValue(of(undefined));
+    adapter.patchSwitchLeader.mockReturnValue(of(undefined));
     repository.patchSwitchLeader(1, 42).subscribe();
-    expect(adapter.patchSwitchLeader).toHaveBeenCalledOnceWith(1, 42);
+    expect(adapter.patchSwitchLeader).toHaveBeenCalledExactlyOnceWith(1, 42);
   });
 
   it("deleteLeave делегирует в adapter", () => {
     setup();
-    adapter.deleteLeave.and.returnValue(of(undefined));
+    adapter.deleteLeave.mockReturnValue(of(undefined));
     repository.deleteLeave(1).subscribe();
-    expect(adapter.deleteLeave).toHaveBeenCalledOnceWith(1);
+    expect(adapter.deleteLeave).toHaveBeenCalledExactlyOnceWith(1);
   });
 });
