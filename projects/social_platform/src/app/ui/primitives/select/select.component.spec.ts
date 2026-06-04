@@ -52,7 +52,7 @@ describe("SelectComponent", () => {
       { value: "option2", label: "Option 2", id: 2 },
     ];
     const selectedOption = options[0];
-    spyOn(component, "onChange");
+    vi.spyOn(component, "onChange");
     fixture.componentRef.setInput("options", options);
     component.isOpen = true;
     fixture.detectChanges();

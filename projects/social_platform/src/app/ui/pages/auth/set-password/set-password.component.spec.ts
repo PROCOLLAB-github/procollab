@@ -15,7 +15,7 @@ describe("SetPasswordComponent", () => {
   let fixture: ComponentFixture<SetPasswordComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj({ setPassword: of({}) });
+    const authSpy = { setPassword: vi.fn().mockReturnValue(of({})) };
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),

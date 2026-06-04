@@ -15,9 +15,9 @@ describe("ChatComponent", () => {
   beforeEach(async () => {
     const chatInfoServiceSpy = {
       chats: of([]),
-      initializationChats: jasmine.createSpy("initializationChats"),
-      destroy: jasmine.createSpy("destroy"),
-      onGotoChat: jasmine.createSpy("onGotoChat"),
+      initializationChats: vi.fn(),
+      destroy: vi.fn(),
+      onGotoChat: vi.fn(),
     };
 
     const chatUIInfoServiceSpy = {

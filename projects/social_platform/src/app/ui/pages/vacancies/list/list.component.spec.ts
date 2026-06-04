@@ -1,7 +1,5 @@
 /** @format */
 
-/// <reference types="jasmine" />
-
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { signal } from "@angular/core";
 import { VacanciesListComponent } from "./list.component";
@@ -12,15 +10,11 @@ import { provideRouter } from "@angular/router";
 describe("VacanciesListComponent", () => {
   let component: VacanciesListComponent;
   let fixture: ComponentFixture<VacanciesListComponent>;
-  let vacancyInfoService: jasmine.SpyObj<VacancyInfoService>;
+  let vacancyInfoService: any;
   let vacancyUIInfoService: any;
 
   beforeEach(async () => {
-    const infServiceSpy = jasmine.createSpyObj<VacancyInfoService>("VacancyInfoService", [
-      "init",
-      "initScroll",
-      "destroy",
-    ]);
+    const infServiceSpy = { init: vi.fn(), initScroll: vi.fn(), destroy: vi.fn() };
 
     const uiServiceSpy = {
       listType: signal("all"),

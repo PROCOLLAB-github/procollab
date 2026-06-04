@@ -19,9 +19,9 @@ describe("MainComponent", () => {
 
   beforeEach(async () => {
     const profileDetailInfoServiceSpy = {
-      initializationProfile: jasmine.createSpy("initializationProfile"),
-      initCheckDescription: jasmine.createSpy("initCheckDescription"),
-      destroy: jasmine.createSpy("destroy"),
+      initializationProfile: vi.fn(),
+      initCheckDescription: vi.fn(),
+      destroy: vi.fn(),
     };
 
     const profileDetailUIInfoServiceSpy = {
@@ -52,7 +52,7 @@ describe("MainComponent", () => {
       descriptionExpandable: signal(false),
       readFullDescription: signal(""),
       readAll: signal(""),
-      onExpand: jasmine.createSpy("onExpand"),
+      onExpand: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

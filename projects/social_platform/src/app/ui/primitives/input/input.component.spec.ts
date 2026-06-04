@@ -60,7 +60,7 @@ describe("InputComponent", () => {
   });
 
   it("should emit the input value on input", () => {
-    const emitSpy = jasmine.createSpy("appValueChange");
+    const emitSpy = vi.fn();
     component.appValue.subscribe(emitSpy);
     const testValue = "test";
     const input = fixture.nativeElement.querySelector("input");
@@ -70,14 +70,14 @@ describe("InputComponent", () => {
   });
 
   it("should emit enter event on enter keydown", () => {
-    spyOn(component.enter, "emit");
+    vi.spyOn(component.enter, "emit");
     const input = fixture.nativeElement.querySelector("input");
     input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
     expect(component.enter.emit).toHaveBeenCalled();
   });
 
   it("should call onChange function on input", () => {
-    spyOn(component, "onChange");
+    vi.spyOn(component, "onChange");
     const testValue = "test";
     const input = fixture.nativeElement.querySelector("input");
     input.value = testValue;
@@ -86,7 +86,7 @@ describe("InputComponent", () => {
   });
 
   it("should call onTouch function on blur", () => {
-    spyOn(component, "onTouch");
+    vi.spyOn(component, "onTouch");
     const input = fixture.nativeElement.querySelector("input");
     input.dispatchEvent(new Event("blur"));
     expect(component.onTouch).toHaveBeenCalled();

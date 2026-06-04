@@ -25,7 +25,7 @@ describe("CheckboxComponent", () => {
   });
 
   it("should emit the checked value when the field is clicked", () => {
-    const emitSpy = jasmine.createSpy("checkedChange");
+    const emitSpy = vi.fn();
     component.checked.subscribe(emitSpy);
 
     const field = fixture.debugElement.query(By.css(".field"));

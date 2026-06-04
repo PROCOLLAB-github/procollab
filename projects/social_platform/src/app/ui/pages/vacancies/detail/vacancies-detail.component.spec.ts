@@ -14,18 +14,13 @@ describe("VacanciesDetailComponent", () => {
   let fixture: ComponentFixture<VacanciesDetailComponent>;
 
   beforeEach(async () => {
-    const vacancyDetailInfoServiceSpy = jasmine.createSpyObj("VacancyDetailInfoService", [
-      "initializeDetailInfo",
-      "destroy",
-    ]);
+    const vacancyDetailInfoServiceSpy = { initializeDetailInfo: vi.fn(), destroy: vi.fn() };
 
     const vacancyDetailUIInfoServiceSpy = {
       vacancy: signal(undefined),
     };
 
-    const expandServiceSpy = jasmine.createSpyObj("ExpandService", [], {
-      expanded: signal({}),
-    });
+    const expandServiceSpy = { expanded: signal({}) };
 
     await TestBed.configureTestingModule({
       imports: [VacanciesDetailComponent],

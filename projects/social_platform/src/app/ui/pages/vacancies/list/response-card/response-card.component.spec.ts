@@ -12,15 +12,13 @@ describe("ResponseCardComponent", () => {
 
   beforeEach(async () => {
     const authPortSpy = {
-      login: jasmine.createSpy("login").and.returnValue(of({} as any)),
-      logout: jasmine.createSpy("logout").and.returnValue(of(undefined)),
-      fetchProfile: jasmine
-        .createSpy("fetchProfile")
-        .and.returnValue(of({ id: 1, firstName: "Test" })),
-      fetchUser: jasmine.createSpy("fetchUser").and.returnValue(of({} as any)),
-      fetchUserRoles: jasmine.createSpy("fetchUserRoles").and.returnValue(of([])),
-      fetchChangeableRoles: jasmine.createSpy("fetchChangeableRoles").and.returnValue(of([])),
-      fetchLeaderProjects: jasmine.createSpy("fetchLeaderProjects").and.returnValue(of({} as any)),
+      login: vi.fn().mockReturnValue(of({} as any)),
+      logout: vi.fn().mockReturnValue(of(undefined)),
+      fetchProfile: vi.fn().mockReturnValue(of({ id: 1, firstName: "Test" })),
+      fetchUser: vi.fn().mockReturnValue(of({} as any)),
+      fetchUserRoles: vi.fn().mockReturnValue(of([])),
+      fetchChangeableRoles: vi.fn().mockReturnValue(of([])),
+      fetchLeaderProjects: vi.fn().mockReturnValue(of({} as any)),
     };
 
     await TestBed.configureTestingModule({

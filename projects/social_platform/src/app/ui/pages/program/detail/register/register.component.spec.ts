@@ -26,9 +26,9 @@ function makeFakeRoute(programId: string, schema: unknown = SCHEMA): ActivatedRo
 describe("ProgramRegisterComponent", () => {
   let fixture: ComponentFixture<ProgramRegisterComponent>;
   let component: ProgramRegisterComponent;
-  let routerSpy: jasmine.SpyObj<Router>;
-  let useCaseSpy: jasmine.SpyObj<RegisterProgramUseCase>;
-  let validationSpy: jasmine.SpyObj<ValidationService>;
+  let routerSpy: any;
+  let useCaseSpy: any;
+  let validationSpy: any;
 
   async function setup(
     options: {
@@ -39,19 +39,15 @@ describe("ProgramRegisterComponent", () => {
   ): Promise<void> {
     const { programId = "42", schema = SCHEMA, formValid = true } = options;
 
-    routerSpy = jasmine.createSpyObj<Router>("Router", ["navigateByUrl"]);
-    routerSpy.navigateByUrl.and.resolveTo(true);
+    routerSpy = { navigateByUrl: vi.fn() };
+    routerSpy.navigateByUrl.mockResolvedValue(true);
 
-    useCaseSpy = jasmine.createSpyObj<RegisterProgramUseCase>("RegisterProgramUseCase", [
-      "execute",
-    ]);
+    useCaseSpy = { execute: vi.fn() };
     // По умолчанию use-case отвечает успехом. Тест, которому нужно поражение, переопределит.
-    useCaseSpy.execute.and.returnValue(of(ok({} as never)));
+    useCaseSpy.execute.mockReturnValue(of(ok({} as never)));
 
-    validationSpy = jasmine.createSpyObj<ValidationService>("ValidationService", [
-      "getFormValidation",
-    ]);
-    validationSpy.getFormValidation.and.returnValue(formValid);
+    validationSpy = { getFormValidation: vi.fn() };
+    validationSpy.getFormValidation.mockReturnValue(formValid);
 
     await TestBed.configureTestingModule({
       imports: [ProgramRegisterComponent],
@@ -101,7 +97,7 @@ describe("ProgramRegisterComponent", () => {
       component.registerForm!.patchValue({ city: "Москва", age: "25" });
       component.onSubmit();
 
-      expect(useCaseSpy.execute).toHaveBeenCalledOnceWith(99, { city: "Москва", age: "25" });
+      expect(useCaseSpy.execute).toHaveBeenCalledExactlyOnceWith(99, { city: "Москва", age: "25" });
     });
 
     it("навигирует на детальную страницу программы при успехе use-case", async () => {
@@ -109,12 +105,14 @@ describe("ProgramRegisterComponent", () => {
 
       component.onSubmit();
 
-      expect(routerSpy.navigateByUrl).toHaveBeenCalledOnceWith(AppRoutes.program.detail("99"));
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledExactlyOnceWith(
+        AppRoutes.program.detail("99"),
+      );
     });
 
     it("не навигирует, если use-case вернул failure", async () => {
       await setup();
-      useCaseSpy.execute.and.returnValue(of(fail({ kind: "register_program_error" as const })));
+      useCaseSpy.execute.mockReturnValue(of(fail({ kind: "register_program_error" as const })));
 
       component.onSubmit();
 

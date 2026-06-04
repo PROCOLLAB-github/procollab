@@ -35,13 +35,12 @@ describe("ProjectsListComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const projectsListInfoServiceSpy = jasmine.createSpyObj(
-      "ProjectsListInfoService",
-      ["initializationProjectsList", "initScroll", "destroy"],
-      {
-        projects: signal([]),
-      },
-    );
+    const projectsListInfoServiceSpy = {
+      initializationProjectsList: vi.fn(),
+      initScroll: vi.fn(),
+      destroy: vi.fn(),
+      projects: signal([]),
+    };
 
     const projectsInfoServiceSpy = {
       isAll: signal(false),
@@ -54,25 +53,19 @@ describe("ProjectsListComponent", () => {
       profileProjSubsIds: signal([]),
     };
 
-    const officeInfoServiceSpy = jasmine.createSpyObj("OfficeInfoService", [
-      "onAcceptInvite",
-      "onRejectInvite",
-    ]);
+    const officeInfoServiceSpy = { onAcceptInvite: vi.fn(), onRejectInvite: vi.fn() };
 
     const officeUIInfoServiceSpy = {};
 
     const swipeServiceSpy = {
       isFilterOpen: signal(false),
-      onSwipeStart: jasmine.createSpy("onSwipeStart"),
-      onSwipeMove: jasmine.createSpy("onSwipeMove"),
-      onSwipeEnd: jasmine.createSpy("onSwipeEnd"),
-      closeFilter: jasmine.createSpy("closeFilter"),
+      onSwipeStart: vi.fn(),
+      onSwipeMove: vi.fn(),
+      onSwipeEnd: vi.fn(),
+      closeFilter: vi.fn(),
     };
 
-    const programDetailListInfoServiceSpy = jasmine.createSpyObj("ProgramDetailListInfoService", [
-      "init",
-      "destroy",
-    ]);
+    const programDetailListInfoServiceSpy = { init: vi.fn(), destroy: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, ProjectsListComponent],

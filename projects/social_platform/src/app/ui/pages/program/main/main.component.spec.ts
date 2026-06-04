@@ -13,9 +13,9 @@ describe("MainComponent", () => {
 
   beforeEach(async () => {
     const programMainInfoServiceSpy = {
-      initializationMainPrograms: jasmine.createSpy("initializationMainPrograms"),
-      destroy: jasmine.createSpy("destroy"),
-      onTogglePparticipating: jasmine.createSpy("onTogglePparticipating"),
+      initializationMainPrograms: vi.fn(),
+      destroy: vi.fn(),
+      onTogglePparticipating: vi.fn(),
     };
 
     const programMainUIInfoServiceSpy = {

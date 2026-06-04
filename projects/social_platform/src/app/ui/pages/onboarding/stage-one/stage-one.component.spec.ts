@@ -23,34 +23,22 @@ describe("StageOneComponent", () => {
       setOnboardingStage: of({}),
     };
 
-    const authPortSpy = jasmine.createSpyObj(
-      "AuthRepositoryPort",
-      ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles", "updateProfile"],
-      {
-        fetchProfile: of({}),
-        fetchUserRoles: of([]),
-        fetchChangeableRoles: of([]),
-        updateProfile: of({}),
-      },
-    );
+    const authPortSpy = {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+      updateProfile: of({}),
+    };
 
-    const skillsSpy = jasmine.createSpyObj(
-      "SkillsRepositoryPort",
-      ["getSkillsNested", "getSkillsInline"],
-      {
-        getSkillsNested: of([]),
-        getSkillsInline: of({ count: 0, results: [], next: "", previous: "" }),
-      },
-    );
+    const skillsSpy = {
+      getSkillsNested: of([]),
+      getSkillsInline: of({ count: 0, results: [], next: "", previous: "" }),
+    };
 
-    const specializationsSpy = jasmine.createSpyObj(
-      "SpecializationsRepositoryPort",
-      ["getSpecializationsNested", "getSpecializationsInline"],
-      {
-        getSpecializationsNested: of([]),
-        getSpecializationsInline: of({ count: 0, results: [], next: "", previous: "" }),
-      },
-    );
+    const specializationsSpy = {
+      getSpecializationsNested: of([]),
+      getSpecializationsInline: of({ count: 0, results: [], next: "", previous: "" }),
+    };
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, HttpClientTestingModule, OnboardingStageOneComponent],

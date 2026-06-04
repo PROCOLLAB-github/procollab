@@ -7,7 +7,7 @@ import { TextareaComponent } from "./textarea.component";
 describe("TextareaComponent", () => {
   let component: TextareaComponent;
   let fixture: ComponentFixture<TextareaComponent>;
-  let onChangeSpy: jasmine.Spy;
+  let onChangeSpy: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,7 +18,7 @@ describe("TextareaComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TextareaComponent);
     component = fixture.componentInstance;
-    onChangeSpy = spyOn(component, "onChange");
+    onChangeSpy = vi.spyOn(component, "onChange");
     fixture.detectChanges();
   });
 
@@ -34,7 +34,7 @@ describe("TextareaComponent", () => {
   });
 
   it("should set touched on blur", () => {
-    spyOn(component, "onTouch");
+    vi.spyOn(component, "onTouch");
     const inputEl = fixture.nativeElement.querySelector("textarea");
     inputEl.dispatchEvent(new Event("blur"));
     expect(component.onTouch).toHaveBeenCalled();
@@ -48,7 +48,7 @@ describe("TextareaComponent", () => {
   });
 
   it("should prevent enter", () => {
-    const preventDefaultSpy = jasmine.createSpy("preventDefault");
+    const preventDefaultSpy = vi.fn();
     const event = { preventDefault: preventDefaultSpy } as any;
     component.preventEnter(event);
     expect(preventDefaultSpy).toHaveBeenCalled();

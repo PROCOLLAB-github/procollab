@@ -27,7 +27,7 @@ describe("ProjectChatResolver", () => {
         },
         {
           provide: ProjectsDetailUIInfoService,
-          useValue: { applySetProject: jasmine.createSpy("applySetProject") },
+          useValue: { applySetProject: vi.fn() },
         },
       ],
     });

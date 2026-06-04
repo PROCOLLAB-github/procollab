@@ -28,12 +28,12 @@ describe("MembersComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const membersInfoServiceSpy = jasmine.createSpyObj("MembersInfoService", [
-      "initializationMembers",
-      "initScroll",
-      "destroy",
-      "redirectToProfile",
-    ]);
+    const membersInfoServiceSpy = {
+      initializationMembers: vi.fn(),
+      initScroll: vi.fn(),
+      destroy: vi.fn(),
+      redirectToProfile: vi.fn(),
+    };
 
     const fb = new FormBuilder();
     const membersUIInfoServiceSpy = {

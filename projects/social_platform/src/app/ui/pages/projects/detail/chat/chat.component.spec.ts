@@ -32,15 +32,15 @@ describe("ChatComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const chatDirectInfoServiceSpy = jasmine.createSpyObj("ChatDirectInfoService", [
-      "initializationChatDirect",
-      "initializationChatFiles",
-      "destroy",
-      "onFetchMessages",
-      "onSubmitMessage",
-      "onEditMessage",
-      "onDeleteMessage",
-    ]);
+    const chatDirectInfoServiceSpy = {
+      initializationChatDirect: vi.fn(),
+      initializationChatFiles: vi.fn(),
+      destroy: vi.fn(),
+      onFetchMessages: vi.fn(),
+      onSubmitMessage: vi.fn(),
+      onEditMessage: vi.fn(),
+      onDeleteMessage: vi.fn(),
+    };
 
     const chatDirectUIInfoServiceSpy = {
       chatFiles: signal([]),
@@ -49,7 +49,7 @@ describe("ChatComponent", () => {
       typingPersons: signal([]),
       isAsideMobileShown: signal(false),
       fetching: signal(false),
-      onToggleMobileAside: jasmine.createSpy("onToggleMobileAside"),
+      onToggleMobileAside: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

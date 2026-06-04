@@ -17,14 +17,14 @@ describe("MainComponent", () => {
 
   beforeEach(async () => {
     const programDetailMainServiceSpy = {
-      initializationProgramDetailMain: jasmine.createSpy("initializationProgramDetailMain"),
-      initScroll: jasmine.createSpy("initScroll"),
-      destroy: jasmine.createSpy("destroy"),
-      onAddNews: jasmine.createSpy("onAddNews").and.returnValue(of({ ok: true })),
-      onDelete: jasmine.createSpy("onDelete"),
-      onLike: jasmine.createSpy("onLike"),
-      onEdit: jasmine.createSpy("onEdit").and.returnValue(of({ ok: true })),
-      closeModal: jasmine.createSpy("closeModal"),
+      initializationProgramDetailMain: vi.fn(),
+      initScroll: vi.fn(),
+      destroy: vi.fn(),
+      onAddNews: vi.fn().mockReturnValue(of({ ok: true })),
+      onDelete: vi.fn(),
+      onLike: vi.fn(),
+      onEdit: vi.fn().mockReturnValue(of({ ok: true })),
+      closeModal: vi.fn(),
     };
 
     const programDetailMainUIInfoServiceSpy = {
@@ -39,7 +39,7 @@ describe("MainComponent", () => {
     const expandServiceSpy = {
       descriptionExpandable: signal(false),
       readFullDescription: signal(""),
-      onExpand: jasmine.createSpy("onExpand"),
+      onExpand: vi.fn(),
     };
 
     const newsInfoServiceSpy = {
@@ -49,7 +49,7 @@ describe("MainComponent", () => {
     const projectAdditionalServiceSpy = {
       isSend$: signal(null),
       errorAssignProjectToProgramModalMessage: signal(""),
-      clearAssignProjectToProgramError: jasmine.createSpy("clearAssignProjectToProgramError"),
+      clearAssignProjectToProgramError: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
