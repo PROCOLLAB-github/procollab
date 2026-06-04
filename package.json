@@ -11,7 +11,7 @@
     "watch": "ng build --watch social_platform --configuration=development",
     "build:sprite": "svg-sprite -s --dest=projects/social_platform/src/assets/icons 'projects/social_platform/src/assets/icons/svg/**/*.svg'",
     "test": "ng test",
-    "test:ci": "ng test social_platform --browsers=Headless --no-watch",
+    "test:ci": "vitest run",
     "lint:ts": "eslint projects/**/*.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
