@@ -10,15 +10,12 @@ import { Vacancy } from "@domain/vacancy/vacancy.model";
 
 describe("SendVacancyResponseUseCase", () => {
   let useCase: SendVacancyResponseUseCase;
-  let repo: jasmine.SpyObj<VacancyRepositoryPort>;
-  let eventBus: jasmine.SpyObj<EventBus>;
+  let repo: any;
+  let eventBus: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<VacancyRepositoryPort>("VacancyRepositoryPort", [
-      "sendResponse",
-      "getOne",
-    ]);
-    eventBus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
+    repo = { sendResponse: vi.fn(), getOne: vi.fn() };
+    eventBus = { emit: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         SendVacancyResponseUseCase,
@@ -37,42 +34,45 @@ describe("SendVacancyResponseUseCase", () => {
   } as unknown as VacancyResponse;
   const fakeVacancy = { id: 10, project: { id: 30 } } as unknown as Vacancy;
 
-  it("делегирует vacancyId и body, получает вакансию и эмитит событие", done => {
-    setup();
-    repo.sendResponse.and.returnValue(of(fakeResponse));
-    repo.getOne.and.returnValue(of(fakeVacancy));
+  it("делегирует vacancyId и body, получает вакансию и эмитит событие", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.sendResponse.mockReturnValue(of(fakeResponse));
+      repo.getOne.mockReturnValue(of(fakeVacancy));
 
-    useCase.execute(10, { whyMe: "test" }).subscribe(() => {
-      expect(repo.sendResponse).toHaveBeenCalledOnceWith(10, { whyMe: "test" });
-      expect(repo.getOne).toHaveBeenCalledOnceWith(10);
-      expect(eventBus.emit).toHaveBeenCalledTimes(1);
-      done();
-    });
-  });
+      useCase.execute(10, { whyMe: "test" }).subscribe(() => {
+        expect(repo.sendResponse).toHaveBeenCalledExactlyOnceWith(10, { whyMe: "test" });
+        expect(repo.getOne).toHaveBeenCalledExactlyOnceWith(10);
+        expect(eventBus.emit).toHaveBeenCalledTimes(1);
+        done();
+      });
+    }));
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.sendResponse.and.returnValue(of(fakeResponse));
-    repo.getOne.and.returnValue(of(fakeVacancy));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.sendResponse.mockReturnValue(of(fakeResponse));
+      repo.getOne.mockReturnValue(of(fakeVacancy));
 
-    useCase.execute(10, { whyMe: "test" }).subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute(10, { whyMe: "test" }).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'send_vacancy_response_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.sendResponse.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'send_vacancy_response_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.sendResponse.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(10, { whyMe: "test" }).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("send_vacancy_response_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(10, { whyMe: "test" }).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("send_vacancy_response_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

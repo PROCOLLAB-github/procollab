@@ -8,16 +8,13 @@ import { User, UserInput } from "@domain/auth/user.model";
 
 describe("SaveProfileUseCase", () => {
   let useCase: SaveProfileUseCase;
-  let repo: jasmine.SpyObj<AuthRepositoryPort>;
+  let repo: any;
 
   const command: UserInput = { firstName: "Иван" } as UserInput;
   const freshUser = { id: 42 } as User;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<AuthRepositoryPort>("AuthRepositoryPort", [
-      "updateProfile",
-      "fetchProfile",
-    ]);
+    repo = { updateProfile: vi.fn(), fetchProfile: vi.fn() };
     TestBed.configureTestingModule({
       providers: [SaveProfileUseCase, { provide: AuthRepositoryPort, useValue: repo }],
     });
@@ -26,36 +23,38 @@ describe("SaveProfileUseCase", () => {
 
   it("делегирует command в updateProfile", () => {
     setup();
-    repo.updateProfile.and.returnValue(of(freshUser));
+    repo.updateProfile.mockReturnValue(of(freshUser));
 
     useCase.execute(command).subscribe();
 
-    expect(repo.updateProfile).toHaveBeenCalledOnceWith(command);
+    expect(repo.updateProfile).toHaveBeenCalledExactlyOnceWith(command);
   });
 
-  it("при успехе возвращает ok со профилем из updateProfile", done => {
-    setup();
-    repo.updateProfile.and.returnValue(of(freshUser));
+  it("при успехе возвращает ok со профилем из updateProfile", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.updateProfile.mockReturnValue(of(freshUser));
 
-    useCase.execute(command).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(freshUser);
-      done();
-    });
-  });
+      useCase.execute(command).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(freshUser);
+        done();
+      });
+    }));
 
-  it("при ошибке updateProfile возвращает fail { kind: 'profile_edit_error' } с cause", done => {
-    setup();
-    const boom = { error: { phone_number: ["плохой номер"] } };
-    repo.updateProfile.and.returnValue(throwError(() => boom));
+  it("при ошибке updateProfile возвращает fail { kind: 'profile_edit_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = { error: { phone_number: ["плохой номер"] } };
+      repo.updateProfile.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(command).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("profile_edit_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(command).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("profile_edit_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

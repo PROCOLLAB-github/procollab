@@ -8,12 +8,10 @@ import { Resource, ResourceDto } from "@domain/project/resource.model";
 
 describe("UpdateResourceUseCase", () => {
   let useCase: UpdateResourceUseCase;
-  let repo: jasmine.SpyObj<ProjectResourceRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectResourceRepositoryPort>("ProjectResourceRepositoryPort", [
-      "updateResource",
-    ]);
+    repo = { updateResource: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         UpdateResourceUseCase,
@@ -27,37 +25,39 @@ describe("UpdateResourceUseCase", () => {
 
   it("делегирует (projectId, resourceId, params) в updateResource", () => {
     setup();
-    repo.updateResource.and.returnValue(of({} as Resource));
+    repo.updateResource.mockReturnValue(of({} as Resource));
 
     useCase.execute(1, 42, params).subscribe();
 
-    expect(repo.updateResource).toHaveBeenCalledOnceWith(1, 42, params);
+    expect(repo.updateResource).toHaveBeenCalledExactlyOnceWith(1, 42, params);
   });
 
-  it("при успехе возвращает ok с ресурсом", done => {
-    setup();
-    const resource = {} as Resource;
-    repo.updateResource.and.returnValue(of(resource));
+  it("при успехе возвращает ok с ресурсом", () =>
+    new Promise<void>(done => {
+      setup();
+      const resource = {} as Resource;
+      repo.updateResource.mockReturnValue(of(resource));
 
-    useCase.execute(1, 42, params).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(resource);
-      done();
-    });
-  });
+      useCase.execute(1, 42, params).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(resource);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'update_project_resource_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.updateResource.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'update_project_resource_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.updateResource.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1, 42, params).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("update_project_resource_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1, 42, params).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("update_project_resource_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

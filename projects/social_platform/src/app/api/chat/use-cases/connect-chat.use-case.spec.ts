@@ -7,25 +7,26 @@ import { ChatRealtimePort } from "@domain/chat/ports/chat-realtime.port";
 
 describe("ConnectChatUseCase", () => {
   let useCase: ConnectChatUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
 
   function setup(): void {
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["connect"]);
+    rt = { connect: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ConnectChatUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
     useCase = TestBed.inject(ConnectChatUseCase);
   }
 
-  it("делегирует в chatRealtime.connect и возвращает Observable", done => {
-    setup();
-    rt.connect.and.returnValue(of(undefined));
+  it("делегирует в chatRealtime.connect и возвращает Observable", () =>
+    new Promise<void>(done => {
+      setup();
+      rt.connect.mockReturnValue(of(undefined));
 
-    useCase.execute().subscribe({
-      complete: () => {
-        expect(rt.connect).toHaveBeenCalledOnceWith();
-        done();
-      },
-    });
-  });
+      useCase.execute().subscribe({
+        complete: () => {
+          expect(rt.connect).toHaveBeenCalledExactlyOnceWith();
+          done();
+        },
+      });
+    }));
 });

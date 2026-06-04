@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { API_URL, PRODUCTION, ApiService, TokenService } from "@corelib";
+import { API_URL, PRODUCTION, ApiService } from "@corelib";
 import { ChatStateService } from "@domain/shared/chat-state.service";
 
 describe("AuthRepository", () => {
@@ -20,7 +20,7 @@ describe("AuthRepository", () => {
         { provide: PRODUCTION, useValue: false },
         {
           provide: ChatStateService,
-          useValue: jasmine.createSpyObj("ChatStateService", ["reset"]),
+          useValue: { reset: vi.fn() },
         },
       ],
     });

@@ -9,13 +9,13 @@ import { LoginResponse } from "@core/lib/models/auth/http.model";
 
 describe("LoginUseCase", () => {
   let useCase: LoginUseCase;
-  let repo: jasmine.SpyObj<AuthRepositoryPort>;
+  let repo: any;
 
   const command: LoginCommand = { email: "u@e.com", password: "p" };
   const tokens: LoginResponse = { access: "a", refresh: "r" };
 
   function setup(): void {
-    repo = jasmine.createSpyObj<AuthRepositoryPort>("AuthRepositoryPort", ["login"]);
+    repo = { login: vi.fn() };
     TestBed.configureTestingModule({
       providers: [LoginUseCase, { provide: AuthRepositoryPort, useValue: repo }],
     });
@@ -24,43 +24,46 @@ describe("LoginUseCase", () => {
 
   it("делегирует вызов в репозиторий с командой", () => {
     setup();
-    repo.login.and.returnValue(of(tokens));
+    repo.login.mockReturnValue(of(tokens));
 
     useCase.execute(command).subscribe();
 
-    expect(repo.login).toHaveBeenCalledOnceWith(command);
+    expect(repo.login).toHaveBeenCalledExactlyOnceWith(command);
   });
 
-  it("при успехе возвращает ok с токенами внутри LoginResult", done => {
-    setup();
-    repo.login.and.returnValue(of(tokens));
+  it("при успехе возвращает ok с токенами внутри LoginResult", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.login.mockReturnValue(of(tokens));
 
-    useCase.execute(command).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value.tokens).toEqual(tokens);
-      done();
-    });
-  });
+      useCase.execute(command).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value.tokens).toEqual(tokens);
+        done();
+      });
+    }));
 
-  it("при 401 возвращает fail { kind: 'wrong_credentials' }", done => {
-    setup();
-    repo.login.and.returnValue(throwError(() => ({ status: 401 })));
+  it("при 401 возвращает fail { kind: 'wrong_credentials' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.login.mockReturnValue(throwError(() => ({ status: 401 })));
 
-    useCase.execute(command).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("wrong_credentials");
-      done();
-    });
-  });
+      useCase.execute(command).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("wrong_credentials");
+        done();
+      });
+    }));
 
-  it("при прочих ошибках возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.login.and.returnValue(throwError(() => ({ status: 500 })));
+  it("при прочих ошибках возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.login.mockReturnValue(throwError(() => ({ status: 500 })));
 
-    useCase.execute(command).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
-      done();
-    });
-  });
+      useCase.execute(command).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        done();
+      });
+    }));
 });

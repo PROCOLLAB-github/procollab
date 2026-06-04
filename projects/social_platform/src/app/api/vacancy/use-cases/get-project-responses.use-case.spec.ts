@@ -8,12 +8,10 @@ import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 
 describe("GetProjectResponsesUseCase", () => {
   let useCase: GetProjectResponsesUseCase;
-  let repo: jasmine.SpyObj<VacancyRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<VacancyRepositoryPort>("VacancyRepositoryPort", [
-      "responsesByProject",
-    ]);
+    repo = { responsesByProject: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetProjectResponsesUseCase, { provide: VacancyRepositoryPort, useValue: repo }],
     });
@@ -22,37 +20,39 @@ describe("GetProjectResponsesUseCase", () => {
 
   it("делегирует projectId в репозиторий", () => {
     setup();
-    repo.responsesByProject.and.returnValue(of([]));
+    repo.responsesByProject.mockReturnValue(of([]));
 
     useCase.execute(42).subscribe();
 
-    expect(repo.responsesByProject).toHaveBeenCalledOnceWith(42);
+    expect(repo.responsesByProject).toHaveBeenCalledExactlyOnceWith(42);
   });
 
-  it("при успехе возвращает ok со списком откликов", done => {
-    setup();
-    const responses = [{ id: 1 }] as unknown as VacancyResponse[];
-    repo.responsesByProject.and.returnValue(of(responses));
+  it("при успехе возвращает ok со списком откликов", () =>
+    new Promise<void>(done => {
+      setup();
+      const responses = [{ id: 1 }] as unknown as VacancyResponse[];
+      repo.responsesByProject.mockReturnValue(of(responses));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(responses);
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(responses);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_project_responses_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.responsesByProject.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'get_project_responses_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.responsesByProject.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_project_responses_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_project_responses_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

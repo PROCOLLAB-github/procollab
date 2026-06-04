@@ -8,12 +8,10 @@ import { Partner } from "@domain/project/partner.model";
 
 describe("GetProjectPartnersUseCase", () => {
   let useCase: GetProjectPartnersUseCase;
-  let repo: jasmine.SpyObj<ProjectPartnerRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectPartnerRepositoryPort>("ProjectPartnerRepositoryPort", [
-      "fetchAll",
-    ]);
+    repo = { fetchAll: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         GetProjectPartnersUseCase,
@@ -25,37 +23,39 @@ describe("GetProjectPartnersUseCase", () => {
 
   it("делегирует projectId в fetchAll", () => {
     setup();
-    repo.fetchAll.and.returnValue(of([]));
+    repo.fetchAll.mockReturnValue(of([]));
 
     useCase.execute(1).subscribe();
 
-    expect(repo.fetchAll).toHaveBeenCalledOnceWith(1);
+    expect(repo.fetchAll).toHaveBeenCalledExactlyOnceWith(1);
   });
 
-  it("при успехе возвращает ok с массивом партнёров", done => {
-    setup();
-    const partners: Partner[] = [];
-    repo.fetchAll.and.returnValue(of(partners));
+  it("при успехе возвращает ok с массивом партнёров", () =>
+    new Promise<void>(done => {
+      setup();
+      const partners: Partner[] = [];
+      repo.fetchAll.mockReturnValue(of(partners));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(partners);
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(partners);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_project_partners_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.fetchAll.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'get_project_partners_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.fetchAll.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_project_partners_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_project_partners_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

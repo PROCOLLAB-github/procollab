@@ -11,10 +11,10 @@ import { ProfileNews } from "@domain/profile/profile-news.model";
 
 describe("EditProfileNewsUseCase", () => {
   let useCase: EditProfileNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["editNews"]);
+    repo = { editNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [EditProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -23,38 +23,40 @@ describe("EditProfileNewsUseCase", () => {
 
   it("делегирует параметры в репозиторий", () => {
     setup();
-    repo.editNews.and.returnValue(of({} as ProfileNews));
+    repo.editNews.mockReturnValue(of({} as ProfileNews));
     const patch: Partial<ProfileNews> = { text: "edited" } as Partial<ProfileNews>;
 
     useCase.execute("u1", 7, patch).subscribe();
 
-    expect(repo.editNews).toHaveBeenCalledOnceWith("u1", 7, patch);
+    expect(repo.editNews).toHaveBeenCalledExactlyOnceWith("u1", 7, patch);
   });
 
-  it("при успехе возвращает ok с обновлённой новостью", done => {
-    setup();
-    const news = { id: 7 } as unknown as ProfileNews;
-    repo.editNews.and.returnValue(of(news));
+  it("при успехе возвращает ok с обновлённой новостью", () =>
+    new Promise<void>(done => {
+      setup();
+      const news = { id: 7 } as unknown as ProfileNews;
+      repo.editNews.mockReturnValue(of(news));
 
-    useCase.execute("u1", 7, {} as Partial<ProfileNews>).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(news);
-      done();
-    });
-  });
+      useCase.execute("u1", 7, {} as Partial<ProfileNews>).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(news);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'edit_profile_news_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.editNews.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'edit_profile_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.editNews.mockReturnValue(throwError(() => boom));
 
-    useCase.execute("u1", 7, {} as Partial<ProfileNews>).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("edit_profile_news_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute("u1", 7, {} as Partial<ProfileNews>).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("edit_profile_news_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

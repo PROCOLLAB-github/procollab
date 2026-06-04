@@ -20,7 +20,7 @@ describe("ProjectFormService", () => {
         },
         {
           provide: UpdateFormUseCase,
-          useValue: { execute: jasmine.createSpy("execute").and.returnValue(of({ ok: true })) },
+          useValue: { execute: vi.fn().mockReturnValue(of({ ok: true })) },
         },
       ],
     });

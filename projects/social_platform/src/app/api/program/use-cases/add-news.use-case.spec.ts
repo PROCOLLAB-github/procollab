@@ -11,10 +11,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 
 describe("AddNewsUseCase", () => {
   let useCase: AddNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["addNews"]);
+    repo = { addNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [AddNewsUseCase, { provide: PROGRAM_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -23,33 +23,35 @@ describe("AddNewsUseCase", () => {
 
   it("делегирует (programId, {text, files}) в репозиторий", () => {
     setup();
-    repo.addNews.and.returnValue(of({} as FeedNews));
+    repo.addNews.mockReturnValue(of({} as FeedNews));
 
     useCase.execute(1, { text: "hi", files: ["f"] }).subscribe();
 
-    expect(repo.addNews).toHaveBeenCalledOnceWith("1", { text: "hi", files: ["f"] });
+    expect(repo.addNews).toHaveBeenCalledExactlyOnceWith("1", { text: "hi", files: ["f"] });
   });
 
-  it("при успехе возвращает ok с созданной новостью", done => {
-    setup();
-    const news = { id: 10 } as FeedNews;
-    repo.addNews.and.returnValue(of(news));
+  it("при успехе возвращает ok с созданной новостью", () =>
+    new Promise<void>(done => {
+      setup();
+      const news = { id: 10 } as FeedNews;
+      repo.addNews.mockReturnValue(of(news));
 
-    useCase.execute(1, { text: "hi", files: [] }).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(news);
-      done();
-    });
-  });
+      useCase.execute(1, { text: "hi", files: [] }).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(news);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.addNews.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.addNews.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute(1, { text: "hi", files: [] }).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
-      done();
-    });
-  });
+      useCase.execute(1, { text: "hi", files: [] }).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        done();
+      });
+    }));
 });

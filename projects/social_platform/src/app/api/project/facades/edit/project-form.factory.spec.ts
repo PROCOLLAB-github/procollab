@@ -16,8 +16,8 @@ describe("project-form.factory", () => {
     expect(form.get("coverImageAddress")?.hasError("required")).toBe(true);
     expect(form.get("targetAudience")?.hasError("required")).toBe(true);
     expect(form.get("problem")?.hasError("required")).toBe(true);
-    expect(form.get("links")).toEqual(jasmine.any(FormArray));
-    expect(form.get("achievements")).toEqual(jasmine.any(FormArray));
+    expect(form.get("links")).toEqual(expect.any(FormArray));
+    expect(form.get("achievements")).toEqual(expect.any(FormArray));
   });
 
   it("валидирует поле link только для http/https адресов", () => {

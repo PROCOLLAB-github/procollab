@@ -8,12 +8,10 @@ import { Resource, ResourceDto } from "@domain/project/resource.model";
 
 describe("CreateResourceUseCase", () => {
   let useCase: CreateResourceUseCase;
-  let repo: jasmine.SpyObj<ProjectResourceRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectResourceRepositoryPort>("ProjectResourceRepositoryPort", [
-      "createResource",
-    ]);
+    repo = { createResource: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         CreateResourceUseCase,
@@ -27,37 +25,39 @@ describe("CreateResourceUseCase", () => {
 
   it("делегирует (projectId, params) в createResource", () => {
     setup();
-    repo.createResource.and.returnValue(of({} as Resource));
+    repo.createResource.mockReturnValue(of({} as Resource));
 
     useCase.execute(1, dto).subscribe();
 
-    expect(repo.createResource).toHaveBeenCalledOnceWith(1, dto);
+    expect(repo.createResource).toHaveBeenCalledExactlyOnceWith(1, dto);
   });
 
-  it("при успехе возвращает ok с ресурсом", done => {
-    setup();
-    const resource = {} as Resource;
-    repo.createResource.and.returnValue(of(resource));
+  it("при успехе возвращает ok с ресурсом", () =>
+    new Promise<void>(done => {
+      setup();
+      const resource = {} as Resource;
+      repo.createResource.mockReturnValue(of(resource));
 
-    useCase.execute(1, dto).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(resource);
-      done();
-    });
-  });
+      useCase.execute(1, dto).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(resource);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'create_project_resource_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.createResource.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'create_project_resource_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.createResource.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1, dto).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("create_project_resource_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1, dto).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("create_project_resource_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

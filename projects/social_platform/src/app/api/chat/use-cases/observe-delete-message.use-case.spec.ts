@@ -8,13 +8,13 @@ import { OnDeleteChatMessageDto } from "@domain/chat/chat.model";
 
 describe("ObserveDeleteMessageUseCase", () => {
   let useCase: ObserveDeleteMessageUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
   let subject: Subject<OnDeleteChatMessageDto>;
 
   function setup(): void {
     subject = new Subject();
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["onDeleteMessage"]);
-    rt.onDeleteMessage.and.returnValue(subject.asObservable());
+    rt = { onDeleteMessage: vi.fn() };
+    rt.onDeleteMessage.mockReturnValue(subject.asObservable());
     TestBed.configureTestingModule({
       providers: [ObserveDeleteMessageUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -26,18 +26,19 @@ describe("ObserveDeleteMessageUseCase", () => {
 
     useCase.execute().subscribe();
 
-    expect(rt.onDeleteMessage).toHaveBeenCalledOnceWith();
+    expect(rt.onDeleteMessage).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("пробрасывает события из observable", done => {
-    setup();
-    const event: OnDeleteChatMessageDto = { chatType: "project", chatId: "1", messageId: 42 };
+  it("пробрасывает события из observable", () =>
+    new Promise<void>(done => {
+      setup();
+      const event: OnDeleteChatMessageDto = { chatType: "project", chatId: "1", messageId: 42 };
 
-    useCase.execute().subscribe(e => {
-      expect(e).toBe(event);
-      done();
-    });
+      useCase.execute().subscribe(e => {
+        expect(e).toBe(event);
+        done();
+      });
 
-    subject.next(event);
-  });
+      subject.next(event);
+    }));
 });

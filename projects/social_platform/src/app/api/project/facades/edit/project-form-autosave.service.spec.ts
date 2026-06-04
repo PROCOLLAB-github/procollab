@@ -11,11 +11,11 @@ import { Project } from "@domain/project/project.model";
 
 describe("ProjectFormAutosaveService", () => {
   let service: ProjectFormAutosaveService;
-  let updateFormUseCase: jasmine.SpyObj<UpdateFormUseCase>;
+  let updateFormUseCase: any;
 
   beforeEach(() => {
-    updateFormUseCase = jasmine.createSpyObj<UpdateFormUseCase>("UpdateFormUseCase", ["execute"]);
-    updateFormUseCase.execute.and.returnValue(of({ ok: true, value: Project.default() }));
+    updateFormUseCase = { execute: vi.fn() };
+    updateFormUseCase.execute.mockReturnValue(of({ ok: true, value: Project.default() }));
 
     TestBed.configureTestingModule({
       providers: [
@@ -41,7 +41,7 @@ describe("ProjectFormAutosaveService", () => {
     service.bindDraftCleanupAutosave(control, "presentationAddress", destroyRef);
     control.setValue("");
 
-    expect(updateFormUseCase.execute).toHaveBeenCalledOnceWith({
+    expect(updateFormUseCase.execute).toHaveBeenCalledExactlyOnceWith({
       id: 42,
       data: {
         presentationAddress: "",

@@ -8,10 +8,10 @@ import { User } from "@domain/auth/user.model";
 
 describe("ResendEmailUseCase", () => {
   let useCase: ResendEmailUseCase;
-  let repo: jasmine.SpyObj<AuthRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<AuthRepositoryPort>("AuthRepositoryPort", ["resendEmail"]);
+    repo = { resendEmail: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ResendEmailUseCase, { provide: AuthRepositoryPort, useValue: repo }],
     });
@@ -20,31 +20,33 @@ describe("ResendEmailUseCase", () => {
 
   it("делегирует email в репозиторий", () => {
     setup();
-    repo.resendEmail.and.returnValue(of({} as User));
+    repo.resendEmail.mockReturnValue(of({} as User));
 
     useCase.execute("u@e.com").subscribe();
 
-    expect(repo.resendEmail).toHaveBeenCalledOnceWith("u@e.com");
+    expect(repo.resendEmail).toHaveBeenCalledExactlyOnceWith("u@e.com");
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.resendEmail.and.returnValue(of({} as User));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.resendEmail.mockReturnValue(of({} as User));
 
-    useCase.execute("u@e.com").subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute("u@e.com").subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.resendEmail.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.resendEmail.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute("u@e.com").subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("network");
-      done();
-    });
-  });
+      useCase.execute("u@e.com").subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("network");
+        done();
+      });
+    }));
 });

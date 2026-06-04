@@ -9,15 +9,12 @@ import { projectSubscribed } from "@domain/project/events/project-subscribed.eve
 
 describe("AddProjectSubscriptionUseCase", () => {
   let useCase: AddProjectSubscriptionUseCase;
-  let repo: jasmine.SpyObj<ProjectSubscriptionRepositoryPort>;
-  let bus: jasmine.SpyObj<EventBus>;
+  let repo: any;
+  let bus: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectSubscriptionRepositoryPort>(
-      "ProjectSubscriptionRepositoryPort",
-      ["addSubscription"],
-    );
-    bus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
+    repo = { addSubscription: vi.fn() };
+    bus = { emit: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         AddProjectSubscriptionUseCase,
@@ -30,37 +27,39 @@ describe("AddProjectSubscriptionUseCase", () => {
 
   it("делегирует projectId в addSubscription", () => {
     setup();
-    repo.addSubscription.and.returnValue(of(undefined));
+    repo.addSubscription.mockReturnValue(of(undefined));
 
     useCase.execute(7).subscribe();
 
-    expect(repo.addSubscription).toHaveBeenCalledOnceWith(7);
+    expect(repo.addSubscription).toHaveBeenCalledExactlyOnceWith(7);
   });
 
-  it("при успехе возвращает ok<void> и эмитит projectSubscribed", done => {
-    setup();
-    repo.addSubscription.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void> и эмитит projectSubscribed", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.addSubscription.mockReturnValue(of(undefined));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      expect(bus.emit).toHaveBeenCalledOnceWith(projectSubscribed(7));
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(true);
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(projectSubscribed(7));
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'add_project_subscription_error' } и не эмитит", done => {
-    setup();
-    const err = new Error("boom");
-    repo.addSubscription.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'add_project_subscription_error' } и не эмитит", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.addSubscription.mockReturnValue(throwError(() => err));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("add_project_subscription_error");
-        expect(result.error.cause).toBe(err);
-      }
-      expect(bus.emit).not.toHaveBeenCalled();
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("add_project_subscription_error");
+          expect(result.error.cause).toBe(err);
+        }
+        expect(bus.emit).not.toHaveBeenCalled();
+        done();
+      });
+    }));
 });

@@ -12,10 +12,10 @@ import { ProfileNews } from "@domain/profile/profile-news.model";
 
 describe("FetchProfileNewsUseCase", () => {
   let useCase: FetchProfileNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["fetchNews"]);
+    repo = { fetchNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [FetchProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -31,36 +31,38 @@ describe("FetchProfileNewsUseCase", () => {
 
   it("делегирует userId в репозиторий", () => {
     setup();
-    repo.fetchNews.and.returnValue(of(page));
+    repo.fetchNews.mockReturnValue(of(page));
 
     useCase.execute(42).subscribe();
 
-    expect(repo.fetchNews).toHaveBeenCalledOnceWith("42");
+    expect(repo.fetchNews).toHaveBeenCalledExactlyOnceWith("42");
   });
 
-  it("при успехе возвращает ok со страницей новостей", done => {
-    setup();
-    repo.fetchNews.and.returnValue(of(page));
+  it("при успехе возвращает ok со страницей новостей", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.fetchNews.mockReturnValue(of(page));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(page);
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(page);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'fetch_profile_news_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.fetchNews.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'fetch_profile_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.fetchNews.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("fetch_profile_news_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("fetch_profile_news_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

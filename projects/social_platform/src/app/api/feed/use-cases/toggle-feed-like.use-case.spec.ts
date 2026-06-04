@@ -11,16 +11,12 @@ import {
 
 describe("ToggleFeedLikeUseCase", () => {
   let useCase: ToggleFeedLikeUseCase;
-  let profileNewsRepo: jasmine.SpyObj<NewsRepositoryPort<any>>;
-  let projectNewsRepo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let profileNewsRepo: any;
+  let projectNewsRepo: any;
 
   function setup(): void {
-    profileNewsRepo = jasmine.createSpyObj<NewsRepositoryPort<any>>("ProfileNewsRepository", [
-      "toggleLike",
-    ]);
-    projectNewsRepo = jasmine.createSpyObj<NewsRepositoryPort<any>>("ProjectNewsRepository", [
-      "toggleLike",
-    ]);
+    profileNewsRepo = { toggleLike: vi.fn() };
+    projectNewsRepo = { toggleLike: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [
@@ -34,46 +30,48 @@ describe("ToggleFeedLikeUseCase", () => {
 
   it("для ownerType='profile' делегирует в profileNewsRepository", () => {
     setup();
-    profileNewsRepo.toggleLike.and.returnValue(of(undefined));
+    profileNewsRepo.toggleLike.mockReturnValue(of(undefined));
 
     useCase.execute("profile", "42", 10, true).subscribe();
 
-    expect(profileNewsRepo.toggleLike).toHaveBeenCalledOnceWith("42", 10, true);
+    expect(profileNewsRepo.toggleLike).toHaveBeenCalledExactlyOnceWith("42", 10, true);
     expect(projectNewsRepo.toggleLike).not.toHaveBeenCalled();
   });
 
   it("для ownerType='project' делегирует в projectNewsRepository", () => {
     setup();
-    projectNewsRepo.toggleLike.and.returnValue(of(undefined));
+    projectNewsRepo.toggleLike.mockReturnValue(of(undefined));
 
     useCase.execute("project", "42", 10, false).subscribe();
 
-    expect(projectNewsRepo.toggleLike).toHaveBeenCalledOnceWith("42", 10, false);
+    expect(projectNewsRepo.toggleLike).toHaveBeenCalledExactlyOnceWith("42", 10, false);
     expect(profileNewsRepo.toggleLike).not.toHaveBeenCalled();
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    profileNewsRepo.toggleLike.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      profileNewsRepo.toggleLike.mockReturnValue(of(undefined));
 
-    useCase.execute("profile", "42", 10, true).subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute("profile", "42", 10, true).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'toggle_feed_like_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    profileNewsRepo.toggleLike.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'toggle_feed_like_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      profileNewsRepo.toggleLike.mockReturnValue(throwError(() => boom));
 
-    useCase.execute("profile", "42", 10, true).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("toggle_feed_like_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute("profile", "42", 10, true).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("toggle_feed_like_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

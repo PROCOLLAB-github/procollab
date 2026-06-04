@@ -11,10 +11,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 
 describe("AddProjectNewsUseCase", () => {
   let useCase: AddProjectNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["addNews"]);
+    repo = { addNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [AddProjectNewsUseCase, { provide: PROJECT_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -23,38 +23,40 @@ describe("AddProjectNewsUseCase", () => {
 
   it("делегирует (projectId, {text, files}) в репозиторий", () => {
     setup();
-    repo.addNews.and.returnValue(of({} as FeedNews));
+    repo.addNews.mockReturnValue(of({} as FeedNews));
     const news = { text: "hi", files: ["f"] };
 
     useCase.execute("p1", news).subscribe();
 
-    expect(repo.addNews).toHaveBeenCalledOnceWith("p1", news);
+    expect(repo.addNews).toHaveBeenCalledExactlyOnceWith("p1", news);
   });
 
-  it("при успехе возвращает ok с созданной новостью", done => {
-    setup();
-    const created = { id: 42 } as FeedNews;
-    repo.addNews.and.returnValue(of(created));
+  it("при успехе возвращает ok с созданной новостью", () =>
+    new Promise<void>(done => {
+      setup();
+      const created = { id: 42 } as FeedNews;
+      repo.addNews.mockReturnValue(of(created));
 
-    useCase.execute("p1", { text: "hi", files: [] }).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(created);
-      done();
-    });
-  });
+      useCase.execute("p1", { text: "hi", files: [] }).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(created);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'add_project_news_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.addNews.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'add_project_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.addNews.mockReturnValue(throwError(() => err));
 
-    useCase.execute("p1", { text: "hi", files: [] }).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("add_project_news_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute("p1", { text: "hi", files: [] }).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("add_project_news_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

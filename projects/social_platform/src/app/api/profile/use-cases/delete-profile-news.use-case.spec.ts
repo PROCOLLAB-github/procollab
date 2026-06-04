@@ -10,10 +10,10 @@ import {
 
 describe("DeleteProfileNewsUseCase", () => {
   let useCase: DeleteProfileNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["delete"]);
+    repo = { delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [DeleteProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -22,35 +22,37 @@ describe("DeleteProfileNewsUseCase", () => {
 
   it("делегирует userId и newsId в репозиторий", () => {
     setup();
-    repo.delete.and.returnValue(of(undefined));
+    repo.delete.mockReturnValue(of(undefined));
 
     useCase.execute("u1", 42).subscribe();
 
-    expect(repo.delete).toHaveBeenCalledOnceWith("u1", 42);
+    expect(repo.delete).toHaveBeenCalledExactlyOnceWith("u1", 42);
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.delete.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.delete.mockReturnValue(of(undefined));
 
-    useCase.execute("u1", 42).subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute("u1", 42).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'delete_profile_news_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.delete.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'delete_profile_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.delete.mockReturnValue(throwError(() => boom));
 
-    useCase.execute("u1", 42).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("delete_profile_news_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute("u1", 42).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("delete_profile_news_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

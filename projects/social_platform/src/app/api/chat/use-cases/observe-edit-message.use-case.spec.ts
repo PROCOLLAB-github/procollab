@@ -8,13 +8,13 @@ import { OnEditChatMessageDto } from "@domain/chat/chat.model";
 
 describe("ObserveEditMessageUseCase", () => {
   let useCase: ObserveEditMessageUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
   let subject: Subject<OnEditChatMessageDto>;
 
   function setup(): void {
     subject = new Subject();
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["onEditMessage"]);
-    rt.onEditMessage.and.returnValue(subject.asObservable());
+    rt = { onEditMessage: vi.fn() };
+    rt.onEditMessage.mockReturnValue(subject.asObservable());
     TestBed.configureTestingModule({
       providers: [ObserveEditMessageUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -26,18 +26,19 @@ describe("ObserveEditMessageUseCase", () => {
 
     useCase.execute().subscribe();
 
-    expect(rt.onEditMessage).toHaveBeenCalledOnceWith();
+    expect(rt.onEditMessage).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("пробрасывает события из observable", done => {
-    setup();
-    const event = { chatId: "1" } as OnEditChatMessageDto;
+  it("пробрасывает события из observable", () =>
+    new Promise<void>(done => {
+      setup();
+      const event = { chatId: "1" } as OnEditChatMessageDto;
 
-    useCase.execute().subscribe(e => {
-      expect(e).toBe(event);
-      done();
-    });
+      useCase.execute().subscribe(e => {
+        expect(e).toBe(event);
+        done();
+      });
 
-    subject.next(event);
-  });
+      subject.next(event);
+    }));
 });

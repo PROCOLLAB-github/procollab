@@ -7,10 +7,10 @@ import { TypingInChatDto } from "@domain/chat/chat.model";
 
 describe("StartTypingUseCase", () => {
   let useCase: StartTypingUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
 
   function setup(): void {
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["startTyping"]);
+    rt = { startTyping: vi.fn() };
     TestBed.configureTestingModule({
       providers: [StartTypingUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -23,6 +23,6 @@ describe("StartTypingUseCase", () => {
 
     useCase.execute(dto);
 
-    expect(rt.startTyping).toHaveBeenCalledOnceWith(dto);
+    expect(rt.startTyping).toHaveBeenCalledExactlyOnceWith(dto);
   });
 });

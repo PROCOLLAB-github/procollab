@@ -8,10 +8,10 @@ import { CourseCard } from "@domain/courses/courses.model";
 
 describe("GetCoursesUseCase", () => {
   let useCase: GetCoursesUseCase;
-  let repo: jasmine.SpyObj<CoursesRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<CoursesRepositoryPort>("CoursesRepositoryPort", ["getCourses"]);
+    repo = { getCourses: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetCoursesUseCase, { provide: CoursesRepositoryPort, useValue: repo }],
     });
@@ -20,37 +20,39 @@ describe("GetCoursesUseCase", () => {
 
   it("вызывает getCourses у репозитория без параметров", () => {
     setup();
-    repo.getCourses.and.returnValue(of([]));
+    repo.getCourses.mockReturnValue(of([]));
 
     useCase.execute().subscribe();
 
-    expect(repo.getCourses).toHaveBeenCalledOnceWith();
+    expect(repo.getCourses).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("при успехе возвращает ok со списком курсов", done => {
-    setup();
-    const courses = [{ id: 1 }, { id: 2 }] as unknown as CourseCard[];
-    repo.getCourses.and.returnValue(of(courses));
+  it("при успехе возвращает ok со списком курсов", () =>
+    new Promise<void>(done => {
+      setup();
+      const courses = [{ id: 1 }, { id: 2 }] as unknown as CourseCard[];
+      repo.getCourses.mockReturnValue(of(courses));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(courses);
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(courses);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_courses_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.getCourses.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'get_courses_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.getCourses.mockReturnValue(throwError(() => boom));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_courses_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_courses_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

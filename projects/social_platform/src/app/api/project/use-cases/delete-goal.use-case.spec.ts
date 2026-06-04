@@ -7,12 +7,10 @@ import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.
 
 describe("DeleteGoalUseCase", () => {
   let useCase: DeleteGoalUseCase;
-  let repo: jasmine.SpyObj<ProjectGoalsRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectGoalsRepositoryPort>("ProjectGoalsRepositoryPort", [
-      "deleteGoal",
-    ]);
+    repo = { deleteGoal: vi.fn() };
     TestBed.configureTestingModule({
       providers: [DeleteGoalUseCase, { provide: ProjectGoalsRepositoryPort, useValue: repo }],
     });
@@ -21,35 +19,37 @@ describe("DeleteGoalUseCase", () => {
 
   it("делегирует (projectId, goalId) в deleteGoal", () => {
     setup();
-    repo.deleteGoal.and.returnValue(of(undefined));
+    repo.deleteGoal.mockReturnValue(of(undefined));
 
     useCase.execute(1, 42).subscribe();
 
-    expect(repo.deleteGoal).toHaveBeenCalledOnceWith(1, 42);
+    expect(repo.deleteGoal).toHaveBeenCalledExactlyOnceWith(1, 42);
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.deleteGoal.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.deleteGoal.mockReturnValue(of(undefined));
 
-    useCase.execute(1, 42).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      done();
-    });
-  });
+      useCase.execute(1, 42).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'delete_project_goal_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.deleteGoal.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'delete_project_goal_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.deleteGoal.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1, 42).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("delete_project_goal_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1, 42).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("delete_project_goal_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

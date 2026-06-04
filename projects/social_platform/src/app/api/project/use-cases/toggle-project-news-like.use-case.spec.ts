@@ -10,10 +10,10 @@ import {
 
 describe("ToggleProjectNewsLikeUseCase", () => {
   let useCase: ToggleProjectNewsLikeUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["toggleLike"]);
+    repo = { toggleLike: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ToggleProjectNewsLikeUseCase,
@@ -25,36 +25,38 @@ describe("ToggleProjectNewsLikeUseCase", () => {
 
   it("делегирует (projectId, newsId, state) в toggleLike", () => {
     setup();
-    repo.toggleLike.and.returnValue(of(undefined));
+    repo.toggleLike.mockReturnValue(of(undefined));
 
     useCase.execute("p1", 42, true).subscribe();
 
-    expect(repo.toggleLike).toHaveBeenCalledOnceWith("p1", 42, true);
+    expect(repo.toggleLike).toHaveBeenCalledExactlyOnceWith("p1", 42, true);
   });
 
-  it("при успехе возвращает ok c newsId", done => {
-    setup();
-    repo.toggleLike.and.returnValue(of(undefined));
+  it("при успехе возвращает ok c newsId", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.toggleLike.mockReturnValue(of(undefined));
 
-    useCase.execute("p1", 42, true).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(42);
-      done();
-    });
-  });
+      useCase.execute("p1", 42, true).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(42);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'toggle_project_news_like_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.toggleLike.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'toggle_project_news_like_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.toggleLike.mockReturnValue(throwError(() => err));
 
-    useCase.execute("p1", 42, true).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("toggle_project_news_like_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute("p1", 42, true).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("toggle_project_news_like_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

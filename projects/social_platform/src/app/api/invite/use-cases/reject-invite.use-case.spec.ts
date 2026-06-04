@@ -9,12 +9,12 @@ import { Invite } from "@domain/invite/invite.model";
 
 describe("RejectInviteUseCase", () => {
   let useCase: RejectInviteUseCase;
-  let repo: jasmine.SpyObj<InviteRepositoryPort>;
-  let eventBus: jasmine.SpyObj<EventBus>;
+  let repo: any;
+  let eventBus: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<InviteRepositoryPort>("InviteRepositoryPort", ["rejectInvite"]);
-    eventBus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
+    repo = { rejectInvite: vi.fn() };
+    eventBus = { emit: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         RejectInviteUseCase,
@@ -33,33 +33,35 @@ describe("RejectInviteUseCase", () => {
 
   it("делегирует inviteId в репозиторий и эмитит событие", () => {
     setup();
-    repo.rejectInvite.and.returnValue(of(fakeInvite));
+    repo.rejectInvite.mockReturnValue(of(fakeInvite));
 
     useCase.execute(1).subscribe();
 
-    expect(repo.rejectInvite).toHaveBeenCalledOnceWith(1);
+    expect(repo.rejectInvite).toHaveBeenCalledExactlyOnceWith(1);
     expect(eventBus.emit).toHaveBeenCalledTimes(1);
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.rejectInvite.and.returnValue(of(fakeInvite));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.rejectInvite.mockReturnValue(of(fakeInvite));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.rejectInvite.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.rejectInvite.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
-      expect(eventBus.emit).not.toHaveBeenCalled();
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        expect(eventBus.emit).not.toHaveBeenCalled();
+        done();
+      });
+    }));
 });

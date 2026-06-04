@@ -7,10 +7,10 @@ import { SendChatMessageDto } from "@domain/chat/chat.model";
 
 describe("SendMessageUseCase", () => {
   let useCase: SendMessageUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
 
   function setup(): void {
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["sendMessage"]);
+    rt = { sendMessage: vi.fn() };
     TestBed.configureTestingModule({
       providers: [SendMessageUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -29,6 +29,6 @@ describe("SendMessageUseCase", () => {
 
     useCase.execute(dto);
 
-    expect(rt.sendMessage).toHaveBeenCalledOnceWith(dto);
+    expect(rt.sendMessage).toHaveBeenCalledExactlyOnceWith(dto);
   });
 });

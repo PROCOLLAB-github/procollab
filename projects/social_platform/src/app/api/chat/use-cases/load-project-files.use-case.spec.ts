@@ -8,10 +8,10 @@ import { ChatFile } from "@domain/chat/chat-message.model";
 
 describe("LoadProjectFilesUseCase", () => {
   let useCase: LoadProjectFilesUseCase;
-  let repo: jasmine.SpyObj<ChatRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ChatRepositoryPort>("ChatRepositoryPort", ["loadProjectFiles"]);
+    repo = { loadProjectFiles: vi.fn() };
     TestBed.configureTestingModule({
       providers: [LoadProjectFilesUseCase, { provide: ChatRepositoryPort, useValue: repo }],
     });
@@ -20,33 +20,35 @@ describe("LoadProjectFilesUseCase", () => {
 
   it("делегирует projectId в репозиторий", () => {
     setup();
-    repo.loadProjectFiles.and.returnValue(of([]));
+    repo.loadProjectFiles.mockReturnValue(of([]));
 
     useCase.execute(42).subscribe();
 
-    expect(repo.loadProjectFiles).toHaveBeenCalledOnceWith(42);
+    expect(repo.loadProjectFiles).toHaveBeenCalledExactlyOnceWith(42);
   });
 
-  it("при успехе возвращает ok со списком файлов", done => {
-    setup();
-    const files = [{ id: 1 }] as unknown as ChatFile[];
-    repo.loadProjectFiles.and.returnValue(of(files));
+  it("при успехе возвращает ok со списком файлов", () =>
+    new Promise<void>(done => {
+      setup();
+      const files = [{ id: 1 }] as unknown as ChatFile[];
+      repo.loadProjectFiles.mockReturnValue(of(files));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(files);
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(files);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'server_error' }", done => {
-    setup();
-    repo.loadProjectFiles.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'server_error' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.loadProjectFiles.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("server_error");
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("server_error");
+        done();
+      });
+    }));
 });

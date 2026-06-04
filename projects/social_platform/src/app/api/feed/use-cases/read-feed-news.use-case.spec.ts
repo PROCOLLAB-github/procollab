@@ -11,16 +11,12 @@ import {
 
 describe("ReadFeedNewsUseCase", () => {
   let useCase: ReadFeedNewsUseCase;
-  let profileNewsRepo: jasmine.SpyObj<NewsRepositoryPort<any>>;
-  let projectNewsRepo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let profileNewsRepo: any;
+  let projectNewsRepo: any;
 
   function setup(): void {
-    profileNewsRepo = jasmine.createSpyObj<NewsRepositoryPort<any>>("ProfileNewsRepository", [
-      "readNews",
-    ]);
-    projectNewsRepo = jasmine.createSpyObj<NewsRepositoryPort<any>>("ProjectNewsRepository", [
-      "readNews",
-    ]);
+    profileNewsRepo = { readNews: vi.fn() };
+    projectNewsRepo = { readNews: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [
@@ -34,46 +30,48 @@ describe("ReadFeedNewsUseCase", () => {
 
   it("для ownerType='profile' вызывает profileNewsRepository и НЕ вызывает projectNewsRepository", () => {
     setup();
-    profileNewsRepo.readNews.and.returnValue(of([]));
+    profileNewsRepo.readNews.mockReturnValue(of([]));
 
     useCase.execute("profile", 1, [10, 20]).subscribe();
 
-    expect(profileNewsRepo.readNews).toHaveBeenCalledOnceWith(1, [10, 20]);
+    expect(profileNewsRepo.readNews).toHaveBeenCalledExactlyOnceWith(1, [10, 20]);
     expect(projectNewsRepo.readNews).not.toHaveBeenCalled();
   });
 
   it("для ownerType='project' вызывает projectNewsRepository и НЕ вызывает profileNewsRepository", () => {
     setup();
-    projectNewsRepo.readNews.and.returnValue(of([]));
+    projectNewsRepo.readNews.mockReturnValue(of([]));
 
     useCase.execute("project", 1, [10]).subscribe();
 
-    expect(projectNewsRepo.readNews).toHaveBeenCalledOnceWith(1, [10]);
+    expect(projectNewsRepo.readNews).toHaveBeenCalledExactlyOnceWith(1, [10]);
     expect(profileNewsRepo.readNews).not.toHaveBeenCalled();
   });
 
-  it("при успехе возвращает ok со значением из репозитория", done => {
-    setup();
-    profileNewsRepo.readNews.and.returnValue(of([]));
+  it("при успехе возвращает ok со значением из репозитория", () =>
+    new Promise<void>(done => {
+      setup();
+      profileNewsRepo.readNews.mockReturnValue(of([]));
 
-    useCase.execute("profile", 1, [10]).subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute("profile", 1, [10]).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'read_feed_news_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    profileNewsRepo.readNews.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'read_feed_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      profileNewsRepo.readNews.mockReturnValue(throwError(() => boom));
 
-    useCase.execute("profile", 1, [10]).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("read_feed_news_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute("profile", 1, [10]).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("read_feed_news_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });
