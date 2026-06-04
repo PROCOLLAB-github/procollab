@@ -11,19 +11,19 @@ import { rejectInvite } from "@domain/invite/events/reject-invite.event";
 
 describe("InviteRepository", () => {
   let repository: InviteRepository;
-  let adapter: jasmine.SpyObj<InviteHttpAdapter>;
+  let adapter: any;
   let eventBus: EventBus;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<InviteHttpAdapter>("InviteHttpAdapter", [
-      "sendForUser",
-      "revokeInvite",
-      "acceptInvite",
-      "rejectInvite",
-      "updateInvite",
-      "getMy",
-      "getByProject",
-    ]);
+    adapter = {
+      sendForUser: vi.fn(),
+      revokeInvite: vi.fn(),
+      acceptInvite: vi.fn(),
+      rejectInvite: vi.fn(),
+      updateInvite: vi.fn(),
+      getMy: vi.fn(),
+      getByProject: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [InviteRepository, { provide: InviteHttpAdapter, useValue: adapter }],
     });
@@ -31,70 +31,72 @@ describe("InviteRepository", () => {
     repository = TestBed.inject(InviteRepository);
   }
 
-  it("sendForUser делегирует в adapter и мапит ответ в Invite", done => {
-    setup();
-    adapter.sendForUser.and.returnValue(of({ id: 1 } as Invite));
+  it("sendForUser делегирует в adapter и мапит ответ в Invite", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.sendForUser.mockReturnValue(of({ id: 1 } as Invite));
 
-    repository.sendForUser(10, 42, "dev", "frontend").subscribe(invite => {
-      expect(adapter.sendForUser).toHaveBeenCalledOnceWith(10, 42, "dev", "frontend");
-      expect(invite).toBeInstanceOf(Invite);
-      done();
-    });
-  });
+      repository.sendForUser(10, 42, "dev", "frontend").subscribe(invite => {
+        expect(adapter.sendForUser).toHaveBeenCalledExactlyOnceWith(10, 42, "dev", "frontend");
+        expect(invite).toBeInstanceOf(Invite);
+        done();
+      });
+    }));
 
   it("revokeInvite делегирует в adapter", () => {
     setup();
-    adapter.revokeInvite.and.returnValue(of(undefined));
+    adapter.revokeInvite.mockReturnValue(of(undefined));
 
     repository.revokeInvite(7).subscribe();
 
-    expect(adapter.revokeInvite).toHaveBeenCalledOnceWith(7);
+    expect(adapter.revokeInvite).toHaveBeenCalledExactlyOnceWith(7);
   });
 
   it("acceptInvite делегирует в adapter", () => {
     setup();
-    adapter.acceptInvite.and.returnValue(of({ id: 5 } as Invite));
+    adapter.acceptInvite.mockReturnValue(of({ id: 5 } as Invite));
     repository.acceptInvite(5).subscribe();
-    expect(adapter.acceptInvite).toHaveBeenCalledOnceWith(5);
+    expect(adapter.acceptInvite).toHaveBeenCalledExactlyOnceWith(5);
   });
 
   it("rejectInvite делегирует в adapter", () => {
     setup();
-    adapter.rejectInvite.and.returnValue(of({ id: 5 } as Invite));
+    adapter.rejectInvite.mockReturnValue(of({ id: 5 } as Invite));
     repository.rejectInvite(5).subscribe();
-    expect(adapter.rejectInvite).toHaveBeenCalledOnceWith(5);
+    expect(adapter.rejectInvite).toHaveBeenCalledExactlyOnceWith(5);
   });
 
   it("updateInvite делегирует в adapter", () => {
     setup();
-    adapter.updateInvite.and.returnValue(of({ id: 5 } as Invite));
+    adapter.updateInvite.mockReturnValue(of({ id: 5 } as Invite));
     repository.updateInvite(5, "dev", "backend").subscribe();
-    expect(adapter.updateInvite).toHaveBeenCalledOnceWith(5, "dev", "backend");
+    expect(adapter.updateInvite).toHaveBeenCalledExactlyOnceWith(5, "dev", "backend");
   });
 
   it("getMy делегирует в adapter", () => {
     setup();
-    adapter.getMy.and.returnValue(of([] as Invite[]));
+    adapter.getMy.mockReturnValue(of([] as Invite[]));
     repository.getMy().subscribe();
-    expect(adapter.getMy).toHaveBeenCalledOnceWith();
+    expect(adapter.getMy).toHaveBeenCalledExactlyOnceWith();
   });
 
   it("getByProject делегирует в adapter", () => {
     setup();
-    adapter.getByProject.and.returnValue(of([] as Invite[]));
+    adapter.getByProject.mockReturnValue(of([] as Invite[]));
     repository.getByProject(42).subscribe();
-    expect(adapter.getByProject).toHaveBeenCalledOnceWith(42);
+    expect(adapter.getByProject).toHaveBeenCalledExactlyOnceWith(42);
   });
 
-  it("на событие AcceptInvite уменьшает myInvitesCount$", done => {
-    setup();
-    repository.myInvitesCount$.next(3);
+  it("на событие AcceptInvite уменьшает myInvitesCount$", () =>
+    new Promise<void>(done => {
+      setup();
+      repository.myInvitesCount$.next(3);
 
-    eventBus.emit(acceptInvite(1, 42, 10, "dev"));
+      eventBus.emit(acceptInvite(1, 42, 10, "dev"));
 
-    expect(repository.myInvitesCount$.getValue()).toBe(2);
-    done();
-  });
+      expect(repository.myInvitesCount$.getValue()).toBe(2);
+      done();
+    }));
 
   it("на событие RejectInvite уменьшает myInvitesCount$ (не ниже нуля)", () => {
     setup();

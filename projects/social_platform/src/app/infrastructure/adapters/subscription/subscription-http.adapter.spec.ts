@@ -7,10 +7,10 @@ import { SubscriptionHttpAdapter } from "./subscription-http.adapter";
 
 describe("SubscriptionHttpAdapter", () => {
   let adapter: SubscriptionHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post"]);
+    api = { get: vi.fn(), post: vi.fn() };
     TestBed.configureTestingModule({
       providers: [SubscriptionHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -19,37 +19,40 @@ describe("SubscriptionHttpAdapter", () => {
 
   it("getSubscribers идёт в GET /projects/:id/subscribers/", () => {
     setup();
-    api.get.and.returnValue(of([]));
+    api.get.mockReturnValue(of([]));
 
     adapter.getSubscribers(42).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/subscribers/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/subscribers/");
   });
 
   it("addSubscription идёт в POST /projects/:id/subscribe/", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
 
     adapter.addSubscription(42).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/subscribe/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/subscribe/", {});
   });
 
   it("getSubscriptions идёт в GET /auth/users/:uid/subscribed_projects/", () => {
     setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
+    api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
     adapter.getSubscriptions(7).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/auth/users/7/subscribed_projects/", undefined);
+    expect(api.get).toHaveBeenCalledExactlyOnceWith(
+      "/auth/users/7/subscribed_projects/",
+      undefined,
+    );
   });
 
   it("deleteSubscription идёт в POST /projects/:id/unsubscribe/", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
 
     adapter.deleteSubscription(42).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/unsubscribe/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/unsubscribe/", {});
   });
 });

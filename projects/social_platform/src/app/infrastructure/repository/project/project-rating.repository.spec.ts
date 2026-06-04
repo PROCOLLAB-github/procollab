@@ -12,14 +12,10 @@ import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-cri
 
 describe("ProjectRatingRepository", () => {
   let repository: ProjectRatingRepository;
-  let adapter: jasmine.SpyObj<ProjectRatingHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProjectRatingHttpAdapter>("ProjectRatingHttpAdapter", [
-      "getAll",
-      "postFilters",
-      "rate",
-    ]);
+    adapter = { getAll: vi.fn(), postFilters: vi.fn(), rate: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ProjectRatingRepository,
@@ -39,25 +35,25 @@ describe("ProjectRatingRepository", () => {
   it("getAll делегирует в adapter", () => {
     setup();
     const params = new HttpParams();
-    adapter.getAll.and.returnValue(of(page()));
+    adapter.getAll.mockReturnValue(of(page()));
     repository.getAll(5, params).subscribe();
-    expect(adapter.getAll).toHaveBeenCalledOnceWith(5, params);
+    expect(adapter.getAll).toHaveBeenCalledExactlyOnceWith(5, params);
   });
 
   it("postFilters делегирует в adapter", () => {
     setup();
     const params = new HttpParams();
-    adapter.postFilters.and.returnValue(of(page()));
+    adapter.postFilters.mockReturnValue(of(page()));
     repository.postFilters(5, { status: ["open"] }, params).subscribe();
-    expect(adapter.postFilters).toHaveBeenCalledOnceWith(5, { status: ["open"] }, params);
+    expect(adapter.postFilters).toHaveBeenCalledExactlyOnceWith(5, { status: ["open"] }, params);
   });
 
   it("rate делегирует в adapter", () => {
     setup();
     const scores = [] as ProjectRatingCriterionOutput[];
-    adapter.rate.and.returnValue(of(undefined));
+    adapter.rate.mockReturnValue(of(undefined));
     repository.rate(42, scores).subscribe();
-    expect(adapter.rate).toHaveBeenCalledOnceWith(42, scores);
+    expect(adapter.rate).toHaveBeenCalledExactlyOnceWith(42, scores);
   });
 
   it("formValuesToDTO приводит boolean к капитализированной строке", () => {

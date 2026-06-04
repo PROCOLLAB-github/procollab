@@ -15,35 +15,35 @@ import {
 
 describe("CoursesRepository", () => {
   let repository: CoursesRepository;
-  let adapter: jasmine.SpyObj<CoursesHttpAdapter>;
+  let adapter: any;
   let eventBus: EventBus;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<CoursesHttpAdapter>("CoursesHttpAdapter", [
-      "getCourses",
-      "getCourseDetail",
-      "getCourseStructure",
-      "getCourseLesson",
-      "postAnswerQuestion",
-    ]);
+    adapter = {
+      getCourses: vi.fn(),
+      getCourseDetail: vi.fn(),
+      getCourseStructure: vi.fn(),
+      getCourseLesson: vi.fn(),
+      postAnswerQuestion: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [CoursesRepository, { provide: CoursesHttpAdapter, useValue: adapter }],
     });
     eventBus = TestBed.inject(EventBus);
-    spyOn(eventBus, "emit");
+    vi.spyOn(eventBus, "emit");
     repository = TestBed.inject(CoursesRepository);
   }
 
   it("getCourses делегирует в adapter", () => {
     setup();
-    adapter.getCourses.and.returnValue(of([] as CourseCard[]));
+    adapter.getCourses.mockReturnValue(of([] as CourseCard[]));
     repository.getCourses().subscribe();
-    expect(adapter.getCourses).toHaveBeenCalledOnceWith();
+    expect(adapter.getCourses).toHaveBeenCalledExactlyOnceWith();
   });
 
   it("getCourseDetail кеширует результат", () => {
     setup();
-    adapter.getCourseDetail.and.returnValue(of({ id: 1 } as CourseDetail));
+    adapter.getCourseDetail.mockReturnValue(of({ id: 1 } as CourseDetail));
     repository.getCourseDetail(1).subscribe();
     repository.getCourseDetail(1).subscribe();
     expect(adapter.getCourseDetail).toHaveBeenCalledTimes(1);
@@ -51,7 +51,7 @@ describe("CoursesRepository", () => {
 
   it("getCourseStructure кеширует результат", () => {
     setup();
-    adapter.getCourseStructure.and.returnValue(of({ id: 1 } as unknown as CourseStructure));
+    adapter.getCourseStructure.mockReturnValue(of({ id: 1 } as unknown as CourseStructure));
     repository.getCourseStructure(1).subscribe();
     repository.getCourseStructure(1).subscribe();
     expect(adapter.getCourseStructure).toHaveBeenCalledTimes(1);
@@ -59,23 +59,23 @@ describe("CoursesRepository", () => {
 
   it("getCourseLesson делегирует в adapter", () => {
     setup();
-    adapter.getCourseLesson.and.returnValue(of({} as CourseLesson));
+    adapter.getCourseLesson.mockReturnValue(of({} as CourseLesson));
     repository.getCourseLesson(5).subscribe();
-    expect(adapter.getCourseLesson).toHaveBeenCalledOnceWith(5);
+    expect(adapter.getCourseLesson).toHaveBeenCalledExactlyOnceWith(5);
   });
 
   it("postAnswerQuestion эмитит TaskAnswerSubmitted и очищает structure-кеш", () => {
     setup();
     const response = {} as TaskAnswerResponse;
-    adapter.postAnswerQuestion.and.returnValue(of(response));
-    adapter.getCourseStructure.and.returnValue(of({ id: 1 } as unknown as CourseStructure));
+    adapter.postAnswerQuestion.mockReturnValue(of(response));
+    adapter.getCourseStructure.mockReturnValue(of({ id: 1 } as unknown as CourseStructure));
     repository.getCourseStructure(1).subscribe();
 
     repository.postAnswerQuestion(10, "answer", [1], [2]).subscribe();
 
-    expect(adapter.postAnswerQuestion).toHaveBeenCalledOnceWith(10, "answer", [1], [2]);
+    expect(adapter.postAnswerQuestion).toHaveBeenCalledExactlyOnceWith(10, "answer", [1], [2]);
     expect(eventBus.emit).toHaveBeenCalledWith(
-      jasmine.objectContaining({ type: "TaskAnswerSubmitted" }),
+      expect.objectContaining({ type: "TaskAnswerSubmitted" }),
     );
     // после clear() кеш структуры должен повторно бить adapter
     repository.getCourseStructure(1).subscribe();

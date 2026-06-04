@@ -10,10 +10,10 @@ import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-cri
 
 describe("ProjectRatingHttpAdapter", () => {
   let adapter: ProjectRatingHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post"]);
+    api = { get: vi.fn(), post: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectRatingHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -29,42 +29,42 @@ describe("ProjectRatingHttpAdapter", () => {
 
   it("getAll идёт в GET /rate-project/:programId c params", () => {
     setup();
-    api.get.and.returnValue(of(pagination()));
+    api.get.mockReturnValue(of(pagination()));
     const params = new HttpParams().set("limit", "10");
 
     adapter.getAll(5, params).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/rate-project/5/", params);
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/rate-project/5/", params);
   });
 
   it("postFilters идёт в POST /rate-project/:programId c query и body", () => {
     setup();
-    api.post.and.returnValue(of(pagination()));
+    api.post.mockReturnValue(of(pagination()));
     const params = new HttpParams().set("limit", "10");
 
     adapter.postFilters(5, { status: ["open"] }, params).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/5/?limit=10", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5/?limit=10", {
       filters: { status: ["open"] },
     });
   });
 
   it("postFilters без params не добавляет query", () => {
     setup();
-    api.post.and.returnValue(of(pagination()));
+    api.post.mockReturnValue(of(pagination()));
 
     adapter.postFilters(5, {}).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/5/", { filters: {} });
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5/", { filters: {} });
   });
 
   it("rate идёт в POST /rate-project/rate/:projectId c массивом оценок", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
     const scores = [] as ProjectRatingCriterionOutput[];
 
     adapter.rate(42, scores).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/rate-project/rate/42/", scores);
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/rate/42/", scores);
   });
 });

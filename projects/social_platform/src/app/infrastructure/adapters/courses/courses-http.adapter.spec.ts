@@ -14,10 +14,10 @@ import {
 
 describe("CoursesHttpAdapter", () => {
   let adapter: CoursesHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post"]);
+    api = { get: vi.fn(), post: vi.fn() };
     TestBed.configureTestingModule({
       providers: [CoursesHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -26,47 +26,47 @@ describe("CoursesHttpAdapter", () => {
 
   it("getCourses идёт в GET /courses/", () => {
     setup();
-    api.get.and.returnValue(of([] as CourseCard[]));
+    api.get.mockReturnValue(of([] as CourseCard[]));
 
     adapter.getCourses().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/courses/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/courses/");
   });
 
   it("getCourseDetail идёт в GET /courses/:id/", () => {
     setup();
-    api.get.and.returnValue(of({} as CourseDetail));
+    api.get.mockReturnValue(of({} as CourseDetail));
 
     adapter.getCourseDetail(5).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/courses/5/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/courses/5/");
   });
 
   it("getCourseStructure идёт в GET /courses/:id/structure/", () => {
     setup();
-    api.get.and.returnValue(of({} as CourseStructure));
+    api.get.mockReturnValue(of({} as CourseStructure));
 
     adapter.getCourseStructure(5).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/courses/5/structure/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/courses/5/structure/");
   });
 
   it("getCourseLesson идёт в GET /courses/lessons/:id/", () => {
     setup();
-    api.get.and.returnValue(of({} as CourseLesson));
+    api.get.mockReturnValue(of({} as CourseLesson));
 
     adapter.getCourseLesson(9).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/courses/lessons/9/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/courses/lessons/9/");
   });
 
   it("postAnswerQuestion идёт в POST /courses/tasks/:id/answer/ с body", () => {
     setup();
-    api.post.and.returnValue(of({} as TaskAnswerResponse));
+    api.post.mockReturnValue(of({} as TaskAnswerResponse));
 
     adapter.postAnswerQuestion(3, "text", [1, 2], [7]).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/courses/tasks/3/answer/", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/courses/tasks/3/answer/", {
       answerText: "text",
       optionIds: [1, 2],
       fileIds: [7],

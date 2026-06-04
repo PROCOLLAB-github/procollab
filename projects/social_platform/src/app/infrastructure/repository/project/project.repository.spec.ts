@@ -20,19 +20,19 @@ import { rejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-res
 
 describe("ProjectRepository", () => {
   let repository: ProjectRepository;
-  let adapter: jasmine.SpyObj<ProjectHttpAdapter>;
+  let adapter: any;
   let eventBus: EventBus;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProjectHttpAdapter>("ProjectHttpAdapter", [
-      "fetchAll",
-      "fetchOne",
-      "fetchCount",
-      "putUpdate",
-      "fetchMy",
-      "postCreate",
-      "deleteOne",
-    ]);
+    adapter = {
+      fetchAll: vi.fn(),
+      fetchOne: vi.fn(),
+      fetchCount: vi.fn(),
+      putUpdate: vi.fn(),
+      fetchMy: vi.fn(),
+      postCreate: vi.fn(),
+      deleteOne: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [ProjectRepository, { provide: ProjectHttpAdapter, useValue: adapter }],
     });
@@ -47,21 +47,22 @@ describe("ProjectRepository", () => {
     results: [{ id: 1 } as ProjectDto],
   });
 
-  it("getAll мапит results в Project", done => {
-    setup();
-    const params = new HttpParams();
-    adapter.fetchAll.and.returnValue(of(page()));
+  it("getAll мапит results в Project", () =>
+    new Promise<void>(done => {
+      setup();
+      const params = new HttpParams();
+      adapter.fetchAll.mockReturnValue(of(page()));
 
-    repository.getAll(params).subscribe(res => {
-      expect(adapter.fetchAll).toHaveBeenCalledOnceWith(params);
-      expect(res.results[0]).toBeInstanceOf(Project);
-      done();
-    });
-  });
+      repository.getAll(params).subscribe(res => {
+        expect(adapter.fetchAll).toHaveBeenCalledExactlyOnceWith(params);
+        expect(res.results[0]).toBeInstanceOf(Project);
+        done();
+      });
+    }));
 
   it("getOne кеширует результат: повторный вызов не бьёт adapter", () => {
     setup();
-    adapter.fetchOne.and.returnValue(of({ id: 42 } as ProjectDto));
+    adapter.fetchOne.mockReturnValue(of({ id: 42 } as ProjectDto));
 
     repository.getOne(42).subscribe();
     repository.getOne(42).subscribe();
@@ -69,56 +70,60 @@ describe("ProjectRepository", () => {
     expect(adapter.fetchOne).toHaveBeenCalledTimes(1);
   });
 
-  it("refreshCount мапит в ProjectCount и пушит в count$", done => {
-    setup();
-    adapter.fetchCount.and.returnValue(of({ my: 1, all: 2, subs: 3 } as ProjectCount));
+  it("refreshCount мапит в ProjectCount и пушит в count$", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchCount.mockReturnValue(of({ my: 1, all: 2, subs: 3 } as ProjectCount));
 
-    repository.refreshCount().subscribe(count => {
-      expect(count).toBeInstanceOf(ProjectCount);
-      expect(repository.count$.getValue().my).toBe(1);
-      expect(repository.count$.getValue().all).toBe(2);
-      expect(repository.count$.getValue().subs).toBe(3);
-      done();
-    });
-  });
+      repository.refreshCount().subscribe(count => {
+        expect(count).toBeInstanceOf(ProjectCount);
+        expect(repository.count$.getValue().my).toBe(1);
+        expect(repository.count$.getValue().all).toBe(2);
+        expect(repository.count$.getValue().subs).toBe(3);
+        done();
+      });
+    }));
 
-  it("update мапит ответ в Project и инвалидирует кеш", done => {
-    setup();
-    adapter.fetchOne.and.returnValue(of({ id: 42 } as ProjectDto));
-    adapter.putUpdate.and.returnValue(of({ id: 42 } as ProjectDto));
+  it("update мапит ответ в Project и инвалидирует кеш", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchOne.mockReturnValue(of({ id: 42 } as ProjectDto));
+      adapter.putUpdate.mockReturnValue(of({ id: 42 } as ProjectDto));
 
-    repository.getOne(42).subscribe();
-    repository.update(42, { description: "x" }).subscribe(() => {
-      // после invalidate следующий getOne должен снова пойти в adapter
       repository.getOne(42).subscribe();
-      expect(adapter.fetchOne).toHaveBeenCalledTimes(2);
-      done();
-    });
-  });
+      repository.update(42, { description: "x" }).subscribe(() => {
+        // после invalidate следующий getOne должен снова пойти в adapter
+        repository.getOne(42).subscribe();
+        expect(adapter.fetchOne).toHaveBeenCalledTimes(2);
+        done();
+      });
+    }));
 
-  it("getMy мапит results в Project", done => {
-    setup();
-    adapter.fetchMy.and.returnValue(of(page()));
-    repository.getMy().subscribe(res => {
-      expect(res.results[0]).toBeInstanceOf(Project);
-      done();
-    });
-  });
+  it("getMy мапит results в Project", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchMy.mockReturnValue(of(page()));
+      repository.getMy().subscribe(res => {
+        expect(res.results[0]).toBeInstanceOf(Project);
+        done();
+      });
+    }));
 
-  it("postOne мапит ответ в Project", done => {
-    setup();
-    adapter.postCreate.and.returnValue(of({ id: 1 } as ProjectDto));
-    repository.postOne().subscribe(p => {
-      expect(p).toBeInstanceOf(Project);
-      done();
-    });
-  });
+  it("postOne мапит ответ в Project", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.postCreate.mockReturnValue(of({ id: 1 } as ProjectDto));
+      repository.postOne().subscribe(p => {
+        expect(p).toBeInstanceOf(Project);
+        done();
+      });
+    }));
 
   it("deleteOne делегирует в adapter", () => {
     setup();
-    adapter.deleteOne.and.returnValue(of(undefined));
+    adapter.deleteOne.mockReturnValue(of(undefined));
     repository.deleteOne(42).subscribe();
-    expect(adapter.deleteOne).toHaveBeenCalledOnceWith(42);
+    expect(adapter.deleteOne).toHaveBeenCalledExactlyOnceWith(42);
   });
 
   it("ProjectCreated увеличивает count.my", () => {
@@ -130,7 +135,7 @@ describe("ProjectRepository", () => {
 
   it("ProjectDeleted уменьшает count.my и инвалидирует кеш", () => {
     setup();
-    adapter.fetchOne.and.returnValue(of({ id: 7 } as ProjectDto));
+    adapter.fetchOne.mockReturnValue(of({ id: 7 } as ProjectDto));
     repository.getOne(7).subscribe();
     repository.count$.next({ my: 2, all: 0, subs: 0 });
 
@@ -157,7 +162,7 @@ describe("ProjectRepository", () => {
 
   it("RemoveProjectCollaborator инвалидирует кеш проекта", () => {
     setup();
-    adapter.fetchOne.and.returnValue(of({ id: 7 } as ProjectDto));
+    adapter.fetchOne.mockReturnValue(of({ id: 7 } as ProjectDto));
     repository.getOne(7).subscribe();
     eventBus.emit(removeProjectCollaborator(7, 42));
     repository.getOne(7).subscribe();
@@ -166,7 +171,7 @@ describe("ProjectRepository", () => {
 
   it("SendVacancyResponse инвалидирует кеш проекта", () => {
     setup();
-    adapter.fetchOne.and.returnValue(of({ id: 7 } as ProjectDto));
+    adapter.fetchOne.mockReturnValue(of({ id: 7 } as ProjectDto));
     repository.getOne(7).subscribe();
     eventBus.emit(sendVacancyResponse(1, 2, 7, 10, false));
     repository.getOne(7).subscribe();
@@ -175,7 +180,7 @@ describe("ProjectRepository", () => {
 
   it("AcceptVacancyResponse инвалидирует кеш проекта", () => {
     setup();
-    adapter.fetchOne.and.returnValue(of({ id: 7 } as ProjectDto));
+    adapter.fetchOne.mockReturnValue(of({ id: 7 } as ProjectDto));
     repository.getOne(7).subscribe();
     eventBus.emit(acceptVacancyResponse(1, 2, 7, 10));
     repository.getOne(7).subscribe();
@@ -184,7 +189,7 @@ describe("ProjectRepository", () => {
 
   it("RejectVacancyResponse инвалидирует кеш проекта", () => {
     setup();
-    adapter.fetchOne.and.returnValue(of({ id: 7 } as ProjectDto));
+    adapter.fetchOne.mockReturnValue(of({ id: 7 } as ProjectDto));
     repository.getOne(7).subscribe();
     eventBus.emit(rejectVacancyResponse(1, 2, 7, 10));
     repository.getOne(7).subscribe();

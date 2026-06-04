@@ -9,10 +9,10 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("MemberRepository", () => {
   let repository: MemberRepository;
-  let adapter: jasmine.SpyObj<MemberHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<MemberHttpAdapter>("MemberHttpAdapter", ["getMembers"]);
+    adapter = { getMembers: vi.fn() };
     TestBed.configureTestingModule({
       providers: [MemberRepository, { provide: MemberHttpAdapter, useValue: adapter }],
     });
@@ -26,14 +26,15 @@ describe("MemberRepository", () => {
     results: [{ id: 1 } as User],
   });
 
-  it("getMembers делегирует в adapter и мапит results в User", done => {
-    setup();
-    adapter.getMembers.and.returnValue(of(page()));
+  it("getMembers делегирует в adapter и мапит results в User", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getMembers.mockReturnValue(of(page()));
 
-    repository.getMembers(0, 10, { q: "a" }).subscribe(res => {
-      expect(adapter.getMembers).toHaveBeenCalledOnceWith(0, 10, { q: "a" });
-      expect(res.results[0]).toBeInstanceOf(User);
-      done();
-    });
-  });
+      repository.getMembers(0, 10, { q: "a" }).subscribe(res => {
+        expect(adapter.getMembers).toHaveBeenCalledExactlyOnceWith(0, 10, { q: "a" });
+        expect(res.results[0]).toBeInstanceOf(User);
+        done();
+      });
+    }));
 });

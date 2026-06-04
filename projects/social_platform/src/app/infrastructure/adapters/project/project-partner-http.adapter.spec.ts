@@ -8,10 +8,10 @@ import { Partner, PartnerDto } from "@domain/project/partner.model";
 
 describe("ProjectPartnerHttpAdapter", () => {
   let adapter: ProjectPartnerHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "patch", "delete"]);
+    api = { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectPartnerHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -20,39 +20,39 @@ describe("ProjectPartnerHttpAdapter", () => {
 
   it("addPartner идёт в POST /projects/:id/companies/ c params", () => {
     setup();
-    api.post.and.returnValue(of({} as Partner));
+    api.post.mockReturnValue(of({} as Partner));
     const params = {} as PartnerDto;
 
     adapter.addPartner(42, params).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/companies/", params);
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/", params);
   });
 
   it("getPartners идёт в GET /projects/:id/companies/list/", () => {
     setup();
-    api.get.and.returnValue(of([] as Partner[]));
+    api.get.mockReturnValue(of([] as Partner[]));
 
     adapter.getPartners(42).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/companies/list/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/list/");
   });
 
   it("editParter идёт в PATCH /projects/:pid/companies/:cid/ c partial", () => {
     setup();
-    api.patch.and.returnValue(of([] as Partner[]));
+    api.patch.mockReturnValue(of([] as Partner[]));
     const params = {} as Pick<PartnerDto, "contribution" | "decisionMaker">;
 
     adapter.editParter(42, 7, params).subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/projects/42/companies/7/", params);
+    expect(api.patch).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/7/", params);
   });
 
   it("deletePartner идёт в DELETE /projects/:pid/companies/:cid/", () => {
     setup();
-    api.delete.and.returnValue(of(undefined));
+    api.delete.mockReturnValue(of(undefined));
 
     adapter.deletePartner(42, 7).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/companies/7/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/7/");
   });
 });

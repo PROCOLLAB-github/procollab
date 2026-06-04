@@ -22,12 +22,12 @@ import {
 
 describe("ChatWsAdapter", () => {
   let adapter: ChatWsAdapter;
-  let ws: jasmine.SpyObj<WebsocketService>;
-  let tokens: jasmine.SpyObj<TokenService>;
+  let ws: any;
+  let tokens: any;
 
   function setup(): void {
-    ws = jasmine.createSpyObj<WebsocketService>("WebsocketService", ["connect", "send", "on"]);
-    tokens = jasmine.createSpyObj<TokenService>("TokenService", ["getTokens"]);
+    ws = { connect: vi.fn(), send: vi.fn(), on: vi.fn() };
+    tokens = { getTokens: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ChatWsAdapter,
@@ -40,17 +40,17 @@ describe("ChatWsAdapter", () => {
 
   it("connect подключается к /chat/ если токен есть", () => {
     setup();
-    tokens.getTokens.and.returnValue({ access: "a", refresh: "r" });
-    ws.connect.and.returnValue(of(undefined));
+    tokens.getTokens.mockReturnValue({ access: "a", refresh: "r" });
+    ws.connect.mockReturnValue(of(undefined));
 
     adapter.connect().subscribe();
 
-    expect(ws.connect).toHaveBeenCalledOnceWith("/chat/");
+    expect(ws.connect).toHaveBeenCalledExactlyOnceWith("/chat/");
   });
 
   it("connect кидает если токена нет", () => {
     setup();
-    tokens.getTokens.and.returnValue(null);
+    tokens.getTokens.mockReturnValue(null);
 
     expect(() => adapter.connect()).toThrowError("No token provided");
   });
@@ -61,7 +61,7 @@ describe("ChatWsAdapter", () => {
 
     adapter.sendMessage(msg);
 
-    expect(ws.send).toHaveBeenCalledOnceWith(ChatEventType.NEW_MESSAGE, msg);
+    expect(ws.send).toHaveBeenCalledExactlyOnceWith(ChatEventType.NEW_MESSAGE, msg);
   });
 
   it("editMessage шлёт EDIT_MESSAGE", () => {
@@ -70,7 +70,7 @@ describe("ChatWsAdapter", () => {
 
     adapter.editMessage(msg);
 
-    expect(ws.send).toHaveBeenCalledOnceWith(ChatEventType.EDIT_MESSAGE, msg);
+    expect(ws.send).toHaveBeenCalledExactlyOnceWith(ChatEventType.EDIT_MESSAGE, msg);
   });
 
   it("deleteMessage шлёт DELETE_MESSAGE", () => {
@@ -79,7 +79,7 @@ describe("ChatWsAdapter", () => {
 
     adapter.deleteMessage(msg);
 
-    expect(ws.send).toHaveBeenCalledOnceWith(ChatEventType.DELETE_MESSAGE, msg);
+    expect(ws.send).toHaveBeenCalledExactlyOnceWith(ChatEventType.DELETE_MESSAGE, msg);
   });
 
   it("readMessage шлёт READ_MESSAGE", () => {
@@ -88,7 +88,7 @@ describe("ChatWsAdapter", () => {
 
     adapter.readMessage(msg);
 
-    expect(ws.send).toHaveBeenCalledOnceWith(ChatEventType.READ_MESSAGE, msg);
+    expect(ws.send).toHaveBeenCalledExactlyOnceWith(ChatEventType.READ_MESSAGE, msg);
   });
 
   it("startTyping шлёт TYPING", () => {
@@ -97,69 +97,69 @@ describe("ChatWsAdapter", () => {
 
     adapter.startTyping(typing);
 
-    expect(ws.send).toHaveBeenCalledOnceWith(ChatEventType.TYPING, typing);
+    expect(ws.send).toHaveBeenCalledExactlyOnceWith(ChatEventType.TYPING, typing);
   });
 
   it("onMessage слушает NEW_MESSAGE", () => {
     setup();
-    ws.on.and.returnValue(of({} as OnChatMessageDto));
+    ws.on.mockReturnValue(of({} as OnChatMessageDto));
 
     adapter.onMessage().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.NEW_MESSAGE);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.NEW_MESSAGE);
   });
 
   it("onEditMessage слушает EDIT_MESSAGE", () => {
     setup();
-    ws.on.and.returnValue(of({} as OnEditChatMessageDto));
+    ws.on.mockReturnValue(of({} as OnEditChatMessageDto));
 
     adapter.onEditMessage().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.EDIT_MESSAGE);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.EDIT_MESSAGE);
   });
 
   it("onDeleteMessage слушает DELETE_MESSAGE", () => {
     setup();
-    ws.on.and.returnValue(of({} as OnDeleteChatMessageDto));
+    ws.on.mockReturnValue(of({} as OnDeleteChatMessageDto));
 
     adapter.onDeleteMessage().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.DELETE_MESSAGE);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.DELETE_MESSAGE);
   });
 
   it("onReadMessage слушает READ_MESSAGE", () => {
     setup();
-    ws.on.and.returnValue(of({} as OnReadChatMessageDto));
+    ws.on.mockReturnValue(of({} as OnReadChatMessageDto));
 
     adapter.onReadMessage().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.READ_MESSAGE);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.READ_MESSAGE);
   });
 
   it("onTyping слушает TYPING", () => {
     setup();
-    ws.on.and.returnValue(of({} as TypingInChatEventDto));
+    ws.on.mockReturnValue(of({} as TypingInChatEventDto));
 
     adapter.onTyping().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.TYPING);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.TYPING);
   });
 
   it("onSetOnline слушает SET_ONLINE", () => {
     setup();
-    ws.on.and.returnValue(of({} as OnChangeStatus));
+    ws.on.mockReturnValue(of({} as OnChangeStatus));
 
     adapter.onSetOnline().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.SET_ONLINE);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.SET_ONLINE);
   });
 
   it("onSetOffline слушает SET_OFFLINE", () => {
     setup();
-    ws.on.and.returnValue(of({} as OnChangeStatus));
+    ws.on.mockReturnValue(of({} as OnChangeStatus));
 
     adapter.onSetOffline().subscribe();
 
-    expect(ws.on).toHaveBeenCalledOnceWith(ChatEventType.SET_OFFLINE);
+    expect(ws.on).toHaveBeenCalledExactlyOnceWith(ChatEventType.SET_OFFLINE);
   });
 });

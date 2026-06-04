@@ -7,10 +7,10 @@ import { IndustryHttpAdapter } from "./industry-http.adapter";
 
 describe("IndustryHttpAdapter", () => {
   let adapter: IndustryHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get"]);
+    api = { get: vi.fn() };
     TestBed.configureTestingModule({
       providers: [IndustryHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -19,10 +19,10 @@ describe("IndustryHttpAdapter", () => {
 
   it("fetchAll идёт в GET /industries/", () => {
     setup();
-    api.get.and.returnValue(of([]));
+    api.get.mockReturnValue(of([]));
 
     adapter.fetchAll().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/industries/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/industries/");
   });
 });

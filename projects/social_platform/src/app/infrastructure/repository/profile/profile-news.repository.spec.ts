@@ -10,20 +10,20 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("ProfileNewsRepository", () => {
   let repository: ProfileNewsRepository;
-  let adapter: jasmine.SpyObj<ProfileNewsHttpAdapter>;
-  let storage: jasmine.SpyObj<StorageService>;
+  let adapter: any;
+  let storage: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProfileNewsHttpAdapter>("ProfileNewsHttpAdapter", [
-      "fetchNews",
-      "fetchNewsDetail",
-      "addNews",
-      "setNewsViewed",
-      "deleteNews",
-      "toggleLike",
-      "editNews",
-    ]);
-    storage = jasmine.createSpyObj<StorageService>("StorageService", ["getItem", "setItem"]);
+    adapter = {
+      fetchNews: vi.fn(),
+      fetchNewsDetail: vi.fn(),
+      addNews: vi.fn(),
+      setNewsViewed: vi.fn(),
+      deleteNews: vi.fn(),
+      toggleLike: vi.fn(),
+      editNews: vi.fn(),
+    };
+    storage = { getItem: vi.fn(), setItem: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ProfileNewsRepository,
@@ -41,86 +41,92 @@ describe("ProfileNewsRepository", () => {
     results: [{ id: 1 } as ProfileNews],
   });
 
-  it("fetchNews делегирует в adapter со строковым userId и мапит results", done => {
-    setup();
-    adapter.fetchNews.and.returnValue(of(page()));
+  it("fetchNews делегирует в adapter со строковым userId и мапит results", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchNews.mockReturnValue(of(page()));
 
-    repository.fetchNews("42").subscribe(res => {
-      expect(adapter.fetchNews).toHaveBeenCalledOnceWith("42");
-      expect(res.results[0]).toBeInstanceOf(ProfileNews);
-      done();
-    });
-  });
+      repository.fetchNews("42").subscribe(res => {
+        expect(adapter.fetchNews).toHaveBeenCalledExactlyOnceWith("42");
+        expect(res.results[0]).toBeInstanceOf(ProfileNews);
+        done();
+      });
+    }));
 
-  it("fetchNewsDetail мапит ответ в ProfileNews", done => {
-    setup();
-    adapter.fetchNewsDetail.and.returnValue(of({ id: 1 } as ProfileNews));
+  it("fetchNewsDetail мапит ответ в ProfileNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.fetchNewsDetail.mockReturnValue(of({ id: 1 } as ProfileNews));
 
-    repository.fetchNewsDetail("u1", "n1").subscribe(news => {
-      expect(adapter.fetchNewsDetail).toHaveBeenCalledOnceWith("u1", "n1");
-      expect(news).toBeInstanceOf(ProfileNews);
-      done();
-    });
-  });
+      repository.fetchNewsDetail("u1", "n1").subscribe(news => {
+        expect(adapter.fetchNewsDetail).toHaveBeenCalledExactlyOnceWith("u1", "n1");
+        expect(news).toBeInstanceOf(ProfileNews);
+        done();
+      });
+    }));
 
-  it("addNews мапит ответ в ProfileNews", done => {
-    setup();
-    adapter.addNews.and.returnValue(of({ id: 1 } as ProfileNews));
+  it("addNews мапит ответ в ProfileNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.addNews.mockReturnValue(of({ id: 1 } as ProfileNews));
 
-    repository.addNews("u1", { text: "t", files: [] }).subscribe(news => {
-      expect(adapter.addNews).toHaveBeenCalledOnceWith("u1", { text: "t", files: [] });
-      expect(news).toBeInstanceOf(ProfileNews);
-      done();
-    });
-  });
+      repository.addNews("u1", { text: "t", files: [] }).subscribe(news => {
+        expect(adapter.addNews).toHaveBeenCalledExactlyOnceWith("u1", { text: "t", files: [] });
+        expect(news).toBeInstanceOf(ProfileNews);
+        done();
+      });
+    }));
 
-  it("readNews отмечает только ещё непрочитанные новости", done => {
-    setup();
-    storage.getItem.and.returnValue([1]);
-    adapter.setNewsViewed.and.returnValue(of(undefined));
+  it("readNews отмечает только ещё непрочитанные новости", () =>
+    new Promise<void>(done => {
+      setup();
+      storage.getItem.mockReturnValue([1]);
+      adapter.setNewsViewed.mockReturnValue(of(undefined));
 
-    repository.readNews(10, [1, 2, 3]).subscribe(() => {
-      expect(adapter.setNewsViewed).toHaveBeenCalledTimes(2);
-      expect(adapter.setNewsViewed).toHaveBeenCalledWith(10, 2);
-      expect(adapter.setNewsViewed).toHaveBeenCalledWith(10, 3);
-      expect(storage.setItem).toHaveBeenCalled();
-      done();
-    });
-  });
+      repository.readNews(10, [1, 2, 3]).subscribe(() => {
+        expect(adapter.setNewsViewed).toHaveBeenCalledTimes(2);
+        expect(adapter.setNewsViewed).toHaveBeenCalledWith(10, 2);
+        expect(adapter.setNewsViewed).toHaveBeenCalledWith(10, 3);
+        expect(storage.setItem).toHaveBeenCalled();
+        done();
+      });
+    }));
 
-  it("readNews возвращает пустой массив, если все уже прочитаны", done => {
-    setup();
-    storage.getItem.and.returnValue([1, 2]);
+  it("readNews возвращает пустой массив, если все уже прочитаны", () =>
+    new Promise<void>(done => {
+      setup();
+      storage.getItem.mockReturnValue([1, 2]);
 
-    repository.readNews(10, [1, 2]).subscribe(res => {
-      expect(res).toEqual([]);
-      expect(adapter.setNewsViewed).not.toHaveBeenCalled();
-      done();
-    });
-  });
+      repository.readNews(10, [1, 2]).subscribe(res => {
+        expect(res).toEqual([]);
+        expect(adapter.setNewsViewed).not.toHaveBeenCalled();
+        done();
+      });
+    }));
 
   it("delete делегирует в adapter", () => {
     setup();
-    adapter.deleteNews.and.returnValue(of(undefined));
+    adapter.deleteNews.mockReturnValue(of(undefined));
     repository.delete("u1", 5).subscribe();
-    expect(adapter.deleteNews).toHaveBeenCalledOnceWith("u1", 5);
+    expect(adapter.deleteNews).toHaveBeenCalledExactlyOnceWith("u1", 5);
   });
 
   it("toggleLike делегирует в adapter", () => {
     setup();
-    adapter.toggleLike.and.returnValue(of(undefined));
+    adapter.toggleLike.mockReturnValue(of(undefined));
     repository.toggleLike("u1", 5, true).subscribe();
-    expect(adapter.toggleLike).toHaveBeenCalledOnceWith("u1", 5, true);
+    expect(adapter.toggleLike).toHaveBeenCalledExactlyOnceWith("u1", 5, true);
   });
 
-  it("editNews мапит ответ в ProfileNews", done => {
-    setup();
-    adapter.editNews.and.returnValue(of({ id: 5 } as ProfileNews));
+  it("editNews мапит ответ в ProfileNews", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.editNews.mockReturnValue(of({ id: 5 } as ProfileNews));
 
-    repository.editNews("u1", 5, { text: "t" }).subscribe(news => {
-      expect(adapter.editNews).toHaveBeenCalledOnceWith("u1", 5, { text: "t" });
-      expect(news).toBeInstanceOf(ProfileNews);
-      done();
-    });
-  });
+      repository.editNews("u1", 5, { text: "t" }).subscribe(news => {
+        expect(adapter.editNews).toHaveBeenCalledExactlyOnceWith("u1", 5, { text: "t" });
+        expect(news).toBeInstanceOf(ProfileNews);
+        done();
+      });
+    }));
 });

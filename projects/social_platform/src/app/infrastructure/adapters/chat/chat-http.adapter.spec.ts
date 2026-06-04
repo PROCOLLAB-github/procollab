@@ -7,10 +7,10 @@ import { ChatHttpAdapter } from "./chat-http.adapter";
 
 describe("ChatHttpAdapter", () => {
   let adapter: ChatHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get"]);
+    api = { get: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ChatHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -19,11 +19,11 @@ describe("ChatHttpAdapter", () => {
 
   it("loadMessages идёт в GET /chats/projects/:id/messages/ c offset/limit", () => {
     setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
+    api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
     adapter.loadMessages(42, "projects", 20, 10).subscribe();
 
-    const [url, params] = api.get.calls.mostRecent().args;
+    const [url, params] = api.get.mock.lastCall;
     expect(url).toBe("/chats/projects/42/messages/");
     expect(params?.get("offset")).toBe("20");
     expect(params?.get("limit")).toBe("10");
@@ -31,30 +31,30 @@ describe("ChatHttpAdapter", () => {
 
   it("loadMessages не добавляет параметры если offset/limit не переданы", () => {
     setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
+    api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
     adapter.loadMessages(42, "projects").subscribe();
 
-    const params = api.get.calls.mostRecent().args[1];
-    expect(params?.has("offset")).toBeFalse();
-    expect(params?.has("limit")).toBeFalse();
+    const params = api.get.mock.lastCall[1];
+    expect(params?.has("offset")).toBe(false);
+    expect(params?.has("limit")).toBe(false);
   });
 
   it("loadProjectFiles идёт в GET /chats/projects/:id/files", () => {
     setup();
-    api.get.and.returnValue(of([]));
+    api.get.mockReturnValue(of([]));
 
     adapter.loadProjectFiles(42).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/chats/projects/42/files/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/chats/projects/42/files/");
   });
 
   it("hasUnreads идёт в GET /chats/has-unreads/", () => {
     setup();
-    api.get.and.returnValue(of({ hasUnreads: true }));
+    api.get.mockReturnValue(of({ hasUnreads: true }));
 
     adapter.hasUnreads().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/chats/has-unreads/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/chats/has-unreads/");
   });
 });

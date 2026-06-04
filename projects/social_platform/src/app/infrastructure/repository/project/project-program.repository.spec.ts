@@ -11,13 +11,10 @@ import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-progr
 
 describe("ProjectProgramRepository", () => {
   let repository: ProjectProgramRepository;
-  let adapter: jasmine.SpyObj<ProjectProgramHttpAdapter>;
+  let adapter: any;
 
   function setup(): void {
-    adapter = jasmine.createSpyObj<ProjectProgramHttpAdapter>("ProjectProgramHttpAdapter", [
-      "assignProjectToProgram",
-      "sendNewProjectFieldsValues",
-    ]);
+    adapter = { assignProjectToProgram: vi.fn(), sendNewProjectFieldsValues: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         ProjectProgramRepository,
@@ -27,26 +24,28 @@ describe("ProjectProgramRepository", () => {
     repository = TestBed.inject(ProjectProgramRepository);
   }
 
-  it("assignProjectToProgram мапит ответ в ProjectAssign", done => {
-    setup();
-    adapter.assignProjectToProgram.and.returnValue(of({} as ProjectAssign));
+  it("assignProjectToProgram мапит ответ в ProjectAssign", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.assignProjectToProgram.mockReturnValue(of({} as ProjectAssign));
 
-    repository.assignProjectToProgram(42, 5).subscribe(res => {
-      expect(adapter.assignProjectToProgram).toHaveBeenCalledOnceWith(42, 5);
-      expect(res).toBeInstanceOf(ProjectAssign);
-      done();
-    });
-  });
+      repository.assignProjectToProgram(42, 5).subscribe(res => {
+        expect(adapter.assignProjectToProgram).toHaveBeenCalledExactlyOnceWith(42, 5);
+        expect(res).toBeInstanceOf(ProjectAssign);
+        done();
+      });
+    }));
 
-  it("sendNewProjectFieldsValues мапит ответ в Project", done => {
-    setup();
-    const values = [] as ProjectNewAdditionalProgramFields[];
-    adapter.sendNewProjectFieldsValues.and.returnValue(of({ id: 1 } as ProjectDto));
+  it("sendNewProjectFieldsValues мапит ответ в Project", () =>
+    new Promise<void>(done => {
+      setup();
+      const values = [] as ProjectNewAdditionalProgramFields[];
+      adapter.sendNewProjectFieldsValues.mockReturnValue(of({ id: 1 } as ProjectDto));
 
-    repository.sendNewProjectFieldsValues(42, values).subscribe(res => {
-      expect(adapter.sendNewProjectFieldsValues).toHaveBeenCalledOnceWith(42, values);
-      expect(res).toBeInstanceOf(Project);
-      done();
-    });
-  });
+      repository.sendNewProjectFieldsValues(42, values).subscribe(res => {
+        expect(adapter.sendNewProjectFieldsValues).toHaveBeenCalledExactlyOnceWith(42, values);
+        expect(res).toBeInstanceOf(Project);
+        done();
+      });
+    }));
 });

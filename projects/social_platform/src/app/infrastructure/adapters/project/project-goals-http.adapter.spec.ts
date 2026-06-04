@@ -9,10 +9,10 @@ import { GoalFormData } from "@domain/project/goal-form-data.model";
 
 describe("ProjectGoalsHttpAdapter", () => {
   let adapter: ProjectGoalsHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "put", "delete"]);
+    api = { get: vi.fn(), post: vi.fn(), put: vi.fn(), delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectGoalsHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -21,39 +21,39 @@ describe("ProjectGoalsHttpAdapter", () => {
 
   it("getGoals идёт в GET /projects/:id/goals/", () => {
     setup();
-    api.get.and.returnValue(of([] as Goal[]));
+    api.get.mockReturnValue(of([] as Goal[]));
 
     adapter.getGoals(42).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/goals/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/");
   });
 
   it("addGoals идёт в POST /projects/:id/goals/ c массивом", () => {
     setup();
-    api.post.and.returnValue(of([] as Goal[]));
+    api.post.mockReturnValue(of([] as Goal[]));
     const data = [] as GoalFormData[];
 
     adapter.addGoals(42, data).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/42/goals/", data);
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/", data);
   });
 
   it("editGoal идёт в PUT /projects/:pid/goals/:gid c params", () => {
     setup();
-    api.put.and.returnValue(of({} as Goal));
+    api.put.mockReturnValue(of({} as Goal));
     const params = {} as GoalFormData;
 
     adapter.editGoal(42, 9, params).subscribe();
 
-    expect(api.put).toHaveBeenCalledOnceWith("/projects/42/goals/9/", params);
+    expect(api.put).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/9/", params);
   });
 
   it("deleteGoals идёт в DELETE /projects/:pid/goals/:gid", () => {
     setup();
-    api.delete.and.returnValue(of(undefined));
+    api.delete.mockReturnValue(of(undefined));
 
     adapter.deleteGoals(42, 9).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/goals/9/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/9/");
   });
 });

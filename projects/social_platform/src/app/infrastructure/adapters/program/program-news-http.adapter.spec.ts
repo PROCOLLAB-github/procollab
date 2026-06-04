@@ -8,10 +8,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 
 describe("ProgramNewsHttpAdapter", () => {
   let adapter: ProgramNewsHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "patch", "delete"]);
+    api = { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProgramNewsHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -20,11 +20,11 @@ describe("ProgramNewsHttpAdapter", () => {
 
   it("fetchNews идёт в GET /programs/:id/news/ c limit/offset", () => {
     setup();
-    api.get.and.returnValue(of({ count: 0, results: [], next: "", previous: "" }));
+    api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
     adapter.fetchNews(5, 10, 20).subscribe();
 
-    const [url, params] = api.get.calls.mostRecent().args;
+    const [url, params] = api.get.mock.lastCall;
     expect(url).toBe("/programs/5/news/");
     expect(params?.get("limit")).toBe("10");
     expect(params?.get("offset")).toBe("20");
@@ -32,48 +32,50 @@ describe("ProgramNewsHttpAdapter", () => {
 
   it("setNewsViewed идёт в POST /programs/:pid/news/:nid/set_viewed/", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
 
     adapter.setNewsViewed("5", 9).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/programs/5/news/9/set_viewed/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/news/9/set_viewed/", {});
   });
 
   it("toggleLike идёт в POST /programs/:pid/news/:nid/set_liked/ c is_liked", () => {
     setup();
-    api.post.and.returnValue(of(undefined));
+    api.post.mockReturnValue(of(undefined));
 
     adapter.toggleLike("5", 9, true).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/programs/5/news/9/set_liked/", { is_liked: true });
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/news/9/set_liked/", {
+      is_liked: true,
+    });
   });
 
   it("addNews идёт в POST /programs/:id/news/ с body", () => {
     setup();
-    api.post.and.returnValue(of({} as FeedNews));
+    api.post.mockReturnValue(of({} as FeedNews));
     const body = { text: "t", files: ["f"] };
 
     adapter.addNews(5, body).subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/programs/5/news/", body);
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/news/", body);
   });
 
   it("editNews идёт в PATCH /programs/:pid/news/:nid c частичными данными", () => {
     setup();
-    api.patch.and.returnValue(of({} as FeedNews));
+    api.patch.mockReturnValue(of({} as FeedNews));
     const patch = { text: "new" };
 
     adapter.editNews(5, 9, patch).subscribe();
 
-    expect(api.patch).toHaveBeenCalledOnceWith("/programs/5/news/9/", patch);
+    expect(api.patch).toHaveBeenCalledExactlyOnceWith("/programs/5/news/9/", patch);
   });
 
   it("deleteNews идёт в DELETE /programs/:pid/news/:nid", () => {
     setup();
-    api.delete.and.returnValue(of(undefined));
+    api.delete.mockReturnValue(of(undefined));
 
     adapter.deleteNews(5, 9).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/programs/5/news/9/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/programs/5/news/9/");
   });
 });

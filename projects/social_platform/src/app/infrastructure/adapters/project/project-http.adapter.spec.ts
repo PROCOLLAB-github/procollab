@@ -9,10 +9,10 @@ import { ProjectCountDto, ProjectDto, ProjectListDto } from "./dto/project.dto";
 
 describe("ProjectHttpAdapter", () => {
   let adapter: ProjectHttpAdapter;
-  let api: jasmine.SpyObj<ApiService>;
+  let api: any;
 
   function setup(): void {
-    api = jasmine.createSpyObj<ApiService>("ApiService", ["get", "post", "put", "delete"]);
+    api = { get: vi.fn(), post: vi.fn(), put: vi.fn(), delete: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -21,67 +21,67 @@ describe("ProjectHttpAdapter", () => {
 
   it("fetchAll идёт в GET /projects/ c переданными params", () => {
     setup();
-    api.get.and.returnValue(of({} as ProjectListDto));
+    api.get.mockReturnValue(of({} as ProjectListDto));
     const params = new HttpParams().set("limit", "10");
 
     adapter.fetchAll(params).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/", params);
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/", params);
   });
 
   it("fetchOne идёт в GET /projects/:id/", () => {
     setup();
-    api.get.and.returnValue(of({} as ProjectDto));
+    api.get.mockReturnValue(of({} as ProjectDto));
 
     adapter.fetchOne(42).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/42/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/");
   });
 
   it("fetchCount идёт в GET /projects/count/", () => {
     setup();
-    api.get.and.returnValue(of({} as ProjectCountDto));
+    api.get.mockReturnValue(of({} as ProjectCountDto));
 
     adapter.fetchCount().subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/projects/count/");
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/count/");
   });
 
   it("postCreate идёт в POST /projects/ с пустым телом", () => {
     setup();
-    api.post.and.returnValue(of({} as ProjectDto));
+    api.post.mockReturnValue(of({} as ProjectDto));
 
     adapter.postCreate().subscribe();
 
-    expect(api.post).toHaveBeenCalledOnceWith("/projects/", {});
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/", {});
   });
 
   it("putUpdate идёт в PUT /projects/:id/ c данными", () => {
     setup();
-    api.put.and.returnValue(of({} as ProjectDto));
+    api.put.mockReturnValue(of({} as ProjectDto));
     const data: Partial<ProjectDto> = { name: "n" } as Partial<ProjectDto>;
 
     adapter.putUpdate(42, data).subscribe();
 
-    expect(api.put).toHaveBeenCalledOnceWith("/projects/42/", data);
+    expect(api.put).toHaveBeenCalledExactlyOnceWith("/projects/42/", data);
   });
 
   it("deleteOne идёт в DELETE /projects/:id/", () => {
     setup();
-    api.delete.and.returnValue(of(undefined));
+    api.delete.mockReturnValue(of(undefined));
 
     adapter.deleteOne(42).subscribe();
 
-    expect(api.delete).toHaveBeenCalledOnceWith("/projects/42/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/");
   });
 
   it("fetchMy идёт в GET /auth/users/projects/ c params", () => {
     setup();
-    api.get.and.returnValue(of({} as ProjectListDto));
+    api.get.mockReturnValue(of({} as ProjectListDto));
     const params = new HttpParams().set("limit", "5");
 
     adapter.fetchMy(params).subscribe();
 
-    expect(api.get).toHaveBeenCalledOnceWith("/auth/users/projects/", params);
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/projects/", params);
   });
 });
