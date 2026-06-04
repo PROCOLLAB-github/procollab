@@ -10,14 +10,14 @@ import { LoggerService } from "../services/logger/logger.service";
 
 describe("BearerTokenInterceptor", () => {
   beforeEach(() => {
-    const tokenServiceSpy = jasmine.createSpyObj("TokenService", [
-      "getTokens",
-      "refreshTokens",
-      "clearTokens",
-      "memTokens",
-      "getCookieOptions",
-    ]);
-    const loggerSpy = jasmine.createSpyObj("LoggerService", ["log", "error", "warn"]);
+    const tokenServiceSpy = {
+      getTokens: vi.fn(),
+      refreshTokens: vi.fn(),
+      clearTokens: vi.fn(),
+      memTokens: vi.fn(),
+      getCookieOptions: vi.fn(),
+    };
+    const loggerSpy = { log: vi.fn(), error: vi.fn(), warn: vi.fn() };
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],

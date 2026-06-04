@@ -14,13 +14,13 @@ describe("WebsocketService", () => {
         WebsocketService,
         {
           provide: TokenService,
-          useValue: jasmine.createSpyObj("TokenService", [
-            "getTokens",
-            "clearTokens",
-            "memTokens",
-            "refreshTokens",
-            "getCookieOptions",
-          ]),
+          useValue: {
+            getTokens: vi.fn(),
+            clearTokens: vi.fn(),
+            memTokens: vi.fn(),
+            refreshTokens: vi.fn(),
+            getCookieOptions: vi.fn(),
+          },
         },
       ],
     });

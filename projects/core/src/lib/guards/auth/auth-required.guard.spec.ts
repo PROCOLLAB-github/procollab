@@ -9,8 +9,8 @@ import { TokenService } from "../../services/tokens/token.service";
 
 describe("AuthRequiredGuard", () => {
   beforeEach(() => {
-    const tokenSpy = jasmine.createSpyObj("TokenService", ["getTokens"]);
-    tokenSpy.getTokens.and.returnValue(null);
+    const tokenSpy = { getTokens: vi.fn() };
+    tokenSpy.getTokens.mockReturnValue(null);
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
