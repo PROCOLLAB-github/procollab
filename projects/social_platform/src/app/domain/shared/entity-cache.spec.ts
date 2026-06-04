@@ -16,18 +16,19 @@ describe("EntityCache", () => {
     factoryCallCount = 0;
   });
 
-  it("возвращает один и тот же Observable при повторном getOrFetch", done => {
-    const first = cache.getOrFetch(1, factory);
-    const second = cache.getOrFetch(1, factory);
+  it("возвращает один и тот же Observable при повторном getOrFetch", () =>
+    new Promise<void>(done => {
+      const first = cache.getOrFetch(1, factory);
+      const second = cache.getOrFetch(1, factory);
 
-    expect(first).toBe(second);
-    expect(factoryCallCount).toBe(1);
+      expect(first).toBe(second);
+      expect(factoryCallCount).toBe(1);
 
-    first.subscribe(value => {
-      expect(value).toBe("value-1");
-      done();
-    });
-  });
+      first.subscribe(value => {
+        expect(value).toBe("value-1");
+        done();
+      });
+    }));
 
   it("разные id — разные Observable", () => {
     const a = cache.getOrFetch(1, factory);
@@ -59,11 +60,11 @@ describe("EntityCache", () => {
 
   describe("с TTL", () => {
     beforeEach(() => {
-      jasmine.clock().install();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jasmine.clock().uninstall();
+      vi.useRealTimers();
     });
 
     it("возвращает кешированный Observable до истечения TTL", () => {
@@ -79,7 +80,7 @@ describe("EntityCache", () => {
       const ttlCache = new EntityCache<string>(5000);
       const first = ttlCache.getOrFetch(1, factory);
 
-      jasmine.clock().mockDate(new Date(Date.now() + 3000));
+      vi.setSystemTime(new Date(Date.now() + 3000));
 
       const second = ttlCache.getOrFetch(1, factory);
 
@@ -104,20 +105,20 @@ describe("EntityCache", () => {
     let swrFactoryCallCount: number;
 
     beforeEach(() => {
-      jasmine.clock().install();
+      vi.useFakeTimers();
       subject$ = new Subject<string>();
       swrCache = new EntityCache<string>(5000);
       swrFactoryCallCount = 0;
     });
 
     afterEach(() => {
-      jasmine.clock().uninstall();
+      vi.useRealTimers();
     });
 
     it("после TTL возвращает стухшие данные немедленно", () => {
       swrCache.getOrFetch(1, () => of("initial"));
 
-      jasmine.clock().mockDate(new Date(Date.now() + 6000));
+      vi.setSystemTime(new Date(Date.now() + 6000));
 
       let emitted = "";
       swrCache.getOrFetch(1, () => of("refreshed")).subscribe(v => (emitted = v));
@@ -131,7 +132,7 @@ describe("EntityCache", () => {
       // ("macroTask setTimeout can not transition to running") и течёт в другие спеки.
       swrCache.getOrFetch(1, () => of("initial"));
 
-      jasmine.clock().mockDate(new Date(Date.now() + 6000));
+      vi.setSystemTime(new Date(Date.now() + 6000));
 
       swrCache.getOrFetch(1, () => {
         swrFactoryCallCount++;
@@ -149,7 +150,7 @@ describe("EntityCache", () => {
     it("не запускает повторный re-fetch если предыдущий ещё летит", () => {
       swrCache.getOrFetch(1, () => of("initial"));
 
-      jasmine.clock().mockDate(new Date(Date.now() + 6000));
+      vi.setSystemTime(new Date(Date.now() + 6000));
 
       const longSubject = new Subject<string>();
       swrCache.getOrFetch(1, () => {
@@ -170,7 +171,7 @@ describe("EntityCache", () => {
     it("invalidate останавливает фоновый re-fetch", () => {
       swrCache.getOrFetch(1, () => of("initial"));
 
-      jasmine.clock().mockDate(new Date(Date.now() + 6000));
+      vi.setSystemTime(new Date(Date.now() + 6000));
 
       const longSubject = new Subject<string>();
       swrCache.getOrFetch(1, () => {
