@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
-import { IconComponent } from "@ui/primitives";
+import { IconComponent } from "./icon.component";
 
 describe("IconComponent", () => {
   let component: IconComponent;
@@ -17,6 +17,7 @@ describe("IconComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(IconComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput("icon", "check"); // icon — required input
     fixture.detectChanges();
   });
 
