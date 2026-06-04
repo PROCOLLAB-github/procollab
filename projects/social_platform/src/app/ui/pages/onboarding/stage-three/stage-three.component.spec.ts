@@ -14,15 +14,13 @@ describe("StageThreeComponent", () => {
   let fixture: ComponentFixture<OnboardingStageThreeComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj({
-      saveProfile: of({}),
-      setOnboardingStage: of({}),
-    });
-    const onboardingSpy = jasmine.createSpyObj({}, { formValue$: of({}) });
+    const authSpy = {
+      saveProfile: vi.fn().mockReturnValue(of({})),
+      setOnboardingStage: vi.fn().mockReturnValue(of({})),
+    };
+    const onboardingSpy = { formValue$: of({}) };
 
-    const authPortSpy = jasmine.createSpyObj("AuthRepositoryPort", ["updateProfile"], {
-      updateProfile: of({}),
-    });
+    const authPortSpy = { updateProfile: of({}) };
 
     await TestBed.configureTestingModule({
       imports: [OnboardingStageThreeComponent],

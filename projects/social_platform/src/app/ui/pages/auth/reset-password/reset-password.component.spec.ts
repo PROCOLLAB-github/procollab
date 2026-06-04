@@ -15,7 +15,7 @@ describe("ResetPasswordComponent", () => {
   let fixture: ComponentFixture<ResetPasswordComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj({ resetPassword: of({}) });
+    const authSpy = { resetPassword: vi.fn().mockReturnValue(of({})) };
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),

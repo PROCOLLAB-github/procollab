@@ -21,10 +21,10 @@ function makeFakeRouteWithCourseId(courseId: string | null): ActivatedRoute {
 describe("TaskCompleteComponent", () => {
   let fixture: ComponentFixture<TaskCompleteComponent>;
   let component: TaskCompleteComponent;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let routerSpy: any;
 
   async function setup(courseId: string | null): Promise<void> {
-    routerSpy = jasmine.createSpyObj<Router>("Router", ["navigateByUrl"]);
+    routerSpy = { navigateByUrl: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [TaskCompleteComponent],
@@ -65,7 +65,7 @@ describe("TaskCompleteComponent", () => {
       await setup("7");
 
       const button = fixture.debugElement.query(By.css("app-button"));
-      expect(button).withContext("кнопка должна быть в DOM").toBeTruthy();
+      expect(button, "кнопка должна быть в DOM").toBeTruthy();
 
       button.triggerEventHandler("click", null);
 

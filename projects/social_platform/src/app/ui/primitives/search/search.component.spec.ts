@@ -7,7 +7,7 @@ import { SearchComponent } from "./search.component";
 describe("SearchComponent", () => {
   let component: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
-  let onSwitchSearchSpy: jasmine.Spy;
+  let onSwitchSearchSpy: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,7 +18,7 @@ describe("SearchComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
-    onSwitchSearchSpy = spyOn(component, "onSwitchSearch").and.callThrough();
+    onSwitchSearchSpy = vi.spyOn(component, "onSwitchSearch");
     fixture.detectChanges();
   });
 

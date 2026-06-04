@@ -24,7 +24,7 @@ describe("SwitchComponent", () => {
   });
 
   it("should emit checkedChange when clicked", () => {
-    const emitSpy = jasmine.createSpy("checkedChange");
+    const emitSpy = vi.fn();
     component.checked.subscribe(emitSpy);
     const switchElement = fixture.nativeElement.querySelector(".switch");
     switchElement.click();

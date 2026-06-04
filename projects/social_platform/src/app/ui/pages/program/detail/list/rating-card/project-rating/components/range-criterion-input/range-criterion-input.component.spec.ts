@@ -37,7 +37,7 @@ describe("RangeCriterionInputComponent", () => {
   });
 
   it("should call onChange function on input", () => {
-    spyOn(component, "onChange");
+    vi.spyOn(component, "onChange");
     const testValue = 1;
     const input = fixture.nativeElement.querySelector("input");
     input.value = testValue;
@@ -46,7 +46,7 @@ describe("RangeCriterionInputComponent", () => {
   });
 
   it("should call onTouch function on blur", () => {
-    spyOn(component, "onTouch");
+    vi.spyOn(component, "onTouch");
     const input = fixture.nativeElement.querySelector("input");
     input.dispatchEvent(new Event("blur"));
     expect(component.onTouch).toHaveBeenCalled();

@@ -56,7 +56,7 @@ describe("AvatarComponent", () => {
     fixture.componentRef.setInput("hasBorder", true);
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector(".avatar > div");
-    expect(div.classList.contains("avatar--border")).toBeTrue();
+    expect(div.classList.contains("avatar--border")).toBe(true);
   });
 
   it("should not have border if hasBorder is false", () => {
@@ -66,6 +66,6 @@ describe("AvatarComponent", () => {
     fixture.componentRef.setInput("hasBorder", false);
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector(".avatar > div");
-    expect(div.classList.contains("avatar--border")).toBeFalse();
+    expect(div.classList.contains("avatar--border")).toBe(false);
   });
 });

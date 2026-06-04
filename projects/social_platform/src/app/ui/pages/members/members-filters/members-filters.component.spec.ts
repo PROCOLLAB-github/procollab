@@ -17,12 +17,12 @@ describe("MembersFiltersComponent ", () => {
     const searchesServiceSpy = {
       inlineSpecs: signal([]),
       inlineSkills: signal([]),
-      onSearchSpec: jasmine.createSpy("onSearchSpec"),
-      onSearchSkill: jasmine.createSpy("onSearchSkill"),
+      onSearchSpec: vi.fn(),
+      onSearchSkill: vi.fn(),
     };
 
     const loggerServiceSpy = {
-      info: jasmine.createSpy("info"),
+      info: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

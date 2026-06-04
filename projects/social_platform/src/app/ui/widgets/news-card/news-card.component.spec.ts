@@ -18,7 +18,7 @@ describe("NewsCardComponent", () => {
   let fixture: ComponentFixture<NewsCardComponent>;
 
   beforeEach(async () => {
-    const projectNewsServiceSpy = jasmine.createSpyObj(["addNews"]);
+    const projectNewsServiceSpy = { addNews: vi.fn() };
     const authSpy = {
       profile: of({}),
     };

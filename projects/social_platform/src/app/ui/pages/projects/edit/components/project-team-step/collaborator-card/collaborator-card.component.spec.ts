@@ -16,7 +16,7 @@ describe("CollaboratorCardComponent", () => {
         provideRouter([]),
         {
           provide: RemoveProjectCollaboratorUseCase,
-          useValue: { execute: jasmine.createSpy("execute") },
+          useValue: { execute: vi.fn() },
         },
       ],
     }).compileComponents();

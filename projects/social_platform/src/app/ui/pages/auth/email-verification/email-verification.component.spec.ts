@@ -15,7 +15,7 @@ describe("EmailVerificationComponent", () => {
   let fixture: ComponentFixture<EmailVerificationComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj(["memTokens"]);
+    const authSpy = { memTokens: vi.fn() };
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),

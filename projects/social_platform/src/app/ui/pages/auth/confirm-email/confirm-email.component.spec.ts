@@ -15,7 +15,7 @@ describe("ConfirmEmailComponent", () => {
   let fixture: ComponentFixture<ConfirmEmailComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj(["getTokens", "memTokens"]);
+    const authSpy = { getTokens: vi.fn(), memTokens: vi.fn() };
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),

@@ -29,14 +29,14 @@ describe("ProjectEditComponent", () => {
   beforeEach(async () => {
     const fb = new FormBuilder();
     const projectsEditInfoServiceSpy = {
-      initializationEditInfo: jasmine.createSpy("initializationEditInfo"),
-      loadProgramTagsAndProject: jasmine.createSpy("loadProgramTagsAndProject"),
-      destroy: jasmine.createSpy("destroy"),
-      deleteProject: jasmine.createSpy("deleteProject"),
-      saveProjectAsPublished: jasmine.createSpy("saveProjectAsPublished"),
-      saveProjectAsDraft: jasmine.createSpy("saveProjectAsDraft"),
-      submitProjectForm: jasmine.createSpy("submitProjectForm"),
-      closeSendingDescisionModal: jasmine.createSpy("closeSendingDescisionModal"),
+      initializationEditInfo: vi.fn(),
+      loadProgramTagsAndProject: vi.fn(),
+      destroy: vi.fn(),
+      deleteProject: vi.fn(),
+      saveProjectAsPublished: vi.fn(),
+      saveProjectAsDraft: vi.fn(),
+      submitProjectForm: vi.fn(),
+      closeSendingDescisionModal: vi.fn(),
       projectForm: fb.group({ name: [""] }),
       additionalForm: fb.group({}),
       profileId: signal(0),
@@ -57,12 +57,12 @@ describe("ProjectEditComponent", () => {
       errorModalMessage: signal(""),
       onEditClicked: signal(false),
       warningModalSeen: signal(false),
-      applyCloseWarningModal: jasmine.createSpy("applyCloseWarningModal"),
+      applyCloseWarningModal: vi.fn(),
     };
 
     const projectStepServiceSpy = {
       currentStep: signal(0),
-      navigateToStep: jasmine.createSpy("navigateToStep"),
+      navigateToStep: vi.fn(),
     };
 
     const projectVacancyUIServiceSpy = {
@@ -70,10 +70,10 @@ describe("ProjectEditComponent", () => {
     };
 
     const projectGoalServiceSpy = {
-      reset: jasmine.createSpy("reset"),
+      reset: vi.fn(),
     };
 
-    const emptySpy = { execute: jasmine.createSpy("execute") };
+    const emptySpy = { execute: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, ProjectEditComponent],

@@ -20,10 +20,10 @@ describe("ProgramListComponent", () => {
 
   beforeEach(async () => {
     const programDetailListInfoServiceSpy = {
-      initializeSearchForm: jasmine.createSpy("initializeSearchForm"),
-      initializationListData: jasmine.createSpy("initializationListData"),
-      initScroll: jasmine.createSpy("initScroll"),
-      destroy: jasmine.createSpy("destroy"),
+      initializeSearchForm: vi.fn(),
+      initializationListData: vi.fn(),
+      initScroll: vi.fn(),
+      destroy: vi.fn(),
     };
 
     const fb = new FormBuilder();
@@ -32,14 +32,14 @@ describe("ProgramListComponent", () => {
       listType: signal("projects"),
       searchedList: signal([]),
       profileProjSubsIds: signal([]),
-      routerLink: jasmine.createSpy("routerLink"),
-      applySetAvailableFilters: jasmine.createSpy("applySetAvailableFilters"),
+      routerLink: vi.fn(),
+      applySetAvailableFilters: vi.fn(),
       isHintExpertsModal: signal(false),
     };
 
     const programProjectsFilterInfoServiceSpy = {
-      initializationProgramProjectsFilter: jasmine.createSpy("initializationProgramProjectsFilter"),
-      clearFilters: jasmine.createSpy("clearFilters"),
+      initializationProgramProjectsFilter: vi.fn(),
+      clearFilters: vi.fn(),
       filters: signal([]),
       filterForm: fb.group({}),
     };
@@ -47,22 +47,22 @@ describe("ProgramListComponent", () => {
     const exportFileInfoServiceSpy = {
       loadingExports$: signal(initial()),
       loadingExports: signal(false),
-      downloadProjects: jasmine.createSpy("downloadProjects"),
-      downloadSubmittedProjects: jasmine.createSpy("downloadSubmittedProjects"),
-      downloadRates: jasmine.createSpy("downloadRates"),
+      downloadProjects: vi.fn(),
+      downloadSubmittedProjects: vi.fn(),
+      downloadRates: vi.fn(),
     };
 
     const swipeServiceSpy = {
       isFilterOpen: signal(false),
-      onSwipeStart: jasmine.createSpy("onSwipeStart"),
-      onSwipeMove: jasmine.createSpy("onSwipeMove"),
-      onSwipeEnd: jasmine.createSpy("onSwipeEnd"),
-      closeFilter: jasmine.createSpy("closeFilter"),
+      onSwipeStart: vi.fn(),
+      onSwipeMove: vi.fn(),
+      onSwipeEnd: vi.fn(),
+      closeFilter: vi.fn(),
     };
 
     const tooltipInfoServiceSpy = {
       isTooltipVisible: signal(false),
-      toggleTooltip: jasmine.createSpy("toggleTooltip"),
+      toggleTooltip: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

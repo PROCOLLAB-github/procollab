@@ -29,40 +29,41 @@ describe("OfficeComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const officeInfoServiceSpy = jasmine.createSpyObj(
-      "OfficeInfoService",
-      ["initializationOffice", "destroy", "onRejectInvite", "onAcceptInvite", "onLogout"],
-      {
-        invites: signal([]),
-      },
-    );
+    const officeInfoServiceSpy = {
+      initializationOffice: vi.fn(),
+      destroy: vi.fn(),
+      onRejectInvite: vi.fn(),
+      onAcceptInvite: vi.fn(),
+      onLogout: vi.fn(),
+      invites: signal([]),
+    };
 
     const officeUIInfoServiceSpy = {
       waitVerificationModal: signal(false),
       waitVerificationAccepted: signal(false),
       inviteErrorModal: signal(false),
       navItems: signal([]),
-      applyAcceptWaitVerification: jasmine.createSpy("applyAcceptWaitVerification"),
+      applyAcceptWaitVerification: vi.fn(),
     };
 
     const authUIInfoServiceSpy = {};
 
     const authRegisterServiceSpy = {
-      downloadPolicy: jasmine.createSpy("downloadPolicy"),
+      downloadPolicy: vi.fn(),
     };
 
     const chatUnreadStateSpy = {
       hasUnreads: signal(false),
-      ensureLoaded: jasmine.createSpy("ensureLoaded"),
-      markRead: jasmine.createSpy("markRead"),
+      ensureLoaded: vi.fn(),
+      markRead: vi.fn(),
     };
 
     const programShellInfoServiceSpy = {
       actualPrograms: signal([]),
-      ensureProgramsLoaded: jasmine
-        .createSpy("ensureProgramsLoaded")
-        .and.returnValue(of({ ok: true, value: { results: [], count: 0 } })),
-      invalidatePrograms: jasmine.createSpy("invalidatePrograms"),
+      ensureProgramsLoaded: vi
+        .fn()
+        .mockReturnValue(of({ ok: true, value: { results: [], count: 0 } })),
+      invalidatePrograms: vi.fn(),
     };
 
     const profileInfoServiceSpy = {

@@ -17,25 +17,15 @@ describe("RatingCardComponent", () => {
   let fixture: ComponentFixture<RatingCardComponent>;
 
   beforeEach(async () => {
-    const projectRatingSpy = jasmine.createSpyObj("ProjectRatingRepositoryPort", [
-      "getAll",
-      "postFilters",
-      "rate",
-    ]);
+    const projectRatingSpy = { getAll: vi.fn(), postFilters: vi.fn(), rate: vi.fn() };
 
-    const programDetailMainSpy = jasmine.createSpyObj("ProgramDetailMainUIInfoService", [], {
-      program: of({}),
-    });
+    const programDetailMainSpy = { program: of({}) };
 
-    const authPortSpy = jasmine.createSpyObj(
-      "AuthRepositoryPort",
-      ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles"],
-      {
-        fetchProfile: of({}),
-        fetchUserRoles: of([]),
-        fetchChangeableRoles: of([]),
-      },
-    );
+    const authPortSpy = {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+    };
 
     const industrySpy = {
       industries: signal([]),

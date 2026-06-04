@@ -23,16 +23,12 @@ describe("StageTwoComponent", () => {
       setOnboardingStage: of({}),
     };
 
-    const authPortSpy = jasmine.createSpyObj(
-      "AuthRepositoryPort",
-      ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles", "updateProfile"],
-      {
-        fetchProfile: of({}),
-        fetchUserRoles: of([]),
-        fetchChangeableRoles: of([]),
-        updateProfile: of({}),
-      },
-    );
+    const authPortSpy = {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+      updateProfile: of({}),
+    };
 
     const skillsSpy = {
       getSkillsNested: () => of([]),

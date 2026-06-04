@@ -18,15 +18,11 @@ describe("OnboardingComponent", () => {
       profile: of({}),
     };
 
-    const authPortSpy = jasmine.createSpyObj(
-      "AuthRepositoryPort",
-      ["fetchProfile", "fetchUserRoles", "fetchChangeableRoles"],
-      {
-        fetchProfile: of({}),
-        fetchUserRoles: of([]),
-        fetchChangeableRoles: of([]),
-      },
-    );
+    const authPortSpy = {
+      fetchProfile: of({}),
+      fetchUserRoles: of([]),
+      fetchChangeableRoles: of([]),
+    };
 
     await TestBed.configureTestingModule({
       imports: [OnboardingComponent, HttpClientTestingModule],

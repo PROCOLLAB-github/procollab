@@ -12,10 +12,8 @@ import { of } from "rxjs";
 import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
 
 const vacancyRepositorySpy = {
-  getVacancies: jasmine
-    .createSpy("getVacancies")
-    .and.returnValue(of({ results: [], count: 0, next: "", previous: "" })),
-  getOne: jasmine.createSpy("getOne").and.returnValue(of({})),
+  getVacancies: vi.fn().mockReturnValue(of({ results: [], count: 0, next: "", previous: "" })),
+  getOne: vi.fn().mockReturnValue(of({})),
 };
 
 describe("VacanciesComponent", () => {
@@ -23,24 +21,24 @@ describe("VacanciesComponent", () => {
   let fixture: ComponentFixture<VacanciesComponent>;
 
   beforeEach(async () => {
-    const vacancyInfoServiceSpy = jasmine.createSpyObj("VacancyInfoService", [
-      "initializationSearchValueForm",
-      "init",
-      "destroy",
-      "onSearchSubmit",
-    ]);
+    const vacancyInfoServiceSpy = {
+      initializationSearchValueForm: vi.fn(),
+      init: vi.fn(),
+      destroy: vi.fn(),
+      onSearchSubmit: vi.fn(),
+    };
 
     const fb = new FormBuilder();
     const vacancyUIInfoServiceSpy = {
       searchForm: fb.group({ search: [""] }),
       listType: signal<"all" | "my" | null>("all"),
-      applySearhValueChanged: jasmine.createSpy("applySearhValueChanged"),
+      applySearhValueChanged: vi.fn(),
     };
 
     const vacancyFilterInfoServiceSpy = {
       filterForm: fb.group({}),
-      initFilterForm: jasmine.createSpy("initFilterForm"),
-      clearFilters: jasmine.createSpy("clearFilters"),
+      initFilterForm: vi.fn(),
+      clearFilters: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

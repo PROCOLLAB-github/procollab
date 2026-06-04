@@ -21,14 +21,14 @@ describe("ChatDirectComponent", () => {
       typingPersons: signal([]),
       chat: signal(undefined),
       messages: signal([]),
-      initializationChatDirect: jasmine.createSpy("initializationChatDirect"),
-      destroy: jasmine.createSpy("destroy"),
-      onSubmitMessage: jasmine.createSpy("onSubmitMessage"),
-      onEditMessage: jasmine.createSpy("onEditMessage"),
-      onDeleteMessage: jasmine.createSpy("onDeleteMessage"),
-      onFetchMessages: jasmine.createSpy("onFetchMessages"),
-      onType: jasmine.createSpy("onType"),
-      onReadMessage: jasmine.createSpy("onReadMessage"),
+      initializationChatDirect: vi.fn(),
+      destroy: vi.fn(),
+      onSubmitMessage: vi.fn(),
+      onEditMessage: vi.fn(),
+      onDeleteMessage: vi.fn(),
+      onFetchMessages: vi.fn(),
+      onType: vi.fn(),
+      onReadMessage: vi.fn(),
     };
 
     const chatDirectUIInfoServiceSpy = {

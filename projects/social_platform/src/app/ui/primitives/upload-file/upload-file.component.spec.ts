@@ -9,13 +9,13 @@ import { of } from "rxjs";
 describe("UploadFileComponent", () => {
   let component: UploadFileComponent;
   let fixture: ComponentFixture<UploadFileComponent>;
-  let fileServiceSpy: jasmine.SpyObj<FileService>;
+  let fileServiceSpy: any;
 
   beforeEach(() => {
-    fileServiceSpy = jasmine.createSpyObj("FileService", {
-      uploadFile: of({}),
-      deleteFile: of({}),
-    });
+    fileServiceSpy = {
+      uploadFile: vi.fn().mockReturnValue(of({})),
+      deleteFile: vi.fn().mockReturnValue(of({})),
+    };
 
     TestBed.configureTestingModule({
       imports: [FormsModule, UploadFileComponent],
@@ -32,7 +32,7 @@ describe("UploadFileComponent", () => {
   });
 
   it("should upload file and emit change event", () => {
-    spyOn(component, "onUpdate");
+    vi.spyOn(component, "onUpdate");
 
     const input = fixture.nativeElement.querySelector("input[type=file]");
     const event = new Event("change");
@@ -42,8 +42,8 @@ describe("UploadFileComponent", () => {
   });
 
   it("should clear value and emit change event when delete button is clicked", () => {
-    spyOn(component, "onTouch");
-    spyOn(component, "onChange");
+    vi.spyOn(component, "onTouch");
+    vi.spyOn(component, "onChange");
 
     component.writeValue("http://example.com/image.png");
     fixture.detectChanges();

@@ -19,9 +19,9 @@ describe("ProjectsFilterComponent", () => {
     const programProjectsFilterInfoServiceSpy = {
       filterForm: signal(null),
       filters: signal([]),
-      toggleAdditionalFormValues: jasmine.createSpy("toggleAdditionalFormValues"),
-      setValue: jasmine.createSpy("setValue"),
-      clearFilters: jasmine.createSpy("clearFilters"),
+      toggleAdditionalFormValues: vi.fn(),
+      setValue: vi.fn(),
+      clearFilters: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

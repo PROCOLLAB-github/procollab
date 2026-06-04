@@ -23,7 +23,7 @@ describe("ProjectInfoComponent", () => {
     const authSpy = {
       profile: of({}),
     };
-    const projectNewsServiceSpy = jasmine.createSpyObj({ fetchNews: of({}) });
+    const projectNewsServiceSpy = { fetchNews: vi.fn().mockReturnValue(of({})) };
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),
@@ -33,11 +33,11 @@ describe("ProjectInfoComponent", () => {
       fetchLeaderProjects: of({} as any),
     };
 
-    const projectsDetailServiceSpy = jasmine.createSpyObj("ProjectsDetailService", [
-      "initializationProjectInfo",
-      "initCheckDescription",
-      "destroy",
-    ]);
+    const projectsDetailServiceSpy = {
+      initializationProjectInfo: vi.fn(),
+      initCheckDescription: vi.fn(),
+      destroy: vi.fn(),
+    };
 
     const projectsDetailUIInfoServiceSpy = {
       project: signal(undefined),
@@ -47,12 +47,10 @@ describe("ProjectInfoComponent", () => {
       user: signal(undefined),
       loggedUserId: signal(0),
       profileId: signal(0),
-      applySetLoggedUserId: jasmine.createSpy("applySetLoggedUserId"),
+      applySetLoggedUserId: vi.fn(),
     };
 
-    const expandServiceSpy = jasmine.createSpyObj("ExpandService", [], {
-      expanded: signal({}),
-    });
+    const expandServiceSpy = { expanded: signal({}) };
 
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, ReactiveFormsModule, ProjectInfoComponent],

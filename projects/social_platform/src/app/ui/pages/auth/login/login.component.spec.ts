@@ -18,7 +18,7 @@ describe("LoginComponent", () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthRepository", ["login", "memTokens", "clearTokens"]);
+    const authSpy = { login: vi.fn(), memTokens: vi.fn(), clearTokens: vi.fn() };
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),
