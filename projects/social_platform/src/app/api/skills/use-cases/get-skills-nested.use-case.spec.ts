@@ -8,10 +8,10 @@ import { SkillsGroup } from "@domain/skills/skills-group.model";
 
 describe("GetSkillsNestedUseCase", () => {
   let useCase: GetSkillsNestedUseCase;
-  let repo: jasmine.SpyObj<SkillsRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<SkillsRepositoryPort>("SkillsRepositoryPort", ["getSkillsNested"]);
+    repo = { getSkillsNested: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetSkillsNestedUseCase, { provide: SkillsRepositoryPort, useValue: repo }],
     });
@@ -20,33 +20,35 @@ describe("GetSkillsNestedUseCase", () => {
 
   it("делегирует вызов в репозиторий", () => {
     setup();
-    repo.getSkillsNested.and.returnValue(of([]));
+    repo.getSkillsNested.mockReturnValue(of([]));
 
     useCase.execute().subscribe();
 
-    expect(repo.getSkillsNested).toHaveBeenCalledOnceWith();
+    expect(repo.getSkillsNested).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("при успехе возвращает ok с группами навыков", done => {
-    setup();
-    const groups = [{ id: 1, name: "frontend", skills: [] }] as unknown as SkillsGroup[];
-    repo.getSkillsNested.and.returnValue(of(groups));
+  it("при успехе возвращает ok с группами навыков", () =>
+    new Promise<void>(done => {
+      setup();
+      const groups = [{ id: 1, name: "frontend", skills: [] }] as unknown as SkillsGroup[];
+      repo.getSkillsNested.mockReturnValue(of(groups));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(groups);
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(groups);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'server_error' }", done => {
-    setup();
-    repo.getSkillsNested.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'server_error' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getSkillsNested.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("server_error");
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("server_error");
+        done();
+      });
+    }));
 });

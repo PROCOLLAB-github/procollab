@@ -9,13 +9,10 @@ import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-cri
 
 describe("RateProjectUseCase", () => {
   let useCase: RateProjectUseCase;
-  let repo: jasmine.SpyObj<ProjectRatingRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectRatingRepositoryPort>("ProjectRatingRepositoryPort", [
-      "formValuesToDTO",
-      "rate",
-    ]);
+    repo = { formValuesToDTO: vi.fn(), rate: vi.fn() };
     TestBed.configureTestingModule({
       providers: [RateProjectUseCase, { provide: ProjectRatingRepositoryPort, useValue: repo }],
     });
@@ -27,39 +24,41 @@ describe("RateProjectUseCase", () => {
     const criteria: ProjectRatingCriterion[] = [];
     const outputVals = { a: 5 };
     const dto: ProjectRatingCriterionOutput[] = [];
-    repo.formValuesToDTO.and.returnValue(dto);
-    repo.rate.and.returnValue(of(undefined));
+    repo.formValuesToDTO.mockReturnValue(dto);
+    repo.rate.mockReturnValue(of(undefined));
 
     useCase.execute(1, criteria, outputVals).subscribe();
 
-    expect(repo.formValuesToDTO).toHaveBeenCalledOnceWith(criteria, outputVals);
-    expect(repo.rate).toHaveBeenCalledOnceWith(1, dto);
+    expect(repo.formValuesToDTO).toHaveBeenCalledExactlyOnceWith(criteria, outputVals);
+    expect(repo.rate).toHaveBeenCalledExactlyOnceWith(1, dto);
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.formValuesToDTO.and.returnValue([]);
-    repo.rate.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.formValuesToDTO.mockReturnValue([]);
+      repo.rate.mockReturnValue(of(undefined));
 
-    useCase.execute(1, [], {}).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      done();
-    });
-  });
+      useCase.execute(1, [], {}).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'rate_project_error' } с cause", done => {
-    setup();
-    repo.formValuesToDTO.and.returnValue([]);
-    const err = new Error("boom");
-    repo.rate.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'rate_project_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.formValuesToDTO.mockReturnValue([]);
+      const err = new Error("boom");
+      repo.rate.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1, [], {}).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("rate_project_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1, [], {}).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("rate_project_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

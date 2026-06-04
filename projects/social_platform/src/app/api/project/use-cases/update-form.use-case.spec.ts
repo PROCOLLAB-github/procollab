@@ -9,10 +9,10 @@ import { UpdateFormCommand } from "@domain/project/commands/update-form.command"
 
 describe("UpdateFormUseCase", () => {
   let useCase: UpdateFormUseCase;
-  let repo: jasmine.SpyObj<ProjectRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectRepositoryPort>("ProjectRepositoryPort", ["update"]);
+    repo = { update: vi.fn() };
     TestBed.configureTestingModule({
       providers: [UpdateFormUseCase, { provide: ProjectRepositoryPort, useValue: repo }],
     });
@@ -23,36 +23,38 @@ describe("UpdateFormUseCase", () => {
 
   it("делегирует (id, data) в update", () => {
     setup();
-    repo.update.and.returnValue(of({} as Project));
+    repo.update.mockReturnValue(of({} as Project));
 
     useCase.execute(cmd).subscribe();
 
-    expect(repo.update).toHaveBeenCalledOnceWith(cmd.id, cmd.data);
+    expect(repo.update).toHaveBeenCalledExactlyOnceWith(cmd.id, cmd.data);
   });
 
-  it("при успехе возвращает ok с проектом", done => {
-    setup();
-    const project = {} as Project;
-    repo.update.and.returnValue(of(project));
+  it("при успехе возвращает ok с проектом", () =>
+    new Promise<void>(done => {
+      setup();
+      const project = {} as Project;
+      repo.update.mockReturnValue(of(project));
 
-    useCase.execute(cmd).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(project);
-      done();
-    });
-  });
+      useCase.execute(cmd).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(project);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.update.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'unknown' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.update.mockReturnValue(throwError(() => err));
 
-    useCase.execute(cmd).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok && result.error.kind === "unknown") {
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(cmd).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok && result.error.kind === "unknown") {
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

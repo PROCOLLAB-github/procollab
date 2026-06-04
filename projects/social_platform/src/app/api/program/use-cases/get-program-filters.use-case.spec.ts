@@ -8,12 +8,10 @@ import { PartnerProgramFields } from "@domain/program/partner-program-fields.mod
 
 describe("GetProgramFiltersUseCase", () => {
   let useCase: GetProgramFiltersUseCase;
-  let repo: jasmine.SpyObj<ProgramRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProgramRepositoryPort>("ProgramRepositoryPort", [
-      "getProgramFilters",
-    ]);
+    repo = { getProgramFilters: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetProgramFiltersUseCase, { provide: ProgramRepositoryPort, useValue: repo }],
     });
@@ -22,37 +20,39 @@ describe("GetProgramFiltersUseCase", () => {
 
   it("делегирует programId в getProgramFilters", () => {
     setup();
-    repo.getProgramFilters.and.returnValue(of([]));
+    repo.getProgramFilters.mockReturnValue(of([]));
 
     useCase.execute(1).subscribe();
 
-    expect(repo.getProgramFilters).toHaveBeenCalledOnceWith(1);
+    expect(repo.getProgramFilters).toHaveBeenCalledExactlyOnceWith(1);
   });
 
-  it("при успехе возвращает ok с массивом полей", done => {
-    setup();
-    const fields: PartnerProgramFields[] = [];
-    repo.getProgramFilters.and.returnValue(of(fields));
+  it("при успехе возвращает ok с массивом полей", () =>
+    new Promise<void>(done => {
+      setup();
+      const fields: PartnerProgramFields[] = [];
+      repo.getProgramFilters.mockReturnValue(of(fields));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(fields);
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(fields);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_program_filters_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.getProgramFilters.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'get_program_filters_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.getProgramFilters.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_program_filters_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_program_filters_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

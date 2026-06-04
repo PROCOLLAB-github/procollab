@@ -7,10 +7,10 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 describe("ResetPasswordUseCase", () => {
   let useCase: ResetPasswordUseCase;
-  let repo: jasmine.SpyObj<AuthRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<AuthRepositoryPort>("AuthRepositoryPort", ["resetPassword"]);
+    repo = { resetPassword: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ResetPasswordUseCase, { provide: AuthRepositoryPort, useValue: repo }],
     });
@@ -19,31 +19,33 @@ describe("ResetPasswordUseCase", () => {
 
   it("делегирует email в репозиторий", () => {
     setup();
-    repo.resetPassword.and.returnValue(of(undefined));
+    repo.resetPassword.mockReturnValue(of(undefined));
 
     useCase.execute("u@e.com").subscribe();
 
-    expect(repo.resetPassword).toHaveBeenCalledOnceWith("u@e.com");
+    expect(repo.resetPassword).toHaveBeenCalledExactlyOnceWith("u@e.com");
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.resetPassword.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.resetPassword.mockReturnValue(of(undefined));
 
-    useCase.execute("u@e.com").subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute("u@e.com").subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.resetPassword.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.resetPassword.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute("u@e.com").subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("network");
-      done();
-    });
-  });
+      useCase.execute("u@e.com").subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("network");
+        done();
+      });
+    }));
 });

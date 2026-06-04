@@ -8,10 +8,10 @@ import { Vacancy } from "@domain/vacancy/vacancy.model";
 
 describe("GetVacancyDetailUseCase", () => {
   let useCase: GetVacancyDetailUseCase;
-  let repo: jasmine.SpyObj<VacancyRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<VacancyRepositoryPort>("VacancyRepositoryPort", ["getOne"]);
+    repo = { getOne: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetVacancyDetailUseCase, { provide: VacancyRepositoryPort, useValue: repo }],
     });
@@ -20,37 +20,39 @@ describe("GetVacancyDetailUseCase", () => {
 
   it("делегирует vacancyId в репозиторий", () => {
     setup();
-    repo.getOne.and.returnValue(of({} as Vacancy));
+    repo.getOne.mockReturnValue(of({} as Vacancy));
 
     useCase.execute(42).subscribe();
 
-    expect(repo.getOne).toHaveBeenCalledOnceWith(42);
+    expect(repo.getOne).toHaveBeenCalledExactlyOnceWith(42);
   });
 
-  it("при успехе возвращает ok с вакансией", done => {
-    setup();
-    const vacancy = { id: 42 } as unknown as Vacancy;
-    repo.getOne.and.returnValue(of(vacancy));
+  it("при успехе возвращает ok с вакансией", () =>
+    new Promise<void>(done => {
+      setup();
+      const vacancy = { id: 42 } as unknown as Vacancy;
+      repo.getOne.mockReturnValue(of(vacancy));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(vacancy);
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(vacancy);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_vacancy_detail_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.getOne.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'get_vacancy_detail_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.getOne.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(42).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_vacancy_detail_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(42).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_vacancy_detail_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

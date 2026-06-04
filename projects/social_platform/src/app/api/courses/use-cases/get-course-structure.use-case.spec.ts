@@ -8,12 +8,10 @@ import { CourseStructure } from "@domain/courses/courses.model";
 
 describe("GetCourseStructureUseCase", () => {
   let useCase: GetCourseStructureUseCase;
-  let repo: jasmine.SpyObj<CoursesRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<CoursesRepositoryPort>("CoursesRepositoryPort", [
-      "getCourseStructure",
-    ]);
+    repo = { getCourseStructure: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetCourseStructureUseCase, { provide: CoursesRepositoryPort, useValue: repo }],
     });
@@ -22,37 +20,39 @@ describe("GetCourseStructureUseCase", () => {
 
   it("делегирует courseId в репозиторий", () => {
     setup();
-    repo.getCourseStructure.and.returnValue(of({} as CourseStructure));
+    repo.getCourseStructure.mockReturnValue(of({} as CourseStructure));
 
     useCase.execute(7).subscribe();
 
-    expect(repo.getCourseStructure).toHaveBeenCalledOnceWith(7);
+    expect(repo.getCourseStructure).toHaveBeenCalledExactlyOnceWith(7);
   });
 
-  it("при успехе возвращает ok со структурой курса", done => {
-    setup();
-    const structure = { modules: [] } as unknown as CourseStructure;
-    repo.getCourseStructure.and.returnValue(of(structure));
+  it("при успехе возвращает ok со структурой курса", () =>
+    new Promise<void>(done => {
+      setup();
+      const structure = { modules: [] } as unknown as CourseStructure;
+      repo.getCourseStructure.mockReturnValue(of(structure));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(structure);
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(structure);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_course_structure_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.getCourseStructure.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'get_course_structure_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.getCourseStructure.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_course_structure_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_course_structure_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

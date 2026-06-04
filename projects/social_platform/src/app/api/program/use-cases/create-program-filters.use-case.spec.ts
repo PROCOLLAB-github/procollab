@@ -10,12 +10,10 @@ import { Project } from "@domain/project/project.model";
 
 describe("CreateProgramFiltersUseCase", () => {
   let useCase: CreateProgramFiltersUseCase;
-  let repo: jasmine.SpyObj<ProgramRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProgramRepositoryPort>("ProgramRepositoryPort", [
-      "createProgramFilters",
-    ]);
+    repo = { createProgramFilters: vi.fn() };
     TestBed.configureTestingModule({
       providers: [CreateProgramFiltersUseCase, { provide: ProgramRepositoryPort, useValue: repo }],
     });
@@ -26,34 +24,36 @@ describe("CreateProgramFiltersUseCase", () => {
 
   it("делегирует (programId, filters, params) в репозиторий", () => {
     setup();
-    repo.createProgramFilters.and.returnValue(of(page));
+    repo.createProgramFilters.mockReturnValue(of(page));
     const filters = { stack: ["ts"] };
     const params = new HttpParams();
 
     useCase.execute(1, filters, params).subscribe();
 
-    expect(repo.createProgramFilters).toHaveBeenCalledOnceWith(1, filters, params);
+    expect(repo.createProgramFilters).toHaveBeenCalledExactlyOnceWith(1, filters, params);
   });
 
-  it("при успехе возвращает ok с пагинацией проектов", done => {
-    setup();
-    repo.createProgramFilters.and.returnValue(of(page));
+  it("при успехе возвращает ok с пагинацией проектов", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.createProgramFilters.mockReturnValue(of(page));
 
-    useCase.execute(1, {}).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(page);
-      done();
-    });
-  });
+      useCase.execute(1, {}).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(page);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.createProgramFilters.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.createProgramFilters.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute(1, {}).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
-      done();
-    });
-  });
+      useCase.execute(1, {}).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        done();
+      });
+    }));
 });

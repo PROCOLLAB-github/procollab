@@ -11,10 +11,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 
 describe("GetProjectNewsDetailUseCase", () => {
   let useCase: GetProjectNewsDetailUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["fetchNewsDetail"]);
+    repo = { fetchNewsDetail: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         GetProjectNewsDetailUseCase,
@@ -26,37 +26,39 @@ describe("GetProjectNewsDetailUseCase", () => {
 
   it("делегирует (projectId, newsId) в fetchNewsDetail", () => {
     setup();
-    repo.fetchNewsDetail.and.returnValue(of({} as FeedNews));
+    repo.fetchNewsDetail.mockReturnValue(of({} as FeedNews));
 
     useCase.execute("p1", "42").subscribe();
 
-    expect(repo.fetchNewsDetail).toHaveBeenCalledOnceWith("p1", "42");
+    expect(repo.fetchNewsDetail).toHaveBeenCalledExactlyOnceWith("p1", "42");
   });
 
-  it("при успехе возвращает ok с новостью", done => {
-    setup();
-    const news = { id: 42 } as FeedNews;
-    repo.fetchNewsDetail.and.returnValue(of(news));
+  it("при успехе возвращает ok с новостью", () =>
+    new Promise<void>(done => {
+      setup();
+      const news = { id: 42 } as FeedNews;
+      repo.fetchNewsDetail.mockReturnValue(of(news));
 
-    useCase.execute("p1", "42").subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(news);
-      done();
-    });
-  });
+      useCase.execute("p1", "42").subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(news);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_project_news_detail_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.fetchNewsDetail.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'get_project_news_detail_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.fetchNewsDetail.mockReturnValue(throwError(() => err));
 
-    useCase.execute("p1", "42").subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_project_news_detail_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute("p1", "42").subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_project_news_detail_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

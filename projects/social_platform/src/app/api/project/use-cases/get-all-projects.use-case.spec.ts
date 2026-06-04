@@ -10,10 +10,10 @@ import { Project } from "@domain/project/project.model";
 
 describe("GetAllProjectsUseCase", () => {
   let useCase: GetAllProjectsUseCase;
-  let repo: jasmine.SpyObj<ProjectRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectRepositoryPort>("ProjectRepositoryPort", ["getAll"]);
+    repo = { getAll: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetAllProjectsUseCase, { provide: ProjectRepositoryPort, useValue: repo }],
     });
@@ -24,33 +24,35 @@ describe("GetAllProjectsUseCase", () => {
 
   it("делегирует params в getAll", () => {
     setup();
-    repo.getAll.and.returnValue(of(page));
+    repo.getAll.mockReturnValue(of(page));
     const params = new HttpParams();
 
     useCase.execute(params).subscribe();
 
-    expect(repo.getAll).toHaveBeenCalledOnceWith(params);
+    expect(repo.getAll).toHaveBeenCalledExactlyOnceWith(params);
   });
 
-  it("при успехе возвращает ok с пагинацией", done => {
-    setup();
-    repo.getAll.and.returnValue(of(page));
+  it("при успехе возвращает ok с пагинацией", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getAll.mockReturnValue(of(page));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(page);
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(page);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' }", done => {
-    setup();
-    repo.getAll.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getAll.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        done();
+      });
+    }));
 });

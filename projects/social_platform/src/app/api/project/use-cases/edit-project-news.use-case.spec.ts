@@ -11,10 +11,10 @@ import { FeedNews } from "@domain/news/project-news.model";
 
 describe("EditProjectNewsUseCase", () => {
   let useCase: EditProjectNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["editNews"]);
+    repo = { editNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [EditProjectNewsUseCase, { provide: PROJECT_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -23,38 +23,40 @@ describe("EditProjectNewsUseCase", () => {
 
   it("делегирует (projectId, newsId, patch) в editNews", () => {
     setup();
-    repo.editNews.and.returnValue(of({} as FeedNews));
+    repo.editNews.mockReturnValue(of({} as FeedNews));
     const patch: Partial<FeedNews> = { text: "new" };
 
     useCase.execute("p1", 42, patch).subscribe();
 
-    expect(repo.editNews).toHaveBeenCalledOnceWith("p1", 42, patch);
+    expect(repo.editNews).toHaveBeenCalledExactlyOnceWith("p1", 42, patch);
   });
 
-  it("при успехе возвращает ok с обновлённой новостью", done => {
-    setup();
-    const news = { id: 42 } as FeedNews;
-    repo.editNews.and.returnValue(of(news));
+  it("при успехе возвращает ok с обновлённой новостью", () =>
+    new Promise<void>(done => {
+      setup();
+      const news = { id: 42 } as FeedNews;
+      repo.editNews.mockReturnValue(of(news));
 
-    useCase.execute("p1", 42, {}).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(news);
-      done();
-    });
-  });
+      useCase.execute("p1", 42, {}).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(news);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'edit_project_news_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.editNews.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'edit_project_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.editNews.mockReturnValue(throwError(() => err));
 
-    useCase.execute("p1", 42, {}).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("edit_project_news_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute("p1", 42, {}).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("edit_project_news_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

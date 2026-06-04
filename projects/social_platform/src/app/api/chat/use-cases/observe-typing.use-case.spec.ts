@@ -8,13 +8,13 @@ import { TypingInChatEventDto } from "@domain/chat/chat.model";
 
 describe("ObserveTypingUseCase", () => {
   let useCase: ObserveTypingUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
   let subject: Subject<TypingInChatEventDto>;
 
   function setup(): void {
     subject = new Subject();
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["onTyping"]);
-    rt.onTyping.and.returnValue(subject.asObservable());
+    rt = { onTyping: vi.fn() };
+    rt.onTyping.mockReturnValue(subject.asObservable());
     TestBed.configureTestingModule({
       providers: [ObserveTypingUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -26,23 +26,24 @@ describe("ObserveTypingUseCase", () => {
 
     useCase.execute().subscribe();
 
-    expect(rt.onTyping).toHaveBeenCalledOnceWith();
+    expect(rt.onTyping).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("пробрасывает события из observable", done => {
-    setup();
-    const event = {
-      chatType: "project",
-      chatId: "1",
-      userId: 5,
-      endTime: 0,
-    } as TypingInChatEventDto;
+  it("пробрасывает события из observable", () =>
+    new Promise<void>(done => {
+      setup();
+      const event = {
+        chatType: "project",
+        chatId: "1",
+        userId: 5,
+        endTime: 0,
+      } as TypingInChatEventDto;
 
-    useCase.execute().subscribe(e => {
-      expect(e).toBe(event);
-      done();
-    });
+      useCase.execute().subscribe(e => {
+        expect(e).toBe(event);
+        done();
+      });
 
-    subject.next(event);
-  });
+      subject.next(event);
+    }));
 });

@@ -10,12 +10,12 @@ import { projectCreated } from "@domain/project/events/project-created.event";
 
 describe("CreateProjectUseCase", () => {
   let useCase: CreateProjectUseCase;
-  let repo: jasmine.SpyObj<ProjectRepositoryPort>;
-  let bus: jasmine.SpyObj<EventBus>;
+  let repo: any;
+  let bus: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectRepositoryPort>("ProjectRepositoryPort", ["postOne"]);
-    bus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
+    repo = { postOne: vi.fn() };
+    bus = { emit: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         CreateProjectUseCase,
@@ -28,35 +28,37 @@ describe("CreateProjectUseCase", () => {
 
   it("делегирует в postOne без аргументов", () => {
     setup();
-    repo.postOne.and.returnValue(of({} as Project));
+    repo.postOne.mockReturnValue(of({} as Project));
 
     useCase.execute().subscribe();
 
-    expect(repo.postOne).toHaveBeenCalledOnceWith();
+    expect(repo.postOne).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("при успехе возвращает ok с проектом и эмитит projectCreated", done => {
-    setup();
-    const project = { id: 1 } as Project;
-    repo.postOne.and.returnValue(of(project));
+  it("при успехе возвращает ok с проектом и эмитит projectCreated", () =>
+    new Promise<void>(done => {
+      setup();
+      const project = { id: 1 } as Project;
+      repo.postOne.mockReturnValue(of(project));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(project);
-      expect(bus.emit).toHaveBeenCalledOnceWith(projectCreated(project));
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(project);
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(projectCreated(project));
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' } и не эмитит", done => {
-    setup();
-    repo.postOne.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'unknown' } и не эмитит", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.postOne.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) expect(result.error.kind).toBe("unknown");
-      expect(bus.emit).not.toHaveBeenCalled();
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        expect(bus.emit).not.toHaveBeenCalled();
+        done();
+      });
+    }));
 });

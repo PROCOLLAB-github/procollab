@@ -9,10 +9,10 @@ import { ChatMessage } from "@domain/chat/chat-message.model";
 
 describe("LoadMessagesUseCase", () => {
   let useCase: LoadMessagesUseCase;
-  let repo: jasmine.SpyObj<ChatRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ChatRepositoryPort>("ChatRepositoryPort", ["loadMessages"]);
+    repo = { loadMessages: vi.fn() };
     TestBed.configureTestingModule({
       providers: [LoadMessagesUseCase, { provide: ChatRepositoryPort, useValue: repo }],
     });
@@ -28,32 +28,34 @@ describe("LoadMessagesUseCase", () => {
 
   it("делегирует projectId, offset, limit в репозиторий", () => {
     setup();
-    repo.loadMessages.and.returnValue(of(page));
+    repo.loadMessages.mockReturnValue(of(page));
 
     useCase.execute(1, "directs", 10, 20).subscribe();
 
-    expect(repo.loadMessages).toHaveBeenCalledOnceWith(1, "directs", 10, 20);
+    expect(repo.loadMessages).toHaveBeenCalledExactlyOnceWith(1, "directs", 10, 20);
   });
 
-  it("при успехе возвращает ok со страницей сообщений", done => {
-    setup();
-    repo.loadMessages.and.returnValue(of(page));
+  it("при успехе возвращает ok со страницей сообщений", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.loadMessages.mockReturnValue(of(page));
 
-    useCase.execute(1, "directs").subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(page);
-      done();
-    });
-  });
+      useCase.execute(1, "directs").subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(page);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'server_error' }", done => {
-    setup();
-    repo.loadMessages.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'server_error' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.loadMessages.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute(1, "directs").subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("server_error");
-      done();
-    });
-  });
+      useCase.execute(1, "directs").subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("server_error");
+        done();
+      });
+    }));
 });

@@ -8,13 +8,13 @@ import { OnChangeStatus } from "@domain/chat/chat.model";
 
 describe("ObserveSetOnlineUseCase", () => {
   let useCase: ObserveSetOnlineUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
   let subject: Subject<OnChangeStatus>;
 
   function setup(): void {
     subject = new Subject();
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["onSetOnline"]);
-    rt.onSetOnline.and.returnValue(subject.asObservable());
+    rt = { onSetOnline: vi.fn() };
+    rt.onSetOnline.mockReturnValue(subject.asObservable());
     TestBed.configureTestingModule({
       providers: [ObserveSetOnlineUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -26,18 +26,19 @@ describe("ObserveSetOnlineUseCase", () => {
 
     useCase.execute().subscribe();
 
-    expect(rt.onSetOnline).toHaveBeenCalledOnceWith();
+    expect(rt.onSetOnline).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("пробрасывает события из observable", done => {
-    setup();
-    const event: OnChangeStatus = { userId: 5 } as OnChangeStatus;
+  it("пробрасывает события из observable", () =>
+    new Promise<void>(done => {
+      setup();
+      const event: OnChangeStatus = { userId: 5 } as OnChangeStatus;
 
-    useCase.execute().subscribe(e => {
-      expect(e).toBe(event);
-      done();
-    });
+      useCase.execute().subscribe(e => {
+        expect(e).toBe(event);
+        done();
+      });
 
-    subject.next(event);
-  });
+      subject.next(event);
+    }));
 });

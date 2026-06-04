@@ -8,12 +8,10 @@ import { Resource } from "@domain/project/resource.model";
 
 describe("GetProjectResourcesUseCase", () => {
   let useCase: GetProjectResourcesUseCase;
-  let repo: jasmine.SpyObj<ProjectResourceRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectResourceRepositoryPort>("ProjectResourceRepositoryPort", [
-      "fetchAll",
-    ]);
+    repo = { fetchAll: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         GetProjectResourcesUseCase,
@@ -25,37 +23,39 @@ describe("GetProjectResourcesUseCase", () => {
 
   it("делегирует projectId в fetchAll", () => {
     setup();
-    repo.fetchAll.and.returnValue(of([]));
+    repo.fetchAll.mockReturnValue(of([]));
 
     useCase.execute(1).subscribe();
 
-    expect(repo.fetchAll).toHaveBeenCalledOnceWith(1);
+    expect(repo.fetchAll).toHaveBeenCalledExactlyOnceWith(1);
   });
 
-  it("при успехе возвращает ok с массивом ресурсов", done => {
-    setup();
-    const resources: Resource[] = [];
-    repo.fetchAll.and.returnValue(of(resources));
+  it("при успехе возвращает ok с массивом ресурсов", () =>
+    new Promise<void>(done => {
+      setup();
+      const resources: Resource[] = [];
+      repo.fetchAll.mockReturnValue(of(resources));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(resources);
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(resources);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_project_resources_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.fetchAll.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'get_project_resources_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.fetchAll.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_project_resources_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_project_resources_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

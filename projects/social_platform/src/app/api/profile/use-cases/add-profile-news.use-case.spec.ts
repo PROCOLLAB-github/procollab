@@ -11,10 +11,10 @@ import { ProfileNews } from "@domain/profile/profile-news.model";
 
 describe("AddProfileNewsUseCase", () => {
   let useCase: AddProfileNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["addNews"]);
+    repo = { addNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [AddProfileNewsUseCase, { provide: PROFILE_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -23,38 +23,40 @@ describe("AddProfileNewsUseCase", () => {
 
   it("делегирует userId и news в репозиторий", () => {
     setup();
-    repo.addNews.and.returnValue(of({} as ProfileNews));
+    repo.addNews.mockReturnValue(of({} as ProfileNews));
     const payload = { text: "hello", files: ["f1"] };
 
     useCase.execute("u1", payload).subscribe();
 
-    expect(repo.addNews).toHaveBeenCalledOnceWith("u1", payload);
+    expect(repo.addNews).toHaveBeenCalledExactlyOnceWith("u1", payload);
   });
 
-  it("при успехе возвращает ok с новостью", done => {
-    setup();
-    const news = { id: 1 } as unknown as ProfileNews;
-    repo.addNews.and.returnValue(of(news));
+  it("при успехе возвращает ok с новостью", () =>
+    new Promise<void>(done => {
+      setup();
+      const news = { id: 1 } as unknown as ProfileNews;
+      repo.addNews.mockReturnValue(of(news));
 
-    useCase.execute("u1", { text: "x", files: [] }).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(news);
-      done();
-    });
-  });
+      useCase.execute("u1", { text: "x", files: [] }).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(news);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'add_profile_news_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.addNews.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'add_profile_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.addNews.mockReturnValue(throwError(() => boom));
 
-    useCase.execute("u1", { text: "x", files: [] }).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("add_profile_news_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute("u1", { text: "x", files: [] }).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("add_profile_news_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

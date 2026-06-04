@@ -9,12 +9,12 @@ import { projectDeleted } from "@domain/project/events/project-deleted.event";
 
 describe("DeleteProjectUseCase", () => {
   let useCase: DeleteProjectUseCase;
-  let repo: jasmine.SpyObj<ProjectRepositoryPort>;
-  let bus: jasmine.SpyObj<EventBus>;
+  let repo: any;
+  let bus: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<ProjectRepositoryPort>("ProjectRepositoryPort", ["deleteOne"]);
-    bus = jasmine.createSpyObj<EventBus>("EventBus", ["emit"]);
+    repo = { deleteOne: vi.fn() };
+    bus = { emit: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         DeleteProjectUseCase,
@@ -27,37 +27,39 @@ describe("DeleteProjectUseCase", () => {
 
   it("делегирует id в deleteOne", () => {
     setup();
-    repo.deleteOne.and.returnValue(of(undefined));
+    repo.deleteOne.mockReturnValue(of(undefined));
 
     useCase.execute(7).subscribe();
 
-    expect(repo.deleteOne).toHaveBeenCalledOnceWith(7);
+    expect(repo.deleteOne).toHaveBeenCalledExactlyOnceWith(7);
   });
 
-  it("при успехе возвращает ok<void> и эмитит projectDeleted", done => {
-    setup();
-    repo.deleteOne.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void> и эмитит projectDeleted", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.deleteOne.mockReturnValue(of(undefined));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      expect(bus.emit).toHaveBeenCalledOnceWith(projectDeleted(7));
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(true);
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(projectDeleted(7));
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'unknown' } и не эмитит", done => {
-    setup();
-    const err = new Error("boom");
-    repo.deleteOne.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'unknown' } и не эмитит", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.deleteOne.mockReturnValue(throwError(() => err));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("unknown");
-        expect(result.error.cause).toBe(err);
-      }
-      expect(bus.emit).not.toHaveBeenCalled();
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("unknown");
+          expect(result.error.cause).toBe(err);
+        }
+        expect(bus.emit).not.toHaveBeenCalled();
+        done();
+      });
+    }));
 });

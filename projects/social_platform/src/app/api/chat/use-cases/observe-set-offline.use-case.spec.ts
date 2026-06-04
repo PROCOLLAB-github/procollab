@@ -8,13 +8,13 @@ import { OnChangeStatus } from "@domain/chat/chat.model";
 
 describe("ObserveSetOfflineUseCase", () => {
   let useCase: ObserveSetOfflineUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
   let subject: Subject<OnChangeStatus>;
 
   function setup(): void {
     subject = new Subject();
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["onSetOffline"]);
-    rt.onSetOffline.and.returnValue(subject.asObservable());
+    rt = { onSetOffline: vi.fn() };
+    rt.onSetOffline.mockReturnValue(subject.asObservable());
     TestBed.configureTestingModule({
       providers: [ObserveSetOfflineUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -26,18 +26,19 @@ describe("ObserveSetOfflineUseCase", () => {
 
     useCase.execute().subscribe();
 
-    expect(rt.onSetOffline).toHaveBeenCalledOnceWith();
+    expect(rt.onSetOffline).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("пробрасывает события из observable", done => {
-    setup();
-    const event: OnChangeStatus = { userId: 5 } as OnChangeStatus;
+  it("пробрасывает события из observable", () =>
+    new Promise<void>(done => {
+      setup();
+      const event: OnChangeStatus = { userId: 5 } as OnChangeStatus;
 
-    useCase.execute().subscribe(e => {
-      expect(e).toBe(event);
-      done();
-    });
+      useCase.execute().subscribe(e => {
+        expect(e).toBe(event);
+        done();
+      });
 
-    subject.next(event);
-  });
+      subject.next(event);
+    }));
 });

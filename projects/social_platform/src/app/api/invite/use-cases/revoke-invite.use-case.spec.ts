@@ -7,10 +7,10 @@ import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.por
 
 describe("RevokeInviteUseCase", () => {
   let useCase: RevokeInviteUseCase;
-  let repo: jasmine.SpyObj<InviteRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<InviteRepositoryPort>("InviteRepositoryPort", ["revokeInvite"]);
+    repo = { revokeInvite: vi.fn() };
     TestBed.configureTestingModule({
       providers: [RevokeInviteUseCase, { provide: InviteRepositoryPort, useValue: repo }],
     });
@@ -19,35 +19,37 @@ describe("RevokeInviteUseCase", () => {
 
   it("делегирует invitationId в репозиторий", () => {
     setup();
-    repo.revokeInvite.and.returnValue(of(undefined));
+    repo.revokeInvite.mockReturnValue(of(undefined));
 
     useCase.execute(1).subscribe();
 
-    expect(repo.revokeInvite).toHaveBeenCalledOnceWith(1);
+    expect(repo.revokeInvite).toHaveBeenCalledExactlyOnceWith(1);
   });
 
-  it("при успехе возвращает ok<void>", done => {
-    setup();
-    repo.revokeInvite.and.returnValue(of(undefined));
+  it("при успехе возвращает ok<void>", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.revokeInvite.mockReturnValue(of(undefined));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBe(true);
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(true);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'revoke_invite_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.revokeInvite.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'revoke_invite_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.revokeInvite.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(1).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("revoke_invite_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(1).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("revoke_invite_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

@@ -8,12 +8,10 @@ import { CourseLesson } from "@domain/courses/courses.model";
 
 describe("GetCourseLessonUseCase", () => {
   let useCase: GetCourseLessonUseCase;
-  let repo: jasmine.SpyObj<CoursesRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<CoursesRepositoryPort>("CoursesRepositoryPort", [
-      "getCourseLesson",
-    ]);
+    repo = { getCourseLesson: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetCourseLessonUseCase, { provide: CoursesRepositoryPort, useValue: repo }],
     });
@@ -22,37 +20,39 @@ describe("GetCourseLessonUseCase", () => {
 
   it("делегирует lessonId в репозиторий", () => {
     setup();
-    repo.getCourseLesson.and.returnValue(of({} as CourseLesson));
+    repo.getCourseLesson.mockReturnValue(of({} as CourseLesson));
 
     useCase.execute(7).subscribe();
 
-    expect(repo.getCourseLesson).toHaveBeenCalledOnceWith(7);
+    expect(repo.getCourseLesson).toHaveBeenCalledExactlyOnceWith(7);
   });
 
-  it("при успехе возвращает ok с уроком", done => {
-    setup();
-    const lesson = { id: 7 } as CourseLesson;
-    repo.getCourseLesson.and.returnValue(of(lesson));
+  it("при успехе возвращает ok с уроком", () =>
+    new Promise<void>(done => {
+      setup();
+      const lesson = { id: 7 } as CourseLesson;
+      repo.getCourseLesson.mockReturnValue(of(lesson));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(lesson);
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(lesson);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_course_lesson_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.getCourseLesson.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'get_course_lesson_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.getCourseLesson.mockReturnValue(throwError(() => boom));
 
-    useCase.execute(7).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_course_lesson_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute(7).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_course_lesson_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

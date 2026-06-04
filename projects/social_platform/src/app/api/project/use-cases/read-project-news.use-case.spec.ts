@@ -10,10 +10,10 @@ import {
 
 describe("ReadProjectNewsUseCase", () => {
   let useCase: ReadProjectNewsUseCase;
-  let repo: jasmine.SpyObj<NewsRepositoryPort<any>>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<NewsRepositoryPort<any>>("NewsRepositoryPort", ["readNews"]);
+    repo = { readNews: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ReadProjectNewsUseCase, { provide: PROJECT_NEWS_REPOSITORY, useValue: repo }],
     });
@@ -22,37 +22,39 @@ describe("ReadProjectNewsUseCase", () => {
 
   it("делегирует (projectId, newsIds) в readNews", () => {
     setup();
-    repo.readNews.and.returnValue(of([]));
+    repo.readNews.mockReturnValue(of([]));
 
     useCase.execute(1, [10, 20]).subscribe();
 
-    expect(repo.readNews).toHaveBeenCalledOnceWith(1, [10, 20]);
+    expect(repo.readNews).toHaveBeenCalledExactlyOnceWith(1, [10, 20]);
   });
 
-  it("при успехе возвращает ok с результатом", done => {
-    setup();
-    const res: void[] = [];
-    repo.readNews.and.returnValue(of(res));
+  it("при успехе возвращает ok с результатом", () =>
+    new Promise<void>(done => {
+      setup();
+      const res: void[] = [];
+      repo.readNews.mockReturnValue(of(res));
 
-    useCase.execute(1, [10]).subscribe(result => {
-      expect(result.ok).toBeTrue();
-      if (result.ok) expect(result.value).toBe(res);
-      done();
-    });
-  });
+      useCase.execute(1, [10]).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(res);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'read_project_news_error' } с cause", done => {
-    setup();
-    const err = new Error("boom");
-    repo.readNews.and.returnValue(throwError(() => err));
+  it("при ошибке возвращает fail { kind: 'read_project_news_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const err = new Error("boom");
+      repo.readNews.mockReturnValue(throwError(() => err));
 
-    useCase.execute(1, [10]).subscribe(result => {
-      expect(result.ok).toBeFalse();
-      if (!result.ok) {
-        expect(result.error.kind).toBe("read_project_news_error");
-        expect(result.error.cause).toBe(err);
-      }
-      done();
-    });
-  });
+      useCase.execute(1, [10]).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("read_project_news_error");
+          expect(result.error.cause).toBe(err);
+        }
+        done();
+      });
+    }));
 });

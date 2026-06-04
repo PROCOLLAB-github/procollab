@@ -8,10 +8,10 @@ import { Invite } from "@domain/invite/invite.model";
 
 describe("GetMyInvitesUseCase", () => {
   let useCase: GetMyInvitesUseCase;
-  let repo: jasmine.SpyObj<InviteRepositoryPort>;
+  let repo: any;
 
   function setup(): void {
-    repo = jasmine.createSpyObj<InviteRepositoryPort>("InviteRepositoryPort", ["getMy"]);
+    repo = { getMy: vi.fn() };
     TestBed.configureTestingModule({
       providers: [GetMyInvitesUseCase, { provide: InviteRepositoryPort, useValue: repo }],
     });
@@ -20,37 +20,39 @@ describe("GetMyInvitesUseCase", () => {
 
   it("вызывает getMy без аргументов", () => {
     setup();
-    repo.getMy.and.returnValue(of([]));
+    repo.getMy.mockReturnValue(of([]));
 
     useCase.execute().subscribe();
 
-    expect(repo.getMy).toHaveBeenCalledOnceWith();
+    expect(repo.getMy).toHaveBeenCalledExactlyOnceWith();
   });
 
-  it("при успехе возвращает ok со списком приглашений", done => {
-    setup();
-    const invites = [{ id: 1 }] as unknown as Invite[];
-    repo.getMy.and.returnValue(of(invites));
+  it("при успехе возвращает ok со списком приглашений", () =>
+    new Promise<void>(done => {
+      setup();
+      const invites = [{ id: 1 }] as unknown as Invite[];
+      repo.getMy.mockReturnValue(of(invites));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(invites);
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(invites);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'get_invites_error' } с cause", done => {
-    setup();
-    const boom = new Error("boom");
-    repo.getMy.and.returnValue(throwError(() => boom));
+  it("при ошибке возвращает fail { kind: 'get_invites_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.getMy.mockReturnValue(throwError(() => boom));
 
-    useCase.execute().subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.error.kind).toBe("get_invites_error");
-        expect(result.error.cause).toBe(boom);
-      }
-      done();
-    });
-  });
+      useCase.execute().subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_invites_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
 });

@@ -9,12 +9,12 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 
 describe("SearchSkillsUseCase", () => {
   let useCase: SearchSkillsUseCase;
-  let repo: jasmine.SpyObj<SkillsRepositoryPort>;
+  let repo: any;
 
   const page: ApiPagination<Skill> = { count: 0, results: [], next: "", previous: "" };
 
   function setup(): void {
-    repo = jasmine.createSpyObj<SkillsRepositoryPort>("SkillsRepositoryPort", ["getSkillsInline"]);
+    repo = { getSkillsInline: vi.fn() };
     TestBed.configureTestingModule({
       providers: [SearchSkillsUseCase, { provide: SkillsRepositoryPort, useValue: repo }],
     });
@@ -23,32 +23,34 @@ describe("SearchSkillsUseCase", () => {
 
   it("делегирует вызов с параметрами поиска", () => {
     setup();
-    repo.getSkillsInline.and.returnValue(of(page));
+    repo.getSkillsInline.mockReturnValue(of(page));
 
     useCase.execute("angular", 10, 20).subscribe();
 
-    expect(repo.getSkillsInline).toHaveBeenCalledOnceWith("angular", 10, 20);
+    expect(repo.getSkillsInline).toHaveBeenCalledExactlyOnceWith("angular", 10, 20);
   });
 
-  it("при успехе возвращает ok со страницей навыков", done => {
-    setup();
-    repo.getSkillsInline.and.returnValue(of(page));
+  it("при успехе возвращает ok со страницей навыков", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getSkillsInline.mockReturnValue(of(page));
 
-    useCase.execute("", 10, 0).subscribe(result => {
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.value).toBe(page);
-      done();
-    });
-  });
+      useCase.execute("", 10, 0).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(page);
+        done();
+      });
+    }));
 
-  it("при ошибке возвращает fail { kind: 'server_error' }", done => {
-    setup();
-    repo.getSkillsInline.and.returnValue(throwError(() => new Error("boom")));
+  it("при ошибке возвращает fail { kind: 'server_error' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getSkillsInline.mockReturnValue(throwError(() => new Error("boom")));
 
-    useCase.execute("", 10, 0).subscribe(result => {
-      expect(result.ok).toBe(false);
-      if (!result.ok) expect(result.error.kind).toBe("server_error");
-      done();
-    });
-  });
+      useCase.execute("", 10, 0).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("server_error");
+        done();
+      });
+    }));
 });

@@ -7,10 +7,10 @@ import { DeleteChatMessageDto } from "@domain/chat/chat.model";
 
 describe("DeleteMessageUseCase", () => {
   let useCase: DeleteMessageUseCase;
-  let rt: jasmine.SpyObj<ChatRealtimePort>;
+  let rt: any;
 
   function setup(): void {
-    rt = jasmine.createSpyObj<ChatRealtimePort>("ChatRealtimePort", ["deleteMessage"]);
+    rt = { deleteMessage: vi.fn() };
     TestBed.configureTestingModule({
       providers: [DeleteMessageUseCase, { provide: ChatRealtimePort, useValue: rt }],
     });
@@ -23,6 +23,6 @@ describe("DeleteMessageUseCase", () => {
 
     useCase.execute(dto);
 
-    expect(rt.deleteMessage).toHaveBeenCalledOnceWith(dto);
+    expect(rt.deleteMessage).toHaveBeenCalledExactlyOnceWith(dto);
   });
 });
