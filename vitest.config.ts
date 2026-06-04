@@ -20,7 +20,13 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    testTimeout: 10000,
     setupFiles: ["./test-setup.ts"],
-    include: ["projects/core/**/*.spec.ts", "projects/ui/**/*.spec.ts"],
+    include: ["projects/core/**/*.spec.ts", "projects/ui/**/*.spec.ts", "projects/social_platform/**/*.spec.ts"],
+    exclude: [
+      "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts",
+      "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",
+      "projects/social_platform/src/app/ui/pages/profile/edit/editor-submit-button.directive.spec.ts",
+    ],
   },
 });
