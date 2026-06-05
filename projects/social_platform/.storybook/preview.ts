@@ -1,3 +1,5 @@
+/** @format */
+
 import type { Preview } from "@storybook/angular";
 import { applicationConfig } from "@storybook/angular";
 import { provideZonelessChangeDetection } from "@angular/core";

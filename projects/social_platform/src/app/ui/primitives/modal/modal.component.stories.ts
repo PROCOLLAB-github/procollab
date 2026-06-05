@@ -17,7 +17,7 @@ const meta: Meta<ModalComponent> = {
     color: { control: "inline-radio", options: ["primary", "gradient"] },
     open: { control: "boolean" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       onClose: () => {},

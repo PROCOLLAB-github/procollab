@@ -30,14 +30,10 @@
               "projects/social_platform/src/favicon.ico",
               "projects/social_platform/src/assets"
             ],
-            "styles": [
-              "projects/social_platform/src/styles.scss"
-            ],
+            "styles": ["projects/social_platform/src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "projects/social_platform/src"
-              ]
+              "includePaths": ["projects/social_platform/src"]
             },
             "browser": "projects/social_platform/src/main.ts"
           },
@@ -95,12 +91,7 @@
             "configDir": "projects/social_platform/.storybook",
             "browserTarget": "social_platform:build",
             "compodoc": false,
-            "compodocArgs": [
-              "-e",
-              "json",
-              "-d",
-              "projects/social_platform"
-            ],
+            "compodocArgs": ["-e", "json", "-d", "projects/social_platform"],
             "port": 6006
           }
         },
@@ -110,12 +101,7 @@
             "configDir": "projects/social_platform/.storybook",
             "browserTarget": "social_platform:build",
             "compodoc": false,
-            "compodocArgs": [
-              "-e",
-              "json",
-              "-d",
-              "projects/social_platform"
-            ],
+            "compodocArgs": ["-e", "json", "-d", "projects/social_platform"],
             "outputDir": "dist/storybook/social_platform"
           }
         }

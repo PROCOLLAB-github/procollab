@@ -23,7 +23,7 @@ const meta: Meta<InputComponent> = {
     maxLength: { control: "number" },
     mask: { control: "text" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl(""),
@@ -69,15 +69,18 @@ export const WithMaxLength: Story = {
 };
 
 export const WithMask: Story = {
-  args: { placeholder: "+7 (000) 000-00-00", type: "tel", size: "small", mask: "+7 (000) 000-00-00" },
+  args: {
+    placeholder: "+7 (000) 000-00-00",
+    type: "tel",
+    size: "small",
+    mask: "+7 (000) 000-00-00",
+  },
 };
 
 export const Disabled: Story = {
   args: { placeholder: "Заблокировано", type: "text", size: "small" },
-  decorators: [
-    moduleMetadata({ imports: [ReactiveFormsModule] }),
-  ],
-  render: (args) => ({
+  decorators: [moduleMetadata({ imports: [ReactiveFormsModule] })],
+  render: args => ({
     props: {
       ...args,
       control: new FormControl({ value: "", disabled: true }),

@@ -15,7 +15,7 @@ const meta: Meta<TooltipComponent> = {
     tooltipWidth: { control: "number" },
     color: { control: "inline-radio", options: ["accent", "grey"] },
   },
-  render: (args) => ({
+  render: args => ({
     props: args,
     template: `
       <div style="padding: 60px 120px; position: relative;">

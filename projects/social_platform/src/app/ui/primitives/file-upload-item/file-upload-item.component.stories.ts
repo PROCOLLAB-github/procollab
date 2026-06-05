@@ -15,7 +15,7 @@ const meta: Meta<FileUploadItemComponent> = {
     loading: { control: "boolean" },
     error: { control: "text" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       onDelete: () => console.log("[FileUploadItem] delete"),

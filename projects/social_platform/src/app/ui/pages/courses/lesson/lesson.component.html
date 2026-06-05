@@ -29,7 +29,7 @@
 
     @if (loading()) {
       <div class="loading">
-        <app-loader size="125px" color="accent"></app-loader>
+        <app-loader size="125px" color="var(--accent)"></app-loader>
       </div>
     } @else {
       <div class="task__main" [class.task__complete]="isComplete()">

@@ -22,7 +22,7 @@
     </div>
   }
   @if (loading() && !error()) {
-    <app-loader class="file__right" type="circle" size="40px" color="accent"></app-loader>
+    <app-loader class="file__right" type="circle" size="40px" color="var(--accent)"></app-loader>
   }
   @if (!loading() && !error()) {
     <div class="file__right">

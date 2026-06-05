@@ -12,10 +12,7 @@ const meta: Meta<AvatarControlComponent> = {
   tags: ["autodocs"],
   decorators: [
     applicationConfig({
-      providers: [
-        provideHttpClient(),
-        { provide: API_URL, useValue: "" },
-      ],
+      providers: [provideHttpClient(), { provide: API_URL, useValue: "" }],
     }),
     moduleMetadata({
       imports: [ReactiveFormsModule],
@@ -26,7 +23,7 @@ const meta: Meta<AvatarControlComponent> = {
     error: { control: "boolean" },
     type: { control: "select", options: ["avatar", "project", "profile"] },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl(""),
@@ -45,7 +42,7 @@ type Story = StoryObj<AvatarControlComponent>;
 
 export const Default: Story = {
   args: { size: 140, type: "avatar" },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl("https://i.pravatar.cc/300?img=12"),
@@ -61,7 +58,7 @@ export const Default: Story = {
 
 export const Project: Story = {
   args: { size: 100, type: "project" },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl("https://picsum.photos/seed/project/200/200"),
@@ -77,7 +74,7 @@ export const Project: Story = {
 
 export const Profile: Story = {
   args: { size: 160, type: "profile" },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl("https://i.pravatar.cc/300?img=32"),
@@ -97,7 +94,7 @@ export const Empty: Story = {
 
 export const WithError: Story = {
   args: { size: 140, type: "avatar", error: true },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl(""),
@@ -113,7 +110,7 @@ export const WithError: Story = {
 
 export const Small: Story = {
   args: { size: 80, type: "avatar" },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl("https://i.pravatar.cc/300?img=47"),
