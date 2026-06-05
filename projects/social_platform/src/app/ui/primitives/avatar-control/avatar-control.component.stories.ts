@@ -1,7 +1,9 @@
 /** @format */
 
-import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata, applicationConfig } from "@storybook/angular";
 import { ReactiveFormsModule, FormControl } from "@angular/forms";
+import { provideHttpClient } from "@angular/common/http";
+import { API_URL } from "@corelib";
 import { AvatarControlComponent } from "./avatar-control.component";
 
 const meta: Meta<AvatarControlComponent> = {
@@ -9,6 +11,12 @@ const meta: Meta<AvatarControlComponent> = {
   component: AvatarControlComponent,
   tags: ["autodocs"],
   decorators: [
+    applicationConfig({
+      providers: [
+        provideHttpClient(),
+        { provide: API_URL, useValue: "" },
+      ],
+    }),
     moduleMetadata({
       imports: [ReactiveFormsModule],
     }),

@@ -15,6 +15,7 @@ const meta: Meta<SearchComponent> = {
   ],
   argTypes: {
     placeholder: { control: "text" },
+    type: { control: "select", options: ["text", "password", "email"] },
     openable: { control: "boolean" },
     error: { control: "boolean" },
   },
@@ -26,6 +27,7 @@ const meta: Meta<SearchComponent> = {
     template: `<app-search
       [formControl]="control"
       [placeholder]="placeholder"
+      [type]="type"
       [openable]="openable"
       [error]="error"
     ></app-search>`,
