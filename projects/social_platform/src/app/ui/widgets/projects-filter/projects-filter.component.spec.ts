@@ -6,7 +6,7 @@ import { ProjectsFilterComponent } from "./projects-filter.component";
 import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
-import { of } from "rxjs";
+import { signal } from "@angular/core";
 
 describe("ProjectsFilterComponent", () => {
   let component: ProjectsFilterComponent;
@@ -14,7 +14,7 @@ describe("ProjectsFilterComponent", () => {
 
   beforeEach(async () => {
     const industrySpy = {
-      industries: of([]),
+      industries: signal([]),
     };
 
     await TestBed.configureTestingModule({

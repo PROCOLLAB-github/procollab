@@ -6,7 +6,6 @@ import { CreateProjectUseCase } from "./create-project.use-case";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { Project } from "@domain/project/project.model";
 import { EventBus } from "@domain/shared/event-bus";
-import { projectCreated } from "@domain/project/events/project-created.event";
 
 describe("CreateProjectUseCase", () => {
   let useCase: CreateProjectUseCase;
@@ -44,7 +43,12 @@ describe("CreateProjectUseCase", () => {
       useCase.execute().subscribe(result => {
         expect(result.ok).toBe(true);
         if (result.ok) expect(result.value).toBe(project);
-        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(projectCreated(project));
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(
+          expect.objectContaining({
+            type: "ProjectCreated",
+            payload: { projectId: 1, project },
+          }),
+        );
         done();
       });
     }));

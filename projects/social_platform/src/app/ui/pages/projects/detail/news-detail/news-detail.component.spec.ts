@@ -18,7 +18,10 @@ describe("NewsDetailComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewsDetailComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture?.destroy();
   });
 
   it("should create", () => {

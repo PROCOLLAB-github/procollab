@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { OnboardingStageTwoComponent } from "./stage-two.component";
-import { of } from "rxjs";
+import { EMPTY, of } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { provideRouter } from "@angular/router";
@@ -11,6 +11,9 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 import { SpecializationsRepositoryPort } from "@domain/specializations/ports/specializations.repository.port";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { OnboardingService } from "@api/onboarding/onboarding.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { signal } from "@angular/core";
 
 describe("StageTwoComponent", () => {
   let component: OnboardingStageTwoComponent;
@@ -40,6 +43,8 @@ describe("StageTwoComponent", () => {
       getSpecializationsInline: () => of({ count: 0, results: [], next: "", previous: "" }),
     };
 
+    const onboardingSpy = { formValue$: EMPTY, setFormValue: () => {} };
+
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, HttpClientTestingModule, OnboardingStageTwoComponent],
       providers: [
@@ -47,6 +52,8 @@ describe("StageTwoComponent", () => {
         { provide: AuthRepositoryPort, useValue: authPortSpy },
         { provide: SkillsRepositoryPort, useValue: skillsSpy },
         { provide: SpecializationsRepositoryPort, useValue: specializationsSpy },
+        { provide: OnboardingService, useValue: onboardingSpy },
+        { provide: ProfileInfoService, useValue: { profile: signal(null) } },
         provideRouter([]),
       ],
     }).compileComponents();

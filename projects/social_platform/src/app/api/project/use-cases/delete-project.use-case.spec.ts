@@ -5,7 +5,6 @@ import { of, throwError } from "rxjs";
 import { DeleteProjectUseCase } from "./delete-project.use-case";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { EventBus } from "@domain/shared/event-bus";
-import { projectDeleted } from "@domain/project/events/project-deleted.event";
 
 describe("DeleteProjectUseCase", () => {
   let useCase: DeleteProjectUseCase;
@@ -41,7 +40,12 @@ describe("DeleteProjectUseCase", () => {
 
       useCase.execute(7).subscribe(result => {
         expect(result.ok).toBe(true);
-        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(projectDeleted(7));
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(
+          expect.objectContaining({
+            type: "ProjectDeleted",
+            payload: { projectId: 7 },
+          }),
+        );
         done();
       });
     }));
