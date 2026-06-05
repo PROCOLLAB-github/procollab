@@ -1,3 +1,5 @@
+/** @format */
+
 /// <reference types="vitest" />
 import { fileURLToPath } from "node:url";
 import angular from "@analogjs/vite-plugin-angular";
@@ -22,7 +24,11 @@ export default defineConfig({
     environment: "jsdom",
     testTimeout: 10000,
     setupFiles: ["./test-setup.ts"],
-    include: ["projects/core/**/*.spec.ts", "projects/ui/**/*.spec.ts", "projects/social_platform/**/*.spec.ts"],
+    include: [
+      "projects/core/**/*.spec.ts",
+      "projects/ui/**/*.spec.ts",
+      "projects/social_platform/**/*.spec.ts",
+    ],
     exclude: [
       "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts",
       "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",

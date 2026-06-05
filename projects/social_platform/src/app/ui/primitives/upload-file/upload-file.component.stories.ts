@@ -28,7 +28,7 @@ const meta: Meta<UploadFileComponent> = {
     error: { control: "boolean" },
     resetAfterUpload: { control: "boolean" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl(""),

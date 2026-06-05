@@ -27,7 +27,7 @@ const meta: Meta<FileItemComponent> = {
     mode: { control: "inline-radio", options: ["default", "preview"] },
     canDelete: { control: "boolean" },
   },
-  render: (args) => ({
+  render: args => ({
     props: args,
     template: `
       <div style="max-width: 400px;">

@@ -30,7 +30,7 @@ const meta: Meta<DropdownComponent> = {
     highlightedIndex: { control: "number" },
     colorText: { control: "inline-radio", options: ["grey", "red"] },
   },
-  render: (args) => ({
+  render: args => ({
     props: { ...args, options: sampleOptions },
     template: `
       <div style="padding: 80px 20px;">

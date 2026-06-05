@@ -26,7 +26,7 @@ const meta: Meta<SelectComponent> = {
     size: { control: "inline-radio", options: ["small", "big"] },
     error: { control: "boolean" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       options: sampleOptions,
@@ -59,7 +59,7 @@ export const WithError: Story = {
 
 export const WithValue: Story = {
   args: { placeholder: "Выбрано", size: "small" },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       options: sampleOptions,

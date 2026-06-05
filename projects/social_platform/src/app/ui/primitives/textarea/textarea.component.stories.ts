@@ -19,18 +19,21 @@ const meta: Meta<TextareaComponent> = {
     error: { control: "boolean" },
     maxLength: { control: "number" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl(""),
     },
-    template: `<app-textarea
-      [formControl]="control"
-      [placeholder]="placeholder"
-      [size]="size"
-      [error]="error"
-      [maxLength]="maxLength"
-    ></app-textarea>`,
+    template: `
+      <div [style.maxWidth]="size === 'small' ? '400px' : '100%'">
+        <app-textarea
+          [formControl]="control"
+          [placeholder]="placeholder"
+          [size]="size"
+          [error]="error"
+          [maxLength]="maxLength"
+        ></app-textarea>
+      </div>`,
   }),
 };
 export default meta;
@@ -55,15 +58,18 @@ export const WithMaxLength: Story = {
 
 export const WithValue: Story = {
   args: { placeholder: "С текстом", size: "small" },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl("Пример текста\nВторая строка"),
     },
-    template: `<app-textarea
-      [formControl]="control"
-      [placeholder]="placeholder"
-      [size]="size"
-    ></app-textarea>`,
+    template: `
+      <div [style.maxWidth]="size === 'small' ? '400px' : '100%'">
+        <app-textarea
+          [formControl]="control"
+          [placeholder]="placeholder"
+          [size]="size"
+        ></app-textarea>
+      </div>`,
   }),
 };

@@ -63,5 +63,5 @@ export const HasBorder: Story = {
     url: "",
     size: 50,
     hasBorder: true,
-  }
-}
+  },
+};

@@ -19,7 +19,7 @@ const meta: Meta<SearchComponent> = {
     openable: { control: "boolean" },
     error: { control: "boolean" },
   },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl(""),
@@ -51,7 +51,7 @@ export const WithError: Story = {
 
 export const WithValue: Story = {
   args: { placeholder: "Поиск", openable: true },
-  render: (args) => ({
+  render: args => ({
     props: {
       ...args,
       control: new FormControl("запрос"),

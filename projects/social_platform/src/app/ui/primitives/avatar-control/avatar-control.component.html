@@ -19,7 +19,7 @@
   <label [for]="controlId" class="control__label" [class.control__label--error]="error()">
     @if (loading) {
       <div class="control__loader">
-        <app-loader type="circle" color="accent" size="20px"></app-loader>
+        <app-loader type="circle" color="var(--accent)" size="20px"></app-loader>
       </div>
     }
     @if (value) {
