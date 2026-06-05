@@ -5,7 +5,6 @@ import { of, throwError } from "rxjs";
 import { AddProjectSubscriptionUseCase } from "./add-project-subscription.use-case";
 import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { EventBus } from "@domain/shared/event-bus";
-import { projectSubscribed } from "@domain/project/events/project-subscribed.event";
 
 describe("AddProjectSubscriptionUseCase", () => {
   let useCase: AddProjectSubscriptionUseCase;
@@ -41,7 +40,12 @@ describe("AddProjectSubscriptionUseCase", () => {
 
       useCase.execute(7).subscribe(result => {
         expect(result.ok).toBe(true);
-        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(projectSubscribed(7));
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(
+          expect.objectContaining({
+            type: "ProjectSubscribed",
+            payload: { projectId: 7 },
+          }),
+        );
         done();
       });
     }));

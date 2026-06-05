@@ -9,6 +9,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { of } from "rxjs";
 import { API_URL, PRODUCTION } from "@corelib";
+import { TokenService } from "@corelib";
 
 describe("ConfirmEmailComponent", () => {
   let component: ConfirmEmailComponent;
@@ -25,12 +26,14 @@ describe("ConfirmEmailComponent", () => {
       fetchLeaderProjects: of({} as any),
       resendEmail: of({} as any),
     };
+    const tokenSpy = { getTokens: vi.fn().mockReturnValue(null), memTokens: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [ConfirmEmailComponent, HttpClientTestingModule],
       providers: [
         { provide: AuthRepository, useValue: authSpy },
         { provide: AuthRepositoryPort, useValue: authPortSpy },
+        { provide: TokenService, useValue: tokenSpy },
         { provide: API_URL, useValue: "" },
         { provide: PRODUCTION, useValue: false },
         provideRouter([]),

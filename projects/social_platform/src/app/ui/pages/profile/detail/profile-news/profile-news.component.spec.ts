@@ -17,7 +17,10 @@ describe("ProfileNewsComponent", () => {
 
     fixture = TestBed.createComponent(ProfileNewsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture?.destroy();
   });
 
   it("should create", () => {

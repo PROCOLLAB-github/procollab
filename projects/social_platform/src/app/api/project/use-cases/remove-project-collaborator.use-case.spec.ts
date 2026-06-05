@@ -5,7 +5,6 @@ import { of, throwError } from "rxjs";
 import { RemoveProjectCollaboratorUseCase } from "./remove-project-collaborator.use-case";
 import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
 import { EventBus } from "@domain/shared/event-bus";
-import { removeProjectCollaborator } from "@domain/project/events/remove-project-collaborator.event";
 
 describe("RemoveProjectCollaboratorUseCase", () => {
   let useCase: RemoveProjectCollaboratorUseCase;
@@ -42,7 +41,12 @@ describe("RemoveProjectCollaboratorUseCase", () => {
       useCase.execute(1, 42).subscribe(result => {
         expect(result.ok).toBe(true);
         if (result.ok) expect(result.value).toBe(42);
-        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(removeProjectCollaborator(1, 42));
+        expect(bus.emit).toHaveBeenCalledExactlyOnceWith(
+          expect.objectContaining({
+            type: "RemoveProjectCollaborator",
+            payload: { projectId: 1, userId: 42 },
+          }),
+        );
         done();
       });
     }));
