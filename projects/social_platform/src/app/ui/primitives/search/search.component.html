@@ -16,7 +16,8 @@
         <input
           #inputEl
           class="text-body-12"
-          type="text"
+          [type]="type()"
+          [value]="value"
           [placeholder]="placeholder()"
           (input)="onInput($event)"
         />

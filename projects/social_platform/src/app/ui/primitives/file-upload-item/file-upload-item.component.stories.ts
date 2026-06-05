@@ -16,7 +16,11 @@ const meta: Meta<FileUploadItemComponent> = {
     error: { control: "text" },
   },
   render: (args) => ({
-    props: args,
+    props: {
+      ...args,
+      onDelete: () => console.log("[FileUploadItem] delete"),
+      onRetry: () => console.log("[FileUploadItem] retry"),
+    },
     template: `
       <div style="max-width: 400px;">
         <app-file-upload-item
@@ -26,6 +30,8 @@ const meta: Meta<FileUploadItemComponent> = {
           [link]="link"
           [loading]="loading"
           [error]="error"
+          (delete)="onDelete()"
+          (retry)="onRetry()"
         ></app-file-upload-item>
       </div>
     `,

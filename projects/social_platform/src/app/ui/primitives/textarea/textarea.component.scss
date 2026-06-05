@@ -6,7 +6,17 @@
 .field {
   position: relative;
 
+  &--small {
+    min-width: 245px;
+  }
+
+  &--big {
+    width: 100%;
+  }
+
   &__input {
+    display: block;
+    width: 100%;
     min-height: 162px;
     padding: 12px 18px;
     color: var(--black);

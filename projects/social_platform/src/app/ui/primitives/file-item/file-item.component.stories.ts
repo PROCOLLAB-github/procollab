@@ -23,6 +23,7 @@ const meta: Meta<FileItemComponent> = {
     type: { control: "text" },
     name: { control: "text" },
     size: { control: "number" },
+    link: { control: "text" },
     mode: { control: "inline-radio", options: ["default", "preview"] },
     canDelete: { control: "boolean" },
   },
@@ -34,6 +35,7 @@ const meta: Meta<FileItemComponent> = {
           [type]="type"
           [name]="name"
           [size]="size"
+          [link]="link"
           [mode]="mode"
           [canDelete]="canDelete"
         ></app-file-item>
@@ -52,6 +54,7 @@ export const Default: Story = {
     size: 2457600,
     mode: "default",
     canDelete: false,
+    link: "https://example.com/Документ.pdf",
   },
 };
 
@@ -62,6 +65,7 @@ export const WithDelete: Story = {
     size: 1048576,
     mode: "default",
     canDelete: true,
+    link: "https://example.com/Удаляемый.pdf",
   },
 };
 
@@ -72,6 +76,7 @@ export const Preview: Story = {
     size: 3145728,
     mode: "preview",
     canDelete: true,
+    link: "https://example.com/Фото.jpg",
   },
 };
 
@@ -82,5 +87,6 @@ export const SmallFile: Story = {
     size: 2048,
     mode: "default",
     canDelete: false,
+    link: "https://example.com/readme.txt",
   },
 };
