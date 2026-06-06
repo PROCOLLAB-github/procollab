@@ -17,6 +17,7 @@ import {
 import { Observable, finalize, forkJoin, shareReplay } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { clearCacheKey, readCache, writeCache } from "@utils/cache";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
 
 const ROLES_CACHE_KEY = "users:roles";
 const CHANGEABLE_ROLES_CACHE_KEY = "users:changeableRoles";
@@ -30,8 +31,10 @@ export class ProfileInfoService {
   private readonly roles$ = signal<AsyncState<UserRole[]>>(initial());
   private readonly changeableRoles$ = signal<AsyncState<UserRole[]>>(initial());
   private readonly leaderProjects$ = signal<AsyncState<Project[]>>(initial());
+  private readonly profileSubs$ = signal<AsyncState<Project[]>>(initial());
 
   private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
 
   readonly profile = computed(() => {
     const state = this.profile$();
@@ -65,6 +68,14 @@ export class ProfileInfoService {
     return [];
   });
 
+  readonly profileSubs = computed(() => {
+    const state = this.profileSubs$();
+    if (isSuccess(state)) return state.data;
+    if (isLoading(state)) return state.previous ?? [];
+    if (isFailure(state)) return state.previous ?? [];
+    return [];
+  });
+
   readonly isLoading = computed(() => {
     return (
       isLoading(this.profile$()) || isLoading(this.roles$()) || isLoading(this.changeableRoles$())
@@ -75,13 +86,21 @@ export class ProfileInfoService {
     return isLoading(this.leaderProjects$());
   });
 
+  readonly isProfileSubsLoading = computed(() => {
+    return isLoading(this.profileSubs$());
+  });
+
   private profileInflight: Observable<unknown> | null = null;
   private leaderInflight: Observable<unknown> | null = null;
+  private profileSubsInflight: Observable<unknown> | null = null;
 
   ensureProfileLoaded(): void {
     if (
       this.isLoading() ||
-      (isSuccess(this.profile$()) && isSuccess(this.roles$()) && isSuccess(this.changeableRoles$()))
+      (isSuccess(this.profile$()) &&
+        isSuccess(this.roles$()) &&
+        isSuccess(this.changeableRoles$()) &&
+        isSuccess(this.profileSubs$()))
     )
       return;
 
@@ -109,6 +128,11 @@ export class ProfileInfoService {
   ensureLeaderProjectsLoaded(): void {
     if (this.isLeaderProjectsLoading() || isSuccess(this.leaderProjects$())) return;
     this.fetchLeaderProjects();
+  }
+
+  ensureProfileSubsLoaded(): void {
+    if (this.isProfileSubsLoading() || isSuccess(this.profileSubs$())) return;
+    this.fetchProfileSubs();
   }
 
   private fetchProfile(): void {
@@ -171,6 +195,36 @@ export class ProfileInfoService {
     });
   }
 
+  private fetchProfileSubs(): void {
+    if (this.profileSubsInflight) return;
+
+    const state = this.profileSubs$();
+    const prev = isSuccess(state) ? state.data : undefined;
+    this.profileSubs$.set(loading(prev));
+
+    const profileId = this.profile()?.id;
+    if (!profileId) {
+      this.profileSubs$.set(failure("Profile not loaded", prev));
+      return;
+    }
+
+    this.profileSubsInflight = this.getProjectSubscriptionsUseCase.execute(profileId).pipe(
+      finalize(() => (this.profileSubsInflight = null)),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+
+    this.profileSubsInflight.subscribe({
+      next: (result: any) => {
+        if (!result.ok) {
+          this.profileSubs$.set(failure(result.error, prev));
+          return;
+        }
+        this.profileSubs$.set(success(result.value.results));
+      },
+      error: err => this.profileSubs$.set(failure(err, prev)),
+    });
+  }
+
   refreshProfile(): void {
     this.profileInflight = null;
     this.fetchProfile();
@@ -195,7 +249,21 @@ export class ProfileInfoService {
     this.leaderProjects$.set(initial());
   }
 
+  refreshProfileSubs(): void {
+    this.profileSubsInflight = null;
+    this.fetchProfileSubs();
+  }
+
+  invalidateProfileSubs(): void {
+    this.profileSubsInflight = null;
+    this.profileSubs$.set(initial());
+  }
+
   applyProfileUpdated(profile: User): void {
     this.profile$.set(success(profile));
+  }
+
+  applyProfileSubsUpdated(subs: Project[]): void {
+    this.profileSubs$.set(success(subs));
   }
 }

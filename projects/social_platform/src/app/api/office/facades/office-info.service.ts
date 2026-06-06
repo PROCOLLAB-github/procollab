@@ -1,7 +1,7 @@
 /** @format */
 
 import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
-import { filter, tap } from "rxjs";
+import { catchError, EMPTY, filter, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
@@ -149,6 +149,7 @@ export class OfficeInfoService {
     this.authRepository
       .logout()
       .pipe(
+        catchError(() => EMPTY),
         tap(() => {
           this.router
             .navigateByUrl(AppRoutes.auth.login())

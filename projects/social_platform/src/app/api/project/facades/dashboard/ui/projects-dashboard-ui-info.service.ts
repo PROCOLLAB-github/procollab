@@ -3,24 +3,22 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { DashboardItem, dashboardItemBuilder } from "@utils/dashboardItemBuilder";
 import { Project } from "@domain/project/project.model";
-import { ProgramDetailListUIInfoService } from "../../../../program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
 /** UI-проекция дашборда проектов: computed-сигналы перечня. */
 @Injectable()
 export class ProjectsDashboardUIInfoService {
-  private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
   readonly dashboardItems = signal<DashboardItem[]>([]);
-
-  private readonly profileSubs = this.programDetailListUIInfoService.profileSubscriptions;
 
   applySetDashboardItems(
     all: ApiPagination<Project>,
     my: ApiPagination<Project>,
     subs: ApiPagination<Project>,
   ): void {
-    this.profileSubs.set(subs.results);
+    this.profileInfoService.applyProfileSubsUpdated(subs.results);
 
     const allProjects = all.results.slice(0, 4);
     const myProjects = my.results.slice(0, 4);

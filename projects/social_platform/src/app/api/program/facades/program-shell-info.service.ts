@@ -12,7 +12,7 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
-import { Observable, finalize, shareReplay, of, tap, EMPTY } from "rxjs";
+import { Observable, finalize, shareReplay, of, tap } from "rxjs";
 import { readCache, writeCache } from "@utils/cache";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
@@ -100,7 +100,7 @@ export class ProgramShellInfoService {
   }
 
   private fetchPrograms(filter?: HttpParams): Observable<Result<ApiPagination<Program>, unknown>> {
-    if (this.programsInflight) return EMPTY;
+    if (this.programsInflight) return this.programsInflight;
 
     const state = this.programs$();
     const prev = isSuccess(state) ? state.data : undefined;

@@ -2,17 +2,17 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { ApiPagination } from "@domain/other/api-pagination.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
-import { Project } from "@domain/project/project.model";
 import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import Fuse from "fuse.js";
 
 /** Состояние интерфейса списков программы: проекты, участники, рейтинг, фильтры и пагинация. */
 @Injectable()
 export class ProgramDetailListUIInfoService {
   private readonly fb = inject(FormBuilder);
+  private readonly profileInfoService = inject(ProfileInfoService);
 
   readonly listType = signal<"projects" | "members" | "rating">("projects");
 
@@ -41,8 +41,9 @@ export class ProgramDetailListUIInfoService {
     return new Fuse(list, { keys }).search(search).map(r => r.item);
   });
 
-  readonly profileSubscriptions = signal<Project[]>([]);
-  readonly profileProjSubsIds = computed(() => this.profileSubscriptions().map(sub => sub.id));
+  readonly profileProjSubsIds = computed(() =>
+    this.profileInfoService.profileSubs().map(sub => sub.id),
+  );
 
   readonly availableFilters = signal<PartnerProgramFields[]>([]);
 
@@ -83,10 +84,6 @@ export class ProgramDetailListUIInfoService {
 
   applySetAvailableFilters(filters: PartnerProgramFields[]): void {
     this.availableFilters.set(filters);
-  }
-
-  applySetupProfile(subs: ApiPagination<Project>): void {
-    this.profileSubscriptions.set(subs.results);
   }
 
   applyHintModalOpen(): void {

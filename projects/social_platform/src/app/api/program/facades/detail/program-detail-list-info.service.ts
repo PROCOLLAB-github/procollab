@@ -6,7 +6,6 @@ import {
   concatMap,
   distinctUntilChanged,
   EMPTY,
-  filter,
   fromEvent,
   map,
   of,
@@ -23,7 +22,6 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
 import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
 import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
-import { GetProjectSubscriptionsUseCase } from "../../../project/use-cases/get-project-subscriptions.use-case";
 import { FilterProjectRatingsUseCase } from "../../use-cases/filter-project-ratings.use-case";
 import { GetProjectRatingsUseCase } from "../../use-cases/get-project-ratings.use-case";
 import { Project } from "@domain/project/project.model";
@@ -47,7 +45,6 @@ export class ProgramDetailListInfoService {
   private readonly createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   private readonly getAllMembersUseCase = inject(GetAllMembersUseCase);
-  private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
   private readonly filterProjectRatingsUseCase = inject(FilterProjectRatingsUseCase);
   private readonly getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
 
@@ -76,7 +73,7 @@ export class ProgramDetailListInfoService {
 
     this.setupSearch();
 
-    if (this.listType() === "projects") this.setupProfile();
+    if (this.listType() === "projects") this.profileInfoService.ensureProfileSubsLoaded();
 
     this.setupFilters();
   }
@@ -124,25 +121,6 @@ export class ProgramDetailListInfoService {
       )
       .subscribe(search => {
         this.programDetailListUIInfoService.searchQuery.set(search ?? "");
-      });
-  }
-
-  setupProfile(): void {
-    toObservable(this.profile, { injector: this.injector })
-      .pipe(
-        filter(profile => !!profile),
-        switchMap(p => this.getProjectSubscriptionsUseCase.execute(p!.id)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            this.logger.error("Error loading profile subscriptions:", result.error);
-            return;
-          }
-
-          this.programDetailListUIInfoService.applySetupProfile(result.value);
-        },
       });
   }
 

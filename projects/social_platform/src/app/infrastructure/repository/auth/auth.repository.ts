@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
 import { User, UserInput, UserRole } from "@domain/auth/user.model";
-import { map, Observable, take, tap } from "rxjs";
+import { catchError, EMPTY, map, Observable, take, tap } from "rxjs";
 import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { plainToInstance } from "class-transformer";
 import { TokenService } from "@corelib";
@@ -33,6 +33,11 @@ export class AuthRepository implements AuthRepositoryPort {
       tap(() => {
         this.tokenService.clearTokens();
         this.chatStateService.reset();
+      }),
+      catchError(() => {
+        this.tokenService.clearTokens();
+        this.chatStateService.reset();
+        return EMPTY;
       }),
     );
   }

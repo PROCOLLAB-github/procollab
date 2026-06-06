@@ -158,6 +158,8 @@ export class ProjectsListInfoService {
           },
         });
     }
+
+    this.profileInfoService.ensureProfileSubsLoaded();
   }
 
   initScroll(target: HTMLElement, listRoot: ElementRef<HTMLUListElement>): void {
