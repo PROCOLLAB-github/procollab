@@ -7,6 +7,7 @@ import { of } from "rxjs";
 import { provideRouter } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { OverlayModule } from "@angular/cdk/overlay";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { API_URL } from "@corelib";
 
 describe("ChatMessageComponent", () => {
@@ -26,6 +27,10 @@ describe("ChatMessageComponent", () => {
       providers: [
         { provide: AuthRepositoryPort, useValue: authSpy },
         { provide: API_URL, useValue: "" },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         provideRouter([]),
       ],
     }).compileComponents();

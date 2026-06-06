@@ -10,6 +10,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { provideNgxMask } from "ngx-mask";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { API_URL } from "@corelib";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 
 describe("ChatWindowComponent", () => {
   let component: ChatWindowComponent;
@@ -28,6 +29,10 @@ describe("ChatWindowComponent", () => {
       providers: [
         { provide: AuthRepositoryPort, useValue: authSpy },
         { provide: API_URL, useValue: "" },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         provideNgxMask(),
         provideRouter([]),
       ],

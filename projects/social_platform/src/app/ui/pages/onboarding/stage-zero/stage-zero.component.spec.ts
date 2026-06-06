@@ -10,6 +10,7 @@ import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { provideNgxMask } from "ngx-mask";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 
 describe("StageZeroComponent", () => {
   let component: OnboardingStageZeroComponent;
@@ -33,6 +34,10 @@ describe("StageZeroComponent", () => {
       providers: [
         { provide: AuthRepository, useValue: authSpy },
         { provide: AuthRepositoryPort, useValue: authPortSpy },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         provideNgxMask(),
         provideRouter([]),
       ],

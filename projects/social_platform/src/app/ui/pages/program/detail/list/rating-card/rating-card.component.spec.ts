@@ -11,6 +11,7 @@ import { ProjectRatingRepositoryPort } from "@domain/project/ports/project-ratin
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 
 describe("RatingCardComponent", () => {
   let component: RatingCardComponent;
@@ -40,6 +41,10 @@ describe("RatingCardComponent", () => {
         { provide: ProgramDetailMainUIInfoService, useValue: programDetailMainSpy },
         { provide: AuthRepositoryPort, useValue: authPortSpy },
         { provide: IndustryRepositoryPort, useValue: industrySpy },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         provideRouter([]),
       ],
     }).compileComponents();

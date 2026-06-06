@@ -15,6 +15,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { SpecializationsRepositoryPort } from "@domain/specializations/ports/specializations.repository.port";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { API_URL } from "@corelib";
 
 describe("ProfileEditComponent", () => {
@@ -51,6 +52,10 @@ describe("ProfileEditComponent", () => {
         { provide: SpecializationsRepositoryPort, useValue: specializationsSpy },
         { provide: SkillsRepositoryPort, useValue: skillsSpy },
         { provide: ProjectRepositoryPort, useValue: {} },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         { provide: API_URL, useValue: "" },
         provideNgxMask(),
         provideRouter([]),

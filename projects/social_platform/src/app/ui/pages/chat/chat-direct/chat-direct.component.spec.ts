@@ -10,6 +10,7 @@ import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.servic
 import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { API_URL } from "@corelib";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { provideNgxMask } from "ngx-mask";
 
 describe("ChatDirectComponent", () => {
@@ -51,6 +52,10 @@ describe("ChatDirectComponent", () => {
           },
         },
         { provide: API_URL, useValue: "" },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
       ],
     })
       .overrideComponent(ChatDirectComponent, {

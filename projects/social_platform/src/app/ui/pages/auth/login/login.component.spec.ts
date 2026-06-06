@@ -10,6 +10,7 @@ import { provideNgxMask } from "ngx-mask";
 import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { of } from "rxjs";
 import { API_URL, PRODUCTION } from "@corelib";
 
@@ -41,6 +42,10 @@ describe("LoginComponent", () => {
         { provide: AuthRepositoryPort, useValue: authPortSpy },
         { provide: API_URL, useValue: "" },
         { provide: PRODUCTION, useValue: false },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         provideRouter([]),
         provideNgxMask(),
       ],

@@ -8,6 +8,7 @@ import { AuthRepository } from "@infrastructure/repository/auth/auth.repository"
 import { OnboardingService } from "@api/onboarding/onboarding.service";
 import { provideRouter } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 
 describe("StageThreeComponent", () => {
   let component: OnboardingStageThreeComponent;
@@ -28,6 +29,10 @@ describe("StageThreeComponent", () => {
         { provide: AuthRepository, useValue: authSpy },
         { provide: OnboardingService, useValue: onboardingSpy },
         { provide: AuthRepositoryPort, useValue: authPortSpy },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
         provideRouter([]),
       ],
     }).compileComponents();

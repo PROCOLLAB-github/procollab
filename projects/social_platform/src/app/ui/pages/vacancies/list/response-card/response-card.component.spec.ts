@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ResponseCardComponent } from "./response-card.component";
 import { provideRouter } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { of } from "rxjs";
 
 describe("ResponseCardComponent", () => {
@@ -23,7 +24,14 @@ describe("ResponseCardComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [ResponseCardComponent],
-      providers: [provideRouter([]), { provide: AuthRepositoryPort, useValue: authPortSpy }],
+      providers: [
+        provideRouter([]),
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
+      ],
     }).compileComponents();
   });
 
