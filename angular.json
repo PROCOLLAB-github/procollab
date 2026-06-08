@@ -21,7 +21,8 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/social_platform"
+              "base": "dist/social_platform",
+              "browser": ""
             },
             "index": "projects/social_platform/src/index.html",
             "tsConfig": "projects/social_platform/tsconfig.app.json",
