@@ -49,7 +49,7 @@ export class InviteHttpAdapter {
   getByProject(projectId: number): Observable<Invite[]> {
     return this.apiService.get<Invite[]>(
       `${this.INVITES_URL}/`,
-      new HttpParams({ fromObject: { project: projectId, user: "any" } }),
+      new HttpParams({ fromObject: { project: projectId } }),
     );
   }
 }

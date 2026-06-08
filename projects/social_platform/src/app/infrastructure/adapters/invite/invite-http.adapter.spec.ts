@@ -80,7 +80,7 @@ describe("InviteHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/invites/");
   });
 
-  it("getByProject идёт в GET /invites/ c project/user=any", () => {
+  it("getByProject идёт в GET /invites/ c project", () => {
     setup();
     api.get.mockReturnValue(of([]));
 
@@ -89,6 +89,6 @@ describe("InviteHttpAdapter", () => {
     const [url, params] = api.get.mock.lastCall;
     expect(url).toBe("/invites/");
     expect(params?.get("project")).toBe("42");
-    expect(params?.get("user")).toBe("any");
+    expect(params?.get("user")).toBeNull();
   });
 });
