@@ -19,10 +19,8 @@ import { HttpParams } from "@angular/common/http";
 import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
 import { Result, ok } from "@domain/shared/result.type";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { GetProgramsUseCase } from "../use-cases/get-programs.use-case";
 
 const PROGRAM_CACHE_KEY = "programs";
-const PROGRAM_ACTUAL_CACHE_KEY = "programs:actual";
 const CACHE_VERSION = 1;
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 
@@ -31,7 +29,6 @@ const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
   providedIn: "root",
 })
 export class ProgramShellInfoService {
-  private readonly getProgramsUseCase = inject(GetProgramsUseCase);
   private readonly participatingProgramUseCase = inject(ParticipatingProgramUseCase);
 
   private readonly programs$ = signal<AsyncState<Program[], unknown>>(initial());
@@ -50,12 +47,15 @@ export class ProgramShellInfoService {
       .slice(0, 3);
   });
 
-  private programsInflight: Observable<Result<ApiPagination<Program>, unknown>> | null = null;
+  private allProgramsInflight: Observable<Result<ApiPagination<Program>, unknown>> | null = null;
+  private filteredInflight: Observable<Result<ApiPagination<Program>, unknown>> | null = null;
 
   ensureProgramsLoaded(filter?: HttpParams): Observable<Result<ApiPagination<Program>, unknown>> {
-    if (filter && filter.keys().length > 0) {
-      if (this.programsInflight) return this.programsInflight;
-      return this.fetchPrograms(filter);
+    const isFiltered = !!filter && filter.keys().length > 0;
+
+    if (isFiltered) {
+      if (this.filteredInflight) return this.filteredInflight;
+      return this.fetchFilteredPrograms(filter);
     }
 
     if (isSuccess(this.programs$())) {
@@ -74,8 +74,7 @@ export class ProgramShellInfoService {
 
     if (cached) {
       this.programs$.set(success(cached));
-
-      this.fetchPrograms();
+      this.fetchAllPrograms();
       return of(
         ok<ApiPagination<Program>>({
           count: cached.length,
@@ -86,27 +85,28 @@ export class ProgramShellInfoService {
       );
     }
 
-    return this.fetchPrograms();
+    return this.fetchAllPrograms();
   }
 
   refreshPrograms(): void {
-    this.programsInflight = null;
-    this.fetchPrograms();
+    this.allProgramsInflight = null;
+    this.fetchAllPrograms();
   }
 
   invalidatePrograms(): void {
-    this.programsInflight = null;
+    this.allProgramsInflight = null;
+    this.filteredInflight = null;
     this.programs$.set(initial());
   }
 
-  private fetchPrograms(filter?: HttpParams): Observable<Result<ApiPagination<Program>, unknown>> {
-    if (this.programsInflight) return this.programsInflight;
+  private fetchAllPrograms(): Observable<Result<ApiPagination<Program>, unknown>> {
+    if (this.allProgramsInflight) return this.allProgramsInflight;
 
     const state = this.programs$();
     const prev = isSuccess(state) ? state.data : undefined;
     this.programs$.set(loading(prev));
 
-    const source$ = this.participatingProgramUseCase.execute(filter);
+    const source$ = this.participatingProgramUseCase.execute();
 
     const request$ = source$.pipe(
       tap(result => {
@@ -116,15 +116,32 @@ export class ProgramShellInfoService {
           writeCache(PROGRAM_CACHE_KEY, CACHE_VERSION, result.value.results);
         } catch {}
       }),
-      finalize(() => (this.programsInflight = null)),
+      finalize(() => (this.allProgramsInflight = null)),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
-    this.programsInflight = request$;
+    this.allProgramsInflight = request$;
 
     request$.subscribe({
       error: error => this.programs$.set(failure(error, prev)),
     });
+
+    return request$;
+  }
+
+  private fetchFilteredPrograms(
+    filter: HttpParams,
+  ): Observable<Result<ApiPagination<Program>, unknown>> {
+    const source$ = this.participatingProgramUseCase.execute(filter);
+
+    const request$ = source$.pipe(
+      finalize(() => (this.filteredInflight = null)),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+
+    this.filteredInflight = request$;
+
+    request$.subscribe();
 
     return request$;
   }
