@@ -61,7 +61,10 @@ describe("ProgramListComponent", () => {
     };
 
     const tooltipInfoServiceSpy = {
-      isTooltipVisible: signal(false),
+      isTooltipVisible: signal<Record<string, boolean>>({}),
+      isVisible: vi.fn().mockReturnValue(false),
+      show: vi.fn(),
+      hide: vi.fn(),
       toggleTooltip: vi.fn(),
     };
 
@@ -77,6 +80,7 @@ describe("ProgramListComponent", () => {
             ProgramProjectsFilterInfoService,
             ExportFileInfoService,
             SwipeService,
+            TooltipInfoService,
           ],
         },
         add: {

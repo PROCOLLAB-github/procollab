@@ -58,6 +58,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
     ProgramProjectsFilterInfoService,
     ExportFileInfoService,
     SwipeService,
+    TooltipInfoService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -73,7 +74,7 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly programProjectsFilterInfoService = inject(ProgramProjectsFilterInfoService);
   private readonly exportFileInfoService = inject(ExportFileInfoService);
-  private readonly tooltipInfoService = inject(TooltipInfoService);
+  protected readonly tooltipInfoService = inject(TooltipInfoService);
   private readonly swipeService = inject(SwipeService);
   private readonly logger = inject(LoggerService);
 
@@ -90,7 +91,6 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;
   protected readonly ratingOptionsList = tagsFilter;
 
-  protected readonly isHintExpertsVisible = this.tooltipInfoService.isTooltipVisible;
   protected readonly isHintExpertsModal = this.programDetailListUIInfoService.isHintExpertsModal;
 
   protected appWidth = window.innerWidth;
