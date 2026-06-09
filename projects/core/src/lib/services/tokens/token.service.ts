@@ -39,7 +39,7 @@ export class TokenService {
    * ключи токенов разводятся, чтобы сессии не затирали друг друга в одном браузере.
    */
   private get isDevStage(): boolean {
-    return window.location.hostname === this.enviroment.apiUrl;
+    return !this.production;
   }
 
   private get accessTokenKey(): string {
