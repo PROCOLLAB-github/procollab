@@ -44,7 +44,7 @@ export class ProfileFormService {
   readonly educationStatusList = educationUserType;
   readonly educationLevelList = educationUserLevel;
 
-  readonly achievementsYearList = generateOptionsList(25, "years");
+  readonly achievementsYearList = generateOptionsList(25, "years").reverse();
 
   readonly languageList = languageNamesList;
   readonly languageLevelList = languageLevelsList;

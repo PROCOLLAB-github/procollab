@@ -61,7 +61,7 @@
           @if (user()!.relations.education) {
             <ul>
               @for (educationItem of user()!.relations.education.slice(3); track $index) {
-                <li>
+                <li class="lists__item">
                   <ng-container
                     *ngTemplateOutlet="educationTemp; context: { $implicit: educationItem }"
                   ></ng-container>
@@ -118,7 +118,7 @@
           @if (user()!.relations.workExperience) {
             <ul>
               @for (workExperienceItem of user()!.relations.workExperience.slice(3); track $index) {
-                <li>
+                <li class="lists__item">
                   <ng-container
                     *ngTemplateOutlet="
                       workExperienceTemp;

@@ -21,7 +21,7 @@
         </fieldset>
       </div>
     }
-    @if (coverImageAddress) {
+    <!-- @if (coverImageAddress) {
       <fieldset class="profile__file">
         <label class="field-label text-body-12" for="coverImageAddress" style="text-align: center"
           >обложка для профиля</label
@@ -44,7 +44,7 @@
           </ng-container>
         </app-upload-file>
       </fieldset>
-    }
+    } -->
   </div>
 
   <div class="profile__main--grid">
@@ -158,7 +158,7 @@
               [suggestions]="inlineSpecs()"
               fieldToDisplay="name"
               valueField="name"
-              fieldToDisplay="name"
+              fieldToDisplayMode="text"
               [forceSelect]="true"
               [error]="speciality | controlError"
               (searchStart)="onSearchSpec($event)"

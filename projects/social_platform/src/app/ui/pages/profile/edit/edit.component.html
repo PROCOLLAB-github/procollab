@@ -62,7 +62,7 @@
         @if (editingStep() === "main") {
           @defer {
             <app-profile-main-step
-              (openSpecsGroupsModal)="openSpecializationGroup()"
+              (openSpecsGroupsModal)="toggleSpecsGroupsModal()"
             ></app-profile-main-step>
           }
         }

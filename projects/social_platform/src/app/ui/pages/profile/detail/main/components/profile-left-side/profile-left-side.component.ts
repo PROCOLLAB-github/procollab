@@ -29,7 +29,7 @@ export class ProfileLeftSideComponent {
 
   protected readonly expandService = inject(ExpandService);
 
-  protected readonly readAllPrograms = this.expandService.readAll()["programs"];
+  protected readonly readAllPrograms = this.expandService.readAll;
 
   protected readonly AppRoutes = AppRoutes;
 }
