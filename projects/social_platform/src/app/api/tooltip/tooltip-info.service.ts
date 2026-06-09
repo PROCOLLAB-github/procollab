@@ -16,7 +16,8 @@ export type TooltipKey =
   | "auth"
   | "lib"
   | "login"
-  | "team";
+  | "team"
+  | "hint-experts";
 
 /** Реестр состояния тултипов по ключу: show/hide/toggle. */
 @Injectable()

@@ -180,11 +180,11 @@
         <app-tooltip
           color="grey"
           iconSize="40"
-          (show)="tooltipInfoService.show('base')"
+          (show)="tooltipInfoService.show('hint-experts')"
         ></app-tooltip>
 
-        @if (tooltipInfoService.isVisible('base')) {
-          <div class="tooltip__wrapper" (mouseleave)="tooltipInfoService.hide('base')">
+        @if (tooltipInfoService.isVisible('hint-experts')) {
+          <div class="tooltip__wrapper" (mouseleave)="tooltipInfoService.hide('hint-experts')">
             <p class="tooltip__text text-body-10">
               Нажмите, чтобы открыть подсказку и узнать больше о процессе оценивания проектов
             </p>

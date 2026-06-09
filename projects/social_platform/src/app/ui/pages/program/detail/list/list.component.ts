@@ -154,7 +154,7 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
 
   openHintModal(event: Event): void {
     event.preventDefault();
-    this.tooltipInfoService.toggleTooltip("base");
+    this.tooltipInfoService.toggleTooltip("hint-experts");
     this.programDetailListUIInfoService.applyHintModalOpen();
   }
 
