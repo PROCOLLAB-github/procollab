@@ -34,7 +34,7 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.getAll(5, params).subscribe();
 
-    expect(api.get).toHaveBeenCalledExactlyOnceWith("/rate-project/5/", params);
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/rate-project/5", params);
   });
 
   it("postFilters идёт в POST /rate-project/:programId c query и body", () => {

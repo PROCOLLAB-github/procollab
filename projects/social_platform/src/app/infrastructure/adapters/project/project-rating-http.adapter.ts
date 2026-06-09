@@ -15,7 +15,7 @@ export class ProjectRatingHttpAdapter {
   private readonly apiService = inject(ApiService);
 
   getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>> {
-    return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}/`, params);
+    return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}`, params);
   }
 
   postFilters(
