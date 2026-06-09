@@ -40,7 +40,9 @@ describe("VacancyRepository", () => {
   it("getForProject делегирует и мапит в Vacancy[]", () =>
     new Promise<void>(done => {
       setup();
-      adapter.getForProject.mockReturnValue(of([{ id: 1 }] as Vacancy[]));
+      adapter.getForProject.mockReturnValue(
+        of({ count: 1, results: [{ id: 1 }], next: null, previous: null }),
+      );
 
       repository.getForProject(10, 0, 42, "3+", "remote", "full", "100", "js").subscribe(res => {
         expect(adapter.getForProject).toHaveBeenCalledExactlyOnceWith(
@@ -162,7 +164,7 @@ describe("VacancyRepository", () => {
     adapter.getForProject.mockImplementation(() =>
       defer(() => {
         fetches++;
-        return of([{ id: 7 }] as Vacancy[]);
+        return of({ count: 1, results: [{ id: 7 }], next: null, previous: null });
       }),
     );
 

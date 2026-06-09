@@ -60,8 +60,8 @@ export class InviteRepository implements InviteRepositoryPort {
     return this.inviteAdapter.sendForUser(userId, projectId, role, specialization).pipe(
       map(raw => {
         const invite = plainToInstance(Invite, raw);
-        invite.sender = userFromRaw(raw.sender);
-        invite.user = userFromRaw(raw.user);
+        if (raw.sender) invite.sender = userFromRaw(raw.sender);
+        if (raw.user) invite.user = userFromRaw(raw.user);
         return invite;
       }),
     );
