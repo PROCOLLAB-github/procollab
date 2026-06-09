@@ -35,7 +35,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     TooltipComponent,
     ModalComponent,
   ],
-  providers: [ToggleFieldsInfoService, ProjectTeamUIService],
+  providers: [ToggleFieldsInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -118,11 +118,11 @@ export class ProjectTeamStepComponent implements OnInit {
   }
 
   editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
-    this.projectTeamUIService.applyEditInvitation(params);
+    this.projectTeamService.editInvitation(params);
   }
 
   removeInvitation(invitationId: number): void {
-    this.projectTeamUIService.applyRemoveInvitation(invitationId);
+    this.projectTeamService.removeInvitation(invitationId);
   }
 
   onModalOpenChange(open: boolean): void {

@@ -57,9 +57,14 @@ export class InviteRepository implements InviteRepositoryPort {
     role: string,
     specialization?: string,
   ): Observable<Invite> {
-    return this.inviteAdapter
-      .sendForUser(userId, projectId, role, specialization)
-      .pipe(map(invite => plainToInstance(Invite, invite)));
+    return this.inviteAdapter.sendForUser(userId, projectId, role, specialization).pipe(
+      map(raw => {
+        const invite = plainToInstance(Invite, raw);
+        invite.sender = userFromRaw(raw.sender);
+        invite.user = userFromRaw(raw.user);
+        return invite;
+      }),
+    );
   }
 
   revokeInvite(invitationId: number): Observable<void> {
@@ -103,8 +108,8 @@ export class InviteRepository implements InviteRepositoryPort {
           // Бэк отдаёт sender/user плоско (без personal) — прогоняем через userFromRaw,
           // иначе sender.personal.avatar в карточке инвайта undefined.
           const invite = plainToInstance(Invite, raw);
-          invite.sender = userFromRaw(raw.sender);
-          invite.user = userFromRaw(raw.user);
+          if (raw.sender) invite.sender = userFromRaw(raw.sender);
+          if (raw.user) invite.user = userFromRaw(raw.user);
           return invite;
         }),
       ),
@@ -115,8 +120,15 @@ export class InviteRepository implements InviteRepositoryPort {
    * Получает приглашения по проекту и маппит их в доменную модель `Invite`.
    */
   getByProject(projectId: number): Observable<Invite[]> {
-    return this.inviteAdapter
-      .getByProject(projectId)
-      .pipe(map(invites => plainToInstance(Invite, invites)));
+    return this.inviteAdapter.getByProject(projectId).pipe(
+      map(invites =>
+        (invites ?? []).map(raw => {
+          const invite = plainToInstance(Invite, raw);
+          if (raw.sender) invite.sender = userFromRaw(raw.sender);
+          if (raw.user) invite.user = userFromRaw(raw.user);
+          return invite;
+        }),
+      ),
+    );
   }
 }
