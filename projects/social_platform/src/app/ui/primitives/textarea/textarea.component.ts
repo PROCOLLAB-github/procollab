@@ -82,9 +82,6 @@ export class TextareaComponent implements ControlValueAccessor {
   /** Двустороннее связывание текста */
   text = model("");
 
-  /** Событие изменения текста */
-  textChange = output<string>();
-
   /** Обработчик ввода текста */
   onInput(event: Event): void {
     const nextValue = (event.target as HTMLInputElement).value ?? "";

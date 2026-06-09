@@ -11,7 +11,9 @@ import {
   output,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { HttpErrorResponse } from "@angular/common/http";
 import { FileService } from "@core/lib/services/file/file.service";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { nanoid } from "nanoid";
 import { LoaderComponent } from "../loader/loader.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -51,6 +53,7 @@ import { IconComponent } from "../icon/icon.component";
 })
 export class UploadFileComponent implements ControlValueAccessor {
   private readonly fileService = inject(FileService);
+  private readonly snackbarService = inject(SnackbarService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -111,14 +114,34 @@ export class UploadFileComponent implements ControlValueAccessor {
     this.cdr.markForCheck();
 
     this.fileService
-      .uploadFile(files[0])
+      .uploadFile(originalFile)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(res => {
-        this.loading = false;
+      .subscribe({
+        next: res => {
+          this.loading = false;
 
-        this.value = res.url;
-        this.onChange(res.url);
-        this.cdr.markForCheck();
+          this.value = res.url;
+          this.onChange(res.url);
+          this.cdr.markForCheck();
+          this.uploaded.emit({
+            url: res.url,
+            name: originalFile.name,
+            size: originalFile.size,
+            mimeType: originalFile.type,
+          });
+        },
+        error: (err: HttpErrorResponse) => {
+          this.loading = false;
+          this.cdr.markForCheck();
+
+          if (err.status === 413) {
+            this.snackbarService.error(
+              "Файл превышает допустимый размер. Уменьшите или измените размер файла и попробуйте снова.",
+            );
+          } else {
+            this.snackbarService.error("Ошибка загрузки файла. Попробуйте ещё раз.");
+          }
+        },
       });
   }
 
