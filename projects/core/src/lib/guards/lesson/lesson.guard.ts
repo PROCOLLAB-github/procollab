@@ -1,3 +1,5 @@
+/** @format */
+
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
 import { CoursesRepositoryPort } from "@domain/courses/ports/courses.repository.port";

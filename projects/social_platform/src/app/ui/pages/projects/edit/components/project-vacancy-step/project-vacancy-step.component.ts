@@ -3,7 +3,12 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, ButtonComponent, SelectComponent, TextareaComponent } from "@ui/primitives";
+import {
+  InputComponent,
+  ButtonComponent,
+  SelectComponent,
+  TextareaComponent,
+} from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";

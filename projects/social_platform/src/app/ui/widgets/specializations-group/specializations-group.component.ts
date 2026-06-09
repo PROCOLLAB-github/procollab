@@ -1,13 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-  signal,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, output, signal } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
 import { Specialization } from "@domain/specializations/specialization.model";
 
