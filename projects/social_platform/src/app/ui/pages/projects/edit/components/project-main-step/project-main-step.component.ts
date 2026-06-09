@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, inject, OnInit, ChangeDetectionStrategy, input } from "@angular/core";
+import { Component, inject, OnInit, ChangeDetectionStrategy, input } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { directionProjectList } from "@core/consts/lists/direction-project-list.const";
@@ -47,7 +47,6 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     FormsModule,
     RouterLink,
   ],
-  providers: [ProjectTeamUIService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMainStepComponent implements OnInit {

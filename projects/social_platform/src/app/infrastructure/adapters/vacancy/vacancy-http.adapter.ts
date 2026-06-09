@@ -2,11 +2,12 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 
 /** HTTP-адаптер вакансий: `/vacancies`, `/projects` (поиск, CRUD, отклики, accept/reject). */
 @Injectable({ providedIn: "root" })
@@ -24,7 +25,7 @@ export class VacancyHttpAdapter {
     workSchedule?: string,
     salary?: string,
     searchValue?: string,
-  ): Observable<Vacancy[]> {
+  ): Observable<ApiPagination<Vacancy>> {
     let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
 
     if (projectId !== undefined) params = params.set("project_id", projectId.toString());
@@ -34,7 +35,7 @@ export class VacancyHttpAdapter {
     if (salary) params = params.set("salary", salary);
     if (searchValue) params = params.set("role_contains", searchValue);
 
-    return this.apiService.get<Vacancy[]>(`${this.VACANCIES_URL}/`, params);
+    return this.apiService.get<ApiPagination<Vacancy>>(`${this.VACANCIES_URL}/`, params);
   }
 
   getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {

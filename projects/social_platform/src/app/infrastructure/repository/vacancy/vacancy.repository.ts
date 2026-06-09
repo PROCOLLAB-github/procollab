@@ -21,9 +21,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
   private readonly vacancyAdapter = inject(VacancyHttpAdapter);
   private readonly eventBus = inject(EventBus);
   private readonly entityCache = new EntityCache<Vacancy>();
-  // Кеш первой страницы вакансий проекта (limit=20, offset=0, без фильтров) по projectId.
-  // На info-resolver'е и shell-точках это самый частый вызов — кешируем его, остальные
-  // (с фильтрами/пагинацией/поиском) идут напрямую без кеша.
+
   private readonly projectVacanciesCache = new EntityCache<Vacancy[]>();
 
   constructor() {
@@ -33,9 +31,6 @@ export class VacancyRepository implements VacancyRepositoryPort {
 
     this.eventBus.on<VacancyUpdated>("VacancyUpdated").subscribe(event => {
       this.entityCache.invalidate(event.payload.vacancyId);
-      // Событие содержит только vacancyId — точечно инвалидировать project нельзя,
-      // безопаснее очистить весь кеш проектных листов (вакансия могла изменить поля,
-      // которые рендерятся в списке).
       this.projectVacanciesCache.clear();
     });
 
@@ -84,7 +79,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
         salary,
         searchValue,
       )
-      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
+      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies.results)));
 
     return isDefaultFirstPage
       ? this.projectVacanciesCache.getOrFetch(projectId!, () => fetch$)

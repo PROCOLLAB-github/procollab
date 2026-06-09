@@ -3,14 +3,13 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, ButtonComponent, SelectComponent } from "@ui/primitives";
+import { InputComponent, ButtonComponent, SelectComponent, TextareaComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
 import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
 import { IconComponent } from "@uilib";
-import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { Skill } from "@domain/skills/skill.model";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -33,26 +32,22 @@ import { SearchesService } from "@api/searches/searches.service";
     IconComponent,
     ControlErrorPipe,
     SelectComponent,
+    TextareaComponent,
     AutoCompleteInputComponent,
     SkillsBasketComponent,
     VacancyCardComponent,
-    TextareaComponent,
     ModalComponent,
     SkillsGroupComponent,
   ],
-  providers: [ProjectsEditInfoService, ProjectVacancyService, ProjectVacancyUIService],
+  providers: [ProjectsEditInfoService, ProjectVacancyService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectVacancyStepComponent implements OnInit {
+export class ProjectVacancyStepComponent {
   private readonly projectVacancyInfoService = inject(ProjectVacancyService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
   private readonly searchesService = inject(SearchesService);
   private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
-
-  ngOnInit(): void {
-    this.projectVacancyUIService.applySetVacancies(this.vacancies());
-  }
 
   // Геттеры для формы
   protected readonly vacancyForm = this.projectVacancyUIService.vacancyForm;

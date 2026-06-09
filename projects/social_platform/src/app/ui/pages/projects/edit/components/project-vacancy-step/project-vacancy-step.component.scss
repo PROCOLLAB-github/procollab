@@ -31,7 +31,7 @@
   &__right {
     flex-basis: 30%;
 
-    :first-child & :not(span, fieldset, label, h4, p, i) {
+    :first-child & :not(span, fieldset, label, h4, p, i, ul, li) {
       margin-top: 26px;
       margin-bottom: 10px;
     }
