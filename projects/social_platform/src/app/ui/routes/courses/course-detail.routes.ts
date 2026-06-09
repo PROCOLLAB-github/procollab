@@ -1,6 +1,7 @@
 /** @format */
 
 import type { Routes } from "@angular/router";
+import { LessonGuard } from "@core/lib/guards/lesson/lesson.guard";
 import { CourseDetailComponent } from "@ui/pages/courses/detail/course-detail.component";
 import { CoursesDetailResolver } from "@ui/pages/courses/detail/course-detail.resolver";
 import { CourseInfoComponent } from "@ui/pages/courses/detail/info/info.component";
@@ -21,6 +22,7 @@ export const COURSE_DETAIL_ROUTES: Routes = [
       {
         path: "lesson",
         loadChildren: () => import("./lesson.routes").then(m => m.LESSON_ROUTES),
+        canActivate: [LessonGuard],
       },
     ],
   },
