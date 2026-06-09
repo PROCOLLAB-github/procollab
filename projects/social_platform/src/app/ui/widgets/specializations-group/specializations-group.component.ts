@@ -4,11 +4,8 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   input,
-  Input,
   output,
-  Output,
   signal,
 } from "@angular/core";
 import { IconComponent } from "@ui/primitives";

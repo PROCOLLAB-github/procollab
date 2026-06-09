@@ -58,6 +58,9 @@
     gap: 5px;
 
     &--open {
+      position: absolute;
+      top: 2%;
+      right: 0%;
       z-index: 1000;
       width: 40%;
     }

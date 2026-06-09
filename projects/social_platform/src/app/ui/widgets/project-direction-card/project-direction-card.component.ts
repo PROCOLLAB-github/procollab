@@ -3,6 +3,7 @@
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   input,
@@ -57,6 +58,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly updateGoalUseCase = inject(UpdateGoalUseCase);
   private readonly logger = inject(LoggerService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private subscriptions: Subscription[] = [];
 
@@ -125,9 +127,10 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
     const projectId = this.route.snapshot.params["projectId"];
     const goalId = +this.route.snapshot.queryParams["goalId"];
 
-    if (!goalId || !Array.isArray(this.about)) return;
+    const goals = this.about() as Goal[];
+    if (!goalId || !Array.isArray(goals)) return;
 
-    const goal = this.about.find((g: Goal) => g.id === goalId);
+    const goal = goals.find((g: Goal) => g.id === goalId);
 
     if (!goal) return;
 
@@ -147,16 +150,18 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
         }
 
         const response = result.value;
-        if (Array.isArray(this.about)) {
-          const index = this.about.findIndex((g: Goal) => g.id === goalId);
+        const goals = this.about() as Goal[];
+        if (Array.isArray(goals)) {
+          const index = goals.findIndex((g: Goal) => g.id === goalId);
           if (index !== -1) {
-            this.about[index] = response;
+            goals[index] = response;
           }
         }
 
         this.isShowsConfirmGoal = false;
         this.goalCompleteHoverId = null;
         this.selectedGoal = null;
+        this.cdr.markForCheck();
 
         this.router.navigate([], {
           queryParams: {},
