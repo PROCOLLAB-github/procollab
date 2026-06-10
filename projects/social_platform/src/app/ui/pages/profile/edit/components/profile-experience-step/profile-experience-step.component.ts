@@ -40,6 +40,8 @@ export class ProfileExperienceStepComponent {
   protected readonly workItems = this.profileEditExperienceInfoService.workItems;
 
   protected readonly yearListEducation = this.profileFormService.yearListEducation;
+  protected readonly yearListEducationWithPresent =
+    this.profileFormService.yearListEducationWithPresent;
 
   protected readonly showWorkFields = this.profileEditExperienceInfoService.showWorkFields;
   protected readonly editWorkClick = this.profileEditExperienceInfoService.editWorkClick;

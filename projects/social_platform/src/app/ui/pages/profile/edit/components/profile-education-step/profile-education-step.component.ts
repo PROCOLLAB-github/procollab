@@ -42,6 +42,8 @@ export class ProfileEducationStepComponent {
   protected readonly educationItems = this.profileEditEducationInfoService.educationItems;
 
   protected readonly yearListEducation = this.profileFormService.yearListEducation;
+  protected readonly yearListEducationWithPresent =
+    this.profileFormService.yearListEducationWithPresent;
   protected readonly educationLevelList = this.profileFormService.educationLevelList;
   protected readonly educationStatusList = this.profileFormService.educationStatusList;
 
