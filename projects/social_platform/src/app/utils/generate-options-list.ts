@@ -23,6 +23,7 @@ export const generateOptionsList = (
   amount: number,
   type: "numbers" | "years" | "strings",
   otherStrings: string[] = [],
+  includePresent = true,
 ): optionsListElement[] => {
   if (amount <= 0) return [];
 
@@ -57,7 +58,7 @@ export const generateOptionsList = (
     });
   }
 
-  if (type === "years") {
+  if (type === "years" && includePresent) {
     const currentId = amount - 1;
     list.push({
       id: currentId,

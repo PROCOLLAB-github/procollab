@@ -40,11 +40,12 @@ export class ProfileFormService {
 
   readonly newPreferredIndustryTitle = signal<string>("");
 
-  readonly yearListEducation = generateOptionsList(55, "years").reverse();
+  readonly yearListEducation = generateOptionsList(55, "years", [], false).reverse();
+  readonly yearListEducationWithPresent = generateOptionsList(55, "years").reverse();
   readonly educationStatusList = educationUserType;
   readonly educationLevelList = educationUserLevel;
 
-  readonly achievementsYearList = generateOptionsList(25, "years").reverse();
+  readonly achievementsYearList = generateOptionsList(25, "years", [], false).reverse();
 
   readonly languageList = languageNamesList;
   readonly languageLevelList = languageLevelsList;
