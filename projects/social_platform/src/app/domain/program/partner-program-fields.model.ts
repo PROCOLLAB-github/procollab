@@ -22,17 +22,14 @@ export class PartnerProgramFieldsValues {
 
 export class ProjectNewAdditionalProgramFields {
   fieldId!: number;
-  valueText!: string | boolean;
+  valueText!: string;
 
   /**
    * Единая точка сборки DTO из доменного поля.
    * Резолв значения (форма / опции по умолчанию) остаётся за вызывающим —
    * это единственное, что реально отличается между флоу.
    */
-  static fromField(
-    field: PartnerProgramFields,
-    value: string | boolean,
-  ): ProjectNewAdditionalProgramFields {
+  static fromField(field: PartnerProgramFields, value: string): ProjectNewAdditionalProgramFields {
     return { fieldId: field.id, valueText: value };
   }
 }

@@ -49,9 +49,11 @@ export class DetailProgramInfoService {
       .pipe(
         switchMap(filtersResult => {
           const fields = filtersResult.ok ? filtersResult.value.programFields : [];
-          const newFieldsFormValues = fields.map(field =>
-            ProjectNewAdditionalProgramFields.fromField(field, this.placeholderFor(field)),
-          );
+          const newFieldsFormValues = fields
+            .filter(field => field.fieldType !== "file")
+            .map(field =>
+              ProjectNewAdditionalProgramFields.fromField(field, this.placeholderFor(field)),
+            );
           const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };
           return this.applyProjectToProgramUseCase.execute(programId, body);
         }),
@@ -81,8 +83,8 @@ export class DetailProgramInfoService {
       });
   }
 
-  private placeholderFor(field: PartnerProgramFields): string | boolean {
-    if (field.fieldType === "checkbox") return false;
+  private placeholderFor(field: PartnerProgramFields): string {
+    if (field.fieldType === "checkbox") return "false";
     if (field.options.length > 0) return field.options[0];
     return "-";
   }
