@@ -3,12 +3,14 @@
 import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ApplyProjectToProgramUseCase } from "@api/program/use-cases/apply-project-to-program.use-case";
+import { GetProgramProjectAdditionalFieldsUseCase } from "@api/program/use-cases/get-program-project-additional-fields.use-case";
 import {
   PartnerProgramFields,
   ProjectNewAdditionalProgramFields,
 } from "@domain/program/partner-program-fields.model";
 
 import { Router } from "@angular/router";
+import { switchMap } from "rxjs";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { Program } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
@@ -25,6 +27,9 @@ export class DetailProgramInfoService {
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
 
   private readonly applyProjectToProgramUseCase = inject(ApplyProjectToProgramUseCase);
+  private readonly getProgramProjectAdditionalFieldsUseCase = inject(
+    GetProgramProjectAdditionalFieldsUseCase,
+  );
 
   readonly isProjectsPage = signal<boolean>(false);
   readonly isMembersPage = signal<boolean>(false);
@@ -39,22 +44,19 @@ export class DetailProgramInfoService {
   private readonly projectForm = this.projectFormService.getForm();
 
   addNewProject(programId: number): void {
-    const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
-
-    this.additionalFields().forEach((field: PartnerProgramFields) => {
-      newFieldsFormValues.push(
-        ProjectNewAdditionalProgramFields.fromField(
-          field,
-          field.options.length ? field.options[0] : "'",
-        ),
-      );
-    });
-
-    const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };
-
-    this.applyProjectToProgramUseCase
-      .execute(programId, body)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.getProgramProjectAdditionalFieldsUseCase
+      .execute(programId)
+      .pipe(
+        switchMap(filtersResult => {
+          const fields = filtersResult.ok ? filtersResult.value.programFields : [];
+          const newFieldsFormValues = fields.map(field =>
+            ProjectNewAdditionalProgramFields.fromField(field, this.placeholderFor(field)),
+          );
+          const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };
+          return this.applyProjectToProgramUseCase.execute(programId, body);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -72,11 +74,17 @@ export class DetailProgramInfoService {
 
           this.router
             .navigate([AppRoutes.projects.edit(response.projectId)], {
-              queryParams: { editingStep: "main", fromProgram: true },
+              queryParams: { editingStep: "additional", fromProgram: true },
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));
         },
       });
+  }
+
+  private placeholderFor(field: PartnerProgramFields): string | boolean {
+    if (field.fieldType === "checkbox") return false;
+    if (field.options.length > 0) return field.options[0];
+    return "-";
   }
 
   /**

@@ -45,9 +45,10 @@ export class ProjectAdditionalService {
   public initializeAdditionalForm(
     fields: PartnerProgramFields[],
     values: PartnerProgramFieldsValues[] = [],
+    clearValues = false,
   ): void {
     this.partnerProgramFields.set(fields);
-    this.partnerProgramFieldsValues = values;
+    this.partnerProgramFieldsValues = clearValues ? [] : values;
 
     // Создаем новую пустую форму
     this.additionalForm = this.fb.group({});

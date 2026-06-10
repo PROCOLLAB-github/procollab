@@ -373,9 +373,11 @@ export class ProjectsEditInfoService {
             );
             this.isProjectAssignToProgram.set(!!project.partnerProgram.programId);
 
+            const isFirstVisitFromProgram = !!this.route.snapshot.queryParams["fromProgram"];
             this.projectAdditionalService.initializeAdditionalForm(
               project.partnerProgram?.programFields,
               project.partnerProgram?.programFieldValues,
+              isFirstVisitFromProgram,
             );
           }
 
