@@ -73,7 +73,15 @@ export class VacancyDetailInfoService {
         next: result => {
           if (!result.ok) {
             this.vacancyDetailUIInfoService.applyErrorFormSubmit();
-            this.snackbarService.error("Не удалось отправить отклик. Возможно, вакансия закрыта.");
+            if (result.error.cause) {
+              this.snackbarService.error(
+                "Не удалось отправить отклик. Вы уже отправили отклик на эту вакансию",
+              );
+            } else {
+              this.snackbarService.error(
+                "Не удалось отправить отклик. Возможно, вакансия закрыта.",
+              );
+            }
             return;
           }
 
