@@ -1,14 +1,23 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from "@angular/core";
-import { InviteManageCardComponent, ProfileInfoComponent, IconComponent } from "@uilib";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  input,
+  output,
+} from "@angular/core";
+import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
+import { ProfileInfoComponent } from "../profile-info/profile-info.component";
+import { IconComponent } from "../../primitives/icon/icon.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import type { Invite } from "@office/models/invite.model";
+import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { RouterLink } from "@angular/router";
-import type { User } from "../../../models/user.model";
 import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
-import { UserData } from "projects/skills/src/models/profile.model";
+import { User } from "@domain/auth/user.model";
 
 /**
  * Компонент панели управления профилем
@@ -32,14 +41,12 @@ import { UserData } from "projects/skills/src/models/profile.model";
  */
 @Component({
   selector: "app-profile-control-panel",
-  standalone: true,
   imports: [
     CommonModule,
     InviteManageCardComponent,
     ProfileInfoComponent,
     ClickOutsideModule,
     IconComponent,
-    RouterLink,
     EmptyManageCardComponent,
   ],
   templateUrl: "./profile-control-panel.component.html",
@@ -48,32 +55,32 @@ import { UserData } from "projects/skills/src/models/profile.model";
 })
 export class ProfileControlPanelComponent {
   /** Данные текущего пользователя */
-  @Input({ required: true }) user!: User | UserData | null;
+  readonly user = input.required<User | null>();
 
   /** Массив приглашений пользователя */
-  @Input({ required: true }) invites!: Invite[];
+  readonly invites = input.required<Invite[]>();
 
   /** Флаг наличия уведомлений */
-  @Input({ required: true }) hasNotifications = false;
+  readonly hasNotifications = input<boolean>(false);
 
   /** Флаг наличия непрочитанных сообщений */
-  @Input({ required: true }) hasUnreads = false;
+  readonly hasUnreads = input<boolean>(false);
 
   /** Событие принятия приглашения (передает ID приглашения) */
-  @Output() acceptInvite = new EventEmitter<number>();
+  readonly acceptInvite = output<number>();
 
   /** Событие отклонения приглашения (передает ID приглашения) */
-  @Output() rejectInvite = new EventEmitter<number>();
+  readonly rejectInvite = output<number>();
 
   /** Событие выхода из системы */
-  @Output() logout = new EventEmitter();
+  readonly logout = output();
 
   /**
    * Проверяет наличие неотвеченных приглашений
    * @returns true если есть приглашения без ответа
    */
   get hasInvites(): boolean {
-    return !!this.invites.filter(invite => invite.isAccepted === null).length;
+    return !!this.invites().filter(invite => invite.isAccepted === null).length;
   }
 
   /** Флаг отображения панели уведомлений */

@@ -1,0 +1,51 @@
+/** @format */
+
+import { CommonModule } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
+import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
+import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
+
+/**
+ * Компонент страницы команды в деательной информации о проекте
+ */
+@Component({
+  selector: "app-project-eam",
+  templateUrl: "./team.component.html",
+  styleUrl: "./team.component.scss",
+  imports: [CommonModule, InfoCardComponent],
+  providers: [ProjectsDetailService, ProfileDetailUIInfoService, ExpandService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ProjectTeamComponent implements OnInit, OnDestroy {
+  private readonly projectsDetailService = inject(ProjectsDetailService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+
+  // массив пользователей в команде
+  protected readonly collaborators = this.projectsDetailUIInfoService.collaborators;
+  protected readonly projectId = this.projectsDetailUIInfoService.projectId;
+  protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
+  protected readonly leaderId = this.projectsDetailUIInfoService.leaderId;
+
+  ngOnInit(): void {
+    this.projectsDetailService.initializationTeam();
+  }
+
+  ngOnDestroy(): void {
+    this.projectsDetailService.destroy();
+  }
+
+  removeCollaboratorFromProject(userId: number): void {
+    this.projectsDetailService.removeCollaboratorFromProject(userId);
+  }
+}

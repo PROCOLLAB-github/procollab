@@ -1,0 +1,148 @@
+/** @format */
+
+import { TestBed } from "@angular/core/testing";
+import { of } from "rxjs";
+import { HttpParams } from "@angular/common/http";
+import { ProgramRepository } from "./program.repository";
+import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter";
+import { Program, ProgramDataSchema } from "@domain/program/program.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Project } from "@domain/project/project.model";
+import { User } from "@domain/auth/user.model";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
+import { ProgramCreate } from "@domain/program/program-create.model";
+
+describe("ProgramRepository", () => {
+  let repository: ProgramRepository;
+  let adapter: any;
+
+  function setup(): void {
+    adapter = {
+      getAll: vi.fn(),
+      getOne: vi.fn(),
+      create: vi.fn(),
+      getDataSchema: vi.fn(),
+      register: vi.fn(),
+      getAllProjects: vi.fn(),
+      getAllMembers: vi.fn(),
+      getProgramFilters: vi.fn(),
+      getProgramProjectAdditionalFields: vi.fn(),
+      applyProjectToProgram: vi.fn(),
+      createProgramFilters: vi.fn(),
+      submitCompettetiveProject: vi.fn(),
+    };
+    TestBed.configureTestingModule({
+      providers: [ProgramRepository, { provide: ProgramHttpAdapter, useValue: adapter }],
+    });
+    repository = TestBed.inject(ProgramRepository);
+  }
+
+  const page = <T>(): ApiPagination<T> => ({
+    count: 0,
+    results: [] as T[],
+    next: "",
+    previous: "",
+  });
+
+  it("getAll делегирует в adapter", () => {
+    setup();
+    const params = new HttpParams();
+    adapter.getAll.mockReturnValue(of(page<Program>()));
+    repository.getAll(0, 10, params).subscribe();
+    expect(adapter.getAll).toHaveBeenCalledExactlyOnceWith(0, 10, params);
+  });
+
+  it("getOne кеширует результат: повторный вызов не бьёт adapter", () => {
+    setup();
+    adapter.getOne.mockReturnValue(of({ id: 42 } as Program));
+
+    repository.getOne(42).subscribe();
+    repository.getOne(42).subscribe();
+
+    expect(adapter.getOne).toHaveBeenCalledTimes(1);
+  });
+
+  it("create делегирует в adapter", () => {
+    setup();
+    adapter.create.mockReturnValue(of({ id: 1 } as Program));
+    const data = { name: "p" } as ProgramCreate;
+    repository.create(data).subscribe();
+    expect(adapter.create).toHaveBeenCalledExactlyOnceWith(data);
+  });
+
+  it("getDataSchema разворачивает response.dataSchema", () =>
+    new Promise<void>(done => {
+      setup();
+      const schema = { city: { name: "Город", placeholder: "" } } as unknown as ProgramDataSchema;
+      adapter.getDataSchema.mockReturnValue(of({ dataSchema: schema }));
+
+      repository.getDataSchema(1).subscribe(res => {
+        expect(res).toBe(schema);
+        done();
+      });
+    }));
+
+  it("register делегирует в adapter", () => {
+    setup();
+    adapter.register.mockReturnValue(of({} as ProgramDataSchema));
+    repository.register(1, { city: "Москва" }).subscribe();
+    expect(adapter.register).toHaveBeenCalledExactlyOnceWith(1, { city: "Москва" });
+  });
+
+  it("getAllProjects делегирует в adapter", () => {
+    setup();
+    const params = new HttpParams();
+    adapter.getAllProjects.mockReturnValue(of(page<Project>()));
+    repository.getAllProjects(1, params).subscribe();
+    expect(adapter.getAllProjects).toHaveBeenCalledExactlyOnceWith(1, params);
+  });
+
+  it("getAllMembers делегирует в adapter", () => {
+    setup();
+    adapter.getAllMembers.mockReturnValue(of(page<User>()));
+    repository.getAllMembers(1, 0, 10).subscribe();
+    expect(adapter.getAllMembers).toHaveBeenCalledExactlyOnceWith(1, 0, 10);
+  });
+
+  it("getProgramFilters делегирует в adapter", () => {
+    setup();
+    adapter.getProgramFilters.mockReturnValue(of([] as PartnerProgramFields[]));
+    repository.getProgramFilters(1).subscribe();
+    expect(adapter.getProgramFilters).toHaveBeenCalledExactlyOnceWith(1);
+  });
+
+  it("getProgramProjectAdditionalFields делегирует в adapter", () => {
+    setup();
+    adapter.getProgramProjectAdditionalFields.mockReturnValue(of({} as ProjectAdditionalFields));
+    repository.getProgramProjectAdditionalFields(1).subscribe();
+    expect(adapter.getProgramProjectAdditionalFields).toHaveBeenCalledExactlyOnceWith(1);
+  });
+
+  it("applyProjectToProgram делегирует в adapter", () => {
+    setup();
+    const dto = { project: {} as Project, programFieldValues: [] };
+    adapter.applyProjectToProgram.mockReturnValue(of({ projectId: 1, programLinkId: 2 }));
+    repository.applyProjectToProgram(1, dto).subscribe();
+    expect(adapter.applyProjectToProgram).toHaveBeenCalledExactlyOnceWith(1, dto);
+  });
+
+  it("createProgramFilters делегирует в adapter", () => {
+    setup();
+    const params = new HttpParams();
+    adapter.createProgramFilters.mockReturnValue(of(page<Project>()));
+    repository.createProgramFilters(1, { status: ["open"] }, params).subscribe();
+    expect(adapter.createProgramFilters).toHaveBeenCalledExactlyOnceWith(
+      1,
+      { status: ["open"] },
+      params,
+    );
+  });
+
+  it("submitCompettetiveProject делегирует в adapter", () => {
+    setup();
+    adapter.submitCompettetiveProject.mockReturnValue(of({} as Project));
+    repository.submitCompettetiveProject(42).subscribe();
+    expect(adapter.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(42);
+  });
+});

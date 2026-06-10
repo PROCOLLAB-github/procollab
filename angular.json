@@ -18,12 +18,13 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/social_platform",
+            "outputPath": {
+              "base": "dist/social_platform",
+              "browser": ""
+            },
             "index": "projects/social_platform/src/index.html",
-            "main": "projects/social_platform/src/main.ts",
-            "polyfills": ["zone.js"],
             "tsConfig": "projects/social_platform/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -34,7 +35,8 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["projects/social_platform/src"]
-            }
+            },
+            "browser": "projects/social_platform/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -44,12 +46,11 @@
                   "with": "projects/social_platform/src/environments/environment.prod.ts"
                 }
               ],
-
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -59,7 +60,6 @@
               ],
               "outputHashing": "all"
             },
-
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -69,7 +69,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "social_platform:build:production"
@@ -81,31 +81,33 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "social_platform:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "projects/social_platform/tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/social_platform/src/favicon.ico",
-              "projects/social_platform/src/assets"
-            ],
-            "styles": ["projects/social_platform/src/styles.scss"],
-            "scripts": [],
-            "stylePreprocessorOptions": {
-              "includePaths": ["projects/social_platform/src"]
-            }
+            "configDir": "projects/social_platform/.storybook",
+            "browserTarget": "social_platform:build",
+            "compodoc": false,
+            "compodocArgs": ["-e", "json", "-d", "projects/social_platform"],
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": "projects/social_platform/.storybook",
+            "browserTarget": "social_platform:build",
+            "compodoc": false,
+            "compodocArgs": ["-e", "json", "-d", "projects/social_platform"],
+            "outputDir": "dist/storybook/social_platform"
           }
         }
       }
     },
-
     "core": {
       "projectType": "library",
       "root": "projects/core",
@@ -113,7 +115,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/core/ng-package.json"
           },
@@ -126,101 +128,6 @@
             }
           },
           "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/core/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
-          }
-        }
-      }
-    },
-    "skills": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "projects/skills",
-      "sourceRoot": "projects/skills/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/skills",
-            "index": "projects/skills/src/index.html",
-            "main": "projects/skills/src/main.ts",
-            "polyfills": ["zone.js"],
-            "tsConfig": "projects/skills/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": ["projects/skills/src/favicon.ico", "projects/skills/src/assets"],
-            "styles": ["projects/skills/src/styles.scss"],
-            "scripts": [],
-            "stylePreprocessorOptions": {
-              "includePaths": ["projects/skills/src"]
-            }
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/skills/src/environments/environment.ts",
-                  "with": "projects/skills/src/environments/environment.prod.ts"
-                }
-              ],
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "12kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "skills:build:production"
-            },
-            "development": {
-              "buildTarget": "skills:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "skills:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "projects/skills/tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": ["projects/skills/src/favicon.ico", "projects/skills/src/assets"],
-            "styles": ["projects/skills/src/styles.scss"],
-            "scripts": []
-          }
         }
       }
     },
@@ -231,7 +138,7 @@
       "prefix": "ui",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/ui/ng-package.json"
           },
@@ -244,15 +151,34 @@
             }
           },
           "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/ui/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
-          }
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }

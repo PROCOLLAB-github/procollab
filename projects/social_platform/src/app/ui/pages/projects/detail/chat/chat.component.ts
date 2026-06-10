@@ -1,0 +1,105 @@
+/** @format */
+
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  viewChild,
+} from "@angular/core";
+import { NavService } from "@api/shared/nav.service";
+import { RouterLink } from "@angular/router";
+import { MessageInputComponent } from "@ui/widgets/message-input/message-input.component";
+import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
+import { IconComponent } from "@ui/primitives";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ChatDirectInfoService } from "@api/chat/facades/chat-direct-info.service";
+import { ChatDirectUIInfoService } from "@api/chat/facades/ui/chat-direct-ui-info.service";
+import { AppRoutes } from "@api/paths/app-routes";
+
+/** Чат проекта с сообщениями, файлами и управлением. */
+@Component({
+  selector: "app-chat",
+  templateUrl: "./chat.component.html",
+  styleUrl: "./chat.component.scss",
+  imports: [
+    AvatarComponent,
+    IconComponent,
+    ChatWindowComponent,
+    RouterLink,
+    FileItemComponent,
+    MessageInputComponent,
+  ],
+  providers: [ChatDirectInfoService, ChatDirectUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ProjectChatComponent implements OnInit, OnDestroy {
+  readonly messageInputComponent = viewChild(MessageInputComponent);
+
+  private readonly navService = inject(NavService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
+  private readonly chatDirectInfoService = inject(ChatDirectInfoService);
+  private readonly chatDirectUIInfoService = inject(ChatDirectUIInfoService);
+
+  /** Данные проекта */
+  readonly project = this.projectsDetailUIInfoService.project;
+
+  /** Все файлы, загруженные в чат */
+  protected readonly chatFiles = this.chatDirectUIInfoService.chatFiles;
+
+  /** ID текущего пользователя */
+  protected readonly currentUserId = this.chatDirectUIInfoService.currentUserId;
+
+  /** Все сообщения чата */
+  protected readonly messages = this.chatDirectUIInfoService.messages;
+
+  protected readonly AppRoutes = AppRoutes;
+
+  /** Список пользователей, которые сейчас печатают */
+  protected readonly typingPersons = this.chatDirectUIInfoService.typingPersons;
+
+  /** Флаг отображения боковой панели на мобильных устройствах */
+  protected readonly isAsideMobileShown = this.chatDirectUIInfoService.isAsideMobileShown;
+
+  /** Флаг процесса загрузки сообщений */
+  protected readonly fetching = this.chatDirectUIInfoService.fetching;
+
+  ngOnInit(): void {
+    this.navService.setNavTitle("Чат проекта");
+
+    this.chatDirectInfoService.initializationChatDirect("project");
+
+    this.chatDirectInfoService.initializationChatFiles();
+  }
+
+  ngOnDestroy(): void {
+    this.chatDirectInfoService.destroy();
+  }
+
+  onToggleMobileAside(): void {
+    this.chatDirectUIInfoService.onToggleMobileAside();
+  }
+
+  /** Загрузка дополнительных сообщений при прокрутке */
+  onFetchMessages(): void {
+    this.chatDirectInfoService.onFetchMessages();
+  }
+
+  /** Отправка нового сообщения */
+  onSubmitMessage(message: any): void {
+    this.chatDirectInfoService.onSubmitMessage(message);
+  }
+
+  /** Редактирование существующего сообщения */
+  onEditMessage(message: any): void {
+    this.chatDirectInfoService.onEditMessage(message);
+  }
+
+  /** Удаление сообщения */
+  onDeleteMessage(messageId: number): void {
+    this.chatDirectInfoService.onDeleteMessage(messageId);
+  }
+}

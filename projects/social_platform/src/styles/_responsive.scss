@@ -1,10 +1,23 @@
 /** @format */
 
 $container-md: 1280px;
-$container-sm: 920px;
+$desktop: 1000px;
+$tablet: 750px;
 
 @mixin apply-desktop {
-  @media screen and (min-width: #{$container-sm}) {
+  @media screen and (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+@mixin apply-tablet {
+  @media screen and (min-width: #{$tablet}) and (max-width: #{$desktop - 1px}) {
+    @content;
+  }
+}
+
+@mixin apply-tablet-and-above {
+  @media screen and (min-width: #{$tablet}) {
     @content;
   }
 }

@@ -1,0 +1,135 @@
+/** @format */
+
+import { DestroyRef, inject, Injectable } from "@angular/core";
+import { Validators } from "@angular/forms";
+import { ValidationService } from "@corelib";
+import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
+import { CreateVacancyDto } from "../../../../domain/vacancy/dto/create-vacancy.model";
+import { ProjectFormService } from "./project-form.service";
+import { UpdateVacancyUseCase } from "../../../vacancy/use-cases/update-vacancy.use-case";
+import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-case";
+import { DeleteVacancyUseCase } from "../../../vacancy/use-cases/delete-vacancy.use-case";
+import { failure, initial, loading } from "@domain/shared/async-state";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+/** Сервис для управления вакансиями проекта. */
+@Injectable()
+export class ProjectVacancyService {
+  private readonly validationService = inject(ValidationService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
+  private readonly projectFormService = inject(ProjectFormService);
+
+  private readonly updateVacancyUseCase = inject(UpdateVacancyUseCase);
+  private readonly postVacancyUseCase = inject(PostVacancyUseCase);
+  private readonly deleteVacancyUseCase = inject(DeleteVacancyUseCase);
+
+  private readonly vacancyForm = this.projectVacancyUIService.vacancyForm;
+  private readonly selectedSkills = this.projectVacancyUIService.selectedSkills;
+
+  private readonly vacancyIsSubmitting = this.projectVacancyUIService.vacancyIsSubmitting;
+  private readonly vacancySubmitInitiated = this.projectVacancyUIService.vacancySubmitInitiated;
+
+  constructor() {
+    this.vacancyForm
+      .get("skills")
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(skills => {
+        this.selectedSkills.set(skills ?? []);
+      });
+  }
+
+  public submitVacancy(projectId: number) {
+    // Настройка валидаторов для обязательных полей
+    this.vacancyForm.get("role")?.setValidators([Validators.required]);
+    this.vacancyForm.get("skills")?.setValidators([Validators.required]);
+    this.vacancyForm.get("requiredExperience")?.setValidators([Validators.required]);
+    this.vacancyForm.get("workFormat")?.setValidators([Validators.required]);
+    this.vacancyForm.get("workSchedule")?.setValidators([Validators.required]);
+    this.vacancyForm
+      .get("salary")
+      ?.setValidators([Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]);
+
+    // Обновление валидности и отображение ошибок
+    Object.keys(this.vacancyForm.controls).forEach(name => {
+      const ctrl = this.vacancyForm.get(name);
+      ctrl?.updateValueAndValidity();
+      if (["role", "skills"].includes(name)) ctrl?.markAsTouched();
+    });
+
+    this.vacancySubmitInitiated.set(true);
+
+    // Проверка валидации формы
+    if (!this.validationService.getFormValidation(this.vacancyForm)) {
+      return;
+    }
+
+    // Подготовка payload для API
+    this.vacancyIsSubmitting.set(loading());
+
+    const form = this.vacancyForm.value;
+
+    const payload: CreateVacancyDto = {
+      role: form.role!,
+      requiredSkillsIds: (form.skills ?? []).map(s => s.id),
+      description: form.description ?? "",
+      requiredExperience: form.requiredExperience!,
+      workFormat: form.workFormat!,
+      workSchedule: form.workSchedule!,
+      specialization: form.specialization ?? undefined,
+      salary: typeof form.salary === "string" ? +form.salary : null,
+    };
+
+    const editIdx = this.projectFormService.editIndex();
+    if (editIdx !== null) {
+      const editedVacancy = this.projectVacancyUIService.vacancies()[editIdx];
+      if (!editedVacancy?.id) {
+        this.vacancyIsSubmitting.set(initial());
+        return;
+      }
+
+      this.updateVacancyUseCase
+        .execute(editedVacancy.id, payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: result => {
+            if (!result.ok) {
+              this.vacancyIsSubmitting.set(failure("vacancy_error"));
+              return;
+            }
+
+            this.projectVacancyUIService.applyUpdateVacancy(result.value);
+          },
+        });
+      return;
+    }
+
+    // Вызов API для создания вакансии
+    this.postVacancyUseCase
+      .execute(projectId, payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: result => {
+          if (!result.ok) {
+            this.vacancyIsSubmitting.set(failure("vacancy_error"));
+            return;
+          }
+
+          this.projectVacancyUIService.applySubmitVacancy(result.value);
+        },
+      });
+  }
+
+  public removeVacancy(vacancyId: number): void {
+    if (!confirm("Вы точно хотите удалить вакансию?")) return;
+    this.deleteVacancyUseCase
+      .execute(vacancyId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) return;
+
+        this.projectVacancyUIService.applyRemoveVacancy(vacancyId);
+      });
+  }
+}

@@ -1,0 +1,234 @@
+/** @format */
+
+import { DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { ProfileFormService } from "./profile-form.service";
+import { Achievement } from "@domain/auth/user.model";
+import { Skill } from "@domain/skills/skill.model";
+import { NavigationService } from "../../../paths/navigation.service";
+import { ProjectStepService } from "../../../project/project-step.service";
+import { NavService } from "@api/shared/nav.service";
+import { ActivatedRoute } from "@angular/router";
+import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
+import { EditStep } from "@core/lib/models/edit-step";
+import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
+import { ProfileInfoService } from "../profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { SnackbarService } from "@domain/shared/snackbar.service";
+
+/** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
+@Injectable()
+export class ProfileEditInfoService {
+  private readonly route = inject(ActivatedRoute);
+  private readonly navigationService = inject(NavigationService);
+  private readonly navService = inject(NavService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly profileFormService = inject(ProfileFormService);
+  private readonly projectStepService = inject(ProjectStepService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+
+  private readonly saveProfileUseCase = inject(SaveProfileUseCase);
+  private readonly snackbarService = inject(SnackbarService);
+
+  private readonly profileForm = this.profileFormService.getForm();
+
+  readonly editIndex = signal<number | null>(null);
+
+  readonly profileFormSubmitting$ = signal<AsyncState<void>>(initial());
+
+  readonly openGroupIndex = signal<number | null>(null);
+
+  readonly isModalErrorSkillsChoose = signal<boolean>(false);
+  readonly isModalErrorSkillChooseText = signal<string>("");
+
+  private readonly typeSpecific = this.profileFormService.typeSpecific;
+  private readonly achievements = this.profileFormService.achievements;
+  readonly profileId = this.profileFormService.profileId;
+
+  private userTypeMap: { [type: number]: string } = {
+    1: "member",
+    2: "mentor",
+    3: "expert",
+    4: "investor",
+  };
+
+  initializationEditInfo(): void {
+    this.navService.setNavTitle("Редактирование профиля");
+
+    // Получение текущего шага редактирования из query параметров
+    this.setupEditingStep();
+  }
+
+  private setupEditingStep(): void {
+    const stepFromUrl = this.route.snapshot.queryParams["editingStep"] as EditStep;
+    if (stepFromUrl) {
+      this.projectStepService.setStepFromRoute(stepFromUrl);
+    }
+  }
+
+  onGroupToggled(index: number, isOpen: boolean): void {
+    this.openGroupIndex.set(isOpen ? index : null);
+  }
+
+  isGroupDisabled(index: number): boolean {
+    return this.openGroupIndex() !== null && this.openGroupIndex() !== index;
+  }
+
+  saveProfile(): void {
+    this.profileForm.markAllAsTouched();
+    this.profileForm.updateValueAndValidity();
+
+    const tempFields = [
+      "organizationName",
+      "entryYear",
+      "completionYear",
+      "description",
+      "educationLevel",
+      "educationStatus",
+      "organization",
+      "entryYearWork",
+      "completionYearWork",
+      "descriptionWork",
+      "jobPosition",
+      "language",
+      "languageLevel",
+      "title",
+      "status",
+      "year",
+      "files",
+      "phoneNumber",
+    ];
+
+    tempFields.forEach(name => {
+      const control = this.profileForm.get(name);
+      if (control) {
+        control.clearValidators();
+        control.updateValueAndValidity();
+      }
+    });
+
+    const lengthLimits: { field: string; limit: number }[] = [
+      { field: "city", limit: 100 },
+      { field: "aboutMe", limit: 300 },
+      { field: "organizationName", limit: 100 },
+      { field: "description", limit: 400 },
+      { field: "organization", limit: 50 },
+      { field: "descriptionWork", limit: 400 },
+    ];
+
+    const hasLengthOverflow = lengthLimits.some(({ field, limit }) => {
+      const value = this.profileForm.get(field)?.value;
+      return typeof value === "string" && value.length > limit;
+    });
+
+    if (hasLengthOverflow) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(
+        "Превышено допустимое количество символов в одном из полей",
+      );
+      return;
+    }
+
+    const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality", "city"].every(
+      name => this.profileForm.get(name)?.valid,
+    );
+
+    if (!mainFieldsValid || this.profileFormSubmitting$().status === "loading") {
+      this.isModalErrorSkillsChoose.set(true);
+      return;
+    }
+
+    this.profileFormSubmitting$.set(loading());
+
+    const achievements = this.achievements.value.map((achievement: Achievement) => ({
+      ...(achievement.id && { id: achievement.id }),
+      title: achievement.title,
+      status: achievement.status,
+      year: achievement.year,
+      fileLinks:
+        achievement.files && Array.isArray(achievement.files)
+          ? achievement.files
+              .map((file: any) => (typeof file === "string" ? file : file.link))
+              .filter(Boolean)
+          : achievement.files
+            ? [achievement.files]
+            : [],
+    }));
+
+    // Построение объекта профиля с только необходимыми полями
+    const newProfile: any = {
+      id: this.profileId(),
+      first_name: this.profileForm.value.firstName,
+      last_name: this.profileForm.value.lastName,
+      email: this.profileForm.value.email,
+      user_type: this.profileForm.value.userType,
+      city: this.profileForm.value.city,
+      about_me: this.profileForm.value.aboutMe || "",
+      avatar: this.profileForm.value.avatar || null,
+      cover_image_address: this.profileForm.value.coverImageAddress || null,
+      phoneNumber: this.profileForm.value.phoneNumber
+        ? this.profileForm.value.phoneNumber.replace(/^\+?[87]/, "+7")
+        : null,
+      speciality: this.profileForm.value.speciality,
+      skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
+    };
+
+    // Добавляем birthday если он указан
+    if (this.profileForm.value.birthday) {
+      newProfile.birthday = this.profileForm.value.birthday || undefined;
+    }
+
+    // Добавляем специфичные для типа пользователя поля
+    if (this.userTypeMap[this.profileForm.value.userType]) {
+      newProfile[this.userTypeMap[this.profileForm.value.userType]] = this.typeSpecific.value;
+    }
+
+    // Добавляем связанные данные если они были отредактированы
+    if (this.achievements.length > 0) {
+      newProfile.achievements = achievements;
+    }
+    if (this.profileForm.value.education?.length > 0) {
+      newProfile.education = this.profileForm.value.education;
+    }
+    if (this.profileForm.value.workExperience?.length > 0) {
+      newProfile.work_experience = this.profileForm.value.workExperience;
+    }
+    if (this.profileForm.value.userLanguages?.length > 0) {
+      newProfile.user_languages = this.profileForm.value.userLanguages;
+    }
+
+    this.saveProfileUseCase
+      .execute(newProfile)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          this.profileFormSubmitting$.set(failure("profile_edit_error"));
+          this.isModalErrorSkillsChoose.set(true);
+          this.isModalErrorSkillChooseText.set(this.resolveSaveErrorText(result.error.cause));
+          return;
+        }
+
+        this.profileInfoService.applyProfileUpdated(result.value);
+        this.profileFormSubmitting$.set(success(undefined));
+        this.snackbarService.success("Профиль сохранён");
+        this.navigationService.profileRedirect(result.value.id);
+      });
+  }
+
+  private resolveSaveErrorText(cause?: { error?: any }): string {
+    const body = cause?.error;
+    if (!body) return "Ошибка при сохранении профиля";
+
+    if (body.phone_number) return body.phone_number[0];
+    if (body.language) return body.language;
+    if (body.achievements) return body.achievements[0];
+    if (body.work_experience?.[2]) {
+      return body.work_experience[2].entry_year ?? body.work_experience[2].completion_year;
+    }
+    if (body.first_name?.[0]) return body.first_name[0];
+    if (body.last_name?.[0]) return body.last_name[0];
+    if (body[0]) return body[0];
+
+    return "Ошибка при сохранении профиля";
+  }
+}

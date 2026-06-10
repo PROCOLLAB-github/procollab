@@ -1,12 +1,20 @@
 /** @format */
 
-import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
-import type { Invite } from "@models/invite.model";
-import { DayjsPipe } from "projects/core";
-import { ButtonComponent } from "@ui/components";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  input,
+  Input,
+  type OnInit,
+  output,
+  Output,
+} from "@angular/core";
+import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
+import { ButtonComponent } from "../../primitives/button/button.component";
 import { RouterLink } from "@angular/router";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { AvatarComponent } from "../../primitives/avatar/avatar.component";
+import { TruncatePipe } from "@corelib";
 
 /**
  * Компонент карточки управления приглашением
@@ -30,20 +38,18 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
   selector: "app-invite-manage-card",
   templateUrl: "./invite-manage-card.component.html",
   styleUrl: "./invite-manage-card.component.scss",
-  standalone: true,
-  imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe, TruncatePipe],
+  imports: [AvatarComponent, RouterLink, ButtonComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteManageCardComponent implements OnInit {
-  constructor() {}
-
   /** Данные приглашения для отображения */
-  @Input({ required: true }) invite!: Invite;
+  readonly invite = input.required<Invite>();
 
   /** Событие принятия приглашения (передает ID приглашения) */
-  @Output() accept = new EventEmitter<number>();
+  readonly accept = output<number>();
 
   /** Событие отклонения приглашения (передает ID приглашения) */
-  @Output() reject = new EventEmitter<number>();
+  readonly reject = output<number>();
 
   ngOnInit(): void {}
 }

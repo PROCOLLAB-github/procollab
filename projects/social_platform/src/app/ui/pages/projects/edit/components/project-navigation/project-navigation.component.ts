@@ -1,0 +1,38 @@
+/** @format */
+
+import {
+  Component,
+  inject,
+  Output,
+  EventEmitter,
+  Input,
+  ChangeDetectionStrategy,
+  input,
+  output,
+} from "@angular/core";
+import { ProjectStepService } from "@api/project/project-step.service";
+import { IconComponent } from "@uilib";
+import { CommonModule } from "@angular/common";
+import { Navigation } from "@core/lib/models/navigation.model";
+import { EditStep } from "@core/lib/models/edit-step";
+
+/** Навигация по шагам формы проекта. */
+@Component({
+  selector: "app-project-navigation",
+  templateUrl: "./project-navigation.component.html",
+  styleUrl: "project-navigation.component.scss",
+  imports: [IconComponent, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ProjectNavigationComponent {
+  readonly navItems = input.required<Navigation[]>();
+  readonly stepChange = output<EditStep>();
+
+  private stepService = inject(ProjectStepService);
+
+  protected readonly currentStep = this.stepService.currentStep;
+
+  onStepClick(step: EditStep): void {
+    this.stepChange.emit(step);
+  }
+}

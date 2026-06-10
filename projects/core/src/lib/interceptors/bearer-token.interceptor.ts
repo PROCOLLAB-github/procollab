@@ -10,52 +10,58 @@ import {
 } from "@angular/common/http";
 import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from "rxjs";
 import { Router } from "@angular/router";
-import { TokenService } from "../services";
+import { LoggerService, TokenService } from "../services";
 
 /**
- * HTTP интерцептор для автоматического управления JWT токенами
+ * HTTP-интерцептор для автоматического добавления Bearer-токена
+ * и повторной отправки запросов после обновления access-токена.
  *
- * Основные функции:
- * 1. Автоматически добавляет Bearer токен к исходящим HTTP запросам
- * 2. Перехватывает 401 ошибки и автоматически обновляет токены
- * 3. Повторяет неудачные запросы с новым токеном
- * 4. Предотвращает множественные одновременные запросы на обновление токена
- * 5. Перенаправляет на страницу логина при невозможности обновить токен
- *
- * Алгоритм работы:
- * - Если есть токены → добавляет Authorization header
- * - При 401 ошибке → пытается обновить токен
- * - При успешном обновлении → повторяет исходный запрос
- * - При неудаче обновления → перенаправляет на /auth/login
+ * Основные сценарии:
+ * - добавляет `Authorization` header при наличии токенов;
+ * - предотвращает параллельные refresh-запросы;
+ * - повторяет запросы после успешного обновления токена;
+ * - перенаправляет пользователя на страницу авторизации
+ *   при недействительном refresh-токене.
  */
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private readonly tokenService: TokenService, private readonly router: Router) {}
+  constructor(
+    private readonly tokenService: TokenService,
+    private readonly router: Router,
+    private readonly loggerService: LoggerService,
+  ) {}
 
-  /** Флаг предотвращения множественных запросов на обновление токена */
+  /**
+   * Флаг активного процесса обновления токена.
+   *
+   * Используется для предотвращения одновременных refresh-запросов
+   * при множественных ответах `401 Unauthorized`.
+   */
   private isRefreshing = false;
 
-  /** Subject для уведомления ожидающих запросов о получении нового токена */
+  /**
+   * Хранилище access-токена для запросов,
+   * ожидающих завершения refresh-процесса.
+   */
   private refreshTokenSubject = new BehaviorSubject<any>(null);
 
   /**
-   * Основной метод интерцептора
-   * @param request - Исходящий HTTP запрос
-   * @param next - Следующий обработчик в цепочке
-   * @returns Observable с HTTP событием
+   * Добавляет служебные заголовки к HTTP-запросу
+   * и подключает обработку ошибок авторизации.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    // Базовые заголовки для всех запросов
     const headers: Record<string, string> = {};
 
     const tokens = this.tokenService.getTokens();
 
-    // Добавляем Authorization header если токены доступны
     if (tokens !== null) {
       headers["Authorization"] = `Bearer ${tokens.access}`;
     }
 
-    // Для blob запросов (файлы) не устанавливаем Accept, чтобы не парсить blob как JSON
+    /**
+     * Blob-запросы исключаются из установки `Accept: application/json`,
+     * чтобы браузер не пытался интерпретировать бинарный ответ как JSON.
+     */
     const isBlobRequest =
       request.url.includes("/export") ||
       request.url.includes("/download") ||
@@ -77,43 +83,43 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Обрабатывает запросы с токенами и перехватывает ошибки аутентификации
-   * @param request - HTTP запрос с токеном
-   * @param next - Следующий обработчик
-   * @returns Observable с результатом запроса или обработкой ошибки
+   * Обрабатывает запросы с авторизацией
+   * и перехватывает ошибки аутентификации.
    */
   private handleRequestWithTokens(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        // Если 401 ошибка на refresh endpoint - токен refresh недействителен
+        /**
+         * Ошибка обновления токена означает,
+         * что пользовательская сессия больше недействительна.
+         */
         if (error.status === 401 && request.url.includes("/api/token/refresh")) {
           this.router
             .navigateByUrl("/auth/login")
-            .then(() => console.debug("Redirected to login: refresh token expired"));
+            .then(() => this.loggerService.debug("Redirected to login: refresh token expired"));
         }
-        // Если 401 на другом endpoint - пытаемся обновить токен
+        // Для остальных 401 выполняется попытка обновления access-токена.
         else if (error.status === 401 && !request.url.includes("/api/token/refresh")) {
           return this.handle401(request, next);
         }
 
         return throwError(() => error);
-      })
+      }),
     );
   }
 
   /**
-   * Обрабатывает 401 ошибку - обновляет токен и повторяет запрос
-   * Использует механизм блокировки для предотвращения множественных запросов обновления
-   * @param request - Исходный запрос, который вернул 401
-   * @param next - Следующий обработчик
-   * @returns Observable с повторным запросом или ошибкой
+   * Выполняет обновление токена и повторяет исходный запрос.
+   *
+   * Во время активного refresh-процесса остальные запросы
+   * ожидают новый access-токен через `refreshTokenSubject`.
    */
   private handle401(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
@@ -152,9 +158,9 @@ export class BearerTokenInterceptor implements HttpInterceptor {
           return next.handle(
             request.clone({
               setHeaders: headers,
-            })
+            }),
           );
-        })
+        }),
       );
     }
 
@@ -181,9 +187,9 @@ export class BearerTokenInterceptor implements HttpInterceptor {
         return next.handle(
           request.clone({
             setHeaders: headers,
-          })
+          }),
         );
-      })
+      }),
     );
   }
 }

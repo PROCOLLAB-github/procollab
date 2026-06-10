@@ -1,0 +1,80 @@
+/** @format */
+
+import { CommonModule } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  input,
+  Input,
+  OnInit,
+  output,
+  Output,
+} from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { Collaborator } from "@domain/project/collaborator.model";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { IconComponent } from "@uilib";
+import { TruncatePipe } from "@corelib";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
+
+/** Карточка участника команды проекта. */
+@Component({
+  selector: "app-collaborator-card",
+  templateUrl: "./collaborator-card.component.html",
+  styleUrl: "./collaborator-card.component.scss",
+  imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CollaboratorCardComponent implements OnInit {
+  private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
+  private readonly route = inject(ActivatedRoute);
+  private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.inviteForm = this.fb.group({
+      role: [""],
+      specializations: this.fb.array([]),
+    });
+  }
+
+  inviteForm: FormGroup;
+  errorMessage = ErrorMessage;
+
+  readonly collaborator = input.required<Collaborator>();
+  readonly collaboratorRemoved = output<number>();
+
+  ngOnInit(): void {
+    if (this.collaborator()) {
+      this.inviteForm.patchValue({
+        role: this.collaborator().role,
+        specialization: this.collaborator().skills,
+      });
+    }
+  }
+
+  onDeleteCollaborator(collaboratorId: number): void {
+    const projectId = this.route.snapshot.params["projectId"];
+
+    if (!confirm("Вы точно хотите удалить участника проекта?")) return;
+
+    this.removeProjectCollaboratorUseCase
+      .execute(+projectId, collaboratorId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: result => {
+          if (!result.ok) {
+            return;
+          }
+
+          this.collaboratorRemoved.emit(result.value);
+        },
+      });
+  }
+}

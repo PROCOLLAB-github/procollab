@@ -1,0 +1,24 @@
+<!-- @format -->
+
+<div class="register">
+  <app-bar class="bar register__bar" [backHave]="true" [links]="[]"></app-bar>
+  @if (registerForm && schema) {
+    <form class="register__form form" [formGroup]="registerForm">
+      @for (f of schema | keyvalue; track f.key) {
+        <fieldset class="form__fieldset">
+          <label [for]="f.key" class="field-label">{{ f.value.name }}</label>
+          @if (registerForm.get(f.key); as field) {
+            <app-input
+              size="big"
+              [id]="f.key"
+              [formControlName]="f.key"
+              [placeholder]="f.value.placeholder"
+              [error]="field | controlError"
+            ></app-input>
+          }
+        </fieldset>
+      }
+      <app-button size="big" (click)="onSubmit()">Зарегистрироваться в программе</app-button>
+    </form>
+  }
+</div>

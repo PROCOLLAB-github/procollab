@@ -1,0 +1,232 @@
+/** @format */
+
+import { DestroyRef, inject, Injectable } from "@angular/core";
+import { filter, map, Observable, tap } from "rxjs";
+import { NavService } from "@api/shared/nav.service";
+import { FeedNews } from "@domain/news/project-news.model";
+import { ActivatedRoute } from "@angular/router";
+import { Collaborator } from "@domain/project/collaborator.model";
+import { ExpandService } from "../../../expand/expand.service";
+import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
+import { NewsInfoService } from "../../../news/news-info.service";
+import { User } from "@domain/auth/user.model";
+import { RemoveProjectCollaboratorUseCase } from "../../use-cases/remove-project-collaborator.use-case";
+import { TransferProjectOwnershipUseCase } from "../../use-cases/transfer-project-ownership.use-case";
+import { FetchProjectNewsUseCase } from "../../use-cases/fetch-project-news.use-case";
+import { ReadProjectNewsUseCase } from "../../use-cases/read-project-news.use-case";
+import { AddProjectNewsUseCase } from "../../use-cases/add-project-news.use-case";
+import { DeleteProjectNewsUseCase } from "../../use-cases/delete-project-news.use-case";
+import { ToggleProjectNewsLikeUseCase } from "../../use-cases/toggle-project-news-like.use-case";
+import { EditProjectNewsUseCase } from "../../use-cases/edit-project-news.use-case";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+/** Фасад детали проекта: участники (удаление/передача владения) и новости проекта (CRUD, лайк, read по видимости). */
+@Injectable()
+export class ProjectsDetailService {
+  private readonly route = inject(ActivatedRoute);
+  private readonly navService = inject(NavService);
+  private readonly expandService = inject(ExpandService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly newsInfoService = inject(NewsInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+
+  private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
+  private readonly transferProjectOwnershipUseCase = inject(TransferProjectOwnershipUseCase);
+  private readonly fetchProjectNewsUseCase = inject(FetchProjectNewsUseCase);
+  private readonly readProjectNewsUseCase = inject(ReadProjectNewsUseCase);
+  private readonly addProjectNewsUseCase = inject(AddProjectNewsUseCase);
+  private readonly deleteProjectNewsUseCase = inject(DeleteProjectNewsUseCase);
+  private readonly toggleProjectNewsLikeUseCase = inject(ToggleProjectNewsLikeUseCase);
+  private readonly editProjectNewsUseCase = inject(EditProjectNewsUseCase);
+
+  private observer?: IntersectionObserver;
+
+  private readonly project = this.projectsDetailUIService.project;
+  private readonly projectId = this.projectsDetailUIService.projectId;
+  private readonly profile = this.profileInfoService.profile;
+
+  private readonly news = this.newsInfoService.news;
+
+  readonly projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(
+    map(r => r["data"][1]),
+  );
+
+  destroy(): void {
+    this.observer?.disconnect();
+  }
+
+  initializationTeam(): void {
+    this.profileDetailUIInfoService.applySetLoggedUserId("logged", this.profile()!.id);
+  }
+
+  initializationProjectInfo(): void {
+    this.navService.setNavTitle("Профиль проекта");
+
+    this.projectsDetailUIService.applyDirectionItems();
+
+    this.initCheckDescription();
+
+    // Загрузка новостей проекта
+    this.initializationNews();
+
+    // Получение ID текущего пользователя
+    this.profileDetailUIInfoService.applySetLoggedUserId("profile", this.profile()!.id);
+  }
+
+  initializationNews(): void {
+    this.fetchProjectNewsUseCase
+      .execute(String(this.project()?.id))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
+        this.newsInfoService.applySetNews(result.value);
+
+        // Настройка наблюдателя для отслеживания просмотра новостей
+        setTimeout(() => {
+          this.observer?.disconnect();
+          this.observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
+            root: document.querySelector(".office__body"),
+            rootMargin: "0px 0px 0px 0px",
+            threshold: 0,
+          });
+
+          document.querySelectorAll(".news__item").forEach(e => {
+            this.observer?.observe(e);
+          });
+        });
+      });
+  }
+
+  initCheckDescription(): void {
+    setTimeout(() => {
+      this.expandService.checkExpandable("description", !!this.project()?.description);
+    }, 150);
+  }
+
+  removeCollaboratorFromProject(userId: number): void {
+    const projectId = this.projectId();
+    if (!projectId) return;
+
+    this.removeProjectCollaboratorUseCase
+      .execute(this.projectId()!, userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: result => {
+          if (!result.ok) {
+            return;
+          }
+
+          this.projectsDetailUIService.removeCollaborators(result.value);
+        },
+      });
+  }
+
+  onNewsInVew(entries: IntersectionObserverEntry[]): void {
+    const projectId = Number(this.project()?.id);
+    if (!projectId) {
+      return;
+    }
+
+    const ids = entries
+      .map(e => Number((e.target as HTMLElement).dataset["id"]))
+      .filter(id => Number.isFinite(id));
+
+    if (!ids.length) {
+      return;
+    }
+
+    this.readProjectNewsUseCase
+      .execute(projectId, ids)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+  }
+
+  onAddNews(news: { text: string; files: string[] }): Observable<void> {
+    return this.addProjectNewsUseCase.execute(this.projectId()!.toString(), news).pipe(
+      tap(result => {
+        if (result.ok) {
+          this.newsInfoService.applyAddNews(result.value);
+        }
+      }),
+      filter(result => result.ok),
+      map(() => undefined),
+      takeUntilDestroyed(this.destroyRef),
+    );
+  }
+
+  onDeleteNews(newsId: number): void {
+    this.deleteProjectNewsUseCase
+      .execute(this.projectId()!.toString(), newsId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
+        this.newsInfoService.applyDeleteNews(result.value);
+      });
+  }
+
+  onLike(newsId: number): void {
+    const item = this.news().find(n => n.id === newsId);
+    if (!item) return;
+
+    this.toggleProjectNewsLikeUseCase
+      .execute(this.projectId()!.toString(), newsId, !item.isUserLiked)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
+        this.newsInfoService.applyLikeNews(result.value);
+      });
+  }
+
+  onEditNews(news: FeedNews, newsItemId: number): Observable<void> {
+    return this.editProjectNewsUseCase.execute(this.projectId()!.toString(), newsItemId, news).pipe(
+      tap(result => {
+        if (result.ok) {
+          this.newsInfoService.applyEditNews(result.value);
+        }
+      }),
+      filter(result => result.ok),
+      map(() => undefined),
+      takeUntilDestroyed(this.destroyRef),
+    );
+  }
+
+  onRemoveMember(id: Collaborator["userId"]) {
+    this.removeProjectCollaboratorUseCase
+      .execute(this.projectId()!, id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
+        this.projectsDetailUIService.applyMembersManipulation(result.value);
+      });
+  }
+
+  onTransferOwnership(id: Collaborator["userId"]) {
+    this.transferProjectOwnershipUseCase
+      .execute(this.projectId()!, id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
+        this.projectsDetailUIService.applyMembersManipulation(result.value);
+      });
+  }
+}

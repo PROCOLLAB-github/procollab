@@ -17,7 +17,7 @@
 @import "styles/components/key-skills.scss";
 @import "styles/components/nav.scss";
 @import "styles/components/contact-link.scss";
-@import "app/office/courses/lesson/shared/image-preview/image-preview.scss";
+@import "app/ui/pages/courses/lesson/shared/image-preview/image-preview.scss";
 
 // PAGES
 
@@ -52,7 +52,8 @@ body {
 // Be sure that you only ever include this mixin once!
 
 // stylelint-disable
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 .mat-progress-bar {
   z-index: 200;
@@ -61,16 +62,16 @@ body {
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$procollab-primary: mat.define-palette(mat.$indigo-palette);
+$procollab-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
 
-$procollab-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$procollab-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$procollab-warn: mat.define-palette(mat.$red-palette);
+$procollab-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$procollab-theme: mat.define-light-theme(
+$procollab-theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $procollab-primary,

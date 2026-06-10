@@ -5,6 +5,9 @@ import { environment } from "@environment";
 import { AppComponent } from "./app/app.component";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { APP_CONFIG } from "./app/app.config";
+import { initSentry } from "./app/sentry.config";
+
+initSentry();
 
 if (environment.production) {
   enableProdMode();

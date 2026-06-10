@@ -1,0 +1,13 @@
+/** @format */
+
+import { Observable } from "rxjs";
+import { Goal } from "../goals.model";
+import { GoalFormData } from "@domain/project/goal-form-data.model";
+
+/** Порт репозитория целей проекта */
+export abstract class ProjectGoalsRepositoryPort {
+  abstract fetchAll(projectId: number): Observable<Goal[]>;
+  abstract createGoal(projectId: number, params: GoalFormData[]): Observable<Goal[]>;
+  abstract editGoal(projectId: number, goalId: number, params: GoalFormData): Observable<Goal>;
+  abstract deleteGoal(projectId: number, goalId: number): Observable<void>;
+}

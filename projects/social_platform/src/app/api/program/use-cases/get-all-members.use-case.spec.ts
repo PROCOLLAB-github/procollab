@@ -1,0 +1,56 @@
+/** @format */
+
+import { TestBed } from "@angular/core/testing";
+import { of, throwError } from "rxjs";
+import { GetAllMembersUseCase } from "./get-all-members.use-case";
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { User } from "@domain/auth/user.model";
+
+describe("GetAllMembersUseCase", () => {
+  let useCase: GetAllMembersUseCase;
+  let repo: any;
+
+  function setup(): void {
+    repo = { getAllMembers: vi.fn() };
+    TestBed.configureTestingModule({
+      providers: [GetAllMembersUseCase, { provide: ProgramRepositoryPort, useValue: repo }],
+    });
+    useCase = TestBed.inject(GetAllMembersUseCase);
+  }
+
+  const page: ApiPagination<User> = { count: 0, results: [], next: "", previous: "" };
+
+  it("делегирует (programId, skip, take) в репозиторий", () => {
+    setup();
+    repo.getAllMembers.mockReturnValue(of(page));
+
+    useCase.execute(1, 0, 20).subscribe();
+
+    expect(repo.getAllMembers).toHaveBeenCalledExactlyOnceWith(1, 0, 20);
+  });
+
+  it("при успехе возвращает ok с пагинацией участников", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getAllMembers.mockReturnValue(of(page));
+
+      useCase.execute(1, 0, 20).subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(page);
+        done();
+      });
+    }));
+
+  it("при ошибке возвращает fail { kind: 'unknown' }", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.getAllMembers.mockReturnValue(throwError(() => new Error("boom")));
+
+      useCase.execute(1, 0, 20).subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) expect(result.error.kind).toBe("unknown");
+        done();
+      });
+    }));
+});

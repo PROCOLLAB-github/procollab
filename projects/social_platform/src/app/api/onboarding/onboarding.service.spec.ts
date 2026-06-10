@@ -1,0 +1,35 @@
+/** @format */
+
+import { TestBed } from "@angular/core/testing";
+
+import { of } from "rxjs";
+import { OnboardingService } from "./onboarding.service";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
+
+describe("OnboardingService", () => {
+  let service: OnboardingService;
+
+  const authPortSpy = {
+    fetchProfile: of({}),
+    fetchUserRoles: of([]),
+    fetchChangeableRoles: of([]),
+  };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: AuthRepositoryPort, useValue: authPortSpy },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
+      ],
+    });
+    service = TestBed.inject(OnboardingService);
+  });
+
+  it("should be created", () => {
+    expect(service).toBeTruthy();
+  });
+});

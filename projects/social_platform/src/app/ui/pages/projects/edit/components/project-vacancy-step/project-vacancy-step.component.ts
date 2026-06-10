@@ -1,0 +1,140 @@
+/** @format */
+
+import { CommonModule } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import {
+  InputComponent,
+  ButtonComponent,
+  SelectComponent,
+  TextareaComponent,
+} from "@ui/primitives";
+import { ControlErrorPipe } from "@corelib";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
+import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
+import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
+import { IconComponent } from "@uilib";
+import { Skill } from "@domain/skills/skill.model";
+import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
+import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-vacancy-ui.service";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
+import { SearchesService } from "@api/searches/searches.service";
+
+/** Шаг редактирования проекта: вакансии. */
+@Component({
+  selector: "app-project-vacancy-step",
+  templateUrl: "./project-vacancy-step.component.html",
+  styleUrl: "./project-vacancy-step.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    IconComponent,
+    ControlErrorPipe,
+    SelectComponent,
+    TextareaComponent,
+    AutoCompleteInputComponent,
+    SkillsBasketComponent,
+    VacancyCardComponent,
+    ModalComponent,
+    SkillsGroupComponent,
+  ],
+  providers: [ProjectsEditInfoService, ProjectVacancyService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ProjectVacancyStepComponent {
+  private readonly projectVacancyInfoService = inject(ProjectVacancyService);
+  private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
+  private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
+  private readonly searchesService = inject(SearchesService);
+  private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
+
+  // Геттеры для формы
+  protected readonly vacancyForm = this.projectVacancyUIService.vacancyForm;
+
+  protected readonly role = this.projectVacancyUIService.role;
+  protected readonly description = this.projectVacancyUIService.description;
+  protected readonly requiredExperience = this.projectVacancyUIService.requiredExperience;
+  protected readonly workFormat = this.projectVacancyUIService.workFormat;
+  protected readonly salary = this.projectVacancyUIService.salary;
+  protected readonly workSchedule = this.projectVacancyUIService.workSchedule;
+  protected readonly skills = this.projectVacancyUIService.skills;
+  protected readonly specialization = this.projectVacancyUIService.specialization;
+
+  // Геттеры для данных
+  protected readonly vacancies = this.projectVacancyUIService.vacancies;
+
+  protected readonly experienceList = this.projectVacancyUIService.workExperienceList;
+  protected readonly formatList = this.projectVacancyUIService.workFormatList;
+  protected readonly scheludeList = this.projectVacancyUIService.workScheduledList;
+  protected readonly rolesMembersList = this.projectVacancyUIService.rolesMembersList;
+
+  protected readonly selectedRequiredExperienceId =
+    this.projectVacancyUIService.selectedRequiredExperienceId;
+
+  protected readonly selectedWorkFormatId = this.projectVacancyUIService.selectedWorkFormatId;
+  protected readonly selectedWorkScheduleId = this.projectVacancyUIService.selectedWorkScheduleId;
+  protected readonly selectedVacanciesSpecializationId =
+    this.projectVacancyUIService.selectedVacanciesSpecializationId;
+
+  protected readonly vacancySubmitInitiated = this.projectVacancyUIService.vacancySubmitInitiated;
+  protected readonly vacancyIsSubmitting = this.projectVacancyUIService.vacancyIsSubmittingFlag;
+
+  protected readonly inlineSkills = this.projectsEditInfoService.inlineSkills;
+  protected readonly projectId = this.projectsEditInfoService.profileId;
+  protected readonly showInputFields = this.toggleFieldsInfoService.showInputFields;
+
+  // Сигналы для управления состоянием
+  protected readonly nestedSkills$ = this.projectsEditInfoService.nestedSkills$;
+  protected readonly skillsGroupsModalOpen = this.projectVacancyUIService.skillsGroupsModalOpen;
+
+  protected readonly hasOpenSkillsGroups = this.projectsEditInfoService.hasOpenSkillsGroups;
+  protected readonly openGroupIds = this.projectsEditInfoService.openGroupIds;
+
+  protected readonly errorMessage = ErrorMessage;
+
+  createVacancyBlock(): void {
+    this.toggleFieldsInfoService.showFields();
+  }
+
+  submitVacancy(): void {
+    this.projectVacancyInfoService.submitVacancy(this.projectId());
+  }
+
+  removeVacancy(vacancyId: number): void {
+    this.projectVacancyInfoService.removeVacancy(vacancyId);
+  }
+
+  editVacancy(index: number): void {
+    this.projectVacancyUIService.applyEditVacancy(index);
+  }
+
+  onAddSkill(newSkill: Skill): void {
+    this.searchesService.onAddSkill(newSkill, this.vacancyForm);
+  }
+
+  onRemoveSkill(oddSkill: Skill): void {
+    this.searchesService.onRemoveSkill(oddSkill, this.vacancyForm);
+  }
+
+  onToggleSkill(toggledSkill: Skill): void {
+    this.searchesService.onToggleSkill(toggledSkill, this.vacancyForm);
+  }
+
+  onSearchSkill(query: string): void {
+    this.projectsEditInfoService.onSearchSkill(query);
+  }
+
+  onToggleSkillsGroupsModal(): void {
+    this.skillsGroupsModalOpen.update(open => !open);
+  }
+
+  onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
+    this.projectsEditInfoService.onGroupToggled(isOpen, skillsGroupId);
+  }
+}

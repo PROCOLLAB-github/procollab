@@ -2,7 +2,7 @@
 
 <div class="sidebar">
   <a (click)="redirectToHome()" class="sidebar__logo">
-    <img [src]="logoSrc" alt="logo" />
+    <img [src]="logoSrc()" alt="logo" loading="lazy" decoding="async" />
   </a>
   <nav class="sidebar-nav sidebar__nav">
     <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">
@@ -11,19 +11,19 @@
         [style.opacity]="showBar ? 1 : 0"
         [style.transform]="'translateY(' + barPosition + 'px)'"
       ></div>
-      @for (item of navItems; track $index) {
-      <a
-        #navItem
-        (click)="handleItemClick(item)"
-        class="sidebar-nav__item text-body-12"
-        [routerLink]="item.isExternal ? null : item.link"
-        (mouseenter)="updateBarPosition(navItem)"
-        [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
-        [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
-      >
-        <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
-        {{ item.name }}
-      </a>
+      @for (item of navItems(); track $index) {
+        <a
+          #navItem
+          (click)="handleItemClick(item)"
+          class="sidebar-nav__item text-body-12"
+          [routerLink]="item.isExternal ? null : item.link"
+          (mouseenter)="updateBarPosition(navItem)"
+          [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
+          [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
+        >
+          <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
+          {{ item.name }}
+        </a>
       }
       <ng-content select="[afterNavItems]"></ng-content>
     </div>

@@ -1,8 +1,9 @@
 /** @format */
 
-import { Invite } from "@office/models/invite.model";
+import { Invite } from "@domain/invite/invite.model";
+import { InviteProjectSummary } from "@domain/project/invite-project-summary.model";
 
-export const inviteToProjectMapper = (invites: Invite[] = []): any[] => {
+export const inviteToProjectMapper = (invites: Invite[] = []): InviteProjectSummary[] => {
   return (invites ?? []).map((invite: Invite) => ({
     inviteId: invite.id,
     id: invite.project.id,

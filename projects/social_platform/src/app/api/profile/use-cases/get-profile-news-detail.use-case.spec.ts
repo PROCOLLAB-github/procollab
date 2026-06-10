@@ -1,0 +1,64 @@
+/** @format */
+
+import { TestBed } from "@angular/core/testing";
+import { of, throwError } from "rxjs";
+import { GetProfileNewsDetailUseCase } from "./get-profile-news-detail.use-case";
+import {
+  NewsRepositoryPort,
+  PROFILE_NEWS_REPOSITORY,
+} from "@domain/news/port/news.repository.port";
+import { ProfileNews } from "@domain/profile/profile-news.model";
+
+describe("GetProfileNewsDetailUseCase", () => {
+  let useCase: GetProfileNewsDetailUseCase;
+  let repo: any;
+
+  function setup(): void {
+    repo = { fetchNewsDetail: vi.fn() };
+    TestBed.configureTestingModule({
+      providers: [
+        GetProfileNewsDetailUseCase,
+        { provide: PROFILE_NEWS_REPOSITORY, useValue: repo },
+      ],
+    });
+    useCase = TestBed.inject(GetProfileNewsDetailUseCase);
+  }
+
+  it("делегирует userId и newsId в репозиторий", () => {
+    setup();
+    repo.fetchNewsDetail.mockReturnValue(of({} as ProfileNews));
+
+    useCase.execute("u1", "7").subscribe();
+
+    expect(repo.fetchNewsDetail).toHaveBeenCalledExactlyOnceWith("u1", "7");
+  });
+
+  it("при успехе возвращает ok с деталью новости", () =>
+    new Promise<void>(done => {
+      setup();
+      const news = { id: 7 } as unknown as ProfileNews;
+      repo.fetchNewsDetail.mockReturnValue(of(news));
+
+      useCase.execute("u1", "7").subscribe(result => {
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.value).toBe(news);
+        done();
+      });
+    }));
+
+  it("при ошибке возвращает fail { kind: 'get_profile_news_detail_error' } с cause", () =>
+    new Promise<void>(done => {
+      setup();
+      const boom = new Error("boom");
+      repo.fetchNewsDetail.mockReturnValue(throwError(() => boom));
+
+      useCase.execute("u1", "7").subscribe(result => {
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+          expect(result.error.kind).toBe("get_profile_news_detail_error");
+          expect(result.error.cause).toBe(boom);
+        }
+        done();
+      });
+    }));
+});

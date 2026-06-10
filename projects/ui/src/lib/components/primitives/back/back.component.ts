@@ -1,9 +1,17 @@
 /** @format */
 
-import { Component, inject, Input, type OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  type OnInit,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
-import { IconComponent } from "@ui/components";
+import { IconComponent } from "../icon/icon.component";
+import { LoggerService } from "@corelib";
 
 /**
  * Компонент кнопки "Назад"
@@ -25,17 +33,17 @@ import { IconComponent } from "@ui/components";
   selector: "app-back",
   templateUrl: "./back.component.html",
   styleUrl: "./back.component.scss",
-  standalone: true,
   imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BackComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly loggerService = inject(LoggerService);
 
   /** Путь для перехода (если не указан, используется history.back()) */
-  @Input() path?: string;
-
-  @Input() namespace?: string;
+  readonly path = input<string | undefined>();
+  readonly namespace = input<string | undefined>();
 
   ngOnInit(): void {}
 
@@ -46,10 +54,10 @@ export class BackComponent implements OnInit {
    * иначе возвращается к предыдущей странице в истории браузера
    */
   onClick(): void {
-    if (this.path) {
+    if (this.path()) {
       this.router
-        .navigateByUrl(this.path)
-        .then(() => console.debug("Route changed from BackComponent"));
+        .navigateByUrl(this.path()!)
+        .then(() => this.loggerService.debug("Route changed from BackComponent"));
     } else {
       this.location.back();
     }

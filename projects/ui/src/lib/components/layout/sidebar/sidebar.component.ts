@@ -2,15 +2,15 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Input,
-  QueryList,
-  ViewChildren,
+  input,
   type OnInit,
+  viewChildren,
 } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { IconComponent } from "@uilib";
+import { IconComponent } from "../../primitives/icon/icon.component";
 import { CommonModule } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 
@@ -48,15 +48,15 @@ export interface NavItem {
   selector: "ui-sidebar",
   templateUrl: "./sidebar.component.html",
   styleUrl: "./sidebar.component.scss",
-  standalone: true,
   imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   /** Массив элементов навигации */
-  @Input() navItems: NavItem[] = [];
+  readonly navItems = input<NavItem[]>([]);
 
   /** Путь к изображению логотипа (обязательный параметр) */
-  @Input({ required: true }) logoSrc!: string;
+  readonly logoSrc = input.required<string>();
 
   ngOnInit(): void {
     this.checkExternalActiveState();
@@ -68,7 +68,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     });
   }
 
-  @ViewChildren("navItem") navItemElements!: QueryList<ElementRef<HTMLElement>>;
+  readonly navItemElements = viewChildren<ElementRef<HTMLElement>>("navItem");
 
   /** Позиция анимированной полосы (индекс элемента навигации) */
   barPosition = 0;
@@ -85,15 +85,15 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   }
 
   initializeBarPosition(): void {
-    if (!this.navItemElements) return;
+    if (!this.navItemElements()) return;
 
-    const navElements = this.navItemElements.toArray();
+    const navElements = this.navItemElements();
 
     const activeRouterElement = navElements.find(elementRef =>
-      elementRef.nativeElement.classList.contains("sidebar-nav__item--active")
+      elementRef.nativeElement.classList.contains("sidebar-nav__item--active"),
     );
 
-    const activeExternalIndex = this.navItems.findIndex(item => item.isExternal && item.isActive);
+    const activeExternalIndex = this.navItems().findIndex(item => item.isExternal && item.isActive);
 
     if (activeRouterElement) {
       this.barPosition = activeRouterElement.nativeElement.offsetTop;
@@ -107,7 +107,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   checkExternalActiveState(): void {
     const currentUrl = window.location.href;
 
-    this.navItems.forEach(item => {
+    this.navItems().forEach(item => {
       if (item.isExternal) {
         if (item.link === "skills" && currentUrl.includes("skills.procollab.ru")) {
           item.isActive = true;
@@ -126,7 +126,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
    */
   handleItemClick(item: NavItem): void {
     if (item.isExternal) {
-      this.navItems.forEach(navItem => {
+      this.navItems().forEach(navItem => {
         if (navItem.isExternal) {
           navItem.isActive = false;
         }

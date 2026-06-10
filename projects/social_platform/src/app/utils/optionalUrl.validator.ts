@@ -3,7 +3,7 @@
 import { AbstractControl, ValidationErrors } from "@angular/forms";
 
 export const optionalUrlOrMentionValidator = (
-  control: AbstractControl
+  control: AbstractControl,
 ): ValidationErrors | null => {
   const value: string = control.value;
 

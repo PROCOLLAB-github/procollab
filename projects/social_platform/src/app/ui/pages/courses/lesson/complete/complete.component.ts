@@ -1,0 +1,45 @@
+/** @format */
+
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ButtonComponent } from "@ui/primitives";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AppRoutes } from "@api/paths/app-routes";
+
+/** Страница завершения задачи с результатами. */
+@Component({
+  selector: "app-complete",
+  imports: [CommonModule, ButtonComponent],
+  templateUrl: "./complete.component.html",
+  styleUrl: "./complete.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class TaskCompleteComponent implements OnInit {
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  courseId = signal<number | null>(null);
+
+  protected appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
+
+  ngOnInit(): void {
+    const courseId = Number(this.route.parent?.parent?.parent?.snapshot.paramMap.get("courseId"));
+    this.courseId.set(isNaN(courseId) ? null : courseId);
+  }
+
+  routeToCourses(): void {
+    const id = this.courseId();
+    this.router.navigateByUrl(id ? AppRoutes.courses.detail(id) : AppRoutes.courses.list());
+  }
+}

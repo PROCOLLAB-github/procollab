@@ -1,0 +1,290 @@
+/** @format */
+
+import { computed, DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
+import { ActivatedRoute, Params } from "@angular/router";
+import {
+  concatMap,
+  distinctUntilChanged,
+  EMPTY,
+  fromEvent,
+  map,
+  skip,
+  take,
+  tap,
+  throttleTime,
+} from "rxjs";
+import { NavService } from "@api/shared/nav.service";
+import { ProjectsInfoService } from "../projects-info.service";
+import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
+import { HttpParams } from "@angular/common/http";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Project } from "@domain/project/project.model";
+import { InviteProjectSummary } from "@domain/project/invite-project-summary.model";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "../../use-cases/get-my-projects.use-case";
+import {
+  AsyncState,
+  initial,
+  isLoading,
+  isSuccess,
+  loading,
+  success,
+} from "@domain/shared/async-state";
+import { InviteInfoService } from "@api/invite/facades/invite-info.service";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-cases/get-project-subscriptions.use-case";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+/** Управляет списками проектов: табы, фильтры URL, поиск, пагинация, инвайты. */
+@Injectable()
+export class ProjectsListInfoService {
+  private static readonly PROJECTS_PAGE_SIZE = 16;
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly navService = inject(NavService);
+  private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly projectsInfoService = inject(ProjectsInfoService);
+  private readonly inviteInfoService = inject(InviteInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+
+  private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
+  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
+  private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
+
+  private readonly projectsCount = signal<number>(0);
+
+  readonly count = computed(() => {
+    if (this.isInvites()) return this.inviteInfoService.invites().length;
+    return this.projectsCount();
+  });
+
+  private readonly currentPage = signal<number>(1);
+  private readonly projectsPerFetch = signal<number>(ProjectsListInfoService.PROJECTS_PAGE_SIZE);
+
+  private readonly currentSearchQuery = signal<string | undefined>(undefined);
+  // Используется для отсечения повторного запроса с теми же URL-параметрами.
+  private previousReqQuery = signal<Record<string, string> | null>(null);
+
+  readonly projects$ = signal<AsyncState<Array<Project | InviteProjectSummary>>>(initial());
+
+  readonly projects = computed<Array<Project | InviteProjectSummary>>(() => {
+    if (this.isInvites()) {
+      return inviteToProjectMapper(this.inviteInfoService.invites());
+    }
+
+    const state = this.projects$();
+    if (isSuccess(state)) return state.data;
+    if (isLoading(state)) return state.previous ?? [];
+    return [];
+  });
+
+  private readonly isAll = this.projectsInfoService.isAll;
+  private readonly isSubs = this.projectsInfoService.isSubs;
+  private readonly isInvites = this.projectsInfoService.isInvites;
+  private readonly profile = this.profileInfoService.profile;
+
+  initializationProjectsList(): void {
+    this.navService.setNavTitle("Проекты");
+
+    this.projectsInfoService.initializationRouterEvents();
+
+    this.route.data
+      .pipe(
+        map(d => d["data"] as ApiPagination<Project> | undefined),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(page => {
+        if (this.isSubs() || this.isInvites() || !page) return;
+        this.projects$.set(success(page.results ?? []));
+        this.projectsCount.set(page.count ?? 0);
+      });
+
+    this.route.queryParams
+      .pipe(
+        map(q => q["name__contains"]),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(search => {
+        if (search !== this.currentSearchQuery()) {
+          this.currentSearchQuery.set(search);
+          this.currentPage.set(1);
+        }
+      });
+
+    if (this.isAll()) {
+      this.route.queryParams
+        .pipe(
+          skip(1),
+          distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+          concatMap(q => {
+            const prev = this.projects();
+            this.projects$.set(loading(prev));
+
+            const reqQuery = this.buildFilterQuery(q);
+
+            if (
+              this.previousReqQuery() !== null &&
+              JSON.stringify(reqQuery) === JSON.stringify(this.previousReqQuery())
+            ) {
+              return EMPTY;
+            }
+
+            this.previousReqQuery.set(reqQuery);
+            this.currentPage.set(1);
+
+            return this.fetchAllProjects(reqQuery);
+          }),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe(projects => {
+          this.projects$.set(success(projects.results));
+          this.projectsCount.set(projects.count);
+        });
+    }
+
+    if (this.isSubs()) {
+      this.getProjectSubscriptionsUseCase
+        .execute(this.profile()!.id)
+        .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: result => {
+            if (!result.ok) return;
+
+            this.projectsCount.set(result.value.count);
+            this.projects$.set(success(result.value.results ?? []));
+          },
+        });
+    }
+
+    this.profileInfoService.ensureProfileSubsLoaded();
+  }
+
+  initScroll(target: HTMLElement, listRoot: ElementRef<HTMLUListElement>): void {
+    fromEvent(target, "scroll")
+      .pipe(
+        throttleTime(300),
+        concatMap(() => this.onScroll(target, listRoot)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+
+  private buildFilterQuery(q: Params): Record<string, string> {
+    const reqQuery: Record<string, string> = {};
+
+    if (q["name__contains"]) {
+      reqQuery["name__contains"] = q["name__contains"];
+    }
+    if (q["industry"]) {
+      reqQuery["industry"] = q["industry"];
+    }
+    if (q["step"]) {
+      reqQuery["step"] = q["step"];
+    }
+    if (q["membersCount"]) {
+      reqQuery["collaborator__count__gte"] = q["membersCount"];
+    }
+    if (q["anyVacancies"]) {
+      reqQuery["any_vacancies"] = q["anyVacancies"];
+    }
+    if (q["is_rated_by_expert"]) {
+      reqQuery["is_rated_by_expert"] = q["is_rated_by_expert"];
+    }
+    if (q["is_mospolytech"]) {
+      reqQuery["is_mospolytech"] = q["is_mospolytech"];
+      reqQuery["partner_program"] = q["partner_program"];
+    }
+
+    return reqQuery;
+  }
+
+  private onScroll(target: HTMLElement, listRoot: ElementRef<HTMLUListElement>) {
+    if (this.isSubs() || this.isInvites()) {
+      return EMPTY;
+    }
+
+    if (this.projectsCount() && this.projects().length >= this.projectsCount()) return EMPTY;
+
+    if (!target || !listRoot.nativeElement) return EMPTY;
+
+    const diff =
+      target.scrollTop - listRoot.nativeElement.getBoundingClientRect().height + window.innerHeight;
+
+    if (diff > 0) {
+      return this.onFetch(
+        this.currentPage() * this.projectsPerFetch(),
+        this.projectsPerFetch(),
+      ).pipe(
+        tap(chunk => {
+          this.currentPage.update(p => p + 1);
+          this.projects$.update(state =>
+            isSuccess(state) ? success([...state.data, ...chunk]) : success(chunk),
+          );
+        }),
+      );
+    }
+
+    return EMPTY;
+  }
+
+  private onFetch(skip: number, take: number) {
+    const queryParams = {
+      offset: skip,
+      limit: take,
+      ...this.buildFilterQuery(this.route.snapshot.queryParams),
+    };
+
+    if (this.isAll()) {
+      return this.fetchAllProjects(queryParams).pipe(map(projects => projects.results));
+    }
+
+    return this.fetchMyProjects({ offset: skip, limit: take }).pipe(
+      tap(projects => {
+        this.projectsCount.set(projects.count);
+      }),
+      map(projects => projects.results),
+    );
+  }
+
+  private fetchAllProjects(queryParams?: Record<string, string | number>) {
+    const params = queryParams ? new HttpParams({ fromObject: queryParams }) : undefined;
+
+    return this.getAllProjectsUseCase.execute(params).pipe(
+      map(result => {
+        if (!result.ok) {
+          this.logger.error("Error fetching all projects:", result.error);
+          return this.emptyProjectsPage();
+        }
+
+        return result.value;
+      }),
+    );
+  }
+
+  private fetchMyProjects(queryParams?: Record<string, string | number>) {
+    const params = queryParams ? new HttpParams({ fromObject: queryParams }) : undefined;
+
+    return this.getMyProjectsUseCase.execute(params).pipe(
+      map(result => {
+        if (!result.ok) {
+          this.logger.error("Error fetching my projects:", result.error);
+          return this.emptyProjectsPage();
+        }
+
+        return result.value;
+      }),
+    );
+  }
+
+  private emptyProjectsPage(): ApiPagination<Project> {
+    return {
+      count: 0,
+      results: [],
+      next: "",
+      previous: "",
+    };
+  }
+}

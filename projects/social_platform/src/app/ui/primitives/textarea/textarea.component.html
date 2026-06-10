@@ -1,0 +1,51 @@
+<!-- @format -->
+
+<div
+  class="field"
+  [class.field--error]="error()"
+  [class.field--small]="size() === 'small'"
+  [class.field--big]="size() === 'big'"
+>
+  <div class="field__left-icon">
+    <ng-content select="left-icon"></ng-content>
+  </div>
+  <textarea
+    autosize
+    [value]="value"
+    (input)="onInput($event)"
+    (keydown.enter)="preventEnter($event)"
+    (blur)="onBlur()"
+    [disabled]="disabled"
+    [placeholder]="placeholder()"
+    class="text-body-12 field__input"
+    [class.field__input--small]="size() === 'small'"
+    [class.field__input--big]="size() === 'big'"
+    [class.field__input--error]="error()"
+    [class.field__input--overflow]="isLengthOverflow"
+  ></textarea>
+  @if (maxLength()) {
+    <div class="field__counter">
+      <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
+        <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
+          value.length
+        }}</span>
+        / {{ maxLength() }}
+      </p>
+    </div>
+  }
+  @if (error()) {
+    <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+  } @else if (haveHint() && tooltipText()) {
+    <div class="field__tooltip-wrapper">
+      <app-tooltip
+        [text]="tooltipText()!"
+        [isVisible]="isTooltipVisible"
+        [position]="tooltipPosition()"
+        [tooltipWidth]="tooltipWidth()"
+        customClass="field__tooltip-icon"
+        (show)="showTooltip()"
+        (hide)="hideTooltip()"
+      ></app-tooltip>
+    </div>
+  }
+</div>

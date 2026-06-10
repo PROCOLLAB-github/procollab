@@ -1,0 +1,92 @@
+/** @format */
+
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  input,
+  Input,
+  OnInit,
+  output,
+  Output,
+  signal,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { Task } from "@domain/courses/courses.model";
+import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { animateContentHeight } from "@utils/animate-content-height";
+import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
+import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
+import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
+
+/** Компонент задачи с одним вариантом ответа и локальным сбросом выбора при ошибке. */
+@Component({
+  selector: "app-radio-select-task",
+  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
+  templateUrl: "./radio-select-task.component.html",
+  styleUrl: "./radio-select-task.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class RadioSelectTaskComponent implements OnInit {
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  readonly data = input.required<Task>();
+  readonly success = input<boolean>(false);
+  readonly hint = input<string>("");
+  readonly disabled = input<boolean>(false);
+
+  @Input()
+  set error(value: boolean) {
+    this._error.set(value);
+
+    if (value) {
+      setTimeout(() => {
+        // Ошибочный ответ сбрасывает выбранный вариант.
+        this.result.set({ answerId: null });
+        this._error.set(false);
+      }, 1000);
+    }
+  }
+
+  get error() {
+    return this._error();
+  }
+
+  readonly update = output<{ answerId: number }>();
+
+  result = signal<{ answerId: number | null }>({ answerId: null });
+  _error = signal<boolean>(false);
+  readFullDescription = false;
+  cachedVideoUrl: SafeResourceUrl | null = null;
+  readonly truncateLimit = 700;
+
+  get descriptionExpandable(): boolean {
+    return isHtmlTextTruncated(this.data()?.bodyText, this.truncateLimit);
+  }
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  ngOnInit(): void {
+    const iframeUrl = resolveVideoUrlForIframe(this.data()?.videoUrl);
+    this.cachedVideoUrl = iframeUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
+      : null;
+  }
+
+  onToggleDescription(elem: HTMLElement): void {
+    animateContentHeight(elem, () => {
+      this.readFullDescription = !this.readFullDescription;
+      this.cdRef.detectChanges();
+    });
+  }
+
+  onSelect(id: number) {
+    if (this.disabled()) return;
+    this.result.set({ answerId: id });
+    this.update.emit({ answerId: id });
+  }
+}

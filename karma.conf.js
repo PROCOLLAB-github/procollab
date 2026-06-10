@@ -31,7 +31,7 @@ module.exports = function (config) {
       subdir: ".",
       reporters: [{ type: "html" }, { type: "text-summary" }],
     },
-    reporters: ["progress", "kjhtml"],
+    reporters: ["progress", "kjhtml", "coverage"],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
@@ -40,7 +40,12 @@ module.exports = function (config) {
     customLaunchers: {
       Headless: {
         base: "ChromeHeadless",
-        flags: ["--no-sandbox", "--disable-setuid-sandbox"],
+        flags: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+        ],
       },
     },
     singleRun: false,

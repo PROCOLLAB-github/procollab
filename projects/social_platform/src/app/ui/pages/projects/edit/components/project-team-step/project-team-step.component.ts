@@ -1,0 +1,143 @@
+/** @format */
+
+import { CommonModule } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { InputComponent, ButtonComponent } from "@ui/primitives";
+import { ControlErrorPipe } from "@corelib";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { InviteCardComponent } from "./invite-card/invite-card.component";
+import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
+import { IconComponent } from "@uilib";
+import { CollaboratorCardComponent } from "./collaborator-card/collaborator-card.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+
+/** Шаг редактирования проекта: команда. */
+@Component({
+  selector: "app-project-team-step",
+  templateUrl: "./project-team-step.component.html",
+  styleUrl: "./project-team-step.component.scss",
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    IconComponent,
+    ControlErrorPipe,
+    InviteCardComponent,
+    CollaboratorCardComponent,
+    TooltipComponent,
+    ModalComponent,
+  ],
+  providers: [ToggleFieldsInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ProjectTeamStepComponent implements OnInit {
+  private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
+  private readonly projectTeamService = inject(ProjectTeamService);
+  private readonly projectTeamUIService = inject(ProjectTeamUIService);
+  protected readonly tooltipInfoService = inject(TooltipInfoService);
+  private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
+
+  // Константы для селектов
+  protected readonly rolesMembersList = rolesMembersList;
+  protected readonly showInputFields = this.toggleFieldsInfoService.showInputFields;
+
+  // Геттеры для формы
+  protected readonly inviteForm = this.projectTeamUIService.inviteForm;
+
+  protected readonly role = this.projectTeamUIService.role;
+  protected readonly link = this.projectTeamUIService.link;
+  protected readonly specialization = this.projectTeamUIService.specialization;
+
+  // Геттеры для данных
+  protected readonly invites = this.projectTeamUIService.invites;
+  protected readonly collaborators = this.projectTeamUIService.collaborators;
+  protected readonly invitesFill = this.projectTeamUIService.invitesFill;
+
+  protected readonly isInviteModalOpen = this.projectTeamUIService.isInviteModalOpen;
+  protected readonly inviteNotExistingError = this.projectTeamUIService.inviteNotExistingError;
+  protected readonly inviteSubmitInitiated = this.projectTeamUIService.inviteSubmitInitiated;
+  protected readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
+
+  protected readonly projectId = this.projectsEditInfoService.profileId;
+
+  /** Наличие подсказки */
+  protected readonly haveHint = this.tooltipInfoService.haveHint;
+
+  protected isHintTeamVisible = this.tooltipInfoService.isVisible;
+  protected readonly isHintTeamModal = this.projectTeamUIService.isHintTeamModal;
+
+  /** Позиция подсказки */
+  protected readonly tooltipPosition = this.tooltipInfoService.tooltipPosition;
+
+  /** Состояние видимости подсказки */
+  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
+
+  protected readonly errorMessage = ErrorMessage;
+
+  ngOnInit(): void {
+    // Настраиваем динамическую валидацию
+    this.projectTeamService.setupDynamicValidation();
+  }
+
+  /** Показать подсказку */
+  toggleTooltip(key: "base" | "team"): void {
+    this.tooltipInfoService.toggleTooltip(key);
+  }
+
+  /**
+   * Открытие блоков для создания приглашения
+   */
+  createInvitationBlock(): void {
+    this.toggleFieldsInfoService.showFields();
+  }
+
+  openInviteModal(): void {
+    this.projectTeamUIService.applyOpenInviteModal();
+  }
+
+  closeInviteModal(): void {
+    this.projectTeamUIService.applyCloseInviteModal();
+  }
+
+  submitInvite(): void {
+    if (this.link?.value!.trim() || this.role?.value!.trim()) {
+      this.projectTeamService.submitInvite(this.projectId());
+      this.toggleFieldsInfoService.hideFields();
+      return;
+    }
+
+    this.toggleFieldsInfoService.showFields();
+  }
+
+  editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
+    this.projectTeamService.editInvitation(params);
+  }
+
+  removeInvitation(invitationId: number): void {
+    this.projectTeamService.removeInvitation(invitationId);
+  }
+
+  onModalOpenChange(open: boolean): void {
+    if (!open) {
+      this.closeInviteModal();
+    }
+  }
+
+  onCollaboratorRemove(collaboratorId: number): void {
+    this.projectTeamUIService.applyRemoveCollaborator(collaboratorId);
+  }
+
+  openHintModal(event: Event): void {
+    event.preventDefault();
+    this.tooltipInfoService.toggleTooltip("team");
+    this.projectTeamUIService.applyOpenHintModal();
+  }
+}

@@ -1,0 +1,379 @@
+/** @format */
+
+import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { concatMap, filter, map, Observable, skip, take } from "rxjs";
+import { yearRangeValidators } from "@utils/yearRangeValidators";
+import { User, UserRolesData } from "@domain/auth/user.model";
+import { Specialization } from "@domain/specializations/specialization.model";
+import { generateOptionsList } from "@utils/generate-options-list";
+import {
+  educationUserLevel,
+  educationUserType,
+} from "@core/consts/lists/education-info-list.const";
+import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProfileInfoService } from "../profile-info.service";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+
+/** Реактивная форма профиля: построение `FormGroup`, справочники (роли, годы, образование), inline-специализации. */
+@Injectable({ providedIn: "root" })
+export class ProfileFormService {
+  private readonly fb = inject(FormBuilder);
+  private readonly injector = inject(Injector);
+  private readonly authRepository = inject(AuthRepositoryPort);
+  private readonly profileInfoService = inject(ProfileInfoService);
+
+  private readonly destroyRef = inject(DestroyRef);
+
+  private profileForm!: FormGroup;
+
+  readonly inlineSpecs = signal<Specialization[]>([]);
+  readonly profileId = signal<number | undefined>(undefined);
+
+  private readonly changeableRoles = this.profileInfoService.changeableRoles;
+  private readonly profile = this.profileInfoService.profile;
+
+  readonly roles = signal<{ value: string | number | boolean | null; label: string; id: number }[]>(
+    [],
+  );
+
+  readonly newPreferredIndustryTitle = signal<string>("");
+
+  readonly yearListEducation = generateOptionsList(55, "years", [], false).reverse();
+  readonly yearListEducationWithPresent = generateOptionsList(55, "years").reverse();
+  readonly educationStatusList = educationUserType;
+  readonly educationLevelList = educationUserLevel;
+
+  readonly achievementsYearList = generateOptionsList(25, "years", [], false).reverse();
+
+  readonly languageList = languageNamesList;
+  readonly languageLevelList = languageLevelsList;
+
+  private readonly userTypeMap: Record<number, keyof UserRolesData> = {
+    1: "member",
+    2: "mentor",
+    3: "expert",
+    4: "investor",
+  };
+
+  constructor() {
+    this.initializeProfileForm();
+
+    toObservable(this.changeableRoles, { injector: this.injector })
+      .pipe(
+        filter(roles => !!roles),
+        map(roles => roles!.map(role => ({ id: role.id, value: role.id, label: role.name }))),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: roles => {
+          this.roles.set(roles);
+        },
+      });
+  }
+
+  private initializeProfileForm(): void {
+    this.profileForm = this.fb.group({
+      firstName: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
+      email: ["", [Validators.email, Validators.maxLength(50)]],
+      userType: [0],
+      birthday: ["", [Validators.required]],
+      city: ["", [Validators.required, Validators.maxLength(100)]],
+      phoneNumber: ["", Validators.maxLength(12)],
+      additionalRole: [null],
+      coverImageAddress: [null],
+
+      // education
+      organizationName: ["", Validators.maxLength(100)],
+      entryYear: [null],
+      completionYear: [null],
+      description: [null, Validators.maxLength(400)],
+      educationLevel: [null],
+      educationStatus: [""],
+      isMospolytechStudent: [false],
+      studyGroup: ["", Validators.maxLength(10)],
+
+      // language
+      language: [null],
+      languageLevel: [null],
+
+      // achievements
+      title: [null],
+      status: [null],
+      year: [null],
+      files: [""],
+
+      education: this.fb.array([]),
+      workExperience: this.fb.array([]),
+      userLanguages: this.fb.array([]),
+      links: this.fb.array([]),
+      achievements: this.fb.array([]),
+
+      // work
+      organization: ["", Validators.maxLength(50)],
+      entryYearWork: [null],
+      completionYearWork: [null],
+      descriptionWork: [null, Validators.maxLength(400)],
+      jobPosition: [""],
+
+      // skills
+      speciality: ["", [Validators.required]],
+      skills: [[]],
+      avatar: [""],
+      aboutMe: ["", Validators.maxLength(300)],
+      typeSpecific: this.fb.group({}),
+    });
+
+    this.profileForm
+      .get("userType")
+      ?.valueChanges.pipe(
+        skip(1),
+        concatMap(this.changeUserType.bind(this)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+
+    this.profileForm
+      .get("avatar")
+      ?.valueChanges.pipe(
+        skip(1),
+        concatMap(url => this.authRepository.updateAvatar(url, this.profile()!.id)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(user => this.profileInfoService.applyProfileUpdated(user));
+  }
+
+  public initializeProfileData(): void {
+    toObservable(this.profile, { injector: this.injector })
+      .pipe(
+        filter((profile): profile is User => !!profile),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: profile => {
+          this.profileId.set(profile.id);
+
+          this.profileForm.patchValue({
+            firstName: profile.firstName ?? "",
+            lastName: profile.lastName ?? "",
+            email: profile.email ?? "",
+            userType: profile.personal.userType ?? 1,
+            birthday: profile.personal.birthday ?? "",
+            city: profile.personal.city ?? "",
+            coverImageAddress: profile.personal.coverImageAddress ?? "",
+            phoneNumber: profile.personal.phoneNumber ?? "",
+            additionalRole: profile.personal.v2Speciality?.name ?? "",
+            speciality: profile.personal.speciality ?? "",
+            skills: profile.relations.skills ?? [],
+            avatar: profile.personal.avatar ?? "",
+            aboutMe: profile.personal.aboutMe ?? "",
+            isMospolytechStudent: profile.personal.isMospolytechStudent ?? false,
+            studyGroup: profile.personal.studyGroup ?? "",
+          });
+
+          this.workExperience.clear();
+          profile.relations.workExperience.forEach(work => {
+            this.workExperience.push(
+              this.fb.group(
+                {
+                  organizationName: work.organizationName,
+                  entryYear: work.entryYear,
+                  completionYear: work.completionYear,
+                  description: work.description,
+                  jobPosition: work.jobPosition,
+                },
+                {
+                  validators: yearRangeValidators("entryYear", "completionYear"),
+                },
+              ),
+            );
+          });
+
+          this.education.clear();
+          profile.relations.education.forEach(edu => {
+            this.education.push(
+              this.fb.group(
+                {
+                  organizationName: edu.organizationName,
+                  entryYear: edu.entryYear,
+                  completionYear: edu.completionYear,
+                  description: edu.description,
+                  educationStatus: edu.educationStatus,
+                  educationLevel: edu.educationLevel,
+                },
+                {
+                  validators: yearRangeValidators("entryYear", "completionYear"),
+                },
+              ),
+            );
+          });
+
+          this.userLanguages.clear();
+          profile.relations.userLanguages.forEach(lang => {
+            this.userLanguages.push(
+              this.fb.group({
+                language: lang.language,
+                languageLevel: lang.languageLevel,
+              }),
+            );
+          });
+
+          this.achievements.clear();
+          profile.relations.achievements.forEach(achievement => {
+            this.achievements.push(
+              this.fb.group({
+                id: [achievement.id],
+                title: [achievement.title, Validators.required],
+                status: [achievement.status, Validators.required],
+                year: [achievement.year, Validators.required],
+                files: [achievement.files ?? []],
+              }),
+            );
+          });
+
+          profile.personal.links.length && profile.personal.links.forEach(l => this.addLink(l));
+
+          if ([2, 3, 4].includes(profile.personal.userType)) {
+            this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
+            const role = profile.roles[this.userTypeMap[profile.personal.userType]] as
+              | { preferredIndustries?: string[] }
+              | undefined;
+            role?.preferredIndustries?.forEach((industry: string) =>
+              this.addPreferredIndustry(industry),
+            );
+          }
+
+          if ([1, 3, 4].includes(profile.personal.userType)) {
+            const userTypeData =
+              profile.roles.member ?? profile.roles.mentor ?? profile.roles.expert;
+            this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
+            this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject);
+          }
+        },
+      });
+  }
+
+  public getForm(): FormGroup {
+    return this.profileForm;
+  }
+
+  get avatar(): FormControl {
+    return this.profileForm.get("avatar") as FormControl;
+  }
+
+  get coverImageAddress(): FormControl {
+    return this.profileForm.get("coverImageAddress") as FormControl;
+  }
+
+  get firstName(): FormControl {
+    return this.profileForm.get("firstName") as FormControl;
+  }
+
+  get lastName(): FormControl {
+    return this.profileForm.get("lastName") as FormControl;
+  }
+
+  get city(): FormControl {
+    return this.profileForm.get("city") as FormControl;
+  }
+
+  get birthday(): FormControl {
+    return this.profileForm.get("birthday") as FormControl;
+  }
+
+  get userType(): FormControl {
+    return this.profileForm.get("userType") as FormControl;
+  }
+
+  get speciality(): FormControl {
+    return this.profileForm.get("speciality") as FormControl;
+  }
+
+  get aboutMe(): FormControl {
+    return this.profileForm.get("aboutMe") as FormControl;
+  }
+
+  get phoneNumber(): FormControl {
+    return this.profileForm.get("phoneNumber") as FormControl;
+  }
+
+  get achievements(): FormArray {
+    return this.profileForm.get("achievements") as FormArray;
+  }
+
+  get education(): FormArray {
+    return this.profileForm.get("education") as FormArray;
+  }
+
+  get workExperience(): FormArray {
+    return this.profileForm.get("workExperience") as FormArray;
+  }
+
+  get userLanguages(): FormArray {
+    return this.profileForm.get("userLanguages") as FormArray;
+  }
+
+  get links(): FormArray {
+    return this.profileForm.get("links") as FormArray;
+  }
+
+  get typeSpecific(): FormGroup {
+    return this.profileForm.get("typeSpecific") as FormGroup;
+  }
+
+  get usefulToProject(): FormControl {
+    return this.typeSpecific.get("usefulToProject") as FormControl;
+  }
+
+  get preferredIndustries(): FormArray {
+    return this.typeSpecific.get("preferredIndustries") as FormArray;
+  }
+
+  addPreferredIndustry(title?: string): void {
+    const fromState = title ?? this.newPreferredIndustryTitle;
+    if (!fromState) {
+      return;
+    }
+
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.preferredIndustries.push(control);
+
+    this.newPreferredIndustryTitle.set("");
+  }
+
+  removePreferredIndustry(i: number): void {
+    this.preferredIndustries.removeAt(i);
+  }
+
+  protected readonly newLink = signal<string>("");
+
+  addLink(title?: string): void {
+    const fromState = title ?? this.newLink;
+
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.links.push(control);
+
+    this.newLink.set("");
+  }
+
+  removeLink(i: number): void {
+    this.links.removeAt(i);
+  }
+
+  changeUserType(typeId: number): Observable<void> {
+    return this.authRepository
+      .updateProfile({
+        email: this.profileForm.value.email,
+        firstName: this.profileForm.value.firstName,
+        lastName: this.profileForm.value.lastName,
+        userType: typeId,
+      })
+      .pipe(
+        map(() => location.reload()),
+        takeUntilDestroyed(this.destroyRef),
+      );
+  }
+}

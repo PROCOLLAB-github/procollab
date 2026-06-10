@@ -1,0 +1,19 @@
+/** @format */
+
+import { CommonModule } from "@angular/common";
+import { ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
+import { PluralizePipe } from "@corelib";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { Skill } from "@domain/skills/skill.model";
+
+/** Виджет: люди, подтвердившие навык. */
+@Component({
+  selector: "app-approve-skill-people",
+  templateUrl: "./approve-skill-people.component.html",
+  styleUrl: "./approve-skill-people.component.scss",
+  imports: [CommonModule, AvatarComponent, PluralizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ApproveSkillPeopleComponent {
+  readonly approves = input.required<Skill["approves"]>();
+}

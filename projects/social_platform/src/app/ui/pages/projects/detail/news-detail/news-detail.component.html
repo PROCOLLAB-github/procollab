@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<app-modal [open]="true" (openChange)="onOpenChange($event)">
+  @if (newsItem | async; as item) {
+    <app-news-card
+      class="item"
+      [feedItem]="item"
+      [resourceLink]="[AppRoutes.projects.detail(item.id)]"
+    ></app-news-card>
+  }
+</app-modal>

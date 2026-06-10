@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@angular/core";
 
 /**
  * Компонент аватара пользователя
@@ -30,28 +30,29 @@ import { Component, Input, type OnInit } from "@angular/core";
   templateUrl: "./avatar.component.html",
   styleUrl: "./avatar.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarComponent implements OnInit {
   /** URL изображения аватара (опциональный, при отсутствии используется placeholder) */
-  @Input({ required: true }) url?: string;
+  readonly url = input.required<string | undefined>();
 
   /** Размер аватара в пикселях (по умолчанию 50px) */
-  @Input() size = 50;
+  readonly size = input<number>(50);
 
   /** Флаг отображения рамки вокруг аватара */
-  @Input() hasBorder = false;
+  readonly hasBorder = input<boolean>(false);
 
   /** Флаг отображения индикатора онлайн статуса */
-  @Input() isOnline = false;
+  readonly isOnline = input<boolean>(false);
 
   /** Размер индикатора онлайн статуса в пикселях */
-  @Input() onlineBadgeSize = 16;
+  readonly onlineBadgeSize = input<number>(16);
 
   /** Толщина рамки индикатора онлайн статуса в пикселях */
-  @Input() onlineBadgeBorder = 3;
+  readonly onlineBadgeBorder = input<number>(3);
 
   /** Смещение индикатора онлайн статуса от края аватара */
-  @Input() onlineBadgeOffset = 0;
+  readonly onlineBadgeOffset = input<number>(0);
 
   /** URL placeholder изображения, используемого при отсутствии аватара */
   placeholderUrl =

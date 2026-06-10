@@ -1,0 +1,207 @@
+/** @format */
+
+import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NavService } from "@api/shared/nav.service";
+import {
+  concatMap,
+  debounceTime,
+  distinctUntilChanged,
+  EMPTY,
+  fromEvent,
+  map,
+  skip,
+  switchMap,
+  take,
+  tap,
+  throttleTime,
+} from "rxjs";
+import { User } from "@domain/auth/user.model";
+import { AbstractControl } from "@angular/forms";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { MembersUIInfoService } from "./ui/members-ui-info.service";
+import { NavigationService } from "../../paths/navigation.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { GetMembersUseCase } from "../use-cases/get-members.use-case";
+import { isSuccess, loading, success } from "@domain/shared/async-state";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+/** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
+@Injectable()
+export class MembersInfoService {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
+  private readonly navService = inject(NavService);
+  private readonly navigationService = inject(NavigationService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly membersUIInfoService = inject(MembersUIInfoService);
+
+  private readonly getMembersUseCase = inject(GetMembersUseCase);
+
+  private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
+  private readonly membersTake = this.membersUIInfoService.membersTake; // Количество участников на странице
+
+  private readonly profile = this.profileInfoService.profile;
+  private readonly profileId = this.profileDetailUIInfoService.profileId;
+
+  private readonly searchForm = this.membersUIInfoService.searchForm;
+  private readonly filterForm = this.membersUIInfoService.filterForm;
+
+  initializationMembers(): void {
+    // Устанавливаем заголовок страницы
+    this.navService.setNavTitle("Участники");
+
+    this.profileDetailUIInfoService.applySetLoggedUserId("profile", this.profile()!.id);
+
+    this.initializationControls();
+
+    // Подписываемся на изменения URL параметров для обновления списка участников
+    // (skip(1) пропускает начальное значение — данные уже загружены resolver'ом)
+    this.initializationQueryParams();
+  }
+
+  private initializationControls(): void {
+    this.route.data
+      .pipe(
+        take(1),
+        map(r => r["data"]),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((members: ApiPagination<User>) => {
+        this.membersUIInfoService.applyMembersPagination(members);
+      });
+
+    // Настраиваем синхронизацию значений форм с URL параметрами
+    this.saveControlValue(this.searchForm.get("search"), "fullname");
+    this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
+    this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
+    this.saveControlValue(this.filterForm.get("age"), "age");
+    this.saveControlValue(this.filterForm.get("isMosPolytechStudent"), "is_mospolytech_student");
+  }
+
+  private initializationQueryParams(): void {
+    this.route.queryParams
+      .pipe(
+        skip(1), // Пропускаем первое значение
+        distinctUntilChanged(), // Игнорируем одинаковые значения
+        debounceTime(100), // Задержка для предотвращения частых запросов
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(params => {
+          // Формируем параметры для API запроса
+          const fetchParams: Record<string, string> = {};
+
+          if (params["fullname"]) fetchParams["fullname"] = params["fullname"];
+          if (params["skills__contains"])
+            fetchParams["skills__contains"] = params["skills__contains"];
+          if (params["speciality__icontains"])
+            fetchParams["speciality__icontains"] = params["speciality__icontains"];
+          if (params["is_mospolytech_student"])
+            fetchParams["is_mospolytech_student"] = params["is_mospolytech_student"];
+
+          // Проверяем формат параметра возраста (должен быть "число,число")
+          if (params["age"] && /\d+,\d+/.test(params["age"])) fetchParams["age"] = params["age"];
+
+          this.searchParams.set(fetchParams);
+
+          const prev = this.membersUIInfoService.members();
+          this.membersUIInfoService.members$.set(loading(prev));
+
+          return this.onFetch(0, 20, fetchParams);
+        }),
+      )
+      .subscribe(members => {
+        this.membersUIInfoService.members$.set(success(members.results));
+      });
+  }
+
+  private onScroll(target: HTMLElement, membersRoot: ElementRef<HTMLUListElement>) {
+    // Проверяем, есть ли еще участники для загрузки
+    const total = this.membersUIInfoService.membersTotalCount();
+
+    if (total !== undefined && this.membersUIInfoService.members().length >= total) {
+      return EMPTY;
+    }
+
+    if (!target || !membersRoot?.nativeElement) return EMPTY;
+
+    // Вычисляем, достиг ли пользователь конца списка
+    const diff =
+      target.scrollTop -
+      membersRoot.nativeElement.getBoundingClientRect().height +
+      window.innerHeight;
+
+    if (diff > 0) {
+      // Загружаем следующую порцию участников
+      return this.onFetch(
+        this.membersUIInfoService.members().length,
+        this.membersTake(),
+        this.searchParams(),
+      ).pipe(
+        tap(membersChunk => {
+          this.membersUIInfoService.members$.update(state =>
+            isSuccess(state)
+              ? success([...state.data, ...membersChunk.results])
+              : success(membersChunk.results),
+          );
+        }),
+      );
+    }
+
+    return EMPTY;
+  }
+
+  initScroll(target: HTMLElement, membersRoot: ElementRef<HTMLUListElement>): void {
+    fromEvent(target, "scroll")
+      .pipe(
+        throttleTime(500),
+        // concatMap (а не merge/switchMap): подгрузки идут строго последовательно,
+        // иначе параллельные скроллы посчитают одинаковый skip (= текущая длина
+        // списка) и придут дубли страниц.
+        concatMap(() => this.onScroll(target, membersRoot)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+
+  private saveControlValue(control: AbstractControl | null, queryName: string): void {
+    if (!control) return;
+
+    control.valueChanges
+      .pipe(throttleTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.router
+          .navigate([], {
+            queryParams: { [queryName]: value.toString() },
+            relativeTo: this.route,
+            queryParamsHandling: "merge",
+          })
+          .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
+      });
+  }
+
+  private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
+    return this.getMembersUseCase.execute(skip, take, params).pipe(
+      map(result => (result.ok ? result.value : this.emptyMembersPagination())),
+      takeUntilDestroyed(this.destroyRef),
+    );
+  }
+
+  redirectToProfile(): void {
+    this.navigationService.profileRedirect(this.profileId());
+  }
+
+  private emptyMembersPagination(): ApiPagination<User> {
+    return {
+      count: 0,
+      results: [],
+      next: "",
+      previous: "",
+    };
+  }
+}

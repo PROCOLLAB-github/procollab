@@ -1,0 +1,313 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  max-width: 1280px;
+  padding-bottom: 100px;
+  margin: 0 auto;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 8fr 2fr;
+  }
+
+  &__outlet {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 20px;
+    width: 100%;
+    padding: 0 10px;
+    margin-top: 12px;
+
+    @include responsive.apply-desktop {
+      padding: 0;
+    }
+  }
+
+  &__filter {
+    display: none;
+
+    &--open {
+      display: block;
+    }
+
+    @include responsive.apply-desktop {
+      display: block;
+      margin-left: 16px;
+    }
+  }
+
+  &__mobile-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-filter-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__clear {
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  &__mobile-export {
+    display: flex;
+    gap: 20px;
+
+    ::ng-deep app-button {
+      flex: 1;
+
+      button {
+        width: 100%;
+      }
+
+      span {
+        margin-right: 5px !important;
+      }
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 50px;
+    column-gap: 12px;
+    align-items: flex-start;
+    margin-top: 30px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(4, 2fr);
+      row-gap: 50px;
+      column-gap: 20px;
+      margin-top: 50px;
+    }
+
+    &--rating {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+      margin-top: 0;
+
+      @include responsive.apply-desktop {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  &__create {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  &__left {
+    position: relative;
+    width: 100%;
+  }
+
+  &__export {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+
+    ::ng-deep {
+      app-button {
+        span {
+          margin-right: 5px !important;
+        }
+      }
+    }
+  }
+
+  &__tooltip {
+    position: fixed;
+    right:
+      calc(
+        (100vw - 1080px) / 2
+      );
+    bottom: 24px;
+    z-index: 30;
+  }
+}
+
+.filter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+
+  @include responsive.apply-desktop {
+    position: static;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.3;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+  }
+
+  &__bar {
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 25px;
+    touch-action: none;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+
+    &::after {
+      display: block;
+      width: 85px;
+      height: 5px;
+      margin: auto;
+      content: "";
+      background-color: var(--gray);
+      border-radius: var(--rounded-lg);
+      transition: transform 0.2s;
+    }
+  }
+
+  &__body {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    min-height: 72vh;
+    overflow-y: auto;
+    background-color: var(--white);
+    border-radius: var(--rounded-lg);
+    transform: translateY(0%);
+
+    @include responsive.apply-desktop {
+      position: static;
+      max-height: unset;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+}
+
+.filter-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 10px;
+  cursor: pointer;
+  background-color: var(--white);
+  border: 1px solid var(--medium-medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
+
+  @include responsive.apply-desktop {
+    display: none;
+  }
+}
+
+.tooltip {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__wrapper {
+    position: absolute;
+    right: 100%;
+    bottom: 22px;
+    left: auto;
+    width: 310px;
+    padding: 18px 10px 10px 16px;
+    background-color: var(--white);
+    border: 0.5px solid var(--grey-for-text);
+    border-radius: var(--rounded-lg) var(--rounded-lg) 0 var(--rounded-lg);
+
+    :last-child {
+      color: var(--black);
+      cursor: pointer;
+    }
+  }
+
+  &__text {
+    color: var(--grey-for-text);
+
+    a {
+      color: var(--accent);
+    }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-height: calc(100vh - 40px);
+  padding: 0 24px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 605px;
+    max-width: 100%;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
+
+    &-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 30px 0;
+    }
+  }
+}
