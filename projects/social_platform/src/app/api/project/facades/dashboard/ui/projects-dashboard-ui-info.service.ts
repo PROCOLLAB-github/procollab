@@ -24,7 +24,7 @@ export class ProjectsDashboardUIInfoService {
     const myProjects = my.results.slice(0, 4);
     const subsProjects = subs.results.slice(0, 4);
 
-    this.dashBoardItemsBuilder(allProjects, myProjects, subsProjects);
+    this.dashBoardItemsBuilder(myProjects, subsProjects, allProjects);
   }
 
   private dashBoardItemsBuilder(
