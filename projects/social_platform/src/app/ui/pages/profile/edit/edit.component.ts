@@ -234,7 +234,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   }
 
   onSelectSpec(speciality: Specialization): void {
-    this.onboardingStageOneInfoService.onSelectSpec(speciality);
+    this.searchesService.onSelectSpec(this.profileForm, speciality);
   }
 
   onToggleSkill(toggledSkill: Skill): void {
