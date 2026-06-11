@@ -50,6 +50,11 @@ export class ProfileEditAchievementsInfoService {
     );
     ["title", "status", "year"].forEach(name => this.profileForm.get(name)?.markAsTouched());
 
+    const hasInvalid = ["title", "status", "year"].some(
+      name => this.profileForm.get(name)?.invalid,
+    );
+    if (hasInvalid) return;
+
     const achievementsYear =
       typeof this.profileForm.get("year")?.value === "string"
         ? +this.profileForm.get("year")?.value.slice(0, 5)
