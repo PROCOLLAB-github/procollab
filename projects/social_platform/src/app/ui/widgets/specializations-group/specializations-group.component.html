@@ -19,7 +19,11 @@
   @if (contentVisible()) {
     <div class="content" [class.content--open]="hasOpenGroups()">
       @for (opt of options(); track opt.id) {
-        <div class="content__option" [class.content__option--disabled]="disabled()">
+        <div
+          class="content__option"
+          [class.content__option--disabled]="disabled()"
+          [class.content__option--selected]="selectedName() === opt.name"
+        >
           <label class="text-body-12" (click)="onSelectOption(opt)">{{ opt.name }}</label>
         </div>
       }

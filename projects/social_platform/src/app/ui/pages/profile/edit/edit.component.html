@@ -169,6 +169,7 @@
                   [options]="specsGroup.specializations"
                   [hasOpenGroups]="hasOpenSpecializationsGroups()"
                   [disabled]="isSpecializationGroupDisabled(specsGroup.name)"
+                  [selectedName]="selectedSpecialityName()"
                   (groupToggled)="onSpecializationsGroupToggled($event, specsGroup.name)"
                   (selectOption)="onSelectSpec($event)"
                 ></app-specializations-group>

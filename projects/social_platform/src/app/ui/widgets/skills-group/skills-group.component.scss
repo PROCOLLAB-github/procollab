@@ -6,7 +6,6 @@
   min-height: 32px;
 
   .heading {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -58,7 +57,7 @@
 
     &--open {
       position: absolute;
-      top: 0%;
+      top: 3%;
       right: 0%;
       width: 40%;
     }
