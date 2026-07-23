@@ -15,6 +15,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { SearchesService } from "@api/searches/searches.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
 
 /** Координирует шаг выбора навыков и сохранение второго этапа. */
 @Injectable()
@@ -69,15 +70,24 @@ export class OnboardingStageTwoInfoService {
       return;
     }
 
+    const profile = this.profile();
+    if (!isValidProfileId(profile?.id)) {
+      this.stageSubmitting.set(failure("submit_error"));
+      this.onboardingStageTwoUIInfoService.applySubmitErrorModal(
+        new Error(INVALID_PROFILE_ID_MESSAGE),
+      );
+      return;
+    }
+
     this.stageSubmitting.set(loading());
 
     const { skills } = this.stageForm.getRawValue();
 
     this.updateProfileUseCase
-      .execute({ skillsIds: skills.map((skill: Skill) => skill.id) })
+      .execute(profile.id, { skillsIds: skills.map((skill: Skill) => skill.id) })
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result),
+          result.ok ? this.updateOnboardingStageUseCase.execute(2, profile.id) : of(result),
         ),
         takeUntilDestroyed(this.destroyRef),
       )

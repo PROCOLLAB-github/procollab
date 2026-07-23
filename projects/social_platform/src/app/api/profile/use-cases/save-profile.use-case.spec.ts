@@ -25,9 +25,9 @@ describe("SaveProfileUseCase", () => {
     setup();
     repo.updateProfile.mockReturnValue(of(freshUser));
 
-    useCase.execute(command).subscribe();
+    useCase.execute(42, command).subscribe();
 
-    expect(repo.updateProfile).toHaveBeenCalledExactlyOnceWith(command);
+    expect(repo.updateProfile).toHaveBeenCalledExactlyOnceWith(42, command);
   });
 
   it("при успехе возвращает ok со профилем из updateProfile", () =>
@@ -35,7 +35,7 @@ describe("SaveProfileUseCase", () => {
       setup();
       repo.updateProfile.mockReturnValue(of(freshUser));
 
-      useCase.execute(command).subscribe(result => {
+      useCase.execute(42, command).subscribe(result => {
         expect(result.ok).toBe(true);
         if (result.ok) expect(result.value).toBe(freshUser);
         done();
@@ -48,7 +48,7 @@ describe("SaveProfileUseCase", () => {
       const boom = { error: { phone_number: ["плохой номер"] } };
       repo.updateProfile.mockReturnValue(throwError(() => boom));
 
-      useCase.execute(command).subscribe(result => {
+      useCase.execute(42, command).subscribe(result => {
         expect(result.ok).toBe(false);
         if (!result.ok) {
           expect(result.error.kind).toBe("profile_edit_error");

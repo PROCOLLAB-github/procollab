@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { AuthRepository } from "./auth.repository";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
 import { TokenService } from "@corelib";
-import { User } from "@domain/auth/user.model";
+import { User, UserInput } from "@domain/auth/user.model";
 import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProjectDto } from "../../adapters/project/dto/project.dto";
@@ -119,12 +119,21 @@ describe("AuthRepository", () => {
   it("updateProfile делегирует в adapter.saveProfile", () =>
     new Promise<void>(done => {
       setup();
-      const data = { id: 1, firstName: "A" } as never;
-      adapter.saveProfile.mockReturnValue(of({ id: 1, firstName: "A" } as User));
+      const data = {
+        firstName: "A",
+        personal: { city: "Москва" },
+      } as UserInput;
+      adapter.saveProfile.mockReturnValue(
+        of({ id: 42, firstName: "A", city: "Москва" } as unknown as User),
+      );
 
-      repository.updateProfile(data).subscribe(profile => {
-        expect(adapter.saveProfile).toHaveBeenCalledExactlyOnceWith(data);
+      repository.updateProfile(42, data).subscribe(profile => {
+        expect(adapter.saveProfile).toHaveBeenCalledExactlyOnceWith(42, {
+          firstName: "A",
+          city: "Москва",
+        });
         expect(profile).toBeInstanceOf(User);
+        expect(profile.personal.city).toBe("Москва");
         done();
       });
     }));
