@@ -72,11 +72,7 @@ export class OfficeInfoService {
       )
       .subscribe(profile => {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
-        if (!profile!.doesCompleted()) {
-          this.router
-            .navigateByUrl(AppRoutes.onboarding.root())
-            .then(() => this.logger.debug("Route changed from OfficeComponent"));
-        } else if (
+        if (
           profile!.relations.verificationDate === null &&
           localStorage.getItem("waitVerificationAccepted") !== "true"
         ) {
