@@ -14,6 +14,7 @@ import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-cas
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
 
 /** Координирует первый шаг онбординга: профильные поля, FormArray, сохранение этапа. */
 @Injectable()
@@ -68,6 +69,15 @@ export class OnboardingStageZeroInfoService {
       return;
     }
 
+    const profile = this.profile();
+    if (!isValidProfileId(profile?.id)) {
+      this.skipSubmitting.set(failure("skip_error"));
+      this.onboardingStageZeroUIInfoService.applySkipRegistrationModalError(
+        new Error(INVALID_PROFILE_ID_MESSAGE),
+      );
+      return;
+    }
+
     const onboardingSkipInfo = {
       avatar: this.stageForm.get("avatar")?.value,
       city: this.stageForm.get("city")?.value,
@@ -76,7 +86,7 @@ export class OnboardingStageZeroInfoService {
     this.skipSubmitting.set(loading());
 
     this.updateProfileUseCase
-      .execute(onboardingSkipInfo as Partial<User>)
+      .execute(profile.id, onboardingSkipInfo as Partial<User>)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
@@ -88,6 +98,7 @@ export class OnboardingStageZeroInfoService {
             return;
           }
 
+          this.profileInfoService.applyProfileUpdated(result.value);
           this.completeRegistration(3);
         },
       });
@@ -96,6 +107,15 @@ export class OnboardingStageZeroInfoService {
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.stageForm)) {
       this.achievements.markAllAsTouched();
+      return;
+    }
+
+    const profile = this.profile();
+    if (!isValidProfileId(profile?.id)) {
+      this.stageSubmitting.set(failure("submit_error"));
+      this.onboardingStageZeroUIInfoService.applySubmitModalError(
+        new Error(INVALID_PROFILE_ID_MESSAGE),
+      );
       return;
     }
 
@@ -111,10 +131,10 @@ export class OnboardingStageZeroInfoService {
     this.stageSubmitting.set(loading());
 
     this.updateProfileUseCase
-      .execute(newStageForm as Partial<User>)
+      .execute(profile.id, newStageForm as Partial<User>)
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(1, this.profile()!.id) : of(result),
+          result.ok ? this.updateOnboardingStageUseCase.execute(1, profile.id) : of(result),
         ),
         takeUntilDestroyed(this.destroyRef),
       )

@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { concatMap, filter, map, Observable, skip, take } from "rxjs";
+import { concatMap, filter, map, Observable, skip, take, throwError } from "rxjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User, UserRolesData } from "@domain/auth/user.model";
 import { Specialization } from "@domain/specializations/specialization.model";
@@ -15,6 +15,7 @@ import { languageLevelsList, languageNamesList } from "@core/consts/lists/langua
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProfileInfoService } from "../profile-info.service";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
 
 /** Реактивная форма профиля: построение `FormGroup`, справочники (роли, годы, образование), inline-специализации. */
 @Injectable({ providedIn: "root" })
@@ -364,8 +365,13 @@ export class ProfileFormService {
   }
 
   changeUserType(typeId: number): Observable<void> {
+    const profileId = this.profileId();
+    if (!isValidProfileId(profileId)) {
+      return throwError(() => new Error(INVALID_PROFILE_ID_MESSAGE));
+    }
+
     return this.authRepository
-      .updateProfile({
+      .updateProfile(profileId, {
         email: this.profileForm.value.email,
         firstName: this.profileForm.value.firstName,
         lastName: this.profileForm.value.lastName,

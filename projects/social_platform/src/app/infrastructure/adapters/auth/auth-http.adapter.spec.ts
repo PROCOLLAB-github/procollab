@@ -4,8 +4,9 @@ import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 import { ApiService, TokenService } from "@corelib";
 import { AuthHttpAdapter } from "./auth-http.adapter";
-import { User } from "@domain/auth/user.model";
+import { User, UserRaw } from "@domain/auth/user.model";
 import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
+import { INVALID_PROFILE_ID_MESSAGE } from "@domain/auth/profile-id";
 
 describe("AuthHttpAdapter", () => {
   let adapter: AuthHttpAdapter;
@@ -125,12 +126,30 @@ describe("AuthHttpAdapter", () => {
   it("saveProfile идёт в PATCH /auth/users/:id/ с частичными данными", () => {
     setup();
     api.patch.mockReturnValue(of({} as User));
-    const profile: Partial<User> = { id: 7, firstName: "A" };
+    const profile: Partial<UserRaw> = { id: 7, firstName: "A" };
 
-    adapter.saveProfile(profile).subscribe();
+    adapter.saveProfile(42, profile).subscribe();
 
-    expect(api.patch).toHaveBeenCalledExactlyOnceWith("/auth/users/7/", profile);
+    expect(api.patch).toHaveBeenCalledExactlyOnceWith("/auth/users/42/", profile);
   });
+
+  it.each([undefined, null, NaN, Infinity, 0, -1, 1.5])(
+    "saveProfile отклоняет некорректный profileId %s до HTTP-запроса",
+    profileId => {
+      setup();
+      let actualError: unknown;
+
+      adapter.saveProfile(profileId as number, { firstName: "A" }).subscribe({
+        error: error => {
+          actualError = error;
+        },
+      });
+
+      expect(api.patch).not.toHaveBeenCalled();
+      expect(actualError).toBeInstanceOf(Error);
+      expect((actualError as Error).message).toBe(INVALID_PROFILE_ID_MESSAGE);
+    },
+  );
 
   it("setOnboardingStage идёт в PUT /auth/users/:pid/set_onboarding_stage/", () => {
     setup();

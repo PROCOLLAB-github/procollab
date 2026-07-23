@@ -14,8 +14,8 @@ export type SaveProfileResultError = { kind: "profile_edit_error"; cause?: SaveP
 export class SaveProfileUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);
 
-  execute(command: UserInput): Observable<Result<User, SaveProfileResultError>> {
-    return this.authRepository.updateProfile(command).pipe(
+  execute(profileId: number, command: UserInput): Observable<Result<User, SaveProfileResultError>> {
+    return this.authRepository.updateProfile(profileId, command).pipe(
       map(profile => ok<User>(profile)),
       catchError(error =>
         of(fail<SaveProfileResultError>({ kind: "profile_edit_error", cause: error })),

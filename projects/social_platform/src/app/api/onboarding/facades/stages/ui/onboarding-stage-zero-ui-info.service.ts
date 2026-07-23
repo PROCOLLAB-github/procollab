@@ -501,13 +501,17 @@ export class OnboardingStageZeroUIInfoService {
   applySubmitModalError(error: any): void {
     this.isModalErrorYear.set(true);
 
-    if (error.error.language) {
+    if (error instanceof Error) {
+      this.isModalErrorYearText.set(error.message);
+    } else if (error.error?.language) {
       this.isModalErrorYearText.set(error.error.language);
     }
   }
 
   applySkipRegistrationModalError(error: any): void {
     this.isModalErrorYear.set(true);
-    this.isModalErrorYearText.set(error.error?.message || "Ошибка сохранения");
+    this.isModalErrorYearText.set(
+      error instanceof Error ? error.message : error.error?.message || "Ошибка сохранения",
+    );
   }
 }
