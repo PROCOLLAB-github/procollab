@@ -14,6 +14,7 @@ import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case
 import { ProfileInfoService } from "../profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { SnackbarService } from "@domain/shared/snackbar.service";
+import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
 
 /** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
@@ -138,6 +139,14 @@ export class ProfileEditInfoService {
       return;
     }
 
+    const profileId = this.profileId();
+    if (!isValidProfileId(profileId)) {
+      this.profileFormSubmitting$.set(failure("profile_edit_error"));
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(INVALID_PROFILE_ID_MESSAGE);
+      return;
+    }
+
     this.profileFormSubmitting$.set(loading());
 
     const achievements = this.achievements.value.map((achievement: Achievement) => ({
@@ -157,7 +166,6 @@ export class ProfileEditInfoService {
 
     // Построение объекта профиля с только необходимыми полями
     const newProfile: any = {
-      id: this.profileId(),
       first_name: this.profileForm.value.firstName,
       last_name: this.profileForm.value.lastName,
       email: this.profileForm.value.email,
@@ -198,7 +206,7 @@ export class ProfileEditInfoService {
     }
 
     this.saveProfileUseCase
-      .execute(newProfile)
+      .execute(profileId, newProfile)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {

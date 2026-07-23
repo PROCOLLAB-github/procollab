@@ -9,10 +9,11 @@ import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-u
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
-import { loading } from "@domain/shared/async-state";
+import { failure, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { isValidProfileId } from "@domain/auth/profile-id";
 
 /** Фасад этапа 3 онбординга: обновление профиля и продвижение этапа онбординга. */
 @Injectable()
@@ -49,15 +50,19 @@ export class OnboardingStageThreeInfoService {
       return;
     }
 
+    const profile = this.profile();
+    if (!isValidProfileId(profile?.id)) {
+      this.stageSubmitting.set(failure("submit_error"));
+      return;
+    }
+
     this.stageSubmitting.set(loading());
 
     this.updateProfileUseCase
-      .execute({ userType: this.userRole() })
+      .execute(profile.id, { userType: this.userRole() })
       .pipe(
         concatMap(result =>
-          result.ok
-            ? this.updateOnboardingStageUseCase.execute(null, this.profile()!.id)
-            : of(result),
+          result.ok ? this.updateOnboardingStageUseCase.execute(null, profile.id) : of(result),
         ),
         tap(result => {
           if (!result.ok) return;
