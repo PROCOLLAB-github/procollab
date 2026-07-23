@@ -11,8 +11,11 @@ import { catchError, map, Observable, of } from "rxjs";
 export class UpdateProfileUseCase {
   private readonly authRepository = inject(AuthRepositoryPort);
 
-  execute(data: UserInput): Observable<Result<User, { kind: "server_error"; cause?: unknown }>> {
-    return this.authRepository.updateProfile(data).pipe(
+  execute(
+    profileId: number,
+    data: UserInput,
+  ): Observable<Result<User, { kind: "server_error"; cause?: unknown }>> {
+    return this.authRepository.updateProfile(profileId, data).pipe(
       map(profile => ok<User>(profile)),
       catchError(error => of(fail({ kind: "server_error", cause: error } as const))),
     );

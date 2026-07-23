@@ -2,9 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { LoginResponse, RegisterResponse } from "@core/lib/models/auth/http.model";
 import { User, UserRaw } from "@domain/auth/user.model";
+import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
 import { ProjectDto } from "../project/dto/project.dto";
 import { LoginCommand } from "@domain/auth/commands/login.command";
 import { RegisterCommand } from "@domain/auth/commands/register.command";
@@ -63,8 +64,13 @@ export class AuthHttpAdapter {
     return this.apiService.patch<User>(`${this.AUTH_USERS_URL}/${profileId}/`, { avatar: url });
   }
 
-  saveProfile(newProfile: Partial<UserRaw>): Observable<User> {
-    return this.apiService.patch<User>(`${this.AUTH_USERS_URL}/${newProfile.id}/`, newProfile);
+  /** Обновляет профиль по отдельно проверенному идентификатору маршрута. */
+  saveProfile(profileId: number, newProfile: Partial<UserRaw>): Observable<User> {
+    if (!isValidProfileId(profileId)) {
+      return throwError(() => new Error(INVALID_PROFILE_ID_MESSAGE));
+    }
+
+    return this.apiService.patch<User>(`${this.AUTH_USERS_URL}/${profileId}/`, newProfile);
   }
 
   setOnboardingStage(stage: number | null, profileId: number): Observable<User> {

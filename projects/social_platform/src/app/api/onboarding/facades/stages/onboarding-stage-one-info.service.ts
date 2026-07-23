@@ -16,6 +16,7 @@ import { failure, initial, loading } from "@domain/shared/async-state";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { isValidProfileId } from "@domain/auth/profile-id";
 
 /** Координирует шаг выбора специализаций и сохранение первого этапа. */
 @Injectable()
@@ -80,13 +81,19 @@ export class OnboardingStageOneInfoService {
       return;
     }
 
+    const profile = this.profile();
+    if (!isValidProfileId(profile?.id)) {
+      this.stageSubmitting.set(failure("submit_error"));
+      return;
+    }
+
     this.stageSubmitting.set(loading());
 
     this.updateProfileUseCase
-      .execute(this.stageForm.value)
+      .execute(profile.id, this.stageForm.value)
       .pipe(
         concatMap(result =>
-          result.ok ? this.updateOnboardingStageUseCase.execute(2, this.profile()!.id) : of(result),
+          result.ok ? this.updateOnboardingStageUseCase.execute(2, profile.id) : of(result),
         ),
         takeUntilDestroyed(this.destroyRef),
       )

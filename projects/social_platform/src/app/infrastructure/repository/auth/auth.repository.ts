@@ -60,9 +60,9 @@ export class AuthRepository implements AuthRepositoryPort {
     return this.authAdapter.getProfile().pipe(map(user => userFromRaw(user)));
   }
 
-  updateProfile(data: UserInput): Observable<User> {
+  updateProfile(profileId: number, data: UserInput): Observable<User> {
     const rawData = userToRaw(data);
-    return this.authAdapter.saveProfile(rawData).pipe(map(user => userFromRaw(user)));
+    return this.authAdapter.saveProfile(profileId, rawData).pipe(map(user => userFromRaw(user)));
   }
 
   updateOnboardingStage(stage: number | null, userId: number): Observable<User> {
