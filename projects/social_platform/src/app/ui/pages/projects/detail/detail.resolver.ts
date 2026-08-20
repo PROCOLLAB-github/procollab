@@ -24,7 +24,19 @@ export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = 
       }
 
       const project = result.value;
-      projectsDetailUIInfoService.applySetProject(project);
+      const leaderInfo = project.collaborators.find(
+        collaborator => collaborator.userId === project.leader,
+      );
+
+      projectsDetailUIInfoService.applySetProject({
+        ...project,
+        ...(leaderInfo && {
+          leaderInfo: {
+            firstName: leaderInfo.firstName,
+            lastName: leaderInfo.lastName,
+          },
+        }),
+      });
 
       return getProjectSubscribersUseCase
         .execute(project.id)

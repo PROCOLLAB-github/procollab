@@ -152,7 +152,7 @@ export class ProfileEditInfoService {
     const achievements = this.achievements.value.map((achievement: Achievement) => ({
       ...(achievement.id && { id: achievement.id }),
       title: achievement.title,
-      status: achievement.status,
+      ...(achievement.status ? { status: achievement.status } : {}),
       year: achievement.year,
       fileLinks:
         achievement.files && Array.isArray(achievement.files)
@@ -229,7 +229,17 @@ export class ProfileEditInfoService {
 
     if (body.phone_number) return body.phone_number[0];
     if (body.language) return body.language;
-    if (body.achievements) return body.achievements[0];
+    if (body.achievements) {
+      const err = Array.isArray(body.achievements)
+        ? body.achievements[0]
+        : body.achievements;
+      if (typeof err === "string") return err;
+      if (err && typeof err === "object") {
+        const val = Object.values(err)[0];
+        if (Array.isArray(val) && val.length > 0) return val[0];
+        if (val !== null && val !== undefined) return String(val);
+      }
+    }
     if (body.work_experience?.[2]) {
       return body.work_experience[2].entry_year ?? body.work_experience[2].completion_year;
     }
