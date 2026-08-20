@@ -3,14 +3,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   effect,
   inject,
   input,
   OnInit,
   output,
+  signal,
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ValidationService } from "@corelib";
 import { nanoid } from "nanoid";
 import { AutosizeModule } from "ngx-autosize";
@@ -19,28 +22,23 @@ import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
 import { FileUploadItemComponent } from "@ui/primitives/file-upload-item/file-upload-item.component";
 import { IconComponent } from "@ui/primitives";
 import { FileService } from "@core/lib/services/file/file.service";
-import { catchError, forkJoin, noop, Observable, of, tap } from "rxjs";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-/**
- * Компонент формы создания новости
- *
- * Функциональность:
- * - Создание новой новости с текстом и прикрепленными файлами
- * - Загрузка файлов через input или drag&drop, а также вставка из буфера обмена
- * - Разделение файлов на изображения и документы
- * - Предварительный просмотр загруженных файлов
- * - Управление состояниями загрузки и ошибок для каждого файла
- * - Возможность удаления и повторной загрузки файлов
- *
- * Выходные события:
- * output addNews - событие добавления новости, передает объект с текстом и массивом URL файлов
- *
- * Внутренние свойства:
- * - messageForm - форма с полем текста новости (обязательное)
- * - imagesList - массив объектов изображений с состояниями загрузки
- * - filesList - массив объектов файлов с состояниями загрузки
- */
+type ImageUploadItem = {
+  id: string;
+  src: string;
+  loading: boolean;
+  error: boolean;
+  tempFile: File | null;
+};
+
+type FileUploadItem = {
+  id: string;
+  loading: boolean;
+  error: string;
+  src: string;
+  tempFile: File;
+};
+
 @Component({
   selector: "app-news-form",
   templateUrl: "./news-form.component.html",
@@ -86,119 +84,49 @@ export class NewsFormComponent implements OnInit {
 
   readonly maxTextLength = 15940;
 
+  readonly imagesList = signal<ImageUploadItem[]>([]);
+
+  readonly filesList = signal<FileUploadItem[]>([]);
+
+  readonly isSubmitDisabled = computed(
+    () => this.pending() || this.isTextOverflow || this.hasBlockedAttachments(),
+  );
+
   get isTextOverflow(): boolean {
     return (this.messageForm.get("text")?.value?.length ?? 0) > this.maxTextLength;
   }
 
-  /**
-   * Обработчик отправки формы
-   * Валидирует форму и эмитит событие с данными новости
-   */
   onSubmit() {
-    if (this.pending()) return;
-    if (this.isTextOverflow) return;
+    if (this.isSubmitDisabled()) return;
     if (!this.validationService.getFormValidation(this.messageForm)) {
       return;
     }
 
     this.addNews.emit({
       ...this.messageForm.value,
-      files: [...this.imagesList.map(f => f.src), ...this.filesList.map(f => f.src)],
+      files: this.getUploadedFileUrls(),
     });
-
-    this.onResetForm();
   }
 
-  /**
-   * Сброс формы и очистка списков файлов
-   */
   onResetForm() {
-    this.imagesList = [];
-    this.filesList = [];
+    this.imagesList.set([]);
+    this.filesList.set([]);
     this.messageForm.reset();
   }
 
-  // Массив изображений с метаданными
-  imagesList: {
-    id: string;
-    src: string;
-    loading: boolean;
-    error: boolean;
-    tempFile: File | null;
-  }[] = [];
-
-  // Массив файлов с метаданными
-  filesList: {
-    id: string;
-    loading: boolean;
-    error: string;
-    src: string;
-    tempFile: File;
-  }[] = [];
-
-  /**
-   * Загрузка файлов на сервер
-   * Разделяет файлы на изображения и документы, загружает параллельно
-   */
   uploadFiles(files: FileList) {
-    const observableArray: Observable<any>[] = [];
     for (let i = 0; i < files.length; i++) {
-      const fileType = files[i].type.split("/")[0];
+      const file = files[i];
+      const fileType = file.type.split("/")[0];
 
       if (fileType === "image") {
-        const fileObj: NewsFormComponent["imagesList"][0] = {
-          id: nanoid(2),
-          src: "",
-          loading: true,
-          error: false,
-          tempFile: files[0],
-        };
-        this.imagesList.push(fileObj);
-        observableArray.push(
-          this.fileService.uploadFile(files[i]).pipe(
-            tap(file => {
-              fileObj.src = file.url;
-              fileObj.loading = false;
-              fileObj.tempFile = null;
-            }),
-            catchError(() => {
-              fileObj.loading = false;
-              fileObj.error = true;
-              return of(null);
-            }),
-          ),
-        );
+        this.uploadImageFile(file);
       } else {
-        const fileObj: NewsFormComponent["filesList"][0] = {
-          id: nanoid(2),
-          loading: true,
-          error: "",
-          src: "",
-          tempFile: files[0],
-        };
-        this.filesList.push(fileObj);
-        observableArray.push(
-          this.fileService.uploadFile(files[i]).pipe(
-            tap(file => {
-              fileObj.loading = false;
-              fileObj.src = file.url;
-            }),
-            catchError(() => {
-              fileObj.loading = false;
-              fileObj.error = "Ошибка загрузки";
-              return of(null);
-            }),
-          ),
-        );
+        this.uploadRegularFile(file);
       }
     }
-
-    forkJoin(observableArray).subscribe(noop);
   }
 
-  /**
-   * Обработчик выбора файлов через input
-   */
   onInputFiles(event: Event) {
     const files = (event.currentTarget as HTMLInputElement).files;
     if (!files) return;
@@ -206,9 +134,6 @@ export class NewsFormComponent implements OnInit {
     this.uploadFiles(files);
   }
 
-  /**
-   * Обработчик вставки файлов из буфера обмена
-   */
   onPaste(event: ClipboardEvent) {
     const files = event.clipboardData?.files;
     if (!files) return;
@@ -216,69 +141,166 @@ export class NewsFormComponent implements OnInit {
     this.uploadFiles(files);
   }
 
-  /**
-   * Удаление изображения из списка
-   * Если файл уже загружен на сервер, удаляет его оттуда
-   */
   onDeletePhoto(fId: string) {
-    const fileIdx = this.imagesList.findIndex(f => f.id === fId);
+    const fileObj = this.imagesList().find(f => f.id === fId);
+    if (!fileObj) return;
 
-    if (this.imagesList[fileIdx].src) {
-      this.imagesList[fileIdx].loading = true;
+    if (fileObj.src) {
+      this.updateImage(fId, { loading: true });
       this.fileService
-        .deleteFile(this.imagesList[fileIdx].src)
+        .deleteFile(fileObj.src)
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => {
-          this.imagesList.splice(fileIdx, 1);
+        .subscribe({
+          next: () => this.removeImage(fId),
+          error: () => {
+            this.updateImage(fId, { loading: false });
+          },
         });
     } else {
-      this.imagesList.splice(fileIdx, 1);
+      this.removeImage(fId);
     }
   }
 
-  /**
-   * Удаление файла из списка
-   * Если файл уже загружен на сервер, удаляет его оттуда
-   */
   onDeleteFile(fId: string) {
-    const fileIdx = this.filesList.findIndex(f => f.id === fId);
+    const fileObj = this.filesList().find(f => f.id === fId);
+    if (!fileObj) return;
 
-    if (this.filesList[fileIdx].src) {
-      this.filesList[fileIdx].loading = true;
+    if (fileObj.src) {
+      this.updateFile(fId, { loading: true });
       this.fileService
-        .deleteFile(this.imagesList[fileIdx].src)
+        .deleteFile(fileObj.src)
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => {
-          this.filesList.splice(fileIdx, 1);
+        .subscribe({
+          next: () => this.removeFile(fId),
+          error: () => {
+            this.updateFile(fId, { loading: false });
+          },
         });
     } else {
-      this.filesList.splice(fileIdx, 1);
+      this.removeFile(fId);
     }
   }
 
-  /**
-   * Повторная попытка загрузки изображения
-   * Используется при ошибке загрузки
-   */
   onRetryUpload(id: string) {
-    const fileObj = this.imagesList.find(f => f.id === id);
+    const fileObj = this.imagesList().find(f => f.id === id);
     if (!fileObj || !fileObj.tempFile) return;
 
-    fileObj.loading = true;
-    fileObj.error = false;
+    this.updateImage(id, { loading: true, error: false, src: "" });
     this.fileService
       .uploadFile(fileObj.tempFile)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: file => {
-          fileObj.src = file.url;
-          fileObj.loading = false;
-          fileObj.tempFile = null;
+          this.updateImage(id, { src: file.url, loading: false, tempFile: null });
         },
         error: () => {
-          fileObj.error = true;
-          fileObj.loading = false;
+          this.updateImage(id, { error: true, loading: false });
         },
       });
+  }
+
+  onRetryFile(id: string) {
+    const fileObj = this.filesList().find(f => f.id === id);
+    if (!fileObj) return;
+
+    this.updateFile(id, { loading: true, error: "", src: "" });
+    this.fileService
+      .uploadFile(fileObj.tempFile)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: file => {
+          this.updateFile(id, { src: file.url, loading: false });
+        },
+        error: () => {
+          this.updateFile(id, { error: "Ошибка загрузки", loading: false });
+        },
+      });
+  }
+
+  private uploadImageFile(file: File): void {
+    const id = nanoid(2);
+    const fileObj: ImageUploadItem = {
+      id,
+      src: "",
+      loading: true,
+      error: false,
+      tempFile: file,
+    };
+
+    this.imagesList.update(files => [...files, fileObj]);
+    this.fileService
+      .uploadFile(file)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: uploadedFile => {
+          this.updateImage(id, {
+            src: uploadedFile.url,
+            loading: false,
+            tempFile: null,
+          });
+        },
+        error: () => {
+          this.updateImage(id, { loading: false, error: true });
+        },
+      });
+  }
+
+  private uploadRegularFile(file: File): void {
+    const id = nanoid(2);
+    const fileObj: FileUploadItem = {
+      id,
+      loading: true,
+      error: "",
+      src: "",
+      tempFile: file,
+    };
+
+    this.filesList.update(files => [...files, fileObj]);
+    this.fileService
+      .uploadFile(file)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: uploadedFile => {
+          this.updateFile(id, {
+            src: uploadedFile.url,
+            loading: false,
+          });
+        },
+        error: () => {
+          this.updateFile(id, { loading: false, error: "Ошибка загрузки" });
+        },
+      });
+  }
+
+  private updateImage(id: string, changes: Partial<ImageUploadItem>): void {
+    this.imagesList.update(files =>
+      files.map(file => (file.id === id ? { ...file, ...changes } : file)),
+    );
+  }
+
+  private updateFile(id: string, changes: Partial<FileUploadItem>): void {
+    this.filesList.update(files =>
+      files.map(file => (file.id === id ? { ...file, ...changes } : file)),
+    );
+  }
+
+  private removeImage(id: string): void {
+    this.imagesList.update(files => files.filter(file => file.id !== id));
+  }
+
+  private removeFile(id: string): void {
+    this.filesList.update(files => files.filter(file => file.id !== id));
+  }
+
+  private hasBlockedAttachments(): boolean {
+    return [...this.imagesList(), ...this.filesList()].some(
+      file => file.loading || Boolean(file.error) || !file.src,
+    );
+  }
+
+  private getUploadedFileUrls(): string[] {
+    return [...this.imagesList(), ...this.filesList()]
+      .map(file => file.src)
+      .filter((src): src is string => Boolean(src));
   }
 }
