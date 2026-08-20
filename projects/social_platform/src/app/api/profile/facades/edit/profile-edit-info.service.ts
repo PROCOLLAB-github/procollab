@@ -230,9 +230,7 @@ export class ProfileEditInfoService {
     if (body.phone_number) return body.phone_number[0];
     if (body.language) return body.language;
     if (body.achievements) {
-      const err = Array.isArray(body.achievements)
-        ? body.achievements[0]
-        : body.achievements;
+      const err = Array.isArray(body.achievements) ? body.achievements[0] : body.achievements;
       if (typeof err === "string") return err;
       if (err && typeof err === "object") {
         const val = Object.values(err)[0];
