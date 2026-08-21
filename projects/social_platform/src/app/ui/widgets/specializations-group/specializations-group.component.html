@@ -23,8 +23,12 @@
           class="content__option"
           [class.content__option--disabled]="disabled()"
           [class.content__option--selected]="selectedName() === opt.name"
+          (click)="onSelectOption(opt)"
         >
-          <label class="text-body-12" (click)="onSelectOption(opt)">{{ opt.name }}</label>
+          <span class="text-body-12">{{ opt.name }}</span>
+          @if (selectedName() === opt.name) {
+            <i appIcon icon="check" appSquare="10"></i>
+          }
         </div>
       }
     </div>

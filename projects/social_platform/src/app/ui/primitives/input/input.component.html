@@ -20,22 +20,59 @@
       class="field__input"
     />
   } @else if (type() === "date") {
-    <input
-      matInput
-      [matDatepicker]="picker"
-      [value]="dateValue"
-      (dateChange)="onDateChange($event)"
-      (click)="picker.open()"
-      [placeholder]="placeholder()"
-      class="field__input"
-      [class.field__input--error]="error()"
-      [class.field__input--small]="size() === 'small'"
-      [class.field__input--small--error]="size() === 'small' && error()"
-      [class.field__input--big]="size() === 'big'"
-      [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
-      [class.field__input--border]="hasBorder()"
-      readonly
-    />
+    @if (dateInputMode() === "text") {
+      <input
+        #nativeInput
+        [value]="value"
+        (input)="onInput($event)"
+        (keydown.enter)="onEnter($event)"
+        (blur)="onBlur()"
+        [placeholder]="placeholder()"
+        type="text"
+        [mask]="mask() || '00.00.0000'"
+        [dropSpecialCharacters]="dropSpecialCharacters()"
+        class="field__input"
+        [class.field__input--error]="error()"
+        [class.field__input--small]="size() === 'small'"
+        [class.field__input--small--error]="size() === 'small' && error()"
+        [class.field__input--big]="size() === 'big'"
+        [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
+        [class.field__input--border]="hasBorder()"
+      />
+      <button
+        type="button"
+        class="field__calendar-button"
+        aria-label="Открыть календарь"
+        (click)="openDatepicker($event, picker)"
+      >
+        <i appIcon icon="calendar" appSquare="16"></i>
+      </button>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [value]="dateValue"
+        (dateChange)="onDateChange($event)"
+        class="field__datepicker-anchor"
+        readonly
+      />
+    } @else {
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [value]="dateValue"
+        (dateChange)="onDateChange($event)"
+        (click)="picker.open()"
+        [placeholder]="placeholder()"
+        class="field__input"
+        [class.field__input--error]="error()"
+        [class.field__input--small]="size() === 'small'"
+        [class.field__input--small--error]="size() === 'small' && error()"
+        [class.field__input--big]="size() === 'big'"
+        [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
+        [class.field__input--border]="hasBorder()"
+        readonly
+      />
+    }
     <mat-datepicker #picker></mat-datepicker>
   } @else {
     <input
@@ -48,7 +85,7 @@
       [type]="type()"
       [mask]="mask()"
       [name]="name()"
-      [dropSpecialCharacters]="true"
+      [dropSpecialCharacters]="dropSpecialCharacters()"
       class="field__input"
       [class.field__input--error]="error()"
       [class.field__input--overflow]="isLengthOverflow"

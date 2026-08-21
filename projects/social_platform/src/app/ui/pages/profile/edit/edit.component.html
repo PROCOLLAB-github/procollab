@@ -158,7 +158,7 @@
     class="modal"
   >
     <div class="modal__wrapper">
-      <h4 class="text-heading-4">более специальностей</h4>
+      <h4 class="text-heading-4">Выберите специальность</h4>
       <div class="modal__content">
         <div class="modal__specs-groups">
           <ul>
@@ -168,7 +168,7 @@
                   [title]="specsGroup.name"
                   [options]="specsGroup.specializations"
                   [hasOpenGroups]="hasOpenSpecializationsGroups()"
-                  [disabled]="isSpecializationGroupDisabled(specsGroup.name)"
+                  [isOpen]="isSpecializationGroupOpen(specsGroup.name)"
                   [selectedName]="selectedSpecialityName()"
                   (groupToggled)="onSpecializationsGroupToggled($event, specsGroup.name)"
                   (selectOption)="onSelectSpec($event)"

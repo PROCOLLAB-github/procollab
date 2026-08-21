@@ -16,6 +16,15 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProfileInfoService } from "../profile-info.service";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
+import {
+  cyrillicNameValidator,
+  formatBirthdayForView,
+  profileBirthdayValidator,
+  skillsCountValidator,
+  userLanguagesValidator,
+  userPhoneNumberValidator,
+  yearBoundsValidator,
+} from "./profile-edit-validation.utils";
 
 /** Реактивная форма профиля: построение `FormGroup`, справочники (роли, годы, образование), inline-специализации. */
 @Injectable({ providedIn: "root" })
@@ -76,13 +85,13 @@ export class ProfileFormService {
 
   private initializeProfileForm(): void {
     this.profileForm = this.fb.group({
-      firstName: ["", [Validators.required]],
-      lastName: ["", [Validators.required]],
+      firstName: ["", [Validators.required, Validators.minLength(2), cyrillicNameValidator]],
+      lastName: ["", [Validators.required, Validators.minLength(2), cyrillicNameValidator]],
       email: ["", [Validators.email, Validators.maxLength(50)]],
       userType: [0],
-      birthday: ["", [Validators.required]],
+      birthday: ["", [Validators.required, profileBirthdayValidator]],
       city: ["", [Validators.required, Validators.maxLength(100)]],
-      phoneNumber: ["", Validators.maxLength(12)],
+      phoneNumber: ["", [Validators.maxLength(20), userPhoneNumberValidator]],
       additionalRole: [null],
       coverImageAddress: [null],
 
@@ -108,7 +117,7 @@ export class ProfileFormService {
 
       education: this.fb.array([]),
       workExperience: this.fb.array([]),
-      userLanguages: this.fb.array([]),
+      userLanguages: this.fb.array([], [userLanguagesValidator]),
       links: this.fb.array([]),
       achievements: this.fb.array([]),
 
@@ -121,7 +130,7 @@ export class ProfileFormService {
 
       // skills
       speciality: ["", [Validators.required]],
-      skills: [[]],
+      skills: [[], [skillsCountValidator]],
       avatar: [""],
       aboutMe: ["", Validators.maxLength(300)],
       typeSpecific: this.fb.group({}),
@@ -162,7 +171,7 @@ export class ProfileFormService {
             lastName: profile.lastName ?? "",
             email: profile.email ?? "",
             userType: profile.personal.userType ?? 1,
-            birthday: profile.personal.birthday ?? "",
+            birthday: formatBirthdayForView(profile.personal.birthday),
             city: profile.personal.city ?? "",
             coverImageAddress: profile.personal.coverImageAddress ?? "",
             phoneNumber: profile.personal.phoneNumber ?? "",
@@ -187,7 +196,10 @@ export class ProfileFormService {
                   jobPosition: work.jobPosition,
                 },
                 {
-                  validators: yearRangeValidators("entryYear", "completionYear"),
+                  validators: [
+                    yearRangeValidators("entryYear", "completionYear"),
+                    yearBoundsValidator("entryYear", "completionYear"),
+                  ],
                 },
               ),
             );
@@ -206,7 +218,10 @@ export class ProfileFormService {
                   educationLevel: edu.educationLevel,
                 },
                 {
-                  validators: yearRangeValidators("entryYear", "completionYear"),
+                  validators: [
+                    yearRangeValidators("entryYear", "completionYear"),
+                    yearBoundsValidator("entryYear", "completionYear"),
+                  ],
                 },
               ),
             );
@@ -235,7 +250,8 @@ export class ProfileFormService {
             );
           });
 
-          profile.personal.links.length && profile.personal.links.forEach(l => this.addLink(l));
+          this.links.clear();
+          profile.personal.links?.forEach(l => this.addLink(l));
 
           if ([2, 3, 4].includes(profile.personal.userType)) {
             this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
@@ -352,7 +368,7 @@ export class ProfileFormService {
   protected readonly newLink = signal<string>("");
 
   addLink(title?: string): void {
-    const fromState = title ?? this.newLink;
+    const fromState = title ?? "";
 
     const control = this.fb.control(fromState, [Validators.required]);
     this.links.push(control);
@@ -364,6 +380,12 @@ export class ProfileFormService {
     this.links.removeAt(i);
   }
 
+  getCleanLinks(): string[] {
+    return this.links.value
+      .map((link: unknown) => (typeof link === "string" ? link.trim() : ""))
+      .filter(Boolean);
+  }
+
   changeUserType(typeId: number): Observable<void> {
     const profileId = this.profileId();
     if (!isValidProfileId(profileId)) {
@@ -373,8 +395,8 @@ export class ProfileFormService {
     return this.authRepository
       .updateProfile(profileId, {
         email: this.profileForm.value.email,
-        firstName: this.profileForm.value.firstName,
-        lastName: this.profileForm.value.lastName,
+        firstName: this.profileForm.value.firstName?.trim(),
+        lastName: this.profileForm.value.lastName?.trim(),
         userType: typeId,
       })
       .pipe(

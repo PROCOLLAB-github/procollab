@@ -132,6 +132,32 @@
     justify-content: center;
   }
 
+  &__calendar-button {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: var(--accent);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transform: translateY(-50%);
+  }
+
+  &__datepicker-anchor {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    padding: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
   &__tooltip-wrapper {
     position: absolute;
     top: 55%;

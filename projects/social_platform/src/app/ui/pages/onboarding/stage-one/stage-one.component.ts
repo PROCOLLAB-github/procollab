@@ -87,6 +87,10 @@ export class OnboardingStageOneComponent implements OnInit {
     return this.onboardingStageOneUIInfoService.isSpecializationGroupDisabled(groupName);
   }
 
+  isSpecializationGroupOpen(groupName: string): boolean {
+    return this.onboardingStageOneUIInfoService.isSpecializationGroupOpen(groupName);
+  }
+
   onSkipRegistration(): void {
     this.onboardingStageOneInfoService.onSkipRegistration();
   }
