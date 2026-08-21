@@ -1,7 +1,12 @@
 /** @format */
 
+import {
+  ConnectedOverlayPositionChange,
+  ConnectedPosition,
+  OverlayModule,
+} from "@angular/cdk/overlay";
 import { CommonModule } from "@angular/common";
-import { Component, input, output, ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, output, signal } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
 
 /**
@@ -23,7 +28,7 @@ import { IconComponent } from "../icon/icon.component";
   selector: "app-tooltip",
   templateUrl: "./tooltip.component.html",
   styleUrl: "./tooltip.component.scss",
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, OverlayModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TooltipComponent {
@@ -48,9 +53,43 @@ export class TooltipComponent {
   /** Цвет иконки */
   color = input<"accent" | "grey">("accent");
 
+  useOverlay = input(false);
+
   /** Событие показа подсказки */
   show = output<void>();
 
   /** Событие скрытия подсказки */
   hide = output<void>();
+
+  overlayPlacement = signal<"left" | "right" | null>(null);
+
+  private readonly rightOverlayPosition: ConnectedPosition = {
+    originX: "end",
+    originY: "center",
+    overlayX: "start",
+    overlayY: "center",
+    offsetX: 8,
+  };
+
+  private readonly leftOverlayPosition: ConnectedPosition = {
+    originX: "start",
+    originY: "center",
+    overlayX: "end",
+    overlayY: "center",
+    offsetX: -8,
+  };
+
+  get overlayPositions(): ConnectedPosition[] {
+    return this.position() === "right"
+      ? [this.rightOverlayPosition, this.leftOverlayPosition]
+      : [this.leftOverlayPosition, this.rightOverlayPosition];
+  }
+
+  get currentOverlayPlacement(): "left" | "right" {
+    return this.overlayPlacement() ?? this.position();
+  }
+
+  onOverlayPositionChange(event: ConnectedOverlayPositionChange): void {
+    this.overlayPlacement.set(event.connectionPair.overlayX === "start" ? "right" : "left");
+  }
 }

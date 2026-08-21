@@ -209,19 +209,6 @@ $detail-bar-mb: 12px;
     }
   }
 
-  &__analytics {
-    position: relative;
-    z-index: 20;
-
-    app-tooltip {
-      position: absolute;
-      top: 50%;
-      right: 28px;
-      z-index: 1000;
-      transform: translateY(-50%);
-    }
-  }
-
   &__edit {
     display: block;
   }
