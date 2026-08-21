@@ -47,4 +47,14 @@ describe("ProfileFormService", () => {
 
     expect(service.getCleanLinks()).toEqual(["https://t.me/procollab"]);
   });
+
+  it("should allow backend-supported formatted phone and reject invalid phone", () => {
+    service.phoneNumber.setValue("+7 (999) 123-45-67");
+
+    expect(service.phoneNumber.valid).toBe(true);
+
+    service.phoneNumber.setValue("wrong-phone");
+
+    expect(service.phoneNumber.hasError("pattern")).toBe(true);
+  });
 });
