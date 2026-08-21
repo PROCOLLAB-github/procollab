@@ -203,9 +203,10 @@ $detail-bar-mb: 12px;
 
     app-tooltip {
       position: absolute;
-      right: -7%;
-      bottom: 32%;
+      top: 50%;
+      right: 28px;
       z-index: 1000;
+      transform: translateY(-50%);
     }
   }
 
