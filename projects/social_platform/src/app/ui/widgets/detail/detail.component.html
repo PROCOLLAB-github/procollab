@@ -197,7 +197,12 @@
                   }
                 </div>
 
-                <a [href]="info().presentationAddress" download="" target="_blank">
+                <a
+                  [class.info__analytics]="isUserManager() && appWidth > 1000"
+                  [href]="info().presentationAddress"
+                  download=""
+                  target="_blank"
+                >
                   <app-button
                     [disabled]="isUserManager()"
                     appearance="outline"
