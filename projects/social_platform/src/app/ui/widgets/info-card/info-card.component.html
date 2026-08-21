@@ -115,6 +115,7 @@
 <ng-template #cardDescription>
   <div
     class="card__description"
+    [class.card__description--project]="type() === 'projects'"
     [style.max-height]="type() === 'members' ? '50px' : '24px'"
     [class.invite-description]="type() === 'invite'"
   >
