@@ -218,17 +218,7 @@
                             : "положение"
                       }}</span>
                     }
-                    @if (isUserManager() && appWidth > 1000) {
-                      <app-tooltip
-                        [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
-                        [isVisible]="isTooltipVisible('base')"
-                        [position]="'right'"
-                        [tooltipWidth]="180"
-                        customClass="content__hint"
-                        (show)="toggleTooltip()"
-                        (hide)="toggleTooltip()"
-                      ></app-tooltip>
-                    } @else {
+                    @if (!isUserManager() || appWidth <= 1000) {
                       <i
                         appIcon
                         class="info__presentation-icon"
@@ -237,6 +227,18 @@
                       ></i>
                     }
                   </app-button>
+
+                  @if (isUserManager() && appWidth > 1000) {
+                    <app-tooltip
+                      [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
+                      [isVisible]="isTooltipVisible('base')"
+                      [position]="'right'"
+                      [tooltipWidth]="180"
+                      customClass="content__hint"
+                      (show)="toggleTooltip()"
+                      (hide)="toggleTooltip()"
+                    ></app-tooltip>
+                  }
                 </a>
 
                 @if (appWidth > 1000) {
