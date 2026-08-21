@@ -17,13 +17,13 @@
       icon="send"
       appSquare="12"
       class="form__send"
-      [style.opacity]="isTextOverflow || pending() ? '0.5' : '1'"
-      [style.pointer-events]="isTextOverflow || pending() ? 'none' : 'auto'"
+      [style.opacity]="isSubmitDisabled() ? '0.5' : '1'"
+      [style.pointer-events]="isSubmitDisabled() ? 'none' : 'auto'"
       (click)="onSubmit()"
     ></i>
   </div>
   <div class="form__images">
-    @for (i of imagesList; track i.id) {
+    @for (i of imagesList(); track i.id) {
       <app-img-card
         [loading]="i.loading"
         [src]="i.src"
@@ -34,7 +34,7 @@
     }
   </div>
   <div class="form__files">
-    @for (f of filesList; track f.id) {
+    @for (f of filesList(); track f.id) {
       <app-file-upload-item
         [name]="f.tempFile.name"
         [type]="f.tempFile.type"
@@ -42,6 +42,7 @@
         [loading]="f.loading"
         [error]="f.error"
         (delete)="onDeleteFile(f.id)"
+        (retry)="onRetryFile(f.id)"
       ></app-file-upload-item>
     }
   </div>
