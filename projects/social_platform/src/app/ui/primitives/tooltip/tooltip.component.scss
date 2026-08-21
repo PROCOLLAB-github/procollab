@@ -39,11 +39,26 @@
       opacity: 1;
     }
 
+    &--overlay {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      left: auto;
+      display: block;
+      opacity: 1;
+      transform: none;
+    }
+
     &--left {
       top: 50%;
       right: calc(100% + 8px);
-      border-radius: 15px 15px 15px 0;
       transform: translateY(-50%);
+    }
+
+    &--left,
+    &--overlay-left {
+      border-radius: 15px 15px 15px 0;
 
       &::after {
         position: absolute;
@@ -71,8 +86,12 @@
     &--right {
       top: 50%;
       left: calc(100% + 8px);
-      border-radius: 15px 15px 0;
       transform: translateY(-50%);
+    }
+
+    &--right,
+    &--overlay-right {
+      border-radius: 15px 15px 0;
 
       &::after {
         position: absolute;
