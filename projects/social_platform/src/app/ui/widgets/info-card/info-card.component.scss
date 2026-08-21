@@ -160,11 +160,13 @@
   }
 
   &__footer {
-    display: flex;
-    flex-shrink: 0;
-    align-items: flex-end;
-    justify-content: center;
-    margin-top: auto;
+    &--project {
+      display: flex;
+      flex-shrink: 0;
+      align-items: flex-end;
+      justify-content: center;
+      margin-top: auto;
+    }
   }
 
   &__invite-actions {
