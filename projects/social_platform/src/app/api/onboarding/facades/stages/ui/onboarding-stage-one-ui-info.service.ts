@@ -24,6 +24,10 @@ export class OnboardingStageOneUIInfoService {
     this.openSpecializationGroup.set(isOpen ? groupName : null);
   }
 
+  isSpecializationGroupOpen(groupName: string): boolean {
+    return this.openSpecializationGroup() === groupName;
+  }
+
   isSpecializationGroupDisabled(groupName: string): boolean {
     return this.openSpecializationGroup() !== null && this.openSpecializationGroup() !== groupName;
   }

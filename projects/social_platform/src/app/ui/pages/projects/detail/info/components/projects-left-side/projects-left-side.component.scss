@@ -65,7 +65,8 @@
   &__item {
     display: flex;
     gap: 6px;
-    align-items: center;
+    align-items: flex-start;
+    min-width: 0;
 
     &--status {
       padding: 8px;
@@ -84,12 +85,39 @@
       border-radius: var(--rounded-xl);
     }
 
-    p {
+    p,
+    a {
       color: var(--accent);
     }
 
-    span {
+    a {
+      text-decoration: none;
       cursor: pointer;
+    }
+  }
+
+  &__item-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__label {
+    color: var(--dark-grey);
+  }
+
+  &__value {
+    min-width: 0;
+    margin: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+    &--link {
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
