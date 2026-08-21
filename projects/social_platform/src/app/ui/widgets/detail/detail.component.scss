@@ -209,6 +209,11 @@ $detail-bar-mb: 12px;
     }
   }
 
+  &__analytics {
+    position: relative;
+    z-index: 20;
+  }
+
   &__edit {
     display: block;
   }
