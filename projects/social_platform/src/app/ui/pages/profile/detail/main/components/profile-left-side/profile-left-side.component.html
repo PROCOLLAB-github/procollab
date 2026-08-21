@@ -24,8 +24,8 @@
       @if (user()!.personal.speciality) {
         <li class="lists__item">
           <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
-          <p class="text-body-10">
-            {{ (user()!.personal.speciality | truncate: 13) ?? "не указана" }}
+          <p class="text-body-10 lists__item-value">
+            {{ user()!.personal.speciality ?? "не указана" }}
           </p>
         </li>
       }
