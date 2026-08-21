@@ -148,8 +148,24 @@
     text-align: center;
     word-break: break-word;
 
+    &--project {
+      flex: 0 0 24px;
+      height: 24px;
+      min-height: 24px;
+    }
+
     &.invite-description {
       justify-content: center;
+    }
+  }
+
+  &__footer {
+    &--project {
+      display: flex;
+      flex-shrink: 0;
+      align-items: flex-end;
+      justify-content: center;
+      margin-top: auto;
     }
   }
 

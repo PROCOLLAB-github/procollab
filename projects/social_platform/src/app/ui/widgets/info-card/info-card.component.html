@@ -54,7 +54,7 @@
         <ng-container *ngTemplateOutlet="cardDescription"></ng-container>
       }
 
-      <div class="card__footer">
+      <div class="card__footer" [class.card__footer--project]="type() === 'projects'">
         @if (appereance() === "empty") {
           @if (section() === "projects") {
             <i appIcon icon="main" appSquare="22" class="card__empty--icon"></i>
@@ -115,6 +115,7 @@
 <ng-template #cardDescription>
   <div
     class="card__description"
+    [class.card__description--project]="type() === 'projects'"
     [style.max-height]="type() === 'members' ? '50px' : '24px'"
     [class.invite-description]="type() === 'invite'"
   >
