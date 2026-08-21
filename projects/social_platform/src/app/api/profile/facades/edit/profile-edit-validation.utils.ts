@@ -14,7 +14,8 @@ const DISPLAY_DATE_FORMAT = "DD.MM.YYYY";
 const API_DATE_FORMAT = "YYYY-MM-DD";
 const MIN_PROFILE_AGE = 12;
 const MAX_PROFILE_AGE = 100;
-const MIN_YEAR = 1900;
+const MIN_BIRTHDAY_YEAR = 1900;
+const MIN_EXPERIENCE_YEAR = 1971;
 
 const parseDisplayDate = (value: string): Date | null => {
   const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(value);
@@ -59,7 +60,7 @@ export const profileBirthdayValidator: ValidatorFn = (
   const birthdayDate = parseDisplayDate(value);
   const birthday = birthdayDate ? dayjs(birthdayDate) : null;
 
-  if (!birthday || birthday.year() < MIN_YEAR || birthday.isAfter(dayjs(), "day")) {
+  if (!birthday || birthday.year() < MIN_BIRTHDAY_YEAR || birthday.isAfter(dayjs(), "day")) {
     return { invalidDateFormat: true };
   }
 
@@ -81,7 +82,27 @@ export const cyrillicNameValidator: ValidatorFn = (
   const value = String(control.value ?? "").trim();
   if (!value) return null;
 
-  return /^[А-Яа-яЁё-]+$/.test(value) ? null : { invalidLanguage: true };
+  return /^[А-Яа-яЁё]+$/.test(value) ? null : { invalidLanguage: true };
+};
+
+export const userPhoneNumberValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
+  const value = String(control.value ?? "").trim();
+  if (!value) return null;
+
+  if (!/^[+\d\s()-]+$/.test(value)) {
+    return { pattern: true };
+  }
+
+  const normalizedForParse = value.replace(/^8/, "+7").replace(/^7/, "+7");
+  const digits = normalizedForParse.replace(/\D/g, "");
+
+  if (!normalizedForParse.startsWith("+") || digits.length < 8 || digits.length > 15) {
+    return { pattern: true };
+  }
+
+  return null;
 };
 
 export const skillsCountValidator: ValidatorFn = (
@@ -124,13 +145,13 @@ export const yearBoundsValidator = (
   completionYearControlName: string,
 ): ValidatorFn => {
   return (formGroup: AbstractControl): ValidationErrors | null => {
-    const currentYear = new Date().getFullYear() + 1;
+    const currentYear = new Date().getFullYear();
     const entryYear = formGroup.get(entryYearControlName)?.value;
     const completionYear = formGroup.get(completionYearControlName)?.value;
     const years = [entryYear, completionYear].filter(Boolean) as number[];
 
-    return years.some(year => year < MIN_YEAR || year > currentYear)
-      ? { yearBoundsError: { min: MIN_YEAR, max: currentYear } }
+    return years.some(year => year < MIN_EXPERIENCE_YEAR || year > currentYear)
+      ? { yearBoundsError: { min: MIN_EXPERIENCE_YEAR, max: currentYear } }
       : null;
   };
 };

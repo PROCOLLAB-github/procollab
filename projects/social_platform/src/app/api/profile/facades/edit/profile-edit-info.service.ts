@@ -176,8 +176,8 @@ export class ProfileEditInfoService {
 
     // Построение объекта профиля с только необходимыми полями
     const newProfile: any = {
-      first_name: this.profileForm.value.firstName,
-      last_name: this.profileForm.value.lastName,
+      first_name: this.profileForm.value.firstName?.trim(),
+      last_name: this.profileForm.value.lastName?.trim(),
       email: this.profileForm.value.email,
       user_type: this.profileForm.value.userType,
       city: this.profileForm.value.city,
@@ -185,7 +185,7 @@ export class ProfileEditInfoService {
       avatar: this.profileForm.value.avatar || null,
       cover_image_address: this.profileForm.value.coverImageAddress || null,
       phoneNumber: this.profileForm.value.phoneNumber
-        ? this.profileForm.value.phoneNumber.replace(/^\+?[87]/, "+7")
+        ? this.profileForm.value.phoneNumber.trim().replace(/^\+?[87]/, "+7")
         : null,
       speciality: this.profileForm.value.speciality,
       skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),

@@ -64,8 +64,8 @@ describe("ProfileEditInfoService", () => {
     profileFormService.addLink(" ");
 
     form.patchValue({
-      firstName: "Иван",
-      lastName: "Иванов",
+      firstName: " Иван ",
+      lastName: " Иванов ",
       birthday: "25.03.1990",
       city: "Москва",
       speciality: "Frontend developer",
@@ -79,6 +79,8 @@ describe("ProfileEditInfoService", () => {
     expect(saveProfileUseCase.execute.mock.calls[0][1]).not.toHaveProperty("id");
     expect(saveProfileUseCase.execute.mock.calls[0][1]).toEqual(
       expect.objectContaining({
+        first_name: "Иван",
+        last_name: "Иванов",
         birthday: "1990-03-25",
         links: ["https://t.me/procollab"],
         skillsIds: [1],

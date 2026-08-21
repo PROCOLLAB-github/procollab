@@ -3,10 +3,13 @@
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import dayjs from "dayjs";
 import {
+  cyrillicNameValidator,
   formatBirthdayForApi,
   formatBirthdayForView,
   profileBirthdayValidator,
   userLanguagesValidator,
+  userPhoneNumberValidator,
+  yearBoundsValidator,
 } from "./profile-edit-validation.utils";
 
 describe("profile edit validation utils", () => {
@@ -37,6 +40,37 @@ describe("profile edit validation utils", () => {
     const control = new FormControl(dayjs().subtract(100, "year").format("DD.MM.YYYY"));
 
     expect(profileBirthdayValidator(control)).toEqual({ tooOld: { requiredAge: 100 } });
+  });
+
+  it("should validate experience years according to backend range", () => {
+    const currentYear = new Date().getFullYear();
+    const validator = yearBoundsValidator("entryYear", "completionYear");
+    const group = new FormGroup({
+      entryYear: new FormControl(1970),
+      completionYear: new FormControl(currentYear),
+    });
+
+    expect(validator(group)).toEqual({ yearBoundsError: { min: 1971, max: currentYear } });
+
+    group.patchValue({ entryYear: 1971, completionYear: currentYear });
+
+    expect(validator(group)).toBeNull();
+
+    group.patchValue({ entryYear: currentYear + 1 });
+
+    expect(validator(group)).toEqual({ yearBoundsError: { min: 1971, max: currentYear } });
+  });
+
+  it("should reject hyphenated names according to backend user_name_validator", () => {
+    expect(cyrillicNameValidator(new FormControl("Анна-Мария"))).toEqual({
+      invalidLanguage: true,
+    });
+    expect(cyrillicNameValidator(new FormControl("Анна"))).toBeNull();
+  });
+
+  it("should allow backend-supported formatted phone and reject invalid phone", () => {
+    expect(userPhoneNumberValidator(new FormControl("+7 (999) 123-45-67"))).toBeNull();
+    expect(userPhoneNumberValidator(new FormControl("wrong-phone"))).toEqual({ pattern: true });
   });
 
   it("should reject more than 4 languages and duplicates", () => {

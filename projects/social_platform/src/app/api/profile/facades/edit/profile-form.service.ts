@@ -22,6 +22,7 @@ import {
   profileBirthdayValidator,
   skillsCountValidator,
   userLanguagesValidator,
+  userPhoneNumberValidator,
   yearBoundsValidator,
 } from "./profile-edit-validation.utils";
 
@@ -90,7 +91,7 @@ export class ProfileFormService {
       userType: [0],
       birthday: ["", [Validators.required, profileBirthdayValidator]],
       city: ["", [Validators.required, Validators.maxLength(100)]],
-      phoneNumber: ["", [Validators.maxLength(16), Validators.pattern(/^\+?[1-9]\d{6,14}$/)]],
+      phoneNumber: ["", [Validators.maxLength(20), userPhoneNumberValidator]],
       additionalRole: [null],
       coverImageAddress: [null],
 
@@ -394,8 +395,8 @@ export class ProfileFormService {
     return this.authRepository
       .updateProfile(profileId, {
         email: this.profileForm.value.email,
-        firstName: this.profileForm.value.firstName,
-        lastName: this.profileForm.value.lastName,
+        firstName: this.profileForm.value.firstName?.trim(),
+        lastName: this.profileForm.value.lastName?.trim(),
         userType: typeId,
       })
       .pipe(
