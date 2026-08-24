@@ -81,7 +81,8 @@
                 [title]="spec.name"
                 [options]="spec.specializations"
                 [hasOpenGroups]="hasOpenSpecializationsGroups()"
-                [disabled]="isSpecializationGroupDisabled(spec.name)"
+                [isOpen]="isSpecializationGroupOpen(spec.name)"
+                [selectedName]="stageForm.controls['speciality'].value"
                 (groupToggled)="onSpecializationsGroupToggled($event, spec.name)"
                 (selectOption)="onSelectSpec($event)"
               ></app-specializations-group>

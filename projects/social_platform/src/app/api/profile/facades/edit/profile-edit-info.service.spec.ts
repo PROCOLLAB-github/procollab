@@ -4,104 +4,106 @@ import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
-import { ProfileEditInfoService } from "./profile-edit-info.service";
-import { ProfileFormService } from "./profile-form.service";
+import { Skill } from "@domain/skills/skill.model";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { NavigationService } from "../../../paths/navigation.service";
 import { ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@api/shared/nav.service";
 import { SaveProfileUseCase } from "@api/profile/use-cases/save-profile.use-case";
 import { ProfileInfoService } from "../profile-info.service";
-import { SnackbarService } from "@domain/shared/snackbar.service";
-import { User } from "@domain/auth/user.model";
-import { ok } from "@domain/shared/result.type";
+import { ProfileEditInfoService } from "./profile-edit-info.service";
+import { ProfileFormService } from "./profile-form.service";
 
 describe("ProfileEditInfoService", () => {
   let service: ProfileEditInfoService;
-  let profileId: ReturnType<typeof signal<number | undefined>>;
-  let executeSaveProfile: ReturnType<typeof vi.fn>;
+  let profileFormService: ProfileFormService;
+  let saveProfileUseCase: { execute: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
-    profileId = signal<number | undefined>(42);
-    executeSaveProfile = vi.fn();
-
-    const values = {
-      firstName: "Иван",
-      lastName: "Иванов",
-      email: "ivan@example.com",
-      userType: 1,
-      birthday: "2000-01-01",
-      speciality: "Разработчик",
-      city: "Москва",
-      aboutMe: "",
-      avatar: null,
-      coverImageAddress: null,
-      phoneNumber: "",
-      skills: [],
-      education: [],
-      workExperience: [],
-      userLanguages: [],
-    };
-    const controls: Record<string, any> = Object.fromEntries(
-      Object.entries(values).map(([name, value]) => [
-        name,
-        {
-          value,
-          valid: true,
-          clearValidators: vi.fn(),
-          updateValueAndValidity: vi.fn(),
-        },
-      ]),
-    );
-    const form = {
-      value: values,
-      markAllAsTouched: vi.fn(),
-      updateValueAndValidity: vi.fn(),
-      get: vi.fn((name: string) => controls[name] ?? null),
+    saveProfileUseCase = {
+      execute: vi.fn().mockReturnValue(of({ ok: true, value: { id: 42 } })),
     };
 
     TestBed.configureTestingModule({
       providers: [
         ProfileEditInfoService,
-        {
-          provide: ProfileFormService,
-          useValue: {
-            getForm: () => form,
-            profileId,
-            typeSpecific: { value: {} },
-            achievements: { value: [], length: 0 },
-          },
-        },
+        ProfileFormService,
         { provide: ActivatedRoute, useValue: { snapshot: { queryParams: {} } } },
         { provide: NavigationService, useValue: { profileRedirect: vi.fn() } },
-        { provide: ProjectStepService, useValue: { setStepFromRoute: vi.fn() } },
         { provide: NavService, useValue: { setNavTitle: vi.fn() } },
-        { provide: SaveProfileUseCase, useValue: { execute: executeSaveProfile } },
+        { provide: ProjectStepService, useValue: { setStepFromRoute: vi.fn() } },
+        { provide: SnackbarService, useValue: { success: vi.fn() } },
+        { provide: SaveProfileUseCase, useValue: saveProfileUseCase },
+        {
+          provide: AuthRepositoryPort,
+          useValue: {
+            updateAvatar: vi.fn(),
+            updateProfile: vi.fn(),
+          },
+        },
         {
           provide: ProfileInfoService,
-          useValue: { applyProfileUpdated: vi.fn() },
+          useValue: {
+            changeableRoles: signal([]),
+            profile: signal(null),
+            applyProfileUpdated: vi.fn(),
+          },
         },
-        { provide: SnackbarService, useValue: { success: vi.fn() } },
       ],
     });
+
     service = TestBed.inject(ProfileEditInfoService);
+    profileFormService = TestBed.inject(ProfileFormService);
   });
 
-  it("передает текущий profileId отдельно и не добавляет id в payload", () => {
-    executeSaveProfile.mockReturnValue(of(ok({ id: 42 } as User)));
+  it("should include cleaned links in save payload", () => {
+    const form = profileFormService.getForm();
+    profileFormService.profileId.set(42);
+    profileFormService.addLink(" https://t.me/procollab ");
+    profileFormService.addLink(" ");
+
+    form.patchValue({
+      firstName: " Иван ",
+      lastName: " Иванов ",
+      birthday: "25.03.1990",
+      city: "Москва",
+      speciality: "Frontend developer",
+      skills: [{ id: 1, name: "Angular" }] as Skill[],
+    });
 
     service.saveProfile();
 
-    expect(executeSaveProfile).toHaveBeenCalledOnce();
-    expect(executeSaveProfile.mock.calls[0][0]).toBe(42);
-    expect(executeSaveProfile.mock.calls[0][1]).not.toHaveProperty("id");
+    expect(saveProfileUseCase.execute).toHaveBeenCalledTimes(1);
+    expect(saveProfileUseCase.execute.mock.calls[0][0]).toBe(42);
+    expect(saveProfileUseCase.execute.mock.calls[0][1]).not.toHaveProperty("id");
+    expect(saveProfileUseCase.execute.mock.calls[0][1]).toEqual(
+      expect.objectContaining({
+        first_name: "Иван",
+        last_name: "Иванов",
+        birthday: "1990-03-25",
+        links: ["https://t.me/procollab"],
+        skillsIds: [1],
+      }),
+    );
   });
 
-  it("не отправляет профиль без корректного profileId", () => {
-    profileId.set(undefined);
+  it("does not save a profile without a valid profile id", () => {
+    const form = profileFormService.getForm();
+    profileFormService.profileId.set(undefined);
+
+    form.patchValue({
+      firstName: "Иван",
+      lastName: "Иванов",
+      birthday: "25.03.1990",
+      city: "Москва",
+      speciality: "Frontend developer",
+      skills: [{ id: 1, name: "Angular" }] as Skill[],
+    });
 
     service.saveProfile();
 
-    expect(executeSaveProfile).not.toHaveBeenCalled();
+    expect(saveProfileUseCase.execute).not.toHaveBeenCalled();
     expect(service.profileFormSubmitting$().status).toBe("failure");
     expect(service.isModalErrorSkillsChoose()).toBe(true);
   });

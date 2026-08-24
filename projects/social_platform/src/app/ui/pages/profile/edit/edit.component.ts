@@ -45,6 +45,7 @@ import { SearchesService } from "@api/searches/searches.service";
 import { EditStep } from "@core/lib/models/edit-step";
 import { GetSpecializationsNestedUseCase } from "@api/specializations/use-cases/get-specializations-nested.use-case";
 import { map } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/profile-edit-achievements-info.service";
 
 /** Многошаговая форма редактирования профиля пользователя. */
@@ -99,6 +100,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   private readonly profileEditSkillsInfoService = inject(ProfileEditSkillsInfoService);
 
   protected readonly profileForm = this.profileFormService.getForm();
+
+  protected readonly selectedSpecialityName = toSignal(
+    this.profileFormService.getForm().get("speciality")!.valueChanges,
+    { initialValue: this.profileFormService.getForm().get("speciality")!.value as string | null },
+  );
 
   ngOnInit(): void {
     this.profileEditInfoService.initializationEditInfo();
@@ -223,6 +229,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   isSpecializationGroupDisabled(groupName: string): boolean {
     return this.onboardingStageOneUIInfoService.isSpecializationGroupDisabled(groupName);
+  }
+
+  isSpecializationGroupOpen(groupName: string): boolean {
+    return this.onboardingStageOneUIInfoService.isSpecializationGroupOpen(groupName);
   }
 
   onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
