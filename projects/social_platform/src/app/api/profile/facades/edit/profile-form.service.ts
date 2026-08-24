@@ -2,7 +2,7 @@
 
 import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { concatMap, filter, map, Observable, skip, take, throwError } from "rxjs";
+import { concatMap, filter, map, Observable, take, throwError } from "rxjs";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User, UserRolesData } from "@domain/auth/user.model";
 import { Specialization } from "@domain/specializations/specialization.model";
@@ -139,7 +139,6 @@ export class ProfileFormService {
     this.profileForm
       .get("userType")
       ?.valueChanges.pipe(
-        skip(1),
         concatMap(this.changeUserType.bind(this)),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -148,7 +147,6 @@ export class ProfileFormService {
     this.profileForm
       .get("avatar")
       ?.valueChanges.pipe(
-        skip(1),
         concatMap(url => this.authRepository.updateAvatar(url, this.profile()!.id)),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -166,23 +164,26 @@ export class ProfileFormService {
         next: profile => {
           this.profileId.set(profile.id);
 
-          this.profileForm.patchValue({
-            firstName: profile.firstName ?? "",
-            lastName: profile.lastName ?? "",
-            email: profile.email ?? "",
-            userType: profile.personal.userType ?? 1,
-            birthday: formatBirthdayForView(profile.personal.birthday),
-            city: profile.personal.city ?? "",
-            coverImageAddress: profile.personal.coverImageAddress ?? "",
-            phoneNumber: profile.personal.phoneNumber ?? "",
-            additionalRole: profile.personal.v2Speciality?.name ?? "",
-            speciality: profile.personal.speciality ?? "",
-            skills: profile.relations.skills ?? [],
-            avatar: profile.personal.avatar ?? "",
-            aboutMe: profile.personal.aboutMe ?? "",
-            isMospolytechStudent: profile.personal.isMospolytechStudent ?? false,
-            studyGroup: profile.personal.studyGroup ?? "",
-          });
+          this.profileForm.patchValue(
+            {
+              firstName: profile.firstName ?? "",
+              lastName: profile.lastName ?? "",
+              email: profile.email ?? "",
+              userType: profile.personal.userType ?? 1,
+              birthday: formatBirthdayForView(profile.personal.birthday),
+              city: profile.personal.city ?? "",
+              coverImageAddress: profile.personal.coverImageAddress ?? "",
+              phoneNumber: profile.personal.phoneNumber ?? "",
+              additionalRole: profile.personal.v2Speciality?.name ?? "",
+              speciality: profile.personal.speciality ?? "",
+              skills: profile.relations.skills ?? [],
+              avatar: profile.personal.avatar ?? "",
+              aboutMe: profile.personal.aboutMe ?? "",
+              isMospolytechStudent: profile.personal.isMospolytechStudent ?? false,
+              studyGroup: profile.personal.studyGroup ?? "",
+            },
+            { emitEvent: false },
+          );
 
           this.workExperience.clear();
           profile.relations.workExperience.forEach(work => {
