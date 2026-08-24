@@ -24,6 +24,7 @@ describe("ProgramRepository", () => {
       create: vi.fn(),
       getDataSchema: vi.fn(),
       register: vi.fn(),
+      acknowledgeWelcome: vi.fn(),
       getAllProjects: vi.fn(),
       getAllMembers: vi.fn(),
       getProgramFilters: vi.fn(),
@@ -88,6 +89,21 @@ describe("ProgramRepository", () => {
     adapter.register.mockReturnValue(of({} as ProgramDataSchema));
     repository.register(1, { city: "Москва" }).subscribe();
     expect(adapter.register).toHaveBeenCalledExactlyOnceWith(1, { city: "Москва" });
+  });
+
+  it("подтверждает приветствие и сбрасывает кеш detail программы", () => {
+    setup();
+    adapter.getOne.mockReturnValue(of({ id: 1 } as Program));
+    adapter.acknowledgeWelcome.mockReturnValue(
+      of({ welcomeAcknowledgedAt: "2026-08-24T10:00:00Z" }),
+    );
+
+    repository.getOne(1).subscribe();
+    repository.acknowledgeWelcome(1).subscribe();
+    repository.getOne(1).subscribe();
+
+    expect(adapter.acknowledgeWelcome).toHaveBeenCalledExactlyOnceWith(1);
+    expect(adapter.getOne).toHaveBeenCalledTimes(2);
   });
 
   it("getAllProjects делегирует в adapter", () => {

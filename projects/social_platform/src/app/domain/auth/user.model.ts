@@ -80,7 +80,9 @@ export class UserRelations {
   isActive!: boolean;
   timeCreated!: string;
   timeUpdated!: string;
-  verificationDate!: string;
+  verificationDate!: string | null;
+  verificationNoticeAcknowledgedAt!: string | null;
+  profileFillPromptAcknowledgedAt!: string | null;
 }
 
 export class UserPersonal {

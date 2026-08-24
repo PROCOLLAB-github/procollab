@@ -18,18 +18,18 @@ export class ProfileDetailUIInfoService {
   readonly directions = signal<DirectionItem[]>([]);
   readonly isShowModal = signal<boolean>(false);
 
-  applyInitProfile(data: any): void {
+  applyInitProfile(data: any, currentUserId?: number): void {
     const userWithProgress = data["data"]["user"] as User;
     this.user.set(userWithProgress);
     this.initializationDirections(userWithProgress);
 
     if (
-      userWithProgress?.id !== undefined &&
+      currentUserId !== undefined &&
+      userWithProgress?.id === currentUserId &&
       userWithProgress.relations.progress! < 100 &&
-      !this.hasSeenProfileFillModal(userWithProgress.id)
+      userWithProgress.relations.profileFillPromptAcknowledgedAt === null
     ) {
       this.isProfileFill.set(true);
-      this.markSeenProfileFillModal(userWithProgress.id);
     } else {
       this.isProfileFill.set(false);
     }
@@ -55,6 +55,20 @@ export class ProfileDetailUIInfoService {
     this.isShowModal.set(true);
   }
 
+  applyProfileFillAcknowledged(acknowledgedAt: string): void {
+    this.user.update(user =>
+      user
+        ? Object.assign(new User(), user, {
+            relations: {
+              ...user.relations,
+              profileFillPromptAcknowledgedAt: acknowledgedAt,
+            },
+          })
+        : user,
+    );
+    this.isProfileFill.set(false);
+  }
+
   private initializationDirections(user: User): void {
     this.directions.set(
       directionItemBuilder(
@@ -65,25 +79,5 @@ export class ProfileDetailUIInfoService {
         ["array", "array"],
       )!.filter(item => !Array.isArray(item.about) || item.about.length > 0),
     );
-  }
-
-  private getProfileFillSeenKey(userId: number): string {
-    return `profile_${userId}_fill_modal_seen`;
-  }
-
-  private hasSeenProfileFillModal(userId: number): boolean {
-    try {
-      return !!localStorage.getItem(this.getProfileFillSeenKey(userId));
-    } catch (e) {
-      return false;
-    }
-  }
-
-  private markSeenProfileFillModal(userId: number): void {
-    try {
-      localStorage.setItem(this.getProfileFillSeenKey(userId), "1");
-    } catch (e) {
-      // ignore storage errors
-    }
   }
 }

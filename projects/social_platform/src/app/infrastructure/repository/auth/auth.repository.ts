@@ -60,6 +60,14 @@ export class AuthRepository implements AuthRepositoryPort {
     return this.authAdapter.getProfile().pipe(map(user => userFromRaw(user)));
   }
 
+  acknowledgeVerificationNotice(): Observable<User> {
+    return this.authAdapter.acknowledgeVerificationNotice().pipe(map(user => userFromRaw(user)));
+  }
+
+  acknowledgeProfileFillPrompt(): Observable<User> {
+    return this.authAdapter.acknowledgeProfileFillPrompt().pipe(map(user => userFromRaw(user)));
+  }
+
   updateProfile(profileId: number, data: UserInput): Observable<User> {
     const rawData = userToRaw(data);
     return this.authAdapter.saveProfile(profileId, rawData).pipe(map(user => userFromRaw(user)));

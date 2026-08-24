@@ -6,20 +6,12 @@ import { Injectable, inject, signal } from "@angular/core";
 @Injectable()
 export class OfficeUIInfoService {
   readonly waitVerificationModal = signal<boolean>(false);
-  readonly waitVerificationAccepted = signal<boolean>(false);
+  readonly verificationAcknowledgementPending = signal<boolean>(false);
   readonly inviteErrorModal = signal<boolean>(false);
 
   readonly navItems = signal<
     { name: string; link: string; icon: string; isExternal?: boolean; isActive?: boolean }[]
   >([]);
-
-  applyVerificationModal(): void {
-    // Не показываем модалку, если пользователь уже принял подтверждение
-    if (localStorage.getItem("waitVerificationAccepted") === "true") {
-      // eslint-disable-next-line no-useless-return
-      return;
-    }
-  }
 
   applyOpenVerificationModal(): void {
     this.waitVerificationModal.set(true);
@@ -29,9 +21,8 @@ export class OfficeUIInfoService {
     this.inviteErrorModal.set(true);
   }
 
-  applyAcceptWaitVerification() {
-    this.waitVerificationAccepted.set(true);
-    localStorage.setItem("waitVerificationAccepted", "true");
+  applyVerificationAcknowledged(): void {
+    this.waitVerificationModal.set(false);
   }
 
   applyCreateNavItems(profileId: number): void {
