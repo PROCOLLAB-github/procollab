@@ -116,4 +116,17 @@ describe("InputComponent", () => {
     fixture.detectChanges();
     expect(field.classList).toContain("field--error");
   });
+
+  it("should format datepicker value as DD.MM.YYYY in text date mode", () => {
+    const onChange = vi.fn();
+    fixture.componentRef.setInput("type", "date");
+    fixture.componentRef.setInput("dateInputMode", "text");
+    component.registerOnChange(onChange);
+    fixture.detectChanges();
+
+    component.onDateChange({ value: new Date(1990, 2, 25) });
+
+    expect(onChange).toHaveBeenCalledWith("25.03.1990");
+    expect(component.appValue()).toBe("25.03.1990");
+  });
 });

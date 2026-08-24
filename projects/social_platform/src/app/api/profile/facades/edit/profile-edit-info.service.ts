@@ -15,6 +15,9 @@ import { ProfileInfoService } from "../profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { SnackbarService } from "@domain/shared/snackbar.service";
 import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
+import { AbstractControl, FormArray, FormGroup } from "@angular/forms";
+import { formatBirthdayForApi } from "./profile-edit-validation.utils";
+import { resolveProfileSaveErrorText } from "./profile-save-error.utils";
 
 /** Фасад редактирования профиля: сбор формы, `SaveProfileUseCase`, раскрытие групп. */
 @Injectable()
@@ -76,6 +79,7 @@ export class ProfileEditInfoService {
   }
 
   saveProfile(): void {
+    this.isModalErrorSkillChooseText.set("");
     this.profileForm.markAllAsTouched();
     this.profileForm.updateValueAndValidity();
 
@@ -97,7 +101,6 @@ export class ProfileEditInfoService {
       "status",
       "year",
       "files",
-      "phoneNumber",
     ];
 
     tempFields.forEach(name => {
@@ -127,6 +130,13 @@ export class ProfileEditInfoService {
       this.isModalErrorSkillChooseText.set(
         "Превышено допустимое количество символов в одном из полей",
       );
+      return;
+    }
+
+    const localErrorText = this.resolveLocalFormErrorText();
+    if (localErrorText) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set(localErrorText);
       return;
     }
 
@@ -179,11 +189,12 @@ export class ProfileEditInfoService {
         : null,
       speciality: this.profileForm.value.speciality,
       skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
+      links: this.profileFormService.getCleanLinks(),
     };
 
     // Добавляем birthday если он указан
     if (this.profileForm.value.birthday) {
-      newProfile.birthday = this.profileForm.value.birthday || undefined;
+      newProfile.birthday = formatBirthdayForApi(this.profileForm.value.birthday);
     }
 
     // Добавляем специфичные для типа пользователя поля
@@ -212,7 +223,7 @@ export class ProfileEditInfoService {
         if (!result.ok) {
           this.profileFormSubmitting$.set(failure("profile_edit_error"));
           this.isModalErrorSkillsChoose.set(true);
-          this.isModalErrorSkillChooseText.set(this.resolveSaveErrorText(result.error.cause));
+          this.isModalErrorSkillChooseText.set(resolveProfileSaveErrorText(result.error.cause));
           return;
         }
 
@@ -223,28 +234,98 @@ export class ProfileEditInfoService {
       });
   }
 
-  private resolveSaveErrorText(cause?: { error?: any }): string {
-    const body = cause?.error;
-    if (!body) return "Ошибка при сохранении профиля";
+  private resolveLocalFormErrorText(): string {
+    const firstNameError = this.resolveControlErrorText("Имя", this.profileForm.get("firstName"));
+    if (firstNameError) return firstNameError;
 
-    if (body.phone_number) return body.phone_number[0];
-    if (body.language) return body.language;
-    if (body.achievements) {
-      const err = Array.isArray(body.achievements) ? body.achievements[0] : body.achievements;
-      if (typeof err === "string") return err;
-      if (err && typeof err === "object") {
-        const val = Object.values(err)[0];
-        if (Array.isArray(val) && val.length > 0) return val[0];
-        if (val !== null && val !== undefined) return String(val);
-      }
-    }
-    if (body.work_experience?.[2]) {
-      return body.work_experience[2].entry_year ?? body.work_experience[2].completion_year;
-    }
-    if (body.first_name?.[0]) return body.first_name[0];
-    if (body.last_name?.[0]) return body.last_name[0];
-    if (body[0]) return body[0];
+    const lastNameError = this.resolveControlErrorText("Фамилия", this.profileForm.get("lastName"));
+    if (lastNameError) return lastNameError;
 
-    return "Ошибка при сохранении профиля";
+    const birthdayError = this.resolveControlErrorText(
+      "Дата рождения",
+      this.profileForm.get("birthday"),
+    );
+    if (birthdayError) return birthdayError;
+
+    const specialityError = this.resolveControlErrorText(
+      "Специальность",
+      this.profileForm.get("speciality"),
+    );
+    if (specialityError) return specialityError;
+
+    const cityError = this.resolveControlErrorText("Город", this.profileForm.get("city"));
+    if (cityError) return cityError;
+
+    const phoneError = this.resolveControlErrorText("Телефон", this.profileForm.get("phoneNumber"));
+    if (phoneError) return phoneError;
+
+    const skillsError = this.resolveControlErrorText("Навыки", this.profileForm.get("skills"));
+    if (skillsError) return skillsError;
+
+    const languagesError = this.resolveControlErrorText(
+      "Языки",
+      this.profileForm.get("userLanguages"),
+    );
+    if (languagesError) return languagesError;
+
+    const educationError = this.resolveIndexedGroupErrorText(
+      "Образование",
+      this.profileForm.get("education") as FormArray,
+    );
+    if (educationError) return educationError;
+
+    const workError = this.resolveIndexedGroupErrorText(
+      "Опыт работы",
+      this.profileForm.get("workExperience") as FormArray,
+    );
+    if (workError) return workError;
+
+    const achievementError = this.resolveIndexedGroupErrorText(
+      "Достижение",
+      this.profileForm.get("achievements") as FormArray,
+    );
+    if (achievementError) return achievementError;
+
+    return "";
+  }
+
+  private resolveIndexedGroupErrorText(label: string, formArray: FormArray): string {
+    const index = formArray.controls.findIndex(control => control.invalid);
+    if (index === -1) return "";
+
+    const group = formArray.at(index) as FormGroup;
+    const groupError = this.resolveControlErrorText(`${label} #${index + 1}`, group);
+    if (groupError) return groupError;
+
+    const invalidEntry = Object.entries(group.controls).find(([, control]) => control.invalid);
+    if (!invalidEntry) return "";
+
+    return this.resolveControlErrorText(`${label} #${index + 1}`, invalidEntry[1]);
+  }
+
+  private resolveControlErrorText(label: string, control: AbstractControl | null): string {
+    if (!control?.errors) return "";
+
+    if (control.errors["required"]) return `${label}: поле обязательно для заполнения`;
+    if (control.errors["minlength"]) return `${label}: укажите минимум 2 символа`;
+    if (control.errors["invalidLanguage"]) return `${label}: используйте только кириллицу`;
+    if (control.errors["invalidDateFormat"])
+      return `${label}: укажите реальную дату в формате ДД.ММ.ГГГГ`;
+    if (control.errors["tooYoung"]) return `${label}: возраст должен быть от 12 до 99 лет`;
+    if (control.errors["tooOld"]) return `${label}: возраст должен быть от 12 до 99 лет`;
+    if (control.errors["pattern"]) {
+      return `${label}: укажите телефон в международном формате, например +79991234567`;
+    }
+    if (control.errors["minSkills"] || control.errors["maxSkills"]) {
+      return `${label}: необходимо выбрать от 1 до 20 навыков`;
+    }
+    if (control.errors["maxLanguages"]) return `${label}: можно добавить не более 4 языков`;
+    if (control.errors["duplicateLanguages"]) return `${label}: нельзя добавлять одинаковые языки`;
+    if (control.errors["yearRangeError"]) {
+      return `${label}: год начала должен быть меньше или равен году окончания`;
+    }
+    if (control.errors["yearBoundsError"]) return `${label}: укажите корректный год`;
+
+    return "";
   }
 }

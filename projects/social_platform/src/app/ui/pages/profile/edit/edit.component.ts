@@ -225,6 +225,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     return this.onboardingStageOneUIInfoService.isSpecializationGroupDisabled(groupName);
   }
 
+  isSpecializationGroupOpen(groupName: string): boolean {
+    return this.onboardingStageOneUIInfoService.isSpecializationGroupOpen(groupName);
+  }
+
   onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
     this.onboardingStageOneUIInfoService.onSpecializationsGroupToggled(isOpen, groupName);
   }

@@ -38,7 +38,15 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      min-height: 32px;
+      padding: 0 8px;
+      border-radius: var(--rounded-lg);
       transition: width 0.2s ease;
+
+      &:hover {
+        color: var(--accent);
+        background-color: rgb(109 40 255 / 6%);
+      }
 
       .heading--open &,
       &--has-open {
@@ -66,17 +74,43 @@
     }
 
     &__option {
-      padding: 5px 0;
-      padding-left: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
       cursor: pointer;
-      transition: opacity 0.2s ease;
+      border: 0.5px solid transparent;
+      border-radius: var(--rounded-md);
+      transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
 
-      label {
-        cursor: pointer;
+      span {
+        cursor: inherit;
       }
 
       &:hover {
-        background-color: var(--light-gray);
+        color: var(--accent);
+        background-color: rgb(109 40 255 / 6%);
+        transform: translateX(2px);
+      }
+
+      &--selected {
+        color: var(--accent);
+        background-color: rgb(109 40 255 / 12%);
+        border-color: var(--accent);
+
+        span {
+          font-weight: 600;
+        }
+
+        i {
+          flex: 0 0 auto;
+          color: var(--accent);
+        }
       }
 
       &--disabled {

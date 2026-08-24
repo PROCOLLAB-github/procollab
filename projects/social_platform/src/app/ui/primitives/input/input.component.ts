@@ -64,6 +64,8 @@ export class InputComponent implements ControlValueAccessor {
   tooltipWidth = input(250);
   error = input(false);
   mask = input("");
+  dropSpecialCharacters = input(true);
+  dateInputMode = input<"picker" | "text">("picker");
   name = input("");
   checked = input(false);
   maxLength = input<number>();
@@ -99,13 +101,19 @@ export class InputComponent implements ControlValueAccessor {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
-      const formattedDate = `${year}-${month}-${day}`;
+      const formattedDate =
+        this.dateInputMode() === "text" ? `${day}.${month}.${year}` : `${year}-${month}-${day}`;
 
       this.value = formattedDate;
       this.onChange(formattedDate);
       this.appValue.set(formattedDate);
       this.onTouch();
     }
+  }
+
+  openDatepicker(event: Event, picker: { open: () => void }): void {
+    event.stopPropagation();
+    picker.open();
   }
 
   showTooltip(): void {
@@ -136,11 +144,11 @@ export class InputComponent implements ControlValueAccessor {
   get dateValue(): Date | null {
     if (!this.value || this.type() !== "date") return null;
 
-    const parts = this.value.split("-");
+    const parts = this.dateInputMode() === "text" ? this.value.split(".") : this.value.split("-");
     if (parts.length === 3) {
-      const year = parseInt(parts[0], 10);
+      const year = parseInt(this.dateInputMode() === "text" ? parts[2] : parts[0], 10);
       const month = parseInt(parts[1], 10) - 1;
-      const day = parseInt(parts[2], 10);
+      const day = parseInt(this.dateInputMode() === "text" ? parts[0] : parts[2], 10);
       return new Date(year, month, day);
     }
 
