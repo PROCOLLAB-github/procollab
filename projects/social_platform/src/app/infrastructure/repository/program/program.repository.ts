@@ -2,7 +2,7 @@
 
 import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { User } from "@domain/auth/user.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
@@ -44,6 +44,12 @@ export class ProgramRepository implements ProgramRepositoryPort {
 
   getOne(programId: number): Observable<Program> {
     return this.entityCache.getOrFetch(programId, () => this.programAdapter.getOne(programId));
+  }
+
+  acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {
+    return this.programAdapter
+      .acknowledgeWelcome(programId)
+      .pipe(tap(() => this.entityCache.invalidate(programId)));
   }
 
   create(program: ProgramCreate): Observable<Program> {

@@ -2,7 +2,7 @@
 
 import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, fromEvent, map, of, tap, throttleTime } from "rxjs";
+import { concatMap, EMPTY, finalize, fromEvent, map, of, tap, throttleTime } from "rxjs";
 import { FeedNews } from "@domain/news/project-news.model";
 import { LoadingService } from "@api/shared/loading.service";
 import { ExpandService } from "../../../expand/expand.service";
@@ -16,6 +16,7 @@ import { DeleteNewsUseCase } from "../../use-cases/delete-news.use-case";
 import { ToggleLikeUseCase } from "../../use-cases/toggle-like.use-case";
 import { EditNewsUseCase } from "../../use-cases/edit-news.use-case";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AcknowledgeProgramWelcomeUseCase } from "../../use-cases/acknowledge-program-welcome.use-case";
 
 /** Координирует основную вкладку программы: данные резолвера, новости, пагинация. */
 @Injectable()
@@ -35,6 +36,7 @@ export class ProgramDetailMainService {
   private readonly deleteNewsUseCase = inject(DeleteNewsUseCase);
   private readonly toggleLikeUseCase = inject(ToggleLikeUseCase);
   private readonly editNewsUseCase = inject(EditNewsUseCase);
+  private readonly acknowledgeProgramWelcomeUseCase = inject(AcknowledgeProgramWelcomeUseCase);
 
   private observer?: IntersectionObserver;
 
@@ -245,6 +247,24 @@ export class ProgramDetailMainService {
   closeModal(): void {
     this.programDetailMainUIInfoService.applyProgramCloseModal();
     this.loadingService.hide();
+  }
+
+  acknowledgeProgramWelcome() {
+    if (this.programDetailMainUIInfoService.welcomeAcknowledgementPending()) return EMPTY;
+
+    const programId = Number(this.programId());
+    if (!Number.isInteger(programId) || programId <= 0) return EMPTY;
+
+    this.programDetailMainUIInfoService.welcomeAcknowledgementPending.set(true);
+    return this.acknowledgeProgramWelcomeUseCase.execute(programId).pipe(
+      tap(result => {
+        if (!result.ok) return;
+        this.programDetailMainUIInfoService.applyProgramWelcomeAcknowledged(
+          result.value.welcomeAcknowledgedAt,
+        );
+      }),
+      finalize(() => this.programDetailMainUIInfoService.welcomeAcknowledgementPending.set(false)),
+    );
   }
 
   private setupNewsObserver(): void {

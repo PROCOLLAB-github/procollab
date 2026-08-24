@@ -1,7 +1,7 @@
 /** @format */
 
 import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { SnackbarService } from "@domain/shared/snackbar.service";
 import { saveFile } from "@utils/export-file";
 import { SendForUserUseCase } from "@api/invite/use-cases/send-for-user.use-case";
@@ -9,14 +9,17 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "@domain/auth/user.model";
 import { Project } from "@domain/project/project.model";
-import { filter, take } from "rxjs";
+import { filter, finalize, take } from "rxjs";
 import { DownloadCvUseCase } from "@api/auth/use-cases/download-cv.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
 export class DetailProfileInfoService {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly snackbarService = inject(SnackbarService);
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
@@ -24,6 +27,7 @@ export class DetailProfileInfoService {
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly authRepository = inject(AuthRepositoryPort);
 
   private readonly downloadCvUseCase = inject(DownloadCvUseCase);
   private readonly sendForUserUseCase = inject(SendForUserUseCase);
@@ -34,6 +38,7 @@ export class DetailProfileInfoService {
   readonly profileProjects = signal<User["relations"]["projects"]>([]);
   readonly isSended = signal<boolean>(false);
   readonly isProfileFill = signal<boolean>(false);
+  readonly profileFillAcknowledgementPending = signal<boolean>(false);
   readonly showApproveSkillModal = signal<boolean>(false);
   readonly showSendInviteModal = signal<boolean>(false);
   readonly showNoProjectsModal = signal<boolean>(false);
@@ -71,12 +76,36 @@ export class DetailProfileInfoService {
   initializationProfile(): void {
     this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: r => {
-        this.profileDetailUIInfoService.applyInitProfile(r);
+        this.profileDetailUIInfoService.applyInitProfile(r, this.profile()?.id);
       },
     });
 
     const isProfileFill = this.profileDetailUIInfoService.isProfileFill();
     this.isProfileFill.set(isProfileFill);
+  }
+
+  acknowledgeProfileFillPrompt(continueFilling = false): void {
+    if (this.profileFillAcknowledgementPending()) return;
+
+    this.profileFillAcknowledgementPending.set(true);
+    this.authRepository
+      .acknowledgeProfileFillPrompt()
+      .pipe(finalize(() => this.profileFillAcknowledgementPending.set(false)))
+      .subscribe({
+        next: profile => {
+          this.profileInfoService.applyProfileUpdated(profile);
+          this.profileDetailUIInfoService.applyProfileFillAcknowledged(
+            profile.relations.profileFillPromptAcknowledgedAt!,
+          );
+          this.isProfileFill.set(false);
+
+          if (continueFilling) {
+            this.router.navigate([AppRoutes.profile.edit()], {
+              queryParams: { editingStep: "main" },
+            });
+          }
+        },
+      });
   }
 
   onCopyLink(profileId: number): void {

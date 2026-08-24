@@ -874,7 +874,7 @@
                 @defer (when isProfileFill()) {
                   <app-modal
                     [open]="isProfileFill()"
-                    (openChange)="isProfileFill.set(!isProfileFill())"
+                    (openChange)="!$event ? acknowledgeProfileFillPrompt() : null"
                   >
                     <div class="cancel">
                       <img
@@ -884,7 +884,7 @@
                       />
                       <div class="cancel__top">
                         <i
-                          (click)="isProfileFill.set(false)"
+                          (click)="acknowledgeProfileFillPrompt()"
                           appIcon
                           appSquare="12"
                           icon="cross"
@@ -898,14 +898,14 @@
                         Заполните все поля, чтобы иметь сильное резюме
                       </p>
 
-                      <a
-                        [routerLink]="AppRoutes.profile.edit()"
-                        [queryParams]="{ editingStep: 'main' }"
+                      <app-button
+                        size="big"
+                        customTypographyClass="text-body-12"
+                        [disabled]="profileFillAcknowledgementPending()"
+                        (click)="acknowledgeProfileFillPrompt(true)"
                       >
-                        <app-button size="big" customTypographyClass="text-body-12"
-                          >продолжить заполнение</app-button
-                        >
-                      </a>
+                        продолжить заполнение
+                      </app-button>
                     </div>
                   </app-modal>
                 }
