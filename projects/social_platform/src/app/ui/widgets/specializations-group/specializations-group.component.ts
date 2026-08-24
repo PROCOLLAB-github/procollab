@@ -19,6 +19,7 @@ export class SpecializationsGroupComponent {
   readonly hasOpenGroups = input<boolean>(false);
   readonly isOpen = input<boolean | null>(null);
   readonly disabled = input<boolean>(false);
+  readonly selectedName = input<string | null>(null);
 
   readonly selectOption = output<Specialization>();
   readonly groupToggled = output<boolean>();
