@@ -40,6 +40,10 @@ export class ProgramHttpAdapter {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
   }
 
+  acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {
+    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/acknowledge-welcome/`, {});
+  }
+
   create(program: ProgramCreate): Observable<Program> {
     return this.apiService.post(`${this.PROGRAMS_URL}/`, program);
   }

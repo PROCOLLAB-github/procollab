@@ -25,6 +25,7 @@ export class ProgramDetailMainUIInfoService {
   readonly showProgramModal = signal(false);
   readonly showProgramModalErrorMessage = signal<string | null>(null);
   readonly registeredProgramModal = signal<boolean>(false);
+  readonly welcomeAcknowledgementPending = signal<boolean>(false);
 
   readonly registerDateExpired = signal<boolean>(false);
 
@@ -48,13 +49,7 @@ export class ProgramDetailMainUIInfoService {
   applyFormatingProgramData(program: Program): void {
     this.program.set(program);
     this.registerDateExpired.set(Date.now() > Date.parse(program.datetimeRegistrationEnds));
-    if (program.isUserMember) {
-      const seen = this.hasSeenRegisteredProgramModal(program.id);
-      if (!seen) {
-        this.registeredProgramModal.set(true);
-        this.markSeenRegisteredProgramModal(program.id);
-      }
-    }
+    this.registeredProgramModal.set(program.isUserMember && program.welcomeAcknowledgedAt === null);
   }
 
   applyProgramOpenModal(type: "access" | "error"): void {
@@ -71,21 +66,12 @@ export class ProgramDetailMainUIInfoService {
     this.showProgramModal.set(false);
   }
 
-  private getRegisteredProgramSeenKey(programId: number): string {
-    return `program_registered_modal_seen_${programId}`;
-  }
-
-  private hasSeenRegisteredProgramModal(programId: number): boolean {
-    try {
-      return !!localStorage.getItem(this.getRegisteredProgramSeenKey(programId));
-    } catch (e) {
-      return false;
-    }
-  }
-
-  private markSeenRegisteredProgramModal(programId: number): void {
-    try {
-      localStorage.setItem(this.getRegisteredProgramSeenKey(programId), "1");
-    } catch (e) {}
+  applyProgramWelcomeAcknowledged(acknowledgedAt: string): void {
+    this.program.update(program =>
+      program
+        ? Object.assign(new Program(), program, { welcomeAcknowledgedAt: acknowledgedAt })
+        : program,
+    );
+    this.registeredProgramModal.set(false);
   }
 }
