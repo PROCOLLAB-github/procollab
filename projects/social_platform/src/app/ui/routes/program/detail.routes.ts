@@ -7,11 +7,9 @@ import { DeatilComponent } from "@ui/widgets/detail/detail.component";
 import { ProgramDetailMainComponent } from "@ui/pages/program/detail/main/main.component";
 import { ProgramProjectsResolver } from "@ui/pages/program/detail/list/projects.resolver";
 import { ProgramMembersResolver } from "@ui/pages/program/detail/list/members.resolver";
-import { ProgramRegisterComponent } from "@ui/pages/program/detail/register/register.component";
-import { ProgramRegisterResolver } from "@ui/pages/program/detail/register/register.resolver";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
-/** Маршруты детальной страницы программы: информация, проекты, участники, регистрация. */
+/** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
   {
     path: "",
@@ -54,9 +52,8 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
   },
   {
     path: "register",
-    component: ProgramRegisterComponent,
-    resolve: {
-      data: ProgramRegisterResolver,
-    },
+    pathMatch: "full",
+    // Старые закладки не должны возвращать пользователя во встроенную форму регистрации.
+    redirectTo: "",
   },
 ];
