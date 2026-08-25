@@ -19,6 +19,9 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class DetailProgramInfoService {
+  private static readonly MIR_PROGRAM_NAME = "Кейс-чемпионат MIR";
+  private static readonly MIR_REGISTRATION_LINK = "https://case-champ.ru/corporate#rec1176757836";
+
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
@@ -90,7 +93,19 @@ export class DetailProgramInfoService {
   }
 
   /**
-   * Проверка завершения программы перед регистрацией
+   * Возвращает подтверждённую внешнюю ссылку регистрации, включая legacy-сценарий MIR.
+   */
+  getRegistrationLink(program: Program): string | null {
+    const normalizedName = program.name.replace(/\s+/g, " ").trim();
+    if (normalizedName.includes(DetailProgramInfoService.MIR_PROGRAM_NAME)) {
+      return DetailProgramInfoService.MIR_REGISTRATION_LINK;
+    }
+
+    return program.registrationLink;
+  }
+
+  /**
+   * Блокирует внешнюю регистрацию, если закончился один из разрешённых периодов.
    */
   checkPrograRegistrationEnded(event: Event, program: Program): void {
     if (
@@ -107,8 +122,6 @@ export class DetailProgramInfoService {
       event.preventDefault();
       event.stopPropagation();
       this.isProgramSubmissionProjectsEndedModalOpen.set(true);
-    } else {
-      this.router.navigateByUrl(AppRoutes.program.register(program.id));
     }
   }
 
