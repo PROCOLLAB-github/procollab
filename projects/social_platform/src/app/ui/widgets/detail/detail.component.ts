@@ -259,4 +259,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   checkPrograRegistrationEnded(event: Event, program: Program): void {
     this.detailProgramInfoService.checkPrograRegistrationEnded(event, program);
   }
+
+  getProgramRegistrationLink(program: Program): string | null {
+    return this.detailProgramInfoService.getRegistrationLink(program);
+  }
 }
