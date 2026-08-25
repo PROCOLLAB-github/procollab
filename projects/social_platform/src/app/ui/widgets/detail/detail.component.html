@@ -127,39 +127,11 @@
               } @else {
                 <div class="info__primary-action">
                   @if (!isUserMember() && !isUserManager()) {
-                    @if (
-                      info().name.includes(
-                        "Кейс-чемпионат
-            MIR"
-                      )
-                    ) {
+                    @if (getProgramRegistrationLink(info()); as registrationLink) {
                       <a
-                        (click)="checkPrograRegistrationEnded($event, info()?.id)"
-                        href="https://case-champ.ru/corporate#rec1176757836"
+                        (click)="checkPrograRegistrationEnded($event, info())"
+                        [href]="registrationLink"
                       >
-                        <app-button
-                          appearance="outline"
-                          size="medium"
-                          customTypographyClass="text-body-12"
-                        >
-                          зарегистрироваться
-                        </app-button>
-                      </a>
-                    } @else if (info().registrationLink) {
-                      <a
-                        (click)="checkPrograRegistrationEnded($event, info()?.id)"
-                        [href]="info().registrationLink"
-                      >
-                        <app-button
-                          appearance="outline"
-                          size="medium"
-                          customTypographyClass="text-body-12"
-                        >
-                          зарегистрироваться
-                        </app-button>
-                      </a>
-                    } @else {
-                      <a (click)="checkPrograRegistrationEnded($event, info()?.id)">
                         <app-button
                           appearance="outline"
                           size="medium"
