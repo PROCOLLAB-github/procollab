@@ -146,10 +146,7 @@
     </div>
   </app-modal>
 
-  <app-modal
-    [open]="registeredProgramModal()"
-    (openChange)="!$event ? onAcknowledgeProgramWelcome() : null"
-  >
+  <app-modal [open]="registeredProgramModal()" (openChange)="registeredProgramModal.set(false)">
     <div class="cancel" style="width: 605px; padding: 0px 24px">
       <div class="cancel__top">
         <p class="cancel__title text-body-14">поздравляем с регистрацией на программу! 🎉</p>
@@ -184,8 +181,7 @@
       <app-button
         customTypographyClass="text-body-12"
         size="medium"
-        [disabled]="welcomeAcknowledgementPending()"
-        (click)="onAcknowledgeProgramWelcome()"
+        (click)="registeredProgramModal.set(false)"
         >спасибо, понятно</app-button
       >
     </div>

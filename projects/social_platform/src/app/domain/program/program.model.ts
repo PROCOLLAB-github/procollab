@@ -26,7 +26,6 @@ export class Program {
   isUserLiked!: boolean;
   isUserManager!: boolean;
   isUserMember!: boolean;
-  welcomeAcknowledgedAt!: string | null;
   publishProjectsAfterFinish!: boolean;
   courseId!: number | null;
   courses!: { id: number; title: string; isAvailable: boolean }[];
@@ -56,7 +55,6 @@ export class Program {
       year: 0,
       isUserLiked: false,
       isUserMember: false,
-      welcomeAcknowledgedAt: null,
       isUserManager: false,
       publishProjectsAfterFinish: false,
       courseId: null,

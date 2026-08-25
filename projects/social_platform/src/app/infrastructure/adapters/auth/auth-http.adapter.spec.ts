@@ -76,30 +76,6 @@ describe("AuthHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/current/");
   });
 
-  it("подтверждает уведомление о верификации текущего аккаунта", () => {
-    setup();
-    api.post.mockReturnValue(of({} as User));
-
-    adapter.acknowledgeVerificationNotice().subscribe();
-
-    expect(api.post).toHaveBeenCalledExactlyOnceWith(
-      "/auth/users/current/acknowledge-verification-notice/",
-      {},
-    );
-  });
-
-  it("подтверждает предложение заполнить профиль текущего аккаунта", () => {
-    setup();
-    api.post.mockReturnValue(of({} as User));
-
-    adapter.acknowledgeProfileFillPrompt().subscribe();
-
-    expect(api.post).toHaveBeenCalledExactlyOnceWith(
-      "/auth/users/current/acknowledge-profile-fill-prompt/",
-      {},
-    );
-  });
-
   it("getUserRoles идёт в GET /auth/users/types/", () => {
     setup();
     api.get.mockReturnValue(of([[1, "r"]] as [[number, string]]));

@@ -81,15 +81,6 @@ describe("ProgramHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/register/", { foo: "bar" });
   });
 
-  it("подтверждает приветствие в конкретной программе", () => {
-    setup();
-    api.post.mockReturnValue(of({ welcomeAcknowledgedAt: "2026-08-24T10:00:00Z" }));
-
-    adapter.acknowledgeWelcome(5).subscribe();
-
-    expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/acknowledge-welcome/", {});
-  });
-
   it("getAllProjects идёт в GET /programs/:id/projects", () => {
     setup();
     api.get.mockReturnValue(of(pagination<Project>()));

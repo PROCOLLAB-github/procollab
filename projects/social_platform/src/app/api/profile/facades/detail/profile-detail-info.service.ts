@@ -65,7 +65,7 @@ export class ProfileDetailInfoService {
       )
       .subscribe({
         next: data => {
-          this.profileDetailUIInfoService.applyInitProfile(data, this.profile()?.id);
+          this.profileDetailUIInfoService.applyInitProfile(data);
         },
       });
 

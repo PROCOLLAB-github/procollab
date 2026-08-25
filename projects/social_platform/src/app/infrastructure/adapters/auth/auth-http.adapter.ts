@@ -44,20 +44,6 @@ export class AuthHttpAdapter {
     return this.apiService.get<User>(`${this.AUTH_USERS_URL}/current/`);
   }
 
-  acknowledgeVerificationNotice(): Observable<User> {
-    return this.apiService.post<User>(
-      `${this.AUTH_USERS_URL}/current/acknowledge-verification-notice/`,
-      {},
-    );
-  }
-
-  acknowledgeProfileFillPrompt(): Observable<User> {
-    return this.apiService.post<User>(
-      `${this.AUTH_USERS_URL}/current/acknowledge-profile-fill-prompt/`,
-      {},
-    );
-  }
-
   getUserRoles(): Observable<[[number, string]]> {
     return this.apiService.get(`${this.AUTH_USERS_URL}/types/`);
   }

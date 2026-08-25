@@ -112,8 +112,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   protected readonly isSended = this.detailProfileInfoService.isSended;
   protected readonly isProfileFill = this.detailProfileInfoService.isProfileFill;
-  protected readonly profileFillAcknowledgementPending =
-    this.detailProfileInfoService.profileFillAcknowledgementPending;
 
   // Переменные для работы с модалкой подачи проекта
   protected readonly selectedProjectId = this.detailProfileInfoService.selectedProjectId;
@@ -202,10 +200,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   onProjectRadioChange(event: Event): void {
     this.detailProfileInfoService.onProjectRadioChange(event);
-  }
-
-  acknowledgeProfileFillPrompt(continueFilling = false): void {
-    this.detailProfileInfoService.acknowledgeProfileFillPrompt(continueFilling);
   }
 
   addNewProject(programId: number): void {
