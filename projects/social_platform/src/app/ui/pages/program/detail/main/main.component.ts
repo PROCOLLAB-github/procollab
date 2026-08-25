@@ -90,6 +90,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly registeredProgramModal =
     this.programDetailMainUIInfoService.registeredProgramModal;
+  protected readonly welcomeAcknowledgementPending =
+    this.programDetailMainUIInfoService.welcomeAcknowledgementPending;
 
   protected readonly contactLinks = this.programDetailMainUIInfoService.contactLinks;
   protected readonly materialLinks = this.programDetailMainUIInfoService.materialLinks;
@@ -157,5 +159,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   clearAssignProjectToProgramError(): void {
     this.projectAdditionalService.clearAssignProjectToProgramError();
+  }
+
+  onAcknowledgeProgramWelcome(): void {
+    this.programDetailMainService
+      .acknowledgeProgramWelcome()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 }

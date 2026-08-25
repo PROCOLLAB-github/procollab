@@ -22,6 +22,8 @@ describe("AuthRepository", () => {
       register: vi.fn(),
       downloadCV: vi.fn(),
       getProfile: vi.fn(),
+      acknowledgeVerificationNotice: vi.fn(),
+      acknowledgeProfileFillPrompt: vi.fn(),
       getUserRoles: vi.fn(),
       getLeaderProjects: vi.fn(),
       getChangeableRoles: vi.fn(),
@@ -112,6 +114,36 @@ describe("AuthRepository", () => {
 
       repository.fetchProfile().subscribe(profile => {
         expect(profile).toBeInstanceOf(User);
+        done();
+      });
+    }));
+
+  it("подтверждает уведомление о верификации и мапит актуальный профиль", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.acknowledgeVerificationNotice.mockReturnValue(
+        of({ id: 1, verificationNoticeAcknowledgedAt: "2026-08-24T10:00:00Z" }),
+      );
+
+      repository.acknowledgeVerificationNotice().subscribe(profile => {
+        expect(adapter.acknowledgeVerificationNotice).toHaveBeenCalledExactlyOnceWith();
+        expect(profile).toBeInstanceOf(User);
+        expect(profile.relations.verificationNoticeAcknowledgedAt).toBe("2026-08-24T10:00:00Z");
+        done();
+      });
+    }));
+
+  it("подтверждает предложение заполнить профиль и мапит актуальный профиль", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.acknowledgeProfileFillPrompt.mockReturnValue(
+        of({ id: 1, profileFillPromptAcknowledgedAt: "2026-08-24T10:00:00Z" }),
+      );
+
+      repository.acknowledgeProfileFillPrompt().subscribe(profile => {
+        expect(adapter.acknowledgeProfileFillPrompt).toHaveBeenCalledExactlyOnceWith();
+        expect(profile).toBeInstanceOf(User);
+        expect(profile.relations.profileFillPromptAcknowledgedAt).toBe("2026-08-24T10:00:00Z");
         done();
       });
     }));

@@ -19,6 +19,8 @@ export abstract class AuthRepositoryPort {
   abstract resendEmail(email: string): Observable<User>;
   abstract fetchUser(id: number): Observable<User>;
   abstract fetchProfile(): Observable<User>;
+  abstract acknowledgeVerificationNotice(): Observable<User>;
+  abstract acknowledgeProfileFillPrompt(): Observable<User>;
   abstract updateProfile(profileId: number, data: UserInput): Observable<User>;
   abstract updateOnboardingStage(stage: number | null, userId: number): Observable<User>;
   abstract updateAvatar(url: string, userId: number): Observable<User>;
