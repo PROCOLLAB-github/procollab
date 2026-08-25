@@ -1,7 +1,7 @@
 /** @format */
 
 import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
-import { catchError, EMPTY, filter, tap } from "rxjs";
+import { catchError, EMPTY, filter, finalize, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
@@ -60,8 +60,6 @@ export class OfficeInfoService {
     if (!this.router.url.includes("chats")) {
       this.chatUnreadState.ensureLoaded();
     }
-
-    this.officeUIInfoService.applyVerificationModal();
   }
 
   private initializationNavItems(): void {
@@ -74,10 +72,28 @@ export class OfficeInfoService {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
         if (
           profile!.relations.verificationDate === null &&
-          localStorage.getItem("waitVerificationAccepted") !== "true"
+          profile!.relations.verificationNoticeAcknowledgedAt === null
         ) {
           this.officeUIInfoService.applyOpenVerificationModal();
         }
+      });
+  }
+
+  onAcknowledgeVerificationNotice(): void {
+    if (this.officeUIInfoService.verificationAcknowledgementPending()) return;
+
+    this.officeUIInfoService.verificationAcknowledgementPending.set(true);
+    this.authRepository
+      .acknowledgeVerificationNotice()
+      .pipe(
+        finalize(() => this.officeUIInfoService.verificationAcknowledgementPending.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: profile => {
+          this.profileInfoService.applyProfileUpdated(profile);
+          this.officeUIInfoService.applyVerificationAcknowledged();
+        },
       });
   }
 

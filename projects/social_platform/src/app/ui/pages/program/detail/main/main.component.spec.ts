@@ -25,6 +25,7 @@ describe("MainComponent", () => {
       onLike: vi.fn(),
       onEdit: vi.fn().mockReturnValue(of({ ok: true })),
       closeModal: vi.fn(),
+      acknowledgeProgramWelcome: vi.fn().mockReturnValue(of({ ok: true })),
     };
 
     const programDetailMainUIInfoServiceSpy = {
@@ -32,6 +33,7 @@ describe("MainComponent", () => {
       showProgramModal: signal(false),
       showProgramModalErrorMessage: signal(""),
       registeredProgramModal: signal(false),
+      welcomeAcknowledgementPending: signal(false),
       contactLinks: signal([]),
       materialLinks: signal([]),
     };
@@ -89,5 +91,13 @@ describe("MainComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("подтверждает приветствие только по действию пользователя", () => {
+    const service = fixture.debugElement.injector.get(ProgramDetailMainService);
+
+    component.onAcknowledgeProgramWelcome();
+
+    expect(service.acknowledgeProgramWelcome).toHaveBeenCalledOnce();
   });
 });

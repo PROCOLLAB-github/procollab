@@ -21,11 +21,15 @@ import { ProgramShellInfoService } from "@api/program/facades/program-shell-info
 import { User } from "@domain/auth/user.model";
 
 describe("OfficeInfoService", () => {
-  function setup(onboardingStage: number | null, verificationDate: string | null) {
+  function setup(
+    onboardingStage: number | null,
+    verificationDate: string | null,
+    verificationNoticeAcknowledgedAt: string | null | undefined,
+  ) {
     const profile = Object.assign(new User(), {
       id: 42,
       personal: { onboardingStage },
-      relations: { verificationDate },
+      relations: { verificationDate, verificationNoticeAcknowledgedAt },
     });
     const router = {
       url: "/office",
@@ -88,20 +92,20 @@ describe("OfficeInfoService", () => {
   });
 
   it("создает навигацию и не открывает onboarding для onboardingStage = 0", () => {
-    const { router, officeUI } = setup(0, "2026-01-01");
+    const { router, officeUI } = setup(0, "2026-01-01", null);
 
     expect(officeUI.applyCreateNavItems).toHaveBeenCalledExactlyOnceWith(42);
     expect(router.navigateByUrl).not.toHaveBeenCalled();
   });
 
   it.each([1, 2])("не открывает onboarding для onboardingStage = %s", onboardingStage => {
-    const { router } = setup(onboardingStage, "2026-01-01");
+    const { router } = setup(onboardingStage, "2026-01-01", null);
 
     expect(router.navigateByUrl).not.toHaveBeenCalled();
   });
 
   it("сохраняет обычную навигацию для onboardingStage = null", () => {
-    const { router, officeUI } = setup(null, "2026-01-01");
+    const { router, officeUI } = setup(null, "2026-01-01", null);
 
     expect(officeUI.applyCreateNavItems).toHaveBeenCalledExactlyOnceWith(42);
     expect(router.navigateByUrl).not.toHaveBeenCalled();
@@ -110,14 +114,26 @@ describe("OfficeInfoService", () => {
   it.each([0, 1, 2, null])(
     "открывает verification modal независимо от onboardingStage = %s",
     onboardingStage => {
-      const { officeUI } = setup(onboardingStage, null);
+      const { officeUI } = setup(onboardingStage, null, null);
 
       expect(officeUI.applyOpenVerificationModal).toHaveBeenCalledOnce();
     },
   );
 
   it("не открывает verification modal для подтвержденного профиля", () => {
-    const { officeUI } = setup(0, "2026-01-01");
+    const { officeUI } = setup(0, "2026-01-01", null);
+
+    expect(officeUI.applyOpenVerificationModal).not.toHaveBeenCalled();
+  });
+
+  it("не открывает verification modal после подтверждения уведомления", () => {
+    const { officeUI } = setup(0, null, "2026-08-25T10:00:00Z");
+
+    expect(officeUI.applyOpenVerificationModal).not.toHaveBeenCalled();
+  });
+
+  it("не считает отсутствующее acknowledgement подтвержденным API-контрактом", () => {
+    const { officeUI } = setup(0, null, undefined);
 
     expect(officeUI.applyOpenVerificationModal).not.toHaveBeenCalled();
   });
