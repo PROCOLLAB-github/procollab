@@ -47,12 +47,6 @@ export function userFromRaw(raw: UserInput): User {
     timeCreated: raw.relations?.timeCreated ?? raw.timeCreated!,
     timeUpdated: raw.relations?.timeUpdated ?? raw.timeUpdated!,
     verificationDate: raw.relations?.verificationDate ?? raw.verificationDate!,
-    verificationNoticeAcknowledgedAt:
-      raw.relations?.verificationNoticeAcknowledgedAt ??
-      raw.verificationNoticeAcknowledgedAt ??
-      null,
-    profileFillPromptAcknowledgedAt:
-      raw.relations?.profileFillPromptAcknowledgedAt ?? raw.profileFillPromptAcknowledgedAt ?? null,
   };
 
   user.subscription = {

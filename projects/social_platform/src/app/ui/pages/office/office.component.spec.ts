@@ -32,7 +32,6 @@ describe("OfficeComponent", () => {
     const officeInfoServiceSpy = {
       initializationOffice: vi.fn(),
       destroy: vi.fn(),
-      onAcknowledgeVerificationNotice: vi.fn(),
       onRejectInvite: vi.fn(),
       onAcceptInvite: vi.fn(),
       onLogout: vi.fn(),
@@ -41,9 +40,10 @@ describe("OfficeComponent", () => {
 
     const officeUIInfoServiceSpy = {
       waitVerificationModal: signal(false),
-      verificationAcknowledgementPending: signal(false),
+      waitVerificationAccepted: signal(false),
       inviteErrorModal: signal(false),
       navItems: signal([]),
+      applyAcceptWaitVerification: vi.fn(),
     };
 
     const authUIInfoServiceSpy = {};
@@ -106,17 +106,5 @@ describe("OfficeComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  it("подтверждает уведомление о верификации через backend", () => {
-    const officeInfoService = fixture.debugElement.injector.get(OfficeInfoService);
-
-    component.onAcceptWaitVerification();
-
-    expect(officeInfoService.onAcknowledgeVerificationNotice).toHaveBeenCalledOnce();
-  });
-
-  it("не содержит дублирующее приветствие программы", () => {
-    expect(fixture.nativeElement.textContent).not.toContain("Привет! Рады знакомству");
   });
 });

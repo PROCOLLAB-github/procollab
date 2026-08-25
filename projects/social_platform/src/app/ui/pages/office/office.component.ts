@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, signal, effect, inject, ChangeDetectionStrategy } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -9,6 +9,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { NavComponent } from "./nav/nav.component";
 import { SnackbarComponent } from "./snackbar/snackbar.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
+import { Program } from "@domain/program/program.model";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -51,8 +52,7 @@ export class OfficeComponent implements OnInit {
   protected readonly invites = this.officeInfoService.invites;
 
   protected readonly waitVerificationModal = this.officeUIInfoService.waitVerificationModal;
-  protected readonly verificationAcknowledgementPending =
-    this.officeUIInfoService.verificationAcknowledgementPending;
+  protected readonly waitVerificationAccepted = this.officeUIInfoService.waitVerificationAccepted;
 
   protected readonly inviteErrorModal = this.officeUIInfoService.inviteErrorModal;
 
@@ -63,13 +63,29 @@ export class OfficeComponent implements OnInit {
 
   protected currentYear = signal(new Date().getFullYear());
 
+  protected readonly showRegisteredProgramModal = signal<boolean>(false);
+
+  protected registeredProgramToShow?: Program | null = null;
+
+  private readonly _ = effect(() => {
+    const programs = this.programs();
+    if (programs && programs.length) {
+      this.tryShowRegisteredProgramModal();
+    }
+  });
+
   ngOnInit(): void {
     this.officeInfoService.initializationOffice();
+
+    if (localStorage.getItem("waitVerificationAccepted") === "true") {
+      this.waitVerificationAccepted.set(true);
+    }
+
     this.programShellInfoService.ensureProgramsLoaded();
   }
 
   onAcceptWaitVerification() {
-    this.officeInfoService.onAcknowledgeVerificationNotice();
+    this.officeUIInfoService.applyAcceptWaitVerification();
   }
 
   onRejectInvite(inviteId: number): void {
@@ -88,5 +104,39 @@ export class OfficeComponent implements OnInit {
   downloadPolicy(event: Event): void {
     event.stopPropagation();
     this.authRegisterService.downloadPolicy();
+  }
+
+  private tryShowRegisteredProgramModal(): void {
+    const programs = this.programs();
+    if (!programs || programs.length === 0) return;
+
+    const memberProgram = programs.find(p => p.isUserMember);
+    if (!memberProgram) return;
+
+    if (this.hasSeenRegisteredProgramModal(memberProgram.id)) return;
+
+    this.registeredProgramToShow = memberProgram;
+    this.showRegisteredProgramModal.set(true);
+    this.markSeenRegisteredProgramModal(memberProgram.id);
+  }
+
+  private getRegisteredProgramSeenKey(programId: number): string {
+    return `program_${this.profile()?.id}_registered_modal_seen_${programId}`;
+  }
+
+  private hasSeenRegisteredProgramModal(programId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getRegisteredProgramSeenKey(programId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenRegisteredProgramModal(programId: number): void {
+    try {
+      localStorage.setItem(this.getRegisteredProgramSeenKey(programId), "1");
+    } catch (e) {
+      // ignore storage errors
+    }
   }
 }

@@ -22,8 +22,6 @@ export abstract class ProgramRepositoryPort {
 
   abstract getOne(programId: number): Observable<Program>;
 
-  abstract acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }>;
-
   abstract create(program: ProgramCreate): Observable<Program>;
 
   abstract getDataSchema(programId: number): Observable<ProgramDataSchema>;
