@@ -103,7 +103,8 @@ export class DetailProgramInfoService {
   }
 
   /**
-   * Блокирует внешнюю регистрацию, если закончился один из разрешённых периодов.
+   * Блокирует регистрацию после дедлайна или открывает лендинг без PROCOLLAB в истории вкладки.
+   * Если браузер блокирует новое окно, ссылка сохраняет штатный переход через target="_blank".
    */
   checkPrograRegistrationEnded(event: Event, program: Program): void {
     if (
@@ -113,14 +114,28 @@ export class DetailProgramInfoService {
       event.preventDefault();
       event.stopPropagation();
       this.isProgramEndedModalOpen.set(true);
-    } else if (
+      return;
+    }
+
+    if (
       program?.datetimeProjectSubmissionEnds &&
       Date.now() > Date.parse(program?.datetimeProjectSubmissionEnds)
     ) {
       event.preventDefault();
       event.stopPropagation();
       this.isProgramSubmissionProjectsEndedModalOpen.set(true);
+      return;
     }
+
+    const registrationLink = this.getRegistrationLink(program);
+    if (!registrationLink) return;
+
+    const newTab = window.open("about:blank", "_blank");
+    if (!newTab) return;
+
+    event.preventDefault();
+    newTab.opener = null;
+    newTab.location.replace(registrationLink);
   }
 
   applyUpdateStage(stage: "projects" | "projects-rating" | "members", isStage: boolean): void {
