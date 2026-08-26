@@ -1,6 +1,6 @@
 /** @format */
 
-import { signal } from "@angular/core";
+import { signal, WritableSignal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
@@ -21,6 +21,8 @@ describe("ProjectVacancyService", () => {
   let service: ProjectVacancyService;
   let uiService: ProjectVacancyUIService;
   let postVacancy: ReturnType<typeof vi.fn>;
+  let updateVacancy: ReturnType<typeof vi.fn>;
+  let editIndex: WritableSignal<number | null>;
 
   const skill = {
     id: 7,
@@ -31,6 +33,8 @@ describe("ProjectVacancyService", () => {
 
   beforeEach(() => {
     postVacancy = vi.fn(() => of(ok(Object.assign(new Vacancy(), { id: 10 }))));
+    updateVacancy = vi.fn(() => of(ok(Object.assign(new Vacancy(), { id: 10 }))));
+    editIndex = signal<number | null>(null);
 
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
@@ -39,12 +43,9 @@ describe("ProjectVacancyService", () => {
         ProjectVacancyUIService,
         {
           provide: ProjectFormService,
-          useValue: { editIndex: signal<number | null>(null) },
+          useValue: { editIndex },
         },
-        {
-          provide: ValidationService,
-          useValue: { getFormValidation: vi.fn(() => true) },
-        },
+        ValidationService,
         {
           provide: ProjectsEditUIInfoService,
           useValue: { onEditClicked: signal(false) },
@@ -54,7 +55,7 @@ describe("ProjectVacancyService", () => {
           useValue: { showFields: vi.fn() },
         },
         { provide: PostVacancyUseCase, useValue: { execute: postVacancy } },
-        { provide: UpdateVacancyUseCase, useValue: { execute: vi.fn() } },
+        { provide: UpdateVacancyUseCase, useValue: { execute: updateVacancy } },
         { provide: DeleteVacancyUseCase, useValue: { execute: vi.fn() } },
       ],
     });
@@ -90,7 +91,7 @@ describe("ProjectVacancyService", () => {
   });
 
   it("отправляет city=null для удаленной работы", () => {
-    fillRequiredFields("работа в офисе", "Москва");
+    fillRequiredFields("работа в офисе", "   ");
     uiService.workFormat?.setValue("удаленная работа");
 
     service.submitVacancy(42);
@@ -100,5 +101,25 @@ describe("ProjectVacancyService", () => {
       42,
       expect.objectContaining({ workFormat: "удаленная работа", city: null }),
     );
+  });
+
+  it("не вызывает создание вакансии для trim-пустого города", () => {
+    fillRequiredFields("работа в офисе", "   ");
+
+    service.submitVacancy(42);
+
+    expect(uiService.city?.hasError("required")).toBe(true);
+    expect(postVacancy).not.toHaveBeenCalled();
+  });
+
+  it("не вызывает обновление вакансии для trim-пустого города", () => {
+    fillRequiredFields("смешанный формат", "\t");
+    uiService.applySetVacancies([Object.assign(new Vacancy(), { id: 10 })]);
+    editIndex.set(0);
+
+    service.submitVacancy(42);
+
+    expect(uiService.city?.hasError("required")).toBe(true);
+    expect(updateVacancy).not.toHaveBeenCalled();
   });
 });

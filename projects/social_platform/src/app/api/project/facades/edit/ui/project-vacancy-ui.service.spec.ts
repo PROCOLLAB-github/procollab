@@ -13,6 +13,7 @@ import { ProjectVacancyUIService } from "./project-vacancy-ui.service";
 
 describe("ProjectVacancyUIService", () => {
   let service: ProjectVacancyUIService;
+  let validationService: ValidationService;
 
   const vacancy = (overrides: Partial<Vacancy> = {}): Vacancy =>
     Object.assign(new Vacancy(), {
@@ -38,10 +39,7 @@ describe("ProjectVacancyUIService", () => {
           provide: ProjectFormService,
           useValue: { editIndex: signal<number | null>(null) },
         },
-        {
-          provide: ValidationService,
-          useValue: { getFormValidation: vi.fn(() => true) },
-        },
+        ValidationService,
         {
           provide: ProjectsEditUIInfoService,
           useValue: { onEditClicked: signal(false) },
@@ -54,6 +52,7 @@ describe("ProjectVacancyUIService", () => {
     });
 
     service = TestBed.inject(ProjectVacancyUIService);
+    validationService = TestBed.inject(ValidationService);
   });
 
   it("содержит nullable-контрол города", () => {
@@ -76,6 +75,45 @@ describe("ProjectVacancyUIService", () => {
     service.city?.setValue(null);
 
     expect(service.city?.hasError("required")).toBe(true);
+  });
+
+  it.each(["", " ", "   ", "\t"])("считает trim-пустой город %j невалидным для офиса", city => {
+    service.workFormat?.setValue("работа в офисе");
+    service.city?.setValue(city);
+
+    expect(service.city?.hasError("required")).toBe(true);
+    expect(service.vacancyForm.invalid).toBe(true);
+    expect(validationService.getFormValidation(service.vacancyForm)).toBe(false);
+  });
+
+  it("считает trim-пустой город невалидным для смешанного формата", () => {
+    service.workFormat?.setValue("смешанный формат");
+    service.city?.setValue(" ");
+
+    expect(service.city?.hasError("required")).toBe(true);
+  });
+
+  it("принимает город с внешними пробелами", () => {
+    service.workFormat?.setValue("работа в офисе");
+    service.city?.setValue(" Москва ");
+
+    expect(service.city?.valid).toBe(true);
+  });
+
+  it("ограничивает город 255 символами независимо от формата", () => {
+    service.city?.setValue("А".repeat(256));
+
+    expect(service.city?.hasError("maxlength")).toBe(true);
+  });
+
+  it("очищает whitespace-город и снимает required для удаленной работы", () => {
+    service.workFormat?.setValue("работа в офисе");
+    service.city?.setValue("   ");
+
+    service.workFormat?.setValue("удаленная работа");
+
+    expect(service.city?.value).toBeNull();
+    expect(service.city?.hasError("required")).toBe(false);
   });
 
   it("сохраняет город при переключении между офисом и смешанным форматом", () => {

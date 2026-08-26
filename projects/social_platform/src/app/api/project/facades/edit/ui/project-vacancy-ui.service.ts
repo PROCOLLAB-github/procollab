@@ -1,7 +1,7 @@
 /** @format */
 
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { workExperienceList } from "@core/consts/lists/work-experience-list.const";
 import { workFormatList } from "@core/consts/lists/work-format-list.const";
@@ -18,6 +18,11 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 const REMOTE_WORK_FORMAT = "удаленная работа";
 const CITY_REQUIRED_WORK_FORMATS = new Set(["работа в офисе", "смешанный формат"]);
+const CITY_MAX_LENGTH = 255;
+const trimmedRequired: ValidatorFn = control => {
+  const value = typeof control.value === "string" ? control.value.trim() : "";
+  return value.length ? null : { required: true };
+};
 
 /** UI-состояние вакансий проекта в форме редактирования. */
 @Injectable()
@@ -56,7 +61,7 @@ export class ProjectVacancyUIService {
     description: this.fb.control<string | null>("", [Validators.maxLength(3500)]),
     requiredExperience: this.fb.control<string | null>(null),
     workFormat: this.fb.control<string | null>(null),
-    city: this.fb.control<string | null>(null),
+    city: this.fb.control<string | null>(null, [Validators.maxLength(CITY_MAX_LENGTH)]),
     salary: this.fb.control<string | null>(""),
     workSchedule: this.fb.control<string | null>(null),
     specialization: this.fb.control<string | null>(null),
@@ -136,9 +141,9 @@ export class ProjectVacancyUIService {
     if (!city) return;
 
     if (this.isCityRequired()) {
-      city.setValidators([Validators.required]);
+      city.setValidators([trimmedRequired, Validators.maxLength(CITY_MAX_LENGTH)]);
     } else {
-      city.clearValidators();
+      city.setValidators([Validators.maxLength(CITY_MAX_LENGTH)]);
       if (this.workFormat?.value === REMOTE_WORK_FORMAT && city.value !== null) {
         city.setValue(null, { emitEvent: false });
       }
@@ -217,5 +222,6 @@ export class ProjectVacancyUIService {
     this.projectFormService.editIndex.set(null);
     this.onEditClicked.set(false);
     this.vacancyIsSubmitting.set(initial());
+    this.applyCityValidation();
   }
 }
