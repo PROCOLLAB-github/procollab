@@ -86,6 +86,26 @@
             }
           </div>
 
+          @if (isCityVisible()) {
+            @if (city; as city) {
+              <fieldset class="vacancy__city">
+                <label class="field-label" for="city">город</label>
+                <app-input
+                  size="big"
+                  id="city"
+                  formControlName="city"
+                  [error]="(city | controlError) && vacancySubmitInitiated()"
+                  placeholder="укажите город"
+                ></app-input>
+                @if ((city | controlError: "required") && vacancySubmitInitiated()) {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+              </fieldset>
+            }
+          }
+
           <div class="vacancy__additional">
             @if (salary; as salary) {
               <fieldset>

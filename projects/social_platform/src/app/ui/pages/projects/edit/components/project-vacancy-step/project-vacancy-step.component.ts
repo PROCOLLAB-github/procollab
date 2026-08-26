@@ -61,6 +61,7 @@ export class ProjectVacancyStepComponent {
   protected readonly description = this.projectVacancyUIService.description;
   protected readonly requiredExperience = this.projectVacancyUIService.requiredExperience;
   protected readonly workFormat = this.projectVacancyUIService.workFormat;
+  protected readonly city = this.projectVacancyUIService.city;
   protected readonly salary = this.projectVacancyUIService.salary;
   protected readonly workSchedule = this.projectVacancyUIService.workSchedule;
   protected readonly skills = this.projectVacancyUIService.skills;
@@ -97,6 +98,10 @@ export class ProjectVacancyStepComponent {
   protected readonly openGroupIds = this.projectsEditInfoService.openGroupIds;
 
   protected readonly errorMessage = ErrorMessage;
+
+  protected isCityVisible(): boolean {
+    return this.projectVacancyUIService.isCityRequired();
+  }
 
   createVacancyBlock(): void {
     this.toggleFieldsInfoService.showFields();
