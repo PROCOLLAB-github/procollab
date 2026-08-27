@@ -12,9 +12,22 @@
       ></app-avatar>
       <p class="text-body-12 vacancy__right--title">{{ project.name | truncate: 20 }}</p>
 
-      <app-button size="big" customTypographyClass="text-body-12" (click)="onSendResponseClick()"
-        >откликнуться</app-button
-      >
+      @if (vacancy()!.canManageResponses) {
+        <app-button
+          size="big"
+          customTypographyClass="text-body-12"
+          (click)="onManageResponsesClick()"
+          >посмотреть отклики</app-button
+        >
+      } @else if (vacancy()!.hasResponded) {
+        <app-button size="big" customTypographyClass="text-body-12" [disabled]="true"
+          >отклик отправлен</app-button
+        >
+      } @else if (vacancy()!.canRespond) {
+        <app-button size="big" customTypographyClass="text-body-12" (click)="onSendResponseClick()"
+          >откликнуться</app-button
+        >
+      }
     </div>
 
     <div class="lists vacancy__content">
