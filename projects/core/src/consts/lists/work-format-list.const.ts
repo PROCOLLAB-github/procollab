@@ -13,7 +13,7 @@ export const workFormatList = [
   },
   {
     id: 2,
-    value: "смешанная",
-    label: "смешанная",
+    value: "смешанный формат",
+    label: "смешанный формат",
   },
 ];

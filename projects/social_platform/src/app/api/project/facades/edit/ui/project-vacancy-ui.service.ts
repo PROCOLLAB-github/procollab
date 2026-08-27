@@ -1,7 +1,7 @@
 /** @format */
 
-import { computed, inject, Injectable, signal } from "@angular/core";
-import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { FormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { workExperienceList } from "@core/consts/lists/work-experience-list.const";
 import { workFormatList } from "@core/consts/lists/work-format-list.const";
@@ -14,11 +14,21 @@ import { ValidationService } from "@corelib";
 import { stripNullish } from "@utils/stripNull";
 import { ProjectsEditUIInfoService } from "./projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "../../../../toggle-fields/toggle-fields-info.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+const REMOTE_WORK_FORMAT = "удаленная работа";
+const CITY_REQUIRED_WORK_FORMATS = new Set(["работа в офисе", "смешанный формат"]);
+const CITY_MAX_LENGTH = 255;
+const trimmedRequired: ValidatorFn = control => {
+  const value = typeof control.value === "string" ? control.value.trim() : "";
+  return value.length ? null : { required: true };
+};
 
 /** UI-состояние вакансий проекта в форме редактирования. */
 @Injectable()
 export class ProjectVacancyUIService {
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly validationService = inject(ValidationService);
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
@@ -51,17 +61,26 @@ export class ProjectVacancyUIService {
     description: this.fb.control<string | null>("", [Validators.maxLength(3500)]),
     requiredExperience: this.fb.control<string | null>(null),
     workFormat: this.fb.control<string | null>(null),
+    city: this.fb.control<string | null>(null, [Validators.maxLength(CITY_MAX_LENGTH)]),
     salary: this.fb.control<string | null>(""),
     workSchedule: this.fb.control<string | null>(null),
     specialization: this.fb.control<string | null>(null),
   });
 
+  constructor() {
+    this.workFormat?.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.applyCityValidation());
+    this.applyCityValidation();
+  }
+
   applySetVacancies(vacancies: Vacancy[]): void {
     this.vacancies.set(vacancies);
   }
 
-  applyPatchFormValues(values: Partial<Vacancy>): void {
+  applyPatchFormValues(values: Parameters<typeof this.vacancyForm.patchValue>[0]): void {
     this.vacancyForm.patchValue(values);
+    this.applyCityValidation();
   }
 
   applyValidateForm(): boolean {
@@ -97,6 +116,10 @@ export class ProjectVacancyUIService {
     return this.vacancyForm.get("workFormat");
   }
 
+  get city() {
+    return this.vacancyForm.get("city");
+  }
+
   get salary() {
     return this.vacancyForm.get("salary");
   }
@@ -107,6 +130,25 @@ export class ProjectVacancyUIService {
 
   get specialization() {
     return this.vacancyForm.get("specialization");
+  }
+
+  isCityRequired(): boolean {
+    return CITY_REQUIRED_WORK_FORMATS.has(this.workFormat?.value ?? "");
+  }
+
+  private applyCityValidation(): void {
+    const city = this.city;
+    if (!city) return;
+
+    if (this.isCityRequired()) {
+      city.setValidators([trimmedRequired, Validators.maxLength(CITY_MAX_LENGTH)]);
+    } else {
+      city.setValidators([Validators.maxLength(CITY_MAX_LENGTH)]);
+      if (this.workFormat?.value === REMOTE_WORK_FORMAT && city.value !== null) {
+        city.setValue(null, { emitEvent: false });
+      }
+    }
+    city.updateValueAndValidity({ emitEvent: false });
   }
 
   applyRemoveVacancy(vacancyId: number): void {
@@ -148,12 +190,13 @@ export class ProjectVacancyUIService {
       );
 
     // Патчинг формы значениями вакансии
-    this.vacancyForm.patchValue({
+    this.applyPatchFormValues({
       role: item.role,
       skills: item.requiredSkills,
       description: item.description,
       requiredExperience: item.requiredExperience,
       workFormat: item.workFormat,
+      city: item.city ?? null,
       salary: item.salary ?? null,
       workSchedule: item.workSchedule,
       specialization: item.specialization,
@@ -167,7 +210,7 @@ export class ProjectVacancyUIService {
     this.vacancyForm.reset();
     Object.keys(this.vacancyForm.controls).forEach(name => {
       const ctrl = this.vacancyForm.get(name);
-      ctrl?.reset(name === "skills" ? [] : "");
+      ctrl?.reset(name === "skills" ? [] : name === "city" ? null : "");
       ctrl?.clearValidators();
       ctrl?.markAsPristine();
       ctrl?.updateValueAndValidity();
@@ -179,5 +222,6 @@ export class ProjectVacancyUIService {
     this.projectFormService.editIndex.set(null);
     this.onEditClicked.set(false);
     this.vacancyIsSubmitting.set(initial());
+    this.applyCityValidation();
   }
 }
