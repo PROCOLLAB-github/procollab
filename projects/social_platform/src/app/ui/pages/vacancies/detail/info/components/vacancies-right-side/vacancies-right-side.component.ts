@@ -1,17 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  input,
-  Input,
-  output,
-  Output,
-  WritableSignal,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { UserLinksPipe, TruncatePipe, CapitalizePipe, SalaryTransformPipe } from "@corelib";
@@ -44,8 +34,13 @@ export class VacanciesRightSideComponent {
 
   readonly vacancy = input.required<Vacancy | undefined>();
   readonly sendResponse = output<void>();
+  readonly manageResponses = output<void>();
 
   onSendResponseClick(): void {
     this.sendResponse.emit();
+  }
+
+  onManageResponsesClick(): void {
+    this.manageResponses.emit();
   }
 }

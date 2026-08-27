@@ -17,21 +17,18 @@ export class AcceptResponseUseCase {
     responseId: number,
   ): Observable<Result<void, { kind: "accept_response_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.acceptResponse(responseId).pipe(
-      switchMap(response =>
-        this.vacancyRepositoryPort.getOne(response.vacancy).pipe(
+      switchMap(response => {
+        const vacancyId =
+          typeof response.vacancy === "number" ? response.vacancy : response.vacancy.id;
+        return this.vacancyRepositoryPort.getOne(vacancyId).pipe(
           tap(vacancy =>
             this.eventBus.emit(
-              acceptVacancyResponse(
-                response.id,
-                response.vacancy,
-                vacancy.project.id,
-                response.user.id,
-              ),
+              acceptVacancyResponse(response.id, vacancyId, vacancy.project.id, response.user!.id),
             ),
           ),
           map(() => ok<void>(undefined)),
-        ),
-      ),
+        );
+      }),
       catchError(error => of(fail({ kind: "accept_response_error" as const, cause: error }))),
     );
   }

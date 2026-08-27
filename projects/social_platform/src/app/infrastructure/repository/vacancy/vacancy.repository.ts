@@ -87,9 +87,10 @@ export class VacancyRepository implements VacancyRepositoryPort {
   }
 
   getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {
-    return this.vacancyAdapter
-      .getMyVacancies(limit, offset)
-      .pipe(map(responses => plainToInstance(VacancyResponse, responses)));
+    return this.vacancyAdapter.getMyVacancies(limit, offset).pipe(
+      map(responses => (Array.isArray(responses) ? responses : responses.results)),
+      map(responses => plainToInstance(VacancyResponse, responses)),
+    );
   }
 
   getOne(vacancyId: number): Observable<Vacancy> {
@@ -122,6 +123,12 @@ export class VacancyRepository implements VacancyRepositoryPort {
     return this.vacancyAdapter
       .sendResponse(vacancyId, body)
       .pipe(map(response => plainToInstance(VacancyResponse, response)));
+  }
+
+  responsesByVacancy(vacancyId: number): Observable<VacancyResponse[]> {
+    return this.vacancyAdapter
+      .responsesByVacancy(vacancyId)
+      .pipe(map(responses => plainToInstance(VacancyResponse, responses)));
   }
 
   responsesByProject(projectId: number): Observable<VacancyResponse[]> {
