@@ -25,54 +25,65 @@
 
       <ul class="lists__list">
         <li class="lists__item">
-          <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
-          <p class="text-body-10">
-            {{ project.region ? (project.region | capitalize | truncate: 20) : "не указан" }}
-          </p>
-        </li>
-
-        <li class="lists__item">
-          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
-          <p class="text-body-10">
-            {{
-              vacancy()!.workFormat
-                ? (vacancy()!.workFormat | capitalize)
-                : "формат работы не указан"
-            }}
-          </p>
-        </li>
-
-        <li class="lists__item">
           <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
-          <p class="text-body-10">
-            {{
-              vacancy()!.requiredExperience
-                ? (vacancy()!.requiredExperience.toLowerCase().includes("без опыта")
-                    ? ""
-                    : "опыт" + " ") + (vacancy()!.requiredExperience | capitalize)
-                : "опыт не указан"
-            }}
-          </p>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Опыт</span>
+            <p class="text-body-10 lists__value">
+              {{
+                vacancy()!.requiredExperience
+                  ? (vacancy()!.requiredExperience | capitalize)
+                  : "Не указан"
+              }}
+            </p>
+          </div>
         </li>
 
         <li class="lists__item">
           <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
-          <p class="text-body-10">
-            {{
-              vacancy()!.workSchedule ? (vacancy()!.workSchedule | capitalize) : "график не указан"
-            }}
-          </p>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">График</span>
+            <p class="text-body-10 lists__value">
+              {{ vacancy()!.workSchedule ? (vacancy()!.workSchedule | capitalize) : "Не указан" }}
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Формат работы</span>
+            <p class="text-body-10 lists__value">
+              {{ vacancy()!.workFormat ? (vacancy()!.workFormat | capitalize) : "Не указан" }}
+            </p>
+          </div>
         </li>
 
         <li class="lists__item">
           <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
-          <p class="text-body-10">
-            {{
-              vacancy()!.salary
-                ? (vacancy()!.salary | salaryTransform | capitalize) + " " + "рублей"
-                : "по договоренности"
-            }}
-          </p>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Зарплата</span>
+            <p class="text-body-10 lists__value">
+              {{
+                vacancy()!.salary
+                  ? (vacancy()!.salary | salaryTransform | capitalize) + " " + "рублей"
+                  : "По договоренности"
+              }}
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Город</span>
+            <p class="text-body-10 lists__value">
+              @if (vacancy()!.city; as city) {
+                {{ city | capitalize }}
+              } @else {
+                Не указан
+              }
+            </p>
+          </div>
         </li>
       </ul>
     </div>

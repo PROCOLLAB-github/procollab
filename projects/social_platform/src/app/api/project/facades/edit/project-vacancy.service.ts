@@ -76,6 +76,7 @@ export class ProjectVacancyService {
       description: form.description ?? "",
       requiredExperience: form.requiredExperience!,
       workFormat: form.workFormat!,
+      city: this.projectVacancyUIService.isCityRequired() ? form.city?.trim() || null : null,
       workSchedule: form.workSchedule!,
       specialization: form.specialization ?? undefined,
       salary: typeof form.salary === "string" ? +form.salary : null,

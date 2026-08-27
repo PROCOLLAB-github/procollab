@@ -6,6 +6,7 @@ export interface CreateVacancyDto {
   description?: string;
   requiredExperience: string;
   workFormat: string;
+  city: string | null;
   workSchedule: string;
   specialization?: string;
   salary: number | null;

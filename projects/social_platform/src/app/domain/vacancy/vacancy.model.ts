@@ -13,6 +13,7 @@ export class Vacancy {
   description!: string;
   requiredExperience!: string;
   workFormat!: string;
+  city!: string | null;
   salary!: string;
   workSchedule!: string;
   specialization?: string;
