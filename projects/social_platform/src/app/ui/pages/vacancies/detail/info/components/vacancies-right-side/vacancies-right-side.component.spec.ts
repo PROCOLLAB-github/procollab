@@ -78,4 +78,40 @@ describe("VacanciesRightSideComponent", () => {
 
     expect(text).toContain(city);
   });
+
+  it("показывает действие отклика только при canRespond", () => {
+    const text = render(vacancy({ canRespond: true })).textContent ?? "";
+
+    expect(text).toContain("откликнуться");
+    expect(text).not.toContain("посмотреть отклики");
+  });
+
+  it("показывает disabled-состояние после отправки и не открывает форму", () => {
+    const emitted = vi.fn();
+    fixture.componentInstance.sendResponse.subscribe(emitted);
+    render(vacancy({ hasResponded: true, canRespond: false }));
+
+    const button = fixture.nativeElement.querySelector("button") as HTMLButtonElement;
+    expect(button.textContent).toContain("отклик отправлен");
+    expect(button.disabled).toBe(true);
+    button.click();
+    expect(emitted).not.toHaveBeenCalled();
+  });
+
+  it("показывает менеджеру просмотр откликов вместо отправки", () => {
+    const text = render(vacancy({ canRespond: true, canManageResponses: true })).textContent ?? "";
+
+    expect(text).toContain("посмотреть отклики");
+    expect(text).not.toContain("откликнуться");
+  });
+
+  it("не показывает действие при всех false", () => {
+    const text =
+      render(vacancy({ hasResponded: false, canRespond: false, canManageResponses: false }))
+        .textContent ?? "";
+
+    expect(text).not.toContain("откликнуться");
+    expect(text).not.toContain("отклик отправлен");
+    expect(text).not.toContain("посмотреть отклики");
+  });
 });

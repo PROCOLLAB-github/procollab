@@ -60,6 +60,23 @@ describe("SendVacancyResponseUseCase", () => {
       });
     }));
 
+  it("поддерживает safe self response без user", () =>
+    new Promise<void>(done => {
+      setup();
+      repo.sendResponse.mockReturnValue(
+        of({ id: 1, vacancy: fakeVacancy, isApproved: null } as unknown as VacancyResponse),
+      );
+      repo.getOne.mockReturnValue(of(fakeVacancy));
+
+      useCase.execute(10, { whyMe: "test" }).subscribe(result => {
+        expect(result.ok).toBe(true);
+        expect(eventBus.emit).toHaveBeenCalledWith(
+          expect.objectContaining({ payload: expect.objectContaining({ userId: null }) }),
+        );
+        done();
+      });
+    }));
+
   it("при ошибке возвращает fail { kind: 'send_vacancy_response_error' } с cause", () =>
     new Promise<void>(done => {
       setup();

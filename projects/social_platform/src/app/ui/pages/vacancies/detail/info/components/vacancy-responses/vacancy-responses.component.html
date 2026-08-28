@@ -1,0 +1,92 @@
+<!-- @format -->
+
+<section class="responses" aria-labelledby="vacancy-responses-title">
+  <h2 id="vacancy-responses-title" class="text-body-14 responses__title">отклики на вакансию</h2>
+
+  @if (loading()) {
+    <p class="text-body-12 responses__state" aria-live="polite">Загрузка откликов…</p>
+  } @else if (error(); as loadError) {
+    <div class="responses__state" role="alert">
+      <p class="text-body-12">{{ errorMessage(loadError) }}</p>
+      <app-button size="medium" appearance="outline" (click)="retry.emit()">Повторить</app-button>
+    </div>
+  } @else if (responses().length === 0) {
+    <p class="text-body-12 responses__state">На эту вакансию пока нет откликов</p>
+  } @else {
+    <div class="responses__list">
+      @for (response of responses(); track response.id) {
+        <article class="response">
+          @if (response.user; as user) {
+            <header class="response__candidate">
+              <app-avatar [size]="52" [url]="user.avatar ?? ''"></app-avatar>
+              <div>
+                <h3 class="text-body-12 response__name">
+                  {{ user.firstName }} {{ user.lastName }}
+                </h3>
+                @if (user.specialization?.name; as specialization) {
+                  <p class="text-body-10 response__specialization">{{ specialization }}</p>
+                }
+              </div>
+            </header>
+
+            @if (user.skills.length) {
+              <div class="response__skills" aria-label="Навыки кандидата">
+                @for (skill of user.skills; track skill.id) {
+                  <span class="text-body-8 response__skill">{{ skill.name }}</span>
+                }
+              </div>
+            }
+          }
+
+          <section class="response__section">
+            <h4 class="text-body-10 response__label">Сопроводительное письмо</h4>
+            <p class="text-body-10 response__letter">{{ response.whyMe }}</p>
+          </section>
+
+          @if (response.accompanyingFile; as file) {
+            <a
+              class="text-body-10 response__file"
+              [href]="file.link"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ file.name || "Открыть резюме" }}</a
+            >
+          }
+
+          @if (response.datetimeCreated) {
+            <p class="text-body-8 response__date">
+              Отклик от {{ response.datetimeCreated | date: "dd.MM.yyyy" }}
+            </p>
+          }
+
+          @if (response.isApproved === null) {
+            <p class="text-body-10 response__status">Ожидает решения</p>
+            <div class="response__actions">
+              <app-button
+                size="medium"
+                appearance="outline"
+                color="red"
+                [disabled]="isProcessing(response.id)"
+                [loader]="isProcessing(response.id)"
+                (click)="decline.emit(response.id)"
+                >отклонить</app-button
+              >
+              <app-button
+                size="medium"
+                color="green"
+                [disabled]="isProcessing(response.id)"
+                [loader]="isProcessing(response.id)"
+                (click)="accept.emit(response.id)"
+                >принять</app-button
+              >
+            </div>
+          } @else if (response.isApproved === true) {
+            <p class="text-body-10 response__status response__status--accepted">Принят</p>
+          } @else {
+            <p class="text-body-10 response__status response__status--declined">Отклонён</p>
+          }
+        </article>
+      }
+    </div>
+  }
+</section>

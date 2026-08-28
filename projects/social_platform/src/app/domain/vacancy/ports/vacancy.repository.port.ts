@@ -27,6 +27,7 @@ export abstract class VacancyRepositoryPort {
   ): Observable<Vacancy>;
   abstract deleteVacancy(vacancyId: number): Observable<void>;
   abstract sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse>;
+  abstract responsesByVacancy(vacancyId: number): Observable<VacancyResponse[]>;
   abstract responsesByProject(projectId: number): Observable<VacancyResponse[]>;
   abstract acceptResponse(responseId: number): Observable<VacancyResponse>;
   abstract rejectResponse(responseId: number): Observable<VacancyResponse>;

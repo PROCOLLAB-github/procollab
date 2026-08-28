@@ -12,14 +12,14 @@
 
       <p class="text-body-10">{{ response().whyMe }}</p>
 
-      @if (response().accompanyingFile) {
+      @if (response().accompanyingFile; as file) {
         <app-file-item
           class="response__file"
           [canDelete]="true"
-          [link]="response().accompanyingFile.link"
-          [name]="response().accompanyingFile.name"
-          [type]="response().accompanyingFile.mimeType"
-          [size]="response().accompanyingFile.size"
+          [link]="file.link"
+          [name]="file.name"
+          [type]="file.mimeType"
+          [size]="file.size"
         ></app-file-item>
       }
     </div>

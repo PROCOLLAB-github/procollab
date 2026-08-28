@@ -19,6 +19,9 @@ export class Vacancy {
   specialization?: string;
   datetimeCreated!: string;
   datetimeUpdated!: string;
+  hasResponded = false;
+  canRespond = false;
+  canManageResponses = false;
 
   getSkillsNames(): string[] {
     return this.requiredSkills.map(s => s.name);

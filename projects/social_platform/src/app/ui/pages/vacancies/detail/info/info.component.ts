@@ -1,7 +1,6 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
-import { RouterModule } from "@angular/router";
 import { ButtonComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { IconComponent } from "@uilib";
@@ -10,11 +9,11 @@ import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-in
 import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 import { VacanciesRightSideComponent } from "./components/vacancies-right-side/vacancies-right-side.component";
 import { VacanciesLeftSideComponent } from "./components/vacancies-left-side/vacancies-left-side.component";
-import { AppRoutes } from "@api/paths/app-routes";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
 import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
+import { VacancyResponsesComponent } from "./components/vacancy-responses/vacancy-responses.component";
 
 /** Отображает детальную информацию о вакансии с возможностью отклика. */
 @Component({
@@ -25,13 +24,13 @@ import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.comp
     IconComponent,
     ButtonComponent,
     ModalComponent,
-    RouterModule,
     ReactiveFormsModule,
     VacanciesRightSideComponent,
     VacanciesLeftSideComponent,
     TextareaComponent,
     ControlErrorPipe,
     UploadFileComponent,
+    VacancyResponsesComponent,
   ],
   providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,11 +41,12 @@ export class VacancyInfoComponent implements OnInit {
 
   protected readonly vacancy = this.vacancyDetailUIInfoService.vacancy;
 
-  protected readonly AppRoutes = AppRoutes;
-
-  /** Флаг отображения модального окна с результатом */
-  protected readonly resultModal = this.vacancyDetailUIInfoService.resultModal;
   protected readonly openModal = this.vacancyDetailUIInfoService.openModal;
+  protected readonly responsesModal = this.vacancyDetailUIInfoService.responsesModal;
+  protected readonly responses = this.vacancyDetailUIInfoService.responses;
+  protected readonly responsesLoading = this.vacancyDetailUIInfoService.responsesLoading;
+  protected readonly responsesError = this.vacancyDetailUIInfoService.responsesError;
+  protected readonly processingResponseIds = this.vacancyDetailUIInfoService.processingResponseIds;
 
   /** Форма отправки отклика */
   protected readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
@@ -63,6 +63,26 @@ export class VacancyInfoComponent implements OnInit {
 
   onOpenResponseModal(): void {
     this.vacancyDetailUIInfoService.applyResponseModalOpen();
+  }
+
+  onOpenResponses(): void {
+    this.vacancyDetailInfoService.openVacancyResponses();
+  }
+
+  onCloseResponses(): void {
+    this.vacancyDetailInfoService.closeVacancyResponses();
+  }
+
+  onRetryResponses(): void {
+    this.vacancyDetailInfoService.loadVacancyResponses();
+  }
+
+  onAcceptResponse(responseId: number): void {
+    this.vacancyDetailInfoService.acceptVacancyResponse(responseId);
+  }
+
+  onDeclineResponse(responseId: number): void {
+    this.vacancyDetailInfoService.declineVacancyResponse(responseId);
   }
 
   onSubmit(): void {

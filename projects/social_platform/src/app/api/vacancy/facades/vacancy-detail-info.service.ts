@@ -10,6 +10,13 @@ import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.u
 import { loading } from "@domain/shared/async-state";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { SnackbarService } from "@domain/shared/snackbar.service";
+import { GetVacancyResponsesUseCase } from "../use-cases/get-vacancy-responses.use-case";
+import { AcceptResponseUseCase } from "../use-cases/accept-response.use-case";
+import { RejectResponseUseCase } from "../use-cases/reject-response.use-case";
+import {
+  getSendVacancyResponseError,
+  getVacancyResponsesLoadError,
+} from "../vacancy-response-error";
 
 /** Управляет детальной страницей вакансии, раскрытием текста и отправкой отклика. */
 @Injectable()
@@ -17,6 +24,9 @@ export class VacancyDetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly sendVacancyResponseUseCase = inject(SendVacancyResponseUseCase);
+  private readonly getVacancyResponsesUseCase = inject(GetVacancyResponsesUseCase);
+  private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
+  private readonly rejectResponseUseCase = inject(RejectResponseUseCase);
   private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
   private readonly validationService = inject(ValidationService);
   private readonly expandService = inject(ExpandService);
@@ -61,6 +71,10 @@ export class VacancyDetailInfoService {
   }
 
   submitVacancyResponse(): void {
+    if (!this.vacancy()?.canRespond || this.sendFormIsSubmitting$().status === "loading") {
+      return;
+    }
+
     if (!this.validationService.getFormValidation(this.sendForm)) {
       return;
     }
@@ -73,20 +87,86 @@ export class VacancyDetailInfoService {
         next: result => {
           if (!result.ok) {
             this.vacancyDetailUIInfoService.applyErrorFormSubmit();
-            if (result.error.cause) {
-              this.snackbarService.error(
-                "Не удалось отправить отклик. Вы уже отправили отклик на эту вакансию",
-              );
-            } else {
-              this.snackbarService.error(
-                "Не удалось отправить отклик. Возможно, вакансия закрыта.",
-              );
-            }
+            this.snackbarService.error(getSendVacancyResponseError(result.error.cause));
             return;
           }
 
           this.vacancyDetailUIInfoService.applySubmitVacancyResponse();
+          this.snackbarService.success("Отклик успешно отправлен");
         },
+      });
+  }
+
+  openVacancyResponses(): void {
+    const vacancy = this.vacancy();
+    if (!vacancy?.canManageResponses) return;
+
+    this.vacancyDetailUIInfoService.applyResponsesModalOpen();
+    this.loadVacancyResponses();
+  }
+
+  closeVacancyResponses(): void {
+    this.vacancyDetailUIInfoService.applyResponsesModalClose();
+  }
+
+  loadVacancyResponses(): void {
+    const vacancy = this.vacancy();
+    if (!vacancy?.canManageResponses || !Number.isInteger(vacancy.id) || vacancy.id <= 0) return;
+
+    this.vacancyDetailUIInfoService.applyResponsesLoading();
+    this.getVacancyResponsesUseCase
+      .execute(vacancy.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result.ok) {
+          this.vacancyDetailUIInfoService.applyResponsesLoaded(result.value);
+          return;
+        }
+
+        this.vacancyDetailUIInfoService.applyResponsesError(
+          getVacancyResponsesLoadError(result.error.cause),
+        );
+      });
+  }
+
+  acceptVacancyResponse(responseId: number): void {
+    if (this.vacancyDetailUIInfoService.processingResponseIds().includes(responseId)) return;
+
+    this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, true);
+    this.acceptResponseUseCase
+      .execute(responseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
+          this.snackbarService.error("Не удалось принять кандидата. Попробуйте ещё раз");
+          return;
+        }
+
+        this.vacancyDetailUIInfoService.applyVacancyAccepted();
+        this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
+        this.snackbarService.success("Кандидат принят в проект");
+        this.loadVacancyResponses();
+      });
+  }
+
+  declineVacancyResponse(responseId: number): void {
+    if (this.vacancyDetailUIInfoService.processingResponseIds().includes(responseId)) return;
+
+    this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, true);
+    this.rejectResponseUseCase
+      .execute(responseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (!result.ok) {
+          this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
+          this.snackbarService.error("Не удалось отклонить отклик. Попробуйте ещё раз");
+          return;
+        }
+
+        this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
+        this.snackbarService.success("Отклик отклонён");
+        this.loadVacancyResponses();
       });
   }
 
