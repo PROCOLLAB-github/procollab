@@ -86,6 +86,7 @@ describe("VacancyDetailInfoService", () => {
     });
     expect(ui.vacancy()?.hasResponded).toBe(true);
     expect(ui.vacancy()?.canRespond).toBe(false);
+    expect(ui.vacancy()?.responseStatus).toBe("pending");
     expect(ui.openModal()).toBe(false);
     expect(snackbar.success).toHaveBeenCalledExactlyOnceWith("Отклик успешно отправлен");
   });
