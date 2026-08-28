@@ -41,6 +41,7 @@ export class VacancyDetailUIInfoService {
   readonly processingResponseIds = signal<number[]>([]);
   readonly sendFormIsSubmitting$ = signal<AsyncState<void>>(initial());
   readonly sendFormIsSubmittingFlag = computed(() => isLoading(this.sendFormIsSubmitting$()));
+  readonly procollabCvLoading = signal(false);
 
   // Создание формы отклика с валидацией
   readonly sendForm = this.fb.nonNullable.group({
@@ -78,6 +79,17 @@ export class VacancyDetailUIInfoService {
 
   applyErrorFormSubmit(): void {
     this.sendFormIsSubmitting$.set(failure("vacancy_form_error"));
+  }
+
+  applyProcollabCvLoading(loading: boolean): void {
+    this.procollabCvLoading.set(loading);
+  }
+
+  applyProcollabCvAttached(url: string): void {
+    const control = this.sendForm.controls.accompanyingFile;
+    control.setValue(url);
+    control.markAsTouched();
+    control.updateValueAndValidity();
   }
 
   applyNoResponseCloseModal(): void {
