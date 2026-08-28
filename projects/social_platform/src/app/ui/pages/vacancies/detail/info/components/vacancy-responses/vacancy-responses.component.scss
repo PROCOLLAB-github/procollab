@@ -1,0 +1,109 @@
+/** @format */
+
+@use "styles/responsive";
+
+.responses {
+  width: min(760px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+
+  &__title {
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+    color: var(--accent);
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__state {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    padding: 32px 16px;
+    color: var(--grey-for-text);
+    text-align: center;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.response {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+
+  &__candidate {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__name,
+  &__label {
+    color: var(--black);
+  }
+
+  &__specialization,
+  &__date {
+    margin-top: 4px;
+    color: var(--grey-for-text);
+  }
+
+  &__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  &__skill,
+  &__status {
+    width: fit-content;
+    padding: 6px 10px;
+    border-radius: var(--rounded-xl);
+  }
+
+  &__skill {
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  &__letter {
+    margin-top: 6px;
+    color: var(--grey-for-text);
+    white-space: pre-wrap;
+  }
+
+  &__file {
+    width: fit-content;
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  &__status--accepted {
+    color: var(--green);
+    border: 0.5px solid var(--green);
+  }
+
+  &__status--declined {
+    color: var(--red);
+    border: 0.5px solid var(--red);
+  }
+
+  @include responsive.apply-desktop {
+    padding: 20px;
+  }
+}

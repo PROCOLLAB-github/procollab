@@ -26,6 +26,7 @@ describe("VacancyRepository", () => {
       updateVacancy: vi.fn(),
       deleteVacancy: vi.fn(),
       sendResponse: vi.fn(),
+      responsesByVacancy: vi.fn(),
       responsesByProject: vi.fn(),
       acceptResponse: vi.fn(),
       rejectResponse: vi.fn(),
@@ -72,6 +73,21 @@ describe("VacancyRepository", () => {
       });
     }));
 
+  it("getMyVacancies поддерживает paginated self response contract", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getMyVacancies.mockReturnValue(
+        of({ count: 1, next: null, previous: null, results: [{ id: 2 }] }),
+      );
+
+      repository.getMyVacancies(10, 0).subscribe(responses => {
+        expect(responses).toHaveLength(1);
+        expect(responses[0]).toBeInstanceOf(VacancyResponse);
+        expect(responses[0].id).toBe(2);
+        done();
+      });
+    }));
+
   it("getOne кеширует результат", () => {
     setup();
     adapter.getOne.mockReturnValue(of({ id: 42 } as Vacancy));
@@ -81,6 +97,34 @@ describe("VacancyRepository", () => {
 
     expect(adapter.getOne).toHaveBeenCalledTimes(1);
   });
+
+  it("getOne сохраняет applicant state из camelCase HTTP contract", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getOne.mockReturnValue(
+        of({ id: 42, hasResponded: true, canRespond: false, canManageResponses: true }),
+      );
+
+      repository.getOne(42).subscribe(result => {
+        expect(result.hasResponded).toBe(true);
+        expect(result.canRespond).toBe(false);
+        expect(result.canManageResponses).toBe(true);
+        done();
+      });
+    }));
+
+  it("getOne использует false для отсутствующих legacy applicant fields", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.getOne.mockReturnValue(of({ id: 42 }));
+
+      repository.getOne(42).subscribe(result => {
+        expect(result.hasResponded).toBe(false);
+        expect(result.canRespond).toBe(false);
+        expect(result.canManageResponses).toBe(false);
+        done();
+      });
+    }));
 
   it("postVacancy мапит ответ в Vacancy", () =>
     new Promise<void>(done => {
@@ -139,6 +183,21 @@ describe("VacancyRepository", () => {
       repository.responsesByProject(42).subscribe(res => {
         expect(adapter.responsesByProject).toHaveBeenCalledExactlyOnceWith(42);
         expect(res[0]).toBeInstanceOf(VacancyResponse);
+        done();
+      });
+    }));
+
+  it("responsesByVacancy мапит manager response и сохраняет null status", () =>
+    new Promise<void>(done => {
+      setup();
+      adapter.responsesByVacancy.mockReturnValue(
+        of([{ id: 1, isApproved: null, user: { id: 2 } }] as VacancyResponse[]),
+      );
+
+      repository.responsesByVacancy(42).subscribe(responses => {
+        expect(adapter.responsesByVacancy).toHaveBeenCalledExactlyOnceWith(42);
+        expect(responses[0]).toBeInstanceOf(VacancyResponse);
+        expect(responses[0].isApproved).toBeNull();
         done();
       });
     }));

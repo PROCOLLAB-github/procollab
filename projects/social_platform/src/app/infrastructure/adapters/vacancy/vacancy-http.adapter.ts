@@ -38,7 +38,10 @@ export class VacancyHttpAdapter {
     return this.apiService.get<ApiPagination<Vacancy>>(`${this.VACANCIES_URL}/`, params);
   }
 
-  getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {
+  getMyVacancies(
+    limit: number,
+    offset: number,
+  ): Observable<VacancyResponse[] | ApiPagination<VacancyResponse>> {
     const params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
     return this.apiService.get<VacancyResponse[]>(`${this.VACANCIES_URL}/responses/self/`, params);
   }
@@ -70,6 +73,10 @@ export class VacancyHttpAdapter {
       `${this.VACANCIES_URL}/${vacancyId}/responses/`,
       body,
     );
+  }
+
+  responsesByVacancy(vacancyId: number): Observable<VacancyResponse[]> {
+    return this.apiService.get<VacancyResponse[]>(`${this.VACANCIES_URL}/${vacancyId}/responses/`);
   }
 
   responsesByProject(projectId: number): Observable<VacancyResponse[]> {

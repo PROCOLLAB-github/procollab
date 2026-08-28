@@ -8,7 +8,7 @@ export interface SendVacancyResponse extends DomainEvent {
     readonly vacancyResponseId: number;
     readonly vacancyId: number;
     readonly projectId: number;
-    readonly userId: number;
+    readonly userId: number | null;
     readonly isApproved: boolean;
   };
 }
@@ -17,7 +17,7 @@ export function sendVacancyResponse(
   vacancyResponseId: number,
   vacancyId: number,
   projectId: number,
-  userId: number,
+  userId: number | null,
   isApproved: boolean,
 ): SendVacancyResponse {
   return {
