@@ -5,7 +5,10 @@ import { ApiService } from "@corelib";
 import { map, Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
-import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
+import {
+  SendVacancyResponsePayload,
+  VacancyResponse,
+} from "@domain/vacancy/vacancy-response.model";
 import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
@@ -43,7 +46,10 @@ export class VacancyHttpAdapter {
     offset: number,
   ): Observable<VacancyResponse[] | ApiPagination<VacancyResponse>> {
     const params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
-    return this.apiService.get<VacancyResponse[]>(`${this.VACANCIES_URL}/responses/self/`, params);
+    return this.apiService.get<VacancyResponse[] | ApiPagination<VacancyResponse>>(
+      `${this.VACANCIES_URL}/responses/self`,
+      params,
+    );
   }
 
   getOne(vacancyId: number): Observable<Vacancy> {
@@ -68,7 +74,7 @@ export class VacancyHttpAdapter {
     return this.apiService.delete(`${this.VACANCIES_URL}/${vacancyId}/`);
   }
 
-  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse> {
+  sendResponse(vacancyId: number, body: SendVacancyResponsePayload): Observable<VacancyResponse> {
     return this.apiService.post<VacancyResponse>(
       `${this.VACANCIES_URL}/${vacancyId}/responses/`,
       body,

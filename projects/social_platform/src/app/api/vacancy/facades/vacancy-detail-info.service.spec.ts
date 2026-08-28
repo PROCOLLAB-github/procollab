@@ -80,6 +80,10 @@ describe("VacancyDetailInfoService", () => {
     service.submitVacancyResponse();
 
     expect(sendUseCase.execute).toHaveBeenCalledTimes(1);
+    expect(sendUseCase.execute).toHaveBeenCalledExactlyOnceWith(10, {
+      whyMe: "Подробное сопроводительное письмо",
+      accompanyingFile: "https://example.test/cv.pdf",
+    });
     expect(ui.vacancy()?.hasResponded).toBe(true);
     expect(ui.vacancy()?.canRespond).toBe(false);
     expect(ui.openModal()).toBe(false);

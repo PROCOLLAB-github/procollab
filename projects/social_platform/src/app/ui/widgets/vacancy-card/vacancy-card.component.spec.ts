@@ -29,16 +29,33 @@ describe("VacancyCardComponent", () => {
 
     fixture = TestBed.createComponent(VacancyCardComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput("vacancy", {
-      id: 1,
-      name: "Test Vacancy",
-      description: "",
-      requiredSkills: [],
-    });
+    fixture.componentRef.setInput("vacancy", createVacancy(true));
     fixture.detectChanges();
   });
 
+  function createVacancy(isActive: boolean) {
+    return {
+      id: 1,
+      role: "Test Vacancy",
+      description: "",
+      requiredSkills: [],
+      isActive,
+    };
+  }
+
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it.each([
+    [true, "Активна", "active"],
+    [false, "Закрыта", "closed"],
+  ] as const)("показывает статус вакансии isActive=%s", (isActive, label, className) => {
+    fixture.componentRef.setInput("vacancy", createVacancy(isActive));
+    fixture.detectChanges();
+
+    const status = fixture.nativeElement.querySelector(".vacancy__status");
+    expect(status.textContent.trim()).toBe(label);
+    expect(status.classList).toContain(`vacancy__status--${className}`);
   });
 });

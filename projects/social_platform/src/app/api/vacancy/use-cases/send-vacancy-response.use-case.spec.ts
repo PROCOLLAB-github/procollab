@@ -33,6 +33,10 @@ describe("SendVacancyResponseUseCase", () => {
     isApproved: false,
   } as unknown as VacancyResponse;
   const fakeVacancy = { id: 10, project: { id: 30 } } as unknown as Vacancy;
+  const body = {
+    whyMe: "test",
+    accompanyingFile: "https://example.test/cv.pdf",
+  };
 
   it("делегирует vacancyId и body, получает вакансию и эмитит событие", () =>
     new Promise<void>(done => {
@@ -40,8 +44,8 @@ describe("SendVacancyResponseUseCase", () => {
       repo.sendResponse.mockReturnValue(of(fakeResponse));
       repo.getOne.mockReturnValue(of(fakeVacancy));
 
-      useCase.execute(10, { whyMe: "test" }).subscribe(() => {
-        expect(repo.sendResponse).toHaveBeenCalledExactlyOnceWith(10, { whyMe: "test" });
+      useCase.execute(10, body).subscribe(() => {
+        expect(repo.sendResponse).toHaveBeenCalledExactlyOnceWith(10, body);
         expect(repo.getOne).toHaveBeenCalledExactlyOnceWith(10);
         expect(eventBus.emit).toHaveBeenCalledTimes(1);
         done();
@@ -54,7 +58,7 @@ describe("SendVacancyResponseUseCase", () => {
       repo.sendResponse.mockReturnValue(of(fakeResponse));
       repo.getOne.mockReturnValue(of(fakeVacancy));
 
-      useCase.execute(10, { whyMe: "test" }).subscribe(result => {
+      useCase.execute(10, body).subscribe(result => {
         expect(result.ok).toBe(true);
         done();
       });
@@ -68,7 +72,7 @@ describe("SendVacancyResponseUseCase", () => {
       );
       repo.getOne.mockReturnValue(of(fakeVacancy));
 
-      useCase.execute(10, { whyMe: "test" }).subscribe(result => {
+      useCase.execute(10, body).subscribe(result => {
         expect(result.ok).toBe(true);
         expect(eventBus.emit).toHaveBeenCalledWith(
           expect.objectContaining({ payload: expect.objectContaining({ userId: null }) }),
@@ -83,7 +87,7 @@ describe("SendVacancyResponseUseCase", () => {
       const boom = new Error("boom");
       repo.sendResponse.mockReturnValue(throwError(() => boom));
 
-      useCase.execute(10, { whyMe: "test" }).subscribe(result => {
+      useCase.execute(10, body).subscribe(result => {
         expect(result.ok).toBe(false);
         if (!result.ok) {
           expect(result.error.kind).toBe("send_vacancy_response_error");

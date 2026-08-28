@@ -2,7 +2,7 @@
 
 import { Observable } from "rxjs";
 import { Vacancy } from "../vacancy.model";
-import { VacancyResponse } from "../vacancy-response.model";
+import { SendVacancyResponsePayload, VacancyResponse } from "../vacancy-response.model";
 import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
 
 /** Порт репозитория вакансий */
@@ -26,7 +26,10 @@ export abstract class VacancyRepositoryPort {
     vacancy: Partial<Vacancy> | CreateVacancyDto,
   ): Observable<Vacancy>;
   abstract deleteVacancy(vacancyId: number): Observable<void>;
-  abstract sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse>;
+  abstract sendResponse(
+    vacancyId: number,
+    body: SendVacancyResponsePayload,
+  ): Observable<VacancyResponse>;
   abstract responsesByVacancy(vacancyId: number): Observable<VacancyResponse[]>;
   abstract responsesByProject(projectId: number): Observable<VacancyResponse[]>;
   abstract acceptResponse(responseId: number): Observable<VacancyResponse>;
