@@ -4,7 +4,10 @@ import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { map, Observable } from "rxjs";
 import { CreateVacancyDto } from "@domain/vacancy/dto/create-vacancy.model";
-import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
+import {
+  SendVacancyResponsePayload,
+  VacancyResponse,
+} from "@domain/vacancy/vacancy-response.model";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter";
 import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
@@ -119,7 +122,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
     return this.vacancyAdapter.deleteVacancy(vacancyId);
   }
 
-  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse> {
+  sendResponse(vacancyId: number, body: SendVacancyResponsePayload): Observable<VacancyResponse> {
     return this.vacancyAdapter
       .sendResponse(vacancyId, body)
       .pipe(map(response => plainToInstance(VacancyResponse, response)));

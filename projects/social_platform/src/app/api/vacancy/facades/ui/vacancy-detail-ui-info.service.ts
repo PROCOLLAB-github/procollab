@@ -43,7 +43,7 @@ export class VacancyDetailUIInfoService {
   readonly sendFormIsSubmittingFlag = computed(() => isLoading(this.sendFormIsSubmitting$()));
 
   // Создание формы отклика с валидацией
-  readonly sendForm = this.fb.group({
+  readonly sendForm = this.fb.nonNullable.group({
     whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
     accompanyingFile: ["", Validators.required],
   });

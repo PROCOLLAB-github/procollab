@@ -169,8 +169,9 @@ describe("VacancyRepository", () => {
     new Promise<void>(done => {
       setup();
       adapter.sendResponse.mockReturnValue(of({ id: 1 } as VacancyResponse));
-      repository.sendResponse(5, { whyMe: "x" }).subscribe(r => {
-        expect(adapter.sendResponse).toHaveBeenCalledExactlyOnceWith(5, { whyMe: "x" });
+      const body = { whyMe: "x", accompanyingFile: "https://example.test/cv.pdf" };
+      repository.sendResponse(5, body).subscribe(r => {
+        expect(adapter.sendResponse).toHaveBeenCalledExactlyOnceWith(5, body);
         expect(r).toBeInstanceOf(VacancyResponse);
         done();
       });

@@ -4,7 +4,7 @@
 
 .response {
   display: grid;
-  grid-template-columns: 4fr 6fr;
+  grid-template-columns: minmax(0, 1fr);
   grid-gap: 20px;
 
   &__section {
@@ -15,8 +15,50 @@
     border-radius: var(--rounded-lg);
   }
 
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__role {
+    color: var(--black);
+  }
+
+  &__project,
+  &__date {
+    color: var(--grey-for-text);
+  }
+
+  &__status {
+    width: fit-content;
+    padding: 5px 10px;
+    color: var(--accent);
+    border: 0.5px solid var(--accent);
+    border-radius: var(--rounded-xl);
+
+    &--accepted {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    &--declined {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    &--pending {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+
   &__file {
     margin-top: 4px;
+  }
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 4fr 6fr;
   }
 }
 

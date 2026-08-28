@@ -17,6 +17,7 @@ import {
   getSendVacancyResponseError,
   getVacancyResponsesLoadError,
 } from "../vacancy-response-error";
+import { SendVacancyResponsePayload } from "@domain/vacancy/vacancy-response.model";
 
 /** Управляет детальной страницей вакансии, раскрытием текста и отправкой отклика. */
 @Injectable()
@@ -82,7 +83,10 @@ export class VacancyDetailInfoService {
     this.sendFormIsSubmitting$.set(loading());
 
     this.sendVacancyResponseUseCase
-      .execute(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value as any)
+      .execute(
+        Number(this.route.snapshot.paramMap.get("vacancyId")),
+        this.sendForm.getRawValue() as SendVacancyResponsePayload,
+      )
       .subscribe({
         next: result => {
           if (!result.ok) {
