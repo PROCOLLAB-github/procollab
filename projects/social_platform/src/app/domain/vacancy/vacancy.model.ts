@@ -22,6 +22,7 @@ export class Vacancy {
   hasResponded = false;
   canRespond = false;
   canManageResponses = false;
+  responseStatus: "pending" | "accepted" | "rejected" | null = null;
 
   getSkillsNames(): string[] {
     return this.requiredSkills.map(s => s.name);

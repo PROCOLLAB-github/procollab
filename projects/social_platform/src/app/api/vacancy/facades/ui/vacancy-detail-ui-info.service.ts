@@ -69,6 +69,7 @@ export class VacancyDetailUIInfoService {
         ? Object.assign(new Vacancy(), vacancy, {
             hasResponded: true,
             canRespond: false,
+            responseStatus: "pending",
           })
         : vacancy,
     );
