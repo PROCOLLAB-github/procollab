@@ -44,7 +44,7 @@
 
   /* stylelint-disable value-no-vendor-prefix */
   &__role {
-    display: box;
+    display: -webkit-box;
     min-width: 0;
     overflow: hidden;
     overflow-wrap: anywhere;
