@@ -6,6 +6,9 @@ import { VacanciesListComponent } from "./list.component";
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
 import { provideRouter } from "@angular/router";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
+import { of } from "rxjs";
 
 describe("VacanciesListComponent", () => {
   let component: VacanciesListComponent;
@@ -18,14 +21,26 @@ describe("VacanciesListComponent", () => {
 
     const uiServiceSpy = {
       listType: signal("all"),
-      vacancyList: signal([]),
-      responsesList: signal([]),
+      vacancyList: signal<any[]>([]),
+      responsesList: signal<any[]>([]),
       isMyModal: signal(false),
     };
 
     await TestBed.configureTestingModule({
       imports: [VacanciesListComponent],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        {
+          provide: AuthRepositoryPort,
+          useValue: {
+            fetchProfile: vi.fn().mockReturnValue(of({ id: 1 })),
+          },
+        },
+        {
+          provide: ProjectSubscriptionRepositoryPort,
+          useValue: { getSubscriptions: of({ results: [], count: 0 }) },
+        },
+      ],
     })
       .overrideComponent(VacanciesListComponent, {
         remove: {
@@ -78,5 +93,39 @@ describe("VacanciesListComponent", () => {
   it("should create", () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it("не показывает empty-state при непустом списке моих откликов", () => {
+    vacancyUIInfoService.listType.set("my");
+    vacancyUIInfoService.responsesList.set([
+      {
+        id: 1,
+        vacancy: {
+          id: 2,
+          role: "Разработчик",
+          project: { id: 3, name: "Проект" },
+        },
+        whyMe: "Сопроводительное письмо",
+        isApproved: null,
+        accompanyingFile: null,
+        datetimeCreated: "2026-08-28T12:00:00Z",
+      },
+    ]);
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).not.toContain(
+      "в данном разделе пока нет ваших откликов",
+    );
+    expect(fixture.nativeElement.textContent).toContain("Разработчик");
+  });
+
+  it("показывает empty-state для пустого списка моих откликов", () => {
+    vacancyUIInfoService.listType.set("my");
+    vacancyUIInfoService.responsesList.set([]);
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain("в данном разделе пока нет ваших откликов");
   });
 });

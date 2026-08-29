@@ -5,6 +5,13 @@
     <div class="vacancy__info">
       <div class="vacancy__info--text">
         <h3 class="text-body-12 vacancy__role">{{ vacancy()!.role | truncate: 20 }}</h3>
+        <span
+          class="text-body-8 vacancy__status"
+          [class.vacancy__status--active]="vacancy()!.isActive"
+          [class.vacancy__status--closed]="!vacancy()!.isActive"
+        >
+          {{ vacancy()!.isActive ? "Активна" : "Закрыта" }}
+        </span>
       </div>
       <div class="vacancy__skills">
         @if (vacancy()!.requiredSkills.length) {

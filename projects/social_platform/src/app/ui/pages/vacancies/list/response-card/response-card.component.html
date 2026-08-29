@@ -2,7 +2,31 @@
 
 @if (response()) {
   <section class="response">
-    <div class="response__section"></div>
+    <div class="response__section response__summary">
+      @if (vacancyDetails(); as vacancy) {
+        <p class="text-body-14 response__role">{{ vacancy.role }}</p>
+        @if (vacancy.project; as project) {
+          <p class="text-body-10 response__project">{{ project.name }}</p>
+        }
+      } @else {
+        <p class="text-body-14 response__role">Вакансия #{{ response().vacancy }}</p>
+      }
+
+      @if (response().datetimeCreated) {
+        <p class="text-body-8 response__date">
+          Отклик от {{ response().datetimeCreated | date: "dd.MM.yyyy" }}
+        </p>
+      }
+
+      <p
+        class="text-body-10 response__status"
+        [class.response__status--accepted]="status().className === 'accepted'"
+        [class.response__status--declined]="status().className === 'declined'"
+        [class.response__status--pending]="status().className === 'pending'"
+      >
+        {{ status().label }}
+      </p>
+    </div>
 
     <div class="response__section">
       <div class="lists__section">
@@ -15,7 +39,7 @@
       @if (response().accompanyingFile; as file) {
         <app-file-item
           class="response__file"
-          [canDelete]="true"
+          [canDelete]="false"
           [link]="file.link"
           [name]="file.name"
           [type]="file.mimeType"

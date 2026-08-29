@@ -52,6 +52,7 @@ export class VacancyInfoComponent implements OnInit {
   protected readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
   protected readonly sendFormIsSubmitting =
     this.vacancyDetailUIInfoService.sendFormIsSubmittingFlag;
+  protected readonly procollabCvLoading = this.vacancyDetailUIInfoService.procollabCvLoading;
 
   /** Объект с сообщениями об ошибках */
   protected readonly errorMessage = ErrorMessage;
@@ -87,6 +88,10 @@ export class VacancyInfoComponent implements OnInit {
 
   onSubmit(): void {
     this.vacancyDetailInfoService.submitVacancyResponse();
+  }
+
+  onAttachProcollabCv(): void {
+    this.vacancyDetailInfoService.attachProcollabCv();
   }
 
   closeSendResponseModal(): void {

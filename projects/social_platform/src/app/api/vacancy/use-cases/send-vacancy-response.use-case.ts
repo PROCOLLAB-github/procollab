@@ -6,6 +6,7 @@ import { catchError, map, Observable, of, switchMap, tap } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { EventBus } from "@domain/shared/event-bus";
 import { sendVacancyResponse } from "@domain/vacancy/events/send-vacancy-response.event";
+import { SendVacancyResponsePayload } from "@domain/vacancy/vacancy-response.model";
 
 /** Сценарий: откликнуться на вакансию; эмитит `SendVacancyResponse` (после дочитки вакансии). */
 @Injectable({ providedIn: "root" })
@@ -15,7 +16,7 @@ export class SendVacancyResponseUseCase {
 
   execute(
     vacancyId: number,
-    body: { whyMe: string },
+    body: SendVacancyResponsePayload,
   ): Observable<Result<void, { kind: "send_vacancy_response_error"; cause?: unknown }>> {
     return this.vacancyRepositoryPort.sendResponse(vacancyId, body).pipe(
       switchMap(response =>

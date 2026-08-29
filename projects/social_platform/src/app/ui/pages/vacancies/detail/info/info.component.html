@@ -58,8 +58,10 @@
           }
 
           <app-button
-            [disabled]="true"
-            style="opacity: 0.5"
+            data-testid="attach-procollab-cv"
+            [disabled]="procollabCvLoading() || !!sendForm.controls.accompanyingFile.value"
+            [loader]="procollabCvLoading()"
+            (click)="onAttachProcollabCv()"
             size="big"
             class="text-body-12"
             appearance="outline"
@@ -94,7 +96,11 @@
             </div>
           }
 
-          <app-button size="big" [loader]="sendFormIsSubmitting()" type="submit"
+          <app-button
+            size="big"
+            [loader]="sendFormIsSubmitting()"
+            [disabled]="procollabCvLoading()"
+            type="submit"
             >отправить отклик</app-button
           >
         </form>

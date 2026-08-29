@@ -38,8 +38,30 @@
       ::ng-deep {
         app-upload-file {
           .control {
+            position: relative;
+            box-sizing: border-box;
             height: 80px;
+            padding: 12px;
+            overflow: hidden;
             border-radius: var(--rounded-xl);
+          }
+
+          .control__success {
+            min-width: 0;
+            padding-right: 40px;
+          }
+
+          .file__title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .file__basket {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            margin: 0;
           }
         }
       }

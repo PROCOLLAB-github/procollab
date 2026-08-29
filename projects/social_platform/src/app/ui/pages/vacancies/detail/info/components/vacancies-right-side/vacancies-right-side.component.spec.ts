@@ -86,13 +86,20 @@ describe("VacanciesRightSideComponent", () => {
     expect(text).not.toContain("посмотреть отклики");
   });
 
-  it("показывает disabled-состояние после отправки и не открывает форму", () => {
+  it.each([
+    ["pending", "На рассмотрении"],
+    ["accepted", "Отклик принят"],
+    ["rejected", "Отклик отклонён"],
+    [null, "Отклик отправлен"],
+  ] as const)("показывает disabled applicant state %s", (responseStatus, label) => {
     const emitted = vi.fn();
     fixture.componentInstance.sendResponse.subscribe(emitted);
-    render(vacancy({ hasResponded: true, canRespond: false }));
+    const text =
+      render(vacancy({ hasResponded: true, canRespond: true, responseStatus })).textContent ?? "";
 
     const button = fixture.nativeElement.querySelector("button") as HTMLButtonElement;
-    expect(button.textContent).toContain("отклик отправлен");
+    expect(text).toContain(label);
+    expect(text).not.toContain("откликнуться");
     expect(button.disabled).toBe(true);
     button.click();
     expect(emitted).not.toHaveBeenCalled();

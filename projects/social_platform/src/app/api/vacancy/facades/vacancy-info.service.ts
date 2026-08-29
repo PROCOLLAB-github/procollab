@@ -20,7 +20,7 @@ import {
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
 import { GetVacanciesUseCase } from "../use-cases/get-vacancies.use-case";
-import { failure, isSuccess, loading, success } from "@domain/shared/async-state";
+import { failure, initial, isSuccess, loading, success } from "@domain/shared/async-state";
 
 /** Управляет списками вакансий: тип списка, фильтры, поиск, пагинация. */
 @Injectable()
@@ -102,20 +102,44 @@ export class VacancyInfoService {
       this.vacancyUIInfoService.resetFilters();
       this.clearQueryParams();
     }
-
-    this.vacancyUIInfoService.myModalSetup();
   }
 
   initializeListData(): void {
-    const routeData$ =
-      this.listType() === "all"
-        ? this.route.data.pipe(map(r => r["data"]))
-        : this.route.data.pipe(map(r => r["data"]));
+    const listType = this.listType();
 
-    routeData$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: result => this.vacancyUIInfoService.vacancies$.set(success(result)),
-      error: () => this.vacancyUIInfoService.vacancies$.set(failure("fetch_error")),
-    });
+    this.vacancyUIInfoService.vacancies$.set(initial());
+    this.vacancyUIInfoService.responsesList.set([]);
+    this.vacancyUIInfoService.isMyModal.set(false);
+
+    this.route.data
+      .pipe(
+        map(routeData => routeData["data"]),
+        takeUntil(this.destroy$),
+      )
+      .subscribe({
+        next: result => {
+          if (listType === "my") {
+            const responses = Array.isArray(result) ? result : [];
+            this.vacancyUIInfoService.responsesList.set(responses);
+            this.vacancyUIInfoService.applySetTotalItems(responses);
+            this.vacancyUIInfoService.myModalSetup();
+            return;
+          }
+
+          const vacancies = Array.isArray(result) ? result : [];
+          this.vacancyUIInfoService.vacancies$.set(success(vacancies));
+          this.vacancyUIInfoService.applySetTotalItems(vacancies);
+        },
+        error: () => {
+          if (listType === "my") {
+            this.vacancyUIInfoService.responsesList.set([]);
+            this.vacancyUIInfoService.myModalSetup();
+            return;
+          }
+
+          this.vacancyUIInfoService.vacancies$.set(failure("fetch_error"));
+        },
+      });
   }
 
   initializeQueryParams(): void {
@@ -163,6 +187,8 @@ export class VacancyInfoService {
   }
 
   onScroll(target: HTMLElement): Observable<Vacancy[]> {
+    if (this.listType() !== "all") return EMPTY;
+
     if (
       this.vacancyUIInfoService.totalItemsCount() &&
       this.vacancyUIInfoService.vacancyList().length >= this.vacancyUIInfoService.totalItemsCount()

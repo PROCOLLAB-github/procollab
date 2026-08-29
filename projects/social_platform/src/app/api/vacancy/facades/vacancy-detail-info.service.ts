@@ -2,8 +2,8 @@
 
 import { DestroyRef, ElementRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { filter, map } from "rxjs";
-import { ValidationService } from "@corelib";
+import { catchError, EMPTY, filter, finalize, map, switchMap, tap } from "rxjs";
+import { FileService, ValidationService } from "@corelib";
 import { VacancyDetailUIInfoService } from "./ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "../../expand/expand.service";
 import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
@@ -17,6 +17,8 @@ import {
   getSendVacancyResponseError,
   getVacancyResponsesLoadError,
 } from "../vacancy-response-error";
+import { SendVacancyResponsePayload } from "@domain/vacancy/vacancy-response.model";
+import { DownloadCvUseCase } from "@api/auth/use-cases/download-cv.use-case";
 
 /** Управляет детальной страницей вакансии, раскрытием текста и отправкой отклика. */
 @Injectable()
@@ -27,6 +29,8 @@ export class VacancyDetailInfoService {
   private readonly getVacancyResponsesUseCase = inject(GetVacancyResponsesUseCase);
   private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
   private readonly rejectResponseUseCase = inject(RejectResponseUseCase);
+  private readonly downloadCvUseCase = inject(DownloadCvUseCase);
+  private readonly fileService = inject(FileService);
   private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
   private readonly validationService = inject(ValidationService);
   private readonly expandService = inject(ExpandService);
@@ -71,7 +75,11 @@ export class VacancyDetailInfoService {
   }
 
   submitVacancyResponse(): void {
-    if (!this.vacancy()?.canRespond || this.sendFormIsSubmitting$().status === "loading") {
+    if (
+      !this.vacancy()?.canRespond ||
+      this.sendFormIsSubmitting$().status === "loading" ||
+      this.vacancyDetailUIInfoService.procollabCvLoading()
+    ) {
       return;
     }
 
@@ -82,7 +90,10 @@ export class VacancyDetailInfoService {
     this.sendFormIsSubmitting$.set(loading());
 
     this.sendVacancyResponseUseCase
-      .execute(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value as any)
+      .execute(
+        Number(this.route.snapshot.paramMap.get("vacancyId")),
+        this.sendForm.getRawValue() as SendVacancyResponsePayload,
+      )
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -95,6 +106,47 @@ export class VacancyDetailInfoService {
           this.snackbarService.success("Отклик успешно отправлен");
         },
       });
+  }
+
+  attachProcollabCv(): void {
+    if (
+      this.vacancyDetailUIInfoService.procollabCvLoading() ||
+      this.sendForm.controls.accompanyingFile.value
+    ) {
+      return;
+    }
+
+    this.vacancyDetailUIInfoService.applyProcollabCvLoading(true);
+    this.downloadCvUseCase
+      .execute()
+      .pipe(
+        switchMap(result => {
+          if (!result.ok) {
+            this.snackbarService.error(this.getProcollabCvDownloadError(result.error.cause));
+            return EMPTY;
+          }
+
+          const file = new File([result.value], "PROCOLLAB_CV.pdf", {
+            type: "application/pdf",
+          });
+
+          return this.fileService.uploadFile(file).pipe(
+            tap(response => {
+              this.vacancyDetailUIInfoService.applyProcollabCvAttached(response.url);
+              this.snackbarService.success("Резюме PROCOLLAB прикреплено");
+            }),
+            catchError(() => {
+              this.snackbarService.error(
+                "CV сформировано, но не удалось прикрепить файл. Попробуйте ещё раз.",
+              );
+              return EMPTY;
+            }),
+          );
+        }),
+        finalize(() => this.vacancyDetailUIInfoService.applyProcollabCvLoading(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
   openVacancyResponses(): void {
@@ -177,5 +229,27 @@ export class VacancyDetailInfoService {
       queryParams: {},
       replaceUrl: true,
     });
+  }
+
+  private getProcollabCvDownloadError(cause: unknown): string {
+    const error = this.asRecord(cause);
+    const responseBody = this.asRecord(error?.["error"]);
+    const retryValue = responseBody?.["seconds_after_retry"] ?? responseBody?.["secondsAfterRetry"];
+    const retrySeconds =
+      typeof retryValue === "number" && Number.isFinite(retryValue) && retryValue >= 0
+        ? Math.ceil(retryValue)
+        : null;
+
+    if (error?.["status"] === 400) {
+      return retrySeconds === null
+        ? "Не удалось сформировать CV. Попробуйте немного позже."
+        : `CV недавно формировалось. Попробуйте снова через ${retrySeconds} сек.`;
+    }
+
+    return "Не удалось сформировать CV PROCOLLAB.";
+  }
+
+  private asRecord(value: unknown): Record<string, unknown> | null {
+    return typeof value === "object" && value !== null ? (value as Record<string, unknown>) : null;
   }
 }
