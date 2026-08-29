@@ -1,6 +1,6 @@
 /** @format */
 
-import { Injectable, signal } from "@angular/core";
+import { computed, Injectable, signal } from "@angular/core";
 import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
 import { User } from "@domain/auth/user.model";
 
@@ -12,7 +12,18 @@ export class ProfileDetailUIInfoService {
   readonly loggedUserId = signal<number>(0);
   readonly profileId = signal<number>(0); // ID текущего пользователя.
 
-  readonly isProfileEmpty = signal<boolean | undefined>(undefined);
+  readonly isProfileEmpty = computed<boolean | undefined>(() => {
+    const user = this.user();
+    if (!user) return undefined;
+
+    return !(
+      user.firstName &&
+      user.lastName &&
+      user.email &&
+      user.personal.avatar &&
+      user.personal.birthday
+    );
+  });
   readonly isProfileFill = signal<boolean>(false);
 
   readonly directions = signal<DirectionItem[]>([]);
@@ -33,18 +44,6 @@ export class ProfileDetailUIInfoService {
     } else {
       this.isProfileFill.set(false);
     }
-  }
-
-  applyProfileEmpty(): void {
-    this.isProfileEmpty.set(
-      !(
-        this.user()?.firstName &&
-        this.user()?.lastName &&
-        this.user()?.email &&
-        this.user()?.personal.avatar &&
-        this.user()?.personal.birthday
-      ),
-    );
   }
 
   applySetLoggedUserId(type: "logged" | "profile", profileId: number): void {

@@ -48,23 +48,12 @@
     margin-bottom: 8px;
     color: var(--accent);
   }
-  /* stylelint-disable value-no-vendor-prefix */
+
   &__text {
     p {
-      display: -webkit-box;
-      overflow: hidden;
       line-height: 1.5;
       color: var(--black);
-      text-overflow: ellipsis;
       word-break: break-word;
-      transition: all 0.7s ease-in-out;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5;
-
-      &.expanded {
-        display: block;
-        -webkit-line-clamp: unset;
-      }
     }
 
     ::ng-deep a {
@@ -79,8 +68,6 @@
       }
     }
   }
-
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
     margin-top: 2px;
@@ -105,9 +92,9 @@
   padding: 0;
   margin-top: 12px;
   color: var(--accent);
+  cursor: pointer;
   background: transparent;
   border: 0;
-  cursor: pointer;
   transition: color 0.2s;
 
   &:hover {

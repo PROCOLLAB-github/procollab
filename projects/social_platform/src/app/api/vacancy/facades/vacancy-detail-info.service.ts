@@ -57,6 +57,11 @@ export class VacancyDetailInfoService {
   initializeDetailInfoQueryParams(): void {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: r => {
+        if (r["manageResponses"] === true || r["manageResponses"] === "true") {
+          this.openVacancyResponses();
+          return;
+        }
+
         this.vacancyDetailUIInfoService.applyNoResponseOpenModal(r);
       },
     });

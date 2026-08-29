@@ -652,6 +652,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.skillsGroupsModalOpen.update(open => !open);
   }
 
+  closeSkillsGroupsModal(): void {
+    this.skillsGroupsModalOpen.set(false);
+  }
+
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.sendResultForm)) {
       return;

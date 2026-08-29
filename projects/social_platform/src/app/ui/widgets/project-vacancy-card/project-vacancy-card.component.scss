@@ -39,6 +39,17 @@
   }
 
   /* stylelint-disable value-no-vendor-prefix */
+  &__project-name {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--black) !important;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  /* stylelint-enable value-no-vendor-prefix */
+
+  /* stylelint-disable value-no-vendor-prefix */
   &__role {
     display: -webkit-box;
     max-width: 100%;

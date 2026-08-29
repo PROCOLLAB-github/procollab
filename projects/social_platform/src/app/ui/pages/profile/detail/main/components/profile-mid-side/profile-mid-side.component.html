@@ -10,15 +10,7 @@
         </div>
 
         <div class="text-body-10 about__text">
-          <p #descEl [innerHTML]="about | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable()) {
-            <div
-              class="read-more text-body-10"
-              (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
-            >
-              {{ readFullDescription() ? "скрыть" : "подробнее" }}
-            </div>
-          }
+          <p [innerHTML]="about | parseLinks | parseBreaks"></p>
         </div>
       </div>
     }

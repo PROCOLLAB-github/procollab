@@ -83,7 +83,8 @@
                 [title]="skillGroup.name"
                 [options]="skillGroup.skills"
                 [selected]="stageForm.getRawValue().skills"
-                [disabled]="isSkillGroupDisabled(skillGroup.name)"
+                [hasOpenGroups]="hasOpenSkillsGroups()"
+                [isOpen]="openSkillGroup() === skillGroup.name"
                 (groupToggled)="onSkillGroupToggled($event, skillGroup.name)"
                 (optionToggled)="onOptionToggled($event)"
               ></app-skills-group>

@@ -2,7 +2,8 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ProjectVacancyCardComponent } from "./project-vacancy-card.component";
-import { provideRouter } from "@angular/router";
+import { provideRouter, RouterLink } from "@angular/router";
+import { By } from "@angular/platform-browser";
 
 describe("ProjectVacancyCardComponent", () => {
   let component: ProjectVacancyCardComponent;
@@ -46,5 +47,104 @@ describe("ProjectVacancyCardComponent", () => {
 
     const role = fixture.nativeElement.querySelector(".vacancy__role") as HTMLElement;
     expect(role.textContent?.trim()).toBe(longRole);
+  });
+
+  it.each([
+    [
+      "leader",
+      { canManageResponses: true, canRespond: false, hasResponded: false },
+      "посмотреть отклики",
+    ],
+    [
+      "outsider",
+      { canManageResponses: false, canRespond: true, hasResponded: false },
+      "откликнуться",
+    ],
+  ])("uses backend applicant flags for %s catalog action", (_, state, expectedAction) => {
+    fixture.componentRef.setInput("type", "vacancies");
+    fixture.componentRef.setInput("vacancy", {
+      id: 7,
+      role: "Frontend developer",
+      description: "",
+      requiredSkills: [],
+      salary: "100000",
+      datetimeCreated: "2026-08-29T12:00:00Z",
+      project: { name: "Проект", imageAddress: "" },
+      ...state,
+    });
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent as string;
+    expect(text).toContain("подробнее");
+    expect(text).toContain(expectedAction);
+  });
+
+  it("uses manageResponses query parameter for the leader action", () => {
+    fixture.componentRef.setInput("type", "vacancies");
+    fixture.componentRef.setInput("vacancy", {
+      id: 7,
+      role: "Frontend developer",
+      description: "",
+      requiredSkills: [],
+      salary: "100000",
+      datetimeCreated: "2026-08-29T12:00:00Z",
+      project: { name: "Проект", imageAddress: "" },
+      canManageResponses: true,
+      canRespond: false,
+      hasResponded: false,
+    });
+    fixture.detectChanges();
+
+    const managerLink = fixture.debugElement
+      .queryAll(By.directive(RouterLink))
+      .find(element => element.nativeElement.textContent.includes("посмотреть отклики"));
+
+    expect(managerLink?.injector.get(RouterLink).queryParams).toEqual({ manageResponses: true });
+  });
+
+  it.each([
+    ["collaborator", { canManageResponses: false, canRespond: false, hasResponded: false }],
+    ["responded user", { canManageResponses: false, canRespond: false, hasResponded: true }],
+  ])("shows only detail action for %s", (_, state) => {
+    fixture.componentRef.setInput("type", "vacancies");
+    fixture.componentRef.setInput("vacancy", {
+      id: 7,
+      role: "Frontend developer",
+      description: "",
+      requiredSkills: [],
+      salary: "100000",
+      datetimeCreated: "2026-08-29T12:00:00Z",
+      project: { name: "Проект", imageAddress: "" },
+      ...state,
+    });
+    fixture.detectChanges();
+
+    const actions = Array.from(
+      fixture.nativeElement.querySelectorAll(".vacancy__actions app-button"),
+    ) as HTMLElement[];
+    expect(actions).toHaveLength(1);
+    expect(actions[0].textContent).toContain("подробнее");
+  });
+
+  it("keeps a long project title in the DOM without hard truncation", () => {
+    const projectName = "Очень длинное название проекта без потери полного текста в DOM";
+    fixture.componentRef.setInput("type", "vacancies");
+    fixture.componentRef.setInput("vacancy", {
+      id: 7,
+      role: "Frontend developer",
+      description: "",
+      requiredSkills: [],
+      salary: "100000",
+      datetimeCreated: "2026-08-29T12:00:00Z",
+      project: { name: projectName, imageAddress: "" },
+      canRespond: false,
+      canManageResponses: false,
+      hasResponded: false,
+    });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector(".vacancy__project-name").textContent.trim()).toBe(
+      projectName,
+    );
   });
 });

@@ -2,7 +2,7 @@
 
 /** @format */
 
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, DeferBlockState, TestBed } from "@angular/core/testing";
 
 import { ProfileEditComponent } from "./edit.component";
 import { of } from "rxjs";
@@ -71,5 +71,45 @@ describe("ProfileEditComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("closes the skills library with the explicit close button", async () => {
+    component.toggleSkillsGroupsModal();
+    fixture.detectChanges();
+    for (const block of await fixture.getDeferBlocks()) {
+      await block.render(DeferBlockState.Complete);
+    }
+    await new Promise(resolve => setTimeout(resolve, 10));
+    fixture.detectChanges();
+
+    const closeButton = document.querySelector(
+      'button[aria-label="Закрыть библиотеку навыков"]',
+    ) as HTMLButtonElement;
+    expect(closeButton).toBeTruthy();
+
+    closeButton.click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect((component as any).skillsGroupsModalOpen()).toBe(false);
+  });
+
+  it("closes the skills library through the modal backdrop", async () => {
+    component.toggleSkillsGroupsModal();
+    fixture.detectChanges();
+    for (const block of await fixture.getDeferBlocks()) {
+      await block.render(DeferBlockState.Complete);
+    }
+    await new Promise(resolve => setTimeout(resolve, 10));
+    fixture.detectChanges();
+
+    const backdrop = document.querySelector(".modal__overlay") as HTMLElement;
+    expect(backdrop).toBeTruthy();
+
+    backdrop.click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect((component as any).skillsGroupsModalOpen()).toBe(false);
   });
 });

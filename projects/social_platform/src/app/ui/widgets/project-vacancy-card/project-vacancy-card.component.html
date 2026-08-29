@@ -11,8 +11,8 @@
           borderColor="accent"
         ></app-avatar>
         <div class="vacancy__project--info">
-          <p class="text-body-10" style="color: var(--black)">
-            {{ vacancy().project.name | truncate: 12 }}
+          <p class="text-body-10 vacancy__project-name">
+            {{ vacancy().project.name }}
           </p>
           <p class="text-body-10">
             {{ vacancy().datetimeCreated | dayjs: "format" : "DD.MM.YY • HH:MM" }}
@@ -73,11 +73,20 @@
       size="medium"
       >подробнее</app-button
     >
-    <app-button
-      [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
-      [queryParams]="{ sendResponse: true }"
-      size="medium"
-      >откликнуться</app-button
-    >
+    @if (type() === "vacancies" && vacancy().canManageResponses) {
+      <app-button
+        [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
+        [queryParams]="{ manageResponses: true }"
+        size="medium"
+        >посмотреть отклики</app-button
+      >
+    } @else if (type() !== "vacancies" || (vacancy().canRespond && !vacancy().hasResponded)) {
+      <app-button
+        [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
+        [queryParams]="{ sendResponse: true }"
+        size="medium"
+        >откликнуться</app-button
+      >
+    }
   </div>
 </div>

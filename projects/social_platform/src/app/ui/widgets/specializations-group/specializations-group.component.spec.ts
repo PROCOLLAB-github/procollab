@@ -94,7 +94,10 @@ describe("SpecializationsGroupComponent", () => {
 
     expect(hostFixture.componentInstance.selectedName()).toBe("Frontend developer");
     expect(hostFixture.debugElement.query(By.css(".content__option--selected"))).toBeTruthy();
-    expect(hostFixture.debugElement.query(By.css(".content__option--selected i"))).toBeTruthy();
+    expect(
+      hostFixture.debugElement.query(By.css('[data-testid="selected-specialization-dot"]')),
+    ).toBeTruthy();
+    expect(hostFixture.debugElement.query(By.css(".content__option--selected i"))).toBeFalsy();
   });
 
   it("использует системную иконку chevron для открытой категории", () => {

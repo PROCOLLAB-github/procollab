@@ -68,21 +68,11 @@
     margin-bottom: 8px;
     color: var(--accent);
   }
-  /* stylelint-disable value-no-vendor-prefix */
+
   &__text {
     p {
-      display: -webkit-box;
-      overflow: hidden;
       color: var(--black);
-      text-overflow: ellipsis;
       word-break: break-word;
-      transition: all 0.7s ease-in-out;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5;
-
-      &.expanded {
-        -webkit-line-clamp: unset;
-      }
     }
 
     ::ng-deep a {
@@ -97,8 +87,6 @@
       }
     }
   }
-
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
     margin-top: 2px;
@@ -116,16 +104,5 @@
   &__item {
     display: block;
     margin-top: 20px;
-  }
-}
-
-.read-more {
-  margin-top: 12px;
-  color: var(--accent);
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &:hover {
-    color: var(--accent-dark);
   }
 }
