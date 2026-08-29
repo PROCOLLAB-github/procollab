@@ -24,6 +24,10 @@
     flex-direction: column;
 
     &--text {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
       padding-bottom: 5px;
       margin-bottom: 10px;
       border-bottom: 1px solid var(--dark-grey);
@@ -35,6 +39,21 @@
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+  }
+
+  &__status {
+    flex-shrink: 0;
+    padding: 4px 8px;
+    border: 0.5px solid currentcolor;
+    border-radius: var(--rounded-xl);
+
+    &--active {
+      color: var(--green);
+    }
+
+    &--closed {
+      color: var(--red);
+    }
   }
 
   &__icons {

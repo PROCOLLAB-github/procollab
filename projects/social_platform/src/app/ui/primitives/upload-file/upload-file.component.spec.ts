@@ -41,6 +41,24 @@ describe("UploadFileComponent", () => {
     expect(component.onUpdate).toHaveBeenCalledWith(event);
   });
 
+  it.each([
+    ["manual-cv.pdf", "application/pdf"],
+    ["manual-cv.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+  ])("should keep manual %s upload flow", (name, type) => {
+    const file = new File(["cv"], name, { type });
+    const url = `https://example.test/${name}`;
+    fileServiceSpy.uploadFile.mockReturnValue(of({ url }));
+    vi.spyOn(component, "onChange");
+    const input = fixture.nativeElement.querySelector("input[type=file]") as HTMLInputElement;
+    Object.defineProperty(input, "files", { value: [file] });
+
+    input.dispatchEvent(new Event("change"));
+
+    expect(fileServiceSpy.uploadFile).toHaveBeenCalledExactlyOnceWith(file);
+    expect(component.onChange).toHaveBeenCalledExactlyOnceWith(url);
+    expect(component.value).toBe(url);
+  });
+
   it("should clear value and emit change event when delete button is clicked", () => {
     vi.spyOn(component, "onTouch");
     vi.spyOn(component, "onChange");
@@ -56,5 +74,18 @@ describe("UploadFileComponent", () => {
     expect(component.value).toBeFalsy();
     expect(component.onTouch).toHaveBeenCalled();
     expect(component.onChange).toHaveBeenCalledWith("");
+  });
+
+  it("should delete attached PROCOLLAB CV and clear accompanyingFile value", () => {
+    const url = "https://example.test/PROCOLLAB_CV.pdf";
+    vi.spyOn(component, "onChange");
+    component.writeValue(url);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector(".file__basket") as HTMLElement).click();
+
+    expect(fileServiceSpy.deleteFile).toHaveBeenCalledExactlyOnceWith(url);
+    expect(component.onChange).toHaveBeenCalledExactlyOnceWith("");
+    expect(component.value).toBe("");
   });
 });

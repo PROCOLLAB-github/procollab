@@ -102,13 +102,20 @@ describe("VacancyRepository", () => {
     new Promise<void>(done => {
       setup();
       adapter.getOne.mockReturnValue(
-        of({ id: 42, hasResponded: true, canRespond: false, canManageResponses: true }),
+        of({
+          id: 42,
+          hasResponded: true,
+          canRespond: false,
+          canManageResponses: true,
+          responseStatus: "accepted",
+        }),
       );
 
       repository.getOne(42).subscribe(result => {
         expect(result.hasResponded).toBe(true);
         expect(result.canRespond).toBe(false);
         expect(result.canManageResponses).toBe(true);
+        expect(result.responseStatus).toBe("accepted");
         done();
       });
     }));
@@ -122,6 +129,7 @@ describe("VacancyRepository", () => {
         expect(result.hasResponded).toBe(false);
         expect(result.canRespond).toBe(false);
         expect(result.canManageResponses).toBe(false);
+        expect(result.responseStatus).toBeNull();
         done();
       });
     }));
@@ -169,8 +177,9 @@ describe("VacancyRepository", () => {
     new Promise<void>(done => {
       setup();
       adapter.sendResponse.mockReturnValue(of({ id: 1 } as VacancyResponse));
-      repository.sendResponse(5, { whyMe: "x" }).subscribe(r => {
-        expect(adapter.sendResponse).toHaveBeenCalledExactlyOnceWith(5, { whyMe: "x" });
+      const body = { whyMe: "x", accompanyingFile: "https://example.test/cv.pdf" };
+      repository.sendResponse(5, body).subscribe(r => {
+        expect(adapter.sendResponse).toHaveBeenCalledExactlyOnceWith(5, body);
         expect(r).toBeInstanceOf(VacancyResponse);
         done();
       });

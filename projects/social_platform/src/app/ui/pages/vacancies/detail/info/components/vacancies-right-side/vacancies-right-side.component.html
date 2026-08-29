@@ -20,9 +20,9 @@
           >посмотреть отклики</app-button
         >
       } @else if (vacancy()!.hasResponded) {
-        <app-button size="big" customTypographyClass="text-body-12" [disabled]="true"
-          >отклик отправлен</app-button
-        >
+        <app-button size="big" customTypographyClass="text-body-12" [disabled]="true">{{
+          responseStatusLabel(vacancy()!.responseStatus)
+        }}</app-button>
       } @else if (vacancy()!.canRespond) {
         <app-button size="big" customTypographyClass="text-body-12" (click)="onSendResponseClick()"
           >откликнуться</app-button

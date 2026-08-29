@@ -36,6 +36,19 @@ export class VacanciesRightSideComponent {
   readonly sendResponse = output<void>();
   readonly manageResponses = output<void>();
 
+  protected responseStatusLabel(status: Vacancy["responseStatus"] | undefined): string {
+    switch (status) {
+      case "pending":
+        return "На рассмотрении";
+      case "accepted":
+        return "Отклик принят";
+      case "rejected":
+        return "Отклик отклонён";
+      default:
+        return "Отклик отправлен";
+    }
+  }
+
   onSendResponseClick(): void {
     this.sendResponse.emit();
   }

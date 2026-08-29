@@ -22,6 +22,11 @@ export type VacancyResponseFile = Pick<
   "link" | "name" | "extension" | "mimeType" | "size"
 >;
 
+export interface SendVacancyResponsePayload {
+  whyMe: string;
+  accompanyingFile: string;
+}
+
 /** Модель отклика на вакансию */
 export class VacancyResponse {
   id!: number;
