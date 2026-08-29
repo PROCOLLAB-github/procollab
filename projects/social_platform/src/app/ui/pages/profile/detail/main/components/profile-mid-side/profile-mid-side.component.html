@@ -37,7 +37,7 @@
     }
     @if (isProfileEmpty()) {
       @if (loggedUserId() === user()!.id) {
-        <div class="profile__empty">
+        <div class="profile__empty" data-testid="empty-profile-state">
           <i appIcon icon="empty-chat" appSquare="44"></i>
           <p class="profile__empty--text text-body-12">
             заполните профиль и начните пользоваться PROCOLLAB

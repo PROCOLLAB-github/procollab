@@ -90,6 +90,7 @@
     display: flex;
     gap: 6px;
     align-items: center;
+    min-width: 0;
 
     &--status {
       padding: 8px;
@@ -115,6 +116,12 @@
     span {
       cursor: pointer;
     }
+  }
+
+  &__contact {
+    min-width: 0;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   @include expandable-list;

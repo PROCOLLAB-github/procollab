@@ -5,8 +5,10 @@
 
   &__info {
     display: flex;
+    gap: 12px;
     align-items: center;
     justify-content: space-between;
+    min-width: 0;
     padding-bottom: 8px;
     border-bottom: 0.5px solid var(--accent);
 
@@ -16,27 +18,49 @@
 
     &--top {
       display: flex;
+      flex: 1 1 auto;
       flex-direction: column;
       gap: 3px;
       align-items: flex-end;
+      min-width: 0;
     }
   }
 
   &__project {
     display: flex;
+    flex: 0 1 auto;
     gap: 10px;
     align-items: center;
+    min-width: 0;
+
+    &--info {
+      min-width: 0;
+    }
   }
 
+  /* stylelint-disable value-no-vendor-prefix */
   &__role {
+    display: -webkit-box;
+    max-width: 100%;
+    overflow: hidden;
     color: var(--accent);
+    text-align: right;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
+  /* stylelint-enable value-no-vendor-prefix */
 
   &__salary {
     display: flex;
+    flex: 0 0 auto;
     gap: 6px;
     align-items: center;
     color: var(--grey-for-text);
+
+    p {
+      white-space: nowrap;
+    }
   }
 
   &__description {

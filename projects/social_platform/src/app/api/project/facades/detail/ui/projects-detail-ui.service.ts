@@ -26,7 +26,7 @@ export class ProjectsDetailUIInfoService {
     this.directions.set(
       directionItemBuilder(
         5,
-        ["проблема", "целевая аудитория", "актуаль-сть", "цели", "партнеры"],
+        ["проблема", "целевая аудитория", "актуальность", "цели", "партнеры"],
         ["key", "smile", "graph", "goal", "team"],
         [
           this.project()!.problem,

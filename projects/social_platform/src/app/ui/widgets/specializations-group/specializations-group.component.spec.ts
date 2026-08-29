@@ -96,4 +96,11 @@ describe("SpecializationsGroupComponent", () => {
     expect(hostFixture.debugElement.query(By.css(".content__option--selected"))).toBeTruthy();
     expect(hostFixture.debugElement.query(By.css(".content__option--selected i"))).toBeTruthy();
   });
+
+  it("использует системную иконку chevron для открытой категории", () => {
+    fixture.componentRef.setInput("isOpen", true);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css(".heading--open .heading__chevron"))).toBeTruthy();
+  });
 });

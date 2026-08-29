@@ -38,6 +38,12 @@
       width: 100%;
       transition: width 0.2s ease;
 
+      &:hover,
+      &--selected {
+        color: var(--accent);
+        background-color: rgb(109 40 255 / 6%);
+      }
+
       .heading--open &,
       &--has-open {
         width: 50%;
@@ -57,9 +63,13 @@
 
     &--open {
       position: absolute;
-      top: 3%;
-      right: 0%;
+      top: 0;
+      right: 0;
       width: 40%;
+      max-height: 100%;
+      padding: 0 14px 14px;
+      overflow-y: auto;
+      scrollbar-width: thin;
     }
 
     &__option {

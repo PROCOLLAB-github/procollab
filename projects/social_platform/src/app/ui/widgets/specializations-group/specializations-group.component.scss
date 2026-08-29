@@ -22,8 +22,8 @@
     &--open {
       z-index: 1000;
 
-      i {
-        transform: rotate(90deg);
+      .heading__chevron {
+        transform: rotate(0deg);
       }
     }
 

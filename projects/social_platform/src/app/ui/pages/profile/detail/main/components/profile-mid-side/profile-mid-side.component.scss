@@ -32,6 +32,10 @@
     flex-direction: column;
     gap: 24px;
     align-items: center;
+    justify-content: center;
+    min-height: min(480px, calc(100vh - 240px));
+    padding: 24px;
+    text-align: center;
 
     &--text {
       color: var(--grey-for-text);

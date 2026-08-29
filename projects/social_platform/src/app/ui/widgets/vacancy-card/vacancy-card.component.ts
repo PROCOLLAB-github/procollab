@@ -13,14 +13,13 @@ import {
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { TruncatePipe } from "@corelib";
 
 /** Компонент карточки вакансии с кнопками редактирования и удаления. */
 @Component({
   selector: "app-vacancy-card",
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
-  imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
+  imports: [IconComponent, ButtonComponent, TagComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyCardComponent implements OnInit {

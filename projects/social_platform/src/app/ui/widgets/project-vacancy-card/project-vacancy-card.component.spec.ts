@@ -18,7 +18,7 @@ describe("ProjectVacancyCardComponent", () => {
     component = fixture.componentInstance;
     fixture.componentRef.setInput("vacancy", {
       id: 1,
-      name: "Test Vacancy",
+      role: "Test Vacancy",
       description: "",
       requiredSkills: [],
       salary: "100000",
@@ -28,5 +28,23 @@ describe("ProjectVacancyCardComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("показывает длинное название вакансии целиком в двухстрочном контейнере", () => {
+    const longRole = "Очень длинное название роли специалиста по развитию цифровых продуктов";
+    fixture.componentRef.setInput("type", "vacancies");
+    fixture.componentRef.setInput("vacancy", {
+      id: 1,
+      role: longRole,
+      description: "",
+      requiredSkills: [],
+      salary: "100000",
+      datetimeCreated: "2026-08-29T12:00:00Z",
+      project: { name: "Проект", imageAddress: "" },
+    });
+    fixture.detectChanges();
+
+    const role = fixture.nativeElement.querySelector(".vacancy__role") as HTMLElement;
+    expect(role.textContent?.trim()).toBe(longRole);
   });
 });

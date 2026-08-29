@@ -79,11 +79,11 @@ describe("VacanciesRightSideComponent", () => {
   });
 
   it.each([
-    ["pending", "На рассмотрении"],
-    ["accepted", "Отклик принят"],
-    ["rejected", "Отклик отклонён"],
-    [null, "Отклик отправлен"],
-  ] as const)("показывает disabled applicant state %s", (responseStatus, label) => {
+    ["pending", "На рассмотрении", "gold"],
+    ["accepted", "Отклик принят", "green"],
+    ["rejected", "Отклик отклонён", "red"],
+    [null, "Отклик отправлен", "gold"],
+  ] as const)("показывает disabled applicant state %s", (responseStatus, label, color) => {
     const emitted = vi.fn();
     fixture.componentInstance.sendResponse.subscribe(emitted);
     const text = render(vacancy({ hasResponded: true, canRespond: true, responseStatus }));
@@ -92,6 +92,7 @@ describe("VacanciesRightSideComponent", () => {
     expect(text).toContain(label);
     expect(text).not.toContain("откликнуться");
     expect(button.disabled).toBe(true);
+    expect(button.classList).toContain(`button--${color}`);
     button.click();
     expect(emitted).not.toHaveBeenCalled();
   });

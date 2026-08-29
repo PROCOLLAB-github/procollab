@@ -102,8 +102,11 @@
 }
 
 .read-more {
+  padding: 0;
   margin-top: 12px;
   color: var(--accent);
+  background: transparent;
+  border: 0;
   cursor: pointer;
   transition: color 0.2s;
 
