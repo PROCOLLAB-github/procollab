@@ -26,4 +26,22 @@ describe("SkillsGroupComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("показывает options panel сверху правой области для активной категории", () => {
+    fixture.componentRef.setInput("hasOpenGroups", true);
+    fixture.componentRef.setInput("options", [
+      { id: 1, name: "Типографика", category: { id: 2, name: "Дизайн" } },
+    ]);
+    component.contentVisible.set(true);
+    fixture.detectChanges();
+
+    const heading = fixture.nativeElement.querySelector(".heading__top") as HTMLElement;
+    const panel = fixture.nativeElement.querySelector(
+      '[data-testid="skills-options-panel"]',
+    ) as HTMLElement;
+
+    expect(heading.classList).toContain("heading__top--selected");
+    expect(panel.classList).toContain("content--open");
+    expect(panel.textContent).toContain("Типографика");
+  });
 });

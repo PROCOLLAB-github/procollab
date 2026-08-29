@@ -21,13 +21,13 @@
       </div>
     } @else {
       <p class="text-body-12 vacancy__role">
-        {{ vacancy().role | truncate: 12 }}
+        {{ vacancy().role }}
       </p>
     }
     <div class="vacancy__info--top">
       @if (type() === "vacancies") {
         <p class="text-body-12 vacancy__role">
-          {{ vacancy().role | truncate: 12 }}
+          {{ vacancy().role }}
         </p>
       }
       <div class="vacancy__salary">
