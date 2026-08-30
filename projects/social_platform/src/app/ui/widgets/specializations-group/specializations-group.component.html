@@ -34,7 +34,11 @@
         >
           <span class="text-body-12">{{ opt.name }}</span>
           @if (selectedName() === opt.name) {
-            <i appIcon icon="check" appSquare="10"></i>
+            <span
+              class="content__option-dot"
+              data-testid="selected-specialization-dot"
+              aria-hidden="true"
+            ></span>
           }
         </div>
       }

@@ -15,7 +15,7 @@ import { RouterLink } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/primitives";
-import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe, TruncatePipe } from "@corelib";
+import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -31,7 +31,6 @@ import { ExpandService } from "@api/expand/expand.service";
     ButtonComponent,
     ParseLinksPipe,
     ParseBreaksPipe,
-    TruncatePipe,
     TagComponent,
     AvatarComponent,
     DayjsPipe,

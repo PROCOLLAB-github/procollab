@@ -106,11 +106,14 @@
         span {
           font-weight: 600;
         }
+      }
 
-        i {
-          flex: 0 0 auto;
-          color: var(--accent);
-        }
+      &-dot {
+        flex-shrink: 0;
+        width: 8px;
+        height: 8px;
+        background-color: var(--accent);
+        border-radius: 50%;
       }
 
       &--disabled {

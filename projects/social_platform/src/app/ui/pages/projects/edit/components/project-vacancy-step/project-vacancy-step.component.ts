@@ -139,6 +139,10 @@ export class ProjectVacancyStepComponent {
     this.skillsGroupsModalOpen.update(open => !open);
   }
 
+  closeSkillsGroupsModal(): void {
+    this.skillsGroupsModalOpen.set(false);
+  }
+
   onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
     this.projectsEditInfoService.onGroupToggled(isOpen, skillsGroupId);
   }

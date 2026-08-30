@@ -144,10 +144,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     this.profileEditInfoService.onGroupToggled(index, isOpen);
   }
 
-  isGroupDisabled(index: number): boolean {
-    return this.profileEditInfoService.isGroupDisabled(index);
-  }
-
   protected readonly isModalErrorSkillsChoose =
     this.profileEditInfoService.isModalErrorSkillsChoose;
 
@@ -261,6 +257,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   toggleSkillsGroupsModal(): void {
     this.skillsGroupsModalOpen.update(open => !open);
+  }
+
+  closeSkillsGroupsModal(): void {
+    this.skillsGroupsModalOpen.set(false);
   }
 
   toggleSpecsGroupsModal(): void {
