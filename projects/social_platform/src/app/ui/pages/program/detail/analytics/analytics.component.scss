@@ -95,6 +95,7 @@
 
 .summary-card,
 .analytics-card,
+.regions,
 .attention,
 .activity {
   min-width: 0;
@@ -102,6 +103,38 @@
   border: 1px solid var(--medium-grey-for-outline);
   border-radius: 15px;
   box-shadow: 0 6px 22px rgb(51 51 51 / 4%);
+}
+
+.regions {
+  padding: 16px 18px;
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+
+    li {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 0;
+      padding: 8px 10px;
+      background: var(--light-gray);
+      border-radius: 8px;
+
+      span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+
+  .analytics-card__empty {
+    margin-top: 12px;
+    text-align: left;
+  }
 }
 
 .summary-card {
@@ -206,6 +239,13 @@
     z-index: 1;
   }
 
+  &__label {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    min-width: 0;
+  }
+
   &__bar {
     position: absolute;
     top: 0;
@@ -229,6 +269,52 @@
     padding: 10px 12px;
     background: var(--light-gray);
     border-radius: 8px;
+  }
+
+  &--compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+
+    li {
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+
+    @media screen and (max-width: 520px) {
+      grid-template-columns: 1fr;
+
+      li {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+}
+
+.evaluation {
+  &__mode {
+    margin-top: 2px;
+    color: var(--grey-for-text);
+  }
+
+  &__limit {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 12px;
+    color: var(--grey-for-text);
+
+    strong {
+      color: var(--black);
+    }
+  }
+
+  &__assignments {
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px solid var(--medium-grey-for-outline);
   }
 }
 
@@ -284,39 +370,91 @@
   }
 
   &__chart {
-    display: grid;
-    gap: 16px;
-    margin-top: 24px;
+    min-width: 0;
+    margin-top: 16px;
+    overflow-x: auto;
   }
 
-  &__row {
-    display: grid;
-    grid-template-columns: minmax(110px, 180px) minmax(80px, 1fr) auto;
-    gap: 12px;
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
     align-items: center;
-
-    @media screen and (max-width: 520px) {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-  }
-
-  &__track {
-    height: 14px;
-    overflow: hidden;
-    background: var(--light-gray);
-    border-radius: 999px;
-
-    @media screen and (max-width: 520px) {
-      grid-row: 2;
-      grid-column: 1 / -1;
-    }
+    margin-top: 12px;
 
     span {
-      display: block;
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--purple));
-      border-radius: inherit;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
     }
+  }
+
+  &__marker {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+
+    &--registrations {
+      background: var(--accent);
+    }
+
+    &--solutions {
+      background: var(--green);
+    }
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    min-width: 520px;
+    height: 220px;
+    overflow: visible;
+  }
+
+  &__grid-line {
+    stroke: var(--medium-grey-for-outline);
+    stroke-width: 0.6;
+    vector-effect: non-scaling-stroke;
+  }
+
+  &__line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+
+    &--registrations {
+      stroke: var(--accent);
+    }
+
+    &--solutions {
+      stroke: var(--green);
+    }
+  }
+
+  &__point {
+    stroke: var(--light-white);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+
+    &--registrations {
+      fill: var(--accent);
+    }
+
+    &--solutions {
+      fill: var(--green);
+    }
+  }
+
+  &__axis {
+    display: flex;
+    justify-content: space-between;
+    min-width: 520px;
+    padding-top: 6px;
+    color: var(--grey-for-text);
+    border-top: 1px solid var(--medium-grey-for-outline);
   }
 }
 

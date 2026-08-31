@@ -1,62 +1,64 @@
 /** @format */
 
+export type ProgramEvaluationMode = "open" | "distributed";
+
 export interface ProgramAnalyticsOverview {
-  program: {
-    id: number;
-    name: string;
+  summary: {
+    participants: ProgramAnalyticsTotal;
+    projects: ProgramAnalyticsTotal;
+    experts: ProgramAnalyticsTotal;
+    regions: ProgramAnalyticsTotal & {
+      items: ProgramAnalyticsRegion[];
+    };
   };
-  registrations: ProgramAnalyticsTotal;
-  participants: ProgramAnalyticsTotal;
-  applications: ProgramAnalyticsTotal & {
-    byStatus: {
-      draft: number;
+  participantFunnel: {
+    registrations: number;
+    uniqueParticipants: number;
+    withTeam: number;
+    projectCreators: number;
+    submittedProjectCreators: number;
+  };
+  solutionFunnel: {
+    created: number;
+    notSubmitted: number;
+    submitted: number;
+    evaluated: number;
+  };
+  evaluationStatus: {
+    mode: ProgramEvaluationMode;
+    maxEvaluationsPerProject: number | null;
+    assignments: {
+      total: number;
+      pending: number;
+      evaluated: number;
+    };
+    projects: {
       submitted: number;
-      approved: number;
-      rejected: number;
-      withdrawn: number;
-      cancelled: number;
-    };
-    byParticipationMode: {
-      undecided: number;
-      individual: number;
-      team: number;
+      awaitingEvaluation: number;
+      partiallyEvaluated: number;
+      evaluated: number;
     };
   };
-  teams: ProgramAnalyticsTotal & {
-    acceptedMembers: number;
+  attention: {
+    participantsWithoutTeam: number;
+    projectsAwaitingEvaluation: number;
   };
-  submissions: ProgramAnalyticsTotal & {
-    byStatus: {
-      draft: number;
-      submitted: number;
-      returned: number;
-      final: number;
-      cancelled: number;
-    };
-    applicationsWithSubmittedSolution: number;
-  };
-  expertAssignments: ProgramAnalyticsTotal & {
-    byStatus: {
-      assigned: number;
-      completed: number;
-      revoked: number;
-    };
-  };
-  evaluations: ProgramAnalyticsTotal & {
-    byStatus: {
-      draft: number;
-      submitted: number;
-    };
-  };
+  activity: ProgramAnalyticsActivityPoint[];
 }
 
 export interface ProgramAnalyticsTotal {
   total: number;
 }
 
-export interface ProgramAnalyticsData {
-  overview: ProgramAnalyticsOverview;
-  projectCount: number | null;
+export interface ProgramAnalyticsRegion {
+  name: string;
+  count: number;
+}
+
+export interface ProgramAnalyticsActivityPoint {
+  date: string;
+  registrations: number;
+  submittedSolutions: number;
 }
 
 export interface ProgramAnalyticsError {

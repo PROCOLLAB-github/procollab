@@ -11,6 +11,7 @@ import {
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
+import { ProgramAnalyticsActivityPoint } from "@domain/program/program-analytics.model";
 import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
@@ -18,9 +19,16 @@ import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 interface AnalyticsMetric {
   key: string;
   label: string;
-  value: number | string;
+  value: number;
   tooltip: string;
   icon?: string;
+}
+
+interface ActivityChartPoint extends ProgramAnalyticsActivityPoint {
+  dateLabel: string;
+  x: number;
+  registrationsY: number;
+  submittedSolutionsY: number;
 }
 
 /** Внутренняя manager-вкладка с агрегированной аналитикой программы. */
@@ -47,143 +55,225 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly exportFailed = computed(() => isFailure(this.exports.loadingExports$()));
 
   protected readonly summary = computed<AnalyticsMetric[]>(() => {
-    const data = this.data();
-    if (!data) return [];
+    const overview = this.data();
+    if (!overview) return [];
 
     return [
       {
         key: "participants",
         label: "Участники",
-        value: data.overview.participants.total,
+        value: overview.summary.participants.total,
         icon: "team",
         tooltip: "Уникальные пользователи, зарегистрированные в программе.",
       },
       {
         key: "projects",
         label: "Проекты",
-        value: data.projectCount ?? "—",
+        value: overview.summary.projects.total,
         icon: "folder",
-        tooltip:
-          data.projectCount === null
-            ? "Количество проектов временно недоступно."
-            : "Все проекты, связанные с программой.",
+        tooltip: "Все проекты, связанные с программой.",
       },
       {
         key: "experts",
-        label: "Назначения экспертов",
-        value: data.overview.expertAssignments.total,
+        label: "Эксперты",
+        value: overview.summary.experts.total,
         icon: "person",
-        tooltip: "Все назначения экспертов на решения программы.",
+        tooltip: "Эксперты, добавленные в программу.",
       },
       {
         key: "regions",
         label: "Регионы проектов",
-        value: "—",
+        value: overview.summary.regions.total,
         icon: "world-wide",
-        tooltip: "Разрез по уникальным регионам пока недоступен.",
+        tooltip: "Количество уникальных регионов, указанных в проектах программы.",
       },
     ];
   });
 
+  protected readonly regions = computed(() => this.data()?.summary.regions.items ?? []);
+
   protected readonly participantFunnel = computed<AnalyticsMetric[]>(() => {
-    const overview = this.data()?.overview;
-    if (!overview) return [];
+    const funnel = this.data()?.participantFunnel;
+    if (!funnel) return [];
+
     return [
-      this.metric("registrations", "Зарегистрировались", overview.registrations.total),
-      this.metric("participants-total", "Уникальные участники", overview.participants.total),
-      this.metric("applications", "Создали заявку", overview.applications.total),
-      this.metric("team-members", "Приняты в команды", overview.teams.acceptedMembers),
       this.metric(
-        "submitted-applications",
-        "Отправили решение",
-        overview.submissions.applicationsWithSubmittedSolution,
+        "registrations",
+        "Зарегистрировались",
+        funnel.registrations,
+        "Все регистрационные записи программы, включая записи одного пользователя в разных ролях.",
+      ),
+      this.metric(
+        "unique-participants",
+        "Уникальные участники",
+        funnel.uniqueParticipants,
+        "Уникальные пользователи среди регистрационных записей программы.",
+      ),
+      this.metric(
+        "with-team",
+        "В команде",
+        funnel.withTeam,
+        "Участники, которые являются руководителями или участниками команды проекта программы.",
+      ),
+      this.metric(
+        "project-creators",
+        "Создали проект",
+        funnel.projectCreators,
+        "Участники, ставшие руководителями проекта программы.",
+      ),
+      this.metric(
+        "submitted-project-creators",
+        "Сдали проект",
+        funnel.submittedProjectCreators,
+        "Руководители проектов, отправившие решение программы.",
       ),
     ];
   });
 
   protected readonly solutionFunnel = computed<AnalyticsMetric[]>(() => {
-    const overview = this.data()?.overview;
-    if (!overview) return [];
+    const funnel = this.data()?.solutionFunnel;
+    if (!funnel) return [];
+
     return [
-      this.metric("solutions-created", "Создано версий", overview.submissions.total),
-      this.metric("solutions-draft", "Черновик", overview.submissions.byStatus.draft),
+      this.metric("solutions-created", "Создано", funnel.created, "Все проекты программы."),
+      this.metric(
+        "solutions-not-submitted",
+        "Черновик / не сдано",
+        funnel.notSubmitted,
+        "Проекты программы, решение по которым ещё не отправлено.",
+      ),
       this.metric(
         "solutions-submitted",
-        "Сдано заявок",
-        overview.submissions.applicationsWithSubmittedSolution,
+        "Сдано",
+        funnel.submitted,
+        "Проекты с отправленным решением.",
       ),
-      this.metric("solutions-evaluated", "Оценено", overview.evaluations.byStatus.submitted),
+      this.metric(
+        "solutions-evaluated",
+        "Оценено",
+        funnel.evaluated,
+        "Сданные проекты, признанные оценёнными по режиму программы.",
+      ),
     ];
   });
 
   protected readonly evaluationStatuses = computed<AnalyticsMetric[]>(() => {
-    const overview = this.data()?.overview;
-    if (!overview) return [];
+    const status = this.data()?.evaluationStatus;
+    if (!status) return [];
+
+    const metrics = [
+      this.metric(
+        "evaluation-submitted",
+        "Сдано",
+        status.projects.submitted,
+        "Все проекты с отправленным решением.",
+      ),
+      this.metric(
+        "evaluation-awaiting",
+        "Ожидают оценивания",
+        status.projects.awaitingEvaluation,
+        this.awaitingEvaluationTooltip(status.mode),
+      ),
+    ];
+
+    if (status.mode === "distributed") {
+      metrics.push(
+        this.metric(
+          "evaluation-partial",
+          "Частично оценено",
+          status.projects.partiallyEvaluated,
+          "Выполнена часть назначений экспертов на проект.",
+        ),
+      );
+    }
+
+    metrics.push(
+      this.metric(
+        "evaluation-evaluated",
+        "Оценено",
+        status.projects.evaluated,
+        status.mode === "open"
+          ? "Проекты, получившие хотя бы одну оценку эксперта."
+          : "Проекты, по которым выполнены все назначения экспертов.",
+      ),
+    );
+    return metrics;
+  });
+
+  protected readonly assignmentStatuses = computed<AnalyticsMetric[]>(() => {
+    const assignments = this.data()?.evaluationStatus.assignments;
+    if (!assignments) return [];
     return [
-      this.metric(
-        "assignments-assigned",
-        "Назначено",
-        overview.expertAssignments.byStatus.assigned,
-      ),
-      this.metric("evaluations-draft", "На проверке", overview.evaluations.byStatus.draft),
-      this.metric("evaluations-submitted", "Оценено", overview.evaluations.byStatus.submitted),
-      this.metric(
-        "assignments-revoked",
-        "Назначение отозвано",
-        overview.expertAssignments.byStatus.revoked,
-      ),
+      this.metric("assignments-total", "Назначений всего", assignments.total),
+      this.metric("assignments-evaluated", "Выполнено", assignments.evaluated),
+      this.metric("assignments-pending", "Ожидает", assignments.pending),
     ];
   });
 
+  protected readonly evaluationModeLabel = computed(() =>
+    this.data()?.evaluationStatus.mode === "distributed"
+      ? "Распределённое оценивание"
+      : "Открытое оценивание",
+  );
+
   protected readonly attention = computed<AnalyticsMetric[]>(() => {
-    const overview = this.data()?.overview;
+    const overview = this.data();
     if (!overview) return [];
     return [
       {
         key: "without-team",
-        label: "Участники вне принятых команд",
-        value: Math.max(overview.participants.total - overview.teams.acceptedMembers, 0),
+        label: "Участники без команды",
+        value: overview.attention.participantsWithoutTeam,
         tooltip:
-          "Уникальные участники за вычетом принятых участников команд. Индивидуальные участники также входят в это число.",
+          "Зарегистрированные участники, которые не являются руководителями или участниками команды проекта программы.",
       },
       {
         key: "awaiting-evaluation",
-        label: "Решения ожидают оценивания",
-        value: overview.submissions.byStatus.submitted,
-        tooltip: "Версии решений, находящиеся в статусе «сдано».",
+        label: "Работы ожидают оценивания",
+        value: overview.attention.projectsAwaitingEvaluation,
+        tooltip: this.awaitingEvaluationTooltip(overview.evaluationStatus.mode),
       },
     ];
   });
 
-  protected readonly activity = computed<AnalyticsMetric[]>(() => {
-    const overview = this.data()?.overview;
-    if (!overview) return [];
-    return [
-      {
-        key: "activity-registrations",
-        label: "Новые регистрации",
-        value: overview.registrations.total,
-        tooltip: "Накопленное количество регистрационных записей программы.",
-      },
-      {
-        key: "activity-submissions",
-        label: "Отправленные решения",
-        value: overview.submissions.applicationsWithSubmittedSolution,
-        tooltip: "Заявки, по которым отправлено хотя бы одно решение.",
-      },
-    ];
-  });
+  protected readonly hasActivity = computed(() =>
+    (this.data()?.activity ?? []).some(
+      point => point.registrations > 0 || point.submittedSolutions > 0,
+    ),
+  );
 
-  protected readonly allMetricsEmpty = computed(() => {
-    const overview = this.data()?.overview;
-    if (!overview) return false;
-    return (
-      overview.registrations.total === 0 &&
-      overview.applications.total === 0 &&
-      overview.submissions.total === 0 &&
-      overview.evaluations.total === 0 &&
-      (this.data()?.projectCount ?? 0) === 0
+  protected readonly activityChart = computed<ActivityChartPoint[]>(() => {
+    const activity = this.data()?.activity ?? [];
+    const maxValue = Math.max(
+      1,
+      ...activity.flatMap(point => [point.registrations, point.submittedSolutions]),
     );
+    const divisor = Math.max(activity.length - 1, 1);
+
+    return activity.map((point, index) => ({
+      ...point,
+      dateLabel: this.formatDate(point.date),
+      x: (index / divisor) * 100,
+      registrationsY: 88 - (point.registrations / maxValue) * 76,
+      submittedSolutionsY: 88 - (point.submittedSolutions / maxValue) * 76,
+    }));
+  });
+
+  protected readonly registrationPolyline = computed(() =>
+    this.activityChart()
+      .map(point => `${point.x},${point.registrationsY}`)
+      .join(" "),
+  );
+
+  protected readonly submissionPolyline = computed(() =>
+    this.activityChart()
+      .map(point => `${point.x},${point.submittedSolutionsY}`)
+      .join(" "),
+  );
+
+  protected readonly activityAxisLabels = computed(() => {
+    const points = this.activityChart();
+    return points.filter((_, index) => index % 5 === 0 || index === points.length - 1);
   });
 
   protected readonly errorMessage = computed(() => {
@@ -227,14 +317,13 @@ export class ProgramAnalyticsComponent implements OnInit {
     return this.activeTooltip() === key;
   }
 
-  protected barWidth(value: number | string, metrics: AnalyticsMetric[]): number {
-    if (typeof value !== "number") return 0;
-    const max = Math.max(...metrics.map(item => (typeof item.value === "number" ? item.value : 0)));
+  protected barWidth(value: number, metrics: AnalyticsMetric[]): number {
+    const max = Math.max(...metrics.map(item => item.value));
     return max > 0 ? Math.max((value / max) * 100, value > 0 ? 8 : 0) : 0;
   }
 
   protected hasValues(metrics: AnalyticsMetric[]): boolean {
-    return metrics.some(item => typeof item.value === "number" && item.value > 0);
+    return metrics.some(item => item.value > 0);
   }
 
   protected downloadProjects(): void {
@@ -249,7 +338,18 @@ export class ProgramAnalyticsComponent implements OnInit {
     this.exports.downloadRates();
   }
 
-  private metric(key: string, label: string, value: number): AnalyticsMetric {
-    return { key, label, value, tooltip: label };
+  private metric(key: string, label: string, value: number, tooltip = label): AnalyticsMetric {
+    return { key, label, value, tooltip };
+  }
+
+  private awaitingEvaluationTooltip(mode: "open" | "distributed"): string {
+    return mode === "open"
+      ? "Сданные проекты, которые ещё не получили ни одной оценки эксперта."
+      : "Сданные проекты без выполненных назначений или с выполненной только частью назначений.";
+  }
+
+  private formatDate(date: string): string {
+    const [, month = "", day = ""] = date.split("-");
+    return `${day}.${month}`;
   }
 }

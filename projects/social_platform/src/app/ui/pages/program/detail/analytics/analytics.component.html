@@ -87,19 +87,7 @@
         </app-button>
       }
     </section>
-  } @else if (data()) {
-    @if (allMetricsEmpty()) {
-      <section class="analytics-state analytics-state--compact" data-testid="analytics-zero-state">
-        <i appIcon icon="folder" appSquare="28"></i>
-        <div>
-          <h2 class="text-body-12">В программе пока нет данных для аналитики</h2>
-          <p class="text-body-10">
-            Показатели появятся после регистрации участников и отправки первых заявок.
-          </p>
-        </div>
-      </section>
-    }
-
+  } @else if (data(); as overview) {
     <section class="summary" aria-label="Основные показатели">
       @for (card of summary(); track card.key) {
         <article class="summary-card" [attr.data-testid]="'summary-' + card.key">
@@ -125,12 +113,38 @@
       }
     </section>
 
+    <section class="regions" aria-labelledby="regions-title" data-testid="regions-breakdown">
+      <div class="analytics__heading-row">
+        <h2 id="regions-title" class="text-body-12">Регионы проектов</h2>
+        <app-tooltip
+          text="Количество проектов по регионам, указанным в карточках проектов программы."
+          [isVisible]="isTooltipVisible('regions-breakdown')"
+          [useOverlay]="true"
+          (click)="toggleTooltip('regions-breakdown')"
+          (show)="showTooltip('regions-breakdown')"
+          (hide)="hideTooltip('regions-breakdown')"
+        ></app-tooltip>
+      </div>
+      @if (regions().length > 0) {
+        <ul class="regions__list">
+          @for (region of regions(); track region.name) {
+            <li>
+              <span class="text-body-10">{{ region.name }}</span>
+              <strong>{{ region.count }}</strong>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="analytics-card__empty text-body-10">У проектов пока не указаны регионы</p>
+      }
+    </section>
+
     <section class="analytics-grid" aria-label="Аналитические показатели">
       <article class="analytics-card" data-testid="participant-funnel">
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Воронка участников</h2>
           <app-tooltip
-            text="Путь от регистрации в программе до отправки решения."
+            text="Путь участников от регистрации до отправки проекта."
             [isVisible]="isTooltipVisible('participant-funnel')"
             [useOverlay]="true"
             (click)="toggleTooltip('participant-funnel')"
@@ -142,7 +156,17 @@
           <ol class="funnel">
             @for (item of participantFunnel(); track item.key) {
               <li class="funnel__item">
-                <span class="text-body-10">{{ item.label }}</span>
+                <span class="funnel__label text-body-10">
+                  {{ item.label }}
+                  <app-tooltip
+                    [text]="item.tooltip"
+                    [isVisible]="isTooltipVisible(item.key)"
+                    [useOverlay]="true"
+                    (click)="toggleTooltip(item.key)"
+                    (show)="showTooltip(item.key)"
+                    (hide)="hideTooltip(item.key)"
+                  ></app-tooltip>
+                </span>
                 <strong>{{ item.value }}</strong>
                 <span
                   class="funnel__bar"
@@ -160,7 +184,7 @@
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Воронка решений</h2>
           <app-tooltip
-            text="Версии решений и заявки, дошедшие до отправки и оценки."
+            text="Путь проектов программы от создания до оценки."
             [isVisible]="isTooltipVisible('solution-funnel')"
             [useOverlay]="true"
             (click)="toggleTooltip('solution-funnel')"
@@ -172,7 +196,17 @@
           <ol class="funnel">
             @for (item of solutionFunnel(); track item.key) {
               <li class="funnel__item">
-                <span class="text-body-10">{{ item.label }}</span>
+                <span class="funnel__label text-body-10">
+                  {{ item.label }}
+                  <app-tooltip
+                    [text]="item.tooltip"
+                    [isVisible]="isTooltipVisible(item.key)"
+                    [useOverlay]="true"
+                    (click)="toggleTooltip(item.key)"
+                    (show)="showTooltip(item.key)"
+                    (hide)="hideTooltip(item.key)"
+                  ></app-tooltip>
+                </span>
                 <strong>{{ item.value }}</strong>
                 <span
                   class="funnel__bar"
@@ -190,7 +224,7 @@
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Кейсы</h2>
           <app-tooltip
-            text="Количество решений по каждому кейсу программы."
+            text="Статистика проектов по кейсам программы."
             [isVisible]="isTooltipVisible('cases')"
             [useOverlay]="true"
             (click)="toggleTooltip('cases')"
@@ -200,15 +234,22 @@
         </div>
         <div class="analytics-card__empty analytics-card__empty--center text-body-10">
           <i appIcon icon="task" appSquare="28"></i>
-          <span>Данные по кейсам пока недоступны.</span>
+          <span>Статистика по кейсам пока недоступна</span>
         </div>
       </article>
 
-      <article class="analytics-card" data-testid="evaluation-statuses">
+      <article class="analytics-card evaluation" data-testid="evaluation-statuses">
         <div class="analytics__heading-row">
-          <h2 class="text-body-12">Статус оценивания</h2>
+          <div>
+            <h2 class="text-body-12">Статус оценивания</h2>
+            <p class="evaluation__mode text-body-8">{{ evaluationModeLabel() }}</p>
+          </div>
           <app-tooltip
-            text="Текущие статусы назначений экспертов и сохранённых оценок."
+            [text]="
+              overview.evaluationStatus.mode === 'open'
+                ? 'Проект считается оценённым после первой оценки эксперта.'
+                : 'Статус проекта определяется выполнением назначений экспертов.'
+            "
             [isVisible]="isTooltipVisible('evaluation-status')"
             [useOverlay]="true"
             (click)="toggleTooltip('evaluation-status')"
@@ -216,8 +257,8 @@
             (hide)="hideTooltip('evaluation-status')"
           ></app-tooltip>
         </div>
-        @if (hasValues(evaluationStatuses())) {
-          <ul class="status-list">
+        @if (overview.evaluationStatus.projects.submitted > 0) {
+          <ul class="status-list status-list--projects">
             @for (item of evaluationStatuses(); track item.key) {
               <li>
                 <span class="text-body-10">{{ item.label }}</span>
@@ -225,8 +266,37 @@
               </li>
             }
           </ul>
+          @if (overview.evaluationStatus.maxEvaluationsPerProject !== null) {
+            <div class="evaluation__limit text-body-8" data-testid="evaluation-limit">
+              <span>
+                Максимум экспертов на проект:
+                <strong>{{ overview.evaluationStatus.maxEvaluationsPerProject }}</strong>
+              </span>
+              <app-tooltip
+                text="Максимальное количество экспертов, которые могут оценить один проект."
+                [isVisible]="isTooltipVisible('evaluation-limit')"
+                [useOverlay]="true"
+                (click)="toggleTooltip('evaluation-limit')"
+                (show)="showTooltip('evaluation-limit')"
+                (hide)="hideTooltip('evaluation-limit')"
+              ></app-tooltip>
+            </div>
+          }
+          @if (overview.evaluationStatus.mode === "distributed") {
+            <div class="evaluation__assignments" data-testid="assignment-statuses">
+              <h3 class="text-body-10">Назначения экспертов</h3>
+              <ul class="status-list status-list--compact">
+                @for (item of assignmentStatuses(); track item.key) {
+                  <li>
+                    <span class="text-body-8">{{ item.label }}</span>
+                    <strong>{{ item.value }}</strong>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
         } @else {
-          <p class="analytics-card__empty text-body-10">Оценивание ещё не началось.</p>
+          <p class="analytics-card__empty text-body-10">Пока нет сданных работ для оценивания</p>
         }
       </article>
     </section>
@@ -264,7 +334,7 @@
             }
           </ul>
         } @else {
-          <p class="attention__empty text-body-10">Сейчас нет показателей, требующих внимания.</p>
+          <p class="attention__empty text-body-10">Ничего не требует внимания</p>
         }
       </article>
 
@@ -272,10 +342,10 @@
         <div class="analytics__heading-row">
           <div>
             <h2 class="text-body-12">Динамика активности</h2>
-            <p class="activity__note text-body-8">Накопленные значения без разбивки по датам</p>
+            <p class="activity__note text-body-8">Последние 30 дней</p>
           </div>
           <app-tooltip
-            text="API показывает текущие итоги регистраций и отправленных решений без временного ряда."
+            text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
             [isVisible]="isTooltipVisible('activity')"
             [useOverlay]="true"
             position="left"
@@ -284,20 +354,61 @@
             (hide)="hideTooltip('activity')"
           ></app-tooltip>
         </div>
-        @if (hasValues(activity())) {
-          <div class="activity__chart" aria-label="Сравнение активности">
-            @for (item of activity(); track item.key) {
-              <div class="activity__row">
-                <span class="text-body-10">{{ item.label }}</span>
-                <div class="activity__track">
-                  <span [style.width.%]="barWidth(item.value, activity())"></span>
-                </div>
-                <strong>{{ item.value }}</strong>
-              </div>
-            }
+        @if (hasActivity()) {
+          <div class="activity__legend" aria-label="Обозначения графика">
+            <span class="text-body-8"
+              ><i class="activity__marker activity__marker--registrations"></i>Новые
+              регистрации</span
+            >
+            <span class="text-body-8"
+              ><i class="activity__marker activity__marker--solutions"></i>Отправленные
+              решения</span
+            >
+          </div>
+          <div
+            class="activity__chart"
+            role="img"
+            aria-label="График регистраций и отправленных решений за последние 30 дней"
+          >
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <line class="activity__grid-line" x1="0" y1="88" x2="100" y2="88"></line>
+              <line class="activity__grid-line" x1="0" y1="50" x2="100" y2="50"></line>
+              <line class="activity__grid-line" x1="0" y1="12" x2="100" y2="12"></line>
+              <polyline
+                class="activity__line activity__line--registrations"
+                [attr.points]="registrationPolyline()"
+              ></polyline>
+              <polyline
+                class="activity__line activity__line--solutions"
+                [attr.points]="submissionPolyline()"
+              ></polyline>
+              @for (point of activityChart(); track point.date) {
+                <circle
+                  class="activity__point activity__point--registrations"
+                  [attr.cx]="point.x"
+                  [attr.cy]="point.registrationsY"
+                  r="1.2"
+                >
+                  <title>{{ point.dateLabel }} — регистрации: {{ point.registrations }}</title>
+                </circle>
+                <circle
+                  class="activity__point activity__point--solutions"
+                  [attr.cx]="point.x"
+                  [attr.cy]="point.submittedSolutionsY"
+                  r="1.2"
+                >
+                  <title>{{ point.dateLabel }} — решения: {{ point.submittedSolutions }}</title>
+                </circle>
+              }
+            </svg>
+            <div class="activity__axis" aria-hidden="true">
+              @for (point of activityAxisLabels(); track point.date) {
+                <span class="text-body-8">{{ point.dateLabel }}</span>
+              }
+            </div>
           </div>
         } @else {
-          <p class="analytics-card__empty text-body-10">Нет данных для графика активности.</p>
+          <p class="analytics-card__empty text-body-10">За последние 30 дней активности пока нет</p>
         }
       </article>
     </section>

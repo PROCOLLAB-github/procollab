@@ -1,14 +1,12 @@
 /** @format */
 
-import { HttpParams } from "@angular/common/http";
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
-import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
 import { GetProgramManagerOverviewUseCase } from "@api/program/use-cases/get-program-manager-overview.use-case";
 import {
-  ProgramAnalyticsData,
   ProgramAnalyticsError,
+  ProgramAnalyticsOverview,
 } from "@domain/program/program-analytics.model";
 import {
   AsyncState,
@@ -20,7 +18,6 @@ import {
   loading,
   success,
 } from "@domain/shared/async-state";
-import { forkJoin } from "rxjs";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
 
 /** Состояние и загрузка внутренней вкладки аналитики программы. */
@@ -29,10 +26,9 @@ export class ProgramAnalyticsInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly getOverview = inject(GetProgramManagerOverviewUseCase);
-  private readonly getProjects = inject(GetAllProjectsUseCase);
   private readonly programUI = inject(ProgramDetailMainUIInfoService);
 
-  readonly state = signal<AsyncState<ProgramAnalyticsData, ProgramAnalyticsError>>(initial());
+  readonly state = signal<AsyncState<ProgramAnalyticsOverview, ProgramAnalyticsError>>(initial());
   readonly data = computed(() => {
     const state = this.state();
     return isSuccess(state) ? state.data : null;
@@ -59,27 +55,16 @@ export class ProgramAnalyticsInfoService {
     }
 
     this.state.set(loading());
-
-    forkJoin({
-      overview: this.getOverview.execute(programId),
-      projects: this.getProjects.execute(
-        programId,
-        new HttpParams({ fromObject: { limit: 1, offset: 0 } }),
-      ),
-    })
+    this.getOverview
+      .execute(programId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ overview, projects }) => {
-        if (!overview.ok) {
-          this.state.set(failure(this.mapError(overview.error.status)));
+      .subscribe(result => {
+        if (!result.ok) {
+          this.state.set(failure(this.mapError(result.error.status)));
           return;
         }
 
-        this.state.set(
-          success({
-            overview: overview.value,
-            projectCount: projects.ok ? projects.value.count : null,
-          }),
-        );
+        this.state.set(success(result.value));
       });
   }
 

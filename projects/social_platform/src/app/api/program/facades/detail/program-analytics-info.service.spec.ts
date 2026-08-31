@@ -2,7 +2,6 @@
 
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
 import { GetProgramManagerOverviewUseCase } from "@api/program/use-cases/get-program-manager-overview.use-case";
 import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 import { Program } from "@domain/program/program.model";
@@ -11,26 +10,44 @@ import { of, Subject } from "rxjs";
 import { ProgramAnalyticsInfoService } from "./program-analytics-info.service";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
 
-const overview = { participants: { total: 2 } } as ProgramAnalyticsOverview;
+const overview: ProgramAnalyticsOverview = {
+  summary: {
+    participants: { total: 2 },
+    projects: { total: 7 },
+    experts: { total: 1 },
+    regions: { total: 1, items: [{ name: "Москва", count: 7 }] },
+  },
+  participantFunnel: {
+    registrations: 3,
+    uniqueParticipants: 2,
+    withTeam: 1,
+    projectCreators: 1,
+    submittedProjectCreators: 1,
+  },
+  solutionFunnel: { created: 7, notSubmitted: 6, submitted: 1, evaluated: 0 },
+  evaluationStatus: {
+    mode: "open",
+    maxEvaluationsPerProject: null,
+    assignments: { total: 0, pending: 0, evaluated: 0 },
+    projects: { submitted: 1, awaitingEvaluation: 1, partiallyEvaluated: 0, evaluated: 0 },
+  },
+  attention: { participantsWithoutTeam: 1, projectsAwaitingEvaluation: 1 },
+  activity: [],
+};
 
 describe("ProgramAnalyticsInfoService", () => {
   let service: ProgramAnalyticsInfoService;
   let getOverview: { execute: ReturnType<typeof vi.fn> };
-  let getProjects: { execute: ReturnType<typeof vi.fn> };
   let programUI: ProgramDetailMainUIInfoService;
 
   beforeEach(() => {
     getOverview = { execute: vi.fn().mockReturnValue(of(ok(overview))) };
-    getProjects = {
-      execute: vi.fn().mockReturnValue(of(ok({ count: 7, results: [], next: "", previous: "" }))),
-    };
 
     TestBed.configureTestingModule({
       providers: [
         ProgramAnalyticsInfoService,
         ProgramDetailMainUIInfoService,
         { provide: GetProgramManagerOverviewUseCase, useValue: getOverview },
-        { provide: GetAllProjectsUseCase, useValue: getProjects },
         {
           provide: ActivatedRoute,
           useValue: { parent: { snapshot: { params: { programId: "12" } } } },
@@ -42,14 +59,14 @@ describe("ProgramAnalyticsInfoService", () => {
     programUI = TestBed.inject(ProgramDetailMainUIInfoService);
   });
 
-  it("загружает manager overview и count проектов", () => {
+  it("загружает только authoritative manager overview", () => {
     programUI.program.set({ ...Program.default(), id: 12, isUserManager: true });
 
     service.initialize();
 
-    expect(service.data()).toEqual({ overview, projectCount: 7 });
+    expect(service.data()).toBe(overview);
+    expect(service.data()?.summary.projects.total).toBe(7);
     expect(getOverview.execute).toHaveBeenCalledExactlyOnceWith(12);
-    expect(getProjects.execute).toHaveBeenCalledOnce();
   });
 
   it("не запрашивает аналитику для пользователя без manager-признака", () => {
@@ -84,7 +101,7 @@ describe("ProgramAnalyticsInfoService", () => {
     expect(service.error()?.kind).toBe("network");
 
     service.retry();
-    expect(service.data()?.overview).toBe(overview);
+    expect(service.data()).toBe(overview);
     expect(getOverview.execute).toHaveBeenCalledTimes(2);
   });
 });
