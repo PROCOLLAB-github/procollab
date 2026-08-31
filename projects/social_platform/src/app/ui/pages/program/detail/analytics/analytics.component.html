@@ -1,0 +1,305 @@
+<!-- @format -->
+
+<main class="analytics" aria-labelledby="program-analytics-title">
+  <header class="analytics__header">
+    <div>
+      <p class="analytics__eyebrow text-body-10">Управление программой</p>
+      <h1 id="program-analytics-title" class="analytics__title text-heading-3">Аналитика</h1>
+      <p class="analytics__subtitle text-body-10">
+        Обезличенная сводка пути участников от регистрации до экспертной оценки.
+      </p>
+    </div>
+
+    @if (data()) {
+      <section class="exports" aria-labelledby="analytics-exports-title">
+        <div class="analytics__heading-row">
+          <h2 id="analytics-exports-title" class="text-body-12">Выгрузки</h2>
+          <app-tooltip
+            data-testid="exports-tooltip"
+            text="Скачайте проекты программы или выставленные проектные оценки."
+            [isVisible]="isTooltipVisible('exports')"
+            [useOverlay]="true"
+            position="left"
+            (click)="toggleTooltip('exports')"
+            (show)="showTooltip('exports')"
+            (hide)="hideTooltip('exports')"
+          ></app-tooltip>
+        </div>
+        <div class="exports__actions">
+          <app-button
+            appearance="outline"
+            size="medium"
+            [loader]="loadingExports()"
+            [disabled]="loadingExports()"
+            customTypographyClass="text-body-10"
+            (click)="downloadProjects()"
+          >
+            Все проекты
+          </app-button>
+          <app-button
+            appearance="outline"
+            size="medium"
+            [loader]="loadingExports()"
+            [disabled]="loadingExports()"
+            customTypographyClass="text-body-10"
+            (click)="downloadSubmittedProjects()"
+          >
+            Сданные проекты
+          </app-button>
+          <app-button
+            appearance="outline"
+            size="medium"
+            [loader]="loadingExports()"
+            [disabled]="loadingExports()"
+            customTypographyClass="text-body-10"
+            (click)="downloadRates()"
+          >
+            Оценки проектов
+          </app-button>
+        </div>
+        @if (exportFailed()) {
+          <p class="exports__error text-body-10" role="alert">
+            Не удалось подготовить выгрузку. Повторите попытку.
+          </p>
+        }
+      </section>
+    }
+  </header>
+
+  @if (pending()) {
+    <section class="analytics__loading" aria-live="polite" data-testid="analytics-loading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p class="text-body-10">Загружаем аналитику программы…</p>
+      <div class="summary summary--loading" aria-hidden="true">
+        @for (_ of [1, 2, 3, 4]; track $index) {
+          <div class="summary-card summary-card--skeleton"></div>
+        }
+      </div>
+    </section>
+  } @else if (failed()) {
+    <section class="analytics-state" role="alert" data-testid="analytics-error">
+      <i appIcon icon="accent-error" appSquare="40"></i>
+      <h2 class="text-body-14">Аналитика недоступна</h2>
+      <p class="text-body-10">{{ errorMessage() }}</p>
+      @if (error()?.kind === "network") {
+        <app-button size="medium" customTypographyClass="text-body-10" (click)="retry()">
+          Повторить
+        </app-button>
+      }
+    </section>
+  } @else if (data()) {
+    @if (allMetricsEmpty()) {
+      <section class="analytics-state analytics-state--compact" data-testid="analytics-zero-state">
+        <i appIcon icon="folder" appSquare="28"></i>
+        <div>
+          <h2 class="text-body-12">В программе пока нет данных для аналитики</h2>
+          <p class="text-body-10">
+            Показатели появятся после регистрации участников и отправки первых заявок.
+          </p>
+        </div>
+      </section>
+    }
+
+    <section class="summary" aria-label="Основные показатели">
+      @for (card of summary(); track card.key) {
+        <article class="summary-card" [attr.data-testid]="'summary-' + card.key">
+          <div class="summary-card__icon">
+            <i appIcon [icon]="card.icon!" appSquare="24"></i>
+          </div>
+          <div class="summary-card__content">
+            <div class="analytics__heading-row">
+              <h2 class="summary-card__label text-body-10">{{ card.label }}</h2>
+              <app-tooltip
+                data-testid="metric-tooltip"
+                [text]="card.tooltip"
+                [isVisible]="isTooltipVisible(card.key)"
+                [useOverlay]="true"
+                (click)="toggleTooltip(card.key)"
+                (show)="showTooltip(card.key)"
+                (hide)="hideTooltip(card.key)"
+              ></app-tooltip>
+            </div>
+            <strong class="summary-card__value">{{ card.value }}</strong>
+          </div>
+        </article>
+      }
+    </section>
+
+    <section class="analytics-grid" aria-label="Аналитические показатели">
+      <article class="analytics-card" data-testid="participant-funnel">
+        <div class="analytics__heading-row">
+          <h2 class="text-body-12">Воронка участников</h2>
+          <app-tooltip
+            text="Путь от регистрации в программе до отправки решения."
+            [isVisible]="isTooltipVisible('participant-funnel')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('participant-funnel')"
+            (show)="showTooltip('participant-funnel')"
+            (hide)="hideTooltip('participant-funnel')"
+          ></app-tooltip>
+        </div>
+        @if (hasValues(participantFunnel())) {
+          <ol class="funnel">
+            @for (item of participantFunnel(); track item.key) {
+              <li class="funnel__item">
+                <span class="text-body-10">{{ item.label }}</span>
+                <strong>{{ item.value }}</strong>
+                <span
+                  class="funnel__bar"
+                  [style.width.%]="barWidth(item.value, participantFunnel())"
+                ></span>
+              </li>
+            }
+          </ol>
+        } @else {
+          <p class="analytics-card__empty text-body-10">Пока нет данных по участникам.</p>
+        }
+      </article>
+
+      <article class="analytics-card" data-testid="solution-funnel">
+        <div class="analytics__heading-row">
+          <h2 class="text-body-12">Воронка решений</h2>
+          <app-tooltip
+            text="Версии решений и заявки, дошедшие до отправки и оценки."
+            [isVisible]="isTooltipVisible('solution-funnel')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('solution-funnel')"
+            (show)="showTooltip('solution-funnel')"
+            (hide)="hideTooltip('solution-funnel')"
+          ></app-tooltip>
+        </div>
+        @if (hasValues(solutionFunnel())) {
+          <ol class="funnel">
+            @for (item of solutionFunnel(); track item.key) {
+              <li class="funnel__item">
+                <span class="text-body-10">{{ item.label }}</span>
+                <strong>{{ item.value }}</strong>
+                <span
+                  class="funnel__bar"
+                  [style.width.%]="barWidth(item.value, solutionFunnel())"
+                ></span>
+              </li>
+            }
+          </ol>
+        } @else {
+          <p class="analytics-card__empty text-body-10">Нет решений для отображения.</p>
+        }
+      </article>
+
+      <article class="analytics-card" data-testid="cases-card">
+        <div class="analytics__heading-row">
+          <h2 class="text-body-12">Кейсы</h2>
+          <app-tooltip
+            text="Количество решений по каждому кейсу программы."
+            [isVisible]="isTooltipVisible('cases')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('cases')"
+            (show)="showTooltip('cases')"
+            (hide)="hideTooltip('cases')"
+          ></app-tooltip>
+        </div>
+        <div class="analytics-card__empty analytics-card__empty--center text-body-10">
+          <i appIcon icon="task" appSquare="28"></i>
+          <span>Данные по кейсам пока недоступны.</span>
+        </div>
+      </article>
+
+      <article class="analytics-card" data-testid="evaluation-statuses">
+        <div class="analytics__heading-row">
+          <h2 class="text-body-12">Статус оценивания</h2>
+          <app-tooltip
+            text="Текущие статусы назначений экспертов и сохранённых оценок."
+            [isVisible]="isTooltipVisible('evaluation-status')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('evaluation-status')"
+            (show)="showTooltip('evaluation-status')"
+            (hide)="hideTooltip('evaluation-status')"
+          ></app-tooltip>
+        </div>
+        @if (hasValues(evaluationStatuses())) {
+          <ul class="status-list">
+            @for (item of evaluationStatuses(); track item.key) {
+              <li>
+                <span class="text-body-10">{{ item.label }}</span>
+                <strong>{{ item.value }}</strong>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="analytics-card__empty text-body-10">Оценивание ещё не началось.</p>
+        }
+      </article>
+    </section>
+
+    <section class="analytics-bottom">
+      <article class="attention" data-testid="attention-block">
+        <div class="analytics__heading-row">
+          <h2 class="text-body-12">Требует внимания</h2>
+          <app-tooltip
+            text="Показатели, которые могут потребовать действия организатора."
+            [isVisible]="isTooltipVisible('attention')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('attention')"
+            (show)="showTooltip('attention')"
+            (hide)="hideTooltip('attention')"
+          ></app-tooltip>
+        </div>
+        @if (hasValues(attention())) {
+          <ul class="attention__list">
+            @for (item of attention(); track item.key) {
+              <li>
+                <i appIcon icon="accent-error" appSquare="20"></i>
+                <span class="text-body-10">{{ item.label }}</span>
+                <strong>{{ item.value }}</strong>
+                <app-tooltip
+                  [text]="item.tooltip"
+                  [isVisible]="isTooltipVisible(item.key)"
+                  [useOverlay]="true"
+                  position="left"
+                  (click)="toggleTooltip(item.key)"
+                  (show)="showTooltip(item.key)"
+                  (hide)="hideTooltip(item.key)"
+                ></app-tooltip>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="attention__empty text-body-10">Сейчас нет показателей, требующих внимания.</p>
+        }
+      </article>
+
+      <article class="activity" data-testid="activity-dynamics">
+        <div class="analytics__heading-row">
+          <div>
+            <h2 class="text-body-12">Динамика активности</h2>
+            <p class="activity__note text-body-8">Накопленные значения без разбивки по датам</p>
+          </div>
+          <app-tooltip
+            text="API показывает текущие итоги регистраций и отправленных решений без временного ряда."
+            [isVisible]="isTooltipVisible('activity')"
+            [useOverlay]="true"
+            position="left"
+            (click)="toggleTooltip('activity')"
+            (show)="showTooltip('activity')"
+            (hide)="hideTooltip('activity')"
+          ></app-tooltip>
+        </div>
+        @if (hasValues(activity())) {
+          <div class="activity__chart" aria-label="Сравнение активности">
+            @for (item of activity(); track item.key) {
+              <div class="activity__row">
+                <span class="text-body-10">{{ item.label }}</span>
+                <div class="activity__track">
+                  <span [style.width.%]="barWidth(item.value, activity())"></span>
+                </div>
+                <strong>{{ item.value }}</strong>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="analytics-card__empty text-body-10">Нет данных для графика активности.</p>
+        }
+      </article>
+    </section>
+  }
+</main>

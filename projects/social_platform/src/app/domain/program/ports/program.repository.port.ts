@@ -11,6 +11,7 @@ import { PartnerProgramFields } from "../partner-program-fields.model";
 import { ProjectAdditionalFields } from "../../project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "../dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "../results/apply-to-program";
+import { ProgramAnalyticsOverview } from "../program-analytics.model";
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
@@ -21,6 +22,8 @@ export abstract class ProgramRepositoryPort {
   ): Observable<ApiPagination<Program>>;
 
   abstract getOne(programId: number): Observable<Program>;
+
+  abstract getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview>;
 
   abstract acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }>;
 

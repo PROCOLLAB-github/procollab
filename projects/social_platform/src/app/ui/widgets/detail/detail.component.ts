@@ -14,14 +14,12 @@ import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ApproveSkillComponent } from "./approve-skill/approve-skill.component";
 import { TruncatePipe, ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
-import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { DetailInfoService } from "./services/detail-info.service";
 import { DetailProfileInfoService } from "./services/profile/detail-profile-info.service";
 import { DetailProgramInfoService } from "./services/program/detail-program-info.service";
@@ -46,7 +44,6 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     ButtonComponent,
     ModalComponent,
     AvatarComponent,
-    TooltipComponent,
     ApproveSkillComponent,
     InputComponent,
     TruncatePipe,
@@ -61,7 +58,6 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     DetailProjectInfoService,
     DetailProgramInfoService,
     ProjectAdditionalService,
-    TooltipInfoService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -72,7 +68,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly router = inject(Router);
   public readonly chatStateService = inject(ChatStateService);
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly tooltipInfoService = inject(TooltipInfoService);
 
   private readonly detailInfoService = inject(DetailInfoService);
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
@@ -84,13 +79,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly profileProjects = this.detailProfileInfoService.profileProjects;
   protected readonly listType = this.detailInfoService.listType;
 
-  // Переменная для подсказок
-  protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
-
   // Переменные для отображения данных в зависимости от url
   protected readonly isProjectsPage = this.detailProgramInfoService.isProjectsPage;
   protected readonly isMembersPage = this.detailProgramInfoService.isMembersPage;
   protected readonly isProjectsRatingPage = this.detailProgramInfoService.isProjectsRatingPage;
+  protected readonly isAnalyticsPage = this.detailProgramInfoService.isAnalyticsPage;
 
   protected readonly isTeamPage = this.detailProjectInfoService.isTeamPage;
   protected readonly isVacanciesPage = this.detailProjectInfoService.isVacanciesPage;
@@ -194,10 +187,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Методы для управления состоянием ошибок через сервис
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
-  }
-
-  toggleTooltip(): void {
-    this.tooltipInfoService.toggleTooltip("base");
   }
 
   onProjectRadioChange(event: Event): void {

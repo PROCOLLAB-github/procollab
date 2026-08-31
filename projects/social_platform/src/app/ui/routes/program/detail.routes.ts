@@ -8,6 +8,7 @@ import { ProgramDetailMainComponent } from "@ui/pages/program/detail/main/main.c
 import { ProgramProjectsResolver } from "@ui/pages/program/detail/list/projects.resolver";
 import { ProgramMembersResolver } from "@ui/pages/program/detail/list/members.resolver";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/analytics.component";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
@@ -47,6 +48,10 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
         path: "projects-rating",
         component: ProgramListComponent,
         data: { listType: "rating" },
+      },
+      {
+        path: "analytics",
+        component: ProgramAnalyticsComponent,
       },
     ],
   },

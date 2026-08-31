@@ -10,6 +10,7 @@ import { ProgramCreate } from "@domain/program/program-create.model";
 import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 
 describe("ProgramHttpAdapter", () => {
   let adapter: ProgramHttpAdapter;
@@ -51,6 +52,15 @@ describe("ProgramHttpAdapter", () => {
     adapter.getOne(5).subscribe();
 
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/");
+  });
+
+  it("getManagerOverview идёт в manager overview программы", () => {
+    setup();
+    api.get.mockReturnValue(of({} as ProgramAnalyticsOverview));
+
+    adapter.getManagerOverview(5).subscribe();
+
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/manager-overview/");
   });
 
   it("create идёт в POST /programs/ с телом", () => {
