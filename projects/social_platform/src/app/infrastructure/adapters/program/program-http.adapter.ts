@@ -13,6 +13,7 @@ import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
+import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
@@ -38,6 +39,10 @@ export class ProgramHttpAdapter {
 
   getOne(programId: number): Observable<Program> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
+  }
+
+  getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/manager-overview/`);
   }
 
   acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {

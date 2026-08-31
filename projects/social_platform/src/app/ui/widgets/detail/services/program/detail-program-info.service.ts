@@ -37,6 +37,7 @@ export class DetailProgramInfoService {
   readonly isProjectsPage = signal<boolean>(false);
   readonly isMembersPage = signal<boolean>(false);
   readonly isProjectsRatingPage = signal<boolean>(false);
+  readonly isAnalyticsPage = signal<boolean>(false);
   readonly additionalFields = signal<PartnerProgramFields[]>([]);
   readonly isAssignProjectToProgramModalOpen = signal(false);
   readonly isProgramEndedModalOpen = signal(false);
@@ -125,7 +126,10 @@ export class DetailProgramInfoService {
     }
   }
 
-  applyUpdateStage(stage: "projects" | "projects-rating" | "members", isStage: boolean): void {
+  applyUpdateStage(
+    stage: "projects" | "projects-rating" | "members" | "analytics",
+    isStage: boolean,
+  ): void {
     switch (stage) {
       case "projects":
         this.isProjectsPage.set(isStage);
@@ -137,6 +141,10 @@ export class DetailProgramInfoService {
 
       case "projects-rating":
         this.isProjectsRatingPage.set(isStage);
+        break;
+
+      case "analytics":
+        this.isAnalyticsPage.set(isStage);
         break;
     }
   }

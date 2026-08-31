@@ -12,6 +12,7 @@ import { User } from "@domain/auth/user.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { ProgramCreate } from "@domain/program/program-create.model";
+import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 
 describe("ProgramRepository", () => {
   let repository: ProgramRepository;
@@ -21,6 +22,7 @@ describe("ProgramRepository", () => {
     adapter = {
       getAll: vi.fn(),
       getOne: vi.fn(),
+      getManagerOverview: vi.fn(),
       create: vi.fn(),
       getDataSchema: vi.fn(),
       register: vi.fn(),
@@ -62,6 +64,15 @@ describe("ProgramRepository", () => {
     repository.getOne(42).subscribe();
 
     expect(adapter.getOne).toHaveBeenCalledTimes(1);
+  });
+
+  it("getManagerOverview делегирует в adapter", () => {
+    setup();
+    adapter.getManagerOverview.mockReturnValue(of({} as ProgramAnalyticsOverview));
+
+    repository.getManagerOverview(42).subscribe();
+
+    expect(adapter.getManagerOverview).toHaveBeenCalledExactlyOnceWith(42);
   });
 
   it("create делегирует в adapter", () => {

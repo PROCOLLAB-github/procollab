@@ -172,6 +172,8 @@ export class DetailInfoService {
       currentUrl.includes("/projects-rating"),
     );
 
+    this.detailProgramInfoService.applyUpdateStage("analytics", currentUrl.includes("/analytics"));
+
     this.detailProjectInfoService.applyUpdateStage("team", currentUrl.includes("/team"));
     this.detailProjectInfoService.applyUpdateStage("vacancies", currentUrl.includes("/vacancies"));
     this.detailProjectInfoService.applyUpdateStage("chat", currentUrl.includes("/chat"));

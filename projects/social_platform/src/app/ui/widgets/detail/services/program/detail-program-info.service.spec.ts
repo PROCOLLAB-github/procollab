@@ -87,6 +87,15 @@ describe("DetailProgramInfoService", () => {
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
+  it("отмечает analytics как активную внутреннюю вкладку", () => {
+    service.applyUpdateStage("analytics", true);
+
+    expect(service.isAnalyticsPage()).toBe(true);
+
+    service.applyUpdateStage("analytics", false);
+    expect(service.isAnalyticsPage()).toBe(false);
+  });
+
   it("блокирует внешнюю ссылку и показывает модалку после окончания регистрации", () => {
     const event = clickEvent();
     const past = new Date(Date.now() - 60_000).toISOString();

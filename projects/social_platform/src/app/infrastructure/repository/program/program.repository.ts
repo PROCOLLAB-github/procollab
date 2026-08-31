@@ -18,6 +18,7 @@ import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program
 import { userFromRaw } from "@utils/userRaw";
 import { EventBus } from "@domain/shared/event-bus";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
+import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
@@ -44,6 +45,10 @@ export class ProgramRepository implements ProgramRepositoryPort {
 
   getOne(programId: number): Observable<Program> {
     return this.entityCache.getOrFetch(programId, () => this.programAdapter.getOne(programId));
+  }
+
+  getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
+    return this.programAdapter.getManagerOverview(programId);
   }
 
   acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {
