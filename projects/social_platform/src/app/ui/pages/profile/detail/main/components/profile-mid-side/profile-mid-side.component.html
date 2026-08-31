@@ -10,15 +10,7 @@
         </div>
 
         <div class="text-body-10 about__text">
-          <p #descEl [innerHTML]="about | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable()) {
-            <div
-              class="read-more text-body-10"
-              (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
-            >
-              {{ readFullDescription() ? "скрыть" : "подробнее" }}
-            </div>
-          }
+          <p [innerHTML]="about | parseLinks | parseBreaks"></p>
         </div>
       </div>
     }
@@ -37,7 +29,7 @@
     }
     @if (isProfileEmpty()) {
       @if (loggedUserId() === user()!.id) {
-        <div class="profile__empty">
+        <div class="profile__empty" data-testid="empty-profile-state">
           <i appIcon icon="empty-chat" appSquare="44"></i>
           <p class="profile__empty--text text-body-12">
             заполните профиль и начните пользоваться PROCOLLAB

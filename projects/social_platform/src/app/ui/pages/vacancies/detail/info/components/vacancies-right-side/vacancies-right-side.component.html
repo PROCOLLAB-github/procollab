@@ -20,9 +20,13 @@
           >посмотреть отклики</app-button
         >
       } @else if (vacancy()!.hasResponded) {
-        <app-button size="big" customTypographyClass="text-body-12" [disabled]="true">{{
-          responseStatusLabel(vacancy()!.responseStatus)
-        }}</app-button>
+        <app-button
+          size="big"
+          customTypographyClass="text-body-12"
+          [color]="responseStatusColor(vacancy()!.responseStatus)"
+          [disabled]="true"
+          >{{ responseStatusLabel(vacancy()!.responseStatus) }}</app-button
+        >
       } @else if (vacancy()!.canRespond) {
         <app-button size="big" customTypographyClass="text-body-12" (click)="onSendResponseClick()"
           >откликнуться</app-button
@@ -114,7 +118,7 @@
               @if (link | userLinks; as l) {
                 <a class="lists__item" target="_blank" [href]="link">
                   <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span>{{ l.tag | truncate: 30 }}</span>
+                  <span class="lists__contact">{{ l.tag }}</span>
                 </a>
               }
             </li>

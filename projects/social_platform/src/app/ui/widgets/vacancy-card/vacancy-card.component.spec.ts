@@ -58,4 +58,12 @@ describe("VacancyCardComponent", () => {
     expect(status.textContent.trim()).toBe(label);
     expect(status.classList).toContain(`vacancy__status--${className}`);
   });
+
+  it("не удаляет часть длинного названия вакансии из DOM", () => {
+    const longRole = "Ведущий специалист по развитию международных образовательных программ";
+    fixture.componentRef.setInput("vacancy", { ...createVacancy(true), role: longRole });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector(".vacancy__role").textContent.trim()).toBe(longRole);
+  });
 });

@@ -13,7 +13,14 @@
   >
     <span class="text-body-12">{{ title() }}</span>
     @if (!disabled()) {
-      <i appIcon icon="arrow-no-body" appWidth="18" appHeight="9" appViewBox="0 0 18 9"></i>
+      <i
+        class="heading__chevron"
+        appIcon
+        icon="arrow-no-body"
+        appWidth="18"
+        appHeight="9"
+        appViewBox="0 0 18 9"
+      ></i>
     }
   </div>
   @if (contentVisible()) {
@@ -27,7 +34,11 @@
         >
           <span class="text-body-12">{{ opt.name }}</span>
           @if (selectedName() === opt.name) {
-            <i appIcon icon="check" appSquare="10"></i>
+            <span
+              class="content__option-dot"
+              data-testid="selected-specialization-dot"
+              aria-hidden="true"
+            ></span>
           }
         </div>
       }

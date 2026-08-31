@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   input,
   Input,
@@ -46,6 +47,7 @@ export class SkillsGroupComponent {
 
   readonly title = input.required<string>();
   readonly hasOpenGroups = input<boolean>(false);
+  readonly isOpen = input<boolean | null>(null);
   readonly disabled = input<boolean>(false);
 
   readonly groupToggled = output<boolean>();
@@ -53,15 +55,17 @@ export class SkillsGroupComponent {
 
   _options = signal<(Skill & { checked?: boolean })[]>([]);
   _selected = signal<Skill[]>([]);
-  contentVisible = signal(false);
+  private readonly internalContentVisible = signal(false);
+  readonly contentVisible = computed(() => this.isOpen() ?? this.internalContentVisible());
 
   toggleContentVisible() {
     if (this.disabled()) {
       return;
     }
 
-    this.contentVisible.update(val => !val);
-    this.groupToggled.emit(this.contentVisible());
+    const nextValue = !this.contentVisible();
+    this.internalContentVisible.set(nextValue);
+    this.groupToggled.emit(nextValue);
   }
 
   onOptionClick(opt: Skill) {

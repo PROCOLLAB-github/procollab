@@ -212,8 +212,16 @@
   }
 </div>
 
-<app-modal [open]="skillsGroupsModalOpen()" class="modal">
+<app-modal [open]="skillsGroupsModalOpen()" (openChange)="closeSkillsGroupsModal()" class="modal">
   <div class="modal__wrapper">
+    <button
+      type="button"
+      class="modal__close"
+      aria-label="Закрыть библиотеку навыков"
+      (click)="closeSkillsGroupsModal()"
+    >
+      <i appIcon icon="cross" appSquare="12"></i>
+    </button>
     <p class="text-body-14">библиотека навыков</p>
     <div class="modal__content">
       <div class="modal__skills-groups">
@@ -225,7 +233,7 @@
                 [options]="skillsGroup.skills"
                 [selected]="this.vacancyForm.getRawValue().skills!"
                 [hasOpenGroups]="hasOpenSkillsGroups()"
-                [disabled]="hasOpenSkillsGroups() && !openGroupIds().has(skillsGroup.id)"
+                [isOpen]="openGroupIds().has(skillsGroup.id)"
                 (optionToggled)="onToggleSkill($event)"
                 (groupToggled)="onGroupToggled($event, skillsGroup.id)"
               ></app-skills-group>

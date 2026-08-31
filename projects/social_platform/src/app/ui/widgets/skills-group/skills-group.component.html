@@ -8,6 +8,7 @@
   <div
     class="heading__top"
     [class.heading__top--has-open]="hasOpenGroups()"
+    [class.heading__top--selected]="contentVisible()"
     [class.heading__top--disabled]="disabled()"
     (click)="toggleContentVisible()"
   >
@@ -17,7 +18,7 @@
     }
   </div>
   @if (contentVisible()) {
-    <div class="content" [class.content--open]="hasOpenGroups()">
+    <div class="content" data-testid="skills-options-panel" [class.content--open]="hasOpenGroups()">
       @for (opt of options; track opt.id) {
         <div
           class="content__option"

@@ -6,16 +6,13 @@
       <h3 class="text-body-12 about__title">о проекте</h3>
       <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
     </div>
-    @if (project()!.description) {
+    @if (fullDescription()) {
       <div class="text-body-10 about__text">
-        <p #descEl [innerHTML]="project()!.description | parseLinks | parseBreaks"></p>
+        <p [innerHTML]="visibleDescription() | parseLinks | parseBreaks"></p>
         @if (descriptionExpandable()) {
-          <div
-            class="read-more text-body-10"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
-          >
-            {{ readFullDescription() ? "скрыть" : "подробнее" }}
-          </div>
+          <button type="button" class="read-more text-body-10" (click)="onToggleDescription()">
+            {{ descriptionExpanded() ? "Скрыть" : "Подробнее" }}
+          </button>
         }
       </div>
     }

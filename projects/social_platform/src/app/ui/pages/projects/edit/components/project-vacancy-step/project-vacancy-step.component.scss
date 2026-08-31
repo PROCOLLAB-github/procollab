@@ -108,11 +108,23 @@
 
 .modal {
   &__wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
     width: 672px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 8px;
+    color: var(--black);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
   }
 
   &__content {
@@ -130,6 +142,7 @@
 
   &__specs-groups,
   &__skills-groups {
+    position: relative;
     height: 100%;
     overflow: auto;
     scrollbar-width: thin;

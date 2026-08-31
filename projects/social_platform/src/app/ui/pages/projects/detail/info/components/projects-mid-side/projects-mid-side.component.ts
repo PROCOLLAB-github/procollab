@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   inject,
@@ -16,7 +17,6 @@ import { ProjectDirectionCard } from "@ui/widgets/project-direction-card/project
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
 import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
-import { ExpandService } from "@api/expand/expand.service";
 import { Project } from "@domain/project/project.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
@@ -26,6 +26,34 @@ import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+
+const PROJECT_DESCRIPTION_PREVIEW_LENGTH = 420;
+
+export function buildProjectDescriptionPreview(
+  description: string,
+  maxLength = PROJECT_DESCRIPTION_PREVIEW_LENGTH,
+): string {
+  const normalizedDescription = description.trim();
+  if (normalizedDescription.length <= maxLength) {
+    return normalizedDescription;
+  }
+
+  const candidate = normalizedDescription.slice(0, maxLength + 1);
+  const minimumNaturalBoundary = Math.floor(maxLength * 0.5);
+  const paragraphBoundary = Math.max(candidate.lastIndexOf("\n\n"), candidate.lastIndexOf("\n"));
+  const sentenceBoundary = [...candidate.matchAll(/[.!?](?=\s|$)/g)].at(-1)?.index ?? -1;
+  const naturalBoundary = Math.max(paragraphBoundary, sentenceBoundary + 1);
+  const wordBoundary = candidate.lastIndexOf(" ");
+  const previewEnd =
+    naturalBoundary >= minimumNaturalBoundary
+      ? naturalBoundary
+      : wordBoundary >= minimumNaturalBoundary
+        ? wordBoundary
+        : maxLength;
+  const preview = normalizedDescription.slice(0, previewEnd).trimEnd();
+
+  return /[.!?]$/.test(preview) ? preview : `${preview}…`;
+}
 
 /** Центральная колонка детали проекта: описание, новости. */
 @Component({
@@ -49,8 +77,6 @@ export class ProjectsMidSideComponent {
   // Ссылки на элементы DOM
   readonly newsEl = viewChild<ElementRef>("newsEl");
   readonly contentEl = viewChild<ElementRef>("contentEl");
-  readonly descEl = viewChild<ElementRef>("descEl");
-
   // Ссылки на дочерние компоненты
   readonly newsFormComponent = viewChild(NewsFormComponent);
   readonly newsCardComponent = viewChild(NewsCardComponent);
@@ -60,7 +86,6 @@ export class ProjectsMidSideComponent {
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
-  private readonly expandService = inject(ExpandService);
 
   protected readonly directions = this.projectsDetailUIInfoService.directions;
 
@@ -70,8 +95,17 @@ export class ProjectsMidSideComponent {
   protected readonly profile = this.profileInfoService.profile;
   protected readonly news = this.newsInfoService.news; // Массив новостей
   protected readonly newsPending = signal(false);
-  protected readonly readFullDescription = this.expandService.readFullDescription; // Флаг развернутого описания
-  protected readonly descriptionExpandable = this.expandService.descriptionExpandable; // Флаг необходимости кнопки "Читать полностью"
+  protected readonly descriptionExpanded = signal(false);
+  protected readonly fullDescription = computed(() => this.project()?.description?.trim() ?? "");
+  protected readonly descriptionPreview = computed(() =>
+    buildProjectDescriptionPreview(this.fullDescription()),
+  );
+  protected readonly descriptionExpandable = computed(
+    () => this.descriptionPreview() !== this.fullDescription(),
+  );
+  protected readonly visibleDescription = computed(() =>
+    this.descriptionExpanded() ? this.fullDescription() : this.descriptionPreview(),
+  );
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     this.projectsDetailService.onNewsInVew(entries);
@@ -115,7 +149,7 @@ export class ProjectsMidSideComponent {
     this.projectsDetailService.onTransferOwnership(id);
   }
 
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    this.expandService.onExpand("description", elem, expandedClass, isExpanded);
+  onToggleDescription(): void {
+    this.descriptionExpanded.update(expanded => !expanded);
   }
 }
