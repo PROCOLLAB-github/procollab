@@ -18,7 +18,6 @@ import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
 import { ProjectDirectionCard } from "@ui/widgets/project-direction-card/project-direction-card.component";
-import { ExpandService } from "@api/expand/expand.service";
 import { NewsInfoService } from "@api/news/news-info.service";
 import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
@@ -53,7 +52,6 @@ export class ProfileMidSideComponent {
   private readonly profileDetailInfoService = inject(ProfileDetailInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly newsInfoService = inject(NewsInfoService);
-  private readonly expandService = inject(ExpandService);
 
   protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
   protected readonly isProfileEmpty = this.profileDetailUIInfoService.isProfileEmpty;
@@ -62,9 +60,6 @@ export class ProfileMidSideComponent {
   protected readonly news = this.newsInfoService.news;
 
   protected readonly newsPending = signal(false);
-
-  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
-  protected readonly readFullDescription = this.expandService.readFullDescription;
 
   private readonly destroyRef$ = inject(DestroyRef);
 
@@ -102,9 +97,5 @@ export class ProfileMidSideComponent {
 
   onNewsInView(entries: IntersectionObserverEntry[]): void {
     this.profileDetailInfoService.onNewsInView(entries);
-  }
-
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    this.expandService.onExpand("description", elem, expandedClass, isExpanded);
   }
 }

@@ -472,6 +472,14 @@
     class="modal"
   >
     <div class="modal__wrapper" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="modal__close"
+        aria-label="Закрыть библиотеку навыков"
+        (click)="closeSkillsGroupsModal()"
+      >
+        <i appIcon icon="cross" appSquare="12"></i>
+      </button>
       <p class="text-body-14">библиотека навыков</p>
       <div class="modal__content">
         <div class="modal__skills-groups">
@@ -483,7 +491,7 @@
                   [options]="skillsGroup.skills"
                   [selected]="selectedSkills"
                   [hasOpenGroups]="hasOpenSkillsGroups"
-                  [disabled]="isGroupDisabled(skillsGroup.id)"
+                  [isOpen]="openGroupIndex === skillsGroup.id"
                   (optionToggled)="onToggleSkill($event)"
                   (groupToggled)="onGroupToggled($event, skillsGroup.id)"
                 ></app-skills-group>

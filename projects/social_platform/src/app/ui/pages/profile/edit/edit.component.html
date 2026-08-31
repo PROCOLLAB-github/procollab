@@ -189,8 +189,16 @@
 }
 
 @defer (when skillsGroupsModalOpen()) {
-  <app-modal [open]="skillsGroupsModalOpen()" class="modal">
+  <app-modal [open]="skillsGroupsModalOpen()" (openChange)="closeSkillsGroupsModal()" class="modal">
     <div class="modal__wrapper">
+      <button
+        type="button"
+        class="modal__close"
+        aria-label="Закрыть библиотеку навыков"
+        (click)="closeSkillsGroupsModal()"
+      >
+        <i appIcon icon="cross" appSquare="12"></i>
+      </button>
       <h4 class="text-heading-4">библиотека навыков</h4>
       <div class="modal__content">
         <div class="modal__skills-groups">
@@ -201,8 +209,8 @@
                   [title]="skillsGroup.name"
                   [options]="skillsGroup.skills"
                   [selected]="this.profileForm.getRawValue().skills"
-                  [disabled]="isGroupDisabled(skillsGroup.id)"
-                  [hasOpenGroups]="openGroupIndex !== null"
+                  [hasOpenGroups]="openGroupIndex() !== null"
+                  [isOpen]="openGroupIndex() === skillsGroup.id"
                   (optionToggled)="onToggleSkill($event)"
                   (groupToggled)="onGroupToggled(skillsGroup.id, $event)"
                 ></app-skills-group>

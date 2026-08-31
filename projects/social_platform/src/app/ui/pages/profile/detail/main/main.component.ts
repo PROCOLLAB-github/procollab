@@ -1,15 +1,6 @@
 /** @format */
 
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  viewChild,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
@@ -32,9 +23,7 @@ import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-m
   providers: [ProfileDetailInfoService, ProfileDetailUIInfoService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
-  readonly descEl = viewChild<ElementRef | undefined>("descEl");
-
+export class ProfileMainComponent implements OnInit, OnDestroy {
   private readonly profileDetailInfoService = inject(ProfileDetailInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 
@@ -42,10 +31,6 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.profileDetailInfoService.initializationProfile();
-  }
-
-  ngAfterViewInit(): void {
-    this.profileDetailInfoService.initCheckDescription(this.descEl());
   }
 
   ngOnDestroy(): void {

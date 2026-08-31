@@ -29,6 +29,7 @@ describe("VacancyDetailInfoService", () => {
   let downloadCvUseCase: any;
   let fileService: any;
   let snackbar: any;
+  let queryParams$: Subject<Record<string, unknown>>;
 
   beforeEach(() => {
     sendUseCase = { execute: vi.fn() };
@@ -38,6 +39,7 @@ describe("VacancyDetailInfoService", () => {
     downloadCvUseCase = { execute: vi.fn() };
     fileService = { uploadFile: vi.fn() };
     snackbar = { success: vi.fn(), error: vi.fn() };
+    queryParams$ = new Subject<Record<string, unknown>>();
 
     TestBed.configureTestingModule({
       providers: [
@@ -48,7 +50,7 @@ describe("VacancyDetailInfoService", () => {
           provide: ActivatedRoute,
           useValue: {
             data: of({}),
-            queryParams: of({}),
+            queryParams: queryParams$,
             snapshot: { paramMap: { get: () => "10" } },
           },
         },
@@ -108,6 +110,28 @@ describe("VacancyDetailInfoService", () => {
     ui.applyNoResponseOpenModal({ sendResponse: true });
 
     expect(ui.openModal()).toBe(false);
+  });
+
+  it("opens manager responses from a guarded query parameter", () => {
+    ui.vacancy.update(vacancy =>
+      vacancy ? Object.assign(new Vacancy(), vacancy, { canManageResponses: true }) : vacancy,
+    );
+    getResponsesUseCase.execute.mockReturnValue(of(ok([])));
+    service.initializeDetailInfoQueryParams();
+
+    queryParams$.next({ manageResponses: "true" });
+
+    expect(ui.responsesModal()).toBe(true);
+    expect(getResponsesUseCase.execute).toHaveBeenCalledExactlyOnceWith(10);
+  });
+
+  it("does not open or load manager responses without backend permission", () => {
+    service.initializeDetailInfoQueryParams();
+
+    queryParams$.next({ manageResponses: "true" });
+
+    expect(ui.responsesModal()).toBe(false);
+    expect(getResponsesUseCase.execute).not.toHaveBeenCalled();
   });
 
   it.each([

@@ -1,10 +1,9 @@
 /** @format */
 
-import { DestroyRef, ElementRef, inject, Injectable } from "@angular/core";
-import { concatMap, filter, map, tap } from "rxjs";
+import { DestroyRef, inject, Injectable } from "@angular/core";
+import { filter, map, switchMap, tap } from "rxjs";
 import { ProfileNews } from "@domain/profile/profile-news.model";
 import { ActivatedRoute } from "@angular/router";
-import { ExpandService } from "../../../expand/expand.service";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";
 import { NewsInfoService } from "../../../news/news-info.service";
@@ -23,7 +22,6 @@ export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly expandService = inject(ExpandService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
   private readonly newsInfoService = inject(NewsInfoService);
@@ -69,14 +67,8 @@ export class ProfileDetailInfoService {
         },
       });
 
-    this.initializationProfileVields();
+    this.initializationProfileFields();
     this.initializationProfileNews();
-  }
-
-  initCheckDescription(descEl?: ElementRef): void {
-    setTimeout(() => {
-      this.expandService.checkExpandable("description", !!this.profile()?.personal.aboutMe, descEl);
-    }, 150);
   }
 
   onAddNews(news: { text: string; files: string[] }) {
@@ -136,16 +128,16 @@ export class ProfileDetailInfoService {
       .subscribe();
   }
 
-  private initializationProfileVields(): void {
+  private initializationProfileFields(): void {
     this.profileDetailUIInfoService.applySetLoggedUserId("logged", this.profile()!.id);
-    this.profileDetailUIInfoService.applyProfileEmpty();
   }
 
-  private initializationProfileNews(descEl?: ElementRef): void {
+  private initializationProfileNews(): void {
     this.route.params
       .pipe(
         map(r => r["id"]),
-        concatMap(userId => this.fetchProfileNewsUseCase.execute(Number(userId))),
+        tap(() => this.newsInfoService.applySetNews({ results: [], count: 0 })),
+        switchMap(userId => this.fetchProfileNewsUseCase.execute(Number(userId))),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
@@ -157,8 +149,6 @@ export class ProfileDetailInfoService {
           this.setupNewsObserver();
         }, 100);
       });
-
-    this.initCheckDescription(descEl);
   }
 
   private setupNewsObserver(): void {

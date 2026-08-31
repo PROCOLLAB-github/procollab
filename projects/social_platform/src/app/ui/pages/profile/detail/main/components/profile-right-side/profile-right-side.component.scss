@@ -31,6 +31,7 @@
   &__right {
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   &__aside {
@@ -92,6 +93,7 @@
   &__info {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 
     &--text {
       color: var(--black) !important;
@@ -110,6 +112,17 @@
     }
   }
 
+  /* stylelint-disable value-no-vendor-prefix */
+  &__project-name {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--black);
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  /* stylelint-enable value-no-vendor-prefix */
+
   &__date {
     display: flex;
     flex-direction: column;
@@ -125,6 +138,7 @@
     display: flex;
     gap: 6px;
     align-items: center;
+    min-width: 0;
     color: var(--grey-for-text);
 
     &--status {
@@ -162,6 +176,12 @@
     span {
       cursor: pointer;
     }
+  }
+
+  &__contact {
+    min-width: 0;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   @include expandable-list;

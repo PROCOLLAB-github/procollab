@@ -49,6 +49,19 @@ export class VacanciesRightSideComponent {
     }
   }
 
+  protected responseStatusColor(
+    status: Vacancy["responseStatus"] | undefined,
+  ): "gold" | "green" | "red" {
+    switch (status) {
+      case "accepted":
+        return "green";
+      case "rejected":
+        return "red";
+      default:
+        return "gold";
+    }
+  }
+
   onSendResponseClick(): void {
     this.sendResponse.emit();
   }

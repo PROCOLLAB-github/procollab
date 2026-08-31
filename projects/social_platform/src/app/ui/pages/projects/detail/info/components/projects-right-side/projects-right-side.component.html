@@ -15,7 +15,7 @@
               @if (link | userLinks; as l) {
                 <a class="lists__item" target="_blank" [href]="link">
                   <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span>{{ l.tag | truncate: 20 }}</span>
+                  <span class="lists__contact">{{ l.tag }}</span>
                 </a>
               }
             </li>

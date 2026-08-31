@@ -26,8 +26,9 @@
     &--text {
       display: flex;
       gap: 12px;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
+      min-width: 0;
       padding-bottom: 5px;
       margin-bottom: 10px;
       border-bottom: 1px solid var(--dark-grey);
@@ -40,6 +41,17 @@
     gap: 10px;
     align-items: center;
   }
+
+  /* stylelint-disable value-no-vendor-prefix */
+  &__role {
+    display: -webkit-box;
+    min-width: 0;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  /* stylelint-enable value-no-vendor-prefix */
 
   &__status {
     flex-shrink: 0;
