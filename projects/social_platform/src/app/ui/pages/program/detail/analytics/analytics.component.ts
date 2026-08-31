@@ -101,7 +101,7 @@ export class ProgramAnalyticsComponent implements OnInit {
         "registrations",
         "Зарегистрировались",
         funnel.registrations,
-        "Все регистрационные записи программы, включая записи одного пользователя в разных ролях.",
+        "Все регистрационные записи программы, включая сохранённые записи удалённых пользователей.",
       ),
       this.metric(
         "unique-participants",
