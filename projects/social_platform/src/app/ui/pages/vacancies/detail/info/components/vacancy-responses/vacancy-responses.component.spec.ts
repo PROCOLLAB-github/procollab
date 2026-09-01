@@ -90,6 +90,7 @@ describe("VacancyResponsesComponent", () => {
     };
     const element = render([withFile]);
     const link = element.querySelector("a.response__file") as HTMLAnchorElement;
+    expect(element.textContent).toContain("Приложенный файл:");
     expect(link.textContent).toContain("resume.pdf");
     expect(link.href).toBe("https://example.test/cv.pdf");
   });

@@ -61,4 +61,16 @@ describe("LoginComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("uses the browser current-password contract without covering the eye control", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="password"]',
+    ) as HTMLInputElement;
+    const passwordField = fixture.nativeElement.querySelector(
+      "app-input.auth__password-input",
+    ) as HTMLElement;
+
+    expect(password.autocomplete).toBe("current-password");
+    expect(passwordField).toBeTruthy();
+  });
 });

@@ -66,6 +66,21 @@
     }
   }
 
+  &__password-input {
+    ::ng-deep {
+      .field__input {
+        padding-right: 72px;
+      }
+
+      .field__right-icon {
+        right: 18px !important;
+        z-index: 2;
+        padding: 3px 0 3px 8px;
+        background-color: var(--white);
+      }
+    }
+  }
+
   &__row {
     display: flex;
 

@@ -46,6 +46,10 @@
     align-items: center;
   }
 
+  &__name {
+    font-weight: 600;
+  }
+
   &__name,
   &__label {
     color: var(--black);
@@ -77,8 +81,19 @@
 
   &__letter {
     margin-top: 6px;
-    color: var(--grey-for-text);
+    color: var(--black);
     white-space: pre-wrap;
+  }
+
+  &__file-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    align-items: baseline;
+  }
+
+  &__file-label {
+    color: var(--grey-for-text);
   }
 
   &__file {

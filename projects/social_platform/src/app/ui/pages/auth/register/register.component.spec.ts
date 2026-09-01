@@ -56,4 +56,14 @@ describe("RegisterComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("marks both password fields as new-password and reserves the eye-control area", () => {
+    const passwordInputs = Array.from(
+      fixture.nativeElement.querySelectorAll('input[autocomplete="new-password"]'),
+    ) as HTMLInputElement[];
+    const passwordFields = fixture.nativeElement.querySelectorAll("app-input.auth__password-input");
+
+    expect(passwordInputs).toHaveLength(2);
+    expect(passwordFields).toHaveLength(2);
+  });
 });

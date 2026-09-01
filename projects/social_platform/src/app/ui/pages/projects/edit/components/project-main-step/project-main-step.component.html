@@ -423,7 +423,7 @@
 
   <div [formGroup]="projectForm">
     <div formArrayName="links">
-      @if (hasLinks()) {
+      @if (links.length) {
         <ul class="project__links--wrapper">
           @for (control of links.controls; track trackByIndex($index)) {
             <li class="project__links">

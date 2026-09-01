@@ -55,16 +55,20 @@
 
   &__status {
     flex-shrink: 0;
-    padding: 4px 8px;
+    padding: 5px 10px;
+    font-weight: 600;
+    background-color: var(--light-white);
     border: 0.5px solid currentcolor;
     border-radius: var(--rounded-xl);
 
     &--active {
-      color: var(--green);
+      color: var(--green-dark);
+      background-color: rgb(43 135 79 / 8%);
     }
 
     &--closed {
-      color: var(--red);
+      color: var(--red-dark);
+      background-color: rgb(255 40 40 / 7%);
     }
   }
 

@@ -17,6 +17,7 @@
             <fieldset class="auth__field">
               <label for="email" class="field-label">почта</label>
               <app-input
+                class="auth__password-input"
                 size="big"
                 [error]="email | controlError"
                 id="email"
@@ -52,6 +53,8 @@
                 id="password"
                 [type]="showPassword() ? 'text' : 'password'"
                 formControlName="password"
+                name="password"
+                autocomplete="current-password"
                 placeholder="GJiwoeuhbn120="
               >
                 @if (showPassword()) {

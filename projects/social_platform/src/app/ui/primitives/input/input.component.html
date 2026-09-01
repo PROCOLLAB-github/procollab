@@ -85,6 +85,7 @@
       [type]="type()"
       [mask]="mask()"
       [name]="name()"
+      [attr.autocomplete]="autocomplete() || null"
       [dropSpecialCharacters]="dropSpecialCharacters()"
       class="field__input"
       [class.field__input--error]="error()"
