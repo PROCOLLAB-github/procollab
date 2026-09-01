@@ -170,4 +170,13 @@
     word-break: normal;
     overflow-wrap: anywhere;
   }
+
+  &__responses-button {
+    display: block;
+
+    ::ng-deep .button {
+      min-height: 40px;
+      padding: 10px 24px;
+    }
+  }
 }

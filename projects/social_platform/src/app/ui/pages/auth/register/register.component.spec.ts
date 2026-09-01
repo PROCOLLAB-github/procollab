@@ -56,4 +56,22 @@ describe("RegisterComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("marks both password fields as new-password and reserves the eye-control area", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="new-password"]',
+    ) as HTMLInputElement;
+    const repeatedPassword = fixture.nativeElement.querySelector(
+      'input[name="new-password-confirmation"]',
+    ) as HTMLInputElement;
+    const birthdayField = fixture.nativeElement.querySelector(
+      'app-input[id="birthday"]',
+    ) as HTMLElement;
+
+    expect(password.autocomplete).toBe("new-password");
+    expect(repeatedPassword.autocomplete).toBe("new-password");
+    expect(password.closest("app-input")?.classList).toContain("auth__password-input");
+    expect(repeatedPassword.closest("app-input")?.classList).toContain("auth__password-input");
+    expect(birthdayField.classList).not.toContain("auth__password-input");
+  });
 });

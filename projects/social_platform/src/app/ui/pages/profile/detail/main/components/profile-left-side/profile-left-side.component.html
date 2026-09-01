@@ -50,19 +50,23 @@
     </div>
   }
   @if (user()!.relations.programs.length; as programsLength) {
-    <div class="lists">
-      <ul class="lists__list--line">
+    <div class="lists profile__programs">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">программы</h3>
+        <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
+      </div>
+      <ul class="lists__program-list">
         @for (p of user()!.relations.programs.slice(0, 3); track p.id) {
-          <li class="lists__item" [routerLink]="AppRoutes.program.detail(p.id)">
+          <li>
             <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
           </li>
         }
       </ul>
       <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms()['programs']">
         @if (user()!.relations.programs) {
-          <ul class="lists__list--line">
+          <ul class="lists__program-list">
             @for (program of user()!.relations.programs.slice(3); track program.id) {
-              <li class="lists__item">
+              <li>
                 <ng-container
                   *ngTemplateOutlet="programTemp; context: { $implicit: program }"
                 ></ng-container>
@@ -72,23 +76,16 @@
         }
       </div>
       <ng-template #programTemp let-program>
-        <div>
-          <div class="lists__info">
-            <a
-              [routerLink]="AppRoutes.program.detail(program.id)"
-              class="text-body-10 lists__title"
-            >
-              <img
-                alt="program logo"
-                [src]="program.logo"
-                width="40"
-                height="40"
-                loading="lazy"
-                decoding="async"
-              />
-            </a>
-          </div>
-        </div>
+        <a [routerLink]="AppRoutes.program.detail(program.id)" class="lists__program-card">
+          @if (programImage(program); as image) {
+            <img alt="" [src]="image" width="48" height="36" loading="lazy" decoding="async" />
+          } @else {
+            <span class="lists__program-placeholder" aria-hidden="true">
+              <i appIcon icon="folder" appSquare="14"></i>
+            </span>
+          }
+          <span class="text-body-10 lists__program-name">{{ program.name }}</span>
+        </a>
       </ng-template>
       @if (programsLength > 3) {
         <div class="read-more text-body-10" (click)="expandService.toggleReadAll('programs')">

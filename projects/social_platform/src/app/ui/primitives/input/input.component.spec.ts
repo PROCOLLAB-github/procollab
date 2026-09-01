@@ -51,6 +51,14 @@ describe("InputComponent", () => {
     expect(input.placeholder).toBe(testPlaceholder);
   });
 
+  it("passes autocomplete through to the native input", () => {
+    fixture.componentRef.setInput("autocomplete", "current-password");
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector("input") as HTMLInputElement;
+    expect(input.autocomplete).toBe("current-password");
+  });
+
   it("should set the error class when error input is true", () => {
     const field = fixture.nativeElement.querySelector(".field");
     expect(field.classList).not.toContain("field--error");

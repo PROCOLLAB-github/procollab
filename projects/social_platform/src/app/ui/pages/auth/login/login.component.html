@@ -47,11 +47,14 @@
               </div>
 
               <app-input
+                class="auth__password-input"
                 size="big"
                 [error]="password | controlError"
                 id="password"
                 [type]="showPassword() ? 'text' : 'password'"
                 formControlName="password"
+                name="password"
+                autocomplete="current-password"
                 placeholder="GJiwoeuhbn120="
               >
                 @if (showPassword()) {

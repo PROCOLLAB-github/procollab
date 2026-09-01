@@ -36,6 +36,9 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      min-height: 32px;
+      padding: 0 8px;
+      border-radius: var(--rounded-lg);
       transition: width 0.2s ease;
 
       &:hover,

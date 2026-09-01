@@ -172,11 +172,14 @@
         <fieldset class="auth__field">
           <label for="passowrd" class="field-label">пароль</label>
           <app-input
+            class="auth__password-input"
             size="big"
             [error]="!!(password | controlError)"
             id="passowrd"
             [type]="showPassword() ? 'text' : 'password'"
             formControlName="password"
+            name="new-password"
+            autocomplete="new-password"
             placeholder="GJiwoeuhbn120="
           >
             @if (showPassword()) {
@@ -203,11 +206,13 @@
           <label for="repeatedPassword" class="field-label">повторите пароль</label>
           <app-input
             size="big"
-            class="register__repeated-password"
+            class="register__repeated-password auth__password-input"
             [error]="!!(password | controlError)"
             id="repeatedPassword"
             [type]="showPasswordRepeat() ? 'text' : 'password'"
             formControlName="repeatedPassword"
+            name="new-password-confirmation"
+            autocomplete="new-password"
             placeholder="GJiwoeuhbn120="
           >
             @if (showPasswordRepeat()) {
