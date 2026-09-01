@@ -73,7 +73,6 @@
         <fieldset class="auth__field">
           <label for="birthday" class="field-label">дата рождения</label>
           <app-input
-            class="auth__password-input"
             size="big"
             id="birthday"
             [error]="!!(birthday | controlError)"
@@ -173,6 +172,7 @@
         <fieldset class="auth__field">
           <label for="passowrd" class="field-label">пароль</label>
           <app-input
+            class="auth__password-input"
             size="big"
             [error]="!!(password | controlError)"
             id="passowrd"

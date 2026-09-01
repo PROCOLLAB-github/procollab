@@ -66,11 +66,12 @@ describe("LoginComponent", () => {
     const password = fixture.nativeElement.querySelector(
       'input[name="password"]',
     ) as HTMLInputElement;
-    const passwordField = fixture.nativeElement.querySelector(
-      "app-input.auth__password-input",
-    ) as HTMLElement;
+    const passwordField = password.closest("app-input") as HTMLElement;
+    const email = fixture.nativeElement.querySelector('input[type="email"]') as HTMLInputElement;
+    const emailField = email.closest("app-input") as HTMLElement;
 
     expect(password.autocomplete).toBe("current-password");
-    expect(passwordField).toBeTruthy();
+    expect(passwordField.classList).toContain("auth__password-input");
+    expect(emailField.classList).not.toContain("auth__password-input");
   });
 });

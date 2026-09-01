@@ -17,7 +17,6 @@
             <fieldset class="auth__field">
               <label for="email" class="field-label">почта</label>
               <app-input
-                class="auth__password-input"
                 size="big"
                 [error]="email | controlError"
                 id="email"
@@ -48,6 +47,7 @@
               </div>
 
               <app-input
+                class="auth__password-input"
                 size="big"
                 [error]="password | controlError"
                 id="password"
