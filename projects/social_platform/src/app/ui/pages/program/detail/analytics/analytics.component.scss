@@ -46,6 +46,12 @@
     gap: 8px;
     align-items: center;
     justify-content: space-between;
+
+    h2,
+    h3 {
+      font-weight: 600;
+      color: var(--black);
+    }
   }
 
   &__loading {
@@ -57,15 +63,24 @@
 }
 
 .exports {
-  min-width: min(100%, 380px);
+  width: min(100%, 540px);
+  min-width: 0;
 
   &__actions {
-    display: grid;
-    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-top: 10px;
 
-    @include responsive.apply-desktop {
-      grid-template-columns: repeat(3, minmax(100px, 1fr));
+    app-button {
+      flex: 1 1 160px;
+      min-width: 0;
+    }
+
+    @media screen and (max-width: 520px) {
+      app-button {
+        flex-basis: 100%;
+      }
     }
   }
 
@@ -126,7 +141,14 @@
 
       span {
         min-width: 0;
+        font-weight: 500;
+        color: var(--black);
         overflow-wrap: anywhere;
+      }
+
+      strong {
+        font-weight: 700;
+        color: var(--black);
       }
     }
   }
@@ -161,6 +183,8 @@
 
   &__label {
     min-width: 0;
+    font-weight: 600;
+    color: var(--black);
     overflow-wrap: anywhere;
   }
 
@@ -168,7 +192,9 @@
     display: block;
     margin-top: 6px;
     font-size: 24px;
+    font-weight: 700;
     line-height: 1;
+    color: var(--black);
   }
 
   &--skeleton {
@@ -233,10 +259,17 @@
     border-radius: 8px;
   }
 
-  &__item > span:not(.funnel__bar),
+  &__item > span:not(.funnel__bar) {
+    position: relative;
+    z-index: 1;
+    color: var(--black);
+  }
+
   &__item > strong {
     position: relative;
     z-index: 1;
+    font-weight: 700;
+    color: var(--black);
   }
 
   &__label {
@@ -244,6 +277,7 @@
     gap: 6px;
     align-items: center;
     min-width: 0;
+    font-weight: 500;
   }
 
   &__bar {
@@ -269,6 +303,16 @@
     padding: 10px 12px;
     background: var(--light-gray);
     border-radius: 8px;
+
+    span {
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    strong {
+      font-weight: 700;
+      color: var(--black);
+    }
   }
 
   &--compact {
@@ -294,8 +338,14 @@
 }
 
 .evaluation {
+  &__assignments h3 {
+    font-weight: 600;
+    color: var(--black);
+  }
+
   &__mode {
     margin-top: 2px;
+    font-weight: 500;
     color: var(--grey-for-text);
   }
 
@@ -333,8 +383,9 @@
 }
 
 .attention {
-  background: linear-gradient(135deg, var(--red-light), var(--light-white) 72%);
-  border-color: var(--red);
+  background: var(--light-white);
+  border-color: var(--medium-grey-for-outline);
+  border-left: 4px solid var(--red);
 
   &__list {
     display: grid;
@@ -344,22 +395,46 @@
     li {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto auto;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
-      padding: 12px;
-      background: rgb(255 255 255 / 75%);
-      border-radius: 10px;
+      padding: 14px 16px;
+      background: var(--light-gray);
+      border: 1px solid var(--medium-grey-for-outline);
+      border-radius: 12px;
+
+      span {
+        font-weight: 500;
+        color: var(--black);
+      }
     }
 
     strong,
     i {
       color: var(--red-dark);
     }
+
+    strong {
+      font-weight: 700;
+    }
   }
 
   &__empty {
-    margin-top: 20px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-weight: 500;
     color: var(--grey-for-text);
+    background: var(--light-gray);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 12px;
+
+    &::before {
+      font-weight: 700;
+      color: var(--green-dark);
+      content: "\2713";
+    }
   }
 }
 

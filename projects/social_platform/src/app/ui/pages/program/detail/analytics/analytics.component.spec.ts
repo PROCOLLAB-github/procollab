@@ -150,6 +150,8 @@ describe("ProgramAnalyticsComponent", () => {
     expect(evaluation?.textContent).not.toContain("Частично оценено");
     expect(evaluation?.textContent).toContain("Максимум экспертов на проект");
     expect(evaluation?.textContent).not.toContain("требуется 3");
+    expect(evaluation?.querySelector(".status-list--projects")).not.toBeNull();
+    expect(evaluation?.querySelectorAll(".status-list--projects li strong").length).toBe(3);
     expect(evaluation?.querySelector('[data-testid="assignment-statuses"]')).toBeNull();
   });
 
@@ -198,6 +200,8 @@ describe("ProgramAnalyticsComponent", () => {
     expect(attention?.textContent).toContain("3");
     expect(attention?.textContent).toContain("Работы ожидают оценивания");
     expect(attention?.textContent).not.toContain("97");
+    expect(attention?.querySelectorAll(".attention__list li").length).toBe(2);
+    expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(2);
   });
 
   it("строит две серии по всем 30 точкам activity", () => {
@@ -252,6 +256,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("Нет решений для отображения");
     expect(fixture.nativeElement.textContent).toContain("Пока нет сданных работ для оценивания");
     expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
+    expect(fixture.nativeElement.querySelector(".attention__empty")).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain("За последние 30 дней активности пока нет");
     expect(fixture.nativeElement.textContent).toContain("Статистика по кейсам пока недоступна");
   });
@@ -275,8 +280,13 @@ describe("ProgramAnalyticsComponent", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const buttons = Array.from(
-      (fixture.nativeElement as HTMLElement).querySelectorAll("app-button"),
+      (fixture.nativeElement as HTMLElement).querySelectorAll(".exports__actions app-button"),
     );
+
+    expect(buttons.length).toBe(3);
+    expect(
+      buttons.every(button => button.querySelector("button")?.classList.contains("button--big")),
+    ).toBe(true);
 
     buttons
       .find(button => button.textContent?.includes("Все проекты"))
