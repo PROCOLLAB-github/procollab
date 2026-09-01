@@ -69,14 +69,20 @@
   &__password-input {
     ::ng-deep {
       .field__input {
-        padding-right: 72px;
+        padding-right: 104px;
       }
 
       .field__right-icon {
-        right: 18px !important;
-        z-index: 2;
+        right: 52px !important;
+        z-index: 4;
         padding: 3px 0 3px 8px;
+        pointer-events: none;
         background-color: var(--white);
+
+        i {
+          pointer-events: auto;
+          cursor: pointer;
+        }
       }
     }
   }

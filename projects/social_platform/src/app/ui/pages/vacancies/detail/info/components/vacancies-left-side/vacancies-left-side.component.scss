@@ -1,4 +1,5 @@
 @use "styles/responsive";
+@use "styles/components/vacancy-skill";
 
 @mixin expandable-list {
   &__remaining {
@@ -55,7 +56,9 @@
       p {
         display: -webkit-box;
         overflow: hidden;
-        color: var(--black);
+        font-size: 12px;
+        line-height: 18px;
+        color: var(--black) !important;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 5;
@@ -101,9 +104,12 @@
       }
     }
 
-    ::ng-deep app-tag .tag p {
-      font-size: 10px;
-      line-height: 14px;
+    &__tag {
+      min-width: 0;
+
+      ::ng-deep .tag {
+        @include vacancy-skill.readable-tag;
+      }
     }
 
     @include expandable-list;

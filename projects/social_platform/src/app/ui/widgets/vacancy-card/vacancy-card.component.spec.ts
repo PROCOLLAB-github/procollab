@@ -66,4 +66,16 @@ describe("VacancyCardComponent", () => {
 
     expect(fixture.nativeElement.querySelector(".vacancy__role").textContent.trim()).toBe(longRole);
   });
+
+  it("показывает полное название навыка в readable tag", () => {
+    const skillName = "Управление распределённой командой разработки";
+    fixture.componentRef.setInput("vacancy", {
+      ...createVacancy(true),
+      requiredSkills: [{ id: 4, name: skillName, category: { name: "Soft skills" } }],
+    });
+    fixture.detectChanges();
+
+    const skill = fixture.nativeElement.querySelector("app-tag.vacancy__skill") as HTMLElement;
+    expect(skill.textContent?.trim()).toBe(skillName);
+  });
 });

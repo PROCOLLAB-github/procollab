@@ -232,8 +232,10 @@
             (hide)="hideTooltip('cases')"
           ></app-tooltip>
         </div>
-        <div class="analytics-card__empty analytics-card__empty--center text-body-10">
-          <i appIcon icon="task" appSquare="28"></i>
+        <div
+          class="analytics-card__empty analytics-card__empty--center analytics-card__empty--cases text-body-12"
+        >
+          <i appIcon icon="task" appSquare="32"></i>
           <span>Статистика по кейсам пока недоступна</span>
         </div>
       </article>
@@ -241,8 +243,8 @@
       <article class="analytics-card evaluation" data-testid="evaluation-statuses">
         <div class="analytics__heading-row">
           <div>
-            <h2 class="text-body-12">Статус оценивания</h2>
-            <p class="evaluation__mode text-body-8">{{ evaluationModeLabel() }}</p>
+            <h2 class="analytics-card__title">Статус оценивания</h2>
+            <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
           </div>
           <app-tooltip
             [text]="
@@ -267,7 +269,7 @@
             }
           </ul>
           @if (overview.evaluationStatus.maxEvaluationsPerProject !== null) {
-            <div class="evaluation__limit text-body-8" data-testid="evaluation-limit">
+            <div class="evaluation__limit" data-testid="evaluation-limit">
               <span>
                 Максимум экспертов на проект:
                 <strong>{{ overview.evaluationStatus.maxEvaluationsPerProject }}</strong>
@@ -284,11 +286,11 @@
           }
           @if (overview.evaluationStatus.mode === "distributed") {
             <div class="evaluation__assignments" data-testid="assignment-statuses">
-              <h3 class="text-body-10">Назначения экспертов</h3>
+              <h3 class="analytics-card__section-label">Назначения экспертов</h3>
               <ul class="status-list status-list--compact">
                 @for (item of assignmentStatuses(); track item.key) {
                   <li>
-                    <span class="text-body-8">{{ item.label }}</span>
+                    <span>{{ item.label }}</span>
                     <strong>{{ item.value }}</strong>
                   </li>
                 }
@@ -341,8 +343,10 @@
       <article class="activity" data-testid="activity-dynamics">
         <div class="analytics__heading-row">
           <div>
-            <h2 class="text-body-12">Динамика активности</h2>
-            <p class="activity__note text-body-8">Последние 30 дней</p>
+            <h2 class="analytics-card__title">Динамика активности</h2>
+            @if (hasActivity()) {
+              <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
+            }
           </div>
           <app-tooltip
             text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
@@ -408,7 +412,9 @@
             </div>
           </div>
         } @else {
-          <p class="analytics-card__empty text-body-10">За последние 30 дней активности пока нет</p>
+          <p class="analytics-card__empty activity__empty text-body-12">
+            За последние 30 дней активности не было
+          </p>
         }
       </article>
     </section>

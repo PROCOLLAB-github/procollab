@@ -1,3 +1,5 @@
+@use "styles/components/vacancy-skill";
+
 .vacancy {
   padding: 24px;
   border: 0.5px solid var(--medium-grey-for-outline);
@@ -81,17 +83,25 @@
 
   &__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     align-items: center;
     justify-content: space-between;
 
-    &--vacancies {
-      ::ng-deep {
-        app-button {
-          button {
-            width: 131px;
-          }
-        }
+    ::ng-deep app-button .button {
+      min-height: 42px;
+      padding: 10px 18px;
+    }
+
+    &--vacancies app-button {
+      flex: 1 1 140px;
+    }
+
+    @media screen and (max-width: 420px) {
+      gap: 10px;
+
+      app-button {
+        flex-basis: 100%;
       }
     }
   }
@@ -105,6 +115,12 @@
   }
 
   &__skill {
+    min-width: 0;
+
+    ::ng-deep .tag {
+      @include vacancy-skill.readable-tag;
+    }
+
     &--more {
       color: var(--accent);
     }

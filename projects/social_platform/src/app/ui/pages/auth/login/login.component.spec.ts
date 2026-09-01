@@ -73,5 +73,21 @@ describe("LoginComponent", () => {
     expect(password.autocomplete).toBe("current-password");
     expect(passwordField.classList).toContain("auth__password-input");
     expect(emailField.classList).not.toContain("auth__password-input");
+    expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
+  });
+
+  it("keeps the custom password visibility control clickable", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="password"]',
+    ) as HTMLInputElement;
+    const toggle = password
+      .closest("app-input")
+      ?.querySelector(".field__right-icon i") as HTMLElement;
+
+    expect(password.type).toBe("password");
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(password.type).toBe("text");
   });
 });

@@ -3,7 +3,13 @@
 <div class="login">
   <div class="login__left">
     <div class="login__left-content">
-      <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
+      <form
+        class="auth"
+        [formGroup]="loginForm"
+        novalidate
+        (ngSubmit)="onSubmit()"
+        (keyup.enter)="onSubmit()"
+      >
         <div class="auth__wrapper">
           <img
             class="login__logo"

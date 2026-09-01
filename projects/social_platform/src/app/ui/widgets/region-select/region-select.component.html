@@ -1,0 +1,51 @@
+<!-- @format -->
+
+<div class="region-select" (focusout)="onFocusOut($event)">
+  <div class="region-select__control" [class.region-select__control--error]="error()">
+    <input
+      type="text"
+      role="combobox"
+      autocomplete="off"
+      aria-autocomplete="list"
+      aria-label="Регион проекта"
+      [id]="id()"
+      [value]="query()"
+      [placeholder]="placeholder()"
+      [disabled]="disabled()"
+      [attr.aria-expanded]="open()"
+      [attr.aria-controls]="id() + '-options'"
+      [attr.aria-activedescendant]="open() && options().length ? id() + '-option-' + activeIndex() : null"
+      (focus)="onFocus()"
+      (input)="onInput($event)"
+      (keydown)="onKeydown($event)"
+    />
+    @if (query()) {
+      <button type="button" class="region-select__clear" aria-label="Очистить регион" (click)="clear($event)">
+        <i appIcon icon="cross" appSquare="14"></i>
+      </button>
+    }
+  </div>
+
+  @if (legacyValue(); as legacy) {
+    <p class="region-select__legacy text-body-10">
+      Текущее значение: <strong>{{ legacy }}</strong>. Выберите корректный регион из списка.
+    </p>
+  }
+
+  @if (open()) {
+    <ul class="region-select__options" [id]="id() + '-options'" role="listbox">
+      @for (option of options(); track option; let index = $index) {
+        <li
+          role="option"
+          [id]="id() + '-option-' + index"
+          [attr.aria-selected]="selectedValue() === option"
+          [class.region-select__option--active]="activeIndex() === index"
+        >
+          <button type="button" (click)="selectRegion(option)">{{ option }}</button>
+        </li>
+      } @empty {
+        <li class="region-select__empty text-body-12">Ничего не найдено</li>
+      }
+    </ul>
+  }
+</div>

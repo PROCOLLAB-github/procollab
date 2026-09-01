@@ -100,6 +100,22 @@ describe("ProjectVacancyCardComponent", () => {
       .find(element => element.nativeElement.textContent.includes("посмотреть отклики"));
 
     expect(managerLink?.injector.get(RouterLink).queryParams).toEqual({ manageResponses: true });
+    expect(managerLink?.nativeElement.classList).toContain("vacancy__primary-action");
+  });
+
+  it("keeps the complete skill name in a dedicated readable tag", () => {
+    const skillName = "Проектирование пользовательских интерфейсов";
+    fixture.componentRef.setInput("vacancy", {
+      id: 1,
+      role: "Designer",
+      description: "",
+      requiredSkills: [{ id: 2, name: skillName, category: { name: "Hard skills" } }],
+      salary: "100000",
+    });
+    fixture.detectChanges();
+
+    const skill = fixture.nativeElement.querySelector("app-tag.vacancy__skill") as HTMLElement;
+    expect(skill.textContent?.trim()).toBe(skillName);
   });
 
   it.each([

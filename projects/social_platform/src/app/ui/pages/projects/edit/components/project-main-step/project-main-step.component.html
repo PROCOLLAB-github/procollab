@@ -112,18 +112,20 @@
       @if (region; as region) {
         <fieldset>
           <label class="field-label text-body-12" for="region">регион</label>
-          <app-input
-            size="big"
+          <app-region-select
             id="region"
             formControlName="region"
             [error]="(region | controlError) || projSubmitInitiated()"
-            placeholder="введите регион"
-            [maxLength]="256"
-          ></app-input>
-          @if ((region | controlError: "required") || projSubmitInitiated()) {
+            placeholder="выберите регион"
+          ></app-region-select>
+          @if (region.hasError("required") && (region.touched || projSubmitInitiated())) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
+          } @else if (
+            region.hasError("canonicalRegion") && (region.touched || projSubmitInitiated())
+          ) {
+            <div class="text-body-10 error">Выберите регион из списка</div>
           }
         </fieldset>
       }
@@ -423,7 +425,7 @@
 
   <div [formGroup]="projectForm">
     <div formArrayName="links">
-      @if (links.length) {
+      @if (hasLinks()) {
         <ul class="project__links--wrapper">
           @for (control of links.controls; track trackByIndex($index)) {
             <li class="project__links">

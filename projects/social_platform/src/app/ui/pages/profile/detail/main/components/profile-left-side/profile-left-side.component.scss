@@ -109,13 +109,20 @@
     background-color: var(--accent-light);
   }
 
+  /* stylelint-disable value-no-vendor-prefix */
   &__program-name {
+    display: -webkit-box;
     min-width: 0;
     overflow: hidden;
+    font-size: 12px;
     font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 16px;
+    color: var(--black);
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
+  /* stylelint-enable value-no-vendor-prefix */
 
   &__icon {
     color: var(--accent);
