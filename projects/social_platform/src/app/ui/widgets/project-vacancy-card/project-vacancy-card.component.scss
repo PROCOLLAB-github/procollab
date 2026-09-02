@@ -83,8 +83,8 @@
 
   &__actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-flow: row nowrap;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
 
@@ -92,15 +92,22 @@
       flex: 0 0 auto;
     }
 
-    .vacancy__primary-action {
+    .vacancy__secondary-action {
       ::ng-deep .button {
-        width: auto;
-        padding-inline: 24px;
+        width: 131px;
+      }
+    }
+
+    .vacancy__primary-action,
+    .vacancy__response-action {
+      ::ng-deep .button {
+        width: 146px;
         white-space: nowrap;
       }
     }
 
     @media screen and (max-width: 420px) {
+      flex-flow: column nowrap;
       gap: 10px;
 
       app-button {
@@ -124,8 +131,10 @@
   &__skill {
     min-width: 0;
 
-    ::ng-deep .tag {
-      @include vacancy-skill.readable-tag;
+    &--compact {
+      ::ng-deep .tag {
+        @include vacancy-skill.compact-tag;
+      }
     }
 
     &--more {

@@ -75,7 +75,9 @@ describe("VacancyCardComponent", () => {
     });
     fixture.detectChanges();
 
-    const skill = fixture.nativeElement.querySelector("app-tag.vacancy__skill") as HTMLElement;
+    const skill = fixture.nativeElement.querySelector(
+      "app-tag.vacancy__skill--readable",
+    ) as HTMLElement;
     expect(skill.textContent?.trim()).toBe(skillName);
   });
 });

@@ -1,7 +1,41 @@
+@mixin compact-tag {
+  max-width: 100%;
+  min-height: 24px;
+  padding: 4px 8px;
+
+  p {
+    margin: 0;
+    overflow: visible;
+    font-size: 11px;
+    line-height: 15px;
+    text-align: center;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
 @mixin readable-tag {
   max-width: 100%;
+  min-height: 26px;
+  padding: 5px 10px;
+
+  p {
+    margin: 0;
+    overflow: visible;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
+@mixin detail-tag {
+  max-width: 100%;
   min-height: 28px;
-  padding: 6px 10px;
+  padding: 5px 10px;
 
   p {
     margin: 0;
@@ -17,9 +51,9 @@
 
 @mixin readable-inline-tag {
   max-width: 100%;
-  min-height: 28px;
-  padding: 6px 10px;
-  font-size: 13px;
-  line-height: 18px;
+  min-height: 26px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 16px;
   overflow-wrap: anywhere;
 }

@@ -44,7 +44,7 @@
       <app-tag
         [appearance]="skill.category.name.includes('Soft skills') ? 'outline' : 'inline'"
         [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
-        class="vacancy__skill"
+        class="vacancy__skill vacancy__skill--compact"
         >{{ skill.name }}</app-tag
       >
     }
@@ -68,6 +68,7 @@
 
   <div class="vacancy__actions" [class.vacancy__actions--vacancies]="type() === 'vacancies'">
     <app-button
+      class="vacancy__secondary-action"
       [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
       appearance="outline"
       size="medium"
@@ -83,6 +84,7 @@
       >
     } @else if (type() !== "vacancies" || (vacancy().canRespond && !vacancy().hasResponded)) {
       <app-button
+        class="vacancy__response-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
         [queryParams]="{ sendResponse: true }"
         size="medium"

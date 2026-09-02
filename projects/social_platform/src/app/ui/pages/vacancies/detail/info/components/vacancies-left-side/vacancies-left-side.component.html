@@ -33,7 +33,7 @@
             <ul class="skills__list">
               @for (skill of requiredSkills.slice(0, 8); track $index) {
                 <app-tag
-                  class="skills__tag"
+                  class="skills__tag skills__tag--readable"
                   [color]="skill.category.name.includes('Soft') ? 'accent' : 'complete'"
                   [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'"
                   >{{ skill.name }}</app-tag
@@ -45,7 +45,7 @@
             @if (requiredSkills) {
               <ul class="skills__list">
                 @for (skill of requiredSkills.slice(0, 8); track $index) {
-                  <app-tag class="skills__tag">{{ skill.name }}</app-tag>
+                  <app-tag class="skills__tag skills__tag--readable">{{ skill.name }}</app-tag>
                 }
               </ul>
             }
