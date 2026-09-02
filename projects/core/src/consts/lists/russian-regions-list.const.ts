@@ -1,4 +1,9 @@
-/** Канонические display-названия субъектов РФ для формы проекта. */
+/**
+ * Канонические display-названия субъектов РФ для формы проекта.
+ *
+ * @format
+ */
+
 export const russianRegions = [
   "Республика Адыгея",
   "Республика Алтай",
@@ -91,8 +96,7 @@ export const russianRegions = [
   "Ямало-Ненецкий автономный округ",
 ] as const;
 
-const normalizeForComparison = (value: string): string =>
-  value.trim().toLocaleLowerCase("ru-RU");
+const normalizeForComparison = (value: string): string => value.trim().toLocaleLowerCase("ru-RU");
 
 /** Нормализует только безопасные различия регистра и внешних пробелов. */
 export function findCanonicalRussianRegion(value: unknown): string | null {
@@ -108,5 +112,23 @@ export function filterRussianRegions(query: string): readonly string[] {
   const normalized = normalizeForComparison(query);
   if (!normalized) return russianRegions;
 
-  return russianRegions.filter(region => normalizeForComparison(region).includes(normalized));
+  return russianRegions
+    .filter(region => normalizeForComparison(region).includes(normalized))
+    .sort((first, second) => {
+      const firstNormalized = normalizeForComparison(first);
+      const secondNormalized = normalizeForComparison(second);
+      const getRank = (region: string): number => {
+        if (region === normalized) return 0;
+        if (region.startsWith(normalized)) return 1;
+        return 2;
+      };
+      const rankDifference = getRank(firstNormalized) - getRank(secondNormalized);
+
+      if (rankDifference !== 0) return rankDifference;
+
+      const lengthDifference = firstNormalized.length - secondNormalized.length;
+      if (lengthDifference !== 0) return lengthDifference;
+
+      return first.localeCompare(second, "ru-RU");
+    });
 }

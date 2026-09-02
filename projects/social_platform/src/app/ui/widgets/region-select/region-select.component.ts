@@ -57,6 +57,8 @@ export class RegionSelectComponent implements ControlValueAccessor {
 
   protected onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
+
+    this.clearCommittedValueWhenSearchChanges(value);
     this.query.set(value);
     this.updateOptions(value);
     this.open.set(true);
@@ -114,7 +116,7 @@ export class RegionSelectComponent implements ControlValueAccessor {
     const trimmed = typeof value === "string" ? value.trim() : "";
     const canonical = findCanonicalRussianRegion(trimmed);
 
-    this.selectedValue.set(canonical ?? trimmed);
+    this.selectedValue.set(canonical ?? "");
     this.query.set(canonical ?? trimmed);
     this.legacyValue.set(trimmed && !canonical ? trimmed : null);
     this.updateOptions("");
@@ -138,8 +140,21 @@ export class RegionSelectComponent implements ControlValueAccessor {
   }
 
   private restoreSelectedDisplayValue(): void {
-    this.query.set(this.selectedValue());
+    this.query.set(this.selectedValue() || this.legacyValue() || "");
     this.updateOptions("");
+  }
+
+  private clearCommittedValueWhenSearchChanges(query: string): void {
+    const selected = this.selectedValue();
+    const legacy = this.legacyValue();
+    const queryMatchesSelected = selected && findCanonicalRussianRegion(query) === selected;
+    const queryMatchesLegacy = legacy && query === legacy;
+
+    if ((!selected && !legacy) || queryMatchesSelected || queryMatchesLegacy) return;
+
+    this.selectedValue.set("");
+    this.legacyValue.set(null);
+    this.onChange("");
   }
 
   private onChange: (value: string) => void = () => {};

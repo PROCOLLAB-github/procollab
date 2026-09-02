@@ -28,4 +28,10 @@ describe("russianRegions", () => {
   it("filters by a case-insensitive substring", () => {
     expect(filterRussianRegions("  татар ")).toEqual(["Республика Татарстан"]);
   });
+
+  it("ranks exact, prefix and substring matches deterministically", () => {
+    expect(filterRussianRegions("моск").slice(0, 2)).toEqual(["Москва", "Московская область"]);
+    expect(filterRussianRegions("Москов")).toEqual(["Московская область"]);
+    expect(filterRussianRegions("Москва")).toEqual(["Москва"]);
+  });
 });
