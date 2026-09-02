@@ -88,22 +88,23 @@
     align-items: center;
     justify-content: space-between;
 
-    ::ng-deep app-button .button {
-      width: auto;
-      min-width: 157px;
-      padding: 4px 24px;
-      white-space: nowrap;
+    app-button {
+      flex: 0 0 auto;
     }
 
-    &--vacancies app-button {
-      flex: 1 1 140px;
+    .vacancy__primary-action {
+      ::ng-deep .button {
+        width: auto;
+        padding-inline: 24px;
+        white-space: nowrap;
+      }
     }
 
     @media screen and (max-width: 420px) {
       gap: 10px;
 
       app-button {
-        flex-basis: 100%;
+        flex: 0 0 100%;
       }
 
       ::ng-deep app-button .button {

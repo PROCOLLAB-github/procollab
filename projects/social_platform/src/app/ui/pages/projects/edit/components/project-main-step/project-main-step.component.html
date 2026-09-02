@@ -427,15 +427,11 @@
     <div formArrayName="links">
       @if (hasLinks()) {
         <ul class="project__links--wrapper">
-          @for (control of links.controls; track trackByIndex($index)) {
+          @for (control of linkControls(); track control; let i = $index) {
             <li class="project__links">
               <fieldset style="flex-grow: 1">
                 <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>
-                <app-input
-                  size="big"
-                  [formControlName]="$index"
-                  placeholder="@eeeasycarrer"
-                ></app-input>
+                <app-input size="big" [formControlName]="i" placeholder="@eeeasycarrer"></app-input>
                 @if (control.invalid && (control.touched || projSubmitInitiated())) {
                   <div class="text-body-10 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
@@ -446,7 +442,7 @@
               <app-button
                 class="project__links--remove"
                 color="red"
-                (click)="removeLink($index)"
+                (click)="removeLink(i)"
                 type="icon"
               >
                 <i appIcon icon="basket" appSquare="14"></i>
