@@ -104,7 +104,8 @@ describe("ProjectVacancyCardComponent", () => {
 
     expect(managerLink?.injector.get(RouterLink).queryParams).toEqual({ manageResponses: true });
     expect(managerLink?.nativeElement.classList).toContain("vacancy__primary-action");
-    expect(detailLink?.nativeElement.classList).not.toContain("vacancy__primary-action");
+    expect(detailLink?.nativeElement.classList).toContain("vacancy__secondary-action");
+    expect(fixture.nativeElement.querySelectorAll(".vacancy__actions app-button")).toHaveLength(2);
   });
 
   it("keeps the complete skill name in a dedicated readable tag", () => {
@@ -118,7 +119,9 @@ describe("ProjectVacancyCardComponent", () => {
     });
     fixture.detectChanges();
 
-    const skill = fixture.nativeElement.querySelector("app-tag.vacancy__skill") as HTMLElement;
+    const skill = fixture.nativeElement.querySelector(
+      "app-tag.vacancy__skill--compact",
+    ) as HTMLElement;
     expect(skill.textContent?.trim()).toBe(skillName);
   });
 

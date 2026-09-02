@@ -94,13 +94,19 @@ describe("LoginComponent", () => {
 
   it("keeps validation and visibility icons in separate password suffix elements", () => {
     const authUIInfoService = fixture.debugElement.injector.get(AuthUIInfoService);
+    authUIInfoService.loginForm.get("email")?.markAsTouched();
     authUIInfoService.loginForm.get("password")?.markAsTouched();
     fixture.detectChanges();
 
+    const emailField = fixture.nativeElement
+      .querySelector('input[type="email"]')
+      .closest("app-input") as HTMLElement;
     const passwordField = fixture.nativeElement.querySelector(
       "app-input.auth__password-input",
     ) as HTMLElement;
 
+    expect(emailField.querySelector(".field__error-icon")).not.toBeNull();
+    expect(emailField.querySelector(".field__right-icon i")).toBeNull();
     expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
     expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
   });

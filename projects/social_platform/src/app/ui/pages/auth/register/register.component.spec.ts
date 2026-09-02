@@ -12,6 +12,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { of } from "rxjs";
 import { API_URL, PRODUCTION } from "@corelib";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("RegisterComponent", () => {
   let component: RegisterComponent;
@@ -93,5 +94,28 @@ describe("RegisterComponent", () => {
     ).click();
     fixture.detectChanges();
     expect(repeatedPassword.type).toBe("text");
+  });
+
+  it("keeps email errors and both password visibility controls in separate suffix elements", () => {
+    const authUIInfoService = fixture.debugElement.injector.get(AuthUIInfoService);
+    authUIInfoService.registerForm.get("email")?.markAsTouched();
+    authUIInfoService.registerForm.get("password")?.markAsTouched();
+    authUIInfoService.registerForm.get("repeatedPassword")?.markAsTouched();
+    fixture.detectChanges();
+
+    const emailField = fixture.nativeElement
+      .querySelector('input[type="email"]')
+      .closest("app-input") as HTMLElement;
+    const passwordFields = Array.from(
+      fixture.nativeElement.querySelectorAll("app-input.auth__password-input"),
+    ) as HTMLElement[];
+
+    expect(emailField.querySelector(".field__error-icon")).not.toBeNull();
+    expect(emailField.querySelector(".field__right-icon i")).toBeNull();
+    expect(passwordFields).toHaveLength(2);
+    for (const passwordField of passwordFields) {
+      expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
+      expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
+    }
   });
 });
