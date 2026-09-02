@@ -68,7 +68,6 @@ export class InputComponent implements ControlValueAccessor {
   dateInputMode = input<"picker" | "text">("picker");
   name = input("");
   autocomplete = input("");
-  rightActionOutside = input(false);
   checked = input(false);
   maxLength = input<number>();
 

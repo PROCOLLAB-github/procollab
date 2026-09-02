@@ -59,25 +59,15 @@ describe("InputComponent", () => {
     expect(input.autocomplete).toBe("current-password");
   });
 
-  it("keeps the native input area separate from an outside right action", () => {
-    fixture.componentRef.setInput("rightActionOutside", true);
-    fixture.detectChanges();
-
+  it("renders the native input and right action as siblings in the field", () => {
     const field = fixture.nativeElement.querySelector(".field") as HTMLElement;
-    const nativeArea = field.querySelector(".field__native-input-area") as HTMLElement;
     const input = field.querySelector("input") as HTMLInputElement;
     const rightAction = field.querySelector(".field__right-icon") as HTMLElement;
 
-    expect(field.classList).toContain("field--right-action-outside");
-    expect(nativeArea.contains(input)).toBe(true);
-    expect(nativeArea.contains(rightAction)).toBe(false);
+    expect(field.querySelector(".field__native-input-area")).toBeNull();
+    expect(input.parentElement).toBe(field);
     expect(rightAction.parentElement).toBe(field);
     expect(field.lastElementChild).toBe(rightAction);
-  });
-
-  it("leaves the generic input in overlay mode by default", () => {
-    const field = fixture.nativeElement.querySelector(".field") as HTMLElement;
-    expect(field.classList).not.toContain("field--right-action-outside");
   });
 
   it("should set the error class when error input is true", () => {
