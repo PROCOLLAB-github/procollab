@@ -38,6 +38,8 @@
       align-items: center;
       width: auto;
       min-width: 0;
+      background: transparent;
+      border: 0;
     }
 
     .field__input {
@@ -51,6 +53,13 @@
       &:focus {
         border: 0;
         box-shadow: none;
+      }
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        box-shadow: 0 0 0 1000px var(--white) inset;
+        -webkit-text-fill-color: var(--black);
       }
     }
 
@@ -69,6 +78,8 @@
       flex: 0 0 42px;
       align-items: center;
       justify-content: center;
+      background: transparent;
+      border: 0;
     }
   }
 
