@@ -82,12 +82,12 @@
           </div>
 
           <div class="lists__info">
-            <p class="text-body-10 lists__info--text" style="margin: 0">
-              {{ education.organizationName | truncate: 20 }}
+            <p class="text-body-12 lists__info--text" style="margin: 0">
+              {{ education.organizationName }}
             </p>
 
-            <span class="text-body-6 lists__info--subtext"
-              >{{ education.description | truncate: 30 }} <br />
+            <span class="text-body-10 lists__info--subtext"
+              >{{ education.description }} <br />
               {{ education.educationLevel }} • {{ education.educationStatus }}</span
             >
           </div>
@@ -140,15 +140,13 @@
           </div>
 
           <div class="lists__info">
-            <p class="text-body-10 lists__info--text" style="margin: 0">
-              {{ workExperience.organizationName | truncate: 20 }}
+            <p class="text-body-12 lists__info--text" style="margin: 0">
+              {{ workExperience.organizationName }}
             </p>
 
-            <span class="text-body-6 lists__info--subtext">{{
-              workExperience.jobPosition | truncate: 30
-            }}</span>
+            <span class="text-body-10 lists__info--subtext">{{ workExperience.jobPosition }}</span>
 
-            <span (click)="openWorkInfoModal()" class="text-body-6 lists__info--more"
+            <span (click)="openWorkInfoModal()" class="text-body-10 lists__info--more"
               >подробнее</span
             >
           </div>
@@ -162,7 +160,7 @@
 
               <p class="text-body-10 cancel__text">{{ workExperience.description }}</p>
 
-              <p class="text-body-6 lists__info--subtext">
+              <p class="text-body-10 lists__info--subtext">
                 {{ workExperience.jobPosition }} • {{ workExperience.entryYear }} -
                 {{ workExperience.completionYear }}
               </p>

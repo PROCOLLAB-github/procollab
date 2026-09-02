@@ -7,7 +7,7 @@
         <p class="text-body-12 lists__title">описание вакансии</p>
         <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
       </div>
-      <div class="text-body-12 about__text">
+      <div class="text-body-14 about__text">
         <p #descEl [innerHTML]="vacancy()!.description | parseLinks | parseBreaks"></p>
         @if (descriptionExpandable()) {
           <div

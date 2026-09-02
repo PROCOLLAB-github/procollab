@@ -30,7 +30,7 @@
                 </div>
               </div>
               @if (response.datetimeCreated) {
-                <p class="text-body-10 response__date">
+                <p class="text-body-12 response__date">
                   Отклик от {{ response.datetimeCreated | date: "dd.MM.yyyy" }}
                 </p>
               }
@@ -39,7 +39,7 @@
             @if (user.skills.length) {
               <div class="response__skills" aria-label="Навыки кандидата">
                 @for (skill of user.skills; track skill.id) {
-                  <span class="text-body-10 response__skill">{{ skill.name }}</span>
+                  <span class="response__skill">{{ skill.name }}</span>
                 }
               </div>
             }

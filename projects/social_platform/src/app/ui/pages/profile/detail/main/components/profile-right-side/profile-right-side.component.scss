@@ -96,14 +96,25 @@
     min-width: 0;
 
     &--text {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 17px;
       color: var(--black) !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     &--subtext {
+      font-size: 11px;
+      line-height: 16px;
       color: var(--grey-for-text) !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     &--more {
+      font-size: 11px;
+      line-height: 16px;
       color: var(--accent) !important;
     }
 
@@ -143,6 +154,12 @@
     padding: 5px;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
+
+    p {
+      font-size: 11px;
+      line-height: 14px;
+      color: var(--dark-grey);
+    }
   }
 
   &__item {

@@ -115,9 +115,10 @@
     min-width: 0;
     overflow: hidden;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 16px;
     color: var(--black);
+    word-break: break-word;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;

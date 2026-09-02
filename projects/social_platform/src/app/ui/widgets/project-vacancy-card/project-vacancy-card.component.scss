@@ -89,8 +89,10 @@
     justify-content: space-between;
 
     ::ng-deep app-button .button {
-      min-height: 42px;
-      padding: 10px 18px;
+      width: auto;
+      min-width: 157px;
+      padding: 4px 24px;
+      white-space: nowrap;
     }
 
     &--vacancies app-button {
@@ -102,6 +104,10 @@
 
       app-button {
         flex-basis: 100%;
+      }
+
+      ::ng-deep app-button .button {
+        width: 100%;
       }
     }
   }
