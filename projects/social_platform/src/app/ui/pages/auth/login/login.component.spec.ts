@@ -73,6 +73,13 @@ describe("LoginComponent", () => {
 
     expect(password.autocomplete).toBe("current-password");
     expect(passwordField.classList).toContain("auth__password-input");
+    const field = passwordField.querySelector(".field") as HTMLElement;
+    const nativeArea = field.querySelector(".field__native-input-area") as HTMLElement;
+    const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;
+    expect(field.classList).toContain("field--right-action-outside");
+    expect(nativeArea.contains(password)).toBe(true);
+    expect(nativeArea.contains(eyeSlot)).toBe(false);
+    expect(field.lastElementChild).toBe(eyeSlot);
     expect(emailField.classList).not.toContain("auth__password-input");
     expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
   });
@@ -109,5 +116,8 @@ describe("LoginComponent", () => {
     expect(emailField.querySelector(".field__right-icon i")).toBeNull();
     expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
     expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
+    expect(passwordField.querySelector(".field")?.lastElementChild?.classList).toContain(
+      "field__right-icon",
+    );
   });
 });

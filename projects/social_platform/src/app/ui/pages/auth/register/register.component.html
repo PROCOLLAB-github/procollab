@@ -180,6 +180,7 @@
             formControlName="password"
             name="new-password"
             autocomplete="new-password"
+            [rightActionOutside]="true"
             placeholder="GJiwoeuhbn120="
           >
             @if (showPassword()) {
@@ -213,6 +214,7 @@
             formControlName="repeatedPassword"
             name="new-password-confirmation"
             autocomplete="new-password"
+            [rightActionOutside]="true"
             placeholder="GJiwoeuhbn120="
           >
             @if (showPasswordRepeat()) {
