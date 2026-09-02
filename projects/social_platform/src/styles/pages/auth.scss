@@ -70,6 +70,15 @@
       pointer-events: none;
       background: transparent;
     }
+
+    .field__input {
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        box-shadow: 0 0 0 1000px var(--white) inset;
+        -webkit-text-fill-color: var(--black);
+      }
+    }
   }
 
   &__password-input {
