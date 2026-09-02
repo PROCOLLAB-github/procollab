@@ -131,8 +131,10 @@
   &__skill {
     min-width: 0;
 
-    ::ng-deep .tag {
-      @include vacancy-skill.compact-tag;
+    &--compact {
+      ::ng-deep .tag {
+        @include vacancy-skill.compact-tag;
+      }
     }
 
     &--more {

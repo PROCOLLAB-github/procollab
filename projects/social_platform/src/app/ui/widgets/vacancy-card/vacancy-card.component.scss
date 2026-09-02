@@ -47,8 +47,10 @@
   &__skill {
     min-width: 0;
 
-    ::ng-deep .tag {
-      @include vacancy-skill.readable-tag;
+    &--readable {
+      ::ng-deep .tag {
+        @include vacancy-skill.readable-tag;
+      }
     }
   }
 
