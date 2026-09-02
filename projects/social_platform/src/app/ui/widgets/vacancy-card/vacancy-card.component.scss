@@ -1,5 +1,7 @@
 /** @format */
 
+@use "styles/components/vacancy-skill";
+
 .vacancy {
   &__requirements {
     padding: 5px 40px;
@@ -40,6 +42,14 @@
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+  }
+
+  &__skill {
+    min-width: 0;
+
+    ::ng-deep .tag {
+      @include vacancy-skill.readable-tag;
+    }
   }
 
   /* stylelint-disable value-no-vendor-prefix */

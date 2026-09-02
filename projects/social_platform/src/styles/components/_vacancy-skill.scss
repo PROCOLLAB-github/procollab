@@ -1,0 +1,25 @@
+@mixin readable-tag {
+  max-width: 100%;
+  min-height: 26px;
+  padding: 5px 10px;
+
+  p {
+    margin: 0;
+    overflow: visible;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
+@mixin readable-inline-tag {
+  max-width: 100%;
+  min-height: 26px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 16px;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,134 @@
+/**
+ * Канонические display-названия субъектов РФ для формы проекта.
+ *
+ * @format
+ */
+
+export const russianRegions = [
+  "Республика Адыгея",
+  "Республика Алтай",
+  "Республика Башкортостан",
+  "Республика Бурятия",
+  "Республика Дагестан",
+  "Донецкая Народная Республика",
+  "Республика Ингушетия",
+  "Кабардино-Балкарская Республика",
+  "Республика Калмыкия",
+  "Карачаево-Черкесская Республика",
+  "Республика Карелия",
+  "Республика Коми",
+  "Республика Крым",
+  "Луганская Народная Республика",
+  "Республика Марий Эл",
+  "Республика Мордовия",
+  "Республика Саха (Якутия)",
+  "Республика Северная Осетия — Алания",
+  "Республика Татарстан",
+  "Республика Тыва",
+  "Удмуртская Республика",
+  "Республика Хакасия",
+  "Чеченская Республика",
+  "Чувашская Республика",
+  "Алтайский край",
+  "Забайкальский край",
+  "Камчатский край",
+  "Краснодарский край",
+  "Красноярский край",
+  "Пермский край",
+  "Приморский край",
+  "Ставропольский край",
+  "Хабаровский край",
+  "Амурская область",
+  "Архангельская область",
+  "Астраханская область",
+  "Белгородская область",
+  "Брянская область",
+  "Владимирская область",
+  "Волгоградская область",
+  "Вологодская область",
+  "Воронежская область",
+  "Запорожская область",
+  "Ивановская область",
+  "Иркутская область",
+  "Калининградская область",
+  "Калужская область",
+  "Кемеровская область — Кузбасс",
+  "Кировская область",
+  "Костромская область",
+  "Курганская область",
+  "Курская область",
+  "Ленинградская область",
+  "Липецкая область",
+  "Магаданская область",
+  "Московская область",
+  "Мурманская область",
+  "Нижегородская область",
+  "Новгородская область",
+  "Новосибирская область",
+  "Омская область",
+  "Оренбургская область",
+  "Орловская область",
+  "Пензенская область",
+  "Псковская область",
+  "Ростовская область",
+  "Рязанская область",
+  "Самарская область",
+  "Саратовская область",
+  "Сахалинская область",
+  "Свердловская область",
+  "Смоленская область",
+  "Тамбовская область",
+  "Тверская область",
+  "Томская область",
+  "Тульская область",
+  "Тюменская область",
+  "Ульяновская область",
+  "Херсонская область",
+  "Челябинская область",
+  "Ярославская область",
+  "Москва",
+  "Санкт-Петербург",
+  "Севастополь",
+  "Еврейская автономная область",
+  "Ненецкий автономный округ",
+  "Ханты-Мансийский автономный округ — Югра",
+  "Чукотский автономный округ",
+  "Ямало-Ненецкий автономный округ",
+] as const;
+
+const normalizeForComparison = (value: string): string => value.trim().toLocaleLowerCase("ru-RU");
+
+/** Нормализует только безопасные различия регистра и внешних пробелов. */
+export function findCanonicalRussianRegion(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+
+  const normalized = normalizeForComparison(value);
+  if (!normalized) return null;
+
+  return russianRegions.find(region => normalizeForComparison(region) === normalized) ?? null;
+}
+
+export function filterRussianRegions(query: string): readonly string[] {
+  const normalized = normalizeForComparison(query);
+  if (!normalized) return russianRegions;
+
+  return russianRegions
+    .filter(region => normalizeForComparison(region).includes(normalized))
+    .sort((first, second) => {
+      const firstNormalized = normalizeForComparison(first);
+      const secondNormalized = normalizeForComparison(second);
+      const getRank = (region: string): number => {
+        if (region === normalized) return 0;
+        if (region.startsWith(normalized)) return 1;
+        return 2;
+      };
+      const rankDifference = getRank(firstNormalized) - getRank(secondNormalized);
+
+      if (rankDifference !== 0) return rankDifference;
+
+      const lengthDifference = firstNormalized.length - secondNormalized.length;
+      if (lengthDifference !== 0) return lengthDifference;
+
+      return first.localeCompare(second, "ru-RU");
+    });
+}

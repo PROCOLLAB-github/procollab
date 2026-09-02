@@ -31,6 +31,17 @@ describe("project-form.factory", () => {
     expect(linkControl?.valid).toBe(true);
   });
 
+  it("не принимает произвольный регион нового проекта", () => {
+    const form = createProjectForm(fb);
+    const region = form.get("region")!;
+
+    region.setValue("Москва");
+    expect(region.valid).toBe(true);
+
+    region.setValue("Миксва");
+    expect(region.hasError("canonicalRegion")).toBe(true);
+  });
+
   it("создаёт группу достижения с fallback id и валидацией года", () => {
     const achievement = createProjectAchievementGroup(
       fb,

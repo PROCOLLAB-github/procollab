@@ -87,4 +87,24 @@ describe("ProjectFormService", () => {
     expect(service.achievements.length).toBe(1);
     expect(service.achievements.at(0).get("title")?.value).toBe("Second");
   });
+
+  it("нормализует безопасные различия регистра и пробелов", () => {
+    const project = Project.default();
+    project.region = "  мОскВа ";
+
+    service.initializeProjectData(project);
+
+    expect(service.region?.value).toBe("Москва");
+    expect(service.region?.valid).toBe(true);
+  });
+
+  it("сохраняет неизвестное legacy-значение без потери при открытии формы", () => {
+    const project = Project.default();
+    project.region = "Миксва";
+
+    service.initializeProjectData(project);
+
+    expect(service.region?.value).toBe("Миксва");
+    expect(service.region?.valid).toBe(true);
+  });
 });

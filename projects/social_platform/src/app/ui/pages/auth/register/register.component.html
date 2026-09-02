@@ -10,7 +10,7 @@
       decoding="async"
     />
   </div>
-  <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSendForm()">
+  <form class="auth__wrapper" [formGroup]="registerForm" novalidate (ngSubmit)="onSendForm()">
     <ng-container>
       <div class="auth__row">
         @if (registerForm.get("firstName"); as name) {

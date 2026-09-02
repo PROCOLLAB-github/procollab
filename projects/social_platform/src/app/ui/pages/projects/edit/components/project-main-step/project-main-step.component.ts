@@ -24,6 +24,7 @@ import { ProjectGoalsUIService } from "@api/project/facades/edit/ui/project-goal
 import { ProjectGoalService } from "@api/project/facades/edit/project-goals.service";
 import { ProjectContactsService } from "@api/project/facades/edit/project-contacts.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.component";
 
 /** Шаг редактирования проекта: основная информация. */
 @Component({
@@ -46,6 +47,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     AvatarComponent,
     FormsModule,
     RouterLink,
+    RegionSelectComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

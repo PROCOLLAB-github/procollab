@@ -116,10 +116,21 @@
   &__project-name {
     display: -webkit-box;
     overflow: hidden;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
     color: var(--black);
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+
+  &__project-role {
+    margin-top: 3px;
+    font-size: 11px;
+    line-height: 15px;
+    color: var(--dark-grey);
+    overflow-wrap: anywhere;
   }
   /* stylelint-enable value-no-vendor-prefix */
 

@@ -146,6 +146,9 @@ describe("ProgramAnalyticsComponent", () => {
     );
 
     expect(evaluation?.textContent).toContain("Открытое оценивание");
+    expect(evaluation?.querySelector(".analytics-card__title")?.textContent).toContain(
+      "Статус оценивания",
+    );
     expect(evaluation?.textContent).toContain("Ожидают оценивания");
     expect(evaluation?.textContent).not.toContain("Частично оценено");
     expect(evaluation?.textContent).toContain("Максимум экспертов на проект");
@@ -257,8 +260,10 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("Пока нет сданных работ для оценивания");
     expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
     expect(fixture.nativeElement.querySelector(".attention__empty")).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain("За последние 30 дней активности пока нет");
+    expect(fixture.nativeElement.textContent).toContain("За последние 30 дней активности не было");
+    expect(fixture.nativeElement.querySelector(".activity__note")).toBeNull();
     expect(fixture.nativeElement.textContent).toContain("Статистика по кейсам пока недоступна");
+    expect(fixture.nativeElement.querySelector(".analytics-card__empty--cases")).not.toBeNull();
   });
 
   it("показывает loading и recoverable error", () => {

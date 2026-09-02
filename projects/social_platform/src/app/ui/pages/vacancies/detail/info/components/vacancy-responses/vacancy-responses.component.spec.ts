@@ -52,6 +52,24 @@ describe("VacancyResponsesComponent", () => {
     expect(element.textContent).toContain("отклонить");
   });
 
+  it("показывает дату отклика в правой части header карточки", () => {
+    const element = render([response(null)]);
+    const header = element.querySelector(".response__candidate") as HTMLElement;
+    const date = header.querySelector(".response__date") as HTMLElement;
+
+    expect(date.textContent).toContain("Отклик от 27.08.2026");
+    expect(element.querySelector(".response > .response__date")).toBeNull();
+  });
+
+  it("сохраняет полное длинное название навыка в читаемом chip", () => {
+    const longSkill = "Проектирование сложных пользовательских сценариев";
+    const item = response(null);
+    item.user!.skills = [{ id: 9, name: longSkill }];
+    const element = render([item]);
+
+    expect(element.querySelector(".response__skill")?.textContent?.trim()).toBe(longSkill);
+  });
+
   it.each([
     [true, "Принят"],
     [false, "Отклонён"],

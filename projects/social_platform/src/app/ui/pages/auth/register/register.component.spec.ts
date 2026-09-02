@@ -73,5 +73,25 @@ describe("RegisterComponent", () => {
     expect(password.closest("app-input")?.classList).toContain("auth__password-input");
     expect(repeatedPassword.closest("app-input")?.classList).toContain("auth__password-input");
     expect(birthdayField.classList).not.toContain("auth__password-input");
+    expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
+  });
+
+  it("keeps both custom password visibility controls clickable", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="new-password"]',
+    ) as HTMLInputElement;
+    const repeatedPassword = fixture.nativeElement.querySelector(
+      'input[name="new-password-confirmation"]',
+    ) as HTMLInputElement;
+
+    (password.closest("app-input")?.querySelector(".field__right-icon i") as HTMLElement).click();
+    fixture.detectChanges();
+    expect(password.type).toBe("text");
+
+    (
+      repeatedPassword.closest("app-input")?.querySelector(".field__right-icon i") as HTMLElement
+    ).click();
+    fixture.detectChanges();
+    expect(repeatedPassword.type).toBe("text");
   });
 });

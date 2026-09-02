@@ -45,7 +45,7 @@
     align-items: center;
 
     p {
-      color: var(--grey-for-text);
+      color: var(--black);
     }
   }
 
@@ -61,6 +61,8 @@
   }
 
   &__clear {
+    font-weight: 500;
+    color: var(--accent-dark);
     cursor: pointer;
   }
 
@@ -78,7 +80,7 @@
 
   &__name {
     margin-bottom: 6px;
-    color: var(--gray);
+    color: var(--dark-grey);
   }
 
   &__switch {
@@ -97,6 +99,8 @@
   }
 
   &__yes-no {
+    color: var(--dark-grey);
+
     &--active {
       color: var(--accent);
     }
@@ -123,7 +127,13 @@
       app-select {
         .field__input,
         li {
-          @include typography.body-10;
+          @include typography.body-12;
+
+          color: var(--black);
+        }
+
+        .field__input::placeholder {
+          color: var(--dark-grey);
         }
       }
     }

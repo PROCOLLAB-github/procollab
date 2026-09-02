@@ -3,6 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { signal } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import { ProgramProjectsFilterComponent } from "./program-projects-filter.component";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 import { ProgramProjectsFilterInfoService } from "./service/program-projects-filter-info.service";
@@ -10,6 +11,8 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
 describe("ProjectsFilterComponent", () => {
   let component: ProgramProjectsFilterComponent;
   let fixture: ComponentFixture<ProgramProjectsFilterComponent>;
+  const filters = signal<any[]>([]);
+  const filterForm = new FormBuilder().group({ caseDirection: [null] });
 
   beforeEach(async () => {
     const programDetailListUIInfoServiceSpy = {
@@ -17,8 +20,8 @@ describe("ProjectsFilterComponent", () => {
     };
 
     const programProjectsFilterInfoServiceSpy = {
-      filterForm: signal(null),
-      filters: signal([]),
+      filterForm,
+      filters,
       toggleAdditionalFormValues: vi.fn(),
       setValue: vi.fn(),
       clearFilters: vi.fn(),
@@ -56,5 +59,27 @@ describe("ProjectsFilterComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("renders the expert case filter with readable semantic classes", () => {
+    filters.set([
+      {
+        id: 1,
+        name: "caseDirection",
+        label: "Кейс",
+        helpText: "Выберите кейс",
+        fieldType: "select",
+        options: ["Цифровая трансформация"],
+      },
+    ]);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector(".filter__title").textContent.trim()).toBe(
+      "фильтры",
+    );
+    expect(fixture.nativeElement.querySelector(".filter__clear").textContent.trim()).toBe(
+      "cбросить",
+    );
+    expect(fixture.nativeElement.querySelector(".filter__select app-select")).not.toBeNull();
   });
 });

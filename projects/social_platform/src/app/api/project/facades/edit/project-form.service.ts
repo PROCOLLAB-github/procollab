@@ -12,8 +12,13 @@ import {
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { stripNullish } from "@utils/stripNull";
 import { Project } from "@domain/project/project.model";
-import { createProjectAchievementGroup, createProjectForm } from "./project-form.factory";
+import {
+  createProjectAchievementGroup,
+  createProjectForm,
+  projectRegionValidator,
+} from "./project-form.factory";
 import { ProjectFormAutosaveService } from "./project-form-autosave.service";
+import { findCanonicalRussianRegion } from "@core/consts/lists/russian-regions-list.const";
 /** Управляет основной формой проекта и формой дополнительных полей партнерской программы. */
 @Injectable({ providedIn: "root" })
 export class ProjectFormService {
@@ -47,11 +52,18 @@ export class ProjectFormService {
   }
 
   public initializeProjectData(project: Project): void {
+    const rawRegion = typeof project.region === "string" ? project.region.trim() : "";
+    const canonicalRegion = findCanonicalRussianRegion(rawRegion);
+    this.region?.setValidators([
+      Validators.required,
+      projectRegionValidator(canonicalRegion ? "" : rawRegion),
+    ]);
+
     // Заполняем простые поля
     this.projectForm.patchValue({
       imageAddress: project.imageAddress,
       name: project.name,
-      region: project.region,
+      region: canonicalRegion ?? rawRegion,
       industryId: project.industry,
       description: project.description,
       implementationDeadline: project.implementationDeadline ?? null,
@@ -63,6 +75,7 @@ export class ProjectFormService {
       coverImageAddress: project.coverImageAddress,
       partnerProgramId: project.partnerProgram?.programId ?? null,
     });
+    this.region?.updateValueAndValidity({ emitEvent: false });
 
     if (project.partnerProgram) {
       this.relationId.set(project.partnerProgram?.programLinkId);
