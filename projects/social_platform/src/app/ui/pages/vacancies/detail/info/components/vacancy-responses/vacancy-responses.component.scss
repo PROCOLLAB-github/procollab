@@ -57,6 +57,8 @@
 
   &__name {
     font-weight: 600;
+    line-height: 20px;
+    overflow-wrap: anywhere;
   }
 
   &__name,
@@ -67,6 +69,8 @@
   &__specialization,
   &__date {
     margin-top: 4px;
+    font-size: 12px;
+    line-height: 18px;
     color: var(--dark-grey);
   }
 
@@ -98,8 +102,15 @@
 
   &__letter {
     margin-top: 6px;
+    font-size: 13px;
+    line-height: 20px;
     color: var(--black);
     white-space: pre-wrap;
+  }
+
+  &__label {
+    font-size: 13px;
+    line-height: 18px;
   }
 
   &__file-row {
@@ -110,12 +121,16 @@
   }
 
   &__file-label {
+    font-size: 13px;
     font-weight: 500;
+    line-height: 18px;
     color: var(--black);
   }
 
   &__file {
     width: fit-content;
+    font-size: 13px;
+    line-height: 18px;
     color: var(--accent);
     text-decoration: underline;
   }

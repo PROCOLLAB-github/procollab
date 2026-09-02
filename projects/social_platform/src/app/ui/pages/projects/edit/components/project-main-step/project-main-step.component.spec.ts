@@ -1,6 +1,6 @@
 /** @format */
 
-import { signal } from "@angular/core";
+import { provideZonelessChangeDetection, signal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormArray, FormBuilder } from "@angular/forms";
 import { provideRouter } from "@angular/router";
@@ -42,6 +42,7 @@ describe("ProjectMainStepComponent", () => {
     await TestBed.configureTestingModule({
       imports: [ProjectMainStepComponent],
       providers: [
+        provideZonelessChangeDetection(),
         provideRouter([]),
         provideNgxMask(),
         ProjectContactsService,
@@ -92,23 +93,47 @@ describe("ProjectMainStepComponent", () => {
     fixture.detectChanges();
   });
 
-  it("renders every new project contact input immediately", () => {
+  it("renders every new project contact input in the originating UI cycle", async () => {
     const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button")).find(
       (button: Element) => button.textContent?.includes("добавить ссылку"),
     ) as HTMLElement;
 
     addButton.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(links.length).toBe(1);
     expect(
       fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input'),
     ).toHaveLength(1);
 
     addButton.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(links.length).toBe(2);
     expect(
       fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input'),
     ).toHaveLength(2);
+  });
+
+  it("renders an input again after deleting the last project contact", async () => {
+    const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button")).find(
+      (button: Element) => button.textContent?.includes("добавить ссылку"),
+    ) as HTMLElement;
+
+    addButton.click();
+    await fixture.whenStable();
+
+    const removeButton = fixture.nativeElement.querySelector(
+      ".project__links--remove button",
+    ) as HTMLButtonElement;
+    removeButton.click();
+    await fixture.whenStable();
+
+    expect(links.length).toBe(0);
+    expect(fixture.nativeElement.querySelector('[formarrayname="links"] app-input')).toBeNull();
+
+    addButton.click();
+    await fixture.whenStable();
+
+    expect(links.length).toBe(1);
+    expect(fixture.nativeElement.querySelector('[formarrayname="links"] app-input')).not.toBeNull();
   });
 });

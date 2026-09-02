@@ -35,4 +35,16 @@ describe("ProfileLeftSideComponent", () => {
     expect(card.nativeElement.querySelector("img").getAttribute("src")).toBe("/program.png");
     expect(routerLink.urlTree.toString()).toContain("/office/program/4");
   });
+
+  it("renders the complete user city without hard truncation", () => {
+    fixture.componentRef.setInput("user", {
+      personal: { birthday: null, city: "Санкт-Петербург", speciality: "" },
+      relations: { userLanguages: [], programs: [] },
+    } as unknown as User);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector(".lists__item-value").textContent.trim()).toBe(
+      "Санкт-Петербург",
+    );
+  });
 });

@@ -13,6 +13,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { of } from "rxjs";
 import { API_URL, PRODUCTION } from "@corelib";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -89,5 +90,18 @@ describe("LoginComponent", () => {
     fixture.detectChanges();
 
     expect(password.type).toBe("text");
+  });
+
+  it("keeps validation and visibility icons in separate password suffix elements", () => {
+    const authUIInfoService = fixture.debugElement.injector.get(AuthUIInfoService);
+    authUIInfoService.loginForm.get("password")?.markAsTouched();
+    fixture.detectChanges();
+
+    const passwordField = fixture.nativeElement.querySelector(
+      "app-input.auth__password-input",
+    ) as HTMLElement;
+
+    expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
+    expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
   });
 });

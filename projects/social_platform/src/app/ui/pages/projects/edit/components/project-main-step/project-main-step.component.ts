@@ -108,6 +108,7 @@ export class ProjectMainStepComponent implements OnInit {
   // Геттеры для работы со ссылками
   protected readonly link = this.projectContactsService.link;
   protected readonly links = this.projectContactsService.links;
+  protected readonly linkControls = this.projectContactsService.linkControls;
 
   // Геттеры для работы с целями
   protected readonly goals = this.projectGoalService.goals;
@@ -167,9 +168,5 @@ export class ProjectMainStepComponent implements OnInit {
 
   toggleGoalLeaderModal(index?: number): void {
     this.projectGoalsUIService.applyToggleGoalLeaderModal(this.goals, index);
-  }
-
-  protected trackByIndex(index: number): number {
-    return index;
   }
 }

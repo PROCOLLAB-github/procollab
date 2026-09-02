@@ -18,7 +18,7 @@
       @if (user()!.personal.city) {
         <li class="lists__item">
           <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
-          <p class="text-body-10">{{ (user()!.personal.city | truncate: 12) ?? "не указан" }}</p>
+          <p class="text-body-10 lists__item-value">{{ user()!.personal.city }}</p>
         </li>
       }
       @if (user()!.personal.speciality) {

@@ -98,9 +98,13 @@ describe("ProjectVacancyCardComponent", () => {
     const managerLink = fixture.debugElement
       .queryAll(By.directive(RouterLink))
       .find(element => element.nativeElement.textContent.includes("посмотреть отклики"));
+    const detailLink = fixture.debugElement
+      .queryAll(By.directive(RouterLink))
+      .find(element => element.nativeElement.textContent.includes("подробнее"));
 
     expect(managerLink?.injector.get(RouterLink).queryParams).toEqual({ manageResponses: true });
     expect(managerLink?.nativeElement.classList).toContain("vacancy__primary-action");
+    expect(detailLink?.nativeElement.classList).not.toContain("vacancy__primary-action");
   });
 
   it("keeps the complete skill name in a dedicated readable tag", () => {
