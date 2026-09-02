@@ -14,13 +14,20 @@
       [disabled]="disabled()"
       [attr.aria-expanded]="open()"
       [attr.aria-controls]="id() + '-options'"
-      [attr.aria-activedescendant]="open() && options().length ? id() + '-option-' + activeIndex() : null"
+      [attr.aria-activedescendant]="
+        open() && options().length ? id() + '-option-' + activeIndex() : null
+      "
       (focus)="onFocus()"
       (input)="onInput($event)"
       (keydown)="onKeydown($event)"
     />
     @if (query()) {
-      <button type="button" class="region-select__clear" aria-label="Очистить регион" (click)="clear($event)">
+      <button
+        type="button"
+        class="region-select__clear"
+        aria-label="Очистить регион"
+        (click)="clear($event)"
+      >
         <i appIcon icon="cross" appSquare="14"></i>
       </button>
     }
@@ -28,7 +35,8 @@
 
   @if (legacyValue(); as legacy) {
     <p class="region-select__legacy text-body-10">
-      Текущее значение: <strong>{{ legacy }}</strong>. Выберите корректный регион из списка.
+      Текущее значение: <strong>{{ legacy }}</strong
+      >. Выберите корректный регион из списка.
     </p>
   }
 

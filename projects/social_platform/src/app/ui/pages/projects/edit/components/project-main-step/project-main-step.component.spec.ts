@@ -100,15 +100,15 @@ describe("ProjectMainStepComponent", () => {
     addButton.click();
     fixture.detectChanges();
     expect(links.length).toBe(1);
-    expect(fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input')).toHaveLength(
-      1,
-    );
+    expect(
+      fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input'),
+    ).toHaveLength(1);
 
     addButton.click();
     fixture.detectChanges();
     expect(links.length).toBe(2);
-    expect(fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input')).toHaveLength(
-      2,
-    );
+    expect(
+      fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input'),
+    ).toHaveLength(2);
   });
 });
