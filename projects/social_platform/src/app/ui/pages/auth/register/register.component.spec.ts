@@ -73,6 +73,15 @@ describe("RegisterComponent", () => {
     expect(repeatedPassword.autocomplete).toBe("new-password");
     expect(password.closest("app-input")?.classList).toContain("auth__password-input");
     expect(repeatedPassword.closest("app-input")?.classList).toContain("auth__password-input");
+    for (const nativePassword of [password, repeatedPassword]) {
+      const field = nativePassword.closest("app-input")?.querySelector(".field") as HTMLElement;
+      const nativeArea = field.querySelector(".field__native-input-area") as HTMLElement;
+      const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;
+      expect(field.classList).toContain("field--right-action-outside");
+      expect(nativeArea.contains(nativePassword)).toBe(true);
+      expect(nativeArea.contains(eyeSlot)).toBe(false);
+      expect(field.lastElementChild).toBe(eyeSlot);
+    }
     expect(birthdayField.classList).not.toContain("auth__password-input");
     expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
   });
@@ -116,6 +125,9 @@ describe("RegisterComponent", () => {
     for (const passwordField of passwordFields) {
       expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
       expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
+      expect(passwordField.querySelector(".field")?.lastElementChild?.classList).toContain(
+        "field__right-icon",
+      );
     }
   });
 });

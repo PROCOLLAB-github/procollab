@@ -6,6 +6,72 @@
 .field {
   position: relative;
 
+  &--right-action-outside {
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    background-color: var(--white);
+    border-radius: var(--rounded-xxl);
+
+    &.field--border {
+      border: 0.5px solid var(--gray);
+
+      &:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
+    }
+
+    &.field--error {
+      border-color: var(--red);
+
+      &:focus-within {
+        border-color: var(--red);
+        box-shadow: 0 0 6px rgb(255 40 40 / 30.8%);
+      }
+    }
+
+    .field__native-input-area {
+      position: relative;
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      width: auto;
+      min-width: 0;
+    }
+
+    .field__input {
+      flex: 1 1 auto;
+      min-width: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+
+      &:focus {
+        border: 0;
+        box-shadow: none;
+      }
+    }
+
+    .field__error-icon {
+      position: static;
+      flex: 0 0 20px;
+      align-self: center;
+      padding: 0;
+      background: transparent;
+      transform: none;
+    }
+
+    .field__right-icon {
+      position: static;
+      display: flex;
+      flex: 0 0 42px;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   &__input {
     color: var(--black) !important;
     background-color: var(--white);
