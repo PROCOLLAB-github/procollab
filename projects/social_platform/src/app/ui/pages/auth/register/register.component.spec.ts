@@ -58,7 +58,7 @@ describe("RegisterComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("marks both password fields as new-password and reserves the eye-control area", () => {
+  it("uses full-width native password inputs with sibling visibility controls", () => {
     const password = fixture.nativeElement.querySelector(
       'input[name="new-password"]',
     ) as HTMLInputElement;
@@ -75,11 +75,10 @@ describe("RegisterComponent", () => {
     expect(repeatedPassword.closest("app-input")?.classList).toContain("auth__password-input");
     for (const nativePassword of [password, repeatedPassword]) {
       const field = nativePassword.closest("app-input")?.querySelector(".field") as HTMLElement;
-      const nativeArea = field.querySelector(".field__native-input-area") as HTMLElement;
       const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;
-      expect(field.classList).toContain("field--right-action-outside");
-      expect(nativeArea.contains(nativePassword)).toBe(true);
-      expect(nativeArea.contains(eyeSlot)).toBe(false);
+      expect(field.querySelector(".field__native-input-area")).toBeNull();
+      expect(nativePassword.parentElement).toBe(field);
+      expect(eyeSlot.parentElement).toBe(field);
       expect(field.lastElementChild).toBe(eyeSlot);
     }
     expect(birthdayField.classList).not.toContain("auth__password-input");

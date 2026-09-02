@@ -3,8 +3,6 @@
 <div
   class="field"
   [class.field--error]="error()"
-  [class.field--border]="rightActionOutside() && hasBorder()"
-  [class.field--right-action-outside]="rightActionOutside()"
   [style.width]="size() === 'small' ? '70px' : '100%'"
   (click)="focusInput()"
 >
@@ -77,12 +75,36 @@
     }
     <mat-datepicker #picker></mat-datepicker>
   } @else {
-    @if (rightActionOutside()) {
-      <div class="field__native-input-area">
-        <ng-container [ngTemplateOutlet]="standardInput"></ng-container>
+    <input
+      #nativeInput
+      [value]="value"
+      (input)="onInput($event)"
+      (keydown.enter)="onEnter($event)"
+      (blur)="onBlur()"
+      [placeholder]="placeholder()"
+      [type]="type()"
+      [mask]="mask()"
+      [name]="name()"
+      [attr.autocomplete]="autocomplete() || null"
+      [dropSpecialCharacters]="dropSpecialCharacters()"
+      class="field__input"
+      [class.field__input--error]="error()"
+      [class.field__input--overflow]="isLengthOverflow"
+      [class.field__input--small]="size() === 'small'"
+      [class.field__input--small--error]="size() === 'small' && error()"
+      [class.field__input--big]="size() === 'big'"
+      [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
+      [class.field__input--border]="hasBorder()"
+    />
+    @if (maxLength()) {
+      <div class="field__counter">
+        <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
+          <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
+            value.length
+          }}</span>
+          / {{ maxLength() }}
+        </p>
       </div>
-    } @else {
-      <ng-container [ngTemplateOutlet]="standardInput"></ng-container>
     }
   }
   @if (showErrorIcon) {
@@ -91,13 +113,9 @@
       appIcon
       icon="error"
       appSquare="20"
-      [ngStyle]="
-        rightActionOutside()
-          ? {}
-          : {
-              right: size() === 'small' ? '6px' : '16px',
-            }
-      "
+      [ngStyle]="{
+        right: size() === 'small' ? '6px' : '16px',
+      }"
     ></i>
   } @else if (haveHint() && tooltipText()) {
     <div class="field__tooltip-wrapper" [class.field__tooltip-wrapper--small]="size() === 'small'">
@@ -115,48 +133,10 @@
 
   <div
     class="field__right-icon"
-    [ngStyle]="
-      rightActionOutside()
-        ? {}
-        : {
-            right: error() ? '60px' : haveHint() ? '50px' : '24px',
-          }
-    "
+    [ngStyle]="{
+      right: error() ? '60px' : haveHint() ? '50px' : '24px',
+    }"
   >
     <ng-content></ng-content>
   </div>
 </div>
-
-<ng-template #standardInput>
-  <input
-    #nativeInput
-    [value]="value"
-    (input)="onInput($event)"
-    (keydown.enter)="onEnter($event)"
-    (blur)="onBlur()"
-    [placeholder]="placeholder()"
-    [type]="type()"
-    [mask]="mask()"
-    [name]="name()"
-    [attr.autocomplete]="autocomplete() || null"
-    [dropSpecialCharacters]="dropSpecialCharacters()"
-    class="field__input"
-    [class.field__input--error]="error()"
-    [class.field__input--overflow]="isLengthOverflow"
-    [class.field__input--small]="size() === 'small'"
-    [class.field__input--small--error]="size() === 'small' && error()"
-    [class.field__input--big]="size() === 'big'"
-    [class.field__input--with-tooltip]="size() !== 'small' && haveHint()"
-    [class.field__input--border]="hasBorder()"
-  />
-  @if (maxLength()) {
-    <div class="field__counter">
-      <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
-        <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
-          value.length
-        }}</span>
-        / {{ maxLength() }}
-      </p>
-    </div>
-  }
-</ng-template>

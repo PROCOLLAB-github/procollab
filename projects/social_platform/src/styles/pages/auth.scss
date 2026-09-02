@@ -82,12 +82,34 @@
   }
 
   &__password-input {
+    .field__input {
+      box-sizing: border-box;
+      width: 100%;
+      padding-right: 76px;
+    }
+
     .field__right-icon {
+      top: 50%;
+      right: 12px !important;
+      z-index: 4;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      pointer-events: none;
       background-color: transparent;
+      transform: translateY(-50%);
 
       i {
+        pointer-events: auto;
         cursor: pointer;
       }
+    }
+
+    .field__error-icon {
+      right: 44px !important;
+      z-index: 3;
+      width: 20px;
+      height: 20px;
     }
   }
 

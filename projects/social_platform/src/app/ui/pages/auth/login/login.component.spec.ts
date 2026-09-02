@@ -63,7 +63,7 @@ describe("LoginComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("uses the browser current-password contract without covering the eye control", () => {
+  it("uses a full-width native password input with a sibling visibility control", () => {
     const password = fixture.nativeElement.querySelector(
       'input[name="password"]',
     ) as HTMLInputElement;
@@ -74,11 +74,10 @@ describe("LoginComponent", () => {
     expect(password.autocomplete).toBe("current-password");
     expect(passwordField.classList).toContain("auth__password-input");
     const field = passwordField.querySelector(".field") as HTMLElement;
-    const nativeArea = field.querySelector(".field__native-input-area") as HTMLElement;
     const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;
-    expect(field.classList).toContain("field--right-action-outside");
-    expect(nativeArea.contains(password)).toBe(true);
-    expect(nativeArea.contains(eyeSlot)).toBe(false);
+    expect(field.querySelector(".field__native-input-area")).toBeNull();
+    expect(password.parentElement).toBe(field);
+    expect(eyeSlot.parentElement).toBe(field);
     expect(field.lastElementChild).toBe(eyeSlot);
     expect(emailField.classList).not.toContain("auth__password-input");
     expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
