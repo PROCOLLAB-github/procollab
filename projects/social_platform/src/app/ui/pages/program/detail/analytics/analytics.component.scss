@@ -126,6 +126,8 @@
 }
 
 .regions {
+  display: flex;
+  flex-direction: column;
   padding: 16px 18px;
 
   &__list {
@@ -156,11 +158,6 @@
         color: var(--black);
       }
     }
-  }
-
-  .analytics-card__empty {
-    margin-top: 12px;
-    text-align: left;
   }
 }
 
@@ -231,32 +228,6 @@
   min-height: 250px;
   padding: 18px;
 
-  &__empty {
-    margin: auto 0;
-    color: var(--grey-for-text);
-    text-align: center;
-
-    &--center {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      color: var(--dark-grey);
-    }
-
-    &--cases {
-      width: min(100%, 300px);
-      min-height: 112px;
-      padding: 20px;
-      margin: auto;
-      line-height: 18px;
-      background: var(--light-gray);
-      border: 1px solid var(--medium-grey-for-outline);
-      border-radius: 12px;
-    }
-  }
-
   &__title {
     font-size: 16px;
     font-weight: 600;
@@ -277,6 +248,16 @@
     line-height: 18px;
     color: var(--black);
   }
+}
+
+.analytics-empty-state {
+  display: grid;
+  flex: 1 1 auto;
+  place-items: center;
+  min-height: 96px;
+  margin: 16px 0 0;
+  color: var(--grey-for-text);
+  text-align: center;
 }
 
 .funnel {
@@ -426,9 +407,15 @@
 }
 
 .attention {
+  display: flex;
+  flex-direction: column;
   background: var(--light-white);
   border-color: var(--medium-grey-for-outline);
   border-left: 4px solid var(--red);
+
+  &--empty {
+    border-left-color: var(--green);
+  }
 
   &__list {
     display: grid;
@@ -462,37 +449,18 @@
   }
 
   &__empty {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    padding: 14px 16px;
-    margin-top: 16px;
     font-weight: 500;
     color: var(--grey-for-text);
-    background: var(--light-gray);
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 12px;
-
-    &::before {
-      font-weight: 700;
-      color: var(--green-dark);
-      content: "\2713";
-    }
   }
 }
 
 .activity {
+  display: flex;
+  flex-direction: column;
+
   &__note {
     margin-top: 2px;
     color: var(--dark-grey);
-  }
-
-  &__empty {
-    padding: 28px 16px;
-    margin: 24px 0 0;
-    color: var(--dark-grey);
-    background: var(--light-gray);
-    border-radius: 12px;
   }
 
   &__chart {
