@@ -57,6 +57,11 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly summary = computed<AnalyticsMetric[]>(() => {
     const overview = this.data();
     if (!overview) return [];
+    const projectCount = overview.summary.projects.total;
+    const averageTeamSize =
+      projectCount > 0
+        ? Math.round((overview.summary.participants.total / projectCount) * 10) / 10
+        : 0;
 
     return [
       {
@@ -81,11 +86,11 @@ export class ProgramAnalyticsComponent implements OnInit {
         tooltip: "Эксперты, добавленные в программу.",
       },
       {
-        key: "regions",
-        label: "Регионы проектов",
-        value: overview.summary.regions.total,
-        icon: "world-wide",
-        tooltip: "Количество уникальных регионов, указанных в проектах программы.",
+        key: "team",
+        label: "Команда",
+        value: averageTeamSize,
+        icon: "people",
+        tooltip: "Среднее количество участников в одном проекте программы.",
       },
     ];
   });

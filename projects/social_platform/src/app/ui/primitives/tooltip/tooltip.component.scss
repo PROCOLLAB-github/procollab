@@ -58,7 +58,7 @@
 
     &--left,
     &--overlay-left {
-      border-radius: 15px 15px 15px 0;
+      border-radius: 15px;
 
       &::after {
         position: absolute;
@@ -91,7 +91,7 @@
 
     &--right,
     &--overlay-right {
-      border-radius: 15px 15px 0;
+      border-radius: 15px;
 
       &::after {
         position: absolute;

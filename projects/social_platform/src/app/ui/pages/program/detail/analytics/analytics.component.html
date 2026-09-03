@@ -135,7 +135,7 @@
           }
         </ul>
       } @else {
-        <p class="analytics-card__empty text-body-10">У проектов пока не указаны регионы</p>
+        <p class="analytics-empty-state text-body-10">У проектов пока не указаны регионы</p>
       }
     </section>
 
@@ -176,13 +176,13 @@
             }
           </ol>
         } @else {
-          <p class="analytics-card__empty text-body-10">Пока нет данных по участникам.</p>
+          <p class="analytics-empty-state text-body-10">Пока нет данных по участникам</p>
         }
       </article>
 
       <article class="analytics-card" data-testid="solution-funnel">
         <div class="analytics__heading-row">
-          <h2 class="text-body-12">Воронка решений</h2>
+          <h2 class="text-body-12">Проекты</h2>
           <app-tooltip
             text="Путь проектов программы от создания до оценки."
             [isVisible]="isTooltipVisible('solution-funnel')"
@@ -216,7 +216,7 @@
             }
           </ol>
         } @else {
-          <p class="analytics-card__empty text-body-10">Нет решений для отображения.</p>
+          <p class="analytics-empty-state text-body-10">Нет решений для отображения</p>
         }
       </article>
 
@@ -232,12 +232,7 @@
             (hide)="hideTooltip('cases')"
           ></app-tooltip>
         </div>
-        <div
-          class="analytics-card__empty analytics-card__empty--center analytics-card__empty--cases text-body-12"
-        >
-          <i appIcon icon="task" appSquare="32"></i>
-          <span>Статистика по кейсам пока недоступна</span>
-        </div>
+        <p class="analytics-empty-state text-body-12">Статистика по кейсам пока недоступна</p>
       </article>
 
       <article class="analytics-card evaluation" data-testid="evaluation-statuses">
@@ -298,13 +293,17 @@
             </div>
           }
         } @else {
-          <p class="analytics-card__empty text-body-10">Пока нет сданных работ для оценивания</p>
+          <p class="analytics-empty-state text-body-10">Пока нет сданных работ для оценивания</p>
         }
       </article>
     </section>
 
     <section class="analytics-bottom">
-      <article class="attention" data-testid="attention-block">
+      <article
+        class="attention"
+        [class.attention--empty]="!hasValues(attention())"
+        data-testid="attention-block"
+      >
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Требует внимания</h2>
           <app-tooltip
@@ -336,7 +335,9 @@
             }
           </ul>
         } @else {
-          <p class="attention__empty text-body-10">Ничего не требует внимания</p>
+          <p class="analytics-empty-state attention__empty text-body-10">
+            Ничего не требует внимания
+          </p>
         }
       </article>
 
@@ -412,9 +413,7 @@
             </div>
           </div>
         } @else {
-          <p class="analytics-card__empty activity__empty text-body-12">
-            За последние 30 дней активности не было
-          </p>
+          <p class="analytics-empty-state text-body-12">За последние 30 дней активности не было</p>
         }
       </article>
     </section>
