@@ -58,7 +58,7 @@ export class ProgramAnalyticsComponent implements OnInit {
     const overview = this.data();
     if (!overview) return [];
     const projectCount = overview.summary.projects.total;
-    const averageTeamSize =
+    const averageParticipantsPerProject =
       projectCount > 0
         ? Math.round((overview.summary.participants.total / projectCount) * 10) / 10
         : 0;
@@ -86,11 +86,11 @@ export class ProgramAnalyticsComponent implements OnInit {
         tooltip: "Эксперты, добавленные в программу.",
       },
       {
-        key: "team",
-        label: "Команда",
-        value: averageTeamSize,
+        key: "participants-per-project",
+        label: "Участников на проект",
+        value: averageParticipantsPerProject,
         icon: "people",
-        tooltip: "Среднее количество участников в одном проекте программы.",
+        tooltip: "Среднее количество зарегистрированных участников программы на один проект.",
       },
     ];
   });

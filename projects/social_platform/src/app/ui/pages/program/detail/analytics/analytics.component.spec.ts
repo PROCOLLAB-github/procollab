@@ -110,8 +110,13 @@ describe("ProgramAnalyticsComponent", () => {
       "Эксперты",
     );
     expect(root.querySelector('[data-testid="summary-experts"]')?.textContent).toContain("4");
-    expect(root.querySelector('[data-testid="summary-team"]')?.textContent).toContain("Команда");
-    expect(root.querySelector('[data-testid="summary-team"]')?.textContent).toContain("2.6");
+    expect(
+      root.querySelector('[data-testid="summary-participants-per-project"]')?.textContent,
+    ).toContain("Участников на проект");
+    expect(
+      root.querySelector('[data-testid="summary-participants-per-project"]')?.textContent,
+    ).toContain("2.6");
+    expect(root.querySelector('[data-testid="summary-team"]')).toBeNull();
     expect(root.querySelector('[data-testid="summary-regions"]')).toBeNull();
     expect(root.querySelector('[data-testid="regions-breakdown"]')?.textContent).toContain(
       "Москва",
@@ -122,7 +127,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(root.querySelectorAll('[data-testid="metric-tooltip"]').length).toBe(4);
   });
 
-  it("считает и форматирует среднее количество участников в проекте", () => {
+  it("считает и форматирует отношение участников программы к проектам", () => {
     const base = overview();
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
 
@@ -135,11 +140,11 @@ describe("ProgramAnalyticsComponent", () => {
       },
     });
     fixture.detectChanges();
-    const teamValue = () =>
+    const participantsPerProjectValue = () =>
       (fixture.nativeElement as HTMLElement)
-        .querySelector('[data-testid="summary-team"] .summary-card__value')
+        .querySelector('[data-testid="summary-participants-per-project"] .summary-card__value')
         ?.textContent?.trim();
-    expect(teamValue()).toBe("3.5");
+    expect(participantsPerProjectValue()).toBe("3.5");
 
     data.set({
       ...base,
@@ -150,7 +155,7 @@ describe("ProgramAnalyticsComponent", () => {
       },
     });
     fixture.detectChanges();
-    expect(teamValue()).toBe("3");
+    expect(participantsPerProjectValue()).toBe("3");
 
     data.set({
       ...base,
@@ -161,7 +166,7 @@ describe("ProgramAnalyticsComponent", () => {
       },
     });
     fixture.detectChanges();
-    expect(teamValue()).toBe("0");
+    expect(participantsPerProjectValue()).toBe("0");
   });
 
   it("строит воронки только из participantFunnel и solutionFunnel", () => {
@@ -315,6 +320,10 @@ describe("ProgramAnalyticsComponent", () => {
     expect(emptyStates.every(state => !state.textContent?.trim().endsWith("."))).toBe(true);
     expect(fixture.nativeElement.querySelector(".attention--empty")).not.toBeNull();
     expect(fixture.nativeElement.querySelector(".attention__empty")).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector(".attention > .analytics-empty-state"),
+    ).not.toBeNull();
+    expect(fixture.nativeElement.querySelector(".regions > .analytics-empty-state")).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain("За последние 30 дней активности не было");
     expect(fixture.nativeElement.querySelector(".activity__note")).toBeNull();
     expect(fixture.nativeElement.textContent).toContain("Статистика по кейсам пока недоступна");

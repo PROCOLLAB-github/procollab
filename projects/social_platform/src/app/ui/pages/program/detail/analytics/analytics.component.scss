@@ -126,6 +126,8 @@
 }
 
 .regions {
+  display: flex;
+  flex-direction: column;
   padding: 16px 18px;
 
   &__list {
@@ -405,6 +407,8 @@
 }
 
 .attention {
+  display: flex;
+  flex-direction: column;
   background: var(--light-white);
   border-color: var(--medium-grey-for-outline);
   border-left: 4px solid var(--red);
