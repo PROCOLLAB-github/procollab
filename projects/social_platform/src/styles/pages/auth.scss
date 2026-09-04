@@ -69,11 +69,11 @@
   // Keep native autofill on the complete input, including below transparent overlays.
   // Outrank emulated app-input styles, which are inserted after the global auth sheet.
   &__field app-input.auth__password-input {
-    --auth-password-eye-inset: 8px;
-    --auth-password-eye-size: 32px;
-    --auth-password-eye-text-gap: 4px;
+    --auth-password-eye-inset: 5px;
+    --auth-password-eye-size: 25px;
+    --auth-password-eye-text-gap: 5px;
     --auth-password-error-size: 20px;
-    --auth-password-error-gap: 8px;
+    --auth-password-error-gap: 4px;
     --auth-password-eye-edge: calc(var(--auth-password-eye-inset) + var(--auth-password-eye-size));
     --auth-password-error-inset: calc(var(--auth-password-eye-edge) + var(--auth-password-error-gap));
     --auth-password-input-padding: calc(var(--auth-password-eye-edge) + var(--auth-password-eye-text-gap));
@@ -125,8 +125,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 25px;
+    height: 25px;
     padding: 0;
     color: var(--dark-grey);
     background: transparent;
