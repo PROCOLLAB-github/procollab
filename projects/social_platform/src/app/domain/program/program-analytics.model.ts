@@ -7,9 +7,8 @@ export interface ProgramAnalyticsOverview {
     participants: ProgramAnalyticsTotal;
     projects: ProgramAnalyticsTotal;
     experts: ProgramAnalyticsTotal;
-    regions: ProgramAnalyticsTotal & {
-      items: ProgramAnalyticsRegion[];
-    };
+    regions: ProgramAnalyticsRegions;
+    participantRegions: ProgramAnalyticsRegions;
   };
   participantFunnel: {
     registrations: number;
@@ -53,6 +52,10 @@ export interface ProgramAnalyticsTotal {
 export interface ProgramAnalyticsRegion {
   name: string;
   count: number;
+}
+
+export interface ProgramAnalyticsRegions extends ProgramAnalyticsTotal {
+  items: ProgramAnalyticsRegion[];
 }
 
 export interface ProgramAnalyticsActivityPoint {

@@ -113,29 +113,37 @@
       }
     </section>
 
-    <section class="regions" aria-labelledby="regions-title" data-testid="regions-breakdown">
-      <div class="analytics__heading-row">
-        <h2 id="regions-title" class="text-body-12">Регионы проектов</h2>
-        <app-tooltip
-          text="Количество проектов по регионам, указанным в карточках проектов программы."
-          [isVisible]="isTooltipVisible('regions-breakdown')"
-          [useOverlay]="true"
-          (click)="toggleTooltip('regions-breakdown')"
-          (show)="showTooltip('regions-breakdown')"
-          (hide)="hideTooltip('regions-breakdown')"
-        ></app-tooltip>
-      </div>
-      @if (regions().length > 0) {
-        <ul class="regions__list">
-          @for (region of regions(); track region.name) {
-            <li>
-              <span class="text-body-10">{{ region.name }}</span>
-              <strong>{{ region.count }}</strong>
-            </li>
+    <section class="regions-grid" aria-label="География программы">
+      @for (card of regionCards(); track card.key) {
+        <article
+          class="regions"
+          [attr.aria-labelledby]="card.key + '-title'"
+          [attr.data-testid]="card.key"
+        >
+          <div class="analytics__heading-row">
+            <h2 [id]="card.key + '-title'" class="text-body-12">{{ card.title }}</h2>
+            <app-tooltip
+              [text]="card.tooltip"
+              [isVisible]="isTooltipVisible(card.key)"
+              [useOverlay]="true"
+              (click)="toggleTooltip(card.key)"
+              (show)="showTooltip(card.key)"
+              (hide)="hideTooltip(card.key)"
+            ></app-tooltip>
+          </div>
+          @if (card.items.length > 0) {
+            <ul class="regions__list">
+              @for (region of card.items; track region.name) {
+                <li>
+                  <span class="text-body-10">{{ region.name }}</span>
+                  <strong>{{ region.count }}</strong>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="analytics-empty-state text-body-10">{{ card.emptyMessage }}</p>
           }
-        </ul>
-      } @else {
-        <p class="analytics-empty-state text-body-10">У проектов пока не указаны регионы</p>
+        </article>
       }
     </section>
 
@@ -182,7 +190,7 @@
 
       <article class="analytics-card" data-testid="solution-funnel">
         <div class="analytics__heading-row">
-          <h2 class="text-body-12">Проекты</h2>
+          <h2 class="text-body-12">Воронка проектов</h2>
           <app-tooltip
             text="Путь проектов программы от создания до оценки."
             [isVisible]="isTooltipVisible('solution-funnel')"

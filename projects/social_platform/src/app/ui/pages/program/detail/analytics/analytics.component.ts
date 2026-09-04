@@ -87,7 +87,7 @@ export class ProgramAnalyticsComponent implements OnInit {
       },
       {
         key: "participants-per-project",
-        label: "Участников на проект",
+        label: "Команда",
         value: averageParticipantsPerProject,
         icon: "people",
         tooltip: "Среднее количество зарегистрированных участников программы на один проект.",
@@ -95,7 +95,22 @@ export class ProgramAnalyticsComponent implements OnInit {
     ];
   });
 
-  protected readonly regions = computed(() => this.data()?.summary.regions.items ?? []);
+  protected readonly regionCards = computed(() => [
+    {
+      key: "project-regions",
+      title: "Регионы проектов",
+      items: this.data()?.summary.regions.items ?? [],
+      tooltip: "Количество проектов по регионам, указанным в карточках проектов программы.",
+      emptyMessage: "У проектов пока не указаны регионы",
+    },
+    {
+      key: "participant-regions",
+      title: "Регионы участников",
+      items: this.data()?.summary.participantRegions.items ?? [],
+      tooltip: "Количество участников программы по региону, указанному в профиле.",
+      emptyMessage: "У участников пока не указаны регионы",
+    },
+  ]);
 
   protected readonly participantFunnel = computed<AnalyticsMetric[]>(() => {
     const funnel = this.data()?.participantFunnel;

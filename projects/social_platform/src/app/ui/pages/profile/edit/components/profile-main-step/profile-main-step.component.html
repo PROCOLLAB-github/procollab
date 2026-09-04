@@ -102,16 +102,13 @@
     <div class="profile__column">
       @if (city) {
         <fieldset>
-          <label for="city" class="field-label">город</label>
-          <app-input
-            size="big"
+          <label for="city" class="field-label">Регион</label>
+          <app-region-select
             id="city"
+            ariaLabel="Регион пользователя"
             [error]="city | controlError"
-            type="text"
-            placeholder="москва"
-            [maxLength]="100"
             formControlName="city"
-          ></app-input>
+          ></app-region-select>
           @if (city | controlError: "required") {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
