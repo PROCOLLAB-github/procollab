@@ -102,14 +102,14 @@ describe("ProjectMainStepComponent", () => {
     await fixture.whenStable();
     expect(links.length).toBe(1);
     expect(
-      fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input'),
+      fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input input'),
     ).toHaveLength(1);
 
     addButton.click();
     await fixture.whenStable();
     expect(links.length).toBe(2);
     expect(
-      fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input'),
+      fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input input'),
     ).toHaveLength(2);
   });
 
@@ -134,6 +134,33 @@ describe("ProjectMainStepComponent", () => {
     await fixture.whenStable();
 
     expect(links.length).toBe(1);
-    expect(fixture.nativeElement.querySelector('[formarrayname="links"] app-input')).not.toBeNull();
+    const input = fixture.nativeElement.querySelector(
+      '[formarrayname="links"] app-input input',
+    ) as HTMLInputElement;
+    expect(input).not.toBeNull();
+    input.value = "https://new.example";
+    input.dispatchEvent(new Event("input"));
+    await fixture.whenStable();
+    expect(links.value).toEqual(["https://new.example"]);
+  });
+
+  it("renders loaded links and lets users add and type without another click or manual detection", async () => {
+    links.push(new FormBuilder().control("https://existing.example"));
+    TestBed.inject(ProjectContactsService).syncLinksItems(links);
+    await fixture.whenStable();
+    const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button button")).find(
+      (button: Element) => button.textContent?.includes("добавить ссылку"),
+    ) as HTMLButtonElement;
+    addButton.click();
+    await fixture.whenStable();
+    const inputs = fixture.nativeElement.querySelectorAll(
+      '[formarrayname="links"] input',
+    ) as NodeListOf<HTMLInputElement>;
+    expect(inputs).toHaveLength(2);
+    expect(inputs[0].value).toBe("https://existing.example");
+    inputs[1].value = "https://second.example";
+    inputs[1].dispatchEvent(new Event("input"));
+    await fixture.whenStable();
+    expect(links.value).toEqual(["https://existing.example", "https://second.example"]);
   });
 });

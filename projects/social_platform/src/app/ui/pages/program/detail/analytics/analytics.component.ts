@@ -15,6 +15,7 @@ import { ProgramAnalyticsActivityPoint } from "@domain/program/program-analytics
 import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { exportRegions, RegionExportKind } from "@utils/export-regions";
 
 interface AnalyticsMetric {
   key: string;
@@ -29,6 +30,11 @@ interface ActivityChartPoint extends ProgramAnalyticsActivityPoint {
   x: number;
   registrationsY: number;
   submittedSolutionsY: number;
+}
+
+interface RegionExportState {
+  pending: boolean;
+  failed: boolean;
 }
 
 /** Внутренняя manager-вкладка с агрегированной аналитикой программы. */
@@ -50,6 +56,11 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly error = this.analytics.error;
   protected readonly activeTooltip = signal<string | null>(null);
   protected readonly pinnedTooltip = signal<string | null>(null);
+  protected readonly selectedActivityDate = signal<string | null>(null);
+  protected readonly regionExportState = signal<Record<RegionExportKind, RegionExportState>>({
+    "project-regions": { pending: false, failed: false },
+    "participant-regions": { pending: false, failed: false },
+  });
 
   protected readonly loadingExports = computed(() => isLoading(this.exports.loadingExports$()));
   protected readonly exportFailed = computed(() => isFailure(this.exports.loadingExports$()));
@@ -97,14 +108,14 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   protected readonly regionCards = computed(() => [
     {
-      key: "project-regions",
+      key: "project-regions" as const,
       title: "Регионы проектов",
       items: this.data()?.summary.regions.items ?? [],
       tooltip: "Количество проектов по регионам, указанным в карточках проектов программы.",
       emptyMessage: "У проектов пока не указаны регионы",
     },
     {
-      key: "participant-regions",
+      key: "participant-regions" as const,
       title: "Регионы участников",
       items: this.data()?.summary.participantRegions.items ?? [],
       tooltip: "Количество участников программы по региону, указанному в профиле.",
@@ -262,18 +273,26 @@ export class ProgramAnalyticsComponent implements OnInit {
     ),
   );
 
-  protected readonly activityChart = computed<ActivityChartPoint[]>(() => {
+  protected readonly activityScale = computed(() => {
     const activity = this.data()?.activity ?? [];
-    const maxValue = Math.max(
+    const maximum = Math.max(
       1,
       ...activity.flatMap(point => [point.registrations, point.submittedSolutions]),
     );
+    // Integer counts, shared zero-based scale for both series; at most five grid labels.
+    const step = Math.max(1, Math.ceil(maximum / 4));
+    return { maximum: step * 4, ticks: [4, 3, 2, 1, 0].map(index => index * step) };
+  });
+
+  protected readonly activityChart = computed<ActivityChartPoint[]>(() => {
+    const activity = this.data()?.activity ?? [];
+    const maxValue = this.activityScale().maximum;
     const divisor = Math.max(activity.length - 1, 1);
 
     return activity.map((point, index) => ({
       ...point,
       dateLabel: this.formatDate(point.date),
-      x: (index / divisor) * 100,
+      x: 3 + (index / divisor) * 94,
       registrationsY: 88 - (point.registrations / maxValue) * 76,
       submittedSolutionsY: 88 - (point.submittedSolutions / maxValue) * 76,
     }));
@@ -293,8 +312,38 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   protected readonly activityAxisLabels = computed(() => {
     const points = this.activityChart();
-    return points.filter((_, index) => index % 5 === 0 || index === points.length - 1);
+    const interval = Math.max(1, Math.ceil((points.length - 1) / 3));
+    return points.filter((_, index) => index % interval === 0 || index === points.length - 1);
   });
+
+  protected readonly selectedActivity = computed(() =>
+    this.activityChart().find(point => point.date === this.selectedActivityDate()),
+  );
+
+  protected activityPointLabel(point: ActivityChartPoint): string {
+    return `${point.dateLabel}: новые регистрации — ${point.registrations}, отправленные решения — ${point.submittedSolutions}`;
+  }
+
+  protected async downloadRegions(kind: RegionExportKind): Promise<void> {
+    const card = this.regionCards().find(item => item.key === kind);
+    if (!card?.items.length || this.regionExportState()[kind].pending) return;
+    this.regionExportState.update(state => ({
+      ...state,
+      [kind]: { pending: true, failed: false },
+    }));
+    try {
+      await exportRegions(kind, card.items);
+      this.regionExportState.update(state => ({
+        ...state,
+        [kind]: { pending: false, failed: false },
+      }));
+    } catch {
+      this.regionExportState.update(state => ({
+        ...state,
+        [kind]: { pending: false, failed: true },
+      }));
+    }
+  }
 
   protected readonly errorMessage = computed(() => {
     switch (this.error()?.kind) {

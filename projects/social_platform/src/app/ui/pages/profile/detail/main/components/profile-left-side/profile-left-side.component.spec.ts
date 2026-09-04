@@ -33,7 +33,21 @@ describe("ProfileLeftSideComponent", () => {
 
     expect(card.nativeElement.textContent).toContain("Школа проектных команд");
     expect(card.nativeElement.querySelector("img").getAttribute("src")).toBe("/program.png");
+    const avatar = card.nativeElement.querySelector(".lists__program-avatar") as HTMLImageElement;
+    expect(avatar.width).toBe(48);
+    expect(avatar.height).toBe(48);
     expect(routerLink.urlTree.toString()).toContain("/office/program/4");
+  });
+
+  it("uses the same round avatar context for a missing program image", () => {
+    fixture.componentRef.setInput("user", {
+      personal: { birthday: null, city: "", speciality: "" },
+      relations: { userLanguages: [], programs: [{ id: 7, name: "Без изображения" }] },
+    } as unknown as User);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector(".lists__program-avatar.lists__program-placeholder"),
+    ).not.toBeNull();
   });
 
   it.each(["Санкт-Петербург", "Набережные Челны", "Мсква"])(

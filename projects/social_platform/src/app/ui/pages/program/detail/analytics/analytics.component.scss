@@ -479,9 +479,61 @@
   }
 
   &__chart {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
     min-width: 0;
     margin-top: 16px;
-    overflow-x: auto;
+    margin-bottom: 26px;
+  }
+
+  &__plot,
+  &__y-axis {
+    position: relative;
+    min-width: 0;
+  }
+
+  &__y-axis span {
+    position: absolute;
+    right: 8px;
+    font-size: 12px;
+    color: var(--black);
+    transform: translateY(-50%);
+  }
+
+  &__helper,
+  &__readout {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--grey-for-text);
+  }
+
+  &__readout {
+    min-height: 54px;
+
+    strong {
+      color: var(--black);
+    }
+  }
+
+  &__date-target {
+    position: absolute;
+    top: 12%;
+    bottom: 12%;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    transform: translateX(-50%);
+
+    &:hover,
+    &--selected {
+      background: rgb(109 40 255 / 8%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+    }
   }
 
   &__legend {
@@ -495,6 +547,10 @@
       display: inline-flex;
       gap: 6px;
       align-items: center;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 18px;
+      color: var(--black);
     }
   }
 
@@ -516,7 +572,6 @@
   svg {
     display: block;
     width: 100%;
-    min-width: 520px;
     height: 220px;
     overflow: visible;
   }
@@ -540,6 +595,7 @@
 
     &--solutions {
       stroke: var(--green);
+      stroke-dasharray: 5 3;
     }
   }
 
@@ -558,13 +614,49 @@
   }
 
   &__axis {
-    display: flex;
-    justify-content: space-between;
-    min-width: 520px;
+    position: relative;
     padding-top: 6px;
     color: var(--grey-for-text);
     border-top: 1px solid var(--medium-grey-for-outline);
+
+    span {
+      position: absolute;
+      font-size: 11px;
+      transform: translateX(-50%);
+    }
   }
+}
+
+.regions__export {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-left: auto;
+  color: var(--accent);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
+
+  &:disabled {
+    color: var(--dark-grey);
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.regions__export-message {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .analytics-state {

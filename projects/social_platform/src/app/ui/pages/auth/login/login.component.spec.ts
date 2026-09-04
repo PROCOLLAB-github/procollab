@@ -89,13 +89,22 @@ describe("LoginComponent", () => {
     ) as HTMLInputElement;
     const toggle = password
       .closest("app-input")
-      ?.querySelector(".field__right-icon i") as HTMLElement;
+      ?.querySelector(".field__right-icon button") as HTMLButtonElement;
 
     expect(password.type).toBe("password");
+    expect(toggle.type).toBe("button");
+    expect(toggle.getAttribute("aria-label")).toBe("Показать пароль");
+    toggle.focus();
     toggle.click();
     fixture.detectChanges();
 
     expect(password.type).toBe("text");
+    expect(toggle.getAttribute("aria-pressed")).toBe("true");
+    expect(document.activeElement).toBe(toggle);
+    toggle.click();
+    fixture.detectChanges();
+    expect(password.type).toBe("password");
+    expect(password.autocomplete).toBe("current-password");
   });
 
   it("keeps validation and visibility icons in separate password suffix elements", () => {

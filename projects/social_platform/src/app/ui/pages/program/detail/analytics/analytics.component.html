@@ -122,6 +122,17 @@
         >
           <div class="analytics__heading-row">
             <h2 [id]="card.key + '-title'" class="text-body-12">{{ card.title }}</h2>
+            <button
+              type="button"
+              class="regions__export"
+              [attr.aria-label]="'Выгрузить ' + card.title.toLowerCase() + ' в Excel'"
+              [attr.title]="card.items.length ? 'Скачать XLSX' : 'Нет данных для выгрузки'"
+              [disabled]="!card.items.length || regionExportState()[card.key].pending"
+              [attr.aria-busy]="regionExportState()[card.key].pending"
+              (click)="downloadRegions(card.key)"
+            >
+              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+            </button>
             <app-tooltip
               [text]="card.tooltip"
               [isVisible]="isTooltipVisible(card.key)"
@@ -131,6 +142,14 @@
               (hide)="hideTooltip(card.key)"
             ></app-tooltip>
           </div>
+          @if (regionExportState()[card.key].pending) {
+            <p class="regions__export-message" role="status">Подготавливаем Excel…</p>
+          }
+          @if (regionExportState()[card.key].failed) {
+            <p class="regions__export-message exports__error" role="alert">
+              Не удалось создать Excel. Попробуйте ещё раз.
+            </p>
+          }
           @if (card.items.length > 0) {
             <ul class="regions__list">
               @for (region of card.items; track region.name) {
@@ -369,57 +388,97 @@
         </div>
         @if (hasActivity()) {
           <div class="activity__legend" aria-label="Обозначения графика">
-            <span class="text-body-8"
+            <span
               ><i class="activity__marker activity__marker--registrations"></i>Новые
               регистрации</span
             >
-            <span class="text-body-8"
+            <span
               ><i class="activity__marker activity__marker--solutions"></i>Отправленные
               решения</span
             >
           </div>
+          <p class="activity__helper" id="activity-help">
+            Количество событий в день. Выберите дату на графике, чтобы увидеть значения.
+          </p>
           <div
             class="activity__chart"
-            role="img"
-            aria-label="График регистраций и отправленных решений за последние 30 дней"
+            role="group"
+            aria-label="График активности"
+            aria-describedby="activity-help"
           >
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <line class="activity__grid-line" x1="0" y1="88" x2="100" y2="88"></line>
-              <line class="activity__grid-line" x1="0" y1="50" x2="100" y2="50"></line>
-              <line class="activity__grid-line" x1="0" y1="12" x2="100" y2="12"></line>
-              <polyline
-                class="activity__line activity__line--registrations"
-                [attr.points]="registrationPolyline()"
-              ></polyline>
-              <polyline
-                class="activity__line activity__line--solutions"
-                [attr.points]="submissionPolyline()"
-              ></polyline>
-              @for (point of activityChart(); track point.date) {
-                <circle
-                  class="activity__point activity__point--registrations"
-                  [attr.cx]="point.x"
-                  [attr.cy]="point.registrationsY"
-                  r="1.2"
-                >
-                  <title>{{ point.dateLabel }} — регистрации: {{ point.registrations }}</title>
-                </circle>
-                <circle
-                  class="activity__point activity__point--solutions"
-                  [attr.cx]="point.x"
-                  [attr.cy]="point.submittedSolutionsY"
-                  r="1.2"
-                >
-                  <title>{{ point.dateLabel }} — решения: {{ point.submittedSolutions }}</title>
-                </circle>
-              }
-            </svg>
-            <div class="activity__axis" aria-hidden="true">
-              @for (point of activityAxisLabels(); track point.date) {
-                <span class="text-body-8">{{ point.dateLabel }}</span>
+            <div class="activity__y-axis" aria-label="Количество событий в день">
+              @for (value of activityScale().ticks; track value; let i = $index) {
+                <span [style.top.%]="12 + i * 19">{{ value }}</span>
               }
             </div>
+            <div class="activity__plot">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                @for (value of activityScale().ticks; track value; let i = $index) {
+                  <line
+                    class="activity__grid-line"
+                    x1="0"
+                    [attr.y1]="12 + i * 19"
+                    x2="100"
+                    [attr.y2]="12 + i * 19"
+                  ></line>
+                }
+                <polyline
+                  class="activity__line activity__line--registrations"
+                  [attr.points]="registrationPolyline()"
+                ></polyline>
+                <polyline
+                  class="activity__line activity__line--solutions"
+                  [attr.points]="submissionPolyline()"
+                ></polyline>
+                @for (point of activityChart(); track point.date) {
+                  <circle
+                    class="activity__point activity__point--registrations"
+                    [attr.cx]="point.x"
+                    [attr.cy]="point.registrationsY"
+                    r="1.2"
+                  >
+                    <title>{{ point.dateLabel }} — регистрации: {{ point.registrations }}</title>
+                  </circle>
+                  <circle
+                    class="activity__point activity__point--solutions"
+                    [attr.cx]="point.x"
+                    [attr.cy]="point.submittedSolutionsY"
+                    r="1.2"
+                  >
+                    <title>{{ point.dateLabel }} — решения: {{ point.submittedSolutions }}</title>
+                  </circle>
+                }
+              </svg>
+              @for (point of activityChart(); track point.date) {
+                <button
+                  type="button"
+                  class="activity__date-target"
+                  [class.activity__date-target--selected]="selectedActivityDate() === point.date"
+                  [style.left.%]="point.x"
+                  [style.width.%]="94 / activityChart().length"
+                  [attr.aria-label]="activityPointLabel(point)"
+                  (mouseenter)="selectedActivityDate.set(point.date)"
+                  (focus)="selectedActivityDate.set(point.date)"
+                  (click)="selectedActivityDate.set(point.date)"
+                  (keydown.escape)="selectedActivityDate.set(null)"
+                ></button>
+              }
+              <div class="activity__axis" aria-hidden="true">
+                @for (point of activityAxisLabels(); track point.date) {
+                  <span [style.left.%]="point.x">{{ point.dateLabel }}</span>
+                }
+              </div>
+            </div>
           </div>
+          <p class="activity__readout" aria-live="polite" aria-atomic="true">
+            @if (selectedActivity(); as point) {
+              <strong>{{ point.dateLabel }}</strong> · Новые регистрации:
+              <strong>{{ point.registrations }}</strong> · Отправленные решения:
+              <strong>{{ point.submittedSolutions }}</strong>
+            } @else {
+              Наведите указатель или перейдите к дате клавишей Tab
+            }
+          </p>
         } @else {
           <p class="analytics-empty-state text-body-12">За последние 30 дней активности не было</p>
         }

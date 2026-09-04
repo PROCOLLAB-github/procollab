@@ -13,7 +13,7 @@ import {
   output,
   viewChild,
 } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { NgxMaskDirective } from "ngx-mask";
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -36,6 +36,7 @@ import { IconComponent } from "../icon/icon.component";
   ],
   imports: [
     CommonModule,
+    FormsModule,
     NgxMaskDirective,
     IconComponent,
     TooltipComponent,
@@ -165,11 +166,10 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string | null): void {
-    setTimeout(() => {
-      this.value = value ?? "";
-      this.appValue.set(this.value);
-      this.cdr.markForCheck();
-    });
+    // CVA initialization belongs to the current form/render cycle, not a later timer.
+    this.value = value ?? "";
+    this.appValue.set(this.value);
+    this.cdr.markForCheck();
   }
 
   onChange: (value: string) => void = () => {};
