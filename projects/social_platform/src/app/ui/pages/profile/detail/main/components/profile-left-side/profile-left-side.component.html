@@ -78,9 +78,17 @@
       <ng-template #programTemp let-program>
         <a [routerLink]="AppRoutes.program.detail(program.id)" class="lists__program-card">
           @if (programImage(program); as image) {
-            <img alt="" [src]="image" width="48" height="36" loading="lazy" decoding="async" />
+            <img
+              class="lists__program-avatar"
+              alt=""
+              [src]="image"
+              width="48"
+              height="48"
+              loading="lazy"
+              decoding="async"
+            />
           } @else {
-            <span class="lists__program-placeholder" aria-hidden="true">
+            <span class="lists__program-avatar lists__program-placeholder" aria-hidden="true">
               <i appIcon icon="folder" appSquare="14"></i>
             </span>
           }

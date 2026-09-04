@@ -63,23 +63,20 @@
                 autocomplete="current-password"
                 placeholder="GJiwoeuhbn120="
               >
-                @if (showPassword()) {
+                <button
+                  type="button"
+                  class="auth__password-toggle"
+                  [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                  [attr.aria-pressed]="showPassword()"
+                  (click)="$event.stopPropagation(); toggleShowPassword()"
+                >
                   <i
                     appIcon
-                    icon="eye"
+                    [icon]="showPassword() ? 'eye' : 'eye-off'"
                     appSquare="18"
-                    class="icon"
-                    (click)="toggleShowPassword()"
+                    aria-hidden="true"
                   ></i>
-                } @else {
-                  <i
-                    appIcon
-                    icon="eye-off"
-                    appSquare="18"
-                    class="icon"
-                    (click)="toggleShowPassword()"
-                  ></i>
-                }
+                </button>
               </app-input>
 
               @if (password | controlError: "required") {

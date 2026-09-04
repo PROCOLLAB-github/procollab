@@ -93,15 +93,24 @@ describe("RegisterComponent", () => {
       'input[name="new-password-confirmation"]',
     ) as HTMLInputElement;
 
-    (password.closest("app-input")?.querySelector(".field__right-icon i") as HTMLElement).click();
+    const firstToggle = password
+      .closest("app-input")
+      ?.querySelector(".field__right-icon button") as HTMLButtonElement;
+    expect(firstToggle.type).toBe("button");
+    expect(firstToggle.getAttribute("aria-label")).toBe("Показать пароль");
+    firstToggle.click();
     fixture.detectChanges();
     expect(password.type).toBe("text");
 
     (
-      repeatedPassword.closest("app-input")?.querySelector(".field__right-icon i") as HTMLElement
+      repeatedPassword
+        .closest("app-input")
+        ?.querySelector(".field__right-icon button") as HTMLButtonElement
     ).click();
     fixture.detectChanges();
     expect(repeatedPassword.type).toBe("text");
+    expect(firstToggle.getAttribute("aria-pressed")).toBe("true");
+    expect(repeatedPassword.autocomplete).toBe("new-password");
   });
 
   it("keeps email errors and both password visibility controls in separate suffix elements", () => {

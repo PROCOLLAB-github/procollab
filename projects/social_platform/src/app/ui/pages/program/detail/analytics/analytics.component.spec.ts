@@ -9,6 +9,9 @@ import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program
 import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 import { initial } from "@domain/shared/async-state";
 import { ProgramAnalyticsComponent } from "./analytics.component";
+import { exportRegions } from "@utils/export-regions";
+
+vi.mock("@utils/export-regions", () => ({ exportRegions: vi.fn().mockResolvedValue(undefined) }));
 
 function activity(count = 30, allZero = false): ProgramAnalyticsOverview["activity"] {
   return Array.from({ length: count }, (_, index) => ({
@@ -85,6 +88,7 @@ describe("ProgramAnalyticsComponent", () => {
   };
 
   beforeEach(() => {
+    vi.mocked(exportRegions).mockReset().mockResolvedValue(undefined);
     data.set(overview());
     pending.set(false);
     failed.set(false);
@@ -325,6 +329,80 @@ describe("ProgramAnalyticsComponent", () => {
     expect(chart?.querySelectorAll("circle").length).toBe(60);
     expect(chart?.querySelectorAll("polyline").length).toBe(2);
     expect(chart?.querySelector("title")?.textContent).toContain("01.08");
+    expect(chart?.querySelectorAll(".activity__grid-line")).toHaveLength(5);
+    expect(chart?.querySelector(".activity__y-axis")?.textContent).toContain("4");
+    expect(chart?.textContent).toContain("Количество событий в день");
+    const date = chart?.querySelectorAll<HTMLButtonElement>(".activity__date-target")[1];
+    expect(date?.getAttribute("aria-label")).toContain(
+      "02.08: новые регистрации — 1, отправленные решения — 1",
+    );
+    date?.dispatchEvent(new FocusEvent("focus"));
+    fixture.detectChanges();
+    expect(chart?.querySelector(".activity__readout")?.textContent).toContain("02.08");
+    date?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    fixture.detectChanges();
+    expect(chart?.querySelector(".activity__readout")?.textContent).toContain("Наведите указатель");
+  });
+
+  it("exports each loaded region dataset independently and prevents repeated clicks", async () => {
+    let resolve!: () => void;
+    vi.mocked(exportRegions).mockReturnValueOnce(
+      new Promise<void>(done => {
+        resolve = done;
+      }),
+    );
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const buttons = fixture.nativeElement.querySelectorAll(
+      ".regions__export",
+    ) as NodeListOf<HTMLButtonElement>;
+    expect(buttons).toHaveLength(2);
+    expect(exportRegions).not.toHaveBeenCalled();
+    buttons[0].click();
+    buttons[0].click();
+    fixture.detectChanges();
+    expect(buttons[0].disabled).toBe(true);
+    expect(buttons[1].disabled).toBe(false);
+    expect(exportRegions).toHaveBeenCalledExactlyOnceWith(
+      "project-regions",
+      data()!.summary.regions.items,
+    );
+    buttons[1].click();
+    expect(exportRegions).toHaveBeenLastCalledWith(
+      "participant-regions",
+      data()!.summary.participantRegions.items,
+    );
+    resolve();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(buttons[0].disabled).toBe(false);
+  });
+
+  it("disables empty region exports and keeps export errors local to their card", async () => {
+    const empty = overview();
+    empty.summary.regions = { total: 0, items: [] };
+    data.set(empty);
+    vi.mocked(exportRegions).mockRejectedValueOnce(new Error("internal details"));
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const buttons = root.querySelectorAll<HTMLButtonElement>(".regions__export");
+    expect(buttons[0].disabled).toBe(true);
+    expect(buttons[0].title).toBe("Нет данных для выгрузки");
+    buttons[0].click();
+    expect(exportRegions).not.toHaveBeenCalled();
+    buttons[1].click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(
+      root.querySelector('[data-testid="participant-regions"] [role="alert"]')?.textContent,
+    ).toContain("Не удалось создать Excel");
+    expect(root.textContent).not.toContain("internal details");
+    expect(root.querySelector(".activity")).not.toBeNull();
+    buttons[1].click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(root.querySelector('[data-testid="participant-regions"] [role="alert"]')).toBeNull();
   });
 
   it("показывает отдельные zero states для каждого блока", () => {

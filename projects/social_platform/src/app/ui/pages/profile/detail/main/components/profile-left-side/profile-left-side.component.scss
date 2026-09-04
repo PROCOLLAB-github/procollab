@@ -91,13 +91,12 @@
       box-shadow: 0 2px 8px rgb(51 51 51 / 8%);
     }
 
-    img,
-    .lists__program-placeholder {
+    .lists__program-avatar {
       flex: 0 0 48px;
       width: 48px;
-      height: 36px;
+      height: 48px;
       object-fit: cover;
-      border-radius: var(--rounded-md);
+      border-radius: 50%;
     }
   }
 

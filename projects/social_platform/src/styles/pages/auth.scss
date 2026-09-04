@@ -65,51 +65,67 @@
       display: block;
     }
 
-    .field__error-icon {
+    app-input .field__error-icon {
       padding: 0;
       pointer-events: none;
       background: transparent;
     }
 
-    .field__input {
-      &:-webkit-autofill,
-      &:-webkit-autofill:hover,
-      &:-webkit-autofill:focus {
-        box-shadow: 0 0 0 1000px var(--white) inset;
-        -webkit-text-fill-color: var(--black);
-      }
-    }
+    // Keep native autofill on the complete input, including below transparent overlays.
   }
 
-  &__password-input {
+  // Outrank emulated app-input styles, which are inserted after the global auth sheet.
+  &__field app-input.auth__password-input {
     .field__input {
       box-sizing: border-box;
       width: 100%;
-      padding-right: 76px;
+      padding-right: 56px;
+    }
+
+    .field--error .field__input {
+      padding-right: 88px;
     }
 
     .field__right-icon {
       top: 50%;
-      right: 12px !important;
+      right: 8px !important;
       z-index: 4;
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       padding: 0;
       pointer-events: none;
       background-color: transparent;
       transform: translateY(-50%);
 
-      i {
+      button {
         pointer-events: auto;
         cursor: pointer;
       }
     }
 
     .field__error-icon {
-      right: 44px !important;
+      right: 48px !important;
       z-index: 3;
       width: 20px;
       height: 20px;
+    }
+  }
+
+  &__password-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    color: var(--black);
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
     }
   }
 

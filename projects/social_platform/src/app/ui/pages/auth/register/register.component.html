@@ -182,23 +182,20 @@
             autocomplete="new-password"
             placeholder="GJiwoeuhbn120="
           >
-            @if (showPassword()) {
+            <button
+              type="button"
+              class="auth__password-toggle"
+              [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+              [attr.aria-pressed]="showPassword()"
+              (click)="$event.stopPropagation(); toggleShowPassword('first')"
+            >
               <i
                 appIcon
-                icon="eye"
-                appSquare="20"
-                class="icon"
-                (click)="toggleShowPassword('first')"
-              ></i>
-            } @else {
-              <i
-                appIcon
-                icon="eye-off"
+                [icon]="showPassword() ? 'eye' : 'eye-off'"
                 appSquare="18"
-                class="icon"
-                (click)="toggleShowPassword('first')"
+                aria-hidden="true"
               ></i>
-            }
+            </button>
           </app-input>
         </fieldset>
 
@@ -215,23 +212,22 @@
             autocomplete="new-password"
             placeholder="GJiwoeuhbn120="
           >
-            @if (showPasswordRepeat()) {
+            <button
+              type="button"
+              class="auth__password-toggle"
+              [attr.aria-label]="
+                showPasswordRepeat() ? 'Скрыть повторный пароль' : 'Показать повторный пароль'
+              "
+              [attr.aria-pressed]="showPasswordRepeat()"
+              (click)="$event.stopPropagation(); toggleShowPassword('repeat')"
+            >
               <i
                 appIcon
-                icon="eye"
-                appSquare="20"
-                class="icon"
-                (click)="toggleShowPassword('repeat')"
-              ></i>
-            } @else {
-              <i
-                appIcon
-                icon="eye-off"
+                [icon]="showPasswordRepeat() ? 'eye' : 'eye-off'"
                 appSquare="18"
-                class="icon"
-                (click)="toggleShowPassword('repeat')"
+                aria-hidden="true"
               ></i>
-            }
+            </button>
           </app-input>
         </fieldset>
 
