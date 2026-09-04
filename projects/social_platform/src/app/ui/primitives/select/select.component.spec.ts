@@ -60,4 +60,14 @@ describe("SelectComponent", () => {
     expect(component.selectedId).toBe(selectedOption.id);
     expect(component.onChange).toHaveBeenCalledWith(selectedOption.value);
   });
+
+  it("renders its validation icon without a padded background wrapper", () => {
+    fixture.componentRef.setInput("error", true);
+    fixture.detectChanges();
+
+    const control = fixture.nativeElement.querySelector(".field__input") as HTMLElement;
+    const icon = control.querySelector(".field__error-icon") as HTMLElement;
+    expect(icon.parentElement).toBe(control);
+    expect(icon.classList).toContain("field__error-icon--bare");
+  });
 });

@@ -27,15 +27,17 @@ describe("ProfileLeftSideComponent", () => {
     fixture.detectChanges();
   });
 
-  it("renders programs as named rectangular links", () => {
+  it("renders programs as compact named rectangular links", () => {
     const card = fixture.debugElement.query(By.css(".lists__program-card"));
     const routerLink = card.injector.get(RouterLink);
 
     expect(card.nativeElement.textContent).toContain("Школа проектных команд");
     expect(card.nativeElement.querySelector("img").getAttribute("src")).toBe("/program.png");
     const avatar = card.nativeElement.querySelector(".lists__program-avatar") as HTMLImageElement;
-    expect(avatar.width).toBe(48);
-    expect(avatar.height).toBe(48);
+    expect(avatar.width).toBe(40);
+    expect(avatar.height).toBe(40);
+    const name = card.nativeElement.querySelector(".lists__program-name") as HTMLElement;
+    expect(name.classList).toContain("lists__program-name--compact");
     expect(routerLink.urlTree.toString()).toContain("/office/program/4");
   });
 
@@ -45,9 +47,24 @@ describe("ProfileLeftSideComponent", () => {
       relations: { userLanguages: [], programs: [{ id: 7, name: "Без изображения" }] },
     } as unknown as User);
     fixture.detectChanges();
-    expect(
-      fixture.nativeElement.querySelector(".lists__program-avatar.lists__program-placeholder"),
-    ).not.toBeNull();
+    const placeholder = fixture.nativeElement.querySelector(
+      ".lists__program-avatar.lists__program-placeholder",
+    ) as HTMLElement;
+    expect(placeholder).not.toBeNull();
+    expect(placeholder.classList).toContain("lists__program-avatar");
+  });
+
+  it("keeps a long program name intact in the two-line compact name container", () => {
+    const longName = "Международная программа развития проектного предпринимательства";
+    fixture.componentRef.setInput("user", {
+      personal: { birthday: null, city: "", speciality: "" },
+      relations: { userLanguages: [], programs: [{ id: 9, name: longName }] },
+    } as unknown as User);
+    fixture.detectChanges();
+
+    const name = fixture.nativeElement.querySelector(".lists__program-name") as HTMLElement;
+    expect(name.textContent?.trim()).toBe(longName);
+    expect(name.classList).toContain("lists__program-name--compact");
   });
 
   it.each(["Санкт-Петербург", "Набережные Челны", "Мсква"])(

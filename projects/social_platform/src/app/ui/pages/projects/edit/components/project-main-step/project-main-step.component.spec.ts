@@ -2,8 +2,9 @@
 
 import { provideZonelessChangeDetection, signal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { FormArray, FormBuilder } from "@angular/forms";
+import { FormArray, FormBuilder, NgControl } from "@angular/forms";
 import { provideRouter } from "@angular/router";
+import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { provideNgxMask } from "ngx-mask";
 import { ProjectContactsService } from "@api/project/facades/edit/project-contacts.service";
@@ -104,6 +105,11 @@ describe("ProjectMainStepComponent", () => {
     expect(
       fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input input'),
     ).toHaveLength(1);
+    expect(
+      fixture.debugElement
+        .query(By.css('[formarrayname="links"] app-input'))
+        .injector.get(NgControl).control,
+    ).toBe(links.at(0));
 
     addButton.click();
     await fixture.whenStable();
@@ -111,6 +117,57 @@ describe("ProjectMainStepComponent", () => {
     expect(
       fixture.nativeElement.querySelectorAll('[formarrayname="links"] app-input input'),
     ).toHaveLength(2);
+    const renderedControls = fixture.debugElement.queryAll(
+      By.css('[formarrayname="links"] app-input'),
+    );
+    expect(renderedControls[0].injector.get(NgControl).control).toBe(links.at(0));
+    expect(renderedControls[1].injector.get(NgControl).control).toBe(links.at(1));
+  });
+
+  it("writes immediately typed contact text into the source FormArray", async () => {
+    const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button")).find(
+      (button: Element) => button.textContent?.includes("добавить ссылку"),
+    ) as HTMLElement;
+
+    addButton.click();
+    await fixture.whenStable();
+    const input = fixture.nativeElement.querySelector(
+      '[formarrayname="links"] app-input input',
+    ) as HTMLInputElement;
+    input.value = "https://typed-immediately.example";
+    input.dispatchEvent(new Event("input"));
+    await fixture.whenStable();
+
+    expect(links.getRawValue()).toEqual(["https://typed-immediately.example"]);
+  });
+
+  it("keeps the remaining direct control after removing the first contact", async () => {
+    const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button")).find(
+      (button: Element) => button.textContent?.includes("добавить ссылку"),
+    ) as HTMLElement;
+
+    addButton.click();
+    await fixture.whenStable();
+    addButton.click();
+    await fixture.whenStable();
+    links.at(0).setValue("https://first.example");
+    links.at(1).setValue("https://remaining.example");
+
+    const removeButtons = fixture.nativeElement.querySelectorAll(
+      ".project__links--remove button",
+    ) as NodeListOf<HTMLButtonElement>;
+    removeButtons[0].click();
+    await fixture.whenStable();
+
+    const remainingInput = fixture.nativeElement.querySelector(
+      '[formarrayname="links"] app-input input',
+    ) as HTMLInputElement;
+    const remainingControl = fixture.debugElement.query(
+      By.css('[formarrayname="links"] app-input'),
+    );
+    expect(links.getRawValue()).toEqual(["https://remaining.example"]);
+    expect(remainingInput.value).toBe("https://remaining.example");
+    expect(remainingControl.injector.get(NgControl).control).toBe(links.at(0));
   });
 
   it("renders an input again after deleting the last project contact", async () => {
@@ -145,7 +202,7 @@ describe("ProjectMainStepComponent", () => {
   });
 
   it("renders loaded links and lets users add and type without another click or manual detection", async () => {
-    links.push(new FormBuilder().control("https://existing.example"));
+    links.push(new FormBuilder().nonNullable.control("https://existing.example"));
     TestBed.inject(ProjectContactsService).syncLinksItems(links);
     await fixture.whenStable();
     const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button button")).find(

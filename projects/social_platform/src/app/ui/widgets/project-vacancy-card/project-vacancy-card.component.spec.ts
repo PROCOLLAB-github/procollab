@@ -170,4 +170,33 @@ describe("ProjectVacancyCardComponent", () => {
       projectName,
     );
   });
+
+  it("keeps the project avatar at 40 by 40 when project and role text are long", () => {
+    fixture.componentRef.setInput("type", "vacancies");
+    fixture.componentRef.setInput("vacancy", {
+      id: 7,
+      role: "Очень длинная роль специалиста по развитию международных цифровых проектов",
+      description: "",
+      requiredSkills: [],
+      salary: "100000",
+      datetimeCreated: "2026-08-29T12:00:00Z",
+      project: {
+        name: "Очень длинное название проекта для проверки неизменного размера аватара",
+        imageAddress: "",
+      },
+      canRespond: false,
+      canManageResponses: false,
+      hasResponded: false,
+    });
+    fixture.detectChanges();
+
+    const avatar = fixture.nativeElement.querySelector(
+      "app-avatar.vacancy__project-avatar",
+    ) as HTMLElement;
+    const image = avatar.querySelector("img") as HTMLImageElement;
+
+    expect(avatar.classList).toContain("vacancy__project-avatar");
+    expect(image.style.width).toBe("40px");
+    expect(image.style.height).toBe("40px");
+  });
 });

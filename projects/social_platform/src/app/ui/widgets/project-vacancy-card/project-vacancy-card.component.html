@@ -5,6 +5,7 @@
     @if (type() === "vacancies") {
       <div class="vacancy__project">
         <app-avatar
+          class="vacancy__project-avatar"
           [url]="vacancy().project.imageAddress"
           [size]="40"
           [hasBorder]="true"

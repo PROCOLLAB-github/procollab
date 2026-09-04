@@ -431,7 +431,11 @@
             <li class="project__links">
               <fieldset style="flex-grow: 1">
                 <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>
-                <app-input size="big" [formControlName]="i" placeholder="@eeeasycarrer"></app-input>
+                <app-input
+                  size="big"
+                  [formControl]="control"
+                  placeholder="@eeeasycarrer"
+                ></app-input>
                 @if (control.invalid && (control.touched || projSubmitInitiated())) {
                   <div class="text-body-10 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}

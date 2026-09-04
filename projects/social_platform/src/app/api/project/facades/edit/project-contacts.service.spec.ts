@@ -2,7 +2,7 @@
 
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
-import { FormArray, FormBuilder } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl } from "@angular/forms";
 import { ProjectContactsService } from "./project-contacts.service";
 import { ProjectFormService } from "./project-form.service";
 
@@ -37,6 +37,7 @@ describe("ProjectContactsService", () => {
 
     expect(service.hasLinks()).toBe(true);
     expect(service.linkControls()).toEqual(links.controls);
+    expect(service.linkControls().every(control => control instanceof FormControl)).toBe(true);
     expect(links.getRawValue()).toEqual(["https://t.me/procollab", "https://vk.com/procollab"]);
   });
 
@@ -57,7 +58,7 @@ describe("ProjectContactsService", () => {
   });
 
   it("synchronizes existing links without changing their values", () => {
-    links.push(new FormBuilder().control("https://example.com"));
+    links.push(new FormBuilder().nonNullable.control("https://example.com"));
 
     service.syncLinksItems(links);
 

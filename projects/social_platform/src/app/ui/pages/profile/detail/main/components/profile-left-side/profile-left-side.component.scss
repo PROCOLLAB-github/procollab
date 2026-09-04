@@ -92,9 +92,9 @@
     }
 
     .lists__program-avatar {
-      flex: 0 0 48px;
-      width: 48px;
-      height: 48px;
+      flex: 0 0 40px;
+      width: 40px;
+      height: 40px;
       object-fit: cover;
       border-radius: 50%;
     }
@@ -113,14 +113,18 @@
     display: -webkit-box;
     min-width: 0;
     overflow: hidden;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
     color: var(--black);
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    text-overflow: ellipsis;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+
+    &--compact {
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 14px;
+      word-break: normal;
+      overflow-wrap: normal;
+    }
   }
   /* stylelint-enable value-no-vendor-prefix */
 

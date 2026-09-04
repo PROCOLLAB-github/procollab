@@ -96,4 +96,15 @@
       transform: rotate(0deg);
     }
   }
+
+  &__error-icon {
+    flex: 0 0 auto;
+    color: var(--red);
+    pointer-events: none;
+
+    &--bare {
+      padding: 0;
+      background: transparent;
+    }
+  }
 }

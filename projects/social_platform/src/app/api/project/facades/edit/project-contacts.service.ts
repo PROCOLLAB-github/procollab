@@ -1,14 +1,7 @@
 /** @format */
 
 import { computed, inject, Injectable, signal } from "@angular/core";
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 import { ProjectFormService } from "./project-form.service";
 
 /** Сервис для управления контактами проекта. */
@@ -18,10 +11,11 @@ import { ProjectFormService } from "./project-form.service";
 export class ProjectContactsService {
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);
-  public readonly linkControls = signal<readonly AbstractControl[]>([]);
+  public readonly linkControls = signal<readonly FormControl<string>[]>([]);
 
   public syncLinksItems(linksFormArray: FormArray): void {
-    this.linkControls.set([...linksFormArray.controls]);
+    // Project links are scalar FormControls in the source FormArray.
+    this.linkControls.set([...linksFormArray.controls] as FormControl<string>[]);
   }
 
   readonly hasLinks = computed(() => this.linkControls().length > 0);
@@ -39,7 +33,7 @@ export class ProjectContactsService {
   }
 
   public addLink(linksFormArray: FormArray): void {
-    linksFormArray.push(this.fb.control("", Validators.required));
+    linksFormArray.push(this.fb.nonNullable.control("", Validators.required));
     this.syncLinksItems(linksFormArray);
   }
 

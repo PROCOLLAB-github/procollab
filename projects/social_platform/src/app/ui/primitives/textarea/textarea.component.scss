@@ -67,11 +67,16 @@
     align-items: center;
     justify-content: center;
     color: var(--red) !important;
-    background-color: var(--light-white);
+    pointer-events: none;
     transform: translateY(-50%);
 
     i {
       color: var(--red) !important;
+    }
+
+    &--bare {
+      padding: 0;
+      background: transparent;
     }
   }
 

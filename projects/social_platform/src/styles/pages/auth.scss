@@ -64,34 +64,44 @@
     app-select {
       display: block;
     }
-
-    app-input .field__error-icon {
-      padding: 0;
-      pointer-events: none;
-      background: transparent;
-    }
-
-    // Keep native autofill on the complete input, including below transparent overlays.
   }
 
+  // Keep native autofill on the complete input, including below transparent overlays.
   // Outrank emulated app-input styles, which are inserted after the global auth sheet.
   &__field app-input.auth__password-input {
+    --auth-password-eye-inset: 8px;
+    --auth-password-eye-size: 32px;
+    --auth-password-eye-text-gap: 4px;
+    --auth-password-error-size: 20px;
+    --auth-password-error-gap: 8px;
+    --auth-password-eye-edge: calc(var(--auth-password-eye-inset) + var(--auth-password-eye-size));
+    --auth-password-error-inset: calc(var(--auth-password-eye-edge) + var(--auth-password-error-gap));
+    --auth-password-input-padding: calc(var(--auth-password-eye-edge) + var(--auth-password-eye-text-gap));
+    --auth-password-error-content-width:
+      calc(
+        var(--auth-password-error-inset) + var(--auth-password-error-size)
+      );
+    --auth-password-error-input-padding:
+      calc(
+        var(--auth-password-error-content-width) + var(--auth-password-eye-text-gap)
+      );
+
     .field__input {
       box-sizing: border-box;
       width: 100%;
-      padding-right: 56px;
+      padding-right: var(--auth-password-input-padding);
     }
 
     .field--error .field__input {
-      padding-right: 88px;
+      padding-right: var(--auth-password-error-input-padding);
     }
 
     .field__right-icon {
       top: 50%;
-      right: 8px !important;
+      right: var(--auth-password-eye-inset) !important;
       z-index: 4;
-      width: 32px;
-      height: 32px;
+      width: var(--auth-password-eye-size);
+      height: var(--auth-password-eye-size);
       padding: 0;
       pointer-events: none;
       background-color: transparent;
@@ -104,10 +114,10 @@
     }
 
     .field__error-icon {
-      right: 48px !important;
+      right: var(--auth-password-error-inset) !important;
       z-index: 3;
-      width: 20px;
-      height: 20px;
+      width: var(--auth-password-error-size);
+      height: var(--auth-password-error-size);
     }
   }
 
@@ -118,7 +128,7 @@
     width: 32px;
     height: 32px;
     padding: 0;
-    color: var(--black);
+    color: var(--dark-grey);
     background: transparent;
     border: 0;
     border-radius: 50%;
@@ -126,6 +136,10 @@
     &:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 1px;
+    }
+
+    &--muted {
+      color: var(--dark-grey);
     }
   }
 
