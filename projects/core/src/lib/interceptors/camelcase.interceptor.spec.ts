@@ -23,6 +23,9 @@ describe("CamelcaseInterceptor", () => {
     const request = new HttpRequest("GET", "/programs/12/manager-overview/");
     const response = new HttpResponse({
       body: {
+        summary: {
+          participant_regions: { total: 1, items: [{ name: "Набережные Челны", count: 3 }] },
+        },
         participant_funnel: { unique_participants: 3 },
         evaluation_status: {
           max_evaluations_per_project: 2,
@@ -36,6 +39,9 @@ describe("CamelcaseInterceptor", () => {
       if (!(event instanceof HttpResponse)) return;
 
       expect(event.body).toEqual({
+        summary: {
+          participantRegions: { total: 1, items: [{ name: "Набережные Челны", count: 3 }] },
+        },
         participantFunnel: { uniqueParticipants: 3 },
         evaluationStatus: {
           maxEvaluationsPerProject: 2,

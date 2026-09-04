@@ -37,20 +37,23 @@
         }
         @if (stageForm.get("city"); as city) {
           <fieldset class="page__field">
-            <label for="city" class="field-label">Город*</label>
-            <app-input
-              size="big"
+            <div class="content">
+              <label for="city" class="field-label">Регион*</label>
+              <app-tooltip
+                text="Выберите регион, в котором вы сейчас живёте"
+                [isVisible]="isHintCityVisible('city')"
+                position="right"
+                [tooltipWidth]="220"
+                (show)="toggleTooltip('city')"
+                (hide)="toggleTooltip('city')"
+              ></app-tooltip>
+            </div>
+            <app-region-select
               id="city"
-              [haveHint]="true"
-              [tooltipText]="'Напишите город, в которым вы сейчас живете'"
-              [tooltipPosition]="'right'"
-              [tooltipWidth]="220"
+              ariaLabel="Регион пользователя"
               [error]="city | controlError"
-              type="text"
-              placeholder="Где вы живете?"
               formControlName="city"
-            >
-            </app-input>
+            ></app-region-select>
             @if (city | controlError: "required") {
               <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}

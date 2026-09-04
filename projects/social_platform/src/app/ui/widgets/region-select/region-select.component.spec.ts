@@ -37,6 +37,17 @@ describe("RegionSelectComponent", () => {
     fixture.detectChanges();
   };
 
+  it("keeps the project accessible name by default and accepts a user label", () => {
+    expect(getInput().getAttribute("aria-label")).toBe("Регион проекта");
+    const select = TestBed.createComponent(RegionSelectComponent);
+    select.componentRef.setInput("ariaLabel", "Регион пользователя");
+    select.detectChanges();
+
+    expect(select.nativeElement.querySelector("input").getAttribute("aria-label")).toBe(
+      "Регион пользователя",
+    );
+  });
+
   it("filters and selects a canonical region", () => {
     const input = getInput();
     input.dispatchEvent(new FocusEvent("focus"));

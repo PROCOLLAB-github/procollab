@@ -16,6 +16,7 @@ const overview: ProgramAnalyticsOverview = {
     projects: { total: 7 },
     experts: { total: 1 },
     regions: { total: 1, items: [{ name: "Москва", count: 7 }] },
+    participantRegions: { total: 1, items: [{ name: "Набережные Челны", count: 2 }] },
   },
   participantFunnel: {
     registrations: 3,
@@ -66,6 +67,9 @@ describe("ProgramAnalyticsInfoService", () => {
 
     expect(service.data()).toBe(overview);
     expect(service.data()?.summary.projects.total).toBe(7);
+    expect(service.data()?.summary.participantRegions.items).toEqual([
+      { name: "Набережные Челны", count: 2 },
+    ]);
     expect(getOverview.execute).toHaveBeenCalledExactlyOnceWith(12);
   });
 

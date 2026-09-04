@@ -2,6 +2,8 @@
 
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
 import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
@@ -27,6 +29,13 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
         items: [
           { name: "Москва", count: 5 },
           { name: "Казань", count: 2 },
+        ],
+      },
+      participantRegions: {
+        total: 2,
+        items: [
+          { name: "Москва", count: 12 },
+          { name: "Набережные Челны", count: 2 },
         ],
       },
     },
@@ -112,20 +121,64 @@ describe("ProgramAnalyticsComponent", () => {
     expect(root.querySelector('[data-testid="summary-experts"]')?.textContent).toContain("4");
     expect(
       root.querySelector('[data-testid="summary-participants-per-project"]')?.textContent,
-    ).toContain("Участников на проект");
+    ).toContain("Команда");
+    expect(root.textContent).not.toContain("Участников на проект");
     expect(
       root.querySelector('[data-testid="summary-participants-per-project"]')?.textContent,
     ).toContain("2.6");
     expect(root.querySelector('[data-testid="summary-team"]')).toBeNull();
     expect(root.querySelector('[data-testid="summary-regions"]')).toBeNull();
-    expect(root.querySelector('[data-testid="regions-breakdown"]')?.textContent).toContain(
-      "Москва",
-    );
-    expect(root.querySelector('[data-testid="regions-breakdown"]')?.textContent).toContain(
-      "Казань",
-    );
+    expect(root.querySelector('[data-testid="project-regions"]')?.textContent).toContain("Москва");
+    expect(root.querySelector('[data-testid="project-regions"]')?.textContent).toContain("Казань");
     expect(root.querySelectorAll('[data-testid="metric-tooltip"]').length).toBe(4);
+    const tooltip = fixture.debugElement.query(
+      By.css('[data-testid="summary-participants-per-project"] app-tooltip'),
+    ).componentInstance as TooltipComponent;
+    expect(tooltip.text()).toBe(
+      "Среднее количество зарегистрированных участников программы на один проект.",
+    );
   });
+
+  it("renders independent project and participant region cards without normalizing legacy names", () => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const cards = root.querySelectorAll(".regions-grid > .regions");
+    expect(cards).toHaveLength(2);
+    expect(cards[0].querySelector("h2")?.textContent).toBe("Регионы проектов");
+    expect(cards[1].querySelector("h2")?.textContent).toBe("Регионы участников");
+    const rows = (card: Element) =>
+      Array.from(card.querySelectorAll("li"), row => [
+        row.querySelector("span")?.textContent?.trim(),
+        row.querySelector("strong")?.textContent?.trim(),
+      ]);
+    expect(rows(cards[0])).toEqual([
+      ["Москва", "5"],
+      ["Казань", "2"],
+    ]);
+    expect(rows(cards[1])).toEqual([
+      ["Москва", "12"],
+      ["Набережные Челны", "2"],
+    ]);
+  });
+
+  it.each(["regions", "participantRegions"] as const)(
+    "shows an independent empty state for %s",
+    key => {
+      const base = overview();
+      data.set({ ...base, summary: { ...base.summary, [key]: { total: 0, items: [] } } });
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      fixture.detectChanges();
+      const root = fixture.nativeElement as HTMLElement;
+      expect(root.querySelectorAll(".regions .analytics-empty-state")).toHaveLength(1);
+      expect(root.querySelectorAll(".regions__list")).toHaveLength(1);
+      expect(root.querySelector(".regions .analytics-empty-state")?.textContent?.trim()).toBe(
+        key === "regions"
+          ? "У проектов пока не указаны регионы"
+          : "У участников пока не указаны регионы",
+      );
+    },
+  );
 
   it("считает и форматирует отношение участников программы к проектам", () => {
     const base = overview();
@@ -186,7 +239,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(solutions).toContain("Сдано");
     expect(solutions).toContain("Оценено");
     expect(root.querySelector('[data-testid="solution-funnel"] h2')?.textContent?.trim()).toBe(
-      "Проекты",
+      "Воронка проектов",
     );
     expect(solutions).not.toContain("Воронка решений");
   });
@@ -281,6 +334,7 @@ describe("ProgramAnalyticsComponent", () => {
         projects: { total: 0 },
         experts: { total: 0 },
         regions: { total: 0, items: [] },
+        participantRegions: { total: 0, items: [] },
       },
       participantFunnel: {
         registrations: 0,
@@ -308,6 +362,7 @@ describe("ProgramAnalyticsComponent", () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain("У проектов пока не указаны регионы");
+    expect(fixture.nativeElement.textContent).toContain("У участников пока не указаны регионы");
     expect(fixture.nativeElement.textContent).toContain("Пока нет данных по участникам");
     expect(fixture.nativeElement.textContent).toContain("Нет решений для отображения");
     expect(fixture.nativeElement.textContent).toContain("Пока нет сданных работ для оценивания");
@@ -315,7 +370,7 @@ describe("ProgramAnalyticsComponent", () => {
     const emptyStates = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll(".analytics-empty-state"),
     ) as HTMLElement[];
-    expect(emptyStates).toHaveLength(7);
+    expect(emptyStates).toHaveLength(8);
     expect(emptyStates.every(state => state.querySelector("i") === null)).toBe(true);
     expect(emptyStates.every(state => !state.textContent?.trim().endsWith("."))).toBe(true);
     expect(fixture.nativeElement.querySelector(".attention--empty")).not.toBeNull();

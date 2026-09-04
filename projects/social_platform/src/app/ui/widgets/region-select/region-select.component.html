@@ -7,7 +7,7 @@
       role="combobox"
       autocomplete="off"
       aria-autocomplete="list"
-      aria-label="Регион проекта"
+      [attr.aria-label]="ariaLabel()"
       [id]="id()"
       [value]="query()"
       [placeholder]="placeholder()"

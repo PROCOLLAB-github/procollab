@@ -125,6 +125,16 @@
   box-shadow: 0 6px 22px rgb(51 51 51 / 4%);
 }
 
+.regions-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .regions {
   display: flex;
   flex-direction: column;
@@ -132,7 +142,7 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 8px;
     margin-top: 12px;
 
@@ -154,10 +164,15 @@
       }
 
       strong {
+        flex-shrink: 0;
         font-weight: 700;
         color: var(--black);
       }
     }
+  }
+
+  .analytics__heading-row app-tooltip {
+    flex-shrink: 0;
   }
 }
 

@@ -33,6 +33,7 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
 export class RegionSelectComponent implements ControlValueAccessor {
   readonly id = input("region");
   readonly placeholder = input("Выберите регион");
+  readonly ariaLabel = input("Регион проекта");
   readonly error = input(false);
 
   protected readonly query = signal("");
