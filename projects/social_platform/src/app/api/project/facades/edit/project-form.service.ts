@@ -93,7 +93,7 @@ export class ProjectFormService {
     }
 
     links.forEach(link => {
-      linksFormArray.push(this.fb.control(link, [Validators.required]));
+      linksFormArray.push(this.fb.nonNullable.control(link, [Validators.required]));
     });
   }
 

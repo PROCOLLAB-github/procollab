@@ -48,6 +48,17 @@ describe("RegionSelectComponent", () => {
     );
   });
 
+  it("uses only the error border and does not render a validation icon wrapper", () => {
+    const select = TestBed.createComponent(RegionSelectComponent);
+    select.componentRef.setInput("error", true);
+    select.detectChanges();
+
+    expect(select.nativeElement.querySelector(".region-select__control").classList).toContain(
+      "region-select__control--error",
+    );
+    expect(select.nativeElement.querySelector(".field__error-icon")).toBeNull();
+  });
+
   it("filters and selects a canonical region", () => {
     const input = getInput();
     input.dispatchEvent(new FocusEvent("focus"));

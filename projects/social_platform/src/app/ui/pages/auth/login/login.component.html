@@ -65,7 +65,7 @@
               >
                 <button
                   type="button"
-                  class="auth__password-toggle"
+                  class="auth__password-toggle auth__password-toggle--muted"
                   [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
                   [attr.aria-pressed]="showPassword()"
                   (click)="$event.stopPropagation(); toggleShowPassword()"

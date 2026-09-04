@@ -97,16 +97,17 @@ describe("RegisterComponent", () => {
       .closest("app-input")
       ?.querySelector(".field__right-icon button") as HTMLButtonElement;
     expect(firstToggle.type).toBe("button");
+    expect(firstToggle.classList).toContain("auth__password-toggle--muted");
     expect(firstToggle.getAttribute("aria-label")).toBe("Показать пароль");
     firstToggle.click();
     fixture.detectChanges();
     expect(password.type).toBe("text");
 
-    (
-      repeatedPassword
-        .closest("app-input")
-        ?.querySelector(".field__right-icon button") as HTMLButtonElement
-    ).click();
+    const repeatToggle = repeatedPassword
+      .closest("app-input")
+      ?.querySelector(".field__right-icon button") as HTMLButtonElement;
+    expect(repeatToggle.classList).toContain("auth__password-toggle--muted");
+    repeatToggle.click();
     fixture.detectChanges();
     expect(repeatedPassword.type).toBe("text");
     expect(firstToggle.getAttribute("aria-pressed")).toBe("true");

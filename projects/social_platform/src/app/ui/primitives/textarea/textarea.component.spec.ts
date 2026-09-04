@@ -53,4 +53,14 @@ describe("TextareaComponent", () => {
     component.preventEnter(event);
     expect(preventDefaultSpy).toHaveBeenCalled();
   });
+
+  it("renders the validation icon without a padded background wrapper", () => {
+    fixture.componentRef.setInput("error", true);
+    fixture.detectChanges();
+
+    const field = fixture.nativeElement.querySelector(".field") as HTMLElement;
+    const icon = field.querySelector(".field__error-icon") as HTMLElement;
+    expect(icon.parentElement).toBe(field);
+    expect(icon.classList).toContain("field__error-icon--bare");
+  });
 });

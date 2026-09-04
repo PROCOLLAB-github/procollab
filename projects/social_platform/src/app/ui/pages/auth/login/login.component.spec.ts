@@ -93,6 +93,7 @@ describe("LoginComponent", () => {
 
     expect(password.type).toBe("password");
     expect(toggle.type).toBe("button");
+    expect(toggle.classList).toContain("auth__password-toggle--muted");
     expect(toggle.getAttribute("aria-label")).toBe("Показать пароль");
     toggle.focus();
     toggle.click();

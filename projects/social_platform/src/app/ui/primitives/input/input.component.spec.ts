@@ -121,6 +121,16 @@ describe("InputComponent", () => {
     expect(field.classList).toContain("field--error");
   });
 
+  it("renders the validation icon without a padded background wrapper", () => {
+    fixture.componentRef.setInput("error", true);
+    fixture.detectChanges();
+
+    const field = fixture.nativeElement.querySelector(".field") as HTMLElement;
+    const icon = field.querySelector(".field__error-icon") as HTMLElement;
+    expect(icon.parentElement).toBe(field);
+    expect(icon.classList).toContain("field__error-icon--bare");
+  });
+
   it("should emit the input value on input", () => {
     const emitSpy = vi.fn();
     component.appValue.subscribe(emitSpy);

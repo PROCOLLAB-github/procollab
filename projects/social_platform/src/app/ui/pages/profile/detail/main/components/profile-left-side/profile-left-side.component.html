@@ -82,8 +82,8 @@
               class="lists__program-avatar"
               alt=""
               [src]="image"
-              width="48"
-              height="48"
+              width="40"
+              height="40"
               loading="lazy"
               decoding="async"
             />
@@ -92,7 +92,9 @@
               <i appIcon icon="folder" appSquare="14"></i>
             </span>
           }
-          <span class="text-body-10 lists__program-name">{{ program.name }}</span>
+          <span class="text-body-10 lists__program-name lists__program-name--compact">{{
+            program.name
+          }}</span>
         </a>
       </ng-template>
       @if (programsLength > 3) {
