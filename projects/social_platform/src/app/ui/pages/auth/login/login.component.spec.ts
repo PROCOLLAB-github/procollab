@@ -94,6 +94,8 @@ describe("LoginComponent", () => {
     expect(password.type).toBe("password");
     expect(toggle.type).toBe("button");
     expect(toggle.classList).toContain("auth__password-toggle--muted");
+    expect(toggle.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(toggle.querySelector("svg")?.getAttribute("height")).toBe("15");
     expect(toggle.getAttribute("aria-label")).toBe("Показать пароль");
     toggle.focus();
     toggle.click();

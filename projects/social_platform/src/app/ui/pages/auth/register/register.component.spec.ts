@@ -98,6 +98,8 @@ describe("RegisterComponent", () => {
       ?.querySelector(".field__right-icon button") as HTMLButtonElement;
     expect(firstToggle.type).toBe("button");
     expect(firstToggle.classList).toContain("auth__password-toggle--muted");
+    expect(firstToggle.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(firstToggle.querySelector("svg")?.getAttribute("height")).toBe("15");
     expect(firstToggle.getAttribute("aria-label")).toBe("Показать пароль");
     firstToggle.click();
     fixture.detectChanges();
@@ -107,6 +109,8 @@ describe("RegisterComponent", () => {
       .closest("app-input")
       ?.querySelector(".field__right-icon button") as HTMLButtonElement;
     expect(repeatToggle.classList).toContain("auth__password-toggle--muted");
+    expect(repeatToggle.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(repeatToggle.querySelector("svg")?.getAttribute("height")).toBe("15");
     repeatToggle.click();
     fixture.detectChanges();
     expect(repeatedPassword.type).toBe("text");
