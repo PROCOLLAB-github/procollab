@@ -76,6 +76,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     expect(trap.enabled).toBe(true);
     expect(trap.focusTrap.hasAttached()).toBe(true);
     expect(trap.autoCapture).toBe(false);
+    expect(dialog().querySelectorAll('.cdk-focus-trap-anchor[tabindex="0"]')).toHaveLength(2);
   });
 
   it.each(["Escape", "backdrop", "button"])(
@@ -108,6 +109,20 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     button("×").click();
     await detached;
     expect(focus).not.toHaveBeenCalled();
+  });
+
+  it("после закрытия и повторного attachment anchors остаются внутри текущего dialog", async () => {
+    await open();
+    const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+    const detached = firstValueFrom(modal.overlayRef!.detachments());
+    button("×").click();
+    await detached;
+    await fixture.whenStable();
+    await open("pending");
+    expect(dialog().querySelectorAll('.cdk-focus-trap-anchor[tabindex="0"]')).toHaveLength(2);
+    expect(fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus)).toBe(
+      trap,
+    );
   });
 
   it("list/detail/back сохраняют trap, фокусируют heading и не перезагружают список", async () => {

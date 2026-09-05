@@ -365,8 +365,10 @@ Facade создаётся для одной модалки. До пользов�
 `openChange` обслуживает только backdrop, не lifecycle overlay.
 
 Один `role=dialog`, `aria-modal=true`, динамический `aria-labelledby` и один CDK
-focus trap охватывают list/detail/delayed/backlog. Initial focus на close button
-выставляется только после attachment. Переходы сохраняют trap и переводят focus
+focus trap охватывают list/detail/delayed/backlog. Trap расположен внутри
+проецируемого dialog-wrapper, поэтому его anchors переносятся вместе с содержимым
+при повторном открытии portal. Initial focus на close button выставляется только
+после attachment. Переходы сохраняют trap и переводят focus
 на heading через Angular render lifecycle. AutoCapture/automatic restore CDK выключены.
 
 Escape через overlay keyboard events закрывает всю модалку, не выполняет Back.

@@ -126,7 +126,6 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       .subscribe(() => {
         // Shared primitive прикрепляет portal асинхронно: уже отменённое открытие не захватывает focus.
         if (!this.state.open()) {
-          overlay.detach();
           return;
         }
         this.attached.set(true);
