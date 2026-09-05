@@ -279,3 +279,116 @@ DI-биндинги (`infrastructure/di/program/`):
 | `domain/auth/user.model.ts`                              | `User.programs: Program[]` — программы пользователя.                                                                         |
 
 ---
+
+## Детализация экспертного оценивания в аналитике
+
+На `/office/program/:programId/analytics` организатор открывает назначения из трёх
+метрик: «Назначений всего», «Выполнено», «Ожидает». Нулевые метрики остаются видимыми,
+но неактивными. Доступ окончательно проверяет backend. Новых маршрутов нет.
+
+### API и архитектура
+
+- `GET /programs/:programId/manager-overview/` — сводка, включая `attention.delayedExperts`.
+- `GET /programs/:programId/manager-overview/assignments/?scope=all|completed|pending` — массив назначений.
+- `GET /programs/:programId/manager-overview/assignments/:assignmentId/scores/` — поля назначения и все критерии в `scores`.
+
+Backend API в этом PR не изменялся. Данные проходят через существующий
+`CamelcaseInterceptor`: `assignment_id → assignmentId`, `criteria_total → criteriaTotal`,
+`criteria_scored → criteriaScored`, `waiting_seconds → waitingSeconds`,
+`delayed_experts → delayedExperts`. Важно: установленный camelcase-keys преобразует
+`overdue_24h → overdue24H` и `overdue_48h → overdue48H` (заглавная H).
+Ручного преобразования SLA-полей нет.
+
+Путь данных: `ProgramRepositoryPort → ProgramHttpAdapter / ProgramRepository →
+GetProgramManagerAssignmentsUseCase / GetProgramManagerAssignmentScoresUseCase →
+ProgramAnalyticsDrilldownService → AnalyticsDrilldownComponent`.
+Use cases возвращают `Result` с `ProgramAnalyticsError`; сырой текст HTTP-ошибки не попадает в UI.
+
+### Назначения, статусы и оценки
+
+| Scope       | Заголовок                | Содержимое                            |
+| ----------- | ------------------------ | ------------------------------------- |
+| `all`       | Все назначения экспертов | Все физически существующие назначения |
+| `completed` | Выполненные назначения   | Завершённое оценивание                |
+| `pending`   | Ожидают оценки           | `not_ready`, `pending`, `in_progress` |
+
+Статусы backend отображаются без пересчёта:
+
+- `not_ready` — «Проект не сдан»;
+- `pending` — «Не начал оценивание»;
+- `in_progress` — «В процессе»;
+- `completed` — «Выполнено».
+
+Прогресс — например, «2 из 5 критериев»; при отсутствии критериев — «Нет критериев»,
+для несданного проекта — «—». В open-режиме показываются реальные назначения,
+но frontend не синтезирует задержки экспертов. В distributed-режиме
+«Частично оценено» означает, что хотя бы один назначенный эксперт полностью оценил
+проект, но не все назначенные эксперты завершили оценивание.
+
+«Посмотреть оценку» открывает detail внутри той же модалки. Возврат к списку
+не перезагружает назначения. Отображаются все критерии и их описания; диапазон
+min/max показан отдельно от значения. Булевы строки True/False — «Да/Нет»,
+числа и текст — как присланы backend. `isScored=false` — «Не оценено»;
+существующая запись с `value=null` или пустой строкой — «Пустое значение».
+Общий балл, среднее и итоговый рейтинг не вычисляются.
+
+### Задержки и backlog
+
+Третья метрика «Требует внимания» использует `attention.delayedExperts.total`.
+При всех трёх нулевых значениях сохраняется зелёный empty state.
+Список экспертов использует backend order, счётчики и severity:
+`warning` — «Требует внимания», `critical` — «Критическая задержка».
+Backend SLA: минимум два ожидания 24 часа либо одно 48 часов; UI не проверяет пороги.
+
+При открытии списка задержек один раз запрашивается `scope=pending` для backlog.
+Ошибка этого запроса не скрывает экспертов из overview. Backlog фильтруется строго
+по `assignment.expert.expertId`, а не по userId или имени. `not_ready` отделён
+в нижнюю секцию «Ещё не сданы»; порядок внутри групп сохранён.
+
+Ожидание форматируется только из authoritative `waitingSeconds`:
+менее часа — «< 1 ч», 7 часов — «7 ч», 30 часов — «1 д 6 ч»,
+52 часа — «2 д 4 ч». Таймера и вычисления SLA по датам нет.
+При `null`: несданный проект — «Проект не сдан», выполненное назначение — «—»,
+остальные — «Нет данных». Неизвестная дата не подменяется нулевым ожиданием.
+
+### Состояние, ошибки и доступность
+
+Facade создаётся для одной модалки. До пользовательского действия запросов нет;
+повторное открытие загружает свежие данные. Закрытие, смена программы и destroy
+отменяют запросы и очищают detail/selected expert. Поздние ответы не обновляют
+текущую программу. Ошибки 401, 403, 404 и сети показываются локально с retry,
+не закрывая модалку и не скрывая основную аналитику.
+
+Используется неизменённый shared `app-modal`. Analytics-specific компонент получает
+его public `overlayRef` через ViewChild после `ngAfterViewInit` и подписывается
+на attachments/detachments/keydownEvents с `takeUntilDestroyed`.
+`openChange` обслуживает только backdrop, не lifecycle overlay.
+
+Один `role=dialog`, `aria-modal=true`, динамический `aria-labelledby` и один CDK
+focus trap охватывают list/detail/delayed/backlog. Initial focus на close button
+выставляется только после attachment. Переходы сохраняют trap и переводят focus
+на heading через Angular render lifecycle. AutoCapture/automatic restore CDK выключены.
+
+Escape через overlay keyboard events закрывает всю модалку, не выполняет Back.
+Backdrop, Escape и close button используют `closeAnalyticsModal()`.
+Возврат фокуса происходит на detach только на сохранённый HTMLElement-trigger,
+если он `isConnected`. Смена программы/destroy очищают ссылку. Учитывается
+bottom-up destroy Angular: дочерний modal может detach до cleanup родителя;
+проверяется DestroyRef владельца view, без изменения shared primitive.
+Таймеров, polling, MutationObserver и document-global Escape handler нет.
+
+Desktop: таблица внутри модалки шириной до 880px. Mobile/tablet: stacked cards,
+перенос длинных имён и названий, ограничение высоты с вертикальным скроллом.
+Сохранены Mont, токены и существующие zero states аналитики.
+
+### Проверка
+
+Regression tests покрывают adapter/repository/use cases/facade/interceptor,
+scope/status/progress, nullable ожидание, критерии, задержки, смену программы,
+отмену запросов и настоящий CDK Overlay lifecycle. Focus tests не подменяют
+attachment событием openChange и не добавляют ручной detectChanges после клика.
+
+Ручной smoke после доступного DEV окружения: все три scope, detail/back,
+delayed/backlog/back, loading/error/retry, длинные имена на desktop/mobile,
+Tab/Shift+Tab, Escape, backdrop, возврат на конкретный trigger и смена программы.
+Backend, React, shared modal, зависимости, workflows/Docker и deploy вне изменений.

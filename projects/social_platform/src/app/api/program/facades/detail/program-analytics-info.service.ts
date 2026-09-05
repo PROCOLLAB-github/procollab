@@ -1,6 +1,6 @@
 /** @format */
 
-import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, effect, inject, Injectable, signal, untracked } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
 import { GetProgramManagerOverviewUseCase } from "@api/program/use-cases/get-program-manager-overview.use-case";
@@ -19,6 +19,8 @@ import {
   success,
 } from "@domain/shared/async-state";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
+import { Subject, takeUntil } from "rxjs";
+import { Program } from "@domain/program/program.model";
 
 /** Состояние и загрузка внутренней вкладки аналитики программы. */
 @Injectable()
@@ -27,6 +29,19 @@ export class ProgramAnalyticsInfoService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly getOverview = inject(GetProgramManagerOverviewUseCase);
   private readonly programUI = inject(ProgramDetailMainUIInfoService);
+  private readonly cancel = new Subject<void>();
+  private initialized = false;
+  private loadedProgram: Program | undefined;
+  readonly programId = signal<number | null>(null);
+
+  constructor() {
+    effect(() => {
+      const program = this.programUI.program();
+      if (this.initialized && program !== this.loadedProgram) {
+        untracked(() => this.initialize());
+      }
+    });
+  }
 
   readonly state = signal<AsyncState<ProgramAnalyticsOverview, ProgramAnalyticsError>>(initial());
   readonly data = computed(() => {
@@ -43,21 +58,26 @@ export class ProgramAnalyticsInfoService {
   initialize(): void {
     const program = this.programUI.program();
     const programId = Number(this.route.parent?.snapshot.params["programId"]);
+    this.initialized = true;
+    this.loadedProgram = program;
+    this.cancel.next();
+    this.programId.set(null);
 
     if (!program?.isUserManager) {
       this.state.set(failure({ kind: "forbidden" }));
       return;
     }
 
-    if (!Number.isInteger(programId) || programId <= 0) {
+    if (!Number.isInteger(programId) || programId <= 0 || program.id !== programId) {
       this.state.set(failure({ kind: "not_found" }));
       return;
     }
 
     this.state.set(loading());
+    this.programId.set(programId);
     this.getOverview
       .execute(programId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.cancel), takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
           this.state.set(failure(this.mapError(result.error.status)));

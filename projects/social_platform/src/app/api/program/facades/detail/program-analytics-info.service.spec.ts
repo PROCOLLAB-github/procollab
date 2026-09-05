@@ -32,7 +32,11 @@ const overview: ProgramAnalyticsOverview = {
     assignments: { total: 0, pending: 0, evaluated: 0 },
     projects: { submitted: 1, awaitingEvaluation: 1, partiallyEvaluated: 0, evaluated: 0 },
   },
-  attention: { participantsWithoutTeam: 1, projectsAwaitingEvaluation: 1 },
+  attention: {
+    participantsWithoutTeam: 1,
+    projectsAwaitingEvaluation: 1,
+    delayedExperts: { total: 0, items: [] },
+  },
   activity: [],
 };
 
@@ -93,6 +97,25 @@ describe("ProgramAnalyticsInfoService", () => {
     response$.next(ok(overview));
     response$.complete();
     expect(service.pending()).toBe(false);
+  });
+
+  it("при смене resolver program отменяет старую сводку и обновляет контекст", () => {
+    const old = new Subject<ReturnType<typeof ok<ProgramAnalyticsOverview>>>();
+    getOverview.execute.mockReturnValueOnce(old);
+    programUI.program.set({ ...Program.default(), id: 12, isUserManager: true });
+    service.initialize();
+    TestBed.tick();
+    const route = TestBed.inject(ActivatedRoute);
+    route.parent!.snapshot.params["programId"] = "13";
+    programUI.program.set({ ...Program.default(), id: 13, isUserManager: true });
+    TestBed.tick();
+    expect(old.observed).toBe(false);
+    expect(service.programId()).toBe(13);
+    expect(getOverview.execute).toHaveBeenLastCalledWith(13);
+    old.next(
+      ok({ ...overview, activity: [{ date: "old", registrations: 999, submittedSolutions: 999 }] }),
+    );
+    expect(service.data()?.activity).toEqual([]);
   });
 
   it("отображает recoverable error и повторяет запрос", () => {

@@ -375,6 +375,37 @@
 }
 
 .evaluation {
+  &__assignment-action {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    padding: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+
+    &:hover:not(:disabled) span {
+      color: var(--accent-dark);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+
+    &:disabled span[aria-hidden] {
+      visibility: hidden;
+    }
+  }
+
   &__assignments h3 {
     font-weight: 600;
     color: var(--black);
@@ -427,6 +458,33 @@
   background: var(--light-white);
   border-color: var(--medium-grey-for-outline);
   border-left: 4px solid var(--red);
+
+  &__action {
+    display: flex;
+    grid-column: span 2;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:hover:not(:disabled) span {
+      color: var(--accent-dark);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
 
   &--empty {
     border-left-color: var(--green);

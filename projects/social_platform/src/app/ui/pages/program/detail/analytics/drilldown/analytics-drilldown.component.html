@@ -1,0 +1,204 @@
+<!-- @format -->
+<app-modal
+  [open]="state.open()"
+  bodyClass="analytics-drilldown-body"
+  (openChange)="onOpenChange($event)"
+>
+  <section
+    class="analytics-drilldown"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="'analytics-dialog-' + state.view()"
+    [cdkTrapFocus]="attached()"
+    [cdkTrapFocusAutoCapture]="false"
+  >
+    <header class="analytics-drilldown__header">
+      <div>
+        @if (state.view() === "scores" || state.view() === "backlog") {
+          <button type="button" class="analytics-drilldown__action" (click)="state.back()">
+            ← Назад к списку
+          </button>
+        }
+        <h2 #heading tabindex="-1" [id]="'analytics-dialog-' + state.view()">{{ title() }}</h2>
+        @if (state.view() === "backlog") {
+          <p>Ожидающие назначения</p>
+        }
+      </div>
+      <button
+        #closeButton
+        type="button"
+        class="analytics-drilldown__close"
+        aria-label="Закрыть аналитику назначений"
+        (click)="closeAnalyticsModal()"
+      >
+        ×
+      </button>
+    </header>
+
+    @if (state.view() === "scores") {
+      @if (state.scoreDetailPending()) {
+        <p class="analytics-drilldown__empty" role="status">Загружаем оценку…</p>
+      }
+      @if (state.scoreDetailError()) {
+        <div class="analytics-drilldown__error" role="alert">
+          <p>Не удалось загрузить оценку</p>
+          <p>{{ requestError(state.scoreDetailError()) }}</p>
+          <button type="button" class="analytics-drilldown__action" (click)="state.retryScores()">
+            Повторить загрузку
+          </button>
+        </div>
+      }
+      @if (state.scoreDetail(); as detail) {
+        <div class="analytics-drilldown__identity">
+          <app-avatar [url]="detail.expert.avatar || ''" [size]="36" />
+          <div>
+            <p>Эксперт: {{ detail.expert.fullName || "Имя не указано" }}</p>
+            <p>Проект: {{ detail.project.name }}</p>
+          </div>
+        </div>
+        <ul class="analytics-drilldown__criteria">
+          @for (criterion of detail.scores; track criterion.criterionId) {
+            <li>
+              <h3>{{ criterion.name }}</h3>
+              @if (criterion.description) {
+                <p>{{ criterion.description }}</p>
+              }
+              @if (criterion.minValue !== null || criterion.maxValue !== null) {
+                <p class="analytics-drilldown__secondary">
+                  Диапазон: {{ criterion.minValue ?? "—" }} – {{ criterion.maxValue ?? "—" }}
+                </p>
+              }
+              <strong>{{ criterionValue(criterion) }}</strong>
+            </li>
+          } @empty {
+            <li class="analytics-drilldown__empty">Нет критериев</li>
+          }
+        </ul>
+      }
+    } @else {
+      @if (state.view() === "delayed") {
+        <ul class="analytics-drilldown__experts">
+          @for (expert of state.delayedExperts(); track expert.expertId) {
+            <li>
+              <button
+                type="button"
+                class="analytics-drilldown__expert"
+                (click)="state.showBacklog(expert)"
+              >
+                <span class="analytics-drilldown__identity"
+                  ><app-avatar [url]="expert.avatar || ''" [size]="36" /><strong>{{
+                    expert.fullName || "Имя не указано"
+                  }}</strong></span
+                >
+                <span
+                  class="analytics-drilldown__badge"
+                  [class.analytics-drilldown__badge--critical]="expert.severity === 'critical'"
+                  [class.analytics-drilldown__badge--pending]="expert.severity === 'warning'"
+                  >{{
+                    expert.severity === "critical" ? "Критическая задержка" : "Требует внимания"
+                  }}</span
+                >
+                <span>Выполнено {{ expert.completed }} из {{ expert.assignmentsTotal }}</span
+                ><span>Ожидает: {{ expert.pending }}</span>
+                <span>Самое долгое ожидание: {{ waiting(expert.oldestWaitingSeconds) }}</span>
+                <span class="analytics-drilldown__secondary">Посмотреть назначения →</span>
+              </button>
+            </li>
+          } @empty {
+            <li class="analytics-drilldown__empty">Задержек оценивания нет</li>
+          }
+        </ul>
+      }
+      @if (state.assignmentsPending()) {
+        <p class="analytics-drilldown__empty" role="status">Загружаем назначения…</p>
+      }
+      @if (state.assignmentsError()) {
+        <div class="analytics-drilldown__error" role="alert">
+          <p>Не удалось загрузить назначения</p>
+          <p>{{ requestError(state.assignmentsError()) }}</p>
+          <button
+            type="button"
+            class="analytics-drilldown__action"
+            (click)="state.loadAssignments()"
+          >
+            Повторить загрузку
+          </button>
+        </div>
+      } @else if (!state.assignmentsPending()) {
+        @if (state.view() === "assignments") {
+          @if (state.assignments().length) {
+            <ng-container
+              *ngTemplateOutlet="assignmentTable; context: { $implicit: state.assignments() }"
+            />
+          } @else {
+            <p class="analytics-drilldown__empty">{{ emptyMessage() }}</p>
+          }
+        }
+        @if (state.view() === "backlog") {
+          @if (!state.backlog().length) {
+            <p class="analytics-drilldown__empty">У эксперта нет ожидающих назначений</p>
+          }
+          @if (state.waitingBacklog().length) {
+            <ng-container
+              *ngTemplateOutlet="assignmentTable; context: { $implicit: state.waitingBacklog() }"
+            />
+          }
+          @if (state.notReadyBacklog().length) {
+            <h3 class="analytics-drilldown__section">Ещё не сданы</h3>
+            <ng-container
+              *ngTemplateOutlet="assignmentTable; context: { $implicit: state.notReadyBacklog() }"
+            />
+          }
+        }
+      }
+    }
+  </section>
+</app-modal>
+
+<ng-template #assignmentTable let-assignments>
+  <table class="analytics-drilldown__table">
+    <thead>
+      <tr>
+        <th scope="col">Эксперт</th>
+        <th scope="col">Проект</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Прогресс</th>
+        <th scope="col">Ожидание</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of assignments; track item.assignmentId) {
+        <tr [attr.data-assignment-id]="item.assignmentId">
+          <td data-label="Эксперт">
+            <span class="analytics-drilldown__identity"
+              ><app-avatar [url]="item.expert.avatar || ''" [size]="36" /><span>{{
+                item.expert.fullName || "Имя не указано"
+              }}</span></span
+            >
+          </td>
+          <td data-label="Проект">{{ item.project.name }}</td>
+          <td data-label="Статус">
+            <span
+              [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
+              >{{ statusLabel(item.status) }}</span
+            >
+            @if (item.status === "completed") {
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.loadAssignmentScores(item.assignmentId)"
+                [attr.aria-label]="
+                  'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
+                "
+              >
+                Посмотреть оценку
+              </button>
+            }
+          </td>
+          <td data-label="Прогресс">{{ progress(item) }}</td>
+          <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</ng-template>

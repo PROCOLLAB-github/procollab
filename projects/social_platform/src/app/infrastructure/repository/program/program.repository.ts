@@ -18,7 +18,12 @@ import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program
 import { userFromRaw } from "@utils/userRaw";
 import { EventBus } from "@domain/shared/event-bus";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
-import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
+import {
+  ProgramAnalyticsOverview,
+  ProgramAnalyticsAssignment,
+  ProgramAnalyticsAssignmentScope,
+  ProgramAnalyticsAssignmentScoreDetail,
+} from "@domain/program/program-analytics.model";
 
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
@@ -49,6 +54,22 @@ export class ProgramRepository implements ProgramRepositoryPort {
 
   getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
     return this.programAdapter.getManagerOverview(programId);
+  }
+
+  /** Не кешируем manager-данные между открытиями или программами. */
+  getManagerAssignments(
+    programId: number,
+    scope: ProgramAnalyticsAssignmentScope,
+  ): Observable<ProgramAnalyticsAssignment[]> {
+    return this.programAdapter.getManagerAssignments(programId, scope);
+  }
+
+  /** Возвращает все критерии, включая ещё не оценённые. */
+  getManagerAssignmentScores(
+    programId: number,
+    assignmentId: number,
+  ): Observable<ProgramAnalyticsAssignmentScoreDetail> {
+    return this.programAdapter.getManagerAssignmentScores(programId, assignmentId);
   }
 
   acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {

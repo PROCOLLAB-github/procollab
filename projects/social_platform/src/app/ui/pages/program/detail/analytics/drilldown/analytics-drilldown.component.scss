@@ -1,0 +1,255 @@
+/** @format */
+@use "styles/responsive";
+
+// Overlay лежит вне host: единственное глобальное правило ограничено собственным bodyClass.
+.modal__body.analytics-drilldown-body {
+  box-sizing: border-box;
+  width: min(880px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.analytics-drilldown {
+  width: 100%;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--black);
+  overflow-wrap: anywhere;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:focus-visible,
+  h2:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  &__header {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  &__close {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    font-size: 26px !important;
+    color: var(--dark-grey);
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+  }
+
+  &__action {
+    padding: 6px 0;
+    color: var(--accent-dark);
+    text-align: left;
+    background: transparent;
+    border: 0;
+  }
+
+  &__action:hover {
+    text-decoration: underline;
+  }
+
+  &__identity {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  app-avatar {
+    flex-shrink: 0;
+  }
+
+  &__secondary {
+    color: var(--dark-grey);
+  }
+
+  &__empty {
+    padding: 32px 12px;
+    text-align: center;
+  }
+
+  &__error {
+    padding: 16px;
+    margin-block: 12px;
+    border: 1px solid var(--red);
+    border-radius: 12px;
+  }
+
+  &__section {
+    margin-block: 20px 12px;
+  }
+
+  &__criteria,
+  &__experts {
+    display: grid;
+    gap: 12px;
+  }
+
+  &__criteria li {
+    display: grid;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 12px;
+  }
+
+  &__criteria strong {
+    white-space: pre-wrap;
+  }
+
+  &__expert {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    width: 100%;
+    padding: 14px;
+    color: var(--black);
+    text-align: left;
+    background: var(--light-white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 12px;
+  }
+
+  &__expert:hover {
+    border-color: var(--accent);
+  }
+
+  &__expert > .analytics-drilldown__identity {
+    flex-basis: 100%;
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--dark-grey);
+    background: var(--light-gray);
+    border-radius: 6px;
+  }
+
+  &__badge--pending {
+    color: var(--gold-dark);
+    background: var(--gold-light);
+  }
+
+  &__badge--in_progress {
+    color: var(--blue-dark);
+    background: var(--accent-light);
+  }
+
+  &__badge--completed {
+    color: var(--green-dark);
+    background: var(--green-light);
+  }
+
+  &__badge--critical {
+    color: var(--red-dark);
+    background: var(--red-light);
+  }
+
+  &__table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: grid;
+      gap: 12px;
+    }
+
+    tr {
+      display: block;
+      padding: 12px;
+      border: 1px solid var(--medium-grey-for-outline);
+      border-radius: 12px;
+    }
+
+    td {
+      display: block;
+      padding-block: 4px;
+    }
+
+    td::before {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark-grey);
+      content: attr(data-label);
+    }
+
+    @include responsive.apply-desktop {
+      thead {
+        display: table-header-group;
+      }
+
+      tbody {
+        display: table-row-group;
+      }
+
+      tr {
+        display: table-row;
+        padding: 0;
+        border: 0;
+      }
+
+      th,
+      td {
+        display: table-cell;
+        padding: 12px 8px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--medium-grey-for-outline);
+      }
+
+      th {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      td::before {
+        display: none;
+      }
+
+      th:first-child {
+        width: 25%;
+      }
+
+      th:last-child {
+        width: 15%;
+      }
+    }
+  }
+}

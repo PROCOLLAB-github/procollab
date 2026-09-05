@@ -285,7 +285,19 @@
           <ul class="status-list status-list--projects">
             @for (item of evaluationStatuses(); track item.key) {
               <li>
-                <span class="text-body-10">{{ item.label }}</span>
+                <span class="text-body-10"
+                  >{{ item.label }}
+                  @if (item.key === "evaluation-partial") {
+                    <app-tooltip
+                      [text]="item.tooltip"
+                      [isVisible]="isTooltipVisible(item.key)"
+                      [useOverlay]="true"
+                      (click)="toggleTooltip(item.key)"
+                      (show)="showTooltip(item.key)"
+                      (hide)="hideTooltip(item.key)"
+                    />
+                  }
+                </span>
                 <strong>{{ item.value }}</strong>
               </li>
             }
@@ -306,22 +318,29 @@
               ></app-tooltip>
             </div>
           }
-          @if (overview.evaluationStatus.mode === "distributed") {
-            <div class="evaluation__assignments" data-testid="assignment-statuses">
-              <h3 class="analytics-card__section-label">Назначения экспертов</h3>
-              <ul class="status-list status-list--compact">
-                @for (item of assignmentStatuses(); track item.key) {
-                  <li>
-                    <span>{{ item.label }}</span>
-                    <strong>{{ item.value }}</strong>
-                  </li>
-                }
-              </ul>
-            </div>
-          }
         } @else {
           <p class="analytics-empty-state text-body-10">Пока нет сданных работ для оценивания</p>
         }
+        <div class="evaluation__assignments" data-testid="assignment-statuses">
+          <h3 class="analytics-card__section-label">Назначения экспертов</h3>
+          <ul class="status-list status-list--compact">
+            @for (item of assignmentStatuses(); track item.key) {
+              <li>
+                <button
+                  #assignmentTrigger
+                  type="button"
+                  class="evaluation__assignment-action"
+                  [disabled]="item.value === 0"
+                  [attr.aria-label]="item.label + ': ' + item.value"
+                  (click)="drilldown.openAssignments(item.scope!, assignmentTrigger)"
+                >
+                  <span>{{ item.label }} <span aria-hidden="true">→</span></span>
+                  <strong>{{ item.value }}</strong>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
       </article>
     </section>
 
@@ -347,8 +366,21 @@
             @for (item of attention(); track item.key) {
               <li>
                 <i appIcon icon="accent-error" appSquare="20"></i>
-                <span class="text-body-10">{{ item.label }}</span>
-                <strong>{{ item.value }}</strong>
+                @if (item.key === "delayed-experts") {
+                  <button
+                    #delayedTrigger
+                    type="button"
+                    class="attention__action"
+                    [disabled]="item.value === 0"
+                    (click)="drilldown.openDelayed(delayedTrigger)"
+                  >
+                    <span>{{ item.label }}</span
+                    ><strong>{{ item.value }}</strong>
+                  </button>
+                } @else {
+                  <span class="text-body-10">{{ item.label }}</span>
+                  <strong>{{ item.value }}</strong>
+                }
                 <app-tooltip
                   [text]="item.tooltip"
                   [isVisible]="isTooltipVisible(item.key)"
@@ -486,3 +518,8 @@
     </section>
   }
 </main>
+<app-analytics-drilldown
+  #drilldown
+  [programId]="programId()"
+  [delayedExperts]="data()?.attention?.delayedExperts ?? { total: 0, items: [] }"
+/>

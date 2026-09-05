@@ -18,6 +18,54 @@ describe("CamelcaseInterceptor", () => {
     expect(interceptor).toBeTruthy();
   });
 
+  it("преобразует expert drilldown и SLA с фактическими overdue24H/overdue48H", () => {
+    const interceptor = TestBed.inject(CamelcaseInterceptor);
+    const body = {
+      attention: {
+        delayed_experts: {
+          total: 1,
+          items: [{ expert_id: 4, overdue_24h: 3, overdue_48h: 1, oldest_waiting_seconds: 187200 }],
+        },
+      },
+      assignments: [
+        {
+          assignment_id: 17,
+          criteria_total: 5,
+          criteria_scored: 2,
+          waiting_seconds: 108000,
+          expert: { full_name: "Иван Иванов", user_id: 123 },
+          scores: [{ criterion_id: 1, min_value: 0, is_scored: true }],
+        },
+      ],
+    };
+    interceptor
+      .intercept(
+        new HttpRequest<Record<string, unknown>>("GET", "/programs/12/manager-overview/"),
+        { handle: () => of(new HttpResponse({ body })) },
+      )
+      .subscribe(event => {
+        if (!(event instanceof HttpResponse)) return;
+        expect(event.body).toEqual({
+          attention: {
+            delayedExperts: {
+              total: 1,
+              items: [{ expertId: 4, overdue24H: 3, overdue48H: 1, oldestWaitingSeconds: 187200 }],
+            },
+          },
+          assignments: [
+            {
+              assignmentId: 17,
+              criteriaTotal: 5,
+              criteriaScored: 2,
+              waitingSeconds: 108000,
+              expert: { fullName: "Иван Иванов", userId: 123 },
+              scores: [{ criterionId: 1, minValue: 0, isScored: true }],
+            },
+          ],
+        });
+      });
+  });
+
   it("преобразует вложенный manager overview из snake_case в domain camelCase", () => {
     const interceptor = TestBed.inject(CamelcaseInterceptor);
     const request = new HttpRequest("GET", "/programs/12/manager-overview/");

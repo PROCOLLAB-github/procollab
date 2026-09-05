@@ -13,7 +13,12 @@ import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
-import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
+import {
+  ProgramAnalyticsOverview,
+  ProgramAnalyticsAssignment,
+  ProgramAnalyticsAssignmentScope,
+  ProgramAnalyticsAssignmentScoreDetail,
+} from "@domain/program/program-analytics.model";
 
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
@@ -43,6 +48,27 @@ export class ProgramHttpAdapter {
 
   getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/manager-overview/`);
+  }
+
+  /** Query scope передаётся backend без переопределения его статусной семантики. */
+  getManagerAssignments(
+    programId: number,
+    scope: ProgramAnalyticsAssignmentScope,
+  ): Observable<ProgramAnalyticsAssignment[]> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/assignments/`,
+      new HttpParams().set("scope", scope),
+    );
+  }
+
+  /** Контракт проходит через общий CamelcaseInterceptor. */
+  getManagerAssignmentScores(
+    programId: number,
+    assignmentId: number,
+  ): Observable<ProgramAnalyticsAssignmentScoreDetail> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/assignments/${assignmentId}/scores/`,
+    );
   }
 
   acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {

@@ -16,6 +16,8 @@ import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { exportRegions, RegionExportKind } from "@utils/export-regions";
+import { AnalyticsDrilldownComponent } from "./drilldown/analytics-drilldown.component";
+import { ProgramAnalyticsAssignmentScope } from "@domain/program/program-analytics.model";
 
 interface AnalyticsMetric {
   key: string;
@@ -23,6 +25,7 @@ interface AnalyticsMetric {
   value: number;
   tooltip: string;
   icon?: string;
+  scope?: ProgramAnalyticsAssignmentScope;
 }
 
 interface ActivityChartPoint extends ProgramAnalyticsActivityPoint {
@@ -42,7 +45,13 @@ interface RegionExportState {
   selector: "app-program-analytics",
   templateUrl: "./analytics.component.html",
   styleUrl: "./analytics.component.scss",
-  imports: [ButtonComponent, IconComponent, MatProgressBarModule, TooltipComponent],
+  imports: [
+    ButtonComponent,
+    IconComponent,
+    MatProgressBarModule,
+    TooltipComponent,
+    AnalyticsDrilldownComponent,
+  ],
   providers: [ProgramAnalyticsInfoService, ExportFileInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,6 +60,7 @@ export class ProgramAnalyticsComponent implements OnInit {
   private readonly exports = inject(ExportFileInfoService);
 
   protected readonly data = this.analytics.data;
+  protected readonly programId = this.analytics.programId;
   protected readonly pending = this.analytics.pending;
   protected readonly failed = this.analytics.failed;
   protected readonly error = this.analytics.error;
@@ -213,7 +223,7 @@ export class ProgramAnalyticsComponent implements OnInit {
           "evaluation-partial",
           "Частично оценено",
           status.projects.partiallyEvaluated,
-          "Выполнена часть назначений экспертов на проект.",
+          "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
         ),
       );
     }
@@ -235,9 +245,12 @@ export class ProgramAnalyticsComponent implements OnInit {
     const assignments = this.data()?.evaluationStatus.assignments;
     if (!assignments) return [];
     return [
-      this.metric("assignments-total", "Назначений всего", assignments.total),
-      this.metric("assignments-evaluated", "Выполнено", assignments.evaluated),
-      this.metric("assignments-pending", "Ожидает", assignments.pending),
+      { ...this.metric("assignments-total", "Назначений всего", assignments.total), scope: "all" },
+      {
+        ...this.metric("assignments-evaluated", "Выполнено", assignments.evaluated),
+        scope: "completed",
+      },
+      { ...this.metric("assignments-pending", "Ожидает", assignments.pending), scope: "pending" },
     ];
   });
 
@@ -263,6 +276,13 @@ export class ProgramAnalyticsComponent implements OnInit {
         label: "Работы ожидают оценивания",
         value: overview.attention.projectsAwaitingEvaluation,
         tooltip: this.awaitingEvaluationTooltip(overview.evaluationStatus.mode),
+      },
+      {
+        key: "delayed-experts",
+        label: "Эксперты задерживают оценивание",
+        value: overview.attention.delayedExperts.total,
+        tooltip:
+          "Эксперты с просроченными назначениями: минимум два проекта ожидают оценки 24 часа или хотя бы один проект — 48 часов.",
       },
     ];
   });
