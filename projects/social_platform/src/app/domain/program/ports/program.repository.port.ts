@@ -11,7 +11,12 @@ import { PartnerProgramFields } from "../partner-program-fields.model";
 import { ProjectAdditionalFields } from "../../project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "../dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "../results/apply-to-program";
-import { ProgramAnalyticsOverview } from "../program-analytics.model";
+import {
+  ProgramAnalyticsOverview,
+  ProgramAnalyticsAssignment,
+  ProgramAnalyticsAssignmentScope,
+  ProgramAnalyticsAssignmentScoreDetail,
+} from "../program-analytics.model";
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
@@ -24,6 +29,18 @@ export abstract class ProgramRepositoryPort {
   abstract getOne(programId: number): Observable<Program>;
 
   abstract getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview>;
+
+  /** Manager-only назначения; pending включает несданные проекты. */
+  abstract getManagerAssignments(
+    programId: number,
+    scope: ProgramAnalyticsAssignmentScope,
+  ): Observable<ProgramAnalyticsAssignment[]>;
+
+  /** Оценки конкретного назначения строго внутри выбранной программы. */
+  abstract getManagerAssignmentScores(
+    programId: number,
+    assignmentId: number,
+  ): Observable<ProgramAnalyticsAssignmentScoreDetail>;
 
   abstract acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }>;
 

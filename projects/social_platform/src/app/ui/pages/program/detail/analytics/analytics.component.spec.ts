@@ -10,6 +10,12 @@ import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.mode
 import { initial } from "@domain/shared/async-state";
 import { ProgramAnalyticsComponent } from "./analytics.component";
 import { exportRegions } from "@utils/export-regions";
+import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
+import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
+import { of } from "rxjs";
+import { ok } from "@domain/shared/result.type";
+import { delayedExpert, scoreDetail } from "@domain/program/program-analytics-assignment.fixture";
+import { AnalyticsDrilldownComponent } from "./drilldown/analytics-drilldown.component";
 
 vi.mock("@utils/export-regions", () => ({ exportRegions: vi.fn().mockResolvedValue(undefined) }));
 
@@ -61,7 +67,11 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
         evaluated: 4,
       },
     },
-    attention: { participantsWithoutTeam: 6, projectsAwaitingEvaluation: 2 },
+    attention: {
+      participantsWithoutTeam: 6,
+      projectsAwaitingEvaluation: 2,
+      delayedExperts: { total: 0, items: [] },
+    },
     activity: activity(),
     ...overrides,
   };
@@ -73,6 +83,7 @@ describe("ProgramAnalyticsComponent", () => {
   const failed = signal(false);
   const error = signal<any>(null);
   const analytics = {
+    programId: signal<number | null>(12),
     data,
     pending,
     failed,
@@ -99,7 +110,19 @@ describe("ProgramAnalyticsComponent", () => {
     exports.downloadSubmittedProjects.mockClear();
     exports.downloadRates.mockClear();
 
-    TestBed.configureTestingModule({ imports: [ProgramAnalyticsComponent] })
+    TestBed.configureTestingModule({
+      imports: [ProgramAnalyticsComponent],
+      providers: [
+        {
+          provide: GetProgramManagerAssignmentsUseCase,
+          useValue: { execute: vi.fn().mockReturnValue(of(ok([]))) },
+        },
+        {
+          provide: GetProgramManagerAssignmentScoresUseCase,
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(scoreDetail()))) },
+        },
+      ],
+    })
       .overrideComponent(ProgramAnalyticsComponent, {
         set: {
           providers: [
@@ -141,6 +164,68 @@ describe("ProgramAnalyticsComponent", () => {
     expect(tooltip.text()).toBe(
       "Среднее количество зарегистрированных участников программы на один проект.",
     );
+  });
+
+  it.each([
+    [0, "all"],
+    [1, "completed"],
+    [2, "pending"],
+  ] as const)("метрика %s открывает scope %s с конкретной кнопки", (index, scope) => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    const open = vi.spyOn(drilldown, "openAssignments").mockImplementation(() => {});
+    const trigger = fixture.nativeElement.querySelectorAll(".evaluation__assignment-action")[
+      index
+    ] as HTMLButtonElement;
+    trigger.click();
+    expect(open).toHaveBeenCalledExactlyOnceWith(scope, trigger);
+  });
+
+  it("не скрывает назначения несданных проектов, но отключает нулевые метрики", () => {
+    const base = overview();
+    data.set({
+      ...base,
+      evaluationStatus: {
+        ...base.evaluationStatus,
+        assignments: { total: 2, pending: 2, evaluated: 0 },
+        projects: { submitted: 0, awaitingEvaluation: 0, partiallyEvaluated: 0, evaluated: 0 },
+      },
+    });
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const buttons = fixture.nativeElement.querySelectorAll(
+      ".evaluation__assignment-action",
+    ) as NodeListOf<HTMLButtonElement>;
+    expect(buttons).toHaveLength(3);
+    expect(buttons[0].disabled).toBe(false);
+    expect(buttons[1].disabled).toBe(true);
+    expect(buttons[2].disabled).toBe(false);
+  });
+
+  it("delayed count использует overview и открывает список с конкретного trigger", () => {
+    const base = overview();
+    data.set({
+      ...base,
+      attention: {
+        participantsWithoutTeam: 0,
+        projectsAwaitingEvaluation: 0,
+        delayedExperts: { total: 1, items: [delayedExpert()] },
+      },
+    });
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    const open = vi.spyOn(drilldown, "openDelayed").mockImplementation(() => {});
+    const trigger = fixture.nativeElement.querySelector(".attention__action") as HTMLButtonElement;
+    expect(trigger.textContent).toContain("Эксперты задерживают оценивание");
+    expect(trigger.textContent).toContain("1");
+    trigger.click();
+    expect(open).toHaveBeenCalledExactlyOnceWith(trigger);
+    expect(drilldown.delayedExperts().items).toEqual([delayedExpert()]);
+    expect(fixture.nativeElement.querySelector(".attention--empty")).toBeNull();
   });
 
   it("renders independent project and participant region cards without normalizing legacy names", () => {
@@ -265,7 +350,9 @@ describe("ProgramAnalyticsComponent", () => {
     expect(evaluation?.textContent).not.toContain("требуется 3");
     expect(evaluation?.querySelector(".status-list--projects")).not.toBeNull();
     expect(evaluation?.querySelectorAll(".status-list--projects li strong").length).toBe(3);
-    expect(evaluation?.querySelector('[data-testid="assignment-statuses"]')).toBeNull();
+    expect(evaluation?.querySelectorAll('[data-testid="assignment-statuses"] button')).toHaveLength(
+      3,
+    );
   });
 
   it("в distributed mode показывает partial и отдельную статистику назначений", () => {
@@ -291,6 +378,13 @@ describe("ProgramAnalyticsComponent", () => {
 
     expect(evaluation?.textContent).toContain("Распределённое оценивание");
     expect(evaluation?.textContent).toContain("Частично оценено");
+    const partialTooltip = fixture.debugElement
+      .queryAll(By.directive(TooltipComponent))
+      .map(element => element.componentInstance as TooltipComponent)
+      .find(tooltip => tooltip.text().startsWith("Хотя бы один"));
+    expect(partialTooltip?.text()).toBe(
+      "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
+    );
     expect(evaluation?.querySelector('[data-testid="assignment-statuses"]')?.textContent).toContain(
       "Назначений всего",
     );
@@ -301,7 +395,11 @@ describe("ProgramAnalyticsComponent", () => {
     data.set({
       ...base,
       summary: { ...base.summary, participants: { total: 100 } },
-      attention: { participantsWithoutTeam: 3, projectsAwaitingEvaluation: 1 },
+      attention: {
+        participantsWithoutTeam: 3,
+        projectsAwaitingEvaluation: 1,
+        delayedExperts: { total: 0, items: [] },
+      },
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
@@ -313,8 +411,8 @@ describe("ProgramAnalyticsComponent", () => {
     expect(attention?.textContent).toContain("3");
     expect(attention?.textContent).toContain("Работы ожидают оценивания");
     expect(attention?.textContent).not.toContain("97");
-    expect(attention?.querySelectorAll(".attention__list li").length).toBe(2);
-    expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(2);
+    expect(attention?.querySelectorAll(".attention__list li").length).toBe(3);
+    expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(3);
   });
 
   it("строит две серии по всем 30 точкам activity", () => {
@@ -433,7 +531,11 @@ describe("ProgramAnalyticsComponent", () => {
           evaluated: 0,
         },
       },
-      attention: { participantsWithoutTeam: 0, projectsAwaitingEvaluation: 0 },
+      attention: {
+        participantsWithoutTeam: 0,
+        projectsAwaitingEvaluation: 0,
+        delayedExperts: { total: 0, items: [] },
+      },
       activity: activity(30, true),
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);

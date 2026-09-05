@@ -54,6 +54,26 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/");
   });
 
+  it.each(["all", "completed", "pending"] as const)(
+    "назначения: scope=%s передаётся query-параметром",
+    scope => {
+      setup();
+      api.get.mockReturnValue(of([]));
+      adapter.getManagerAssignments(12, scope).subscribe();
+      expect(api.get.mock.lastCall[0]).toBe("/programs/12/manager-overview/assignments/");
+      expect(api.get.mock.lastCall[1].toString()).toBe(`scope=${scope}`);
+    },
+  );
+
+  it("запрашивает критерии назначения внутри программы", () => {
+    setup();
+    api.get.mockReturnValue(of({}));
+    adapter.getManagerAssignmentScores(12, 17).subscribe();
+    expect(api.get).toHaveBeenCalledExactlyOnceWith(
+      "/programs/12/manager-overview/assignments/17/scores/",
+    );
+  });
+
   it("getManagerOverview идёт в manager overview программы", () => {
     setup();
     api.get.mockReturnValue(of({} as ProgramAnalyticsOverview));

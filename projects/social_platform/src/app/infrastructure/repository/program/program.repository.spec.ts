@@ -23,6 +23,8 @@ describe("ProgramRepository", () => {
       getAll: vi.fn(),
       getOne: vi.fn(),
       getManagerOverview: vi.fn(),
+      getManagerAssignments: vi.fn(),
+      getManagerAssignmentScores: vi.fn(),
       create: vi.fn(),
       getDataSchema: vi.fn(),
       register: vi.fn(),
@@ -54,6 +56,18 @@ describe("ProgramRepository", () => {
     adapter.getAll.mockReturnValue(of(page<Program>()));
     repository.getAll(0, 10, params).subscribe();
     expect(adapter.getAll).toHaveBeenCalledExactlyOnceWith(0, 10, params);
+  });
+
+  it("drilldown делегирует scope/id без кеширования manager данных", () => {
+    setup();
+    adapter.getManagerAssignments.mockReturnValue(of([]));
+    adapter.getManagerAssignmentScores.mockReturnValue(of({}));
+    repository.getManagerAssignments(12, "pending").subscribe();
+    repository.getManagerAssignments(12, "pending").subscribe();
+    repository.getManagerAssignmentScores(12, 17).subscribe();
+    expect(adapter.getManagerAssignments).toHaveBeenCalledWith(12, "pending");
+    expect(adapter.getManagerAssignments).toHaveBeenCalledTimes(2);
+    expect(adapter.getManagerAssignmentScores).toHaveBeenCalledExactlyOnceWith(12, 17);
   });
 
   it("getOne кеширует результат: повторный вызов не бьёт adapter", () => {
