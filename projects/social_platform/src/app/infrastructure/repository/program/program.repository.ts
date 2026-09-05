@@ -19,6 +19,12 @@ import { userFromRaw } from "@utils/userRaw";
 import { EventBus } from "@domain/shared/event-bus";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
 import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsAttentionQuery,
+} from "@domain/program/program-analytics-attention.model";
+import {
   ProgramAnalyticsOverview,
   ProgramAnalyticsAssignment,
   ProgramAnalyticsAssignmentScope,
@@ -54,6 +60,22 @@ export class ProgramRepository implements ProgramRepositoryPort {
 
   getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
     return this.programAdapter.getManagerOverview(programId);
+  }
+
+  /** Свежий manager-список при каждом открытии/поиске, без EntityCache. */
+  getManagerParticipantsWithoutTeam(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
+    return this.programAdapter.getManagerParticipantsWithoutTeam(programId, query);
+  }
+
+  /** Проксируем актуальный count/mode и nullable поля без вычислений. */
+  getManagerProjectsAwaitingEvaluation(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionProjects> {
+    return this.programAdapter.getManagerProjectsAwaitingEvaluation(programId, query);
   }
 
   /** Не кешируем manager-данные между открытиями или программами. */

@@ -14,6 +14,12 @@ import { ProjectAdditionalFields } from "@domain/project/project-additional-fiel
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsAttentionQuery,
+} from "@domain/program/program-analytics-attention.model";
+import {
   ProgramAnalyticsOverview,
   ProgramAnalyticsAssignment,
   ProgramAnalyticsAssignmentScope,
@@ -48,6 +54,35 @@ export class ProgramHttpAdapter {
 
   getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/manager-overview/`);
+  }
+
+  /** Без автозагрузки остальных страниц; camelcase преобразует общий interceptor. */
+  getManagerParticipantsWithoutTeam(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/participants-without-team/`,
+      this.attentionParams(query),
+    );
+  }
+
+  /** Список работ не подменяется assignments и не включает несданные проекты. */
+  getManagerProjectsAwaitingEvaluation(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionProjects> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/projects-awaiting-evaluation/`,
+      this.attentionParams(query),
+    );
+  }
+
+  private attentionParams(query: ProgramAnalyticsAttentionQuery): HttpParams {
+    let params = new HttpParams().set("limit", query.limit ?? 25).set("offset", query.offset ?? 0);
+    const search = query.search?.trim();
+    if (search) params = params.set("search", search);
+    return params;
   }
 
   /** Query scope передаётся backend без переопределения его статусной семантики. */

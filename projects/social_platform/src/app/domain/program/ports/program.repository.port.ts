@@ -12,6 +12,12 @@ import { ProjectAdditionalFields } from "../../project/project-additional-fields
 import { ApplyToProgramDTO } from "../dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "../results/apply-to-program";
 import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsAttentionQuery,
+} from "../program-analytics-attention.model";
+import {
   ProgramAnalyticsOverview,
   ProgramAnalyticsAssignment,
   ProgramAnalyticsAssignmentScope,
@@ -29,6 +35,18 @@ export abstract class ProgramRepositoryPort {
   abstract getOne(programId: number): Observable<Program>;
 
   abstract getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview>;
+
+  /** Уникальные участники без команды текущей программы, серверный поиск/пагинация. */
+  abstract getManagerParticipantsWithoutTeam(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>>;
+
+  /** Только сданные, ещё не оценённые работы; одна работа — одна строка. */
+  abstract getManagerProjectsAwaitingEvaluation(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionProjects>;
 
   /** Manager-only назначения; pending включает несданные проекты. */
   abstract getManagerAssignments(

@@ -66,6 +66,56 @@ describe("CamelcaseInterceptor", () => {
       });
   });
 
+  it("attention pages: вложенные snake_case поля и null проходят без потерь", () => {
+    const interceptor = TestBed.inject(CamelcaseInterceptor);
+    const body = {
+      count: 1,
+      next: null,
+      previous: null,
+      mode: "open",
+      results: [
+        {
+          program_project_id: 70,
+          user_id: 123,
+          registered_at: null,
+          submitted_at: null,
+          full_name: "Анна",
+          reason_label: "Ожидает первой оценки",
+          assignments_total: null,
+          assignments_completed: null,
+          leader: { user_id: 123, full_name: "Анна", avatar: null },
+        },
+      ],
+    };
+    interceptor
+      .intercept(
+        new HttpRequest("GET", "/programs/12/manager-overview/projects-awaiting-evaluation/"),
+        { handle: () => of(new HttpResponse({ body })) },
+      )
+      .subscribe(event => {
+        if (!(event instanceof HttpResponse)) return;
+        expect(event.body).toEqual({
+          count: 1,
+          next: null,
+          previous: null,
+          mode: "open",
+          results: [
+            {
+              programProjectId: 70,
+              userId: 123,
+              registeredAt: null,
+              submittedAt: null,
+              fullName: "Анна",
+              reasonLabel: "Ожидает первой оценки",
+              assignmentsTotal: null,
+              assignmentsCompleted: null,
+              leader: { userId: 123, fullName: "Анна", avatar: null },
+            },
+          ],
+        });
+      });
+  });
+
   it("преобразует вложенный manager overview из snake_case в domain camelCase", () => {
     const interceptor = TestBed.inject(CamelcaseInterceptor);
     const request = new HttpRequest("GET", "/programs/12/manager-overview/");

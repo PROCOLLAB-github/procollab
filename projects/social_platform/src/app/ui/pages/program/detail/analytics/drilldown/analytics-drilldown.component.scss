@@ -39,6 +39,8 @@
   }
 
   button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
   h2:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
@@ -73,6 +75,52 @@
 
   &__action:hover {
     text-decoration: underline;
+  }
+
+  &__action:disabled {
+    color: var(--dark-grey);
+    text-decoration: none;
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  &__search {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  &__search-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+
+    input {
+      box-sizing: border-box;
+      flex: 1 1 220px;
+      width: 100%;
+      min-width: 0;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--black);
+      background: var(--white);
+      border: 1px solid var(--medium-grey-for-outline);
+      border-radius: 8px;
+    }
+  }
+
+  &__count {
+    margin-bottom: 12px;
+  }
+
+  &__pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
   }
 
   &__identity {
@@ -249,6 +297,14 @@
 
       th:last-child {
         width: 15%;
+      }
+    }
+  }
+
+  &__table--projects {
+    @include responsive.apply-desktop {
+      th:first-child {
+        width: 18%;
       }
     }
   }
