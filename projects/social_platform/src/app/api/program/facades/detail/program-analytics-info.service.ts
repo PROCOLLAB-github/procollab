@@ -19,7 +19,7 @@ import {
   success,
 } from "@domain/shared/async-state";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
-import { Subject, takeUntil } from "rxjs";
+import { distinctUntilChanged, map, Subject, takeUntil } from "rxjs";
 import { Program } from "@domain/program/program.model";
 
 /** Состояние и загрузка внутренней вкладки аналитики программы. */
@@ -31,14 +31,30 @@ export class ProgramAnalyticsInfoService {
   private readonly programUI = inject(ProgramDetailMainUIInfoService);
   private readonly cancel = new Subject<void>();
   private initialized = false;
+  private routeProgramId: number | null = null;
   private loadedProgram: Program | undefined;
   readonly programId = signal<number | null>(null);
 
   constructor() {
+    this.route.parent?.paramMap
+      .pipe(
+        map(params => {
+          const id = Number(params.get("programId"));
+          return Number.isInteger(id) && id > 0 ? id : null;
+        }),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(programId => {
+        this.routeProgramId = programId;
+        // Параметры приходят раньше resolver: сразу сбрасываем предыдущий контекст.
+        if (this.initialized) this.refresh();
+      });
+
     effect(() => {
       const program = this.programUI.program();
       if (this.initialized && program !== this.loadedProgram) {
-        untracked(() => this.initialize());
+        untracked(() => this.refresh());
       }
     });
   }
@@ -56,20 +72,30 @@ export class ProgramAnalyticsInfoService {
   });
 
   initialize(): void {
-    const program = this.programUI.program();
-    const programId = Number(this.route.parent?.snapshot.params["programId"]);
     this.initialized = true;
+    this.refresh();
+  }
+
+  /** Запрос разрешён только при совпадении resolved программы с текущим route. */
+  private refresh(): void {
+    const program = this.programUI.program();
+    const programId = this.routeProgramId;
     this.loadedProgram = program;
     this.cancel.next();
     this.programId.set(null);
 
-    if (!program?.isUserManager) {
-      this.state.set(failure({ kind: "forbidden" }));
+    if (programId === null) {
+      this.state.set(failure({ kind: "not_found" }));
       return;
     }
 
-    if (!Number.isInteger(programId) || programId <= 0 || program.id !== programId) {
-      this.state.set(failure({ kind: "not_found" }));
+    if (program?.id !== programId) {
+      this.state.set(loading());
+      return;
+    }
+
+    if (!program.isUserManager) {
+      this.state.set(failure({ kind: "forbidden" }));
       return;
     }
 
