@@ -18,8 +18,12 @@ import {
   ViewEncapsulation,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { NgTemplateOutlet } from "@angular/common";
-import { ProgramAnalyticsDrilldownService } from "@api/program/facades/detail/program-analytics-drilldown.service";
+import { DatePipe, NgTemplateOutlet } from "@angular/common";
+import { RouterLink } from "@angular/router";
+import {
+  AnalyticsAttentionView,
+  ProgramAnalyticsDrilldownService,
+} from "@api/program/facades/detail/program-analytics-drilldown.service";
 import {
   ProgramAnalyticsAssignmentScope,
   ProgramAnalyticsAssignmentStatus,
@@ -40,7 +44,7 @@ import {
   selector: "app-analytics-drilldown",
   templateUrl: "./analytics-drilldown.component.html",
   styleUrl: "./analytics-drilldown.component.scss",
-  imports: [A11yModule, ModalComponent, AvatarComponent, NgTemplateOutlet],
+  imports: [A11yModule, ModalComponent, AvatarComponent, NgTemplateOutlet, DatePipe, RouterLink],
   providers: [ProgramAnalyticsDrilldownService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -69,6 +73,10 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   protected readonly requestError = analyticsRequestError;
   protected readonly title = computed(() => {
     switch (this.state.view()) {
+      case "participants-without-team":
+        return "Участники без команды";
+      case "projects-awaiting-evaluation":
+        return "Работы ожидают оценивания";
       case "scores":
         return "Оценка проекта";
       case "delayed":
@@ -91,6 +99,18 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
         pending: "Все назначения выполнены",
       })[this.state.scope()],
   );
+  protected readonly attentionEmptyMessage = computed(() => {
+    if (this.state.appliedSearch()) return "По вашему запросу ничего не найдено.";
+    return this.state.view() === "participants-without-team"
+      ? "Все зарегистрированные участники уже состоят в командах."
+      : "Нет работ, ожидающих оценивания.";
+  });
+  protected readonly attentionRequestError = computed(() => {
+    const error = this.state.attentionError();
+    if (error?.kind === "forbidden") return "Нет доступа к данным этой программы.";
+    if (error?.kind === "not_found") return "Программа не найдена.";
+    return analyticsRequestError(error);
+  });
 
   constructor() {
     effect(() => {
@@ -173,6 +193,21 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
     if (id === null || this.state.open() || this.attached()) return;
     this.trigger = trigger;
     this.state.openDelayed(id, this.delayedExperts());
+  }
+
+  /** Attention root сохраняет конкретную строку-trigger для обычного закрытия. */
+  openAttention(view: AnalyticsAttentionView, trigger: HTMLElement): void {
+    const id = this.programId();
+    if (id === null || this.state.open() || this.attached() || trigger.hasAttribute("disabled"))
+      return;
+    this.trigger = trigger;
+    this.state.openAttention(id, view);
+  }
+
+  /** Уходим из программы по RouterLink без попытки фокусировать старый контекст. */
+  protected leaveAnalytics(): void {
+    this.trigger = null;
+    this.closeAnalyticsModal();
   }
 
   /** Backdrop, Escape и кнопка закрывают весь drilldown. Фокус возвращается на detach. */

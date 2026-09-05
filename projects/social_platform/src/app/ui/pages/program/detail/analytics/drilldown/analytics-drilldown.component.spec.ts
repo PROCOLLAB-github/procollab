@@ -4,6 +4,9 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
+import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { provideRouter } from "@angular/router";
 import { ProgramAnalyticsDrilldownService } from "@api/program/facades/detail/program-analytics-drilldown.service";
 import { ProgramAnalyticsAssignmentScope } from "@domain/program/program-analytics.model";
 import { fail, ok } from "@domain/shared/result.type";
@@ -35,6 +38,15 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await TestBed.configureTestingModule({
       imports: [AnalyticsDrilldownComponent],
       providers: [
+        provideRouter([]),
+        {
+          provide: GetProgramManagerParticipantsWithoutTeamUseCase,
+          useValue: { execute: vi.fn() },
+        },
+        {
+          provide: GetProgramManagerProjectsAwaitingEvaluationUseCase,
+          useValue: { execute: vi.fn() },
+        },
         { provide: GetProgramManagerAssignmentsUseCase, useValue: assignments },
         { provide: GetProgramManagerAssignmentScoresUseCase, useValue: scores },
       ],
@@ -68,7 +80,9 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
   it("initial focus только после attachment; один dialog и активный trap", async () => {
     expect(assignments.execute).not.toHaveBeenCalled();
     await open();
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Закрыть аналитику назначений");
+    expect(document.activeElement?.getAttribute("aria-label")).toBe(
+      "Закрыть детализацию аналитики",
+    );
     expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
     expect(dialog().getAttribute("aria-modal")).toBe("true");
     expect(dialog().getAttribute("aria-labelledby")).toBe(dialog().querySelector("h2")?.id);

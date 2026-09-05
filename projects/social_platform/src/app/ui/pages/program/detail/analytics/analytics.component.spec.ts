@@ -12,6 +12,9 @@ import { ProgramAnalyticsComponent } from "./analytics.component";
 import { exportRegions } from "@utils/export-regions";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
+import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { provideRouter } from "@angular/router";
 import { of } from "rxjs";
 import { ok } from "@domain/shared/result.type";
 import { delayedExpert, scoreDetail } from "@domain/program/program-analytics-assignment.fixture";
@@ -113,6 +116,15 @@ describe("ProgramAnalyticsComponent", () => {
     TestBed.configureTestingModule({
       imports: [ProgramAnalyticsComponent],
       providers: [
+        provideRouter([]),
+        {
+          provide: GetProgramManagerParticipantsWithoutTeamUseCase,
+          useValue: { execute: vi.fn() },
+        },
+        {
+          provide: GetProgramManagerProjectsAwaitingEvaluationUseCase,
+          useValue: { execute: vi.fn() },
+        },
         {
           provide: GetProgramManagerAssignmentsUseCase,
           useValue: { execute: vi.fn().mockReturnValue(of(ok([]))) },
@@ -219,13 +231,41 @@ describe("ProgramAnalyticsComponent", () => {
     const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
       .componentInstance as AnalyticsDrilldownComponent;
     const open = vi.spyOn(drilldown, "openDelayed").mockImplementation(() => {});
-    const trigger = fixture.nativeElement.querySelector(".attention__action") as HTMLButtonElement;
+    const trigger = Array.from(
+      fixture.nativeElement.querySelectorAll(".attention__action") as NodeListOf<HTMLButtonElement>,
+    ).find(button => button.textContent?.includes("Эксперты задерживают"))!;
     expect(trigger.textContent).toContain("Эксперты задерживают оценивание");
     expect(trigger.textContent).toContain("1");
     trigger.click();
     expect(open).toHaveBeenCalledExactlyOnceWith(trigger);
     expect(drilldown.delayedExperts().items).toEqual([delayedExpert()]);
     expect(fixture.nativeElement.querySelector(".attention--empty")).toBeNull();
+  });
+
+  it.each([
+    ["Участники без команды", "participants-without-team", "participantsWithoutTeam"],
+    ["Работы ожидают оценивания", "projects-awaiting-evaluation", "projectsAwaitingEvaluation"],
+  ] as const)("%s: button, zero disabled, tooltip отдельно", (label, view, key) => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
+    const trigger = Array.from(
+      fixture.nativeElement.querySelectorAll(".attention__action") as NodeListOf<HTMLButtonElement>,
+    ).find(button => button.textContent?.includes(label))!;
+    expect(trigger.disabled).toBe(false);
+    expect(trigger.querySelector("app-tooltip")).toBeNull();
+    trigger.parentElement!.querySelector<HTMLElement>("app-tooltip")!.click();
+    expect(open).not.toHaveBeenCalled();
+    trigger.click();
+    expect(open).toHaveBeenCalledExactlyOnceWith(view, trigger);
+    const current = data()!;
+    data.set({ ...current, attention: { ...current.attention, [key]: 0 } });
+    fixture.detectChanges();
+    expect(trigger.disabled).toBe(true);
+    trigger.click();
+    expect(open).toHaveBeenCalledTimes(1);
   });
 
   it("renders independent project and participant region cards without normalizing legacy names", () => {

@@ -2,6 +2,9 @@
 import { TestBed } from "@angular/core/testing";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
+import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { provideRouter } from "@angular/router";
 import {
   ProgramAnalyticsAssignment,
   ProgramAnalyticsAssignmentScoreDetail,
@@ -25,6 +28,15 @@ describe("ProgramAnalyticsDrilldownService", () => {
     scores.execute.mockReset().mockReturnValue(of(ok(scoreDetail())));
     TestBed.configureTestingModule({
       providers: [
+        provideRouter([]),
+        {
+          provide: GetProgramManagerParticipantsWithoutTeamUseCase,
+          useValue: { execute: vi.fn() },
+        },
+        {
+          provide: GetProgramManagerProjectsAwaitingEvaluationUseCase,
+          useValue: { execute: vi.fn() },
+        },
         ProgramAnalyticsDrilldownService,
         { provide: GetProgramManagerAssignmentsUseCase, useValue: assignments },
         { provide: GetProgramManagerAssignmentScoresUseCase, useValue: scores },

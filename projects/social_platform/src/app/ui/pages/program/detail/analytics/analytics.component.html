@@ -378,8 +378,23 @@
                     ><strong>{{ item.value }}</strong>
                   </button>
                 } @else {
-                  <span class="text-body-10">{{ item.label }}</span>
-                  <strong>{{ item.value }}</strong>
+                  <button
+                    #attentionTrigger
+                    type="button"
+                    class="attention__action"
+                    [disabled]="item.value === 0"
+                    (click)="
+                      drilldown.openAttention(
+                        item.key === 'without-team'
+                          ? 'participants-without-team'
+                          : 'projects-awaiting-evaluation',
+                        attentionTrigger
+                      )
+                    "
+                  >
+                    <span>{{ item.label }}</span
+                    ><strong>{{ item.value }}</strong>
+                  </button>
                 }
                 <app-tooltip
                   [text]="item.tooltip"

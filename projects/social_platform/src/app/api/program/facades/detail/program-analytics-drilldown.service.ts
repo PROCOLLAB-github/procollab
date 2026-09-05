@@ -4,6 +4,13 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Subject, takeUntil } from "rxjs";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
+import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+} from "@domain/program/program-analytics-attention.model";
 import {
   ProgramAnalyticsAssignment,
   ProgramAnalyticsAssignmentScope,
@@ -13,16 +20,26 @@ import {
   ProgramAnalyticsError,
 } from "@domain/program/program-analytics.model";
 
-export type AnalyticsDrilldownView = "assignments" | "scores" | "delayed" | "backlog";
+/** Два root-списка внимания используют тот же modal context, не вложенную модалку. */
+export type AnalyticsAttentionView = "participants-without-team" | "projects-awaiting-evaluation";
+export type AnalyticsDrilldownView =
+  | "assignments"
+  | "scores"
+  | "delayed"
+  | "backlog"
+  | AnalyticsAttentionView;
 
 /** Живёт вместе с одной analytics-модалкой, не сохраняет manager-данные между открытиями. */
 @Injectable()
 export class ProgramAnalyticsDrilldownService {
   private readonly getAssignments = inject(GetProgramManagerAssignmentsUseCase);
   private readonly getScores = inject(GetProgramManagerAssignmentScoresUseCase);
+  private readonly getParticipants = inject(GetProgramManagerParticipantsWithoutTeamUseCase);
+  private readonly getProjects = inject(GetProgramManagerProjectsAwaitingEvaluationUseCase);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cancelAssignments = new Subject<void>();
   private readonly cancelScores = new Subject<void>();
+  private readonly cancelAttention = new Subject<void>();
   private programId: number | null = null;
   private selectedAssignmentId: number | null = null;
 
@@ -37,6 +54,101 @@ export class ProgramAnalyticsDrilldownService {
   readonly scoreDetailError = signal<ProgramAnalyticsError | null>(null);
   readonly delayedExperts = signal<ProgramAnalyticsDelayedExpert[]>([]);
   readonly selectedExpert = signal<ProgramAnalyticsDelayedExpert | null>(null);
+
+  readonly searchDraft = signal("");
+  readonly appliedSearch = signal("");
+  readonly attentionLimit = 25;
+  readonly attentionOffset = signal(0);
+  readonly participantsPage =
+    signal<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant> | null>(null);
+  readonly projectsPage = signal<ProgramAnalyticsAttentionProjects | null>(null);
+  readonly attentionPending = signal(false);
+  readonly attentionError = signal<ProgramAnalyticsError | null>(null);
+  readonly isAttentionView = computed(
+    () =>
+      this.view() === "participants-without-team" || this.view() === "projects-awaiting-evaluation",
+  );
+  readonly attentionPage = computed(() =>
+    this.view() === "participants-without-team" ? this.participantsPage() : this.projectsPage(),
+  );
+  readonly attentionCount = computed(() => this.attentionPage()?.count ?? 0);
+  readonly attentionHasNext = computed(() => {
+    const page = this.attentionPage();
+    return !!page && this.attentionOffset() + page.results.length < page.count;
+  });
+  readonly attentionRange = computed(() => {
+    const page = this.attentionPage();
+    if (!page?.results.length) return `0 из ${page?.count ?? 0}`;
+    return `${this.attentionOffset() + 1}–${this.attentionOffset() + page.results.length} из ${page.count}`;
+  });
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.close());
+  }
+
+  /** Каждое root-open очищает поиск/страницу/старые данные и делает ровно один запрос. */
+  openAttention(programId: number, view: AnalyticsAttentionView): void {
+    if (!this.start(programId)) return;
+    this.view.set(view);
+    this.loadAttention();
+  }
+
+  /** Query остаётся черновиком до Enter; сервер получает trimmed search с первой страницы. */
+  applyAttentionSearch(): void {
+    if (!this.open() || !this.isAttentionView()) return;
+    this.appliedSearch.set(this.searchDraft().trim());
+    this.attentionOffset.set(0);
+    this.loadAttention();
+  }
+
+  /** Явная очистка возвращает первую страницу полного списка. */
+  clearAttentionSearch(): void {
+    this.searchDraft.set("");
+    this.applyAttentionSearch();
+  }
+
+  /** Переход отменяет запрос; ссылка next от backend не используется как произвольный URL. */
+  changeAttentionPage(direction: -1 | 1): void {
+    if (!this.open() || !this.isAttentionView()) return;
+    if (direction === 1 && (this.attentionPending() || !this.attentionHasNext())) return;
+    if (direction === -1 && this.attentionOffset() === 0) return;
+    this.attentionOffset.update(offset => Math.max(0, offset + direction * this.attentionLimit));
+    this.loadAttention();
+  }
+
+  /** Retry сохраняет search/offset; takeUntil не допускает позднего ответа прошлого контекста. */
+  loadAttention(): void {
+    if (!this.open() || this.programId === null || !this.isAttentionView()) return;
+    this.cancelAttention.next();
+    this.participantsPage.set(null);
+    this.projectsPage.set(null);
+    this.attentionError.set(null);
+    this.attentionPending.set(true);
+    const query = {
+      search: this.appliedSearch(),
+      limit: this.attentionLimit,
+      offset: this.attentionOffset(),
+    };
+    if (this.view() === "participants-without-team") {
+      this.getParticipants
+        .execute(this.programId, query)
+        .pipe(takeUntil(this.cancelAttention), takeUntilDestroyed(this.destroyRef))
+        .subscribe(result => {
+          this.attentionPending.set(false);
+          if (result.ok) this.participantsPage.set(result.value);
+          else this.attentionError.set(result.error);
+        });
+    } else {
+      this.getProjects
+        .execute(this.programId, query)
+        .pipe(takeUntil(this.cancelAttention), takeUntilDestroyed(this.destroyRef))
+        .subscribe(result => {
+          this.attentionPending.set(false);
+          if (result.ok) this.projectsPage.set(result.value);
+          else this.attentionError.set(result.error);
+        });
+    }
+  }
 
   /** Фильтруем по expertId, не userId/имени; порядок backend внутри группы сохраняется. */
   readonly backlog = computed(() =>
@@ -133,6 +245,14 @@ export class ProgramAnalyticsDrilldownService {
   close(): void {
     this.cancelAssignments.next();
     this.cancelScores.next();
+    this.cancelAttention.next();
+    this.searchDraft.set("");
+    this.appliedSearch.set("");
+    this.attentionOffset.set(0);
+    this.participantsPage.set(null);
+    this.projectsPage.set(null);
+    this.attentionPending.set(false);
+    this.attentionError.set(null);
     this.open.set(false);
     this.programId = null;
     this.selectedAssignmentId = null;

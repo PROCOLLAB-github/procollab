@@ -394,3 +394,92 @@ attachment событием openChange и не добавляют ручной d
 delayed/backlog/back, loading/error/retry, длинные имена на desktop/mobile,
 Tab/Shift+Tab, Escape, backdrop, возврат на конкретный trigger и смена программы.
 Backend, React, shared modal, зависимости, workflows/Docker и deploy вне изменений.
+
+## Детализация «Требует внимания»: участники и работы (v1)
+
+Контракт — backend PR #725 (merge `bc1fffb16071935cfce449e6c59202251cb860c6`).
+Два дополнительных root-view расширяют существующий `AnalyticsDrilldownComponent`:
+`participants-without-team` и `projects-awaiting-evaluation`. Все три строки внимания
+теперь кнопки; нулевая строка неактивна, а при всех нулях сохранено «Ничего не требует внимания».
+Tooltip — соседний контрол, его нажатие не открывает детализацию.
+
+### API и типы
+
+- `getManagerParticipantsWithoutTeam` / `GetProgramManagerParticipantsWithoutTeamUseCase`:
+  `GET /programs/:programId/manager-overview/participants-without-team/`.
+- `getManagerProjectsAwaitingEvaluation` / `GetProgramManagerProjectsAwaitingEvaluationUseCase`:
+  `GET /programs/:programId/manager-overview/projects-awaiting-evaluation/`.
+
+Оба метода принимают `ProgramAnalyticsAttentionQuery` (`search`, `limit`, `offset`).
+Путь данных сохраняет port → HTTP adapter → repository → use case → page-local facade.
+Компонент не использует HttpClient. Use cases возвращают `Result<…, ProgramAnalyticsError>`.
+Тип страницы переиспользует `ApiPagination`, уточняя nullable `next`/`previous` только
+в analytics contract; общая модель пагинации не меняется. Ручного snake_case parser нет.
+Общий interceptor преобразует `user_id`, `registered_at`, `program_project_id`,
+`submitted_at`, `reason_label`, `assignments_total`, `assignments_completed` в camelCase.
+
+`ProgramAnalyticsAttentionParticipant` содержит только `userId`, `fullName`, `avatar`,
+`city`, `registeredAt`. Дата означает регистрацию в программе, не создание аккаунта.
+Legacy city показывается как прислано. Отсутствующие город/дата: «Не указано» / «Нет данных».
+Отсутствие команды не означает заявленный статус «Ищет команду».
+
+`ProgramAnalyticsAttentionProject` — одна сданная работа программы: `programProjectId`,
+`project`, nullable `leader`/`submittedAt`, `status`, `reason`, `reasonLabel` и nullable
+assignment-счётчики. Режим берётся из `mode` ответа списка, не из старого overview.
+Пустой руководитель — «Не указан», неизвестная дата — «Дата сдачи неизвестна».
+
+Причины backend (код используется как стабильный идентификатор, label — для отображения):
+
+- `no_assignments` — «Эксперты не назначены»;
+- `no_completed_evaluations` — «Нет завершённых оценок»;
+- `partially_evaluated` — «Частично оценено»;
+- `awaiting_first_evaluation` — «Ожидает первой оценки» (open).
+
+В distributed прогресс: «Завершили: X из Y» из `assignmentsCompleted/assignmentsTotal`;
+при total=0 — «Нет назначений». В open — «—», null не становится нулём.
+Нет расчёта процентов, SLA, средних баллов или требуемого числа экспертов.
+Несданные работы исключены backend и не добавляются обратно через assignments.
+
+### Поиск, страницы, ошибки и отмена
+
+Данные не кешируются между открытиями. Нажатие root-trigger очищает прошлый контекст,
+поиск и offset и делает один запрос. Вместе с overview списки не загружаются.
+Черновик поиска применяется по Enter/«Найти», сервер получает trimmed search.
+«Очистить» возвращает полный список. Новый поиск всегда начинает с offset=0.
+Размер страницы фиксирован: 25. «Назад»/«Далее» меняют offset, диапазон и count
+отображаются из актуального detail response. Ссылки backend next/previous не открываются
+напрямую. Расхождение со старым числом overview не ошибка; overview циклически не обновляется.
+
+Loading, успешный список, empty без поиска и search-empty — разные состояния.
+При пустом поиске: «Все зарегистрированные участники уже состоят в командах.» либо
+«Нет работ, ожидающих оценивания.» При применённом поиске: «По вашему запросу ничего не найдено.»
+Ошибки 401/403/404/network локальны и не скрывают основную аналитику. Показываются
+только контролируемые сообщения, не HTTP body. Retry сохраняет view/program/search/limit/offset.
+
+`cancelAttention` + `takeUntilDestroyed` отписывают активный запрос при закрытии,
+другом root-open, новом поиске, смене страницы/программы и destroy. Поздний ответ
+не может перезаписать новую страницу. Перед загрузкой старые results очищаются.
+Сохраняется реактивный parent `ActivatedRoute.paramMap` из #332: смена 12 → 13 сразу
+обнуляет публичный programId, отменяет overview и через signal input закрывает drilldown.
+До соответствующего resolver Program(13) новый overview не запрашивается; новый attention
+список не запрашивается и после resolver, пока пользователь снова не нажмёт строку.
+
+### Общая модалка, навигация и ограничения
+
+Shared `app-modal` не меняется. У всех шести views один overlay/dialog/focus trap.
+Focus на close только после attachments, Escape через overlay keydownEvents,
+backdrop и close используют единый flow; при detach возврат на конкретный connected trigger.
+Смена программы/destroy не возвращают focus в старый контекст. Сохранён bottom-up cleanup.
+Новых таймеров, polling, глобальных keyboard handlers или второго trap нет.
+
+Явные RouterLink-действия: «Открыть профиль» → `/office/profile/:userId`,
+«Открыть проект» → `/office/projects/:projectId`. При уходе ссылка-trigger очищается,
+модалка закрывается, запросы отменяются. Новых маршрутов и вложенных modal нет.
+На desktop — таблицы; mobile/tablet — stacked cards с подписями, переносом длинных
+значений и вертикальным скроллом внутри существующего dialog до 880px шириной.
+
+V1 не добавляет вуз/роль/кейс, contact/team actions, напоминания, назначения,
+несданные работы, exports или fake data. Контракт/семантика backend не расширяются.
+Targeted tests покрывают pipeline, camelcase/null, поиск/страницы/retry/races,
+реальный overlay lifecycle и observable route change до resolver.
+Ручной DEV smoke и mobile/keyboard проверяются отдельно от unit/component tests.
