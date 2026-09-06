@@ -5,8 +5,8 @@ import { of } from "rxjs";
 import { ProjectProgramRepository } from "./project-program.repository";
 import { ProjectProgramHttpAdapter } from "../../adapters/project/project-program-http.adapter";
 import { ProjectAssign } from "@domain/project/project-assign.model";
-import { Project } from "@domain/project/project.model";
-import { ProjectDto } from "../../adapters/project/dto/project.dto";
+import { ProgramLinkField, ProgramLinkFields } from "@domain/project/program-link-fields.model";
+import { programLinkFields } from "@domain/project/program-link-fields.fixture";
 import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-program-fields.model";
 
 describe("ProjectProgramRepository", () => {
@@ -14,7 +14,11 @@ describe("ProjectProgramRepository", () => {
   let adapter: any;
 
   function setup(): void {
-    adapter = { assignProjectToProgram: vi.fn(), sendNewProjectFieldsValues: vi.fn() };
+    adapter = {
+      assignProjectToProgram: vi.fn(),
+      getProgramLinkFields: vi.fn(),
+      updateProgramLinkFields: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [
         ProjectProgramRepository,
@@ -36,15 +40,31 @@ describe("ProjectProgramRepository", () => {
       });
     }));
 
-  it("sendNewProjectFieldsValues мапит ответ в Project", () =>
+  it("GET maps the canonical snapshot and nullable help text", () => {
+    setup();
+    const dto = programLinkFields();
+    adapter.getProgramLinkFields.mockReturnValue(
+      of({ ...dto, fields: [{ ...dto.fields[0], helpText: null }] }),
+    );
+    repository.getProgramLinkFields(700).subscribe(snapshot => {
+      expect(snapshot).toBeInstanceOf(ProgramLinkFields);
+      expect(snapshot.fields[0]).toBeInstanceOf(ProgramLinkField);
+      expect(snapshot.fields[0].helpText).toBe("");
+      expect(snapshot.fields[0].value).toBeNull();
+      expect(snapshot.projectId).toBe(55);
+    });
+    expect(adapter.getProgramLinkFields).toHaveBeenCalledExactlyOnceWith(700);
+  });
+
+  it("PUT delegates canonical relation ID without interpreting acknowledgement as Project", () =>
     new Promise<void>(done => {
       setup();
       const values = [] as ProjectNewAdditionalProgramFields[];
-      adapter.sendNewProjectFieldsValues.mockReturnValue(of({ id: 1 } as ProjectDto));
+      adapter.updateProgramLinkFields.mockReturnValue(of(undefined));
 
-      repository.sendNewProjectFieldsValues(42, values).subscribe(res => {
-        expect(adapter.sendNewProjectFieldsValues).toHaveBeenCalledExactlyOnceWith(42, values);
-        expect(res).toBeInstanceOf(Project);
+      repository.updateProgramLinkFields(700, values).subscribe(res => {
+        expect(adapter.updateProgramLinkFields).toHaveBeenCalledExactlyOnceWith(700, values);
+        expect(res).toBeUndefined();
         done();
       });
     }));

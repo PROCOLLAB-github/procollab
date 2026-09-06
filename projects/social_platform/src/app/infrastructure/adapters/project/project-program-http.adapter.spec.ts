@@ -5,15 +5,14 @@ import { of } from "rxjs";
 import { ApiService } from "@corelib";
 import { ProjectProgramHttpAdapter } from "./project-program-http.adapter";
 import { ProjectAssign } from "@domain/project/project-assign.model";
-import { ProjectDto } from "./dto/project.dto";
-import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-program-fields.model";
+import { programLinkFields } from "@domain/project/program-link-fields.fixture";
 
 describe("ProjectProgramHttpAdapter", () => {
   let adapter: ProjectProgramHttpAdapter;
   let api: any;
 
   function setup(): void {
-    api = { post: vi.fn(), put: vi.fn() };
+    api = { post: vi.fn(), put: vi.fn(), get: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProjectProgramHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -32,13 +31,27 @@ describe("ProjectProgramHttpAdapter", () => {
     });
   });
 
-  it("sendNewProjectFieldsValues идёт в PUT /projects/:id/program-fields/ c массивом", () => {
+  it("GET uses canonical link 700, not project 55", () => {
     setup();
-    api.put.mockReturnValue(of({} as ProjectDto));
-    const values = [] as ProjectNewAdditionalProgramFields[];
+    api.get.mockReturnValue(of(programLinkFields()));
+    adapter.getProgramLinkFields(700).subscribe();
+    expect(api.get).toHaveBeenCalledExactlyOnceWith(
+      "/programs/partner-program-projects/700/fields/",
+    );
+  });
 
-    adapter.sendNewProjectFieldsValues(42, values).subscribe();
+  it("PUT uses canonical link 700 and field_id/value_text", () => {
+    setup();
+    api.put.mockReturnValue(of({ detail: "Значения успешно обновлены" }));
+    const values = [{ fieldId: 5, valueText: "Цифровой HR" }];
 
-    expect(api.put).toHaveBeenCalledExactlyOnceWith("/projects/42/program-fields/", values);
+    adapter
+      .updateProgramLinkFields(700, values)
+      .subscribe(result => expect(result).toBeUndefined());
+
+    expect(api.put).toHaveBeenCalledExactlyOnceWith(
+      "/programs/partner-program-projects/700/fields/",
+      [{ field_id: 5, value_text: "Цифровой HR" }],
+    );
   });
 });

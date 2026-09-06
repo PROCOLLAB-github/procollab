@@ -11,6 +11,9 @@ import { ProjectFormService } from "@api/project/project-form.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { Program } from "@domain/program/program.model";
 import { DetailProgramInfoService } from "./detail-program-info.service";
+import { of } from "rxjs";
+import { ok } from "@domain/shared/result.type";
+import { programLinkFields } from "@domain/project/program-link-fields.fixture";
 
 describe("DetailProgramInfoService", () => {
   let service: DetailProgramInfoService;
@@ -46,6 +49,26 @@ describe("DetailProgramInfoService", () => {
   function program(overrides: Partial<Program> = {}): Program {
     return Object.assign(Program.default(), overrides);
   }
+
+  it("omits only system case from apply, preserves generic defaults and navigates with exact link", () => {
+    const fields = programLinkFields().fields;
+    const file = { ...fields[2], id: 20, name: "attachment", fieldType: "file" as const };
+    vi.mocked(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).mockReturnValue(
+      of(ok({ programFields: [...fields, file] })) as never,
+    );
+    const apply = vi.mocked(TestBed.inject(ApplyProjectToProgramUseCase).execute);
+    apply.mockReturnValue(of(ok({ projectId: 55, programLinkId: 700 })));
+    service.addNewProject(12);
+    const body = apply.mock.calls[0][1];
+    expect(body.programFieldValues).toEqual([
+      { fieldId: 6, valueText: "X" },
+      { fieldId: 7, valueText: "-" },
+      { fieldId: 8, valueText: "false" },
+    ]);
+    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/55/edit"], {
+      queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 700 },
+    });
+  });
 
   function clickEvent(): Event {
     return {

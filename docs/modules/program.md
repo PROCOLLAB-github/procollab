@@ -2,6 +2,34 @@
 
 # Module: `program`
 
+## Выбор системного кейса в проекте
+
+Backend contract: DEV `f932586fc59818b445c473ec2a33990605f16524` (merged #728).
+Системное поле определяется **только** точным `name="case"`, через общую константу
+`PROGRAM_CASE_FIELD_NAME`. Это `PartnerProgramField`, не отдельная Case entity.
+
+При initial apply из программы поле case полностью исключается из
+`programFieldValues`: не отправляется ни первый option, ни пустая строка/null.
+Generic select сохраняет прежний первый placeholder, checkbox — `"false"`,
+file по-прежнему исключается. Backend может создать draft без кейса.
+
+После apply навигация ведёт на `/office/projects/:projectId/edit` с query
+`editingStep=additional`, `fromProgram=true`, `programLinkId` из ответа apply.
+Дополнительные определения/значения далее загружаются canonical GET конкретной связи,
+а не берутся из встроенного `partnerProgram.programFields/programFieldValues`.
+
+Для системного select используется обычный `app-select`, label поля и options backend,
+но неизменный placeholder «Выберите кейс». Не выбранный кейс — пустой required control.
+Draft save пропускает пустой/whitespace case в partial PUT; выбранный option сохраняется
+и может быть изменён до сдачи. Пустое значение не является командой удалить ранее
+сохранённый кейс. Повторное открытие восстанавливает canonical value; `fromProgram`
+не подставляет первый option и не очищает уже сохранённый кейс.
+
+Сдача требует заполнения обязательных полей: PUT полей и POST submit используют один
+проверенный `programLinkId`. Missing/stale case 400 показываются контролируемым текстом;
+stale case обновляет canonical options, сохраняя остальные локальные правки.
+При `submitted=true` поля read-only. Аналитика, фильтры и статистика по кейсам не меняются.
+
 Партнёрские программы — крупные мероприятия с проектами, участниками, сроками регистрации, оценкой проектов экспертами. Связан с [`project`](project.md) (проект подаётся в программу), [`courses`](courses.md) (программа может иметь привязанный курс), [`news`](news.md) (программа имеет свою ленту новостей).
 
 ## Назначение
@@ -270,13 +298,13 @@ DI-биндинги (`infrastructure/di/program/`):
 
 ## Consumers
 
-| Где                                                      | Как использует                                                                                                               |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `pages/projects/edit/components/project-additional-step` | Использует `ProgramRepositoryPort.getProgramProjectAdditionalFields()` — определяет дополнительные поля проекта в программе. |
-| `pages/projects/detail/info`                             | `Project.partnerProgram` — связь с программой.                                                                               |
-| `pages/courses/detail/...`                               | `course.partnerProgramId` — связь курса с программой.                                                                        |
-| `widgets/detail`                                         | `listType: "program"` режим.                                                                                                 |
-| `domain/auth/user.model.ts`                              | `User.programs: Program[]` — программы пользователя.                                                                         |
+| Где                                                      | Как использует                                                                                   |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `pages/projects/edit/components/project-additional-step` | Использует canonical GET/PUT через `ProjectProgramRepositoryPort` для активного `programLinkId`. |
+| `pages/projects/detail/info`                             | `Project.partnerProgram` — связь с программой.                                                   |
+| `pages/courses/detail/...`                               | `course.partnerProgramId` — связь курса с программой.                                            |
+| `widgets/detail`                                         | `listType: "program"` режим.                                                                     |
+| `domain/auth/user.model.ts`                              | `User.programs: Program[]` — программы пользователя.                                             |
 
 ---
 

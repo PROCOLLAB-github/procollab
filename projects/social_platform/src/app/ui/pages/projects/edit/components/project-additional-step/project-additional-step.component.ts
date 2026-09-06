@@ -1,16 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  Component,
-  computed,
-  Input,
-  OnInit,
-  inject,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy,
-  input,
-} from "@angular/core";
+import { Component, computed, inject, ChangeDetectionStrategy } from "@angular/core";
 import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
@@ -29,6 +20,7 @@ import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.const";
 
 /** Шаг редактирования проекта: дополнительные поля программы. */
 @Component({
@@ -52,17 +44,24 @@ import { AppRoutes } from "@api/paths/app-routes";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectAdditionalStepComponent implements OnInit {
+export class ProjectAdditionalStepComponent {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
 
-  private readonly cdRef = inject(ChangeDetectorRef);
+  protected readonly isProjectAssignToProgram = this.projectAdditionalService.hasProgramLink;
+  protected readonly pending = this.projectAdditionalService.pending;
+  protected readonly loadFailed = this.projectAdditionalService.loadFailed;
+  protected readonly submitted = this.projectAdditionalService.submitted;
+  protected readonly saveError = this.projectAdditionalService.saveError;
+  protected readonly caseError = this.projectAdditionalService.caseError;
+  protected readonly caseFieldName = PROGRAM_CASE_FIELD_NAME;
 
-  readonly isProjectAssignToProgram = input<boolean>();
+  retry(): void {
+    this.projectAdditionalService.retry();
+  }
 
-  ngOnInit(): void {
-    // Инициализация уже должна быть выполнена в родительском компоненте
-    this.cdRef.detectChanges();
+  setBooleanValue(name: string, value: boolean): void {
+    this.projectAdditionalService.setBooleanValue(name, value);
   }
 
   protected readonly AppRoutes = AppRoutes;

@@ -15,6 +15,7 @@ import { ProjectFormService } from "@api/project/project-form.service";
 import { Program } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.const";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
@@ -54,7 +55,7 @@ export class DetailProgramInfoService {
         switchMap(filtersResult => {
           const fields = filtersResult.ok ? filtersResult.value.programFields : [];
           const newFieldsFormValues = fields
-            .filter(field => field.fieldType !== "file")
+            .filter(field => field.fieldType !== "file" && field.name !== PROGRAM_CASE_FIELD_NAME)
             .map(field =>
               ProjectNewAdditionalProgramFields.fromField(field, this.placeholderFor(field)),
             );
@@ -80,7 +81,11 @@ export class DetailProgramInfoService {
 
           this.router
             .navigate([AppRoutes.projects.edit(response.projectId)], {
-              queryParams: { editingStep: "additional", fromProgram: true },
+              queryParams: {
+                editingStep: "additional",
+                fromProgram: true,
+                programLinkId: response.programLinkId,
+              },
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));
         },

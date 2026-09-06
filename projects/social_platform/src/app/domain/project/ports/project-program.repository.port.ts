@@ -2,7 +2,7 @@
 
 import { Observable } from "rxjs";
 import { ProjectAssign } from "../project-assign.model";
-import { Project } from "../project.model";
+import { ProgramLinkFields } from "../program-link-fields.model";
 import { ProjectNewAdditionalProgramFields } from "../../program/partner-program-fields.model";
 
 /** Порт связи проект↔программа: подача проекта и отправка доп. полей программы. */
@@ -12,8 +12,10 @@ export abstract class ProjectProgramRepositoryPort {
     partnerProgramId: number,
   ): Observable<ProjectAssign>;
 
-  abstract sendNewProjectFieldsValues(
-    projectId: number,
+  abstract getProgramLinkFields(programLinkId: number): Observable<ProgramLinkFields>;
+
+  abstract updateProgramLinkFields(
+    programLinkId: number,
     newValues: ProjectNewAdditionalProgramFields[],
-  ): Observable<Project>;
+  ): Observable<void>;
 }
