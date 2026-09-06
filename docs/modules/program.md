@@ -4,7 +4,7 @@
 
 ## Выбор системного кейса в проекте
 
-Backend contract: DEV `f932586fc59818b445c473ec2a33990605f16524` (merged #728).
+Backend contract: DEV `77c8d41e2139c5902f2c7958d499fe26b9c4ef79` (merged/deployed #729).
 Системное поле определяется **только** точным `name="case"`, через общую константу
 `PROGRAM_CASE_FIELD_NAME`. Это `PartnerProgramField`, не отдельная Case entity.
 
@@ -29,6 +29,29 @@ Draft save пропускает пустой/whitespace case в partial PUT; в�
 проверенный `programLinkId`. Missing/stale case 400 показываются контролируемым текстом;
 stale case обновляет canonical options, сохраняя остальные локальные правки.
 При `submitted=true` поля read-only. Аналитика, фильтры и статистика по кейсам не меняются.
+
+### Canonical submission metadata / multi-program safety
+
+Canonical GET конкретного programLinkId содержит `isCompetitive`, `submissionOpen`,
+`submissionDeadline: string | null`, `canSubmit` и `submitted`. Metadata backend
+является authoritative context: frontend не рассчитывает сроки/доступность заново
+и не использует legacy `project.partnerProgram.canSubmit` для submission decision.
+Legacy singular link остаётся только fallback для ID, если валидный query ID отсутствует.
+
+Неконкурсная связь сохраняется без submit; сданная — без PUT и повторного submit.
+Конкурсная несданная связь с `canSubmit=true` проходит validation → confirmation →
+PUT fields → POST submit → обычное сохранение Project. При закрытой подаче показывается
+существующая deadline modal, без PUT/POST и без перехода в обычный publish.
+
+Backend submit остаётся последней authoritative validation при гонках: известные 400
+мапятся в `submission_closed`, `already_submitted`, `not_competitive`. Первый открывает
+deadline UI; последние два обновляют canonical GET без автоматического повторного submit
+или success. Если обновлённый snapshot сдан, controls становятся read-only.
+
+Обычное сохранение в verified canonical context исключает `partnerProgramId` из копии
+Project payload: поле иначе означало бы legacy bind/unbind command и могло удалить
+другую связь проекта. Сам FormControl не меняется; explicit dedicated assignment и
+обычные legacy flows вне canonical context сохранены.
 
 Партнёрские программы — крупные мероприятия с проектами, участниками, сроками регистрации, оценкой проектов экспертами. Связан с [`project`](project.md) (проект подаётся в программу), [`courses`](courses.md) (программа может иметь привязанный курс), [`news`](news.md) (программа имеет свою ленту новостей).
 

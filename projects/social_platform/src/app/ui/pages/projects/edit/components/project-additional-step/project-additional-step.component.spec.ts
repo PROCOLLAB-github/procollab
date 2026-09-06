@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { By } from "@angular/platform-browser";
 import { provideNgxMask } from "ngx-mask";
-import { firstValueFrom, of, Subject } from "rxjs";
+import { firstValueFrom, of, Subject, throwError } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
@@ -33,11 +33,13 @@ describe("ProjectAdditionalStepComponent canonical form", () => {
   let service: ProjectAdditionalService;
   let response: Subject<ProgramLinkFields>;
   const repo = { getProgramLinkFields: vi.fn(), updateProgramLinkFields: vi.fn() };
+  const programRepo = { submitCompettetiveProject: vi.fn() };
 
   beforeEach(async () => {
     response = new Subject<ProgramLinkFields>();
     repo.getProgramLinkFields.mockReset().mockReturnValue(response);
     repo.updateProgramLinkFields.mockReset().mockReturnValue(of(undefined));
+    programRepo.submitCompettetiveProject.mockReset().mockReturnValue(of({}));
     await TestBed.configureTestingModule({
       imports: [ProjectAdditionalStepComponent],
       providers: [
@@ -46,7 +48,7 @@ describe("ProjectAdditionalStepComponent canonical form", () => {
         provideNgxMask(),
         ProjectAdditionalService,
         { provide: ProjectProgramRepositoryPort, useValue: repo },
-        { provide: ProgramRepositoryPort, useValue: {} },
+        { provide: ProgramRepositoryPort, useValue: programRepo },
         { provide: LoggerService, useValue: { error: vi.fn() } },
         { provide: TooltipInfoService, useValue: { isVisible: () => false } },
       ],
@@ -151,5 +153,43 @@ describe("ProjectAdditionalStepComponent canonical form", () => {
       fixture.nativeElement.querySelector('[data-testid="saved-field-value"]')?.textContent.trim(),
     ).toBe("Previously available case");
     expect(fixture.nativeElement.textContent).not.toContain("больше недоступен");
+  });
+
+  it("renders read-only state after an already-submitted race refresh without an extra detectChanges", async () => {
+    response.next(programLinkFields());
+    service.getAdditionalForm().get("case")?.setValue("A");
+    const refresh = new Subject<ProgramLinkFields>();
+    repo.getProgramLinkFields.mockReturnValue(refresh);
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: { detail: "Проект уже был сдан на проверку." },
+          }),
+      ),
+    );
+    const host = TestBed.createComponent(SubmitHost);
+    await host.whenStable();
+    host.nativeElement.querySelector("button").click();
+    await host.whenStable();
+    expect(host.nativeElement.textContent).toContain("Загружаем дополнительные сведения");
+    const snapshot = programLinkFields({ submitted: true, canSubmit: false });
+    snapshot.fields[0].value = "B";
+    refresh.next(snapshot);
+    await host.whenStable();
+    expect(host.nativeElement.textContent).toContain(
+      "Проект уже сдан. Дополнительные сведения изменить нельзя.",
+    );
+    expect(
+      host.nativeElement.querySelector("app-select#case .field__input")?.textContent.trim(),
+    ).toBe("B");
+    expect(host.debugElement.query(By.directive(SelectComponent)).componentInstance.disabled).toBe(
+      true,
+    );
+    host.nativeElement.querySelector("button").click();
+    await host.whenStable();
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledTimes(1);
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
   });
 });

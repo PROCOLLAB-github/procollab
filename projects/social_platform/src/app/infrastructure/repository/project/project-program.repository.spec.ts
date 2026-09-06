@@ -68,4 +68,22 @@ describe("ProjectProgramRepository", () => {
         done();
       });
     }));
+
+  it.each(["2020-01-01T00:00:00Z", null])(
+    "preserves canonical metadata, including deadline %s, without frontend calculations",
+    deadline => {
+      setup();
+      const dto = programLinkFields({ submissionDeadline: deadline });
+      adapter.getProgramLinkFields.mockReturnValue(of(dto));
+      repository.getProgramLinkFields(700).subscribe(snapshot => {
+        expect(snapshot).toMatchObject({
+          isCompetitive: true,
+          submissionOpen: true,
+          submissionDeadline: deadline,
+          canSubmit: true,
+          submitted: false,
+        });
+      });
+    },
+  );
 });

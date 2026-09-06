@@ -9,11 +9,27 @@
 для старых ссылок. ProjectId/programId/первый program tag не используются как link ID.
 
 - GET `/programs/partner-program-projects/:programLinkId/fields/` возвращает
-  `ProgramLinkFields`: projectId, programId, programLinkId, submitted, fields с value.
+  `ProgramLinkFields`: projectId, programId, programLinkId, submitted, fields с value,
+  isCompetitive, submissionOpen, submissionDeadline (string|null), canSubmit.
 - PUT того же URL отправляет массив `{ field_id, value_text }` и получает подтверждение,
   не Project. `GetProgramLinkFieldsUseCase` / `UpdateProgramLinkFieldsUseCase` возвращают Result.
 - POST `/programs/partner-program-projects/:programLinkId/submit/` использует ту же связь,
   только после успешного PUT. Существующие правила доступности сдачи не расширяются.
+
+Backend contract SHA: `77c8d41e2139c5902f2c7958d499fe26b9c4ef79` (#729, DEV).
+Все решения о сдаче и её доступности используют canonical metadata активной связи,
+не legacy `project.partnerProgram`. При смене context ID и metadata сбрасываются вместе;
+metadata старого ответа не может заменить данные новой связи. Даты/флаги не пересчитываются
+на frontend. Закрытая конкурсная связь не превращается в обычный publish: deadline UI
+показывается до отправки fields/submit. Неконкурсная связь не вызывает submit, сданная
+не вызывает ни fields PUT, ни повторный submit.
+
+Для ordinary edit/save с verified activeProgramLinkId `UpdateFormUseCase` получает
+новую копию payload **без partnerProgramId** (а значит, без partner_program_id после
+interceptor). Это исключает случайную команду изменить Project × Program bindings A/B.
+FormControl сохраняется; `assignProjectToProgram()` и dedicated `AssignProjectProgramUseCase`
+не меняются. Вне canonical context прежняя payload semantics, включая explicit legacy
+bind/unbind, сохранена.
 
 `CamelcaseInterceptor` сохраняется; repository преобразует GET DTO в domain snapshot.
 До применения проверяются projectId текущего route и programLinkId запроса.
@@ -27,6 +43,10 @@ Loading, error с «Повторить», empty success и заполненны�
 Неизвестные PUT ошибки, network и 5xx отображаются только через заданные сообщения,
 без raw backend body и без потери введённых значений. Case errors подсвечивают control;
 при устаревшем option повторный GET получает актуальные options без смешивания программ.
+Отдельные controlled kinds `submission_closed`, `already_submitted`, `not_competitive`
+обрабатывают backend races после GET. Deadline failure открывает существующую late modal;
+already-submitted/noncompetitive повторяют canonical GET и не сообщают success.
+Backend submit validation и endpoint не меняются и остаются final authority.
 
 System case определяется exact `name="case"`. Нулевое value становится `""`,
 checkbox/radio — false; сохранённые значения восстанавливаются. Кейс имеет required

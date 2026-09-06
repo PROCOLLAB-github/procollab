@@ -98,7 +98,8 @@ export class ProjectsEditInfoService {
   readonly activeProgramLinkId = this.projectAdditionalService.activeProgramLinkId;
   private readonly leaderId = this.projectsEditUIInfoService.leaderId;
 
-  private readonly isCompetitive = this.projectsEditUIInfoService.isCompetitive;
+  readonly isCompetitive = this.projectAdditionalService.isCompetitive;
+  readonly submitted = this.projectAdditionalService.submitted;
   private readonly isProjectAssignToProgram =
     this.projectsEditUIInfoService.isProjectAssignToProgram;
 
@@ -231,6 +232,7 @@ export class ProjectsEditInfoService {
 
   saveProjectAsPublished(): void {
     if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
+    if (!this.submissionAvailable()) return;
     this.projectForm.get("draft")?.patchValue(false);
     this.submitMode.set("published");
 
@@ -277,8 +279,6 @@ export class ProjectsEditInfoService {
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
     this.submitMode.set("draft");
-    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
-    this.projectForm.patchValue({ partnerProgramId });
     this.projFormIsSubmitting$.set(loading());
 
     if (this.activeProgramLinkId() && !this.projectAdditionalService.submitted()) {
@@ -289,13 +289,18 @@ export class ProjectsEditInfoService {
   }
 
   submitProjectForm(): void {
+    if (!this.additionalContextReady()) return;
     const isDraft = this.projectForm.get("draft")?.value === true;
 
     this.projectFormService.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
 
-    const payload = this.projectFormService.getFormValue();
+    const rawPayload = this.projectFormService.getFormValue();
+    const payload = { ...rawPayload };
+    // In a verified canonical edit this is NOT a legacy bind/unbind command.
+    // Preserve the control and dedicated assignment flow; do not mutate raw form data.
+    if (this.activeProgramLinkId()) delete payload.partnerProgramId;
     const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
 
     if (this.projectVacancyUIService.isDirty()) {
@@ -353,6 +358,7 @@ export class ProjectsEditInfoService {
   closeSendingDescisionModal(): void {
     this.projectsEditUIInfoService.applyCloseSendDescisionModal();
     if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
+    if (!this.submissionAvailable()) return;
     if (this.validateAdditionalFields()) {
       this.projSubmitInitiated.set(true);
       return;
@@ -360,12 +366,11 @@ export class ProjectsEditInfoService {
     this.projFormIsSubmitting$.set(loading());
     if (this.projectAdditionalService.submitted()) this.submitProjectForm();
     else if (this.activeProgramLinkId())
-      this.sendAdditionalFields(this.activeProgramLinkId()!, true);
+      this.sendAdditionalFields(this.activeProgramLinkId()!, this.isCompetitive());
   }
 
   loadProgramTagsAndProject(): void {
     // Сброс состояния перед загрузкой
-    this.isCompetitive.set(false);
     this.isProjectAssignToProgram.set(false);
 
     this.route.data
@@ -394,13 +399,6 @@ export class ProjectsEditInfoService {
 
           // Синхронизируем ссылки после инициализации данных проекта
           this.projectContactsService.syncLinksItems(this.projectFormService.links);
-
-          if (project.partnerProgram) {
-            this.isCompetitive.set(
-              !!project.partnerProgram.programId && project.partnerProgram.canSubmit,
-            );
-            this.isProjectAssignToProgram.set(!!project.partnerProgram.programId);
-          }
 
           this.projectVacancyUIService.applySetVacancies(project.vacancies);
         },
@@ -568,6 +566,26 @@ export class ProjectsEditInfoService {
     return false;
   }
 
+  /** A closed competitive link must never silently fall through to normal publishing. */
+  private submissionAvailable(): boolean {
+    if (
+      !this.isCompetitive() ||
+      this.projectAdditionalService.submitted() ||
+      this.projectAdditionalService.canSubmit()
+    ) {
+      return true;
+    }
+    this.projFormIsSubmitting$.set(failure("submission_unavailable"));
+    if (!this.projectAdditionalService.submissionOpen()) {
+      this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
+    } else {
+      this.snackBarService.error(
+        "Сейчас проект нельзя сдать. Обновите дополнительные сведения программы.",
+      );
+    }
+    return false;
+  }
+
   private sendAdditionalFields(programLinkId: number, submit: boolean): void {
     let fieldsSaved = false;
     this.projectAdditionalService
@@ -582,6 +600,9 @@ export class ProjectsEditInfoService {
       .subscribe(result => {
         if (!result.ok) {
           this.projFormIsSubmitting$.set(failure(result.error.kind));
+          if (result.error.kind === "submission_closed") {
+            this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
+          }
           this.projectStepService.setStepFromRoute("additional");
           return;
         }

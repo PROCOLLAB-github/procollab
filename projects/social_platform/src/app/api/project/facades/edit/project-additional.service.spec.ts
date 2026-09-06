@@ -271,4 +271,188 @@ describe("ProjectAdditionalService canonical fields", () => {
     TestBed.resetTestingModule();
     expect(request.observed).toBe(false);
   });
+
+  it("clears all metadata with the old active link and ignores stale A after loading B", () => {
+    const old = new Subject<ProgramLinkFields>();
+    const next = new Subject<ProgramLinkFields>();
+    repo.getProgramLinkFields.mockReturnValueOnce(old).mockReturnValueOnce(next);
+    service.setContext(55, 700, 900);
+    old.next(programLinkFields());
+    expect(service.isCompetitive()).toBe(true);
+    expect(service.canSubmit()).toBe(true);
+    expect(service.submissionOpen()).toBe(true);
+    expect(service.submissionDeadline()).toBe("2026-10-01T18:00:00Z");
+    service.setContext(55, 900);
+    expect(old.observed).toBe(false);
+    expect(service.activeProgramLinkId()).toBeNull();
+    expect(service.isCompetitive()).toBe(false);
+    expect(service.submissionOpen()).toBe(false);
+    expect(service.submissionDeadline()).toBeNull();
+    expect(service.canSubmit()).toBe(false);
+    expect(service.submitted()).toBe(false);
+    next.next(
+      programLinkFields({
+        programLinkId: 900,
+        isCompetitive: false,
+        canSubmit: false,
+        submissionDeadline: null,
+      }),
+    );
+    old.next(programLinkFields());
+    expect(service.activeProgramLinkId()).toBe(900);
+    expect(service.isCompetitive()).toBe(false);
+    expect(service.canSubmit()).toBe(false);
+    expect(service.submissionDeadline()).toBeNull();
+    expect(service.submissionOpen()).toBe(true);
+  });
+
+  it.each([
+    [{ submitted: true, canSubmit: false }, "already_submitted"],
+    [{ isCompetitive: false, canSubmit: false }, "not_competitive"],
+    [{ submissionOpen: false, canSubmit: false }, "submission_closed"],
+    [{ submissionOpen: true, canSubmit: false }, "context"],
+  ] as const)(
+    "save submit=true blocks canonical state %j before any HTTP",
+    async (metadata, kind) => {
+      repo.getProgramLinkFields.mockReturnValue(of(programLinkFields(metadata)));
+      service.setContext(55, 700);
+      expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+        ok: false,
+        error: { kind },
+      });
+      expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+      expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    },
+  );
+
+  it("draft PUT does not require canSubmit and still omits empty case", async () => {
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ submissionOpen: false, canSubmit: false })),
+    );
+    service.setContext(55, 700);
+    expect((await firstValueFrom(service.save(700, false))).ok).toBe(true);
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
+    expect(repo.updateProgramLinkFields.mock.calls[0][1]).not.toContainEqual(
+      expect.objectContaining({ fieldId: 5 }),
+    );
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+  });
+
+  it("direct submit rejects unloaded and mismatched link contexts even with a valid case", async () => {
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "context" },
+    });
+    service.setContext(55, 700);
+    caseControl().setValue("A");
+    expect(await firstValueFrom(service.save(900, true))).toMatchObject({
+      ok: false,
+      error: { kind: "context" },
+    });
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+  });
+
+  it("backend deadline race returns controlled failure after PUT without freezing or success", async () => {
+    service.setContext(55, 700);
+    caseControl().setValue("A");
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: { detail: "Срок подачи проектов в программу завершён." },
+          }),
+      ),
+    );
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "submission_closed" },
+    });
+    expect(service.saveError()).toBe("Срок подачи проектов в программу завершён.");
+    expect(service.isSend$().status).toBe("failure");
+    expect(service.submitted()).toBe(false);
+    expect(caseControl().value).toBe("A");
+  });
+
+  it("already-submitted race refetches A, shows the saved case read-only and forbids another PUT/submit", async () => {
+    service.setContext(55, 700);
+    caseControl().setValue("A");
+    const reload = new Subject<ProgramLinkFields>();
+    repo.getProgramLinkFields.mockReturnValue(reload);
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: { detail: "Проект уже был сдан на проверку." },
+          }),
+      ),
+    );
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "already_submitted" },
+    });
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+    expect(service.activeProgramLinkId()).toBeNull();
+    expect(service.canSubmit()).toBe(false);
+    const snapshot = programLinkFields({ submitted: true, canSubmit: false });
+    snapshot.fields[0].value = "B";
+    reload.next(snapshot);
+    expect(caseControl().value).toBe("B");
+    expect(service.getAdditionalForm().disabled).toBe(true);
+    expect(service.submitted()).toBe(true);
+    await firstValueFrom(service.save(700, true));
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledTimes(1);
+    expect(service.isSend$().status).toBe("failure");
+  });
+
+  it("not-competitive backend guard refreshes metadata and preserves edits without automatic submit", async () => {
+    service.setContext(55, 700);
+    caseControl().setValue("A");
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ isCompetitive: false, canSubmit: false })),
+    );
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: { detail: "Программа не является конкурсной." },
+          }),
+      ),
+    );
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "not_competitive" },
+    });
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+    expect(service.isCompetitive()).toBe(false);
+    expect(service.canSubmit()).toBe(false);
+    expect(caseControl().value).toBe("A");
+    await firstValueFrom(service.save(700, true));
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledTimes(1);
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
+  });
+
+  it("cancels an in-flight submit when the route link changes; its error cannot refresh B", () => {
+    service.setContext(55, 700);
+    caseControl().setValue("A");
+    const submission = new Subject<unknown>();
+    programRepo.submitCompettetiveProject.mockReturnValue(submission);
+    service.save(700, true).subscribe();
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ programLinkId: 900, isCompetitive: false, canSubmit: false })),
+    );
+    service.setContext(55, 900);
+    expect(submission.observed).toBe(false);
+    submission.error(
+      new HttpErrorResponse({ status: 400, error: { detail: "Проект уже был сдан на проверку." } }),
+    );
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [900]]);
+    expect(service.activeProgramLinkId()).toBe(900);
+    expect(service.isCompetitive()).toBe(false);
+    expect(service.saveError()).toBeNull();
+  });
 });

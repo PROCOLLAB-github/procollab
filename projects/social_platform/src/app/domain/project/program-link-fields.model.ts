@@ -12,12 +12,26 @@ export class ProgramLinkFields {
   programId!: number;
   projectId!: number;
   submitted!: boolean;
+  /** Submission metadata belongs to this exact link and is computed by the backend. */
+  isCompetitive!: boolean;
+  submissionOpen!: boolean;
+  submissionDeadline!: string | null;
+  canSubmit!: boolean;
 
   fields!: ProgramLinkField[];
 }
 
 /** Controlled failures of link-scoped fields/save/submit operations. */
 export interface ProgramLinkFieldsError {
-  kind: "case_required" | "case_unavailable" | "network" | "server" | "unknown" | "context";
+  kind:
+    | "case_required"
+    | "case_unavailable"
+    | "submission_closed"
+    | "already_submitted"
+    | "not_competitive"
+    | "network"
+    | "server"
+    | "unknown"
+    | "context";
   cause?: unknown;
 }

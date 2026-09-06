@@ -4,7 +4,8 @@ import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, provideRouter, Router } from "@angular/router";
-import { BehaviorSubject, of, Subject } from "rxjs";
+import { BehaviorSubject, of, Subject, throwError } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 import { NavService } from "@api/shared/nav.service";
 import { SearchesService } from "@api/searches/searches.service";
 import { ProjectStepService } from "@api/project/project-step.service";
@@ -43,15 +44,17 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
   const repo = { getProgramLinkFields: vi.fn(), updateProgramLinkFields: vi.fn() };
   const programRepo = { submitCompettetiveProject: vi.fn() };
   const update = { execute: vi.fn() };
+  const assign = { execute: vi.fn() };
   const step = { currentStep: signal("additional"), setStepFromRoute: vi.fn() };
   const ui = {
     leaderId: signal(1),
-    isCompetitive: signal(false),
     isProjectAssignToProgram: signal(false),
     fromProgram: signal(""),
     fromProgramOpen: signal(false),
     applySendDescision: vi.fn(),
     applyCloseSendDescisionModal: vi.fn(),
+    applyOpenSendDescisionLateModal: vi.fn(),
+    applyOpenAssignProjectModal: vi.fn(),
   };
   function project(id = 55): Project {
     // The embedded legacy program is deliberately B. Explicit route link A is authoritative.
@@ -60,7 +63,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
       partnerProgram: {
         programId: 99,
         programLinkId: 900,
-        canSubmit: true,
+        canSubmit: false,
         programFields: [{ name: "legacy", options: ["WRONG PROGRAM"] }],
         programFieldValues: [{ fieldName: "case", value: "WRONG PROGRAM" }],
       },
@@ -71,7 +74,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
 
   beforeEach(() => {
     const fb = new FormBuilder();
-    const form = fb.group({ draft: [true], name: ["Project"], partnerProgramId: [12] });
+    const form = fb.group({ draft: [true], name: ["Project"], partnerProgramId: [99] });
     params = new BehaviorSubject({ projectId: "55" });
     query = new BehaviorSubject<Record<string, unknown>>({
       programLinkId: "700",
@@ -82,7 +85,11 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     repo.updateProgramLinkFields.mockReset().mockReturnValue(of(undefined));
     programRepo.submitCompettetiveProject.mockReset().mockReturnValue(of({}));
     update.execute.mockReset().mockReturnValue(of(ok(project())));
+    assign.execute.mockReset().mockReturnValue(of(ok({ newProjectId: 55 })));
     ui.applySendDescision.mockClear();
+    ui.applyCloseSendDescisionModal.mockClear();
+    ui.applyOpenSendDescisionLateModal.mockClear();
+    ui.applyOpenAssignProjectModal.mockClear();
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
@@ -150,7 +157,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
         },
         { provide: ProjectVacancyService, useValue: {} },
         { provide: ProjectsEditUIInfoService, useValue: ui },
-        { provide: AssignProjectProgramUseCase, useValue: {} },
+        { provide: AssignProjectProgramUseCase, useValue: assign },
         { provide: DeleteProjectUseCase, useValue: {} },
         { provide: UpdateFormUseCase, useValue: update },
         { provide: ProjectProgramRepositoryPort, useValue: repo },
@@ -182,6 +189,8 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
       ),
     ).toBe(false);
     expect(update.execute).toHaveBeenCalledOnce();
+    expect(update.execute).toHaveBeenCalledWith({ id: 55, data: { name: "Project", draft: true } });
+    expect(service.projectForm.get("partnerProgramId")?.value).toBe(99);
     expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
   });
 
@@ -198,6 +207,11 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(repo.updateProgramLinkFields.mock.calls[0][0]).toBe(700);
     expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
     expect(update.execute).toHaveBeenCalledOnce();
+    expect(service.isCompetitive()).toBe(true);
+    expect(update.execute).toHaveBeenCalledWith({
+      id: 55,
+      data: { name: "Project", draft: false },
+    });
   });
 
   it("mismatched GET project blocks draft PUT and main save", () => {
@@ -248,5 +262,174 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     data.next({ data: [project(56), [], [], [], []] });
     expect(repo.getProgramLinkFields).toHaveBeenCalledTimes(2);
     expect(service.activeProgramLinkId()).toBe(700);
+  });
+
+  function legacyBAllowsSubmission(): void {
+    const legacy = project();
+    legacy.partnerProgram.canSubmit = true;
+    data.next({ data: [legacy, [], [], [], []] });
+  }
+
+  it("closed canonical A does not publish or send any fields even if legacy B allows submission", () => {
+    legacyBAllowsSubmission();
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ submissionOpen: false, canSubmit: false })),
+    );
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")?.setValue("B");
+    service.saveProjectAsPublished();
+    expect(service.isCompetitive()).toBe(true);
+    expect(ui.applyOpenSendDescisionLateModal).toHaveBeenCalledOnce();
+    expect(ui.applySendDescision).not.toHaveBeenCalled();
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
+    expect(service.projectForm.get("draft")?.value).toBe(true);
+  });
+
+  it("noncompetitive canonical A saves normally without submit despite legacy B", () => {
+    legacyBAllowsSubmission();
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ isCompetitive: false, canSubmit: false })),
+    );
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")?.setValue("B");
+    service.saveProjectAsPublished();
+    expect(service.isCompetitive()).toBe(false);
+    expect(ui.applySendDescision).not.toHaveBeenCalled();
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledExactlyOnceWith(700, [
+      { fieldId: 5, valueText: "B" },
+      { fieldId: 6, valueText: "Y" },
+      { fieldId: 7, valueText: "" },
+      { fieldId: 8, valueText: "false" },
+    ]);
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Project", draft: false },
+    });
+  });
+
+  it("single-link happy path: validation, confirmation, PUT, submit, main save and success exactly once", () => {
+    const single = project();
+    single.partnerProgram.programId = 12;
+    single.partnerProgram.programLinkId = 700;
+    data.next({ data: [single, [], [], [], []] });
+    query.next({}); // Exercise the single-link backward-compatible ID fallback.
+    service.projectForm.get("partnerProgramId")?.setValue(12);
+    const put = new Subject<void>();
+    const submission = new Subject<unknown>();
+    repo.updateProgramLinkFields.mockReturnValue(put);
+    programRepo.submitCompettetiveProject.mockReturnValue(submission);
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")?.setValue("B");
+    service.saveProjectAsPublished();
+    expect(ui.applySendDescision).toHaveBeenCalledOnce();
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    service.closeSendingDescisionModal();
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
+    expect(repo.updateProgramLinkFields.mock.calls[0][0]).toBe(700);
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    expect(update.execute).not.toHaveBeenCalled();
+    put.next();
+    put.complete();
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
+    expect(update.execute).not.toHaveBeenCalled();
+    submission.next({});
+    submission.complete();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Project", draft: false },
+    });
+    expect(service.projectForm.get("partnerProgramId")?.value).toBe(12);
+    expect(additional.submitted()).toBe(true);
+    expect(additional.canSubmit()).toBe(false);
+    expect(TestBed.inject(SnackbarService).success).toHaveBeenCalledExactlyOnceWith(
+      "данные успешно сохранены",
+    );
+    expect(TestBed.inject(Router).navigateByUrl).toHaveBeenCalledOnce();
+  });
+
+  it("excludes binding from a new ordinary payload without mutating the raw value or control", () => {
+    service.loadProgramTagsAndProject();
+    const raw = Object.freeze({ name: "Project", draft: true, partnerProgramId: 99 });
+    vi.spyOn(TestBed.inject(ProjectFormService), "getFormValue").mockReturnValue(raw);
+    service.saveProjectAsDraft();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Project", draft: true },
+    });
+    expect(raw.partnerProgramId).toBe(99);
+    expect(service.projectForm.get("partnerProgramId")?.value).toBe(99);
+  });
+
+  it("preserves ordinary payload semantics without canonical context", () => {
+    data.next({ data: [{ ...project(), partnerProgram: null }, [], [], [], []] });
+    query.next({});
+    service.loadProgramTagsAndProject();
+    service.saveProjectAsDraft();
+    expect(additional.activeProgramLinkId()).toBeNull();
+    expect(repo.getProgramLinkFields).not.toHaveBeenCalled();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Project", draft: true, partnerProgramId: 99 },
+    });
+  });
+
+  it("preserves the explicit dedicated assignment action and its selected program ID", () => {
+    service.loadProgramTagsAndProject();
+    vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
+    service.assignProjectToProgram();
+    expect(assign.execute).toHaveBeenCalledExactlyOnceWith(55, 99);
+    expect(ui.applyOpenAssignProjectModal).toHaveBeenCalledOnce();
+    expect(update.execute).not.toHaveBeenCalled();
+  });
+
+  it("backend deadline race opens existing late modal, with no main save or success", () => {
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")?.setValue("B");
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: { detail: "Срок подачи проектов в программу завершён." },
+          }),
+      ),
+    );
+    service.saveProjectAsPublished();
+    service.closeSendingDescisionModal();
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
+    expect(ui.applyOpenSendDescisionLateModal).toHaveBeenCalledOnce();
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
+    expect(service.projFormIsSubmitting$().status).toBe("failure");
+  });
+
+  it("already-submitted race refreshes read-only state without reporting a successful save", () => {
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")?.setValue("B");
+    const frozen = programLinkFields({ submitted: true, canSubmit: false });
+    frozen.fields[0].value = "B";
+    repo.getProgramLinkFields.mockReturnValue(of(frozen));
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: { detail: "Проект уже был сдан на проверку." },
+          }),
+      ),
+    );
+    service.saveProjectAsPublished();
+    service.closeSendingDescisionModal();
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+    expect(service.additionalForm.disabled).toBe(true);
+    expect(additional.submitted()).toBe(true);
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
+    expect(service.projFormIsSubmitting$().status).toBe("failure");
   });
 });

@@ -8,6 +8,10 @@ export interface ProgramLinkFieldsDto {
   programId: number;
   projectId: number;
   submitted: boolean;
+  isCompetitive: boolean;
+  submissionOpen: boolean;
+  submissionDeadline: string | null;
+  canSubmit: boolean;
   fields: (Omit<PartnerProgramFields, "helpText"> & {
     helpText: string | null;
     value: string | null;

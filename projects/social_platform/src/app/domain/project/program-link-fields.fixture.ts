@@ -9,6 +9,10 @@ export function programLinkFields(overrides: Partial<ProgramLinkFields> = {}): P
     programId: 12,
     projectId: 55,
     submitted: false,
+    isCompetitive: true,
+    submissionOpen: true,
+    submissionDeadline: "2026-10-01T18:00:00Z",
+    canSubmit: true,
     fields: [
       {
         id: 5,

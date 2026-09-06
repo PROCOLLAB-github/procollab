@@ -51,6 +51,17 @@ export class ProjectAdditionalService {
   readonly hasProgramLink = signal(false);
   /** Exposed only after GET verifies both the relation and the route project. */
   readonly activeProgramLinkId = signal<number | null>(null);
+  /** Never expose metadata from a previous, loading or unverified relation. */
+  private readonly activeSnapshot = computed(() => {
+    const state = this.fieldsState();
+    return state.status === "success" && state.data.programLinkId === this.activeProgramLinkId()
+      ? state.data
+      : null;
+  });
+  readonly isCompetitive = computed(() => this.activeSnapshot()?.isCompetitive === true);
+  readonly submissionOpen = computed(() => this.activeSnapshot()?.submissionOpen === true);
+  readonly submissionDeadline = computed(() => this.activeSnapshot()?.submissionDeadline ?? null);
+  readonly canSubmit = computed(() => this.activeSnapshot()?.canSubmit === true);
   readonly submitted = signal(false);
   readonly pending = computed(() => this.fieldsState().status === "loading");
   readonly loadFailed = computed(() => this.fieldsState().status === "failure");
@@ -222,10 +233,16 @@ export class ProjectAdditionalService {
       if (
         this.activeProgramLinkId() !== programLinkId ||
         this.fieldsState().status !== "success" ||
-        this.submitted() ||
         this.isSend$().status === "loading"
       ) {
         return of(fail<ProgramLinkFieldsError>({ kind: "context" }));
+      }
+      const blocked = this.saveBlockedReason(submit);
+      if (blocked) {
+        const error: ProgramLinkFieldsError = { kind: blocked };
+        this.saveError.set(programLinkFieldsErrorMessage(error));
+        this.isSend$.set(failure(blocked));
+        return of(fail(error));
       }
       if (submit && this.validateRequiredFields()) {
         return of(
@@ -265,10 +282,21 @@ export class ProjectAdditionalService {
               control?.markAsTouched();
               if (result.error.kind === "case_unavailable") this.loadFields(true);
             }
+            if (
+              result.error.kind === "already_submitted" ||
+              result.error.kind === "not_competitive"
+            ) {
+              this.loadFields(true);
+            }
           } else {
             this.isSend$.set(success(undefined));
             if (submit) {
               this.submitted.set(true);
+              // A successful submit acknowledgement freezes this link immediately.
+              // Eligibility before the request always comes from canonical GET.
+              const snapshot = this.activeSnapshot();
+              if (snapshot)
+                this.fieldsState.set(success({ ...snapshot, submitted: true, canSubmit: false }));
               this.additionalForm.disable({ emitEvent: false });
             }
           }
@@ -277,6 +305,14 @@ export class ProjectAdditionalService {
         takeUntilDestroyed(this.destroyRef),
       );
     });
+  }
+
+  private saveBlockedReason(submit: boolean): ProgramLinkFieldsError["kind"] | null {
+    if (this.submitted()) return "already_submitted";
+    if (!submit) return null;
+    if (!this.isCompetitive()) return "not_competitive";
+    if (!this.canSubmit()) return this.submissionOpen() ? "context" : "submission_closed";
+    return null;
   }
 
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
