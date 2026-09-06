@@ -6,6 +6,7 @@ import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import { provideRouter } from "@angular/router";
 import { ProgramAnalyticsDrilldownService } from "@api/program/facades/detail/program-analytics-drilldown.service";
 import { ProgramAnalyticsAssignmentScope } from "@domain/program/program-analytics.model";
@@ -39,6 +40,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
       imports: [AnalyticsDrilldownComponent],
       providers: [
         provideRouter([]),
+        { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: { execute: vi.fn() } },
         {
           provide: GetProgramManagerParticipantsWithoutTeamUseCase,
           useValue: { execute: vi.fn() },

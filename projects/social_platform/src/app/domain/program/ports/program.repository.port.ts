@@ -15,6 +15,7 @@ import {
   ProgramAnalyticsAttentionPage,
   ProgramAnalyticsAttentionParticipant,
   ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
   ProgramAnalyticsAttentionQuery,
 } from "../program-analytics-attention.model";
 import {
@@ -47,6 +48,12 @@ export abstract class ProgramRepositoryPort {
     programId: number,
     query: ProgramAnalyticsAttentionQuery,
   ): Observable<ProgramAnalyticsAttentionProjects>;
+
+  /** Несданные связи конкурсной программы с серверным поиском, страницей и сроком. */
+  abstract getManagerProjectsNotSubmitted(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsNotSubmittedProjectsPage>;
 
   /** Manager-only назначения; pending включает несданные проекты. */
   abstract getManagerAssignments(

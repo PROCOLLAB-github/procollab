@@ -171,7 +171,7 @@
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Воронка участников</h2>
           <app-tooltip
-            text="Путь участников от регистрации до отправки проекта."
+            text="Путь участников от регистрации до создания проекта. Сдача учитывается в воронке проектов."
             [isVisible]="isTooltipVisible('participant-funnel')"
             [useOverlay]="true"
             (click)="toggleTooltip('participant-funnel')"
@@ -361,7 +361,7 @@
             (hide)="hideTooltip('attention')"
           ></app-tooltip>
         </div>
-        @if (hasValues(attention())) {
+        @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
           <ul class="attention__list">
             @for (item of attention(); track item.key) {
               <li>
@@ -387,7 +387,9 @@
                       drilldown.openAttention(
                         item.key === 'without-team'
                           ? 'participants-without-team'
-                          : 'projects-awaiting-evaluation',
+                          : item.key === 'projects-not-submitted'
+                            ? 'projects-not-submitted'
+                            : 'projects-awaiting-evaluation',
                         attentionTrigger
                       )
                     "
@@ -408,7 +410,8 @@
               </li>
             }
           </ul>
-        } @else {
+        }
+        @if (!hasValues(attention())) {
           <p class="analytics-empty-state attention__empty text-body-10">
             Ничего не требует внимания
           </p>
@@ -536,5 +539,6 @@
 <app-analytics-drilldown
   #drilldown
   [programId]="programId()"
+  [notSubmittedApplicable]="data()?.attention?.projectsNotSubmitted?.applicable ?? false"
   [delayedExperts]="data()?.attention?.delayedExperts ?? { total: 0, items: [] }"
 />

@@ -3,11 +3,13 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
 import { CdkTrapFocus } from "@angular/cdk/a11y";
+import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { firstValueFrom, of, Subject } from "rxjs";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import {
   ProgramAnalyticsDrilldownService,
   AnalyticsAttentionView,
@@ -17,6 +19,8 @@ import {
   attentionProject,
   participantsPage,
   projectsPage,
+  notSubmittedPage,
+  notSubmittedProject,
 } from "@domain/program/program-analytics-attention.fixture";
 import { fail, ok } from "@domain/shared/result.type";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -30,6 +34,7 @@ describe("Attention views: real overlay", () => {
   let trigger: HTMLButtonElement;
   const participants = { execute: vi.fn() };
   const projects = { execute: vi.fn() };
+  const notSubmitted = { execute: vi.fn() };
   const dialog = () => document.querySelector<HTMLElement>('[role="dialog"]')!;
   const button = (text: string) =>
     Array.from(dialog().querySelectorAll<HTMLButtonElement>("button")).find(
@@ -39,12 +44,15 @@ describe("Attention views: real overlay", () => {
   beforeEach(async () => {
     participants.execute.mockReset().mockReturnValue(of(ok(participantsPage())));
     projects.execute.mockReset().mockReturnValue(of(ok(projectsPage())));
+    notSubmitted.execute.mockReset().mockReturnValue(of(ok(notSubmittedPage())));
     await TestBed.configureTestingModule({
       imports: [AnalyticsDrilldownComponent],
       providers: [
         provideRouter([]),
+        { provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: "UTC" } },
         { provide: GetProgramManagerParticipantsWithoutTeamUseCase, useValue: participants },
         { provide: GetProgramManagerProjectsAwaitingEvaluationUseCase, useValue: projects },
+        { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: notSubmitted },
         {
           provide: GetProgramManagerAssignmentsUseCase,
           useValue: { execute: vi.fn().mockReturnValue(of(ok([]))) },
@@ -54,6 +62,7 @@ describe("Attention views: real overlay", () => {
     }).compileComponents();
     fixture = TestBed.createComponent(AnalyticsDrilldownComponent);
     fixture.componentRef.setInput("programId", 12);
+    fixture.componentRef.setInput("notSubmittedApplicable", true);
     fixture.autoDetectChanges();
     await fixture.whenStable();
     state = fixture.debugElement.injector.get(ProgramAnalyticsDrilldownService);
@@ -202,6 +211,126 @@ describe("Attention views: real overlay", () => {
     expect(dialog().textContent).not.toContain("Ещё не сданы");
   });
 
+  it.each([true, false, null])(
+    "not-submitted: deadline open=%s, row fields и mobile labels",
+    async openState => {
+      notSubmitted.execute.mockReturnValue(
+        of(
+          ok(
+            notSubmittedPage({
+              submissionOpen: openState === true,
+              submissionDeadline: openState === null ? null : "2026-09-10T23:59:00Z",
+              count: 2,
+              results: [
+                notSubmittedProject(),
+                notSubmittedProject({
+                  programProjectId: 71,
+                  leader: null,
+                  project: { id: 56, name: "Очень длинное название проекта ".repeat(10) },
+                }),
+              ],
+            }),
+          ),
+        ),
+      );
+      await open("projects-not-submitted");
+      const metadata = dialog().querySelector('[data-testid="submission-deadline"]')?.textContent;
+      expect(metadata).toContain(
+        openState === null
+          ? "Срок сдачи не указан"
+          : openState
+            ? "Сдача открыта до"
+            : "Срок сдачи завершён",
+      );
+      if (openState !== null) expect(metadata).toMatch(/10\.09\.2026, 23:59/);
+      for (const text of [
+        "Проекты не сдали решение",
+        "Проекты программы, которые ещё не отправили решение.",
+        "Проект А",
+        "Анна Петрова",
+        "Не указан",
+        "01.09.2026",
+        "Найдено: 2",
+      ])
+        expect(dialog().textContent).toContain(text);
+      expect(dialog().querySelector('[data-label="Статус"]')?.textContent).toContain(
+        openState === true ? "Не сдано" : "Срок сдачи завершён",
+      );
+      expect(
+        Array.from(dialog().querySelectorAll("tbody tr:first-child td"), cell =>
+          cell.getAttribute("data-label"),
+        ),
+      ).toEqual(["Проект", "Руководитель", "В программе с", "Статус", "Действие"]);
+      expect(dialog().querySelector("a")?.getAttribute("href")).toBe("/office/projects/55");
+      expect(dialog().querySelectorAll("tbody tr")).toHaveLength(2);
+    },
+  );
+
+  it("not-submitted: server search via submit/button, clear and page", async () => {
+    notSubmitted.execute.mockReturnValue(
+      of(
+        ok(
+          notSubmittedPage({
+            count: 61,
+            results: Array.from({ length: 25 }, (_, i) =>
+              notSubmittedProject({ programProjectId: i + 1 }),
+            ),
+          }),
+        ),
+      ),
+    );
+    await open("projects-not-submitted");
+    const input = dialog().querySelector("input")!;
+    input.value = " Проект ";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await fixture.whenStable();
+    expect(notSubmitted.execute).toHaveBeenCalledTimes(1);
+    button("Найти").click();
+    await fixture.whenStable();
+    expect(notSubmitted.execute).toHaveBeenLastCalledWith(12, {
+      search: "Проект",
+      limit: 25,
+      offset: 0,
+    });
+    button("Далее").click();
+    await fixture.whenStable();
+    expect(dialog().textContent).toContain("26–50 из 61");
+    expect(notSubmitted.execute).toHaveBeenLastCalledWith(12, {
+      search: "Проект",
+      limit: 25,
+      offset: 25,
+    });
+    button("Очистить").click();
+    await fixture.whenStable();
+    expect(input.value).toBe("");
+    expect(notSubmitted.execute).toHaveBeenLastCalledWith(12, { search: "", limit: 25, offset: 0 });
+  });
+
+  it.each(["disconnected", "destroy"])(
+    "not-submitted %s: no focus restoration, cancellation",
+    async action => {
+      const pending = new Subject();
+      notSubmitted.execute.mockReturnValue(pending);
+      await open("projects-not-submitted");
+      const focus = vi.spyOn(trigger, "focus");
+      if (action === "disconnected") {
+        trigger.remove();
+        const detached = firstValueFrom(modal.overlayRef!.detachments());
+        fixture.componentInstance.closeAnalyticsModal();
+        await detached;
+        await fixture.whenStable();
+      } else {
+        fixture.destroy();
+        (modal.overlayRef!.keydownEvents() as Subject<KeyboardEvent>).next(
+          new KeyboardEvent("keydown", { key: "Escape" }),
+        );
+      }
+      expect(focus).not.toHaveBeenCalled();
+      expect(pending.observed).toBe(false);
+      expect(state.notSubmittedPage()).toBeNull();
+    },
+  );
+
   it("open: nullable progress —, не 0 из 0", async () => {
     projects.execute.mockReturnValue(
       of(
@@ -225,83 +354,101 @@ describe("Attention views: real overlay", () => {
     expect(dialog().textContent).toContain("Ожидает первой оценки");
   });
 
-  it.each(["participants-without-team", "projects-awaiting-evaluation"] as const)(
-    "%s: loading, empty, search_empty, error и retry отдельно",
-    async view => {
-      const api = view === "participants-without-team" ? participants : projects;
-      const page = view === "participants-without-team" ? participantsPage() : projectsPage();
-      const loading = new Subject();
-      api.execute.mockReturnValueOnce(loading);
-      await open(view);
-      expect(dialog().textContent).toContain("Загружаем список");
-      loading.next(ok({ ...page, count: 0, results: [] }));
-      await fixture.whenStable();
-      expect(dialog().textContent).toContain(
-        view === "participants-without-team"
-          ? "Все зарегистрированные участники уже состоят в командах."
+  it.each([
+    "participants-without-team",
+    "projects-awaiting-evaluation",
+    "projects-not-submitted",
+  ] as const)("%s: loading, empty, search_empty, error и retry отдельно", async view => {
+    const api =
+      view === "participants-without-team"
+        ? participants
+        : view === "projects-not-submitted"
+          ? notSubmitted
+          : projects;
+    const page =
+      view === "participants-without-team"
+        ? participantsPage()
+        : view === "projects-not-submitted"
+          ? notSubmittedPage()
+          : projectsPage();
+    const loading = new Subject();
+    api.execute.mockReturnValueOnce(loading);
+    await open(view);
+    expect(dialog().textContent).toContain("Загружаем список");
+    loading.next(ok({ ...page, count: 0, results: [] }));
+    await fixture.whenStable();
+    expect(dialog().textContent).toContain(
+      view === "participants-without-team"
+        ? "Все зарегистрированные участники уже состоят в командах."
+        : view === "projects-not-submitted"
+          ? "Все проекты программы уже сданы."
           : "Нет работ, ожидающих оценивания.",
-      );
-      api.execute.mockReturnValueOnce(of(ok({ ...page, count: 0, results: [] })));
-      state.searchDraft.set("нет");
-      state.applyAttentionSearch();
+    );
+    api.execute.mockReturnValueOnce(of(ok({ ...page, count: 0, results: [] })));
+    state.searchDraft.set("нет");
+    state.applyAttentionSearch();
+    await fixture.whenStable();
+    expect(dialog().textContent).toContain("По вашему запросу ничего не найдено.");
+    for (const [kind, message] of [
+      ["unauthorized", "Авторизуйтесь заново"],
+      ["forbidden", "Нет доступа к данным этой программы."],
+      ["not_found", "Программа не найдена."],
+      ["network", "Проверьте соединение"],
+    ] as const) {
+      api.execute.mockReturnValueOnce(of(fail({ kind, body: "secret" })));
+      state.loadAttention();
       await fixture.whenStable();
-      expect(dialog().textContent).toContain("По вашему запросу ничего не найдено.");
-      for (const [kind, message] of [
-        ["unauthorized", "Авторизуйтесь заново"],
-        ["forbidden", "Нет доступа к данным этой программы."],
-        ["not_found", "Программа не найдена."],
-        ["network", "Проверьте соединение"],
-      ] as const) {
-        api.execute.mockReturnValueOnce(of(fail({ kind, body: "secret" })));
-        state.loadAttention();
-        await fixture.whenStable();
-        expect(dialog().querySelector('[role="alert"]')?.textContent).toContain(message);
-        expect(dialog().textContent).not.toContain("secret");
-        expect(dialog().textContent).not.toContain("По вашему запросу ничего не найдено.");
-        button("Повторить загрузку").click();
-        await fixture.whenStable();
-        expect(dialog().querySelector('[role="alert"]')).toBeNull();
-      }
-    },
-  );
+      expect(dialog().querySelector('[role="alert"]')?.textContent).toContain(message);
+      expect(dialog().textContent).not.toContain("secret");
+      expect(dialog().textContent).not.toContain("По вашему запросу ничего не найдено.");
+      button("Повторить загрузку").click();
+      await fixture.whenStable();
+      expect(dialog().querySelector('[role="alert"]')).toBeNull();
+    }
+  });
 
-  it.each(["participants-without-team", "projects-awaiting-evaluation"] as const)(
-    "%s: один trap, focus, Escape/backdrop/button единый close",
-    async view => {
-      let trap: CdkTrapFocus | undefined;
-      for (const method of ["Escape", "backdrop", "button"]) {
-        await open(view);
-        const currentTrap = fixture.debugElement
-          .query(By.directive(CdkTrapFocus))
-          .injector.get(CdkTrapFocus);
-        trap ??= currentTrap;
-        expect(currentTrap).toBe(trap);
-        expect(document.activeElement).toBe(dialog().querySelector(".analytics-drilldown__close"));
-        expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
-        expect(trap.enabled).toBe(true);
-        expect(dialog().querySelectorAll('.cdk-focus-trap-anchor[tabindex="0"]')).toHaveLength(2);
-        const close = vi.spyOn(fixture.componentInstance, "closeAnalyticsModal");
-        const detached = firstValueFrom(modal.overlayRef!.detachments());
-        if (method === "Escape")
-          (modal.overlayRef!.keydownEvents() as Subject<KeyboardEvent>).next(
-            new KeyboardEvent("keydown", { key: "Escape" }),
-          );
-        else if (method === "backdrop")
-          document.querySelector<HTMLElement>(".modal__overlay")!.click();
-        else button("×").click();
-        await detached;
-        await fixture.whenStable();
-        expect(close).toHaveBeenCalledOnce();
-        close.mockRestore();
-        expect(document.activeElement).toBe(trigger);
-        expect(state.attentionPage()).toBeNull();
-      }
-    },
-  );
+  it.each([
+    "participants-without-team",
+    "projects-awaiting-evaluation",
+    "projects-not-submitted",
+  ] as const)("%s: один trap, focus, Escape/backdrop/button единый close", async view => {
+    let trap: CdkTrapFocus | undefined;
+    for (const method of ["Escape", "backdrop", "button"]) {
+      await open(view);
+      const currentTrap = fixture.debugElement
+        .query(By.directive(CdkTrapFocus))
+        .injector.get(CdkTrapFocus);
+      trap ??= currentTrap;
+      expect(currentTrap).toBe(trap);
+      expect(document.activeElement).toBe(dialog().querySelector(".analytics-drilldown__close"));
+      expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
+      expect(trap.enabled).toBe(true);
+      expect(dialog().querySelectorAll('.cdk-focus-trap-anchor[tabindex="0"]')).toHaveLength(2);
+      const close = vi.spyOn(fixture.componentInstance, "closeAnalyticsModal");
+      const detached = firstValueFrom(modal.overlayRef!.detachments());
+      if (method === "Escape")
+        (modal.overlayRef!.keydownEvents() as Subject<KeyboardEvent>).next(
+          new KeyboardEvent("keydown", { key: "Escape" }),
+        );
+      else if (method === "backdrop")
+        document.querySelector<HTMLElement>(".modal__overlay")!.click();
+      else button("×").click();
+      await detached;
+      await fixture.whenStable();
+      expect(close).toHaveBeenCalledOnce();
+      close.mockRestore();
+      expect(document.activeElement).toBe(trigger);
+      expect(state.attentionPage()).toBeNull();
+    }
+  });
 
-  it("RouterLink закрывает без return focus в покидаемую программу", async () => {
+  it.each([
+    "participants-without-team",
+    "projects-awaiting-evaluation",
+    "projects-not-submitted",
+  ] as const)("RouterLink %s закрывает без return focus в покидаемую программу", async view => {
     const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
-    await open();
+    await open(view);
     const focus = vi.spyOn(trigger, "focus");
     const detached = firstValueFrom(modal.overlayRef!.detachments());
     dialog().querySelector<HTMLAnchorElement>("a")!.click();

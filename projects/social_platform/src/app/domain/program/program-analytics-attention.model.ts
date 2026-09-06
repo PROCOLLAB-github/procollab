@@ -51,3 +51,19 @@ export interface ProgramAnalyticsAttentionProject {
 /** Режим берём из ответа списка, не из потенциально устаревшей сводки. */
 export type ProgramAnalyticsAttentionProjects =
   ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionProject> & { mode: ProgramEvaluationMode };
+
+/** Несданная связь проекта с программой; linkedAt — дата связи, не создания проекта. */
+export interface ProgramAnalyticsNotSubmittedProject {
+  programProjectId: number;
+  project: { id: number; name: string };
+  leader: { userId: number; fullName: string; avatar: string | null } | null;
+  linkedAt: string;
+}
+
+/** Применимость и срок задаёт backend; клиент не пересчитывает дедлайн или SLA. */
+export type ProgramAnalyticsNotSubmittedProjectsPage =
+  ProgramAnalyticsAttentionPage<ProgramAnalyticsNotSubmittedProject> & {
+    applicable: boolean;
+    submissionDeadline: string | null;
+    submissionOpen: boolean;
+  };

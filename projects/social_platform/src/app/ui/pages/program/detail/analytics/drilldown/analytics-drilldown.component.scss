@@ -138,6 +138,11 @@
     color: var(--dark-grey);
   }
 
+  &__metadata {
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
   &__empty {
     padding: 32px 12px;
     text-align: center;

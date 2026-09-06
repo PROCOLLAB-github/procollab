@@ -466,7 +466,7 @@ Loading, успешный список, empty без поиска и search-empt
 
 ### Общая модалка, навигация и ограничения
 
-Shared `app-modal` не меняется. У всех шести views один overlay/dialog/focus trap.
+Shared `app-modal` не меняется. У всех views один overlay/dialog/focus trap.
 Focus на close только после attachments, Escape через overlay keydownEvents,
 backdrop и close используют единый flow; при detach возврат на конкретный connected trigger.
 Смена программы/destroy не возвращают focus в старый контекст. Сохранён bottom-up cleanup.
@@ -483,3 +483,88 @@ V1 не добавляет вуз/роль/кейс, contact/team actions, на�
 Targeted tests покрывают pipeline, camelcase/null, поиск/страницы/retry/races,
 реальный overlay lifecycle и observable route change до resolver.
 Ручной DEV smoke и mobile/keyboard проверяются отдельно от unit/component tests.
+
+## Детализация «Проекты не сдали решение»
+
+Backend #726 смержен как `4dea5bd8893839e46800f5c9ee20646fc6307aab`; успешный
+DEV deploy подтверждён для этого exact SHA. Angular база —
+`ed06dff90feff709737b7c47ab405ec99623167f`.
+
+### Единицы воронок
+
+Строка «Сдали проект» удалена только из `participantFunnel` computed UI.
+`participantFunnel.submittedProjectCreators` остаётся частью domain/API contract:
+это уникальные зарегистрированные руководители, а не число сданных проектов.
+Два руководителя могут сдать шесть проектов. Воронка участников теперь содержит
+«Зарегистрировались», «Уникальные участники», «В команде», «Создали проект».
+Tooltip описывает путь до создания проекта; сдача относится к воронке проектов.
+Её стадии и значения не меняются: «Создано», «Черновик / не сдано», «Сдано»,
+«Оценено». «Сдано» по-прежнему использует `solutionFunnel.submitted`.
+
+### Применимость и путь данных
+
+Overview `attention.projectsNotSubmitted: { applicable: boolean; total: number }`
+задаёт применимость. При `applicable=false` строки нет и detail не запрашивается,
+даже если старый `solutionFunnel.notSubmitted` ненулевой. При true строка
+«Проекты не сдали решение» стоит после работ, ожидающих оценивания, перед экспертами.
+Нулевой total виден неактивной кнопкой; сообщение «Ничего не требует внимания»
+сохраняется при всех нулевых метриках. Tooltip — отдельный соседний контрол:
+«Проекты конкурсной программы, которые ещё не отправили решение.»
+
+`GetProgramManagerProjectsNotSubmittedUseCase` вызывает repository port → repository
+→ HTTP adapter → `GET /programs/:programId/manager-overview/projects-not-submitted/`.
+Компоненты не используют HttpClient. `ProgramAnalyticsNotSubmittedProjectsPage`
+расширяет существующий `ProgramAnalyticsAttentionPage<ProgramAnalyticsNotSubmittedProject>`.
+Новые общие pagination-модели и manual snake_case преобразования не добавлены.
+`CamelcaseInterceptor` преобразует `projects_not_submitted`, `program_project_id`,
+`user_id`, `full_name`, `linked_at`, `submission_deadline`, `submission_open`.
+
+Строка содержит `programProjectId`, безопасные `project` и nullable `leader`,
+`linkedAt` — дату связи с программой, не создания проекта. Unknown leader —
+«Не указан», пустой avatar использует существующий placeholder. Никаких email,
+кейсов, предполагаемых процентов готовности или дополнительных пользовательских
+запросов нет.
+
+### View, сроки и страницы
+
+Новый root-view `projects-not-submitted` расширяет ту же модалку, overlay, dialog
+и единственный CdkTrapFocus. Desktop — таблица, mobile/tablet — stacked rows с
+подписями; длинные имена переносятся. Колонки: проект, руководитель, «В программе с»
+(`dd.MM.yyyy`), статус, «Открыть проект» (`RouterLink /office/projects/:projectId`).
+
+Metadata берётся из detail, не из потенциально устаревшего overview:
+
+- известный `submissionDeadline` и `submissionOpen=true`: «Сдача открыта до …»;
+- известный срок и false: «Срок сдачи завершён …»;
+- null: «Срок сдачи не указан».
+
+Дата отображается DatePipe в локальном часовом поясе браузера как
+`dd.MM.yyyy, HH:mm`. Статус строки — «Не сдано» или «Срок сдачи завершён» строго
+по backend `submissionOpen`, не по Date.now(). Клиент не рассчитывает SLA,
+оставшиеся часы или severity. Если detail сообщает `applicable=false`, UI
+показывает «Для этой программы сдача решения не требуется.», не утверждает,
+что все проекты сданы.
+
+Поиск по названию отправляется только Enter/«Найти». «Очистить» сбрасывает search
+и offset; limit=25. Диапазон, count и «Назад»/«Далее» берутся из detail. По next URL
+клиент не переходит. Retry сохраняет program/search/offset. Loading: «Загружаем список…»;
+empty: «Все проекты программы уже сданы.»; search-empty: «По вашему запросу ничего
+не найдено.» Ошибки 401/403/404/network контролируемые, raw HTTP body не выводится
+и основная аналитика не скрывается.
+
+### Отмена, доступность и проверки
+
+Повторно используется `cancelAttention`/`takeUntilDestroyed`: close, другой root,
+search, page, смена программы, destroy и RouterLink отменяют запрос и очищают
+старую страницу. Нет второго механизма race-control. Observable parent paramMap
+12 → 13 обнуляет exposed programId до resolver, закрывает модалку, отписывает
+старый Subject. Program(13) запускает только overview; detail ждёт нового клика.
+
+Сохранены initial focus только после attachments, Escape/backdrop/close через
+единый flow, возврат на connected trigger, отсутствие возврата при RouterLink,
+смене программы, disconnected trigger и bottom-up destroy. Новый view включён
+в parameterized lifecycle, search/pagination/race и SPA regression tests.
+
+V1 не меняет backend, React, shared modal, submission/scoring lifecycle, зависимости,
+workflows, Docker или deploy. Unit/component tests с реальным CDK Overlay не
+заменяют отдельную браузерную desktop/mobile/keyboard/E2E проверку.

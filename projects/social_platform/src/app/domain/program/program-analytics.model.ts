@@ -41,6 +41,8 @@ export interface ProgramAnalyticsOverview {
   attention: {
     participantsWithoutTeam: number;
     projectsAwaitingEvaluation: number;
+    /** Несданные связи: требование сдачи применимо только к конкурсной программе. */
+    projectsNotSubmitted: { applicable: boolean; total: number };
     delayedExperts: ProgramAnalyticsDelayedExperts;
   };
   activity: ProgramAnalyticsActivityPoint[];

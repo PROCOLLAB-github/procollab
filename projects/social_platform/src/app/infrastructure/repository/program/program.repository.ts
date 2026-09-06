@@ -22,6 +22,7 @@ import {
   ProgramAnalyticsAttentionPage,
   ProgramAnalyticsAttentionParticipant,
   ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
   ProgramAnalyticsAttentionQuery,
 } from "@domain/program/program-analytics-attention.model";
 import {
@@ -76,6 +77,14 @@ export class ProgramRepository implements ProgramRepositoryPort {
     query: ProgramAnalyticsAttentionQuery,
   ): Observable<ProgramAnalyticsAttentionProjects> {
     return this.programAdapter.getManagerProjectsAwaitingEvaluation(programId, query);
+  }
+
+  /** Передаёт страницу несданных связей без кэша, нормализации или пересчёта срока. */
+  getManagerProjectsNotSubmitted(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsNotSubmittedProjectsPage> {
+    return this.programAdapter.getManagerProjectsNotSubmitted(programId, query);
   }
 
   /** Не кешируем manager-данные между открытиями или программами. */
