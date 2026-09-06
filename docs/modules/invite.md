@@ -96,7 +96,36 @@ DI-биндинг (`infrastructure/di/invite.providers.ts`):
 | `GetMyInvitesUseCase`      | —                                   | `Result<Invite[], error>` | —              |
 | `GetProjectInvitesUseCase` | `projectId`                         | `Result<Invite[], error>` | —              |
 
-Все ошибки коллапсятся в `{ kind: "...error", cause? }` (стандартный стиль).
+Ошибки отправки `SendForUserUseCase` преобразуются централизованным
+`mapInviteSendError` в `InviteSendError { kind, message }`, без raw cause в UI.
+Остальные use cases сохраняют `{ kind: "...error", cause? }`.
+
+### Ошибки отправки и жизненный цикл формы
+
+Mapper в `api/invite/mappers/` распознаёт только известные ошибки `user` из
+ожидаемых HTTP 400/422: `user_not_found`, `already_leader`, `already_member`,
+`already_invited`, `not_program_participant`. Для 401/403, network/status 0,
+5xx и неизвестных ошибок используются контролируемые `unauthorized`, `forbidden`,
+`network`, `server`, `validation`, `unknown` сообщения. Сырые массивы,
+английский DRF text и backend body никогда не отображаются. Ответ 500 с `"error"`
+даёт «Не удалось отправить приглашение. Попробуйте ещё раз позже.»
+Профильный invite facade использует те же typed kinds для существующих состояний,
+без повторного разбора текста backend.
+
+`ProjectTeamService` очищает backend error, валидирует форму через
+`ValidationService`, затем отправляет запрос. Invalid required/pattern не допускают
+HTTP. Пока запрос выполняется, кнопка показывает loader и disabled; повторный
+вызов также блокируется в facade. Видимость input block хранит `ProjectTeamUIService`.
+
+Ошибка завершает loading, но оставляет форму открытой и сохраняет ссылку/роль.
+Одно конкретное сообщение выводится рядом со ссылкой в `role="alert"`.
+Изменение link, role или specialization очищает backend error, не удаляя
+frontend validators. Retry создаёт новый запрос. Только успех добавляет Invite,
+очищает transient state и форму и скрывает input block. Reset сохраняет required/pattern.
+
+Backend rules, POST `/invites/`, payload и приглашения/участие в программе не меняются.
+Ограничения размера команды, membership, submission freeze и дальнейшие изменения
+invite lifecycle не входят в этот UI cleanup.
 
 ---
 

@@ -338,7 +338,6 @@
     border-radius: 8px;
 
     span {
-      font-size: 13px;
       font-weight: 500;
       line-height: 18px;
       color: var(--black);
@@ -422,12 +421,16 @@
     gap: 6px;
     align-items: center;
     margin-top: 12px;
-    font-size: 13px;
     line-height: 18px;
     color: var(--dark-grey);
 
     strong {
+      font-size: 13px;
       color: var(--black);
+    }
+
+    .text-body-10 {
+      color: inherit;
     }
   }
 

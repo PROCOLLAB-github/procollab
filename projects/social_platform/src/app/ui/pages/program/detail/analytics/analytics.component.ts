@@ -141,14 +141,8 @@ export class ProgramAnalyticsComponent implements OnInit {
       this.metric(
         "registrations",
         "Зарегистрировались",
-        funnel.registrations,
-        "Все регистрационные записи программы, включая сохранённые записи удалённых пользователей.",
-      ),
-      this.metric(
-        "unique-participants",
-        "Уникальные участники",
         funnel.uniqueParticipants,
-        "Уникальные пользователи среди регистрационных записей программы.",
+        "Уникальные зарегистрированные участники программы.",
       ),
       this.metric(
         "with-team",
