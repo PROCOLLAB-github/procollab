@@ -4,6 +4,8 @@ import {
   ProgramAnalyticsAttentionParticipant,
   ProgramAnalyticsAttentionProject,
   ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProject,
+  ProgramAnalyticsNotSubmittedProjectsPage,
 } from "./program-analytics-attention.model";
 
 export const attentionParticipant = (
@@ -50,5 +52,28 @@ export const projectsPage = (
   previous: null,
   results: [attentionProject()],
   mode: "distributed",
+  ...overrides,
+});
+
+export const notSubmittedProject = (
+  overrides: Partial<ProgramAnalyticsNotSubmittedProject> = {},
+): ProgramAnalyticsNotSubmittedProject => ({
+  programProjectId: 70,
+  project: { id: 55, name: "Проект А" },
+  leader: { userId: 123, fullName: "Анна Петрова", avatar: null },
+  linkedAt: "2026-09-01T10:00:00+03:00",
+  ...overrides,
+});
+
+export const notSubmittedPage = (
+  overrides: Partial<ProgramAnalyticsNotSubmittedProjectsPage> = {},
+): ProgramAnalyticsNotSubmittedProjectsPage => ({
+  count: 1,
+  next: null,
+  previous: null,
+  results: [notSubmittedProject()],
+  applicable: true,
+  submissionDeadline: "2026-09-10T23:59:00+03:00",
+  submissionOpen: true,
   ...overrides,
 });

@@ -116,6 +116,51 @@ describe("CamelcaseInterceptor", () => {
       });
   });
 
+  it("not-submitted: overview, nullable metadata и вложенные поля преобразуются автоматически", () => {
+    const interceptor = TestBed.inject(CamelcaseInterceptor);
+    const body = {
+      attention: { projects_not_submitted: { applicable: true, total: 1 } },
+      count: 1,
+      next: null,
+      previous: null,
+      applicable: true,
+      submission_deadline: null,
+      submission_open: true,
+      results: [
+        {
+          program_project_id: 70,
+          project: { id: 55, name: "Проект" },
+          leader: { user_id: 123, full_name: "Анна", avatar: null },
+          linked_at: "2026-09-01T10:00:00Z",
+        },
+      ],
+    };
+    interceptor
+      .intercept(new HttpRequest("GET", "/programs/12/manager-overview/projects-not-submitted/"), {
+        handle: () => of(new HttpResponse({ body })),
+      })
+      .subscribe(event => {
+        if (!(event instanceof HttpResponse)) return;
+        expect(event.body).toEqual({
+          attention: { projectsNotSubmitted: { applicable: true, total: 1 } },
+          count: 1,
+          next: null,
+          previous: null,
+          applicable: true,
+          submissionDeadline: null,
+          submissionOpen: true,
+          results: [
+            {
+              programProjectId: 70,
+              project: { id: 55, name: "Проект" },
+              leader: { userId: 123, fullName: "Анна", avatar: null },
+              linkedAt: "2026-09-01T10:00:00Z",
+            },
+          ],
+        });
+      });
+  });
+
   it("преобразует вложенный manager overview из snake_case в domain camelCase", () => {
     const interceptor = TestBed.inject(CamelcaseInterceptor);
     const request = new HttpRequest("GET", "/programs/12/manager-overview/");

@@ -9,9 +9,11 @@ import { ProgramRepository } from "@infrastructure/repository/program/program.re
 import {
   participantsPage,
   projectsPage,
+  notSubmittedPage,
 } from "@domain/program/program-analytics-attention.fixture";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "./get-program-manager-participants-without-team.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "./get-program-manager-projects-awaiting-evaluation.use-case";
+import { GetProgramManagerProjectsNotSubmittedUseCase } from "./get-program-manager-projects-not-submitted.use-case";
 
 describe("Attention: adapter → repository → use cases", () => {
   const api = { get: vi.fn() };
@@ -26,6 +28,12 @@ describe("Attention: adapter → repository → use cases", () => {
   });
 
   for (const [method, endpoint, useCase, page] of [
+    [
+      "getManagerProjectsNotSubmitted",
+      "projects-not-submitted",
+      GetProgramManagerProjectsNotSubmittedUseCase,
+      notSubmittedPage(),
+    ],
     [
       "getManagerParticipantsWithoutTeam",
       "participants-without-team",
@@ -43,6 +51,7 @@ describe("Attention: adapter → repository → use cases", () => {
       TestBed.inject<
         | GetProgramManagerParticipantsWithoutTeamUseCase
         | GetProgramManagerProjectsAwaitingEvaluationUseCase
+        | GetProgramManagerProjectsNotSubmittedUseCase
       >(useCase);
     it(`${endpoint}: forwarding, response passthrough, отсутствие cache`, async () => {
       api.get.mockReturnValue(of(page));
@@ -88,6 +97,28 @@ describe("Attention: adapter → repository → use cases", () => {
       });
     });
   }
+
+  it("not-submitted сохраняет nullable leader/deadline и applicable=false", async () => {
+    const page = notSubmittedPage({
+      submissionDeadline: null,
+      results: [{ ...notSubmittedPage().results[0], leader: null }],
+    });
+    api.get.mockReturnValueOnce(of(page));
+    const service = TestBed.inject(GetProgramManagerProjectsNotSubmittedUseCase);
+    expect(await firstValueFrom(service.execute(12, {}))).toEqual({ ok: true, value: page });
+    const noncompetitive = notSubmittedPage({
+      applicable: false,
+      count: 0,
+      results: [],
+      submissionDeadline: null,
+      submissionOpen: false,
+    });
+    api.get.mockReturnValueOnce(of(noncompetitive));
+    expect(await firstValueFrom(service.execute(12, {}))).toEqual({
+      ok: true,
+      value: noncompetitive,
+    });
+  });
 
   it("open mode: null assignment counters не превращаются в 0", async () => {
     const page = projectsPage({

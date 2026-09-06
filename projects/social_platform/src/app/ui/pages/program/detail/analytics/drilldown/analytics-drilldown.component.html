@@ -34,6 +34,23 @@
               Сданные работы, оценивание которых ещё не завершено.
             </p>
           }
+          @if (state.view() === "projects-not-submitted") {
+            <p class="analytics-drilldown__secondary">
+              Проекты программы, которые ещё не отправили решение.
+            </p>
+            @if (state.notSubmittedPage(); as page) {
+              @if (page.applicable) {
+                <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
+                  @if (page.submissionDeadline) {
+                    {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершён" }}
+                    {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
+                  } @else {
+                    Срок сдачи не указан
+                  }
+                </p>
+              }
+            }
+          }
         </div>
         <button
           #closeButton
@@ -191,6 +208,52 @@
                         } @else {
                           Нет данных
                         }
+                      </td>
+                      <td data-label="Действие">
+                        <a
+                          class="analytics-drilldown__action"
+                          [routerLink]="['/office/projects', item.project.id]"
+                          (click)="leaveAnalytics()"
+                          >Открыть проект</a
+                        >
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          }
+          @if (state.notSubmittedPage(); as page) {
+            @if (page.applicable && page.results.length) {
+              <table class="analytics-drilldown__table">
+                <thead>
+                  <tr>
+                    <th scope="col">Проект</th>
+                    <th scope="col">Руководитель</th>
+                    <th scope="col">В программе с</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Действие</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of page.results; track item.programProjectId) {
+                    <tr [attr.data-program-project-id]="item.programProjectId">
+                      <td data-label="Проект">{{ item.project.name }}</td>
+                      <td data-label="Руководитель">
+                        @if (item.leader; as leader) {
+                          <span class="analytics-drilldown__identity">
+                            <app-avatar [url]="leader.avatar || ''" [size]="36" />
+                            <span>{{ leader.fullName }}</span>
+                          </span>
+                        } @else {
+                          Не указан
+                        }
+                      </td>
+                      <td data-label="В программе с">{{ item.linkedAt | date: "dd.MM.yyyy" }}</td>
+                      <td data-label="Статус">
+                        <span class="analytics-drilldown__badge">{{
+                          page.submissionOpen ? "Не сдано" : "Срок сдачи завершён"
+                        }}</span>
                       </td>
                       <td data-label="Действие">
                         <a

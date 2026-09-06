@@ -35,6 +35,7 @@ const overview: ProgramAnalyticsOverview = {
   attention: {
     participantsWithoutTeam: 1,
     projectsAwaitingEvaluation: 1,
+    projectsNotSubmitted: { applicable: false, total: 0 },
     delayedExperts: { total: 0, items: [] },
   },
   activity: [],

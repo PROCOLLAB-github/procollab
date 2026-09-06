@@ -17,6 +17,7 @@ import {
   ProgramAnalyticsAttentionPage,
   ProgramAnalyticsAttentionParticipant,
   ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
   ProgramAnalyticsAttentionQuery,
 } from "@domain/program/program-analytics-attention.model";
 import {
@@ -74,6 +75,17 @@ export class ProgramHttpAdapter {
   ): Observable<ProgramAnalyticsAttentionProjects> {
     return this.apiService.get(
       `${this.PROGRAMS_URL}/${programId}/manager-overview/projects-awaiting-evaluation/`,
+      this.attentionParams(query),
+    );
+  }
+
+  /** Отдельный список несданных связей; camelcase выполняет общий interceptor. */
+  getManagerProjectsNotSubmitted(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsNotSubmittedProjectsPage> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/projects-not-submitted/`,
       this.attentionParams(query),
     );
   }

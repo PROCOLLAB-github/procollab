@@ -162,12 +162,6 @@ export class ProgramAnalyticsComponent implements OnInit {
         funnel.projectCreators,
         "Участники, ставшие руководителями проекта программы.",
       ),
-      this.metric(
-        "submitted-project-creators",
-        "Сдали проект",
-        funnel.submittedProjectCreators,
-        "Руководители проектов, отправившие решение программы.",
-      ),
     ];
   });
 
@@ -277,6 +271,16 @@ export class ProgramAnalyticsComponent implements OnInit {
         value: overview.attention.projectsAwaitingEvaluation,
         tooltip: this.awaitingEvaluationTooltip(overview.evaluationStatus.mode),
       },
+      ...(overview.attention.projectsNotSubmitted.applicable
+        ? [
+            {
+              key: "projects-not-submitted",
+              label: "Проекты не сдали решение",
+              value: overview.attention.projectsNotSubmitted.total,
+              tooltip: "Проекты конкурсной программы, которые ещё не отправили решение.",
+            },
+          ]
+        : []),
       {
         key: "delayed-experts",
         label: "Эксперты задерживают оценивание",

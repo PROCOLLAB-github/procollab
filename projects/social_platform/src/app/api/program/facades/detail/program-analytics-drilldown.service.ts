@@ -6,10 +6,12 @@ import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import {
   ProgramAnalyticsAttentionPage,
   ProgramAnalyticsAttentionParticipant,
   ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
 } from "@domain/program/program-analytics-attention.model";
 import {
   ProgramAnalyticsAssignment,
@@ -20,8 +22,11 @@ import {
   ProgramAnalyticsError,
 } from "@domain/program/program-analytics.model";
 
-/** Два root-списка внимания используют тот же modal context, не вложенную модалку. */
-export type AnalyticsAttentionView = "participants-without-team" | "projects-awaiting-evaluation";
+/** Root-списки внимания используют тот же modal context, не вложенную модалку. */
+export type AnalyticsAttentionView =
+  | "participants-without-team"
+  | "projects-awaiting-evaluation"
+  | "projects-not-submitted";
 export type AnalyticsDrilldownView =
   | "assignments"
   | "scores"
@@ -36,6 +41,7 @@ export class ProgramAnalyticsDrilldownService {
   private readonly getScores = inject(GetProgramManagerAssignmentScoresUseCase);
   private readonly getParticipants = inject(GetProgramManagerParticipantsWithoutTeamUseCase);
   private readonly getProjects = inject(GetProgramManagerProjectsAwaitingEvaluationUseCase);
+  private readonly getNotSubmitted = inject(GetProgramManagerProjectsNotSubmittedUseCase);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cancelAssignments = new Subject<void>();
   private readonly cancelScores = new Subject<void>();
@@ -62,14 +68,21 @@ export class ProgramAnalyticsDrilldownService {
   readonly participantsPage =
     signal<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant> | null>(null);
   readonly projectsPage = signal<ProgramAnalyticsAttentionProjects | null>(null);
+  readonly notSubmittedPage = signal<ProgramAnalyticsNotSubmittedProjectsPage | null>(null);
   readonly attentionPending = signal(false);
   readonly attentionError = signal<ProgramAnalyticsError | null>(null);
   readonly isAttentionView = computed(
     () =>
-      this.view() === "participants-without-team" || this.view() === "projects-awaiting-evaluation",
+      this.view() === "participants-without-team" ||
+      this.view() === "projects-awaiting-evaluation" ||
+      this.view() === "projects-not-submitted",
   );
   readonly attentionPage = computed(() =>
-    this.view() === "participants-without-team" ? this.participantsPage() : this.projectsPage(),
+    this.view() === "participants-without-team"
+      ? this.participantsPage()
+      : this.view() === "projects-not-submitted"
+        ? this.notSubmittedPage()
+        : this.projectsPage(),
   );
   readonly attentionCount = computed(() => this.attentionPage()?.count ?? 0);
   readonly attentionHasNext = computed(() => {
@@ -87,7 +100,13 @@ export class ProgramAnalyticsDrilldownService {
   }
 
   /** Каждое root-open очищает поиск/страницу/старые данные и делает ровно один запрос. */
-  openAttention(programId: number, view: AnalyticsAttentionView): void {
+  openAttention(
+    programId: number,
+    view: AnalyticsAttentionView,
+    notSubmittedApplicable = false,
+  ): void {
+    // Только явно подтверждённая overview применимость разрешает новый сценарий.
+    if (view === "projects-not-submitted" && !notSubmittedApplicable) return;
     if (!this.start(programId)) return;
     this.view.set(view);
     this.loadAttention();
@@ -122,6 +141,7 @@ export class ProgramAnalyticsDrilldownService {
     this.cancelAttention.next();
     this.participantsPage.set(null);
     this.projectsPage.set(null);
+    this.notSubmittedPage.set(null);
     this.attentionError.set(null);
     this.attentionPending.set(true);
     const query = {
@@ -136,6 +156,15 @@ export class ProgramAnalyticsDrilldownService {
         .subscribe(result => {
           this.attentionPending.set(false);
           if (result.ok) this.participantsPage.set(result.value);
+          else this.attentionError.set(result.error);
+        });
+    } else if (this.view() === "projects-not-submitted") {
+      this.getNotSubmitted
+        .execute(this.programId, query)
+        .pipe(takeUntil(this.cancelAttention), takeUntilDestroyed(this.destroyRef))
+        .subscribe(result => {
+          this.attentionPending.set(false);
+          if (result.ok) this.notSubmittedPage.set(result.value);
           else this.attentionError.set(result.error);
         });
     } else {
@@ -251,6 +280,7 @@ export class ProgramAnalyticsDrilldownService {
     this.attentionOffset.set(0);
     this.participantsPage.set(null);
     this.projectsPage.set(null);
+    this.notSubmittedPage.set(null);
     this.attentionPending.set(false);
     this.attentionError.set(null);
     this.open.set(false);

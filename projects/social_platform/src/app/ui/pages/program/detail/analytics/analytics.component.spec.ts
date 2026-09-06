@@ -14,6 +14,7 @@ import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
+import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import { provideRouter } from "@angular/router";
 import { of } from "rxjs";
 import { ok } from "@domain/shared/result.type";
@@ -56,7 +57,7 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
       uniqueParticipants: 18,
       withTeam: 12,
       projectCreators: 7,
-      submittedProjectCreators: 6,
+      submittedProjectCreators: 2,
     },
     solutionFunnel: { created: 7, notSubmitted: 1, submitted: 6, evaluated: 4 },
     evaluationStatus: {
@@ -73,6 +74,7 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
     attention: {
       participantsWithoutTeam: 6,
       projectsAwaitingEvaluation: 2,
+      projectsNotSubmitted: { applicable: false, total: 0 },
       delayedExperts: { total: 0, items: [] },
     },
     activity: activity(),
@@ -117,6 +119,7 @@ describe("ProgramAnalyticsComponent", () => {
       imports: [ProgramAnalyticsComponent],
       providers: [
         provideRouter([]),
+        { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: { execute: vi.fn() } },
         {
           provide: GetProgramManagerParticipantsWithoutTeamUseCase,
           useValue: { execute: vi.fn() },
@@ -223,6 +226,7 @@ describe("ProgramAnalyticsComponent", () => {
       attention: {
         participantsWithoutTeam: 0,
         projectsAwaitingEvaluation: 0,
+        projectsNotSubmitted: { applicable: false, total: 0 },
         delayedExperts: { total: 1, items: [delayedExpert()] },
       },
     });
@@ -266,6 +270,63 @@ describe("ProgramAnalyticsComponent", () => {
     expect(trigger.disabled).toBe(true);
     trigger.click();
     expect(open).toHaveBeenCalledTimes(1);
+  });
+
+  it("not-submitted: порядок, активная/нулевая строка и tooltip отдельно", () => {
+    const base = overview();
+    data.set({
+      ...base,
+      attention: { ...base.attention, projectsNotSubmitted: { applicable: true, total: 4 } },
+    });
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
+    const buttons = Array.from(
+      fixture.nativeElement.querySelectorAll(".attention__action"),
+    ) as HTMLButtonElement[];
+    expect(buttons.map(button => button.querySelector("span")?.textContent)).toEqual([
+      "Участники без команды",
+      "Работы ожидают оценивания",
+      "Проекты не сдали решение",
+      "Эксперты задерживают оценивание",
+    ]);
+    const trigger = buttons[2];
+    expect(trigger.disabled).toBe(false);
+    expect(drilldown.notSubmittedApplicable()).toBe(true);
+    expect(trigger.querySelector("app-tooltip")).toBeNull();
+    trigger.parentElement!.querySelector<HTMLElement>("app-tooltip")!.click();
+    expect(open).not.toHaveBeenCalled();
+    trigger.click();
+    expect(open).toHaveBeenCalledExactlyOnceWith("projects-not-submitted", trigger);
+    data.set({
+      ...base,
+      attention: {
+        participantsWithoutTeam: 0,
+        projectsAwaitingEvaluation: 0,
+        delayedExperts: { total: 0, items: [] },
+        projectsNotSubmitted: { applicable: true, total: 0 },
+      },
+    });
+    fixture.detectChanges();
+    expect(trigger.disabled).toBe(true);
+    expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
+    trigger.click();
+    expect(open).toHaveBeenCalledTimes(1);
+  });
+
+  it("non-competitive скрывает строку даже с notSubmitted > 0 и не делает detail request", () => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    expect(data()?.solutionFunnel.notSubmitted).toBeGreaterThan(0);
+    expect(fixture.nativeElement.textContent).not.toContain("Проекты не сдали решение");
+    drilldown.openAttention("projects-not-submitted", document.createElement("button"));
+    expect(
+      TestBed.inject(GetProgramManagerProjectsNotSubmittedUseCase).execute,
+    ).not.toHaveBeenCalled();
   });
 
   it("renders independent project and participant region cards without normalizing legacy names", () => {
@@ -362,7 +423,11 @@ describe("ProgramAnalyticsComponent", () => {
     expect(participants).toContain("Уникальные участники");
     expect(participants).toContain("В команде");
     expect(participants).toContain("Создали проект");
-    expect(participants).toContain("Сдали проект");
+    expect(participants).not.toContain("Сдали проект");
+    const submitted = Array.from(root.querySelectorAll('[data-testid="solution-funnel"] li')).find(
+      row => row.querySelector(".funnel__label")?.textContent?.trim().startsWith("Сдано"),
+    );
+    expect(submitted?.querySelector("strong")?.textContent?.trim()).toBe("6");
     expect(solutions).toContain("Создано");
     expect(solutions).toContain("Черновик / не сдано");
     expect(solutions).toContain("Сдано");
@@ -438,6 +503,7 @@ describe("ProgramAnalyticsComponent", () => {
       attention: {
         participantsWithoutTeam: 3,
         projectsAwaitingEvaluation: 1,
+        projectsNotSubmitted: { applicable: false, total: 0 },
         delayedExperts: { total: 0, items: [] },
       },
     });
@@ -574,6 +640,7 @@ describe("ProgramAnalyticsComponent", () => {
       attention: {
         participantsWithoutTeam: 0,
         projectsAwaitingEvaluation: 0,
+        projectsNotSubmitted: { applicable: false, total: 0 },
         delayedExperts: { total: 0, items: [] },
       },
       activity: activity(30, true),

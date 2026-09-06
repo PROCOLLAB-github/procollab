@@ -51,6 +51,7 @@ import {
 })
 export class AnalyticsDrilldownComponent implements AfterViewInit {
   readonly programId = input<number | null>(null);
+  readonly notSubmittedApplicable = input(false);
   readonly delayedExperts = input<ProgramAnalyticsDelayedExperts>({ total: 0, items: [] });
   protected readonly state = inject(ProgramAnalyticsDrilldownService);
   private readonly destroyRef = inject(DestroyRef);
@@ -77,6 +78,8 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
         return "Участники без команды";
       case "projects-awaiting-evaluation":
         return "Работы ожидают оценивания";
+      case "projects-not-submitted":
+        return "Проекты не сдали решение";
       case "scores":
         return "Оценка проекта";
       case "delayed":
@@ -100,7 +103,13 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       })[this.state.scope()],
   );
   protected readonly attentionEmptyMessage = computed(() => {
+    if (
+      this.state.view() === "projects-not-submitted" &&
+      this.state.notSubmittedPage()?.applicable === false
+    )
+      return "Для этой программы сдача решения не требуется.";
     if (this.state.appliedSearch()) return "По вашему запросу ничего не найдено.";
+    if (this.state.view() === "projects-not-submitted") return "Все проекты программы уже сданы.";
     return this.state.view() === "participants-without-team"
       ? "Все зарегистрированные участники уже состоят в командах."
       : "Нет работ, ожидающих оценивания.";
@@ -198,10 +207,11 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   /** Attention root сохраняет конкретную строку-trigger для обычного закрытия. */
   openAttention(view: AnalyticsAttentionView, trigger: HTMLElement): void {
     const id = this.programId();
+    if (view === "projects-not-submitted" && !this.notSubmittedApplicable()) return;
     if (id === null || this.state.open() || this.attached() || trigger.hasAttribute("disabled"))
       return;
     this.trigger = trigger;
-    this.state.openAttention(id, view);
+    this.state.openAttention(id, view, this.notSubmittedApplicable());
   }
 
   /** Уходим из программы по RouterLink без попытки фокусировать старый контекст. */
