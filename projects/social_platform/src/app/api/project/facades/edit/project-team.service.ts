@@ -6,7 +6,7 @@ import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { SendForUserUseCase } from "../../../invite/use-cases/send-for-user.use-case";
 import { UpdateInviteUseCase } from "../../../invite/use-cases/update-invite.use-case";
 import { RevokeInviteUseCase } from "../../../invite/use-cases/revoke-invite.use-case";
-import { loading } from "@domain/shared/async-state";
+import { isLoading, loading } from "@domain/shared/async-state";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Сервис для управления приглашениями участников команды проекта. */
@@ -26,6 +26,8 @@ export class ProjectTeamService {
   private readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
 
   public submitInvite(projectId: number): void {
+    if (isLoading(this.inviteFormIsSubmitting())) return;
+    this.projectTeamUIService.applyClearLinkError();
     this.inviteSubmitInitiated.set(true);
     // Проверка валидности формы
     if (!this.validationService.getFormValidation(this.inviteForm)) {
@@ -50,7 +52,7 @@ export class ProjectTeamService {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            this.projectTeamUIService.applyErrorSubmitInvite(result.error.cause);
+            this.projectTeamUIService.applyErrorSubmitInvite(result.error);
             return;
           }
 
@@ -85,15 +87,9 @@ export class ProjectTeamService {
   }
 
   public setupDynamicValidation(): void {
-    this.inviteForm
-      .get("link")
-      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        if (value === "") {
-          this.inviteForm.get("link")?.clearValidators();
-          this.inviteForm.get("link")?.updateValueAndValidity();
-        }
-        this.projectTeamUIService.applyClearLinkError();
-      });
+    // Clear only the backend error; required/pattern validators remain independent.
+    this.inviteForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.projectTeamUIService.applyClearLinkError();
+    });
   }
 }

@@ -171,7 +171,7 @@
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Воронка участников</h2>
           <app-tooltip
-            text="Путь участников от регистрации до создания проекта. Сдача учитывается в воронке проектов."
+            text="Путь участников от регистрации до создания проекта."
             [isVisible]="isTooltipVisible('participant-funnel')"
             [useOverlay]="true"
             (click)="toggleTooltip('participant-funnel')"
@@ -305,7 +305,7 @@
           @if (overview.evaluationStatus.maxEvaluationsPerProject !== null) {
             <div class="evaluation__limit" data-testid="evaluation-limit">
               <span>
-                Максимум экспертов на проект:
+                <span class="text-body-10">Максимум экспертов на проект:</span>
                 <strong>{{ overview.evaluationStatus.maxEvaluationsPerProject }}</strong>
               </span>
               <app-tooltip
@@ -334,7 +334,9 @@
                   [attr.aria-label]="item.label + ': ' + item.value"
                   (click)="drilldown.openAssignments(item.scope!, assignmentTrigger)"
                 >
-                  <span>{{ item.label }} <span aria-hidden="true">→</span></span>
+                  <span class="text-body-10"
+                    >{{ item.label }} <span aria-hidden="true">→</span></span
+                  >
                   <strong>{{ item.value }}</strong>
                 </button>
               </li>
@@ -374,7 +376,7 @@
                     [disabled]="item.value === 0"
                     (click)="drilldown.openDelayed(delayedTrigger)"
                   >
-                    <span>{{ item.label }}</span
+                    <span class="text-body-10">{{ item.label }}</span
                     ><strong>{{ item.value }}</strong>
                   </button>
                 } @else {
@@ -394,7 +396,7 @@
                       )
                     "
                   >
-                    <span>{{ item.label }}</span
+                    <span class="text-body-10">{{ item.label }}</span
                     ><strong>{{ item.value }}</strong>
                   </button>
                 }

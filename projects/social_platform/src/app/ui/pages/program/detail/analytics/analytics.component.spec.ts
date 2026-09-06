@@ -413,6 +413,15 @@ describe("ProgramAnalyticsComponent", () => {
   });
 
   it("строит воронки только из participantFunnel и solutionFunnel", () => {
+    const model = overview();
+    model.participantFunnel = {
+      ...model.participantFunnel,
+      registrations: 11,
+      uniqueParticipants: 7,
+      withTeam: 4,
+      projectCreators: 3,
+    };
+    data.set(model);
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
@@ -420,7 +429,28 @@ describe("ProgramAnalyticsComponent", () => {
     const solutions = root.querySelector('[data-testid="solution-funnel"]')?.textContent;
 
     expect(participants).toContain("Зарегистрировались");
-    expect(participants).toContain("Уникальные участники");
+    expect(participants).not.toContain("Уникальные участники");
+    const rows = Array.from(root.querySelectorAll('[data-testid="participant-funnel"] li'));
+    expect(rows.map(row => row.querySelector(".funnel__label")?.textContent?.trim())).toEqual([
+      "Зарегистрировались",
+      "В команде",
+      "Создали проект",
+    ]);
+    expect(rows.map(row => row.querySelector("strong")?.textContent?.trim())).toEqual([
+      "7",
+      "4",
+      "3",
+    ]);
+    expect(data()?.participantFunnel.registrations).toBe(11);
+    const tooltips = fixture.debugElement
+      .queryAll(By.directive(TooltipComponent))
+      .map(element => (element.componentInstance as TooltipComponent).text());
+    expect(tooltips).toContain("Уникальные зарегистрированные участники программы.");
+    expect(tooltips).toContain("Путь участников от регистрации до создания проекта.");
+    expect(tooltips.some(text => text.includes("регистрационные записи"))).toBe(false);
+    expect(root.querySelector('[data-testid="attention-block"]')?.textContent).toContain(
+      "Участники без команды",
+    );
     expect(participants).toContain("В команде");
     expect(participants).toContain("Создали проект");
     expect(participants).not.toContain("Сдали проект");
@@ -436,6 +466,52 @@ describe("ProgramAnalyticsComponent", () => {
       "Воронка проектов",
     );
     expect(solutions).not.toContain("Воронка решений");
+  });
+
+  it("technical registrations alone do not remove the participant zero state", () => {
+    const model = overview();
+    model.participantFunnel = {
+      registrations: 11,
+      uniqueParticipants: 0,
+      withTeam: 0,
+      projectCreators: 0,
+      submittedProjectCreators: 0,
+    };
+    data.set(model);
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const card = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-testid="participant-funnel"]',
+    );
+    expect(card?.querySelectorAll("li")).toHaveLength(0);
+    expect(card?.textContent).toContain("Пока нет данных по участникам");
+  });
+
+  it("uses text-body-10 for metric labels without changing heading or number classes", () => {
+    const model = overview();
+    model.evaluationStatus.mode = "distributed";
+    model.attention.projectsNotSubmitted = { applicable: true, total: 2 };
+    data.set(model);
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const selectors = [
+      ".status-list--projects li > span",
+      ".evaluation__assignment-action > span",
+      ".attention__action > span",
+      ".evaluation__limit .text-body-10",
+    ];
+    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([4, 3, 4, 1]);
+    for (const selector of selectors) {
+      for (const label of root.querySelectorAll(selector))
+        expect(label.classList.contains("text-body-10")).toBe(true);
+    }
+    expect(
+      root.querySelectorAll(
+        ".status-list strong.text-body-10, .attention strong.text-body-10, h2.text-body-10:not(.summary-card__label), h3.text-body-10",
+      ),
+    ).toHaveLength(0);
+    expect(root.querySelector(".evaluation__limit strong")?.textContent).toBe("3");
   });
 
   it("в open mode показывает статусы проектов без partial и трактует max как лимит", () => {

@@ -159,12 +159,9 @@ export class DetailProfileInfoService {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            const error = result.error.cause as { error?: { user?: string[] } } | undefined;
-            const userErrors = error?.error?.user ?? [];
-
-            if (userErrors[0]?.includes("проект относится к программе")) {
+            if (result.error.kind === "not_program_participant") {
               this.showNoInProgramModal.set(true);
-            } else if (userErrors[0]?.includes("активное приглашение")) {
+            } else if (result.error.kind === "already_invited") {
               this.showActiveInviteModal.set(true);
             }
             return;

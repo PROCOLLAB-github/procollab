@@ -5,6 +5,7 @@ import { of, throwError } from "rxjs";
 import { SendForUserUseCase } from "./send-for-user.use-case";
 import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.port";
 import { Invite } from "@domain/invite/invite.model";
+import { HttpErrorResponse } from "@angular/common/http";
 
 describe("SendForUserUseCase", () => {
   let useCase: SendForUserUseCase;
@@ -40,17 +41,22 @@ describe("SendForUserUseCase", () => {
       });
     }));
 
-  it("при ошибке возвращает fail { kind: 'invite_error' } с cause", () =>
+  it("преобразует HTTP validation в controlled Result без raw cause", () =>
     new Promise<void>(done => {
       setup();
-      const boom = new Error("boom");
+      const boom = new HttpErrorResponse({
+        status: 400,
+        error: { user: ["Пользователь уже состоит в проекте."] },
+      });
       repo.sendForUser.mockReturnValue(throwError(() => boom));
 
       useCase.execute({ userId: 1, projectId: 2, role: "member" }).subscribe(result => {
         expect(result.ok).toBe(false);
         if (!result.ok) {
-          expect(result.error.kind).toBe("invite_error");
-          expect(result.error.cause).toBe(boom);
+          expect(result.error).toEqual({
+            kind: "already_member",
+            message: "Пользователь уже состоит в команде проекта.",
+          });
         }
         done();
       });

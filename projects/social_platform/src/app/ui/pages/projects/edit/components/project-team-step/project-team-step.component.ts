@@ -11,7 +11,7 @@ import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "./collaborator-card/collaborator-card.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
-import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { isLoading } from "@domain/shared/async-state";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
@@ -35,7 +35,6 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     TooltipComponent,
     ModalComponent,
   ],
-  providers: [ToggleFieldsInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -43,11 +42,10 @@ export class ProjectTeamStepComponent implements OnInit {
   private readonly projectTeamService = inject(ProjectTeamService);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   protected readonly tooltipInfoService = inject(TooltipInfoService);
-  private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
 
   // Константы для селектов
   protected readonly rolesMembersList = rolesMembersList;
-  protected readonly showInputFields = this.toggleFieldsInfoService.showInputFields;
+  protected readonly showInputFields = this.projectTeamUIService.showInviteFields;
 
   // Геттеры для формы
   protected readonly inviteForm = this.projectTeamUIService.inviteForm;
@@ -62,7 +60,8 @@ export class ProjectTeamStepComponent implements OnInit {
   protected readonly invitesFill = this.projectTeamUIService.invitesFill;
 
   protected readonly isInviteModalOpen = this.projectTeamUIService.isInviteModalOpen;
-  protected readonly inviteNotExistingError = this.projectTeamUIService.inviteNotExistingError;
+  protected readonly inviteSubmitError = this.projectTeamUIService.inviteSubmitError;
+  protected readonly isLoading = isLoading;
   protected readonly inviteSubmitInitiated = this.projectTeamUIService.inviteSubmitInitiated;
   protected readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
 
@@ -96,7 +95,7 @@ export class ProjectTeamStepComponent implements OnInit {
    * Открытие блоков для создания приглашения
    */
   createInvitationBlock(): void {
-    this.toggleFieldsInfoService.showFields();
+    this.showInputFields.set(true);
   }
 
   openInviteModal(): void {
@@ -108,13 +107,7 @@ export class ProjectTeamStepComponent implements OnInit {
   }
 
   submitInvite(): void {
-    if (this.link?.value!.trim() || this.role?.value!.trim()) {
-      this.projectTeamService.submitInvite(this.projectId());
-      this.toggleFieldsInfoService.hideFields();
-      return;
-    }
-
-    this.toggleFieldsInfoService.showFields();
+    this.projectTeamService.submitInvite(this.projectId());
   }
 
   editInvitation(params: { inviteId: number; role: string; specialization: string }): void {

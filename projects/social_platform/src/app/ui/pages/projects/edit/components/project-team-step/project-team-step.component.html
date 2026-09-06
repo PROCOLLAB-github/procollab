@@ -44,11 +44,9 @@
                   {{ errorMessage.VALIDATION_PROFILE_LINK }}
                 </div>
               }
-              @if (inviteNotExistingError() && inviteSubmitInitiated()) {
-                <div class="text-body-10 error">
-                  {{ errorMessage.USER_NOT_EXISTING }} либо<br />
-                  {{ errorMessage.USER_IS_LEADER }} либо <br />
-                  {{ errorMessage.USER_IS_MEMBER }} либо <br />
+              @if (inviteSubmitError(); as error) {
+                <div class="text-body-10 error" role="alert">
+                  {{ error.message }}
                 </div>
               }
             </fieldset>
@@ -129,6 +127,8 @@
       size="big"
       appearance="outline"
       (click)="showInputFields() ? submitInvite() : createInvitationBlock()"
+      [disabled]="isLoading(inviteFormIsSubmitting())"
+      [loader]="isLoading(inviteFormIsSubmitting())"
       class="invite__submit"
       customTypographyClass="text-body-12"
     >
