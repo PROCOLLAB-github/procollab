@@ -11,7 +11,11 @@ import {
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
-import { ProgramAnalyticsActivityPoint } from "@domain/program/program-analytics.model";
+import {
+  ProgramAnalyticsActivityPoint,
+  ProgramAnalyticsCaseMetrics,
+} from "@domain/program/program-analytics.model";
+import { PluralizePipe } from "@corelib";
 import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
@@ -40,6 +44,16 @@ interface RegionExportState {
   failed: boolean;
 }
 
+interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
+  key: string;
+  name: string;
+  isWithoutCase: boolean;
+  totalLabel: string;
+  description: string;
+  submittedPercent: number;
+  notSubmittedPercent: number;
+}
+
 /** Внутренняя manager-вкладка с агрегированной аналитикой программы. */
 @Component({
   selector: "app-program-analytics",
@@ -58,6 +72,7 @@ interface RegionExportState {
 export class ProgramAnalyticsComponent implements OnInit {
   private readonly analytics = inject(ProgramAnalyticsInfoService);
   private readonly exports = inject(ExportFileInfoService);
+  private readonly pluralize = new PluralizePipe();
 
   protected readonly data = this.analytics.data;
   protected readonly programId = this.analytics.programId;
@@ -74,6 +89,49 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   protected readonly loadingExports = computed(() => isLoading(this.exports.loadingExports$()));
   protected readonly exportFailed = computed(() => isFailure(this.exports.loadingExports$()));
+
+  protected readonly caseEmptyMessage = computed(() => {
+    const cases = this.data()?.cases;
+    if (!cases?.configured) return "Кейсы не настроены для этой программы";
+    return cases.items.length ? null : "Для программы пока не настроены варианты кейсов";
+  });
+
+  /** Preserve backend order/counts; only bar percentages and presentation are derived. */
+  protected readonly caseRows = computed<AnalyticsCaseRow[]>(() => {
+    const cases = this.data()?.cases;
+    if (!cases?.configured || !cases.items.length) return [];
+    const rows = cases.items.map((item, index) => ({
+      ...item,
+      key: `case:${index}`,
+      isWithoutCase: false,
+    }));
+    if (cases.withoutCase.projectsTotal > 0) {
+      rows.push({
+        ...cases.withoutCase,
+        name: "Без выбранного кейса",
+        key: "without-case",
+        isWithoutCase: true,
+      });
+    }
+    return rows.map(row => {
+      const totalLabel = this.pluralize.transform(row.projectsTotal, [
+        "проект",
+        "проекта",
+        "проектов",
+      ]);
+      const submission = cases.submissionApplicable
+        ? `, сдано ${row.submitted}, не сдано ${row.notSubmitted}`
+        : "";
+      return {
+        ...row,
+        totalLabel,
+        description: `${row.name}: ${row.projectsTotal} ${totalLabel}${submission}, участников ${row.participantsTotal}`,
+        submittedPercent: row.projectsTotal > 0 ? (row.submitted / row.projectsTotal) * 100 : 0,
+        notSubmittedPercent:
+          row.projectsTotal > 0 ? (row.notSubmitted / row.projectsTotal) * 100 : 0,
+      };
+    });
+  });
 
   protected readonly summary = computed<AnalyticsMetric[]>(() => {
     const overview = this.data();

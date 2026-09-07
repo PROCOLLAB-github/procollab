@@ -175,6 +175,39 @@ describe("CamelcaseInterceptor", () => {
           projects: { awaiting_evaluation: 1, partially_evaluated: 1 },
         },
         activity: [{ date: "2026-08-01", submitted_solutions: 1 }],
+        cases: {
+          configured: true,
+          submission_applicable: true,
+          items: [
+            {
+              name: "Case A",
+              participants_total: 7,
+              projects_total: 3,
+              not_submitted: 1,
+              submitted: 2,
+            },
+            {
+              name: "Case B",
+              participants_total: 4,
+              projects_total: 1,
+              not_submitted: 0,
+              submitted: 1,
+            },
+            {
+              name: "Case C",
+              participants_total: 0,
+              projects_total: 0,
+              not_submitted: 0,
+              submitted: 0,
+            },
+          ],
+          without_case: {
+            participants_total: 3,
+            projects_total: 2,
+            not_submitted: 2,
+            submitted: 0,
+          },
+        },
       },
     });
 
@@ -191,6 +224,34 @@ describe("CamelcaseInterceptor", () => {
           projects: { awaitingEvaluation: 1, partiallyEvaluated: 1 },
         },
         activity: [{ date: "2026-08-01", submittedSolutions: 1 }],
+        cases: {
+          configured: true,
+          submissionApplicable: true,
+          items: [
+            {
+              name: "Case A",
+              participantsTotal: 7,
+              projectsTotal: 3,
+              notSubmitted: 1,
+              submitted: 2,
+            },
+            {
+              name: "Case B",
+              participantsTotal: 4,
+              projectsTotal: 1,
+              notSubmitted: 0,
+              submitted: 1,
+            },
+            {
+              name: "Case C",
+              participantsTotal: 0,
+              projectsTotal: 0,
+              notSubmitted: 0,
+              submitted: 0,
+            },
+          ],
+          withoutCase: { participantsTotal: 3, projectsTotal: 2, notSubmitted: 2, submitted: 0 },
+        },
       });
     });
   });

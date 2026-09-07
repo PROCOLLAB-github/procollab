@@ -630,3 +630,34 @@ search, page, смена программы, destroy и RouterLink отменя�
 V1 не меняет backend, React, shared modal, submission/scoring lifecycle, зависимости,
 workflows, Docker или deploy. Unit/component tests с реальным CDK Overlay не
 заменяют отдельную браузерную desktop/mobile/keyboard/E2E проверку.
+
+## Кейсы в manager overview
+
+Карточка «Кейсы» напрямую использует обязательный `ProgramAnalyticsOverview.cases`
+из того же `GET /programs/:programId/manager-overview/`, без дополнительного запроса.
+Backend contract deployed: `63ebc4accdb147cf1e02feaaf141d79e7d92966b`.
+Global CamelcaseInterceptor преобразует `submission_applicable`, `without_case`,
+`participants_total`, `projects_total`, `not_submitted` в соответствующие camelCase-поля.
+Ручного парсера и пересчёта backend counts нет; вычисляются только проценты ширины полосы.
+
+- `configured=false`: «Кейсы не настроены для этой программы», без строк или withoutCase.
+- Backend order `items` сохраняется, в том числе все настроенные варианты с нулевыми
+  счётчиками. Для `configured=true, items=[]` — controlled empty state
+  «Для программы пока не настроены варианты кейсов».
+- `withoutCase` добавляется последней строкой «Без выбранного кейса» только при
+  `projectsTotal > 0` и наличии настроенных вариантов. Legacy/missing choices не скрываются.
+- При `submissionApplicable=false` видны только название, проекты и участники:
+  submitted/notSubmitted остаются в модели, но их подписи и segmented bar скрыты.
+- Participants уникальны внутри каждого кейса, но могут повторяться в разных кейсах.
+  Их нельзя складывать в global unique. Это поясняет tooltip карточки.
+- Полоса показывает submitted/projectsTotal и notSubmitted/projectsTotal; при нуле
+  проектов обе ширины равны нулю. Доступное текстовое описание содержит все метрики;
+  строки не кликабельны, без drilldown/export/filter/sorting.
+
+Локальная типографика: заголовок 16/22, 600; имя 12/18, 600 (две строки, полный текст
+в DOM); главное число 17/20, 700; служебные подписи и empty state 10px.
+Global tokens и размеры других карточек не меняются. Название и total разделены
+grid `minmax(0, 1fr) auto`; метрики переносятся на узкой ширине.
+Карточка сохраняет min-height 250px и ограничена max-height 380px; внутренний список
+имеет bounded vertical scroll при большом числе кейсов и доступен с клавиатуры.
+На mobile карточка занимает ширину существующей сетки, без отдельного компонента.

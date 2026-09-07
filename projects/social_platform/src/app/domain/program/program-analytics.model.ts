@@ -46,6 +46,31 @@ export interface ProgramAnalyticsOverview {
     delayedExperts: ProgramAnalyticsDelayedExperts;
   };
   activity: ProgramAnalyticsActivityPoint[];
+  cases: ProgramAnalyticsCases;
+}
+
+/** Backend counts Project × Program links; participants are unique within each case,
+ * not across cases. Submission counts use the link's raw submitted flag.
+ */
+export interface ProgramAnalyticsCaseMetrics {
+  participantsTotal: number;
+  projectsTotal: number;
+  notSubmitted: number;
+  submitted: number;
+}
+
+export interface ProgramAnalyticsCaseItem extends ProgramAnalyticsCaseMetrics {
+  name: string;
+}
+
+/** Current system-case options in backend order, including zero rows.
+ * withoutCase includes missing/obsolete choices; submissionApplicable controls only UI split.
+ */
+export interface ProgramAnalyticsCases {
+  configured: boolean;
+  submissionApplicable: boolean;
+  items: ProgramAnalyticsCaseItem[];
+  withoutCase: ProgramAnalyticsCaseMetrics;
 }
 
 export interface ProgramAnalyticsTotal {

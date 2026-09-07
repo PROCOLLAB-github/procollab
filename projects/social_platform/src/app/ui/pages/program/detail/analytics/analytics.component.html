@@ -247,11 +247,11 @@
         }
       </article>
 
-      <article class="analytics-card" data-testid="cases-card">
+      <article class="analytics-card cases-card" data-testid="cases-card">
         <div class="analytics__heading-row">
-          <h2 class="text-body-12">Кейсы</h2>
+          <h2 class="cases-card__title" id="analytics-cases-title">Кейсы</h2>
           <app-tooltip
-            text="Статистика проектов по кейсам программы."
+            text="Распределение проектов и участников по кейсам программы. Один участник может учитываться в нескольких кейсах."
             [isVisible]="isTooltipVisible('cases')"
             [useOverlay]="true"
             (click)="toggleTooltip('cases')"
@@ -259,7 +259,51 @@
             (hide)="hideTooltip('cases')"
           ></app-tooltip>
         </div>
-        <p class="analytics-empty-state text-body-12">Статистика по кейсам пока недоступна</p>
+        @if (caseEmptyMessage(); as message) {
+          <p class="analytics-empty-state text-body-10">{{ message }}</p>
+        } @else {
+          <ul class="cases-card__list" tabindex="0" aria-labelledby="analytics-cases-title">
+            @for (row of caseRows(); track row.key) {
+              <li
+                class="case-row"
+                [class.case-row--without-case]="row.isWithoutCase"
+                [attr.aria-label]="overview.cases.submissionApplicable ? null : row.description"
+              >
+                <div class="case-row__header">
+                  <span class="case-row__name" [title]="row.name">{{ row.name }}</span>
+                  <span class="case-row__total">
+                    <strong class="case-row__total-value">{{ row.projectsTotal }}</strong>
+                    <span class="case-row__total-label">{{ row.totalLabel }}</span>
+                  </span>
+                </div>
+                @if (overview.cases.submissionApplicable) {
+                  <div class="case-row__bar" role="img" [attr.aria-label]="row.description">
+                    <span class="case-row__submitted" [style.width.%]="row.submittedPercent"></span>
+                    <span
+                      class="case-row__not-submitted"
+                      [style.width.%]="row.notSubmittedPercent"
+                    ></span>
+                  </div>
+                }
+                <div class="case-row__meta">
+                  @if (overview.cases.submissionApplicable) {
+                    <span
+                      >Сдано <strong>{{ row.submitted }}</strong></span
+                    >
+                    <span aria-hidden="true">·</span>
+                    <span
+                      >Не сдано <strong>{{ row.notSubmitted }}</strong></span
+                    >
+                    <span aria-hidden="true">·</span>
+                  }
+                  <span
+                    >Участников <strong>{{ row.participantsTotal }}</strong></span
+                  >
+                </div>
+              </li>
+            }
+          </ul>
+        }
       </article>
 
       <article class="analytics-card evaluation" data-testid="evaluation-statuses">
