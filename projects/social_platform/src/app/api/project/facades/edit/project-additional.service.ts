@@ -283,6 +283,7 @@ export class ProjectAdditionalService {
               if (result.error.kind === "case_unavailable") this.loadFields(true);
             }
             if (
+              result.error.kind === "submission_closed" ||
               result.error.kind === "already_submitted" ||
               result.error.kind === "not_competitive"
             ) {

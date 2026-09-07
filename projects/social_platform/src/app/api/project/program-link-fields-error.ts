@@ -11,7 +11,11 @@ export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsErro
       if (cause.error?.detail === "Срок подачи проектов в программу завершён.") {
         return { kind: "submission_closed", cause };
       }
-      if (cause.error?.detail === "Проект уже был сдан на проверку.") {
+      if (
+        cause.error?.detail === "Проект уже был сдан на проверку." ||
+        cause.error?.detail ===
+          "Нельзя изменять значения полей программы после сдачи проекта на проверку."
+      ) {
         return { kind: "already_submitted", cause };
       }
       if (cause.error?.detail === "Программа не является конкурсной.") {

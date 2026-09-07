@@ -386,9 +386,12 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(update.execute).not.toHaveBeenCalled();
   });
 
-  it("backend deadline race opens existing late modal, with no main save or success", () => {
+  it("backend deadline race keeps late modal, refreshes metadata and blocks another submission", () => {
     service.loadProgramTagsAndProject();
     service.additionalForm.get("case")?.setValue("B");
+    service.additionalForm.get("note")?.setValue("local note");
+    const reload = new Subject<ProgramLinkFields>();
+    repo.getProgramLinkFields.mockReturnValue(reload);
     programRepo.submitCompettetiveProject.mockReturnValue(
       throwError(
         () =>
@@ -406,30 +409,57 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(update.execute).not.toHaveBeenCalled();
     expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
     expect(service.projFormIsSubmitting$().status).toBe("failure");
-  });
-
-  it("already-submitted race refreshes read-only state without reporting a successful save", () => {
-    service.loadProgramTagsAndProject();
-    service.additionalForm.get("case")?.setValue("B");
-    const frozen = programLinkFields({ submitted: true, canSubmit: false });
-    frozen.fields[0].value = "B";
-    repo.getProgramLinkFields.mockReturnValue(of(frozen));
-    programRepo.submitCompettetiveProject.mockReturnValue(
-      throwError(
-        () =>
-          new HttpErrorResponse({
-            status: 400,
-            error: { detail: "Проект уже был сдан на проверку." },
-          }),
-      ),
-    );
-    service.saveProjectAsPublished();
-    service.closeSendingDescisionModal();
     expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
-    expect(service.additionalForm.disabled).toBe(true);
-    expect(additional.submitted()).toBe(true);
+    expect(additional.activeProgramLinkId()).toBeNull();
+    service.saveProjectAsPublished(); // A pending canonical refresh cannot submit either.
+    reload.next(programLinkFields({ submissionOpen: false, canSubmit: false }));
+    reload.complete();
+    expect(additional.submissionOpen()).toBe(false);
+    expect(additional.canSubmit()).toBe(false);
+    expect(service.additionalForm.get("case")?.value).toBe("B");
+    expect(service.additionalForm.get("note")?.value).toBe("local note");
+    service.saveProjectAsPublished();
+    expect(ui.applyOpenSendDescisionLateModal).toHaveBeenCalledTimes(2);
+    expect(ui.applySendDescision).toHaveBeenCalledOnce();
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
     expect(update.execute).not.toHaveBeenCalled();
     expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
-    expect(service.projFormIsSubmitting$().status).toBe("failure");
   });
+
+  it.each([
+    ["submit", "Проект уже был сдан на проверку."],
+    ["put", "Нельзя изменять значения полей программы после сдачи проекта на проверку."],
+  ])(
+    "already-submitted %s race refreshes read-only state without main save or success",
+    (source, detail) => {
+      service.loadProgramTagsAndProject();
+      service.additionalForm.get("case")?.setValue("B");
+      const frozen = programLinkFields({ submitted: true, canSubmit: false });
+      frozen.fields[0].value = "B";
+      repo.getProgramLinkFields.mockReturnValue(of(frozen));
+      (source === "put"
+        ? repo.updateProgramLinkFields
+        : programRepo.submitCompettetiveProject
+      ).mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 400,
+              error: { detail },
+            }),
+        ),
+      );
+      service.saveProjectAsPublished();
+      service.closeSendingDescisionModal();
+      expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+      expect(service.additionalForm.disabled).toBe(true);
+      expect(additional.submitted()).toBe(true);
+      expect(update.execute).not.toHaveBeenCalled();
+      expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
+      expect(service.projFormIsSubmitting$().status).toBe("failure");
+      expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
+      expect(programRepo.submitCompettetiveProject).toHaveBeenCalledTimes(source === "put" ? 0 : 1);
+    },
+  );
 });

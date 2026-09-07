@@ -353,9 +353,12 @@ describe("ProjectAdditionalService canonical fields", () => {
     expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
   });
 
-  it("backend deadline race returns controlled failure after PUT without freezing or success", async () => {
+  it("backend deadline race refreshes eligibility, preserves edits and blocks another PUT/submit", async () => {
     service.setContext(55, 700);
     caseControl().setValue("A");
+    service.getAdditionalForm().get("note")?.setValue("local note");
+    const reload = new Subject<ProgramLinkFields>();
+    repo.getProgramLinkFields.mockReturnValue(reload);
     programRepo.submitCompettetiveProject.mockReturnValue(
       throwError(
         () =>
@@ -373,6 +376,63 @@ describe("ProjectAdditionalService canonical fields", () => {
     expect(service.isSend$().status).toBe("failure");
     expect(service.submitted()).toBe(false);
     expect(caseControl().value).toBe("A");
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+    expect(service.activeProgramLinkId()).toBeNull();
+    const closed = programLinkFields({ submissionOpen: false, canSubmit: false });
+    closed.fields[0].value = "B";
+    reload.next(closed);
+    reload.complete();
+    expect(service.activeProgramLinkId()).toBe(700);
+    expect(service.submissionOpen()).toBe(false);
+    expect(service.canSubmit()).toBe(false);
+    expect(caseControl().value).toBe("A");
+    expect(service.getAdditionalForm().get("note")?.value).toBe("local note");
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "submission_closed" },
+    });
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+  });
+
+  it("PUT after another tab submits refetches saved values and never calls submit or retries PUT", async () => {
+    service.setContext(55, 700);
+    expect(service.submitted()).toBe(false);
+    expect(service.canSubmit()).toBe(true);
+    caseControl().setValue("A");
+    const reload = new Subject<ProgramLinkFields>();
+    repo.getProgramLinkFields.mockReturnValue(reload);
+    const detail = "Нельзя изменять значения полей программы после сдачи проекта на проверку.";
+    repo.updateProgramLinkFields.mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status: 400, error: { detail } })),
+    );
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "already_submitted" },
+    });
+    expect(service.saveError()).toBe("Проект уже был сдан на проверку.");
+    expect(service.saveError()).not.toBe(detail);
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    expect(service.activeProgramLinkId()).toBeNull();
+    const submitted = programLinkFields({ submitted: true, canSubmit: false });
+    submitted.fields[0].value = "B";
+    reload.next(submitted);
+    reload.complete();
+    expect(service.activeProgramLinkId()).toBe(700);
+    expect(service.submitted()).toBe(true);
+    expect(service.canSubmit()).toBe(false);
+    expect(caseControl().value).toBe("B");
+    expect(service.getAdditionalForm().disabled).toBe(true);
+    expect(service.isSend$().status).toBe("failure");
+    expect(await firstValueFrom(service.save(700, true))).toMatchObject({
+      ok: false,
+      error: { kind: "already_submitted" },
+    });
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
   });
 
   it("already-submitted race refetches A, shows the saved case read-only and forbids another PUT/submit", async () => {
