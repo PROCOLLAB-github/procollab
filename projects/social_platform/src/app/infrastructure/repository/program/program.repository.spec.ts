@@ -1,7 +1,7 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-import { of } from "rxjs";
+import { firstValueFrom, of, Subject } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ProgramRepository } from "./program.repository";
 import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter";
@@ -130,6 +130,83 @@ describe("ProgramRepository", () => {
     expect(adapter.acknowledgeWelcome).toHaveBeenCalledExactlyOnceWith(1);
     expect(adapter.getOne).toHaveBeenCalledTimes(2);
   });
+
+  it("string detail key is invalidated by numeric welcome acknowledgement before TTL", async () => {
+    setup();
+    const runtimeId = "7" as unknown as number;
+    const stale = { ...Program.default(), id: 7, welcomeAcknowledgedAt: null };
+    const fresh = { ...stale, welcomeAcknowledgedAt: "2026-09-07T10:00:00Z" };
+    adapter.getOne.mockReturnValueOnce(of(stale)).mockReturnValueOnce(of(fresh));
+    adapter.acknowledgeWelcome.mockReturnValue(
+      of({ welcomeAcknowledgedAt: fresh.welcomeAcknowledgedAt }),
+    );
+
+    expect(await firstValueFrom(repository.getOne(runtimeId))).toBe(stale);
+    expect(adapter.getOne).toHaveBeenCalledTimes(1);
+    await firstValueFrom(repository.acknowledgeWelcome(7));
+    expect(await firstValueFrom(repository.getOne(runtimeId))).toBe(fresh);
+    expect(adapter.getOne).toHaveBeenCalledTimes(2);
+    expect(adapter.getOne.mock.calls).toEqual([[7], [7]]);
+    expect(adapter.acknowledgeWelcome).toHaveBeenCalledExactlyOnceWith(7);
+  });
+
+  it("string and number share one cache key; acknowledging 7 preserves cached program 8", async () => {
+    setup();
+    const seventh = { ...Program.default(), id: 7 };
+    const eighth = { ...Program.default(), id: 8 };
+    adapter.getOne.mockImplementation((id: number) => of(id === 7 ? seventh : eighth));
+    adapter.acknowledgeWelcome.mockReturnValue(
+      of({ welcomeAcknowledgedAt: "2026-09-07T10:00:00Z" }),
+    );
+
+    await firstValueFrom(repository.getOne("7" as unknown as number));
+    expect(await firstValueFrom(repository.getOne(7))).toBe(seventh);
+    await firstValueFrom(repository.getOne("8" as unknown as number));
+    expect(adapter.getOne.mock.calls).toEqual([[7], [8]]);
+    await firstValueFrom(repository.acknowledgeWelcome("7" as unknown as number));
+    await firstValueFrom(repository.getOne(7));
+    expect(await firstValueFrom(repository.getOne(8))).toBe(eighth);
+    expect(adapter.getOne.mock.calls).toEqual([[7], [8], [7]]);
+    expect(adapter.acknowledgeWelcome).toHaveBeenCalledExactlyOnceWith(7);
+  });
+
+  it("does not invalidate before POST success or after an error; permits retry", async () => {
+    setup();
+    const program = { ...Program.default(), id: 7, welcomeAcknowledgedAt: null };
+    const response = new Subject<{ welcomeAcknowledgedAt: string }>();
+    adapter.getOne.mockReturnValue(of(program));
+    adapter.acknowledgeWelcome
+      .mockReturnValueOnce(response)
+      .mockReturnValueOnce(of({ welcomeAcknowledgedAt: "2026-09-07T10:00:00Z" }));
+    await firstValueFrom(repository.getOne("7" as unknown as number));
+    const error = vi.fn();
+    repository.acknowledgeWelcome(7).subscribe({ error });
+    expect(await firstValueFrom(repository.getOne(7))).toBe(program);
+    expect(adapter.getOne).toHaveBeenCalledTimes(1);
+    response.error(new Error("POST failed"));
+    expect(error).toHaveBeenCalledOnce();
+    expect(await firstValueFrom(repository.getOne(7))).toBe(program);
+    expect(adapter.getOne).toHaveBeenCalledTimes(1);
+    expect(program.welcomeAcknowledgedAt).toBeNull();
+
+    await firstValueFrom(repository.acknowledgeWelcome(7));
+    await firstValueFrom(repository.getOne("7" as unknown as number));
+    expect(adapter.getOne).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([NaN, 0, -7, 1.5, Infinity, "abc", "0", "-7", "1.5", "", undefined, null])(
+    "rejects invalid runtime id %s through Observable errors without HTTP",
+    async invalidId => {
+      setup();
+      const id = invalidId as number;
+      const detail = repository.getOne(id);
+      const acknowledgement = repository.acknowledgeWelcome(id);
+      await expect(firstValueFrom(detail)).rejects.toBeInstanceOf(Error);
+      await expect(firstValueFrom(acknowledgement)).rejects.toBeInstanceOf(Error);
+      expect(adapter.getOne).not.toHaveBeenCalled();
+      expect(adapter.acknowledgeWelcome).not.toHaveBeenCalled();
+    },
+  );
 
   it("getAllProjects делегирует в adapter", () => {
     setup();

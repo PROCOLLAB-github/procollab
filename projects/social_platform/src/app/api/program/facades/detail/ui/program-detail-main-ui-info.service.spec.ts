@@ -48,4 +48,18 @@ describe("ProgramDetailMainUIInfoService", () => {
     expect(service.registeredProgramModal()).toBe(false);
     expect(service.program()?.welcomeAcknowledgedAt).toBe("2026-08-24T10:00:00Z");
   });
+
+  it("не открывает приветствие при повторном входе со свежим серверным timestamp", () => {
+    const service = new ProgramDetailMainUIInfoService();
+    const timestamp = "2026-09-07T10:00:00Z";
+    service.applyFormatingProgramData(createProgram(7));
+    expect(service.registeredProgramModal()).toBe(true);
+    service.applyProgramWelcomeAcknowledged(timestamp);
+    expect(service.registeredProgramModal()).toBe(false);
+
+    service.applyFormatingProgramData({ ...Program.default(), id: 8 });
+    service.applyFormatingProgramData(createProgram(7, timestamp));
+    expect(service.registeredProgramModal()).toBe(false);
+    expect(service.program()?.welcomeAcknowledgedAt).toBe(timestamp);
+  });
 });
