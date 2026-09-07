@@ -39,6 +39,14 @@ const overview: ProgramAnalyticsOverview = {
     delayedExperts: { total: 0, items: [] },
   },
   activity: [],
+  cases: {
+    configured: true,
+    submissionApplicable: true,
+    items: [
+      { name: "Case A", participantsTotal: 2, projectsTotal: 3, notSubmitted: 2, submitted: 1 },
+    ],
+    withoutCase: { participantsTotal: 1, projectsTotal: 4, notSubmitted: 4, submitted: 0 },
+  },
 };
 
 describe("ProgramAnalyticsInfoService", () => {
@@ -73,6 +81,7 @@ describe("ProgramAnalyticsInfoService", () => {
     service.initialize();
 
     expect(service.data()).toBe(overview);
+    expect(service.data()?.cases).toBe(overview.cases);
     expect(service.data()?.summary.projects.total).toBe(7);
     expect(service.data()?.summary.participantRegions.items).toEqual([
       { name: "Набережные Челны", count: 2 },

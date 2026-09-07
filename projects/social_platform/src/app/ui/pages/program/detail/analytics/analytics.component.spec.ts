@@ -78,6 +78,16 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
       delayedExperts: { total: 0, items: [] },
     },
     activity: activity(),
+    cases: {
+      configured: true,
+      submissionApplicable: true,
+      items: [
+        { name: "Case A", participantsTotal: 7, projectsTotal: 3, notSubmitted: 1, submitted: 2 },
+        { name: "Case B", participantsTotal: 4, projectsTotal: 1, notSubmitted: 0, submitted: 1 },
+        { name: "Case C", participantsTotal: 0, projectsTotal: 0, notSubmitted: 0, submitted: 0 },
+      ],
+      withoutCase: { participantsTotal: 3, projectsTotal: 2, notSubmitted: 2, submitted: 0 },
+    },
     ...overrides,
   };
 }
@@ -147,6 +157,148 @@ describe("ProgramAnalyticsComponent", () => {
         },
       })
       .compileComponents();
+  });
+
+  describe("cases from manager overview", () => {
+    function renderCases() {
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      fixture.detectChanges();
+      const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        '[data-testid="cases-card"]',
+      )!;
+      return { fixture, card, rows: [...card.querySelectorAll<HTMLElement>(".case-row")] };
+    }
+
+    it("preserves backend counts/order/zero rows and appends withoutCase without mutations", () => {
+      const before = JSON.stringify(data());
+      const { fixture, card, rows } = renderCases();
+      expect(rows.map(row => row.querySelector(".case-row__name")?.textContent)).toEqual([
+        "Case A",
+        "Case B",
+        "Case C",
+        "Без выбранного кейса",
+      ]);
+      expect(rows.map(row => row.querySelector(".case-row__total-value")?.textContent)).toEqual([
+        "3",
+        "1",
+        "0",
+        "2",
+      ]);
+      expect(rows.map(row => row.querySelector(".case-row__total-label")?.textContent)).toEqual([
+        "проекта",
+        "проект",
+        "проектов",
+        "проекта",
+      ]);
+      expect(rows[0].querySelector(".case-row__meta")?.textContent).toMatch(
+        /Сдано 2\s*·\s*Не сдано 1\s*·\s*Участников 7/,
+      );
+      expect(rows[0].querySelector('[role="img"]')?.getAttribute("aria-label")).toBe(
+        "Case A: 3 проекта, сдано 2, не сдано 1, участников 7",
+      );
+      expect(rows[3].classList.contains("case-row--without-case")).toBe(true);
+      expect(card.querySelector("button, a")).toBeNull();
+      expect(JSON.stringify(data())).toBe(before);
+      expect(analytics.initialize).toHaveBeenCalledOnce();
+      const tooltip = fixture.debugElement.query(By.css(".cases-card app-tooltip"))
+        .componentInstance as TooltipComponent;
+      expect(tooltip.text()).toBe(
+        "Распределение проектов и участников по кейсам программы. Один участник может учитываться в нескольких кейсах.",
+      );
+    });
+
+    it("uses only percentages for the bar and never synthesizes 100% for zero projects", () => {
+      const { rows } = renderCases();
+      const width = (index: number, part: string) =>
+        parseFloat(rows[index].querySelector<HTMLElement>(part)!.style.width);
+      expect(width(0, ".case-row__submitted")).toBeCloseTo(200 / 3);
+      expect(width(0, ".case-row__not-submitted")).toBeCloseTo(100 / 3);
+      expect(width(1, ".case-row__submitted")).toBe(100);
+      expect(width(2, ".case-row__submitted")).toBe(0);
+      expect(width(2, ".case-row__not-submitted")).toBe(0);
+      expect(width(3, ".case-row__not-submitted")).toBe(100);
+    });
+
+    it("hides an empty withoutCase bucket", () => {
+      const model = overview();
+      model.cases.withoutCase.projectsTotal = 0;
+      data.set(model);
+      const { card, rows } = renderCases();
+      expect(rows).toHaveLength(3);
+      expect(card.textContent).not.toContain("Без выбранного кейса");
+    });
+
+    it.each([
+      [false, "Кейсы не настроены для этой программы"],
+      [true, "Для программы пока не настроены варианты кейсов"],
+    ])("renders controlled empty state when configured=%s", (configured, message) => {
+      const model = overview();
+      model.cases.configured = configured;
+      if (configured) model.cases.items = [];
+      data.set(model);
+      const { card, rows } = renderCases();
+      expect(rows).toHaveLength(0);
+      expect(card.querySelector(".analytics-empty-state.text-body-10")?.textContent).toBe(message);
+      expect(card.textContent).not.toContain("Без выбранного кейса");
+    });
+
+    it("keeps all configured zero options, without an empty state or fake bar values", () => {
+      const model = overview();
+      const zero = { participantsTotal: 0, projectsTotal: 0, notSubmitted: 0, submitted: 0 };
+      model.cases.items = model.cases.items.map(item => ({ ...item, ...zero }));
+      model.cases.withoutCase = zero;
+      data.set(model);
+      const { card, rows } = renderCases();
+      expect(rows).toHaveLength(3);
+      expect(card.querySelector(".analytics-empty-state")).toBeNull();
+      expect(
+        [...card.querySelectorAll<HTMLElement>(".case-row__bar span")].every(
+          part => part.style.width === "0%",
+        ),
+      ).toBe(true);
+    });
+
+    it("hides only case submission split for noncompetitive programs, retaining raw metrics", () => {
+      const model = overview();
+      model.cases.submissionApplicable = false;
+      data.set(model);
+      const { fixture, card, rows } = renderCases();
+      expect(rows).toHaveLength(4);
+      expect(card.textContent).toContain("Case A");
+      expect(card.textContent).toContain("Участников 7");
+      expect(card.textContent).not.toMatch(/Сдано|Не сдано/);
+      expect(card.querySelector(".case-row__bar")).toBeNull();
+      expect(rows[0].getAttribute("aria-label")).toBe("Case A: 3 проекта, участников 7");
+      expect(model.cases.items[0].submitted).toBe(2);
+      expect(
+        fixture.nativeElement.querySelector('[data-testid="solution-funnel"]').textContent,
+      ).toContain("Сдано");
+    });
+
+    it("retains full long names and all 20 rows inside the bounded, keyboard-scrollable list", () => {
+      const model = overview();
+      const longName =
+        "Разработка цифрового ассистента для персонализированного образовательного маршрута";
+      model.cases.items = Array.from({ length: 20 }, (_, index) => ({
+        ...model.cases.items[0],
+        name: `${longName} ${index + 1}`,
+      }));
+      model.cases.withoutCase.projectsTotal = 0;
+      data.set(model);
+      const { card, rows } = renderCases();
+      expect(rows).toHaveLength(20);
+      expect(rows[0].querySelector(".case-row__header > .case-row__name")?.textContent).toBe(
+        `${longName} 1`,
+      );
+      expect(
+        rows[0].querySelector(".case-row__header > .case-row__total .case-row__total-value"),
+      ).not.toBeNull();
+      expect(card.querySelector(".cases-card__title")?.textContent).toBe("Кейсы");
+      expect(card.querySelector(".cases-card__list")?.getAttribute("tabindex")).toBe("0");
+      expect(card.querySelector(".cases-card__list")?.getAttribute("aria-labelledby")).toBe(
+        card.querySelector("h2")?.id,
+      );
+    });
   });
 
   it("показывает authoritative summary и реальный разрез регионов", () => {
@@ -720,6 +872,12 @@ describe("ProgramAnalyticsComponent", () => {
         delayedExperts: { total: 0, items: [] },
       },
       activity: activity(30, true),
+      cases: {
+        configured: false,
+        submissionApplicable: false,
+        items: [],
+        withoutCase: { participantsTotal: 0, projectsTotal: 0, notSubmitted: 0, submitted: 0 },
+      },
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
@@ -744,7 +902,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.querySelector(".regions > .analytics-empty-state")).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain("За последние 30 дней активности не было");
     expect(fixture.nativeElement.querySelector(".activity__note")).toBeNull();
-    expect(fixture.nativeElement.textContent).toContain("Статистика по кейсам пока недоступна");
+    expect(fixture.nativeElement.textContent).toContain("Кейсы не настроены для этой программы");
     expect(
       fixture.nativeElement.querySelector('[data-testid="cases-card"] .analytics-empty-state i'),
     ).toBeNull();
