@@ -3,138 +3,195 @@
 <div class="project__inner">
   <div [formGroup]="additionalForm" class="project__team">
     <div class="project__additional-wrapper">
-      @if (partnerProgramFields().length) {
-        @for (field of partnerProgramFields(); track field.id) {
-          <label class="text-bold-body-14 field-label">дополнительные сведения</label>
-          <fieldset>
-            @switch (field.fieldType) {
-              @case ("text") {
-                @if (additionalForm.get(field.name); as control) {
-                  <label
-                    style="cursor: pointer"
-                    class="field-label"
-                    (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
-                    [for]="field.name"
-                    >{{ field.label }}</label
-                  >
-                  <app-input
-                    size="big"
-                    [id]="field.name"
-                    formControlName="{{ field.name }}"
-                    [error]="control | controlError: 'required'"
-                    [placeholder]="field.helpText"
-                    [maxLength]="500"
-                  ></app-input>
-                }
-              }
-              @case ("textarea") {
-                <label
-                  style="cursor: pointer"
-                  class="field-label"
-                  (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
-                  [for]="field.name"
-                  >{{ field.label }}</label
-                >
-                @if (additionalForm.get(field.name); as control) {
-                  <app-textarea
-                    size="big"
-                    [id]="field.name"
-                    formControlName="{{ field.name }}"
-                    [error]="control | controlError"
-                    [placeholder]="field.helpText"
-                    [maxLength]="500"
-                  ></app-textarea>
-                }
-              }
-              @case ("checkbox") {
-                <div
-                  class="project__team--additional"
-                  [ngStyle]="{
-                    display: field.fieldType === 'checkbox' ? 'flex' : 'block',
-                  }"
-                >
-                  <app-checkbox
-                    [checked]="this.additionalForm.get(field.name)?.value"
-                    (checkedChange)="this.additionalForm.get(field.name)?.setValue($event)"
-                  ></app-checkbox>
-                  <label
-                    style="cursor: pointer"
-                    class="field-label"
-                    (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
-                    [for]="field.name"
-                    >{{ field.label }}</label
-                  >
-                </div>
-              }
-              @case ("radio") {
-                @if (additionalForm.get(field.name); as control) {
-                  <app-switch
-                    [checked]="additionalForm.get(field.name)?.value"
-                    (checkedChange)="additionalForm.get(field.name)?.setValue($event)"
-                  ></app-switch>
-                }
-                <label
-                  style="cursor: pointer"
-                  class="field-label"
-                  (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
-                  [for]="field.name"
-                  >{{ field.label }}</label
-                >
-              }
-              @case ("select") {
-                <label
-                  style="cursor: pointer"
-                  class="field-label"
-                  (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
-                  [for]="field.name"
-                  >{{ field.label }}</label
-                >
-                <app-select
-                  size="big"
-                  [id]="field.name"
-                  formControlName="{{ field.name }}"
-                  [placeholder]="field.helpText || field.label"
-                  [options]="field.options | toSelectOptions"
-                ></app-select>
-              }
-            }
-            @if (additionalForm.get(field.name); as control) {
-              @if (control | controlError: "required") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-              }
-            }
-          </fieldset>
-        }
+      @if (pending()) {
+        <p class="text-body-12" role="status">Загружаем дополнительные сведения программы…</p>
+      } @else if (loadFailed()) {
+        <div role="alert">
+          <p class="text-body-12">Не удалось загрузить дополнительные сведения программы.</p>
+          <app-button size="medium" (click)="retry()">Повторить</app-button>
+        </div>
       } @else {
-        @if (isProjectAssignToProgram()) {
-          <div class="project__additional--no-items">
-            <p class="text-body-12">
-              проект привязан к программе, но дополнительных полей для заполнения нет
-            </p>
-            <i appIcon icon="info" appSquare="20" class="project__no-items"></i>
-          </div>
+        @if (saveError(); as message) {
+          <p class="text-body-12 error" role="alert">{{ message }}</p>
+        }
+        @if (submitted()) {
+          <p class="text-body-12" role="status">
+            Проект уже сдан. Дополнительные сведения изменить нельзя.
+          </p>
+        }
+        @if (partnerProgramFields().length) {
+          @for (field of partnerProgramFields(); track field.id) {
+            <label class="text-bold-body-14 field-label">дополнительные сведения</label>
+            <fieldset>
+              @switch (field.fieldType) {
+                @case ("text") {
+                  @if (additionalForm.get(field.name); as control) {
+                    <label
+                      style="cursor: pointer"
+                      class="field-label"
+                      (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+                      [for]="field.name"
+                      >{{ field.label }}</label
+                    >
+                    <app-input
+                      size="big"
+                      [id]="field.name"
+                      formControlName="{{ field.name }}"
+                      [error]="control | controlError: 'required'"
+                      [placeholder]="field.helpText"
+                      [maxLength]="500"
+                    ></app-input>
+                  }
+                }
+                @case ("textarea") {
+                  <label
+                    style="cursor: pointer"
+                    class="field-label"
+                    (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+                    [for]="field.name"
+                    >{{ field.label }}</label
+                  >
+                  @if (additionalForm.get(field.name); as control) {
+                    <app-textarea
+                      size="big"
+                      [id]="field.name"
+                      formControlName="{{ field.name }}"
+                      [error]="control | controlError"
+                      [placeholder]="field.helpText"
+                      [maxLength]="500"
+                    ></app-textarea>
+                  }
+                }
+                @case ("checkbox") {
+                  @if (submitted()) {
+                    <p class="text-body-12">
+                      {{ field.label }}: {{ additionalForm.get(field.name)?.value ? "Да" : "Нет" }}
+                    </p>
+                  } @else {
+                    <div
+                      class="project__team--additional"
+                      [ngStyle]="{
+                        display: field.fieldType === 'checkbox' ? 'flex' : 'block',
+                      }"
+                    >
+                      <app-checkbox
+                        [checked]="this.additionalForm.get(field.name)?.value"
+                        (checkedChange)="setBooleanValue(field.name, $event)"
+                      ></app-checkbox>
+                      <label
+                        style="cursor: pointer"
+                        class="field-label"
+                        (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+                        [for]="field.name"
+                        >{{ field.label }}</label
+                      >
+                    </div>
+                  }
+                }
+                @case ("radio") {
+                  @if (submitted()) {
+                    <p class="text-body-12">
+                      {{ field.label }}: {{ additionalForm.get(field.name)?.value ? "Да" : "Нет" }}
+                    </p>
+                  } @else {
+                    @if (additionalForm.get(field.name); as control) {
+                      <app-switch
+                        [checked]="additionalForm.get(field.name)?.value"
+                        (checkedChange)="setBooleanValue(field.name, $event)"
+                      ></app-switch>
+                    }
+                    <label
+                      style="cursor: pointer"
+                      class="field-label"
+                      (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+                      [for]="field.name"
+                      >{{ field.label }}</label
+                    >
+                  }
+                }
+                @case ("select") {
+                  <label
+                    style="cursor: pointer"
+                    class="field-label"
+                    (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+                    [for]="field.name"
+                    >{{ field.label }}</label
+                  >
+                  @if (additionalForm.get(field.name); as control) {
+                    @if (submitted() && control.value && !field.options.includes(control.value)) {
+                      <p class="text-body-12" data-testid="saved-field-value">
+                        {{ control.value }}
+                      </p>
+                    } @else {
+                      <app-select
+                        size="big"
+                        [id]="field.name"
+                        formControlName="{{ field.name }}"
+                        [placeholder]="
+                          field.name === caseFieldName
+                            ? 'Выберите кейс'
+                            : field.helpText || field.label
+                        "
+                        [error]="
+                          (control | controlError) ||
+                          (field.name === caseFieldName && !!caseError())
+                        "
+                        [options]="field.options | toSelectOptions"
+                      ></app-select>
+                    }
+                  }
+                }
+              }
+              @if (additionalForm.get(field.name); as control) {
+                @if (field.name === caseFieldName && caseError()) {
+                  <div class="text-body-10 error" role="alert">{{ caseError() }}</div>
+                } @else if (control | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{
+                      field.name === caseFieldName
+                        ? "Выберите кейс"
+                        : errorMessage.VALIDATION_REQUIRED
+                    }}
+                  </div>
+                } @else if (
+                  field.name === caseFieldName && (control | controlError: "caseUnavailable")
+                ) {
+                  <div class="text-body-10 error" role="alert">
+                    Выбранный кейс больше недоступен. Выберите актуальный кейс.
+                  </div>
+                }
+              }
+            </fieldset>
+          }
         } @else {
-          <div class="project__additional--no-items">
-            <p class="text-body-12">Пока вы не участвуете ни в одной программе</p>
-            <a [routerLink]="AppRoutes.program.list()">
-              <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
-                <span>программы</span>
-                <app-tooltip
-                  [text]="'Перейдите по ссылке и ознакомьтесь с тем, где можно сейчас поучаствовать'"
-                  [isVisible]="isTooltipVisible('base')"
-                  [position]="'right'"
-                  [tooltipWidth]="300"
-                  customClass="content__hint"
-                  (show)="toggleTooltip()"
-                  (hide)="toggleTooltip()"
-                ></app-tooltip>
-              </app-button>
-            </a>
+          @if (isProjectAssignToProgram()) {
+            <div class="project__additional--no-items">
+              <p class="text-body-12">
+                проект привязан к программе, но дополнительных полей для заполнения нет
+              </p>
+              <i appIcon icon="info" appSquare="20" class="project__no-items"></i>
+            </div>
+          } @else {
+            <div class="project__additional--no-items">
+              <p class="text-body-12">Пока вы не участвуете ни в одной программе</p>
+              <a [routerLink]="AppRoutes.program.list()">
+                <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
+                  <span>программы</span>
+                  <app-tooltip
+                    [text]="'Перейдите по ссылке и ознакомьтесь с тем, где можно сейчас поучаствовать'"
+                    [isVisible]="isTooltipVisible('base')"
+                    [position]="'right'"
+                    [tooltipWidth]="300"
+                    customClass="content__hint"
+                    (show)="toggleTooltip()"
+                    (hide)="toggleTooltip()"
+                  ></app-tooltip>
+                </app-button>
+              </a>
 
-            <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
-          </div>
+              <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+            </div>
+          }
         }
       }
     </div>

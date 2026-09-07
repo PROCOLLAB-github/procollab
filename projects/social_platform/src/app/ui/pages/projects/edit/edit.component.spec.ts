@@ -43,12 +43,13 @@ describe("ProjectEditComponent", () => {
       projSubmitInitiated: signal(false),
       projFormIsSubmittingAsPublished: signal(false),
       projFormIsSubmittingAsDraft: signal(false),
+      isCompetitive: signal(false),
+      submitted: signal(false),
     };
 
     const projectsEditUIInfoServiceSpy = {
       fromProgram: signal(false),
       fromProgramOpen: signal(false),
-      isCompetitive: signal(false),
       isProjectAssignToProgram: signal(false),
       isProjectBoundToProgram: signal(false),
       isCompleted: signal(false),
@@ -145,5 +146,20 @@ describe("ProjectEditComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("uses canonical competition/submitted state for the primary action label", () => {
+    const facade = fixture.debugElement.injector.get(ProjectsEditInfoService);
+    // Mutable test signals stand in for the facade's canonical readonly signals.
+    (facade.isCompetitive as ReturnType<typeof signal<boolean>>).set(true);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent,
+    ).toContain("отправить заявку");
+    (facade.submitted as ReturnType<typeof signal<boolean>>).set(true);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent.trim(),
+    ).toBe("сохранить");
   });
 });

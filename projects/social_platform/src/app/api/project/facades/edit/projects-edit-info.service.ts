@@ -2,7 +2,18 @@
 
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { NavService } from "@api/shared/nav.service";
-import { EMPTY, distinctUntilChanged, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
+import {
+  EMPTY,
+  combineLatest,
+  distinctUntilChanged,
+  finalize,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+} from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Goal } from "@domain/project/goals.model";
@@ -84,10 +95,11 @@ export class ProjectsEditInfoService {
   readonly achievements = this.projectFormService.achievements;
 
   // Id связи проекта и программы
-  readonly relationId = computed(() => this.projectFormService.relationId);
+  readonly activeProgramLinkId = this.projectAdditionalService.activeProgramLinkId;
   private readonly leaderId = this.projectsEditUIInfoService.leaderId;
 
-  private readonly isCompetitive = this.projectsEditUIInfoService.isCompetitive;
+  readonly isCompetitive = this.projectAdditionalService.isCompetitive;
+  readonly submitted = this.projectAdditionalService.submitted;
   private readonly isProjectAssignToProgram =
     this.projectsEditUIInfoService.isProjectAssignToProgram;
 
@@ -219,12 +231,26 @@ export class ProjectsEditInfoService {
   }
 
   saveProjectAsPublished(): void {
+    if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
+    if (!this.submissionAvailable()) return;
     this.projectForm.get("draft")?.patchValue(false);
     this.submitMode.set("published");
 
-    if (!this.isCompetitive()) {
+    this.additionalForm.markAllAsTouched();
+    if (
+      !this.projectAdditionalService.submitted() &&
+      !this.validationService.getFormValidation(this.additionalForm)
+    ) {
+      this.projSubmitInitiated.set(true);
+      this.projectStepService.setStepFromRoute("additional");
+      return;
+    }
+
+    if (!this.isCompetitive() || this.projectAdditionalService.submitted()) {
       this.projFormIsSubmitting$.set(loading());
-      this.submitProjectForm();
+      if (this.activeProgramLinkId() && !this.projectAdditionalService.submitted()) {
+        this.sendAdditionalFields(this.activeProgramLinkId()!, false);
+      } else this.submitProjectForm();
       return;
     }
 
@@ -236,6 +262,7 @@ export class ProjectsEditInfoService {
 
     if (!projectValid || !additionalValid) {
       this.projSubmitInitiated.set(true);
+      if (!additionalValid) this.projectStepService.setStepFromRoute("additional");
       return;
     }
 
@@ -248,30 +275,32 @@ export class ProjectsEditInfoService {
   }
 
   saveProjectAsDraft(): void {
+    if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
     this.submitMode.set("draft");
-    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
-    this.projectForm.patchValue({ partnerProgramId });
     this.projFormIsSubmitting$.set(loading());
 
-    if (this.isCompetitive()) {
-      const projectId = Number(this.route.snapshot.params["projectId"]);
-      const relationId = this.relationId();
-      this.sendAdditionalFields(projectId, relationId());
+    if (this.activeProgramLinkId() && !this.projectAdditionalService.submitted()) {
+      this.sendAdditionalFields(this.activeProgramLinkId()!, false);
     } else {
       this.submitProjectForm();
     }
   }
 
   submitProjectForm(): void {
+    if (!this.additionalContextReady()) return;
     const isDraft = this.projectForm.get("draft")?.value === true;
 
     this.projectFormService.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
 
-    const payload = this.projectFormService.getFormValue();
+    const rawPayload = this.projectFormService.getFormValue();
+    const payload = { ...rawPayload };
+    // In a verified canonical edit this is NOT a legacy bind/unbind command.
+    // Preserve the control and dedicated assignment flow; do not mutate raw form data.
+    if (this.activeProgramLinkId()) delete payload.partnerProgramId;
     const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
 
     if (this.projectVacancyUIService.isDirty()) {
@@ -288,7 +317,8 @@ export class ProjectsEditInfoService {
     } else {
       if (
         !this.validationService.getFormValidation(this.projectForm) ||
-        !this.validationService.getFormValidation(this.additionalForm) ||
+        (!this.projectAdditionalService.submitted() &&
+          !this.validationService.getFormValidation(this.additionalForm)) ||
         this.projectVacancyUIService.applyValidateForm()
       ) {
         return;
@@ -327,17 +357,20 @@ export class ProjectsEditInfoService {
 
   closeSendingDescisionModal(): void {
     this.projectsEditUIInfoService.applyCloseSendDescisionModal();
-
-    const projectId = Number(this.route.snapshot.params["projectId"]);
-    const relationId = this.relationId();
-
+    if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
+    if (!this.submissionAvailable()) return;
+    if (this.validateAdditionalFields()) {
+      this.projSubmitInitiated.set(true);
+      return;
+    }
     this.projFormIsSubmitting$.set(loading());
-    this.sendAdditionalFields(projectId, relationId());
+    if (this.projectAdditionalService.submitted()) this.submitProjectForm();
+    else if (this.activeProgramLinkId())
+      this.sendAdditionalFields(this.activeProgramLinkId()!, this.isCompetitive());
   }
 
   loadProgramTagsAndProject(): void {
     // Сброс состояния перед загрузкой
-    this.isCompetitive.set(false);
     this.isProjectAssignToProgram.set(false);
 
     this.route.data
@@ -367,23 +400,26 @@ export class ProjectsEditInfoService {
           // Синхронизируем ссылки после инициализации данных проекта
           this.projectContactsService.syncLinksItems(this.projectFormService.links);
 
-          if (project.partnerProgram) {
-            this.isCompetitive.set(
-              !!project.partnerProgram.programId && project.partnerProgram.canSubmit,
-            );
-            this.isProjectAssignToProgram.set(!!project.partnerProgram.programId);
-
-            const isFirstVisitFromProgram = !!this.route.snapshot.queryParams["fromProgram"];
-            this.projectAdditionalService.initializeAdditionalForm(
-              project.partnerProgram?.programFields,
-              project.partnerProgram?.programFieldValues,
-              isFirstVisitFromProgram,
-            );
-          }
-
           this.projectVacancyUIService.applySetVacancies(project.vacancies);
         },
       );
+
+    // Params change before the new resolver data arrives. Clear the old relation immediately,
+    // and wait for a matching resolved Project before requesting canonical definitions.
+    combineLatest([this.route.params, this.route.queryParams, this.route.data])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([params, query, data]) => {
+        const id = Number(params["projectId"]);
+        const project: Project | undefined = data["data"]?.[0];
+        const matches = Number.isSafeInteger(id) && id > 0 && project?.id === id;
+        this.profileId.set(id);
+        this.projectAdditionalService.setContext(
+          matches ? id : null,
+          query["programLinkId"],
+          project?.partnerProgram?.programLinkId,
+        );
+        this.isProjectAssignToProgram.set(this.projectAdditionalService.hasProgramLink());
+      });
   }
 
   onSearchSkill(query: string): void {
@@ -441,8 +477,6 @@ export class ProjectsEditInfoService {
       return true;
     }
 
-    // Подготавливаем поля для отправки (убираем валидаторы с заполненных полей)
-    this.projectAdditionalService.prepareFieldsForSubmit();
     return false;
   }
 
@@ -525,49 +559,55 @@ export class ProjectsEditInfoService {
     }
   }
 
-  private sendAdditionalFields(projectId: number, relationId: number): void {
-    const isDraft = this.projectForm.get("draft")?.value === true;
+  private additionalContextReady(): boolean {
+    if (!this.projectAdditionalService.hasProgramLink() || this.activeProgramLinkId()) return true;
+    this.projectStepService.setStepFromRoute("additional");
+    this.projFormIsSubmitting$.set(failure("additional_fields_unavailable"));
+    return false;
+  }
 
+  /** A closed competitive link must never silently fall through to normal publishing. */
+  private submissionAvailable(): boolean {
+    if (
+      !this.isCompetitive() ||
+      this.projectAdditionalService.submitted() ||
+      this.projectAdditionalService.canSubmit()
+    ) {
+      return true;
+    }
+    this.projFormIsSubmitting$.set(failure("submission_unavailable"));
+    if (!this.projectAdditionalService.submissionOpen()) {
+      this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
+    } else {
+      this.snackBarService.error(
+        "Сейчас проект нельзя сдать. Обновите дополнительные сведения программы.",
+      );
+    }
+    return false;
+  }
+
+  private sendAdditionalFields(programLinkId: number, submit: boolean): void {
+    let fieldsSaved = false;
     this.projectAdditionalService
-      .sendAdditionalFieldsValues(projectId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            this.logger.error("Error sending additional fields:", result.error.cause);
-            this.projectAdditionalService.resetSendingState();
-            this.submitMode.set("draft");
-            return;
+      .save(programLinkId, submit)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          if (!fieldsSaved && isLoading(this.projFormIsSubmitting$()))
+            this.projFormIsSubmitting$.set(initial());
+        }),
+      )
+      .subscribe(result => {
+        if (!result.ok) {
+          this.projFormIsSubmitting$.set(failure(result.error.kind));
+          if (result.error.kind === "submission_closed") {
+            this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
           }
-
-          if (!isDraft) {
-            this.projectAdditionalService
-              .submitCompettetiveProject(relationId)
-              .pipe(takeUntilDestroyed(this.destroyRef))
-              .subscribe(submitResult => {
-                if (!submitResult.ok) {
-                  this.logger.error(
-                    "Error submitting competitive project:",
-                    submitResult.error.cause,
-                  );
-                  this.projectAdditionalService.resetSendingState();
-                  this.submitMode.set("draft");
-                  return;
-                }
-
-                this.projectAdditionalService.resetSendingState();
-                this.submitProjectForm();
-              });
-          } else {
-            this.projectAdditionalService.resetSendingState();
-            this.submitProjectForm();
-          }
-        },
-        error: error => {
-          this.logger.error("Error sending additional fields:", error);
-          this.projectAdditionalService.resetSendingState();
-          this.submitMode.set("draft");
-        },
+          this.projectStepService.setStepFromRoute("additional");
+          return;
+        }
+        fieldsSaved = true;
+        this.submitProjectForm();
       });
   }
 }

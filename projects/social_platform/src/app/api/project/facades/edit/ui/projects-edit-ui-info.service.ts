@@ -15,8 +15,6 @@ export class ProjectsEditUIInfoService {
   readonly fromProgramOpen = signal<boolean>(false);
   readonly projectId = this.projectsDetailUIInfoService.projectId;
 
-  // Маркер привязки проекта к конкурсной программе.
-  readonly isCompetitive = signal<boolean>(false);
   readonly isProjectAssignToProgram = signal<boolean>(false);
 
   // Состояния модалок и ограничений редактирования.
