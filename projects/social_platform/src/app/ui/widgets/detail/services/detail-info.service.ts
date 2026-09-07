@@ -10,11 +10,10 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { Collaborator } from "@domain/project/collaborator.model";
-import { filter } from "rxjs";
+import { distinctUntilChanged, filter } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
-import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
@@ -33,8 +32,6 @@ export class DetailInfoService {
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly detailProjectInfoService = inject(DetailProjectInfoService);
   private readonly detailProgramInfoService = inject(DetailProgramInfoService);
-
-  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
 
   private unsubscribeUrlChange?: () => void;
 
@@ -97,14 +94,9 @@ export class DetailInfoService {
     return type !== undefined && type === 3;
   });
 
-  readonly isProjectAssigned = computed(() => {
-    const programId = this.info()?.id;
-    if (!programId) return false;
-
-    return this.memberProjects().some(
-      project => project.leader === this.profile()?.id && project.partnerProgram?.id === programId,
-    );
-  });
+  readonly isProjectAssigned = computed(
+    () => !!this.detailProgramInfoService.application()?.submitted,
+  );
 
   initializationDetail(): void {
     this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => {
@@ -117,6 +109,31 @@ export class DetailInfoService {
       const courseId = params["courseId"];
       this.queryCourseId.set(courseId ? Number(courseId) : null);
     });
+
+    // Office loads the current profile asynchronously, including on a hard reload.
+    // Wait for both identities instead of missing the application lookup permanently.
+    const applicationContext = computed(() => {
+      const profile = this.profile();
+      return this.listType() === "program" &&
+        this.isUserMember() &&
+        !this.isUserManager() &&
+        !this.isUserExpert() &&
+        profile
+        ? { programId: Number(this.info().id), userId: profile.id }
+        : null;
+    });
+    toObservable(applicationContext, { injector: this.injector })
+      .pipe(
+        distinctUntilChanged(
+          (previous, current) =>
+            previous?.programId === current?.programId && previous?.userId === current?.userId,
+        ),
+        filter(context => context !== null),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(({ programId, userId }) =>
+        this.detailProgramInfoService.loadApplication(programId, userId),
+      );
 
     this.updatePageStates();
     this.unsubscribeUrlChange = this.location.onUrlChange(url => {
@@ -200,26 +217,6 @@ export class DetailInfoService {
     } else if (this.listType() === "program") {
       const program = this.programDetailMainUIInfoService.program;
       this.info.set(program());
-
-      if (this.isUserMember() && (this.isUserExpert() || this.isUserManager())) return;
-
-      if (this.isUserMember()) {
-        if (!this.isProjectAssigned()) {
-          this.getMyProjectsUseCase
-            .execute()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe({
-              next: result => {
-                if (!result.ok) {
-                  this.memberProjects.set([]);
-                  return;
-                }
-
-                this.memberProjects.set(result.value.results.filter(project => !project.draft));
-              },
-            });
-        }
-      }
     } else {
       this.detailProfileInfoService.initializationProfile();
       toObservable(this.profileDetailUIInfoService.user, { injector: this.injector })

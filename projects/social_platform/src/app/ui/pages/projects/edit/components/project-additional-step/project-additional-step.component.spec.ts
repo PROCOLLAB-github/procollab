@@ -65,6 +65,38 @@ describe("ProjectAdditionalStepComponent canonical form", () => {
       .find(element => element.nativeElement.id === "case")!.componentInstance;
   }
 
+  it("required indicators follow backend metadata; optional text has no fake required error", async () => {
+    const snapshot = programLinkFields();
+    snapshot.fields = [
+      {
+        ...snapshot.fields[2],
+        id: 31,
+        name: "requiredText",
+        fieldType: "text",
+        isRequired: true,
+        value: "",
+      },
+      {
+        ...snapshot.fields[2],
+        id: 32,
+        name: "optionalText",
+        fieldType: "text",
+        isRequired: false,
+        value: "",
+      },
+    ];
+    response.next(snapshot);
+    service.getAdditionalForm().markAllAsTouched();
+    fixture.changeDetectorRef.markForCheck();
+    await fixture.whenStable();
+    const required = fixture.nativeElement.querySelector("#requiredText").closest("fieldset");
+    const optional = fixture.nativeElement.querySelector("#optionalText").closest("fieldset");
+    expect(required.querySelector(".project__input-error")).not.toBeNull();
+    expect(required.querySelector(".error")).not.toBeNull();
+    expect(optional.querySelector(".project__input-error")).toBeNull();
+    expect(optional.querySelector(".error")).toBeNull();
+  });
+
   it("loading is distinct from empty; an asynchronous GET renders blank case with explicit placeholder", async () => {
     expect(fixture.nativeElement.textContent).toContain("Загружаем дополнительные сведения");
     expect(fixture.nativeElement.textContent).not.toContain("полей для заполнения нет");

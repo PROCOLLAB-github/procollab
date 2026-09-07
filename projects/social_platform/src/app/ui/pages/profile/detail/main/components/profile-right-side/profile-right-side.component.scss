@@ -37,7 +37,7 @@
   &__aside {
     display: grid;
     grid-row-start: 3;
-    gap: 20px;
+    gap: 16px;
 
     @include responsive.apply-desktop {
       grid-row-start: unset;
@@ -46,7 +46,7 @@
 
   &__section {
     padding: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);

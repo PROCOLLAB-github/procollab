@@ -8,11 +8,59 @@
     width: 100%;
   }
 
+  &__validated-input ::ng-deep {
+    .field__right-icon {
+      top: 50%;
+      right: 16px !important;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .field__input--error {
+      padding-right: 44px;
+    }
+  }
+
+  &__input-error {
+    color: var(--red);
+  }
+
+  &__region-field {
+    position: relative;
+
+    &--error ::ng-deep .region-select__control input {
+      padding-right: 68px;
+    }
+  }
+
+  &__region-error {
+    position: absolute;
+    top: 11px;
+    right: 42px;
+    color: var(--red);
+    pointer-events: none;
+  }
+
   &__grid {
     display: grid;
-    grid-gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-gap: 16px;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+
+    > * {
+      min-width: 0;
+    }
+
+    @include responsive.apply-tablet-and-above {
+      &--assets {
+        grid-template-columns: 0.1fr 1fr 1fr 0.15fr;
+      }
+
+      &--main {
+        grid-template-columns: 1fr 1fr 1fr 0.2fr;
+      }
+    }
   }
 
   &__options {
@@ -27,11 +75,18 @@
 
     &--additional {
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      gap: 16px;
       align-items: center;
 
       fieldset {
         flex-basis: 50%;
+        width: 100%;
+        min-width: 0;
+      }
+
+      @include responsive.apply-tablet-and-above {
+        flex-direction: row;
       }
     }
   }

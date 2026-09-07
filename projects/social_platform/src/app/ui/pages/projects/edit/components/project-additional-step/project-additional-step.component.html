@@ -35,12 +35,23 @@
                     >
                     <app-input
                       size="big"
+                      class="project__validated-input"
                       [id]="field.name"
                       formControlName="{{ field.name }}"
-                      [error]="control | controlError: 'required'"
+                      [error]="control | controlError"
                       [placeholder]="field.helpText"
                       [maxLength]="500"
-                    ></app-input>
+                    >
+                      @if (control | controlError) {
+                        <i
+                          class="project__input-error"
+                          appIcon
+                          icon="error"
+                          appSquare="20"
+                          aria-hidden="true"
+                        ></i>
+                      }
+                    </app-input>
                   }
                 }
                 @case ("textarea") {

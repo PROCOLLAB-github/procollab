@@ -27,12 +27,13 @@
 
 .profile {
   &__left {
-    width: 157px;
+    width: 100%;
+    min-width: 0;
   }
 
   &__section {
     padding: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);

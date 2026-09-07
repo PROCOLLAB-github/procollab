@@ -11,7 +11,16 @@
 
   &__details {
     display: grid;
-    grid-template-columns: 2fr 5fr 3fr;
-    grid-gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 5fr) minmax(0, 3fr);
+    }
+
+    > * {
+      min-width: 0;
+    }
   }
 }
