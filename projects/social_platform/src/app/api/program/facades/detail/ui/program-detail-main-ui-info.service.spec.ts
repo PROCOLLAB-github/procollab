@@ -14,6 +14,10 @@ function createProgram(id: number, acknowledgedAt: string | null = null): Progra
 }
 
 describe("ProgramDetailMainUIInfoService", () => {
+  it("uses null as the required default current application", () => {
+    expect(Program.default().currentApplication).toBeNull();
+  });
+
   it("показывает приветствие участнику до явного подтверждения", () => {
     const service = new ProgramDetailMainUIInfoService();
 

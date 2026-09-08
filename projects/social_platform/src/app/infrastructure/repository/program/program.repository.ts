@@ -161,7 +161,9 @@ export class ProgramRepository implements ProgramRepositoryPort {
     programId: number,
     dto: ApplyToProgramDTO,
   ): Observable<ApplyToProgramResponse> {
-    return this.programAdapter.applyProjectToProgram(programId, dto);
+    return this.programAdapter
+      .applyProjectToProgram(programId, dto)
+      .pipe(tap(() => this.entityCache.invalidate(programId)));
   }
 
   createProgramFilters(

@@ -116,14 +116,14 @@ describe("Detail cleanup actions", () => {
     expect(button().disabled).toBe(true);
   });
 
-  it("does not offer creation while the current profile is still loading", () => {
+  it("does not wait for the current profile before offering application creation", () => {
     profile.set(null);
     const fixture = TestBed.createComponent(DeatilComponent);
     fixture.detectChanges();
     const button = fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
-    expect(button.disabled).toBe(true);
+    expect(button.disabled).toBe(false);
     button.click();
-    expect(create).not.toHaveBeenCalled();
+    expect(create).toHaveBeenCalledTimes(1);
   });
 
   it("workspace/chat are genuinely disabled, focusable tooltip wrappers have no navigation", () => {

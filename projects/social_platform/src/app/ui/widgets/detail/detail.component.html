@@ -152,8 +152,7 @@
                       [disabled]="
                         !!submissionProjectDateExpired ||
                         isProjectAssigned() ||
-                        applicationPending() ||
-                        !profile()
+                        applicationPending()
                       "
                       [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
                       (click)="isProjectAssigned() ? null : addNewProject(info().id)"

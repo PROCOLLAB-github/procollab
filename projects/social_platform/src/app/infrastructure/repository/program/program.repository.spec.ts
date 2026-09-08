@@ -237,12 +237,18 @@ describe("ProgramRepository", () => {
     expect(adapter.getProgramProjectAdditionalFields).toHaveBeenCalledExactlyOnceWith(1);
   });
 
-  it("applyProjectToProgram делегирует в adapter", () => {
+  it("applyProjectToProgram делегирует в adapter и после успеха сбрасывает кеш программы", () => {
     setup();
     const dto = { project: {} as Project, programFieldValues: [] };
+    adapter.getOne.mockReturnValue(of({ ...Program.default(), id: 1 }));
     adapter.applyProjectToProgram.mockReturnValue(of({ projectId: 1, programLinkId: 2 }));
+
+    repository.getOne(1).subscribe();
     repository.applyProjectToProgram(1, dto).subscribe();
+    repository.getOne(1).subscribe();
+
     expect(adapter.applyProjectToProgram).toHaveBeenCalledExactlyOnceWith(1, dto);
+    expect(adapter.getOne).toHaveBeenCalledTimes(2);
   });
 
   it("createProgramFilters делегирует в adapter", () => {

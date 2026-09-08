@@ -10,7 +10,7 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { Collaborator } from "@domain/project/collaborator.model";
-import { distinctUntilChanged, filter } from "rxjs";
+import { filter } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
@@ -109,31 +109,6 @@ export class DetailInfoService {
       const courseId = params["courseId"];
       this.queryCourseId.set(courseId ? Number(courseId) : null);
     });
-
-    // Office loads the current profile asynchronously, including on a hard reload.
-    // Wait for both identities instead of missing the application lookup permanently.
-    const applicationContext = computed(() => {
-      const profile = this.profile();
-      return this.listType() === "program" &&
-        this.isUserMember() &&
-        !this.isUserManager() &&
-        !this.isUserExpert() &&
-        profile
-        ? { programId: Number(this.info().id), userId: profile.id }
-        : null;
-    });
-    toObservable(applicationContext, { injector: this.injector })
-      .pipe(
-        distinctUntilChanged(
-          (previous, current) =>
-            previous?.programId === current?.programId && previous?.userId === current?.userId,
-        ),
-        filter(context => context !== null),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(({ programId, userId }) =>
-        this.detailProgramInfoService.loadApplication(programId, userId),
-      );
 
     this.updatePageStates();
     this.unsubscribeUrlChange = this.location.onUrlChange(url => {
