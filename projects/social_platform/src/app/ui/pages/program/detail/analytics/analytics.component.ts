@@ -456,6 +456,11 @@ export class ProgramAnalyticsComponent implements OnInit {
     this.activeTooltip.set(shouldClose ? null : key);
   }
 
+  protected closeTooltip(key: string): void {
+    if (this.pinnedTooltip() === key) this.pinnedTooltip.set(null);
+    this.hideTooltip(key);
+  }
+
   protected isTooltipVisible(key: string): boolean {
     return this.activeTooltip() === key;
   }

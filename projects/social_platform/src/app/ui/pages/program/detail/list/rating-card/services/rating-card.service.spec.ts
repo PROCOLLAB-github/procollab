@@ -7,6 +7,7 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { User } from "@domain/auth/user.model";
+import { Program } from "@domain/program/program.model";
 import { ProjectRate } from "@domain/project/project-rate";
 import { fail, ok } from "@domain/shared/result.type";
 import { of, Subject } from "rxjs";
@@ -14,9 +15,20 @@ import { RatingCardService } from "./rating-card.service";
 
 describe("RatingCardService evaluation modes", () => {
   const user = Object.assign(new User(), { id: 7 });
-  const expired = signal(false);
+  const past = "2026-09-01T00:00:00Z";
+  const future = "2026-09-30T00:00:00Z";
   const execute = vi.fn<RateProjectUseCase["execute"]>();
   let service: RatingCardService;
+  let programUI: ProgramDetailMainUIInfoService;
+
+  function loadProgram(evaluation: string | undefined = future, registration = past): void {
+    programUI.applyFormatingProgramData(
+      Object.assign(Program.default(), {
+        datetimeRegistrationEnds: registration,
+        datetimeEvaluationEnds: evaluation,
+      }),
+    );
+  }
 
   function project(scored = false): ProjectRate {
     return {
@@ -39,32 +51,38 @@ describe("RatingCardService evaluation modes", () => {
   }
 
   beforeEach(() => {
-    expired.set(false);
+    vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-09-09T12:00:00Z"));
     execute.mockReset().mockReturnValue(of(ok(undefined)));
     TestBed.configureTestingModule({
       providers: [
         RatingCardService,
         { provide: RateProjectUseCase, useValue: { execute } },
-        {
-          provide: ProgramDetailMainUIInfoService,
-          useValue: { registerDateExpired: expired, program: signal(null) },
-        },
+        ProgramDetailMainUIInfoService,
         { provide: ProfileInfoService, useValue: { profile: signal(user) } },
         { provide: LoggerService, useValue: { error: vi.fn() } },
       ],
     });
     service = TestBed.inject(RatingCardService);
+    programUI = TestBed.inject(ProgramDetailMainUIInfoService);
+    loadProgram();
   });
+
+  afterEach(() => vi.restoreAllMocks());
 
   it("starts with create mode and returns to readonly after the first successful rating", () => {
     service.initProject(project());
+    expect(programUI.registerDateExpired()).toBe(true);
+    expect(service.evaluationDateExpired()).toBe(false);
     expect(service.rateButtonText()).toBe("оценить проект");
+    expect(service.isButtonDisabled()).toBe(false);
+    expect(service.isRatingFormDisabled()).toBe(false);
     expect(service.showRatingForm()).toBe(true);
     service.confirmRateProject();
     expect(service.projectConfirmed()).toBe(true);
     expect(service.rateButtonText()).toBe("проект оценён");
     expect(service.showRatingForm()).toBe(false);
     expect(service.showEditButton()).toBe(true);
+    expect(service.isRatingFormDisabled()).toBe(true);
     expect(service.ratedCount()).toBe(1);
   });
 
@@ -73,10 +91,13 @@ describe("RatingCardService evaluation modes", () => {
     execute.mockReturnValue(response);
     service.initProject(project(true));
     expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.showEditButton()).toBe(true);
+    expect(service.isRatingFormDisabled()).toBe(true);
     service.redoRating();
     service.form().setValue({ score: 4 });
     expect(service.rateButtonText()).toBe("подтвердить изменения");
     expect(service.showRatingForm()).toBe(true);
+    expect(service.isRatingFormDisabled()).toBe(false);
     expect(service.showEditButton()).toBe(false);
     expect(service.buttonColor()).toBe("primary");
     expect(service.canOpenModal()).toBe(true);
@@ -109,12 +130,59 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.rateButtonText()).toBe("проект оценён");
   });
 
-  it("preserves closed-program and rating-limit restrictions", () => {
+  it("preserves rating-limit restrictions independently of the evaluation deadline", () => {
     service.initProject({ ...project(), ratedCount: 1 });
     expect(service.rateButtonText()).toBe("лимит оценок достигнут");
     expect(service.isButtonDisabled()).toBe(true);
-    expired.set(true);
-    expect(service.rateButtonText()).toBe("программа завершена");
+    loadProgram(past);
+    expect(service.rateButtonText()).toBe("оценивание завершено");
     expect(service.canOpenModal()).toBe(false);
+  });
+
+  it.each([false, true])(
+    "keeps a disabled CTA and readonly criteria after evaluation ends (rated=%s)",
+    rated => {
+      loadProgram(past, future);
+      service.initProject(project(rated));
+      expect(programUI.registerDateExpired()).toBe(false);
+      expect(service.evaluationDateExpired()).toBe(true);
+      expect(service.rateButtonText()).toBe("оценивание завершено");
+      expect(service.buttonTooltip()).toBe("Срок оценивания завершён");
+      expect(service.showConfirmedState()).toBe(true);
+      expect(service.showRatingForm()).toBe(false);
+      expect(service.showEditButton()).toBe(false);
+      expect(service.isButtonDisabled()).toBe(true);
+      expect(service.isRatingFormDisabled()).toBe(true);
+      expect(service.canEdit()).toBe(false);
+      expect(service.canRate()).toBe(false);
+      expect(service.canOpenModal()).toBe(false);
+      service.redoRating();
+      expect(service.projectConfirmed()).toBe(rated);
+      service.confirmRateProject();
+      expect(execute).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each(["", "invalid"])("does not block evaluation for %s deadline", evaluation => {
+    loadProgram(evaluation);
+    service.initProject(project());
+    expect(service.canRate()).toBe(true);
+    expect(service.isRatingFormDisabled()).toBe(false);
+  });
+
+  it("applies fresh deadline changes without losing entered scores or adding timers", () => {
+    service.initProject(project(true));
+    service.redoRating();
+    service.form().setValue({ score: 4 });
+    loadProgram(past);
+    expect(service.isRatingFormDisabled()).toBe(true);
+    service.confirmRateProject();
+    expect(execute).not.toHaveBeenCalled();
+    loadProgram(future);
+    expect(service.rateButtonText()).toBe("подтвердить изменения");
+    expect(service.isRatingFormDisabled()).toBe(false);
+    expect(service.form().getRawValue()).toEqual({ score: 4 });
+    service.confirmRateProject();
+    expect(execute).toHaveBeenCalledExactlyOnceWith(12, [], { score: 4 });
   });
 });

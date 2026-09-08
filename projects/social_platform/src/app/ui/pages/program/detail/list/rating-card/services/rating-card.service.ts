@@ -19,7 +19,7 @@ export class RatingCardService {
   private readonly logger = inject(LoggerService);
 
   readonly profile = this.profileInfoService.profile;
-  readonly programDateFinished = this.programDetailMainUIInfoService.registerDateExpired;
+  readonly evaluationDateExpired = this.programDetailMainUIInfoService.evaluationDateExpired;
   readonly program = this.programDetailMainUIInfoService.program;
 
   readonly project = signal<ProjectRate | null>(null);
@@ -69,10 +69,10 @@ export class RatingCardService {
     return !!p && p.ratedCount >= p.maxRates;
   });
 
-  readonly canEdit = computed(() => !this.programDateFinished());
+  readonly canEdit = computed(() => !this.evaluationDateExpired());
 
   readonly canRate = computed(() => {
-    if (this.programDateFinished()) return false;
+    if (this.evaluationDateExpired()) return false;
     if (this.isLimitReached() && !this.userRatedThisProject()) return false;
     return true;
   });
@@ -83,7 +83,7 @@ export class RatingCardService {
   });
 
   readonly rateButtonText = computed(() => {
-    if (this.programDateFinished()) return "программа завершена";
+    if (this.evaluationDateExpired()) return "оценивание завершено";
     if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценён";
     if (this.isLimitReached() && !this.userRatedThisProject()) return "лимит оценок достигнут";
     if (this.userRatedThisProject()) return "подтвердить изменения";
@@ -92,15 +92,21 @@ export class RatingCardService {
 
   readonly showRatingForm = computed(() => !this.projectRated() && this.canEdit());
 
+  readonly isRatingFormDisabled = computed(
+    () =>
+      this.evaluationDateExpired() ||
+      ((this.projectRated() || this.projectConfirmed()) && this.isRatedByCurrentUser()),
+  );
+
   readonly showRatedStatus = computed(() => this.projectRated() || this.projectConfirmed());
 
   readonly showEditButton = computed(
-    () => this.projectConfirmed() && !this.programDateFinished() && this.userRatedThisProject(),
+    () => this.projectConfirmed() && this.canEdit() && this.userRatedThisProject(),
   );
 
   readonly isButtonDisabled = computed(() => {
     if (this.isLimitReached() && !this.userRatedThisProject()) return true;
-    if (this.programDateFinished()) return true;
+    if (this.evaluationDateExpired()) return true;
     return !this.canRate();
   });
 
@@ -111,13 +117,11 @@ export class RatingCardService {
   readonly buttonOpacity = computed(() => (this.isButtonDisabled() ? "0.5" : "1"));
 
   readonly showConfirmedState = computed(
-    () =>
-      (this.projectConfirmed() && !this.canEdit()) ||
-      (this.isLimitReached() && !this.userRatedThisProject()),
+    () => this.evaluationDateExpired() || (this.isLimitReached() && !this.userRatedThisProject()),
   );
 
   readonly buttonTooltip = computed(() => {
-    if (this.programDateFinished()) return "Программа завершена";
+    if (this.evaluationDateExpired()) return "Срок оценивания завершён";
     if (this.isLimitReached() && !this.userRatedThisProject())
       return "Достигнут максимальный лимит оценок";
     if (this.userRatedThisProject()) return "Нажмите для переоценки";
@@ -138,6 +142,7 @@ export class RatingCardService {
 
   /** Подтверждение оценки проекта. */
   confirmRateProject(): void {
+    if (this.evaluationDateExpired()) return;
     const fv = this.form().getRawValue();
     const p = this.project() as ProjectRate;
 
@@ -189,6 +194,7 @@ export class RatingCardService {
 
   /** Сброс статусов для переоценки. */
   redoRating(): void {
+    if (!this.canEdit()) return;
     this.projectRated.set(false);
     this.projectConfirmed.set(false);
   }
