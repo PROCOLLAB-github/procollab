@@ -15,6 +15,40 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
 import { DetailProfileInfoService } from "./detail-profile-info.service";
 
 describe("DetailProfileInfoService invite error compatibility", () => {
+  it.each([7, 13])(
+    "copies the viewed profile URL through the existing clipboard flow (%s)",
+    async profileId => {
+      const writeText = vi.fn().mockResolvedValue(undefined);
+      const success = vi.fn();
+      const originalClipboard = Object.getOwnPropertyDescriptor(navigator, "clipboard");
+      Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+      try {
+        TestBed.configureTestingModule({
+          providers: [
+            provideRouter([]),
+            DetailProfileInfoService,
+            ProjectTeamUIService,
+            { provide: SnackbarService, useValue: { success, error: vi.fn() } },
+            { provide: ProfileInfoService, useValue: { profile: signal({ id: 7 }) } },
+            { provide: ProfileDetailUIInfoService, useValue: {} },
+            { provide: AuthRepositoryPort, useValue: {} },
+            { provide: DownloadCvUseCase, useValue: {} },
+            { provide: InviteRepositoryPort, useValue: {} },
+          ],
+        });
+        TestBed.inject(DetailProfileInfoService).onCopyLink(profileId);
+        await Promise.resolve();
+        expect(writeText).toHaveBeenCalledExactlyOnceWith(
+          `${location.origin}/office/profile/${profileId}/`,
+        );
+        expect(success).toHaveBeenCalledExactlyOnceWith("скопирован URL");
+      } finally {
+        if (originalClipboard) Object.defineProperty(navigator, "clipboard", originalClipboard);
+        else Reflect.deleteProperty(navigator, "clipboard");
+      }
+    },
+  );
+
   it.each([
     [
       400,

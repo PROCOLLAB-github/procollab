@@ -58,7 +58,7 @@ describe("RegisterComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("uses full-width native password inputs with sibling visibility controls", () => {
+  it("keeps native password inputs and visibility controls in adjacent sibling slots", () => {
     const password = fixture.nativeElement.querySelector(
       'input[name="new-password"]',
     ) as HTMLInputElement;

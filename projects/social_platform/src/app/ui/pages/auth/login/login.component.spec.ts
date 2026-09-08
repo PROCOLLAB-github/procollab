@@ -63,7 +63,7 @@ describe("LoginComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("uses a full-width native password input with a sibling visibility control", () => {
+  it("keeps the native password input and visibility control in adjacent sibling slots", () => {
     const password = fixture.nativeElement.querySelector(
       'input[name="password"]',
     ) as HTMLInputElement;
@@ -92,6 +92,9 @@ describe("LoginComponent", () => {
       ?.querySelector(".field__right-icon button") as HTMLButtonElement;
 
     expect(password.type).toBe("password");
+    password.value = "Test-password-42";
+    password.dispatchEvent(new Event("input", { bubbles: true }));
+    fixture.detectChanges();
     expect(toggle.type).toBe("button");
     expect(toggle.classList).toContain("auth__password-toggle--muted");
     expect(toggle.querySelector("svg")?.getAttribute("width")).toBe("15");
@@ -102,12 +105,16 @@ describe("LoginComponent", () => {
     fixture.detectChanges();
 
     expect(password.type).toBe("text");
+    expect(password.value).toBe("Test-password-42");
     expect(toggle.getAttribute("aria-pressed")).toBe("true");
     expect(document.activeElement).toBe(toggle);
     toggle.click();
     fixture.detectChanges();
     expect(password.type).toBe("password");
     expect(password.autocomplete).toBe("current-password");
+    expect(
+      fixture.debugElement.injector.get(AuthUIInfoService).loginForm.get("password")?.value,
+    ).toBe("Test-password-42");
   });
 
   it("keeps validation and visibility icons in separate password suffix elements", () => {

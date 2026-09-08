@@ -50,8 +50,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
   isWithoutCase: boolean;
   totalLabel: string;
   description: string;
-  submittedPercent: number;
-  notSubmittedPercent: number;
+  totalPercent: number;
 }
 
 /** Внутренняя manager-вкладка с агрегированной аналитикой программы. */
@@ -113,6 +112,7 @@ export class ProgramAnalyticsComponent implements OnInit {
         isWithoutCase: true,
       });
     }
+    const maxProjects = Math.max(...rows.map(row => row.projectsTotal));
     return rows.map(row => {
       const totalLabel = this.pluralize.transform(row.projectsTotal, [
         "проект",
@@ -126,9 +126,7 @@ export class ProgramAnalyticsComponent implements OnInit {
         ...row,
         totalLabel,
         description: `${row.name}: ${row.projectsTotal} ${totalLabel}${submission}, участников ${row.participantsTotal}`,
-        submittedPercent: row.projectsTotal > 0 ? (row.submitted / row.projectsTotal) * 100 : 0,
-        notSubmittedPercent:
-          row.projectsTotal > 0 ? (row.notSubmitted / row.projectsTotal) * 100 : 0,
+        totalPercent: maxProjects > 0 ? (row.projectsTotal / maxProjects) * 100 : 0,
       };
     });
   });

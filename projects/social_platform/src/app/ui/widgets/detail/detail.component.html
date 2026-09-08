@@ -579,12 +579,11 @@
             @if (profile()) {
               @if (+profile()!.id === +info().id) {
                 <app-button
-                  style="opacity: 0.5"
                   size="medium"
                   appearance="outline"
-                  [disabled]="true"
                   customTypographyClass="text-body-12"
-                  >продвигать</app-button
+                  (click)="onCopyLink(info().id)"
+                  >поделиться профилем</app-button
                 >
               } @else {
                 <app-button

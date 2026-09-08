@@ -56,8 +56,8 @@ export class DetailProgramInfoService {
     this.application()?.submitted
       ? "вы подали проект"
       : this.application()
-        ? "Перейти в заявку"
-        : "Создать заявку",
+        ? "перейти в заявку"
+        : "создать заявку",
   );
 
   addNewProject(programId: number): void {
