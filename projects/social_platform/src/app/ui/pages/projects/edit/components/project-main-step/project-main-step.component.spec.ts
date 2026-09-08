@@ -15,6 +15,7 @@ import { ProjectGoalsUIService } from "@api/project/facades/edit/ui/project-goal
 import { ProjectGoalService } from "@api/project/facades/edit/project-goals.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectMainStepComponent } from "./project-main-step.component";
+import { createProjectForm } from "@api/project/facades/edit/project-form.factory";
 
 describe("ProjectMainStepComponent", () => {
   let fixture: ComponentFixture<ProjectMainStepComponent>;
@@ -22,16 +23,16 @@ describe("ProjectMainStepComponent", () => {
 
   beforeEach(async () => {
     const fb = new FormBuilder();
-    const projectForm = fb.group({ links: fb.array([]), link: [""] });
+    const projectForm = createProjectForm(fb);
     const emptyProjectControls = {
-      name: null,
-      region: null,
-      industry: null,
-      description: null,
-      actuality: null,
+      name: projectForm.get("name"),
+      region: projectForm.get("region"),
+      industry: projectForm.get("industryId"),
+      description: projectForm.get("description"),
+      actuality: projectForm.get("actuality"),
       implementationDeadline: null,
-      problem: null,
-      targetAudience: null,
+      problem: projectForm.get("problem"),
+      targetAudience: projectForm.get("targetAudience"),
       trl: null,
       partnerProgramId: null,
       presentationAddress: null,
@@ -92,6 +93,74 @@ describe("ProjectMainStepComponent", () => {
 
     fixture = TestBed.createComponent(ProjectMainStepComponent);
     fixture.detectChanges();
+  });
+
+  it("untouched fields are quiet; submit exposes matching borders, warning icons and required messages", async () => {
+    const required = ["name", "region", "industry", "problem", "description", "targetAudience"];
+    for (const id of required) {
+      expect(
+        fixture.nativeElement.querySelector(`#${id}`)?.closest("fieldset")?.querySelector(".error"),
+      ).toBeNull();
+    }
+    fixture.componentRef.setInput("projSubmitInitiated", true);
+    await fixture.whenStable();
+    for (const id of required) {
+      const fieldset: HTMLElement = fixture.nativeElement
+        .querySelector(`#${id}`)
+        .closest("fieldset");
+      expect(fieldset.querySelector(".error")?.textContent).toContain("Обязательное поле");
+      expect(fieldset.querySelector('[class*="--error"]')).not.toBeNull();
+      expect(fieldset.querySelector('[icon="error"]')).not.toBeNull();
+    }
+    const optional: HTMLElement = fixture.nativeElement
+      .querySelector("#actuality")
+      .closest("fieldset");
+    expect(optional.querySelector(".error")).toBeNull();
+    expect(optional.querySelector('[icon="error"]')).toBeNull();
+    expect(optional.querySelector(".field--error")).toBeNull();
+  });
+
+  it("valid fields do not become required errors after a submit attempt", async () => {
+    const form = TestBed.inject(ProjectFormService).getForm();
+    form.patchValue({
+      name: "Проект",
+      region: "Москва",
+      industryId: 1,
+      problem: "Проблема",
+      description: "Информация",
+      targetAudience: "Студенты",
+    });
+    fixture.componentRef.setInput("projSubmitInitiated", true);
+    await fixture.whenStable();
+    for (const id of [
+      "name",
+      "region",
+      "industry",
+      "problem",
+      "description",
+      "targetAudience",
+      "actuality",
+    ]) {
+      const fieldset: HTMLElement = fixture.nativeElement
+        .querySelector(`#${id}`)
+        .closest("fieldset");
+      expect(fieldset.querySelector(".error")).toBeNull();
+      expect(fieldset.querySelector('[icon="error"]')).toBeNull();
+      expect(fieldset.querySelector('[class*="--error"]')).toBeNull();
+    }
+  });
+
+  it("blur exposes a real required error but not an optional blank field", async () => {
+    for (const selector of ["app-input#name input", "app-textarea#actuality textarea"]) {
+      fixture.nativeElement.querySelector(selector).dispatchEvent(new Event("blur"));
+    }
+    await fixture.whenStable();
+    expect(
+      fixture.nativeElement.querySelector("app-input#name .project__input-error"),
+    ).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector("app-textarea#actuality .field__error-icon"),
+    ).toBeNull();
   });
 
   it("renders every new project contact input in the originating UI cycle", async () => {

@@ -1,6 +1,6 @@
 /** @format */
 
-import { DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ApplyProjectToProgramUseCase } from "@api/program/use-cases/apply-project-to-program.use-case";
 import { GetProgramProjectAdditionalFieldsUseCase } from "@api/program/use-cases/get-program-project-additional-fields.use-case";
@@ -10,9 +10,9 @@ import {
 } from "@domain/program/partner-program-fields.model";
 
 import { Router } from "@angular/router";
-import { switchMap } from "rxjs";
+import { finalize, switchMap } from "rxjs";
 import { ProjectFormService } from "@api/project/project-form.service";
-import { Program } from "@domain/program/program.model";
+import { Program, ProgramCurrentApplication } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.const";
@@ -48,7 +48,25 @@ export class DetailProgramInfoService {
 
   private readonly projectForm = this.projectFormService.getForm();
 
+  readonly application = computed(
+    () => this.programDetailMainUIInfoService.program()?.currentApplication ?? null,
+  );
+  readonly applicationPending = signal(false);
+  readonly applicationLabel = computed(() =>
+    this.application()?.submitted
+      ? "вы подали проект"
+      : this.application()
+        ? "Перейти в заявку"
+        : "Создать заявку",
+  );
+
   addNewProject(programId: number): void {
+    if (this.applicationPending() || this.application()?.submitted) return;
+    if (this.application()) {
+      this.openApplication();
+      return;
+    }
+    this.applicationPending.set(true);
     this.getProgramProjectAdditionalFieldsUseCase
       .execute(programId)
       .pipe(
@@ -62,6 +80,7 @@ export class DetailProgramInfoService {
           const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };
           return this.applyProjectToProgramUseCase.execute(programId, body);
         }),
+        finalize(() => this.applicationPending.set(false)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
@@ -78,18 +97,28 @@ export class DetailProgramInfoService {
           }
 
           const response = result.value;
-
-          this.router
-            .navigate([AppRoutes.projects.edit(response.projectId)], {
-              queryParams: {
-                editingStep: "additional",
-                fromProgram: true,
-                programLinkId: response.programLinkId,
-              },
-            })
-            .then(() => this.logger.debug("Route change from ProjectsComponent"));
+          const application: ProgramCurrentApplication = { ...response, submitted: false };
+          this.programDetailMainUIInfoService.program.update(program =>
+            program
+              ? Object.assign(new Program(), program, { currentApplication: application })
+              : program,
+          );
+          this.openApplication(application);
         },
       });
+  }
+
+  private openApplication(application = this.application()): void {
+    if (!application || application.submitted) return;
+    this.router
+      .navigate([AppRoutes.projects.edit(application.projectId)], {
+        queryParams: {
+          editingStep: "additional",
+          fromProgram: true,
+          programLinkId: application.programLinkId,
+        },
+      })
+      .then(() => this.logger.debug("Route change from ProjectsComponent"));
   }
 
   private placeholderFor(field: PartnerProgramFields): string {

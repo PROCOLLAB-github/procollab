@@ -1,7 +1,13 @@
 /** @format */
 
 import { Component, inject, OnInit, ChangeDetectionStrategy, input } from "@angular/core";
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { directionProjectList } from "@core/consts/lists/direction-project-list.const";
 import { trackProjectList } from "@core/consts/lists/track-project-list.const";
@@ -125,6 +131,15 @@ export class ProjectMainStepComponent implements OnInit {
   protected readonly hasGoals = this.projectGoalsUIService.hasGoals;
 
   ngOnInit(): void {}
+
+  /** A submit attempt exposes actual errors; it must never make a valid control look required. */
+  protected showError(control: AbstractControl, errorName?: string): boolean {
+    return (
+      control.enabled &&
+      (control.touched || this.projSubmitInitiated()) &&
+      (errorName ? control.hasError(errorName) : control.invalid)
+    );
+  }
 
   addLink(): void {
     this.projectContactsService.addLink(this.links);

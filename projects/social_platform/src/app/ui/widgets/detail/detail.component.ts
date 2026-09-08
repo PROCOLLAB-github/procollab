@@ -153,6 +153,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly isUserMember = this.detailInfoService.isUserMember;
   protected readonly isUserExpert = this.detailInfoService.isUserExpert;
   protected readonly isProjectAssigned = this.detailInfoService.isProjectAssigned;
+  protected readonly applicationPending = this.detailProgramInfoService.applicationPending;
+  protected readonly applicationLabel = this.detailProgramInfoService.applicationLabel;
 
   // Сигналы для работы с модальными окнами с текстом
   protected readonly assignProjectToProgramModalMessage =

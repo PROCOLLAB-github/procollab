@@ -18,6 +18,32 @@ describe("CamelcaseInterceptor", () => {
     expect(interceptor).toBeTruthy();
   });
 
+  it("converts the program-scoped current application contract to camelCase", () => {
+    const interceptor = TestBed.inject(CamelcaseInterceptor);
+    const body = {
+      current_application: {
+        project_id: 123,
+        program_link_id: 700,
+        submitted: false,
+      },
+    };
+
+    interceptor
+      .intercept(new HttpRequest("GET", "/programs/12/"), {
+        handle: () => of(new HttpResponse({ body })),
+      })
+      .subscribe(event => {
+        if (!(event instanceof HttpResponse)) return;
+        expect(event.body).toEqual({
+          currentApplication: {
+            projectId: 123,
+            programLinkId: 700,
+            submitted: false,
+          },
+        });
+      });
+  });
+
   it("преобразует expert drilldown и SLA с фактическими overdue24H/overdue48H", () => {
     const interceptor = TestBed.inject(CamelcaseInterceptor);
     const body = {

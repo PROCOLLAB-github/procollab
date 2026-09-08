@@ -307,6 +307,10 @@ describe("ProgramAnalyticsComponent", () => {
     const root = fixture.nativeElement as HTMLElement;
 
     expect(analytics.initialize).toHaveBeenCalledOnce();
+    expect(root.textContent).toContain(
+      "Сводка пути участников от регистрации до экспертной оценки.",
+    );
+    expect(root.textContent?.toLowerCase()).not.toContain("обезличенная");
     expect(root.querySelector('[data-testid="summary-participants"]')?.textContent).toContain("18");
     expect(root.querySelector('[data-testid="summary-projects"]')?.textContent).toContain("7");
     expect(root.querySelector('[data-testid="summary-experts"]')?.textContent).toContain(

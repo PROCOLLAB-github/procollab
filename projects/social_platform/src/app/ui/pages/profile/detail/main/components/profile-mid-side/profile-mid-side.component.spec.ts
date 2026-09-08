@@ -73,6 +73,17 @@ describe("ProfileMidSideComponent", () => {
     expect(emptyState.textContent).toContain("заполните профиль и начните пользоваться PROCOLLAB");
   });
 
+  it("keeps about-me content inside the card container", () => {
+    const user = createUser(7, true, "Создаю образовательные проекты");
+    ui.applyInitProfile({ data: { user } }, 7);
+    fixture.componentRef.setInput("user", user);
+    fixture.detectChanges();
+    const card: HTMLElement = fixture.nativeElement.querySelector(".about");
+    expect(card).not.toBeNull();
+    expect(card.querySelector(".about__title")?.textContent).toContain("обо мне");
+    expect(card.textContent).toContain("Создаю образовательные проекты");
+  });
+
   it("does not leak empty state across foreign and own profile navigation", () => {
     const foreignEmpty = createUser(20, false);
     const ownFilled = createUser(10, true, "Заполненный профиль");
