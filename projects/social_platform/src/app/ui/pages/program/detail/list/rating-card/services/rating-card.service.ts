@@ -84,8 +84,9 @@ export class RatingCardService {
 
   readonly rateButtonText = computed(() => {
     if (this.programDateFinished()) return "программа завершена";
-    if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценен";
+    if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценён";
     if (this.isLimitReached() && !this.userRatedThisProject()) return "лимит оценок достигнут";
+    if (this.userRatedThisProject()) return "подтвердить изменения";
     return "оценить проект";
   });
 
@@ -104,7 +105,7 @@ export class RatingCardService {
   });
 
   readonly buttonColor = computed<"green" | "primary">(() =>
-    this.userRatedThisProject() ? "green" : "primary",
+    this.projectConfirmed() && this.userRatedThisProject() ? "green" : "primary",
   );
 
   readonly buttonOpacity = computed(() => (this.isButtonDisabled() ? "0.5" : "1"));

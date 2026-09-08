@@ -21,7 +21,8 @@ describe("Detail cleanup actions", () => {
   const type = signal("program");
   const submitted = signal(false);
   const pending = signal(false);
-  const label = signal("Создать заявку");
+  const label = signal("создать заявку");
+  const copyLink = vi.fn();
   const create = vi.fn();
   const profile = signal<any>({ id: 7 });
 
@@ -30,7 +31,8 @@ describe("Detail cleanup actions", () => {
     info.set(Program.default());
     submitted.set(false);
     pending.set(false);
-    label.set("Создать заявку");
+    label.set("создать заявку");
+    copyLink.mockClear();
     profile.set({ id: 7 });
     create.mockClear();
     // Unused modal flags stay closed; the real template/button primitives are rendered.
@@ -84,7 +86,15 @@ describe("Detail cleanup actions", () => {
               },
             },
             { provide: DetailProjectInfoService, useValue: closed },
-            { provide: DetailProfileInfoService, useValue: { ...closed, profile } },
+            {
+              provide: DetailProfileInfoService,
+              useValue: new Proxy(
+                { profile, onCopyLink: copyLink },
+                {
+                  get: (target, key) => Reflect.get(target, key) ?? signal(false),
+                },
+              ),
+            },
             { provide: ProjectAdditionalService, useValue: {} },
           ],
         },
@@ -97,14 +107,14 @@ describe("Detail cleanup actions", () => {
     fixture.detectChanges();
     const button = () =>
       fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
-    expect(button().textContent).toContain("Создать заявку");
+    expect(button().textContent).toContain("создать заявку");
     // The unrelated deadline flag is absent for programs.
     expect(button().disabled).toBe(false);
     button().click();
     expect(create).toHaveBeenCalledTimes(1);
-    label.set("Перейти в заявку");
+    label.set("перейти в заявку");
     fixture.detectChanges();
-    expect(button().textContent).toContain("Перейти в заявку");
+    expect(button().textContent).toContain("перейти в заявку");
     expect(button().disabled).toBe(false);
     pending.set(true);
     fixture.detectChanges();
@@ -114,6 +124,28 @@ describe("Detail cleanup actions", () => {
     label.set("вы подали проект");
     fixture.detectChanges();
     expect(button().disabled).toBe(true);
+  });
+
+  it.each([7, 8])("shares the viewed profile using the existing copy-link flow (id=%s)", id => {
+    type.set("profile");
+    info.set({ id, firstName: "Имя", lastName: "Фамилия", skills: [] });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const actions = fixture.nativeElement.querySelector(".info__actions") as HTMLElement;
+    const buttons = [...actions.querySelectorAll<HTMLButtonElement>("button")];
+    const share = buttons.find(button => button.textContent?.includes("поделиться профилем"))!;
+    expect(share).toBeDefined();
+    expect(share.disabled).toBe(false);
+    expect(actions.textContent).not.toContain("продвигать");
+    if (id === 7) {
+      expect(buttons[0]).toBe(share);
+      expect(buttons[1].textContent).toContain("мои проекты");
+      expect(buttons[1].disabled).toBe(true);
+    } else {
+      expect(buttons[0].textContent).toContain("подтвердить навыки");
+    }
+    share.click();
+    expect(copyLink).toHaveBeenCalledExactlyOnceWith(id);
   });
 
   it("does not wait for the current profile before offering application creation", () => {

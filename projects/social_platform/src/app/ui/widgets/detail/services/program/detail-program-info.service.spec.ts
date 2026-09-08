@@ -92,7 +92,7 @@ describe("DetailProgramInfoService", () => {
   }
 
   it("currentApplication=null offers application creation", () => {
-    expect(service.applicationLabel()).toBe("Создать заявку");
+    expect(service.applicationLabel()).toBe("создать заявку");
     expect(service.application()).toBeNull();
   });
 
@@ -117,7 +117,7 @@ describe("DetailProgramInfoService", () => {
       submitted: false,
     });
     expect(programUI.program()?.currentApplication).toEqual(service.application());
-    expect(service.applicationLabel()).toBe("Перейти в заявку");
+    expect(service.applicationLabel()).toBe("перейти в заявку");
     service.addNewProject(12);
     expect(create).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledTimes(2);
@@ -129,7 +129,7 @@ describe("DetailProgramInfoService", () => {
   it("backend draft immediately offers navigation with backend IDs and does not create", () => {
     setCurrentApplication({ projectId: 10, programLinkId: 44, submitted: false });
 
-    expect(service.applicationLabel()).toBe("Перейти в заявку");
+    expect(service.applicationLabel()).toBe("перейти в заявку");
     service.addNewProject(12);
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).not.toHaveBeenCalled();
@@ -155,7 +155,7 @@ describe("DetailProgramInfoService", () => {
       programLinkId: 700,
       submitted: false,
     });
-    expect(service.applicationLabel()).toBe("Перейти в заявку");
+    expect(service.applicationLabel()).toBe("перейти в заявку");
     expect(TestBed.inject(GetMyProjectsUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProjectUseCase).execute).not.toHaveBeenCalled();
   });
@@ -178,7 +178,7 @@ describe("DetailProgramInfoService", () => {
 
     service.addNewProject(12);
     expect(service.application()).toBeNull();
-    expect(service.applicationLabel()).toBe("Создать заявку");
+    expect(service.applicationLabel()).toBe("создать заявку");
     expect(service.applicationPending()).toBe(false);
     expect(router.navigate).not.toHaveBeenCalled();
 
@@ -205,7 +205,7 @@ describe("DetailProgramInfoService", () => {
     );
     setCurrentApplication({ projectId: 100, programLinkId: 202, submitted: false });
 
-    expect(service.applicationLabel()).toBe("Перейти в заявку");
+    expect(service.applicationLabel()).toBe("перейти в заявку");
     service.addNewProject(12);
     expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/100/edit"], {
       queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 202 },

@@ -207,16 +207,24 @@ describe("ProgramAnalyticsComponent", () => {
       );
     });
 
-    it("uses only percentages for the bar and never synthesizes 100% for zero projects", () => {
+    it("normalizes bar widths by total projects, independently of submission share", () => {
       const { rows } = renderCases();
-      const width = (index: number, part: string) =>
-        parseFloat(rows[index].querySelector<HTMLElement>(part)!.style.width);
-      expect(width(0, ".case-row__submitted")).toBeCloseTo(200 / 3);
-      expect(width(0, ".case-row__not-submitted")).toBeCloseTo(100 / 3);
-      expect(width(1, ".case-row__submitted")).toBe(100);
-      expect(width(2, ".case-row__submitted")).toBe(0);
-      expect(width(2, ".case-row__not-submitted")).toBe(0);
-      expect(width(3, ".case-row__not-submitted")).toBe(100);
+      const width = (index: number) =>
+        parseFloat(rows[index].querySelector<HTMLElement>(".case-row__volume")!.style.width);
+      expect(width(0)).toBe(100);
+      expect(width(1)).toBeCloseTo(100 / 3);
+      expect(width(2)).toBe(0);
+      expect(width(3)).toBeCloseTo(200 / 3);
+      expect(width(3)).toBeGreaterThan(width(1));
+    });
+
+    it("includes the visible without-case bucket in the common scale", () => {
+      const model = overview();
+      model.cases.withoutCase.projectsTotal = 6;
+      data.set(model);
+      const { rows } = renderCases();
+      expect(rows[0].querySelector<HTMLElement>(".case-row__volume")!.style.width).toBe("50%");
+      expect(rows[3].querySelector<HTMLElement>(".case-row__volume")!.style.width).toBe("100%");
     });
 
     it("hides an empty withoutCase bucket", () => {
@@ -267,7 +275,7 @@ describe("ProgramAnalyticsComponent", () => {
       expect(card.textContent).toContain("Case A");
       expect(card.textContent).toContain("Участников 7");
       expect(card.textContent).not.toMatch(/Сдано|Не сдано/);
-      expect(card.querySelector(".case-row__bar")).toBeNull();
+      expect(rows[0].querySelector<HTMLElement>(".case-row__volume")!.style.width).toBe("100%");
       expect(rows[0].getAttribute("aria-label")).toBe("Case A: 3 проекта, участников 7");
       expect(model.cases.items[0].submitted).toBe(2);
       expect(
@@ -751,6 +759,25 @@ describe("ProgramAnalyticsComponent", () => {
     expect(attention?.textContent).not.toContain("97");
     expect(attention?.querySelectorAll(".attention__list li").length).toBe(3);
     expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(3);
+  });
+
+  it("keeps drilldown arrows separate from wrapping labels and preserves zero-state disabling", () => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    for (const button of root.querySelectorAll<HTMLButtonElement>(
+      ".evaluation__assignment-action, .attention__action",
+    )) {
+      expect(button.type).toBe("button");
+      const arrow = button.querySelector<HTMLElement>(
+        ".evaluation__assignment-arrow, .attention__arrow",
+      )!;
+      expect(arrow.parentElement).toBe(button);
+      expect(arrow.getAttribute("aria-hidden")).toBe("true");
+      expect(arrow.querySelector("use")?.getAttribute("xlink:href")).toContain("arrowright");
+      const count = Number(button.querySelector("strong")!.textContent);
+      expect(button.disabled).toBe(count === 0);
+    }
   });
 
   it("строит две серии по всем 30 точкам activity", () => {

@@ -276,15 +276,9 @@
                     <span class="case-row__total-label">{{ row.totalLabel }}</span>
                   </span>
                 </div>
-                @if (overview.cases.submissionApplicable) {
-                  <div class="case-row__bar" role="img" [attr.aria-label]="row.description">
-                    <span class="case-row__submitted" [style.width.%]="row.submittedPercent"></span>
-                    <span
-                      class="case-row__not-submitted"
-                      [style.width.%]="row.notSubmittedPercent"
-                    ></span>
-                  </div>
-                }
+                <div class="case-row__bar" role="img" [attr.aria-label]="row.description">
+                  <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
+                </div>
                 <div class="case-row__meta">
                   @if (overview.cases.submissionApplicable) {
                     <span
@@ -378,9 +372,14 @@
                   [attr.aria-label]="item.label + ': ' + item.value"
                   (click)="drilldown.openAssignments(item.scope!, assignmentTrigger)"
                 >
-                  <span class="text-body-10"
-                    >{{ item.label }} <span aria-hidden="true">→</span></span
-                  >
+                  <span class="evaluation__assignment-label text-body-10">{{ item.label }}</span>
+                  <i
+                    class="evaluation__assignment-arrow"
+                    appIcon
+                    icon="arrowright"
+                    appSquare="20"
+                    aria-hidden="true"
+                  ></i>
                   <strong>{{ item.value }}</strong>
                 </button>
               </li>
@@ -411,7 +410,6 @@
           <ul class="attention__list">
             @for (item of attention(); track item.key) {
               <li>
-                <i appIcon icon="accent-error" appSquare="20"></i>
                 @if (item.key === "delayed-experts") {
                   <button
                     #delayedTrigger
@@ -420,8 +418,16 @@
                     [disabled]="item.value === 0"
                     (click)="drilldown.openDelayed(delayedTrigger)"
                   >
+                    <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
                     <span class="text-body-10">{{ item.label }}</span
                     ><strong>{{ item.value }}</strong>
+                    <i
+                      class="attention__arrow"
+                      appIcon
+                      icon="arrowright"
+                      appSquare="20"
+                      aria-hidden="true"
+                    ></i>
                   </button>
                 } @else {
                   <button
@@ -440,8 +446,16 @@
                       )
                     "
                   >
+                    <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
                     <span class="text-body-10">{{ item.label }}</span
                     ><strong>{{ item.value }}</strong>
+                    <i
+                      class="attention__arrow"
+                      appIcon
+                      icon="arrowright"
+                      appSquare="20"
+                      aria-hidden="true"
+                    ></i>
                   </button>
                 }
                 <app-tooltip

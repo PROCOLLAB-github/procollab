@@ -54,7 +54,7 @@
 
     @include responsive.apply-tablet-and-above {
       &--assets {
-        grid-template-columns: 0.1fr 1fr 1fr 0.15fr;
+        grid-template-columns: 84px minmax(0, 1fr) minmax(0, 1fr) minmax(64px, 0.3fr);
       }
 
       &--main {
