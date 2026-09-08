@@ -132,9 +132,7 @@ describe("DetailProgramInfoService", () => {
     expect(service.applicationLabel()).toBe("Перейти в заявку");
     service.addNewProject(12);
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
-    expect(
-      TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute,
-    ).not.toHaveBeenCalled();
+    expect(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).not.toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10/edit"], {
       queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 44 },
     });
