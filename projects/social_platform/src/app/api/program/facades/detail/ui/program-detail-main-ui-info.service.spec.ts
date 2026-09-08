@@ -14,6 +14,63 @@ function createProgram(id: number, acknowledgedAt: string | null = null): Progra
 }
 
 describe("ProgramDetailMainUIInfoService", () => {
+  describe("independent deadlines", () => {
+    const now = "2026-09-09T12:00:00Z";
+    const past = "2026-09-01T00:00:00Z";
+    const future = "2026-09-30T00:00:00Z";
+
+    beforeEach(() => vi.spyOn(Date, "now").mockReturnValue(Date.parse(now)));
+    afterEach(() => vi.restoreAllMocks());
+
+    it.each([
+      [past, future, true, false],
+      [future, past, false, true],
+      [past, now, true, false],
+    ] as const)(
+      "registration=%s, evaluation=%s are independent",
+      (registration, evaluation, registrationExpired, evaluationExpired) => {
+        const service = new ProgramDetailMainUIInfoService();
+        service.applyFormatingProgramData({
+          ...createProgram(1),
+          datetimeRegistrationEnds: registration,
+          datetimeEvaluationEnds: evaluation,
+        });
+        expect(service.registerDateExpired()).toBe(registrationExpired);
+        expect(service.evaluationDateExpired()).toBe(evaluationExpired);
+      },
+    );
+
+    it.each(["", undefined, "not-a-date"])(
+      "does not close evaluation for legacy/invalid value %s",
+      evaluation => {
+        const service = new ProgramDetailMainUIInfoService();
+        service.applyFormatingProgramData(
+          Object.assign(createProgram(1), {
+            datetimeRegistrationEnds: past,
+            datetimeEvaluationEnds: evaluation,
+          }),
+        );
+        expect(service.registerDateExpired()).toBe(true);
+        expect(service.evaluationDateExpired()).toBe(false);
+      },
+    );
+
+    it("recalculates closing and reopening from each fresh program response", () => {
+      const service = new ProgramDetailMainUIInfoService();
+      for (const [evaluation, expired] of [
+        [past, true],
+        [future, false],
+        ["", false],
+      ] as const) {
+        service.applyFormatingProgramData({
+          ...createProgram(1),
+          datetimeEvaluationEnds: evaluation,
+        });
+        expect(service.evaluationDateExpired()).toBe(expired);
+      }
+    });
+  });
+
   it("uses null as the required default current application", () => {
     expect(Program.default().currentApplication).toBeNull();
   });

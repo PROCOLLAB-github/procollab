@@ -409,7 +409,7 @@
         @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
           <ul class="attention__list">
             @for (item of attention(); track item.key) {
-              <li>
+              <li [class.attention__row--disabled]="item.value === 0">
                 @if (item.key === "delayed-experts") {
                   <button
                     #delayedTrigger
@@ -460,10 +460,19 @@
                 }
                 <app-tooltip
                   [text]="item.tooltip"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-label]="item.tooltip"
+                  [attr.aria-expanded]="isTooltipVisible(item.key)"
                   [isVisible]="isTooltipVisible(item.key)"
                   [useOverlay]="true"
                   position="left"
                   (click)="toggleTooltip(item.key)"
+                  (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
+                  (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
+                  (keydown.escape)="closeTooltip(item.key)"
+                  (focus)="showTooltip(item.key)"
+                  (blur)="closeTooltip(item.key)"
                   (show)="showTooltip(item.key)"
                   (hide)="hideTooltip(item.key)"
                 ></app-tooltip>

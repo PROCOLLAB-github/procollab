@@ -28,6 +28,7 @@ export class ProgramDetailMainUIInfoService {
   readonly welcomeAcknowledgementPending = signal<boolean>(false);
 
   readonly registerDateExpired = signal<boolean>(false);
+  readonly evaluationDateExpired = signal<boolean>(false);
 
   applyInitProgramQueryParams(): void {
     this.applyProgramOpenModal("access");
@@ -49,6 +50,8 @@ export class ProgramDetailMainUIInfoService {
   applyFormatingProgramData(program: Program): void {
     this.program.set(program);
     this.registerDateExpired.set(Date.now() > Date.parse(program.datetimeRegistrationEnds));
+    const evaluationEnds = Date.parse(program.datetimeEvaluationEnds ?? "");
+    this.evaluationDateExpired.set(Number.isFinite(evaluationEnds) && Date.now() > evaluationEnds);
     this.registeredProgramModal.set(program.isUserMember && program.welcomeAcknowledgedAt === null);
   }
 

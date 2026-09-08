@@ -780,6 +780,43 @@ describe("ProgramAnalyticsComponent", () => {
     }
   });
 
+  it("marks zero attention rows and keeps tooltip controls separate and keyboard accessible", () => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
+    const delayed = vi.spyOn(drilldown, "openDelayed").mockImplementation(() => {});
+    const rows = fixture.nativeElement.querySelectorAll(
+      ".attention__list li",
+    ) as NodeListOf<HTMLElement>;
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      const action = row.querySelector<HTMLButtonElement>(".attention__action")!;
+      const tooltip = row.querySelector<HTMLElement>("app-tooltip")!;
+      expect(action.parentElement).toBe(row);
+      expect(tooltip.parentElement).toBe(row);
+      expect(action.querySelector("app-tooltip")).toBeNull();
+      expect(row.classList.contains("attention__row--disabled")).toBe(action.disabled);
+      expect(tooltip.tabIndex).toBe(0);
+      expect(tooltip.getAttribute("role")).toBe("button");
+      tooltip.click();
+      fixture.detectChanges();
+      expect(tooltip.getAttribute("aria-expanded")).toBe("true");
+      tooltip.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      fixture.detectChanges();
+      expect(tooltip.getAttribute("aria-expanded")).toBe("false");
+      tooltip.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+      fixture.detectChanges();
+      expect(tooltip.getAttribute("aria-expanded")).toBe("true");
+      if (action.disabled) action.click();
+    }
+    expect(open).not.toHaveBeenCalled();
+    expect(delayed).not.toHaveBeenCalled();
+    rows[0].querySelector<HTMLButtonElement>(".attention__action")!.click();
+    expect(open).toHaveBeenCalledOnce();
+  });
+
   it("строит две серии по всем 30 точкам activity", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();

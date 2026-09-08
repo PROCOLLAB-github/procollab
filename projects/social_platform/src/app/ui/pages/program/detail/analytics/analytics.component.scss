@@ -601,11 +601,6 @@
     border: 0;
     border-radius: 8px;
 
-    &:hover:not(:disabled),
-    &:active:not(:disabled) {
-      background: var(--accent-light);
-    }
-
     &:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
@@ -644,9 +639,19 @@
       border: 1px solid var(--medium-grey-for-outline);
       border-radius: 8px;
 
-      &:has(.attention__action:hover:not(:disabled)),
-      &:has(.attention__action:focus-visible) {
-        border-color: var(--accent);
+      &:not(.attention__row--disabled) {
+        &:hover,
+        &:focus-within,
+        &:active {
+          background: var(--accent-light);
+          border-color: var(--accent);
+        }
+      }
+
+      app-tooltip:focus-visible {
+        border-radius: 50%;
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
       }
 
       span {
