@@ -169,6 +169,16 @@ describe("ProgramAnalyticsComponent", () => {
       return { fixture, card, rows: [...card.querySelectorAll<HTMLElement>(".case-row")] };
     }
 
+    it("keeps cases and evaluation as adjacent cards in the same two-column grid row", () => {
+      const { card } = renderCases();
+      const grid = card.parentElement!;
+      expect(grid.classList.contains("analytics-grid")).toBe(true);
+      expect([...grid.children].indexOf(card)).toBe(2);
+      expect(card.classList.contains("analytics-card")).toBe(true);
+      expect(card.classList.contains("cases-card")).toBe(true);
+      expect(card.nextElementSibling?.matches(".analytics-card.evaluation")).toBe(true);
+    });
+
     it("preserves backend counts/order/zero rows and appends withoutCase without mutations", () => {
       const before = JSON.stringify(data());
       const { fixture, card, rows } = renderCases();
