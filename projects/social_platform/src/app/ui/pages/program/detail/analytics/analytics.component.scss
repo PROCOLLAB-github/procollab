@@ -278,6 +278,13 @@
 .cases-card {
   max-height: 380px;
 
+  @include responsive.apply-desktop {
+    // Let the evaluation card size the row; keep the case list scrolling inside it.
+    align-self: stretch;
+    max-height: none;
+    contain: size;
+  }
+
   &__title {
     font-size: 16px;
     font-weight: 600;
@@ -641,7 +648,6 @@
 
       &:not(.attention__row--disabled) {
         &:hover,
-        &:focus-within,
         &:active {
           background: var(--accent-light);
           border-color: var(--accent);

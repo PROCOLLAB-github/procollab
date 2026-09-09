@@ -10,7 +10,15 @@ import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-cri
 
 describe("ProjectRatingHttpAdapter", () => {
   let adapter: ProjectRatingHttpAdapter;
-  let api: any;
+  let api: { get: ReturnType<typeof vi.fn>; post: ReturnType<typeof vi.fn> };
+
+  afterEach(() => {
+    for (const mock of [api.get, api.post]) {
+      for (const [url] of mock.mock.calls) {
+        expect(new URL(url, "https://example.com").pathname.endsWith("/")).toBe(false);
+      }
+    }
+  });
 
   function setup(): void {
     api = { get: vi.fn(), post: vi.fn() };
@@ -44,7 +52,7 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.postFilters(5, { status: ["open"] }, params).subscribe();
 
-    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5/?limit=10", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5?limit=10", {
       filters: { status: ["open"] },
     });
   });
@@ -55,16 +63,16 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.postFilters(5, {}).subscribe();
 
-    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5/", { filters: {} });
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5", { filters: {} });
   });
 
   it("rate идёт в POST /rate-project/rate/:projectId c массивом оценок", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
-    const scores = [] as ProjectRatingCriterionOutput[];
+    const scores: ProjectRatingCriterionOutput[] = [];
 
     adapter.rate(42, scores).subscribe();
 
-    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/rate/42/", scores);
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/rate/42", scores);
   });
 });
