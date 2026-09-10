@@ -82,4 +82,34 @@ describe("ProjectRatingRepository", () => {
 
     expect(out).toEqual([{ criterionId: 3, value: "hello" }]);
   });
+
+  it("formValuesToDTO всегда отправляет полный backend snapshot критериев", () => {
+    setup();
+    const criteria = [
+      { id: 1, type: "int", value: 2 },
+      { id: 2, type: "bool", value: "true" },
+      { id: 3, type: "str", value: "Existing" },
+    ] as ProjectRatingCriterion[];
+
+    expect(repository.formValuesToDTO(criteria, {})).toEqual([
+      { criterionId: 1, value: 2 },
+      { criterionId: 2, value: "true" },
+      { criterionId: 3, value: "Existing" },
+    ]);
+  });
+
+  it("formValuesToDTO сохраняет полный набор при изменении одного критерия", () => {
+    setup();
+    const criteria = [
+      { id: 1, type: "int", value: 2 },
+      { id: 2, type: "bool", value: "false" },
+      { id: 3, type: "str", value: "Existing" },
+    ] as ProjectRatingCriterion[];
+
+    expect(repository.formValuesToDTO(criteria, { 1: "5" })).toEqual([
+      { criterionId: 1, value: 5 },
+      { criterionId: 2, value: "false" },
+      { criterionId: 3, value: "Existing" },
+    ]);
+  });
 });

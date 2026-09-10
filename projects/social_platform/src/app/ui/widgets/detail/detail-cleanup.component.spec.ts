@@ -148,6 +148,32 @@ describe("Detail cleanup actions", () => {
     expect(copyLink).toHaveBeenCalledExactlyOnceWith(id);
   });
 
+  it("keeps a long profile title in normal flow while leaving the project title in its header", () => {
+    type.set("profile");
+    info.set({
+      id: 7,
+      firstName: "Очень длинное составное имя пользователя",
+      lastName: "Очень длинная составная фамилия пользователя",
+      skills: [],
+    });
+    const profileFixture = TestBed.createComponent(DeatilComponent);
+    profileFixture.detectChanges();
+
+    const profileHeading = profileFixture.nativeElement.querySelector(
+      ".info__profile-heading .info__title--profile",
+    ) as HTMLElement;
+    expect(profileHeading.textContent).toContain("Очень длинное составное имя пользователя");
+    expect(profileFixture.nativeElement.querySelector(".info__avatar .info__title")).toBeNull();
+
+    type.set("project");
+    info.set({ id: 55, name: "Проект", collaborators: [], partnerProgram: null });
+    profileFixture.detectChanges();
+    expect(profileFixture.nativeElement.querySelector(".info__profile-heading")).toBeNull();
+    expect(
+      profileFixture.nativeElement.querySelector(".info__avatar .info__title--project"),
+    ).not.toBeNull();
+  });
+
   it("does not wait for the current profile before offering application creation", () => {
     profile.set(null);
     const fixture = TestBed.createComponent(DeatilComponent);

@@ -29,8 +29,19 @@
     }
 
     &--error input {
+      padding-right: 76px;
       border-color: var(--red);
     }
+  }
+
+  &__error {
+    position: absolute;
+    top: 50%;
+    right: 46px;
+    display: grid;
+    color: var(--red);
+    pointer-events: none;
+    transform: translateY(-50%);
   }
 
   &__clear {

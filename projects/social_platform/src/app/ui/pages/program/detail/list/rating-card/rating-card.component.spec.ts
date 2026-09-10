@@ -18,8 +18,10 @@ import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case
 import { Program } from "@domain/program/program.model";
 import { ProjectRate } from "@domain/project/project-rate";
 import { User } from "@domain/auth/user.model";
-import { ok } from "@domain/shared/result.type";
+import { fail, ok } from "@domain/shared/result.type";
 import { ProjectRatingComponent } from "./project-rating/project-rating.component";
+import { HttpErrorResponse } from "@angular/common/http";
+import { RatingCardService } from "./services/rating-card.service";
 
 describe("RatingCardComponent", () => {
   let component: RatingCardComponent;
@@ -46,8 +48,7 @@ describe("RatingCardComponent", () => {
       viewsCount: 0,
       industry: 1,
       scored: rated,
-      scoredExpertId: rated ? user.id : null,
-      ratedExperts: rated ? [user] : [],
+      ratedExperts: rated ? [user.id] : [],
       ratedCount: rated ? 1 : 0,
       maxRates: 1,
       criterias: [
@@ -186,6 +187,63 @@ describe("RatingCardComponent", () => {
     expect(execute).toHaveBeenCalledOnce();
     expect(execute.mock.calls[0][2]).toEqual({ 1: 4, 2: true, 3: "Note" });
     expect(cta().textContent).toContain("проект оценён");
+    expectReadonly(true);
+  });
+
+  it("submits every existing criterion after reload and edit without touching the form", async () => {
+    render(true);
+    const edit = fixture.nativeElement.querySelector(
+      ".card__rated--icon button",
+    ) as HTMLButtonElement;
+    edit.click();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.injector.get(RatingCardService).form().getRawValue()).toEqual({
+      1: 2,
+      2: true,
+      3: "Note",
+    });
+
+    cta().click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    document.querySelector<HTMLButtonElement>(".cancel__button button")!.click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(execute).toHaveBeenCalledExactlyOnceWith(12, expect.any(Array), {
+      1: 2,
+      2: true,
+      3: "Note",
+    });
+    expect(cta().textContent).toContain("проект оценён");
+    expectReadonly(true);
+  });
+
+  it("renders the controlled closed state after an authoritative backend deadline 409", async () => {
+    execute.mockReturnValueOnce(
+      of(
+        fail({
+          kind: "rate_project_error" as const,
+          cause: new HttpErrorResponse({
+            status: 409,
+            error: { error: "evaluation_deadline_passed" },
+          }),
+        }),
+      ),
+    );
+    render();
+    cta().click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    document.querySelector<HTMLButtonElement>(".cancel__button button")!.click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    expect(cta().textContent).toContain("оценивание завершено");
+    expect(cta().disabled).toBe(true);
+    expect(fixture.nativeElement.querySelector(".card__rated--icon")).toBeNull();
     expectReadonly(true);
   });
 

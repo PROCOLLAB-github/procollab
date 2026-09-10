@@ -40,24 +40,24 @@ export class ProjectRatingRepository implements ProjectRatingRepositoryPort {
     criteria: ProjectRatingCriterion[],
     outputVals: Record<string, string | number | boolean>,
   ): ProjectRatingCriterionOutput[] {
-    const output: ProjectRatingCriterionOutput[] = [];
-    const normalizedOutputVals = { ...outputVals };
+    return criteria.map(criterion => {
+      const key = String(criterion.id);
+      let value = Object.prototype.hasOwnProperty.call(outputVals, key)
+        ? outputVals[key]
+        : criterion.value;
 
-    for (const key in normalizedOutputVals) {
       // оценки с boolean значением переводятся в "string-boolean" (true => "True")
-      if (typeof normalizedOutputVals[key] === "boolean") {
-        const boolString = String(normalizedOutputVals[key]);
-        normalizedOutputVals[key] = boolString.charAt(0).toUpperCase() + boolString.slice(1);
+      if (typeof value === "boolean") {
+        const boolString = String(value);
+        value = boolString.charAt(0).toUpperCase() + boolString.slice(1);
       }
 
       // оценки с числовым значением из инпута приходят строкой, их нужно привести к number
-      if (criteria.find(c => c.id === Number(key))?.type === "int") {
-        normalizedOutputVals[key] = Number(normalizedOutputVals[key]);
+      if (criterion.type === "int") {
+        value = Number(value);
       }
 
-      output.push({ criterionId: Number(key), value: normalizedOutputVals[key] });
-    }
-
-    return output;
+      return { criterionId: criterion.id, value };
+    });
   }
 }

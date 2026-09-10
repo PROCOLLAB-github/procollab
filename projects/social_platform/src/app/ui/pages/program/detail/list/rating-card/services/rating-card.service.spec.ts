@@ -2,6 +2,7 @@
 
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
+import { HttpErrorResponse } from "@angular/common/http";
 import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
@@ -18,6 +19,7 @@ describe("RatingCardService evaluation modes", () => {
   const past = "2026-09-01T00:00:00Z";
   const future = "2026-09-30T00:00:00Z";
   const execute = vi.fn<RateProjectUseCase["execute"]>();
+  const loggerError = vi.fn();
   let service: RatingCardService;
   let programUI: ProgramDetailMainUIInfoService;
 
@@ -42,8 +44,7 @@ describe("RatingCardService evaluation modes", () => {
       viewsCount: 0,
       industry: 1,
       scored,
-      scoredExpertId: scored ? user.id : null,
-      ratedExperts: scored ? [user] : [],
+      ratedExperts: scored ? [user.id] : [],
       ratedCount: scored ? 1 : 0,
       maxRates: 1,
       criterias: [],
@@ -53,13 +54,14 @@ describe("RatingCardService evaluation modes", () => {
   beforeEach(() => {
     vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-09-09T12:00:00Z"));
     execute.mockReset().mockReturnValue(of(ok(undefined)));
+    loggerError.mockReset();
     TestBed.configureTestingModule({
       providers: [
         RatingCardService,
         { provide: RateProjectUseCase, useValue: { execute } },
         ProgramDetailMainUIInfoService,
         { provide: ProfileInfoService, useValue: { profile: signal(user) } },
-        { provide: LoggerService, useValue: { error: vi.fn() } },
+        { provide: LoggerService, useValue: { error: loggerError } },
       ],
     });
     service = TestBed.inject(RatingCardService);
@@ -84,6 +86,16 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.showEditButton()).toBe(true);
     expect(service.isRatingFormDisabled()).toBe(true);
     expect(service.ratedCount()).toBe(1);
+    expect(service.project()).toMatchObject({ scored: true, ratedExperts: [user.id] });
+  });
+
+  it("uses backend scored as the current expert state and treats ratedExperts as numeric IDs", () => {
+    service.initProject({ ...project(true), ratedExperts: [99], ratedCount: 1, maxRates: 1 });
+
+    expect(service.isRatedByCurrentUser()).toBe(true);
+    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.showEditButton()).toBe(true);
+    expect(service.isButtonDisabled()).toBe(false);
   });
 
   it("keeps editing until update succeeds, then returns to readonly without incrementing count", () => {
@@ -128,6 +140,63 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.form().getRawValue()).toEqual({ score: 5 });
     service.confirmRateProject();
     expect(service.rateButtonText()).toBe("проект оценён");
+  });
+
+  it("turns a backend deadline 409 into a closed readonly state without exposing the response", () => {
+    service.initProject(project(true));
+    service.redoRating();
+    service.form().setValue({ score: 5 });
+    execute.mockReturnValueOnce(
+      of(
+        fail({
+          kind: "rate_project_error" as const,
+          cause: new HttpErrorResponse({
+            status: 409,
+            error: {
+              error: "evaluation_deadline_passed",
+              detail: "Срок оценивания завершён.",
+            },
+          }),
+        }),
+      ),
+    );
+    service.showConfirmRateModal.set(true);
+
+    service.confirmRateProject();
+
+    expect(service.backendEvaluationClosed()).toBe(true);
+    expect(service.evaluationClosed()).toBe(true);
+    expect(service.showConfirmRateModal()).toBe(false);
+    expect(service.rateButtonText()).toBe("оценивание завершено");
+    expect(service.buttonTooltip()).toBe("Срок оценивания завершён");
+    expect(service.isRatingFormDisabled()).toBe(true);
+    expect(service.showEditButton()).toBe(false);
+    expect(service.isButtonDisabled()).toBe(true);
+    service.confirmRateProject();
+    expect(execute).toHaveBeenCalledTimes(1);
+    expect(loggerError).not.toHaveBeenCalled();
+  });
+
+  it("keeps max_project_rates 400 separate from the deadline state", () => {
+    service.initProject(project());
+    execute.mockReturnValueOnce(
+      of(
+        fail({
+          kind: "rate_project_error" as const,
+          cause: new HttpErrorResponse({
+            status: 400,
+            error: { error: "max_project_rates" },
+          }),
+        }),
+      ),
+    );
+
+    service.confirmRateProject();
+
+    expect(service.backendEvaluationClosed()).toBe(false);
+    expect(service.evaluationClosed()).toBe(false);
+    expect(service.showRatingForm()).toBe(true);
+    expect(loggerError).toHaveBeenCalledOnce();
   });
 
   it("preserves rating-limit restrictions independently of the evaluation deadline", () => {
