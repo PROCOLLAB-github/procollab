@@ -289,7 +289,7 @@ export class ProgramAnalyticsComponent implements OnInit {
     const assignments = this.data()?.evaluationStatus.assignments;
     if (!assignments) return [];
     return [
-      { ...this.metric("assignments-total", "Назначений всего", assignments.total), scope: "all" },
+      { ...this.metric("assignments-total", "Назначений", assignments.total), scope: "all" },
       {
         ...this.metric("assignments-evaluated", "Выполнено", assignments.evaluated),
         scope: "completed",

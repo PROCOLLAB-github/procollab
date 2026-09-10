@@ -21,6 +21,9 @@
       (input)="onInput($event)"
       (keydown)="onKeydown($event)"
     />
+    @if (error()) {
+      <i class="region-select__error" appIcon icon="error" appSquare="20" aria-hidden="true"></i>
+    }
     @if (query()) {
       <button
         type="button"

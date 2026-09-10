@@ -48,15 +48,16 @@ describe("RegionSelectComponent", () => {
     );
   });
 
-  it("uses only the error border and does not render a validation icon wrapper", () => {
+  it("renders the validation icon in a dedicated zone before the clear control", () => {
     const select = TestBed.createComponent(RegionSelectComponent);
     select.componentRef.setInput("error", true);
+    select.componentInstance.writeValue("Москва");
     select.detectChanges();
 
-    expect(select.nativeElement.querySelector(".region-select__control").classList).toContain(
-      "region-select__control--error",
-    );
-    expect(select.nativeElement.querySelector(".field__error-icon")).toBeNull();
+    const control = select.nativeElement.querySelector(".region-select__control") as HTMLElement;
+    expect(control.classList).toContain("region-select__control--error");
+    expect(control.querySelector(".region-select__error")).not.toBeNull();
+    expect(control.querySelector(".region-select__clear")).not.toBeNull();
   });
 
   it("filters and selects a canonical region", () => {

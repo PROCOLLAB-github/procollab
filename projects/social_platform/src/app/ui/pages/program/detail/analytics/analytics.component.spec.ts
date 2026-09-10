@@ -741,7 +741,7 @@ describe("ProgramAnalyticsComponent", () => {
       "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
     );
     expect(evaluation?.querySelector('[data-testid="assignment-statuses"]')?.textContent).toContain(
-      "Назначений всего",
+      "Назначений",
     );
   });
 

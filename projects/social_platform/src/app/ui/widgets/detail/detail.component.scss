@@ -128,6 +128,33 @@ $detail-bar-mb: 12px;
     &--project {
       transform: translateX(-31%);
     }
+
+    &--profile {
+      width: min(100%, 420px);
+      max-height: 36px;
+      margin: 0 auto;
+      line-height: 18px;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &__profile-heading {
+    position: relative;
+    z-index: 1;
+    min-height: 18px;
+    padding: 82px 16px 0;
+
+    + .info__body .info__actions {
+      padding-top: 16px;
+    }
+
+    @include responsive.apply-desktop {
+      padding-top: 78px;
+
+      + .info__body .info__actions {
+        padding-top: 16px;
+      }
+    }
   }
 
   &__text {

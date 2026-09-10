@@ -163,6 +163,24 @@ describe("ProjectMainStepComponent", () => {
     ).toBeNull();
   });
 
+  it("keeps validation icons, counters and region controls in separate DOM zones", async () => {
+    fixture.componentRef.setInput("projSubmitInitiated", true);
+    await fixture.whenStable();
+
+    for (const id of ["name", "problem"]) {
+      const field = fixture.nativeElement.querySelector(`app-input#${id} .field`) as HTMLElement;
+      expect(field.querySelector(".field__input")).not.toBeNull();
+      expect(field.querySelector(".field__right-icon .project__input-error")).not.toBeNull();
+      expect(field.querySelector(".field__counter")).not.toBeNull();
+    }
+
+    const region = fixture.nativeElement.querySelector("app-region-select#region") as HTMLElement;
+    expect(region.querySelector(".region-select__error")).not.toBeNull();
+    expect(region.querySelector(".region-select__control--error")).not.toBeNull();
+    expect(fixture.nativeElement.querySelector(".project__region-error")).toBeNull();
+    expect(fixture.nativeElement.querySelector(".project__grid--main")).not.toBeNull();
+  });
+
   it("renders every new project contact input in the originating UI cycle", async () => {
     const addButton = Array.from(fixture.nativeElement.querySelectorAll("app-button")).find(
       (button: Element) => button.textContent?.includes("добавить ссылку"),

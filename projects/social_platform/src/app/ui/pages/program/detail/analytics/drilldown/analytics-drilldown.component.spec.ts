@@ -61,7 +61,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     modal = fixture.debugElement.query(By.directive(ModalComponent)).componentInstance;
     state = fixture.debugElement.injector.get(ProgramAnalyticsDrilldownService);
     trigger = document.createElement("button");
-    trigger.textContent = "Назначений всего";
+    trigger.textContent = "Назначений";
     document.body.append(trigger);
     trigger.focus();
   });

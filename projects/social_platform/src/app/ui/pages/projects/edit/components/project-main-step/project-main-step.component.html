@@ -134,15 +134,6 @@
               [error]="showError(region)"
               placeholder="выберите регион"
             ></app-region-select>
-            @if (showError(region)) {
-              <i
-                class="project__region-error"
-                appIcon
-                icon="error"
-                appSquare="20"
-                aria-hidden="true"
-              ></i>
-            }
           </div>
           @if (showError(region, "required")) {
             <div class="text-body-10 error">

@@ -47,4 +47,35 @@ describe("SetPasswordComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("uses independent accessible new-password controls for both fields", () => {
+    const inputs = fixture.nativeElement.querySelectorAll(
+      'input[autocomplete="new-password"]',
+    ) as NodeListOf<HTMLInputElement>;
+    const toggles = fixture.nativeElement.querySelectorAll(
+      ".auth__password-toggle",
+    ) as NodeListOf<HTMLButtonElement>;
+
+    expect(inputs).toHaveLength(2);
+    expect(inputs[0].name).toBe("new-password");
+    expect(inputs[1].name).toBe("new-password-confirmation");
+    expect(inputs[0].type).toBe("password");
+    expect(inputs[1].type).toBe("password");
+    expect(toggles).toHaveLength(2);
+    expect(toggles[0].type).toBe("button");
+    expect(toggles[0].getAttribute("aria-label")).toBe("Показать пароль");
+    expect(toggles[1].getAttribute("aria-label")).toBe("Показать повторный пароль");
+
+    toggles[0].click();
+    fixture.detectChanges();
+    expect(inputs[0].type).toBe("text");
+    expect(inputs[1].type).toBe("password");
+    expect(toggles[0].getAttribute("aria-pressed")).toBe("true");
+
+    toggles[1].click();
+    fixture.detectChanges();
+    expect(inputs[0].type).toBe("text");
+    expect(inputs[1].type).toBe("text");
+    expect(toggles[1].getAttribute("aria-pressed")).toBe("true");
+  });
 });

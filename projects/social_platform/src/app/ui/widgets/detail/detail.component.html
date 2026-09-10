@@ -50,28 +50,26 @@
                 "
                 [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
               ></app-avatar>
-              @if (listType() === "project" || listType() === "profile") {
+              @if (listType() === "project") {
                 <h1
                   class="info__title text-body-12"
-                  [style.width]="
-                    listType() === 'project' || listType() === 'profile' ? '300px' : '100%'
-                  "
-                  [class.info__title--project]="
-                    listType() === 'project' || listType() === 'profile'
-                  "
+                  style="width: 300px"
+                  [class.info__title--project]="true"
                 >
-                  {{
-                    listType() === "project"
-                      ? info().name
-                      : listType() === "profile"
-                        ? info().firstName + " " + info().lastName
-                        : ""
-                  }}
+                  {{ info().name }}
                 </h1>
               }
             }
           </div>
         </div>
+
+        @if (listType() === "profile") {
+          <div class="info__profile-heading">
+            <h1 class="info__title info__title--profile text-body-12">
+              {{ info().firstName }} {{ info().lastName }}
+            </h1>
+          </div>
+        }
 
         <div class="info__body">
           <div class="info__actions">

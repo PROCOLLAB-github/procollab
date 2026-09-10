@@ -6,7 +6,7 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ProjectRate } from "@domain/project/project-rate";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
-import { HttpResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { finalize } from "rxjs";
 import { FormControl } from "@angular/forms";
 
@@ -28,7 +28,7 @@ export class RatingCardService {
   readonly submitLoading = signal(false);
   readonly confirmLoading = signal(false);
   readonly showConfirmRateModal = signal(false);
-  readonly locallyRatedByCurrentUser = signal(false);
+  readonly backendEvaluationClosed = signal(false);
   readonly projectRated = signal(false);
   readonly projectConfirmed = signal(false);
   readonly ratedCount = signal(0);
@@ -39,40 +39,26 @@ export class RatingCardService {
     return p.criterias.filter(c => c.type !== "str").length;
   });
 
-  readonly isCurrentUserExpert = computed(() => {
-    const currentProfile = this.profile();
-    const p = this.project();
-    if (!currentProfile || !p) return false;
-
-    const isExpertFromBackend = !!p.scoredExpertId && p.scoredExpertId === currentProfile.id;
-
-    return isExpertFromBackend || this.locallyRatedByCurrentUser();
-  });
-
   readonly isRatedByCurrentUser = computed(() => {
-    const currentUser = this.profile();
     const p = this.project();
-    if (!currentUser || !p) return false;
-
-    return p.ratedExperts.some(user => user.id === currentUser.id);
+    return p?.scored === true;
   });
 
-  readonly userRatedThisProject = computed(() => {
-    return (
-      this.locallyRatedByCurrentUser() ||
-      (this.project()?.ratedExperts && this.isRatedByCurrentUser())
-    );
-  });
+  readonly userRatedThisProject = this.isRatedByCurrentUser;
+
+  readonly evaluationClosed = computed(
+    () => this.evaluationDateExpired() || this.backendEvaluationClosed(),
+  );
 
   readonly isLimitReached = computed(() => {
     const p = this.project();
     return !!p && p.ratedCount >= p.maxRates;
   });
 
-  readonly canEdit = computed(() => !this.evaluationDateExpired());
+  readonly canEdit = computed(() => !this.evaluationClosed());
 
   readonly canRate = computed(() => {
-    if (this.evaluationDateExpired()) return false;
+    if (this.evaluationClosed()) return false;
     if (this.isLimitReached() && !this.userRatedThisProject()) return false;
     return true;
   });
@@ -83,7 +69,7 @@ export class RatingCardService {
   });
 
   readonly rateButtonText = computed(() => {
-    if (this.evaluationDateExpired()) return "оценивание завершено";
+    if (this.evaluationClosed()) return "оценивание завершено";
     if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценён";
     if (this.isLimitReached() && !this.userRatedThisProject()) return "лимит оценок достигнут";
     if (this.userRatedThisProject()) return "подтвердить изменения";
@@ -94,7 +80,7 @@ export class RatingCardService {
 
   readonly isRatingFormDisabled = computed(
     () =>
-      this.evaluationDateExpired() ||
+      this.evaluationClosed() ||
       ((this.projectRated() || this.projectConfirmed()) && this.isRatedByCurrentUser()),
   );
 
@@ -106,7 +92,7 @@ export class RatingCardService {
 
   readonly isButtonDisabled = computed(() => {
     if (this.isLimitReached() && !this.userRatedThisProject()) return true;
-    if (this.evaluationDateExpired()) return true;
+    if (this.evaluationClosed()) return true;
     return !this.canRate();
   });
 
@@ -117,11 +103,11 @@ export class RatingCardService {
   readonly buttonOpacity = computed(() => (this.isButtonDisabled() ? "0.5" : "1"));
 
   readonly showConfirmedState = computed(
-    () => this.evaluationDateExpired() || (this.isLimitReached() && !this.userRatedThisProject()),
+    () => this.evaluationClosed() || (this.isLimitReached() && !this.userRatedThisProject()),
   );
 
   readonly buttonTooltip = computed(() => {
-    if (this.evaluationDateExpired()) return "Срок оценивания завершён";
+    if (this.evaluationClosed()) return "Срок оценивания завершён";
     if (this.isLimitReached() && !this.userRatedThisProject())
       return "Достигнут максимальный лимит оценок";
     if (this.userRatedThisProject()) return "Нажмите для переоценки";
@@ -133,6 +119,7 @@ export class RatingCardService {
   /** Инициализация начального состояния проекта. */
   initProject(project: ProjectRate | null): void {
     if (!project) return;
+    this.backendEvaluationClosed.set(false);
     this.project.set(project);
     const isScored = project.scored || false;
     this.projectConfirmed.set(isScored);
@@ -142,7 +129,7 @@ export class RatingCardService {
 
   /** Подтверждение оценки проекта. */
   confirmRateProject(): void {
-    if (this.evaluationDateExpired()) return;
+    if (this.evaluationClosed()) return;
     const fv = this.form().getRawValue();
     const p = this.project() as ProjectRate;
 
@@ -154,10 +141,17 @@ export class RatingCardService {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            if (result.error.cause instanceof HttpResponse) {
-              if (result.error.cause.status === 400) {
-                this.logger.error("Ошибка: достигнут максимальный лимит оценок");
-              }
+            if (this.isEvaluationDeadlineError(result.error.cause)) {
+              this.backendEvaluationClosed.set(true);
+              this.showConfirmRateModal.set(false);
+              return;
+            }
+
+            if (
+              result.error.cause instanceof HttpErrorResponse &&
+              result.error.cause.status === 400
+            ) {
+              this.logger.error("Ошибка: достигнут максимальный лимит оценок");
             }
             return;
           }
@@ -165,28 +159,21 @@ export class RatingCardService {
           const profile = this.profile();
           const proj = this.project() as ProjectRate;
 
-          this.locallyRatedByCurrentUser.set(true);
           this.projectRated.set(true);
           this.projectConfirmed.set(true);
 
-          let isFirstTimeRating = false;
+          const isFirstTimeRating = !proj.scored;
+          let ratedExperts = Array.isArray(proj.ratedExperts) ? proj.ratedExperts : [];
 
-          if (profile) {
-            if (!Array.isArray(proj.ratedExperts)) {
-              proj.ratedExperts = [];
-            }
-
-            if (!proj.ratedExperts.some(user => user.id === profile.id)) {
-              proj.ratedExperts = [...proj.ratedExperts, profile];
-              isFirstTimeRating = true;
-            }
+          if (profile && !ratedExperts.includes(profile.id)) {
+            ratedExperts = [...ratedExperts, profile.id];
           }
 
           if (isFirstTimeRating) {
             this.ratedCount.update(count => count + 1);
           }
 
-          this.project.set({ ...proj });
+          this.project.set({ ...proj, scored: true, ratedExperts });
           this.showConfirmRateModal.set(false);
         },
       });
@@ -197,5 +184,12 @@ export class RatingCardService {
     if (!this.canEdit()) return;
     this.projectRated.set(false);
     this.projectConfirmed.set(false);
+  }
+
+  private isEvaluationDeadlineError(error: unknown): boolean {
+    if (!(error instanceof HttpErrorResponse) || error.status !== 409) return false;
+    if (!error.error || typeof error.error !== "object") return false;
+
+    return (error.error as { error?: unknown }).error === "evaluation_deadline_passed";
   }
 }
