@@ -2,7 +2,7 @@
 
 <div class="project__inner" [formGroup]="projectForm">
   <div class="project__info">
-    <div class="project__grid" style="grid-template-columns: 0.1fr 1fr 1fr 0.15fr">
+    <div class="project__grid project__grid--assets">
       @if (imageAddress; as imageAddress) {
         <div class="project__image">
           <label class="field-label text-body-12" style="text-align: center" for="name"
@@ -17,9 +17,9 @@
             [size]="68"
             formControlName="imageAddress"
             type="project"
-            [error]="(imageAddress | controlError) && projSubmitInitiated()"
+            [error]="showError(imageAddress)"
           ></app-avatar-control>
-          @if ((imageAddress | controlError: "required") && projSubmitInitiated()) {
+          @if (showError(imageAddress, "required")) {
             <div class="text-body-10 error">
               {{ errorMessage.EMPTY_AVATAR }}
             </div>
@@ -34,7 +34,7 @@
           <app-upload-file
             formControlName="presentationAddress"
             accept=".pdf,.pptx"
-            [error]="presentationAddress | controlError"
+            [error]="showError(presentationAddress)"
           >
             <ng-container emptyPlaceholder>
               <i appIcon icon="file" appSquare="16"></i>
@@ -42,7 +42,7 @@
                 Презентации формата .PDF<br />
                 или .PPTX весом до 50МБ
               </p>
-              @if (presentationAddress | controlError: "required") {
+              @if (showError(presentationAddress, "required")) {
                 <p class="project__slides-error text-body-10">Загрузите файл</p>
               }
             </ng-container>
@@ -57,7 +57,7 @@
           <app-upload-file
             formControlName="coverImageAddress"
             accept=".jpg,.png,.jpeg"
-            [error]="coverImageAddress | controlError"
+            [error]="showError(coverImageAddress)"
           >
             <ng-container emptyPlaceholder>
               <i appIcon icon="file" appSquare="16"></i>
@@ -65,7 +65,7 @@
                 Презентации формата .jpg, .jpeg, .png
                 <br />Размер изображения 1280 x 230
               </p>
-              @if (coverImageAddress | controlError: "required") {
+              @if (showError(coverImageAddress, "required")) {
                 <p class="project__slides-error text-body-10">Загрузите файл</p>
               }
             </ng-container>
@@ -80,8 +80,9 @@
             formControlName="trl"
             placeholder="TRL"
             [options]="trlList"
+            [error]="showError(trl)"
           ></app-select>
-          @if (trl | controlError: "required") {
+          @if (showError(trl, "required")) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -90,19 +91,30 @@
       }
     </div>
 
-    <div class="project__grid" style="grid-template-columns: 1fr 1fr 1fr 0.2fr">
+    <div class="project__grid project__grid--main">
       @if (name; as name) {
         <fieldset>
           <label class="field-label text-body-12" for="name">название</label>
           <app-input
             size="big"
             id="name"
+            class="project__validated-input"
             formControlName="name"
-            [error]="(name | controlError) || projSubmitInitiated()"
+            [error]="showError(name)"
             placeholder="название"
             [maxLength]="256"
-          ></app-input>
-          @if ((name | controlError: "required") || projSubmitInitiated()) {
+          >
+            @if (showError(name)) {
+              <i
+                class="project__input-error"
+                appIcon
+                icon="error"
+                appSquare="20"
+                aria-hidden="true"
+              ></i>
+            }
+          </app-input>
+          @if (showError(name, "required")) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -112,18 +124,23 @@
       @if (region; as region) {
         <fieldset>
           <label class="field-label text-body-12" for="region">регион</label>
-          <app-input
-            size="big"
-            id="region"
-            formControlName="region"
-            [error]="(region | controlError) || projSubmitInitiated()"
-            placeholder="введите регион"
-            [maxLength]="256"
-          ></app-input>
-          @if ((region | controlError: "required") || projSubmitInitiated()) {
+          <div
+            class="project__region-field"
+            [class.project__region-field--error]="showError(region)"
+          >
+            <app-region-select
+              id="region"
+              formControlName="region"
+              [error]="showError(region)"
+              placeholder="выберите регион"
+            ></app-region-select>
+          </div>
+          @if (showError(region, "required")) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
+          } @else if (showError(region, "canonicalRegion")) {
+            <div class="text-body-10 error">Выберите регион из списка</div>
           }
         </fieldset>
       }
@@ -137,9 +154,10 @@
               formControlName="industryId"
               placeholder="выберите сферу проекта"
               [options]="industries"
+              [error]="showError(industry)"
             ></app-select>
           }
-          @if (industry | controlError: "required") {
+          @if (showError(industry, "required")) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -163,10 +181,10 @@
             [tooltipWidth]="300"
             type="date"
             formControlName="implementationDeadline"
-            [error]="(implementationDeadline | controlError) && projSubmitInitiated()"
+            [error]="showError(implementationDeadline)"
             placeholder="25.01.25"
           ></app-input>
-          @if ((implementationDeadline | controlError: "required") && projSubmitInitiated()) {
+          @if (showError(implementationDeadline, "required")) {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -182,12 +200,23 @@
       <app-input
         size="big"
         id="problem"
+        class="project__validated-input"
         formControlName="problem"
-        [error]="(problem | controlError) || projSubmitInitiated()"
+        [error]="showError(problem)"
         placeholder="улучшить качество жизни студентов"
         [maxLength]="1000"
-      ></app-input>
-      @if ((problem | controlError: "required") || projSubmitInitiated()) {
+      >
+        @if (showError(problem)) {
+          <i
+            class="project__input-error"
+            appIcon
+            icon="error"
+            appSquare="20"
+            aria-hidden="true"
+          ></i>
+        }
+      </app-input>
+      @if (showError(problem, "required")) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -205,12 +234,12 @@
         [tooltipText]="'Расскажите основную информацию о проекте. Про что проект, история проекта, как он появился'"
         [tooltipPosition]="'left'"
         [tooltipWidth]="350"
-        [error]="(description | controlError) || projSubmitInitiated()"
+        [error]="showError(description)"
         formControlName="description"
         placeholder="проект начал свое существование с 2020 года"
         [maxLength]="800"
       ></app-textarea>
-      @if ((description | controlError: "required") || projSubmitInitiated()) {
+      @if (showError(description, "required")) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -230,11 +259,11 @@
           [tooltipPosition]="'right'"
           [tooltipWidth]="350"
           formControlName="actuality"
-          [error]="actuality | controlError"
+          [error]="showError(actuality)"
           placeholder="указом президента от 03.07.2023 "
           [maxLength]="1000"
         ></app-textarea>
-        @if (actuality | controlError: "required") {
+        @if (showError(actuality, "required")) {
           <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
@@ -243,7 +272,7 @@
     }
     @if (targetAudience; as targetAudience) {
       <fieldset>
-        <label class="field-label text-body-12" for="actuality">целевая аудитория</label>
+        <label class="field-label text-body-12" for="targetAudience">целевая аудитория</label>
         <app-textarea
           size="big"
           id="targetAudience"
@@ -251,12 +280,12 @@
           [tooltipText]="'Расскажите, кто ваш целевой клиент и какую проблему он решает с помощью вашего проекта. Помните, что вся Россия не может быть целевой аудиторией. Чем конкретнее и меньше аудитория, тем лучше!'"
           [tooltipPosition]="'left'"
           [tooltipWidth]="350"
-          [error]="(targetAudience | controlError) || projSubmitInitiated()"
+          [error]="showError(targetAudience)"
           formControlName="targetAudience"
           placeholder="студенты 2–4 курсов IT и бизнес-направлений"
           [maxLength]="500"
         ></app-textarea>
-        @if ((targetAudience | controlError: "required") || projSubmitInitiated()) {
+        @if (showError(targetAudience, "required")) {
           <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
@@ -425,16 +454,17 @@
     <div formArrayName="links">
       @if (hasLinks()) {
         <ul class="project__links--wrapper">
-          @for (control of links.controls; track trackByIndex($index)) {
+          @for (control of linkControls(); track control; let i = $index) {
             <li class="project__links">
               <fieldset style="flex-grow: 1">
                 <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>
                 <app-input
                   size="big"
-                  [formControlName]="$index"
+                  [formControl]="control"
+                  [error]="showError(control)"
                   placeholder="@eeeasycarrer"
                 ></app-input>
-                @if (control.invalid && (control.touched || projSubmitInitiated())) {
+                @if (showError(control, "required")) {
                   <div class="text-body-10 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
@@ -444,7 +474,7 @@
               <app-button
                 class="project__links--remove"
                 color="red"
-                (click)="removeLink($index)"
+                (click)="removeLink(i)"
                 type="icon"
               >
                 <i appIcon icon="basket" appSquare="14"></i>

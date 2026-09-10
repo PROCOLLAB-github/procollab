@@ -1,6 +1,5 @@
 /** @format */
 
-import { User } from "@domain/auth/user.model";
 import { ProjectRatingCriterion } from "./project-rating-criterion"; // Assuming this is where ProjectRatingCriterion is declared
 
 /** Интерфейс проекта для оценки */
@@ -15,8 +14,7 @@ export interface ProjectRate {
   viewsCount: number;
   industry: number;
   scored: boolean;
-  scoredExpertId: number | null;
-  ratedExperts: User[];
+  ratedExperts: number[];
   ratedCount: number;
   maxRates: number;
   criterias: ProjectRatingCriterion[];

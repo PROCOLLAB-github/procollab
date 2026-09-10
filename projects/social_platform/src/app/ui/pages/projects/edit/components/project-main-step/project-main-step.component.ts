@@ -1,7 +1,13 @@
 /** @format */
 
 import { Component, inject, OnInit, ChangeDetectionStrategy, input } from "@angular/core";
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { directionProjectList } from "@core/consts/lists/direction-project-list.const";
 import { trackProjectList } from "@core/consts/lists/track-project-list.const";
@@ -24,6 +30,7 @@ import { ProjectGoalsUIService } from "@api/project/facades/edit/ui/project-goal
 import { ProjectGoalService } from "@api/project/facades/edit/project-goals.service";
 import { ProjectContactsService } from "@api/project/facades/edit/project-contacts.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.component";
 
 /** Шаг редактирования проекта: основная информация. */
 @Component({
@@ -46,6 +53,7 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     AvatarComponent,
     FormsModule,
     RouterLink,
+    RegionSelectComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -106,6 +114,7 @@ export class ProjectMainStepComponent implements OnInit {
   // Геттеры для работы со ссылками
   protected readonly link = this.projectContactsService.link;
   protected readonly links = this.projectContactsService.links;
+  protected readonly linkControls = this.projectContactsService.linkControls;
 
   // Геттеры для работы с целями
   protected readonly goals = this.projectGoalService.goals;
@@ -122,6 +131,15 @@ export class ProjectMainStepComponent implements OnInit {
   protected readonly hasGoals = this.projectGoalsUIService.hasGoals;
 
   ngOnInit(): void {}
+
+  /** A submit attempt exposes actual errors; it must never make a valid control look required. */
+  protected showError(control: AbstractControl, errorName?: string): boolean {
+    return (
+      control.enabled &&
+      (control.touched || this.projSubmitInitiated()) &&
+      (errorName ? control.hasError(errorName) : control.invalid)
+    );
+  }
 
   addLink(): void {
     this.projectContactsService.addLink(this.links);
@@ -165,9 +183,5 @@ export class ProjectMainStepComponent implements OnInit {
 
   toggleGoalLeaderModal(index?: number): void {
     this.projectGoalsUIService.applyToggleGoalLeaderModal(this.goals, index);
-  }
-
-  protected trackByIndex(index: number): number {
-    return index;
   }
 }

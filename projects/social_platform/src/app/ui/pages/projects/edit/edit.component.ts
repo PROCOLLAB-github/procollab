@@ -100,7 +100,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly fromProgramOpen = this.projectsEditUIInfoService.fromProgramOpen;
 
   // Маркер того является ли проект привязанный к конкурсной программе
-  protected readonly isCompetitive = this.projectsEditUIInfoService.isCompetitive;
+  protected readonly isCompetitive = this.projectsEditInfoService.isCompetitive;
+  protected readonly submitted = this.projectsEditInfoService.submitted;
   protected readonly isProjectAssignToProgram =
     this.projectsEditUIInfoService.isProjectAssignToProgram;
 

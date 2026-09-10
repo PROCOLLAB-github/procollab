@@ -2,6 +2,65 @@
 
 # Module: `project`
 
+## Canonical additional-fields edit flow
+
+Активная связь определяется в `ProjectAdditionalService`: валидный query
+`programLinkId` имеет приоритет, затем используется `project.partnerProgram.programLinkId`
+для старых ссылок. ProjectId/programId/первый program tag не используются как link ID.
+
+- GET `/programs/partner-program-projects/:programLinkId/fields/` возвращает
+  `ProgramLinkFields`: projectId, programId, programLinkId, submitted, fields с value,
+  isCompetitive, submissionOpen, submissionDeadline (string|null), canSubmit.
+- PUT того же URL отправляет массив `{ field_id, value_text }` и получает подтверждение,
+  не Project. `GetProgramLinkFieldsUseCase` / `UpdateProgramLinkFieldsUseCase` возвращают Result.
+- POST `/programs/partner-program-projects/:programLinkId/submit/` использует ту же связь,
+  только после успешного PUT. Существующие правила доступности сдачи не расширяются.
+
+Production backend contract SHA: `907ced23273e298314e9d8604dbaabb25ded6869`.
+Все решения о сдаче и её доступности используют canonical metadata активной связи,
+не legacy `project.partnerProgram`. При смене context ID и metadata сбрасываются вместе;
+metadata старого ответа не может заменить данные новой связи. Даты/флаги не пересчитываются
+на frontend. Закрытая конкурсная связь не превращается в обычный publish: deadline UI
+показывается до отправки fields/submit. Неконкурсная связь не вызывает submit, сданная
+не вызывает ни fields PUT, ни повторный submit.
+
+Для ordinary edit/save с verified activeProgramLinkId `UpdateFormUseCase` получает
+новую копию payload **без partnerProgramId** (а значит, без partner_program_id после
+interceptor). Это исключает случайную команду изменить Project × Program bindings A/B.
+FormControl сохраняется; `assignProjectToProgram()` и dedicated `AssignProjectProgramUseCase`
+не меняются. Вне canonical context прежняя payload semantics, включая explicit legacy
+bind/unbind, сохранена.
+
+`CamelcaseInterceptor` сохраняется; repository преобразует GET DTO в domain snapshot.
+До применения проверяются projectId текущего route и programLinkId запроса.
+Несоответствие логируется, показывает controlled loading error и блокирует PUT.
+Реактивные route params/query и resolver data отменяют старые запросы; новый GET
+не выполняется до совпадения resolved Project с route projectId.
+
+Один экземпляр additionalForm сохраняется на протяжении жизни редактора.
+Loading, error с «Повторить», empty success и заполненный success различаются.
+Ошибка GET: «Не удалось загрузить дополнительные сведения программы.»
+Неизвестные PUT ошибки, network и 5xx отображаются только через заданные сообщения,
+без raw backend body и без потери введённых значений. Case errors подсвечивают control;
+при устаревшем option повторный GET получает актуальные options без смешивания программ.
+Отдельные controlled kinds `submission_closed`, `already_submitted`, `not_competitive`
+обрабатывают backend races после GET. Deadline failure открывает существующую late modal;
+already-submitted/noncompetitive повторяют canonical GET и не сообщают success.
+Backend submit validation и endpoint не меняются и остаются final authority.
+
+System case определяется exact `name="case"`. Нулевое value становится `""`,
+checkbox/radio — false; сохранённые значения восстанавливаются. Кейс имеет required
+validation, но draft save опускает пустой case (partial update). Publish/submit
+блокируется до выбора case; нет auto-select первого варианта. `submitted=true`
+отключает controls, запрещает PUT и показывает «Проект уже сдан. Дополнительные
+сведения изменить нельзя.» Основные сведения проекта сохраняются независимо от
+disabled additionalForm, без повторной отправки frozen fields.
+
+Новый edit flow больше не использует `/projects/:projectId/program-fields/`.
+Legacy embedded fields остаются в глобальной Project model ради совместимости,
+но не являются authoritative source этой формы. Backend, team/invite rules,
+состав команды, кейс-аналитика и API contracts не меняются.
+
 Самый большой модуль приложения — проекты. Состоит из 8 sub-доменов на уровне портов и репозиториев:
 
 - `project` — основная CRUD-логика проекта.
@@ -80,7 +139,7 @@ interface UpdateFormCommand {
 | `ProjectGoalsRepositoryPort`         | `fetchAll(projectId)`, `createGoal(projectId, params: GoalFormData[])`, `editGoal(projectId, goalId, params)`, `deleteGoal(projectId, goalId)`                                  |
 | `PROJECT_NEWS_REPOSITORY`            | `NewsRepositoryPort<FeedNews>`: `fetchNews`, `fetchNewsDetail`, `addNews`, `readNews`, `delete`, `toggleLike`, `editNews`                                                       |
 | `ProjectPartnerRepositoryPort`       | `fetchAll`, `createPartner`, `updatePartner` (только `contribution` + `decisionMaker`), `deletePartner`                                                                         |
-| `ProjectProgramRepositoryPort`       | `assignProjectToProgram(projectId, partnerProgramId)`, `sendNewProjectFieldsValues(projectId, newValues)`                                                                       |
+| `ProjectProgramRepositoryPort`       | `assignProjectToProgram(projectId, partnerProgramId)`, `getProgramLinkFields(programLinkId)`, `updateProgramLinkFields(programLinkId, values)`                                  |
 | `ProjectRatingRepositoryPort`        | `getAll(programId, params?)`, `postFilters(programId, filters, params?)`, `rate(projectId, scores)`, `formValuesToDTO(criteria, outputVals)`                                    |
 | `ProjectResourceRepositoryPort`      | `fetchAll`, `createResource`, `updateResource`, `deleteResource`                                                                                                                |
 | `ProjectSubscriptionRepositoryPort`  | `getSubscribers`, `addSubscription`, `getSubscriptions(userId, params?)`, `deleteSubscription`                                                                                  |
@@ -113,7 +172,7 @@ project-subscription.providers.ts
 | `LeaveProjectUseCase`                                                                                                                                                                             | Выйти из проекта.                                                            |
 | `RemoveProjectCollaboratorUseCase`                                                                                                                                                                | Удалить участника (эмитит `RemoveProjectCollaborator`).                      |
 | `SubmitCompetitiveProjectUseCase`                                                                                                                                                                 | Подать проект на конкурс / партнёрскую программу.                            |
-| `SendProjectAdditionalFieldsUseCase`                                                                                                                                                              | Отправить дополнительные поля для партнёрской программы.                     |
+| `GetProgramLinkFieldsUseCase` / `UpdateProgramLinkFieldsUseCase`                                                                                                                                  | Загрузить/частично обновить поля конкретной связи проекта с программой.      |
 | `GetProjectGoalsUseCase`, `CreateGoalsUseCase`, `DeleteGoalUseCase`                                                                                                                               | CRUD по целям.                                                               |
 | `GetProjectPartnersUseCase`, `CreatePartnerUseCase`, `DeletePartnerUseCase`                                                                                                                       | CRUD по партнёрам.                                                           |
 | `GetProjectResourcesUseCase`, `CreateResourceUseCase`, `DeleteResourceUseCase`                                                                                                                    | CRUD по ресурсам.                                                            |
@@ -221,16 +280,16 @@ DTO лежат в `dto/`:
 
 HTTP-эндпоинты (укрупнённо):
 
-| Адаптер                           | Базовый URL                                                                 | Ключевые операции                                                                                          |
-| --------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `ProjectHttpAdapter`              | `/projects`                                                                 | `getAll`, `getOne`, `getMy`, `postOne` (создаёт черновик), `update(id, data)`, `deleteOne(id)`, `getCount` |
-| `ProjectCollaboratorsHttpAdapter` | `/projects/<id>/collaborators`                                              | DELETE collaborator, PATCH switch_leader, DELETE leave                                                     |
-| `ProjectGoalsHttpAdapter`         | `/projects/<id>/goals`                                                      | CRUD                                                                                                       |
-| `ProjectNewsHttpAdapter`          | `/projects/<id>/news`                                                       | CRUD + set_viewed + set_liked                                                                              |
-| `ProjectPartnerHttpAdapter`       | `/projects/<id>/partners`                                                   | CRUD                                                                                                       |
-| `ProjectProgramHttpAdapter`       | `/projects/<id>/...` (assign-to-program) и `/projects/<id>/program-fields/` | assign + send-fields                                                                                       |
-| `ProjectRatingHttpAdapter`        | `/programs/<programId>/projects`                                            | get rating list, post filters, rate                                                                        |
-| `ProjectResourceHttpAdapter`      | `/projects/<id>/resources`                                                  | CRUD                                                                                                       |
+| Адаптер                           | Базовый URL                                                                                  | Ключевые операции                                                                                          |
+| --------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `ProjectHttpAdapter`              | `/projects`                                                                                  | `getAll`, `getOne`, `getMy`, `postOne` (создаёт черновик), `update(id, data)`, `deleteOne(id)`, `getCount` |
+| `ProjectCollaboratorsHttpAdapter` | `/projects/<id>/collaborators`                                                               | DELETE collaborator, PATCH switch_leader, DELETE leave                                                     |
+| `ProjectGoalsHttpAdapter`         | `/projects/<id>/goals`                                                                       | CRUD                                                                                                       |
+| `ProjectNewsHttpAdapter`          | `/projects/<id>/news`                                                                        | CRUD + set_viewed + set_liked                                                                              |
+| `ProjectPartnerHttpAdapter`       | `/projects/<id>/partners`                                                                    | CRUD                                                                                                       |
+| `ProjectProgramHttpAdapter`       | `/projects/assign-to-program/`, `/programs/partner-program-projects/<programLinkId>/fields/` | assign + canonical GET/PUT fields                                                                          |
+| `ProjectRatingHttpAdapter`        | `/programs/<programId>/projects`                                                             | get rating list, post filters, rate                                                                        |
+| `ProjectResourceHttpAdapter`      | `/projects/<id>/resources`                                                                   | CRUD                                                                                                       |
 
 Subscription-репозиторий пользуется `ProjectHttpAdapter` (без отдельного адаптера).
 

@@ -10,6 +10,7 @@ import { ProgramCreate } from "@domain/program/program-create.model";
 import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 
 describe("ProgramHttpAdapter", () => {
   let adapter: ProgramHttpAdapter;
@@ -51,6 +52,36 @@ describe("ProgramHttpAdapter", () => {
     adapter.getOne(5).subscribe();
 
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/");
+  });
+
+  it.each(["all", "completed", "pending"] as const)(
+    "назначения: scope=%s передаётся query-параметром",
+    scope => {
+      setup();
+      api.get.mockReturnValue(of([]));
+      adapter.getManagerAssignments(12, scope).subscribe();
+      expect(api.get.mock.lastCall[0]).toBe("/programs/12/project-analytics/assignments/");
+      expect(api.get.mock.lastCall[1].toString()).toBe(`scope=${scope}`);
+    },
+  );
+
+  it("запрашивает критерии назначения внутри программы", () => {
+    setup();
+    api.get.mockReturnValue(of({}));
+    adapter.getManagerAssignmentScores(12, 17).subscribe();
+    expect(api.get).toHaveBeenCalledExactlyOnceWith(
+      "/programs/12/project-analytics/assignments/17/scores/",
+    );
+  });
+
+  it("getManagerOverview идёт в production project analytics программы", () => {
+    setup();
+    api.get.mockReturnValue(of({} as ProgramAnalyticsOverview));
+
+    adapter.getManagerOverview(5).subscribe();
+
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/project-analytics/");
+    expect(api.get.mock.calls.flat().join(" ")).not.toContain("manager-overview");
   });
 
   it("create идёт в POST /programs/ с телом", () => {

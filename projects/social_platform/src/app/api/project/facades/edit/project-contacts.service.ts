@@ -11,29 +11,14 @@ import { ProjectFormService } from "./project-form.service";
 export class ProjectContactsService {
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);
-  public readonly linksItems = signal<any[]>([]);
-  private initialized = false;
-
-  private initializeLinksItems(linksFormArray: FormArray): void {
-    if (this.initialized) return;
-
-    if (linksFormArray && linksFormArray.length > 0) {
-      // Синхронизируем сигнал с данными из FormArray
-      this.linksItems.set(linksFormArray.value);
-    }
-    this.initialized = true;
-  }
+  public readonly linkControls = signal<readonly FormControl<string>[]>([]);
 
   public syncLinksItems(linksFormArray: FormArray): void {
-    if (linksFormArray && linksFormArray.length > 0) {
-      this.linksItems.set(linksFormArray.value);
-    } else {
-      this.linksItems.set([]);
-    }
-    this.initialized = true;
+    // Project links are scalar FormControls in the source FormArray.
+    this.linkControls.set([...linksFormArray.controls] as FormControl<string>[]);
   }
 
-  readonly hasLinks = computed(() => this.linksItems().length > 0);
+  readonly hasLinks = computed(() => this.linkControls().length > 0);
 
   private get projectForm(): FormGroup {
     return this.projectFormService.getForm();
@@ -48,15 +33,11 @@ export class ProjectContactsService {
   }
 
   public addLink(linksFormArray: FormArray): void {
-    this.initializeLinksItems(linksFormArray);
-    linksFormArray.push(this.fb.control("", Validators.required));
+    linksFormArray.push(this.fb.nonNullable.control("", Validators.required));
     this.syncLinksItems(linksFormArray);
   }
 
   public editLink(index: number, linksFormArray: FormArray, projectForm: FormGroup): void {
-    // Инициализируем сигнал при необходимости
-    this.initializeLinksItems(linksFormArray);
-
     // Используем данные из FormArray как источник истины
     const source = linksFormArray.value[index];
 
@@ -85,7 +66,6 @@ export class ProjectContactsService {
   }
 
   public reset(): void {
-    this.linksItems.set([]);
-    this.initialized = false;
+    this.linkControls.set([]);
   }
 }

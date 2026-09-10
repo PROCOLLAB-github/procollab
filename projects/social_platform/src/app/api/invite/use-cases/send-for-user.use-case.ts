@@ -6,8 +6,10 @@ import { SendForUserCommand } from "@domain/invite/commands/send-for-user.comman
 import { catchError, map, Observable, of } from "rxjs";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { Invite } from "@domain/invite/invite.model";
+import { InviteSendError } from "@domain/invite/invite-send-error";
+import { mapInviteSendError } from "../mappers/map-invite-send-error";
 
-/** Сценарий: отправить приглашение пользователю в проект; ошибка → `invite_error`. */
+/** Отправляет приглашение, преобразуя HTTP-ошибки в безопасный контракт формы. */
 @Injectable({ providedIn: "root" })
 export class SendForUserUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);
@@ -17,10 +19,10 @@ export class SendForUserUseCase {
     projectId,
     role,
     specialization,
-  }: SendForUserCommand): Observable<Result<Invite, { kind: "invite_error"; cause?: unknown }>> {
+  }: SendForUserCommand): Observable<Result<Invite, InviteSendError>> {
     return this.inviteRepositoryPort.sendForUser(userId, projectId, role, specialization).pipe(
       map(invite => ok<Invite>(invite)),
-      catchError(error => of(fail({ kind: "invite_error" as const, cause: error }))),
+      catchError(error => of(fail(mapInviteSendError(error)))),
     );
   }
 }

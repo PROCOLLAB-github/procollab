@@ -10,7 +10,7 @@
       decoding="async"
     />
   </div>
-  <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSendForm()">
+  <form class="auth__wrapper" [formGroup]="registerForm" novalidate (ngSubmit)="onSendForm()">
     <ng-container>
       <div class="auth__row">
         @if (registerForm.get("firstName"); as name) {
@@ -172,30 +172,30 @@
         <fieldset class="auth__field">
           <label for="passowrd" class="field-label">пароль</label>
           <app-input
+            class="auth__password-input"
             size="big"
             [error]="!!(password | controlError)"
             id="passowrd"
             [type]="showPassword() ? 'text' : 'password'"
             formControlName="password"
+            name="new-password"
+            autocomplete="new-password"
             placeholder="GJiwoeuhbn120="
           >
-            @if (showPassword()) {
+            <button
+              type="button"
+              class="auth__password-toggle auth__password-toggle--muted"
+              [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+              [attr.aria-pressed]="showPassword()"
+              (click)="$event.stopPropagation(); toggleShowPassword('first')"
+            >
               <i
                 appIcon
-                icon="eye"
-                appSquare="20"
-                class="icon"
-                (click)="toggleShowPassword('first')"
+                [icon]="showPassword() ? 'eye' : 'eye-off'"
+                appSquare="15"
+                aria-hidden="true"
               ></i>
-            } @else {
-              <i
-                appIcon
-                icon="eye-off"
-                appSquare="18"
-                class="icon"
-                (click)="toggleShowPassword('first')"
-              ></i>
-            }
+            </button>
           </app-input>
         </fieldset>
 
@@ -203,30 +203,31 @@
           <label for="repeatedPassword" class="field-label">повторите пароль</label>
           <app-input
             size="big"
-            class="register__repeated-password"
+            class="register__repeated-password auth__password-input"
             [error]="!!(password | controlError)"
             id="repeatedPassword"
             [type]="showPasswordRepeat() ? 'text' : 'password'"
             formControlName="repeatedPassword"
+            name="new-password-confirmation"
+            autocomplete="new-password"
             placeholder="GJiwoeuhbn120="
           >
-            @if (showPasswordRepeat()) {
+            <button
+              type="button"
+              class="auth__password-toggle auth__password-toggle--muted"
+              [attr.aria-label]="
+                showPasswordRepeat() ? 'Скрыть повторный пароль' : 'Показать повторный пароль'
+              "
+              [attr.aria-pressed]="showPasswordRepeat()"
+              (click)="$event.stopPropagation(); toggleShowPassword('repeat')"
+            >
               <i
                 appIcon
-                icon="eye"
-                appSquare="20"
-                class="icon"
-                (click)="toggleShowPassword('repeat')"
+                [icon]="showPasswordRepeat() ? 'eye' : 'eye-off'"
+                appSquare="15"
+                aria-hidden="true"
               ></i>
-            } @else {
-              <i
-                appIcon
-                icon="eye-off"
-                appSquare="18"
-                class="icon"
-                (click)="toggleShowPassword('repeat')"
-              ></i>
-            }
+            </button>
           </app-input>
         </fieldset>
 

@@ -37,7 +37,7 @@
   &__aside {
     display: grid;
     grid-row-start: 3;
-    gap: 20px;
+    gap: 16px;
 
     @include responsive.apply-desktop {
       grid-row-start: unset;
@@ -46,7 +46,7 @@
 
   &__section {
     padding: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
@@ -96,14 +96,25 @@
     min-width: 0;
 
     &--text {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 17px;
       color: var(--black) !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     &--subtext {
+      font-size: 11px;
+      line-height: 16px;
       color: var(--grey-for-text) !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     &--more {
+      font-size: 11px;
+      line-height: 16px;
       color: var(--accent) !important;
     }
 
@@ -116,10 +127,21 @@
   &__project-name {
     display: -webkit-box;
     overflow: hidden;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
     color: var(--black);
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+
+  &__project-role {
+    margin-top: 3px;
+    font-size: 11px;
+    line-height: 15px;
+    color: var(--dark-grey);
+    overflow-wrap: anywhere;
   }
   /* stylelint-enable value-no-vendor-prefix */
 
@@ -132,6 +154,12 @@
     padding: 5px;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
+
+    p {
+      font-size: 11px;
+      line-height: 14px;
+      color: var(--dark-grey);
+    }
   }
 
   &__item {

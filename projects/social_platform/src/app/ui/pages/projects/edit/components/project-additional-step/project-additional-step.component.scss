@@ -4,6 +4,23 @@
 @use "styles/typography";
 
 .project {
+  &__validated-input ::ng-deep {
+    .field__right-icon {
+      top: 50%;
+      right: 16px !important;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .field__input--error {
+      padding-right: 44px;
+    }
+  }
+
+  &__input-error {
+    color: var(--red);
+  }
+
   position: relative;
 
   &__inner {

@@ -66,6 +66,106 @@
     }
   }
 
+  // Native password-manager controls stay inside the input; the eye has its own adjacent slot.
+  &__field app-input.auth__password-input {
+    --auth-password-eye-inset: 8px;
+    --auth-password-eye-size: 25px;
+    --auth-password-error-size: 20px;
+    --auth-password-error-gap: 4px;
+
+    .field {
+      display: flex;
+      align-items: center;
+      background: var(--white);
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-xxl);
+
+      &:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
+
+      &--error {
+        border-color: var(--red);
+
+        &:focus-within {
+          box-shadow: 0 0 6px rgb(255 40 40 / 30.8%);
+        }
+      }
+    }
+
+    .field__input {
+      box-sizing: border-box;
+      flex: 1 1 0;
+      width: 0;
+      min-width: 0;
+      padding-right: 4px;
+      border: 0;
+      border-radius: var(--rounded-xxl) 0 0 var(--rounded-xxl);
+      box-shadow: none;
+    }
+
+    .field__right-icon {
+      position: relative;
+      top: auto;
+      right: auto !important;
+      flex: 0 0 var(--auth-password-eye-size);
+      width: var(--auth-password-eye-size);
+      height: var(--auth-password-eye-size);
+      padding: 0;
+      margin-right: var(--auth-password-eye-inset);
+      pointer-events: none;
+      background-color: transparent;
+      transform: none;
+
+      button {
+        pointer-events: auto;
+        cursor: pointer;
+      }
+
+      &::before {
+        position: absolute;
+        top: 4px;
+        bottom: 4px;
+        left: 0;
+        width: 1px;
+        content: "";
+        background: var(--medium-grey-for-outline);
+      }
+    }
+
+    .field__error-icon {
+      position: static;
+      flex: 0 0 var(--auth-password-error-size);
+      width: var(--auth-password-error-size);
+      height: var(--auth-password-error-size);
+      margin: 0 var(--auth-password-error-gap);
+      transform: none;
+    }
+  }
+
+  &__password-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    color: var(--dark-grey);
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    &--muted {
+      color: var(--dark-grey);
+    }
+  }
+
   &__row {
     display: flex;
 

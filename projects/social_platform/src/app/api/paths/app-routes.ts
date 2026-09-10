@@ -47,6 +47,7 @@ export const AppRoutes = {
     detail: (programId: number | string) => `/office/program/${programId}`,
     projects: (programId: number | string) => `/office/program/${programId}/projects`,
     projectsRating: (programId: number | string) => `/office/program/${programId}/projects-rating`,
+    analytics: (programId: number | string) => `/office/program/${programId}/analytics`,
     members: (programId: number | string) => `/office/program/${programId}/members`,
     register: (programId: number | string) => `/office/program/${programId}/register`,
   },

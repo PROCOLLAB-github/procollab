@@ -14,7 +14,6 @@ import { filter } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
-import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 
 @Injectable()
@@ -33,8 +32,6 @@ export class DetailInfoService {
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly detailProjectInfoService = inject(DetailProjectInfoService);
   private readonly detailProgramInfoService = inject(DetailProgramInfoService);
-
-  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
 
   private unsubscribeUrlChange?: () => void;
 
@@ -97,14 +94,9 @@ export class DetailInfoService {
     return type !== undefined && type === 3;
   });
 
-  readonly isProjectAssigned = computed(() => {
-    const programId = this.info()?.id;
-    if (!programId) return false;
-
-    return this.memberProjects().some(
-      project => project.leader === this.profile()?.id && project.partnerProgram?.id === programId,
-    );
-  });
+  readonly isProjectAssigned = computed(
+    () => !!this.detailProgramInfoService.application()?.submitted,
+  );
 
   initializationDetail(): void {
     this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => {
@@ -172,6 +164,8 @@ export class DetailInfoService {
       currentUrl.includes("/projects-rating"),
     );
 
+    this.detailProgramInfoService.applyUpdateStage("analytics", currentUrl.includes("/analytics"));
+
     this.detailProjectInfoService.applyUpdateStage("team", currentUrl.includes("/team"));
     this.detailProjectInfoService.applyUpdateStage("vacancies", currentUrl.includes("/vacancies"));
     this.detailProjectInfoService.applyUpdateStage("chat", currentUrl.includes("/chat"));
@@ -198,26 +192,6 @@ export class DetailInfoService {
     } else if (this.listType() === "program") {
       const program = this.programDetailMainUIInfoService.program;
       this.info.set(program());
-
-      if (this.isUserMember() && (this.isUserExpert() || this.isUserManager())) return;
-
-      if (this.isUserMember()) {
-        if (!this.isProjectAssigned()) {
-          this.getMyProjectsUseCase
-            .execute()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe({
-              next: result => {
-                if (!result.ok) {
-                  this.memberProjects.set([]);
-                  return;
-                }
-
-                this.memberProjects.set(result.value.results.filter(project => !project.draft));
-              },
-            });
-        }
-      }
     } else {
       this.detailProfileInfoService.initializationProfile();
       toObservable(this.profileDetailUIInfoService.user, { injector: this.injector })

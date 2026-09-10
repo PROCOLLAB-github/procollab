@@ -73,11 +73,7 @@
           [criteria]="project.criterias"
           [formControl]="form()"
           [currentUserId]="profile()!.id"
-          [disabled]="
-            (projectRated() || projectConfirmed()) &&
-            isRatedByCurrentUser() &&
-            !programDateFinished()
-          "
+          [disabled]="isRatingFormDisabled()"
         ></app-project-rating>
         @if (form() | controlError: "required"; as error) {
           <div class="text-body-10 error">
@@ -142,6 +138,7 @@
               size="big"
               class="cancel__button"
               customTypographyClass="text-body-12"
+              [disabled]="evaluationClosed()"
               (click)="confirmRateProject()"
             >
               подтверждаю

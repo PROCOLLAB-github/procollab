@@ -253,7 +253,7 @@ export class ProfileEditInfoService {
     );
     if (specialityError) return specialityError;
 
-    const cityError = this.resolveControlErrorText("Город", this.profileForm.get("city"));
+    const cityError = this.resolveControlErrorText("Регион", this.profileForm.get("city"));
     if (cityError) return cityError;
 
     const phoneError = this.resolveControlErrorText("Телефон", this.profileForm.get("phoneNumber"));

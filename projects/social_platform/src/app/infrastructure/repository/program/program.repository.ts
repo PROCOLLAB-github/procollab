@@ -2,7 +2,7 @@
 
 import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { map, Observable, tap } from "rxjs";
+import { map, Observable, tap, throwError } from "rxjs";
 import { User } from "@domain/auth/user.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
@@ -18,6 +18,19 @@ import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program
 import { userFromRaw } from "@utils/userRaw";
 import { EventBus } from "@domain/shared/event-bus";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
+import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
+  ProgramAnalyticsAttentionQuery,
+} from "@domain/program/program-analytics-attention.model";
+import {
+  ProgramAnalyticsOverview,
+  ProgramAnalyticsAssignment,
+  ProgramAnalyticsAssignmentScope,
+  ProgramAnalyticsAssignmentScoreDetail,
+} from "@domain/program/program-analytics.model";
 
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
@@ -43,13 +56,69 @@ export class ProgramRepository implements ProgramRepositoryPort {
   }
 
   getOne(programId: number): Observable<Program> {
-    return this.entityCache.getOrFetch(programId, () => this.programAdapter.getOne(programId));
+    const id = this.normalizeProgramId(programId);
+    if (id === null) return throwError(() => new RangeError("Invalid program id"));
+    return this.entityCache.getOrFetch(id, () => this.programAdapter.getOne(id));
+  }
+
+  getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
+    return this.programAdapter.getManagerOverview(programId);
+  }
+
+  /** Свежий manager-список при каждом открытии/поиске, без EntityCache. */
+  getManagerParticipantsWithoutTeam(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
+    return this.programAdapter.getManagerParticipantsWithoutTeam(programId, query);
+  }
+
+  /** Проксируем актуальный count/mode и nullable поля без вычислений. */
+  getManagerProjectsAwaitingEvaluation(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionProjects> {
+    return this.programAdapter.getManagerProjectsAwaitingEvaluation(programId, query);
+  }
+
+  /** Передаёт страницу несданных связей без кэша, нормализации или пересчёта срока. */
+  getManagerProjectsNotSubmitted(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsNotSubmittedProjectsPage> {
+    return this.programAdapter.getManagerProjectsNotSubmitted(programId, query);
+  }
+
+  /** Не кешируем manager-данные между открытиями или программами. */
+  getManagerAssignments(
+    programId: number,
+    scope: ProgramAnalyticsAssignmentScope,
+  ): Observable<ProgramAnalyticsAssignment[]> {
+    return this.programAdapter.getManagerAssignments(programId, scope);
+  }
+
+  /** Возвращает все критерии, включая ещё не оценённые. */
+  getManagerAssignmentScores(
+    programId: number,
+    assignmentId: number,
+  ): Observable<ProgramAnalyticsAssignmentScoreDetail> {
+    return this.programAdapter.getManagerAssignmentScores(programId, assignmentId);
   }
 
   acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {
+    const id = this.normalizeProgramId(programId);
+    if (id === null) return throwError(() => new RangeError("Invalid program id"));
     return this.programAdapter
-      .acknowledgeWelcome(programId)
-      .pipe(tap(() => this.entityCache.invalidate(programId)));
+      .acknowledgeWelcome(id)
+      .pipe(tap(() => this.entityCache.invalidate(id)));
+  }
+
+  /** Route callers may pass strings at runtime. Detail cache reads and welcome
+   * invalidation must use the same numeric key; invalid IDs become Observable errors.
+   */
+  private normalizeProgramId(programId: number): number | null {
+    const id = Number(programId);
+    return Number.isInteger(id) && id > 0 ? id : null;
   }
 
   create(program: ProgramCreate): Observable<Program> {
@@ -92,7 +161,9 @@ export class ProgramRepository implements ProgramRepositoryPort {
     programId: number,
     dto: ApplyToProgramDTO,
   ): Observable<ApplyToProgramResponse> {
-    return this.programAdapter.applyProjectToProgram(programId, dto);
+    return this.programAdapter
+      .applyProjectToProgram(programId, dto)
+      .pipe(tap(() => this.entityCache.invalidate(programId)));
   }
 
   createProgramFilters(

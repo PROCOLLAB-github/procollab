@@ -15,8 +15,9 @@ import { OnboardingStageZeroUIInfoService } from "@api/onboarding/facades/stages
 import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 import { TooltipInfoService, TooltipKey } from "@api/tooltip/tooltip-info.service";
 import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-control.component";
+import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.component";
 
-/** Начальный этап онбординга — сбор базовой информации профиля (фото, город, образование, опыт, языки, достижения). */
+/** Начальный этап онбординга — сбор базовой информации профиля (фото, регион, образование, опыт, языки, достижения). */
 @Component({
   selector: "app-stage-zero",
   templateUrl: "./stage-zero.component.html",
@@ -32,6 +33,7 @@ import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-con
     CommonModule,
     TooltipComponent,
     AvatarControlComponent,
+    RegionSelectComponent,
   ],
   providers: [
     OnboardingStageZeroInfoService,

@@ -63,6 +63,8 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     this._criteria.set(val);
     this.createFormControls(val);
     this.trackFormValueChange();
+    this.applyWrittenValue();
+    this.emitCurrentValue();
   }
 
   get criteria(): ProjectRatingCriterion[] {
@@ -106,17 +108,23 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   /** Сигнал для хранения подписок */
   subscriptions$ = signal<Subscription[]>([]);
 
-  onChange: (val: unknown) => void = noop;
+  onChange: (val: RatingFormValue) => void = noop;
   onTouched: () => void = noop;
+  private onChangeRegistered = false;
+  private writeValueCalled = false;
+  private writtenValue: RatingFormValue | null = null;
 
-  writeValue(val: typeof this.form.value): void {
-    if (val) {
-      this.form.patchValue(val);
-    }
+  writeValue(val: RatingFormValue | null): void {
+    this.writeValueCalled = true;
+    this.writtenValue = val;
+    this.applyWrittenValue();
+    this.emitCurrentValue();
   }
 
-  registerOnChange(fn: (v: unknown) => void): void {
+  registerOnChange(fn: (v: RatingFormValue) => void): void {
     this.onChange = fn;
+    this.onChangeRegistered = true;
+    this.emitCurrentValue();
   }
 
   registerOnTouched(fn: () => void): void {
@@ -157,10 +165,25 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   }
 
   private trackFormValueChange(): void {
-    const trackChanged$ = this.form.valueChanges.subscribe(val => {
-      this.onChange(val);
+    this.subscriptions$().forEach(subscription => subscription.unsubscribe());
+    this.subscriptions$.set([]);
+
+    const trackChanged$ = this.form.valueChanges.subscribe(() => {
+      this.onChange(this.form.getRawValue() as RatingFormValue);
     });
 
     this.subscriptions$().push(trackChanged$);
   }
+
+  private applyWrittenValue(): void {
+    if (!this.form || !this.writtenValue) return;
+    this.form.patchValue(this.writtenValue, { emitEvent: false });
+  }
+
+  private emitCurrentValue(): void {
+    if (!this.form || !this.onChangeRegistered || !this.writeValueCalled) return;
+    this.onChange(this.form.getRawValue() as RatingFormValue);
+  }
 }
+
+type RatingFormValue = Record<string, string | number | boolean>;

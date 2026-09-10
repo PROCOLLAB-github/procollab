@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ButtonComponent, InputComponent } from "@ui/primitives";
+import { ButtonComponent, IconComponent, InputComponent } from "@ui/primitives";
 import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
@@ -14,7 +14,7 @@ import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
   templateUrl: "./set-password.component.html",
   styleUrl: "./set-password.component.scss",
   providers: [AuthPasswordService, AuthUIInfoService],
-  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
+  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, IconComponent, ControlErrorPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetPasswordComponent implements OnInit {
@@ -30,13 +30,14 @@ export class SetPasswordComponent implements OnInit {
   protected readonly errorMessage = ErrorMessage;
 
   protected readonly showPassword = this.authUIInfoService.showPassword;
+  protected readonly showPasswordRepeat = this.authUIInfoService.showPasswordRepeat;
 
   ngOnInit(): void {
     this.authPasswordService.init();
   }
 
-  toggleShowPassword() {
-    this.authUIInfoService.toggleShowPassword("login");
+  toggleShowPassword(type: "first" | "repeat") {
+    this.authUIInfoService.toggleShowPassword("register", type);
   }
 
   onSubmit() {

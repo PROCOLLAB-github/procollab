@@ -16,6 +16,7 @@ import { TooltipComponent } from "./tooltip.component";
         [isVisible]="isVisible"
         [tooltipWidth]="180"
         [useOverlay]="true"
+        position="left"
         (show)="isVisible = true"
         (hide)="isVisible = false"
       ></app-tooltip>
@@ -72,7 +73,11 @@ describe("TooltipComponent overlay mode", () => {
     fixture.detectChanges();
 
     expect(overlayContainerElement.textContent).toContain("Скоро здесь будет аналитика");
-    expect(overlayContainerElement.querySelector(".tooltip__content--overlay")).toBeTruthy();
+    const popup = overlayContainerElement.querySelector(
+      ".tooltip__content--overlay-left",
+    ) as HTMLElement;
+    expect(popup).toBeTruthy();
+    expect(popup.classList).toContain("tooltip__content--overlay-left");
 
     icon.dispatchEvent(new MouseEvent("mouseleave"));
     fixture.detectChanges();

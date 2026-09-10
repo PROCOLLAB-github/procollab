@@ -85,6 +85,7 @@ describe("SkillsGroupComponent", () => {
     ) as HTMLElement;
 
     expect(heading.classList).toContain("heading__top--selected");
+    expect(getComputedStyle(heading).paddingLeft).not.toBe("0px");
     expect(panel.classList).toContain("content--open");
     expect(panel.textContent).toContain("Типографика");
   });
