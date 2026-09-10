@@ -1,7 +1,14 @@
 /** @format */
 
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from "@angular/forms";
 import { Project } from "@domain/project/project.model";
+import { findCanonicalRussianRegion } from "@core/consts/lists/russian-regions-list.const";
 
 type ProjectAchievement = Project["achievements"][number];
 
@@ -9,7 +16,7 @@ export function createProjectForm(fb: FormBuilder): FormGroup {
   return fb.group({
     imageAddress: [""],
     name: ["", [Validators.required]],
-    region: ["", [Validators.required]],
+    region: ["", [Validators.required, projectRegionValidator()]],
     implementationDeadline: [null],
     trl: [null],
     links: fb.array([]),
@@ -27,6 +34,19 @@ export function createProjectForm(fb: FormBuilder): FormGroup {
     status: [""],
     draft: [null],
   });
+}
+
+export function projectRegionValidator(legacyValue = "") {
+  const normalizedLegacy = legacyValue.trim();
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = typeof control.value === "string" ? control.value.trim() : "";
+    if (!value) return null;
+    if (findCanonicalRussianRegion(value)) return null;
+    if (normalizedLegacy && value === normalizedLegacy) return null;
+
+    return { canonicalRegion: true };
+  };
 }
 
 export function createProjectAchievementGroup(

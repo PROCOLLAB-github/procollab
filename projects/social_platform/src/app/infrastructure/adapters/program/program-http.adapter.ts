@@ -13,6 +13,19 @@ import { Project } from "@domain/project/project.model";
 import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "@domain/program/dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
+import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
+  ProgramAnalyticsAttentionQuery,
+} from "@domain/program/program-analytics-attention.model";
+import {
+  ProgramAnalyticsOverview,
+  ProgramAnalyticsAssignment,
+  ProgramAnalyticsAssignmentScope,
+  ProgramAnalyticsAssignmentScoreDetail,
+} from "@domain/program/program-analytics.model";
 
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
@@ -38,6 +51,71 @@ export class ProgramHttpAdapter {
 
   getOne(programId: number): Observable<Program> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
+  }
+
+  getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/project-analytics/`);
+  }
+
+  /** Без автозагрузки остальных страниц; camelcase преобразует общий interceptor. */
+  getManagerParticipantsWithoutTeam(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/project-analytics/participants-without-team/`,
+      this.attentionParams(query),
+    );
+  }
+
+  /** Список работ не подменяется assignments и не включает несданные проекты. */
+  getManagerProjectsAwaitingEvaluation(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionProjects> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/project-analytics/projects-awaiting-evaluation/`,
+      this.attentionParams(query),
+    );
+  }
+
+  /** Отдельный список несданных связей; camelcase выполняет общий interceptor. */
+  getManagerProjectsNotSubmitted(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsNotSubmittedProjectsPage> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/project-analytics/projects-not-submitted/`,
+      this.attentionParams(query),
+    );
+  }
+
+  private attentionParams(query: ProgramAnalyticsAttentionQuery): HttpParams {
+    let params = new HttpParams().set("limit", query.limit ?? 25).set("offset", query.offset ?? 0);
+    const search = query.search?.trim();
+    if (search) params = params.set("search", search);
+    return params;
+  }
+
+  /** Query scope передаётся backend без переопределения его статусной семантики. */
+  getManagerAssignments(
+    programId: number,
+    scope: ProgramAnalyticsAssignmentScope,
+  ): Observable<ProgramAnalyticsAssignment[]> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/project-analytics/assignments/`,
+      new HttpParams().set("scope", scope),
+    );
+  }
+
+  /** Контракт проходит через общий CamelcaseInterceptor. */
+  getManagerAssignmentScores(
+    programId: number,
+    assignmentId: number,
+  ): Observable<ProgramAnalyticsAssignmentScoreDetail> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/project-analytics/assignments/${assignmentId}/scores/`,
+    );
   }
 
   acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }> {

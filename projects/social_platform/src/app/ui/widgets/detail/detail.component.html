@@ -89,7 +89,11 @@
           <ng-template #programTpl>
             @if (userType() !== undefined) {
               @if (
-                (isProjectsPage() || isProjectsRatingPage() || isMembersPage()) && appWidth < 1000
+                (isProjectsPage() ||
+                  isProjectsRatingPage() ||
+                  isAnalyticsPage() ||
+                  isMembersPage()) &&
+                appWidth < 1000
               ) {
                 <a [routerLink]="AppRoutes.program.detail(info().id)">
                   <app-button
@@ -147,12 +151,16 @@
                   @if (isUserMember() && !isUserManager() && !isUserExpert()) {
                     <app-button
                       [size]="appWidth > 1000 ? 'medium' : 'big'"
-                      [disabled]="!!submissionProjectDateExpired || isProjectAssigned()"
+                      [disabled]="
+                        !!submissionProjectDateExpired ||
+                        isProjectAssigned() ||
+                        applicationPending()
+                      "
                       [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
                       (click)="isProjectAssigned() ? null : addNewProject(info().id)"
                       customTypographyClass="text-body-12 bar__add-project"
                     >
-                      <span>{{ isProjectAssigned() ? "вы подали проект" : "создать заявку" }}</span>
+                      <span>{{ applicationLabel() }}</span>
                       <i appIcon icon="plus" appSquare="10"></i>
                     </app-button>
                   }
@@ -171,43 +179,39 @@
                   }
                 </div>
 
-                <a [href]="info().presentationAddress" download="" target="_blank">
-                  <app-button
-                    [disabled]="isUserManager()"
-                    appearance="outline"
-                    [size]="appWidth > 1000 ? 'medium' : 'small'"
-                    customTypographyClass="text-body-12"
-                  >
-                    @if (appWidth > 1000) {
-                      <span>{{
-                        info().name.includes("Технолидеры Будущего")
-                          ? "Каталог лучших стартапов 2022/23"
-                          : isUserManager()
-                            ? "аналитика"
+                @if (isUserManager()) {
+                  <a [routerLink]="AppRoutes.program.analytics(info().id)">
+                    <app-button
+                      [appearance]="isAnalyticsPage() || appWidth < 1000 ? 'inline' : 'outline'"
+                      [size]="appWidth > 1000 ? 'medium' : 'big'"
+                      customTypographyClass="text-body-12"
+                    >
+                      аналитика
+                    </app-button>
+                  </a>
+                } @else {
+                  <a [href]="info().presentationAddress" download="" target="_blank">
+                    <app-button
+                      appearance="outline"
+                      [size]="appWidth > 1000 ? 'medium' : 'small'"
+                      customTypographyClass="text-body-12"
+                    >
+                      @if (appWidth > 1000) {
+                        <span>{{
+                          info().name.includes("Технолидеры Будущего")
+                            ? "Каталог лучших стартапов 2022/23"
                             : "положение"
-                      }}</span>
-                    }
-                    @if (isUserManager() && appWidth > 1000) {
-                      <app-tooltip
-                        [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
-                        [isVisible]="isTooltipVisible('base')"
-                        [position]="'right'"
-                        [tooltipWidth]="180"
-                        [useOverlay]="true"
-                        customClass="content__hint"
-                        (show)="toggleTooltip()"
-                        (hide)="toggleTooltip()"
-                      ></app-tooltip>
-                    } @else {
+                        }}</span>
+                      }
                       <i
                         appIcon
                         class="info__presentation-icon"
                         [icon]="appWidth > 1000 ? 'arrow-down' : 'file'"
                         [appSquare]="appWidth > 1000 ? '8' : '12'"
                       ></i>
-                    }
-                  </app-button>
-                </a>
+                    </app-button>
+                  </a>
+                }
 
                 @if (appWidth > 1000) {
                   <div class="info__divider"></div>
@@ -387,14 +391,25 @@
 
           <ng-template #projectTpl>
             @if (isInProject()) {
-              <app-button
-                [routerLink]="AppRoutes.projects.workSection(info().id)"
-                appearance="outline"
-                size="medium"
-                customTypographyClass="text-body-12"
+              <span
+                class="info__unavailable"
+                tabindex="0"
+                role="group"
+                aria-label="Рабочая зона"
+                aria-describedby="workspace-coming-soon"
               >
-                рабочая зона
-              </app-button>
+                <app-button
+                  [disabled]="true"
+                  appearance="outline"
+                  size="medium"
+                  customTypographyClass="text-body-12"
+                >
+                  рабочая зона
+                </app-button>
+                <span class="info__unavailable-tooltip" role="tooltip" id="workspace-coming-soon"
+                  >Появится позже</span
+                >
+              </span>
             } @else {
               <a class="info__presentation" [href]="info().presentationAddress" target="_blank">
                 <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
@@ -413,15 +428,25 @@
                 написать
               </app-button>
             } @else {
-              <app-button
-                [appearance]="isProjectChatPage() ? 'inline' : 'outline'"
-                [routerLink]="AppRoutes.projects.chat(info().id)"
-                appearance="outline"
-                size="medium"
-                customTypographyClass="text-body-12"
+              <span
+                class="info__unavailable"
+                tabindex="0"
+                role="group"
+                aria-label="Чат проекта"
+                aria-describedby="chat-coming-soon"
               >
-                чат проекта
-              </app-button>
+                <app-button
+                  [disabled]="true"
+                  appearance="outline"
+                  size="medium"
+                  customTypographyClass="text-body-12"
+                >
+                  чат проекта
+                </app-button>
+                <span class="info__unavailable-tooltip" role="tooltip" id="chat-coming-soon"
+                  >Появится позже</span
+                >
+              </span>
             }
 
             <div class="info__divider"></div>
@@ -556,12 +581,11 @@
             @if (profile()) {
               @if (+profile()!.id === +info().id) {
                 <app-button
-                  style="opacity: 0.5"
                   size="medium"
                   appearance="outline"
-                  [disabled]="true"
                   customTypographyClass="text-body-12"
-                  >продвигать</app-button
+                  (click)="onCopyLink(info().id)"
+                  >поделиться профилем</app-button
                 >
               } @else {
                 <app-button

@@ -35,3 +35,23 @@ Frontend не записывает эти состояния в `localStorage`. 
 
 Дублирующее приветствие на главной странице офиса удалено. Единственный сценарий приветствия
 остаётся на detail-странице программы.
+
+## Кеш detail программы после подтверждения
+
+ProgramDetailResolver преобразует route `programId` в положительное целое число до
+GetProgramUseCase. Для некорректного ID сохраняется прежний fallback `new Program()`
+без HTTP-запроса и без нового окна/маршрута ошибки.
+
+ProgramRepository дополнительно нормализует ID в `getOne` и `acknowledgeWelcome`
+одним helper: EntityCache всегда получает numeric key. Это исключает разные Map-ключи
+`"7"` при чтении и `7` при инвалидации. Некорректные ID возвращают Observable error,
+который существующие use cases преобразуют в Result failure; adapter не вызывается.
+
+Только успешный welcome POST инвалидирует detail-кеш конкретной программы. Другие
+программы остаются в кеше; TTL 5 минут и архитектура EntityCache не изменены. Failed POST
+не выставляет timestamp, не закрывает popup и не инвалидирует кеш; pending блокирует
+повторный клик, после ошибки доступен retry.
+
+Server `welcomeAcknowledgedAt` остаётся source of truth: после success локальная программа
+получает timestamp, popup закрывается; следующий вход выполняет свежий GET и не показывает
+приветствие повторно. `localStorage`/`sessionStorage` для этого состояния не используются.

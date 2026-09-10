@@ -12,6 +12,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { of } from "rxjs";
 import { API_URL, PRODUCTION } from "@corelib";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("RegisterComponent", () => {
   let component: RegisterComponent;
@@ -55,5 +56,91 @@ describe("RegisterComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("keeps native password inputs and visibility controls in adjacent sibling slots", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="new-password"]',
+    ) as HTMLInputElement;
+    const repeatedPassword = fixture.nativeElement.querySelector(
+      'input[name="new-password-confirmation"]',
+    ) as HTMLInputElement;
+    const birthdayField = fixture.nativeElement.querySelector(
+      'app-input[id="birthday"]',
+    ) as HTMLElement;
+
+    expect(password.autocomplete).toBe("new-password");
+    expect(repeatedPassword.autocomplete).toBe("new-password");
+    expect(password.closest("app-input")?.classList).toContain("auth__password-input");
+    expect(repeatedPassword.closest("app-input")?.classList).toContain("auth__password-input");
+    for (const nativePassword of [password, repeatedPassword]) {
+      const field = nativePassword.closest("app-input")?.querySelector(".field") as HTMLElement;
+      const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;
+      expect(field.querySelector(".field__native-input-area")).toBeNull();
+      expect(nativePassword.parentElement).toBe(field);
+      expect(eyeSlot.parentElement).toBe(field);
+      expect(field.lastElementChild).toBe(eyeSlot);
+    }
+    expect(birthdayField.classList).not.toContain("auth__password-input");
+    expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
+  });
+
+  it("keeps both custom password visibility controls clickable", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="new-password"]',
+    ) as HTMLInputElement;
+    const repeatedPassword = fixture.nativeElement.querySelector(
+      'input[name="new-password-confirmation"]',
+    ) as HTMLInputElement;
+
+    const firstToggle = password
+      .closest("app-input")
+      ?.querySelector(".field__right-icon button") as HTMLButtonElement;
+    expect(firstToggle.type).toBe("button");
+    expect(firstToggle.classList).toContain("auth__password-toggle--muted");
+    expect(firstToggle.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(firstToggle.querySelector("svg")?.getAttribute("height")).toBe("15");
+    expect(firstToggle.getAttribute("aria-label")).toBe("Показать пароль");
+    firstToggle.click();
+    fixture.detectChanges();
+    expect(password.type).toBe("text");
+
+    const repeatToggle = repeatedPassword
+      .closest("app-input")
+      ?.querySelector(".field__right-icon button") as HTMLButtonElement;
+    expect(repeatToggle.classList).toContain("auth__password-toggle--muted");
+    expect(repeatToggle.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(repeatToggle.querySelector("svg")?.getAttribute("height")).toBe("15");
+    repeatToggle.click();
+    fixture.detectChanges();
+    expect(repeatedPassword.type).toBe("text");
+    expect(firstToggle.getAttribute("aria-pressed")).toBe("true");
+    expect(repeatedPassword.autocomplete).toBe("new-password");
+  });
+
+  it("keeps email errors and both password visibility controls in separate suffix elements", () => {
+    const authUIInfoService = fixture.debugElement.injector.get(AuthUIInfoService);
+    authUIInfoService.registerForm.get("email")?.markAsTouched();
+    authUIInfoService.registerForm.get("password")?.markAsTouched();
+    authUIInfoService.registerForm.get("repeatedPassword")?.markAsTouched();
+    fixture.detectChanges();
+
+    const emailField = fixture.nativeElement
+      .querySelector('input[type="email"]')
+      .closest("app-input") as HTMLElement;
+    const passwordFields = Array.from(
+      fixture.nativeElement.querySelectorAll("app-input.auth__password-input"),
+    ) as HTMLElement[];
+
+    expect(emailField.querySelector(".field__error-icon")).not.toBeNull();
+    expect(emailField.querySelector(".field__right-icon i")).toBeNull();
+    expect(passwordFields).toHaveLength(2);
+    for (const passwordField of passwordFields) {
+      expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
+      expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
+      expect(passwordField.querySelector(".field")?.lastElementChild?.classList).toContain(
+        "field__right-icon",
+      );
+    }
   });
 });

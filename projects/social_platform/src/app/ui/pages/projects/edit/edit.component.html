@@ -31,7 +31,7 @@
         [disabled]="onEditClicked()"
         [style.opacity]="onEditClicked() ? '0.5' : '1'"
       >
-        {{ isCompetitive() ? "отправить заявку" : "сохранить" }}
+        {{ isCompetitive() && !submitted() ? "отправить заявку" : "сохранить" }}
       </app-button>
     </div>
   </div>

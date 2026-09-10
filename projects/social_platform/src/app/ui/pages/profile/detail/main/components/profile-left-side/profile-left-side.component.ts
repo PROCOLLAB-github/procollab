@@ -15,6 +15,7 @@ import { IconComponent } from "@ui/primitives";
 import { ExpandService } from "@api/expand/expand.service";
 import { User } from "@domain/auth/user.model";
 import { AppRoutes } from "@api/paths/app-routes";
+import { Program } from "@domain/program/program.model";
 
 /** Левая колонка профиля: аватар и основные данные. */
 @Component({
@@ -32,4 +33,8 @@ export class ProfileLeftSideComponent {
   protected readonly readAllPrograms = this.expandService.readAll;
 
   protected readonly AppRoutes = AppRoutes;
+
+  protected programImage(program: Program): string {
+    return program.imageAddress || ((program as Program & { logo?: string }).logo ?? "");
+  }
 }

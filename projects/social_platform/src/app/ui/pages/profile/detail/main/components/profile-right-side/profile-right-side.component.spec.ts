@@ -48,4 +48,46 @@ describe("ProfileRightSideComponent", () => {
       projectName,
     );
   });
+
+  it("keeps complete education and work labels in the profile DOM", () => {
+    const educationName = "Санкт-Петербургский политехнический университет Петра Великого";
+    const workName = "Научно-исследовательский центр цифровых образовательных технологий";
+    const jobPosition = "Ведущий специалист по развитию образовательных продуктов";
+
+    fixture.componentRef.setInput("user", {
+      personal: { links: [] },
+      relations: {
+        education: [
+          {
+            organizationName: educationName,
+            description: "Прикладная информатика",
+            educationLevel: "Высшее образование",
+            educationStatus: "Завершено",
+            entryYear: 2018,
+            completionYear: 2022,
+          },
+        ],
+        workExperience: [
+          {
+            organizationName: workName,
+            jobPosition,
+            description: "Развитие продуктов",
+            entryYear: 2022,
+            completionYear: 2026,
+          },
+        ],
+        projects: [],
+      },
+    } as unknown as User);
+    fixture.detectChanges();
+
+    const labels = Array.from(
+      fixture.nativeElement.querySelectorAll(".lists__info--text, .lists__info--subtext"),
+      (element: Element) => element.textContent?.trim(),
+    );
+
+    expect(labels).toContain(educationName);
+    expect(labels).toContain(workName);
+    expect(labels).toContain(jobPosition);
+  });
 });

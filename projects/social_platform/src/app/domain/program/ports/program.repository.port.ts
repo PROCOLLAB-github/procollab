@@ -11,6 +11,19 @@ import { PartnerProgramFields } from "../partner-program-fields.model";
 import { ProjectAdditionalFields } from "../../project/project-additional-fields.model";
 import { ApplyToProgramDTO } from "../dto/apply-to-program.model";
 import { ApplyToProgramResponse } from "../results/apply-to-program";
+import {
+  ProgramAnalyticsAttentionPage,
+  ProgramAnalyticsAttentionParticipant,
+  ProgramAnalyticsAttentionProjects,
+  ProgramAnalyticsNotSubmittedProjectsPage,
+  ProgramAnalyticsAttentionQuery,
+} from "../program-analytics-attention.model";
+import {
+  ProgramAnalyticsOverview,
+  ProgramAnalyticsAssignment,
+  ProgramAnalyticsAssignmentScope,
+  ProgramAnalyticsAssignmentScoreDetail,
+} from "../program-analytics.model";
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
@@ -21,6 +34,38 @@ export abstract class ProgramRepositoryPort {
   ): Observable<ApiPagination<Program>>;
 
   abstract getOne(programId: number): Observable<Program>;
+
+  abstract getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview>;
+
+  /** Уникальные участники без команды текущей программы, серверный поиск/пагинация. */
+  abstract getManagerParticipantsWithoutTeam(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>>;
+
+  /** Только сданные, ещё не оценённые работы; одна работа — одна строка. */
+  abstract getManagerProjectsAwaitingEvaluation(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionProjects>;
+
+  /** Несданные связи конкурсной программы с серверным поиском, страницей и сроком. */
+  abstract getManagerProjectsNotSubmitted(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsNotSubmittedProjectsPage>;
+
+  /** Manager-only назначения; pending включает несданные проекты. */
+  abstract getManagerAssignments(
+    programId: number,
+    scope: ProgramAnalyticsAssignmentScope,
+  ): Observable<ProgramAnalyticsAssignment[]>;
+
+  /** Оценки конкретного назначения строго внутри выбранной программы. */
+  abstract getManagerAssignmentScores(
+    programId: number,
+    assignmentId: number,
+  ): Observable<ProgramAnalyticsAssignmentScoreDetail>;
 
   abstract acknowledgeWelcome(programId: number): Observable<{ welcomeAcknowledgedAt: string }>;
 

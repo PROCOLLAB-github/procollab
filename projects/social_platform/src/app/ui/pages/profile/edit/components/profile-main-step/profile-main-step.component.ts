@@ -14,6 +14,7 @@ import { ProfileFormService } from "@api/profile/facades/edit/profile-form.servi
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchesService } from "@api/searches/searches.service";
 import { IconComponent } from "@uilib";
+import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.component";
 
 /** Основной шаг редактирования профиля: личные данные, аватар и ключевые навыки. */
 @Component({
@@ -33,6 +34,7 @@ import { IconComponent } from "@uilib";
     AvatarControlComponent,
     ControlErrorPipe,
     ReactiveFormsModule,
+    RegionSelectComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

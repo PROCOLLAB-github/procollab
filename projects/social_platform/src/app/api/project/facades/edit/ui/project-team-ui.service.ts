@@ -3,6 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Invite } from "@domain/invite/invite.model";
+import { InviteSendError } from "@domain/invite/invite-send-error";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { AsyncState, failure, initial } from "@domain/shared/async-state";
 
@@ -14,7 +15,8 @@ export class ProjectTeamUIService {
   readonly invites = signal<Invite[]>([]);
   readonly collaborators = signal<Collaborator[]>([]);
   readonly isInviteModalOpen = signal<boolean>(false);
-  readonly inviteNotExistingError = signal<Error | null>(null);
+  readonly inviteSubmitError = signal<InviteSendError | null>(null);
+  readonly showInviteFields = signal(false);
 
   // Состояние отправки формы
   readonly inviteSubmitInitiated = signal(false);
@@ -50,9 +52,7 @@ export class ProjectTeamUIService {
   }
 
   applyClearLinkError(): void {
-    if (this.inviteNotExistingError()) {
-      this.inviteNotExistingError.set(null);
-    }
+    this.inviteSubmitError.set(null);
   }
 
   applySetInvites(invites: Invite[]): void {
@@ -78,12 +78,13 @@ export class ProjectTeamUIService {
   applySubmitInvite(invite: Invite): void {
     this.invites.update(list => [...list, invite]);
     this.resetInviteForm();
+    this.showInviteFields.set(false);
     this.applyCloseInviteModal();
   }
 
-  applyErrorSubmitInvite(err: any): void {
-    this.inviteNotExistingError.set(err);
-    this.inviteFormIsSubmitting.set(failure("invite_error"));
+  applyErrorSubmitInvite(error: InviteSendError): void {
+    this.inviteSubmitError.set(error);
+    this.inviteFormIsSubmitting.set(failure(error.kind));
   }
 
   applyEditInvitation(params: { inviteId: number; role: string; specialization: string }): void {
@@ -111,13 +112,8 @@ export class ProjectTeamUIService {
 
   resetInviteForm(): void {
     this.inviteForm.reset();
-    Object.keys(this.inviteForm.controls).forEach(name => {
-      const ctrl = this.inviteForm.get(name);
-      ctrl?.clearValidators();
-      ctrl?.markAsPristine();
-      ctrl?.updateValueAndValidity();
-    });
-    this.inviteNotExistingError.set(null);
+    this.inviteSubmitInitiated.set(false);
+    this.inviteSubmitError.set(null);
     this.inviteFormIsSubmitting.set(initial());
   }
 }

@@ -82,6 +82,7 @@ describe("ProfileEditInfoService", () => {
         first_name: "Иван",
         last_name: "Иванов",
         birthday: "1990-03-25",
+        city: "Москва",
         links: ["https://t.me/procollab"],
         skillsIds: [1],
       }),
@@ -106,5 +107,45 @@ describe("ProfileEditInfoService", () => {
     expect(saveProfileUseCase.execute).not.toHaveBeenCalled();
     expect(service.profileFormSubmitting$().status).toBe("failure");
     expect(service.isModalErrorSkillsChoose()).toBe(true);
+  });
+
+  it.each(["Республика Татарстан", "Набережные Челны"])(
+    "saves user region through city without changing %s",
+    city => {
+      profileFormService.profileId.set(42);
+      profileFormService.getForm().patchValue({
+        firstName: "Иван",
+        lastName: "Иванов",
+        birthday: "25.03.1990",
+        city,
+        speciality: "Frontend developer",
+        skills: [{ id: 1, name: "Angular" }] as Skill[],
+      });
+
+      service.saveProfile();
+
+      expect(saveProfileUseCase.execute).toHaveBeenCalledOnce();
+      const payload = saveProfileUseCase.execute.mock.calls[0][1];
+      expect(payload.city).toBe(city);
+      expect(payload).not.toHaveProperty("region");
+    },
+  );
+
+  it("blocks saving an uncommitted region search before API and uses the region error label", () => {
+    profileFormService.profileId.set(42);
+    profileFormService.getForm().patchValue({
+      firstName: "Иван",
+      lastName: "Иванов",
+      birthday: "25.03.1990",
+      city: "",
+      speciality: "Frontend developer",
+      skills: [{ id: 1, name: "Angular" }] as Skill[],
+    });
+
+    service.saveProfile();
+
+    expect(saveProfileUseCase.execute).not.toHaveBeenCalled();
+    expect(service.isModalErrorSkillChooseText()).toContain("Регион");
+    expect(service.isModalErrorSkillChooseText()).not.toContain("Город");
   });
 });

@@ -1,5 +1,11 @@
 /** @format */
 
+export interface ProgramCurrentApplication {
+  projectId: number;
+  programLinkId: number;
+  submitted: boolean;
+}
+
 /** Основная модель программы */
 export class Program {
   id!: number;
@@ -26,6 +32,7 @@ export class Program {
   isUserLiked!: boolean;
   isUserManager!: boolean;
   isUserMember!: boolean;
+  currentProjectApplication!: ProgramCurrentApplication | null;
   welcomeAcknowledgedAt!: string | null;
   publishProjectsAfterFinish!: boolean;
   courseId!: number | null;
@@ -56,6 +63,7 @@ export class Program {
       year: 0,
       isUserLiked: false,
       isUserMember: false,
+      currentProjectApplication: null,
       welcomeAcknowledgedAt: null,
       isUserManager: false,
       publishProjectsAfterFinish: false,

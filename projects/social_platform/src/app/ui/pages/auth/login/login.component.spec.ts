@@ -13,6 +13,7 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { of } from "rxjs";
 import { API_URL, PRODUCTION } from "@corelib";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -60,5 +61,81 @@ describe("LoginComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("keeps the native password input and visibility control in adjacent sibling slots", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="password"]',
+    ) as HTMLInputElement;
+    const passwordField = password.closest("app-input") as HTMLElement;
+    const email = fixture.nativeElement.querySelector('input[type="email"]') as HTMLInputElement;
+    const emailField = email.closest("app-input") as HTMLElement;
+
+    expect(password.autocomplete).toBe("current-password");
+    expect(passwordField.classList).toContain("auth__password-input");
+    const field = passwordField.querySelector(".field") as HTMLElement;
+    const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;
+    expect(field.querySelector(".field__native-input-area")).toBeNull();
+    expect(password.parentElement).toBe(field);
+    expect(eyeSlot.parentElement).toBe(field);
+    expect(field.lastElementChild).toBe(eyeSlot);
+    expect(emailField.classList).not.toContain("auth__password-input");
+    expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
+  });
+
+  it("keeps the custom password visibility control clickable", () => {
+    const password = fixture.nativeElement.querySelector(
+      'input[name="password"]',
+    ) as HTMLInputElement;
+    const toggle = password
+      .closest("app-input")
+      ?.querySelector(".field__right-icon button") as HTMLButtonElement;
+
+    expect(password.type).toBe("password");
+    password.value = "Test-password-42";
+    password.dispatchEvent(new Event("input", { bubbles: true }));
+    fixture.detectChanges();
+    expect(toggle.type).toBe("button");
+    expect(toggle.classList).toContain("auth__password-toggle--muted");
+    expect(toggle.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(toggle.querySelector("svg")?.getAttribute("height")).toBe("15");
+    expect(toggle.getAttribute("aria-label")).toBe("Показать пароль");
+    toggle.focus();
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(password.type).toBe("text");
+    expect(password.value).toBe("Test-password-42");
+    expect(toggle.getAttribute("aria-pressed")).toBe("true");
+    expect(document.activeElement).toBe(toggle);
+    toggle.click();
+    fixture.detectChanges();
+    expect(password.type).toBe("password");
+    expect(password.autocomplete).toBe("current-password");
+    expect(
+      fixture.debugElement.injector.get(AuthUIInfoService).loginForm.get("password")?.value,
+    ).toBe("Test-password-42");
+  });
+
+  it("keeps validation and visibility icons in separate password suffix elements", () => {
+    const authUIInfoService = fixture.debugElement.injector.get(AuthUIInfoService);
+    authUIInfoService.loginForm.get("email")?.markAsTouched();
+    authUIInfoService.loginForm.get("password")?.markAsTouched();
+    fixture.detectChanges();
+
+    const emailField = fixture.nativeElement
+      .querySelector('input[type="email"]')
+      .closest("app-input") as HTMLElement;
+    const passwordField = fixture.nativeElement.querySelector(
+      "app-input.auth__password-input",
+    ) as HTMLElement;
+
+    expect(emailField.querySelector(".field__error-icon")).not.toBeNull();
+    expect(emailField.querySelector(".field__right-icon i")).toBeNull();
+    expect(passwordField.querySelector(".field__error-icon")).not.toBeNull();
+    expect(passwordField.querySelector(".field__right-icon i")).not.toBeNull();
+    expect(passwordField.querySelector(".field")?.lastElementChild?.classList).toContain(
+      "field__right-icon",
+    );
   });
 });
