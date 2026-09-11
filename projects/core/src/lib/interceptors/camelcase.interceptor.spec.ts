@@ -44,6 +44,52 @@ describe("CamelcaseInterceptor", () => {
       });
   });
 
+  it("преобразует Notification DTO и вложенного actor в camelCase", () => {
+    const interceptor = TestBed.inject(CamelcaseInterceptor);
+    const body = {
+      unread_count: 1,
+      results: [
+        {
+          id: 17,
+          action_url: "/office/program/5",
+          read_at: null,
+          created_at: "2026-09-12T08:00:00Z",
+          actor: {
+            id: 4,
+            first_name: "Анна",
+            last_name: "Иванова",
+            avatar: null,
+          },
+        },
+      ],
+    };
+
+    interceptor
+      .intercept(new HttpRequest("GET", "/notifications/"), {
+        handle: () => of(new HttpResponse({ body })),
+      })
+      .subscribe(event => {
+        if (!(event instanceof HttpResponse)) return;
+        expect(event.body).toEqual({
+          unreadCount: 1,
+          results: [
+            {
+              id: 17,
+              actionUrl: "/office/program/5",
+              readAt: null,
+              createdAt: "2026-09-12T08:00:00Z",
+              actor: {
+                id: 4,
+                firstName: "Анна",
+                lastName: "Иванова",
+                avatar: null,
+              },
+            },
+          ],
+        });
+      });
+  });
+
   it("преобразует expert drilldown и SLA с фактическими overdue24H/overdue48H", () => {
     const interceptor = TestBed.inject(CamelcaseInterceptor);
     const body = {

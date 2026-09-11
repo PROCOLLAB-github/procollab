@@ -14,6 +14,7 @@ import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { NotificationService } from "@ui/services/notification/notification.service";
 
 describe("OfficeComponent", () => {
   let component: OfficeComponent;
@@ -70,6 +71,22 @@ describe("OfficeComponent", () => {
       profile: signal(null),
     };
 
+    const notificationServiceSpy = {
+      notifications: signal([]),
+      unreadCount: signal(0),
+      loading: signal(false),
+      loadingMore: signal(false),
+      markingAllRead: signal(false),
+      hasMore: signal(false),
+      error: signal(null),
+      initialize: vi.fn(),
+      onPopupOpenChange: vi.fn(),
+      openNotification: vi.fn(),
+      markAllRead: vi.fn(),
+      loadMore: vi.fn(),
+      retry: vi.fn(),
+    };
+
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, OfficeComponent],
       providers: [{ provide: AuthRepositoryPort, useValue: authPortSpy }, provideRouter([])],
@@ -81,6 +98,7 @@ describe("OfficeComponent", () => {
             OfficeUIInfoService,
             AuthUIInfoService,
             AuthRegisterService,
+            NotificationService,
           ],
         },
         add: {
@@ -92,6 +110,7 @@ describe("OfficeComponent", () => {
             { provide: ChatUnreadStateService, useValue: chatUnreadStateSpy },
             { provide: ProgramShellInfoService, useValue: programShellInfoServiceSpy },
             { provide: ProfileInfoService, useValue: profileInfoServiceSpy },
+            { provide: NotificationService, useValue: notificationServiceSpy },
           ],
         },
       })
@@ -106,6 +125,12 @@ describe("OfficeComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("инициализирует notification lifecycle один раз вместе с Office", () => {
+    const notificationService = fixture.debugElement.injector.get(NotificationService);
+
+    expect(notificationService.initialize).toHaveBeenCalledOnce();
   });
 
   it("подтверждает уведомление о верификации через backend", () => {
