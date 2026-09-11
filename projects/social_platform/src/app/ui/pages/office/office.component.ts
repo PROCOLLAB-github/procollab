@@ -17,6 +17,8 @@ import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { NotificationService } from "@ui/services/notification/notification.service";
+import { Notification } from "@domain/notification/notification.model";
 
 /** Корневой компонент рабочего пространства с навигацией и управлением состоянием. */
 @Component({
@@ -35,7 +37,13 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
     ProfileControlPanelComponent,
     ProgramSidebarCardComponent,
   ],
-  providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
+  providers: [
+    OfficeInfoService,
+    OfficeUIInfoService,
+    AuthUIInfoService,
+    AuthRegisterService,
+    NotificationService,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit {
@@ -45,10 +53,19 @@ export class OfficeComponent implements OnInit {
   public readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly programShellInfoService = inject(ProgramShellInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly profile = this.profileInfoService.profile;
 
   protected readonly invites = this.officeInfoService.invites;
+
+  protected readonly notifications = this.notificationService.notifications;
+  protected readonly notificationUnreadCount = this.notificationService.unreadCount;
+  protected readonly notificationsLoading = this.notificationService.loading;
+  protected readonly notificationsLoadingMore = this.notificationService.loadingMore;
+  protected readonly notificationsMarkingAllRead = this.notificationService.markingAllRead;
+  protected readonly notificationsHasMore = this.notificationService.hasMore;
+  protected readonly notificationsError = this.notificationService.error;
 
   protected readonly waitVerificationModal = this.officeUIInfoService.waitVerificationModal;
   protected readonly verificationAcknowledgementPending =
@@ -66,6 +83,7 @@ export class OfficeComponent implements OnInit {
   ngOnInit(): void {
     this.officeInfoService.initializationOffice();
     this.programShellInfoService.ensureProgramsLoaded();
+    this.notificationService.initialize();
   }
 
   onAcceptWaitVerification() {
@@ -78,6 +96,26 @@ export class OfficeComponent implements OnInit {
 
   onAcceptInvite(inviteId: number): void {
     this.officeInfoService.onAcceptInvite(inviteId);
+  }
+
+  onNotificationsOpenChange(open: boolean): void {
+    this.notificationService.onPopupOpenChange(open);
+  }
+
+  onNotificationClick(notification: Notification): void {
+    this.notificationService.openNotification(notification);
+  }
+
+  onMarkAllNotificationsRead(): void {
+    this.notificationService.markAllRead();
+  }
+
+  onLoadMoreNotifications(): void {
+    this.notificationService.loadMore();
+  }
+
+  onRetryNotifications(): void {
+    this.notificationService.retry();
   }
 
   onLogout() {

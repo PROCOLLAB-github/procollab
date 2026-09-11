@@ -2,39 +2,149 @@
 
 <div class="control-panel">
   <div class="control-panel__actions">
-    <div class="control-panel__action" (click)="showNotifications = true">
-      <div (clickOutside)="onClickOutside()" class="control-panel__bell">
-        @if (hasNotifications() || hasInvites) {
-          <div class="attention"></div>
+    <div class="control-panel__notification-area" (clickOutside)="onClickOutside()">
+      <button
+        type="button"
+        class="control-panel__action control-panel__bell"
+        [attr.aria-label]="'Уведомления, непрочитанных: ' + unreadCount()"
+        aria-haspopup="dialog"
+        aria-controls="notification-center-popup"
+        [attr.aria-expanded]="showNotifications"
+        (click)="toggleNotifications()"
+      >
+        @if (unreadCount() > 0) {
+          <span class="control-panel__attention" aria-hidden="true"></span>
         }
         <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
-        @if (invites().length) {
-          <div class="control-panel__bell--hasInvites"></div>
-        }
-      </div>
-    </div>
-    @if (showNotifications) {
-      <div class="control-panel__notifications notifications">
-        <ul class="notifications__invites">
-          @for (invite of invites(); track invite.id) {
-            <li class="notifications__invite">
-              <app-invite-manage-card
-                [invite]="invite"
-                (accept)="acceptInvite.emit($event)"
-                (reject)="rejectInvite.emit($event)"
-              ></app-invite-manage-card>
-            </li>
-          } @empty {
-            <app-empty-manage-card></app-empty-manage-card>
+      </button>
+
+      @if (showNotifications) {
+        <section
+          id="notification-center-popup"
+          class="control-panel__notifications notifications"
+          role="dialog"
+          aria-label="Уведомления"
+        >
+          <header class="notifications__header">
+            <h2 class="notifications__title">Уведомления</h2>
+            @if (unreadCount() > 0) {
+              <button
+                type="button"
+                class="notifications__mark-all"
+                [disabled]="markingAllRead()"
+                (click)="markAllRead.emit()"
+              >
+                {{ markingAllRead() ? "Сохраняем..." : "Прочитать все" }}
+              </button>
+            }
+          </header>
+
+          <div class="notifications__content">
+            @if (loading() && notifications().length === 0) {
+              <div class="notifications__status" role="status">Загрузка...</div>
+            } @else if (error() && notifications().length === 0) {
+              <div class="notifications__status notifications__status--error" role="alert">
+                <span>{{ error() }}</span>
+                <button type="button" class="notifications__retry" (click)="retry.emit()">
+                  Повторить
+                </button>
+              </div>
+            } @else if (notifications().length === 0) {
+              <div class="notifications__status">Пока нет уведомлений</div>
+            } @else {
+              <ul class="notifications__list" role="list">
+                @for (notification of notifications(); track notification.id) {
+                  <li class="notifications__list-item">
+                    <button
+                      type="button"
+                      class="notification-item"
+                      [class.notification-item--unread]="!notification.readAt"
+                      (click)="selectNotification(notification)"
+                    >
+                      @if (!notification.readAt) {
+                        <span class="notification-item__unread-dot" aria-hidden="true"></span>
+                      }
+
+                      <span class="notification-item__visual" aria-hidden="true">
+                        <span class="notification-item__fallback">
+                          <i
+                            appIcon
+                            [icon]="notificationIcon(notification.type)"
+                            appSquare="20"
+                          ></i>
+                        </span>
+                        @if (notification.actor?.avatar; as avatar) {
+                          <img
+                            class="notification-item__avatar"
+                            [src]="avatar"
+                            alt=""
+                            (error)="onAvatarError($event)"
+                          />
+                        }
+                      </span>
+
+                      <span class="notification-item__body">
+                        <span class="notification-item__title">{{ notification.title }}</span>
+                        <span class="notification-item__message">{{ notification.message }}</span>
+                      </span>
+
+                      <span class="notification-item__aside">
+                        <time
+                          class="notification-item__time"
+                          [attr.datetime]="notification.createdAt"
+                        >
+                          {{ notification.createdAt | notificationRelativeTime }}
+                        </time>
+                        @if (hasSafeAction(notification)) {
+                          <i
+                            class="notification-item__arrow"
+                            appIcon
+                            icon="arrowright"
+                            appSquare="16"
+                            aria-hidden="true"
+                          ></i>
+                        }
+                      </span>
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          @if (error() && notifications().length > 0) {
+            <footer class="notifications__footer notifications__footer--error">
+              <span>{{ error() }}</span>
+              <button type="button" class="notifications__footer-button" (click)="retry.emit()">
+                Повторить
+              </button>
+            </footer>
+          } @else if (hasMore()) {
+            <footer class="notifications__footer">
+              <button
+                type="button"
+                class="notifications__footer-button"
+                [disabled]="loadingMore()"
+                (click)="loadMore.emit()"
+              >
+                {{ loadingMore() ? "Загрузка..." : "Показать ещё" }}
+              </button>
+            </footer>
           }
-        </ul>
-      </div>
-    }
-    <a class="control-panel__action" (click)="logout.emit()">
-      <div class="control-panel__bell">
-        <i appIcon icon="logout3" appWidth="15" appHeight="17"></i>
-      </div>
-    </a>
+        </section>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="control-panel__action control-panel__logout"
+      aria-label="Выйти"
+      (click)="logout.emit()"
+    >
+      <span class="control-panel__bell">
+        <i appIcon icon="logout3" appWidth="15" appHeight="17" aria-hidden="true"></i>
+      </span>
+    </button>
   </div>
   @if (user()) {
     <app-profile-info

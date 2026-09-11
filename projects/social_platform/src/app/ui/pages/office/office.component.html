@@ -41,14 +41,22 @@
               <div class="office__top">
                 <app-nav></app-nav>
 
-                @if (profile() !== undefined && invites() !== undefined) {
+                @if (profile() !== undefined) {
                   <app-profile-control-panel
-                    [invites]="invites()"
-                    [hasNotifications]="false"
+                    [notifications]="notifications()"
+                    [unreadCount]="notificationUnreadCount()"
+                    [loading]="notificationsLoading()"
+                    [loadingMore]="notificationsLoadingMore()"
+                    [markingAllRead]="notificationsMarkingAllRead()"
+                    [hasMore]="notificationsHasMore()"
+                    [error]="notificationsError()"
                     [hasUnreads]="chatUnreadState.hasUnreads()"
                     [user]="profile()"
-                    (acceptInvite)="onAcceptInvite($event)"
-                    (rejectInvite)="onRejectInvite($event)"
+                    (notificationClick)="onNotificationClick($event)"
+                    (markAllRead)="onMarkAllNotificationsRead()"
+                    (loadMore)="onLoadMoreNotifications()"
+                    (retry)="onRetryNotifications()"
+                    (openChange)="onNotificationsOpenChange($event)"
                     (logout)="onLogout()"
                   ></app-profile-control-panel>
                 }
