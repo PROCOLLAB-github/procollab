@@ -148,7 +148,7 @@ describe("Detail cleanup actions", () => {
     expect(copyLink).toHaveBeenCalledExactlyOnceWith(id);
   });
 
-  it("keeps a long profile title in normal flow while leaving the project title in its header", () => {
+  it("keeps profile and project titles in the header without moving profile actions", () => {
     type.set("profile");
     info.set({
       id: 7,
@@ -159,11 +159,14 @@ describe("Detail cleanup actions", () => {
     const profileFixture = TestBed.createComponent(DeatilComponent);
     profileFixture.detectChanges();
 
-    const profileHeading = profileFixture.nativeElement.querySelector(
-      ".info__profile-heading .info__title--profile",
+    const profileTitle = profileFixture.nativeElement.querySelector(
+      ".info__avatar .info__title--project",
     ) as HTMLElement;
-    expect(profileHeading.textContent).toContain("Очень длинное составное имя пользователя");
-    expect(profileFixture.nativeElement.querySelector(".info__avatar .info__title")).toBeNull();
+    expect(profileTitle.textContent).toContain("Очень длинное составное имя пользователя");
+    expect(profileFixture.nativeElement.querySelector(".info__profile-heading")).toBeNull();
+    expect(
+      profileFixture.nativeElement.querySelector(".info__body > .info__actions"),
+    ).not.toBeNull();
 
     type.set("project");
     info.set({ id: 55, name: "Проект", collaborators: [], partnerProgram: null });

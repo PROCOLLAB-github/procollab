@@ -29,19 +29,27 @@
     }
 
     &--error input {
-      padding-right: 76px;
+      padding-right: 44px;
       border-color: var(--red);
+    }
+
+    &--error.region-select__control--clearable input {
+      padding-right: 76px;
     }
   }
 
   &__error {
     position: absolute;
     top: 50%;
-    right: 46px;
+    right: 14px;
     display: grid;
     color: var(--red);
     pointer-events: none;
     transform: translateY(-50%);
+  }
+
+  &__control--clearable &__error {
+    right: 46px;
   }
 
   &__clear {

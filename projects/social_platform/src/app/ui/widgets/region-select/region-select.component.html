@@ -1,7 +1,11 @@
 <!-- @format -->
 
 <div class="region-select" (focusout)="onFocusOut($event)">
-  <div class="region-select__control" [class.region-select__control--error]="error()">
+  <div
+    class="region-select__control"
+    [class.region-select__control--error]="error()"
+    [class.region-select__control--clearable]="query()"
+  >
     <input
       type="text"
       role="combobox"

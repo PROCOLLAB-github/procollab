@@ -99,6 +99,7 @@
             size="big"
             id="name"
             class="project__validated-input"
+            [class.project__validated-input--error]="showError(name)"
             formControlName="name"
             [error]="showError(name)"
             placeholder="название"
@@ -124,10 +125,7 @@
       @if (region; as region) {
         <fieldset>
           <label class="field-label text-body-12" for="region">регион</label>
-          <div
-            class="project__region-field"
-            [class.project__region-field--error]="showError(region)"
-          >
+          <div class="project__region-field">
             <app-region-select
               id="region"
               formControlName="region"
@@ -201,6 +199,7 @@
         size="big"
         id="problem"
         class="project__validated-input"
+        [class.project__validated-input--error]="showError(problem)"
         formControlName="problem"
         [error]="showError(problem)"
         placeholder="улучшить качество жизни студентов"

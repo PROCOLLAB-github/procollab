@@ -56,8 +56,21 @@ describe("RegionSelectComponent", () => {
 
     const control = select.nativeElement.querySelector(".region-select__control") as HTMLElement;
     expect(control.classList).toContain("region-select__control--error");
+    expect(control.classList).toContain("region-select__control--clearable");
     expect(control.querySelector(".region-select__error")).not.toBeNull();
     expect(control.querySelector(".region-select__clear")).not.toBeNull();
+  });
+
+  it("keeps an empty-field validation icon in the rightmost action zone", () => {
+    const select = TestBed.createComponent(RegionSelectComponent);
+    select.componentRef.setInput("error", true);
+    select.detectChanges();
+
+    const control = select.nativeElement.querySelector(".region-select__control") as HTMLElement;
+    expect(control.classList).toContain("region-select__control--error");
+    expect(control.classList).not.toContain("region-select__control--clearable");
+    expect(control.querySelector(".region-select__error")).not.toBeNull();
+    expect(control.querySelector(".region-select__clear")).toBeNull();
   });
 
   it("filters and selects a canonical region", () => {
