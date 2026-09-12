@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/responsive";
+@use "styles/components/vacancy-skill";
 
 .responses {
   width: min(760px, calc(100vw - 48px));
@@ -43,7 +44,21 @@
   &__candidate {
     display: flex;
     gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__identity {
+    display: flex;
+    gap: 12px;
     align-items: center;
+    min-width: 0;
+  }
+
+  &__name {
+    font-weight: 600;
+    line-height: 20px;
+    overflow-wrap: anywhere;
   }
 
   &__name,
@@ -54,7 +69,15 @@
   &__specialization,
   &__date {
     margin-top: 4px;
-    color: var(--grey-for-text);
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--dark-grey);
+  }
+
+  &__date {
+    flex: 0 0 auto;
+    margin-top: 0;
+    text-align: right;
   }
 
   &__skills {
@@ -71,18 +94,43 @@
   }
 
   &__skill {
-    color: var(--accent);
+    @include vacancy-skill.readable-inline-tag;
+
+    color: var(--accent-dark);
     background: var(--accent-light);
   }
 
   &__letter {
     margin-top: 6px;
-    color: var(--grey-for-text);
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--black);
     white-space: pre-wrap;
+  }
+
+  &__label {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  &__file-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    align-items: baseline;
+  }
+
+  &__file-label {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    color: var(--black);
   }
 
   &__file {
     width: fit-content;
+    font-size: 13px;
+    line-height: 18px;
     color: var(--accent);
     text-decoration: underline;
   }
@@ -105,5 +153,15 @@
 
   @include responsive.apply-desktop {
     padding: 20px;
+  }
+
+  @media screen and (max-width: 520px) {
+    &__candidate {
+      flex-direction: column;
+    }
+
+    &__date {
+      align-self: flex-end;
+    }
   }
 }

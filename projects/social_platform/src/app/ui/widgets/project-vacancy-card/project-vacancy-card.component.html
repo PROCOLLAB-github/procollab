@@ -5,6 +5,7 @@
     @if (type() === "vacancies") {
       <div class="vacancy__project">
         <app-avatar
+          class="vacancy__project-avatar"
           [url]="vacancy().project.imageAddress"
           [size]="40"
           [hasBorder]="true"
@@ -44,7 +45,7 @@
       <app-tag
         [appearance]="skill.category.name.includes('Soft skills') ? 'outline' : 'inline'"
         [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
-        class="text-body-6 vacancy__skill"
+        class="vacancy__skill vacancy__skill--compact"
         >{{ skill.name }}</app-tag
       >
     }
@@ -68,6 +69,7 @@
 
   <div class="vacancy__actions" [class.vacancy__actions--vacancies]="type() === 'vacancies'">
     <app-button
+      class="vacancy__secondary-action"
       [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
       appearance="outline"
       size="medium"
@@ -75,6 +77,7 @@
     >
     @if (type() === "vacancies" && vacancy().canManageResponses) {
       <app-button
+        class="vacancy__primary-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
         [queryParams]="{ manageResponses: true }"
         size="medium"
@@ -82,6 +85,7 @@
       >
     } @else if (type() !== "vacancies" || (vacancy().canRespond && !vacancy().hasResponded)) {
       <app-button
+        class="vacancy__response-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
         [queryParams]="{ sendResponse: true }"
         size="medium"

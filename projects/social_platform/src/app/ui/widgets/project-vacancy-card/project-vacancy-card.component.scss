@@ -1,3 +1,5 @@
+@use "styles/components/vacancy-skill";
+
 .vacancy {
   padding: 24px;
   border: 0.5px solid var(--medium-grey-for-outline);
@@ -33,7 +35,15 @@
     align-items: center;
     min-width: 0;
 
+    &-avatar {
+      display: block;
+      flex: 0 0 40px;
+      width: 40px;
+      height: 40px;
+    }
+
     &--info {
+      flex: 1 1 auto;
       min-width: 0;
     }
   }
@@ -81,17 +91,39 @@
 
   &__actions {
     display: flex;
-    gap: 20px;
+    flex-flow: row nowrap;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
 
-    &--vacancies {
-      ::ng-deep {
-        app-button {
-          button {
-            width: 131px;
-          }
-        }
+    app-button {
+      flex: 0 0 auto;
+    }
+
+    .vacancy__secondary-action {
+      ::ng-deep .button {
+        width: 131px;
+      }
+    }
+
+    .vacancy__primary-action,
+    .vacancy__response-action {
+      ::ng-deep .button {
+        width: 146px;
+        white-space: nowrap;
+      }
+    }
+
+    @media screen and (max-width: 420px) {
+      flex-flow: column nowrap;
+      gap: 10px;
+
+      app-button {
+        flex: 0 0 100%;
+      }
+
+      ::ng-deep app-button .button {
+        width: 100%;
       }
     }
   }
@@ -105,6 +137,14 @@
   }
 
   &__skill {
+    min-width: 0;
+
+    &--compact {
+      ::ng-deep .tag {
+        @include vacancy-skill.compact-tag;
+      }
+    }
+
     &--more {
       color: var(--accent);
     }

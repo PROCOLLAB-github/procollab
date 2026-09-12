@@ -168,7 +168,9 @@ describe("ProjectMainStepComponent", () => {
     await fixture.whenStable();
 
     for (const id of ["name", "problem"]) {
-      const field = fixture.nativeElement.querySelector(`app-input#${id} .field`) as HTMLElement;
+      const input = fixture.nativeElement.querySelector(`app-input#${id}`) as HTMLElement;
+      const field = input.querySelector(".field") as HTMLElement;
+      expect(input.classList).toContain("project__validated-input--error");
       expect(field.querySelector(".field__input")).not.toBeNull();
       expect(field.querySelector(".field__right-icon .project__input-error")).not.toBeNull();
       expect(field.querySelector(".field__counter")).not.toBeNull();

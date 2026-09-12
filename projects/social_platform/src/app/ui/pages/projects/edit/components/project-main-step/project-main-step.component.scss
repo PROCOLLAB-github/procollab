@@ -10,12 +10,12 @@
 
   &__validated-input ::ng-deep {
     .field__input {
-      padding-right: 120px;
+      padding-right: 88px;
     }
 
     .field__right-icon {
       top: 50%;
-      right: 88px !important;
+      right: 16px !important;
       pointer-events: none;
       transform: translateY(-50%);
     }
@@ -28,16 +28,22 @@
     }
   }
 
+  &__validated-input--error ::ng-deep {
+    .field__input {
+      padding-right: 120px;
+    }
+
+    .field__counter {
+      right: 48px;
+    }
+  }
+
   &__input-error {
     color: var(--red);
   }
 
   &__region-field {
     position: relative;
-
-    &--error ::ng-deep .region-select__control input {
-      padding-right: 76px;
-    }
   }
 
   &__grid {
@@ -57,7 +63,9 @@
       }
 
       &--main {
-        grid-template-columns: 1fr 1fr 1fr 0.2fr;
+        grid-template-columns:
+          minmax(0, 1.2fr) minmax(0, 0.75fr) minmax(0, 1fr)
+          minmax(70px, 0.3fr);
         align-items: start;
       }
     }
