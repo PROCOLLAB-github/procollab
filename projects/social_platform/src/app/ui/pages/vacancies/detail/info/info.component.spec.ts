@@ -17,7 +17,7 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 describe("VacancyInfoComponent", () => {
-  it("показывает релевантную подсказку сопроводительного письма", async () => {
+  it("сохраняет DEV подсказку сопроводительного письма", async () => {
     const project = Project.default();
     project.id = 5;
     project.name = "Проект";
@@ -95,9 +95,7 @@ describe("VacancyInfoComponent", () => {
     fixture.detectChanges();
 
     const textarea = document.querySelector("textarea") as HTMLTextAreaElement;
-    expect(textarea.placeholder).toBe(
-      "Расскажите, почему вам интересна вакансия и чем вы можете быть полезны проекту",
-    );
+    expect(textarea.placeholder).toBe("Проект начал свое существование с 2020 года");
 
     uiService.openModal.set(false);
     fixture.detectChanges();

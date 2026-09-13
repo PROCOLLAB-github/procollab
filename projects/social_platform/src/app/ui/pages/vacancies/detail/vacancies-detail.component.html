@@ -2,7 +2,12 @@
 
 @if (vacancy()) {
   <div class="detail">
-    <app-back [namespace]="vacancy()!.role" path="/office/vacancies/all"></app-back>
+    <app-back
+      class="detail__back"
+      [namespace]="vacancy()!.role"
+      [attr.title]="vacancy()!.role"
+      path="/office/vacancies/all"
+    ></app-back>
   </div>
 
   <div class="detail__body">
