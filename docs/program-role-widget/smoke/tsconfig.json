@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "types": [],
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false
+  },
+  "files": ["./page.ts"]
+}

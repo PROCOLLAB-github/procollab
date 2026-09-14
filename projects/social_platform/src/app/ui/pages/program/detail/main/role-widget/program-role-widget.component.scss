@@ -1,0 +1,232 @@
+:host {
+  display: block;
+  width: 157px;
+}
+
+.widget {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 27px minmax(0, 1fr) 18px;
+  row-gap: 3px;
+  width: 100%;
+
+  // Исходная карточка при 100%: 157 × 140.984375 CSS px (Mont, desktop).
+  height: 140.9844px;
+  padding: 7px 8px;
+  font-size: 10px;
+  line-height: 13px;
+  color: var(--black);
+  background: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__badge {
+    min-height: 12px;
+    padding: 0 7px;
+    font-size: 8px;
+    line-height: 12px;
+    color: var(--light-white);
+    background: var(--accent);
+    border-radius: 8px;
+  }
+
+  h3 {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    color: var(--accent);
+  }
+
+  &__body {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  &__ellipsis {
+    display: block;
+    overflow: hidden;
+    color: var(--black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__stage-state {
+    height: 12px;
+    font-size: 9px;
+    line-height: 12px;
+    color: var(--dark-grey);
+  }
+
+  &__steps {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__steps li {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    font-size: 8px;
+    line-height: 11px;
+    color: var(--dark-grey);
+  }
+
+  &__dot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    margin-bottom: 2px;
+    line-height: 10px;
+    text-align: center;
+    background: var(--medium-grey-for-outline);
+    border: 1px solid transparent;
+    border-radius: 50%;
+  }
+
+  &__step--complete .widget__dot {
+    color: var(--light-white);
+    background: var(--accent);
+  }
+
+  &__step--current .widget__dot {
+    background: var(--light-white);
+    border-color: var(--accent);
+  }
+
+  &__steps .widget__step--current {
+    color: var(--accent);
+  }
+
+  &__metrics {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2px 6px;
+    margin: 0;
+  }
+
+  dt {
+    font-size: 10px;
+    line-height: 12px;
+    color: var(--dark-grey);
+  }
+
+  dd {
+    margin: 0;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__metrics--organizer > div:nth-child(n + 3) dt {
+    min-height: 24px;
+  }
+
+  &__without span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__without {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  &__without small {
+    flex-shrink: 0;
+    padding-left: 3px;
+    font-size: 8px;
+    line-height: 12px;
+    border-left: 3px solid currentcolor;
+  }
+
+  &__expert-state {
+    margin-top: 3px;
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    border-top: 0.5px solid var(--medium-grey-for-outline);
+  }
+
+  &__footer a,
+  &__footer button {
+    padding: 0;
+    font: inherit;
+    color: var(--accent);
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+
+  &__footer span {
+    font-size: 9px;
+    color: var(--dark-grey);
+  }
+
+  &__footer button:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  &__error {
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+
+  &__skeleton {
+    display: grid;
+    gap: 7px;
+    padding: 6px 0;
+  }
+
+  &__skeleton span {
+    background: var(--medium-grey-for-outline);
+    border-radius: 4px;
+  }
+
+  [data-tone="green"] {
+    color: var(--green-dark);
+  }
+
+  [data-tone="yellow"] {
+    color: var(--gold-dark);
+  }
+
+  [data-tone="red"] {
+    color: var(--red-dark);
+  }
+
+  [data-tone="neutral"] {
+    color: var(--dark-grey);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 1px;
+  }
+}

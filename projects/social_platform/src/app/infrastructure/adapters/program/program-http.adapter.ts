@@ -1,6 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
+import { ProgramRoleWidget } from "@domain/program/program-role-widget.model";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
@@ -30,6 +31,9 @@ import {
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
+  getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/analytics-widget/`);
+  }
   private readonly PROGRAMS_URL = "/programs";
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";
   private readonly apiService = inject(ApiService);

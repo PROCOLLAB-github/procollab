@@ -31,6 +31,7 @@ export class Program {
   likesCount!: number;
   isUserLiked!: boolean;
   isUserManager!: boolean;
+  isUserExpert?: boolean;
   isUserMember!: boolean;
   currentApplication!: ProgramCurrentApplication | null;
   welcomeAcknowledgedAt!: string | null;
