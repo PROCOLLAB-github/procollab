@@ -14,6 +14,7 @@
 
       @if (vacancy()!.canManageResponses) {
         <app-button
+          class="vacancy__responses-button"
           size="big"
           customTypographyClass="text-body-12"
           (click)="onManageResponsesClick()"
@@ -42,6 +43,30 @@
 
       <ul class="lists__list">
         <li class="lists__item">
+          <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Город</span>
+            <p class="text-body-10 lists__value">
+              @if (vacancy()!.city; as city) {
+                {{ city | capitalize }}
+              } @else {
+                Не указан
+              }
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Формат работы</span>
+            <p class="text-body-10 lists__value">
+              {{ vacancy()!.workFormat ? (vacancy()!.workFormat | capitalize) : "Не указан" }}
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
           <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
           <div class="lists__item-content">
             <span class="text-body-10 lists__label">Опыт</span>
@@ -66,16 +91,6 @@
         </li>
 
         <li class="lists__item">
-          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">Формат работы</span>
-            <p class="text-body-10 lists__value">
-              {{ vacancy()!.workFormat ? (vacancy()!.workFormat | capitalize) : "Не указан" }}
-            </p>
-          </div>
-        </li>
-
-        <li class="lists__item">
           <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
           <div class="lists__item-content">
             <span class="text-body-10 lists__label">Зарплата</span>
@@ -85,20 +100,6 @@
                   ? (vacancy()!.salary | salaryTransform | capitalize) + " " + "рублей"
                   : "По договоренности"
               }}
-            </p>
-          </div>
-        </li>
-
-        <li class="lists__item">
-          <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">Город</span>
-            <p class="text-body-10 lists__value">
-              @if (vacancy()!.city; as city) {
-                {{ city | capitalize }}
-              } @else {
-                Не указан
-              }
             </p>
           </div>
         </li>

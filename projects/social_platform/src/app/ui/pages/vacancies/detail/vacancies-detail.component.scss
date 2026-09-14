@@ -1,0 +1,28 @@
+@use "styles/responsive";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.detail__back {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+
+  @include responsive.apply-desktop {
+    // Keep the title clear of the bell, logout and profile controls.
+    max-width: calc(100% - 200px);
+
+    ::ng-deep .back {
+      min-width: 0;
+
+      span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}

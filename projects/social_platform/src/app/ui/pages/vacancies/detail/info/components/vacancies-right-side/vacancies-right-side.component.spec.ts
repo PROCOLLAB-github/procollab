@@ -50,7 +50,7 @@ describe("VacanciesRightSideComponent", () => {
       item.textContent?.trim(),
     );
 
-    expect(labels).toEqual(["Опыт", "График", "Формат работы", "Зарплата", "Город"]);
+    expect(labels).toEqual(["Город", "Формат работы", "Опыт", "График", "Зарплата"]);
     expect(text).toContain("Москва");
     expect(text).not.toContain("Регион проекта не является городом вакансии");
     expect(text).toMatch(/5\s555 рублей/);
@@ -106,10 +106,21 @@ describe("VacanciesRightSideComponent", () => {
   });
 
   it("показывает менеджеру просмотр откликов вместо отправки", () => {
-    const text = render(vacancy({ canRespond: true, canManageResponses: true })).textContent ?? "";
+    const manageResponses = vi.fn();
+    fixture.componentInstance.manageResponses.subscribe(manageResponses);
+    const element = render(
+      vacancy({ canRespond: true, canManageResponses: true, responseStatus: "rejected" }),
+    );
+    const text = element.textContent ?? "";
 
     expect(text).toContain("посмотреть отклики");
     expect(text).not.toContain("откликнуться");
+    const button = element.querySelector(
+      "app-button.vacancy__responses-button button",
+    ) as HTMLButtonElement;
+    expect(button.disabled).toBe(false);
+    button.click();
+    expect(manageResponses).toHaveBeenCalledOnce();
   });
 
   it("не показывает действие при всех false", () => {

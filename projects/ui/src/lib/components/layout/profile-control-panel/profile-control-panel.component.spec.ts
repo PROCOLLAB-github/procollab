@@ -55,6 +55,23 @@ describe("ProfileControlPanelComponent notification center", () => {
     fixture.detectChanges();
   }
 
+  it("сохраняет popup внутри stacking context control-panel при открытии и закрытии", () => {
+    const panel = fixture.nativeElement.querySelector(".control-panel") as HTMLElement;
+    const bell = panel.querySelector("button.control-panel__bell") as HTMLButtonElement;
+    expect(bell.getAttribute("aria-expanded")).toBe("false");
+    expect(panel.querySelector(".control-panel__notifications")).toBeNull();
+
+    openPopup();
+    expect(bell.getAttribute("aria-expanded")).toBe("true");
+    expect(panel.querySelector(".control-panel__notification-area [role='dialog']")).not.toBeNull();
+    expect(panel.querySelector("[role='dialog']")?.closest(".control-panel")).toBe(panel);
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    fixture.detectChanges();
+    expect(bell.getAttribute("aria-expanded")).toBe("false");
+    expect(panel.querySelector(".control-panel__notifications")).toBeNull();
+  });
+
   it("показывает badge и точный aria-label только при unreadCount > 0", () => {
     const bell: HTMLButtonElement = fixture.nativeElement.querySelector(".control-panel__bell");
     expect(fixture.nativeElement.querySelector(".control-panel__attention")).not.toBeNull();
