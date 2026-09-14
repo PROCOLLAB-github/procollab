@@ -6,8 +6,8 @@
 .widget {
   box-sizing: border-box;
   display: grid;
-  grid-template-rows: 27px minmax(0, 1fr) 18px;
-  row-gap: 3px;
+  grid-template-rows: 18px minmax(0, 1fr) 22px;
+  row-gap: 5px;
   width: 100%;
 
   // Исходная карточка при 100%: 157 × 140.984375 CSS px (Mont, desktop).
@@ -22,23 +22,24 @@
 
   &__header {
     display: flex;
-    flex-direction: column;
+    gap: 5px;
     align-items: center;
+    justify-content: space-between;
   }
 
   &__badge {
     min-height: 12px;
-    padding: 0 7px;
+    padding: 1px 4px;
     font-size: 8px;
     line-height: 12px;
-    color: var(--light-white);
-    background: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
     border-radius: 8px;
   }
 
   h3 {
     font-size: 12px;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 15px;
     color: var(--accent);
   }
@@ -50,17 +51,41 @@
 
   &__ellipsis {
     display: block;
+    min-width: 0;
     overflow: hidden;
     color: var(--black);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  &__project-lines {
+    display: grid;
+    gap: 3px;
+    line-height: 14px;
+  }
+
+  &__detail-row {
+    display: flex;
+    gap: 3px;
+    min-width: 0;
+    color: var(--black);
+  }
+
+  &__label {
+    flex-shrink: 0;
+    color: var(--grey-for-text);
+  }
+
+  &__empty {
+    color: var(--grey-for-text);
+  }
+
   &__stage-state {
     height: 12px;
-    font-size: 9px;
+    margin-top: 3px;
+    font-size: 10px;
     line-height: 12px;
-    color: var(--dark-grey);
+    color: var(--grey-for-text);
   }
 
   &__steps {
@@ -72,21 +97,38 @@
   }
 
   &__steps li {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
     align-items: center;
     font-size: 8px;
     line-height: 11px;
-    color: var(--dark-grey);
+    color: var(--grey-for-text);
+  }
+
+  &__steps li:not(:last-child)::after {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 100%;
+    height: 1px;
+    content: "";
+    background: var(--medium-grey-for-outline);
+  }
+
+  &__steps li.widget__step--complete::after {
+    background: var(--accent);
   }
 
   &__dot {
+    position: relative;
+    z-index: 1;
     display: block;
-    width: 10px;
-    height: 10px;
-    margin-bottom: 2px;
-    line-height: 10px;
+    width: 12px;
+    height: 12px;
+    margin-bottom: 3px;
+    line-height: 12px;
     text-align: center;
     background: var(--medium-grey-for-outline);
     border: 1px solid transparent;
@@ -110,21 +152,22 @@
   &__metrics {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 2px 6px;
+    gap: 4px 6px;
     margin: 0;
   }
 
   dt {
     font-size: 10px;
     line-height: 12px;
-    color: var(--dark-grey);
+    color: var(--grey-for-text);
   }
 
   dd {
     margin: 0;
     overflow: hidden;
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -141,30 +184,49 @@
 
   &__without {
     display: flex;
-    gap: 3px;
+    gap: 4px;
     align-items: center;
   }
 
   &__without small {
+    display: flex;
     flex-shrink: 0;
-    padding-left: 3px;
-    font-size: 8px;
+    gap: 3px;
+    align-items: center;
+    font-size: 9px;
+    font-weight: 400;
     line-height: 12px;
-    border-left: 3px solid currentcolor;
+  }
+
+  &__without i {
+    width: 3px;
+    height: 3px;
+    background: currentcolor;
+    border-radius: 50%;
   }
 
   &__expert-state {
-    margin-top: 3px;
-    overflow: hidden;
+    display: grid;
+    align-content: center;
+    min-height: 28px;
+    margin-top: 6px;
     font-size: 10px;
     line-height: 12px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  }
+
+  &__status-label {
+    color: var(--grey-for-text);
+  }
+
+  &__status-value--time {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
   }
 
   &__footer {
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: center;
     border-top: 0.5px solid var(--medium-grey-for-outline);
   }
@@ -182,7 +244,7 @@
 
   &__footer span {
     font-size: 9px;
-    color: var(--dark-grey);
+    color: var(--grey-for-text);
   }
 
   &__footer button:disabled {
@@ -220,7 +282,7 @@
   }
 
   [data-tone="neutral"] {
-    color: var(--dark-grey);
+    color: var(--grey-for-text);
   }
 
   a:focus-visible,

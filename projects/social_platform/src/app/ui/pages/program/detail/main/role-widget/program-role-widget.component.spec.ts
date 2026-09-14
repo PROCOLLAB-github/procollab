@@ -81,6 +81,14 @@ describe("ProgramRoleWidgetComponent", () => {
     f.nativeElement.querySelector("button").click();
     expect(create).toHaveBeenCalledWith(12);
   });
+  it("renders the server-evaluated project as a completed chain", () => {
+    const f = render({
+      ...participant,
+      participant: { ...participant.participant, stage: "evaluated" },
+    });
+    expect(f.nativeElement.querySelectorAll(".widget__step--complete")).toHaveLength(3);
+    expect(f.nativeElement.querySelector('[aria-current="step"]')).toBeNull();
+  });
   it("has no broken action when submission is closed", () => {
     const f = render({
       ...participant,

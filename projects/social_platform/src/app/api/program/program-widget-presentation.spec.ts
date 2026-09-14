@@ -49,8 +49,8 @@ describe("Program widget presentation", () => {
     evaluationEnds: null,
   };
   it.each([
-    [49 * 3600000, "green", "3 дн"],
-    [48 * 3600000, "yellow", "2 дн"],
+    [49 * 3600000, "green", "3 дня"],
+    [48 * 3600000, "yellow", "2 дня"],
     [23 * 3600000, "yellow", "23 ч"],
     [59 * 60000, "yellow", "59 мин"],
     [1, "yellow", "1 мин"],
@@ -75,6 +75,22 @@ describe("Program widget presentation", () => {
     ).toBe("red"));
   it("keeps missing deadline neutral", () =>
     expect(expertWidgetPresentation(expert, true, now).text).toBe("Срок не установлен"));
+  it.each([
+    [25, "25 минут"],
+    [21, "21 минута"],
+    [22, "22 минуты"],
+    [11, "11 минут"],
+    [300, "5 часов"],
+  ])("keeps the full duration and unit for %i minutes", (minutes, value) => {
+    const result = expertWidgetPresentation(
+      { ...expert, evaluationEnds: new Date(now + Number(minutes) * 60000).toISOString() },
+      true,
+      now,
+    );
+    expect(result.label).toBe("До конца оценивания");
+    expect(result.value).toBe(value);
+    expect(result.countdown).toBe(true);
+  });
   it("prioritizes no assignments and completion even after deadline", () => {
     const overdue = { ...expert, evaluationEnds: new Date(now - 1000).toISOString() };
     expect(
@@ -118,7 +134,7 @@ describe("Program widget presentation", () => {
   it("distinguishes current and completed stages", () => {
     expect(participantSteps("submitted").map(s => s.completed)).toEqual([false, false, false]);
     expect(participantSteps("review").map(s => s.completed)).toEqual([true, false, false]);
-    expect(participantSteps("evaluated").map(s => s.completed)).toEqual([true, true, false]);
+    expect(participantSteps("evaluated").map(s => s.completed)).toEqual([true, true, true]);
     for (const stage of ["submitted", "review", "evaluated"] as const)
       expect(participantSteps(stage).filter(s => s.current && s.completed)).toHaveLength(0);
   });

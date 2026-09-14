@@ -55,7 +55,7 @@
                   (addNews)="onAddNews($event)"
                 ></app-news-form>
               }
-              @if (program()!.isUserMember) {
+              @if (program()!.isUserMember || program()!.isUserManager) {
                 @for (n of news(); track n.id) {
                   <app-news-card
                     class="news__item"

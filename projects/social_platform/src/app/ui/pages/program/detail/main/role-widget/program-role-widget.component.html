@@ -6,8 +6,8 @@
   [attr.aria-busy]="state().status === 'loading'"
 >
   <header class="widget__header">
-    <span class="widget__badge">{{ data() ? roleNames[data()!.role] : " " }}</span>
     <h3>аналитика</h3>
+    <span class="widget__badge">{{ data() ? roleNames[data()!.role] : " " }}</span>
   </header>
   @if (data(); as data) {
     <div class="widget__body">
@@ -21,24 +21,34 @@
                 ? "Кейс: " + participant.caseName
                 : "Кейс не выбран"
               : "Кейсы не предусмотрены";
-          <span
-            class="widget__ellipsis"
-            tabindex="0"
-            [matTooltip]="caseText"
-            [attr.aria-label]="caseText"
-            >{{ caseText }}</span
-          >
-          @if (project) {
-            <a
-              class="widget__ellipsis"
-              [routerLink]="routes.projects.detail(project.id)"
-              [queryParams]="{ programLinkId: project.programLinkId }"
-              [matTooltip]="'Проект: ' + project.name"
-              >Проект: {{ project.name }}</a
-            >
-          } @else {
-            <span>Проект не подан</span>
-          }
+          <div class="widget__project-lines">
+            @if (participant.caseName) {
+              <span
+                class="widget__detail-row"
+                tabindex="0"
+                [matTooltip]="caseText"
+                [attr.aria-label]="caseText"
+              >
+                <span class="widget__label">Кейс:</span
+                ><span class="widget__ellipsis">{{ participant.caseName }}</span>
+              </span>
+            } @else {
+              <span class="widget__empty">{{ caseText }}</span>
+            }
+            @if (project) {
+              <a
+                class="widget__detail-row"
+                [routerLink]="routes.projects.detail(project.id)"
+                [queryParams]="{ programLinkId: project.programLinkId }"
+                [matTooltip]="'Проект: ' + project.name"
+              >
+                <span class="widget__label">Проект:</span
+                ><span class="widget__ellipsis">{{ project.name }}</span>
+              </a>
+            } @else {
+              <span class="widget__empty">Проект не подан</span>
+            }
+          </div>
           <div class="widget__stage-state">
             @if (participant.stage === "not_submitted") {
               Не отправлен
@@ -77,9 +87,7 @@
               </dd>
             </div>
             <div>
-              <dt tabindex="0" matTooltip="Отправленные решения">
-                <span class="widget__ellipsis">Отправленные</span>решения
-              </dt>
+              <dt tabindex="0" matTooltip="Отправленные решения">Сдано<br />решений</dt>
               <dd
                 tabindex="0"
                 [matTooltip]="
@@ -97,8 +105,10 @@
                 [matTooltip]="ratio.description"
                 [attr.aria-label]="ratio.description + ', ' + ratio.percentage"
               >
-                <span>{{ count(metrics.participantsWithoutProject) }}</span
-                ><small [attr.data-tone]="ratio.tone">{{ ratio.percentage }}</small>
+                <span>{{ count(metrics.participantsWithoutProject) }}</span>
+                <small [attr.data-tone]="ratio.tone"
+                  ><i aria-hidden="true"></i>{{ ratio.percentage }}</small
+                >
               </dd>
             </div>
           </dl>
@@ -135,7 +145,14 @@
               [attr.data-tone]="status.tone"
               [matTooltip]="status.text + (status.tooltip ? '. ' + status.tooltip : '')"
             >
-              {{ status.text }}
+              @if (status.label) {
+                <span class="widget__status-label">{{ status.label }}</span>
+              }
+              <span
+                class="widget__status-value"
+                [class.widget__status-value--time]="status.countdown"
+                >{{ status.value }}</span
+              >
             </p>
           }
         }

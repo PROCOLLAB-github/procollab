@@ -48,24 +48,53 @@ widgetData.participant = {
         name: view === "long" ? "Международный технологический проект ".repeat(15) : "StudyFlow",
         programLinkId: 34,
       },
-  caseProvided: !empty,
-  caseName: empty ? null : view === "long" ? "Цифровой сервис ".repeat(15) : "Цифровой сервис",
-  stage: empty ? "none" : view === "draft" ? "not_submitted" : "review",
+  caseProvided: !empty && view !== "participant-no-case",
+  caseName:
+    empty || view === "participant-no-case"
+      ? null
+      : view === "long"
+        ? "Цифровой сервис ".repeat(15)
+        : "Цифровой сервис",
+  stage: empty
+    ? "none"
+    : view === "draft"
+      ? "not_submitted"
+      : view === "participant-submitted"
+        ? "submitted"
+        : view === "participant-evaluated"
+          ? "evaluated"
+          : "review",
   submissionOpen: true,
 };
 widgetData.organizer = {
   participants: empty ? 0 : view === "organizer-large" ? 987654321 : 248,
   projects: empty ? 0 : 61,
   submittedSolutions: empty ? 0 : 54,
-  participantsWithoutProject: empty ? 0 : 19,
+  participantsWithoutProject: empty
+    ? 0
+    : view === "organizer-yellow"
+      ? 40
+      : view === "organizer-red"
+        ? 90
+        : 19,
 };
 widgetData.expert = {
   mode: view === "expert-open" ? "open" : "distributed",
   assigned: view === "expert-open" ? null : empty ? 0 : 7,
   remaining: view === "expert-open" ? null : empty || view === "expert-complete" ? 0 : 3,
-  evaluationEnds: new Date(
-    Date.now() + (view === "expert-overdue" ? -1 : 2) * 86400000,
-  ).toISOString(),
+  evaluationEnds:
+    view === "expert-missing"
+      ? null
+      : new Date(
+          Date.now() +
+            (view === "expert-overdue"
+              ? -86400000
+              : view === "expert-hours"
+                ? 5 * 3600000
+                : view === "expert-minutes"
+                  ? 25 * 60000
+                  : 2 * 86400000),
+        ).toISOString(),
 };
 const widgetState = signal<any>(
   view === "loading"

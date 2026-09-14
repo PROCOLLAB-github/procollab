@@ -10,6 +10,21 @@ import { Program } from "@domain/program/program.model";
 
 export type WidgetTone = "neutral" | "green" | "yellow" | "red";
 
+export interface ExpertWidgetStatus {
+  label: string | null;
+  value: string;
+  text: string;
+  countdown: boolean;
+  tone: WidgetTone;
+  tooltip: string;
+}
+
+/** Полные единицы времени остаются видимыми; склонение учитывает 11–14 и 21/22. */
+function durationText(count: number, forms: [string, string, string]): string {
+  const plural = new Intl.PluralRules("ru-RU").select(count);
+  return `${count} ${forms[plural === "one" ? 0 : plural === "few" ? 1 : 2]}`;
+}
+
 /** Только контекстные флаги; глобальная роль пользователя и наличие назначений не подходят. */
 export function programWidgetRole(program: Program | undefined): ProgramWidgetRole | null {
   return program?.isUserManager
@@ -45,7 +60,7 @@ export function expertWidgetPresentation(
   expert: ExpertWidget,
   competitive: boolean,
   now: number,
-): { text: string; tone: WidgetTone; tooltip: string } {
+): ExpertWidgetStatus {
   const deadline = expert.evaluationEnds ? Date.parse(expert.evaluationEnds) : NaN;
   const tooltip = Number.isFinite(deadline)
     ? new Intl.DateTimeFormat("ru-RU", {
@@ -57,38 +72,52 @@ export function expertWidgetPresentation(
         timeZoneName: "short",
       }).format(deadline)
     : "";
+  const modeLabel = expert.mode === "open" ? "Свободное оценивание" : null;
+  const status = (
+    value: string,
+    tone: WidgetTone,
+    date = "",
+    label = modeLabel,
+    countdown = false,
+  ): ExpertWidgetStatus => ({
+    label,
+    value,
+    text: label ? `${label}. ${value}` : value,
+    tone,
+    tooltip: date,
+    countdown,
+  });
   // Неконкурсная программа не подразумевает сдачу; свободное оценивание остаётся доступным.
   if (!competitive && expert.mode === "distributed")
-    return { text: "Без обязательной сдачи", tone: "neutral", tooltip: "" };
+    return status("Без обязательной сдачи", "neutral");
   if (expert.mode === "distributed") {
-    if (expert.assigned === 0)
-      return { text: "Нет назначенных проектов", tone: "neutral", tooltip: "" };
-    if (expert.remaining === 0) return { text: "Все проекты оценены", tone: "green", tooltip: "" };
+    if (expert.assigned === 0) return status("Нет назначенных проектов", "neutral");
+    if (expert.remaining === 0) return status("Все проекты оценены", "green");
   }
-  const prefix = expert.mode === "open" ? "Свободное оценивание. " : "";
-  if (!Number.isFinite(deadline))
-    return { text: `${prefix}Срок не установлен`, tone: "neutral", tooltip: "" };
+  if (!Number.isFinite(deadline)) return status("Срок не установлен", "neutral");
   const remaining = deadline - now;
-  if (remaining <= 0) return { text: `${prefix}Срок оценивания истёк`, tone: "red", tooltip };
+  if (remaining <= 0) return status("Срок оценивания истёк", "red", tooltip);
   const duration =
     remaining < 3600000
-      ? `${Math.ceil(remaining / 60000)} мин`
+      ? durationText(Math.ceil(remaining / 60000), ["минута", "минуты", "минут"])
       : remaining < 86400000
-        ? `${Math.ceil(remaining / 3600000)} ч`
-        : `${Math.ceil(remaining / 86400000)} дн`;
-  return {
-    text: `${prefix}До конца оценивания — ${duration}`,
-    tone: remaining <= 48 * 3600000 ? "yellow" : "green",
+        ? durationText(Math.ceil(remaining / 3600000), ["час", "часа", "часов"])
+        : durationText(Math.ceil(remaining / 86400000), ["день", "дня", "дней"]);
+  return status(
+    modeLabel ? `Осталось ${duration}` : duration,
+    remaining <= 48 * 3600000 ? "yellow" : "green",
     tooltip,
-  };
+    modeLabel ?? "До конца оценивания",
+    true,
+  );
 }
 
-/** Текущий этап никогда не помечается завершённым; сервер определяет итог проверки. */
+/** Проверка остаётся текущей без галочки; серверный evaluated завершает всю цепочку. */
 export function participantSteps(stage: ParticipantStage) {
   const current = ["submitted", "review", "evaluated"].indexOf(stage);
   return ["Отправлен", "Проверка", "Оценён"].map((label, index) => ({
     label,
-    current: current === index,
-    completed: index < current,
+    current: stage !== "evaluated" && current === index,
+    completed: stage === "evaluated" || index < current,
   }));
 }
