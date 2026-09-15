@@ -1,6 +1,7 @@
 /** @format */
 
 import { HttpParams } from "@angular/common/http";
+import { ProgramRoleWidget } from "@domain/program/program-role-widget.model";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable, tap, throwError } from "rxjs";
 import { User } from "@domain/auth/user.model";
@@ -35,6 +36,9 @@ import {
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
+  getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
+    return this.programAdapter.getRoleWidget(programId);
+  }
   private readonly programAdapter = inject(ProgramHttpAdapter);
   private readonly entityCache = new EntityCache<Program>(5 * 60 * 1000);
   private readonly eventBus = inject(EventBus);

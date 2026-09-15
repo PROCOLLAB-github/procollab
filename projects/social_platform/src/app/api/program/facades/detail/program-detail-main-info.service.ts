@@ -95,8 +95,8 @@ export class ProgramDetailMainService {
           this.programDetailMainUIInfoService.applyFormatingProgramData(program);
         }),
         concatMap(program => {
-          // Новости программы доступны только участникам программы.
-          if (program.isUserMember) {
+          // Видимость списка и загрузка совпадают; эксперт сам по себе доступ не получает.
+          if (program.isUserMember || program.isUserManager) {
             return this.fetchNews(0, this.fetchLimit());
           } else {
             return of(

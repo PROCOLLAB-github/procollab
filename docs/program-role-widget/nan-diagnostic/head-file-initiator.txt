@@ -1,0 +1,345 @@
+Captured XHR.send initiator, observer wrapper preserves the original call.
+UTC: 2026-09-14T19:28:57.888Z
+Editor: http://localhost:4314/office/projects/31/edit?editingStep=main
+Request: {"method":"PUT","url":"http://localhost:8010/projects/NaN/","body":"{\"presentation_address\":\"\",\"draft\":true}"}
+
+Original browser stack:
+Error: xhr-send
+    at trace (http://localhost:4314/main.js:10340:165)
+    at XMLHttpRequest.send (http://localhost:4314/main.js:10393:5)
+    at _Observable._subscribe (http://localhost:4314/chunk-ZGRXBWU5.js:2062:13)
+    at _Observable._trySubscribe (http://localhost:4314/chunk-2P7KZKYS.js:949:19)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:113
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at source.subscribe.isComplete (http://localhost:4314/chunk-2P7KZKYS.js:2809:45)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at _Observable._subscribe (http://localhost:4314/chunk-2P7KZKYS.js:1816:18)
+    at _Observable._trySubscribe (http://localhost:4314/chunk-2P7KZKYS.js:949:19)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:113
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2805:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2847:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2398:23
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2048:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2579:14
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2579:14
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at doInnerSub (http://localhost:4314/chunk-2P7KZKYS.js:2156:40)
+    at outerNext (http://localhost:4314/chunk-2P7KZKYS.js:2151:54)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at _Observable._subscribe (http://localhost:4314/chunk-2P7KZKYS.js:1816:18)
+    at _Observable._trySubscribe (http://localhost:4314/chunk-2P7KZKYS.js:949:19)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:113
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at mergeInternals (http://localhost:4314/chunk-2P7KZKYS.js:2184:10)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2200:42
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2348:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2048:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at subscribeForRetry (http://localhost:4314/chunk-2P7KZKYS.js:2646:25)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2684:5
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2530:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2565:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2048:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2847:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at _Observable.subscribe (http://localhost:4314/chunk-2P7KZKYS.js:941:5)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2048:12
+    at OperatorSubscriber.<anonymous> (http://localhost:4314/chunk-2P7KZKYS.js:1013:18)
+    at http://localhost:4314/chunk-2P7KZKYS.js:943:42
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+
+Source map frames (original order):
+tmp/nan-trace.ts:19:142
+tmp/nan-trace.ts:68:5
+../procollab/node_modules/@angular/common/fesm2022/module.mjs:2769:13
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:37:25
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/switchMap.js:14:51
+../procollab/node_modules/rxjs/dist/esm/internal/operators/OperatorSubscriber.js:13:21
+../procollab/node_modules/rxjs/dist/esm/internal/Subscriber.js:31:18
+../procollab/node_modules/rxjs/dist/esm/internal/observable/innerFrom.js:51:24
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:37:25
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/switchMap.js:10:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/tap.js:15:20
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/catchError.js:9:27
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/map.js:6:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/finalize.js:5:20
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/finalize.js:5:20
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/mergeInternals.js:19:44
+../procollab/node_modules/rxjs/dist/esm/internal/operators/mergeInternals.js:14:57
+../procollab/node_modules/rxjs/dist/esm/internal/operators/OperatorSubscriber.js:13:21
+../procollab/node_modules/rxjs/dist/esm/internal/Subscriber.js:31:18
+../procollab/node_modules/rxjs/dist/esm/internal/observable/innerFrom.js:51:24
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:37:25
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/mergeInternals.js:50:12
+../procollab/node_modules/rxjs/dist/esm/internal/operators/mergeMap.js:13:44
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/filter.js:6:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/map.js:6:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/retry.js:24:35
+../procollab/node_modules/rxjs/dist/esm/internal/operators/retry.js:65:13
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/take.js:10:20
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/throwIfEmpty.js:7:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/map.js:6:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/tap.js:15:20
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:22:9
+../procollab/node_modules/rxjs/dist/esm/internal/operators/map.js:6:16
+../procollab/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28
+../procollab/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+../procollab/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9
+
+update-use-case: {"id":"NaN","data":{"presentationAddress":"","draft":true}}
+Error: update-use-case
+    at trace (http://localhost:4314/main.js:10340:165)
+    at UpdateFormUseCase.execute (http://localhost:4314/main.js:10364:3)
+    at http://localhost:4314/chunk-5HWQWVJ2.js:87:37
+    at doInnerSub (http://localhost:4314/chunk-2P7KZKYS.js:2156:15)
+    at outerNext (http://localhost:4314/chunk-2P7KZKYS.js:2151:54)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2348:124
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at ConsumerObserver.next (http://localhost:4314/chunk-2P7KZKYS.js:825:25)
+    at SafeSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:796:22)
+    at SafeSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:1209:20
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at EventEmitter_.next (http://localhost:4314/chunk-2P7KZKYS.js:1202:5)
+    at EventEmitter_.emit (http://localhost:4314/chunk-2P7KZKYS.js:9431:13)
+    at FormControl2.updateValueAndValidity (http://localhost:4314/chunk-DDR2VGWS.js:2110:25)
+    at FormControl2.setValue (http://localhost:4314/chunk-DDR2VGWS.js:3269:10)
+    at updateControl (http://localhost:4314/chunk-DDR2VGWS.js:2829:11)
+    at _UploadFileComponent.onChange (http://localhost:4314/chunk-DDR2VGWS.js:2817:40)
+    at Object.next (http://localhost:4314/chunk-MNLNWENM.js:313:14)
+    at ConsumerObserver.next (http://localhost:4314/chunk-2P7KZKYS.js:825:25)
+    at SafeSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:796:22)
+    at SafeSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2567:18
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2532:20
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2650:20
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2049:18
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2348:124
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at innerFrom.subscribe.innerComplete (http://localhost:4314/chunk-2P7KZKYS.js:2161:20)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2049:18
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at innerFrom.subscribe.innerSubscriber (http://localhost:4314/chunk-2P7KZKYS.js:2809:137)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at source.subscribe.isUnsub (http://localhost:4314/chunk-2P7KZKYS.js:2850:18)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at innerFrom.subscribe.innerSubscriber (http://localhost:4314/chunk-2P7KZKYS.js:2809:137)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at XMLHttpRequest.onLoad (http://localhost:4314/chunk-ZGRXBWU5.js:1978:22)
+
+Mapped application frames (original order, framework frames omitted here):
+tmp/nan-trace.ts:19:142
+tmp/nan-trace.ts:40:3
+projects/social_platform/src/app/api/project/facades/edit/project-form-autosave.service.ts:50:14
+projects/social_platform/src/app/ui/primitives/upload-file/upload-file.component.ts:158:16
+
+http-adapter: {"id":"NaN","data":{"presentationAddress":"","draft":true}}
+Error: http-adapter
+    at trace (http://localhost:4314/main.js:10340:165)
+    at ProjectHttpAdapter.putUpdate (http://localhost:4314/main.js:10369:3)
+    at _ProjectRepository.update (http://localhost:4314/main.js:8891:32)
+    at _UpdateFormUseCase.execute (http://localhost:4314/chunk-5HWQWVJ2.js:51:39)
+    at UpdateFormUseCase.execute (http://localhost:4314/main.js:10365:26)
+    at http://localhost:4314/chunk-5HWQWVJ2.js:87:37
+    at doInnerSub (http://localhost:4314/chunk-2P7KZKYS.js:2156:15)
+    at outerNext (http://localhost:4314/chunk-2P7KZKYS.js:2151:54)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2348:124
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at ConsumerObserver.next (http://localhost:4314/chunk-2P7KZKYS.js:825:25)
+    at SafeSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:796:22)
+    at SafeSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:1209:20
+    at errorContext (http://localhost:4314/chunk-2P7KZKYS.js:738:5)
+    at EventEmitter_.next (http://localhost:4314/chunk-2P7KZKYS.js:1202:5)
+    at EventEmitter_.emit (http://localhost:4314/chunk-2P7KZKYS.js:9431:13)
+    at FormControl2.updateValueAndValidity (http://localhost:4314/chunk-DDR2VGWS.js:2110:25)
+    at FormControl2.setValue (http://localhost:4314/chunk-DDR2VGWS.js:3269:10)
+    at updateControl (http://localhost:4314/chunk-DDR2VGWS.js:2829:11)
+    at _UploadFileComponent.onChange (http://localhost:4314/chunk-DDR2VGWS.js:2817:40)
+    at Object.next (http://localhost:4314/chunk-MNLNWENM.js:313:14)
+    at ConsumerObserver.next (http://localhost:4314/chunk-2P7KZKYS.js:825:25)
+    at SafeSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:796:22)
+    at SafeSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2567:18
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2532:20
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2650:20
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2049:18
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2348:124
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at innerFrom.subscribe.innerComplete (http://localhost:4314/chunk-2P7KZKYS.js:2161:20)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at http://localhost:4314/chunk-2P7KZKYS.js:2049:18
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at innerFrom.subscribe.innerSubscriber (http://localhost:4314/chunk-2P7KZKYS.js:2809:137)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at source.subscribe.isUnsub (http://localhost:4314/chunk-2P7KZKYS.js:2850:18)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at innerFrom.subscribe.innerSubscriber (http://localhost:4314/chunk-2P7KZKYS.js:2809:137)
+    at OperatorSubscriber._next (http://localhost:4314/chunk-2P7KZKYS.js:1034:9)
+    at OperatorSubscriber.next (http://localhost:4314/chunk-2P7KZKYS.js:769:12)
+    at XMLHttpRequest.onLoad (http://localhost:4314/chunk-ZGRXBWU5.js:1978:22)
+
+Mapped application frames (original order, framework frames omitted here):
+tmp/nan-trace.ts:19:142
+tmp/nan-trace.ts:45:3
+projects/social_platform/src/app/infrastructure/repository/project/project.repository.ts:132:32
+projects/social_platform/src/app/api/project/use-cases/update-form.use-case.ts:19:39
+tmp/nan-trace.ts:41:26
+projects/social_platform/src/app/api/project/facades/edit/project-form-autosave.service.ts:50:14
+projects/social_platform/src/app/ui/primitives/upload-file/upload-file.component.ts:158:16

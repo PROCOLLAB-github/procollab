@@ -1,0 +1,87 @@
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { AppComponent } from '../projects/social_platform/src/app/app.component';
+import { APP_CONFIG } from '../projects/social_platform/src/app/app.config';
+import { ProjectFormAutosaveService } from '../projects/social_platform/src/app/api/project/facades/edit/project-form-autosave.service';
+import { ProjectFormService } from '../projects/social_platform/src/app/api/project/facades/edit/project-form.service';
+import { UpdateFormUseCase } from '../projects/social_platform/src/app/api/project/use-cases/update-form.use-case';
+import { ProjectHttpAdapter } from '../projects/social_platform/src/app/infrastructure/adapters/project/project-http.adapter';
+import { ProjectEditComponent } from '../projects/social_platform/src/app/ui/pages/projects/edit/edit.component';
+import { EventBus } from '../projects/social_platform/src/app/domain/shared/event-bus';
+
+// Diagnostic-only observer wrappers: original methods/arguments/results are preserved.
+// No production files, IDs, subscriptions, retry rules or API results are replaced.
+(Error as any).stackTraceLimit = 100;
+let sequence = 0;
+let router: Router | undefined;
+const routeTree = (route: any): any => route ? ({path:route.routeConfig?.path, params:route.snapshot.params, query:route.snapshot.queryParams, children:route.children.map(routeTree)}) : null;
+function trace(kind:string, detail:any = {}, stack = false) {
+  const body = JSON.stringify({seq:++sequence, time:Date.now(), elapsed:performance.now(), kind, url:location.href, detail, ...(stack?{stack:new Error(kind).stack}: {})}, (_key, value)=>typeof value==='number' && !Number.isFinite(value)?String(value):value);
+  console.info('[NAN-DIAG] '+body);
+  fetch('/__nan_trace', {method:'POST',headers:{'Content-Type':'application/json'},body,keepalive:true}).catch(()=>{});
+}
+trace('boot',{queueEntries:JSON.parse(localStorage.getItem('project-autosave-queue')??'[]').length});
+
+const originalBind = ProjectFormAutosaveService.prototype.bindDraftCleanupAutosave;
+ProjectFormAutosaveService.prototype.bindDraftCleanupAutosave = function(control, field, destroyRef) {
+  const route = (this as any).route;
+  trace('bind',{field,rootRoute:route===route.root,params:route.snapshot.params});
+  const subscription = control?.valueChanges.subscribe(value=>trace('control-emission',{field,value,params:route.snapshot.params,rootRoute:route===route.root,routeTree:routeTree(route.root)},!value));
+  destroyRef.onDestroy(()=>{subscription?.unsubscribe();trace('binding-destroy',{field});});
+  return originalBind.call(this,control,field,destroyRef);
+};
+const originalInit = ProjectFormService.prototype.initializeProjectData;
+ProjectFormService.prototype.initializeProjectData = function(project) {
+  trace('initialize-project',{projectId:project.id,presentation:project.presentationAddress,cover:project.coverImageAddress},true);
+  return originalInit.call(this,project);
+};
+const originalExecute = UpdateFormUseCase.prototype.execute;
+UpdateFormUseCase.prototype.execute = function(command) {
+  trace('update-use-case',command,true);
+  return originalExecute.call(this,command);
+};
+const originalPut = ProjectHttpAdapter.prototype.putUpdate;
+ProjectHttpAdapter.prototype.putUpdate = function(id,data) {
+  trace('http-adapter',{id,data},true);
+  return originalPut.call(this,id,data);
+};
+const originalDestroy = ProjectEditComponent.prototype.ngOnDestroy;
+ProjectEditComponent.prototype.ngOnDestroy = function() {
+  trace('editor-destroy');
+  return originalDestroy.call(this);
+};
+const originalEmit = EventBus.prototype.emit;
+EventBus.prototype.emit = function(event) {
+  if (event.type==='ProgramWidgetChanged') trace('widget-event',event,true);
+  return originalEmit.call(this,event);
+};
+const originalOpen = XMLHttpRequest.prototype.open;
+const originalSend = XMLHttpRequest.prototype.send;
+const requests = new WeakMap<XMLHttpRequest,{method:string,url:string}>();
+XMLHttpRequest.prototype.open = function(method:string,url:string|URL,...rest:any[]) {
+  requests.set(this,{method,url:String(url)});
+  return (originalOpen as any).call(this,method,url,...rest);
+};
+XMLHttpRequest.prototype.send = function(body) {
+  const request = requests.get(this);
+  if (request && /\/(projects|programs)\//.test(request.url) && request.method!=='GET') {
+    trace('xhr-send',{...request,body},true);
+    this.addEventListener('loadend',()=>trace('xhr-end',{...request,status:this.status,response:this.responseText?.slice(0,600)}),{once:true});
+  }
+  return originalSend.call(this,body);
+};
+document.addEventListener('click',event=>{
+  const element = (event.target as HTMLElement).closest('a,button,.file__basket');
+  if (element) trace('ui-click',{tag:element.tagName,text:element.textContent?.trim().slice(0,100),href:element.getAttribute('href'),class:element.className});
+},true);
+document.addEventListener('change',event=>{
+  const input = event.target as HTMLInputElement;
+  if (location.pathname.includes('/office/projects/')) trace('ui-change',{tag:input.tagName,type:input.type,value:input.value});
+},true);
+bootstrapApplication(AppComponent,APP_CONFIG).then(app=>{
+  router=app.injector.get(Router);
+  router.events.subscribe(event=>{
+    if (event instanceof NavigationStart || event instanceof NavigationEnd)
+      trace(event instanceof NavigationStart?'navigation-start':'navigation-end',{destination:event.url,tree:routeTree(router?.routerState.root)});
+  });
+}).catch(console.error);
