@@ -4,7 +4,7 @@
   <main class="project">
     <section class="program__main">
       <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
-      @if (!program()!.isUserMember && !program()!.isUserManager) {
+      @if (!program()!.isUserMember && !program()!.isUserManager && !program()!.isUserExpert) {
         <div class="program__advertisement">
           <img
             [src]="program()!.advertisementImageAddress"
@@ -18,11 +18,10 @@
           @if (appWidth > 1000) {
             <div class="program__left">
               <aside class="program__aside">
-                @if (program()!.isUserMember) {
-                  <app-soon-card
-                    title="аналитика"
-                    description="уровень включённости студентов, статистика достижения целей в проектах"
-                  ></app-soon-card>
+                @if (
+                  program()!.isUserMember || program()!.isUserManager || program()!.isUserExpert
+                ) {
+                  <app-program-role-widget></app-program-role-widget>
                 }
               </aside>
             </div>
@@ -56,17 +55,19 @@
                   (addNews)="onAddNews($event)"
                 ></app-news-form>
               }
-              @for (n of news(); track n.id) {
-                <app-news-card
-                  class="news__item"
-                  [attr.data-id]="n.id"
-                  [resourceLink]="[AppRoutes.program.detail(program()!.id)]"
-                  [feedItem]="n"
-                  [isOwner]="program()!.isUserMember"
-                  (like)="onLike($event)"
-                  (edited)="onEdit($event, n.id)"
-                  (delete)="onDelete($event)"
-                ></app-news-card>
+              @if (program()!.isUserMember || program()!.isUserManager) {
+                @for (n of news(); track n.id) {
+                  <app-news-card
+                    class="news__item"
+                    [attr.data-id]="n.id"
+                    [resourceLink]="[AppRoutes.program.detail(program()!.id)]"
+                    [feedItem]="n"
+                    [isOwner]="program()!.isUserMember"
+                    (like)="onLike($event)"
+                    (edited)="onEdit($event, n.id)"
+                    (delete)="onDelete($event)"
+                  ></app-news-card>
+                }
               }
             </div>
           </div>

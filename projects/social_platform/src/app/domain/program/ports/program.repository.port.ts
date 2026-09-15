@@ -1,6 +1,7 @@
 /** @format */
 
 import { HttpParams } from "@angular/common/http";
+import { ProgramRoleWidget } from "../program-role-widget.model";
 import { Observable } from "rxjs";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { Program, ProgramDataSchema } from "../program.model";
@@ -27,6 +28,7 @@ import {
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
+  abstract getRoleWidget(programId: number): Observable<ProgramRoleWidget>;
   abstract getAll(
     skip: number,
     take: number,
