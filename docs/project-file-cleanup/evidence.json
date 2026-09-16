@@ -1,0 +1,903 @@
+{
+  "среда": "Только локальная синтетическая PostgreSQL БД procollab_file_cleanup_20260917, 17.09.2026 MSK; timestamps UTC",
+  "angularBase": "8f59c8ed7bbad1ceb1deba669c65b66a92040231",
+  "backendБезИзменений": "8ed5670d2123dd1f1b53668567ad60bde8641bcc",
+  "открытиеПустогоПоля": {
+    "startUTC": "2026-09-16T21:53:27",
+    "endUTC": "2026-09-16T21:53:53",
+    "seconds": 26,
+    "cleanupPUTCount": 0
+  },
+  "запросыСНевалиднымProjectId": 0,
+  "пояснение400": "Промежуточная проверка 22:06:57 выявила запрет пустых строк при draft=false. Исправлено последовательным сохранением очистки перед публикацией; успешный повтор — 22:18:33.",
+  "network": [
+    {
+      "at": "2026-09-16T21:51:45.718Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T21:54:23.504Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/cover.png",
+      "status": 503,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T21:54:25.509Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/cover.png",
+      "status": 503,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T21:54:29.515Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/cover.png",
+      "status": 503,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T21:54:37.522Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/cover.png",
+      "status": 503,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T21:55:26.228Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/cover.png",
+      "status": 204
+    },
+    {
+      "at": "2026-09-16T21:55:26.499Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "cover_image_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:55:37.300Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Исходный кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:55:37.638Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": true,
+        "cover_image_address": ""
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:58:36.346Z",
+      "method": "POST",
+      "route": "/files/",
+      "status": 201
+    },
+    {
+      "at": "2026-09-16T21:58:47.224Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Исходный кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:58:47.541Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "presentation_address": "http://localhost:8011/cleanup-files/6a92e4af6d114a1d8854d5d9b390a1a8.pdf",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:59:22.602Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T21:59:31.106Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/6a92e4af6d114a1d8854d5d9b390a1a8.pdf",
+      "status": 204
+    },
+    {
+      "at": "2026-09-16T21:59:31.293Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:59:37.665Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Исходный кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T21:59:37.890Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": true,
+        "presentation_address": ""
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:00:33.719Z",
+      "method": "POST",
+      "route": "/files/",
+      "status": 201
+    },
+    {
+      "at": "2026-09-16T22:00:33.957Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Исходный кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:00:34.195Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "presentation_address": "http://localhost:8011/cleanup-files/e06497e0f2ed4409bb50d742661ce946.pdf",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:00:54.665Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/e06497e0f2ed4409bb50d742661ce946.pdf",
+      "status": 204
+    },
+    {
+      "at": "2026-09-16T22:00:54.673Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 0,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T22:00:54.677Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 0,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T22:00:56.695Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 0,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T22:01:00.706Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 0,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T22:01:08.716Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 0,
+      "fault": true
+    },
+    {
+      "at": "2026-09-16T22:01:09.102Z",
+      "kind": "queue",
+      "value": "[{\"projectId\":31,\"field\":\"presentationAddress\",\"value\":\"\"}]"
+    },
+    {
+      "at": "2026-09-16T22:02:10.860Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:02:11.097Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T22:02:32.111Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/presentation-32.pdf",
+      "status": 204
+    },
+    {
+      "at": "2026-09-16T22:02:32.330Z",
+      "method": "PUT",
+      "route": "/projects/32/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:03:13.817Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T22:04:31.212Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Изменённый кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:04:31.452Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:06:04.389Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T22:06:04.857Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/already-missing.pdf",
+      "status": 404
+    },
+    {
+      "at": "2026-09-16T22:06:05.012Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:06:17.476Z",
+      "method": "POST",
+      "route": "/files/",
+      "status": 201
+    },
+    {
+      "at": "2026-09-16T22:06:56.815Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Изменённый кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:06:56.907Z",
+      "method": "POST",
+      "route": "/programs/partner-program-projects/73/submit/",
+      "body": {},
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:06:57.023Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "cover_image_address": "http://localhost:8011/cleanup-files/7c11712ce95f42fe88c92cde6b363410.png",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": false,
+        "presentation_address": ""
+      },
+      "status": 400
+    },
+    {
+      "at": "2026-09-16T22:14:44.266Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T22:15:02.215Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/cover-32.png",
+      "status": 204
+    },
+    {
+      "at": "2026-09-16T22:15:02.408Z",
+      "method": "PUT",
+      "route": "/projects/32/",
+      "body": {
+        "cover_image_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:15:52.315Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T22:18:22.952Z",
+      "kind": "queue",
+      "value": "[]"
+    },
+    {
+      "at": "2026-09-16T22:18:24.705Z",
+      "method": "DELETE",
+      "route": "/files/?link=http://localhost:8011/cleanup-files/publication-presentation.pdf",
+      "status": 204
+    },
+    {
+      "at": "2026-09-16T22:18:25.197Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:18:33.262Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Изменённый кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:18:33.369Z",
+      "method": "POST",
+      "route": "/programs/partner-program-projects/73/submit/",
+      "body": {},
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:18:33.544Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "presentation_address": "",
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:18:33.715Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "name": "Проект после очистки обложки",
+        "region": "Москва",
+        "links": [],
+        "industry_id": 1,
+        "description": "Описание после локальной проверки очистки",
+        "cover_image_address": "http://localhost:8011/cleanup-files/7c11712ce95f42fe88c92cde6b363410.png",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Диагностика существующего автосохранения",
+        "achievements": [],
+        "draft": false
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-16T22:18:59.628Z",
+      "kind": "queue",
+      "value": "[]"
+    }
+  ],
+  "apiReadbacks": [
+    {
+      "checkpoint": "A-empty-after-open",
+      "time": 1789595633331,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Исходный проект диагностики",
+          "description": "Исходное описание для одинаковых прогонов base и head",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover.png",
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "http://localhost:8011/cleanup-files/presentation-32.pdf",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 200,
+        "presentation-32.pdf": 200,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "C-D-cover-explicit-save",
+      "time": 1789595746477,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "http://localhost:8011/cleanup-files/presentation-32.pdf",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 200,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "B-presentation-uploaded-saved",
+      "time": 1789595953974,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "http://localhost:8011/cleanup-files/6a92e4af6d114a1d8854d5d9b390a1a8.pdf",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "http://localhost:8011/cleanup-files/presentation-32.pdf",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 200,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "B-D-presentation-cleared-explicit-save",
+      "time": 1789595985967,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "http://localhost:8011/cleanup-files/presentation-32.pdf",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 200,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "E-offline-pending-31",
+      "time": 1789596097749,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "http://localhost:8011/cleanup-files/e06497e0f2ed4409bb50d742661ce946.pdf",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "http://localhost:8011/cleanup-files/presentation-32.pdf",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 200,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "E-F-replayed-31-while-editing-32",
+      "time": 1789596144497,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "http://localhost:8011/cleanup-files/presentation-32.pdf",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 200,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "F-cleared-32-after-replay",
+      "time": 1789596175985,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Исходный кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 404,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "regression-case-73",
+      "time": 1789596324152,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "http://localhost:8011/cleanup-files/already-missing.pdf",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": false,
+      "case": "Изменённый кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 404,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "after-submit",
+      "time": 1789596710642,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/cover-32.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": true,
+      "case": "Изменённый кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 404,
+        "cover-32.png": 200
+      }
+    },
+    {
+      "checkpoint": "default-cover-fallback",
+      "time": 1789596919898,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": null,
+          "draft": true
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/default-cover.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": true,
+      "case": "Изменённый кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 404,
+        "cover-32.png": 404
+      }
+    },
+    {
+      "checkpoint": "final-publication",
+      "time": 1789597126789,
+      "projects": [
+        {
+          "id": 31,
+          "name": "Проект после очистки обложки",
+          "description": "Описание после локальной проверки очистки",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/7c11712ce95f42fe88c92cde6b363410.png",
+          "draft": false
+        },
+        {
+          "id": 32,
+          "name": "Второй локальный проект",
+          "description": "Проверка изоляции переходов",
+          "presentation_address": "",
+          "cover_image_address": "http://localhost:8011/cleanup-files/default-cover.png",
+          "draft": true
+        }
+      ],
+      "program_link_id": 73,
+      "submitted": true,
+      "case": "Изменённый кейс",
+      "files": {
+        "presentation.pdf": 404,
+        "cover.png": 404,
+        "presentation-32.pdf": 404,
+        "cover-32.png": 404
+      }
+    }
+  ],
+  "праваУчастникаКоманды": [
+    {
+      "user": "synthetic teammate 12",
+      "projectId": 31,
+      "draft": true,
+      "getStatus": 200,
+      "putSameNameStatus": 200
+    },
+    {
+      "user": "synthetic teammate 12",
+      "projectId": 31,
+      "draft": false,
+      "getStatus": 200,
+      "putSameNameStatus": 403
+    }
+  ],
+  "физическиеФайлыИUserFile": [
+    {
+      "file": "cover.png",
+      "physicalExists": false,
+      "userFileExists": false
+    },
+    {
+      "file": "cover-32.png",
+      "physicalExists": false,
+      "userFileExists": false
+    },
+    {
+      "file": "6a92e4af6d114a1d8854d5d9b390a1a8.pdf",
+      "physicalExists": false,
+      "userFileExists": false
+    },
+    {
+      "file": "e06497e0f2ed4409bb50d742661ce946.pdf",
+      "physicalExists": false,
+      "userFileExists": false
+    },
+    {
+      "file": "publication-presentation.pdf",
+      "physicalExists": false,
+      "userFileExists": false
+    },
+    {
+      "file": "default-cover.png",
+      "physicalExists": true,
+      "userFileExists": true
+    }
+  ]
+}

@@ -288,6 +288,7 @@ export class ProjectsEditInfoService {
     }
   }
 
+  /** Сохраняет форму; перед публикацией подтверждает намеренную очистку файлов в режиме черновика. */
   submitProjectForm(): void {
     if (!this.additionalContextReady()) return;
     const isDraft = this.projectForm.get("draft")?.value === true;
@@ -298,8 +299,8 @@ export class ProjectsEditInfoService {
 
     const rawPayload = this.projectFormService.getFormValue();
     const payload = { ...rawPayload };
-    // In a verified canonical edit this is NOT a legacy bind/unbind command.
-    // Preserve the control and dedicated assignment flow; do not mutate raw form data.
+    // Редактирование проверенной связи не является командой привязки/отвязки.
+    // Сохраняем control и отдельный сценарий привязки, не изменяя исходные данные формы.
     if (this.activeProgramLinkId()) delete payload.partnerProgramId;
     const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
 
@@ -325,8 +326,7 @@ export class ProjectsEditInfoService {
       }
     }
 
-    this.updateFormUseCase
-      .execute({ id: projectId, data: payload })
+    this.saveProjectPayload(projectId, payload, isDraft)
       .pipe(
         switchMap(result => {
           if (!result.ok) {
@@ -339,6 +339,7 @@ export class ProjectsEditInfoService {
         }),
         switchMap(() => this.savePartners(projectId)),
         switchMap(() => this.saveOrEditResources(projectId)),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: () => {
@@ -353,6 +354,35 @@ export class ProjectsEditInfoService {
           }
         },
       });
+  }
+
+  /**
+   * Backend принимает пустые файловые поля только с draft: true. Сначала явно
+   * сохраняем очистку и ждём подтверждения, затем публикуем без этих полей.
+   * Простое удаление ключей из payload могло бы скрыть несохранённую очистку
+   * после сетевой ошибки. Остальные поля и серверные правила не меняются.
+   */
+  private saveProjectPayload(projectId: number, payload: Partial<Project>, isDraft: boolean) {
+    const clearedFiles: Partial<Project> = {};
+    const publicationPayload = { ...payload };
+    for (const field of ["presentationAddress", "coverImageAddress"] as const) {
+      if (payload[field] === "") {
+        clearedFiles[field] = "";
+        delete publicationPayload[field];
+      }
+    }
+    if (isDraft || Object.keys(clearedFiles).length === 0) {
+      return this.updateFormUseCase.execute({ id: projectId, data: payload });
+    }
+    return this.updateFormUseCase
+      .execute({ id: projectId, data: { ...clearedFiles, draft: true } })
+      .pipe(
+        switchMap(result =>
+          result.ok
+            ? this.updateFormUseCase.execute({ id: projectId, data: publicationPayload })
+            : of(result),
+        ),
+      );
   }
 
   closeSendingDescisionModal(): void {
