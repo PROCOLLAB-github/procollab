@@ -5,11 +5,27 @@
 
 .project {
   &__cover-reset {
-    margin-top: 6px;
+    // Действие внутри рамки не участвует в потоке и не сдвигает соседние поля.
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 6px;
     color: var(--accent);
     cursor: pointer;
     background: transparent;
     border: 0;
+    border-radius: var(--rounded-md);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--light-gray);
+      outline: 1px solid var(--accent);
+    }
 
     &:disabled {
       cursor: wait;

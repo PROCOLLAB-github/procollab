@@ -47,6 +47,7 @@
       @if (removable()) {
         <i class="file__basket" appIcon icon="basket" appSquare="16" (click)="onRemove()"></i>
       }
+      <ng-content select="[fileAction]"></ng-content>
     </div>
   }
 </div>
