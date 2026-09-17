@@ -55,8 +55,13 @@
             >обложка</label
           >
           <app-upload-file
+            #coverUpload
             formControlName="coverImageAddress"
             accept=".jpg,.png,.jpeg"
+            [removable]="false"
+            [replaceable]="true"
+            [busy]="coverReset.pending()"
+            (uploaded)="isDefaultCover.set(false)"
             [error]="showError(coverImageAddress)"
           >
             <ng-container emptyPlaceholder>
@@ -70,6 +75,19 @@
               }
             </ng-container>
           </app-upload-file>
+          @if (isDefaultCover() === false && coverImageAddress.value) {
+            <button
+              type="button"
+              class="project__cover-reset text-body-12"
+              title="Вернуть стандартную обложку"
+              [disabled]="
+                coverReset.pending() || coverUpload.loading || isLoading(projectSaveState())
+              "
+              (click)="coverReset.reset()"
+            >
+              {{ coverReset.pending() ? "Возвращаем обложку…" : "Вернуть стандартную обложку" }}
+            </button>
+          }
         </fieldset>
       }
       @if (trl; as trl) {

@@ -5,7 +5,14 @@
     <app-loader size="25px" color="var(--accent)"></app-loader>
   } @else if (!value) {
     <div class="control" [class.control--error]="error()">
-      <input [id]="controlId" hidden type="file" [accept]="accept()" (change)="onUpdate($event)" />
+      <input
+        [id]="controlId"
+        [disabled]="busy()"
+        hidden
+        type="file"
+        [accept]="accept()"
+        (change)="onUpdate($event)"
+      />
       <label [for]="controlId">
         <div class="control__empty">
           <ng-content select="[emptyPlaceholder]"></ng-content>
@@ -18,7 +25,28 @@
         <i appIcon icon="file-success" appSquare="16"></i>
         <p class="text-body-12 file__title">Файл успешно загружен</p>
       </div>
-      <i class="file__basket" appIcon icon="basket" appSquare="16" (click)="onRemove()"></i>
+      @if (replaceable()) {
+        <input
+          #replacement
+          [id]="controlId"
+          hidden
+          type="file"
+          [accept]="accept()"
+          [disabled]="busy()"
+          (change)="onUpdate($event)"
+        />
+        <button
+          type="button"
+          class="file__replace text-body-12"
+          [disabled]="busy()"
+          (click)="replacement.click()"
+        >
+          Заменить файл
+        </button>
+      }
+      @if (removable()) {
+        <i class="file__basket" appIcon icon="basket" appSquare="16" (click)="onRemove()"></i>
+      }
     </div>
   }
 </div>

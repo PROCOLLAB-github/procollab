@@ -4,6 +4,19 @@
 @use "styles/typography";
 
 .project {
+  &__cover-reset {
+    margin-top: 6px;
+    color: var(--accent);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:disabled {
+      cursor: wait;
+      opacity: 0.5;
+    }
+  }
+
   &__inner {
     width: 100%;
   }

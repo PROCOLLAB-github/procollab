@@ -44,6 +44,8 @@ export class Project {
   viewsCount!: number;
   cover!: null | string;
   coverImageAddress!: string | null;
+  /** Канонический признак из detail API; сокращённые списки его не возвращают. */
+  isDefaultCover?: boolean;
   collaborators!: Collaborator[];
   collaborator?: Collaborator;
   links!: string[];

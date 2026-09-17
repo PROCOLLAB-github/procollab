@@ -1,7 +1,7 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-import { of } from "rxjs";
+import { of, Subject } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ProjectRepository } from "./project.repository";
 import { ProjectHttpAdapter } from "../../adapters/project/project-http.adapter";
@@ -32,6 +32,7 @@ describe("ProjectRepository", () => {
       fetchMy: vi.fn(),
       postCreate: vi.fn(),
       deleteOne: vi.fn(),
+      resetCover: vi.fn(),
     };
     TestBed.configureTestingModule({
       providers: [ProjectRepository, { provide: ProjectHttpAdapter, useValue: adapter }],
@@ -68,6 +69,29 @@ describe("ProjectRepository", () => {
     repository.getOne(42).subscribe();
 
     expect(adapter.fetchOne).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([true, false])("detail сохраняет серверный isDefaultCover=%s", flag => {
+    setup();
+    adapter.fetchOne.mockReturnValue(of({ id: 31, isDefaultCover: flag }));
+    repository.getOne(31).subscribe(project => expect(project.isDefaultCover).toBe(flag));
+  });
+
+  it.each(["success", "cancel"])("resetCover инвалидирует detail после %s", outcome => {
+    setup();
+    const response = new Subject();
+    adapter.resetCover.mockReturnValue(response);
+    adapter.fetchOne.mockReturnValue(of({ id: 31, isDefaultCover: false }));
+    repository.getOne(31).subscribe();
+    const subscription = repository.resetCover(31).subscribe();
+    repository.getOne(31).subscribe();
+    if (outcome === "success") {
+      response.next({ coverImageAddress: "https://files.test/default.png", isDefaultCover: true });
+      response.complete();
+    } else subscription.unsubscribe();
+    adapter.fetchOne.mockReturnValue(of({ id: 31, isDefaultCover: true }));
+    repository.getOne(31).subscribe(project => expect(project.isDefaultCover).toBe(true));
+    expect(adapter.fetchOne).toHaveBeenCalledTimes(3);
   });
 
   it("refreshCount мапит в ProjectCount и пушит в count$", () =>

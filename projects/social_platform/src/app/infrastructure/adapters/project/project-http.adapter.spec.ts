@@ -84,4 +84,14 @@ describe("ProjectHttpAdapter", () => {
 
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/projects/", params);
   });
+
+  it("resetCover отправляет команду проекта без физического DELETE", () => {
+    setup();
+    api.post.mockReturnValue(
+      of({ coverImageAddress: "https://files.test/default.png", isDefaultCover: true }),
+    );
+    adapter.resetCover(31).subscribe();
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/31/reset-cover/", {});
+    expect(api.delete).not.toHaveBeenCalled();
+  });
 });

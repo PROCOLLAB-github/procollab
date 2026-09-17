@@ -60,6 +60,19 @@
     cursor: pointer;
   }
 
+  &__replace {
+    margin-bottom: 8px;
+    color: var(--accent);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:disabled {
+      cursor: wait;
+      opacity: 0.5;
+    }
+  }
+
   &__basket {
     align-self: flex-end;
     color: var(--red);
