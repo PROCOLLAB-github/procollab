@@ -11,6 +11,7 @@ import { catchError, map, Observable, of } from "rxjs";
 @Injectable({ providedIn: "root" })
 export class GetProgramRoleWidgetUseCase {
   private readonly repository = inject(ProgramRepositoryPort);
+  /** Загружает одну ролевую сводку; HTTP-ошибка сохраняется как состояние ошибки. */
   execute(programId: number): Observable<Result<ProgramRoleWidget, ProgramWidgetError>> {
     return this.repository.getRoleWidget(programId).pipe(
       map(data => ok(data)),

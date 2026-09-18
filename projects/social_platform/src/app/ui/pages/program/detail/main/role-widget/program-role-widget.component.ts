@@ -60,6 +60,7 @@ export class ProgramRoleWidgetComponent {
     const clock = setInterval(() => this.now.set(Date.now()), 1000);
     inject(DestroyRef).onDestroy(() => clearInterval(clock));
   }
+  /** Неприменимое значение отличается от нуля; крупное число не расширяет карточку. */
   count(value: number | null): string {
     return value === null
       ? "—"
@@ -68,6 +69,7 @@ export class ProgramRoleWidgetComponent {
           maximumFractionDigits: 1,
         }).format(value);
   }
+  /** Запускает существующий выбор проекта только пока разрешена подача. */
   createApplication(): void {
     const data = this.data();
     if (

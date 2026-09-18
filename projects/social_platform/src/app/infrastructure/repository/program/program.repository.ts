@@ -36,6 +36,7 @@ import {
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
+  /** Не кеширует ролевую сводку: прежние данные не должны переживать смену контекста. */
   getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
     return this.programAdapter.getRoleWidget(programId);
   }

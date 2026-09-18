@@ -10,7 +10,7 @@ import { ProgramLinkFieldsError } from "@domain/project/program-link-fields.mode
 import { mapProgramLinkFieldsError } from "../program-link-fields-error";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
-/** Partial update of additional values for exactly one program-project link. */
+/** Обновляет дополнительные значения строго одной связи проекта и программы. */
 @Injectable({ providedIn: "root" })
 export class UpdateProgramLinkFieldsUseCase {
   private readonly events = inject(EventBus);

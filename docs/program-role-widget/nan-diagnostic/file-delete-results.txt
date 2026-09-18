@@ -1,5 +1,0 @@
-2026-09-14 22:28:57.626 | WARNING  | daphne.management.commands.runserver:log_action:178 - HTTP DELETE /files/?link=http://localhost:8010/nan-files/presentation.pdf 401 [0.01, 127.0.0.1:57431]
-2026-09-14 22:28:57.869 | INFO     | daphne.management.commands.runserver:log_action:168 - HTTP DELETE /files/?link=http://localhost:8010/nan-files/presentation.pdf 204 [0.13, 127.0.0.1:57431]
-2026-09-14 22:31:48.864 | WARNING  | daphne.management.commands.runserver:log_action:176 - HTTP DELETE /files/?link=http://localhost:8010/nan-files/presentation.pdf 404 [0.18, 127.0.0.1:62734]
-2026-09-14 22:33:13.933 | INFO     | daphne.management.commands.runserver:log_action:168 - HTTP DELETE /files/?link=http://localhost:8010/nan-files/presentation.pdf 204 [0.12, 127.0.0.1:60086]
-2026-09-14 22:34:28.487 | WARNING  | daphne.management.commands.runserver:log_action:176 - HTTP DELETE /files/?link=http://localhost:8010/nan-files/presentation.pdf 404 [0.18, 127.0.0.1:57028]

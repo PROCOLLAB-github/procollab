@@ -31,6 +31,7 @@ import {
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
+  /** Отдельный ролевой endpoint: доступ и агрегации проверяет сервер. */
   getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/analytics-widget/`);
   }

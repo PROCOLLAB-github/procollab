@@ -1,5 +1,5 @@
 /**
- * Read-only данные Angular-проектов; legacy currentApplication не используется.
+ * Данные Angular-проектов только для чтения; currentProjectApplication не используется.
  *
  * @format
  */

@@ -72,6 +72,7 @@ export class ProgramRoleWidgetService {
       this.activeRequest?.unsubscribe();
     });
   }
+  /** Повтор разрешён только для сетевого сбоя, без обхода отказа в доступе. */
   retry(): void {
     const state = this.state();
     if (state.status === "failure" && state.error === "network") this.load(this.key());

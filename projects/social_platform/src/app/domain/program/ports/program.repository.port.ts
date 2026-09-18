@@ -28,6 +28,7 @@ import {
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
+  /** Сводка текущего пользователя без обращения к manager-only API. */
   abstract getRoleWidget(programId: number): Observable<ProgramRoleWidget>;
   abstract getAll(
     skip: number,
