@@ -123,39 +123,46 @@ describe("ProjectMainStepComponent", () => {
     fixture.detectChanges();
   });
 
-  it("стандартная обложка не имеет удаления или сброса, но допускает замену", () => {
+  it("стандартная обложка предлагает загрузку и не выдаёт системный URL за загруженный файл", () => {
     const upload = fixture.debugElement.query(By.css('[formControlName="coverImageAddress"]'))
       .componentInstance as UploadFileComponent;
     expect(
       fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"] .file__basket'),
     ).toBeNull();
     expect(fixture.nativeElement.querySelector(".project__cover-reset")).toBeNull();
-    expect(
-      fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"] .file__replace'),
-    ).not.toBeNull();
+    const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+    expect(cover.textContent).toContain("Стандартная обложка");
+    expect(cover.textContent).not.toContain("Файл успешно загружен");
+    expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Загрузить файл");
+    expect(cover.querySelector('[icon="file-success"]')).toBeNull();
+    expect(upload.value).toBe("https://files.test/default.png");
     upload.onRemove();
     expect(files.deleteFile).not.toHaveBeenCalled();
     expect(resetCover.execute).not.toHaveBeenCalled();
   });
 
-  it("пользовательская обложка сбрасывается кнопкой без DELETE, новый URL отображается сразу", async () => {
+  it("пользовательская обложка предлагает только замену с клавиатуры, без кнопки сброса", async () => {
     const form = TestBed.inject(ProjectFormService);
     form.isDefaultCover.set(false);
     form.coverImageAddress?.setValue("https://files.test/custom.png");
     await fixture.whenStable();
-    const reset = fixture.nativeElement.querySelector(".project__cover-reset") as HTMLButtonElement;
-    expect(reset.title).toBe("Вернуть стандартную обложку");
-    reset.focus();
-    expect(document.activeElement).toBe(reset);
-    reset.click();
-    await fixture.whenStable();
-    expect(resetCover.execute).toHaveBeenCalledExactlyOnceWith(31);
-    expect(form.coverImageAddress?.value).toBe("https://files.test/default.png");
-    expect(form.coverImageAddress?.valid).toBe(true);
+    const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+    const replace = cover.querySelector(".file__replace") as HTMLButtonElement;
+    const fileInput = cover.querySelector('input[type="file"]') as HTMLInputElement;
+    const chooseFile = vi.spyOn(fileInput, "click");
+    expect(replace.textContent?.trim()).toBe("Заменить файл");
+    expect(cover.textContent).not.toContain("Стандартная обложка");
+    expect(cover.textContent).toContain("Файл успешно загружен");
+    replace.focus();
+    expect(document.activeElement).toBe(replace);
+    replace.click();
+    expect(chooseFile).toHaveBeenCalledOnce();
+    expect(resetCover.execute).not.toHaveBeenCalled();
+    expect(form.coverImageAddress?.value).toBe("https://files.test/custom.png");
     expect(fixture.nativeElement.querySelector(".project__cover-reset")).toBeNull();
     const upload = fixture.debugElement.query(By.css('[formControlName="coverImageAddress"]'))
       .componentInstance as UploadFileComponent;
-    expect(upload.value).toBe("https://files.test/default.png");
+    expect(upload.value).toBe("https://files.test/custom.png");
     expect(files.deleteFile).not.toHaveBeenCalled();
   });
 
@@ -170,9 +177,27 @@ describe("ProjectMainStepComponent", () => {
       await fixture.whenStable();
       expect(TestBed.inject(ProjectFormService).coverImageAddress?.value).toBe(url);
       expect(TestBed.inject(ProjectFormService).isDefaultCover()).toBe(false);
-      expect(fixture.nativeElement.querySelector(".project__cover-reset")).not.toBeNull();
+      expect(fixture.nativeElement.querySelector(".project__cover-reset")).toBeNull();
+      const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+      expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Заменить файл");
+      expect(cover.textContent).not.toContain("Стандартная обложка");
     }
     expect(files.deleteFile).not.toHaveBeenCalled();
+  });
+
+  it("пустая обложка показывает zero state, не записывая фиктивный URL в обязательный control", async () => {
+    const form = TestBed.inject(ProjectFormService);
+    form.isDefaultCover.set(null);
+    form.coverImageAddress?.setValue("");
+    await fixture.whenStable();
+    const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+    expect(cover.textContent).toContain("Стандартная обложка");
+    expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Загрузить файл");
+    expect(cover.textContent).not.toContain("Файл успешно загружен");
+    expect(form.coverImageAddress?.value).toBe("");
+    expect(form.coverImageAddress?.hasError("required")).toBe(true);
+    expect(files.uploadFile).not.toHaveBeenCalled();
+    expect(resetCover.execute).not.toHaveBeenCalled();
   });
 
   it("untouched fields are quiet; submit exposes matching borders, warning icons and required messages", async () => {
