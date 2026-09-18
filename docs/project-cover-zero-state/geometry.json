@@ -1,0 +1,160 @@
+{
+  "baseSha": "2324f52345fe608991e888a514aefc491e578bcb",
+  "scope": "Локальный настоящий Angular-компонент с синтетическими данными, без backend",
+  "base": {
+    "boxes": {
+      "#name": {
+        "height": 41.59375,
+        "width": 316.25,
+        "x": 102.5,
+        "y": 253.390625
+      },
+      "#region": {
+        "height": 42,
+        "width": 316.25,
+        "x": 434.75,
+        "y": 253.1875
+      },
+      "#trl": {
+        "height": 41.59375,
+        "width": 403.484375,
+        "x": 621.96875,
+        "y": 124
+      },
+      "[formcontrolname=\"coverImageAddress\"] .control": {
+        "height": 120,
+        "width": 403.46875,
+        "x": 202.5,
+        "y": 95.59375
+      },
+      "[formcontrolname=\"presentationAddress\"] .control": {
+        "height": 120,
+        "width": 84,
+        "x": 102.5,
+        "y": 95.59375
+      }
+    },
+    "viewport": {
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "default": {
+    "boxes": {
+      "#name": {
+        "height": 41.59375,
+        "width": 316.25,
+        "x": 102.5,
+        "y": 253.390625
+      },
+      "#region": {
+        "height": 42,
+        "width": 316.25,
+        "x": 434.75,
+        "y": 253.1875
+      },
+      "#trl": {
+        "height": 41.59375,
+        "width": 403.484375,
+        "x": 621.96875,
+        "y": 124
+      },
+      "[formcontrolname=\"coverImageAddress\"] .control": {
+        "height": 120,
+        "width": 403.46875,
+        "x": 202.5,
+        "y": 95.59375
+      },
+      "[formcontrolname=\"presentationAddress\"] .control": {
+        "height": 120,
+        "width": 84,
+        "x": 102.5,
+        "y": 95.59375
+      }
+    },
+    "viewport": {
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "custom": {
+    "boxes": {
+      "#name": {
+        "height": 41.59375,
+        "width": 316.25,
+        "x": 102.5,
+        "y": 253.390625
+      },
+      "#region": {
+        "height": 42,
+        "width": 316.25,
+        "x": 434.75,
+        "y": 253.1875
+      },
+      "#trl": {
+        "height": 41.59375,
+        "width": 403.484375,
+        "x": 621.96875,
+        "y": 124
+      },
+      "[formcontrolname=\"coverImageAddress\"] .control": {
+        "height": 120,
+        "width": 403.46875,
+        "x": 202.5,
+        "y": 95.59375
+      },
+      "[formcontrolname=\"presentationAddress\"] .control": {
+        "height": 120,
+        "width": 84,
+        "x": 102.5,
+        "y": 95.59375
+      }
+    },
+    "viewport": {
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "empty": {
+    "boxes": {
+      "#name": {
+        "height": 41.59375,
+        "width": 316.25,
+        "x": 102.5,
+        "y": 253.390625
+      },
+      "#region": {
+        "height": 42,
+        "width": 316.25,
+        "x": 434.75,
+        "y": 253.1875
+      },
+      "#trl": {
+        "height": 41.59375,
+        "width": 403.484375,
+        "x": 621.96875,
+        "y": 124
+      },
+      "[formcontrolname=\"coverImageAddress\"] .control": {
+        "height": 120,
+        "width": 403.46875,
+        "x": 202.5,
+        "y": 95.59375
+      },
+      "[formcontrolname=\"presentationAddress\"] .control": {
+        "height": 120,
+        "width": 84,
+        "x": 102.5,
+        "y": 95.59375
+      }
+    },
+    "viewport": {
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  }
+}

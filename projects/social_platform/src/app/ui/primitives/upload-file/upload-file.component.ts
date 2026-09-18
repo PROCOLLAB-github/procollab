@@ -70,6 +70,8 @@ export class UploadFileComponent implements ControlValueAccessor {
   removable = input(true);
   /** Позволяет заменить заполненный файл без предварительного удаления прежнего. */
   replaceable = input(false);
+  /** Предзаданный файл не считается пользовательской загрузкой; подпись не меняет URL control. */
+  presetLabel = input<string | null>(null);
   /** Блокирует действия на время внешней операции родителя. */
   busy = input(false);
 

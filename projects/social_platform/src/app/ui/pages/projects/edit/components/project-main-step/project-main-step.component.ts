@@ -32,7 +32,6 @@ import { ProjectContactsService } from "@api/project/facades/edit/project-contac
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.component";
 import { ProjectCoverResetService } from "@api/project/facades/edit/project-cover-reset.service";
-import { isLoading } from "@domain/shared/async-state";
 
 /** Шаг редактирования проекта: основная информация. */
 @Component({
@@ -69,8 +68,6 @@ export class ProjectMainStepComponent implements OnInit {
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
 
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
-  protected readonly projectSaveState = this.projectsEditInfoService.projFormIsSubmitting$;
-  protected readonly isLoading = isLoading;
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
 
   private readonly projectGoalService = inject(ProjectGoalService);
