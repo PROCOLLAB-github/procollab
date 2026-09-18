@@ -20,6 +20,9 @@ export default defineConfig({
     ],
   },
   test: {
+    // На Node 20/Windows стандартный vmThreads плагина не создаёт платформу TestBed.
+    // Изоляция процессами позволяет запускать весь набор, сохраняя ошибки teardown.
+    pool: "forks",
     globals: true,
     environment: "jsdom",
     testTimeout: 10000,
