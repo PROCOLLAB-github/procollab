@@ -3,7 +3,7 @@
 <div class="root" style="text-align: center">
   @if (loading) {
     <app-loader size="25px" color="var(--accent)"></app-loader>
-  } @else if (!value) {
+  } @else if (!value && !presetLabel()) {
     <div class="control" [class.control--error]="error()">
       <input
         [id]="controlId"
@@ -20,10 +20,14 @@
       </label>
     </div>
   } @else {
-    <div class="control">
+    <div class="control" [class.control--error]="!value && error()">
       <div class="control__success">
-        <i appIcon icon="file-success" appSquare="16"></i>
-        <p class="text-body-12 file__title">Файл успешно загружен</p>
+        @if (presetLabel(); as label) {
+          <p class="text-body-12 file__title">{{ label }}</p>
+        } @else {
+          <i appIcon icon="file-success" appSquare="16"></i>
+          <p class="text-body-12 file__title">Файл успешно загружен</p>
+        }
       </div>
       @if (replaceable()) {
         <input
@@ -41,7 +45,7 @@
           [disabled]="busy()"
           (click)="replacement.click()"
         >
-          Заменить файл
+          {{ presetLabel() ? "Загрузить файл" : "Заменить файл" }}
         </button>
       }
       @if (removable()) {
