@@ -56,6 +56,16 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     applyOpenSendDescisionLateModal: vi.fn(),
     applyOpenAssignProjectModal: vi.fn(),
   };
+
+  it("не сохраняет прежний URL обложки параллельно серверному сбросу", () => {
+    TestBed.inject(ProjectFormService).coverResetPending = true;
+    service.saveProjectAsDraft();
+    service.saveProjectAsPublished();
+    service.submitProjectForm();
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+  });
   function project(id = 55): Project {
     // The embedded legacy program is deliberately B. Explicit route link A is authoritative.
     return {

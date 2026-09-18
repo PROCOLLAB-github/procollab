@@ -30,6 +30,8 @@ export interface ProjectDto {
   presentationAddress: string;
   cover: string | null;
   coverImageAddress: string | null;
+  /** Поле detail API после общего преобразования snake_case в camelCase. */
+  isDefaultCover?: boolean;
   links: string[];
   numberOfCollaborators: number;
   viewsCount: number;

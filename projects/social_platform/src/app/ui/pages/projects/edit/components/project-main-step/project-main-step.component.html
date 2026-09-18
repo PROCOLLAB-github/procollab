@@ -55,8 +55,13 @@
             >обложка</label
           >
           <app-upload-file
+            #coverUpload
             formControlName="coverImageAddress"
             accept=".jpg,.png,.jpeg"
+            [removable]="false"
+            [replaceable]="true"
+            [busy]="coverReset.pending()"
+            (uploaded)="isDefaultCover.set(false)"
             [error]="showError(coverImageAddress)"
           >
             <ng-container emptyPlaceholder>
@@ -67,6 +72,29 @@
               </p>
               @if (showError(coverImageAddress, "required")) {
                 <p class="project__slides-error text-body-10">Загрузите файл</p>
+              }
+            </ng-container>
+            <ng-container fileAction>
+              @if (isDefaultCover() === false && coverImageAddress.value) {
+                <button
+                  type="button"
+                  class="project__cover-reset"
+                  title="Вернуть стандартную обложку"
+                  [attr.aria-label]="
+                    coverReset.pending() ? 'Возвращаем обложку' : 'Вернуть стандартную обложку'
+                  "
+                  [disabled]="
+                    coverReset.pending() || coverUpload.loading || isLoading(projectSaveState())
+                  "
+                  (click)="coverReset.reset()"
+                >
+                  <i
+                    appIcon
+                    [icon]="coverReset.pending() ? 'spinner' : 'reload'"
+                    appSquare="16"
+                    aria-hidden="true"
+                  ></i>
+                </button>
               }
             </ng-container>
           </app-upload-file>

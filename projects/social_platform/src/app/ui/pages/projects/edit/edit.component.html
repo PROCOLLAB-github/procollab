@@ -19,6 +19,7 @@
         customTypographyClass="text-body-12"
         appearance="outline"
         [loader]="projFormIsSubmittingAsDraft()"
+        [disabled]="coverReset.pending()"
         (click)="saveProjectAsDraft()"
       >
         сохранить черновик
@@ -28,7 +29,7 @@
         customTypographyClass="text-body-12"
         [loader]="projFormIsSubmittingAsPublished()"
         (click)="saveProjectAsPublished()"
-        [disabled]="onEditClicked()"
+        [disabled]="onEditClicked() || coverReset.pending()"
         [style.opacity]="onEditClicked() ? '0.5' : '1'"
       >
         {{ isCompetitive() && !submitted() ? "отправить заявку" : "сохранить" }}

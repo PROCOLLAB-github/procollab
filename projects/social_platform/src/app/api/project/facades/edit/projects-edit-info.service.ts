@@ -231,6 +231,7 @@ export class ProjectsEditInfoService {
   }
 
   saveProjectAsPublished(): void {
+    if (this.projectFormService.coverResetPending) return;
     if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
     if (!this.submissionAvailable()) return;
     this.projectForm.get("draft")?.patchValue(false);
@@ -275,6 +276,7 @@ export class ProjectsEditInfoService {
   }
 
   saveProjectAsDraft(): void {
+    if (this.projectFormService.coverResetPending) return;
     if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
@@ -290,6 +292,7 @@ export class ProjectsEditInfoService {
 
   /** Сохраняет форму; перед публикацией подтверждает намеренную очистку файлов в режиме черновика. */
   submitProjectForm(): void {
+    if (this.projectFormService.coverResetPending) return;
     if (!this.additionalContextReady()) return;
     const isDraft = this.projectForm.get("draft")?.value === true;
 

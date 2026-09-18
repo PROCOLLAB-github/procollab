@@ -39,6 +39,7 @@ import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { EditStep } from "@core/lib/models/edit-step";
+import { ProjectCoverResetService } from "@api/project/facades/edit/project-cover-reset.service";
 
 /** Многошаговое редактирование проекта. */
 @Component({
@@ -62,6 +63,7 @@ import { EditStep } from "@core/lib/models/edit-step";
   ],
   providers: [
     ProjectFormService,
+    ProjectCoverResetService,
     ProjectVacancyService,
     ProjectVacancyUIService,
     ProjectTeamService,
@@ -79,6 +81,7 @@ import { EditStep } from "@core/lib/models/edit-step";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected readonly coverReset = inject(ProjectCoverResetService);
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
   protected readonly AppRoutes = AppRoutes;
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
