@@ -5,6 +5,7 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { ProjectCountDto, ProjectDto, ProjectListDto } from "./dto/project.dto";
+import { ProjectCoverReset } from "@domain/project/project-cover.model";
 
 /** HTTP-адаптер проектов: `/projects`, `/auth/users` (CRUD, счётчики, проекты лидера). */
 @Injectable({ providedIn: "root" })
@@ -36,6 +37,11 @@ export class ProjectHttpAdapter {
 
   deleteOne(id: number): Observable<void> {
     return this.apiService.delete(`${this.PROJECTS_URL}/${id}/`);
+  }
+
+  /** Назначает стандартную обложку на сервере без DELETE общего файлового API. */
+  resetCover(id: number): Observable<ProjectCoverReset> {
+    return this.apiService.post<ProjectCoverReset>(`${this.PROJECTS_URL}/${id}/reset-cover/`, {});
   }
 
   fetchMy(params?: HttpParams): Observable<ProjectListDto> {

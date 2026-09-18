@@ -20,6 +20,7 @@ import {
 import { ProjectFormAutosaveService } from "./project-form-autosave.service";
 import { findCanonicalRussianRegion } from "@core/consts/lists/russian-regions-list.const";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Subject } from "rxjs";
 
 const FILE_FIELDS = ["presentationAddress", "coverImageAddress"] as const;
 /** Управляет основной формой проекта и формой дополнительных полей партнерской программы. */
@@ -28,6 +29,13 @@ export class ProjectFormService {
   private projectForm!: FormGroup;
   private additionalForm!: FormGroup;
   private readonly projectId = signal<number | null>(null);
+  readonly currentProjectId = this.projectId.asReadonly();
+  /** null означает, что detail ещё не подтвердил вид обложки; удаление запрещено. */
+  readonly isDefaultCover = signal<boolean | null>(null);
+  private readonly contextChanged = new Subject<void>();
+  readonly contextChanged$ = this.contextChanged.asObservable();
+  /** Сохранение всей формы не должно вернуть прежний URL во время серверного сброса. */
+  coverResetPending = false;
   private readonly fileHadValue = new Set<(typeof FILE_FIELDS)[number]>();
 
   private readonly fb = inject(FormBuilder);
@@ -64,7 +72,9 @@ export class ProjectFormService {
    * без событий. История очистки сбрасывается при каждом новом наборе данных.
    */
   public initializeProjectData(project: Project): void {
+    this.contextChanged.next();
     this.projectId.set(null);
+    this.isDefaultCover.set(project.isDefaultCover ?? null);
     this.fileHadValue.clear();
     for (const field of FILE_FIELDS) {
       const value = project[field] ?? "";
@@ -258,7 +268,9 @@ export class ProjectFormService {
 
   /** Сбрасывает контекст до контролов, чтобы сброс формы не сохранялся в прежний проект. */
   public resetForms(): void {
+    this.contextChanged.next();
     this.projectId.set(null);
+    this.isDefaultCover.set(null);
     this.fileHadValue.clear();
     this.projectForm.reset();
     this.additionalForm?.reset();

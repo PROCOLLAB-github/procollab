@@ -1,0 +1,442 @@
+{
+  "database": "procollab_cover_reset_20260917",
+  "backend": "http://localhost:8012",
+  "frontend": "http://localhost:4317",
+  "readbacks": [
+    {
+      "status": 200,
+      "project": 31,
+      "cover_image_address": "http://localhost:8012/cleanup-files/d1471177881a4cd08a47021bb902e2d7.png",
+      "is_default_cover": false,
+      "presentation_address": "",
+      "name": "Локальная проверка стандартной обложки",
+      "draft": true,
+      "default_count": 1,
+      "custom_exists": true,
+      "case": ["Изменённый кейс"]
+    },
+    {
+      "status": 200,
+      "project": 31,
+      "cover_image_address": "http://localhost:8012/cleanup-files/default.png",
+      "is_default_cover": true,
+      "presentation_address": "",
+      "name": "Локальная проверка стандартной обложки",
+      "draft": true,
+      "default_count": 1,
+      "custom_exists": true,
+      "case": ["Изменённый кейс"]
+    },
+    {
+      "status": 200,
+      "project": 31,
+      "cover_image_address": "http://localhost:8012/cleanup-files/default.png",
+      "is_default_cover": true,
+      "presentation_address": "",
+      "name": "Локальная проверка стандартной обложки",
+      "draft": true,
+      "default_count": 1,
+      "custom_exists": true,
+      "case": ["Изменённый кейс"]
+    },
+    {
+      "status": 200,
+      "project": 31,
+      "cover_image_address": "http://localhost:8012/cleanup-files/custom.png",
+      "is_default_cover": false,
+      "presentation_address": "",
+      "name": "Локальная проверка стандартной обложки",
+      "draft": true,
+      "default_count": 0,
+      "custom_exists": true,
+      "case": ["Изменённый кейс"]
+    },
+    {
+      "status": 200,
+      "project": 31,
+      "cover_image_address": "http://localhost:8012/cleanup-files/default.png",
+      "is_default_cover": true,
+      "presentation_address": "",
+      "name": "Локальная проверка стандартной обложки",
+      "draft": true,
+      "default_count": 1,
+      "custom_exists": true,
+      "case": ["Изменённый кейс"]
+    }
+  ],
+  "frontend_requests": [
+    {
+      "at": "2026-09-17T14:06:24.481Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 401
+    },
+    {
+      "at": "2026-09-17T14:06:30.876Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:06:50.474Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:06:50.577Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:06:50.591Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:06:50.595Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:06:50.983Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:06:51.03Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:08.447Z",
+      "method": "POST",
+      "route": "/files/",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T14:07:21.104Z",
+      "method": "PUT",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "body": [
+        {
+          "field_id": 1,
+          "value_text": "Изменённый кейс"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:21.288Z",
+      "method": "PUT",
+      "route": "/projects/31/",
+      "body": {
+        "image_address": "http://localhost:8012/cleanup-files/default.png",
+        "name": "Локальная проверка стандартной обложки",
+        "region": "Москва",
+        "trl": 4,
+        "links": [],
+        "industry_id": 1,
+        "description": "Синтетические данные: сохранение обложки и кейса программы",
+        "cover_image_address": "http://localhost:8012/cleanup-files/d1471177881a4cd08a47021bb902e2d7.png",
+        "target_audience": "Локальные тестовые пользователи",
+        "problem": "Возврат стандартной обложки",
+        "achievements": [],
+        "draft": true
+      },
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:21.448Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:21.527Z",
+      "method": "GET",
+      "route": "/projects/31/subscribers/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:21.713Z",
+      "method": "GET",
+      "route": "/projects/31/news/?limit=100",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:54.274Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:54.285Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:54.296Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:07:54.525Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:03.664Z",
+      "method": "POST",
+      "route": "/projects/31/reset-cover/",
+      "body": {},
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:49.792Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:49.954Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:49.966Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:50.013Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:50.412Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:08:50.465Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:20.951Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:21.099Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:21.121Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:21.157Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:21.575Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:21.627Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:09:21.813Z",
+      "method": "POST",
+      "route": "/projects/31/reset-cover/",
+      "body": {},
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:28.742Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:28.86Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:28.881Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:28.893Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:29.23Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:29.428Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:10:29.514Z",
+      "method": "POST",
+      "route": "/projects/31/reset-cover/",
+      "body": {},
+      "status": 409
+    },
+    {
+      "at": "2026-09-17T14:11:25.678Z",
+      "method": "POST",
+      "route": "/projects/31/reset-cover/",
+      "body": {},
+      "status": 409
+    },
+    {
+      "at": "2026-09-17T14:12:08.669Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 401
+    },
+    {
+      "at": "2026-09-17T14:12:08.949Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:12:09.1Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:12:09.123Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:12:09.15Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:12:09.506Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:12:09.677Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:12:09.766Z",
+      "method": "POST",
+      "route": "/projects/31/reset-cover/",
+      "body": {},
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:02.727Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 401
+    },
+    {
+      "at": "2026-09-17T14:22:02.979Z",
+      "method": "GET",
+      "route": "/projects/31/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:03.122Z",
+      "method": "GET",
+      "route": "/projects/31/companies/list/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:03.134Z",
+      "method": "GET",
+      "route": "/projects/31/resources/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:03.195Z",
+      "method": "GET",
+      "route": "/projects/31/goals/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:03.504Z",
+      "method": "GET",
+      "route": "/programs/?limit=20&offset=0",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:03.587Z",
+      "method": "GET",
+      "route": "/programs/partner-program-projects/73/fields/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T14:22:12.882Z",
+      "method": "POST",
+      "route": "/projects/31/reset-cover/",
+      "body": {},
+      "status": 200
+    }
+  ],
+  "base_reproduction": {
+    "at": "2026-09-17T14:25:45.277Z",
+    "method": "DELETE",
+    "route": "/files/?link=http://localhost:8012/cleanup-files/default.png",
+    "status": 403
+  },
+  "final_cleanup_readback": {
+    "uploaded_old_file_exists": false,
+    "default_system_file_exists": true,
+    "project_cover": "http://localhost:8012/cleanup-files/default.png"
+  }
+}
