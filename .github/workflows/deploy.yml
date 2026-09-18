@@ -1,39 +1,144 @@
-# @format
-
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy to server
+name: PROD frontend snapshot and inspection only
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["master"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Введите INSPECT_PROD для инспекции или резервной копии без deploy
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prod-frontend-snapshot
+  cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
+  snapshot:
+    if: github.ref == 'refs/heads/ops/prod-analytics-cover-snapshot-20260918' && github.event.inputs.confirmation == 'INSPECT_PROD'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
+      - name: Только snapshot PROD, без изменения runtime
+        uses: garygrossgarten/github-action-ssh@release
         with:
-          node-version: 20
-          cache: "npm"
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint:ts
-      - run: npm run test:ci
-      - run: npm run build:prod
-      - name: deploy to server
-        uses: burnett01/rsync-deployments@5.2.1
-        with:
-          switches: -avzr --delete
-          path: dist/**
-          remote_path: /home/gh_deploy
-          remote_user: gh_deploy
-          remote_key: ${{ secrets.DEPLOY_KEY }}
-          remote_host: app.procollab.ru
+          host: app.procollab.ru
+          username: gh_deploy
+          privateKey: ${{ secrets.DEPLOY_KEY }}
+          command: |
+            bash -se <<'SNAPSHOT_WRAPPER'
+            runner=(bash -se)
+            "${runner[@]}" <<'PROD_SNAPSHOT'
+            export SNAPSHOT_RUN_ID='${{ github.run_id }}'
+            export SNAPSHOT_RUN_ATTEMPT='${{ github.run_attempt }}'
+            #!/usr/bin/env bash
+            # Копируется только статическая сборка; каталог назначения rsync не меняется.
+            set -Eeuo pipefail
+            umask 077
+            stage=guards
+            trap 'printf "SNAPSHOT_FAILED stage=%s line=%s\n" "$stage" "$LINENO" >&2' ERR
+            test "$(id -un)" = gh_deploy
+            [[ "${SNAPSHOT_RUN_ID:?}" =~ ^[0-9]+$ ]]
+            test "${SNAPSHOT_RUN_ATTEMPT:?}" = 1
+            front=/home/gh_deploy
+            # Штатный rsync передаёт dist/social_platform целиком в /home/gh_deploy.
+            index_file="$front/social_platform/index.html"
+            base="/var/tmp/procollab-prod-frontend-rollback-$(id -u)"
+            test "$(readlink -f "$front")" = "$front"
+            test -f "$index_file"
+            test -z "$(find "$front" ! -type f ! -type d -print -quit)"
+            # Если путь содержит домашние credentials, нужна отдельная проверка layout.
+            # Частичная копия с молчаливыми исключениями не объявляется полной сборкой.
+            if find "$front" -printf '%P\n' | grep -Ei '(^|/)(\.env($|[./])|\.git($|/)|\.ssh($|/)|id_(rsa|dsa|ecdsa|ed25519)($|\.)|credentials($|\.)|secrets?($|\.)|passwords?($|\.)|tokens?($|\.)|[^/]*\.(key|pem|p12|pfx|jks|keystore|sql|sqlite3?|db|dump|bak)$)' >/dev/null; then
+              printf 'Refusing snapshot: sensitive files or unexpected frontend layout\n' >&2
+              exit 1
+            else
+              test "$?" = 1
+            fi
+            if grep -rIE -- '-----BEGIN ([A-Z0-9]+ )*PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{60,}|AKIA[0-9A-Z]{16}' "$front" >/dev/null; then
+              printf 'Refusing snapshot: credential marker\n' >&2
+              exit 1
+            else
+              test "$?" = 1
+            fi
+            manifest() { (cd "$1" && find . -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum); }
+            metadata() { (cd "$1" && find . -printf '%y %m %U %G %s %T@ %p\n' | LC_ALL=C sort); }
+            smoke() {
+              python3 - "$index_file" <<'PY'
+            import hashlib, json, sys
+            from html.parser import HTMLParser
+            from pathlib import Path
+            from urllib.parse import urljoin, urlsplit
+            from urllib.request import urlopen
+            origin = "https://app.procollab.ru/"
+            class Assets(HTMLParser):
+                def __init__(self):
+                    super().__init__(); self.urls = set()
+                def handle_starttag(self, tag, attrs):
+                    attrs = dict(attrs)
+                    if tag == "script" and attrs.get("src"):
+                        self.urls.add(attrs["src"])
+                    if tag == "link" and attrs.get("rel") in {"stylesheet", "modulepreload"} and attrs.get("href"):
+                        self.urls.add(attrs["href"])
+            with urlopen(origin, timeout=30) as response:
+                assert response.status == 200, response.status
+                data = response.read()
+            assert data == Path(sys.argv[1]).read_bytes(), "Served index differs from the deployed social_platform/index.html"
+            print("FRONTEND_ROOT=200")
+            print("INDEX_SHA256=" + hashlib.sha256(data).hexdigest())
+            parser = Assets(); parser.feed(data.decode("utf-8"))
+            assert parser.urls, "No primary assets found"
+            for path in sorted(parser.urls):
+                url = urljoin(origin, path)
+                assert urlsplit(url).netloc == "app.procollab.ru", "Unexpected primary asset origin"
+                with urlopen(url, timeout=30) as response:
+                    assert response.status == 200, response.status
+                    print(json.dumps({"asset": urlsplit(url).path, "status": response.status}))
+            PY
+            }
+            stage=initial-smoke
+            smoke
+            stage=space
+            test ! -L "$base"
+            if test ! -e "$base"; then mkdir -m 700 "$base"; fi
+            test "$(stat -c '%u:%a' "$base")" = "$(id -u):700"
+            test "$(readlink -f "$base")" = "$base"
+            size=$(du -sb "$front" | cut -f1)
+            available=$(df -PB1 "$base" | awk 'NR==2 {print $4}')
+            required=$((size * 2 + 1073741824))
+            printf 'FRONTEND_BYTES=%s\nAVAILABLE_BYTES=%s\nREQUIRED_BYTES=%s\n' "$size" "$available" "$required"
+            test "$available" -gt "$required"
+            snapshot="$base/$(date -u +%Y%m%dT%H%M%SZ)-${SNAPSHOT_RUN_ID}-${SNAPSHOT_RUN_ATTEMPT}"
+            mkdir -m 700 "$snapshot"
+            touch "$snapshot/INCOMPLETE"
+            printf 'FRONTEND_SNAPSHOT=%s\n' "$snapshot"
+            stage=copy
+            manifest "$front" > "$snapshot/frontend.sha256"
+            metadata "$front" > "$snapshot/frontend-files.txt"
+            mkdir "$snapshot/frontend"
+            cp -a "$front/." "$snapshot/frontend/"
+            manifest "$snapshot/frontend" > "$snapshot/frontend-copy.sha256"
+            cmp "$snapshot/frontend.sha256" "$snapshot/frontend-copy.sha256"
+            stage=unchanged
+            manifest "$front" > "$snapshot/frontend-after.sha256"
+            metadata "$front" > "$snapshot/frontend-files-after.txt"
+            cmp "$snapshot/frontend.sha256" "$snapshot/frontend-after.sha256"
+            cmp "$snapshot/frontend-files.txt" "$snapshot/frontend-files-after.txt"
+            smoke > "$snapshot/smoke.txt"
+            (
+              cd "$snapshot"
+              sha256sum frontend.sha256 frontend-files.txt frontend-copy.sha256 frontend-after.sha256 frontend-files-after.txt smoke.txt > SHA256SUMS
+              sha256sum --check --status SHA256SUMS
+              cd frontend
+              sha256sum --check --status ../frontend.sha256
+            )
+            mv "$snapshot/INCOMPLETE" "$snapshot/COMPLETE"
+            printf 'FRONTEND_FILE_COUNT=%s\n' "$(find "$snapshot/frontend" -type f | wc -l)"
+            printf 'FRONTEND_MANIFEST_SHA256=%s\n' "$(sha256sum "$snapshot/frontend.sha256" | cut -d' ' -f1)"
+            printf 'SNAPSHOT_SHA256=%s\n' "$(sha256sum "$snapshot/SHA256SUMS" | cut -d' ' -f1)"
+            cat "$snapshot/smoke.txt"
+            printf 'RUNTIME_UNCHANGED=true\nSNAPSHOT_COMPLETE=true\n'
+            PROD_SNAPSHOT
+            SNAPSHOT_WRAPPER
