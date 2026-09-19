@@ -20,6 +20,7 @@ describe("NotificationHttpAdapter", () => {
     readAt: null,
     createdAt: "2026-09-12T08:00:00Z",
     actor: null,
+    imageUrl: "https://example.com/program.png",
   };
 
   beforeEach(() => {

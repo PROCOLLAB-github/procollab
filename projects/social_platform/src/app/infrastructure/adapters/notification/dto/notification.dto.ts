@@ -2,7 +2,7 @@
 
 /**
  * DTO после общего CamelcaseInterceptor. Backend snake_case поля
- * action_url/read_at/created_at и actor first_name/last_name приходят сюда в camelCase.
+ * image_url/action_url/read_at/created_at и actor first_name/last_name приходят в camelCase.
  */
 export interface NotificationActorDto {
   id: number;
@@ -17,6 +17,7 @@ export interface NotificationDto {
   category: string;
   title: string;
   message: string;
+  imageUrl: string | null;
   actionUrl: string | null;
   readAt: string | null;
   createdAt: string;

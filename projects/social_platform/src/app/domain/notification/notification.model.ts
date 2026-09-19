@@ -44,6 +44,8 @@ export interface Notification {
   category: NotificationCategory;
   title: string;
   message: string;
+  /** Визуальный источник события; пользователь actor остаётся отдельным полем. */
+  imageUrl: string | null;
   actionUrl: string | null;
   readAt: string | null;
   createdAt: string;

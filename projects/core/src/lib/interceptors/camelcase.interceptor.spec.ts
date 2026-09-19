@@ -52,6 +52,7 @@ describe("CamelcaseInterceptor", () => {
         {
           id: 17,
           action_url: "/office/program/5",
+          image_url: "https://example.com/program.png",
           read_at: null,
           created_at: "2026-09-12T08:00:00Z",
           actor: {
@@ -76,6 +77,7 @@ describe("CamelcaseInterceptor", () => {
             {
               id: 17,
               actionUrl: "/office/program/5",
+              imageUrl: "https://example.com/program.png",
               readAt: null,
               createdAt: "2026-09-12T08:00:00Z",
               actor: {

@@ -2,8 +2,10 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
+import { By } from "@angular/platform-browser";
 import { Notification } from "@domain/notification/notification.model";
 import { ProfileControlPanelComponent } from "./profile-control-panel.component";
+import { IconComponent } from "../../primitives/icon/icon.component";
 
 describe("ProfileControlPanelComponent notification center", () => {
   let fixture: ComponentFixture<ProfileControlPanelComponent>;
@@ -13,8 +15,9 @@ describe("ProfileControlPanelComponent notification center", () => {
     id: 1,
     type: "program_news_published",
     category: "program",
-    title: "Опубликована новость программы",
-    message: "В программе появилась новая новость.",
+    title: "Новая публикация",
+    message: "В программе «Digital Future Challenge 2026» появилась новость.",
+    imageUrl: "https://example.com/program.png",
     actionUrl: "/office/program/5",
     readAt: null,
     createdAt: new Date(Date.now() - 5 * 60_000).toISOString(),
@@ -33,6 +36,7 @@ describe("ProfileControlPanelComponent notification center", () => {
     actionUrl: null,
     readAt: new Date().toISOString(),
     actor: null,
+    imageUrl: null,
   };
 
   beforeEach(async () => {
@@ -192,5 +196,100 @@ describe("ProfileControlPanelComponent notification center", () => {
     fixture.nativeElement.querySelector(".control-panel__logout").click();
 
     expect(logout).toHaveBeenCalledOnce();
+  });
+
+  const programTypes = [
+    ["program_news_published", "feed"],
+    ["program_material_published", "file"],
+    ["course_access_opened", "academic-hat"],
+  ];
+
+  function fallbackIcon(): string {
+    return fixture.debugElement
+      .query(By.css(".notification-item__fallback"))
+      .query(By.directive(IconComponent))
+      .componentInstance.icon();
+  }
+
+  it.each(programTypes)("%s показывает изображение программы вместо actor", (type, icon) => {
+    fixture.componentRef.setInput("notifications", [{ ...unread, type }]);
+    openPopup();
+    const image: HTMLImageElement = fixture.nativeElement.querySelector(
+      ".notification-item__avatar",
+    );
+    expect(image.src).toBe(unread.imageUrl);
+    expect(image.src).not.toBe(unread.actor?.avatar);
+    expect(fallbackIcon()).toBe(icon);
+  });
+
+  it.each(programTypes)("%s без imageUrl сохраняет %s и не показывает actor", (type, icon) => {
+    for (const imageUrl of [null, undefined, ""]) {
+      fixture.componentRef.setInput("notifications", [{ ...unread, type, imageUrl }]);
+      if (!component.showNotifications) openPopup();
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector(".notification-item__avatar")).toBeNull();
+      expect(fallbackIcon()).toBe(icon);
+    }
+  });
+
+  it.each([
+    ["project_invite_created", "projects"],
+    ["vacancy_response_created", "suitcase"],
+    ["future_backend_type", "bell"],
+  ])("%s сохраняет прежний выбор actor и fallback", (type, icon) => {
+    fixture.componentRef.setInput("notifications", [{ ...unread, type }]);
+    openPopup();
+    expect(fixture.nativeElement.querySelector(".notification-item__avatar").src).toBe(
+      unread.actor?.avatar,
+    );
+    fixture.componentRef.setInput("notifications", [{ ...unread, type, actor: null }]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".notification-item__avatar")).toBeNull();
+    expect(fallbackIcon()).toBe(icon);
+  });
+
+  it.each(programTypes)("ошибка изображения %s оставляет видимой иконку %s", (type, icon) => {
+    fixture.componentRef.setInput("notifications", [{ ...unread, type }]);
+    openPopup();
+    const image: HTMLImageElement = fixture.nativeElement.querySelector(
+      ".notification-item__avatar",
+    );
+    image.dispatchEvent(new Event("error"));
+    fixture.detectChanges();
+    expect(image.hidden).toBe(true);
+    expect(image.src).toBe(unread.imageUrl);
+    const fallback: HTMLElement = fixture.nativeElement.querySelector(
+      ".notification-item__fallback",
+    );
+    expect(fallback.hidden).toBe(false);
+    expect(getComputedStyle(fallback).display).not.toBe("none");
+    expect(fallbackIcon()).toBe(icon);
+  });
+
+  it.each([
+    [
+      "program_news_published",
+      "Новая публикация",
+      "В программе «Digital Future Challenge 2026» появилась новость.",
+    ],
+    [
+      "program_material_published",
+      "Новый материал",
+      "В программе «Digital Future Challenge 2026» добавлен материал «Регламент».",
+    ],
+    [
+      "course_access_opened",
+      "Открыт доступ к курсу",
+      "В программе «Digital Future Challenge 2026» открыт доступ к курсу «Старт».",
+    ],
+  ])("%s отображает серверные тексты без преобразования", (type, title, message) => {
+    fixture.componentRef.setInput("notifications", [{ ...unread, type, title, message }]);
+    openPopup();
+    expect(fixture.nativeElement.querySelector(".notification-item__title").textContent).toBe(
+      title,
+    );
+    expect(fixture.nativeElement.querySelector(".notification-item__message").textContent).toBe(
+      message,
+    );
   });
 });

@@ -95,6 +95,21 @@ export class ProfileControlPanelComponent {
     if (event.currentTarget instanceof HTMLImageElement) event.currentTarget.hidden = true;
   }
 
+  /**
+   * Программные события показывают источник-программу даже при наличии actor.
+   * Без изображения остаётся иконка типа; остальные события сохраняют аватар автора.
+   */
+  notificationImage(notification: Notification): string | null {
+    switch (notification.type) {
+      case "program_news_published":
+      case "program_material_published":
+      case "course_access_opened":
+        return notification.imageUrl ?? null;
+      default:
+        return notification.actor?.avatar ?? null;
+    }
+  }
+
   private setNotificationsOpen(open: boolean): void {
     if (this.showNotifications === open) return;
     this.showNotifications = open;

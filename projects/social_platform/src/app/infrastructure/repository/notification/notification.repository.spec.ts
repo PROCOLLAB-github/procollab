@@ -20,6 +20,7 @@ describe("NotificationRepository", () => {
     category: "future_category",
     title: "Заголовок",
     message: "Текст",
+    imageUrl: "https://example.com/program.png",
     actionUrl: "/office/program/12",
     readAt: null,
     createdAt: "2026-09-12T08:00:00Z",
@@ -64,6 +65,15 @@ describe("NotificationRepository", () => {
     adapter.getUnreadCount.mockReturnValue(of({ unreadCount: 6 }));
 
     await expect(firstValueFrom(repository.getUnreadCount())).resolves.toBe(6);
+  });
+
+  it.each([null, undefined])("отсутствующее imageUrl (%s) нормализуется в null", async imageUrl => {
+    adapter.getNotifications.mockReturnValue(
+      of({ count: 1, unreadCount: 1, next: null, previous: null, results: [{ ...dto, imageUrl }] }),
+    );
+    const page = await firstValueFrom(repository.getNotifications({ limit: 20, offset: 0 }));
+    expect(page.results[0].imageUrl).toBeNull();
+    expect(page.results[0].actor).toEqual(dto.actor);
   });
 
   it("мапит mark-read и mark-all ответы", async () => {

@@ -14,6 +14,7 @@ function notification(actionUrl: string | null, type = "program_news_published")
     readAt: null,
     createdAt: "2026-09-12T08:00:00Z",
     actor: null,
+    imageUrl: null,
   };
 }
 
