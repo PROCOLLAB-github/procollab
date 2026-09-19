@@ -73,10 +73,10 @@
                             appSquare="20"
                           ></i>
                         </span>
-                        @if (notification.actor?.avatar; as avatar) {
+                        @if (notificationImage(notification); as imageUrl) {
                           <img
                             class="notification-item__avatar"
-                            [src]="avatar"
+                            [src]="imageUrl"
                             alt=""
                             (error)="onAvatarError($event)"
                           />

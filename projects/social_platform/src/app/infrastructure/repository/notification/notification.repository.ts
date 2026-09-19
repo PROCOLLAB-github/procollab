@@ -12,6 +12,7 @@ import { map, Observable } from "rxjs";
 import { NotificationDto } from "../../adapters/notification/dto/notification.dto";
 import { NotificationHttpAdapter } from "../../adapters/notification/notification-http.adapter";
 
+/** Сохраняет отсутствие изображения, в том числе при ответе старой версии API. */
 function notificationFromDto(dto: NotificationDto): Notification {
   return {
     id: dto.id,
@@ -19,6 +20,7 @@ function notificationFromDto(dto: NotificationDto): Notification {
     category: dto.category,
     title: dto.title,
     message: dto.message,
+    imageUrl: dto.imageUrl ?? null,
     actionUrl: dto.actionUrl,
     readAt: dto.readAt,
     createdAt: dto.createdAt,
