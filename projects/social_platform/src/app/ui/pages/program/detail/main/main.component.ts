@@ -17,7 +17,7 @@ import { RouterModule } from "@angular/router";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
+import { ProgramRoleWidgetComponent } from "./role-widget/program-role-widget.component";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
@@ -44,7 +44,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
     ParseLinksPipe,
     ModalComponent,
     MatProgressBarModule,
-    SoonCardComponent,
+    ProgramRoleWidgetComponent,
     NewsFormComponent,
     ModalComponent,
     MatProgressBarModule,

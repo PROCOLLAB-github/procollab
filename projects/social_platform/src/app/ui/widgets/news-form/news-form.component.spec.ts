@@ -20,6 +20,7 @@ describe("NewsFormComponent", () => {
   };
 
   beforeEach(async () => {
+    vi.useFakeTimers();
     const projectNewsServiceSpy = { addNews: vi.fn() };
     const authSpy = {
       profile: of({}),
@@ -49,6 +50,22 @@ describe("NewsFormComponent", () => {
     fixture = TestBed.createComponent(NewsFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // ngx-autosize ищет вложенный textarea через 100 мс, не отменяя поиск при destroy.
+    // Завершаем инициализацию в живой fixture, чтобы teardown снял её resize-слушатель.
+    vi.runAllTimers();
+  });
+
+  afterEach(() => {
+    try {
+      // Изменение controls и списка вложений также планирует обновление DOM.
+      vi.runAllTimers();
+      fixture?.destroy();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      TestBed.resetTestingModule();
+      vi.restoreAllMocks();
+      vi.useRealTimers();
+    }
   });
 
   it("should create", () => {

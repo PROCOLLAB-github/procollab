@@ -16,14 +16,31 @@ import { ProjectGoalService } from "@api/project/facades/edit/project-goals.serv
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectMainStepComponent } from "./project-main-step.component";
 import { createProjectForm } from "@api/project/facades/edit/project-form.factory";
+import { ResetProjectCoverUseCase } from "@api/project/use-cases/reset-project-cover.use-case";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
+import { FileService } from "@core/lib/services/file/file.service";
+import { initial } from "@domain/shared/async-state";
+import { Subject } from "rxjs";
+import { ProjectCoverResetService } from "@api/project/facades/edit/project-cover-reset.service";
 
 describe("ProjectMainStepComponent", () => {
   let fixture: ComponentFixture<ProjectMainStepComponent>;
   let links: FormArray;
+  const resetCover = { execute: vi.fn() };
+  const files = { deleteFile: vi.fn(), uploadFile: vi.fn() };
 
   beforeEach(async () => {
     const fb = new FormBuilder();
     const projectForm = createProjectForm(fb);
+    resetCover.execute.mockReset().mockReturnValue(
+      of({
+        ok: true,
+        value: { coverImageAddress: "https://files.test/default.png", isDefaultCover: true },
+      }),
+    );
+    files.deleteFile.mockReset().mockReturnValue(of(undefined));
+    files.uploadFile.mockReset().mockReturnValue(of({ url: "https://files.test/custom.png" }));
+    projectForm.get("coverImageAddress")?.setValue("https://files.test/default.png");
     const emptyProjectControls = {
       name: projectForm.get("name"),
       region: projectForm.get("region"),
@@ -36,7 +53,7 @@ describe("ProjectMainStepComponent", () => {
       trl: null,
       partnerProgramId: null,
       presentationAddress: null,
-      coverImageAddress: null,
+      coverImageAddress: projectForm.get("coverImageAddress"),
       imageAddress: null,
     };
     links = projectForm.get("links") as FormArray;
@@ -48,17 +65,28 @@ describe("ProjectMainStepComponent", () => {
         provideRouter([]),
         provideNgxMask(),
         ProjectContactsService,
+        ProjectCoverResetService,
+        { provide: ResetProjectCoverUseCase, useValue: resetCover },
+        { provide: FileService, useValue: files },
         {
           provide: ProjectFormService,
           useValue: {
             getForm: () => projectForm,
             editIndex: signal<number | null>(null),
+            isDefaultCover: signal<boolean | null>(true),
+            currentProjectId: signal(31),
+            contextChanged$: new Subject<void>(),
             ...emptyProjectControls,
           },
         },
         {
           provide: ProjectsEditInfoService,
-          useValue: { projectForm, profileId: signal(1), industries$: of([]) },
+          useValue: {
+            projectForm,
+            profileId: signal(1),
+            industries$: of([]),
+            projFormIsSubmitting$: signal(initial()),
+          },
         },
         {
           provide: ProjectsEditUIInfoService,
@@ -93,6 +121,83 @@ describe("ProjectMainStepComponent", () => {
 
     fixture = TestBed.createComponent(ProjectMainStepComponent);
     fixture.detectChanges();
+  });
+
+  it("стандартная обложка предлагает загрузку и не выдаёт системный URL за загруженный файл", () => {
+    const upload = fixture.debugElement.query(By.css('[formControlName="coverImageAddress"]'))
+      .componentInstance as UploadFileComponent;
+    expect(
+      fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"] .file__basket'),
+    ).toBeNull();
+    expect(fixture.nativeElement.querySelector(".project__cover-reset")).toBeNull();
+    const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+    expect(cover.textContent).toContain("Стандартная обложка");
+    expect(cover.textContent).not.toContain("Файл успешно загружен");
+    expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Загрузить файл");
+    expect(cover.querySelector('[icon="file-success"]')).toBeNull();
+    expect(upload.value).toBe("https://files.test/default.png");
+    upload.onRemove();
+    expect(files.deleteFile).not.toHaveBeenCalled();
+    expect(resetCover.execute).not.toHaveBeenCalled();
+  });
+
+  it("пользовательская обложка предлагает только замену с клавиатуры, без кнопки сброса", async () => {
+    const form = TestBed.inject(ProjectFormService);
+    form.isDefaultCover.set(false);
+    form.coverImageAddress?.setValue("https://files.test/custom.png");
+    await fixture.whenStable();
+    const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+    const replace = cover.querySelector(".file__replace") as HTMLButtonElement;
+    const fileInput = cover.querySelector('input[type="file"]') as HTMLInputElement;
+    const chooseFile = vi.spyOn(fileInput, "click");
+    expect(replace.textContent?.trim()).toBe("Заменить файл");
+    expect(cover.textContent).not.toContain("Стандартная обложка");
+    expect(cover.textContent).toContain("Файл успешно загружен");
+    replace.focus();
+    expect(document.activeElement).toBe(replace);
+    replace.click();
+    expect(chooseFile).toHaveBeenCalledOnce();
+    expect(resetCover.execute).not.toHaveBeenCalled();
+    expect(form.coverImageAddress?.value).toBe("https://files.test/custom.png");
+    expect(fixture.nativeElement.querySelector(".project__cover-reset")).toBeNull();
+    const upload = fixture.debugElement.query(By.css('[formControlName="coverImageAddress"]'))
+      .componentInstance as UploadFileComponent;
+    expect(upload.value).toBe("https://files.test/custom.png");
+    expect(files.deleteFile).not.toHaveBeenCalled();
+  });
+
+  it("замена стандартной и пользовательской обложки загрузкой не вызывает DELETE", async () => {
+    for (const url of ["https://files.test/custom-a.png", "https://files.test/custom-b.png"]) {
+      files.uploadFile.mockReturnValue(of({ url }));
+      const upload = fixture.debugElement.query(By.css('[formControlName="coverImageAddress"]'))
+        .componentInstance as UploadFileComponent;
+      upload.onUpdate({
+        currentTarget: { files: [new File(["png"], "cover.png", { type: "image/png" })] },
+      } as unknown as Event);
+      await fixture.whenStable();
+      expect(TestBed.inject(ProjectFormService).coverImageAddress?.value).toBe(url);
+      expect(TestBed.inject(ProjectFormService).isDefaultCover()).toBe(false);
+      expect(fixture.nativeElement.querySelector(".project__cover-reset")).toBeNull();
+      const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+      expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Заменить файл");
+      expect(cover.textContent).not.toContain("Стандартная обложка");
+    }
+    expect(files.deleteFile).not.toHaveBeenCalled();
+  });
+
+  it("пустая обложка показывает zero state, не записывая фиктивный URL в обязательный control", async () => {
+    const form = TestBed.inject(ProjectFormService);
+    form.isDefaultCover.set(null);
+    form.coverImageAddress?.setValue("");
+    await fixture.whenStable();
+    const cover = fixture.nativeElement.querySelector('[formcontrolname="coverImageAddress"]');
+    expect(cover.textContent).toContain("Стандартная обложка");
+    expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Загрузить файл");
+    expect(cover.textContent).not.toContain("Файл успешно загружен");
+    expect(form.coverImageAddress?.value).toBe("");
+    expect(form.coverImageAddress?.hasError("required")).toBe(true);
+    expect(files.uploadFile).not.toHaveBeenCalled();
+    expect(resetCover.execute).not.toHaveBeenCalled();
   });
 
   it("untouched fields are quiet; submit exposes matching borders, warning icons and required messages", async () => {

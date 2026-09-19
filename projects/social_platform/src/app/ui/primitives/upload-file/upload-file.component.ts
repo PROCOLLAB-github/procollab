@@ -66,6 +66,15 @@ export class UploadFileComponent implements ControlValueAccessor {
   /** Режим: после загрузки сбросить в пустое состояние и не показывать "файл успешно загружен" */
   resetAfterUpload = input(false);
 
+  /** Родитель может запретить физическое удаление, сохранив обычную загрузку. */
+  removable = input(true);
+  /** Позволяет заменить заполненный файл без предварительного удаления прежнего. */
+  replaceable = input(false);
+  /** Предзаданный файл не считается пользовательской загрузкой; подпись не меняет URL control. */
+  presetLabel = input<string | null>(null);
+  /** Блокирует действия на время внешней операции родителя. */
+  busy = input(false);
+
   /** Событие с данными загруженного файла (url + метаданные оригинального файла) */
   uploaded = output<{
     url: string;
@@ -79,9 +88,11 @@ export class UploadFileComponent implements ControlValueAccessor {
 
   /** URL загруженного файла */
   value = "";
+  private valueRevision = 0;
 
-  // Методы ControlValueAccessor
+  /** Новое значение родительской формы отменяет применение результата прежнего DELETE к control. */
   writeValue(url: string) {
+    this.valueRevision++;
     this.value = url;
     this.cdr.markForCheck();
   }
@@ -103,6 +114,7 @@ export class UploadFileComponent implements ControlValueAccessor {
 
   /** Обработчик загрузки файла */
   onUpdate(event: Event): void {
+    if (this.loading || this.busy()) return;
     const input = event.currentTarget as HTMLInputElement;
     const files = input.files;
     if (!files?.length) {
@@ -145,26 +157,45 @@ export class UploadFileComponent implements ControlValueAccessor {
       });
   }
 
-  /** Обработчик удаления файла */
+  /**
+   * Очищает control только после удаления или 404: отсутствующий файл уже удалён.
+   * При сетевой/серверной ошибке сохраняет URL и показывает ошибку, чтобы форма
+   * не записала ложную очистку и пользователь мог повторить действие.
+   */
   onRemove(): void {
+    if (!this.removable() || this.busy() || this.loading || !this.value) return;
+    const removedUrl = this.value;
+    const removedRevision = this.valueRevision;
+    this.loading = true;
+    this.cdr.markForCheck();
     this.fileService
-      .deleteFile(this.value)
+      .deleteFile(removedUrl)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.value = "";
-
-          this.onTouch();
-          this.onChange("");
-          this.cdr.markForCheck();
+          this.completeRemoval(removedUrl, removedRevision);
         },
-        error: () => {
-          this.value = "";
-
-          this.onTouch();
-          this.onChange("");
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.completeRemoval(removedUrl, removedRevision);
+            return;
+          }
+          this.loading = false;
+          this.snackbarService.error("Не удалось удалить файл. Попробуйте ещё раз.");
           this.cdr.markForCheck();
         },
       });
+  }
+
+  private completeRemoval(removedUrl: string, removedRevision: number): void {
+    this.loading = false;
+    // Пока DELETE выполнялся, родитель мог открыть другой проект или заменить файл.
+    // Версия защищает также новый контекст, в котором URL случайно совпадает.
+    if (this.value === removedUrl && this.valueRevision === removedRevision) {
+      this.value = "";
+      this.onTouch();
+      this.onChange("");
+    }
+    this.cdr.markForCheck();
   }
 }

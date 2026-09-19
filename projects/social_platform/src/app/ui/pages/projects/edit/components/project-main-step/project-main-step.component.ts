@@ -31,6 +31,7 @@ import { ProjectGoalService } from "@api/project/facades/edit/project-goals.serv
 import { ProjectContactsService } from "@api/project/facades/edit/project-contacts.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.component";
+import { ProjectCoverResetService } from "@api/project/facades/edit/project-cover-reset.service";
 
 /** Шаг редактирования проекта: основная информация. */
 @Component({
@@ -62,6 +63,8 @@ export class ProjectMainStepComponent implements OnInit {
 
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);
+  protected readonly coverReset = inject(ProjectCoverResetService);
+  protected readonly isDefaultCover = this.projectFormService.isDefaultCover;
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
 
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
@@ -132,7 +135,7 @@ export class ProjectMainStepComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  /** A submit attempt exposes actual errors; it must never make a valid control look required. */
+  /** Показывает реальные ошибки после отправки, не превращая валидное поле в обязательное. */
   protected showError(control: AbstractControl, errorName?: string): boolean {
     return (
       control.enabled &&

@@ -21,6 +21,8 @@ import { RejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-res
 import { EntityCache } from "@domain/shared/entity-cache";
 import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
+import { ProjectCoverReset } from "@domain/project/project-cover.model";
+import { defer, finalize } from "rxjs";
 
 /** Репозиторий проектов с локальным кешем деталей, инвалидируемым по доменным событиям. */
 @Injectable({ providedIn: "root" })
@@ -147,5 +149,18 @@ export class ProjectRepository implements ProjectRepositoryPort {
 
   deleteOne(id: number): Observable<void> {
     return this.projectAdapter.deleteOne(id);
+  }
+
+  /**
+   * Инвалидирует detail при завершении и отмене: сервер мог сохранить сброс,
+   * даже если редактор закрылся до получения ответа или сеть оборвалась.
+   */
+  resetCover(id: number): Observable<ProjectCoverReset> {
+    return defer(() => {
+      this.entityCache.invalidate(id);
+      return this.projectAdapter
+        .resetCover(id)
+        .pipe(finalize(() => this.entityCache.invalidate(id)));
+    });
   }
 }

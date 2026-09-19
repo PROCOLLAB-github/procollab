@@ -21,6 +21,7 @@ import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { ProjectStepService } from "@api/project/project-step.service";
+import { ProjectCoverResetService } from "@api/project/facades/edit/project-cover-reset.service";
 
 describe("ProjectEditComponent", () => {
   let component: ProjectEditComponent;
@@ -83,6 +84,7 @@ describe("ProjectEditComponent", () => {
       .overrideComponent(ProjectEditComponent, {
         remove: {
           providers: [
+            ProjectCoverResetService,
             ProjectsEditInfoService,
             ProjectsEditUIInfoService,
             ProjectStepService,
@@ -102,6 +104,7 @@ describe("ProjectEditComponent", () => {
         },
         add: {
           providers: [
+            { provide: ProjectCoverResetService, useValue: { pending: signal(false) } },
             {
               provide: ProjectsEditInfoService,
               useValue: projectsEditInfoServiceSpy,
@@ -146,6 +149,14 @@ describe("ProjectEditComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("на любом шаге блокирует сохранение старой обложки во время reset", () => {
+    fixture.debugElement.injector.get(ProjectCoverResetService).pending.set(true);
+    fixture.detectChanges();
+    const buttons = fixture.nativeElement.querySelectorAll(".project__save app-button button");
+    expect(buttons[1].disabled).toBe(true);
+    expect(buttons[2].disabled).toBe(true);
   });
 
   it("uses canonical competition/submitted state for the primary action label", () => {

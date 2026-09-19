@@ -19,11 +19,24 @@ import {
 } from "./project-form.factory";
 import { ProjectFormAutosaveService } from "./project-form-autosave.service";
 import { findCanonicalRussianRegion } from "@core/consts/lists/russian-regions-list.const";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Subject } from "rxjs";
+
+const FILE_FIELDS = ["presentationAddress", "coverImageAddress"] as const;
 /** Управляет основной формой проекта и формой дополнительных полей партнерской программы. */
 @Injectable({ providedIn: "root" })
 export class ProjectFormService {
   private projectForm!: FormGroup;
   private additionalForm!: FormGroup;
+  private readonly projectId = signal<number | null>(null);
+  readonly currentProjectId = this.projectId.asReadonly();
+  /** null означает, что detail ещё не подтвердил вид обложки; удаление запрещено. */
+  readonly isDefaultCover = signal<boolean | null>(null);
+  private readonly contextChanged = new Subject<void>();
+  readonly contextChanged$ = this.contextChanged.asObservable();
+  /** Сохранение всей формы не должно вернуть прежний URL во время серверного сброса. */
+  coverResetPending = false;
+  private readonly fileHadValue = new Set<(typeof FILE_FIELDS)[number]>();
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
@@ -39,19 +52,36 @@ export class ProjectFormService {
 
   private initializeForm(): void {
     this.projectForm = createProjectForm(this.fb);
-    this.projectFormAutosaveService.bindDraftCleanupAutosave(
-      this.presentationAddress,
-      "presentationAddress",
-      this.destroyRef,
-    );
-    this.projectFormAutosaveService.bindDraftCleanupAutosave(
-      this.coverImageAddress,
-      "coverImageAddress",
-      this.destroyRef,
-    );
+    for (const field of FILE_FIELDS) {
+      const control = this.projectForm.get(field)!;
+      control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+        if (typeof value === "string" && value.length > 0) this.fileHadValue.add(field);
+      });
+      this.projectFormAutosaveService.bindDraftCleanupAutosave(
+        control,
+        field,
+        this.destroyRef,
+        this.projectId,
+      );
+    }
   }
 
+  /**
+   * Устанавливает контекст именно Project, а не его связи с программой.
+   * Заполнение файлов не является удалением: только эти контролы заполняются
+   * без событий. История очистки сбрасывается при каждом новом наборе данных.
+   */
   public initializeProjectData(project: Project): void {
+    this.contextChanged.next();
+    this.projectId.set(null);
+    this.isDefaultCover.set(project.isDefaultCover ?? null);
+    this.fileHadValue.clear();
+    for (const field of FILE_FIELDS) {
+      const value = project[field] ?? "";
+      this.projectForm.get(field)!.setValue(value, { emitEvent: false });
+      if (value) this.fileHadValue.add(field);
+    }
+    this.projectId.set(Number.isSafeInteger(project.id) && project.id > 0 ? project.id : null);
     const rawRegion = typeof project.region === "string" ? project.region.trim() : "";
     const canonicalRegion = findCanonicalRussianRegion(rawRegion);
     this.region?.setValidators([
@@ -71,8 +101,6 @@ export class ProjectFormService {
       actuality: project.actuality ?? "",
       trl: project.trl ?? "",
       problem: project.problem ?? "",
-      presentationAddress: project.presentationAddress,
-      coverImageAddress: project.coverImageAddress,
       partnerProgramId: project.partnerProgram?.programId ?? null,
     });
     this.region?.updateValueAndValidity({ emitEvent: false });
@@ -128,8 +156,20 @@ export class ProjectFormService {
     return this.projectForm.valid;
   }
 
+  /**
+   * Оставляет прежнюю очистку обычных полей, но сохраняет явное удаление файла.
+   * Учитывается и файл, загруженный уже после открытия формы. Изначально пустой
+   * нетронутый control не становится командой очистки; dirty для этого недостаточно,
+   * поскольку программное обновление через CVA и patchValue имеет разную семантику.
+   */
   public getFormValue(): any {
-    return stripNullish(this.projectForm.value);
+    const payload = stripNullish(this.projectForm.value);
+    for (const field of FILE_FIELDS) {
+      if (this.fileHadValue.has(field) && this.projectForm.get(field)?.value === "") {
+        payload[field] = "";
+      }
+    }
+    return payload;
   }
 
   // Геттеры для быстрого доступа к контролам основной формы
@@ -226,7 +266,12 @@ export class ProjectFormService {
     return this.additionalForm ? stripNullish(this.additionalForm.value) : {};
   }
 
+  /** Сбрасывает контекст до контролов, чтобы сброс формы не сохранялся в прежний проект. */
   public resetForms(): void {
+    this.contextChanged.next();
+    this.projectId.set(null);
+    this.isDefaultCover.set(null);
+    this.fileHadValue.clear();
     this.projectForm.reset();
     this.additionalForm?.reset();
     this.clearFormArrays();

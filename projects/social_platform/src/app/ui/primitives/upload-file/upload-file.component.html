@@ -3,9 +3,16 @@
 <div class="root" style="text-align: center">
   @if (loading) {
     <app-loader size="25px" color="var(--accent)"></app-loader>
-  } @else if (!value) {
+  } @else if (!value && !presetLabel()) {
     <div class="control" [class.control--error]="error()">
-      <input [id]="controlId" hidden type="file" [accept]="accept()" (change)="onUpdate($event)" />
+      <input
+        [id]="controlId"
+        [disabled]="busy()"
+        hidden
+        type="file"
+        [accept]="accept()"
+        (change)="onUpdate($event)"
+      />
       <label [for]="controlId">
         <div class="control__empty">
           <ng-content select="[emptyPlaceholder]"></ng-content>
@@ -13,12 +20,38 @@
       </label>
     </div>
   } @else {
-    <div class="control">
+    <div class="control" [class.control--error]="!value && error()">
       <div class="control__success">
-        <i appIcon icon="file-success" appSquare="16"></i>
-        <p class="text-body-12 file__title">Файл успешно загружен</p>
+        @if (presetLabel(); as label) {
+          <p class="text-body-12 file__title">{{ label }}</p>
+        } @else {
+          <i appIcon icon="file-success" appSquare="16"></i>
+          <p class="text-body-12 file__title">Файл успешно загружен</p>
+        }
       </div>
-      <i class="file__basket" appIcon icon="basket" appSquare="16" (click)="onRemove()"></i>
+      @if (replaceable()) {
+        <input
+          #replacement
+          [id]="controlId"
+          hidden
+          type="file"
+          [accept]="accept()"
+          [disabled]="busy()"
+          (change)="onUpdate($event)"
+        />
+        <button
+          type="button"
+          class="file__replace text-body-12"
+          [disabled]="busy()"
+          (click)="replacement.click()"
+        >
+          {{ presetLabel() ? "Загрузить файл" : "Заменить файл" }}
+        </button>
+      }
+      @if (removable()) {
+        <i class="file__basket" appIcon icon="basket" appSquare="16" (click)="onRemove()"></i>
+      }
+      <ng-content select="[fileAction]"></ng-content>
     </div>
   }
 </div>

@@ -1,0 +1,201 @@
+<!-- @format -->
+
+<section
+  class="widget"
+  aria-label="Аналитика программы"
+  [attr.aria-busy]="state().status === 'loading'"
+>
+  <header class="widget__header">
+    <h3>аналитика</h3>
+    <span class="widget__badge">{{ data() ? roleNames[data()!.role] : " " }}</span>
+  </header>
+  @if (data(); as data) {
+    <div class="widget__body">
+      @switch (data.role) {
+        @case ("participant") {
+          @let participant = data.participant;
+          @let project = participant.participantProject;
+          @let caseText =
+            participant.caseProvided
+              ? participant.caseName
+                ? "Кейс: " + participant.caseName
+                : "Кейс не выбран"
+              : "Кейсы не предусмотрены";
+          <div class="widget__project-lines">
+            @if (participant.caseName) {
+              <span
+                class="widget__detail-row"
+                tabindex="0"
+                [matTooltip]="caseText"
+                [attr.aria-label]="caseText"
+              >
+                <span class="widget__label">Кейс:</span
+                ><span class="widget__ellipsis">{{ participant.caseName }}</span>
+              </span>
+            } @else {
+              <span class="widget__empty">{{ caseText }}</span>
+            }
+            @if (project) {
+              <a
+                class="widget__detail-row"
+                [routerLink]="routes.projects.detail(project.id)"
+                [queryParams]="{ programLinkId: project.programLinkId }"
+                [matTooltip]="'Проект: ' + project.name"
+              >
+                <span class="widget__label">Проект:</span
+                ><span class="widget__ellipsis">{{ project.name }}</span>
+              </a>
+            } @else {
+              <span class="widget__empty">Проект не подан</span>
+            }
+          </div>
+          <div class="widget__stage-state">
+            @if (participant.stage === "not_submitted") {
+              Не отправлен
+            }
+            @if (participant.stage === "not_applicable") {
+              Сдача не предусмотрена
+            }
+          </div>
+          <ol class="widget__steps" aria-label="Этапы проекта">
+            @for (step of steps(participant.stage); track step.label) {
+              <li
+                [class.widget__step--current]="step.current"
+                [class.widget__step--complete]="step.completed"
+                [attr.aria-current]="step.current ? 'step' : null"
+              >
+                <span class="widget__dot" aria-hidden="true">{{ step.completed ? "✓" : "" }}</span>
+                <span>{{ step.label }}</span>
+              </li>
+            }
+          </ol>
+        }
+        @case ("organizer") {
+          @let metrics = data.organizer;
+          @let ratio = withoutProject(metrics);
+          <dl class="widget__metrics widget__metrics--organizer">
+            <div>
+              <dt>Участники</dt>
+              <dd tabindex="0" [matTooltip]="'' + metrics.participants">
+                {{ count(metrics.participants) }}
+              </dd>
+            </div>
+            <div>
+              <dt>Проекты</dt>
+              <dd tabindex="0" [matTooltip]="'' + metrics.projects">
+                {{ count(metrics.projects) }}
+              </dd>
+            </div>
+            <div>
+              <dt tabindex="0" matTooltip="Отправленные решения">Сдано<br />решений</dt>
+              <dd
+                tabindex="0"
+                [matTooltip]="
+                  data.isCompetitive ? '' + metrics.submittedSolutions : 'Сдача не предусмотрена'
+                "
+              >
+                {{ count(metrics.submittedSolutions) }}
+              </dd>
+            </div>
+            <div>
+              <dt>Без проектов</dt>
+              <dd
+                class="widget__without"
+                tabindex="0"
+                [matTooltip]="ratio.description"
+                [attr.aria-label]="ratio.description + ', ' + ratio.percentage"
+              >
+                <span>{{ count(metrics.participantsWithoutProject) }}</span>
+                <small [attr.data-tone]="ratio.tone"
+                  ><i aria-hidden="true"></i>{{ ratio.percentage }}</small
+                >
+              </dd>
+            </div>
+          </dl>
+        }
+        @case ("expert") {
+          <dl class="widget__metrics">
+            <div>
+              <dt>Назначено<br />проектов</dt>
+              <dd
+                tabindex="0"
+                [matTooltip]="
+                  data.expert.assigned === null ? 'Неприменимо' : '' + data.expert.assigned
+                "
+              >
+                {{ count(data.expert.assigned) }}
+              </dd>
+            </div>
+            <div>
+              <dt>Осталось<br />оценить</dt>
+              <dd
+                tabindex="0"
+                [matTooltip]="
+                  data.expert.remaining === null ? 'Неприменимо' : '' + data.expert.remaining
+                "
+              >
+                {{ count(data.expert.remaining) }}
+              </dd>
+            </div>
+          </dl>
+          @if (expertState(); as status) {
+            <p
+              class="widget__expert-state"
+              tabindex="0"
+              [attr.data-tone]="status.tone"
+              [matTooltip]="status.text + (status.tooltip ? '. ' + status.tooltip : '')"
+            >
+              @if (status.label) {
+                <span class="widget__status-label">{{ status.label }}</span>
+              }
+              <span
+                class="widget__status-value"
+                [class.widget__status-value--time]="status.countdown"
+                >{{ status.value }}</span
+              >
+            </p>
+          }
+        }
+      }
+    </div>
+    <footer class="widget__footer">
+      @switch (data.role) {
+        @case ("organizer") {
+          <a [routerLink]="routes.program.analytics(data.programId)">Открыть →</a>
+        }
+        @case ("expert") {
+          <a [routerLink]="routes.program.projectsRating(data.programId)">Открыть →</a>
+        }
+        @case ("participant") {
+          @if (data.participant.participantProject; as project) {
+            <a
+              [routerLink]="routes.projects.detail(project.id)"
+              [queryParams]="{ programLinkId: project.programLinkId }"
+              >Открыть →</a
+            >
+          } @else if (data.participant.submissionOpen) {
+            <button type="button" [disabled]="applicationPending()" (click)="createApplication()">
+              Создать заявку →
+            </button>
+          } @else {
+            <span>Срок подачи закрыт</span>
+          }
+        }
+      }
+    </footer>
+  } @else if (state(); as state) {
+    @if (state.status === "failure") {
+      <p class="widget__error" role="status">{{ errorMessages[state.error] }}</p>
+      <footer class="widget__footer">
+        @if (state.error === "network") {
+          <button type="button" (click)="service.retry()">Повторить</button>
+        }
+      </footer>
+    } @else {
+      <div class="widget__skeleton" aria-label="Загрузка аналитики">
+        <span></span><span></span><span></span>
+      </div>
+      <footer class="widget__footer"></footer>
+    }
+  }
+</section>

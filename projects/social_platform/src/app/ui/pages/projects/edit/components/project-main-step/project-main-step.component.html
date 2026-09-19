@@ -57,19 +57,15 @@
           <app-upload-file
             formControlName="coverImageAddress"
             accept=".jpg,.png,.jpeg"
+            [removable]="false"
+            [replaceable]="true"
+            [presetLabel]="
+              isDefaultCover() === true || !coverImageAddress.value ? 'Стандартная обложка' : null
+            "
+            [busy]="coverReset.pending()"
+            (uploaded)="isDefaultCover.set(false)"
             [error]="showError(coverImageAddress)"
-          >
-            <ng-container emptyPlaceholder>
-              <i appIcon icon="file" appSquare="16"></i>
-              <p class="text-body-12 project__slides-text">
-                Презентации формата .jpg, .jpeg, .png
-                <br />Размер изображения 1280 x 230
-              </p>
-              @if (showError(coverImageAddress, "required")) {
-                <p class="project__slides-error text-body-10">Загрузите файл</p>
-              }
-            </ng-container>
-          </app-upload-file>
+          ></app-upload-file>
         </fieldset>
       }
       @if (trl; as trl) {

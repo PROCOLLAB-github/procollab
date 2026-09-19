@@ -34,6 +34,7 @@ describe("ProfileMidSideComponent", () => {
     }) as unknown as User;
 
   beforeEach(async () => {
+    vi.useFakeTimers();
     await TestBed.configureTestingModule({
       imports: [ProfileMidSideComponent],
       providers: [
@@ -61,8 +62,29 @@ describe("ProfileMidSideComponent", () => {
     ui.applySetLoggedUserId("logged", 7);
     ui.applyInitProfile({ data: { user } }, 7);
     fixture.componentRef.setInput("user", user);
-    fixture.detectChanges();
+    renderProfile();
   });
+
+  afterEach(() => {
+    try {
+      fixture?.destroy();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      TestBed.resetTestingModule();
+      vi.restoreAllMocks();
+      vi.useRealTimers();
+    }
+  });
+
+  /**
+   * Завершает отложенный поиск textarea в ngx-autosize до удаления вложенной формы.
+   * Его таймер на 100 мс не отменяется в ngOnDestroy: поздний поиск способен заново
+   * зарегистрировать resize после destroy и обратиться к уже закрытому jsdom.
+   */
+  function renderProfile(): void {
+    fixture.detectChanges();
+    vi.runAllTimers();
+  }
 
   it("показывает центрируемый empty state владельцу пустого профиля", () => {
     const emptyState = fixture.nativeElement.querySelector(
@@ -77,7 +99,7 @@ describe("ProfileMidSideComponent", () => {
     const user = createUser(7, true, "Создаю образовательные проекты");
     ui.applyInitProfile({ data: { user } }, 7);
     fixture.componentRef.setInput("user", user);
-    fixture.detectChanges();
+    renderProfile();
     const card: HTMLElement = fixture.nativeElement.querySelector(".about");
     expect(card).not.toBeNull();
     expect(card.querySelector(".about__title")?.textContent).toContain("обо мне");
@@ -91,23 +113,23 @@ describe("ProfileMidSideComponent", () => {
 
     ui.applyInitProfile({ data: { user: foreignEmpty } }, 10);
     fixture.componentRef.setInput("user", foreignEmpty);
-    fixture.detectChanges();
+    renderProfile();
     expect(ui.isProfileEmpty()).toBe(true);
     expect(fixture.nativeElement.querySelector('[data-testid="empty-profile-state"]')).toBeFalsy();
 
     ui.applyInitProfile({ data: { user: ownFilled } }, 10);
     fixture.componentRef.setInput("user", ownFilled);
-    fixture.detectChanges();
+    renderProfile();
     expect(ui.isProfileEmpty()).toBe(false);
     expect(fixture.nativeElement.querySelector('[data-testid="empty-profile-state"]')).toBeFalsy();
     expect(fixture.nativeElement.querySelector("app-news-form")).toBeTruthy();
 
     ui.applyInitProfile({ data: { user: foreignEmpty } }, 10);
     fixture.componentRef.setInput("user", foreignEmpty);
-    fixture.detectChanges();
+    renderProfile();
     ui.applyInitProfile({ data: { user: ownFilled } }, 10);
     fixture.componentRef.setInput("user", ownFilled);
-    fixture.detectChanges();
+    renderProfile();
 
     expect(ui.isProfileEmpty()).toBe(false);
     expect(fixture.nativeElement.querySelector("app-news-form")).toBeTruthy();
@@ -118,9 +140,30 @@ describe("ProfileMidSideComponent", () => {
     const user = createUser(7, true, aboutMe);
     ui.applyInitProfile({ data: { user } }, 7);
     fixture.componentRef.setInput("user", user);
-    fixture.detectChanges();
+    renderProfile();
 
     expect(fixture.nativeElement.querySelector(".about__text p").textContent).toBe(aboutMe);
     expect(fixture.nativeElement.querySelector(".about .read-more")).toBeFalsy();
+  });
+
+  it("освобождает resize и таймеры формы при смене профиля и уничтожении fixture", () => {
+    const addListener = vi.spyOn(window, "addEventListener");
+    const removeListener = vi.spyOn(window, "removeEventListener");
+    const ownFilled = createUser(7, true, "Мой профиль");
+    const foreignEmpty = createUser(20, false);
+
+    for (const user of [ownFilled, foreignEmpty, ownFilled]) {
+      ui.applyInitProfile({ data: { user } }, 7);
+      fixture.componentRef.setInput("user", user);
+      renderProfile();
+    }
+    fixture.destroy();
+
+    const resizeListeners = addListener.mock.calls.filter(([event]) => event === "resize");
+    expect(resizeListeners.length).toBeGreaterThan(0);
+    for (const [event, callback, options] of resizeListeners) {
+      expect(removeListener).toHaveBeenCalledWith(event, callback, options);
+    }
+    expect(vi.getTimerCount()).toBe(0);
   });
 });

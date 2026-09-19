@@ -2,7 +2,7 @@
 
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
 import { ActivatedRoute, provideRouter, Router } from "@angular/router";
 import { BehaviorSubject, of, Subject, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -18,7 +18,7 @@ import { ProjectProgramRepositoryPort } from "@domain/project/ports/project-prog
 import { programLinkFields } from "@domain/project/program-link-fields.fixture";
 import { ProgramLinkFields } from "@domain/project/program-link-fields.model";
 import { Project } from "@domain/project/project.model";
-import { ok } from "@domain/shared/result.type";
+import { fail, ok } from "@domain/shared/result.type";
 import { AssignProjectProgramUseCase } from "@api/program/use-cases/assign-project-program";
 import { DeleteProjectUseCase } from "../../use-cases/delete-project.use-case";
 import { UpdateFormUseCase } from "../../use-cases/update-form.use-case";
@@ -56,6 +56,16 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     applyOpenSendDescisionLateModal: vi.fn(),
     applyOpenAssignProjectModal: vi.fn(),
   };
+
+  it("не сохраняет прежний URL обложки параллельно серверному сбросу", () => {
+    TestBed.inject(ProjectFormService).coverResetPending = true;
+    service.saveProjectAsDraft();
+    service.saveProjectAsPublished();
+    service.submitProjectForm();
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+  });
   function project(id = 55): Project {
     // The embedded legacy program is deliberately B. Explicit route link A is authoritative.
     return {
@@ -192,6 +202,74 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(update.execute).toHaveBeenCalledWith({ id: 55, data: { name: "Project", draft: true } });
     expect(service.projectForm.get("partnerProgramId")?.value).toBe(99);
     expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+  });
+
+  it("черновик передаёт обе явные очистки одним запросом", () => {
+    service.loadProgramTagsAndProject();
+    service.projectForm.addControl("presentationAddress", new FormControl(""));
+    service.projectForm.addControl("coverImageAddress", new FormControl(""));
+    service.saveProjectAsDraft();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Project", draft: true, presentationAddress: "", coverImageAddress: "" },
+    });
+  });
+
+  it("публикация ждёт подтверждения очистки, затем не отправляет запрещённые backend пустые поля", () => {
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")!.setValue("B");
+    service.projectForm.addControl("presentationAddress", new FormControl(""));
+    service.projectForm.addControl("coverImageAddress", new FormControl("new-cover.png"));
+    service.projectForm.get("draft")!.setValue(false);
+    const cleanup = new Subject<ReturnType<typeof ok<Project>>>();
+    update.execute.mockReturnValueOnce(cleanup);
+    service.submitProjectForm();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { presentationAddress: "", draft: true },
+    });
+    expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
+    cleanup.next(ok(project()));
+    cleanup.complete();
+    expect(update.execute).toHaveBeenNthCalledWith(2, {
+      id: 55,
+      data: { name: "Project", draft: false, coverImageAddress: "new-cover.png" },
+    });
+    expect(service.projectForm.get("presentationAddress")!.value).toBe("");
+    expect(TestBed.inject(SnackbarService).success).toHaveBeenCalledOnce();
+  });
+
+  it.each(["network", "unknown"])(
+    "ошибка очистки %s прерывает публикацию без ложного успеха",
+    kind => {
+      service.loadProgramTagsAndProject();
+      service.additionalForm.get("case")!.setValue("B");
+      service.projectForm.addControl("presentationAddress", new FormControl(""));
+      service.projectForm.addControl("coverImageAddress", new FormControl(""));
+      service.projectForm.get("draft")!.setValue(false);
+      update.execute.mockReturnValueOnce(of(fail({ kind, status: 0 })));
+      service.submitProjectForm();
+      expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+        id: 55,
+        data: { presentationAddress: "", coverImageAddress: "", draft: true },
+      });
+      expect(service.projFormIsSubmitting$().status).toBe("failure");
+      expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
+      expect(TestBed.inject(SnackbarService).error).toHaveBeenCalledOnce();
+    },
+  );
+
+  it("уничтожение редактора во время очистки отменяет последующую публикацию", () => {
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")!.setValue("B");
+    service.projectForm.addControl("presentationAddress", new FormControl(""));
+    service.projectForm.get("draft")!.setValue(false);
+    const cleanup = new Subject<ReturnType<typeof ok<Project>>>();
+    update.execute.mockReturnValueOnce(cleanup);
+    service.submitProjectForm();
+    TestBed.resetTestingModule();
+    cleanup.next(ok(project()));
+    expect(update.execute).toHaveBeenCalledOnce();
   });
 
   it("empty case blocks publish; selected case PUT/submit both use A", () => {
