@@ -1,6 +1,5 @@
 /** @format */
 import {
-  ProgramAnalyticsAssignment,
   ProgramAnalyticsAssignmentCriterion,
   ProgramAnalyticsAssignmentStatus,
   ProgramAnalyticsError,
@@ -25,12 +24,6 @@ export function formatAssignmentWaiting(
   if (hours < 1) return "< 1 ч";
   if (hours < 24) return `${hours} ч`;
   return `${Math.floor(hours / 24)} д ${hours % 24} ч`;
-}
-
-export function assignmentProgress(assignment: ProgramAnalyticsAssignment): string {
-  if (assignment.status === "not_ready") return "—";
-  if (!assignment.criteriaTotal) return "Нет критериев";
-  return `${assignment.criteriaScored} из ${assignment.criteriaTotal} критериев`;
 }
 
 /** Наличие записи и её содержимое — разные состояния; числовые строки не агрегируются. */

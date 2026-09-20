@@ -34,7 +34,6 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import {
   analyticsRequestError,
   assignmentCriterionValue,
-  assignmentProgress,
   assignmentStatusLabels,
   formatAssignmentWaiting,
 } from "@utils/program-analytics-assignment";
@@ -69,7 +68,6 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   protected readonly statusLabel = (status: ProgramAnalyticsAssignmentStatus): string =>
     assignmentStatusLabels[status];
   protected readonly waiting = formatAssignmentWaiting;
-  protected readonly progress = assignmentProgress;
   protected readonly criterionValue = assignmentCriterionValue;
   protected readonly requestError = analyticsRequestError;
   protected readonly title = computed(() => {

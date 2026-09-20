@@ -21,8 +21,6 @@ export function assignment(
     },
     project: { id: 55, name: "Проект А" },
     status: "completed",
-    criteriaTotal: 5,
-    criteriaScored: 5,
     assignedAt: "2026-09-01T10:00:00Z",
     projectSubmitted: true,
     projectSubmittedAt: "2026-09-01T12:00:00Z",

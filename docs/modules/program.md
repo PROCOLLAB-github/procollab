@@ -343,9 +343,8 @@ DI-биндинги (`infrastructure/di/program/`):
 - `GET /programs/:programId/manager-overview/assignments/?scope=all|completed|pending` — массив назначений.
 - `GET /programs/:programId/manager-overview/assignments/:assignmentId/scores/` — поля назначения и все критерии в `scores`.
 
-Backend API в этом PR не изменялся. Данные проходят через существующий
-`CamelcaseInterceptor`: `assignment_id → assignmentId`, `criteria_total → criteriaTotal`,
-`criteria_scored → criteriaScored`, `waiting_seconds → waitingSeconds`,
+Данные проходят через существующий
+`CamelcaseInterceptor`: `assignment_id → assignmentId`, `waiting_seconds → waitingSeconds`,
 `delayed_experts → delayedExperts`. Важно: установленный camelcase-keys преобразует
 `overdue_24h → overdue24H` и `overdue_48h → overdue48H` (заглавная H).
 Ручного преобразования SLA-полей нет.
@@ -370,8 +369,15 @@ Use cases возвращают `Result` с `ProgramAnalyticsError`; сырой �
 - `in_progress` — «В процессе»;
 - `completed` — «Выполнено».
 
-Прогресс — например, «2 из 5 критериев»; при отсутствии критериев — «Нет критериев»,
-для несданного проекта — «—». В open-режиме показываются реальные назначения,
+Таблица назначений содержит только «Эксперт», «Проект», «Статус», «Ожидание».
+Количество оценённых критериев — внутренняя деталь расчёта статуса на backend:
+`criteria_total` / `criteria_scored` не возвращаются в assignment object ни списка,
+ни detail `/scores/`; в Angular нет соответствующих полей или formatter прогресса.
+Массив `scores` с критериями и фактическими оценками сохраняется.
+Показатель «Завершили: X из Y» в разделе «Работы ожидают оценивания» остаётся:
+он считает завершённые назначения экспертов, а не критерии одного назначения.
+
+В open-режиме показываются реальные назначения,
 но frontend не синтезирует задержки экспертов. В distributed-режиме
 «Частично оценено» означает, что хотя бы один назначенный эксперт полностью оценил
 проект, но не все назначенные эксперты завершили оценивание.
