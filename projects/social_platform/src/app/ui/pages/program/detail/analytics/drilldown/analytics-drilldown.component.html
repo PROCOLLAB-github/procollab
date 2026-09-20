@@ -417,7 +417,6 @@
         <th scope="col">Эксперт</th>
         <th scope="col">Проект</th>
         <th scope="col">Статус</th>
-        <th scope="col">Прогресс</th>
         <th scope="col">Ожидание</th>
       </tr>
     </thead>
@@ -450,7 +449,6 @@
               </button>
             }
           </td>
-          <td data-label="Прогресс">{{ progress(item) }}</td>
           <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
         </tr>
       }
