@@ -17,6 +17,11 @@ import {
   scoreDetail,
 } from "@domain/program/program-analytics-assignment.fixture";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import {
+  participantsPage,
+  projectsPage,
+  notSubmittedPage,
+} from "@domain/program/program-analytics-attention.fixture";
 import { firstValueFrom, of, Subject } from "rxjs";
 import { AnalyticsDrilldownComponent } from "./analytics-drilldown.component";
 
@@ -40,14 +45,17 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
       imports: [AnalyticsDrilldownComponent],
       providers: [
         provideRouter([]),
-        { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: { execute: vi.fn() } },
+        {
+          provide: GetProgramManagerProjectsNotSubmittedUseCase,
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(notSubmittedPage()))) },
+        },
         {
           provide: GetProgramManagerParticipantsWithoutTeamUseCase,
-          useValue: { execute: vi.fn() },
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(participantsPage()))) },
         },
         {
           provide: GetProgramManagerProjectsAwaitingEvaluationUseCase,
-          useValue: { execute: vi.fn() },
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(projectsPage()))) },
         },
         { provide: GetProgramManagerAssignmentsUseCase, useValue: assignments },
         { provide: GetProgramManagerAssignmentScoresUseCase, useValue: scores },
@@ -80,6 +88,35 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
   }
 
   it.each([
+    ["all", "Все назначения экспертов"],
+    ["completed", "Выполненные назначения"],
+    ["pending", "Ожидают оценки"],
+  ] as const)("%s: единое оформление списка и правильный заголовок", async (scope, title) => {
+    await open(scope);
+    expect(dialog().querySelector("h2")?.textContent?.trim()).toBe(title);
+    expect(assignments.execute).toHaveBeenCalledWith(12, scope);
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).not.toBeNull();
+    expect(dialog().querySelectorAll(".analytics-drilldown__table--assignments")).toHaveLength(1);
+    expect(dialog().querySelectorAll('th[scope="col"]')).toHaveLength(4);
+  });
+
+  it.each([
+    "participants-without-team",
+    "projects-awaiting-evaluation",
+    "projects-not-submitted",
+  ] as const)("%s: таблица и окно не получают оформление назначений", async view => {
+    fixture.componentRef.setInput("notSubmittedApplicable", true);
+    await fixture.whenStable();
+    const attached = firstValueFrom(modal.overlayRef!.attachments());
+    fixture.componentInstance.openAttention(view, trigger);
+    await attached;
+    await fixture.whenStable();
+    expect(dialog().querySelector("table")).not.toBeNull();
+    expect(dialog().querySelector(".analytics-drilldown__table--assignments")).toBeNull();
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
+  });
+
+  it.each([
     ["pending", "not_ready", null, "Проект не сдан", "Проект не сдан"],
     ["all", "pending", 108000, "Не начал оценивание", "1 д 6 ч"],
     ["pending", "in_progress", 187200, "В процессе", "2 д 4 ч"],
@@ -106,6 +143,15 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
       expect(!!row.querySelector('button[aria-label^="Посмотреть оценку"]')).toBe(
         status === "completed",
       );
+      const statusCell = row.querySelector(".analytics-drilldown__assignment-status")!;
+      expect(statusCell.querySelector(`.analytics-drilldown__badge--${status}`)?.textContent).toBe(
+        statusText,
+      );
+      if (status === "completed") {
+        expect(statusCell.querySelector("button")?.getAttribute("aria-label")).toBe(
+          "Посмотреть оценку: Проект А, Иван Иванов",
+        );
+      }
     },
   );
 
@@ -179,6 +225,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     expect(scores.execute).toHaveBeenCalledWith(12, 17);
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
     expect(dialog().textContent).toContain("Оценка проекта");
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
     for (const text of [
       "Новизна",
       "Оцените новизну решения",
@@ -191,6 +238,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     button("Назад").click();
     await fixture.whenStable();
     expect(dialog().textContent).toContain("Выполненные назначения");
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).not.toBeNull();
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
     expect(fixture.debugElement.queryAll(By.directive(CdkTrapFocus))).toHaveLength(1);
     expect(fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus)).toBe(
@@ -229,6 +277,8 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await fixture.whenStable();
     expect(dialog().querySelector('[data-assignment-id="3"]')).toBeNull();
     expect(dialog().textContent).toContain("Ещё не сданы");
+    expect(dialog().querySelector(".analytics-drilldown__table--assignments")).toBeNull();
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
     expect(dialog().querySelector('[data-label="Прогресс"]')).toBeNull();
     expect(dialog().textContent).not.toContain("Прогресс");
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
