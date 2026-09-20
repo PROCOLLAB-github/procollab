@@ -1,7 +1,11 @@
 <!-- @format -->
 <app-modal
   [open]="state.open()"
-  bodyClass="analytics-drilldown-body"
+  [bodyClass]="
+    state.view() === 'assignments'
+      ? 'analytics-drilldown-body analytics-drilldown-body--assignments'
+      : 'analytics-drilldown-body'
+  "
   (openChange)="onOpenChange($event)"
 >
   <section
@@ -411,7 +415,10 @@
 </app-modal>
 
 <ng-template #assignmentTable let-assignments>
-  <table class="analytics-drilldown__table">
+  <table
+    class="analytics-drilldown__table"
+    [class.analytics-drilldown__table--assignments]="state.view() === 'assignments'"
+  >
     <thead>
       <tr>
         <th scope="col">Эксперт</th>
@@ -432,22 +439,24 @@
           </td>
           <td data-label="Проект">{{ item.project.name }}</td>
           <td data-label="Статус">
-            <span
-              [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
-              >{{ statusLabel(item.status) }}</span
-            >
-            @if (item.status === "completed") {
-              <button
-                type="button"
-                class="analytics-drilldown__action"
-                (click)="state.loadAssignmentScores(item.assignmentId)"
-                [attr.aria-label]="
-                  'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
-                "
+            <span class="analytics-drilldown__assignment-status">
+              <span
+                [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
+                >{{ statusLabel(item.status) }}</span
               >
-                Посмотреть оценку
-              </button>
-            }
+              @if (item.status === "completed") {
+                <button
+                  type="button"
+                  class="analytics-drilldown__action"
+                  (click)="state.loadAssignmentScores(item.assignmentId)"
+                  [attr.aria-label]="
+                    'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
+                  "
+                >
+                  Посмотреть оценку
+                </button>
+              }
+            </span>
           </td>
           <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
         </tr>
