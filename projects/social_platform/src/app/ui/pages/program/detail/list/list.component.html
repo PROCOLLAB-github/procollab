@@ -91,6 +91,7 @@
             <a [routerLink]="routerLink(listItem.id)">
               <app-info-card
                 [type]="listType()"
+                [showSubscriptionAction]="listType() === 'projects'"
                 [profileId]="listItem.id"
                 [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
                 [info]="listItem"

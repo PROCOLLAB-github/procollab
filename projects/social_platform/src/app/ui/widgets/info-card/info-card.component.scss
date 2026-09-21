@@ -27,63 +27,39 @@
     align-items: center;
     justify-content: space-evenly;
 
-    &--vacancies,
-    &--collaborators {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      color: var(--grey-for-text);
-    }
-
     &--program {
       display: flex;
       gap: 5px;
       align-items: center;
       justify-content: center;
-
-      &-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 16px;
-        height: 12px;
-        margin-top: 6px;
-        border: 0.5px solid var(--medium-grey-for-outline);
-        border-radius: var(--rounded-lg);
-
-        i {
-          color: var(--accent);
-        }
-      }
-    }
-
-    &--project-partner {
-      position: absolute;
-      top: 63%;
-      left: 30%;
-      z-index: 10000;
-      padding: 3px 5px;
-      background-color: var(--light-white);
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: var(--rounded-lg);
-
-      p {
-        color: var(--black);
-      }
     }
   }
 
-  &__badge {
+  &__subscription-action {
     position: absolute;
-    top: 30px;
-    left: 0;
-    z-index: 1;
-  }
-
-  &__subscribe-badge {
-    display: block;
-    color: var(--accent);
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    color: var(--accent-dark);
     cursor: pointer;
+    background: var(--light-white);
+    border: 0;
+    border-radius: var(--rounded-lg);
+
+    &:hover {
+      background: var(--accent-light);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+    }
   }
 
   &__photo {
@@ -244,8 +220,8 @@
     width: 100px;
   }
 
-  // Модификатор не затрагивает подписки, витрину и остальные применения InfoCard.
-  &--my-project {
+  // Общая геометрия проектов не затрагивает приглашения, участников и пустые карточки.
+  &--project {
     .card__content {
       padding: 27px 12px 0;
     }
@@ -292,7 +268,7 @@
       }
     }
 
-    .card__my-project-action-label {
+    .card__project-action-label {
       font-size: 9px;
       font-weight: 600;
       line-height: inherit;
@@ -300,7 +276,7 @@
     }
   }
 
-  &__status {
+  &__context {
     display: inline-flex;
     flex-shrink: 0;
     gap: 5px;
@@ -317,6 +293,23 @@
     background: var(--light-gray);
     border-radius: 11px;
 
+    &--industry {
+      color: var(--accent-dark);
+      background: var(--accent-light);
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--accent-dark);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  &__status {
     &::before {
       flex: 0 0 6px;
       width: 6px;

@@ -5,9 +5,14 @@
 
   &__info {
     display: flex;
+    flex-direction: column;
     gap: 20px;
     justify-content: space-between;
     padding-bottom: 100px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
 
     form {
       width: 100%;
@@ -20,6 +25,7 @@
     flex-grow: 1;
     gap: 20px;
     width: 100%;
+    min-width: 0;
   }
 
   &__create {

@@ -51,4 +51,22 @@
       }
     }
   }
+
+  @media (max-width: 999px) {
+    // Перенос вкладок не даёт навигации растягивать сетку фиксированных карточек.
+    &__tabs {
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    &__link {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
+
+    &__item {
+      justify-content: center;
+      padding: 5px 8px;
+    }
+  }
 }

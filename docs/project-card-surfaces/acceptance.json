@@ -1,0 +1,220 @@
+{
+  "responsive": [
+    {
+      "width": 1440,
+      "height": 1100,
+      "allCards156x180": true,
+      "allAvatars70": true,
+      "horizontalOverflow": false,
+      "myEqual": true,
+      "subscriptionsEqual": true,
+      "allEqual": true,
+      "pages": [
+        {
+          "path": "/office/projects/dashboard",
+          "cards": 12,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/my",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/subscriptions",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/all",
+          "cards": 4,
+          "overflow": []
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "height": 1100,
+      "allCards156x180": true,
+      "allAvatars70": true,
+      "horizontalOverflow": false,
+      "myEqual": true,
+      "subscriptionsEqual": true,
+      "allEqual": true,
+      "pages": [
+        {
+          "path": "/office/projects/dashboard",
+          "cards": 12,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/my",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/subscriptions",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/all",
+          "cards": 4,
+          "overflow": []
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "allCards156x180": true,
+      "allAvatars70": true,
+      "horizontalOverflow": false,
+      "myEqual": true,
+      "subscriptionsEqual": true,
+      "allEqual": true,
+      "pages": [
+        {
+          "path": "/office/projects/dashboard",
+          "cards": 12,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/my",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/subscriptions",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/all",
+          "cards": 4,
+          "overflow": []
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "allCards156x180": true,
+      "allAvatars70": true,
+      "horizontalOverflow": false,
+      "myEqual": true,
+      "subscriptionsEqual": true,
+      "allEqual": true,
+      "pages": [
+        {
+          "path": "/office/projects/dashboard",
+          "cards": 12,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/my",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/subscriptions",
+          "cards": 4,
+          "overflow": []
+        },
+        {
+          "path": "/office/projects/all",
+          "cards": 4,
+          "overflow": []
+        }
+      ]
+    }
+  ],
+  "overlapChecks": [
+    {
+      "overlaps": 0,
+      "path": "/office/projects/dashboard",
+      "width": 1440
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/my",
+      "width": 1440
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/subscriptions",
+      "width": 1440
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/all",
+      "width": 1440
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/dashboard",
+      "width": 768
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/my",
+      "width": 768
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/subscriptions",
+      "width": 768
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/all",
+      "width": 768
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/dashboard",
+      "width": 390
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/my",
+      "width": 390
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/subscriptions",
+      "width": 390
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/all",
+      "width": 390
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/dashboard",
+      "width": 320
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/my",
+      "width": 320
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/subscriptions",
+      "width": 320
+    },
+    {
+      "overlaps": 0,
+      "path": "/office/projects/all",
+      "width": 320
+    }
+  ],
+  "longText": {
+    "titleMaxHeight": 30,
+    "descriptionMaxHeight": 26
+  },
+  "subscriptionAction": "Открытие Enter, подтверждение и обратная подписка на локальных фикстурах",
+  "browserErrors": []
+}

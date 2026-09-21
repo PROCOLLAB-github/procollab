@@ -18,14 +18,12 @@
   &__list {
     display: grid;
     flex-grow: 1;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, 156px);
+    row-gap: 50px;
     column-gap: 20px;
     align-items: flex-start;
+    justify-content: center;
     margin-top: 50px;
-
-    @include responsive.apply-desktop {
-      grid-template-columns: repeat(4, 2fr);
-    }
   }
 
   &__link {
