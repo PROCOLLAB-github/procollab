@@ -150,8 +150,8 @@
 
     &--project {
       flex: 0 0 24px;
-      min-height: 24px;
       height: 24px;
+      min-height: 24px;
     }
 
     &.invite-description {
@@ -242,6 +242,104 @@
 
   &__skill {
     width: 100px;
+  }
+
+  // Модификатор не затрагивает подписки, витрину и остальные применения InfoCard.
+  &--my-project {
+    .card__content {
+      padding: 27px 12px 0;
+    }
+
+    .card__head {
+      width: 100%;
+      height: 30px;
+      margin-bottom: 6px;
+
+      > div {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    .card__name {
+      /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс нужен для двухстрочного ellipsis. */
+      display: -webkit-box;
+      max-height: 30px;
+      margin: 0;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 15px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .card__description {
+      flex: 0 0 26px;
+      width: 100%;
+      height: 26px;
+      min-height: 26px;
+
+      p {
+        /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс сохраняет двухстрочное сокращение описания. */
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 10px;
+        line-height: 13px;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+    }
+
+    .card__my-project-action-label {
+      font-size: 9px;
+      font-weight: 600;
+      line-height: inherit;
+      white-space: nowrap;
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: 5px;
+    align-items: center;
+    max-width: 100%;
+    height: 20px;
+    padding: 3px 8px;
+    margin-bottom: 6px;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 14px;
+    color: var(--dark-grey);
+    white-space: nowrap;
+    background: var(--light-gray);
+    border-radius: 11px;
+
+    &::before {
+      flex: 0 0 6px;
+      width: 6px;
+      height: 6px;
+      content: "";
+      background: currentcolor;
+      border-radius: 50%;
+    }
+
+    &--published {
+      color: var(--green-dark);
+      background: var(--green-light);
+    }
+
+    &--program {
+      color: var(--accent-dark);
+      background: var(--accent-light);
+    }
+
+    &--submitted {
+      color: var(--gold-dark);
+      background: var(--gold-light);
+    }
   }
 }
 
