@@ -96,12 +96,21 @@ describe("ProjectsDashboard: контексты карточек", () => {
         expect(c.appereance()).toBe(appearance);
         expect(c.profileId()).toBe(c.info().id);
         expect(c.loggedUserId()).toBe(7);
+        expect(el.nativeElement.closest("a")).toBeNull();
+        expect(el.nativeElement.querySelector("a a, a button, a [tabindex]")).toBeNull();
+        expect(el.nativeElement.querySelector(".card__project-action").textContent.trim()).toBe(
+          "Открыть",
+        );
+        const actionLink = el.query(By.directive(RouterLink)).injector.get(RouterLink);
+        expect(TestBed.inject(Router).serializeUrl(actionLink.urlTree!)).toBe(
+          "/office/projects/" + c.info().id,
+        );
+        expect(actionLink.urlTree!.queryParams).toEqual({});
         if (index === 0) {
           expect(el.nativeElement.querySelector(".card__status").textContent.trim()).toBe(
             myProjectCardFixtures[i].label,
           );
           expect(el.nativeElement.querySelector(".card__context--industry")).toBeNull();
-          expect(el.nativeElement.closest("a")).toBeNull();
           expect(el.nativeElement.querySelector(".card__role").textContent).toBe(
             myProjectCardFixtures[i].role,
           );

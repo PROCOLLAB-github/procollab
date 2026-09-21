@@ -82,21 +82,24 @@ describe("ProjectsListComponent: контекст и track", () => {
 
   const cards = () => harness.routeDebugElement!.queryAll(By.directive(InfoCardComponent));
 
-  it("CTA моего проекта выполняет ровно один переход в edit с editingStep=main", async () => {
-    await harness.navigateByUrl("/office/projects/my", ProjectsListComponent);
-    harness.detectChanges();
-    const router = TestBed.inject(Router);
-    const navigate = vi.spyOn(router, "navigateByUrl").mockResolvedValue(true);
-    try {
-      cards()[0].nativeElement.querySelector("button").click();
-      expect(navigate).toHaveBeenCalledOnce();
-      expect(router.serializeUrl(navigate.mock.calls[0][0] as UrlTree)).toBe(
-        "/office/projects/101/edit?editingStep=main",
-      );
-    } finally {
-      navigate.mockRestore();
-    }
-  });
+  it.each(["my", "subscriptions", "all"])(
+    "/%s: CTA выполняет один переход в detail",
+    async route => {
+      await harness.navigateByUrl("/office/projects/" + route, ProjectsListComponent);
+      harness.detectChanges();
+      const router = TestBed.inject(Router);
+      const navigate = vi.spyOn(router, "navigateByUrl").mockResolvedValue(true);
+      try {
+        cards()[0].nativeElement.querySelector(".card__project-action").click();
+        expect(navigate).toHaveBeenCalledOnce();
+        expect(router.serializeUrl(navigate.mock.calls[0][0] as UrlTree)).toBe(
+          "/office/projects/101",
+        );
+      } finally {
+        navigate.mockRestore();
+      }
+    },
+  );
 
   it.each([
     ["my", "my"],
@@ -112,7 +115,8 @@ describe("ProjectsListComponent: контекст и track", () => {
       expect(card.type()).toBe("projects");
       expect(card.profileId()).toBe(projects()[index].id);
       expect(card.loggedUserId()).toBe(7);
-      if (route === "my") expect(element.nativeElement.closest("a")).toBeNull();
+      expect(element.nativeElement.closest("a")).toBeNull();
+      expect(element.nativeElement.querySelector("a a, a button, a [tabindex]")).toBeNull();
       expect(card.showSubscriptionAction()).toBe(route !== "my");
     }
   });

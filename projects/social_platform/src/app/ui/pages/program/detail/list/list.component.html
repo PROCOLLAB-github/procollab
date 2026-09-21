@@ -87,11 +87,18 @@
     <ul class="page__list" [class.page__list--rating]="listType() === 'rating'">
       @for (listItem of searchedList(); track listItem.id) {
         <li class="page__item">
-          @if (listType() === "projects" || listType() === "members") {
+          @if (listType() === "projects") {
+            <app-info-card
+              type="projects"
+              [showSubscriptionAction]="true"
+              [profileId]="listItem.id"
+              [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
+              [info]="listItem"
+            ></app-info-card>
+          } @else if (listType() === "members") {
             <a [routerLink]="routerLink(listItem.id)">
               <app-info-card
                 [type]="listType()"
-                [showSubscriptionAction]="listType() === 'projects'"
                 [profileId]="listItem.id"
                 [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
                 [info]="listItem"

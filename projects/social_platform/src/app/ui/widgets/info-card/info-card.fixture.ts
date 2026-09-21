@@ -34,7 +34,7 @@ export const myProjectCardFixtures = [
   {
     key: "draft",
     label: "Черновик",
-    action: "Продолжить",
+    action: "Открыть",
     role: "Лидер",
     access: "можно редактировать",
     canEdit: true,
@@ -48,7 +48,7 @@ export const myProjectCardFixtures = [
   {
     key: "published",
     label: "Опубликован",
-    action: "Редактировать",
+    action: "Открыть",
     role: "Лидер",
     access: "можно редактировать",
     canEdit: true,
@@ -61,7 +61,7 @@ export const myProjectCardFixtures = [
   {
     key: "program",
     label: "В программе",
-    action: "Редактировать",
+    action: "Открыть",
     role: "Лидер",
     access: "можно редактировать",
     canEdit: true,
