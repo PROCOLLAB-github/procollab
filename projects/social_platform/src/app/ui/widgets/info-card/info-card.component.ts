@@ -96,7 +96,9 @@ export class InfoCardComponent {
    * Роль определяется отдельно по текущему профилю. Отсутствующие ID не делают
    * пользователя лидером; после сдачи даже лидер видит «только просмотр».
    * Единственный признак сдачи — isSubmitted: canSubmit описывает возможность
-   * действия, например открытый срок. Это представление готовых данных,
+   * действия, например открытый срок. Пока состояние программной связи неизвестно,
+   * не обещаем редактирование: отсутствие isSubmitted не равнозначно false.
+   * Это представление готовых данных,
    * а не изменение guard или серверных прав. CTA от этих значений не зависит.
    */
   protected readonly myProjectPresentation = computed<MyProjectPresentation | null>(() => {
@@ -121,7 +123,8 @@ export class InfoCardComponent {
       };
     const userId = this.loggedUserId();
     const isLeader = userId != null && project.leader === userId;
-    const canEdit = isLeader && !isSubmitted;
+    const canEdit =
+      isLeader && (project.partnerProgram == null || project.partnerProgram.isSubmitted === false);
     return {
       lifecycle,
       statusLabel: labels[lifecycle],
