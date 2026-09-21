@@ -26,10 +26,16 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { Project } from "@domain/project/project.model";
 
-interface MyProjectCardStatus {
-  key: "submitted" | "draft" | "program" | "published";
-  label: string;
-  action: "Продолжить" | "Открыть";
+interface MyProjectPresentation {
+  lifecycle: "submitted" | "draft" | "program" | "published";
+  statusLabel: string;
+  role: "leader" | "participant";
+  roleLabel: "Лидер" | "Участник";
+  accessLabel: "можно редактировать" | "только просмотр";
+  canEdit: boolean;
+  actionLabel: "Продолжить" | "Редактировать" | "Открыть";
+  actionRoute: string;
+  actionQueryParams: { editingStep: "main" } | null;
 }
 
 /**
@@ -89,15 +95,17 @@ export class InfoCardComponent {
   });
 
   /**
-   * Только презентация «Моего проекта»: сдача важнее draft, draft важнее связи с программой.
-   * Использует готовый list-контракт, не меняя lifecycle, права и маршрут проекта.
+   * Разделяет lifecycle и доступ пользователя в представлении «Моего проекта».
+   * Сдача важнее draft и всегда ведёт в просмотр, включая лидера. Пока профиль
+   * не загружен, совпадение отсутствующих ID не даёт редактирование. Это только
+   * отображение готовых данных: действующие guard и серверные права не меняются.
    */
-  protected readonly myProjectStatus = computed<MyProjectCardStatus | null>(() => {
+  protected readonly myProjectPresentation = computed<MyProjectPresentation | null>(() => {
     if (this.type() !== "projects" || this.appereance() !== "my") return null;
     const project: Project | undefined = this.info();
     if (!project) return null;
 
-    const key =
+    const lifecycle =
       project.partnerProgram?.isSubmitted === true
         ? "submitted"
         : project.draft === true
@@ -106,12 +114,27 @@ export class InfoCardComponent {
             ? "program"
             : "published";
     const labels = {
-      submitted: "Сдан на проверку",
+      submitted: "Сдан в программу",
       draft: "Черновик",
       program: "В программе",
       published: "Опубликован",
     };
-    return { key, label: labels[key], action: key === "draft" ? "Продолжить" : "Открыть" };
+    const userId = this.loggedUserId();
+    const isLeader = userId != null && project.leader === userId;
+    const canEdit = isLeader && lifecycle !== "submitted";
+    return {
+      lifecycle,
+      statusLabel: labels[lifecycle],
+      role: isLeader ? "leader" : "participant",
+      roleLabel: isLeader ? "Лидер" : "Участник",
+      accessLabel: canEdit ? "можно редактировать" : "только просмотр",
+      canEdit,
+      actionLabel: canEdit ? (lifecycle === "draft" ? "Продолжить" : "Редактировать") : "Открыть",
+      actionRoute: canEdit
+        ? AppRoutes.projects.edit(project.id)
+        : AppRoutes.projects.detail(project.id),
+      actionQueryParams: canEdit ? { editingStep: "main" } : null,
+    };
   });
 
   readonly onAcceptingInvite = output<number>();

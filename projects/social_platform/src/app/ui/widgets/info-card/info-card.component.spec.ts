@@ -40,6 +40,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     fixture.componentRef.setInput("info", projectCardFixture());
     fixture.componentRef.setInput("type", "projects");
     fixture.componentRef.setInput("appereance", "my");
+    fixture.componentRef.setInput("loggedUserId", 7);
   });
 
   afterEach(async () => {
@@ -49,41 +50,48 @@ describe("InfoCardComponent: статусы моих проектов", () => {
   });
   const card = (): HTMLElement => fixture.nativeElement.querySelector(".card__body");
 
-  it.each(myProjectCardFixtures)("$key: один статус, CTA и прежний маршрут", async item => {
-    const original = JSON.stringify(item.project);
-    fixture.componentRef.setInput("info", item.project);
-    fixture.detectChanges();
-    expect(card().querySelectorAll(".card__status")).toHaveLength(1);
-    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
-    expect(card().querySelector("button")?.textContent?.trim()).toBe(item.action);
-    expect(card().querySelector(".card__name")?.textContent).toBe(item.project.name);
-    expect(
-      card().querySelector(
-        ".card__info--vacancies, .card__info--collaborators, .card__info--program-icon, .card__industry, .card__info--project-partner",
-      ),
-    ).toBeNull();
-    expect(fixture.debugElement.queryAll(By.directive(IconComponent))).toHaveLength(0);
-    const avatar = fixture.debugElement.query(By.directive(AvatarComponent)).componentInstance;
-    expect(avatar.size()).toBe(70);
-    expect(avatar.url()).toBe(item.project.imageAddress);
-    expect(fixture.debugElement.query(By.directive(ButtonComponent)).componentInstance.size()).toBe(
-      "extra-small",
-    );
+  it.each(myProjectCardFixtures)(
+    "$key / $role: статус, доступ и единственный корректный маршрут",
+    async item => {
+      const original = JSON.stringify(item.project);
+      fixture.componentRef.setInput("info", item.project);
+      fixture.detectChanges();
+      expect(card().querySelectorAll(".card__status")).toHaveLength(1);
+      expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
+      expect(card().querySelector("button")?.textContent?.trim()).toBe(item.action);
+      expect(card().querySelector(".card__name")?.textContent).toBe(item.project.name);
+      expect(
+        card().querySelector(
+          ".card__info--vacancies, .card__info--collaborators, .card__info--program-icon, .card__industry, .card__info--project-partner",
+        ),
+      ).toBeNull();
+      expect(fixture.debugElement.queryAll(By.directive(IconComponent))).toHaveLength(0);
+      const avatar = fixture.debugElement.query(By.directive(AvatarComponent)).componentInstance;
+      expect(avatar.size()).toBe(70);
+      expect(avatar.url()).toBe(item.project.imageAddress);
+      expect(
+        fixture.debugElement.query(By.directive(ButtonComponent)).componentInstance.size(),
+      ).toBe("big");
 
-    const router = TestBed.inject(Router);
-    const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
-    expect(router.serializeUrl(link.urlTree!)).toBe(AppRoutes.projects.detail(item.project.id));
-    const navigate = vi.spyOn(router, "navigateByUrl").mockResolvedValue(true);
-    card().querySelector("button")!.click();
-    await fixture.whenStable();
-    expect(navigate).toHaveBeenCalled();
-    expect(router.serializeUrl(navigate.mock.calls[0][0] as UrlTree)).toBe(
-      AppRoutes.projects.detail(item.project.id),
-    );
-    expect(JSON.stringify(item.project)).toBe(original);
-    expect(addSubscription.execute).not.toHaveBeenCalled();
-    expect(deleteSubscription.execute).not.toHaveBeenCalled();
-  });
+      const router = TestBed.inject(Router);
+      const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
+      expect(card().querySelector(".card__role")?.textContent).toBe(item.role);
+      expect(card().querySelector(".card__access-label")?.textContent).toBe(item.access);
+      const expectedRoute = item.canEdit
+        ? AppRoutes.projects.edit(item.project.id) + "?editingStep=main"
+        : AppRoutes.projects.detail(item.project.id);
+      expect(router.serializeUrl(link.urlTree!)).toBe(expectedRoute);
+      expect(link.queryParams).toEqual(item.canEdit ? { editingStep: "main" } : null);
+      const navigate = vi.spyOn(router, "navigateByUrl").mockResolvedValue(true);
+      card().querySelector("button")!.click();
+      await fixture.whenStable();
+      expect(navigate).toHaveBeenCalledOnce();
+      expect(router.serializeUrl(navigate.mock.calls[0][0] as UrlTree)).toBe(expectedRoute);
+      expect(JSON.stringify(item.project)).toBe(original);
+      expect(addSubscription.execute).not.toHaveBeenCalled();
+      expect(deleteSubscription.execute).not.toHaveBeenCalled();
+    },
+  );
 
   it("сдача имеет приоритет над draft и открывает проект", () => {
     fixture.componentRef.setInput(
@@ -91,8 +99,58 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       projectCardFixture({ draft: true, partnerProgram: projectCardProgram(true) }),
     );
     fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent).toBe("Сдан на проверку");
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Сдан в программу");
     expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    expect(card().querySelector(".card__role")?.textContent).toBe("Лидер");
+    expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
+    const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
+    expect(link.queryParams).toBeNull();
+    expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(AppRoutes.projects.detail(101));
+  });
+
+  it.each(myProjectCardFixtures.slice(0, 4))("участник: $key никогда не ведёт в редактор", item => {
+    fixture.componentRef.setInput("info", item.project);
+    fixture.componentRef.setInput("loggedUserId", 99);
+    fixture.detectChanges();
+    expect(card().querySelector(".card__role")?.textContent).toBe("Участник");
+    expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
+    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
+    expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(
+      AppRoutes.projects.detail(item.project.id),
+    );
+    expect(link.queryParams).toBeNull();
+  });
+
+  it("отсутствующие ID безопасны, а загрузка/смена пользователя обновляет доступ", () => {
+    fixture.componentRef.setInput("info", projectCardFixture({ leader: undefined }));
+    fixture.componentRef.setInput("loggedUserId", undefined);
+    fixture.detectChanges();
+    expect(card().querySelector(".card__role")?.textContent).toBe("Участник");
+    expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
+    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    fixture.componentRef.setInput("info", projectCardFixture({ leader: 7 }));
+    fixture.detectChanges();
+    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    fixture.componentRef.setInput("loggedUserId", 7);
+    fixture.detectChanges();
+    expect(card().querySelector(".card__role")?.textContent).toBe("Лидер");
+    expect(card().querySelector("button")?.textContent?.trim()).toBe("Редактировать");
+    fixture.componentRef.setInput("loggedUserId", undefined);
+    fixture.detectChanges();
+    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+  });
+
+  it("canSubmit не подменяет факт сдачи", () => {
+    fixture.componentRef.setInput(
+      "info",
+      projectCardFixture({
+        partnerProgram: { ...projectCardProgram(false), canSubmit: false },
+      }),
+    );
+    fixture.detectChanges();
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("В программе");
+    expect(card().querySelector("button")?.textContent?.trim()).toBe("Редактировать");
   });
 
   it("draft имеет приоритет над обычной связью с программой", () => {
@@ -101,7 +159,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       projectCardFixture({ draft: true, partnerProgram: projectCardProgram(false) }),
     );
     fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent).toBe("Черновик");
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Черновик");
     expect(card().querySelector("button")?.textContent?.trim()).toBe("Продолжить");
     fixture.detectChanges();
     expect(card().querySelector(".card__info--project-partner")).toBeNull();
@@ -111,16 +169,16 @@ describe("InfoCardComponent: статусы моих проектов", () => {
   it("отсутствующая связь не превращает опубликованный проект в программный", () => {
     fixture.componentRef.setInput("info", projectCardFixture({ partnerProgram: undefined }));
     fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent).toBe("Опубликован");
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Опубликован");
   });
 
   it("обновляет статус при замене данных и убирает его при смене appearance", () => {
     fixture.componentRef.setInput("info", myProjectCardFixtures[0].project);
     fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent).toBe("Черновик");
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Черновик");
     fixture.componentRef.setInput("info", myProjectCardFixtures[3].project);
     fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent).toBe("Сдан на проверку");
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Сдан в программу");
     fixture.componentRef.setInput("appereance", "subs");
     fixture.detectChanges();
     expect(card().querySelector(".card__status")).toBeNull();
@@ -148,6 +206,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       fixture.componentRef.setInput("appereance", appearance);
       fixture.detectChanges();
       expect(card().querySelector(".card__status")).toBeNull();
+      expect(card().querySelector(".card__access")).toBeNull();
       expect(fixture.nativeElement.querySelector(".card--project")).not.toBeNull();
       expect(card().querySelector(".card__name")?.textContent).toBe(project.name);
       expect(card().querySelector(".card__context--industry")?.textContent?.trim()).toBe(
@@ -231,6 +290,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     fixture.componentRef.setInput("type", type);
     fixture.detectChanges();
     expect(card().querySelector(".card__status")).toBeNull();
+    expect(card().querySelector(".card__access")).toBeNull();
     expect(fixture.nativeElement.querySelector(".card--project")).toBeNull();
   });
 

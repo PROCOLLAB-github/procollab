@@ -22,6 +22,7 @@ export class DashboardItemComponent {
   readonly iconName = input.required<string>();
   readonly sectionName = input.required<string>();
   readonly profileProjSubsIds = input<number[]>();
+  readonly loggedUserId = input<number>();
 
   readonly addProjectClick = output<void>();
 

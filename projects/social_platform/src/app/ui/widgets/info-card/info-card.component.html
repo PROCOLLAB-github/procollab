@@ -3,6 +3,7 @@
 <div
   class="card"
   [class.card--project]="isProjectCard()"
+  [class.card--my-project]="myProjectPresentation() !== null"
   [class.card__empty]="appereance() === 'empty'"
   (click)="
     appereance() === 'empty' && section() === 'projects'
@@ -35,8 +36,10 @@
     <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
 
     <div class="card__content" [class.card__content--empty]="appereance() === 'empty'">
-      @if (myProjectStatus(); as status) {
-        <p [class]="'card__context card__status card__status--' + status.key">{{ status.label }}</p>
+      @if (myProjectPresentation(); as presentation) {
+        <p [class]="'card__context card__status card__status--' + presentation.lifecycle">
+          {{ presentation.statusLabel }}
+        </p>
       } @else if (projectIndustry(); as industry) {
         <p class="card__context card__context--industry" [title]="industry" tabindex="0">
           <span>{{ industry }}</span>
@@ -62,6 +65,12 @@
             <i appIcon icon="main" appSquare="22" class="card__empty--icon"></i>
           }
         } @else {
+          @if (myProjectPresentation(); as presentation) {
+            <div class="card__access">
+              <p class="card__role">{{ presentation.roleLabel }}</p>
+              <p class="card__access-label">{{ presentation.accessLabel }}</p>
+            </div>
+          }
           <ng-container *ngTemplateOutlet="cardActions"></ng-container>
         }
       </div>
@@ -149,12 +158,15 @@
   <div class="card__info">
     @if (isProjectCard()) {
       <app-button
-        [routerLink]="AppRoutes.projects.detail(info()?.id)"
+        [routerLink]="myProjectPresentation()?.actionRoute ?? AppRoutes.projects.detail(info()?.id)"
+        [queryParams]="myProjectPresentation()?.actionQueryParams ?? null"
         customTypographyClass="text-body-6"
-        size="extra-small"
+        [size]="myProjectPresentation() ? 'big' : 'extra-small'"
         class="card__info--text"
       >
-        <span class="card__project-action-label">{{ myProjectStatus()?.action ?? "Открыть" }}</span>
+        <span class="card__project-action-label">{{
+          myProjectPresentation()?.actionLabel ?? "Открыть"
+        }}</span>
       </app-button>
     } @else if (type() === "members") {
       @if (leaderId() === loggedUserId() && loggedUserId() !== info()?.userId) {
