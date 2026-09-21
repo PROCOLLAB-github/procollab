@@ -104,8 +104,6 @@ describe("CamelcaseInterceptor", () => {
       assignments: [
         {
           assignment_id: 17,
-          criteria_total: 5,
-          criteria_scored: 2,
           waiting_seconds: 108000,
           expert: { full_name: "Иван Иванов", user_id: 123 },
           scores: [{ criterion_id: 1, min_value: 0, is_scored: true }],
@@ -129,8 +127,6 @@ describe("CamelcaseInterceptor", () => {
           assignments: [
             {
               assignmentId: 17,
-              criteriaTotal: 5,
-              criteriaScored: 2,
               waitingSeconds: 108000,
               expert: { fullName: "Иван Иванов", userId: 123 },
               scores: [{ criterionId: 1, minValue: 0, isScored: true }],

@@ -348,9 +348,8 @@ DI-биндинги (`infrastructure/di/program/`):
 - `GET /programs/:programId/project-analytics/assignments/?scope=all|completed|pending` — массив назначений.
 - `GET /programs/:programId/project-analytics/assignments/:assignmentId/scores/` — поля назначения и все критерии в `scores`.
 
-Backend API в этом PR не изменялся. Данные проходят через существующий
-`CamelcaseInterceptor`: `assignment_id → assignmentId`, `criteria_total → criteriaTotal`,
-`criteria_scored → criteriaScored`, `waiting_seconds → waitingSeconds`,
+Данные проходят через существующий
+`CamelcaseInterceptor`: `assignment_id → assignmentId`, `waiting_seconds → waitingSeconds`,
 `delayed_experts → delayedExperts`. Важно: установленный camelcase-keys преобразует
 `overdue_24h → overdue24H` и `overdue_48h → overdue48H` (заглавная H).
 Ручного преобразования SLA-полей нет.
@@ -375,8 +374,23 @@ Use cases возвращают `Result` с `ProgramAnalyticsError`; сырой �
 - `in_progress` — «В процессе»;
 - `completed` — «Выполнено».
 
-Прогресс — например, «2 из 5 критериев»; при отсутствии критериев — «Нет критериев»,
-для несданного проекта — «—». В open-режиме показываются реальные назначения,
+Таблица назначений содержит только «Эксперт», «Проект», «Статус», «Ожидание».
+Количество оценённых критериев остаётся внутренней деталью расчёта статуса
+на backend. Angular не использует эти счётчики ни в списке, ни в детализации;
+массив `scores` с критериями и фактическими оценками сохраняется.
+«Завершили: X из Y» в разделе «Работы ожидают оценивания» по-прежнему считает
+завершённые назначения экспертов, а не критерии одного назначения.
+
+Все три scope используют один `assignmentTable`. Локальные модификаторы
+`analytics-drilldown-body--assignments` и `analytics-drilldown__table--assignments`
+применяются только при `view === "assignments"`. Backlog, scores detail и таблицы
+внимания сохраняют прежнее оформление; shared `app-modal` не меняется.
+Desktop-окно имеет ширину `min(980px, calc(100vw - 32px))`, padding 28 px и колонки
+27/31/29/13%. На экранах уже 1000 px назначения представлены карточками, статус
+и действие находятся на отдельных строках. Escape, focus trap и возврат фокуса
+используют прежний lifecycle.
+
+В open-режиме показываются реальные назначения,
 но frontend не синтезирует задержки экспертов. В distributed-режиме
 «Частично оценено» означает, что хотя бы один назначенный эксперт полностью оценил
 проект, но не все назначенные эксперты завершили оценивание.
@@ -435,14 +449,15 @@ bottom-up destroy Angular: дочерний modal может detach до cleanup
 проверяется DestroyRef владельца view, без изменения shared primitive.
 Таймеров, polling, MutationObserver и document-global Escape handler нет.
 
-Desktop: таблица внутри модалки шириной до 880px. Mobile/tablet: stacked cards,
+Desktop: назначения — таблица в модалке шириной до 980px; для остальных view
+сохранено прежнее оформление. Mobile/tablet: stacked cards,
 перенос длинных имён и названий, ограничение высоты с вертикальным скроллом.
 Сохранены Mont, токены и существующие zero states аналитики.
 
 ### Проверка
 
 Regression tests покрывают adapter/repository/use cases/facade/interceptor,
-scope/status/progress, nullable ожидание, критерии, задержки, смену программы,
+scope/status, отсутствие прогресса, nullable ожидание, критерии, задержки, смену программы,
 отмену запросов и настоящий CDK Overlay lifecycle. Focus tests не подменяют
 attachment событием openChange и не добавляют ручной detectChanges после клика.
 

@@ -10,6 +10,37 @@
   overflow-y: auto;
 }
 
+// Тот же шаблон используется в backlog: оформление меняется только у трёх списков назначений.
+.modal__body.analytics-drilldown-body.analytics-drilldown-body--assignments {
+  width: min(980px, calc(100vw - 32px));
+  padding: 16px;
+
+  @include responsive.apply-desktop {
+    padding: 28px;
+  }
+
+  .analytics-drilldown__header {
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: 24px;
+      line-height: 30px;
+    }
+  }
+
+  .analytics-drilldown__close {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    line-height: 1;
+
+    &:hover {
+      background: var(--light-gray);
+    }
+  }
+}
+
 .analytics-drilldown {
   width: 100%;
   min-width: 0;
@@ -310,6 +341,116 @@
     @include responsive.apply-desktop {
       th:first-child {
         width: 18%;
+      }
+    }
+  }
+
+  &__table--assignments {
+    tr {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    td {
+      padding: 0;
+      line-height: 22px;
+    }
+
+    td::before {
+      margin-bottom: 4px;
+    }
+
+    .analytics-drilldown__identity {
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .analytics-drilldown__assignment-status {
+      display: flex;
+      flex-flow: column wrap;
+      gap: 12px 14px;
+      align-items: flex-start;
+    }
+
+    .analytics-drilldown__badge {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 8px;
+
+      &::before {
+        flex: 0 0 6px;
+        width: 6px;
+        height: 6px;
+        content: "";
+        background: currentcolor;
+        border-radius: 50%;
+      }
+    }
+
+    .analytics-drilldown__action {
+      padding: 4px 0;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 20px;
+    }
+
+    @include responsive.apply-desktop {
+      border-spacing: 0;
+      border-collapse: separate;
+
+      .analytics-drilldown__assignment-status {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      tr {
+        display: table-row;
+        height: 72px;
+        padding: 0;
+      }
+
+      th,
+      td {
+        padding: 16px 12px;
+        vertical-align: middle;
+      }
+
+      thead tr {
+        height: auto;
+      }
+
+      th {
+        padding-block: 13px;
+        color: var(--dark-grey);
+        background: var(--light-gray);
+        border-bottom: 0;
+
+        &:first-child {
+          width: 27%;
+          border-radius: 8px 0 0 8px;
+        }
+
+        &:nth-child(2) {
+          width: 31%;
+        }
+
+        &:nth-child(3) {
+          width: 29%;
+        }
+
+        &:last-child {
+          width: 13%;
+          border-radius: 0 8px 8px 0;
+        }
+      }
+
+      th:nth-child(3),
+      td:nth-child(3) {
+        padding-inline: 8px;
       }
     }
   }

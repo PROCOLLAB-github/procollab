@@ -17,6 +17,11 @@ import {
   scoreDetail,
 } from "@domain/program/program-analytics-assignment.fixture";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import {
+  participantsPage,
+  projectsPage,
+  notSubmittedPage,
+} from "@domain/program/program-analytics-attention.fixture";
 import { firstValueFrom, of, Subject } from "rxjs";
 import { AnalyticsDrilldownComponent } from "./analytics-drilldown.component";
 
@@ -40,14 +45,17 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
       imports: [AnalyticsDrilldownComponent],
       providers: [
         provideRouter([]),
-        { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: { execute: vi.fn() } },
+        {
+          provide: GetProgramManagerProjectsNotSubmittedUseCase,
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(notSubmittedPage()))) },
+        },
         {
           provide: GetProgramManagerParticipantsWithoutTeamUseCase,
-          useValue: { execute: vi.fn() },
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(participantsPage()))) },
         },
         {
           provide: GetProgramManagerProjectsAwaitingEvaluationUseCase,
-          useValue: { execute: vi.fn() },
+          useValue: { execute: vi.fn().mockReturnValue(of(ok(projectsPage()))) },
         },
         { provide: GetProgramManagerAssignmentsUseCase, useValue: assignments },
         { provide: GetProgramManagerAssignmentScoresUseCase, useValue: scores },
@@ -78,6 +86,74 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await attached;
     await fixture.whenStable();
   }
+
+  it.each([
+    ["all", "Все назначения экспертов"],
+    ["completed", "Выполненные назначения"],
+    ["pending", "Ожидают оценки"],
+  ] as const)("%s: единое оформление списка и правильный заголовок", async (scope, title) => {
+    await open(scope);
+    expect(dialog().querySelector("h2")?.textContent?.trim()).toBe(title);
+    expect(assignments.execute).toHaveBeenCalledWith(12, scope);
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).not.toBeNull();
+    expect(dialog().querySelectorAll(".analytics-drilldown__table--assignments")).toHaveLength(1);
+    expect(dialog().querySelectorAll('th[scope="col"]')).toHaveLength(4);
+  });
+
+  it.each([
+    "participants-without-team",
+    "projects-awaiting-evaluation",
+    "projects-not-submitted",
+  ] as const)("%s: таблица и окно не получают оформление назначений", async view => {
+    fixture.componentRef.setInput("notSubmittedApplicable", true);
+    await fixture.whenStable();
+    const attached = firstValueFrom(modal.overlayRef!.attachments());
+    fixture.componentInstance.openAttention(view, trigger);
+    await attached;
+    await fixture.whenStable();
+    expect(dialog().querySelector("table")).not.toBeNull();
+    expect(dialog().querySelector(".analytics-drilldown__table--assignments")).toBeNull();
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
+  });
+
+  it.each([
+    ["pending", "not_ready", null, "Проект не сдан", "Проект не сдан"],
+    ["all", "pending", 108000, "Не начал оценивание", "1 д 6 ч"],
+    ["pending", "in_progress", 187200, "В процессе", "2 д 4 ч"],
+    ["completed", "completed", null, "Выполнено", "—"],
+  ] as const)(
+    "%s / %s: четыре колонки без прогресса сохраняют статус, ожидание и действие",
+    async (scope, status, waitingSeconds, statusText, waitingText) => {
+      assignments.execute.mockReturnValue(of(ok([assignment({ status, waitingSeconds })])));
+      await open(scope);
+      const labels = ["Эксперт", "Проект", "Статус", "Ожидание"];
+      expect(
+        Array.from(dialog().querySelectorAll("thead th"), cell => cell.textContent?.trim()),
+      ).toEqual(labels);
+      const row = dialog().querySelector('[data-assignment-id="17"]')!;
+      expect(
+        Array.from(row.querySelectorAll("td"), cell => cell.getAttribute("data-label")),
+      ).toEqual(labels);
+      expect(dialog().textContent).not.toContain("Прогресс");
+      expect(dialog().querySelector('[data-label="Прогресс"]')).toBeNull();
+      expect(row.querySelector('[data-label="Эксперт"]')?.textContent).toContain("Иван Иванов");
+      expect(row.querySelector('[data-label="Проект"]')?.textContent).toContain("Проект А");
+      expect(row.querySelector('[data-label="Статус"]')?.textContent).toContain(statusText);
+      expect(row.querySelector('[data-label="Ожидание"]')?.textContent?.trim()).toBe(waitingText);
+      expect(!!row.querySelector('button[aria-label^="Посмотреть оценку"]')).toBe(
+        status === "completed",
+      );
+      const statusCell = row.querySelector(".analytics-drilldown__assignment-status")!;
+      expect(statusCell.querySelector(`.analytics-drilldown__badge--${status}`)?.textContent).toBe(
+        statusText,
+      );
+      if (status === "completed") {
+        expect(statusCell.querySelector("button")?.getAttribute("aria-label")).toBe(
+          "Посмотреть оценку: Проект А, Иван Иванов",
+        );
+      }
+    },
+  );
 
   it("initial focus только после attachment; один dialog и активный trap", async () => {
     expect(assignments.execute).not.toHaveBeenCalled();
@@ -146,13 +222,23 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
     button("Посмотреть оценку").click();
     await fixture.whenStable();
+    expect(scores.execute).toHaveBeenCalledWith(12, 17);
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
     expect(dialog().textContent).toContain("Оценка проекта");
-    for (const text of ["8", "Хорошая проработка", "Да", "Не оценено"])
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
+    for (const text of [
+      "Новизна",
+      "Оцените новизну решения",
+      "8",
+      "Хорошая проработка",
+      "Да",
+      "Не оценено",
+    ])
       expect(dialog().textContent).toContain(text);
     button("Назад").click();
     await fixture.whenStable();
     expect(dialog().textContent).toContain("Выполненные назначения");
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).not.toBeNull();
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
     expect(fixture.debugElement.queryAll(By.directive(CdkTrapFocus))).toHaveLength(1);
     expect(fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus)).toBe(
@@ -168,7 +254,6 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
           assignment({
             assignmentId: 1,
             status: "pending",
-            criteriaScored: 0,
             waitingSeconds: 187200,
           }),
           assignment({ assignmentId: 2, status: "not_ready" }),
@@ -192,6 +277,10 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await fixture.whenStable();
     expect(dialog().querySelector('[data-assignment-id="3"]')).toBeNull();
     expect(dialog().textContent).toContain("Ещё не сданы");
+    expect(dialog().querySelector(".analytics-drilldown__table--assignments")).toBeNull();
+    expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
+    expect(dialog().querySelector('[data-label="Прогресс"]')).toBeNull();
+    expect(dialog().textContent).not.toContain("Прогресс");
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
     button("Назад").click();
     await fixture.whenStable();

@@ -123,14 +123,15 @@ export interface ProgramAnalyticsAssignmentProject {
   name: string;
 }
 
-/** Ожидание вычисляет backend на момент запроса. null не означает нулевое ожидание. */
+/**
+ * Статус вычисляет backend без публикации внутренних счётчиков критериев.
+ * Ожидание фиксируется на момент запроса; null не означает нулевое ожидание.
+ */
 export interface ProgramAnalyticsAssignment {
   assignmentId: number;
   expert: ProgramAnalyticsAssignmentExpert;
   project: ProgramAnalyticsAssignmentProject;
   status: ProgramAnalyticsAssignmentStatus;
-  criteriaTotal: number;
-  criteriaScored: number;
   assignedAt: string;
   projectSubmitted: boolean;
   projectSubmittedAt: string | null;
