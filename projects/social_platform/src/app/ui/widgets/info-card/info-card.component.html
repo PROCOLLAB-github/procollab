@@ -37,7 +37,7 @@
       <!-- Одна ссылка объединяет карточку и CTA; подписка остаётся отдельной кнопкой. -->
       <a
         class="card__project-link"
-        [routerLink]="myProjectPresentation()?.actionRoute ?? AppRoutes.projects.detail(info()?.id)"
+        [routerLink]="AppRoutes.projects.detail(info()?.id)"
         [attr.aria-label]="'Открыть проект «' + info()?.name + '»'"
         [attr.title]="projectIndustry()"
       >
@@ -175,9 +175,7 @@
     @if (isProjectCard()) {
       <span class="card__info--text">
         <span class="card__project-action text-body-12 text-body-6">
-          <span class="card__project-action-label">{{
-            myProjectPresentation()?.actionLabel ?? "Открыть"
-          }}</span>
+          <span class="card__project-action-label">Открыть</span>
         </span>
       </span>
     } @else if (type() === "members") {

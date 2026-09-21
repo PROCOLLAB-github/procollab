@@ -28,13 +28,11 @@ import { Project } from "@domain/project/project.model";
 
 interface MyProjectPresentation {
   lifecycle: "submitted" | "draft" | "program" | "published";
-  statusLabel: string;
+  statusLabel: "Черновик" | "Опубликован" | "В программе" | "Сдан в программу";
   role: "leader" | "participant";
   roleLabel: "Лидер" | "Участник";
   accessLabel: "можно редактировать" | "только просмотр";
   canEdit: boolean;
-  actionLabel: "Открыть";
-  actionRoute: string;
 }
 
 /**
@@ -94,33 +92,36 @@ export class InfoCardComponent {
   });
 
   /**
-   * Разделяет lifecycle и доступ пользователя в представлении «Моего проекта».
-   * Сдача важнее draft и отображается как «только просмотр», включая лидера. Пока профиль
-   * не загружен, совпадение отсутствующих ID не даёт редактирование. Это только
-   * отображение готовых данных: действующие guard и серверные права не меняются.
+   * Lifecycle зависит только от проекта: submitted > draft > program > published.
+   * Роль определяется отдельно по текущему профилю. Отсутствующие ID не делают
+   * пользователя лидером; после сдачи даже лидер видит «только просмотр».
+   * Единственный признак сдачи — isSubmitted: canSubmit описывает возможность
+   * действия, например открытый срок. Это представление готовых данных,
+   * а не изменение guard или серверных прав. CTA от этих значений не зависит.
    */
   protected readonly myProjectPresentation = computed<MyProjectPresentation | null>(() => {
     if (this.type() !== "projects" || this.appereance() !== "my") return null;
     const project: Project | undefined = this.info();
     if (!project) return null;
 
-    const lifecycle =
-      project.partnerProgram?.isSubmitted === true
-        ? "submitted"
-        : project.draft === true
-          ? "draft"
-          : project.partnerProgram != null
-            ? "program"
-            : "published";
-    const labels = {
-      submitted: "Сдан в программу",
-      draft: "Черновик",
-      program: "В программе",
-      published: "Опубликован",
-    };
+    const isSubmitted = project.partnerProgram?.isSubmitted === true;
+    const lifecycle = isSubmitted
+      ? "submitted"
+      : project.draft === true
+        ? "draft"
+        : project.partnerProgram != null
+          ? "program"
+          : "published";
+    const labels: Record<MyProjectPresentation["lifecycle"], MyProjectPresentation["statusLabel"]> =
+      {
+        submitted: "Сдан в программу",
+        draft: "Черновик",
+        program: "В программе",
+        published: "Опубликован",
+      };
     const userId = this.loggedUserId();
     const isLeader = userId != null && project.leader === userId;
-    const canEdit = isLeader && lifecycle !== "submitted";
+    const canEdit = isLeader && !isSubmitted;
     return {
       lifecycle,
       statusLabel: labels[lifecycle],
@@ -128,8 +129,6 @@ export class InfoCardComponent {
       roleLabel: isLeader ? "Лидер" : "Участник",
       accessLabel: canEdit ? "можно редактировать" : "только просмотр",
       canEdit,
-      actionLabel: "Открыть",
-      actionRoute: AppRoutes.projects.detail(project.id),
     };
   });
 
