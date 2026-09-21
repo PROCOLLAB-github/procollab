@@ -6,6 +6,7 @@ import { DashboardItemComponent } from "./dashboardItem/dashboardItem.component"
 import { ProjectsDashboardInfoService } from "@api/project/facades/dashboard/projects-dashboard-info.service";
 import { ProjectsDashboardUIInfoService } from "@api/project/facades/dashboard/ui/projects-dashboard-ui-info.service";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Дашборд проектов пользователя. */
 @Component({
@@ -26,6 +27,7 @@ export class DashboardProjectsComponent implements OnInit {
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
 
   protected readonly dashboardItems = this.projectsDashboardUIInfoService.dashboardItems;
+  protected readonly profile = inject(ProfileInfoService).profile;
   protected readonly profileProjSubsIds = this.programDetailListUIInfoService.profileProjSubsIds;
 
   ngOnInit(): void {

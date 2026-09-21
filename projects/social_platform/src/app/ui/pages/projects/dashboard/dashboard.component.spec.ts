@@ -18,6 +18,7 @@ import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/p
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-project-subscription.use-case";
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ok } from "@domain/shared/result.type";
 import { DashboardItem } from "@utils/dashboardItemBuilder";
 
@@ -50,6 +51,7 @@ describe("ProjectsDashboard: контексты карточек", () => {
     await TestBed.configureTestingModule({
       imports: [DashboardProjectsComponent, DashboardItemComponent],
       providers: [
+        { provide: ProfileInfoService, useValue: { profile: signal({ id: 7 }) } },
         provideRouter([]),
         {
           provide: IndustryRepositoryPort,
@@ -88,16 +90,24 @@ describe("ProjectsDashboard: контексты карточек", () => {
     for (const [index, section] of sections.entries()) {
       const appearance = ["my", "subs", "base"][index];
       const cards = section.queryAll(By.directive(InfoCardComponent));
-      expect(cards).toHaveLength(4);
+      expect(cards).toHaveLength(index === 0 ? myProjectCardFixtures.length : 4);
       cards.forEach((el, i) => {
         const c = el.componentInstance as InfoCardComponent;
         expect(c.appereance()).toBe(appearance);
         expect(c.profileId()).toBe(c.info().id);
+        expect(c.loggedUserId()).toBe(7);
         if (index === 0) {
-          expect(el.nativeElement.querySelector(".card__status").textContent).toBe(
+          expect(el.nativeElement.querySelector(".card__status").textContent.trim()).toBe(
             myProjectCardFixtures[i].label,
           );
           expect(el.nativeElement.querySelector(".card__context--industry")).toBeNull();
+          expect(el.nativeElement.closest("a")).toBeNull();
+          expect(el.nativeElement.querySelector(".card__role").textContent).toBe(
+            myProjectCardFixtures[i].role,
+          );
+          expect(el.nativeElement.querySelector(".card__access-label").textContent).toBe(
+            myProjectCardFixtures[i].access,
+          );
         } else {
           expect(c.isSubscribed).toBe(true);
           expect(el.nativeElement.querySelector(".card__status")).toBeNull();

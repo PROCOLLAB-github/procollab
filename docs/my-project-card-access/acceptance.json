@@ -1,0 +1,87 @@
+{
+  "base": "1b92bf0e8e05f1edd906195770ca8fa46ab8d95a",
+  "viewportParity": [
+    {
+      "width": 1440,
+      "equal": true,
+      "fixedAccessY": [117],
+      "fixedCtaY": [150],
+      "centered": true,
+      "accessAboveCta": true,
+      "noOuterLinks": true
+    },
+    {
+      "width": 768,
+      "equal": true,
+      "fixedAccessY": [117],
+      "fixedCtaY": [150],
+      "centered": true,
+      "accessAboveCta": true,
+      "noOuterLinks": true
+    },
+    {
+      "width": 390,
+      "equal": true,
+      "fixedAccessY": [117],
+      "fixedCtaY": [150],
+      "centered": true,
+      "accessAboveCta": true,
+      "noOuterLinks": true
+    },
+    {
+      "width": 320,
+      "equal": true,
+      "fixedAccessY": [117],
+      "fixedCtaY": [150],
+      "centered": true,
+      "accessAboveCta": true,
+      "noOuterLinks": true
+    }
+  ],
+  "all156x180": true,
+  "allAvatars70": true,
+  "noOverflow": true,
+  "noOverlap": true,
+  "longTitles": [
+    {
+      "nameLines": "",
+      "accessY": 117,
+      "ctaY": 150
+    },
+    {
+      "nameLines": "",
+      "accessY": 117,
+      "ctaY": 150
+    },
+    {
+      "nameLines": "",
+      "accessY": 117,
+      "ctaY": 150
+    },
+    {
+      "nameLines": "",
+      "accessY": 117,
+      "ctaY": 150
+    },
+    {
+      "nameLines": "",
+      "accessY": 117,
+      "ctaY": 150
+    },
+    {
+      "nameLines": "",
+      "accessY": 117,
+      "ctaY": 150
+    }
+  ],
+  "anonymousReadOnly": true,
+  "publicCtas": {
+    "subscriptions": ["Открыть", "Открыть", "Открыть", "Открыть"],
+    "all": ["Открыть", "Открыть", "Открыть", "Открыть"]
+  },
+  "navigation": {
+    "leaderKeyboard": "Тестовый маршрут: office/projects/:id/edit / 101 / main",
+    "participant": "Тестовый маршрут: office/projects/:id / 105 / "
+  },
+  "consoleErrors": []
+}

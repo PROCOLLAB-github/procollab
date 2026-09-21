@@ -9,8 +9,15 @@
   }
   <ul class="page__list" #listRoot>
     @for (project of projects(); track isInvites() ? project.inviteId : project.id) {
-      <a [routerLink]="AppRoutes.projects.detail(project.id)">
-        <li>
+      <li>
+        @if (isMy()) {
+          <ng-container *ngTemplateOutlet="projectCard"></ng-container>
+        } @else {
+          <a [routerLink]="AppRoutes.projects.detail(project.id)">
+            <ng-container *ngTemplateOutlet="projectCard"></ng-container>
+          </a>
+        }
+        <ng-template #projectCard>
           <app-info-card
             [info]="project"
             [type]="isInvites() ? 'invite' : 'projects'"
@@ -18,11 +25,12 @@
             [showSubscriptionAction]="isSubs() || isAll()"
             [isSubscribed]="profileProjSubsIds()!.includes(project.id)"
             [profileId]="project.id"
+            [loggedUserId]="profile()?.id"
             (onAcceptingInvite)="onAcceptInvite($event)"
             (onRejectingInvite)="onRejectInvite($event)"
           ></app-info-card>
-        </li>
-      </a>
+        </ng-template>
+      </li>
     }
   </ul>
 </section>
