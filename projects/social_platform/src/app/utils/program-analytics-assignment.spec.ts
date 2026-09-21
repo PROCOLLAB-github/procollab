@@ -1,8 +1,7 @@
 /** @format */
-import { assignment, criterion } from "@domain/program/program-analytics-assignment.fixture";
+import { criterion } from "@domain/program/program-analytics-assignment.fixture";
 import {
   assignmentCriterionValue,
-  assignmentProgress,
   assignmentStatusLabels,
   formatAssignmentWaiting,
 } from "./program-analytics-assignment";
@@ -23,16 +22,13 @@ describe("Assignment presentation", () => {
     expect(formatAssignmentWaiting(null, "not_ready")).toBe("Проект не сдан");
     expect(formatAssignmentWaiting(null, "completed")).toBe("—");
   });
-  it("отображает статусы и прогресс без расчёта статуса на клиенте", () => {
+  it("отображает серверные статусы без расчёта на клиенте", () => {
     expect(Object.values(assignmentStatusLabels)).toEqual([
       "Проект не сдан",
       "Не начал оценивание",
       "В процессе",
       "Выполнено",
     ]);
-    expect(assignmentProgress(assignment({ criteriaScored: 2 }))).toBe("2 из 5 критериев");
-    expect(assignmentProgress(assignment({ criteriaTotal: 0 }))).toBe("Нет критериев");
-    expect(assignmentProgress(assignment({ status: "not_ready" }))).toBe("—");
   });
   it("различает numeric, bool, text, unscored и сохранённое пустое значение", () => {
     expect(assignmentCriterionValue(criterion({ value: "0" }))).toBe("0");
