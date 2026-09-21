@@ -3,6 +3,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   Input,
@@ -23,6 +24,13 @@ import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-projec
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { Project } from "@domain/project/project.model";
+
+interface MyProjectCardStatus {
+  key: "submitted" | "draft" | "program" | "published";
+  label: string;
+  action: "Продолжить" | "Открыть";
+}
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -65,6 +73,32 @@ export class InfoCardComponent {
   readonly leaderId = input<number>();
   readonly loggedUserId = input<number>();
 
+  /**
+   * Только презентация «Моего проекта»: сдача важнее draft, draft важнее связи с программой.
+   * Использует готовый list-контракт, не меняя lifecycle, права и маршрут проекта.
+   */
+  protected readonly myProjectStatus = computed<MyProjectCardStatus | null>(() => {
+    if (this.type() !== "projects" || this.appereance() !== "my") return null;
+    const project: Project | undefined = this.info();
+    if (!project) return null;
+
+    const key =
+      project.partnerProgram?.isSubmitted === true
+        ? "submitted"
+        : project.draft === true
+          ? "draft"
+          : project.partnerProgram != null
+            ? "program"
+            : "published";
+    const labels = {
+      submitted: "Сдан на проверку",
+      draft: "Черновик",
+      program: "В программе",
+      published: "Опубликован",
+    };
+    return { key, label: labels[key], action: key === "draft" ? "Продолжить" : "Открыть" };
+  });
+
   readonly onAcceptingInvite = output<number>();
   readonly onRejectingInvite = output<number>();
   readonly onCreate = output();
@@ -75,20 +109,23 @@ export class InfoCardComponent {
   inviteErrorModal = false;
   haveBadge = this.calculateHaveBadge();
 
+  // Подписки и витрина сохраняют прежние подсказки; у «Моих проектов» их нет.
   programProjectHovered = false;
   iconHovered = false;
-  draftProjectHovered = false;
 
   removeCollaboratorFromProject(userId: number): void {
     this.onRemoveCollaborator.emit(userId);
   }
 
   /**
-   * Определяет, нужно ли показывать информацию о проекте
+   * Сохраняет прежние мини-показатели витрины; «Мои проекты» используют статус вместо них.
    */
   shouldShowProjectInfo(): boolean {
     return (
-      this.type() === "projects" && this.appereance() !== "subs" && this.appereance() !== "empty"
+      this.type() === "projects" &&
+      this.appereance() !== "my" &&
+      this.appereance() !== "subs" &&
+      this.appereance() !== "empty"
     );
   }
 

@@ -2,6 +2,7 @@
 
 <div
   class="card"
+  [class.card--my-project]="myProjectStatus() !== null"
   [class.card__empty]="appereance() === 'empty'"
   (click)="
     appereance() === 'empty' && section() === 'projects'
@@ -40,6 +41,9 @@
     <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
 
     <div class="card__content" [class.card__content--empty]="appereance() === 'empty'">
+      @if (myProjectStatus(); as status) {
+        <p [class]="'card__status card__status--' + status.key">{{ status.label }}</p>
+      }
       <div class="card__head">
         <div>
           @if (appereance() === "empty") {
@@ -86,7 +90,9 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (type() === "projects" || type() === "invite") {
+  @if (myProjectStatus()) {
+    <p class="card__name">{{ info().name }}</p>
+  } @else if (type() === "projects" || type() === "invite") {
     @if (info().name) {
       <p class="text-body-12 card__name">{{ info().name | truncate: 12 }}</p>
     }
@@ -116,7 +122,7 @@
   <div
     class="card__description"
     [class.card__description--project]="type() === 'projects'"
-    [style.max-height]="type() === 'members' ? '50px' : '24px'"
+    [style.max-height]="myProjectStatus() ? '26px' : type() === 'members' ? '50px' : '24px'"
     [class.invite-description]="type() === 'invite'"
   >
     @if (type() === "invite") {
@@ -143,7 +149,16 @@
 
 <ng-template #cardActions>
   <div class="card__info">
-    @if (type() === "projects") {
+    @if (myProjectStatus(); as status) {
+      <app-button
+        [routerLink]="AppRoutes.projects.detail(info()?.id)"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        class="card__info--text"
+      >
+        <span class="card__my-project-action-label">{{ status.action }}</span>
+      </app-button>
+    } @else if (type() === "projects") {
       <div class="card__info--program">
         @if (info().partnerProgram || info().draft) {
           @if (info().partnerProgram && info().draft) {

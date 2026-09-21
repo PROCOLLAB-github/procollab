@@ -1,0 +1,586 @@
+{
+  "before": {
+    "cards": [
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 31.1875,
+          "top": 92.1875,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 53.796875,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 92.1875,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 53.796875,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 92.1875,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 53.796875,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 92.1875,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 53.796875,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 92.1875,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 53.796875,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 84.390625,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 46,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgba(0, 0, 0, 0)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": null,
+        "description": null,
+        "descriptionStyle": null,
+        "name": {
+          "height": 15.59375,
+          "top": 76,
+          "width": 139.1875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      }
+    ],
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 760,
+      "width": 1000
+    }
+  },
+  "after": {
+    "cards": [
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 152,
+          "width": 70
+        },
+        "description": {
+          "height": 26,
+          "top": 105,
+          "width": 130
+        },
+        "descriptionStyle": {
+          "clamp": "2",
+          "fontSize": "10px",
+          "lineHeight": "13px"
+        },
+        "name": {
+          "height": 30,
+          "top": 69,
+          "width": 130
+        },
+        "nameStyle": {
+          "clamp": "2",
+          "fontSize": "12px",
+          "lineHeight": "15px"
+        },
+        "status": {
+          "height": 20,
+          "top": 43,
+          "width": 71.890625
+        },
+        "statusText": "Черновик"
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 152,
+          "width": 70
+        },
+        "description": {
+          "height": 26,
+          "top": 105,
+          "width": 130
+        },
+        "descriptionStyle": {
+          "clamp": "2",
+          "fontSize": "10px",
+          "lineHeight": "13px"
+        },
+        "name": {
+          "height": 15,
+          "top": 69,
+          "width": 130
+        },
+        "nameStyle": {
+          "clamp": "2",
+          "fontSize": "12px",
+          "lineHeight": "15px"
+        },
+        "status": {
+          "height": 20,
+          "top": 43,
+          "width": 90.109375
+        },
+        "statusText": "Опубликован"
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 152,
+          "width": 70
+        },
+        "description": {
+          "height": 26,
+          "top": 105,
+          "width": 130
+        },
+        "descriptionStyle": {
+          "clamp": "2",
+          "fontSize": "10px",
+          "lineHeight": "13px"
+        },
+        "name": {
+          "height": 30,
+          "top": 69,
+          "width": 130
+        },
+        "nameStyle": {
+          "clamp": "2",
+          "fontSize": "12px",
+          "lineHeight": "15px"
+        },
+        "status": {
+          "height": 20,
+          "top": 43,
+          "width": 89.3125
+        },
+        "statusText": "В программе"
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 152,
+          "width": 70
+        },
+        "description": {
+          "height": 26,
+          "top": 105,
+          "width": 130
+        },
+        "descriptionStyle": {
+          "clamp": "2",
+          "fontSize": "10px",
+          "lineHeight": "13px"
+        },
+        "name": {
+          "height": 30,
+          "top": 69,
+          "width": 130
+        },
+        "nameStyle": {
+          "clamp": "2",
+          "fontSize": "12px",
+          "lineHeight": "15px"
+        },
+        "status": {
+          "height": 20,
+          "top": 43,
+          "width": 113.1875
+        },
+        "statusText": "Сдан на проверку"
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 92.1875,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 53.796875,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgb(255, 255, 255)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": {
+          "height": 13.796875,
+          "top": 153,
+          "width": 70
+        },
+        "description": {
+          "height": 23.390625,
+          "top": 84.390625,
+          "width": 100
+        },
+        "descriptionStyle": {
+          "clamp": "none",
+          "fontSize": "6px",
+          "lineHeight": "7.8px"
+        },
+        "name": {
+          "height": 15.59375,
+          "top": 46,
+          "width": 115.046875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      },
+      {
+        "avatar": {
+          "height": 70,
+          "top": -34,
+          "width": 70
+        },
+        "avatarTop": "-35px",
+        "background": "rgba(0, 0, 0, 0)",
+        "body": {
+          "height": 180,
+          "top": 0,
+          "width": 156
+        },
+        "button": null,
+        "description": null,
+        "descriptionStyle": null,
+        "name": {
+          "height": 15.59375,
+          "top": 76,
+          "width": 139.1875
+        },
+        "nameStyle": {
+          "clamp": "none",
+          "fontSize": "12px",
+          "lineHeight": "15.6px"
+        },
+        "status": null,
+        "statusText": null
+      }
+    ],
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 760,
+      "width": 1000
+    }
+  }
+}
