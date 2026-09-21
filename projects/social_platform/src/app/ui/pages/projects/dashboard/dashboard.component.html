@@ -7,7 +7,7 @@
       [title]="dashboardItem.title"
       [iconName]="dashboardItem.iconName"
       [arrayItems]="dashboardItem.arrayItems"
-      [profileProjSubsIds]="dashboardItem.sectionName === 'all' ? profileProjSubsIds() : []"
+      [profileProjSubsIds]="profileProjSubsIds()"
       (addProjectClick)="onAddProject()"
     ></app-dashboard-item>
   }

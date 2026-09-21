@@ -72,6 +72,21 @@ export class InfoCardComponent {
   readonly profileId = input<number>();
   readonly leaderId = input<number>();
   readonly loggedUserId = input<number>();
+  readonly showSubscriptionAction = input(false);
+
+  /** Общая геометрия применяется только к заполненным карточкам проектов. */
+  protected readonly isProjectCard = computed(
+    () => this.type() === "projects" && this.appereance() !== "empty",
+  );
+
+  /** Отрасль берётся из уже загруженного справочника; пустая плашка не занимает строку. */
+  protected readonly projectIndustry = computed(() => {
+    if (!this.isProjectCard() || this.appereance() === "my") return null;
+    const industryId = this.info()?.industry;
+    return industryId == null
+      ? null
+      : this.industryRepository.getOne(industryId)?.name?.trim() || null;
+  });
 
   /**
    * Только презентация «Моего проекта»: сдача важнее draft, draft важнее связи с программой.
@@ -107,38 +122,20 @@ export class InfoCardComponent {
   // Состояние компонента
   isUnsubscribeModalOpen = false;
   inviteErrorModal = false;
-  haveBadge = this.calculateHaveBadge();
-
-  // Подписки и витрина сохраняют прежние подсказки; у «Моих проектов» их нет.
-  programProjectHovered = false;
-  iconHovered = false;
 
   removeCollaboratorFromProject(userId: number): void {
     this.onRemoveCollaborator.emit(userId);
   }
 
   /**
-   * Сохраняет прежние мини-показатели витрины; «Мои проекты» используют статус вместо них.
-   */
-  shouldShowProjectInfo(): boolean {
-    return (
-      this.type() === "projects" &&
-      this.appereance() !== "my" &&
-      this.appereance() !== "subs" &&
-      this.appereance() !== "empty"
-    );
-  }
-
-  /**
-   * Определяет, нужно ли показывать бейдж подписки
+   * Контейнер явно разрешает действие подписки; URL не определяет контекст карточки.
+   * Приглашения, участники, пустые и собственные проекты не получают это действие.
    */
   shouldShowSubscriptionBadge(): boolean {
     return (
-      this.appereance() !== "empty" &&
-      this.haveBadge &&
-      this.appereance() === "base" &&
-      this.type() !== "invite" &&
-      this.type() !== "members"
+      this.showSubscriptionAction() &&
+      this.isProjectCard() &&
+      (this.appereance() === "base" || this.appereance() === "subs")
     );
   }
 
@@ -280,16 +277,5 @@ export class InfoCardComponent {
     this.router
       .navigateByUrl(AppRoutes.projects.all())
       .then(() => this.logger.debug("Route change from ProjectsComponent"));
-  }
-
-  /**
-   * Вычисление флага haveBadge
-   */
-  private calculateHaveBadge(): boolean {
-    return (
-      location.href.includes("/subscriptions") ||
-      location.href.includes("/all") ||
-      location.href.includes("/projects")
-    );
   }
 }

@@ -2,7 +2,7 @@
 
 <div
   class="card"
-  [class.card--my-project]="myProjectStatus() !== null"
+  [class.card--project]="isProjectCard()"
   [class.card__empty]="appereance() === 'empty'"
   (click)="
     appereance() === 'empty' && section() === 'projects'
@@ -13,36 +13,34 @@
   "
 >
   <div class="card__body" [class.card__body--empty]="appereance() === 'empty'">
-    @if (shouldShowProjectInfo()) {
-      <div class="card__info">
-        <div class="card__info--vacancies">
-          <p class="text-body-6">12</p>
-          <i appIcon icon="suitcase" appSquare="6"></i>
-        </div>
-        <div class="card__info--collaborators">
-          <p class="text-body-6">12</p>
-          <i appIcon icon="team" appSquare="6"></i>
-        </div>
-      </div>
-    }
     @if (shouldShowSubscriptionBadge()) {
-      <div class="card__badge">
+      <button
+        type="button"
+        class="card__subscription-action"
+        [attr.aria-label]="isSubscribed ? 'Отписаться от проекта' : 'Подписаться на проект'"
+        [attr.title]="isSubscribed ? 'Отписаться от проекта' : 'Подписаться на проект'"
+        [attr.aria-pressed]="!!isSubscribed"
+        (click)="toggleSubscription($event)"
+      >
         <i
           appIcon
           [icon]="isSubscribed ? 'subscribe-badge' : 'unsubscribe-badge'"
-          appWidth="18"
-          appHeight="34"
-          class="card__subscribe-badge"
-          (click)="toggleSubscription($event)"
+          appWidth="12"
+          appHeight="20"
+          aria-hidden="true"
         ></i>
-      </div>
+      </button>
     }
 
     <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
 
     <div class="card__content" [class.card__content--empty]="appereance() === 'empty'">
       @if (myProjectStatus(); as status) {
-        <p [class]="'card__status card__status--' + status.key">{{ status.label }}</p>
+        <p [class]="'card__context card__status card__status--' + status.key">{{ status.label }}</p>
+      } @else if (projectIndustry(); as industry) {
+        <p class="card__context card__context--industry" [title]="industry" tabindex="0">
+          <span>{{ industry }}</span>
+        </p>
       }
       <div class="card__head">
         <div>
@@ -90,7 +88,7 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (myProjectStatus()) {
+  @if (isProjectCard()) {
     <p class="card__name">{{ info().name }}</p>
   } @else if (type() === "projects" || type() === "invite") {
     @if (info().name) {
@@ -122,7 +120,7 @@
   <div
     class="card__description"
     [class.card__description--project]="type() === 'projects'"
-    [style.max-height]="myProjectStatus() ? '26px' : type() === 'members' ? '50px' : '24px'"
+    [style.max-height]="isProjectCard() ? '26px' : type() === 'members' ? '50px' : '24px'"
     [class.invite-description]="type() === 'invite'"
   >
     @if (type() === "invite") {
@@ -149,76 +147,15 @@
 
 <ng-template #cardActions>
   <div class="card__info">
-    @if (myProjectStatus(); as status) {
+    @if (isProjectCard()) {
       <app-button
         [routerLink]="AppRoutes.projects.detail(info()?.id)"
         customTypographyClass="text-body-6"
         size="extra-small"
         class="card__info--text"
       >
-        <span class="card__my-project-action-label">{{ status.action }}</span>
+        <span class="card__project-action-label">{{ myProjectStatus()?.action ?? "Открыть" }}</span>
       </app-button>
-    } @else if (type() === "projects") {
-      <div class="card__info--program">
-        @if (info().partnerProgram || info().draft) {
-          @if (info().partnerProgram && info().draft) {
-            <div
-              class="card__info--program-icon"
-              (mouseenter)="programProjectHovered = true"
-              (mouseleave)="programProjectHovered = false"
-            >
-              <i appIcon icon="program" appSquare="8"></i>
-            </div>
-
-            @if (programProjectHovered) {
-              <div class="card__info--project-partner">
-                <p class="text-body-6">
-                  проект привязан к программе {{ info().partnerProgram.name }}
-                </p>
-              </div>
-            }
-          }
-
-          <app-button
-            [routerLink]="AppRoutes.projects.detail(info()?.id)"
-            customTypographyClass="text-body-6"
-            size="extra-small"
-            class="card__info--text"
-          >
-            проект
-          </app-button>
-
-          <div
-            class="card__info--program-icon"
-            (mouseenter)="iconHovered = true"
-            (mouseleave)="iconHovered = false"
-          >
-            <i appIcon [icon]="info().draft ? 'box' : 'program'" appSquare="8"></i>
-          </div>
-
-          @if (iconHovered) {
-            <div class="card__info--project-partner">
-              <p class="text-body-6">
-                @if (info().draft) {
-                  проект пока еще не опубликовали.
-                } @else {
-                  проект привязан к программе
-                  {{ info().partnerProgram.name }}
-                }
-              </p>
-            </div>
-          }
-        } @else {
-          <app-button
-            [routerLink]="AppRoutes.projects.detail(info()?.id)"
-            customTypographyClass="text-body-6"
-            size="extra-small"
-            class="card__info--text"
-          >
-            проект
-          </app-button>
-        }
-      </div>
     } @else if (type() === "members") {
       @if (leaderId() === loggedUserId() && loggedUserId() !== info()?.userId) {
         <div class="card__info--program">

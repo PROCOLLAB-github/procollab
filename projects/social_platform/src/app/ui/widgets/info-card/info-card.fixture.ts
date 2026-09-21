@@ -74,3 +74,11 @@ export const myProjectCardFixtures = [
     }),
   },
 ] as const;
+
+/** Отрасли и их отсутствие проверяются на одних данных в подписках и витрине. */
+export const publicProjectCardFixtures = [
+  projectCardFixture({ id: 201, name: "Учимся вместе", industry: 1 }),
+  projectCardFixture({ id: 202, name: "Открытая лаборатория технологий", industry: 2 }),
+  projectCardFixture({ id: 203, name: "Сообщество добрых дел", industry: 3 }),
+  projectCardFixture({ id: 204, name: "Проект без указанной отрасли", industry: undefined }),
+];

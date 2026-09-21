@@ -12,7 +12,9 @@
         <a [routerLink]="AppRoutes.projects.detail(project.id)">
           <app-info-card
             [isSubscribed]="profileProjSubsIds()?.includes(project.id)"
-            [appereance]="appereance"
+            [appereance]="appereance()"
+            [showSubscriptionAction]="appereance() !== 'my'"
+            [profileId]="project.id"
             [info]="project"
           ></app-info-card>
         </a>
