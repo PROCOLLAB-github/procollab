@@ -1,16 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  input,
-  Input,
-  OnInit,
-  output,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, input, output } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { RouterLink } from "@angular/router";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
@@ -25,30 +16,19 @@ import { AppRoutes } from "@api/paths/app-routes";
   imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardItemComponent implements OnInit {
+export class DashboardItemComponent {
   readonly title = input.required<string>();
   readonly arrayItems = input.required<Project[]>();
   readonly iconName = input.required<string>();
   readonly sectionName = input.required<string>();
   readonly profileProjSubsIds = input<number[]>();
+  readonly loggedUserId = input<number>();
 
   readonly addProjectClick = output<void>();
 
-  appereance: "base" | "subs" | "my" = "base";
+  /** Раздел задаёт контекст независимо от декоративной иконки и обновляется вместе с input. */
+  readonly appereance = computed(() =>
+    this.sectionName() === "my" ? "my" : this.sectionName() === "subscriptions" ? "subs" : "base",
+  );
   protected readonly AppRoutes = AppRoutes;
-
-  ngOnInit(): void {
-    switch (this.iconName()) {
-      case "favourities":
-        this.appereance = "subs";
-        break;
-
-      case "main":
-        this.appereance = "my";
-        break;
-
-      default:
-        break;
-    }
-  }
 }

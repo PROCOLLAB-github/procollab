@@ -3,6 +3,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   Input,
@@ -23,6 +24,16 @@ import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-projec
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { Project } from "@domain/project/project.model";
+
+interface MyProjectPresentation {
+  lifecycle: "submitted" | "draft" | "program" | "published";
+  statusLabel: "Черновик" | "Опубликован" | "В программе" | "Сдан в программу";
+  role: "leader" | "participant";
+  roleLabel: "Лидер" | "Участник";
+  accessLabel: "можно редактировать" | "только просмотр";
+  canEdit: boolean;
+}
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -64,6 +75,65 @@ export class InfoCardComponent {
   readonly profileId = input<number>();
   readonly leaderId = input<number>();
   readonly loggedUserId = input<number>();
+  readonly showSubscriptionAction = input(false);
+
+  /** Общая геометрия применяется только к заполненным карточкам проектов. */
+  protected readonly isProjectCard = computed(
+    () => this.type() === "projects" && this.appereance() !== "empty",
+  );
+
+  /** Отрасль берётся из уже загруженного справочника; пустая плашка не занимает строку. */
+  protected readonly projectIndustry = computed(() => {
+    if (!this.isProjectCard() || this.appereance() === "my") return null;
+    const industryId = this.info()?.industry;
+    return industryId == null
+      ? null
+      : this.industryRepository.getOne(industryId)?.name?.trim() || null;
+  });
+
+  /**
+   * Lifecycle зависит только от проекта: submitted > draft > program > published.
+   * Роль определяется отдельно по текущему профилю. Отсутствующие ID не делают
+   * пользователя лидером; после сдачи даже лидер видит «только просмотр».
+   * Единственный признак сдачи — isSubmitted: canSubmit описывает возможность
+   * действия, например открытый срок. Пока состояние программной связи неизвестно,
+   * не обещаем редактирование: отсутствие isSubmitted не равнозначно false.
+   * Это представление готовых данных,
+   * а не изменение guard или серверных прав. CTA от этих значений не зависит.
+   */
+  protected readonly myProjectPresentation = computed<MyProjectPresentation | null>(() => {
+    if (this.type() !== "projects" || this.appereance() !== "my") return null;
+    const project: Project | undefined = this.info();
+    if (!project) return null;
+
+    const isSubmitted = project.partnerProgram?.isSubmitted === true;
+    const lifecycle = isSubmitted
+      ? "submitted"
+      : project.draft === true
+        ? "draft"
+        : project.partnerProgram != null
+          ? "program"
+          : "published";
+    const labels: Record<MyProjectPresentation["lifecycle"], MyProjectPresentation["statusLabel"]> =
+      {
+        submitted: "Сдан в программу",
+        draft: "Черновик",
+        program: "В программе",
+        published: "Опубликован",
+      };
+    const userId = this.loggedUserId();
+    const isLeader = userId != null && project.leader === userId;
+    const canEdit =
+      isLeader && (project.partnerProgram == null || project.partnerProgram.isSubmitted === false);
+    return {
+      lifecycle,
+      statusLabel: labels[lifecycle],
+      role: isLeader ? "leader" : "participant",
+      roleLabel: isLeader ? "Лидер" : "Участник",
+      accessLabel: canEdit ? "можно редактировать" : "только просмотр",
+      canEdit,
+    };
+  });
 
   readonly onAcceptingInvite = output<number>();
   readonly onRejectingInvite = output<number>();
@@ -73,35 +143,20 @@ export class InfoCardComponent {
   // Состояние компонента
   isUnsubscribeModalOpen = false;
   inviteErrorModal = false;
-  haveBadge = this.calculateHaveBadge();
-
-  programProjectHovered = false;
-  iconHovered = false;
-  draftProjectHovered = false;
 
   removeCollaboratorFromProject(userId: number): void {
     this.onRemoveCollaborator.emit(userId);
   }
 
   /**
-   * Определяет, нужно ли показывать информацию о проекте
-   */
-  shouldShowProjectInfo(): boolean {
-    return (
-      this.type() === "projects" && this.appereance() !== "subs" && this.appereance() !== "empty"
-    );
-  }
-
-  /**
-   * Определяет, нужно ли показывать бейдж подписки
+   * Контейнер явно разрешает действие подписки; URL не определяет контекст карточки.
+   * Приглашения, участники, пустые и собственные проекты не получают это действие.
    */
   shouldShowSubscriptionBadge(): boolean {
     return (
-      this.appereance() !== "empty" &&
-      this.haveBadge &&
-      this.appereance() === "base" &&
-      this.type() !== "invite" &&
-      this.type() !== "members"
+      this.showSubscriptionAction() &&
+      this.isProjectCard() &&
+      (this.appereance() === "base" || this.appereance() === "subs")
     );
   }
 
@@ -243,16 +298,5 @@ export class InfoCardComponent {
     this.router
       .navigateByUrl(AppRoutes.projects.all())
       .then(() => this.logger.debug("Route change from ProjectsComponent"));
-  }
-
-  /**
-   * Вычисление флага haveBadge
-   */
-  private calculateHaveBadge(): boolean {
-    return (
-      location.href.includes("/subscriptions") ||
-      location.href.includes("/all") ||
-      location.href.includes("/projects")
-    );
   }
 }
