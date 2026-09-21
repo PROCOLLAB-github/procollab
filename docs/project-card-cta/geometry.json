@@ -1,0 +1,100 @@
+{
+  "base": "ec822d13b4f55b0718335ac7f0f9e64d69ed05da",
+  "comparison": [
+    {
+      "width": 1440,
+      "route": "dashboard",
+      "equal": true,
+      "cards": 14,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [
+        [134, 21, 11, 150],
+        [70, 13.796875, 43, 152]
+      ],
+      "accessSizesAndOffsets": [[134, 26, 11, 117]]
+    },
+    {
+      "width": 1440,
+      "route": "my",
+      "equal": true,
+      "cards": 6,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [[134, 21, 11, 150]],
+      "accessSizesAndOffsets": [[134, 26, 11, 117]]
+    },
+    {
+      "width": 1440,
+      "route": "subscriptions",
+      "equal": true,
+      "cards": 4,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [[70, 13.796875, 43, 152]],
+      "accessSizesAndOffsets": []
+    },
+    {
+      "width": 1440,
+      "route": "all",
+      "equal": true,
+      "cards": 4,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [[70, 13.796875, 43, 152]],
+      "accessSizesAndOffsets": []
+    },
+    {
+      "width": 320,
+      "route": "dashboard",
+      "equal": true,
+      "cards": 14,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [
+        [134, 21, 11, 150],
+        [70, 13.796875, 43, 152]
+      ],
+      "accessSizesAndOffsets": [[134, 26, 11, 117]]
+    },
+    {
+      "width": 320,
+      "route": "my",
+      "equal": true,
+      "cards": 6,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [[134, 21, 11, 150]],
+      "accessSizesAndOffsets": [[134, 26, 11, 117]]
+    },
+    {
+      "width": 320,
+      "route": "subscriptions",
+      "equal": true,
+      "cards": 4,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [[70, 13.796875, 43, 152]],
+      "accessSizesAndOffsets": []
+    },
+    {
+      "width": 320,
+      "route": "all",
+      "equal": true,
+      "cards": 4,
+      "bodySizes": [[156, 180]],
+      "avatarSizes": [[70, 70]],
+      "ctaSizesAndOffsets": [[70, 13.796875, 43, 152]],
+      "accessSizesAndOffsets": []
+    }
+  ],
+  "longMobile": {
+    "cards": 6,
+    "bodySizes": [[156, 180]]
+  },
+  "checks": {
+    "draftEnterDetail101": true,
+    "subscriptionCancelThenCtaDetail201": true,
+    "consoleErrors": []
+  }
+}

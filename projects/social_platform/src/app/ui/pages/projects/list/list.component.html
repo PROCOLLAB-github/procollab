@@ -10,7 +10,7 @@
   <ul class="page__list" #listRoot>
     @for (project of projects(); track isInvites() ? project.inviteId : project.id) {
       <li>
-        @if (isMy()) {
+        @if (!isInvites()) {
           <ng-container *ngTemplateOutlet="projectCard"></ng-container>
         } @else {
           <a [routerLink]="AppRoutes.projects.detail(project.id)">

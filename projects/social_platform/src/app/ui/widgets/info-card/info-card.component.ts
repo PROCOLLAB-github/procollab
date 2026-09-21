@@ -33,9 +33,8 @@ interface MyProjectPresentation {
   roleLabel: "Лидер" | "Участник";
   accessLabel: "можно редактировать" | "только просмотр";
   canEdit: boolean;
-  actionLabel: "Продолжить" | "Редактировать" | "Открыть";
+  actionLabel: "Открыть";
   actionRoute: string;
-  actionQueryParams: { editingStep: "main" } | null;
 }
 
 /**
@@ -96,7 +95,7 @@ export class InfoCardComponent {
 
   /**
    * Разделяет lifecycle и доступ пользователя в представлении «Моего проекта».
-   * Сдача важнее draft и всегда ведёт в просмотр, включая лидера. Пока профиль
+   * Сдача важнее draft и отображается как «только просмотр», включая лидера. Пока профиль
    * не загружен, совпадение отсутствующих ID не даёт редактирование. Это только
    * отображение готовых данных: действующие guard и серверные права не меняются.
    */
@@ -129,11 +128,8 @@ export class InfoCardComponent {
       roleLabel: isLeader ? "Лидер" : "Участник",
       accessLabel: canEdit ? "можно редактировать" : "только просмотр",
       canEdit,
-      actionLabel: canEdit ? (lifecycle === "draft" ? "Продолжить" : "Редактировать") : "Открыть",
-      actionRoute: canEdit
-        ? AppRoutes.projects.edit(project.id)
-        : AppRoutes.projects.detail(project.id),
-      actionQueryParams: canEdit ? { editingStep: "main" } : null,
+      actionLabel: "Открыть",
+      actionRoute: AppRoutes.projects.detail(project.id),
     };
   });
 

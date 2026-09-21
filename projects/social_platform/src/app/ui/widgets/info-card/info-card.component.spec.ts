@@ -11,7 +11,7 @@ import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-
 import { AppRoutes } from "@api/paths/app-routes";
 import { ok } from "@domain/shared/result.type";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { ButtonComponent, IconComponent } from "@ui/primitives";
+import { IconComponent } from "@ui/primitives";
 import { InfoCardComponent } from "./info-card.component";
 import { myProjectCardFixtures, projectCardFixture, projectCardProgram } from "./info-card.fixture";
 
@@ -58,7 +58,9 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       fixture.detectChanges();
       expect(card().querySelectorAll(".card__status")).toHaveLength(1);
       expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
-      expect(card().querySelector("button")?.textContent?.trim()).toBe(item.action);
+      expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+        item.action,
+      );
       expect(card().querySelector(".card__name")?.textContent).toBe(item.project.name);
       expect(
         card().querySelector(
@@ -69,22 +71,22 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       const avatar = fixture.debugElement.query(By.directive(AvatarComponent)).componentInstance;
       expect(avatar.size()).toBe(70);
       expect(avatar.url()).toBe(item.project.imageAddress);
-      expect(
-        fixture.debugElement.query(By.directive(ButtonComponent)).componentInstance.size(),
-      ).toBe("big");
-
       const router = TestBed.inject(Router);
       const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
       expect(card().querySelector(".card__role")?.textContent).toBe(item.role);
       expect(card().querySelector(".card__access-label")?.textContent).toBe(item.access);
-      const expectedRoute = item.canEdit
-        ? AppRoutes.projects.edit(item.project.id) + "?editingStep=main"
-        : AppRoutes.projects.detail(item.project.id);
+      const expectedRoute = AppRoutes.projects.detail(item.project.id);
       expect(router.serializeUrl(link.urlTree!)).toBe(expectedRoute);
-      expect(link.queryParams).toEqual(item.canEdit ? { editingStep: "main" } : null);
+      expect(link.urlTree!.queryParams).toEqual({});
+      expect(card().querySelectorAll("a")).toHaveLength(1);
+      expect(card().querySelector("a a, a button, a [tabindex]")).toBeNull();
       const navigate = vi.spyOn(router, "navigateByUrl").mockResolvedValue(true);
-      card().querySelector("button")!.click();
+      card().querySelector<HTMLElement>(".card__project-action")!.click();
       await fixture.whenStable();
+      expect(navigate).toHaveBeenCalledOnce();
+      expect(router.serializeUrl(navigate.mock.calls[0][0] as UrlTree)).toBe(expectedRoute);
+      navigate.mockClear();
+      card().querySelector<HTMLElement>(".card__name")!.click();
       expect(navigate).toHaveBeenCalledOnce();
       expect(router.serializeUrl(navigate.mock.calls[0][0] as UrlTree)).toBe(expectedRoute);
       expect(JSON.stringify(item.project)).toBe(original);
@@ -100,11 +102,13 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     );
     fixture.detectChanges();
     expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Сдан в программу");
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
     expect(card().querySelector(".card__role")?.textContent).toBe("Лидер");
     expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
     const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
-    expect(link.queryParams).toBeNull();
+    expect(link.urlTree!.queryParams).toEqual({});
     expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(AppRoutes.projects.detail(101));
   });
 
@@ -114,12 +118,14 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     fixture.detectChanges();
     expect(card().querySelector(".card__role")?.textContent).toBe("Участник");
     expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
     const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
     expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(
       AppRoutes.projects.detail(item.project.id),
     );
-    expect(link.queryParams).toBeNull();
+    expect(link.urlTree!.queryParams).toEqual({});
   });
 
   it("отсутствующие ID безопасны, а загрузка/смена пользователя обновляет доступ", () => {
@@ -128,17 +134,25 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     fixture.detectChanges();
     expect(card().querySelector(".card__role")?.textContent).toBe("Участник");
     expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
     fixture.componentRef.setInput("info", projectCardFixture({ leader: 7 }));
     fixture.detectChanges();
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
     fixture.componentRef.setInput("loggedUserId", 7);
     fixture.detectChanges();
     expect(card().querySelector(".card__role")?.textContent).toBe("Лидер");
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Редактировать");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
     fixture.componentRef.setInput("loggedUserId", undefined);
     fixture.detectChanges();
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
   });
 
   it("canSubmit не подменяет факт сдачи", () => {
@@ -150,7 +164,9 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     );
     fixture.detectChanges();
     expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("В программе");
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Редактировать");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
   });
 
   it("draft имеет приоритет над обычной связью с программой", () => {
@@ -160,7 +176,9 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     );
     fixture.detectChanges();
     expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Черновик");
-    expect(card().querySelector("button")?.textContent?.trim()).toBe("Продолжить");
+    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+      "Открыть",
+    );
     fixture.detectChanges();
     expect(card().querySelector(".card__info--project-partner")).toBeNull();
     expect(card().textContent).not.toContain("привязан к программе");
@@ -212,7 +230,9 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       expect(card().querySelector(".card__context--industry")?.textContent?.trim()).toBe(
         "Образование",
       );
-      expect(card().querySelector("button")?.textContent?.trim()).toBe("Открыть");
+      expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
+        "Открыть",
+      );
       expect(
         card().querySelector(
           ".card__info--vacancies, .card__info--collaborators, .card__info--program-icon, .card__industry, .card__info--project-partner",
@@ -240,7 +260,9 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     const context = card().querySelector<HTMLElement>(".card__context--industry")!;
     expect(context.title).toBe(name);
     expect(context.textContent?.trim()).toBe(name);
-    expect(context.tabIndex).toBe(0);
+    const link = card().querySelector<HTMLAnchorElement>(".card__project-link")!;
+    expect(link.title).toBe(name);
+    expect(link.tabIndex).toBe(0);
   });
 
   it.each(["base", "subs"] as const)(
@@ -254,7 +276,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       const action = card().querySelector<HTMLButtonElement>(".card__subscription-action")!;
       expect(action.getAttribute("aria-label")).toBe("Отписаться от проекта");
       expect(action.type).toBe("button");
-      expect(action.closest(".card__content")).toBeNull();
+      expect(action.closest(".card__content, a")).toBeNull();
       const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
       action.click();
       fixture.detectChanges();
