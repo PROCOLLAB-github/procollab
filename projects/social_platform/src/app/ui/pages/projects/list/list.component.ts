@@ -10,6 +10,7 @@ import {
   viewChild,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { NgTemplateOutlet } from "@angular/common";
 import { IconComponent } from "@ui/primitives";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsListInfoService } from "@api/project/facades/list/projects-list-info.service";
@@ -20,13 +21,14 @@ import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProgramDetailListInfoService } from "@api/program/facades/detail/program-detail-list-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 
 /** Отображает список проектов с поиском, фильтрацией и бесконечной прокруткой. */
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
-  imports: [IconComponent, RouterLink, InfoCardComponent],
+  imports: [IconComponent, RouterLink, InfoCardComponent, NgTemplateOutlet],
   providers: [
     ProjectsListInfoService,
     ProjectsInfoService,
@@ -51,6 +53,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit {
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;
 
   protected readonly projects = this.projectsListInfoService.projects;
+  protected readonly profile = inject(ProfileInfoService).profile;
   protected readonly profileProjSubsIds = this.programDetailListUIInfoService.profileProjSubsIds;
 
   protected readonly isAll = this.projectsInfoService.isAll;

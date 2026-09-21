@@ -1,0 +1,958 @@
+{
+  "reference": {
+    "cards": [
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/101",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/102",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/103",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/104",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/107",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/108",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/105",
+        "nested": 0,
+        "role": "Участник",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/106",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "dashboard": {
+    "cards": [
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/101",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/102",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/103",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/104",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/107",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/108",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/105",
+        "nested": 0,
+        "role": "Участник",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/106",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/201",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/202",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/203",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/204",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/201",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/202",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/203",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/204",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "myDesktop": {
+    "cards": [
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/101",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/102",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/103",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/104",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/107",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/108",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/105",
+        "nested": 0,
+        "role": "Участник",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/106",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "subscriptions": {
+    "cards": [
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/201",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/202",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/203",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/204",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "all": {
+    "cards": [
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/201",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/202",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/203",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      },
+      {
+        "access": null,
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/204",
+        "nested": 0,
+        "role": null,
+        "status": null,
+        "statusBackground": null,
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "myMobileLong": {
+    "cards": [
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/101",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/102",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/103",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/104",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/107",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/108",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/105",
+        "nested": 0,
+        "role": "Участник",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/106",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 844,
+      "width": 390
+    }
+  },
+  "my320": {
+    "cards": [
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/101",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/102",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "можно редактировать",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/103",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/104",
+        "nested": 0,
+        "role": "Лидер",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/107",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Черновик",
+        "statusBackground": "rgb(249, 249, 249)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/108",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Опубликован",
+        "statusBackground": "rgb(227, 240, 232)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/105",
+        "nested": 0,
+        "role": "Участник",
+        "status": "В программе",
+        "statusBackground": "rgb(232, 224, 250)",
+        "width": 156
+      },
+      {
+        "access": "только просмотр",
+        "avatar": {
+          "height": 70,
+          "width": 70
+        },
+        "cta": "Открыть",
+        "height": 180,
+        "href": "/office/projects/106",
+        "nested": 0,
+        "role": "Участник",
+        "status": "Сдан в программу",
+        "statusBackground": "rgb(253, 248, 240)",
+        "width": 156
+      }
+    ],
+    "overflow": false,
+    "viewport": {
+      "dpr": 1,
+      "height": 844,
+      "width": 320
+    }
+  },
+  "keyboardFocus": {
+    "href": "/office/projects/102",
+    "outline": "rgb(123, 99, 179) solid 2px",
+    "tag": "A"
+  },
+  "keyboardRoute": "http://127.0.0.1:4307/office/projects/my?long",
+  "console": [
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-21T21:13:25.507Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-21T21:14:10.706Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-21T21:14:11.895Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-21T21:14:24.941Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-21T21:14:25.54Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-21T21:14:26.098Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    }
+  ],
+  "keyboardDetailRendered": "Тестовый маршрут: office/projects/:id / 102 /",
+  "keyboardScope": "Локальный TestBed preview: маршрут подтверждён отрисованным detail-placeholder; URL browser API остаётся URL входа."
+}
