@@ -8,7 +8,7 @@ import { RouterTestingHarness } from "@angular/router/testing";
 import { of } from "rxjs";
 import { ProjectsListComponent } from "./list.component";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
-import { projectCardFixture } from "@ui/widgets/info-card/info-card.fixture";
+import { myProjectCardFixtures, projectCardFixture } from "@ui/widgets/info-card/info-card.fixture";
 import { ProjectsListInfoService } from "@api/project/facades/list/projects-list-info.service";
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
@@ -119,6 +119,24 @@ describe("ProjectsListComponent: контекст и track", () => {
       expect(element.nativeElement.querySelector("a a, a button, a [tabindex]")).toBeNull();
       expect(card.showSubscriptionAction()).toBe(route !== "my");
     }
+  });
+
+  it("полный список сохраняет независимые lifecycle/роль/доступ во всех восьми сочетаниях", async () => {
+    projects.set(myProjectCardFixtures.map(item => item.project));
+    await harness.navigateByUrl("/office/projects/my", ProjectsListComponent);
+    harness.detectChanges();
+    expect(cards()).toHaveLength(8);
+    cards().forEach((element, index) => {
+      const item = myProjectCardFixtures[index];
+      const card = element.nativeElement as HTMLElement;
+      expect(card.querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
+      expect(card.querySelector(".card__role")?.textContent).toBe(item.role);
+      expect(card.querySelector(".card__access-label")?.textContent).toBe(item.access);
+      expect(card.querySelector(".card__project-action")?.textContent?.trim()).toBe("Открыть");
+      expect(card.querySelector(".card__project-link")?.getAttribute("href")).toBe(
+        "/office/projects/" + item.project.id,
+      );
+    });
   });
 
   it("обычные проекты с одинаковым inviteId сохраняют DOM по project.id", async () => {

@@ -57,6 +57,11 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       fixture.componentRef.setInput("info", item.project);
       fixture.detectChanges();
       expect(card().querySelectorAll(".card__status")).toHaveLength(1);
+      expect(
+        card()
+          .querySelector(".card__status")
+          ?.classList.contains("card__status--" + item.key),
+      ).toBe(true);
       expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
       expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
         item.action,
@@ -95,7 +100,8 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     },
   );
 
-  it("сдача имеет приоритет над draft и открывает проект", () => {
+  it.each([7, 99])("сдача имеет приоритет над draft для пользователя %s", userId => {
+    fixture.componentRef.setInput("loggedUserId", userId);
     fixture.componentRef.setInput(
       "info",
       projectCardFixture({ draft: true, partnerProgram: projectCardProgram(true) }),
@@ -105,28 +111,38 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
       "Открыть",
     );
-    expect(card().querySelector(".card__role")?.textContent).toBe("Лидер");
+    expect(card().querySelector(".card__role")?.textContent).toBe(
+      userId === 7 ? "Лидер" : "Участник",
+    );
     expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
     const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
     expect(link.urlTree!.queryParams).toEqual({});
     expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(AppRoutes.projects.detail(101));
   });
 
-  it.each(myProjectCardFixtures.slice(0, 4))("участник: $key никогда не ведёт в редактор", item => {
-    fixture.componentRef.setInput("info", item.project);
-    fixture.componentRef.setInput("loggedUserId", 99);
-    fixture.detectChanges();
-    expect(card().querySelector(".card__role")?.textContent).toBe("Участник");
-    expect(card().querySelector(".card__access-label")?.textContent).toBe("только просмотр");
-    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
-      "Открыть",
-    );
-    const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
-    expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(
-      AppRoutes.projects.detail(item.project.id),
-    );
-    expect(link.urlTree!.queryParams).toEqual({});
-  });
+  it.each(myProjectCardFixtures.slice(0, 4))(
+    "$key: смена роли или отсутствие профиля не меняет lifecycle и CTA",
+    item => {
+      fixture.componentRef.setInput("info", item.project);
+      for (const userId of [7, 99, undefined]) {
+        fixture.componentRef.setInput("loggedUserId", userId);
+        fixture.detectChanges();
+        expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
+        expect(card().querySelector(".card__role")?.textContent).toBe(
+          userId === 7 ? "Лидер" : "Участник",
+        );
+        expect(card().querySelector(".card__access-label")?.textContent).toBe(
+          userId === 7 ? item.access : "только просмотр",
+        );
+        expect(card().querySelector(".card__project-action")?.textContent?.trim()).toBe("Открыть");
+        const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
+        expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(
+          AppRoutes.projects.detail(item.project.id),
+        );
+        expect(link.urlTree!.queryParams).toEqual({});
+      }
+    },
+  );
 
   it("отсутствующие ID безопасны, а загрузка/смена пользователя обновляет доступ", () => {
     fixture.componentRef.setInput("info", projectCardFixture({ leader: undefined }));

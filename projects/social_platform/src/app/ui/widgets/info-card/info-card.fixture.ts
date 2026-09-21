@@ -116,6 +116,38 @@ export const myProjectCardFixtures = [
       partnerProgram: projectCardProgram(true),
     }),
   },
+  {
+    key: "draft",
+    label: "Черновик",
+    action: "Открыть",
+    role: "Участник",
+    access: "только просмотр",
+    canEdit: false,
+    project: projectCardFixture({
+      id: 107,
+      leader: 8,
+      draft: true,
+      partnerProgram: null,
+      name: "Черновик команды",
+      shortDescription: "Совместная работа над идеей нового проекта.",
+    }),
+  },
+  {
+    key: "published",
+    label: "Опубликован",
+    action: "Открыть",
+    role: "Участник",
+    access: "только просмотр",
+    canEdit: false,
+    project: projectCardFixture({
+      id: 108,
+      leader: 8,
+      draft: false,
+      partnerProgram: null,
+      name: "Открытая инициатива",
+      shortDescription: "Опубликованный проект участника команды.",
+    }),
+  },
 ] as const;
 
 /** Отрасли и их отсутствие проверяются на одних данных в подписках и витрине. */

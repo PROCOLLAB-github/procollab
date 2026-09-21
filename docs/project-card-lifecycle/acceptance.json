@@ -1,0 +1,100 @@
+{
+  "base": "358e818c7ebd8b7d5916e56167a402e2848177d6",
+  "viewport": [1100, 660],
+  "states": [
+    {
+      "access": "можно редактировать",
+      "avatar": [70, 70],
+      "background": "rgb(249, 249, 249)",
+      "body": [156, 180],
+      "color": "rgb(165, 159, 185)",
+      "cta": "Открыть",
+      "href": "/office/projects/101",
+      "role": "Лидер",
+      "status": "Черновик"
+    },
+    {
+      "access": "можно редактировать",
+      "avatar": [70, 70],
+      "background": "rgb(227, 240, 232)",
+      "body": [156, 180],
+      "color": "rgb(41, 115, 115)",
+      "cta": "Открыть",
+      "href": "/office/projects/102",
+      "role": "Лидер",
+      "status": "Опубликован"
+    },
+    {
+      "access": "можно редактировать",
+      "avatar": [70, 70],
+      "background": "rgb(232, 224, 250)",
+      "body": [156, 180],
+      "color": "rgb(123, 99, 179)",
+      "cta": "Открыть",
+      "href": "/office/projects/103",
+      "role": "Лидер",
+      "status": "В программе"
+    },
+    {
+      "access": "только просмотр",
+      "avatar": [70, 70],
+      "background": "rgb(253, 248, 240)",
+      "body": [156, 180],
+      "color": "rgb(198, 152, 73)",
+      "cta": "Открыть",
+      "href": "/office/projects/104",
+      "role": "Лидер",
+      "status": "Сдан в программу"
+    },
+    {
+      "access": "только просмотр",
+      "avatar": [70, 70],
+      "background": "rgb(249, 249, 249)",
+      "body": [156, 180],
+      "color": "rgb(165, 159, 185)",
+      "cta": "Открыть",
+      "href": "/office/projects/107",
+      "role": "Участник",
+      "status": "Черновик"
+    },
+    {
+      "access": "только просмотр",
+      "avatar": [70, 70],
+      "background": "rgb(227, 240, 232)",
+      "body": [156, 180],
+      "color": "rgb(41, 115, 115)",
+      "cta": "Открыть",
+      "href": "/office/projects/108",
+      "role": "Участник",
+      "status": "Опубликован"
+    },
+    {
+      "access": "только просмотр",
+      "avatar": [70, 70],
+      "background": "rgb(232, 224, 250)",
+      "body": [156, 180],
+      "color": "rgb(123, 99, 179)",
+      "cta": "Открыть",
+      "href": "/office/projects/105",
+      "role": "Участник",
+      "status": "В программе"
+    },
+    {
+      "access": "только просмотр",
+      "avatar": [70, 70],
+      "background": "rgb(253, 248, 240)",
+      "body": [156, 180],
+      "color": "rgb(198, 152, 73)",
+      "cta": "Открыть",
+      "href": "/office/projects/106",
+      "role": "Участник",
+      "status": "Сдан в программу"
+    }
+  ],
+  "checks": {
+    "unknownUserPreservesLifecycleAndReadOnly": true,
+    "programLeaderEnterDetail103": true,
+    "submittedLeaderEnterDetail104": true,
+    "consoleErrors": []
+  }
+}
