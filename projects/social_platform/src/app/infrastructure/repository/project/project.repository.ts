@@ -1,8 +1,8 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable, tap } from "rxjs";
-import { Project, ProjectCount } from "@domain/project/project.model";
+import { BehaviorSubject, catchError, map, Observable, tap, throwError } from "rxjs";
+import { Project, ProjectCount, ProjectCountLoadState } from "@domain/project/project.model";
 import { ProjectHttpAdapter } from "../../adapters/project/project-http.adapter";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
@@ -28,7 +28,15 @@ import { defer, finalize } from "rxjs";
 @Injectable({ providedIn: "root" })
 export class ProjectRepository implements ProjectRepositoryPort {
   private readonly entityCache = new EntityCache<Project>();
-  readonly count$ = new BehaviorSubject<ProjectCount>({ my: 0, all: 0, subs: 0 });
+  readonly count$ = new BehaviorSubject<ProjectCount>({
+    my: 0,
+    all: 0,
+    subs: 0,
+    myLeader: 0,
+    myInProgram: 0,
+    mySubmitted: 0,
+  });
+  readonly countState$ = new BehaviorSubject<ProjectCountLoadState>("idle");
 
   private readonly projectAdapter = inject(ProjectHttpAdapter);
   private readonly eventBus = inject(EventBus);
@@ -38,20 +46,14 @@ export class ProjectRepository implements ProjectRepositoryPort {
   }
 
   private initializeEventListeners(): void {
-    // События синхронизируют счётчики и кеш деталей без повторной загрузки всех списков.
+    // Изменения состава проектов требуют повторной authoritative-агрегации на backend.
     this.eventBus.on<ProjectCreated>("ProjectCreated").subscribe(() => {
-      this.count$.next({
-        ...this.count$.getValue(),
-        my: this.count$.getValue().my + 1,
-      });
+      this.refreshCountAfterProjectChange();
     });
 
     this.eventBus.on<ProjectDeleted>("ProjectDeleted").subscribe(event => {
       this.entityCache.invalidate(event.payload.projectId);
-      this.count$.next({
-        ...this.count$.getValue(),
-        my: Math.max(0, this.count$.getValue().my - 1),
-      });
+      this.refreshCountAfterProjectChange();
     });
 
     this.eventBus.on<ProjectSubscribed>("ProjectSubscribed").subscribe({
@@ -82,6 +84,7 @@ export class ProjectRepository implements ProjectRepositoryPort {
     this.eventBus.on<AcceptInvite>("AcceptInvite").subscribe({
       next: event => {
         this.entityCache.invalidate(event.payload.projectId);
+        this.refreshCountAfterProjectChange();
       },
     });
 
@@ -124,10 +127,26 @@ export class ProjectRepository implements ProjectRepositoryPort {
   }
 
   refreshCount(): Observable<ProjectCount> {
-    return this.projectAdapter.fetchCount().pipe(
-      map(dto => plainToInstance(ProjectCount, dto)),
-      tap(count => this.count$.next(count)),
-    );
+    return defer(() => {
+      this.countState$.next("loading");
+
+      return this.projectAdapter.fetchCount().pipe(
+        map(dto => plainToInstance(ProjectCount, dto)),
+        tap(count => {
+          this.count$.next({ ...this.count$.getValue(), ...count });
+          this.countState$.next("loaded");
+        }),
+        catchError(error => {
+          this.countState$.next("error");
+          return throwError(() => error);
+        }),
+      );
+    });
+  }
+
+  /** После доменного изменения перечитывает все взаимосвязанные метрики одним запросом. */
+  private refreshCountAfterProjectChange(): void {
+    this.refreshCount().subscribe({ error: () => undefined });
   }
 
   update(id: number, data: Partial<Project>): Observable<Project> {

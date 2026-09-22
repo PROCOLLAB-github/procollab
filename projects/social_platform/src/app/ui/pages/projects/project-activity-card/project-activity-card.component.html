@@ -1,0 +1,25 @@
+<!-- @format -->
+
+<section class="activity" aria-labelledby="project-activity-title">
+  <h2 id="project-activity-title" class="activity__title">моя активность</h2>
+
+  <dl class="activity__metrics">
+    @for (metric of metrics(); track metric.label) {
+      <div class="activity__metric">
+        <dt class="activity__label">
+          <span class="activity__icon" aria-hidden="true">
+            <i appIcon [icon]="metric.icon" appSquare="12"></i>
+          </span>
+          <span>{{ metric.label }}</span>
+        </dt>
+        <dd class="activity__value" [attr.title]="isLoaded() ? metric.value : null">
+          @if (isLoaded()) {
+            {{ metric.value }}
+          } @else {
+            <span [attr.aria-label]="placeholderLabel()">—</span>
+          }
+        </dd>
+      </div>
+    }
+  </dl>
+</section>

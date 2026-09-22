@@ -89,11 +89,10 @@
             </div>
           }
           @if (isMy() || isDashboard()) {
-            <app-soon-card
-              title="статистика"
-              description="количество проектов, команды, эффективность"
-            >
-            </app-soon-card>
+            <app-project-activity-card
+              [count]="projectCount()"
+              [state]="projectCountState()"
+            ></app-project-activity-card>
           }
           @if (isAll()) {
             <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
