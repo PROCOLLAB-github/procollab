@@ -1,0 +1,474 @@
+{
+  "base": "26ef957fc254895bc472af960c31a368cd0cfa36",
+  "sourceDev": "4921ad4a2d1c5d9ee44ec62bdb4f1b5e1e13e728",
+  "scope": "Локальная сборка PROD-кода, реальные Angular-компоненты, тестовые данные; use cases с задержкой 700 мс, без live API",
+  "dashboard": {
+    "cardsUnchanged": true,
+    "myCtaUnchanged": true,
+    "statsUnchanged": true,
+    "beforeMyCta": {
+      "fontSize": "9px",
+      "fontWeight": "600",
+      "height": 21,
+      "lineHeight": "11px",
+      "width": 134,
+      "x": 379.65625,
+      "y": 380.59375
+    },
+    "afterMyCta": {
+      "fontSize": "9px",
+      "fontWeight": "600",
+      "height": 21,
+      "lineHeight": "11px",
+      "width": 134,
+      "x": 379.65625,
+      "y": 380.59375
+    }
+  },
+  "surfaces": {
+    "afterDashboard": {
+      "viewport": [1440, 900],
+      "overflow": false,
+      "cardCount": 17,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        },
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        },
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        }
+      ],
+      "minimumInviteGap": 17.21875
+    },
+    "desktop-subscriptions": {
+      "viewport": [1440, 900],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        }
+      ],
+      "minimumInviteGap": null
+    },
+    "desktop-all": {
+      "viewport": [1440, 900],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        }
+      ],
+      "minimumInviteGap": null
+    },
+    "desktop-invites": {
+      "viewport": [1440, 900],
+      "overflow": false,
+      "cardCount": 2,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        }
+      ],
+      "minimumInviteGap": 17.21875
+    },
+    "tablet-dashboard": {
+      "viewport": [768, 1024],
+      "overflow": false,
+      "cardCount": 17,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        },
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        },
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        }
+      ],
+      "minimumInviteGap": 17.21875
+    },
+    "tablet-subscriptions": {
+      "viewport": [768, 1024],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        }
+      ],
+      "minimumInviteGap": null
+    },
+    "tablet-all": {
+      "viewport": [768, 1024],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        }
+      ],
+      "minimumInviteGap": null
+    },
+    "tablet-invites": {
+      "viewport": [768, 1024],
+      "overflow": false,
+      "cardCount": 2,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        }
+      ],
+      "minimumInviteGap": 17.21875
+    },
+    "mobile-dashboard": {
+      "viewport": [390, 844],
+      "overflow": false,
+      "cardCount": 17,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        },
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        },
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        }
+      ],
+      "minimumInviteGap": 17.21875
+    },
+    "mobile-subscriptions": {
+      "viewport": [390, 844],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        }
+      ],
+      "minimumInviteGap": null
+    },
+    "mobile-all": {
+      "viewport": [390, 844],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Социальные проекты",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Социальные проекты"
+        }
+      ],
+      "minimumInviteGap": null
+    },
+    "mobile-invites": {
+      "viewport": [390, 844],
+      "overflow": false,
+      "cardCount": 2,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Образование",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Образование"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        }
+      ],
+      "minimumInviteGap": 17.21875
+    },
+    "longInvites": {
+      "viewport": [390, 844],
+      "overflow": false,
+      "cardCount": 2,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Очень длинная отрасль образовательных технологий",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Очень длинная отрасль образовательных технологий"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        }
+      ],
+      "minimumInviteGap": 2.21875
+    },
+    "longAll": {
+      "viewport": [390, 844],
+      "overflow": false,
+      "cardCount": 4,
+      "allCards156x180": true,
+      "industry": [
+        {
+          "text": "Очень длинная отрасль образовательных технологий",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Очень длинная отрасль образовательных технологий"
+        },
+        {
+          "text": "IT",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "IT"
+        },
+        {
+          "text": "Очень длинная отрасль социальных и общественных инициатив",
+          "fontSize": "11px",
+          "fontWeight": "400",
+          "title": "Очень длинная отрасль социальных и общественных инициатив"
+        }
+      ],
+      "minimumInviteGap": null
+    }
+  },
+  "actions": {
+    "all": {
+      "subscribeAfterResponse": true,
+      "unsubscribeOneConfirmation": true
+    },
+    "subscriptions": {
+      "subscribeByEnter": true,
+      "unsubscribeOneConfirmation": true
+    },
+    "invites": {
+      "accept": "801",
+      "reject": "802"
+    }
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [
+    "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912"
+  ]
+}

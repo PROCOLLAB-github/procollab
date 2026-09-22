@@ -4,6 +4,7 @@
   class="card"
   [class.card--project]="isProjectCard()"
   [class.card--my-project]="myProjectPresentation() !== null"
+  [class.card--invite]="type() === 'invite' && appereance() !== 'empty'"
   [class.card__empty]="appereance() === 'empty'"
   (click)="
     appereance() === 'empty' && section() === 'projects'
@@ -121,7 +122,7 @@
     }
     <p class="text-body-6 card__industry">
       @if (industryRepository.getOne(info()?.industry!); as industry) {
-        <span>{{ industry?.name }}</span>
+        <span [title]="industry?.name">{{ industry?.name }}</span>
       }
     </p>
   } @else {
@@ -145,12 +146,16 @@
   <div
     class="card__description"
     [class.card__description--project]="type() === 'projects'"
-    [style.max-height]="isProjectCard() ? '26px' : type() === 'members' ? '50px' : '24px'"
+    [style.max-height]="
+      isProjectCard() ? '26px' : type() === 'invite' ? null : type() === 'members' ? '50px' : '24px'
+    "
     [class.invite-description]="type() === 'invite'"
   >
     @if (type() === "invite") {
       <p class="text-body-6 card__user">вас приглашает</p>
-      <p class="text-body-10 card__user--invite">{{ info()?.shortDescription }}</p>
+      <p class="text-body-10 card__user--invite" [title]="info()?.shortDescription">
+        {{ info()?.shortDescription }}
+      </p>
     } @else if (type() === "projects") {
       <p class="text-body-6">{{ info()?.shortDescription }}</p>
     } @else {
@@ -211,8 +216,8 @@
       <div class="card__invite-actions">
         <app-button
           (click)="onAcceptInvite($event, info()?.inviteId!)"
-          customTypographyClass="text-body-6"
-          size="extra-small"
+          [customTypographyClass]="type() === 'invite' ? 'text-body-12' : 'text-body-6'"
+          [size]="type() === 'invite' ? 'big' : 'extra-small'"
           appearance="inline"
           [disabled]="!info()?.inviteId"
         >
@@ -220,8 +225,8 @@
         </app-button>
         <app-button
           (click)="onRejectInvite($event, info()?.inviteId!)"
-          customTypographyClass="text-body-6"
-          size="extra-small"
+          [customTypographyClass]="type() === 'invite' ? 'text-body-12' : 'text-body-6'"
+          [size]="type() === 'invite' ? 'big' : 'extra-small'"
           appearance="outline"
           [disabled]="!info()?.inviteId"
         >
