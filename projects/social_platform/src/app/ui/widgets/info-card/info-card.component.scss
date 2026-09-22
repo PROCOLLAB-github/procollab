@@ -372,7 +372,25 @@
     }
 
     .card__head {
+      width: 100%;
       margin-bottom: 2px;
+
+      > div {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    .card__industry {
+      width: 100%;
+      padding: 0 8px;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 14px;
+      color: var(--black);
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .card__description {
@@ -450,6 +468,7 @@
     border-radius: 11px;
 
     &--industry {
+      font-size: 11px;
       color: var(--accent-dark);
       background: var(--accent-light);
 
