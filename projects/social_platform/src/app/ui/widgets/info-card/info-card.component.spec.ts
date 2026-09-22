@@ -233,7 +233,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
   });
 
   it.each(["base", "subs"] as const)(
-    "%s: отрасль, полный текст, Открыть и отсутствие lifecycle/шума",
+    "%s: полный текст и Открыть без отрасли и lifecycle",
     appearance => {
       const project = projectCardFixture({ draft: true, partnerProgram: projectCardProgram(true) });
       fixture.componentRef.setInput("info", project);
@@ -243,9 +243,8 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       expect(card().querySelector(".card__access")).toBeNull();
       expect(fixture.nativeElement.querySelector(".card--project")).not.toBeNull();
       expect(card().querySelector(".card__name")?.textContent).toBe(project.name);
-      expect(card().querySelector(".card__context--industry")?.textContent?.trim()).toBe(
-        "Образование",
-      );
+      expect(card().querySelector(".card__context--industry")).toBeNull();
+      expect(card().textContent).not.toContain("Образование");
       expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
         "Открыть",
       );
@@ -268,17 +267,33 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     expect(card().querySelector(".card__name")?.textContent).toBe(projectCardFixture().name);
   });
 
-  it("длинная отрасль доступна целиком в подсказке и с клавиатуры", () => {
+  it.each(["base", "subs"] as const)("%s: отрасль не остаётся в скрытой подсказке", appearance => {
     const name = "Очень длинное название отрасли проекта";
-    vi.spyOn(TestBed.inject(IndustryRepositoryPort), "getOne").mockReturnValue({ id: 1, name });
-    fixture.componentRef.setInput("appereance", "subs");
+    const getIndustry = vi.spyOn(TestBed.inject(IndustryRepositoryPort), "getOne");
+    getIndustry.mockReturnValue({ id: 1, name });
+    fixture.componentRef.setInput("appereance", appearance);
     fixture.detectChanges();
-    const context = card().querySelector<HTMLElement>(".card__context--industry")!;
-    expect(context.title).toBe(name);
-    expect(context.textContent?.trim()).toBe(name);
+    expect(card().querySelector(".card__context--industry, .card__industry")).toBeNull();
+    expect(card().textContent).not.toContain(name);
     const link = card().querySelector<HTMLAnchorElement>(".card__project-link")!;
-    expect(link.title).toBe(name);
+    expect(link.hasAttribute("title")).toBe(false);
     expect(link.tabIndex).toBe(0);
+    expect(getIndustry).not.toHaveBeenCalled();
+  });
+
+  it("приглашение сохраняет название, действия и данные проекта без отрасли", () => {
+    const project = projectCardFixture({
+      name: "Длинное название приглашённого проекта",
+      inviteId: 801,
+    });
+    fixture.componentRef.setInput("type", "invite");
+    fixture.componentRef.setInput("info", project);
+    fixture.detectChanges();
+    expect(card().querySelector(".card__industry, .card__context--industry")).toBeNull();
+    expect(card().textContent).not.toContain("Образование");
+    expect(card().querySelector(".card__name")?.textContent).toBe(project.name);
+    expect(card().querySelectorAll(".card__invite-actions button")).toHaveLength(2);
+    expect(project.industry).toBe(projectCardFixture().industry);
   });
 
   it.each(["base", "subs"] as const)(

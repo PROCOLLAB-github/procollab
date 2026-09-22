@@ -1,28 +1,33 @@
 :host {
   display: block;
-  width: 157px;
-  height: 141px;
+  width: 156px;
+  height: 180px;
 }
 
 .activity {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 9px 10px;
+  padding: 12px 10px;
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-lg);
 
   &__title {
-    margin: 0 0 5px;
-    font-size: 11px;
+    margin: 0 0 9px;
+    font-size: 14px;
     font-weight: 600;
-    line-height: 14px;
+    line-height: 18px;
     color: var(--accent);
-    text-transform: uppercase;
   }
 
   &__metrics {
+    display: grid;
+    flex: 1;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    min-height: 0;
     margin: 0;
   }
 
@@ -30,7 +35,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 26px;
 
     & + & {
       border-top: 0.5px solid var(--medium-grey-for-outline);
@@ -42,19 +46,18 @@
     gap: 4px;
     align-items: center;
     min-width: 0;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 400;
-    line-height: 12px;
+    line-height: 14px;
     color: var(--black);
-    white-space: nowrap;
   }
 
   &__icon {
     display: grid;
-    flex: 0 0 20px;
+    flex: 0 0 22px;
     place-items: center;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     color: var(--accent);
     background-color: var(--accent-light);
     border-radius: 50%;
@@ -62,10 +65,18 @@
 
   &__value {
     flex: 0 0 auto;
+
+    // Очень большие числа не вытесняют подпись; полное значение остаётся в DOM и title.
+    max-width: 45px;
     margin: 0 0 0 4px;
-    font-size: 13px;
+    overflow: hidden;
+    font-size: 14px;
     font-weight: 600;
-    line-height: 16px;
+    font-variant-numeric: tabular-nums;
+    line-height: 17px;
     color: var(--accent);
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
