@@ -50,6 +50,23 @@
   &__bell {
     position: relative;
 
+    &--notifications {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+
+      > .attention {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 7px;
+        height: 7px;
+        background-color: var(--red);
+        border-radius: 50%;
+      }
+    }
+
     &--hasInvites {
       position: absolute;
       top: -5%;

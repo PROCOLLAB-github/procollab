@@ -3,7 +3,10 @@
 <div class="control-panel">
   <div class="control-panel__actions">
     <div class="control-panel__action" (click)="showNotifications = true">
-      <div (clickOutside)="onClickOutside()" class="control-panel__bell">
+      <div
+        (clickOutside)="onClickOutside()"
+        class="control-panel__bell control-panel__bell--notifications"
+      >
         @if (hasNotifications() || hasInvites) {
           <div class="attention"></div>
         }
