@@ -122,7 +122,7 @@
     }
     <p class="text-body-6 card__industry">
       @if (industryRepository.getOne(info()?.industry!); as industry) {
-        <span>{{ industry?.name }}</span>
+        <span [title]="industry?.name">{{ industry?.name }}</span>
       }
     </p>
   } @else {

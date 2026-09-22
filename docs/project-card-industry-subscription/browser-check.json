@@ -1,0 +1,85 @@
+{
+  "fixture": "Реальные Angular-компоненты, тестовые данные, ответ use case через 700 мс; без live API",
+  "all": {
+    "subscribe": true,
+    "unsubscribeSingleClick": true
+  },
+  "subscriptions": {
+    "subscribeKeyboard": true,
+    "unsubscribeSingleClick": true
+  },
+  "console": [
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:26:07.459Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:26:57.057Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:27:42.379Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:27:53.141Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:28:34.810Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:17.848Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:18.256Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:32.822Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:34.382Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:36.010Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:58.831Z",
+      "url": "http://127.0.0.1:4307/main.js"
+    },
+    {
+      "level": "warn",
+      "message": "NG0912: Component ID generation collision detected. Components '_IconComponent' and '_IconComponent2' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912",
+      "timestamp": "2026-09-22T11:29:59.251Z",
+      "url": "http://127.0.0.1:4308/main.js"
+    }
+  ]
+}
