@@ -9,7 +9,8 @@ import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 import { CreateProjectUseCase } from "../use-cases/create-project.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 
 /** Координирует верхний уровень раздела проектов: табы, поиск и создание проекта. */
 @Injectable()
@@ -24,6 +25,7 @@ export class ProjectsInfoService {
   private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
 
   private readonly createProjectUseCase = inject(CreateProjectUseCase);
+  private readonly projectRepository = inject(ProjectRepositoryPort);
 
   private readonly url = signal(this.router.url);
   private readonly searchForm = this.projectsUIInfoService.searchForm;
@@ -33,11 +35,16 @@ export class ProjectsInfoService {
   readonly isSubs = computed(() => this.url().includes("/subscriptions"));
   readonly isInvites = computed(() => this.url().includes("/invites"));
   readonly isDashboard = computed(() => this.url().includes("/dashboard"));
+  readonly projectCount = toSignal(this.projectRepository.count$, { requireSync: true });
+  readonly projectCountState = toSignal(this.projectRepository.countState$, {
+    requireSync: true,
+  });
 
   initializationProjects(): void {
     this.navService.setNavTitle("Проекты");
 
     this.inviteInfoService.ensureLoaded();
+    this.refreshProjectCountIfVisible();
 
     this.searchForm
       .get("search")
@@ -65,7 +72,32 @@ export class ProjectsInfoService {
         filter(event => event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.url.set(this.router.url));
+      .subscribe(() => {
+        const previousSection = this.activitySection(this.url());
+        this.url.set(this.router.url);
+        const currentSection = this.activitySection(this.url());
+
+        if (currentSection && currentSection !== previousSection) {
+          this.refreshProjectCountIfVisible();
+        }
+      });
+  }
+
+  private activitySection(url: string): "dashboard" | "my" | null {
+    if (url.includes("/dashboard")) return "dashboard";
+    if (url.includes("/my")) return "my";
+    return null;
+  }
+
+  private refreshProjectCountIfVisible(): void {
+    if (!this.isMy() && !this.isDashboard()) return;
+
+    this.projectRepository
+      .refreshCount()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        error: error => this.logger.warn("Не удалось загрузить статистику проектов", error),
+      });
   }
 
   addProject(): void {

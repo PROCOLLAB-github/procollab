@@ -1,7 +1,7 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-import { of, Subject } from "rxjs";
+import { of, Subject, throwError } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ProjectRepository } from "./project.repository";
 import { ProjectHttpAdapter } from "../../adapters/project/project-http.adapter";
@@ -17,6 +17,7 @@ import { removeProjectCollaborator } from "@domain/project/events/remove-project
 import { sendVacancyResponse } from "@domain/vacancy/events/send-vacancy-response.event";
 import { acceptVacancyResponse } from "@domain/vacancy/events/accept-vacancy-response.event";
 import { rejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-response.event";
+import { acceptInvite } from "@domain/invite/events/accept-invite.event";
 
 describe("ProjectRepository", () => {
   let repository: ProjectRepository;
@@ -39,7 +40,18 @@ describe("ProjectRepository", () => {
     });
     eventBus = TestBed.inject(EventBus);
     repository = TestBed.inject(ProjectRepository);
+    adapter.fetchCount.mockReturnValue(of(activityCount()));
   }
+
+  const activityCount = (overrides: Partial<ProjectCount> = {}): ProjectCount => ({
+    all: 0,
+    my: 0,
+    subs: 0,
+    myLeader: 0,
+    myInProgram: 0,
+    mySubmitted: 0,
+    ...overrides,
+  });
 
   const page = (): ApiPagination<ProjectDto> => ({
     count: 1,
@@ -97,16 +109,40 @@ describe("ProjectRepository", () => {
   it("refreshCount мапит в ProjectCount и пушит в count$", () =>
     new Promise<void>(done => {
       setup();
-      adapter.fetchCount.mockReturnValue(of({ my: 1, all: 2, subs: 3 } as ProjectCount));
+      adapter.fetchCount.mockReturnValue(
+        of(
+          activityCount({
+            my: 1,
+            all: 2,
+            subs: 3,
+            myLeader: 4,
+            myInProgram: 5,
+            mySubmitted: 6,
+          }),
+        ),
+      );
 
       repository.refreshCount().subscribe(count => {
         expect(count).toBeInstanceOf(ProjectCount);
         expect(repository.count$.getValue().my).toBe(1);
         expect(repository.count$.getValue().all).toBe(2);
         expect(repository.count$.getValue().subs).toBe(3);
+        expect(repository.count$.getValue().myLeader).toBe(4);
+        expect(repository.count$.getValue().myInProgram).toBe(5);
+        expect(repository.count$.getValue().mySubmitted).toBe(6);
+        expect(repository.countState$.getValue()).toBe("loaded");
         done();
       });
     }));
+
+  it("refreshCount помечает недоступный count API как error", () => {
+    setup();
+    adapter.fetchCount.mockReturnValue(throwError(() => new Error("boom")));
+
+    repository.refreshCount().subscribe({ error: () => undefined });
+
+    expect(repository.countState$.getValue()).toBe("error");
+  });
 
   it("update мапит ответ в Project и инвалидирует кеш", () =>
     new Promise<void>(done => {
@@ -150,18 +186,20 @@ describe("ProjectRepository", () => {
     expect(adapter.deleteOne).toHaveBeenCalledExactlyOnceWith(42);
   });
 
-  it("ProjectCreated увеличивает count.my", () => {
+  it("ProjectCreated перечитывает authoritative count", () => {
     setup();
-    repository.count$.next({ my: 1, all: 0, subs: 0 });
+    adapter.fetchCount.mockReturnValue(of(activityCount({ my: 2, myLeader: 2 })));
     eventBus.emit(projectCreated({ id: 1 } as Project));
     expect(repository.count$.getValue().my).toBe(2);
+    expect(repository.count$.getValue().myLeader).toBe(2);
+    expect(adapter.fetchCount).toHaveBeenCalledOnce();
   });
 
-  it("ProjectDeleted уменьшает count.my и инвалидирует кеш", () => {
+  it("ProjectDeleted перечитывает count и инвалидирует кеш", () => {
     setup();
     adapter.fetchOne.mockReturnValue(of({ id: 7 } as ProjectDto));
     repository.getOne(7).subscribe();
-    repository.count$.next({ my: 2, all: 0, subs: 0 });
+    adapter.fetchCount.mockReturnValue(of(activityCount({ my: 1 })));
 
     eventBus.emit(projectDeleted(7));
 
@@ -172,16 +210,26 @@ describe("ProjectRepository", () => {
 
   it("ProjectSubscribed увеличивает count.subs", () => {
     setup();
-    repository.count$.next({ my: 0, all: 0, subs: 1 });
+    repository.count$.next(activityCount({ subs: 1 }));
     eventBus.emit(projectSubscribed(7));
     expect(repository.count$.getValue().subs).toBe(2);
   });
 
   it("ProjectUnSubscribed уменьшает count.subs (не ниже 0) и инвалидирует", () => {
     setup();
-    repository.count$.next({ my: 0, all: 0, subs: 0 });
+    repository.count$.next(activityCount());
     eventBus.emit(projectUnSubscribed(7));
     expect(repository.count$.getValue().subs).toBe(0);
+  });
+
+  it("AcceptInvite перечитывает count после успешного доменного события", () => {
+    setup();
+    adapter.fetchCount.mockReturnValue(of(activityCount({ my: 1 })));
+
+    eventBus.emit(acceptInvite(5, 7, 11, "Участник"));
+
+    expect(adapter.fetchCount).toHaveBeenCalledOnce();
+    expect(repository.count$.getValue().my).toBe(1);
   });
 
   it("RemoveProjectCollaborator инвалидирует кеш проекта", () => {

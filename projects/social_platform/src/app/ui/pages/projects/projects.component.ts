@@ -12,16 +12,17 @@ import {
 import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
-import { ButtonComponent, IconComponent } from "@ui/primitives";
+import { ButtonComponent } from "@ui/primitives/button/button.component";
+import { IconComponent } from "@ui/primitives/icon/icon.component";
 import { BarNewComponent } from "./bar-new/bar.component";
 import { BackComponent } from "@uilib";
-import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.service";
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
 import { SwipeService } from "@api/swipe/swipe.service";
 import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
+import { ProjectActivityCardComponent } from "./project-activity-card/project-activity-card.component";
 
 /** Контейнер модуля проектов с поиском, фильтрацией и навигацией по разделам. */
 @Component({
@@ -36,7 +37,7 @@ import { OfficeInfoService } from "@api/office/facades/office-info.service";
     RouterOutlet,
     BarNewComponent,
     BackComponent,
-    SoonCardComponent,
+    ProjectActivityCardComponent,
     ProjectsFilterComponent,
     InfoCardComponent,
   ],
@@ -64,6 +65,8 @@ export class ProjectsComponent implements OnInit {
   protected readonly isSubs = this.projectsInfoService.isSubs;
   protected readonly isInvites = this.projectsInfoService.isInvites;
   protected readonly isDashboard = this.projectsInfoService.isDashboard;
+  protected readonly projectCount = this.projectsInfoService.projectCount;
+  protected readonly projectCountState = this.projectsInfoService.projectCountState;
 
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;
 
