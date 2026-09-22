@@ -72,6 +72,11 @@
     min-height: 25px;
   }
 
+  &__logout > &__bell {
+    display: inline-flex;
+    line-height: 0;
+  }
+
   &__attention {
     position: absolute;
     top: 1px;
