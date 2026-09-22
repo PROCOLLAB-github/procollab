@@ -139,13 +139,6 @@
     color: var(--accent);
   }
 
-  &__industry {
-    padding: 2px 36px;
-    color: var(--light-white);
-    background-color: var(--green);
-    border-radius: var(--rounded-xl);
-  }
-
   &__description {
     display: flex;
     flex: 1;
@@ -286,18 +279,19 @@
     }
 
     .card__description {
-      flex: 0 0 26px;
+      // Место удалённой отрасли отдано описанию без увеличения внешней карточки.
+      flex: 0 0 52px;
       width: 100%;
-      height: 26px;
-      min-height: 26px;
+      height: 52px;
+      min-height: 52px;
 
       p {
-        /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс сохраняет двухстрочное сокращение описания. */
+        /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс ограничивает описание четырьмя строками. */
         display: -webkit-box;
         overflow: hidden;
         font-size: 10px;
         line-height: 13px;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
       }
     }
@@ -350,6 +344,7 @@
       p {
         font-size: 9px;
         line-height: 12px;
+        -webkit-line-clamp: 2;
       }
     }
 
@@ -381,16 +376,16 @@
       }
     }
 
-    .card__industry {
-      width: 100%;
-      padding: 0 8px;
+    .card__name {
+      /* stylelint-disable-next-line value-no-vendor-prefix -- Освободившаяся строка сохраняет длинное название. */
+      display: -webkit-box;
+      max-height: 30px;
       overflow: hidden;
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 14px;
-      color: var(--black);
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      line-height: 15px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
 
     .card__description {
@@ -466,22 +461,6 @@
     white-space: nowrap;
     background: var(--light-gray);
     border-radius: 11px;
-
-    &--industry {
-      font-size: 11px;
-      color: var(--accent-dark);
-      background: var(--accent-light);
-
-      span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--accent-dark);
-        outline-offset: 2px;
-      }
-    }
   }
 
   &__status {

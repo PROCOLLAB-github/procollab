@@ -40,7 +40,6 @@
         class="card__project-link"
         [routerLink]="AppRoutes.projects.detail(info()?.id)"
         [attr.aria-label]="'Открыть проект «' + info()?.name + '»'"
-        [attr.title]="projectIndustry()"
       >
         <ng-container *ngTemplateOutlet="cardContent"></ng-container>
       </a>
@@ -59,10 +58,6 @@
     @if (myProjectPresentation(); as presentation) {
       <p [class]="'card__context card__status card__status--' + presentation.lifecycle">
         {{ presentation.statusLabel }}
-      </p>
-    } @else if (projectIndustry(); as industry) {
-      <p class="card__context card__context--industry" [title]="industry">
-        <span>{{ industry }}</span>
       </p>
     }
     <div class="card__head">
@@ -118,13 +113,8 @@
     <p class="card__name">{{ info().name }}</p>
   } @else if (type() === "projects" || type() === "invite") {
     @if (info().name) {
-      <p class="text-body-12 card__name">{{ info().name | truncate: 12 }}</p>
+      <p class="text-body-12 card__name" [title]="info().name">{{ info().name }}</p>
     }
-    <p class="text-body-6 card__industry">
-      @if (industryRepository.getOne(info()?.industry!); as industry) {
-        <span [title]="industry?.name">{{ industry?.name }}</span>
-      }
-    </p>
   } @else {
     <p class="text-body-12 card__name">{{ info()?.firstName | truncate: 10 }}</p>
     <p class="text-body-12 card__name">{{ info()?.lastName | truncate: 10 }}</p>
@@ -147,7 +137,7 @@
     class="card__description"
     [class.card__description--project]="type() === 'projects'"
     [style.max-height]="
-      isProjectCard() ? '26px' : type() === 'invite' ? null : type() === 'members' ? '50px' : '24px'
+      isProjectCard() || type() === 'invite' ? null : type() === 'members' ? '50px' : '24px'
     "
     [class.invite-description]="type() === 'invite'"
   >

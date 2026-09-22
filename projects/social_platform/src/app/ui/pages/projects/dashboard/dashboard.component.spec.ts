@@ -120,7 +120,10 @@ describe("ProjectsDashboard: контексты карточек", () => {
         } else {
           expect(c.isSubscribed).toBe(true);
           expect(el.nativeElement.querySelector(".card__status")).toBeNull();
-          expect(!!el.nativeElement.querySelector(".card__context--industry")).toBe(i !== 3);
+          expect(el.nativeElement.querySelector(".card__context--industry")).toBeNull();
+          expect(el.nativeElement.querySelector(".card__project-link").hasAttribute("title")).toBe(
+            false,
+          );
           expect(
             el.nativeElement.querySelector(".card__project-action-label").textContent.trim(),
           ).toBe("Открыть");

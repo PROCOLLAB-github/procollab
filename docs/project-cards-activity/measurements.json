@@ -1,0 +1,784 @@
+[
+  {
+    "version": "before",
+    "surface": "dashboard",
+    "viewport": 1440,
+    "activity": {
+      "height": 141,
+      "width": 157,
+      "x": 1075.484375,
+      "y": 429.1875
+    },
+    "card": {
+      "height": 180,
+      "width": 156,
+      "x": 368.65625,
+      "y": 230.59375
+    },
+    "invite": {
+      "height": 180,
+      "width": 156,
+      "x": 1075.484375,
+      "y": 233.1875
+    },
+    "overflow": false,
+    "right": {
+      "height": 1131.78125,
+      "width": 157,
+      "x": 1075.484375,
+      "y": 117
+    }
+  },
+  {
+    "version": "after",
+    "surface": "dashboard",
+    "viewport": 1440,
+    "activity": {
+      "height": 180,
+      "width": 156,
+      "x": 1075.484375,
+      "y": 429.1875
+    },
+    "card": {
+      "height": 180,
+      "width": 156,
+      "x": 368.65625,
+      "y": 230.59375
+    },
+    "invite": {
+      "height": 180,
+      "width": 156,
+      "x": 1075.484375,
+      "y": 233.1875
+    },
+    "overflow": false,
+    "right": {
+      "height": 1131.78125,
+      "width": 157,
+      "x": 1075.484375,
+      "y": 117
+    }
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "value": 0,
+    "height": 180,
+    "overflow": false,
+    "rows": [
+      {
+        "height": 31.75,
+        "label": "Проектов",
+        "overlap": false,
+        "title": "0",
+        "value": "0",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Я лидер",
+        "overlap": false,
+        "title": "0",
+        "value": "0",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "В программе",
+        "overlap": false,
+        "title": "0",
+        "value": "0",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Сдано",
+        "overlap": false,
+        "title": "0",
+        "value": "0",
+        "valueClipped": false
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "value": 26,
+    "height": 180,
+    "overflow": false,
+    "rows": [
+      {
+        "height": 31.75,
+        "label": "Проектов",
+        "overlap": false,
+        "title": "26",
+        "value": "26",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Я лидер",
+        "overlap": false,
+        "title": "26",
+        "value": "26",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "В программе",
+        "overlap": false,
+        "title": "26",
+        "value": "26",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Сдано",
+        "overlap": false,
+        "title": "26",
+        "value": "26",
+        "valueClipped": false
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "value": 123,
+    "height": 180,
+    "overflow": false,
+    "rows": [
+      {
+        "height": 31.75,
+        "label": "Проектов",
+        "overlap": false,
+        "title": "123",
+        "value": "123",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Я лидер",
+        "overlap": false,
+        "title": "123",
+        "value": "123",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "В программе",
+        "overlap": false,
+        "title": "123",
+        "value": "123",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Сдано",
+        "overlap": false,
+        "title": "123",
+        "value": "123",
+        "valueClipped": false
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "value": 9999,
+    "height": 180,
+    "overflow": false,
+    "rows": [
+      {
+        "height": 31.75,
+        "label": "Проектов",
+        "overlap": false,
+        "title": "9999",
+        "value": "9999",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Я лидер",
+        "overlap": false,
+        "title": "9999",
+        "value": "9999",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "В программе",
+        "overlap": false,
+        "title": "9999",
+        "value": "9999",
+        "valueClipped": false
+      },
+      {
+        "height": 31.75,
+        "label": "Сдано",
+        "overlap": false,
+        "title": "9999",
+        "value": "9999",
+        "valueClipped": false
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "value": 999999999999,
+    "height": 180,
+    "overflow": false,
+    "rows": [
+      {
+        "height": 31.75,
+        "label": "Проектов",
+        "overlap": false,
+        "title": "999999999999",
+        "value": "999999999999",
+        "valueClipped": true
+      },
+      {
+        "height": 31.75,
+        "label": "Я лидер",
+        "overlap": false,
+        "title": "999999999999",
+        "value": "999999999999",
+        "valueClipped": true
+      },
+      {
+        "height": 31.75,
+        "label": "В программе",
+        "overlap": false,
+        "title": "999999999999",
+        "value": "999999999999",
+        "valueClipped": true
+      },
+      {
+        "height": 31.75,
+        "label": "Сдано",
+        "overlap": false,
+        "title": "999999999999",
+        "value": "999999999999",
+        "valueClipped": true
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "state": "loading",
+    "height": 180,
+    "values": [
+      {
+        "text": "—",
+        "title": null
+      },
+      {
+        "text": "—",
+        "title": null
+      },
+      {
+        "text": "—",
+        "title": null
+      },
+      {
+        "text": "—",
+        "title": null
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "after",
+    "surface": "activity",
+    "state": "error",
+    "height": 180,
+    "values": [
+      {
+        "text": "—",
+        "title": null
+      },
+      {
+        "text": "—",
+        "title": null
+      },
+      {
+        "text": "—",
+        "title": null
+      },
+      {
+        "text": "—",
+        "title": null
+      }
+    ],
+    "width": 156
+  },
+  {
+    "version": "before",
+    "surface": "subscriptions",
+    "viewport": 1440,
+    "activityCount": 0,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 3,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "subscriptions",
+    "viewport": 1440,
+    "activityCount": 0,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "before",
+    "surface": "all",
+    "viewport": 1440,
+    "activityCount": 0,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 3,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "all",
+    "viewport": 1440,
+    "activityCount": 0,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "before",
+    "surface": "invites",
+    "viewport": 1440,
+    "activityCount": 0,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 2,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "invites",
+    "viewport": 1440,
+    "activityCount": 0,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "before",
+    "surface": "dashboard",
+    "viewport": 390,
+    "activity": {
+      "height": 141,
+      "width": 157,
+      "x": 0,
+      "y": 602.96875
+    },
+    "invite": {
+      "height": 180,
+      "width": 156,
+      "x": 0
+    },
+    "overflow": false,
+    "overlap": false,
+    "right": {
+      "width": 375,
+      "x": 0
+    }
+  },
+  {
+    "version": "after",
+    "surface": "dashboard",
+    "viewport": 390,
+    "activity": {
+      "height": 180,
+      "width": 156,
+      "x": 0,
+      "y": 563.96875
+    },
+    "invite": {
+      "height": 180,
+      "width": 156,
+      "x": 0
+    },
+    "overflow": false,
+    "overlap": false,
+    "right": {
+      "width": 375,
+      "x": 0
+    }
+  },
+  {
+    "version": "after",
+    "surface": "my",
+    "viewport": 390,
+    "long": true,
+    "activityCount": 1,
+    "activitySize": {
+      "h": 180,
+      "w": 156
+    },
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "subscriptions",
+    "viewport": 390,
+    "long": true,
+    "activityCount": 0,
+    "activitySize": null,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "all",
+    "viewport": 390,
+    "long": true,
+    "activityCount": 0,
+    "activitySize": null,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "invites",
+    "viewport": 390,
+    "long": true,
+    "activityCount": 0,
+    "activitySize": null,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "my",
+    "viewport": 768,
+    "long": true,
+    "activityCount": 1,
+    "activitySize": {
+      "h": 180,
+      "w": 156
+    },
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "subscriptions",
+    "viewport": 768,
+    "long": true,
+    "activityCount": 0,
+    "activitySize": null,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "all",
+    "viewport": 768,
+    "long": true,
+    "activityCount": 0,
+    "activitySize": null,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "after",
+    "surface": "invites",
+    "viewport": 768,
+    "long": true,
+    "activityCount": 0,
+    "activitySize": null,
+    "cardSizes": [
+      {
+        "h": 180,
+        "w": 156
+      },
+      {
+        "h": 180,
+        "w": 156
+      }
+    ],
+    "industries": 0,
+    "overflow": false
+  },
+  {
+    "version": "before",
+    "surface": "dashboard",
+    "viewport": 768,
+    "activity": {
+      "height": 141,
+      "width": 157,
+      "x": 0,
+      "y": 1562.96875
+    },
+    "overflow": false,
+    "right": {
+      "width": 753,
+      "x": 0
+    }
+  },
+  {
+    "version": "after",
+    "surface": "dashboard",
+    "viewport": 768,
+    "activity": {
+      "height": 180,
+      "width": 156,
+      "x": 0,
+      "y": 1562.96875
+    },
+    "overflow": false,
+    "right": {
+      "width": 753,
+      "x": 0
+    }
+  }
+]

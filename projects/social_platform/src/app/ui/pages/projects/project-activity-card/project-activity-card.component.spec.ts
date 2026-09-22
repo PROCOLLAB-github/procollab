@@ -47,6 +47,7 @@ describe("ProjectActivityCardComponent", () => {
     expect(element.textContent).not.toContain("скоро");
     expect(element.textContent).not.toContain("пока закрыто");
     expect(element.textContent).not.toContain("Подробнее");
+    expect(element.querySelector("button, a")).toBeNull();
   });
 
   it.each(["loading", "error"] as const)("не показывает выдуманные числа в состоянии %s", state => {
@@ -54,5 +55,34 @@ describe("ProjectActivityCardComponent", () => {
     expect(
       Array.from(element.querySelectorAll(".activity__value")).map(x => x.textContent?.trim()),
     ).toEqual(["—", "—", "—", "—"]);
+  });
+
+  it("сохраняет заголовок в обычном регистре и декоративные иконки", () => {
+    const element = render().nativeElement as HTMLElement;
+    expect(element.querySelector("h2")?.textContent?.trim()).toBe("Моя активность");
+    expect(element.querySelectorAll('.activity__icon[aria-hidden="true"]')).toHaveLength(4);
+  });
+
+  it.each([0, 26, 123, 9999, 999999999999])(
+    "не подменяет значение %s сокращённым числом",
+    value => {
+      const element = render(count({ my: value })).nativeElement as HTMLElement;
+      const counter = element.querySelector<HTMLElement>(".activity__value")!;
+      expect(counter.textContent?.trim()).toBe(String(value));
+      expect(counter.title).toBe(String(value));
+    },
+  );
+
+  it("при повторной загрузке убирает устаревшие числа, включая title", () => {
+    const fixture = render(count({ my: 9999 }));
+    for (const state of ["loading", "error"] as const) {
+      fixture.componentRef.setInput("state", state);
+      fixture.detectChanges();
+      const values = Array.from(
+        fixture.nativeElement.querySelectorAll(".activity__value"),
+      ) as HTMLElement[];
+      expect(values.map(element => element.textContent?.trim())).toEqual(["—", "—", "—", "—"]);
+      expect(values.every(element => !element.hasAttribute("title"))).toBe(true);
+    }
   });
 });
