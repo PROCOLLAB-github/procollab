@@ -1,0 +1,356 @@
+{
+  "base": "683da4b9b30334bab4bd6c7a1afea3ddc91fe9ad",
+  "devicePixelRatio": 1,
+  "scope": "Локальные настоящие компоненты с тестовыми данными; одинаковые viewport до/после",
+  "metrics": {
+    "my": {
+      "before": {
+        "title_description_gaps_px": [2, 16, 16, 2, 16, 16, 2, 2],
+        "cta_size_px": [134, 21],
+        "cta_font": "9px"
+      },
+      "after": {
+        "title_description_gaps_px": [1, 1, 1, 1, 1, 1, 1, 1],
+        "cta_size_px": [134, 22],
+        "cta_font": "10px"
+      }
+    },
+    "subscriptions": {
+      "before": {
+        "title_description_gaps_px": [21, 6, 6, 6],
+        "cta_size_px": [70, 13.796875],
+        "cta_font": "9px"
+      },
+      "after": {
+        "title_description_gaps_px": [2, 2, 2, 2],
+        "cta_size_px": [130, 22],
+        "cta_font": "10px"
+      }
+    },
+    "all": {
+      "before": {
+        "title_description_gaps_px": [21, 6, 6, 6],
+        "cta_size_px": [70, 13.796875],
+        "cta_font": "9px"
+      },
+      "after": {
+        "title_description_gaps_px": [2, 2, 2, 2],
+        "cta_size_px": [130, 22],
+        "cta_font": "10px"
+      }
+    }
+  },
+  "invitations": {
+    "before": {
+      "label_font": "6px",
+      "name_font": "10px",
+      "button_font": "6px",
+      "button_size_px": [70, 13.796875]
+    },
+    "after": {
+      "label_font": "10px",
+      "name_font": "12px",
+      "button_font": "12px",
+      "button_size_px": [134, 25.59375]
+    }
+  },
+  "cases": [
+    {
+      "surface": "dashboard",
+      "width": 1440,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "cardCount": 17,
+      "allCards156x180": true,
+      "statisticsBefore": {
+        "x": 1075.484375,
+        "y": 429.1875,
+        "width": 157,
+        "height": 140.984375
+      },
+      "statisticsAfter": {
+        "x": 1075.484375,
+        "y": 429.1875,
+        "width": 157,
+        "height": 140.984375
+      }
+    },
+    {
+      "surface": "my",
+      "width": 1440,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "cardCount": 8,
+      "allCards156x180": true,
+      "statisticsBefore": {
+        "x": 1075.484375,
+        "y": 157.59375,
+        "width": 157,
+        "height": 140.984375
+      },
+      "statisticsAfter": {
+        "x": 1075.484375,
+        "y": 157.59375,
+        "width": 157,
+        "height": 140.984375
+      }
+    },
+    {
+      "surface": "subscriptions",
+      "width": 1440,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "cardCount": 4,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "all",
+      "width": 1440,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "cardCount": 4,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "invites",
+      "width": 1440,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "cardCount": 2,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "dashboard",
+      "width": 768,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      },
+      "cardCount": 17,
+      "allCards156x180": true,
+      "statisticsBefore": {
+        "x": 0,
+        "y": 1562.96875,
+        "width": 753,
+        "height": 133.1875
+      },
+      "statisticsAfter": {
+        "x": 0,
+        "y": 1562.96875,
+        "width": 753,
+        "height": 133.1875
+      }
+    },
+    {
+      "surface": "my",
+      "width": 768,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      },
+      "cardCount": 8,
+      "allCards156x180": true,
+      "statisticsBefore": {
+        "x": 0,
+        "y": 717.1875,
+        "width": 753,
+        "height": 133.1875
+      },
+      "statisticsAfter": {
+        "x": 0,
+        "y": 717.1875,
+        "width": 753,
+        "height": 133.1875
+      }
+    },
+    {
+      "surface": "subscriptions",
+      "width": 768,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      },
+      "cardCount": 4,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "all",
+      "width": 768,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      },
+      "cardCount": 4,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "invites",
+      "width": 768,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      },
+      "cardCount": 2,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "dashboard",
+      "width": 390,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      },
+      "cardCount": 17,
+      "allCards156x180": true,
+      "statisticsBefore": {
+        "x": 0,
+        "y": 2482.96875,
+        "width": 375,
+        "height": 133.1875
+      },
+      "statisticsAfter": {
+        "x": 0,
+        "y": 2482.96875,
+        "width": 375,
+        "height": 133.1875
+      }
+    },
+    {
+      "surface": "my",
+      "width": 390,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      },
+      "cardCount": 8,
+      "allCards156x180": true,
+      "statisticsBefore": {
+        "x": 0,
+        "y": 1206.78125,
+        "width": 375,
+        "height": 133.1875
+      },
+      "statisticsAfter": {
+        "x": 0,
+        "y": 1206.78125,
+        "width": 375,
+        "height": 133.1875
+      }
+    },
+    {
+      "surface": "subscriptions",
+      "width": 390,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      },
+      "cardCount": 4,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "all",
+      "width": 390,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      },
+      "cardCount": 4,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    },
+    {
+      "surface": "invites",
+      "width": 390,
+      "geometrySame": true,
+      "statsSame": true,
+      "noOverflow": true,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      },
+      "cardCount": 2,
+      "allCards156x180": true,
+      "statisticsBefore": null,
+      "statisticsAfter": null
+    }
+  ],
+  "longInvite": [
+    {
+      "gap": 4.421875,
+      "name": " Александра Константинопольская ",
+      "overflow": 0
+    },
+    {
+      "gap": 19.421875,
+      "name": " Анна Смирнова ",
+      "overflow": 0
+    }
+  ]
+}

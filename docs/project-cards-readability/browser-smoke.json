@@ -1,0 +1,21 @@
+{
+  "scope": "Локальная сборка настоящих компонентов с фикстурами и безопасными заглушками API",
+  "invitationActions": [
+    {
+      "surface": "invites",
+      "accepted": 801,
+      "rejected": 801,
+      "navigation": false
+    },
+    {
+      "surface": "dashboard",
+      "accepted": 801,
+      "rejected": 801,
+      "navigation": false
+    }
+  ],
+  "projectNavigation": "Тестовый detail-placeholder проекта 201",
+  "consoleErrors": [],
+  "knownWarning": "NG0912: повторный IconComponent в preview",
+  "geometryCases": 15
+}
