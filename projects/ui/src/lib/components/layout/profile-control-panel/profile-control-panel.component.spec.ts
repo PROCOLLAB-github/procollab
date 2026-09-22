@@ -23,6 +23,9 @@ describe("ProfileControlPanelComponent: колокольчик", () => {
     const bell = element.querySelector(".control-panel__bell--notifications");
 
     expect(bell?.querySelector('i[appIcon][icon="bell"]')).not.toBeNull();
+    expect(bell?.querySelector("svg")?.getAttribute("viewBox")).toBe("0 0 17 19");
+    expect(bell?.querySelector("svg")?.getAttribute("width")).toBe("15");
+    expect(bell?.querySelector("svg")?.getAttribute("height")).toBe("17");
     expect(bell?.querySelector(".attention")).not.toBeNull();
     expect(element.querySelectorAll(".control-panel__bell--notifications")).toHaveLength(1);
   });
