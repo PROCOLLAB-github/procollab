@@ -3,6 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { By } from "@angular/platform-browser";
+import { User } from "@domain/auth/user.model";
 import { Notification } from "@domain/notification/notification.model";
 import { ProfileControlPanelComponent } from "./profile-control-panel.component";
 import { IconComponent } from "../../primitives/icon/icon.component";
@@ -59,6 +60,21 @@ describe("ProfileControlPanelComponent notification center", () => {
     fixture.detectChanges();
   }
 
+  it("использует исходный viewBox колокольчика при прежнем внешнем размере", () => {
+    const icon: SVGElement = fixture.nativeElement.querySelector(
+      "button.control-panel__bell i[icon='bell'] svg",
+    );
+    expect(icon.getAttribute("viewBox")).toBe("0 0 17 19");
+    expect(icon.getAttribute("width")).toBe("15");
+    expect(icon.getAttribute("height")).toBe("17");
+
+    const logoutIcon: SVGElement = fixture.nativeElement.querySelector(
+      "button.control-panel__logout svg",
+    );
+    expect(logoutIcon.getAttribute("width")).toBe("15");
+    expect(logoutIcon.getAttribute("height")).toBe("17");
+  });
+
   it("сохраняет popup внутри stacking context control-panel при открытии и закрытии", () => {
     const panel = fixture.nativeElement.querySelector(".control-panel") as HTMLElement;
     const bell = panel.querySelector("button.control-panel__bell") as HTMLButtonElement;
@@ -107,6 +123,17 @@ describe("ProfileControlPanelComponent notification center", () => {
     fixture.detectChanges();
 
     expect(component.showNotifications).toBe(false);
+  });
+
+  it("закрывает popup при клике вне notification center", async () => {
+    openPopup();
+
+    document.body.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(component.showNotifications).toBe(false);
+    expect(fixture.nativeElement.querySelector("[role='dialog']")).toBeNull();
   });
 
   it("различает unread/read и показывает avatar с fallback", () => {
@@ -196,6 +223,16 @@ describe("ProfileControlPanelComponent notification center", () => {
     fixture.nativeElement.querySelector(".control-panel__logout").click();
 
     expect(logout).toHaveBeenCalledOnce();
+  });
+
+  it("сохраняет переход по аватару в профиль", () => {
+    fixture.componentRef.setInput("user", { id: 42, personal: {} } as User);
+    fixture.detectChanges();
+
+    const link: HTMLAnchorElement = fixture.nativeElement.querySelector(
+      ".control-panel__profile .user",
+    );
+    expect(link.getAttribute("href")).toBe("/office/profile/42");
   });
 
   const programTypes = [
