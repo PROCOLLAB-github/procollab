@@ -52,6 +52,9 @@ export interface ProjectCountDto {
   all: number;
   my: number;
   subs: number;
+  myLeader: number;
+  myInProgram: number;
+  mySubmitted: number;
 }
 
 export interface ProjectListDto {
