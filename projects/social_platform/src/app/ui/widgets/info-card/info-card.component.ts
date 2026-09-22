@@ -2,6 +2,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
@@ -58,6 +59,7 @@ interface MyProjectPresentation {
 })
 export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly addProjectSubscriptionUseCase = inject(AddProjectSubscriptionUseCase);
   private readonly deleteProjectSubscriptionUseCase = inject(DeleteProjectSubscriptionUseCase);
   public readonly industryRepository = inject(IndustryRepositoryPort);
@@ -211,7 +213,9 @@ export class InfoCardComponent {
   }
 
   /**
-   * Подписка на проект или открытие модального окна отписки
+   * Подписка на проект или открытие подтверждения отписки.
+   * Закладка меняется только после успеха API. Отложенный ответ явно уведомляет
+   * OnPush-представление: в zoneless обычное поле не запускает перерисовку.
    */
   onSubscribe(event: Event, projectId: number): void {
     if (!projectId) {
@@ -237,12 +241,15 @@ export class InfoCardComponent {
           }
 
           this.isSubscribed = true;
+          this.changeDetectorRef.markForCheck();
         },
       });
   }
 
   /**
-   * Отписка от проекта
+   * Успешная отписка одновременно снимает закладку и закрывает подтверждение.
+   * Уведомление OnPush после ответа API исключает необходимость второго клика;
+   * при ошибке сохраняются подписка и возможность повторить действие.
    */
   onUnsubscribe(event: Event, projectId: number): void {
     if (!projectId) {
@@ -264,6 +271,7 @@ export class InfoCardComponent {
 
           this.isSubscribed = false;
           this.isUnsubscribeModalOpen = false;
+          this.changeDetectorRef.markForCheck();
         },
       });
   }
