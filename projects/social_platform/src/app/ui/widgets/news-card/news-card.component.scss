@@ -1,4 +1,5 @@
-@use "styles/feed-card";
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -249,70 +250,4 @@
       display: none;
     }
   }
-}
-
-// Ограничения применяются только к preview ленты: файлы и изображения не меняют высоту ряда.
-.card--feed {
-  @include feed-card.layout;
-
-  .feed-card__source-text { flex: 1; }
-
-  .card__feed-extras {
-    gap: 6px;
-    align-items: stretch;
-  }
-
-  .card__feed-industry { align-self: flex-start; }
-
-  .card__feed-media {
-    display: flex;
-    flex: 1;
-    gap: 8px;
-    min-height: 0;
-  }
-
-  app-carousel {
-    --carousel-height: 100%;
-
-    display: block;
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
-  }
-
-  .card__feed-files {
-    flex: 1;
-    min-width: 0;
-    padding: 3px;
-    margin: 0;
-    overflow: hidden auto;
-    list-style: none;
-
-    a {
-      display: block;
-      padding: 4px 0;
-      overflow: hidden;
-      font-size: 11px;
-      line-height: 16px;
-      color: var(--accent-dark);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  .card__feed-actions {
-    flex: 0 0 22px;
-    margin-top: auto;
-    font-size: 11px;
-  }
-
-  button {
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-  }
-
-  .card__option { padding: 5px 20px; }
 }

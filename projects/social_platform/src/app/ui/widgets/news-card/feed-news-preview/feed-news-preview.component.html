@@ -1,0 +1,132 @@
+<!-- @format -->
+<article
+  class="feed-preview"
+  [id]="news().id"
+  tabindex="0"
+  role="button"
+  aria-haspopup="dialog"
+  [attr.aria-expanded]="modalOpen()"
+  [attr.aria-label]="'Открыть новость ' + headline()"
+  (click)="onCardClick($event)"
+  (keydown.enter)="onCardKeydown($event)"
+  (keydown.space)="onCardKeydown($event)"
+>
+  <div class="feed-card__meta">
+    <span class="card__feed-type feed-card__type">{{
+      type() === "people" ? "Новости людей" : "Новости проекта"
+    }}</span>
+    <time class="card__feed-date feed-card__date" [attr.datetime]="publishedAt()">{{
+      publishedAt() | dayjs: "format" : "DD.MM.YYYY"
+    }}</time>
+  </div>
+  <div class="feed-card__source">
+    <img
+      class="feed-card__avatar"
+      [src]="news().imageAddress || placeholderUrl()"
+      [alt]="news().name"
+    />
+    <div class="feed-card__source-text">
+      <span class="feed-card__eyebrow">{{ type() === "people" ? "Автор" : "Проект" }}</span>
+      <a class="feed-card__source-name" [title]="news().name" [routerLink]="resourceLink()">{{
+        news().name
+      }}</a>
+    </div>
+    @if (isOwner()) {
+      <div class="feed-preview__menu" (clickOutside)="menuOpen.set(false)">
+        <button
+          type="button"
+          class="feed-preview__menu-trigger"
+          aria-label="Действия с новостью"
+          [attr.aria-expanded]="menuOpen()"
+          (click)="menuOpen.set(!menuOpen())"
+        >
+          <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
+        </button>
+        @if (menuOpen()) {
+          <div class="feed-preview__options">
+            <button type="button" (click)="menuOpen.set(false); edit.emit()">редактировать</button>
+            <button type="button" (click)="menuOpen.set(false); delete.emit()">удалить</button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+  <div class="feed-preview__content" [class.feed-preview__content--image]="images().length > 0">
+    <div class="feed-preview__text">
+      <h3 #titleElement class="feed-card__title" [title]="headline()">{{ headline() }}</h3>
+      @if (summary()) {
+        <p #summaryElement class="feed-card__description" [textContent]="summary()"></p>
+      }
+      @if (truncated()) {
+        <button
+          #moreButton
+          type="button"
+          class="feed-preview__more"
+          (click)="openModal(moreButton)"
+        >
+          Подробнее
+        </button>
+      }
+      @if (files().length) {
+        <span class="feed-preview__attachments">Вложений: {{ files().length }}</span>
+      }
+    </div>
+    @if (images().length) {
+      <div class="feed-preview__media">
+        <img
+          class="feed-preview__thumbnail"
+          [src]="images()[0].link"
+          [alt]="images()[0].name"
+          loading="lazy"
+        />
+        @if (images().length > 1) {
+          <span class="feed-preview__image-count">{{ images().length }} фото</span>
+        }
+      </div>
+    }
+  </div>
+  <footer class="feed-preview__actions">
+    @if (industryId(); as id) {
+      @if (industryRepository.getOne(id); as industry) {
+        <span
+          class="card__feed-industry feed-card__chip feed-card__chip--industry"
+          [title]="industry.name"
+          >{{ industry.name }}</span
+        >
+      }
+    }
+    <button
+      type="button"
+      aria-label="Нравится"
+      [attr.aria-pressed]="news().isUserLiked"
+      [class.feed-preview__liked]="news().isUserLiked"
+      (click)="like.emit()"
+    >
+      <i appIcon icon="like" appSquare="12"></i>{{ news().likesCount > 0 ? news().likesCount : "" }}
+    </button>
+    <button type="button" aria-label="Скопировать ссылку на новость" (click)="share.emit()">
+      <i appIcon icon="share" appSquare="12"></i>
+    </button>
+    <span class="feed-preview__views" [attr.aria-label]="'Просмотров: ' + news().viewsCount"
+      ><i appIcon icon="eye" appSquare="12"></i>{{ news().viewsCount }}</span
+    >
+  </footer>
+  <a class="card__feed-cta feed-card__cta" [routerLink]="resourceLink()">{{
+    type() === "people" ? "Перейти в профиль" : "Перейти в проект"
+  }}</a>
+</article>
+@if (modalOpen()) {
+  <app-feed-news-modal
+    [news]="news()"
+    [type]="type()"
+    [images]="images()"
+    [files]="files()"
+    [resourceLink]="resourceLink()"
+    [publishedAt]="publishedAt()"
+    [placeholderUrl]="placeholderUrl()"
+    [trigger]="trigger"
+    (like)="like.emit()"
+    (share)="share.emit()"
+    (closed)="modalOpen.set(false)"
+  />
+}

@@ -79,7 +79,7 @@ describe("NewsCardComponent", () => {
     );
   });
 
-  it("сохраняет лайк, ссылку на скачивание и полное имя источника в компактной ленте", () => {
+  it("сохраняет лайк, индикатор вложений и полное имя источника в компактной ленте", () => {
     const name = "Очень длинное название проекта ".repeat(8);
     const news = {
       ...FeedNews.default(),
@@ -103,10 +103,8 @@ describe("NewsCardComponent", () => {
     const emit = vi.spyOn(component.like, "emit");
     root.querySelector<HTMLButtonElement>('button[aria-label="Нравится"]')!.click();
     expect(emit).toHaveBeenCalledExactlyOnceWith(news.id);
-    expect(root.querySelector(".card__feed-files a")?.getAttribute("href")).toBe("/test.pdf");
-    expect(root.querySelector(".card__feed-files a")?.getAttribute("download")).toBe(
-      "Тестовый документ.pdf",
-    );
+    expect(root.querySelector(".feed-preview__attachments")?.textContent).toContain("1");
+    expect(root.querySelector(".feed-preview a[download]")).toBeNull();
   });
 
   it("вне ленты сохраняет обычную карточку и действия владельца", () => {

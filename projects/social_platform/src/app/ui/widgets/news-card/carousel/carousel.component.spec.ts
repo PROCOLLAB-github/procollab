@@ -18,6 +18,21 @@ describe("CarouselComponent", () => {
     fixture.detectChanges();
   });
 
+  it("циклически листает несколько изображений из signal, безопасно обрабатывает пустой набор", () => {
+    component.next();
+    component.prev();
+    expect(component.currentIndex).toBe(0);
+    fixture.componentRef.setInput("images", ["/a.svg", "/b.svg"]);
+    fixture.detectChanges();
+    component.next();
+    expect(component.currentIndex).toBe(1);
+    component.next();
+    expect(component.currentIndex).toBe(0);
+    component.prev();
+    expect(component.currentIndex).toBe(1);
+    expect(component.fit()).toBe("cover");
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
   });
