@@ -36,12 +36,18 @@
         class="filter__option"
         [class.filter__option--disable]="filterItem.id === 5"
         [class.filter__option--active]="filterItem.value === includedFilters()"
-        (click)="setFilter(filterItem.value)"
+        (click)="filterItem.id !== 5 && setFilter(filterItem.value)"
       >
         <div class="filter__option--icon">
           <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
         </div>
         <p class="text-body-12">{{ filterItem.name }}</p>
+        <span
+          class="filter__count"
+          [attr.aria-label]="'Количество: ' + categoryCount(filterItem.value)"
+        >
+          {{ categoryCount(filterItem.value) }}
+        </span>
       </div>
     }
   </div>

@@ -1,5 +1,15 @@
 <!-- @format -->
-<div class="card" [id]="feedItem().id">
+<div class="card" [class.card--feed]="feedType()" [id]="feedItem().id">
+  @if (feedType()) {
+    <div class="card__feed-meta">
+      <span class="card__feed-type">
+        {{ feedType() === "people" ? "Новости людей" : "Новости проекта" }}
+      </span>
+      <time class="card__feed-date" [attr.datetime]="publishedAt() || feedItem().datetimeCreated">
+        {{ publishedAt() || feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}
+      </time>
+    </div>
+  }
   <div class="card__head">
     <a class="card__title" [routerLink]="resourceLink()">
       <img
@@ -9,9 +19,11 @@
       />
       <div class="card__info" style="display: flex; flex-direction: column">
         <div class="card__name text-body-10">{{ feedItem().name | truncate: 30 }}</div>
-        <div class="card__date text-body-10">
-          {{ feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YY" }}
-        </div>
+        @if (!feedType()) {
+          <div class="card__date text-body-10">
+            {{ feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}
+          </div>
+        }
       </div>
     </a>
     @if (isOwner()) {
@@ -33,11 +45,21 @@
   @if (feedItem().text) {
     <div class="card__text text-body-10">
       @if (!editMode) {
-        <p
-          class="text-body-10"
-          #newsTextEl
-          [innerHTML]="feedItem().text | parseLinks | parseBreaks"
-        ></p>
+        @if (feedType()) {
+          <h3 class="card__feed-headline">{{ feedText().headline }}</h3>
+          @if (feedText().summary) {
+            <p
+              class="card__feed-summary"
+              [innerHTML]="feedText().summary | parseLinks | parseBreaks"
+            ></p>
+          }
+        } @else {
+          <p
+            class="text-body-10"
+            #newsTextEl
+            [innerHTML]="feedItem().text | parseLinks | parseBreaks"
+          ></p>
+        }
       } @else {
         @if (editForm.get("text"); as text) {
           <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
@@ -71,7 +93,7 @@
       }
     </ul>
   }
-  @if (descriptionExpandable() && !editMode) {
+  @if (descriptionExpandable() && !editMode && !feedType()) {
     <div class="read-more text-body-10" (click)="onExpandNewsText(newsTextEl()?.nativeElement)">
       {{ readFullDescription() ? "скрыть" : "подробнее" }}
     </div>
@@ -92,6 +114,16 @@
         ></app-file-item>
       }
     </div>
+  }
+  @if (feedType() && !editMode) {
+    @if (feedIndustryId(); as industryId) {
+      @if (industryRepository.getOne(industryId); as industry) {
+        <span class="card__feed-industry">{{ industry.name }}</span>
+      }
+    }
+    <a class="card__feed-cta" [routerLink]="resourceLink()">
+      {{ feedType() === "people" ? "Перейти в профиль" : "Перейти в проект" }}
+    </a>
   }
   @if (!editMode) {
     <div class="card__footer footer">

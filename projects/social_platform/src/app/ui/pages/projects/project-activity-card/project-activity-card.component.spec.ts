@@ -10,8 +10,8 @@ describe("ProjectActivityCardComponent", () => {
     my: 3,
     subs: 0,
     myLeader: 2,
-    myInProgram: 1,
-    mySubmitted: 4,
+    myInProgram: 4,
+    mySubmitted: 2,
     ...overrides,
   });
 
@@ -31,8 +31,8 @@ describe("ProjectActivityCardComponent", () => {
     expect(rows.map(row => row.textContent?.replace(/\s+/g, " ").trim())).toEqual([
       "Проектов 3",
       "Я лидер 2",
-      "В программе 1",
-      "Сдано 4",
+      "В программе 4",
+      "Сдано 2",
     ]);
   });
 

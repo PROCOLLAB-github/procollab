@@ -2,6 +2,12 @@
 
 export const feedFilter = [
   {
+    id: 0,
+    name: "все новости",
+    value: "",
+    icon: "feed",
+  },
+  {
     id: 1,
     name: "новости проектов",
     value: "project",

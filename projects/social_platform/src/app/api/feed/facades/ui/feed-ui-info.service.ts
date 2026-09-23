@@ -1,8 +1,7 @@
 /** @format */
 
 import { computed, Injectable, signal } from "@angular/core";
-import { ApiPagination } from "@domain/other/api-pagination.model";
-import { FeedItem } from "@domain/feed/feed-item.model";
+import { FeedCategoryCounts, FeedItem, FeedPage } from "@domain/feed/feed-item.model";
 import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 
 /** UI-проекция ленты: computed-сигналы страницы `FeedItem`. */
@@ -18,13 +17,22 @@ export class FeedUIInfoService {
   });
 
   readonly totalItemsCount = signal(0);
+  readonly categoryCounts = signal<FeedCategoryCounts>({
+    all: 0,
+    project: 0,
+    vacancy: 0,
+    news: 0,
+    partnerprogram: 0,
+    education: 0,
+  });
   readonly feedPage = signal(0);
-  readonly perFetchTake = signal(20);
+  readonly perFetchTake = signal(6);
 
-  applyInitializationFeedNewsEvent(feed: ApiPagination<FeedItem>): void {
+  applyInitializationFeedNewsEvent(feed: FeedPage): void {
     this.feedItems$.set(success(feed.results));
     this.totalItemsCount.set(feed.count);
     this.feedPage.set(feed.results.length);
+    if (feed.counts) this.categoryCounts.set(feed.counts);
   }
 
   applyFeedFilters(feed: FeedItem[]): void {
