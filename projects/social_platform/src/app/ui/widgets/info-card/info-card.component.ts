@@ -24,7 +24,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AddProjectSubscriptionUseCase } from "@api/project/use-cases/add-project-subscription.use-case";
 import { DeleteProjectSubscriptionUseCase } from "@api/project/use-cases/delete-project-subscription.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { Project } from "@domain/project/project.model";
 
 interface MyProjectPresentation {
@@ -62,7 +61,6 @@ export class InfoCardComponent {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly addProjectSubscriptionUseCase = inject(AddProjectSubscriptionUseCase);
   private readonly deleteProjectSubscriptionUseCase = inject(DeleteProjectSubscriptionUseCase);
-  public readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 
@@ -83,15 +81,6 @@ export class InfoCardComponent {
   protected readonly isProjectCard = computed(
     () => this.type() === "projects" && this.appereance() !== "empty",
   );
-
-  /** Отрасль берётся из уже загруженного справочника; пустая плашка не занимает строку. */
-  protected readonly projectIndustry = computed(() => {
-    if (!this.isProjectCard() || this.appereance() === "my") return null;
-    const industryId = this.info()?.industry;
-    return industryId == null
-      ? null
-      : this.industryRepository.getOne(industryId)?.name?.trim() || null;
-  });
 
   /**
    * Lifecycle зависит только от проекта: submitted > draft > program > published.

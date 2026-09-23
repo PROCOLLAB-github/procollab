@@ -97,7 +97,12 @@ export class ProjectCount {
   all!: number;
   my!: number;
   subs!: number;
+  myLeader!: number;
+  myInProgram!: number;
+  mySubmitted!: number;
 }
+
+export type ProjectCountLoadState = "idle" | "loading" | "loaded" | "error";
 
 export class ProjectStep {
   id!: number;
