@@ -1,0 +1,188 @@
+// Общие строки удерживают CTA и заголовки на одном уровне даже при отсутствующих данных.
+// Миксин подключается только карточками ленты; detail/profile сохраняют свою геометрию.
+@mixin layout {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 26px 44px 44px 54px minmax(0, 1fr) 36px;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  height: 420px;
+  padding: 20px;
+  color: var(--feed-text, var(--black));
+  background: var(--feed-background, var(--light-white));
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
+
+  > * {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--feed-text, var(--accent-dark));
+    outline-offset: 3px;
+  }
+
+  .feed-card__meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .feed-card__type {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 10px;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--accent-dark);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: var(--accent-light);
+    border: 1px solid transparent;
+    border-radius: var(--rounded-xxl);
+  }
+
+  .feed-card__date {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    line-height: 14px;
+    color: var(--feed-secondary, var(--grey-for-text));
+  }
+
+  .feed-card__source {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .feed-card__avatar {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .feed-card__source-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .feed-card__eyebrow {
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--feed-secondary, var(--grey-for-text));
+  }
+
+  .feed-card__source-name {
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 17px;
+    color: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* stylelint-disable value-no-vendor-prefix -- Line-clamp ограничивает текст, сохраняя полное значение в DOM. */
+  .feed-card__title,
+  .feed-card__description {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+  }
+  /* stylelint-enable value-no-vendor-prefix */
+
+  .feed-card__title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 22px;
+    -webkit-line-clamp: 2;
+  }
+
+  .feed-card__description {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: var(--feed-secondary, var(--grey-for-text));
+    -webkit-line-clamp: 3;
+  }
+
+  .feed-card__metadata {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .feed-card__skills {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .feed-card__chip {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    max-width: 100%;
+    height: 24px;
+    padding: 4px 8px;
+    overflow: hidden;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--accent-dark);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: var(--accent-light);
+    border-radius: var(--rounded-lg);
+
+    &--skill {
+      flex-shrink: 1;
+      max-width: calc((100% - 18px) / 4);
+    }
+
+    &--industry {
+      color: var(--green-dark);
+      background: var(--green-light);
+    }
+  }
+
+  .feed-card__cta {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--feed-cta-text, var(--white));
+    text-align: center;
+    background: var(--feed-cta-background, var(--accent));
+    border: 1px solid transparent;
+    border-radius: var(--rounded-xxl);
+
+    &:hover {
+      filter: brightness(0.95);
+    }
+  }
+}

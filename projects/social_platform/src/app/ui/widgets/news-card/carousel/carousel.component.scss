@@ -6,6 +6,9 @@
   align-items: center;
   justify-content: center;
 
+  // Лента задаёт высоту preview; остальные страницы сохраняют естественный размер изображения.
+  height: var(--carousel-height, auto);
+
   &__image-wrapper {
     position: relative;
     width: 100%;
@@ -15,6 +18,7 @@
     img {
       display: block;
       width: 100%;
+      height: var(--carousel-height, auto);
       border-radius: var(--rounded-xl);
       object-fit: cover;
     }

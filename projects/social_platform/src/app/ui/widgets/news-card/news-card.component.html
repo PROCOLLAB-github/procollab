@@ -1,176 +1,301 @@
 <!-- @format -->
-<div class="card" [class.card--feed]="feedType()" [id]="feedItem().id">
-  @if (feedType()) {
-    <div class="card__feed-meta">
-      <span class="card__feed-type">
-        {{ feedType() === "people" ? "Новости людей" : "Новости проекта" }}
-      </span>
-      <time class="card__feed-date" [attr.datetime]="publishedAt() || feedItem().datetimeCreated">
-        {{ publishedAt() || feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}
-      </time>
+@if (feedType() && !editMode) {
+  <article class="card card--feed" [id]="feedItem().id">
+    <div class="card__feed-meta feed-card__meta">
+      <span class="card__feed-type feed-card__type">{{
+        feedType() === "people" ? "Новости людей" : "Новости проекта"
+      }}</span>
+      <time
+        class="card__feed-date feed-card__date"
+        [attr.datetime]="publishedAt() || feedItem().datetimeCreated"
+        >{{ publishedAt() || feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}</time
+      >
     </div>
-  }
-  <div class="card__head">
-    <a class="card__title" [routerLink]="resourceLink()">
+    <div class="feed-card__source">
       <img
-        class="card__avatar"
+        class="feed-card__avatar"
         [src]="feedItem().imageAddress || placeholderUrl"
         [alt]="feedItem().name"
       />
-      <div class="card__info" style="display: flex; flex-direction: column">
-        <div class="card__name text-body-10">{{ feedItem().name | truncate: 30 }}</div>
-        @if (!feedType()) {
-          <div class="card__date text-body-10">
-            {{ feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}
-          </div>
-        }
+      <div class="feed-card__source-text">
+        <span class="feed-card__eyebrow">{{ feedType() === "people" ? "Автор" : "Проект" }}</span>
+        <a class="feed-card__source-name" [title]="feedItem().name" [routerLink]="resourceLink()">{{
+          feedItem().name
+        }}</a>
       </div>
-    </a>
-    @if (isOwner()) {
-      <div class="card__menu" (clickOutside)="onCloseMenu()">
-        <div class="card__dots" (click)="menuOpen = true">
-          <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
+      @if (isOwner()) {
+        <div class="card__menu" (clickOutside)="onCloseMenu()">
+          <button
+            type="button"
+            class="card__dots"
+            aria-label="Действия с новостью"
+            (click)="menuOpen = true"
+          >
+            <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
+          </button>
+          @if (menuOpen) {
+            <ul class="card__options">
+              <li>
+                <button type="button" class="card__option text-body-10" (click)="editMode = true">
+                  редактировать
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="card__option text-body-10"
+                  (click)="delete.emit(feedItem().id)"
+                >
+                  удалить
+                </button>
+              </li>
+            </ul>
+          }
         </div>
-        @if (menuOpen) {
-          <ul class="card__options">
-            @if (!editMode) {
-              <li class="card__option text-body-10" (click)="editMode = true">редактировать</li>
-            }
-            <li class="card__option text-body-10" (click)="delete.emit(feedItem().id)">удалить</li>
-          </ul>
+      }
+    </div>
+    <h3 class="card__feed-headline feed-card__title" [title]="feedText().headline">
+      {{ feedText().headline }}
+    </h3>
+    <p
+      class="card__feed-summary feed-card__description"
+      [innerHTML]="feedText().summary | parseLinks | parseBreaks"
+    ></p>
+    <div class="feed-card__metadata card__feed-extras">
+      @if (feedIndustryId(); as industryId) {
+        @if (industryRepository.getOne(industryId); as industry) {
+          <span
+            class="card__feed-industry feed-card__chip feed-card__chip--industry"
+            [title]="industry.name"
+            >{{ industry.name }}</span
+          >
         }
+      }
+      @if (imagesViewList.length || filesViewList.length) {
+        <div class="card__feed-media">
+          @if (imagesViewList.length) {
+            <app-carousel [images]="imagesViewList" (like)="handleLike($event)"></app-carousel>
+          }
+          @if (filesViewList.length) {
+            <ul class="card__feed-files" aria-label="Вложения новости">
+              @for (file of filesViewList; track $index) {
+                <li>
+                  <a [href]="file.link" [attr.download]="file.name" [title]="file.name">{{
+                    file.name
+                  }}</a>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+      <div class="footer card__feed-actions">
+        <div class="footer__left">
+          <button
+            type="button"
+            class="footer__item footer__like"
+            aria-label="Нравится"
+            [attr.aria-pressed]="feedItem().isUserLiked"
+            [class.footer__like--active]="feedItem().isUserLiked"
+            (click)="like.emit(feedItem().id)"
+          >
+            <i appIcon icon="like" appSquare="12"></i
+            >{{ feedItem().likesCount > 0 ? feedItem().likesCount : "" }}
+          </button>
+          <button
+            type="button"
+            class="share"
+            aria-label="Скопировать ссылку на новость"
+            (click)="onCopyLink()"
+          >
+            <i appIcon icon="share" appSquare="12"></i>
+          </button>
+        </div>
+        <span class="card__views" [attr.aria-label]="'Просмотров: ' + feedItem().viewsCount"
+          ><i appIcon icon="eye" appSquare="12"></i>{{ feedItem().viewsCount }}</span
+        >
+      </div>
+    </div>
+    <a class="card__feed-cta feed-card__cta" [routerLink]="resourceLink()">{{
+      feedType() === "people" ? "Перейти в профиль" : "Перейти в проект"
+    }}</a>
+  </article>
+} @else {
+  <div class="card" [id]="feedItem().id">
+    @if (feedType()) {
+      <div class="card__feed-meta">
+        <span class="card__feed-type">
+          {{ feedType() === "people" ? "Новости людей" : "Новости проекта" }}
+        </span>
+        <time class="card__feed-date" [attr.datetime]="publishedAt() || feedItem().datetimeCreated">
+          {{ publishedAt() || feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}
+        </time>
       </div>
     }
-  </div>
-  @if (feedItem().text) {
-    <div class="card__text text-body-10">
-      @if (!editMode) {
-        @if (feedType()) {
-          <h3 class="card__feed-headline">{{ feedText().headline }}</h3>
-          @if (feedText().summary) {
+    <div class="card__head">
+      <a class="card__title" [routerLink]="resourceLink()">
+        <img
+          class="card__avatar"
+          [src]="feedItem().imageAddress || placeholderUrl"
+          [alt]="feedItem().name"
+        />
+        <div class="card__info" style="display: flex; flex-direction: column">
+          <div class="card__name text-body-10">{{ feedItem().name | truncate: 30 }}</div>
+          @if (!feedType()) {
+            <div class="card__date text-body-10">
+              {{ feedItem().datetimeCreated | dayjs: "format" : "DD.MM.YYYY" }}
+            </div>
+          }
+        </div>
+      </a>
+      @if (isOwner()) {
+        <div class="card__menu" (clickOutside)="onCloseMenu()">
+          <div class="card__dots" (click)="menuOpen = true">
+            <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
+          </div>
+          @if (menuOpen) {
+            <ul class="card__options">
+              @if (!editMode) {
+                <li class="card__option text-body-10" (click)="editMode = true">редактировать</li>
+              }
+              <li class="card__option text-body-10" (click)="delete.emit(feedItem().id)">
+                удалить
+              </li>
+            </ul>
+          }
+        </div>
+      }
+    </div>
+    @if (feedItem().text) {
+      <div class="card__text text-body-10">
+        @if (!editMode) {
+          @if (feedType()) {
+            <h3 class="card__feed-headline">{{ feedText().headline }}</h3>
+            @if (feedText().summary) {
+              <p
+                class="card__feed-summary"
+                [innerHTML]="feedText().summary | parseLinks | parseBreaks"
+              ></p>
+            }
+          } @else {
             <p
-              class="card__feed-summary"
-              [innerHTML]="feedText().summary | parseLinks | parseBreaks"
+              class="text-body-10"
+              #newsTextEl
+              [innerHTML]="feedItem().text | parseLinks | parseBreaks"
             ></p>
           }
         } @else {
-          <p
-            class="text-body-10"
-            #newsTextEl
-            [innerHTML]="feedItem().text | parseLinks | parseBreaks"
-          ></p>
+          @if (editForm.get("text"); as text) {
+            <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
+          }
         }
-      } @else {
-        @if (editForm.get("text"); as text) {
-          <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
-        }
-      }
-    </div>
-  }
-  @defer (when editMode) {
-    <ul>
-      @for (f of imagesEditList; track f.id) {
-        <app-img-card
-          [loading]="f.loading"
-          [src]="f.src"
-          [error]="f.error"
-          (cancel)="onDeletePhoto(f.id)"
-          (retry)="onRetryUpload(f.id)"
-        ></app-img-card>
-      }
-    </ul>
-    <ul class="card__edit-files">
-      @for (f of filesEditList; track f.id) {
-        <app-file-upload-item
-          [link]="f.src"
-          [type]="f.tempFile?.type ?? f.type"
-          [size]="f.tempFile?.size ?? f.size"
-          [name]="f.tempFile?.name ?? f.name"
-          [error]="f.error"
-          [loading]="f.loading"
-          (delete)="onDeleteFile(f.id)"
-        ></app-file-upload-item>
-      }
-    </ul>
-  }
-  @if (descriptionExpandable() && !editMode && !feedType()) {
-    <div class="read-more text-body-10" (click)="onExpandNewsText(newsTextEl()?.nativeElement)">
-      {{ readFullDescription() ? "скрыть" : "подробнее" }}
-    </div>
-  }
-  @if (!editMode) {
-    <div class="card__gallery">
-      <app-carousel [images]="imagesViewList" (like)="handleLike($event)"></app-carousel>
-    </div>
-  }
-  @if (!editMode && filesViewList.length) {
-    <div class="card__files">
-      @for (f of filesViewList; track $index) {
-        <app-file-item
-          [name]="f.name"
-          [size]="f.size"
-          [type]="f.mimeType"
-          [link]="f.link"
-        ></app-file-item>
-      }
-    </div>
-  }
-  @if (feedType() && !editMode) {
-    @if (feedIndustryId(); as industryId) {
-      @if (industryRepository.getOne(industryId); as industry) {
-        <span class="card__feed-industry">{{ industry.name }}</span>
-      }
+      </div>
     }
-    <a class="card__feed-cta" [routerLink]="resourceLink()">
-      {{ feedType() === "people" ? "Перейти в профиль" : "Перейти в проект" }}
-    </a>
-  }
-  @if (!editMode) {
-    <div class="card__footer footer">
-      <div class="footer__left">
-        <div
-          class="footer__item footer__like text-body-10"
-          [class.footer__like--active]="feedItem().isUserLiked"
-          (click)="like.emit(feedItem().id)"
-        >
-          <i appIcon icon="like" appSquare="12"></i>
-          {{ feedItem().likesCount > 0 ? feedItem().likesCount : "" }}
-        </div>
+    @defer (when editMode) {
+      <ul>
+        @for (f of imagesEditList; track f.id) {
+          <app-img-card
+            [loading]="f.loading"
+            [src]="f.src"
+            [error]="f.error"
+            (cancel)="onDeletePhoto(f.id)"
+            (retry)="onRetryUpload(f.id)"
+          ></app-img-card>
+        }
+      </ul>
+      <ul class="card__edit-files">
+        @for (f of filesEditList; track f.id) {
+          <app-file-upload-item
+            [link]="f.src"
+            [type]="f.tempFile?.type ?? f.type"
+            [size]="f.tempFile?.size ?? f.size"
+            [name]="f.tempFile?.name ?? f.name"
+            [error]="f.error"
+            [loading]="f.loading"
+            (delete)="onDeleteFile(f.id)"
+          ></app-file-upload-item>
+        }
+      </ul>
+    }
+    @if (descriptionExpandable() && !editMode && !feedType()) {
+      <div class="read-more text-body-10" (click)="onExpandNewsText(newsTextEl()?.nativeElement)">
+        {{ readFullDescription() ? "скрыть" : "подробнее" }}
+      </div>
+    }
+    @if (!editMode) {
+      <div class="card__gallery">
+        <app-carousel [images]="imagesViewList" (like)="handleLike($event)"></app-carousel>
+      </div>
+    }
+    @if (!editMode && filesViewList.length) {
+      <div class="card__files">
+        @for (f of filesViewList; track $index) {
+          <app-file-item
+            [name]="f.name"
+            [size]="f.size"
+            [type]="f.mimeType"
+            [link]="f.link"
+          ></app-file-item>
+        }
+      </div>
+    }
+    @if (feedType() && !editMode) {
+      @if (feedIndustryId(); as industryId) {
+        @if (industryRepository.getOne(industryId); as industry) {
+          <span class="card__feed-industry">{{ industry.name }}</span>
+        }
+      }
+      <a class="card__feed-cta" [routerLink]="resourceLink()">
+        {{ feedType() === "people" ? "Перейти в профиль" : "Перейти в проект" }}
+      </a>
+    }
+    @if (!editMode) {
+      <div class="card__footer footer">
+        <div class="footer__left">
+          <div
+            class="footer__item footer__like text-body-10"
+            [class.footer__like--active]="feedItem().isUserLiked"
+            (click)="like.emit(feedItem().id)"
+          >
+            <i appIcon icon="like" appSquare="12"></i>
+            {{ feedItem().likesCount > 0 ? feedItem().likesCount : "" }}
+          </div>
 
-        <!--<div class="footer__share share">
+          <!--<div class="footer__share share">
         <i class="share__icon" appIcon icon="comment" appSquare="10"></i>
       </div>-->
 
-        <div class="footer__share share" (click)="onCopyLink()">
-          <i class="share__icon" appIcon icon="share" appSquare="10"></i>
+          <div class="footer__share share" (click)="onCopyLink()">
+            <i class="share__icon" appIcon icon="share" appSquare="10"></i>
+          </div>
         </div>
-      </div>
 
-      <div class="footer__right">
-        <div class="card__views text-body-10">
-          <i appIcon icon="eye" appSquare="12"></i>
-          {{ feedItem().viewsCount }}
+        <div class="footer__right">
+          <div class="card__views text-body-10">
+            <i appIcon icon="eye" appSquare="12"></i>
+            {{ feedItem().viewsCount }}
+          </div>
         </div>
       </div>
-    </div>
-  } @else {
-    <div class="editor-footer">
-      <label class="editor-footer__attach">
-        <i appIcon icon="attach" appSquare="22"></i>
-        <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
-      </label>
-      <div class="editor-footer__actions">
-        <app-button
-          size="medium"
-          customTypographyClass="text-body-12"
-          color="grey"
-          (click)="editMode = false"
-          >отмена</app-button
-        >
-        <app-button size="medium" customTypographyClass="text-body-12" (click)="onEditSubmit()"
-          >сохранить</app-button
-        >
+    } @else {
+      <div class="editor-footer">
+        <label class="editor-footer__attach">
+          <i appIcon icon="attach" appSquare="22"></i>
+          <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
+        </label>
+        <div class="editor-footer__actions">
+          <app-button
+            size="medium"
+            customTypographyClass="text-body-12"
+            color="grey"
+            (click)="editMode = false"
+            >отмена</app-button
+          >
+          <app-button size="medium" customTypographyClass="text-body-12" (click)="onEditSubmit()"
+            >сохранить</app-button
+          >
+        </div>
       </div>
-    </div>
-  }
-</div>
+    }
+  </div>
+}

@@ -1,55 +1,61 @@
 <!-- @format -->
-
 <article class="card">
-  <div class="card__meta">
-    <span class="card__type">Новая вакансия</span>
+  <div class="card__meta feed-card__meta">
+    <span class="card__type feed-card__type">Новая вакансия</span>
     @if (publishedAt()) {
-      <time class="card__date" [attr.datetime]="publishedAt()">
+      <time class="card__date feed-card__date" [attr.datetime]="publishedAt()">
         {{ publishedAt() | dayjs: "format" : "DD.MM.YYYY" }}
       </time>
     }
   </div>
-
-  @if (feedItem().project; as project) {
-    <div class="card__source">
-      <app-avatar [size]="48" [url]="project.imageAddress"></app-avatar>
-      <div class="card__source-text">
-        <span class="card__eyebrow">Проект / компания</span>
-        <a [routerLink]="AppRoutes.projects.detail(project.id)">{{ project.name }}</a>
+  <div class="card__source feed-card__source">
+    @if (feedItem().project; as project) {
+      <app-avatar class="feed-card__avatar" [size]="40" [url]="project.imageAddress"></app-avatar>
+      <div class="card__source-text feed-card__source-text">
+        <span class="feed-card__eyebrow">Проект / компания</span>
+        <a
+          class="feed-card__source-name"
+          [title]="project.name"
+          [routerLink]="AppRoutes.projects.detail(project.id)"
+          >{{ project.name }}</a
+        >
       </div>
-    </div>
-  }
-
-  <h3 class="card__title">{{ feedItem().role }}</h3>
-
-  @if (feedItem().description) {
-    <p
-      class="card__description"
-      [innerHTML]="feedItem().description | parseLinks | parseBreaks"
-    ></p>
-  }
-
-  @if (feedItem().requiredSkills.length) {
-    <ul class="card__skills" aria-label="Навыки вакансии">
-      @for (skill of feedItem().requiredSkills.slice(0, 5); track skill.id) {
-        <li class="card__skill">{{ skill.name }}</li>
-      }
-    </ul>
-  }
-
-  @if (feedItem().project.industry; as industryId) {
-    @if (industryRepository.getOne(industryId); as industry) {
-      <span class="card__industry">{{ industry.name }}</span>
     }
-  }
-
-  <app-button
-    class="card__cta"
-    [routerLink]="AppRoutes.office.vacancy(feedItem().id)"
-    appearance="inline"
-    size="medium"
-    customTypographyClass="text-body-12"
+  </div>
+  <h3 class="card__title feed-card__title" [title]="feedItem().role">{{ feedItem().role }}</h3>
+  <p
+    class="card__description feed-card__description"
+    [innerHTML]="feedItem().description || '' | parseLinks | parseBreaks"
+  ></p>
+  <div class="feed-card__metadata">
+    @if (feedItem().requiredSkills.length) {
+      <ul class="card__skills feed-card__skills" aria-label="Навыки вакансии">
+        @for (skill of feedItem().requiredSkills.slice(0, 3); track skill.id) {
+          <li class="card__skill feed-card__chip feed-card__chip--skill" [title]="skill.name">
+            {{ skill.name }}
+          </li>
+        }
+        @if (feedItem().requiredSkills.length > 3) {
+          <li
+            class="feed-card__chip"
+            [attr.aria-label]="'Ещё навыков: ' + (feedItem().requiredSkills.length - 3)"
+          >
+            +{{ feedItem().requiredSkills.length - 3 }}
+          </li>
+        }
+      </ul>
+    }
+    @if (feedItem().project.industry; as industryId) {
+      @if (industryRepository.getOne(industryId); as industry) {
+        <span
+          class="card__industry feed-card__chip feed-card__chip--industry"
+          [title]="industry.name"
+          >{{ industry.name }}</span
+        >
+      }
+    }
+  </div>
+  <a class="card__cta feed-card__cta" [routerLink]="AppRoutes.office.vacancy(feedItem().id)"
+    >Подробнее о вакансии</a
   >
-    Подробнее о вакансии
-  </app-button>
 </article>

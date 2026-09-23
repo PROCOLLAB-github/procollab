@@ -43,5 +43,21 @@ describe("FeedComponent", () => {
     expect(
       options.map(option => option.querySelector(".filter__count")?.textContent?.trim()),
     ).toEqual(["12", "5", "3", "4", "0", "0"]);
+    for (const option of options) {
+      expect(option.tagName).toBe("BUTTON");
+      expect(Array.from(option.children).map(child => child.className)).toEqual([
+        "filter__option--icon",
+        "filter__title",
+        "filter__count",
+      ]);
+      expect(option.querySelector(".filter__option--icon")?.getAttribute("aria-hidden")).toBe(
+        "true",
+      );
+    }
+    expect((options[5] as HTMLButtonElement).disabled).toBe(true);
+    expect(options[0].getAttribute("aria-pressed")).toBe("true");
+    const setFilter = vi.spyOn(component, "setFilter");
+    options[1].click();
+    expect(setFilter).toHaveBeenCalledExactlyOnceWith("project");
   });
 });

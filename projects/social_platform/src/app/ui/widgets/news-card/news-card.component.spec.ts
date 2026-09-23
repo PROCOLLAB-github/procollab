@@ -74,5 +74,56 @@ describe("NewsCardComponent", () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector(".card__feed-type")?.textContent?.trim()).toBe("Новости людей");
     expect(element.querySelector(".card__feed-cta")?.textContent?.trim()).toBe("Перейти в профиль");
+    expect(element.querySelector(".card__feed-cta")?.getAttribute("href")).toBe(
+      "/office/profile/42",
+    );
+  });
+
+  it("сохраняет лайк, ссылку на скачивание и полное имя источника в компактной ленте", () => {
+    const name = "Очень длинное название проекта ".repeat(8);
+    const news = {
+      ...FeedNews.default(),
+      name,
+      text: "Заголовок новости. Подробности новости",
+      files: [],
+    };
+    fixture.componentRef.setInput("feedItem", news);
+    fixture.componentRef.setInput("feedType", "project");
+    component.filesViewList = [
+      { link: "/test.pdf", name: "Тестовый документ.pdf" },
+    ] as typeof component.filesViewList;
+    fixture.detectChanges();
+    const root: HTMLElement = fixture.nativeElement;
+    expect(root.querySelector(".feed-card__source-name")?.textContent).toBe(name);
+    expect(root.querySelector(".feed-card__source-name")?.getAttribute("title")).toBe(name);
+    expect(root.querySelector(".feed-card__title")?.textContent?.trim()).toBe("Заголовок новости.");
+    expect(root.querySelector(".feed-card__description")?.textContent?.trim()).toBe(
+      "Подробности новости",
+    );
+    const emit = vi.spyOn(component.like, "emit");
+    root.querySelector<HTMLButtonElement>('button[aria-label="Нравится"]')!.click();
+    expect(emit).toHaveBeenCalledExactlyOnceWith(news.id);
+    expect(root.querySelector(".card__feed-files a")?.getAttribute("href")).toBe("/test.pdf");
+    expect(root.querySelector(".card__feed-files a")?.getAttribute("download")).toBe(
+      "Тестовый документ.pdf",
+    );
+  });
+
+  it("вне ленты сохраняет обычную карточку и действия владельца", () => {
+    fixture.componentRef.setInput("isOwner", true);
+    fixture.detectChanges();
+    const root: HTMLElement = fixture.nativeElement;
+    expect(root.querySelector(".card--feed")).toBeNull();
+    expect(root.querySelector(".feed-card__cta")).toBeNull();
+    expect(root.querySelector(".card__text")?.textContent).toContain(component.feedItem().text);
+    root.querySelector<HTMLElement>(".card__dots")!.click();
+    fixture.detectChanges();
+    expect(root.querySelector(".card__options")?.textContent).toContain("редактировать");
+
+    fixture.componentRef.setInput("feedType", "project");
+    component.editMode = true;
+    fixture.detectChanges();
+    expect(root.querySelector(".card--feed")).toBeNull();
+    expect(root.querySelector(".editor-footer")).not.toBeNull();
   });
 });

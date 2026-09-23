@@ -1,0 +1,53 @@
+{
+  "cards": [
+    {
+      "badgeHeight": 26,
+      "ctaFont": "12px",
+      "ctaHeight": 36,
+      "padding": "20px",
+      "radius": "15px",
+      "titleFont": "18px"
+    },
+    {
+      "badgeHeight": 26,
+      "ctaFont": "12px",
+      "ctaHeight": 36,
+      "padding": "20px",
+      "radius": "15px",
+      "titleFont": "18px"
+    },
+    {
+      "badgeHeight": 26,
+      "ctaFont": "12px",
+      "ctaHeight": 36,
+      "padding": "20px",
+      "radius": "15px",
+      "titleFont": "18px"
+    },
+    {
+      "badgeHeight": 26,
+      "ctaFont": "12px",
+      "ctaHeight": 36,
+      "padding": "20px",
+      "radius": "15px",
+      "titleFont": "18px"
+    },
+    {
+      "badgeHeight": 26,
+      "ctaFont": "12px",
+      "ctaHeight": 36,
+      "padding": "20px",
+      "radius": "15px",
+      "titleFont": "18px"
+    },
+    {
+      "badgeHeight": 26,
+      "ctaFont": "12px",
+      "ctaHeight": 36,
+      "padding": "20px",
+      "radius": "15px",
+      "titleFont": "18px"
+    }
+  ],
+  "nestedInteractive": 0
+}
