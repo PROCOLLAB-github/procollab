@@ -36,5 +36,7 @@ describe("NewProjectComponent", () => {
     );
     expect(element.querySelector(".card__industry")?.textContent?.trim()).toBe("Инженерия");
     expect(element.querySelector(".card__cta")?.textContent).toContain("Перейти в проект");
+    expect(element.querySelector("a.card__cta")?.getAttribute("href")).toBe("/office/projects/5");
+    expect(element.querySelector("time")?.getAttribute("datetime")).toBe("2026-09-23T12:00:00Z");
   });
 });

@@ -7,12 +7,11 @@ import { FeedProject } from "@domain/feed/feed-item.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { ButtonComponent } from "@ui/primitives";
 
 /** Карточка нового проекта в общей ленте. */
 @Component({
   selector: "app-new-project",
-  imports: [RouterLink, DayjsPipe, AvatarComponent, ButtonComponent],
+  imports: [RouterLink, DayjsPipe, AvatarComponent],
   templateUrl: "./new-project.component.html",
   styleUrl: "./new-project.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

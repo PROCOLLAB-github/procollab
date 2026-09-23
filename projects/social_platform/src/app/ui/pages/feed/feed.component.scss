@@ -12,7 +12,7 @@
     gap: 20px;
     align-items: start;
 
-    @media (max-width: 800px) {
+    @media (max-width: 999px) {
       grid-template-columns: minmax(0, 1fr);
     }
 

@@ -1,36 +1,37 @@
 <!-- @format -->
-
 <article class="card">
-  <div class="card__meta">
-    <span class="card__type">Новый проект</span>
+  <div class="card__meta feed-card__meta">
+    <span class="card__type feed-card__type">Новый проект</span>
     @if (publishedAt()) {
-      <time class="card__date" [attr.datetime]="publishedAt()">
+      <time class="card__date feed-card__date" [attr.datetime]="publishedAt()">
         {{ publishedAt() | dayjs: "format" : "DD.MM.YYYY" }}
       </time>
     }
   </div>
-
-  <div class="card__heading">
-    <app-avatar [size]="64" [url]="feedItem().imageAddress"></app-avatar>
-    <h3 class="card__title">{{ feedItem().name }}</h3>
+  <div class="feed-card__source">
+    <app-avatar class="feed-card__avatar" [size]="40" [url]="feedItem().imageAddress"></app-avatar>
+    <div class="feed-card__source-text">
+      <span class="feed-card__eyebrow">Проект</span>
+      <a
+        class="feed-card__source-name"
+        [title]="feedItem().name"
+        [routerLink]="AppRoutes.projects.detail(feedItem().id)"
+        >{{ feedItem().name }}</a
+      >
+    </div>
   </div>
-
-  @if (feedItem().shortDescription) {
-    <p class="card__description">{{ feedItem().shortDescription }}</p>
-  }
-
-  @if (industryRepository.getOne(feedItem().industry); as industry) {
-    <span class="card__industry">{{ industry.name }}</span>
-  }
-
-  <app-button
-    class="card__cta"
-    appearance="outline"
-    color="white"
-    size="medium"
-    customTypographyClass="text-body-12"
-    [routerLink]="AppRoutes.projects.detail(feedItem().id)"
+  <h3 class="card__title feed-card__title" [title]="feedItem().name">{{ feedItem().name }}</h3>
+  <p class="card__description feed-card__description">{{ feedItem().shortDescription }}</p>
+  <div class="feed-card__metadata">
+    @if (industryRepository.getOne(feedItem().industry); as industry) {
+      <span
+        class="card__industry feed-card__chip feed-card__chip--industry"
+        [title]="industry.name"
+        >{{ industry.name }}</span
+      >
+    }
+  </div>
+  <a class="card__cta feed-card__cta" [routerLink]="AppRoutes.projects.detail(feedItem().id)"
+    >Перейти в проект</a
   >
-    Перейти в проект
-  </app-button>
 </article>

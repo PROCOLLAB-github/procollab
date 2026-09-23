@@ -41,5 +41,25 @@ describe("OpenVacancyComponent", () => {
     ).toEqual(["Angular", "TypeScript"]);
     expect(element.querySelector(".card__industry")?.textContent?.trim()).toBe("IT");
     expect(element.querySelector(".card__cta")?.textContent).toContain("Подробнее о вакансии");
+    expect(element.querySelector("a.card__cta")?.getAttribute("href")).toBe("/office/vacancies/7");
+    expect(element.querySelector("time")?.getAttribute("datetime")).toBe("2026-09-23T12:00:00Z");
+
+    fixture.componentRef.setInput("feedItem", {
+      ...fixture.componentInstance.feedItem(),
+      requiredSkills: ["QA", "Postman", "API", "SQL", "Git", "Аналитика"].map((name, id) => ({
+        id,
+        name,
+      })),
+    });
+    fixture.detectChanges();
+    expect(
+      Array.from(element.querySelectorAll(".card__skills li")).map(node =>
+        node.textContent?.trim(),
+      ),
+    ).toEqual(["QA", "Postman", "API", "+3"]);
+    expect(element.querySelector(".card__skills li:last-child")?.getAttribute("aria-label")).toBe(
+      "Ещё навыков: 3",
+    );
+    expect(fixture.componentInstance.feedItem().requiredSkills).toHaveLength(6);
   });
 });
