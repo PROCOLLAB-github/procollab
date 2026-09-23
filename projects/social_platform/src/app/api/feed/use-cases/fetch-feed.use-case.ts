@@ -3,8 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
 import { FeedRepositoryPort } from "@domain/feed/ports/feed.repository.port";
-import { FeedItem } from "@domain/feed/feed-item.model";
-import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedPage } from "@domain/feed/feed-item.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 
 /** Сценарий: страница ленты (offset/limit/type); ошибка → `fetch_feed_error`. */
@@ -16,9 +15,9 @@ export class FetchFeedUseCase {
     offset: number,
     limit: number,
     type: string,
-  ): Observable<Result<ApiPagination<FeedItem>, { kind: "fetch_feed_error"; cause?: unknown }>> {
+  ): Observable<Result<FeedPage, { kind: "fetch_feed_error"; cause?: unknown }>> {
     return this.feedRepositoryPort.fetchFeed(offset, limit, type).pipe(
-      map(feed => ok<ApiPagination<FeedItem>>(feed)),
+      map(feed => ok<FeedPage>(feed)),
       catchError(error => of(fail({ kind: "fetch_feed_error" as const, cause: error }))),
     );
   }

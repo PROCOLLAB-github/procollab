@@ -2,28 +2,33 @@
 
 <div class="page">
   <app-feed-filter class="page__filter"></app-feed-filter>
-  <div #feedRoot class="page__feed" [style.column-count]="feedItems().length > 0 ? '2' : '1'">
+  <div #feedRoot class="page__feed">
     @if (feedItems().length > 0) {
-      @for (item of feedItems(); track item.content.id) {
+      @for (item of feedItems(); track item.typeModel + ":" + item.content.id) {
         @if (item.typeModel === "vacancy") {
           <app-open-vacancy
             class="page__item"
-            [attr.data-id]="item.content.id"
+            [attr.data-key]="item.typeModel + ':' + item.content.id"
             [feedItem]="item.content"
+            [publishedAt]="item.publishedAt || item.content.datetimeCreated"
           ></app-open-vacancy>
         } @else if (item.typeModel === "project") {
           <app-new-project
             class="page__item"
-            [attr.data-id]="item.content.id"
+            [attr.data-key]="item.typeModel + ':' + item.content.id"
             [feedItem]="item.content"
+            [publishedAt]="item.publishedAt || ''"
           ></app-new-project>
         } @else if (item.typeModel === "news") {
           <app-news-card
             class="page__item"
-            [attr.data-id]="item.content.id"
+            [attr.data-key]="item.typeModel + ':' + item.content.id"
             [feedItem]="item.content"
             [contentId]="item.content.contentObject.id"
-            [resourceLink]="resourceLink(item.content)"
+            [resourceLink]="resourceLink(item)"
+            [feedType]="isPersonNews(item) ? 'people' : 'project'"
+            [feedIndustryId]="item.content.contentObject.industry"
+            [publishedAt]="item.publishedAt || item.content.datetimeCreated"
             (like)="onLike($event)"
           ></app-news-card>
         }
