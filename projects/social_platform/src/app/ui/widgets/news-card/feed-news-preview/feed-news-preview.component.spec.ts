@@ -102,6 +102,29 @@ describe("FeedNewsPreviewComponent", () => {
     },
   );
 
+  it.each(["project", "people"] as const)(
+    "%s: мета-строка группирует лайк и share слева, а просмотры справа",
+    async type => {
+      fixture.componentRef.setInput("type", type);
+      fixture.componentRef.setInput("news", { ...news, likesCount: 12, viewsCount: 320 });
+      await fixture.whenStable();
+
+      const footer = root().querySelector<HTMLElement>(".feed-preview__actions")!;
+      const left = footer.querySelector<HTMLElement>(".feed-preview__actions-left")!;
+      const views = footer.querySelector<HTMLElement>(".feed-preview__views")!;
+
+      expect(Array.from(footer.children)).toEqual([left, views]);
+      expect(left.querySelector('[aria-label="Нравится"]')?.textContent?.trim()).toBe("12");
+      expect(left.querySelector('[aria-label="Скопировать ссылку на новость"]')).not.toBeNull();
+      expect(views.textContent?.trim()).toBe("320");
+      expect(footer.querySelectorAll('i[appSquare="16"]')).toHaveLength(3);
+    },
+  );
+
+  it("показывает нулевой счётчик лайков", () => {
+    expect(root().querySelector('[aria-label="Нравится"]')?.textContent?.trim()).toBe("0");
+  });
+
   it("Подробнее определяется обрезанием, обновляется при resize и исчезает когда текст помещается", async () => {
     fixture.componentRef.setInput("summary", "Очень длинная новость ".repeat(100));
     await fixture.whenStable();

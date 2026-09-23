@@ -12,9 +12,20 @@
   (keydown.space)="onCardKeydown($event)"
 >
   <div class="feed-card__meta">
-    <span class="card__feed-type feed-card__type">{{
-      type() === "people" ? "Новости людей" : "Новости проекта"
-    }}</span>
+    <div class="feed-preview__badges">
+      <span class="card__feed-type feed-card__type">{{
+        type() === "people" ? "Новости людей" : "Новости проекта"
+      }}</span>
+      @if (industryId(); as id) {
+        @if (industryRepository.getOne(id); as industry) {
+          <span
+            class="card__feed-industry feed-card__chip feed-card__chip--industry"
+            [title]="industry.name"
+            >{{ industry.name }}</span
+          >
+        }
+      }
+    </div>
     <time class="card__feed-date feed-card__date" [attr.datetime]="publishedAt()">{{
       publishedAt() | dayjs: "format" : "DD.MM.YYYY"
     }}</time>
@@ -86,29 +97,23 @@
     }
   </div>
   <footer class="feed-preview__actions">
-    @if (industryId(); as id) {
-      @if (industryRepository.getOne(id); as industry) {
-        <span
-          class="card__feed-industry feed-card__chip feed-card__chip--industry"
-          [title]="industry.name"
-          >{{ industry.name }}</span
-        >
-      }
-    }
-    <button
-      type="button"
-      aria-label="Нравится"
-      [attr.aria-pressed]="news().isUserLiked"
-      [class.feed-preview__liked]="news().isUserLiked"
-      (click)="like.emit()"
-    >
-      <i appIcon icon="like" appSquare="12"></i>{{ news().likesCount > 0 ? news().likesCount : "" }}
-    </button>
-    <button type="button" aria-label="Скопировать ссылку на новость" (click)="share.emit()">
-      <i appIcon icon="share" appSquare="12"></i>
-    </button>
+    <div class="feed-preview__actions-left">
+      <button
+        type="button"
+        aria-label="Нравится"
+        [attr.aria-pressed]="news().isUserLiked"
+        [class.feed-preview__liked]="news().isUserLiked"
+        (click)="like.emit()"
+      >
+        <i appIcon icon="like" appSquare="16"></i>
+        <span>{{ news().likesCount }}</span>
+      </button>
+      <button type="button" aria-label="Скопировать ссылку на новость" (click)="share.emit()">
+        <i appIcon icon="share" appSquare="16"></i>
+      </button>
+    </div>
     <span class="feed-preview__views" [attr.aria-label]="'Просмотров: ' + news().viewsCount"
-      ><i appIcon icon="eye" appSquare="12"></i>{{ news().viewsCount }}</span
+      ><i appIcon icon="eye" appSquare="16"></i><span>{{ news().viewsCount }}</span></span
     >
   </footer>
   <a class="card__feed-cta feed-card__cta" [routerLink]="resourceLink()">{{
