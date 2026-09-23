@@ -32,6 +32,7 @@ import {
 import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { ClickOutsideModule } from "ng-click-outside";
+import { FeedNewsPreviewComponent } from "./feed-news-preview/feed-news-preview.component";
 import { CarouselComponent } from "./carousel/carousel.component";
 import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
 import { FeedNews } from "@domain/news/project-news.model";
@@ -51,6 +52,7 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
   templateUrl: "./news-card.component.html",
   styleUrl: "./news-card.component.scss",
   imports: [
+    FeedNewsPreviewComponent,
     ClickOutsideModule,
     RouterLink,
     IconComponent,

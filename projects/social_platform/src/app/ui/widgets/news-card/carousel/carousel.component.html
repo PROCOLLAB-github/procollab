@@ -1,16 +1,26 @@
 <!-- @format -->
 
 @if (images().length) {
-  <div class="carousel">
+  <div class="carousel" [class.carousel--contain]="fit() === 'contain'">
     @if (images().length !== 1) {
       <div class="carousel__indexes">
         <span>{{ currentIndex + 1 }} / {{ images().length }}</span>
       </div>
-      <button class="carousel__btn carousel__btn--prev" (click)="prev()">
+      <button
+        type="button"
+        aria-label="Предыдущее изображение"
+        class="carousel__btn carousel__btn--prev"
+        (click)="prev()"
+      >
         <i appIcon icon="arrowright" appSquare="20"></i>
       </button>
 
-      <button class="carousel__btn carousel__btn--next" (click)="next()">
+      <button
+        type="button"
+        aria-label="Следующее изображение"
+        class="carousel__btn carousel__btn--next"
+        (click)="next()"
+      >
         <i appIcon icon="arrowright" appSquare="20"></i>
       </button>
     }

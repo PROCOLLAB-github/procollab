@@ -24,6 +24,8 @@ import { IconComponent } from "@uilib";
 })
 export class CarouselComponent implements OnInit {
   readonly images = input<Array<FileModel | string>>([]);
+  /** Полное изображение без обрезки включается только локальным окном чтения новости. */
+  readonly fit = input<"cover" | "contain">("cover");
   readonly like = output<number>();
 
   private readonly cdRef = inject(ChangeDetectorRef);
@@ -34,15 +36,19 @@ export class CarouselComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /** Листаем массив из signal; длина самой функции не описывает число изображений. */
   next(): void {
-    if (this.images.length) {
-      this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    const count = this.images().length;
+    if (count) {
+      this.currentIndex = (this.currentIndex + 1) % count;
     }
   }
 
+  /** Переход назад циклический, пустой набор не меняет индекс. */
   prev(): void {
-    if (this.images.length) {
-      this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    const count = this.images().length;
+    if (count) {
+      this.currentIndex = (this.currentIndex - 1 + count) % count;
     }
   }
 
