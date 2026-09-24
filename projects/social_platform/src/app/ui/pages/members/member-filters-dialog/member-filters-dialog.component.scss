@@ -1,0 +1,80 @@
+/** @format */
+
+// Portal находится вне host; стили ограничены только локальным классом окна фильтров.
+.modal .modal__body.member-filters-dialog-body {
+  box-sizing: border-box;
+  display: block;
+  width: min(480px, calc(100vw - 32px));
+  max-height: 90dvh;
+  padding: 20px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.member-filters-dialog {
+  min-width: 0;
+  color: var(--black);
+
+  &__header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    button {
+      flex: 0 0 40px;
+      height: 40px;
+      font-size: 28px;
+      color: var(--dark-grey);
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      border-radius: var(--rounded-lg);
+    }
+  }
+
+  &__content {
+    min-height: 220px;
+
+    .filters__title {
+      display: none;
+    }
+
+    .filters__titles {
+      justify-content: flex-end;
+    }
+
+    .filters__clear {
+      min-height: 32px;
+      font-size: 13px;
+    }
+
+    input {
+      min-height: 44px;
+      font-size: 16px;
+    }
+  }
+
+  &__done {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--white);
+    cursor: pointer;
+    background: var(--accent);
+    border: 0;
+    border-radius: var(--rounded-xxl);
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 2px;
+  }
+}
