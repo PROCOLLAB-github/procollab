@@ -18,7 +18,7 @@
     </p>
     <div class="member-card__skills-area">
       <ul class="member-card__skills" aria-label="Навыки">
-        @for (skill of visibleSkills(); track skill.id) {
+        @if (primarySkill(); as skill) {
           <li class="member-card__skill" [title]="skill.name">{{ skill.name }}</li>
         }
         @if (hiddenCount()) {
