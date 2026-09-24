@@ -1,0 +1,294 @@
+{
+  "checks": [
+    {
+      "viewport": [390, 844],
+      "geometryUnchanged": true,
+      "areaHeight22": true,
+      "oneRow": true,
+      "primaryFillsSpace": true,
+      "overflow": false
+    },
+    {
+      "viewport": [1440, 900],
+      "geometryUnchanged": true,
+      "areaHeight22": true,
+      "oneRow": true,
+      "primaryFillsSpace": true,
+      "overflow": false
+    },
+    {
+      "viewport": [1024, 900],
+      "geometryUnchanged": true,
+      "areaHeight22": true,
+      "oneRow": true,
+      "primaryFillsSpace": true,
+      "overflow": false
+    },
+    {
+      "viewport": [768, 900],
+      "geometryUnchanged": true,
+      "areaHeight22": true,
+      "oneRow": true,
+      "primaryFillsSpace": true,
+      "overflow": false
+    }
+  ],
+  "viewports": [
+    {
+      "viewport": [390, 844],
+      "columns": "343px",
+      "card": {
+        "width": 343,
+        "height": 248
+      },
+      "avatar": {
+        "h": 70,
+        "w": 70,
+        "x": 136.5,
+        "y": -34
+      },
+      "cta": {
+        "h": 32,
+        "w": 309,
+        "x": 17,
+        "y": 203
+      },
+      "skillArea": {
+        "before": 48,
+        "after": 22
+      },
+      "rows": [
+        {
+          "visible": ["Java"],
+          "widths": [309],
+          "primaryTruncated": false,
+          "title": "Java"
+        },
+        {
+          "visible": ["PostgreSQL", "+1"],
+          "widths": [265, 40],
+          "primaryTruncated": false,
+          "title": "PostgreSQL"
+        },
+        {
+          "visible": ["Ведение социальных сетей", "+4"],
+          "widths": [265, 40],
+          "primaryTruncated": false,
+          "title": "Ведение социальных сетей"
+        },
+        {
+          "visible": ["Python", "+10"],
+          "widths": [265, 40],
+          "primaryTruncated": false,
+          "title": "Python"
+        },
+        {
+          "visible": [],
+          "widths": [],
+          "primaryTruncated": false,
+          "title": null
+        },
+        {
+          "visible": [
+            "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+          ],
+          "widths": [309],
+          "primaryTruncated": true,
+          "title": "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+        }
+      ]
+    },
+    {
+      "viewport": [1440, 900],
+      "columns": "156px 156px 156px 156px",
+      "card": {
+        "width": 156,
+        "height": 248
+      },
+      "avatar": {
+        "h": 70,
+        "w": 70,
+        "x": 43,
+        "y": -34
+      },
+      "cta": {
+        "h": 32,
+        "w": 130,
+        "x": 13,
+        "y": 203
+      },
+      "skillArea": {
+        "before": 48,
+        "after": 22
+      },
+      "rows": [
+        {
+          "visible": ["Java"],
+          "widths": [130],
+          "primaryTruncated": false,
+          "title": "Java"
+        },
+        {
+          "visible": ["PostgreSQL", "+1"],
+          "widths": [86, 40],
+          "primaryTruncated": false,
+          "title": "PostgreSQL"
+        },
+        {
+          "visible": ["Ведение социальных сетей", "+4"],
+          "widths": [86, 40],
+          "primaryTruncated": true,
+          "title": "Ведение социальных сетей"
+        },
+        {
+          "visible": ["Python", "+10"],
+          "widths": [86, 40],
+          "primaryTruncated": false,
+          "title": "Python"
+        },
+        {
+          "visible": [],
+          "widths": [],
+          "primaryTruncated": false,
+          "title": null
+        },
+        {
+          "visible": [
+            "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+          ],
+          "widths": [130],
+          "primaryTruncated": true,
+          "title": "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+        }
+      ]
+    },
+    {
+      "viewport": [1024, 900],
+      "columns": "180.156px 180.172px 180.172px",
+      "card": {
+        "width": 156,
+        "height": 248
+      },
+      "avatar": {
+        "h": 70,
+        "w": 70,
+        "x": 43,
+        "y": -34
+      },
+      "cta": {
+        "h": 32,
+        "w": 130,
+        "x": 13,
+        "y": 203
+      },
+      "skillArea": {
+        "before": 48,
+        "after": 22
+      },
+      "rows": [
+        {
+          "visible": ["Java"],
+          "widths": [130],
+          "primaryTruncated": false,
+          "title": "Java"
+        },
+        {
+          "visible": ["PostgreSQL", "+1"],
+          "widths": [86, 40],
+          "primaryTruncated": false,
+          "title": "PostgreSQL"
+        },
+        {
+          "visible": ["Ведение социальных сетей", "+4"],
+          "widths": [86, 40],
+          "primaryTruncated": true,
+          "title": "Ведение социальных сетей"
+        },
+        {
+          "visible": ["Python", "+10"],
+          "widths": [86, 40],
+          "primaryTruncated": false,
+          "title": "Python"
+        },
+        {
+          "visible": [],
+          "widths": [],
+          "primaryTruncated": false,
+          "title": null
+        },
+        {
+          "visible": [
+            "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+          ],
+          "widths": [130],
+          "primaryTruncated": true,
+          "title": "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+        }
+      ]
+    },
+    {
+      "viewport": [768, 900],
+      "columns": "350.5px 350.5px",
+      "card": {
+        "width": 350.5,
+        "height": 248
+      },
+      "avatar": {
+        "h": 70,
+        "w": 70,
+        "x": 140.25,
+        "y": -34
+      },
+      "cta": {
+        "h": 32,
+        "w": 316.5,
+        "x": 17,
+        "y": 203
+      },
+      "skillArea": {
+        "before": 48,
+        "after": 22
+      },
+      "rows": [
+        {
+          "visible": ["Java"],
+          "widths": [316.5],
+          "primaryTruncated": false,
+          "title": "Java"
+        },
+        {
+          "visible": ["PostgreSQL", "+1"],
+          "widths": [272.5, 40],
+          "primaryTruncated": false,
+          "title": "PostgreSQL"
+        },
+        {
+          "visible": ["Ведение социальных сетей", "+4"],
+          "widths": [272.5, 40],
+          "primaryTruncated": false,
+          "title": "Ведение социальных сетей"
+        },
+        {
+          "visible": ["Python", "+10"],
+          "widths": [272.5, 40],
+          "primaryTruncated": false,
+          "title": "Python"
+        },
+        {
+          "visible": [],
+          "widths": [],
+          "primaryTruncated": false,
+          "title": null
+        },
+        {
+          "visible": [
+            "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+          ],
+          "widths": [316.5],
+          "primaryTruncated": true,
+          "title": "Ведение социальных сетей и контент-маркетинг для международных образовательных проектов"
+        }
+      ]
+    }
+  ]
+}

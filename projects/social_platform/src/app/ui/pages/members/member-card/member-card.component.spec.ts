@@ -7,8 +7,8 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { MemberCardComponent } from "./member-card.component";
 
 describe("Карточка каталога участников", () => {
-  it.each([0, 1, 2, 5, 50])(
-    "показывает первые два навыка и точный +N при %s навыках",
+  it.each([0, 1, 2, 5, 11, 50])(
+    "показывает первый навык в исходном порядке и точный +N при %s навыках",
     async count => {
       await TestBed.configureTestingModule({
         imports: [MemberCardComponent],
@@ -17,23 +17,25 @@ describe("Карточка каталога участников", () => {
       const f = TestBed.createComponent(MemberCardComponent);
       const skills = Array.from({ length: count }, (_, id) => ({
         id,
-        name: id === 0 ? "ОченьДлинныйНавыкБезПробеловДляПроверкиОбрезки" : "Навык " + id,
+        name: id === 0 ? "Java" : id === 1 ? "Angular" : "Навык " + id,
       }));
       f.componentRef.setInput("member", userFromRaw({ id: 42, firstName: "Имя", skills }));
       await f.whenStable();
       const root = f.nativeElement as HTMLElement;
-      expect(root.querySelectorAll(".member-card__skill")).toHaveLength(Math.min(count, 2));
+      expect(root.querySelectorAll(".member-card__skill")).toHaveLength(Math.min(count, 1));
       expect(root.querySelector(".member-card__skills-area")).not.toBeNull();
       const more = root.querySelector(".member-card__more");
-      if (count > 2) {
-        expect(more?.textContent?.trim()).toBe("+" + (count - 2));
+      if (count > 1) {
+        expect(more?.textContent?.trim()).toBe("+" + (count - 1));
         expect(more).toBe(root.querySelector(".member-card__skills")?.lastElementChild);
-        expect(more?.getAttribute("title")).toContain("Навык 2");
+        expect(more?.getAttribute("title")).toContain("Angular");
       } else expect(more).toBeNull();
-      if (count)
+      if (count) {
+        expect(root.querySelector(".member-card__skill")?.textContent?.trim()).toBe("Java");
         expect(root.querySelector(".member-card__skill")?.getAttribute("title")).toBe(
           skills[0].name,
         );
+      }
       // Замена данных не требует ResizeObserver или ожидания загрузки шрифта.
       f.componentRef.setInput("member", userFromRaw({ id: 42, skills: [] }));
       await f.whenStable();
@@ -57,7 +59,7 @@ describe("Карточка каталога участников", () => {
         lastName: "Константинопольская",
         speciality: "Разработчик",
         avatar: "/avatar.svg",
-        skills: [],
+        skills: [{ id: 9, name: "Ведение социальных сетей и контент-маркетинг" }],
       }),
     );
     await f.whenStable();
@@ -71,7 +73,11 @@ describe("Карточка каталога участников", () => {
       .componentInstance as AvatarComponent;
     expect(avatar.size()).toBe(70);
     expect(avatar.url()).toBe("/avatar.svg");
-    expect(root.querySelectorAll(".member-card__skills li")).toHaveLength(0);
+    expect(root.querySelectorAll(".member-card__skills li")).toHaveLength(1);
+    expect(root.querySelector(".member-card__skill")?.getAttribute("title")).toBe(
+      "Ведение социальных сетей и контент-маркетинг",
+    );
+    expect(root.querySelector(".member-card__action")?.textContent?.trim()).toBe("Профиль");
     f.destroy();
   });
 });

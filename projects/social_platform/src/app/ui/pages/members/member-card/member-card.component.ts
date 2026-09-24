@@ -21,12 +21,12 @@ export class MemberCardComponent {
     [this.member().firstName, this.member().lastName].filter(Boolean).join(" "),
   );
   protected readonly skills = computed(() => this.member().relations?.skills ?? []);
-  // Единый визуальный бюджет не зависит от длины слов, шрифта и ширины viewport.
-  protected readonly visibleSkills = computed(() => this.skills().slice(0, 2));
-  protected readonly hiddenCount = computed(() => Math.max(0, this.skills().length - 2));
+  // Основной навык берём из порядка API: ширина карточки не меняет выбор и число скрытых навыков.
+  protected readonly primarySkill = computed(() => this.skills()[0]);
+  protected readonly hiddenCount = computed(() => Math.max(0, this.skills().length - 1));
   protected readonly hiddenNames = computed(() =>
     this.skills()
-      .slice(2)
+      .slice(1)
       .map(s => s.name)
       .join(", "),
   );
