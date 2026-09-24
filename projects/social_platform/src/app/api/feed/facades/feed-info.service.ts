@@ -13,8 +13,7 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { FeedItem, FeedItemType } from "@domain/feed/feed-item.model";
-import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedItem, FeedItemType, FeedPage } from "@domain/feed/feed-item.model";
 import { FeedUIInfoService } from "./ui/feed-ui-info.service";
 import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
 import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
@@ -49,7 +48,7 @@ export class FeedInfoService {
         map(r => r["data"]),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((feed: ApiPagination<FeedItem>) => {
+      .subscribe((feed: FeedPage) => {
         this.feedUIInfoService.applyInitializationFeedNewsEvent(feed);
 
         this.observer?.disconnect();
@@ -97,18 +96,18 @@ export class FeedInfoService {
 
   private onScroll(target: HTMLElement, feedRoot: ElementRef<HTMLElement>): Observable<FeedItem[]> {
     if (
-      this.feedUIInfoService.totalItemsCount() &&
-      this.feedItems().length >= this.feedUIInfoService.totalItemsCount()
+      !this.feedUIInfoService.totalItemsCount() ||
+      this.feedUIInfoService.feedPage() >= this.feedUIInfoService.totalItemsCount()
     )
       return EMPTY;
 
     if (!target || !feedRoot) return EMPTY;
 
     const diff =
-      target.scrollTop - feedRoot.nativeElement.getBoundingClientRect().height + window.innerHeight;
+      feedRoot.nativeElement.getBoundingClientRect().bottom - target.getBoundingClientRect().bottom;
 
-    if (diff > 0) {
-      const currentOffset = this.feedItems().length;
+    if (diff < 400) {
+      const currentOffset = this.feedUIInfoService.feedPage();
 
       return this.onFetch(
         currentOffset,
@@ -116,12 +115,12 @@ export class FeedInfoService {
         this.includes(),
       ).pipe(
         tap((feedChunk: FeedItem[]) => {
+          this.feedUIInfoService.feedPage.set(currentOffset + feedChunk.length);
           const keyOf = (item: FeedItem) => `${item.typeModel}:${item.content.id}`;
           const existingIds = new Set(this.feedItems().map(keyOf));
           const uniqueNewItems = feedChunk.filter(item => !existingIds.has(keyOf(item)));
 
           if (uniqueNewItems.length > 0) {
-            this.feedUIInfoService.feedPage.update(page => page + uniqueNewItems.length);
             this.feedUIInfoService.feedItems$.update(state =>
               isSuccess(state)
                 ? success([...state.data, ...uniqueNewItems])
@@ -163,6 +162,9 @@ export class FeedInfoService {
     return this.fetchFeedUseCase.execute(offset, limit, type).pipe(
       tap(result => {
         this.feedUIInfoService.totalItemsCount.set(result.ok ? result.value.count : 0);
+        if (result.ok && result.value.counts) {
+          this.feedUIInfoService.categoryCounts.set(result.value.counts);
+        }
       }),
       map(result => (result.ok ? result.value.results : [])),
     );
@@ -170,10 +172,9 @@ export class FeedInfoService {
 
   private onFeedItemView(entries: IntersectionObserverEntry[]): void {
     const items = entries
-      .map(e => {
-        return Number((e.target as HTMLElement).dataset["id"]);
-      })
-      .map(id => this.feedItems().find(item => item.content.id === id))
+      .filter(entry => entry.isIntersecting)
+      .map(e => (e.target as HTMLElement).dataset["key"])
+      .map(key => this.feedItems().find(item => `${item.typeModel}:${item.content.id}` === key))
       .filter(Boolean) as FeedItem[];
 
     const projectNews = items.filter(
@@ -203,7 +204,9 @@ export class FeedInfoService {
   }
 
   onLike(newsId: number) {
-    const itemIdx = this.feedItems().findIndex(n => n.content.id === newsId);
+    const itemIdx = this.feedItems().findIndex(
+      n => n.typeModel === "news" && n.content.id === newsId,
+    );
 
     const item = this.feedItems()[itemIdx];
     if (!item || item.typeModel !== "news") return;

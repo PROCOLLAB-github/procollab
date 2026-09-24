@@ -4,13 +4,10 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  computed,
   ElementRef,
   inject,
   OnDestroy,
-  OnInit,
   viewChild,
-  ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
@@ -22,6 +19,7 @@ import { FeedInfoService } from "@api/feed/facades/feed-info.service";
 import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { FeedItem } from "@domain/feed/feed-item.model";
 
 /** Страница ленты активности. */
 @Component({
@@ -36,11 +34,10 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
     FeedFilterComponent,
     NewsCardComponent,
     OpenVacancyComponent,
-    IconComponent,
   ],
   providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
 })
-export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FeedComponent implements AfterViewInit, OnDestroy {
   readonly feedRoot = viewChild<ElementRef<HTMLElement>>("feedRoot");
 
   private readonly feedInfoService = inject(FeedInfoService);
@@ -50,22 +47,28 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly AppRoutes = AppRoutes;
 
   /** Ссылка-маршрут для карточки новости в зависимости от типа источника. */
-  protected resourceLink(content: any): (string | number)[] {
-    if (content.contentObject && "email" in content.contentObject) {
-      return [AppRoutes.profile.detail(content.contentObject.id)];
+  protected resourceLink(item: FeedItem): (string | number)[] {
+    if (item.typeModel !== "news") return [];
+    const source = item.content.contentObject;
+    if ("email" in source) {
+      return [AppRoutes.profile.detail(source.id)];
     }
 
-    return [AppRoutes.projects.detail(content.contentObject.id)];
+    return [AppRoutes.projects.detail(source.id)];
   }
 
-  ngOnInit() {
-    this.feedInfoService.initializationFeedNews(this.feedRoot()!);
+  protected isPersonNews(item: FeedItem): boolean {
+    return item.typeModel === "news" && "email" in item.content.contentObject;
   }
 
   ngAfterViewInit() {
     const target = document.querySelector(".office__body") as HTMLElement;
-    if (target || this.feedRoot) {
-      this.feedInfoService.initScroll(target, this.feedRoot()!);
+    const root = this.feedRoot();
+    if (root) {
+      this.feedInfoService.initializationFeedNews(root);
+    }
+    if (target && root) {
+      this.feedInfoService.initScroll(target, root);
     }
   }
 

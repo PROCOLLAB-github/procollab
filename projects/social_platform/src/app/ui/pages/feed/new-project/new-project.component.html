@@ -1,63 +1,37 @@
 <!-- @format -->
-
-<div class="card">
-  <div class="card__project">
-    <app-avatar
-      class="card__avatar"
-      [size]="88"
-      [url]="feedItem().imageAddress"
-      [hasBorder]="true"
-    ></app-avatar>
-
-    <div class="card__info">
-      <div class="card__info--main">
-        <p class="text-body-12">
-          {{ feedItem().name | truncate: 30 }}
-        </p>
-        <!-- <p class="text-body-10">{{ feedItem.datetimeCreated | dayjs: "format":"DD MM YY" }}</p> -->
-      </div>
-
-      <div class="card__info--additional">
-        <p class="text-body-6 project__industry">
-          @if (industryRepository.getOne(feedItem().industry); as industry) {
-            <app-tag class="card__industry" color="complete">
-              {{ industry.name }}
-            </app-tag>
-          }
-        </p>
-
-        <!-- <div class="card__score">
-          <p class="text-body-10">{{ feedItem.score }}</p>
-          <p class="text-body-10">{{ 25 }}</p>
-          <i appIcon icon="star" appSquare="10"></i>
-        </div> -->
-      </div>
-
-      <p class="card__description text-body-10">{{ feedItem().shortDescription }}</p>
+<article class="card">
+  <div class="card__meta feed-card__meta">
+    <span class="card__type feed-card__type">Новый проект</span>
+    @if (publishedAt()) {
+      <time class="card__date feed-card__date" [attr.datetime]="publishedAt()">
+        {{ publishedAt() | dayjs: "format" : "DD.MM.YYYY" }}
+      </time>
+    }
+  </div>
+  <div class="feed-card__source">
+    <app-avatar class="feed-card__avatar" [size]="40" [url]="feedItem().imageAddress"></app-avatar>
+    <div class="feed-card__source-text">
+      <span class="feed-card__eyebrow">Проект</span>
+      <a
+        class="feed-card__source-name"
+        [title]="feedItem().name"
+        [routerLink]="AppRoutes.projects.detail(feedItem().id)"
+        >{{ feedItem().name }}</a
+      >
     </div>
   </div>
-
-  <div class="card__actions">
-    <app-button
-      class="card__button"
-      appearance="outline"
-      color="white"
-      size="medium"
-      style="opacity: 0.5"
-      [disabled]="true"
-      customTypographyClass="text-body-12"
-      >поддержать проект</app-button
-    >
-
-    <app-button
-      class="card__button"
-      appearance="outline"
-      color="white"
-      size="big"
-      style="flex-grow: 1"
-      customTypographyClass="text-body-12"
-      [routerLink]="AppRoutes.projects.detail(feedItem().id)"
-      >перейти в проект</app-button
-    >
+  <h3 class="card__title feed-card__title" [title]="feedItem().name">{{ feedItem().name }}</h3>
+  <p class="card__description feed-card__description">{{ feedItem().shortDescription }}</p>
+  <div class="feed-card__metadata">
+    @if (industryRepository.getOne(feedItem().industry); as industry) {
+      <span
+        class="card__industry feed-card__chip feed-card__chip--industry"
+        [title]="industry.name"
+        >{{ industry.name }}</span
+      >
+    }
   </div>
-</div>
+  <a class="card__cta feed-card__cta" [routerLink]="AppRoutes.projects.detail(feedItem().id)"
+    >Перейти в проект</a
+  >
+</article>

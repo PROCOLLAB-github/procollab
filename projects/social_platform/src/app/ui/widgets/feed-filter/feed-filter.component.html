@@ -32,17 +32,26 @@
 <ng-template #filter>
   <div class="filter">
     @for (filterItem of feedFilterOptions; track $index) {
-      <div
+      <button
+        type="button"
         class="filter__option"
+        [disabled]="filterItem.id === 5"
+        [attr.aria-pressed]="filterItem.value === includedFilters()"
         [class.filter__option--disable]="filterItem.id === 5"
         [class.filter__option--active]="filterItem.value === includedFilters()"
-        (click)="setFilter(filterItem.value)"
+        (click)="filterItem.id !== 5 && setFilter(filterItem.value)"
       >
-        <div class="filter__option--icon">
+        <span class="filter__option--icon" aria-hidden="true">
           <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
-        </div>
-        <p class="text-body-12">{{ filterItem.name }}</p>
-      </div>
+        </span>
+        <span class="filter__title">{{ filterItem.name }}</span>
+        <span
+          class="filter__count"
+          [attr.aria-label]="'Количество: ' + categoryCount(filterItem.value)"
+        >
+          {{ categoryCount(filterItem.value) }}
+        </span>
+      </button>
     }
   </div>
 </ng-template>

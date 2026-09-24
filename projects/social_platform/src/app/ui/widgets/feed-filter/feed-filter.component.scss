@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -74,20 +76,25 @@
 }
 
 .filter {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px 12px;
+  padding-top: 25px;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 
   &__option {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 32px 18px;
+    row-gap: 4px;
     align-items: center;
-    justify-content: center;
-    width: 156px;
-    height: 66px;
-    padding: 40px 24px 12px;
+    justify-items: center;
+    min-width: 0;
+    height: 104px;
+    padding: 36px 6px 12px;
     cursor: pointer;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
@@ -99,12 +106,18 @@
     }
 
     &--active {
+      border-color: var(--accent);
+
       i {
         color: var(--light-white) !important;
       }
 
       .filter__option--icon {
         background-color: var(--accent);
+      }
+
+      .filter__title {
+        color: var(--accent);
       }
     }
 
@@ -127,16 +140,27 @@
       }
     }
 
-    p {
-      color: var(--grey-for-text);
-      text-align: center;
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
     }
   }
 
-  span {
+  // Одна двухстрочная область названия задаёт общую базовую линию всех счётчиков.
+  &__title {
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--grey-for-text);
+    text-align: center;
+  }
+
+  &__count {
     display: block;
-    margin-bottom: 6px;
-    color: var(--gray);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 18px;
+    color: var(--accent);
   }
 
   &__checkbox {

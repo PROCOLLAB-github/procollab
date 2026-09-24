@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -112,6 +114,13 @@
       &.expanded {
         -webkit-line-clamp: unset;
       }
+    }
+
+    .card__feed-summary {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--grey-for-text);
+      -webkit-line-clamp: 3;
     }
   }
   /* stylelint-enable value-no-vendor-prefix */

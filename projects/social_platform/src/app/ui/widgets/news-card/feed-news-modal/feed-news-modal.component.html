@@ -1,0 +1,85 @@
+<!-- @format -->
+<app-modal [open]="open()" bodyClass="feed-news-modal-body" (openChange)="close()">
+  <section
+    class="feed-news-modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="'Новость: ' + news().name"
+  >
+    <div
+      class="feed-news-modal__shell"
+      [cdkTrapFocus]="attached()"
+      [cdkTrapFocusAutoCapture]="false"
+    >
+      <header class="feed-news-modal__header">
+        <span class="feed-news-modal__badge">{{
+          type() === "people" ? "Новости людей" : "Новости проекта"
+        }}</span>
+        <time [attr.datetime]="publishedAt()">{{
+          publishedAt() | dayjs: "format" : "DD.MM.YYYY"
+        }}</time>
+        <button
+          #closeButton
+          type="button"
+          class="feed-news-modal__close"
+          aria-label="Закрыть новость"
+          (click)="close()"
+        >
+          ×
+        </button>
+      </header>
+      <div
+        class="feed-news-modal__scroll"
+        tabindex="0"
+        role="region"
+        aria-label="Содержимое новости"
+      >
+        <div class="feed-news-modal__source">
+          <img [src]="news().imageAddress || placeholderUrl()" [alt]="news().name" />
+          <div>
+            <span>{{ type() === "people" ? "Автор" : "Проект" }}</span
+            ><a [routerLink]="resourceLink()" (click)="leave()">{{ news().name }}</a>
+          </div>
+        </div>
+        <div
+          class="feed-news-modal__text"
+          [innerHTML]="news().text | parseLinks | parseBreaks"
+        ></div>
+        @if (images().length) {
+          <app-carousel [images]="images()" fit="contain" (like)="like.emit()" />
+        }
+        @if (files().length) {
+          <ul class="feed-news-modal__files" aria-label="Вложения новости">
+            @for (file of files(); track $index) {
+              <li>
+                <a [href]="file.link" [attr.download]="file.name"
+                  ><i appIcon icon="download" appSquare="16"></i>{{ file.name }}</a
+                >
+              </li>
+            }
+          </ul>
+        }
+        <footer class="feed-news-modal__actions">
+          <button
+            type="button"
+            aria-label="Нравится"
+            [attr.aria-pressed]="news().isUserLiked"
+            [class.feed-news-modal__liked]="news().isUserLiked"
+            (click)="like.emit()"
+          >
+            <i appIcon icon="like" appSquare="16"></i>{{ news().likesCount }}
+          </button>
+          <button type="button" aria-label="Скопировать ссылку на новость" (click)="share.emit()">
+            <i appIcon icon="share" appSquare="16"></i>
+          </button>
+          <span [attr.aria-label]="'Просмотров: ' + news().viewsCount"
+            ><i appIcon icon="eye" appSquare="16"></i>{{ news().viewsCount }}</span
+          >
+        </footer>
+        <a class="feed-news-modal__cta" [routerLink]="resourceLink()" (click)="leave()">{{
+          type() === "people" ? "Перейти в профиль" : "Перейти в проект"
+        }}</a>
+      </div>
+    </div>
+  </section>
+</app-modal>
