@@ -13,6 +13,7 @@ describe("Карточка каталога участников", () => {
     [130, [200], 24, 1],
     [130, [120, 120, 120], 24, 1],
     [130, [40, 40, 40, 40, 40, 40, 40], 24, 5],
+    [130, [64, 62.2, 64, 62.2, 20], 24, 2],
     [0, [50], 24, 0],
   ])("две строки с резервом +N: %s / %s", (width, widths, badge, expected) => {
     expect(fitMemberSkills(width as number, widths as number[], badge as number)).toBe(expected);

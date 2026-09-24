@@ -36,6 +36,7 @@
 | Аватар                            | 70 × 70 px          | 70 × 70 px  |
 | Аватар относительно рамки, x / y  | 43 / −34 px         | 43 / −34 px |
 | Desktop, колонок карточек         | 4                   | 4           |
+| 1024 px, колонок карточек         | 4 с переполнением   | 3           |
 | Tablet / mobile, колонок карточек | 1                   | 1           |
 | Максимум строк навыков            | прежнее отображение | 2           |
 
@@ -50,11 +51,19 @@ Viewport: 1440 × 900, 768 × 1024, 390 × 844, масштаб 100%.
 На tablet/mobile координаты статистики совпали с исходными.
 Подробные измерения: [geometry.json](geometry.json).
 
-| Поверхность | До                                         | После                                     |
-| ----------- | ------------------------------------------ | ----------------------------------------- |
-| Desktop     | [Скриншот](screenshots/before-desktop.png) | [Скриншот](screenshots/after-desktop.png) |
-| Tablet      | [Скриншот](screenshots/before-tablet.png)  | [Скриншот](screenshots/after-tablet.png)  |
-| Mobile      | [Скриншот](screenshots/before-mobile.png)  | [Скриншот](screenshots/after-mobile.png)  |
+Дополнительно на 1024 × 768 выявлено исходное переполнение внутри office:
+четыре карточки не помещались рядом с фильтрами. Локальная media-правка
+`MembersComponent` оставляет три колонки в диапазоне 1000–1279 px.
+Проверены границы 1000/1279/1280/1440 px: переполнения нет, начиная с 1280 px
+сохраняются четыре колонки. Общие стили office и статистики не менялись.
+Измерения: [breakpoints.json](breakpoints.json).
+
+| Поверхность              | До                                                  | После                                              |
+| ------------------------ | --------------------------------------------------- | -------------------------------------------------- |
+| Desktop                  | [Скриншот](screenshots/before-desktop.png)          | [Скриншот](screenshots/after-desktop.png)          |
+| Tablet                   | [Скриншот](screenshots/before-tablet.png)           | [Скриншот](screenshots/after-tablet.png)           |
+| Mobile                   | [Скриншот](screenshots/before-mobile.png)           | [Скриншот](screenshots/after-mobile.png)           |
+| Tablet landscape 1024 px | [Скриншот](screenshots/before-tablet-landscape.png) | [Скриншот](screenshots/after-tablet-landscape.png) |
 
 Проверены отсутствие навыков/специальности, длинная фамилия, 1–8 навыков,
 точный счётчик скрытых навыков, переход фокуса Tab и видимая рамка фокуса.
@@ -97,8 +106,9 @@ Resolver учитывает `fullname` из URL. Очистка поиска у�
 
 ## Зависимость от backend и ограничения
 
-Для исправления регистра и полного имени требуется сопутствующий backend PR
-из `fix/dev-member-name-search`. URL, формат ответа и права доступа сохранены.
+Для исправления регистра и полного имени требуется сопутствующий
+[backend PR #754](https://github.com/PROCOLLAB-github/api/pull/754).
+URL, формат ответа и права доступа сохранены.
 Никакой фильтрации всех пользователей в браузере нет.
 
 На DEV/PROD страницы участников перенаправляют в login: безопасной
@@ -113,15 +123,15 @@ Merge и deploy не выполнялись.
 
 - `npm ci` — exit 0, Node 20.20.2.
 - `npm run test:ci -- --pool=forks projects/social_platform/src/app/ui/pages/members projects/social_platform/src/app/api/member projects/social_platform/src/app/ui/widgets/info-card projects/social_platform/src/app/infrastructure/adapters/member`
-  — 9 файлов, **69/69**, exit 0.
-- `npm run test:ci -- --pool=forks` — 387 файлов, **1790/1790**, exit 0,
+  — 9 файлов, **70/70**, exit 0.
+- `npm run test:ci -- --pool=forks` — 387 файлов, **1791/1791**, exit 0,
   без unhandled errors. Использована существующая конфигурация с CLI-выбором
   pool; setup, skip/exclude и зависимости не менялись.
 - `npm run lint:ts` — exit 0, 6 предупреждений в незатронутых файлах.
 - `npx prettier --check` для всех изменённых TS/HTML/Markdown/JSON — exit 0.
   SCSS исключён существующим `.prettierignore` и проверен Stylelint.
 - `npx stylelint projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.scss`
-  — exit 0.
+  и `members.component.scss` — exit 0.
 - `npm run build:prod` — exit 0; присутствуют предупреждения сборки о CommonJS.
 - `git diff --check` — без ошибок.
 

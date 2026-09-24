@@ -24,13 +24,13 @@ export function fitMemberSkills(width: number, widths: number[], counterWidth: n
   for (let i = 0; i < widths.length; i++) {
     const chip = Math.min(widths[i], width);
     const gap = used ? 4 : 0;
-    if (used + gap + chip > width + 0.5) {
+    if (used + gap + chip > width) {
       row++;
       used = chip;
     } else used += gap + chip;
     if (row > 2) break;
     if (i === widths.length - 1) return widths.length;
-    if (row < 2 || used + 4 + counterWidth <= width + 0.5) best = i + 1;
+    if (row < 2 || used + 4 + counterWidth <= width) best = i + 1;
   }
   return best;
 }
@@ -76,7 +76,7 @@ export class MemberCardComponent {
         const counter = element.querySelector<HTMLElement>(".member-card__more")!;
         this.visibleCount.set(
           fitMemberSkills(
-            element.clientWidth,
+            element.getBoundingClientRect().width,
             chips.map(c => c.getBoundingClientRect().width),
             counter.getBoundingClientRect().width,
           ),

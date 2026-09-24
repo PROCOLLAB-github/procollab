@@ -22,6 +22,11 @@
     @include responsive.apply-desktop {
       grid-template-columns: repeat(4, 2fr);
     }
+
+    // Четыре карточки фиксированной ширины не помещаются рядом с фильтрами на узком desktop.
+    @media (min-width: responsive.$desktop) and (max-width: #{responsive.$container-md - 1px}) {
+      grid-template-columns: repeat(3, 2fr);
+    }
   }
 
   &__info {
