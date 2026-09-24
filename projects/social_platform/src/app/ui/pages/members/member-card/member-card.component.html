@@ -18,7 +18,7 @@
     </p>
     <div class="member-card__skills-area">
       <ul class="member-card__skills" aria-label="Навыки">
-        @for (skill of skills().slice(0, visibleCount()); track skill.id) {
+        @for (skill of visibleSkills(); track skill.id) {
           <li class="member-card__skill" [title]="skill.name">{{ skill.name }}</li>
         }
         @if (hiddenCount()) {
@@ -31,12 +31,6 @@
           </li>
         }
       </ul>
-      <div #measureElement class="member-card__measure" aria-hidden="true" inert>
-        @for (skill of skills(); track skill.id) {
-          <span class="member-card__skill">{{ skill.name }}</span>
-        }
-        <span class="member-card__more">+{{ skills().length }}</span>
-      </div>
     </div>
     <span class="member-card__action">Профиль</span>
   </div>

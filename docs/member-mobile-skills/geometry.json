@@ -1,0 +1,1246 @@
+[
+  {
+    "label": "before-1440-settled",
+    "viewport": [1440, 900],
+    "gridColumns": "156px 156px 156px 156px",
+    "horizontalOverflow": false,
+    "inlineFilters": true,
+    "controls": null,
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 1062.328125,
+      "y": 298.78125
+    },
+    "cards": [
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": "+5",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "before-390",
+    "viewport": [390, 844],
+    "gridColumns": "183px",
+    "horizontalOverflow": false,
+    "inlineFilters": true,
+    "controls": null,
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 203,
+      "y": 262.78125
+    },
+    "cards": [
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": "+5",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 3,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-1440-final",
+    "viewport": [1440, 900],
+    "gridColumns": "156px 156px 156px 156px",
+    "horizontalOverflow": false,
+    "inlineFilters": true,
+    "controls": null,
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 1069.828125,
+      "y": 298.78125
+    },
+    "cards": [
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-1280",
+    "viewport": [1280, 900],
+    "gridColumns": "156px 156px 156px 156px",
+    "horizontalOverflow": false,
+    "inlineFilters": true,
+    "controls": null,
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 989.828125,
+      "y": 298.78125
+    },
+    "cards": [
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-1024",
+    "viewport": [1024, 900],
+    "gridColumns": "180.156px 180.172px 180.172px",
+    "horizontalOverflow": false,
+    "inlineFilters": true,
+    "controls": null,
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 802,
+      "y": 298.78125
+    },
+    "cards": [
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 156,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 43,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-768",
+    "viewport": [768, 1024],
+    "gridColumns": "350.5px 350.5px",
+    "horizontalOverflow": false,
+    "inlineFilters": false,
+    "controls": {
+      "h": 44,
+      "w": 721,
+      "x": 16,
+      "y": 173
+    },
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 298,
+      "y": 1438
+    },
+    "cards": [
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 350.5,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 140.25,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-414",
+    "viewport": [414, 896],
+    "gridColumns": "367px",
+    "horizontalOverflow": false,
+    "inlineFilters": false,
+    "controls": {
+      "h": 44,
+      "w": 367,
+      "x": 16,
+      "y": 173
+    },
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 121,
+      "y": 2630
+    },
+    "cards": [
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 367,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 148.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-390",
+    "viewport": [390, 844],
+    "gridColumns": "343px",
+    "horizontalOverflow": false,
+    "inlineFilters": false,
+    "controls": {
+      "h": 44,
+      "w": 343,
+      "x": 16,
+      "y": 173
+    },
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 109,
+      "y": 2630
+    },
+    "cards": [
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 343,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 136.5,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  },
+  {
+    "label": "after-375",
+    "viewport": [375, 812],
+    "gridColumns": "328px",
+    "horizontalOverflow": false,
+    "inlineFilters": false,
+    "controls": {
+      "h": 44,
+      "w": 328,
+      "x": 16,
+      "y": 173
+    },
+    "statistics": {
+      "h": 140.984375,
+      "w": 157,
+      "x": 101.5,
+      "y": 2630
+    },
+    "cards": [
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+6",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+3",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 0,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 1,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": null,
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+2",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+48",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      },
+      {
+        "width": 328,
+        "height": 248,
+        "avatar": {
+          "h": 70,
+          "w": 70,
+          "x": 129,
+          "y": -34
+        },
+        "skillsHeight": 48,
+        "visibleSkills": 2,
+        "more": "+1",
+        "ctaHeight": 32,
+        "ctaOffset": 203
+      }
+    ]
+  }
+]

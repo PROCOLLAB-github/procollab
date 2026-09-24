@@ -8,7 +8,12 @@ import {
   inject,
   OnInit,
   viewChild,
+  effect,
+  signal,
 } from "@angular/core";
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { CommonModule } from "@angular/common";
@@ -22,6 +27,7 @@ import { MembersInfoService } from "@api/member/facades/members-info.service";
 import { MembersUIInfoService } from "@api/member/facades/ui/members-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { MemberFiltersDialogComponent } from "./member-filters-dialog/member-filters-dialog.component";
 
 /** Список участников с поиском, фильтрацией и бесконечной прокруткой. */
 @Component({
@@ -38,6 +44,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
     BackComponent,
     ButtonComponent,
     SoonCardComponent,
+    MemberFiltersDialogComponent,
   ],
   providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService],
 })
@@ -56,6 +63,26 @@ export class MembersComponent implements OnInit, AfterViewInit {
   protected readonly containerSm = containerSm; // Брейкпоинт для мобильных устройств
   protected readonly appWidth = window.innerWidth; // Ширина окна браузера
   protected readonly AppRoutes = AppRoutes;
+  private readonly breakpoints = inject(BreakpointObserver);
+  protected readonly compactLayout = toSignal(
+    this.breakpoints.observe("(max-width: 999px)").pipe(map(state => state.matches)),
+    { initialValue: this.breakpoints.isMatched("(max-width: 999px)") },
+  );
+  protected readonly filtersOpen = signal(false);
+  protected filtersTrigger: HTMLElement | null = null;
+
+  constructor() {
+    // При переходе к desktop фильтры снова видны в sidebar; мобильное окно больше не нужно.
+    effect(() => {
+      if (!this.compactLayout()) this.filtersOpen.set(false);
+    });
+  }
+
+  /** Открывает мобильное представление той же формы, не сбрасывая выбранные фильтры. */
+  protected openFilters(trigger: HTMLElement): void {
+    this.filtersTrigger = trigger;
+    this.filtersOpen.set(true);
+  }
 
   ngOnInit(): void {
     this.membersInfoService.initializationMembers();
