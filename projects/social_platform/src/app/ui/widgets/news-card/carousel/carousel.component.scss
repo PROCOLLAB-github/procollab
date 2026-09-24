@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 
 .carousel {
@@ -5,6 +7,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  // Лента задаёт высоту preview; остальные страницы сохраняют естественный размер изображения.
+  height: var(--carousel-height, auto);
+
+  // Опциональный режим чтения: contain сохраняет весь кадр даже при ограничении по высоте.
+  &--contain {
+    height: auto;
+
+    .carousel__image-wrapper {
+      height: auto;
+    }
+
+    .carousel__image-wrapper img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 68dvh;
+      object-fit: contain;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+  }
 
   &__image-wrapper {
     position: relative;
@@ -15,6 +42,7 @@
     img {
       display: block;
       width: 100%;
+      height: var(--carousel-height, auto);
       border-radius: var(--rounded-xl);
       object-fit: cover;
     }

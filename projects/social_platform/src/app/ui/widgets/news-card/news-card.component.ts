@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   EventEmitter,
@@ -31,6 +32,7 @@ import {
 import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { ClickOutsideModule } from "ng-click-outside";
+import { FeedNewsPreviewComponent } from "./feed-news-preview/feed-news-preview.component";
 import { CarouselComponent } from "./carousel/carousel.component";
 import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
 import { FeedNews } from "@domain/news/project-news.model";
@@ -42,6 +44,7 @@ import { FileModel } from "@domain/file/file.model";
 import { catchError, forkJoin, noop, Observable, of, take, tap } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ExpandService } from "@api/expand/expand.service";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 
 /** Виджет карточки новости: отображение, лайк, режим редактирования. */
 @Component({
@@ -49,6 +52,7 @@ import { ExpandService } from "@api/expand/expand.service";
   templateUrl: "./news-card.component.html",
   styleUrl: "./news-card.component.scss",
   imports: [
+    FeedNewsPreviewComponent,
     ClickOutsideModule,
     RouterLink,
     IconComponent,
@@ -71,6 +75,7 @@ import { ExpandService } from "@api/expand/expand.service";
 export class NewsCardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly expandService = inject(ExpandService);
+  protected readonly industryRepository = inject(IndustryRepositoryPort);
 
   constructor(
     private readonly snackbarService: SnackbarService,
@@ -90,6 +95,20 @@ export class NewsCardComponent implements OnInit {
   readonly resourceLink = input.required<(string | number)[]>();
   readonly contentId = input<number | undefined>();
   readonly isOwner = input<boolean | undefined>();
+  readonly feedType = input<"project" | "people" | undefined>();
+  readonly feedIndustryId = input<number | undefined>();
+  readonly publishedAt = input<string>("");
+
+  protected readonly feedText = computed(() => {
+    const text = this.feedItem().text.trim();
+    const punctuation = text.search(/[.!?](?=\s|$)|\n/);
+    const boundary =
+      punctuation > 0 && punctuation < 120 ? punctuation + 1 : Math.min(text.length, 100);
+    return {
+      headline: text.slice(0, boundary).trim(),
+      summary: text.slice(boundary).trim(),
+    };
+  });
 
   readonly delete = output<number>();
   readonly like = output<number>();
@@ -197,6 +216,7 @@ export class NewsCardComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    if (this.feedType()) return;
     setTimeout(() => {
       this.expandService.checkExpandable("description", true, this.newsTextEl());
       this.cdRef.markForCheck();

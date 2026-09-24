@@ -1,0 +1,6015 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-24T11:27:57.297Z",
+  "source": {
+    "prodBaseSha": "8f0202ab0937965bb548a93ca32c7fc6ff0e9242",
+    "sourceDevSha": "bdb5cf4780be0daa3e441d6b152511fcbe638d4e",
+    "testedGitHead": "8f0202ab0937965bb548a93ca32c7fc6ff0e9242",
+    "testedState": "незакоммиченный selective semantic port в codex/prod-news-feed-angular",
+    "fixture": "локальный Angular TestBed, реальные FeedComponent/FeedInfoService/NewsCard/Modal, синтетические данные и fake use cases без сети",
+    "browser": {
+      "name": "Chrome/153.0.8010.53",
+      "protocol": "1.3",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36"
+    }
+  },
+  "thresholds": {
+    "horizontalOverflowPx": 0,
+    "sameRowHeightDeltaMaxPx": 0.5,
+    "sameRowCtaYDeltaMaxPx": 0.5,
+    "actionCenterlineDeltaMaxPx": 0.5,
+    "iconSizePx": 16,
+    "metaNumberFontSizePx": 12
+  },
+  "feed": [
+    {
+      "label": "feed-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "horizontalOverflowPx": 0,
+      "overflowCandidates": [
+        {
+          "selector": "html",
+          "clientWidth": 1440,
+          "scrollWidth": 1440,
+          "overflow": 0
+        },
+        {
+          "selector": "body",
+          "clientWidth": 1440,
+          "scrollWidth": 1440,
+          "overflow": 0
+        },
+        {
+          "selector": "office",
+          "clientWidth": 1440,
+          "scrollWidth": 1440,
+          "overflow": 0
+        },
+        {
+          "selector": "office__body",
+          "clientWidth": 1425,
+          "scrollWidth": 1425,
+          "overflow": 0
+        },
+        {
+          "selector": "office__inner--content",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        },
+        {
+          "selector": "page",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        },
+        {
+          "selector": "page__feed",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        }
+      ],
+      "officeScroll": {
+        "top": 0,
+        "height": 900,
+        "total": 1173
+      },
+      "grid": {
+        "columns": "423.328px 423.328px",
+        "columnGap": "20px",
+        "rowGap": "20px"
+      },
+      "cards": [
+        {
+          "key": "news:1",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 365.828,
+            "y": 207,
+            "width": 423.328,
+            "height": 267.5,
+            "right": 789.156,
+            "bottom": 474.5,
+            "centerY": 340.75
+          },
+          "cta": {
+            "x": 386.828,
+            "y": 417.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 768.156,
+            "bottom": 453.5,
+            "centerY": 435.5
+          }
+        },
+        {
+          "key": "news:2",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 809.156,
+            "y": 207,
+            "width": 423.328,
+            "height": 267.5,
+            "right": 1232.484,
+            "bottom": 474.5,
+            "centerY": 340.75
+          },
+          "cta": {
+            "x": 830.156,
+            "y": 417.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 1211.484,
+            "bottom": 453.5,
+            "centerY": 435.5
+          }
+        },
+        {
+          "key": "news:3",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 365.828,
+            "y": 494.5,
+            "width": 423.328,
+            "height": 308,
+            "right": 789.156,
+            "bottom": 802.5,
+            "centerY": 648.5
+          },
+          "cta": {
+            "x": 386.828,
+            "y": 745.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 768.156,
+            "bottom": 781.5,
+            "centerY": 763.5
+          }
+        },
+        {
+          "key": "vacancy:4",
+          "type": "Новая вакансия",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 809.156,
+            "y": 494.5,
+            "width": 423.328,
+            "height": 308,
+            "right": 1232.484,
+            "bottom": 802.5,
+            "centerY": 648.5
+          },
+          "cta": {
+            "x": 830.156,
+            "y": 745.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 1211.484,
+            "bottom": 781.5,
+            "centerY": 763.5
+          }
+        },
+        {
+          "key": "project:5",
+          "type": "Новый проект",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 365.828,
+            "y": 822.5,
+            "width": 423.328,
+            "height": 350,
+            "right": 789.156,
+            "bottom": 1172.5,
+            "centerY": 997.5
+          },
+          "cta": {
+            "x": 386.828,
+            "y": 1115.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 768.156,
+            "bottom": 1151.5,
+            "centerY": 1133.5
+          }
+        },
+        {
+          "key": "news:6",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 809.156,
+            "y": 822.5,
+            "width": 423.328,
+            "height": 350,
+            "right": 1232.484,
+            "bottom": 1172.5,
+            "centerY": 997.5
+          },
+          "cta": {
+            "x": 830.156,
+            "y": 1115.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 1211.484,
+            "bottom": 1151.5,
+            "centerY": 1133.5
+          }
+        }
+      ],
+      "rows": [
+        {
+          "y": 207,
+          "keys": ["news:1", "news:2"],
+          "heights": [267.5, 267.5],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 494.5,
+          "keys": ["news:3", "vacancy:4"],
+          "heights": [308, 308],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 822.5,
+          "keys": ["project:5", "news:6"],
+          "heights": [350, 350],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        }
+      ],
+      "filters": [
+        {
+          "label": "все новости",
+          "count": 12,
+          "button": {
+            "x": 365.828,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 500.266,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 424.891,
+            "y": 156,
+            "width": 16.297,
+            "height": 18,
+            "right": 441.188,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "true",
+          "disabled": false
+        },
+        {
+          "label": "новости проектов",
+          "count": 3,
+          "button": {
+            "x": 512.266,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 646.703,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 575.406,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 583.563,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "свежие вакансии",
+          "count": 3,
+          "button": {
+            "x": 658.703,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 793.141,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 721.844,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 730,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости сообщества",
+          "count": 6,
+          "button": {
+            "x": 805.141,
+            "y": 83,
+            "width": 134.453,
+            "height": 104,
+            "right": 939.594,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 868.281,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 876.438,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости программ",
+          "count": 0,
+          "button": {
+            "x": 951.594,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 1086.031,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 1014.734,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 1022.891,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "образование",
+          "count": 0,
+          "button": {
+            "x": 1098.031,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 1232.469,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 1161.172,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 1169.328,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": true
+        }
+      ],
+      "filterRows": [
+        {
+          "centerY": 165,
+          "labels": [
+            "все новости",
+            "новости проектов",
+            "свежие вакансии",
+            "новости сообщества",
+            "новости программ",
+            "образование"
+          ],
+          "counts": [12, 3, 3, 6, 0, 0],
+          "delta": 0
+        }
+      ],
+      "filterCountCenterYDelta": 0,
+      "thumbnails": [
+        {
+          "src": "/fixtures/portrait.svg",
+          "rect": {
+            "x": 1091.484,
+            "y": 314,
+            "width": 120,
+            "height": 67.5,
+            "right": 1211.484,
+            "bottom": 381.5,
+            "centerY": 347.75
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 600,
+          "naturalHeight": 900
+        },
+        {
+          "src": "/fixtures/wide.svg",
+          "rect": {
+            "x": 1091.484,
+            "y": 929.5,
+            "width": 120,
+            "height": 67.5,
+            "right": 1211.484,
+            "bottom": 997,
+            "centerY": 963.25
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 960,
+          "naturalHeight": 540
+        }
+      ],
+      "newsMeta": [
+        {
+          "key": "news:1",
+          "actions": {
+            "x": 386.828,
+            "y": 391.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "left": {
+            "x": 386.828,
+            "y": 391.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 456.422,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "views": {
+            "x": 726.563,
+            "y": 391.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "icons": [
+            {
+              "x": 386.828,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 402.828,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 440.422,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 456.422,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 726.563,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 742.563,
+              "bottom": 407.5,
+              "centerY": 399.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 407.828,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 428.422,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 726.563,
+                "y": 391.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 747.563,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:2",
+          "actions": {
+            "x": 830.156,
+            "y": 391.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "left": {
+            "x": 830.156,
+            "y": 391.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 899.75,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "views": {
+            "x": 1169.891,
+            "y": 391.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "icons": [
+            {
+              "x": 830.156,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 846.156,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 883.75,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 899.75,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 1169.891,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 1185.891,
+              "bottom": 407.5,
+              "centerY": 399.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 851.156,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 871.75,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1169.891,
+                "y": 391.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1190.891,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:3",
+          "actions": {
+            "x": 386.828,
+            "y": 719.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 735.5,
+            "centerY": 727.5
+          },
+          "left": {
+            "x": 386.828,
+            "y": 719.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 456.422,
+            "bottom": 735.5,
+            "centerY": 727.5
+          },
+          "views": {
+            "x": 726.563,
+            "y": 719.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 735.5,
+            "centerY": 727.5
+          },
+          "icons": [
+            {
+              "x": 386.828,
+              "y": 719.5,
+              "width": 16,
+              "height": 16,
+              "right": 402.828,
+              "bottom": 735.5,
+              "centerY": 727.5
+            },
+            {
+              "x": 440.422,
+              "y": 719.5,
+              "width": 16,
+              "height": 16,
+              "right": 456.422,
+              "bottom": 735.5,
+              "centerY": 727.5
+            },
+            {
+              "x": 726.563,
+              "y": 719.5,
+              "width": 16,
+              "height": 16,
+              "right": 742.563,
+              "bottom": 735.5,
+              "centerY": 727.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 407.828,
+                "y": 719.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 428.422,
+                "bottom": 735.5,
+                "centerY": 727.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 726.563,
+                "y": 719.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 735.5,
+                "centerY": 727.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 747.563,
+                "y": 719.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 735.5,
+                "centerY": 727.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:6",
+          "actions": {
+            "x": 830.156,
+            "y": 1089.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 1105.5,
+            "centerY": 1097.5
+          },
+          "left": {
+            "x": 830.156,
+            "y": 1089.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 899.75,
+            "bottom": 1105.5,
+            "centerY": 1097.5
+          },
+          "views": {
+            "x": 1169.891,
+            "y": 1089.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 1105.5,
+            "centerY": 1097.5
+          },
+          "icons": [
+            {
+              "x": 830.156,
+              "y": 1089.5,
+              "width": 16,
+              "height": 16,
+              "right": 846.156,
+              "bottom": 1105.5,
+              "centerY": 1097.5
+            },
+            {
+              "x": 883.75,
+              "y": 1089.5,
+              "width": 16,
+              "height": 16,
+              "right": 899.75,
+              "bottom": 1105.5,
+              "centerY": 1097.5
+            },
+            {
+              "x": 1169.891,
+              "y": 1089.5,
+              "width": 16,
+              "height": 16,
+              "right": 1185.891,
+              "bottom": 1105.5,
+              "centerY": 1097.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 851.156,
+                "y": 1089.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 871.75,
+                "bottom": 1105.5,
+                "centerY": 1097.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1169.891,
+                "y": 1089.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 1105.5,
+                "centerY": 1097.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1190.891,
+                "y": 1089.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 1105.5,
+                "centerY": 1097.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        }
+      ]
+    },
+    {
+      "label": "feed-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 900,
+        "dpr": 1
+      },
+      "horizontalOverflowPx": 0,
+      "overflowCandidates": [
+        {
+          "selector": "html",
+          "clientWidth": 1280,
+          "scrollWidth": 1280,
+          "overflow": 0
+        },
+        {
+          "selector": "body",
+          "clientWidth": 1280,
+          "scrollWidth": 1280,
+          "overflow": 0
+        },
+        {
+          "selector": "office",
+          "clientWidth": 1280,
+          "scrollWidth": 1280,
+          "overflow": 0
+        },
+        {
+          "selector": "office__body",
+          "clientWidth": 1265,
+          "scrollWidth": 1265,
+          "overflow": 0
+        },
+        {
+          "selector": "office__inner--content",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        },
+        {
+          "selector": "page",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        },
+        {
+          "selector": "page__feed",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        }
+      ],
+      "officeScroll": {
+        "top": 0,
+        "height": 900,
+        "total": 1173
+      },
+      "grid": {
+        "columns": "423.328px 423.328px",
+        "columnGap": "20px",
+        "rowGap": "20px"
+      },
+      "cards": [
+        {
+          "key": "news:1",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 285.828,
+            "y": 207,
+            "width": 423.328,
+            "height": 267.5,
+            "right": 709.156,
+            "bottom": 474.5,
+            "centerY": 340.75
+          },
+          "cta": {
+            "x": 306.828,
+            "y": 417.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 688.156,
+            "bottom": 453.5,
+            "centerY": 435.5
+          }
+        },
+        {
+          "key": "news:2",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 729.156,
+            "y": 207,
+            "width": 423.328,
+            "height": 267.5,
+            "right": 1152.484,
+            "bottom": 474.5,
+            "centerY": 340.75
+          },
+          "cta": {
+            "x": 750.156,
+            "y": 417.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 1131.484,
+            "bottom": 453.5,
+            "centerY": 435.5
+          }
+        },
+        {
+          "key": "news:3",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 285.828,
+            "y": 494.5,
+            "width": 423.328,
+            "height": 308,
+            "right": 709.156,
+            "bottom": 802.5,
+            "centerY": 648.5
+          },
+          "cta": {
+            "x": 306.828,
+            "y": 745.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 688.156,
+            "bottom": 781.5,
+            "centerY": 763.5
+          }
+        },
+        {
+          "key": "vacancy:4",
+          "type": "Новая вакансия",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 729.156,
+            "y": 494.5,
+            "width": 423.328,
+            "height": 308,
+            "right": 1152.484,
+            "bottom": 802.5,
+            "centerY": 648.5
+          },
+          "cta": {
+            "x": 750.156,
+            "y": 745.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 1131.484,
+            "bottom": 781.5,
+            "centerY": 763.5
+          }
+        },
+        {
+          "key": "project:5",
+          "type": "Новый проект",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 285.828,
+            "y": 822.5,
+            "width": 423.328,
+            "height": 350,
+            "right": 709.156,
+            "bottom": 1172.5,
+            "centerY": 997.5
+          },
+          "cta": {
+            "x": 306.828,
+            "y": 1115.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 688.156,
+            "bottom": 1151.5,
+            "centerY": 1133.5
+          }
+        },
+        {
+          "key": "news:6",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 729.156,
+            "y": 822.5,
+            "width": 423.328,
+            "height": 350,
+            "right": 1152.484,
+            "bottom": 1172.5,
+            "centerY": 997.5
+          },
+          "cta": {
+            "x": 750.156,
+            "y": 1115.5,
+            "width": 381.328,
+            "height": 36,
+            "right": 1131.484,
+            "bottom": 1151.5,
+            "centerY": 1133.5
+          }
+        }
+      ],
+      "rows": [
+        {
+          "y": 207,
+          "keys": ["news:1", "news:2"],
+          "heights": [267.5, 267.5],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 494.5,
+          "keys": ["news:3", "vacancy:4"],
+          "heights": [308, 308],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 822.5,
+          "keys": ["project:5", "news:6"],
+          "heights": [350, 350],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        }
+      ],
+      "filters": [
+        {
+          "label": "все новости",
+          "count": 12,
+          "button": {
+            "x": 285.828,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 420.266,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 344.891,
+            "y": 156,
+            "width": 16.297,
+            "height": 18,
+            "right": 361.188,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "true",
+          "disabled": false
+        },
+        {
+          "label": "новости проектов",
+          "count": 3,
+          "button": {
+            "x": 432.266,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 566.703,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 495.406,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 503.563,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "свежие вакансии",
+          "count": 3,
+          "button": {
+            "x": 578.703,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 713.141,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 641.844,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 650,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости сообщества",
+          "count": 6,
+          "button": {
+            "x": 725.141,
+            "y": 83,
+            "width": 134.453,
+            "height": 104,
+            "right": 859.594,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 788.281,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 796.438,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости программ",
+          "count": 0,
+          "button": {
+            "x": 871.594,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 1006.031,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 934.734,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 942.891,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "образование",
+          "count": 0,
+          "button": {
+            "x": 1018.031,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 1152.469,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 1081.172,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 1089.328,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": true
+        }
+      ],
+      "filterRows": [
+        {
+          "centerY": 165,
+          "labels": [
+            "все новости",
+            "новости проектов",
+            "свежие вакансии",
+            "новости сообщества",
+            "новости программ",
+            "образование"
+          ],
+          "counts": [12, 3, 3, 6, 0, 0],
+          "delta": 0
+        }
+      ],
+      "filterCountCenterYDelta": 0,
+      "thumbnails": [
+        {
+          "src": "/fixtures/portrait.svg",
+          "rect": {
+            "x": 1011.484,
+            "y": 314,
+            "width": 120,
+            "height": 67.5,
+            "right": 1131.484,
+            "bottom": 381.5,
+            "centerY": 347.75
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 600,
+          "naturalHeight": 900
+        },
+        {
+          "src": "/fixtures/wide.svg",
+          "rect": {
+            "x": 1011.484,
+            "y": 929.5,
+            "width": 120,
+            "height": 67.5,
+            "right": 1131.484,
+            "bottom": 997,
+            "centerY": 963.25
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 960,
+          "naturalHeight": 540
+        }
+      ],
+      "newsMeta": [
+        {
+          "key": "news:1",
+          "actions": {
+            "x": 306.828,
+            "y": 391.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 688.156,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "left": {
+            "x": 306.828,
+            "y": 391.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 376.422,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "views": {
+            "x": 646.563,
+            "y": 391.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 688.156,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "icons": [
+            {
+              "x": 306.828,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 322.828,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 360.422,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 376.422,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 646.563,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 662.563,
+              "bottom": 407.5,
+              "centerY": 399.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 327.828,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 348.422,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 646.563,
+                "y": 391.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 688.156,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 667.563,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 688.156,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:2",
+          "actions": {
+            "x": 750.156,
+            "y": 391.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 1131.484,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "left": {
+            "x": 750.156,
+            "y": 391.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 819.75,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "views": {
+            "x": 1089.891,
+            "y": 391.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 1131.484,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "icons": [
+            {
+              "x": 750.156,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 766.156,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 803.75,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 819.75,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 1089.891,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 1105.891,
+              "bottom": 407.5,
+              "centerY": 399.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 771.156,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 791.75,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1089.891,
+                "y": 391.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 1131.484,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1110.891,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 1131.484,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:3",
+          "actions": {
+            "x": 306.828,
+            "y": 719.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 688.156,
+            "bottom": 735.5,
+            "centerY": 727.5
+          },
+          "left": {
+            "x": 306.828,
+            "y": 719.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 376.422,
+            "bottom": 735.5,
+            "centerY": 727.5
+          },
+          "views": {
+            "x": 646.563,
+            "y": 719.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 688.156,
+            "bottom": 735.5,
+            "centerY": 727.5
+          },
+          "icons": [
+            {
+              "x": 306.828,
+              "y": 719.5,
+              "width": 16,
+              "height": 16,
+              "right": 322.828,
+              "bottom": 735.5,
+              "centerY": 727.5
+            },
+            {
+              "x": 360.422,
+              "y": 719.5,
+              "width": 16,
+              "height": 16,
+              "right": 376.422,
+              "bottom": 735.5,
+              "centerY": 727.5
+            },
+            {
+              "x": 646.563,
+              "y": 719.5,
+              "width": 16,
+              "height": 16,
+              "right": 662.563,
+              "bottom": 735.5,
+              "centerY": 727.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 327.828,
+                "y": 719.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 348.422,
+                "bottom": 735.5,
+                "centerY": 727.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 646.563,
+                "y": 719.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 688.156,
+                "bottom": 735.5,
+                "centerY": 727.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 667.563,
+                "y": 719.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 688.156,
+                "bottom": 735.5,
+                "centerY": 727.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:6",
+          "actions": {
+            "x": 750.156,
+            "y": 1089.5,
+            "width": 381.328,
+            "height": 16,
+            "right": 1131.484,
+            "bottom": 1105.5,
+            "centerY": 1097.5
+          },
+          "left": {
+            "x": 750.156,
+            "y": 1089.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 819.75,
+            "bottom": 1105.5,
+            "centerY": 1097.5
+          },
+          "views": {
+            "x": 1089.891,
+            "y": 1089.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 1131.484,
+            "bottom": 1105.5,
+            "centerY": 1097.5
+          },
+          "icons": [
+            {
+              "x": 750.156,
+              "y": 1089.5,
+              "width": 16,
+              "height": 16,
+              "right": 766.156,
+              "bottom": 1105.5,
+              "centerY": 1097.5
+            },
+            {
+              "x": 803.75,
+              "y": 1089.5,
+              "width": 16,
+              "height": 16,
+              "right": 819.75,
+              "bottom": 1105.5,
+              "centerY": 1097.5
+            },
+            {
+              "x": 1089.891,
+              "y": 1089.5,
+              "width": 16,
+              "height": 16,
+              "right": 1105.891,
+              "bottom": 1105.5,
+              "centerY": 1097.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 771.156,
+                "y": 1089.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 791.75,
+                "bottom": 1105.5,
+                "centerY": 1097.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1089.891,
+                "y": 1089.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 1131.484,
+                "bottom": 1105.5,
+                "centerY": 1097.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1110.891,
+                "y": 1089.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 1131.484,
+                "bottom": 1105.5,
+                "centerY": 1097.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        }
+      ]
+    },
+    {
+      "label": "feed-1024",
+      "viewport": {
+        "width": 1024,
+        "height": 900,
+        "dpr": 1
+      },
+      "horizontalOverflowPx": 0,
+      "overflowCandidates": [
+        {
+          "selector": "html",
+          "clientWidth": 1024,
+          "scrollWidth": 1024,
+          "overflow": 0
+        },
+        {
+          "selector": "body",
+          "clientWidth": 1024,
+          "scrollWidth": 1024,
+          "overflow": 0
+        },
+        {
+          "selector": "office",
+          "clientWidth": 1024,
+          "scrollWidth": 1024,
+          "overflow": 0
+        },
+        {
+          "selector": "office__body",
+          "clientWidth": 1009,
+          "scrollWidth": 1009,
+          "overflow": 0
+        },
+        {
+          "selector": "office__inner--content",
+          "clientWidth": 758,
+          "scrollWidth": 758,
+          "overflow": 0
+        },
+        {
+          "selector": "page",
+          "clientWidth": 758,
+          "scrollWidth": 758,
+          "overflow": 0
+        },
+        {
+          "selector": "page__feed",
+          "clientWidth": 758,
+          "scrollWidth": 758,
+          "overflow": 0
+        }
+      ],
+      "officeScroll": {
+        "top": 0,
+        "height": 900,
+        "total": 1193
+      },
+      "grid": {
+        "columns": "368.75px 368.75px",
+        "columnGap": "20px",
+        "rowGap": "20px"
+      },
+      "cards": [
+        {
+          "key": "news:1",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 201.5,
+            "y": 207,
+            "width": 368.75,
+            "height": 267.5,
+            "right": 570.25,
+            "bottom": 474.5,
+            "centerY": 340.75
+          },
+          "cta": {
+            "x": 222.5,
+            "y": 417.5,
+            "width": 326.75,
+            "height": 36,
+            "right": 549.25,
+            "bottom": 453.5,
+            "centerY": 435.5
+          }
+        },
+        {
+          "key": "news:2",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 590.25,
+            "y": 207,
+            "width": 368.75,
+            "height": 267.5,
+            "right": 959,
+            "bottom": 474.5,
+            "centerY": 340.75
+          },
+          "cta": {
+            "x": 611.25,
+            "y": 417.5,
+            "width": 326.75,
+            "height": 36,
+            "right": 938,
+            "bottom": 453.5,
+            "centerY": 435.5
+          }
+        },
+        {
+          "key": "news:3",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 201.5,
+            "y": 494.5,
+            "width": 368.75,
+            "height": 328,
+            "right": 570.25,
+            "bottom": 822.5,
+            "centerY": 658.5
+          },
+          "cta": {
+            "x": 222.5,
+            "y": 765.5,
+            "width": 326.75,
+            "height": 36,
+            "right": 549.25,
+            "bottom": 801.5,
+            "centerY": 783.5
+          }
+        },
+        {
+          "key": "vacancy:4",
+          "type": "Новая вакансия",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 590.25,
+            "y": 494.5,
+            "width": 368.75,
+            "height": 328,
+            "right": 959,
+            "bottom": 822.5,
+            "centerY": 658.5
+          },
+          "cta": {
+            "x": 611.25,
+            "y": 765.5,
+            "width": 326.75,
+            "height": 36,
+            "right": 938,
+            "bottom": 801.5,
+            "centerY": 783.5
+          }
+        },
+        {
+          "key": "project:5",
+          "type": "Новый проект",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 201.5,
+            "y": 842.5,
+            "width": 368.75,
+            "height": 350,
+            "right": 570.25,
+            "bottom": 1192.5,
+            "centerY": 1017.5
+          },
+          "cta": {
+            "x": 222.5,
+            "y": 1135.5,
+            "width": 326.75,
+            "height": 36,
+            "right": 549.25,
+            "bottom": 1171.5,
+            "centerY": 1153.5
+          }
+        },
+        {
+          "key": "news:6",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 590.25,
+            "y": 842.5,
+            "width": 368.75,
+            "height": 350,
+            "right": 959,
+            "bottom": 1192.5,
+            "centerY": 1017.5
+          },
+          "cta": {
+            "x": 611.25,
+            "y": 1135.5,
+            "width": 326.75,
+            "height": 36,
+            "right": 938,
+            "bottom": 1171.5,
+            "centerY": 1153.5
+          }
+        }
+      ],
+      "rows": [
+        {
+          "y": 207,
+          "keys": ["news:1", "news:2"],
+          "heights": [267.5, 267.5],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 494.5,
+          "keys": ["news:3", "vacancy:4"],
+          "heights": [328, 328],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 842.5,
+          "keys": ["project:5", "news:6"],
+          "heights": [350, 350],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        }
+      ],
+      "filters": [
+        {
+          "label": "все новости",
+          "count": 12,
+          "button": {
+            "x": 201.5,
+            "y": 83,
+            "width": 116.25,
+            "height": 104,
+            "right": 317.75,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 251.469,
+            "y": 156,
+            "width": 16.297,
+            "height": 18,
+            "right": 267.766,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "true",
+          "disabled": false
+        },
+        {
+          "label": "новости проектов",
+          "count": 3,
+          "button": {
+            "x": 329.75,
+            "y": 83,
+            "width": 116.25,
+            "height": 104,
+            "right": 446,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 383.797,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 391.953,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "свежие вакансии",
+          "count": 3,
+          "button": {
+            "x": 458,
+            "y": 83,
+            "width": 116.25,
+            "height": 104,
+            "right": 574.25,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 512.047,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 520.203,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости сообщества",
+          "count": 6,
+          "button": {
+            "x": 586.25,
+            "y": 83,
+            "width": 116.25,
+            "height": 104,
+            "right": 702.5,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 640.297,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 648.453,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости программ",
+          "count": 0,
+          "button": {
+            "x": 714.5,
+            "y": 83,
+            "width": 116.25,
+            "height": 104,
+            "right": 830.75,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 768.547,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 776.703,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "образование",
+          "count": 0,
+          "button": {
+            "x": 842.75,
+            "y": 83,
+            "width": 116.25,
+            "height": 104,
+            "right": 959,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 896.797,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 904.953,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": true
+        }
+      ],
+      "filterRows": [
+        {
+          "centerY": 165,
+          "labels": [
+            "все новости",
+            "новости проектов",
+            "свежие вакансии",
+            "новости сообщества",
+            "новости программ",
+            "образование"
+          ],
+          "counts": [12, 3, 3, 6, 0, 0],
+          "delta": 0
+        }
+      ],
+      "filterCountCenterYDelta": 0,
+      "thumbnails": [
+        {
+          "src": "/fixtures/portrait.svg",
+          "rect": {
+            "x": 818,
+            "y": 314,
+            "width": 120,
+            "height": 67.5,
+            "right": 938,
+            "bottom": 381.5,
+            "centerY": 347.75
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 600,
+          "naturalHeight": 900
+        },
+        {
+          "src": "/fixtures/wide.svg",
+          "rect": {
+            "x": 818,
+            "y": 949.5,
+            "width": 120,
+            "height": 67.5,
+            "right": 938,
+            "bottom": 1017,
+            "centerY": 983.25
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 960,
+          "naturalHeight": 540
+        }
+      ],
+      "newsMeta": [
+        {
+          "key": "news:1",
+          "actions": {
+            "x": 222.5,
+            "y": 391.5,
+            "width": 326.75,
+            "height": 16,
+            "right": 549.25,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "left": {
+            "x": 222.5,
+            "y": 391.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 292.094,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "views": {
+            "x": 507.656,
+            "y": 391.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 549.25,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "icons": [
+            {
+              "x": 222.5,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 238.5,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 276.094,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 292.094,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 507.656,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 523.656,
+              "bottom": 407.5,
+              "centerY": 399.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 243.5,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 264.094,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 507.656,
+                "y": 391.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 549.25,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 528.656,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 549.25,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:2",
+          "actions": {
+            "x": 611.25,
+            "y": 391.5,
+            "width": 326.75,
+            "height": 16,
+            "right": 938,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "left": {
+            "x": 611.25,
+            "y": 391.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 680.844,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "views": {
+            "x": 896.406,
+            "y": 391.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 938,
+            "bottom": 407.5,
+            "centerY": 399.5
+          },
+          "icons": [
+            {
+              "x": 611.25,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 627.25,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 664.844,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 680.844,
+              "bottom": 407.5,
+              "centerY": 399.5
+            },
+            {
+              "x": 896.406,
+              "y": 391.5,
+              "width": 16,
+              "height": 16,
+              "right": 912.406,
+              "bottom": 407.5,
+              "centerY": 399.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 632.25,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 652.844,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 896.406,
+                "y": 391.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 938,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 917.406,
+                "y": 391.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 938,
+                "bottom": 407.5,
+                "centerY": 399.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:3",
+          "actions": {
+            "x": 222.5,
+            "y": 739.5,
+            "width": 326.75,
+            "height": 16,
+            "right": 549.25,
+            "bottom": 755.5,
+            "centerY": 747.5
+          },
+          "left": {
+            "x": 222.5,
+            "y": 739.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 292.094,
+            "bottom": 755.5,
+            "centerY": 747.5
+          },
+          "views": {
+            "x": 507.656,
+            "y": 739.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 549.25,
+            "bottom": 755.5,
+            "centerY": 747.5
+          },
+          "icons": [
+            {
+              "x": 222.5,
+              "y": 739.5,
+              "width": 16,
+              "height": 16,
+              "right": 238.5,
+              "bottom": 755.5,
+              "centerY": 747.5
+            },
+            {
+              "x": 276.094,
+              "y": 739.5,
+              "width": 16,
+              "height": 16,
+              "right": 292.094,
+              "bottom": 755.5,
+              "centerY": 747.5
+            },
+            {
+              "x": 507.656,
+              "y": 739.5,
+              "width": 16,
+              "height": 16,
+              "right": 523.656,
+              "bottom": 755.5,
+              "centerY": 747.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 243.5,
+                "y": 739.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 264.094,
+                "bottom": 755.5,
+                "centerY": 747.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 507.656,
+                "y": 739.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 549.25,
+                "bottom": 755.5,
+                "centerY": 747.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 528.656,
+                "y": 739.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 549.25,
+                "bottom": 755.5,
+                "centerY": 747.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:6",
+          "actions": {
+            "x": 611.25,
+            "y": 1109.5,
+            "width": 326.75,
+            "height": 16,
+            "right": 938,
+            "bottom": 1125.5,
+            "centerY": 1117.5
+          },
+          "left": {
+            "x": 611.25,
+            "y": 1109.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 680.844,
+            "bottom": 1125.5,
+            "centerY": 1117.5
+          },
+          "views": {
+            "x": 896.406,
+            "y": 1109.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 938,
+            "bottom": 1125.5,
+            "centerY": 1117.5
+          },
+          "icons": [
+            {
+              "x": 611.25,
+              "y": 1109.5,
+              "width": 16,
+              "height": 16,
+              "right": 627.25,
+              "bottom": 1125.5,
+              "centerY": 1117.5
+            },
+            {
+              "x": 664.844,
+              "y": 1109.5,
+              "width": 16,
+              "height": 16,
+              "right": 680.844,
+              "bottom": 1125.5,
+              "centerY": 1117.5
+            },
+            {
+              "x": 896.406,
+              "y": 1109.5,
+              "width": 16,
+              "height": 16,
+              "right": 912.406,
+              "bottom": 1125.5,
+              "centerY": 1117.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 632.25,
+                "y": 1109.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 652.844,
+                "bottom": 1125.5,
+                "centerY": 1117.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 896.406,
+                "y": 1109.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 938,
+                "bottom": 1125.5,
+                "centerY": 1117.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 917.406,
+                "y": 1109.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 938,
+                "bottom": 1125.5,
+                "centerY": 1117.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        }
+      ]
+    },
+    {
+      "label": "feed-390",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "horizontalOverflowPx": 0,
+      "overflowCandidates": [
+        {
+          "selector": "html",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "overflow": 0
+        },
+        {
+          "selector": "body",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "overflow": 0
+        },
+        {
+          "selector": "office",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "overflow": 0
+        },
+        {
+          "selector": "office__body",
+          "clientWidth": 375,
+          "scrollWidth": 375,
+          "overflow": 0
+        },
+        {
+          "selector": "office__inner--content",
+          "clientWidth": 375,
+          "scrollWidth": 375,
+          "overflow": 0
+        },
+        {
+          "selector": "page",
+          "clientWidth": 375,
+          "scrollWidth": 375,
+          "overflow": 0
+        },
+        {
+          "selector": "page__feed",
+          "clientWidth": 375,
+          "scrollWidth": 375,
+          "overflow": 0
+        }
+      ],
+      "officeScroll": {
+        "top": 0,
+        "height": 844,
+        "total": 2363
+      },
+      "grid": {
+        "columns": "375px",
+        "columnGap": "20px",
+        "rowGap": "20px"
+      },
+      "cards": [
+        {
+          "key": "news:1",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 0,
+            "y": 515,
+            "width": 375,
+            "height": 222,
+            "right": 375,
+            "bottom": 737,
+            "centerY": 626
+          },
+          "cta": {
+            "x": 21,
+            "y": 680,
+            "width": 333,
+            "height": 36,
+            "right": 354,
+            "bottom": 716,
+            "centerY": 698
+          }
+        },
+        {
+          "key": "news:2",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 0,
+            "y": 757,
+            "width": 375,
+            "height": 267.5,
+            "right": 375,
+            "bottom": 1024.5,
+            "centerY": 890.75
+          },
+          "cta": {
+            "x": 21,
+            "y": 967.5,
+            "width": 333,
+            "height": 36,
+            "right": 354,
+            "bottom": 1003.5,
+            "centerY": 985.5
+          }
+        },
+        {
+          "key": "news:3",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 0,
+            "y": 1044.5,
+            "width": 375,
+            "height": 306,
+            "right": 375,
+            "bottom": 1350.5,
+            "centerY": 1197.5
+          },
+          "cta": {
+            "x": 21,
+            "y": 1293.5,
+            "width": 333,
+            "height": 36,
+            "right": 354,
+            "bottom": 1329.5,
+            "centerY": 1311.5
+          }
+        },
+        {
+          "key": "vacancy:4",
+          "type": "Новая вакансия",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 0,
+            "y": 1370.5,
+            "width": 375,
+            "height": 326,
+            "right": 375,
+            "bottom": 1696.5,
+            "centerY": 1533.5
+          },
+          "cta": {
+            "x": 21,
+            "y": 1639.5,
+            "width": 333,
+            "height": 36,
+            "right": 354,
+            "bottom": 1675.5,
+            "centerY": 1657.5
+          }
+        },
+        {
+          "key": "project:5",
+          "type": "Новый проект",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 0,
+            "y": 1716.5,
+            "width": 375,
+            "height": 276,
+            "right": 375,
+            "bottom": 1992.5,
+            "centerY": 1854.5
+          },
+          "cta": {
+            "x": 21,
+            "y": 1935.5,
+            "width": 333,
+            "height": 36,
+            "right": 354,
+            "bottom": 1971.5,
+            "centerY": 1953.5
+          }
+        },
+        {
+          "key": "news:6",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 0,
+            "y": 2012.5,
+            "width": 375,
+            "height": 350,
+            "right": 375,
+            "bottom": 2362.5,
+            "centerY": 2187.5
+          },
+          "cta": {
+            "x": 21,
+            "y": 2305.5,
+            "width": 333,
+            "height": 36,
+            "right": 354,
+            "bottom": 2341.5,
+            "centerY": 2323.5
+          }
+        }
+      ],
+      "rows": [
+        {
+          "y": 515,
+          "keys": ["news:1"],
+          "heights": [222],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 757,
+          "keys": ["news:2"],
+          "heights": [267.5],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 1044.5,
+          "keys": ["news:3"],
+          "heights": [306],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 1370.5,
+          "keys": ["vacancy:4"],
+          "heights": [326],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 1716.5,
+          "keys": ["project:5"],
+          "heights": [276],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 2012.5,
+          "keys": ["news:6"],
+          "heights": [350],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        }
+      ],
+      "filters": [
+        {
+          "label": "все новости",
+          "count": 12,
+          "button": {
+            "x": 0,
+            "y": 65,
+            "width": 181.5,
+            "height": 104,
+            "right": 181.5,
+            "bottom": 169,
+            "centerY": 117
+          },
+          "countRect": {
+            "x": 82.594,
+            "y": 138,
+            "width": 16.297,
+            "height": 18,
+            "right": 98.891,
+            "bottom": 156,
+            "centerY": 147
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "true",
+          "disabled": false
+        },
+        {
+          "label": "новости проектов",
+          "count": 3,
+          "button": {
+            "x": 193.5,
+            "y": 65,
+            "width": 181.5,
+            "height": 104,
+            "right": 375,
+            "bottom": 169,
+            "centerY": 117
+          },
+          "countRect": {
+            "x": 280.172,
+            "y": 138,
+            "width": 8.156,
+            "height": 18,
+            "right": 288.328,
+            "bottom": 156,
+            "centerY": 147
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "свежие вакансии",
+          "count": 3,
+          "button": {
+            "x": 0,
+            "y": 199,
+            "width": 181.5,
+            "height": 104,
+            "right": 181.5,
+            "bottom": 303,
+            "centerY": 251
+          },
+          "countRect": {
+            "x": 86.672,
+            "y": 272,
+            "width": 8.156,
+            "height": 18,
+            "right": 94.828,
+            "bottom": 290,
+            "centerY": 281
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости сообщества",
+          "count": 6,
+          "button": {
+            "x": 193.5,
+            "y": 199,
+            "width": 181.5,
+            "height": 104,
+            "right": 375,
+            "bottom": 303,
+            "centerY": 251
+          },
+          "countRect": {
+            "x": 280.172,
+            "y": 272,
+            "width": 8.156,
+            "height": 18,
+            "right": 288.328,
+            "bottom": 290,
+            "centerY": 281
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости программ",
+          "count": 0,
+          "button": {
+            "x": 0,
+            "y": 333,
+            "width": 181.5,
+            "height": 104,
+            "right": 181.5,
+            "bottom": 437,
+            "centerY": 385
+          },
+          "countRect": {
+            "x": 86.672,
+            "y": 406,
+            "width": 8.156,
+            "height": 18,
+            "right": 94.828,
+            "bottom": 424,
+            "centerY": 415
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "образование",
+          "count": 0,
+          "button": {
+            "x": 193.5,
+            "y": 333,
+            "width": 181.5,
+            "height": 104,
+            "right": 375,
+            "bottom": 437,
+            "centerY": 385
+          },
+          "countRect": {
+            "x": 280.172,
+            "y": 406,
+            "width": 8.156,
+            "height": 18,
+            "right": 288.328,
+            "bottom": 424,
+            "centerY": 415
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": true
+        }
+      ],
+      "filterRows": [
+        {
+          "centerY": 147,
+          "labels": ["все новости", "новости проектов"],
+          "counts": [12, 3],
+          "delta": 0
+        },
+        {
+          "centerY": 281,
+          "labels": ["свежие вакансии", "новости сообщества"],
+          "counts": [3, 6],
+          "delta": 0
+        },
+        {
+          "centerY": 415,
+          "labels": ["новости программ", "образование"],
+          "counts": [0, 0],
+          "delta": 0
+        }
+      ],
+      "filterCountCenterYDelta": 268,
+      "thumbnails": [
+        {
+          "src": "/fixtures/portrait.svg",
+          "rect": {
+            "x": 234,
+            "y": 864,
+            "width": 120,
+            "height": 67.5,
+            "right": 354,
+            "bottom": 931.5,
+            "centerY": 897.75
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 600,
+          "naturalHeight": 900
+        },
+        {
+          "src": "/fixtures/wide.svg",
+          "rect": {
+            "x": 234,
+            "y": 2119.5,
+            "width": 120,
+            "height": 67.5,
+            "right": 354,
+            "bottom": 2187,
+            "centerY": 2153.25
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 960,
+          "naturalHeight": 540
+        }
+      ],
+      "newsMeta": [
+        {
+          "key": "news:1",
+          "actions": {
+            "x": 21,
+            "y": 654,
+            "width": 333,
+            "height": 16,
+            "right": 354,
+            "bottom": 670,
+            "centerY": 662
+          },
+          "left": {
+            "x": 21,
+            "y": 654,
+            "width": 69.594,
+            "height": 16,
+            "right": 90.594,
+            "bottom": 670,
+            "centerY": 662
+          },
+          "views": {
+            "x": 312.406,
+            "y": 654,
+            "width": 41.594,
+            "height": 16,
+            "right": 354,
+            "bottom": 670,
+            "centerY": 662
+          },
+          "icons": [
+            {
+              "x": 21,
+              "y": 654,
+              "width": 16,
+              "height": 16,
+              "right": 37,
+              "bottom": 670,
+              "centerY": 662
+            },
+            {
+              "x": 74.594,
+              "y": 654,
+              "width": 16,
+              "height": 16,
+              "right": 90.594,
+              "bottom": 670,
+              "centerY": 662
+            },
+            {
+              "x": 312.406,
+              "y": 654,
+              "width": 16,
+              "height": 16,
+              "right": 328.406,
+              "bottom": 670,
+              "centerY": 662
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 42,
+                "y": 654,
+                "width": 20.594,
+                "height": 16,
+                "right": 62.594,
+                "bottom": 670,
+                "centerY": 662
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 312.406,
+                "y": 654,
+                "width": 41.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 670,
+                "centerY": 662
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 333.406,
+                "y": 654,
+                "width": 20.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 670,
+                "centerY": 662
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:2",
+          "actions": {
+            "x": 21,
+            "y": 941.5,
+            "width": 333,
+            "height": 16,
+            "right": 354,
+            "bottom": 957.5,
+            "centerY": 949.5
+          },
+          "left": {
+            "x": 21,
+            "y": 941.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 90.594,
+            "bottom": 957.5,
+            "centerY": 949.5
+          },
+          "views": {
+            "x": 312.406,
+            "y": 941.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 354,
+            "bottom": 957.5,
+            "centerY": 949.5
+          },
+          "icons": [
+            {
+              "x": 21,
+              "y": 941.5,
+              "width": 16,
+              "height": 16,
+              "right": 37,
+              "bottom": 957.5,
+              "centerY": 949.5
+            },
+            {
+              "x": 74.594,
+              "y": 941.5,
+              "width": 16,
+              "height": 16,
+              "right": 90.594,
+              "bottom": 957.5,
+              "centerY": 949.5
+            },
+            {
+              "x": 312.406,
+              "y": 941.5,
+              "width": 16,
+              "height": 16,
+              "right": 328.406,
+              "bottom": 957.5,
+              "centerY": 949.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 42,
+                "y": 941.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 62.594,
+                "bottom": 957.5,
+                "centerY": 949.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 312.406,
+                "y": 941.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 957.5,
+                "centerY": 949.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 333.406,
+                "y": 941.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 957.5,
+                "centerY": 949.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:3",
+          "actions": {
+            "x": 21,
+            "y": 1267.5,
+            "width": 333,
+            "height": 16,
+            "right": 354,
+            "bottom": 1283.5,
+            "centerY": 1275.5
+          },
+          "left": {
+            "x": 21,
+            "y": 1267.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 90.594,
+            "bottom": 1283.5,
+            "centerY": 1275.5
+          },
+          "views": {
+            "x": 312.406,
+            "y": 1267.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 354,
+            "bottom": 1283.5,
+            "centerY": 1275.5
+          },
+          "icons": [
+            {
+              "x": 21,
+              "y": 1267.5,
+              "width": 16,
+              "height": 16,
+              "right": 37,
+              "bottom": 1283.5,
+              "centerY": 1275.5
+            },
+            {
+              "x": 74.594,
+              "y": 1267.5,
+              "width": 16,
+              "height": 16,
+              "right": 90.594,
+              "bottom": 1283.5,
+              "centerY": 1275.5
+            },
+            {
+              "x": 312.406,
+              "y": 1267.5,
+              "width": 16,
+              "height": 16,
+              "right": 328.406,
+              "bottom": 1283.5,
+              "centerY": 1275.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 42,
+                "y": 1267.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 62.594,
+                "bottom": 1283.5,
+                "centerY": 1275.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 312.406,
+                "y": 1267.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 1283.5,
+                "centerY": 1275.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 333.406,
+                "y": 1267.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 1283.5,
+                "centerY": 1275.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:6",
+          "actions": {
+            "x": 21,
+            "y": 2279.5,
+            "width": 333,
+            "height": 16,
+            "right": 354,
+            "bottom": 2295.5,
+            "centerY": 2287.5
+          },
+          "left": {
+            "x": 21,
+            "y": 2279.5,
+            "width": 69.594,
+            "height": 16,
+            "right": 90.594,
+            "bottom": 2295.5,
+            "centerY": 2287.5
+          },
+          "views": {
+            "x": 312.406,
+            "y": 2279.5,
+            "width": 41.594,
+            "height": 16,
+            "right": 354,
+            "bottom": 2295.5,
+            "centerY": 2287.5
+          },
+          "icons": [
+            {
+              "x": 21,
+              "y": 2279.5,
+              "width": 16,
+              "height": 16,
+              "right": 37,
+              "bottom": 2295.5,
+              "centerY": 2287.5
+            },
+            {
+              "x": 74.594,
+              "y": 2279.5,
+              "width": 16,
+              "height": 16,
+              "right": 90.594,
+              "bottom": 2295.5,
+              "centerY": 2287.5
+            },
+            {
+              "x": 312.406,
+              "y": 2279.5,
+              "width": 16,
+              "height": 16,
+              "right": 328.406,
+              "bottom": 2295.5,
+              "centerY": 2287.5
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 42,
+                "y": 2279.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 62.594,
+                "bottom": 2295.5,
+                "centerY": 2287.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 312.406,
+                "y": 2279.5,
+                "width": 41.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 2295.5,
+                "centerY": 2287.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 333.406,
+                "y": 2279.5,
+                "width": 20.594,
+                "height": 16,
+                "right": 354,
+                "bottom": 2295.5,
+                "centerY": 2287.5
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        }
+      ]
+    },
+    {
+      "label": "extreme-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "horizontalOverflowPx": 0,
+      "overflowCandidates": [
+        {
+          "selector": "html",
+          "clientWidth": 1440,
+          "scrollWidth": 1440,
+          "overflow": 0
+        },
+        {
+          "selector": "body",
+          "clientWidth": 1440,
+          "scrollWidth": 1440,
+          "overflow": 0
+        },
+        {
+          "selector": "office",
+          "clientWidth": 1440,
+          "scrollWidth": 1440,
+          "overflow": 0
+        },
+        {
+          "selector": "office__body",
+          "clientWidth": 1425,
+          "scrollWidth": 1425,
+          "overflow": 0
+        },
+        {
+          "selector": "office__inner--content",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        },
+        {
+          "selector": "page",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        },
+        {
+          "selector": "page__feed",
+          "clientWidth": 867,
+          "scrollWidth": 867,
+          "overflow": 0
+        }
+      ],
+      "officeScroll": {
+        "top": 0,
+        "height": 900,
+        "total": 1273
+      },
+      "grid": {
+        "columns": "423.328px 423.328px",
+        "columnGap": "20px",
+        "rowGap": "20px"
+      },
+      "cards": [
+        {
+          "key": "news:1",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 365.828,
+            "y": 207,
+            "width": 423.328,
+            "height": 328,
+            "right": 789.156,
+            "bottom": 535,
+            "centerY": 371
+          },
+          "cta": {
+            "x": 386.828,
+            "y": 478,
+            "width": 381.328,
+            "height": 36,
+            "right": 768.156,
+            "bottom": 514,
+            "centerY": 496
+          }
+        },
+        {
+          "key": "news:2",
+          "type": "Новости людей",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 809.156,
+            "y": 207,
+            "width": 423.328,
+            "height": 328,
+            "right": 1232.484,
+            "bottom": 535,
+            "centerY": 371
+          },
+          "cta": {
+            "x": 830.156,
+            "y": 478,
+            "width": 381.328,
+            "height": 36,
+            "right": 1211.484,
+            "bottom": 514,
+            "centerY": 496
+          }
+        },
+        {
+          "key": "news:3",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 365.828,
+            "y": 555,
+            "width": 423.328,
+            "height": 348,
+            "right": 789.156,
+            "bottom": 903,
+            "centerY": 729
+          },
+          "cta": {
+            "x": 386.828,
+            "y": 846,
+            "width": 381.328,
+            "height": 36,
+            "right": 768.156,
+            "bottom": 882,
+            "centerY": 864
+          }
+        },
+        {
+          "key": "vacancy:4",
+          "type": "Новая вакансия",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 809.156,
+            "y": 555,
+            "width": 423.328,
+            "height": 348,
+            "right": 1232.484,
+            "bottom": 903,
+            "centerY": 729
+          },
+          "cta": {
+            "x": 830.156,
+            "y": 846,
+            "width": 381.328,
+            "height": 36,
+            "right": 1211.484,
+            "bottom": 882,
+            "centerY": 864
+          }
+        },
+        {
+          "key": "project:5",
+          "type": "Новый проект",
+          "date": "23.09.2026",
+          "hasMore": false,
+          "hasThumbnail": false,
+          "hasMediaSlot": false,
+          "rect": {
+            "x": 365.828,
+            "y": 923,
+            "width": 423.328,
+            "height": 350,
+            "right": 789.156,
+            "bottom": 1273,
+            "centerY": 1098
+          },
+          "cta": {
+            "x": 386.828,
+            "y": 1216,
+            "width": 381.328,
+            "height": 36,
+            "right": 768.156,
+            "bottom": 1252,
+            "centerY": 1234
+          }
+        },
+        {
+          "key": "news:6",
+          "type": "Новости проекта",
+          "date": "23.09.2026",
+          "hasMore": true,
+          "hasThumbnail": true,
+          "hasMediaSlot": true,
+          "rect": {
+            "x": 809.156,
+            "y": 923,
+            "width": 423.328,
+            "height": 350,
+            "right": 1232.484,
+            "bottom": 1273,
+            "centerY": 1098
+          },
+          "cta": {
+            "x": 830.156,
+            "y": 1216,
+            "width": 381.328,
+            "height": 36,
+            "right": 1211.484,
+            "bottom": 1252,
+            "centerY": 1234
+          }
+        }
+      ],
+      "rows": [
+        {
+          "y": 207,
+          "keys": ["news:1", "news:2"],
+          "heights": [328, 328],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 555,
+          "keys": ["news:3", "vacancy:4"],
+          "heights": [348, 348],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        },
+        {
+          "y": 923,
+          "keys": ["project:5", "news:6"],
+          "heights": [350, 350],
+          "heightDelta": 0,
+          "ctaYDelta": 0
+        }
+      ],
+      "filters": [
+        {
+          "label": "все новости",
+          "count": 12,
+          "button": {
+            "x": 365.828,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 500.266,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 424.891,
+            "y": 156,
+            "width": 16.297,
+            "height": 18,
+            "right": 441.188,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "true",
+          "disabled": false
+        },
+        {
+          "label": "новости проектов",
+          "count": 3,
+          "button": {
+            "x": 512.266,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 646.703,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 575.406,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 583.563,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "свежие вакансии",
+          "count": 3,
+          "button": {
+            "x": 658.703,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 793.141,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 721.844,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 730,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости сообщества",
+          "count": 6,
+          "button": {
+            "x": 805.141,
+            "y": 83,
+            "width": 134.453,
+            "height": 104,
+            "right": 939.594,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 868.281,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 876.438,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "новости программ",
+          "count": 0,
+          "button": {
+            "x": 951.594,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 1086.031,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 1014.734,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 1022.891,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": false
+        },
+        {
+          "label": "образование",
+          "count": 0,
+          "button": {
+            "x": 1098.031,
+            "y": 83,
+            "width": 134.438,
+            "height": 104,
+            "right": 1232.469,
+            "bottom": 187,
+            "centerY": 135
+          },
+          "countRect": {
+            "x": 1161.172,
+            "y": 156,
+            "width": 8.156,
+            "height": 18,
+            "right": 1169.328,
+            "bottom": 174,
+            "centerY": 165
+          },
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "18px",
+          "fontVariantNumeric": "tabular-nums",
+          "ariaPressed": "false",
+          "disabled": true
+        }
+      ],
+      "filterRows": [
+        {
+          "centerY": 165,
+          "labels": [
+            "все новости",
+            "новости проектов",
+            "свежие вакансии",
+            "новости сообщества",
+            "новости программ",
+            "образование"
+          ],
+          "counts": [12, 3, 3, 6, 0, 0],
+          "delta": 0
+        }
+      ],
+      "filterCountCenterYDelta": 0,
+      "thumbnails": [
+        {
+          "src": "/fixtures/portrait.svg",
+          "rect": {
+            "x": 1091.484,
+            "y": 314,
+            "width": 120,
+            "height": 67.5,
+            "right": 1211.484,
+            "bottom": 381.5,
+            "centerY": 347.75
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 600,
+          "naturalHeight": 900
+        },
+        {
+          "src": "/fixtures/wide.svg",
+          "rect": {
+            "x": 1091.484,
+            "y": 1030,
+            "width": 120,
+            "height": 67.5,
+            "right": 1211.484,
+            "bottom": 1097.5,
+            "centerY": 1063.75
+          },
+          "objectFit": "cover",
+          "complete": true,
+          "naturalWidth": 960,
+          "naturalHeight": 540
+        }
+      ],
+      "newsMeta": [
+        {
+          "key": "news:1",
+          "actions": {
+            "x": 386.828,
+            "y": 452,
+            "width": 381.328,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 468,
+            "centerY": 460
+          },
+          "left": {
+            "x": 386.828,
+            "y": 452,
+            "width": 69.594,
+            "height": 16,
+            "right": 456.422,
+            "bottom": 468,
+            "centerY": 460
+          },
+          "views": {
+            "x": 726.563,
+            "y": 452,
+            "width": 41.594,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 468,
+            "centerY": 460
+          },
+          "icons": [
+            {
+              "x": 386.828,
+              "y": 452,
+              "width": 16,
+              "height": 16,
+              "right": 402.828,
+              "bottom": 468,
+              "centerY": 460
+            },
+            {
+              "x": 440.422,
+              "y": 452,
+              "width": 16,
+              "height": 16,
+              "right": 456.422,
+              "bottom": 468,
+              "centerY": 460
+            },
+            {
+              "x": 726.563,
+              "y": 452,
+              "width": 16,
+              "height": 16,
+              "right": 742.563,
+              "bottom": 468,
+              "centerY": 460
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 407.828,
+                "y": 452,
+                "width": 20.594,
+                "height": 16,
+                "right": 428.422,
+                "bottom": 468,
+                "centerY": 460
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 726.563,
+                "y": 452,
+                "width": 41.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 468,
+                "centerY": 460
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 747.563,
+                "y": 452,
+                "width": 20.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 468,
+                "centerY": 460
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:2",
+          "actions": {
+            "x": 830.156,
+            "y": 452,
+            "width": 381.328,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 468,
+            "centerY": 460
+          },
+          "left": {
+            "x": 830.156,
+            "y": 452,
+            "width": 69.594,
+            "height": 16,
+            "right": 899.75,
+            "bottom": 468,
+            "centerY": 460
+          },
+          "views": {
+            "x": 1169.891,
+            "y": 452,
+            "width": 41.594,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 468,
+            "centerY": 460
+          },
+          "icons": [
+            {
+              "x": 830.156,
+              "y": 452,
+              "width": 16,
+              "height": 16,
+              "right": 846.156,
+              "bottom": 468,
+              "centerY": 460
+            },
+            {
+              "x": 883.75,
+              "y": 452,
+              "width": 16,
+              "height": 16,
+              "right": 899.75,
+              "bottom": 468,
+              "centerY": 460
+            },
+            {
+              "x": 1169.891,
+              "y": 452,
+              "width": 16,
+              "height": 16,
+              "right": 1185.891,
+              "bottom": 468,
+              "centerY": 460
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 851.156,
+                "y": 452,
+                "width": 20.594,
+                "height": 16,
+                "right": 871.75,
+                "bottom": 468,
+                "centerY": 460
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1169.891,
+                "y": 452,
+                "width": 41.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 468,
+                "centerY": 460
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1190.891,
+                "y": 452,
+                "width": 20.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 468,
+                "centerY": 460
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": false,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:3",
+          "actions": {
+            "x": 386.828,
+            "y": 820,
+            "width": 381.328,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 836,
+            "centerY": 828
+          },
+          "left": {
+            "x": 386.828,
+            "y": 820,
+            "width": 69.594,
+            "height": 16,
+            "right": 456.422,
+            "bottom": 836,
+            "centerY": 828
+          },
+          "views": {
+            "x": 726.563,
+            "y": 820,
+            "width": 41.594,
+            "height": 16,
+            "right": 768.156,
+            "bottom": 836,
+            "centerY": 828
+          },
+          "icons": [
+            {
+              "x": 386.828,
+              "y": 820,
+              "width": 16,
+              "height": 16,
+              "right": 402.828,
+              "bottom": 836,
+              "centerY": 828
+            },
+            {
+              "x": 440.422,
+              "y": 820,
+              "width": 16,
+              "height": 16,
+              "right": 456.422,
+              "bottom": 836,
+              "centerY": 828
+            },
+            {
+              "x": 726.563,
+              "y": 820,
+              "width": 16,
+              "height": 16,
+              "right": 742.563,
+              "bottom": 836,
+              "centerY": 828
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 407.828,
+                "y": 820,
+                "width": 20.594,
+                "height": 16,
+                "right": 428.422,
+                "bottom": 836,
+                "centerY": 828
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 726.563,
+                "y": 820,
+                "width": 41.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 836,
+                "centerY": 828
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 747.563,
+                "y": 820,
+                "width": 20.594,
+                "height": 16,
+                "right": 768.156,
+                "bottom": 836,
+                "centerY": 828
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        },
+        {
+          "key": "news:6",
+          "actions": {
+            "x": 830.156,
+            "y": 1190,
+            "width": 381.328,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 1206,
+            "centerY": 1198
+          },
+          "left": {
+            "x": 830.156,
+            "y": 1190,
+            "width": 69.594,
+            "height": 16,
+            "right": 899.75,
+            "bottom": 1206,
+            "centerY": 1198
+          },
+          "views": {
+            "x": 1169.891,
+            "y": 1190,
+            "width": 41.594,
+            "height": 16,
+            "right": 1211.484,
+            "bottom": 1206,
+            "centerY": 1198
+          },
+          "icons": [
+            {
+              "x": 830.156,
+              "y": 1190,
+              "width": 16,
+              "height": 16,
+              "right": 846.156,
+              "bottom": 1206,
+              "centerY": 1198
+            },
+            {
+              "x": 883.75,
+              "y": 1190,
+              "width": 16,
+              "height": 16,
+              "right": 899.75,
+              "bottom": 1206,
+              "centerY": 1198
+            },
+            {
+              "x": 1169.891,
+              "y": 1190,
+              "width": 16,
+              "height": 16,
+              "right": 1185.891,
+              "bottom": 1206,
+              "centerY": 1198
+            }
+          ],
+          "numbers": [
+            {
+              "value": "234",
+              "rect": {
+                "x": 851.156,
+                "y": 1190,
+                "width": 20.594,
+                "height": 16,
+                "right": 871.75,
+                "bottom": 1206,
+                "centerY": 1198
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1169.891,
+                "y": 1190,
+                "width": 41.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 1206,
+                "centerY": 1198
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            },
+            {
+              "value": "234",
+              "rect": {
+                "x": 1190.891,
+                "y": 1190,
+                "width": 20.594,
+                "height": 16,
+                "right": 1211.484,
+                "bottom": 1206,
+                "centerY": 1198
+              },
+              "fontSize": "12px",
+              "lineHeight": "16px",
+              "fontVariantNumeric": "tabular-nums"
+            }
+          ],
+          "centerlineDelta": 0,
+          "leftInset": 21,
+          "rightInset": 21,
+          "industryInTopMeta": true,
+          "industryInFooter": false
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "beforeCount": 6,
+    "afterCount": 12,
+    "beforeKeys": ["news:1", "news:2", "news:3", "vacancy:4", "project:5", "news:6"],
+    "afterKeys": [
+      "news:1",
+      "news:2",
+      "news:3",
+      "vacancy:4",
+      "project:5",
+      "news:6",
+      "vacancy:7",
+      "project:8",
+      "news:9",
+      "news:10",
+      "vacancy:11",
+      "project:12"
+    ],
+    "prefixPreserved": true,
+    "uniqueKeys": true,
+    "fetchCalls": [
+      {
+        "offset": 6,
+        "limit": 6,
+        "type": "vacancy|project|news"
+      }
+    ],
+    "horizontalOverflowPx": 0,
+    "rowsAfterAppend": [
+      {
+        "y": -1048,
+        "keys": ["news:1", "news:2"],
+        "heights": [267.5, 267.5],
+        "heightDelta": 0,
+        "ctaYDelta": 0
+      },
+      {
+        "y": -760.5,
+        "keys": ["news:3", "vacancy:4"],
+        "heights": [308, 308],
+        "heightDelta": 0,
+        "ctaYDelta": 0
+      },
+      {
+        "y": -432.5,
+        "keys": ["project:5", "news:6"],
+        "heights": [350, 350],
+        "heightDelta": 0,
+        "ctaYDelta": 0
+      },
+      {
+        "y": -62.5,
+        "keys": ["vacancy:7", "project:8"],
+        "heights": [308, 308],
+        "heightDelta": 0,
+        "ctaYDelta": 0
+      },
+      {
+        "y": 265.5,
+        "keys": ["news:9", "news:10"],
+        "heights": [306, 306],
+        "heightDelta": 0,
+        "ctaYDelta": 0
+      },
+      {
+        "y": 591.5,
+        "keys": ["vacancy:11", "project:12"],
+        "heights": [308, 308],
+        "heightDelta": 0,
+        "ctaYDelta": 0
+      }
+    ]
+  },
+  "filters": {
+    "countsBefore": {
+      "все новости": 12,
+      "новости проектов": 3,
+      "свежие вакансии": 3,
+      "новости сообщества": 6,
+      "новости программ": 0,
+      "образование": 0
+    },
+    "countsAfter": {
+      "все новости": 12,
+      "новости проектов": 3,
+      "свежие вакансии": 3,
+      "новости сообщества": 6,
+      "новости программ": 0,
+      "образование": 0
+    },
+    "activeAfter": "новости сообщества",
+    "resultKeysAfter": ["news:1", "news:2", "news:3", "news:6", "news:9", "news:10"],
+    "fetchCalls": [
+      {
+        "offset": 0,
+        "limit": 6,
+        "type": "news"
+      }
+    ],
+    "desktopCountCenterYDeltaPx": 0,
+    "mobileClosedRows": [
+      {
+        "centerY": 147,
+        "labels": ["все новости", "новости проектов"],
+        "counts": [12, 3],
+        "delta": 0
+      },
+      {
+        "centerY": 281,
+        "labels": ["свежие вакансии", "новости сообщества"],
+        "counts": [3, 6],
+        "delta": 0
+      },
+      {
+        "centerY": 415,
+        "labels": ["новости программ", "образование"],
+        "counts": [0, 0],
+        "delta": 0
+      }
+    ],
+    "mobileOpenRows": [
+      {
+        "centerY": 147,
+        "labels": ["все новости", "новости проектов"],
+        "counts": [12, 3],
+        "delta": 0
+      },
+      {
+        "centerY": 281,
+        "labels": ["свежие вакансии", "новости сообщества"],
+        "counts": [3, 6],
+        "delta": 0
+      },
+      {
+        "centerY": 415,
+        "labels": ["новости программ", "образование"],
+        "counts": [0, 0],
+        "delta": 0
+      },
+      {
+        "centerY": 595.391,
+        "labels": ["все новости", "новости проектов"],
+        "counts": [12, 3],
+        "delta": 0
+      },
+      {
+        "centerY": 729.391,
+        "labels": ["свежие вакансии", "новости сообщества"],
+        "counts": [3, 6],
+        "delta": 0
+      },
+      {
+        "centerY": 863.391,
+        "labels": ["новости программ", "образование"],
+        "counts": [0, 0],
+        "delta": 0
+      }
+    ],
+    "localTestRouterAddress": "http://127.0.0.1:4347/office/feed"
+  },
+  "modal": [
+    {
+      "label": "attachment-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 810,
+        "right": 1160,
+        "bottom": 855,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 106,
+        "centerY": 75.5
+      },
+      "close": {
+        "x": 1104,
+        "y": 57,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 93,
+        "centerY": 75
+      },
+      "scroll": {
+        "top": 0,
+        "height": 749,
+        "total": 908,
+        "rect": {
+          "x": 280,
+          "y": 106,
+          "width": 880,
+          "height": 749,
+          "right": 1160,
+          "bottom": 855,
+          "centerY": 480.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/wide.svg",
+        "alt": "wide.svg",
+        "naturalWidth": 960,
+        "naturalHeight": 540,
+        "box": {
+          "x": 300,
+          "y": 383.125,
+          "width": 825,
+          "height": 464.063,
+          "right": 1125,
+          "bottom": 847.188,
+          "centerY": 615.156
+        },
+        "paintedWidth": 825,
+        "paintedHeight": 464.063,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": null,
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Закрыть новость",
+        "className": "feed-news-modal__close"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 916.766,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 932.766,
+            "centerY": 924.766
+          },
+          {
+            "x": 367.375,
+            "y": 916.766,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 932.766,
+            "centerY": 924.766
+          },
+          {
+            "x": 1081.625,
+            "y": 916.766,
+            "width": 16,
+            "height": 16,
+            "right": 1097.625,
+            "bottom": 932.766,
+            "centerY": 924.766
+          }
+        ],
+        "centerlineDelta": 0.007
+      },
+      "files": [
+        {
+          "name": "Описание проекта.txt",
+          "href": "/fixtures/notes.txt",
+          "download": "Описание проекта.txt"
+        }
+      ],
+      "fixtureCalls": {
+        "fetch": [
+          {
+            "offset": 6,
+            "limit": 6,
+            "type": "vacancy|project|news"
+          }
+        ],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "portrait-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 810,
+        "right": 1160,
+        "bottom": 855,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 106,
+        "centerY": 75.5
+      },
+      "close": {
+        "x": 1104,
+        "y": 57,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 93,
+        "centerY": 75
+      },
+      "scroll": {
+        "top": 0,
+        "height": 749,
+        "total": 857,
+        "rect": {
+          "x": 280,
+          "y": 106,
+          "width": 880,
+          "height": 749,
+          "right": 1160,
+          "bottom": 855,
+          "centerY": 480.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/portrait.svg",
+        "alt": "portrait.svg",
+        "naturalWidth": 600,
+        "naturalHeight": 900,
+        "box": {
+          "x": 300,
+          "y": 226.391,
+          "width": 825,
+          "height": 612,
+          "right": 1125,
+          "bottom": 838.391,
+          "centerY": 532.391
+        },
+        "paintedWidth": 408,
+        "paintedHeight": 612,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "1 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Закрыть новость",
+        "className": "feed-news-modal__close"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 881.578,
+            "centerY": 873.578
+          },
+          {
+            "x": 367.375,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 881.578,
+            "centerY": 873.578
+          },
+          {
+            "x": 1081.625,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 1097.625,
+            "bottom": 881.578,
+            "centerY": 873.578
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "square-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 810,
+        "right": 1160,
+        "bottom": 855,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 106,
+        "centerY": 75.5
+      },
+      "close": {
+        "x": 1104,
+        "y": 57,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 93,
+        "centerY": 75
+      },
+      "scroll": {
+        "top": 0,
+        "height": 749,
+        "total": 857,
+        "rect": {
+          "x": 280,
+          "y": 106,
+          "width": 880,
+          "height": 749,
+          "right": 1160,
+          "bottom": 855,
+          "centerY": 480.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/square.svg",
+        "alt": "square.svg",
+        "naturalWidth": 600,
+        "naturalHeight": 600,
+        "box": {
+          "x": 300,
+          "y": 226.391,
+          "width": 825,
+          "height": 612,
+          "right": 1125,
+          "bottom": 838.391,
+          "centerY": 532.391
+        },
+        "paintedWidth": 612,
+        "paintedHeight": 612,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "2 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Следующее изображение",
+        "className": "carousel__btn carousel__btn--next ng-star-inserted"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 881.578,
+            "centerY": 873.578
+          },
+          {
+            "x": 367.375,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 881.578,
+            "centerY": 873.578
+          },
+          {
+            "x": 1081.625,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 1097.625,
+            "bottom": 881.578,
+            "centerY": 873.578
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "landscape-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 810,
+        "right": 1160,
+        "bottom": 855,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 45,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 106,
+        "centerY": 75.5
+      },
+      "close": {
+        "x": 1104,
+        "y": 57,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 93,
+        "centerY": 75
+      },
+      "scroll": {
+        "top": 0,
+        "height": 749,
+        "total": 857,
+        "rect": {
+          "x": 280,
+          "y": 106,
+          "width": 880,
+          "height": 749,
+          "right": 1160,
+          "bottom": 855,
+          "centerY": 480.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/landscape.svg",
+        "alt": "landscape.svg",
+        "naturalWidth": 800,
+        "naturalHeight": 600,
+        "box": {
+          "x": 300,
+          "y": 226.391,
+          "width": 825,
+          "height": 612,
+          "right": 1125,
+          "bottom": 838.391,
+          "centerY": 532.391
+        },
+        "paintedWidth": 816,
+        "paintedHeight": 612,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "3 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Следующее изображение",
+        "className": "carousel__btn carousel__btn--next ng-star-inserted"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 881.578,
+            "centerY": 873.578
+          },
+          {
+            "x": 367.375,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 881.578,
+            "centerY": 873.578
+          },
+          {
+            "x": 1081.625,
+            "y": 865.578,
+            "width": 16,
+            "height": 16,
+            "right": 1097.625,
+            "bottom": 881.578,
+            "centerY": 873.578
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "wide-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 60.664,
+        "width": 880,
+        "height": 778.672,
+        "right": 1160,
+        "bottom": 839.336,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 60.664,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 121.664,
+        "centerY": 91.164
+      },
+      "close": {
+        "x": 1104,
+        "y": 72.664,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 108.664,
+        "centerY": 90.664
+      },
+      "scroll": {
+        "top": 0,
+        "height": 718,
+        "total": 718,
+        "rect": {
+          "x": 280,
+          "y": 121.664,
+          "width": 880,
+          "height": 717.672,
+          "right": 1160,
+          "bottom": 839.336,
+          "centerY": 480.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/wide.svg",
+        "alt": "wide.svg",
+        "naturalWidth": 960,
+        "naturalHeight": 540,
+        "box": {
+          "x": 300,
+          "y": 242.055,
+          "width": 840,
+          "height": 472.5,
+          "right": 1140,
+          "bottom": 714.555,
+          "centerY": 478.305
+        },
+        "paintedWidth": 840,
+        "paintedHeight": 472.5,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "4 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Следующее изображение",
+        "className": "carousel__btn carousel__btn--next ng-star-inserted"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 741.742,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 757.742,
+            "centerY": 749.742
+          },
+          {
+            "x": 367.375,
+            "y": 741.742,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 757.742,
+            "centerY": 749.742
+          },
+          {
+            "x": 1096.625,
+            "y": 741.742,
+            "width": 16,
+            "height": 16,
+            "right": 1112.625,
+            "bottom": 757.742,
+            "centerY": 749.742
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "panorama-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 212.914,
+        "width": 880,
+        "height": 474.172,
+        "right": 1160,
+        "bottom": 687.086,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 212.914,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 273.914,
+        "centerY": 243.414
+      },
+      "close": {
+        "x": 1104,
+        "y": 224.914,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 260.914,
+        "centerY": 242.914
+      },
+      "scroll": {
+        "top": 0,
+        "height": 413,
+        "total": 413,
+        "rect": {
+          "x": 280,
+          "y": 273.914,
+          "width": 880,
+          "height": 413.172,
+          "right": 1160,
+          "bottom": 687.086,
+          "centerY": 480.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/panorama.svg",
+        "alt": "panorama.svg",
+        "naturalWidth": 1500,
+        "naturalHeight": 300,
+        "box": {
+          "x": 300,
+          "y": 394.305,
+          "width": 840,
+          "height": 168,
+          "right": 1140,
+          "bottom": 562.305,
+          "centerY": 478.305
+        },
+        "paintedWidth": 840,
+        "paintedHeight": 168,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "5 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Следующее изображение",
+        "className": "carousel__btn carousel__btn--next ng-star-inserted"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 589.492,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 605.492,
+            "centerY": 597.492
+          },
+          {
+            "x": 367.375,
+            "y": 589.492,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 605.492,
+            "centerY": 597.492
+          },
+          {
+            "x": 1096.625,
+            "y": 589.492,
+            "width": 16,
+            "height": 16,
+            "right": 1112.625,
+            "bottom": 605.492,
+            "centerY": 597.492
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "portrait-390",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "body": {
+        "x": 12,
+        "y": 42.203,
+        "width": 366,
+        "height": 759.594,
+        "right": 378,
+        "bottom": 801.797,
+        "centerY": 422
+      },
+      "header": {
+        "x": 12,
+        "y": 42.203,
+        "width": 366,
+        "height": 57,
+        "right": 378,
+        "bottom": 99.203,
+        "centerY": 70.703
+      },
+      "close": {
+        "x": 330,
+        "y": 52.203,
+        "width": 36,
+        "height": 36,
+        "right": 366,
+        "bottom": 88.203,
+        "centerY": 70.203
+      },
+      "scroll": {
+        "top": 0,
+        "height": 703,
+        "total": 716,
+        "rect": {
+          "x": 12,
+          "y": 99.203,
+          "width": 366,
+          "height": 702.594,
+          "right": 378,
+          "bottom": 801.797,
+          "centerY": 450.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/portrait.svg",
+        "alt": "portrait.svg",
+        "naturalWidth": 600,
+        "naturalHeight": 900,
+        "box": {
+          "x": 28,
+          "y": 215.594,
+          "width": 319,
+          "height": 478.5,
+          "right": 347,
+          "bottom": 694.094,
+          "centerY": 454.844
+        },
+        "paintedWidth": 319,
+        "paintedHeight": 478.5,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "1 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Закрыть новость",
+        "className": "feed-news-modal__close"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 32,
+            "y": 721.281,
+            "width": 16,
+            "height": 16,
+            "right": 48,
+            "bottom": 737.281,
+            "centerY": 729.281
+          },
+          {
+            "x": 95.375,
+            "y": 721.281,
+            "width": 16,
+            "height": 16,
+            "right": 111.375,
+            "bottom": 737.281,
+            "centerY": 729.281
+          },
+          {
+            "x": 303.625,
+            "y": 721.281,
+            "width": 16,
+            "height": 16,
+            "right": 319.625,
+            "bottom": 737.281,
+            "centerY": 729.281
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "extreme-portrait-390-top",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "body": {
+        "x": 12,
+        "y": 42.203,
+        "width": 366,
+        "height": 759.594,
+        "right": 378,
+        "bottom": 801.797,
+        "centerY": 422
+      },
+      "header": {
+        "x": 12,
+        "y": 42.203,
+        "width": 366,
+        "height": 57,
+        "right": 378,
+        "bottom": 99.203,
+        "centerY": 70.703
+      },
+      "close": {
+        "x": 330,
+        "y": 52.203,
+        "width": 36,
+        "height": 36,
+        "right": 366,
+        "bottom": 88.203,
+        "centerY": 70.203
+      },
+      "scroll": {
+        "top": 0,
+        "height": 703,
+        "total": 8037,
+        "rect": {
+          "x": 12,
+          "y": 99.203,
+          "width": 366,
+          "height": 702.594,
+          "right": 378,
+          "bottom": 801.797,
+          "centerY": 450.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/portrait.svg",
+        "alt": "portrait.svg",
+        "naturalWidth": 600,
+        "naturalHeight": 900,
+        "box": {
+          "x": 28,
+          "y": 7537.328,
+          "width": 319,
+          "height": 478.5,
+          "right": 347,
+          "bottom": 8015.828,
+          "centerY": 7776.578
+        },
+        "paintedWidth": 319,
+        "paintedHeight": 478.5,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "1 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Закрыть новость",
+        "className": "feed-news-modal__close"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 32,
+            "y": 8043.016,
+            "width": 16,
+            "height": 16,
+            "right": 48,
+            "bottom": 8059.016,
+            "centerY": 8051.016
+          },
+          {
+            "x": 95.375,
+            "y": 8043.016,
+            "width": 16,
+            "height": 16,
+            "right": 111.375,
+            "bottom": 8059.016,
+            "centerY": 8051.016
+          },
+          {
+            "x": 303.625,
+            "y": 8043.016,
+            "width": 16,
+            "height": 16,
+            "right": 319.625,
+            "bottom": 8059.016,
+            "centerY": 8051.016
+          }
+        ],
+        "centerlineDelta": 0.007
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "extreme-portrait-390-bottom",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "body": {
+        "x": 12,
+        "y": 42.203,
+        "width": 366,
+        "height": 759.594,
+        "right": 378,
+        "bottom": 801.797,
+        "centerY": 422
+      },
+      "header": {
+        "x": 12,
+        "y": 42.203,
+        "width": 366,
+        "height": 57,
+        "right": 378,
+        "bottom": 99.203,
+        "centerY": 70.703
+      },
+      "close": {
+        "x": 330,
+        "y": 52.203,
+        "width": 36,
+        "height": 36,
+        "right": 366,
+        "bottom": 88.203,
+        "centerY": 70.203
+      },
+      "scroll": {
+        "top": 7334,
+        "height": 703,
+        "total": 8037,
+        "rect": {
+          "x": 12,
+          "y": 99.203,
+          "width": 366,
+          "height": 702.594,
+          "right": 378,
+          "bottom": 801.797,
+          "centerY": 450.5
+        }
+      },
+      "image": {
+        "src": "/fixtures/portrait.svg",
+        "alt": "portrait.svg",
+        "naturalWidth": 600,
+        "naturalHeight": 900,
+        "box": {
+          "x": 28,
+          "y": 203.328,
+          "width": 319,
+          "height": 478.5,
+          "right": 347,
+          "bottom": 681.828,
+          "centerY": 442.578
+        },
+        "paintedWidth": 319,
+        "paintedHeight": 478.5,
+        "objectFit": "contain",
+        "complete": true,
+        "aspectRatioDelta": 0
+      },
+      "carouselIndex": "1 / 5",
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Закрыть новость",
+        "className": "feed-news-modal__close"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 32,
+            "y": 709.016,
+            "width": 16,
+            "height": 16,
+            "right": 48,
+            "bottom": 725.016,
+            "centerY": 717.016
+          },
+          {
+            "x": 95.375,
+            "y": 709.016,
+            "width": 16,
+            "height": 16,
+            "right": 111.375,
+            "bottom": 725.016,
+            "centerY": 717.016
+          },
+          {
+            "x": 303.625,
+            "y": 709.016,
+            "width": 16,
+            "height": 16,
+            "right": 319.625,
+            "bottom": 725.016,
+            "centerY": 717.016
+          }
+        ],
+        "centerlineDelta": 0.007
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [],
+        "like": [],
+        "clipboard": []
+      }
+    },
+    {
+      "label": "more-long-no-image-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "body": {
+        "x": 280,
+        "y": 228.547,
+        "width": 880,
+        "height": 442.906,
+        "right": 1160,
+        "bottom": 671.453,
+        "centerY": 450
+      },
+      "header": {
+        "x": 280,
+        "y": 228.547,
+        "width": 880,
+        "height": 61,
+        "right": 1160,
+        "bottom": 289.547,
+        "centerY": 259.047
+      },
+      "close": {
+        "x": 1104,
+        "y": 240.547,
+        "width": 36,
+        "height": 36,
+        "right": 1140,
+        "bottom": 276.547,
+        "centerY": 258.547
+      },
+      "scroll": {
+        "top": 0,
+        "height": 382,
+        "total": 382,
+        "rect": {
+          "x": 280,
+          "y": 289.547,
+          "width": 880,
+          "height": 381.906,
+          "right": 1160,
+          "bottom": 671.453,
+          "centerY": 480.5
+        }
+      },
+      "image": null,
+      "carouselIndex": null,
+      "focus": {
+        "tag": "BUTTON",
+        "ariaLabel": "Закрыть новость",
+        "className": "feed-news-modal__close"
+      },
+      "actions": {
+        "likeText": "234",
+        "likePressed": "true",
+        "viewsLabel": "Просмотров: 234",
+        "iconRects": [
+          {
+            "x": 304,
+            "y": 573.859,
+            "width": 16,
+            "height": 16,
+            "right": 320,
+            "bottom": 589.859,
+            "centerY": 581.859
+          },
+          {
+            "x": 367.375,
+            "y": 573.859,
+            "width": 16,
+            "height": 16,
+            "right": 383.375,
+            "bottom": 589.859,
+            "centerY": 581.859
+          },
+          {
+            "x": 1096.625,
+            "y": 573.859,
+            "width": 16,
+            "height": 16,
+            "right": 1112.625,
+            "bottom": 589.859,
+            "centerY": 581.859
+          }
+        ],
+        "centerlineDelta": 0.008
+      },
+      "files": [],
+      "fixtureCalls": {
+        "fetch": [
+          {
+            "offset": 6,
+            "limit": 6,
+            "type": "vacancy|project|news"
+          }
+        ],
+        "like": [
+          {
+            "ownerType": "profile",
+            "ownerId": 41,
+            "newsId": 1,
+            "state": false
+          }
+        ],
+        "clipboard": ["http://127.0.0.1:4347/office/profile/41/news/1"]
+      }
+    }
+  ],
+  "interactions": {
+    "preview": {
+      "like": {
+        "modalOpen": false,
+        "pressed": "false",
+        "count": "233",
+        "calls": [
+          {
+            "ownerType": "profile",
+            "ownerId": 41,
+            "newsId": 1,
+            "state": false
+          }
+        ]
+      },
+      "share": {
+        "modalOpen": false,
+        "clipboardWrites": ["http://127.0.0.1:4347/office/profile/41/news/1"]
+      },
+      "source": {
+        "modalOpen": false,
+        "url": "http://127.0.0.1:4347/office/feed"
+      },
+      "cta": {
+        "modalOpen": false,
+        "url": "http://127.0.0.1:4347/office/feed"
+      },
+      "structure": {
+        "shortHasMore": false,
+        "shortHasMedia": false,
+        "longHasMore": true,
+        "ownerMenus": 0
+      }
+    },
+    "modalLikeSync": {
+      "modal": {
+        "pressed": "false",
+        "text": "233"
+      },
+      "preview": {
+        "pressed": "false",
+        "text": "233"
+      },
+      "calls": [
+        {
+          "ownerType": "profile",
+          "ownerId": 42,
+          "newsId": 2,
+          "state": false
+        }
+      ]
+    },
+    "modalShare": {
+      "modalStillOpen": true,
+      "clipboardWrites": ["http://127.0.0.1:4347/office/profile/42/news/2"]
+    },
+    "mouseOpen": true,
+    "keyboard": {
+      "spaceOpened": true,
+      "enterOpened": true
+    },
+    "focusReturn": {
+      "escape": {
+        "tag": "ARTICLE",
+        "ariaLabel": "Открыть новость Делюсь иллюстрациями.",
+        "className": "feed-preview"
+      },
+      "closeButton": "Открыть новость Короткая новость.",
+      "backdrop": "Открыть новость Короткая новость."
+    },
+    "primaryCarouselModalFetchCalls": [],
+    "modalUsesExistingFeedData": true
+  },
+  "console": {
+    "errors": [],
+    "warnings": [],
+    "maxErrorsAcrossSnapshots": 0,
+    "maxWarningsAcrossSnapshots": 0
+  },
+  "limitations": [
+    "Fixture не использует live backend и авторизацию; backend contract проверяется отдельными тестами.",
+    "Standalone TestBed route подтверждает active/filter fetch, но не считается проверкой production address-bar query synchronization.",
+    "FeedComponent не передаёт isOwner в NewsCard, поэтому owner dots отсутствуют в браузерном global-feed fixture; их исключение из открытия modal покрывается component regression test.",
+    "Системное скачивание не запускалось; проверены href и download локального вложения."
+  ]
+}

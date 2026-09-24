@@ -1,28 +1,25 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { Router, RouterLink } from "@angular/router";
-import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { TruncatePipe, DayjsPipe } from "@corelib";
+import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { DayjsPipe } from "@corelib";
 import { FeedProject } from "@domain/feed/feed-item.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 
-/** Карточка нового проекта в ленте новостей. */
+/** Карточка нового проекта в общей ленте. */
 @Component({
   selector: "app-new-project",
-  imports: [CommonModule, ButtonComponent, AvatarComponent, RouterLink, TruncatePipe, TagComponent],
+  imports: [RouterLink, DayjsPipe, AvatarComponent],
   templateUrl: "./new-project.component.html",
   styleUrl: "./new-project.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewProjectComponent {
   readonly feedItem = input.required<FeedProject>();
+  readonly publishedAt = input<string>("");
 
   protected readonly AppRoutes = AppRoutes;
-
-  constructor(public readonly industryRepository: IndustryRepositoryPort) {}
+  protected readonly industryRepository = inject(IndustryRepositoryPort);
 }

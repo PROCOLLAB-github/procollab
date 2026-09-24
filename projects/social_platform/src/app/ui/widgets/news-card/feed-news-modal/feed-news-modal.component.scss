@@ -1,0 +1,193 @@
+/** @format */
+
+// Overlay находится вне host. Все правила ограничены локальным классом окна чтения.
+.modal .modal__body.feed-news-modal-body {
+  box-sizing: border-box;
+  display: block;
+  width: min(880px, calc(100vw - 24px));
+  max-height: 90dvh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.feed-news-modal {
+  width: 100%;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--black);
+  overflow-wrap: anywhere;
+
+  &__shell {
+    display: flex;
+    flex-direction: column;
+    max-height: 90dvh;
+  }
+
+  &__header {
+    display: flex;
+    flex-shrink: 0;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--medium-grey-for-outline);
+  }
+
+  &__badge {
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-dark);
+    background: var(--accent-light);
+    border-radius: var(--rounded-xxl);
+  }
+
+  time {
+    margin-left: auto;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--grey-for-text);
+    white-space: nowrap;
+  }
+
+  button {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+    padding: 4px;
+    font: inherit;
+    color: var(--dark-grey);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+
+  button.feed-news-modal__close {
+    flex: 0 0 36px;
+    justify-content: center;
+    height: 36px;
+    padding: 0;
+    font-size: 28px;
+    line-height: 1;
+    border-radius: var(--rounded-lg);
+  }
+
+  &__scroll {
+    min-height: 0;
+    padding: 20px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  &__source {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  &__source img {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__source div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__source span {
+    font-size: 11px;
+    color: var(--grey-for-text);
+  }
+
+  &__source a {
+    font-weight: 600;
+    color: var(--black);
+  }
+
+  &__text {
+    margin-bottom: 20px;
+  }
+
+  &__text a,
+  &__files a {
+    color: var(--accent-dark);
+  }
+
+  app-carousel {
+    display: block;
+    margin: 16px 0;
+  }
+
+  &__files {
+    display: grid;
+    gap: 10px;
+    padding: 0;
+    margin: 20px 0;
+    list-style: none;
+  }
+
+  &__files a {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__files i {
+    flex-shrink: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  &__actions span {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+    margin-left: auto;
+    color: var(--grey-for-text);
+  }
+
+  button.feed-news-modal__liked {
+    color: var(--accent);
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 12px;
+    margin-top: 16px;
+    color: var(--white);
+    background: var(--accent);
+    border-radius: var(--rounded-xxl);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  &__scroll:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 599px) {
+    &__header {
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    &__scroll {
+      padding: 16px;
+    }
+  }
+}

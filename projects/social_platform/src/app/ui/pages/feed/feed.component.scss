@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 .page {
@@ -7,12 +9,19 @@
   padding-top: 40px;
 
   &__feed {
-    column-count: 2;
-    column-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+
+    @media (max-width: 999px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
 
     &--no-items {
       display: flex;
       flex-direction: column;
+      grid-column: 1 / -1;
       gap: 20px;
       align-items: center;
       justify-content: center;
@@ -26,9 +35,7 @@
   }
 
   &__item {
-    display: block;
-    width: 100%;
-    margin-bottom: 20px;
-    break-inside: avoid;
+    display: grid;
+    min-width: 0;
   }
 }
