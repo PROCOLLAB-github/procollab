@@ -1,0 +1,110 @@
+[
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "Иван",
+    "status": 200,
+    "count": 5
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "иван",
+    "status": 200,
+    "count": 0
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "ИВАН",
+    "status": 200,
+    "count": 0
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "Иванов",
+    "status": 200,
+    "count": 2
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "иВаНоВ",
+    "status": 200,
+    "count": 0
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "Иван Иванов",
+    "status": 200,
+    "count": 5
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "иван иванов",
+    "status": 200,
+    "count": 0
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "  Иван  Иванов  ",
+    "status": 200,
+    "count": 5
+  },
+  {
+    "host": "https://dev.procollab.ru",
+    "query": "Иван НесуществующаяФамилияПроверка",
+    "status": 200,
+    "count": 5
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "Иван",
+    "status": 200,
+    "count": 365
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "иван",
+    "status": 200,
+    "count": 10
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "ИВАН",
+    "status": 200,
+    "count": 0
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "Иванов",
+    "status": 200,
+    "count": 171
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "иВаНоВ",
+    "status": 200,
+    "count": 0
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "Иван Иванов",
+    "status": 200,
+    "count": 365
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "иван иванов",
+    "status": 200,
+    "count": 10
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "  Иван  Иванов  ",
+    "status": 200,
+    "count": 365
+  },
+  {
+    "host": "https://api.procollab.ru",
+    "query": "Иван НесуществующаяФамилияПроверка",
+    "status": 200,
+    "count": 365
+  }
+]
