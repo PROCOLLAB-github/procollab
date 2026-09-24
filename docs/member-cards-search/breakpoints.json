@@ -1,0 +1,26 @@
+[
+  {
+    "columns": "169.328px 169.328px 169.328px",
+    "heights": [248],
+    "overflow": false,
+    "viewport": 1000
+  },
+  {
+    "columns": "212.438px 212.438px 212.438px",
+    "heights": [248],
+    "overflow": false,
+    "viewport": 1279
+  },
+  {
+    "columns": "156px 156px 156px 156px",
+    "heights": [248],
+    "overflow": false,
+    "viewport": 1280
+  },
+  {
+    "columns": "156px 156px 156px 156px",
+    "heights": [248],
+    "overflow": false,
+    "viewport": 1440
+  }
+]

@@ -9,18 +9,14 @@
         <form [formGroup]="searchForm">
           <app-search
             formControlName="search"
-            placeholder="введите имя участника"
+            placeholder="имя или фамилия участника"
             [openable]="containerSm < appWidth"
           ></app-search>
         </form>
 
         <ul class="page__list">
           @for (member of members(); track member.id) {
-            <a [routerLink]="AppRoutes.profile.detail(member.id)">
-              <li>
-                <app-info-card type="members" [info]="member"></app-info-card>
-              </li>
-            </a>
+            <li><app-member-card [member]="member" /></li>
           }
         </ul>
       </div>

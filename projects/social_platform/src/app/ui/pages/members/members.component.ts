@@ -9,13 +9,12 @@ import {
   OnInit,
   viewChild,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/primitives/search/search.component";
 import { MembersFiltersComponent } from "./members-filters/members-filters.component";
-import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
+import { MemberCardComponent } from "./member-card/member-card.component";
 import { BackComponent } from "@uilib";
 import { ButtonComponent } from "@ui/primitives";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
@@ -34,9 +33,8 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
     ReactiveFormsModule,
     SearchComponent,
     CommonModule,
-    RouterLink,
     MembersFiltersComponent,
-    InfoCardComponent,
+    MemberCardComponent,
     BackComponent,
     ButtonComponent,
     SoonCardComponent,
