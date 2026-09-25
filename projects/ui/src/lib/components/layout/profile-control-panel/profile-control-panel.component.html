@@ -3,11 +3,14 @@
 <div class="control-panel">
   <div class="control-panel__actions">
     <div class="control-panel__action" (click)="showNotifications = true">
-      <div (clickOutside)="onClickOutside()" class="control-panel__bell">
+      <div
+        (clickOutside)="onClickOutside()"
+        class="control-panel__bell control-panel__bell--notifications"
+      >
         @if (hasNotifications() || hasInvites) {
           <div class="attention"></div>
         }
-        <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
+        <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 17 19"></i>
         @if (invites().length) {
           <div class="control-panel__bell--hasInvites"></div>
         }
