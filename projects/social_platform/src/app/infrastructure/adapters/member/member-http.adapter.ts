@@ -6,12 +6,18 @@ import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
+import { MemberStatistics } from "@domain/member/member-statistics.model";
 
 /** HTTP-адаптер участников: `/auth/public-users` (фильтр user_type разделяет members/mentors). */
 @Injectable({ providedIn: "root" })
 export class MemberHttpAdapter {
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";
   private readonly apiService = inject(ApiService);
+
+  /** Отдельный GET без фильтров; snake_case преобразует общий CamelcaseInterceptor. */
+  getStatistics(): Observable<MemberStatistics> {
+    return this.apiService.get<MemberStatistics>(`${this.AUTH_PUBLIC_USERS_URL}/stats/`);
+  }
 
   getMembers(
     skip: number,

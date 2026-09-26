@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 .page {
@@ -125,8 +127,9 @@
     }
 
     &__statistics {
-      width: 157px;
-      margin: 4px auto 0;
+      width: 100%;
+      min-width: 0;
+      margin: 4px 0 0;
     }
   }
 }

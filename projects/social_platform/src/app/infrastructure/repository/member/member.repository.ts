@@ -7,11 +7,25 @@ import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MemberRepositoryPort } from "@domain/member/ports/member.repository.port";
 import { MemberHttpAdapter } from "../../adapters/member/member-http.adapter";
 import { userFromRaw } from "@utils/userRaw";
+import { MemberStatistics } from "@domain/member/member-statistics.model";
 
-/** Репозиторий участников: passthrough + `plainToInstance(User)`. */
+/** Преобразует участников в domain-модель и проверяет контракт глобальных счётчиков. */
 @Injectable({ providedIn: "root" })
 export class MemberRepository implements MemberRepositoryPort {
   private readonly memberAdapter = inject(MemberHttpAdapter);
+
+  /** Не превращает неполный или некорректный контракт в ложные нулевые показатели. */
+  getStatistics(): Observable<MemberStatistics> {
+    return this.memberAdapter.getStatistics().pipe(
+      map(data => {
+        const values = [data?.total, data?.inProjects, data?.inPrograms, data?.newLast30Days];
+        if (values.some(value => !Number.isSafeInteger(value) || value < 0)) {
+          throw new Error("Некорректный ответ статистики участников");
+        }
+        return data;
+      }),
+    );
+  }
 
   getMembers(
     skip: number,

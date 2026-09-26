@@ -1,0 +1,21 @@
+<!-- @format -->
+
+<section
+  class="statistics"
+  aria-label="Статистика участников"
+  [attr.aria-busy]="state().status === 'loading'"
+>
+  <h2 class="statistics__title">Статистика</h2>
+  <dl class="statistics__metrics">
+    @for (row of rows(); track row.key) {
+      <div class="statistics__row">
+        <span class="statistics__icon" aria-hidden="true"
+          ><i appIcon [icon]="row.icon" appSquare="14" [appViewBox]="row.viewBox"></i
+        ></span>
+        <dt class="statistics__label">{{ row.label }}</dt>
+        <dd class="statistics__value" [title]="row.value">{{ row.value }}</dd>
+      </div>
+    }
+  </dl>
+  <span class="statistics__status" role="status">{{ status() }}</span>
+</section>

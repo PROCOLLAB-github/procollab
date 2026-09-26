@@ -13,6 +13,8 @@ import { initial } from "@domain/shared/async-state";
 import { FormBuilder } from "@angular/forms";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 import { SpecializationsRepositoryPort } from "@domain/specializations/ports/specializations.repository.port";
+import { GetMemberStatisticsUseCase } from "@api/member/use-cases/get-member-statistics.use-case";
+import { ok } from "@domain/shared/result.type";
 
 describe("MembersComponent", () => {
   let component: MembersComponent;
@@ -52,6 +54,12 @@ describe("MembersComponent", () => {
     await TestBed.configureTestingModule({
       imports: [MembersComponent],
       providers: [
+        {
+          provide: GetMemberStatisticsUseCase,
+          useValue: {
+            execute: () => of(ok({ total: 0, inProjects: 0, inPrograms: 0, newLast30Days: 0 })),
+          },
+        },
         { provide: AuthRepositoryPort, useValue: authPortSpy },
         {
           provide: SkillsRepositoryPort,
