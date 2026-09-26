@@ -14,8 +14,11 @@
   }
 
   &__clear {
+    padding: 0;
     color: var(--accent);
     cursor: pointer;
+    background: transparent;
+    border: 0;
   }
 
   &__title {

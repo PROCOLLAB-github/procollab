@@ -1,0 +1,989 @@
+[
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      }
+    ],
+    "overflow": 0,
+    "viewport": 1440,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "156px 156px 156px 156px",
+    "maxElementRight": 1232.484375,
+    "sidebar": true,
+    "hasStatisticsBlock": true
+  },
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      }
+    ],
+    "overflow": 0,
+    "viewport": 1280,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "156px 156px 156px 156px",
+    "maxElementRight": 1152.484375,
+    "sidebar": true,
+    "hasStatisticsBlock": true
+  },
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 218
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 478
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 43,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 156,
+        "y": 738
+      }
+    ],
+    "overflow": 0,
+    "viewport": 1024,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "180.156px 180.172px 180.172px",
+    "maxElementRight": 959,
+    "sidebar": true,
+    "hasStatisticsBlock": true
+  },
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 272
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 272
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 532
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 532
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 792
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 792
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 140.25,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 350.5,
+        "y": 1052
+      }
+    ],
+    "overflow": 0,
+    "viewport": 768,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "350.5px 350.5px",
+    "maxElementRight": 753,
+    "sidebar": false,
+    "hasStatisticsBlock": true
+  },
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 272
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 532
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 792
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 1052
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 1312
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 1572
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 148.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 367,
+        "y": 1832
+      }
+    ],
+    "overflow": 0,
+    "viewport": 414,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "367px",
+    "maxElementRight": 399,
+    "sidebar": false,
+    "hasStatisticsBlock": true
+  },
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 272
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 532
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 792
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 1052
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 1312
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 1572
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 136.5,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 343,
+        "y": 1832
+      }
+    ],
+    "overflow": 0,
+    "viewport": 390,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "343px",
+    "maxElementRight": 375,
+    "sidebar": false,
+    "hasStatisticsBlock": true
+  },
+  {
+    "cards": [
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 272
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 532
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 792
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 1052
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 1312
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 1572
+      },
+      {
+        "avatarHeight": 70,
+        "avatarWidth": 70,
+        "avatarX": 129,
+        "avatarY": -34,
+        "ctaHeight": 32,
+        "ctaY": 165,
+        "gap": 15,
+        "height": 210,
+        "skillHeight": 22,
+        "skillY": 128,
+        "width": 328,
+        "y": 1832
+      }
+    ],
+    "overflow": 0,
+    "viewport": 375,
+    "cardOverflow": false,
+    "chips": [
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Java"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "PostgreSQL"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Ведение социальных сетей и контент-маркетинг"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Python"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "TypeScript"
+      },
+      {
+        "ellipsis": "ellipsis",
+        "nowrap": "nowrap",
+        "text": "Аналитика"
+      }
+    ],
+    "columns": "328px",
+    "maxElementRight": 360,
+    "sidebar": false,
+    "hasStatisticsBlock": true
+  }
+]

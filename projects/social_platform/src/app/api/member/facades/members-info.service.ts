@@ -26,6 +26,7 @@ import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { normalizeMemberSearch } from "../member-search";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
@@ -53,6 +54,7 @@ export class MembersInfoService {
   private readonly searchForm = this.membersUIInfoService.searchForm;
   private readonly filterForm = this.membersUIInfoService.filterForm;
 
+  /** Инициализирует выдачу resolver и поиск из URL, не теряя запрос при обновлении страницы. */
   initializationMembers(): void {
     // Устанавливаем заголовок страницы
     this.navService.setNavTitle("Участники");
@@ -77,7 +79,11 @@ export class MembersInfoService {
         this.membersUIInfoService.applyMembersPagination(members);
       });
 
-    // Настраиваем синхронизацию значений форм с URL параметрами
+    const fullname = normalizeMemberSearch(this.route.snapshot.queryParams["fullname"]);
+    this.searchForm.patchValue({ search: fullname }, { emitEvent: false });
+    this.searchParams.set(fullname ? { fullname } : {});
+
+    // Остальные фильтры сохраняют существующую синхронизацию с URL.
     this.saveControlValue(this.searchForm.get("search"), "fullname");
     this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
     this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
@@ -96,7 +102,8 @@ export class MembersInfoService {
           // Формируем параметры для API запроса
           const fetchParams: Record<string, string> = {};
 
-          if (params["fullname"]) fetchParams["fullname"] = params["fullname"];
+          const fullname = normalizeMemberSearch(params["fullname"]);
+          if (fullname) fetchParams["fullname"] = fullname;
           if (params["skills__contains"])
             fetchParams["skills__contains"] = params["skills__contains"];
           if (params["speciality__icontains"])
@@ -116,7 +123,7 @@ export class MembersInfoService {
         }),
       )
       .subscribe(members => {
-        this.membersUIInfoService.members$.set(success(members.results));
+        this.membersUIInfoService.applyMembersPagination(members);
       });
   }
 
@@ -137,13 +144,16 @@ export class MembersInfoService {
       window.innerHeight;
 
     if (diff > 0) {
+      const requestParams = this.searchParams();
       // Загружаем следующую порцию участников
       return this.onFetch(
         this.membersUIInfoService.members().length,
         this.membersTake(),
-        this.searchParams(),
+        requestParams,
       ).pipe(
         tap(membersChunk => {
+          // Поздняя страница прежнего поиска не должна дописаться к новой выдаче.
+          if (requestParams !== this.searchParams()) return;
           this.membersUIInfoService.members$.update(state =>
             isSuccess(state)
               ? success([...state.data, ...membersChunk.results])
@@ -156,6 +166,7 @@ export class MembersInfoService {
     return EMPTY;
   }
 
+  /** Последовательно подгружает страницы текущего поиска. */
   initScroll(target: HTMLElement, membersRoot: ElementRef<HTMLUListElement>): void {
     fromEvent(target, "scroll")
       .pipe(
@@ -172,17 +183,22 @@ export class MembersInfoService {
   private saveControlValue(control: AbstractControl | null, queryName: string): void {
     if (!control) return;
 
-    control.valueChanges
-      .pipe(throttleTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        this.router
-          .navigate([], {
-            queryParams: { [queryName]: value.toString() },
-            relativeTo: this.route,
-            queryParamsHandling: "merge",
-          })
-          .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
-      });
+    const changes =
+      queryName === "fullname"
+        ? control.valueChanges.pipe(map(normalizeMemberSearch), debounceTime(300))
+        : control.valueChanges.pipe(throttleTime(300));
+    // Для текста ждём завершения ввода: throttle без trailing теряет последние символы.
+    changes.pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      this.router
+        .navigate([], {
+          queryParams: {
+            [queryName]: queryName === "fullname" ? value || null : value?.toString(),
+          },
+          relativeTo: this.route,
+          queryParamsHandling: "merge",
+        })
+        .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
+    });
   }
 
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {

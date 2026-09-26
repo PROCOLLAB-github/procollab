@@ -1,0 +1,20 @@
+<!-- @format -->
+<app-modal [open]="open()" bodyClass="member-filters-dialog-body" (openChange)="close()">
+  <section
+    class="member-filters-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Фильтры участников"
+    [cdkTrapFocus]="attached()"
+    [cdkTrapFocusAutoCapture]="false"
+  >
+    <header class="member-filters-dialog__header">
+      <h2>Фильтры участников</h2>
+      <button #closeButton type="button" aria-label="Закрыть фильтры" (click)="close()">×</button>
+    </header>
+    <div class="member-filters-dialog__content">
+      <app-members-filters [filterForm]="filterForm()" />
+    </div>
+    <button type="button" class="member-filters-dialog__done" (click)="close()">Готово</button>
+  </section>
+</app-modal>
