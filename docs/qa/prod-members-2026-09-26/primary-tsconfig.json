@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "outDir": "../out-tsc/surface-preview", "types": [] },
+  "files": ["primary-main.ts"],
+  "include": ["../projects/**/*.d.ts"]
+}

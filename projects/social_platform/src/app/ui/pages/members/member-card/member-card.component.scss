@@ -1,0 +1,145 @@
+/** @format */
+@use "styles/responsive";
+
+:host {
+  display: block;
+  width: 156px;
+}
+
+.member-card {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  width: 156px;
+  height: 210px;
+  padding: 45px 12px 12px;
+  color: var(--black);
+  background: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
+  }
+
+  &__photo {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+  }
+
+  &__name {
+    height: 36px;
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  &__name span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* stylelint-disable value-no-vendor-prefix -- Вторичная информация занимает максимум две строки. */
+  &__secondary {
+    display: -webkit-box;
+    height: 30px;
+    margin: 0 0 10px;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 15px;
+    color: var(--grey-for-text);
+    text-align: center;
+    overflow-wrap: anywhere;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  /* stylelint-enable value-no-vendor-prefix */
+  &__skills-area {
+    min-width: 0;
+    height: 22px;
+  }
+
+  &__skills {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    height: 22px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__skill,
+  &__more {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 0;
+    max-width: 100%;
+    height: 22px;
+    padding: 3px 7px;
+    overflow: hidden;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--accent-dark);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: var(--accent-light);
+    border-radius: 7px;
+  }
+
+  &__skill {
+    flex: 1 1 auto;
+    text-align: left;
+  }
+
+  &__more {
+    flex: 0 0 auto;
+    width: 40px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    margin-top: auto;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--white);
+    background: var(--accent);
+    border-radius: var(--rounded-xxl);
+  }
+
+  &:hover &__action {
+    background: var(--accent-medium);
+  }
+}
+
+@media (max-width: #{responsive.$desktop - 1px}) {
+  :host,
+  .member-card {
+    width: 100%;
+  }
+
+  .member-card {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
