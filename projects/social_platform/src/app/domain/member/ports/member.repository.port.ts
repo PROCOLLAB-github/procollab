@@ -3,9 +3,13 @@
 import { Observable } from "rxjs";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { User } from "../../auth/user.model";
+import { MemberStatistics } from "../member-statistics.model";
 
-/** Порт репозитория участников: список members (skip/take/фильтры) и mentors. */
+/** Порт каталога: фильтруемый список и отдельная глобальная статистика участников. */
 export abstract class MemberRepositoryPort {
+  /** Получает агрегаты без параметров поиска и пагинации. */
+  abstract getStatistics(): Observable<MemberStatistics>;
+
   abstract getMembers(
     skip: number,
     take: number,

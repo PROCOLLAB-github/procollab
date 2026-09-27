@@ -28,8 +28,8 @@
           Перейти в профиль
         </button>
       </div>
-      <ng-container *ngTemplateOutlet="membersList" />
       <ng-container *ngTemplateOutlet="statistics" />
+      <ng-container *ngTemplateOutlet="membersList" />
     </div>
   } @else {
     <div class="page__bar">
@@ -70,7 +70,7 @@
   </ng-template>
   <ng-template #statistics>
     <div class="page__statistics">
-      <app-soon-card title="статистика" description="количество проектов, команды, эффективность" />
+      <app-member-statistics-card [state]="statisticsState()" />
     </div>
   </ng-template>
   @if (filtersOpen() && compactLayout()) {

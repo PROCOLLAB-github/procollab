@@ -22,7 +22,8 @@ import { MembersFiltersComponent } from "./members-filters/members-filters.compo
 import { MemberCardComponent } from "./member-card/member-card.component";
 import { BackComponent } from "@uilib";
 import { ButtonComponent } from "@ui/primitives";
-import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
+import { MemberStatisticsCardComponent } from "./member-statistics-card/member-statistics-card.component";
+import { MemberStatisticsFacade } from "@api/member/facades/member-statistics.facade";
 import { MembersInfoService } from "@api/member/facades/members-info.service";
 import { MembersUIInfoService } from "@api/member/facades/ui/members-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -43,16 +44,23 @@ import { MemberFiltersDialogComponent } from "./member-filters-dialog/member-fil
     MemberCardComponent,
     BackComponent,
     ButtonComponent,
-    SoonCardComponent,
+    MemberStatisticsCardComponent,
     MemberFiltersDialogComponent,
   ],
-  providers: [MembersInfoService, MembersUIInfoService, ProfileDetailUIInfoService],
+  providers: [
+    MembersInfoService,
+    MembersUIInfoService,
+    ProfileDetailUIInfoService,
+    MemberStatisticsFacade,
+  ],
 })
 export class MembersComponent implements OnInit, AfterViewInit {
   readonly membersRoot = viewChild<ElementRef<HTMLUListElement> | undefined>("membersRoot"); // Ссылка на корневой элемент списка
 
   private readonly membersInfoService = inject(MembersInfoService);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
+  private readonly statisticsFacade = inject(MemberStatisticsFacade);
+  protected readonly statisticsState = this.statisticsFacade.state;
 
   protected readonly members = this.membersUIInfoService.members;
 
@@ -86,6 +94,7 @@ export class MembersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.membersInfoService.initializationMembers();
+    this.statisticsFacade.load();
   }
 
   ngAfterViewInit(): void {
