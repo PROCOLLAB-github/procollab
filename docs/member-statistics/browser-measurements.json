@@ -1,0 +1,5524 @@
+{
+  "base": "cbcb5bffbaeb13a37176411a3ebda035618a5879",
+  "environment": "Chromium / Windows; настоящие компоненты Angular, синтетические данные; оболочка office без навигации",
+  "viewports": [
+    {
+      "width": 1440,
+      "before": {
+        "viewport": 1440,
+        "viewportClient": 1440,
+        "grid": {
+          "x": 365.828125,
+          "y": 218,
+          "width": 684,
+          "height": 470,
+          "right": 1049.828125,
+          "bottom": 688
+        },
+        "sidebar": {
+          "x": 1069.828125,
+          "y": 142.59375,
+          "width": 157,
+          "height": 297.171875,
+          "right": 1226.828125,
+          "bottom": 439.765625
+        },
+        "card": null,
+        "host": null,
+        "controls": null,
+        "search": null,
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 1440,
+        "viewportClient": 1440,
+        "grid": {
+          "x": 365.828125,
+          "y": 218,
+          "width": 684,
+          "height": 470,
+          "right": 1049.828125,
+          "bottom": 688
+        },
+        "sidebar": {
+          "x": 1069.828125,
+          "y": 142.59375,
+          "width": 157,
+          "height": 436.1875,
+          "right": 1226.828125,
+          "bottom": 578.78125
+        },
+        "card": {
+          "x": 1069.828125,
+          "y": 298.78125,
+          "width": 157,
+          "height": 280,
+          "right": 1226.828125,
+          "bottom": 578.78125
+        },
+        "host": {
+          "x": 1069.828125,
+          "y": 298.78125,
+          "width": 157,
+          "height": 280,
+          "right": 1226.828125,
+          "bottom": 578.78125
+        },
+        "controls": null,
+        "search": null,
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "157px",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "none",
+        "metricRows": [
+          {
+            "x": 1080.828125,
+            "y": 335.78125
+          },
+          {
+            "x": 1080.828125,
+            "y": 393.78125
+          },
+          {
+            "x": 1080.828125,
+            "y": 451.78125
+          },
+          {
+            "x": 1080.828125,
+            "y": 509.78125
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    },
+    {
+      "width": 1280,
+      "before": {
+        "viewport": 1280,
+        "viewportClient": 1280,
+        "grid": {
+          "x": 285.828125,
+          "y": 218,
+          "width": 684,
+          "height": 470,
+          "right": 969.828125,
+          "bottom": 688
+        },
+        "sidebar": {
+          "x": 989.828125,
+          "y": 142.59375,
+          "width": 157,
+          "height": 297.171875,
+          "right": 1146.828125,
+          "bottom": 439.765625
+        },
+        "card": null,
+        "host": null,
+        "controls": null,
+        "search": null,
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 1280,
+        "viewportClient": 1280,
+        "grid": {
+          "x": 285.828125,
+          "y": 218,
+          "width": 684,
+          "height": 470,
+          "right": 969.828125,
+          "bottom": 688
+        },
+        "sidebar": {
+          "x": 989.828125,
+          "y": 142.59375,
+          "width": 157,
+          "height": 436.1875,
+          "right": 1146.828125,
+          "bottom": 578.78125
+        },
+        "card": {
+          "x": 989.828125,
+          "y": 298.78125,
+          "width": 157,
+          "height": 280,
+          "right": 1146.828125,
+          "bottom": 578.78125
+        },
+        "host": {
+          "x": 989.828125,
+          "y": 298.78125,
+          "width": 157,
+          "height": 280,
+          "right": 1146.828125,
+          "bottom": 578.78125
+        },
+        "controls": null,
+        "search": null,
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "157px",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "none",
+        "metricRows": [
+          {
+            "x": 1000.828125,
+            "y": 335.78125
+          },
+          {
+            "x": 1000.828125,
+            "y": 393.78125
+          },
+          {
+            "x": 1000.828125,
+            "y": 451.78125
+          },
+          {
+            "x": 1000.828125,
+            "y": 509.78125
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    },
+    {
+      "width": 1024,
+      "before": {
+        "viewport": 1024,
+        "viewportClient": 1024,
+        "grid": {
+          "x": 201.5,
+          "y": 218,
+          "width": 580.5,
+          "height": 730,
+          "right": 782,
+          "bottom": 948
+        },
+        "sidebar": {
+          "x": 802,
+          "y": 142.59375,
+          "width": 157,
+          "height": 297.171875,
+          "right": 959,
+          "bottom": 439.765625
+        },
+        "card": null,
+        "host": null,
+        "controls": null,
+        "search": null,
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 1024,
+        "viewportClient": 1024,
+        "grid": {
+          "x": 201.5,
+          "y": 218,
+          "width": 580.5,
+          "height": 730,
+          "right": 782,
+          "bottom": 948
+        },
+        "sidebar": {
+          "x": 802,
+          "y": 142.59375,
+          "width": 157,
+          "height": 436.1875,
+          "right": 959,
+          "bottom": 578.78125
+        },
+        "card": {
+          "x": 802,
+          "y": 298.78125,
+          "width": 157,
+          "height": 280,
+          "right": 959,
+          "bottom": 578.78125
+        },
+        "host": {
+          "x": 802,
+          "y": 298.78125,
+          "width": 157,
+          "height": 280,
+          "right": 959,
+          "bottom": 578.78125
+        },
+        "controls": null,
+        "search": null,
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "157px",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "none",
+        "metricRows": [
+          {
+            "x": 813,
+            "y": 335.78125
+          },
+          {
+            "x": 813,
+            "y": 393.78125
+          },
+          {
+            "x": 813,
+            "y": 451.78125
+          },
+          {
+            "x": 813,
+            "y": 509.78125
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    },
+    {
+      "width": 768,
+      "before": {
+        "viewport": 768,
+        "viewportClient": 768,
+        "grid": {
+          "x": 16,
+          "y": 272,
+          "width": 721,
+          "height": 990,
+          "right": 737,
+          "bottom": 1262
+        },
+        "sidebar": null,
+        "card": null,
+        "host": null,
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 721,
+          "height": 44,
+          "right": 737,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 721,
+          "height": 44,
+          "right": 737,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 768,
+        "viewportClient": 768,
+        "grid": {
+          "x": 16,
+          "y": 468,
+          "width": 721,
+          "height": 990,
+          "right": 737,
+          "bottom": 1458
+        },
+        "sidebar": null,
+        "card": {
+          "x": 16,
+          "y": 241,
+          "width": 721,
+          "height": 172,
+          "right": 737,
+          "bottom": 413
+        },
+        "host": {
+          "x": 16,
+          "y": 241,
+          "width": 721,
+          "height": 172,
+          "right": 737,
+          "bottom": 413
+        },
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 721,
+          "height": 44,
+          "right": 737,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 721,
+          "height": 44,
+          "right": 737,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "none",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "343.5px 343.5px",
+        "metricRows": [
+          {
+            "x": 27,
+            "y": 278
+          },
+          {
+            "x": 382.5,
+            "y": 278
+          },
+          {
+            "x": 27,
+            "y": 344
+          },
+          {
+            "x": 382.5,
+            "y": 344
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    },
+    {
+      "width": 414,
+      "before": {
+        "viewport": 414,
+        "viewportClient": 414,
+        "grid": {
+          "x": 16,
+          "y": 272,
+          "width": 367,
+          "height": 1770,
+          "right": 383,
+          "bottom": 2042
+        },
+        "sidebar": null,
+        "card": null,
+        "host": null,
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 367,
+          "height": 44,
+          "right": 383,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 367,
+          "height": 44,
+          "right": 383,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 414,
+        "viewportClient": 414,
+        "grid": {
+          "x": 16,
+          "y": 468,
+          "width": 367,
+          "height": 1770,
+          "right": 383,
+          "bottom": 2238
+        },
+        "sidebar": null,
+        "card": {
+          "x": 16,
+          "y": 241,
+          "width": 367,
+          "height": 172,
+          "right": 383,
+          "bottom": 413
+        },
+        "host": {
+          "x": 16,
+          "y": 241,
+          "width": 367,
+          "height": 172,
+          "right": 383,
+          "bottom": 413
+        },
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 367,
+          "height": 44,
+          "right": 383,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 367,
+          "height": 44,
+          "right": 383,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "none",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "166.5px 166.5px",
+        "metricRows": [
+          {
+            "x": 27,
+            "y": 278
+          },
+          {
+            "x": 205.5,
+            "y": 278
+          },
+          {
+            "x": 27,
+            "y": 344
+          },
+          {
+            "x": 205.5,
+            "y": 344
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    },
+    {
+      "width": 390,
+      "before": {
+        "viewport": 390,
+        "viewportClient": 390,
+        "grid": {
+          "x": 16,
+          "y": 272,
+          "width": 343,
+          "height": 1770,
+          "right": 359,
+          "bottom": 2042
+        },
+        "sidebar": null,
+        "card": null,
+        "host": null,
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 343,
+          "height": 44,
+          "right": 359,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 343,
+          "height": 44,
+          "right": 359,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 390,
+        "viewportClient": 390,
+        "grid": {
+          "x": 16,
+          "y": 468,
+          "width": 343,
+          "height": 1770,
+          "right": 359,
+          "bottom": 2238
+        },
+        "sidebar": null,
+        "card": {
+          "x": 16,
+          "y": 241,
+          "width": 343,
+          "height": 172,
+          "right": 359,
+          "bottom": 413
+        },
+        "host": {
+          "x": 16,
+          "y": 241,
+          "width": 343,
+          "height": 172,
+          "right": 359,
+          "bottom": 413
+        },
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 343,
+          "height": 44,
+          "right": 359,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 343,
+          "height": 44,
+          "right": 359,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "none",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "154.5px 154.5px",
+        "metricRows": [
+          {
+            "x": 27,
+            "y": 278
+          },
+          {
+            "x": 193.5,
+            "y": 278
+          },
+          {
+            "x": 27,
+            "y": 344
+          },
+          {
+            "x": 193.5,
+            "y": 344
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    },
+    {
+      "width": 375,
+      "before": {
+        "viewport": 375,
+        "viewportClient": 375,
+        "grid": {
+          "x": 16,
+          "y": 272,
+          "width": 328,
+          "height": 1770,
+          "right": 344,
+          "bottom": 2042
+        },
+        "sidebar": null,
+        "card": null,
+        "host": null,
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 328,
+          "height": 44,
+          "right": 344,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 328,
+          "height": 44,
+          "right": 344,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": [],
+        "metricColumns": null,
+        "metricRows": [],
+        "statisticsCalls": 0,
+        "font": true,
+        "soon": true
+      },
+      "after": {
+        "viewport": 375,
+        "viewportClient": 375,
+        "grid": {
+          "x": 16,
+          "y": 468,
+          "width": 328,
+          "height": 1770,
+          "right": 344,
+          "bottom": 2238
+        },
+        "sidebar": null,
+        "card": {
+          "x": 16,
+          "y": 241,
+          "width": 328,
+          "height": 172,
+          "right": 344,
+          "bottom": 413
+        },
+        "host": {
+          "x": 16,
+          "y": 241,
+          "width": 328,
+          "height": 172,
+          "right": 344,
+          "bottom": 413
+        },
+        "controls": {
+          "x": 16,
+          "y": 173,
+          "width": 328,
+          "height": 44,
+          "right": 344,
+          "bottom": 217
+        },
+        "search": {
+          "x": 16,
+          "y": 109,
+          "width": 328,
+          "height": 44,
+          "right": 344,
+          "bottom": 153
+        },
+        "overflow": 0,
+        "cardOverflow": 0,
+        "values": ["1 248", "684", "214", "63"],
+        "maxWidth": "none",
+        "minWidth": "0px",
+        "boxSizing": "border-box",
+        "metricColumns": "147px 147px",
+        "metricRows": [
+          {
+            "x": 27,
+            "y": 278
+          },
+          {
+            "x": 186,
+            "y": 278
+          },
+          {
+            "x": 27,
+            "y": 344
+          },
+          {
+            "x": 186,
+            "y": 344
+          }
+        ],
+        "statisticsCalls": 1,
+        "font": true,
+        "soon": false
+      }
+    }
+  ],
+  "cases": [
+    {
+      "width": 1440,
+      "scenario": "value-0",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "value-9",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "value-63",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "value-999",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "value-1248",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "value-12345",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "value-999999",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "loading",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1440,
+      "scenario": "error",
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 1049.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-0",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-9",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-63",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-999",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-1248",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-12345",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "value-999999",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "loading",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1280,
+      "scenario": "error",
+      "viewport": 1280,
+      "viewportClient": 1280,
+      "grid": {
+        "x": 285.828125,
+        "y": 218,
+        "width": 684,
+        "height": 470,
+        "right": 969.828125,
+        "bottom": 688
+      },
+      "sidebar": {
+        "x": 989.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 989.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1146.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1000.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1000.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-0",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-9",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-63",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-999",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-1248",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-12345",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "value-999999",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "loading",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 1024,
+      "scenario": "error",
+      "viewport": 1024,
+      "viewportClient": 1024,
+      "grid": {
+        "x": 201.5,
+        "y": 218,
+        "width": 580.5,
+        "height": 730,
+        "right": 782,
+        "bottom": 948
+      },
+      "sidebar": {
+        "x": 802,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 802,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 959,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 813,
+          "y": 335.78125
+        },
+        {
+          "x": 813,
+          "y": 393.78125
+        },
+        {
+          "x": 813,
+          "y": 451.78125
+        },
+        {
+          "x": 813,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-0",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-9",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-63",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-999",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-1248",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-12345",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "value-999999",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "loading",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 768,
+      "scenario": "error",
+      "viewport": 768,
+      "viewportClient": 768,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 721,
+        "height": 990,
+        "right": 737,
+        "bottom": 1458
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 721,
+        "height": 172,
+        "right": 737,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 721,
+        "height": 44,
+        "right": 737,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "343.5px 343.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 382.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 382.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-0",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-9",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-63",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-999",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-1248",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-12345",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "value-999999",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "loading",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 414,
+      "scenario": "error",
+      "viewport": 414,
+      "viewportClient": 414,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 367,
+        "height": 1770,
+        "right": 383,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 367,
+        "height": 172,
+        "right": 383,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 367,
+        "height": 44,
+        "right": 383,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "166.5px 166.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 205.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 205.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-0",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-9",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-63",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-999",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-1248",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-12345",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "value-999999",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "loading",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 390,
+      "scenario": "error",
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-0",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["0", "0", "0", "0"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-9",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["9", "9", "9", "9"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-63",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["63", "63", "63", "63"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-999",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999", "999", "999", "999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-1248",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "1 248", "1 248", "1 248"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-12345",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["12 345", "12 345", "12 345", "12 345"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "value-999999",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["999 999", "999 999", "999 999", "999 999"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "loading",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    {
+      "width": 375,
+      "scenario": "error",
+      "viewport": 375,
+      "viewportClient": 375,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 328,
+        "height": 1770,
+        "right": 344,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 328,
+        "height": 172,
+        "right": 344,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 328,
+        "height": 44,
+        "right": 344,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["—", "—", "—", "—"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "147px 147px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 186,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 186,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    }
+  ],
+  "independence": {
+    "initial": {
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 1770,
+        "right": 359,
+        "bottom": 2238
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "684", "214", "63"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    "afterSearchFiltersAndAppend": {
+      "viewport": 390,
+      "viewportClient": 390,
+      "grid": {
+        "x": 16,
+        "y": 468,
+        "width": 343,
+        "height": 3590,
+        "right": 359,
+        "bottom": 4058
+      },
+      "sidebar": null,
+      "card": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "host": {
+        "x": 16,
+        "y": 241,
+        "width": 343,
+        "height": 172,
+        "right": 359,
+        "bottom": 413
+      },
+      "controls": {
+        "x": 16,
+        "y": 173,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 217
+      },
+      "search": {
+        "x": 16,
+        "y": 109,
+        "width": 343,
+        "height": 44,
+        "right": 359,
+        "bottom": 153
+      },
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "684", "214", "63"],
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "154.5px 154.5px",
+      "metricRows": [
+        {
+          "x": 27,
+          "y": 278
+        },
+        {
+          "x": 193.5,
+          "y": 278
+        },
+        {
+          "x": 27,
+          "y": 344
+        },
+        {
+          "x": 193.5,
+          "y": 344
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    "afterResize": {
+      "viewport": 1440,
+      "viewportClient": 1440,
+      "grid": {
+        "x": 365.828125,
+        "y": 218,
+        "width": 684,
+        "height": 990,
+        "right": 1049.828125,
+        "bottom": 1208
+      },
+      "sidebar": {
+        "x": 1069.828125,
+        "y": 142.59375,
+        "width": 157,
+        "height": 436.1875,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "card": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "host": {
+        "x": 1069.828125,
+        "y": 298.78125,
+        "width": 157,
+        "height": 280,
+        "right": 1226.828125,
+        "bottom": 578.78125
+      },
+      "controls": null,
+      "search": null,
+      "overflow": 0,
+      "cardOverflow": 0,
+      "values": ["1 248", "684", "214", "63"],
+      "maxWidth": "157px",
+      "minWidth": "0px",
+      "boxSizing": "border-box",
+      "metricColumns": "none",
+      "metricRows": [
+        {
+          "x": 1080.828125,
+          "y": 335.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 393.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 451.78125
+        },
+        {
+          "x": 1080.828125,
+          "y": 509.78125
+        }
+      ],
+      "statisticsCalls": 1,
+      "font": true,
+      "soon": false
+    },
+    "memberCards": 14
+  },
+  "errors": [],
+  "browser": "154.0.8037.57"
+}
