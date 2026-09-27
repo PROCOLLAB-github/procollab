@@ -1,23 +1,24 @@
 /** @format */
-
 import { TestBed } from "@angular/core/testing";
 import { ProjectTeamUIService } from "./project-team-ui.service";
-
+import { User } from "@domain/auth/user.model";
+import { Collaborator } from "@domain/project/collaborator.model";
 describe("ProjectTeamUIService", () => {
-  it("reset preserves frontend validation and clears only invite transient state", () => {
+  it("reset очищает только создание приглашения, сохраняет участников и валидаторы", () => {
     TestBed.configureTestingModule({ providers: [ProjectTeamUIService] });
     const ui = TestBed.inject(ProjectTeamUIService);
-    ui.inviteForm.patchValue({ link: "bad", role: "Дизайнер" });
-    ui.inviteSubmitInitiated.set(true);
-    ui.applyErrorSubmitInvite({ kind: "network", message: "Controlled network message" });
-    ui.resetInviteForm();
+    ui.collaborators.set([{ userId: 7 } as Collaborator]);
+    ui.applyOpenInviteModal();
+    ui.selectRecipient({ id: 13 } as User);
+    ui.inviteForm.controls.role.setValue("Дизайнер");
+    ui.applyErrorSubmitInvite({ kind: "network", message: "Ошибка подключения" });
+    ui.applyCloseInviteModal();
+    expect(ui.inviteForm.getRawValue()).toEqual({ recipientId: null, role: "" });
     expect(ui.inviteForm.invalid).toBe(true);
-    expect(ui.link?.hasError("required")).toBe(true);
-    expect(ui.role?.hasError("required")).toBe(true);
     expect(ui.inviteSubmitError()).toBeNull();
-    expect(ui.inviteSubmitInitiated()).toBe(false);
     expect(ui.inviteFormIsSubmitting().status).toBe("initial");
-    ui.link?.setValue("invalid");
-    expect(ui.link?.hasError("pattern")).toBe(true);
+    expect(ui.selectedRecipient()).toBeNull();
+    expect(ui.collaborators()).toEqual([{ userId: 7 }]);
+    expect(Object.keys(ui.inviteForm.controls)).toEqual(["recipientId", "role"]);
   });
 });

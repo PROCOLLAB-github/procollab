@@ -9,16 +9,13 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { ButtonComponent, InputComponent } from "@ui/primitives";
+import { ButtonComponent } from "@ui/primitives";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { ReactiveFormsModule } from "@angular/forms";
 import { ApproveSkillComponent } from "./approve-skill/approve-skill.component";
-import { TruncatePipe, ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "@api/project/project-form.service";
-import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { DetailInfoService } from "./services/detail-info.service";
 import { DetailProfileInfoService } from "./services/profile/detail-profile-info.service";
@@ -29,7 +26,7 @@ import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profi
 import { ChatStateService } from "@domain/shared/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/profile-project-invite-modal.component";
 
 /** Виджет детального просмотра сущности. */
 @Component({
@@ -39,20 +36,16 @@ import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-
   imports: [
     CommonModule,
     RouterModule,
-    ReactiveFormsModule,
     IconComponent,
     ButtonComponent,
     ModalComponent,
     AvatarComponent,
     ApproveSkillComponent,
-    InputComponent,
-    TruncatePipe,
-    ControlErrorPipe,
     ProgramLinksComponent,
+    ProfileProjectInviteModalComponent,
   ],
   providers: [
     ProfileDetailUIInfoService,
-    ProjectTeamUIService,
     DetailInfoService,
     DetailProfileInfoService,
     DetailProjectInfoService,
@@ -70,7 +63,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectFormService = inject(ProjectFormService);
 
   private readonly detailInfoService = inject(DetailInfoService);
-  private readonly detailProfileInfoService = inject(DetailProfileInfoService);
+  protected readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly detailProgramInfoService = inject(DetailProgramInfoService);
   private readonly detailProjectInfoService = inject(DetailProjectInfoService);
 
@@ -110,7 +103,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Переменные для работы с модалкой подачи проекта
   protected readonly selectedProjectId = this.detailProfileInfoService.selectedProjectId;
-  protected readonly memberProjects = this.detailProfileInfoService.memberProjects;
 
   protected readonly userType = this.detailInfoService.userType;
 
@@ -141,10 +133,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Переменные для работы с подтверждением навыков
   protected readonly showApproveSkillModal = this.detailProfileInfoService.showApproveSkillModal;
   protected readonly showSendInviteModal = this.detailProfileInfoService.showSendInviteModal;
-  protected readonly showNoProjectsModal = this.detailProfileInfoService.showNoProjectsModal;
-  protected readonly showActiveInviteModal = this.detailProfileInfoService.showActiveInviteModal;
-  protected readonly showNoInProgramModal = this.detailProfileInfoService.showNoInProgramModal;
-  protected readonly showSuccessInviteModal = this.detailProfileInfoService.showSuccessInviteModal;
 
   protected readonly openSkills = this.detailProfileInfoService.openSkills;
 
@@ -162,9 +150,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   protected readonly projectForm = this.projectFormService.getForm();
 
+  protected inviteTrigger: HTMLElement | null = null;
   protected readonly inviteForm = this.detailProfileInfoService.inviteForm;
-
-  protected readonly errorMessage = ErrorMessage;
 
   protected readonly isContactsModalOpen = this.detailInfoService.isContactsModalOpen;
   protected readonly isMaterialsModalOpen = this.detailInfoService.isMaterialsModalOpen;
@@ -189,10 +176,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Методы для управления состоянием ошибок через сервис
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
-  }
-
-  onProjectRadioChange(event: Event): void {
-    this.detailProfileInfoService.onProjectRadioChange(event);
   }
 
   acknowledgeProfileFillPrompt(continueFilling = false): void {
@@ -231,7 +214,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProfileInfoService.downloadCV();
   }
 
-  inviteUser(): void {
+  inviteUser(event: Event): void {
+    this.inviteTrigger =
+      (event.currentTarget as HTMLElement).querySelector("button") ??
+      (event.currentTarget as HTMLElement);
     this.detailProfileInfoService.inviteUser();
   }
 

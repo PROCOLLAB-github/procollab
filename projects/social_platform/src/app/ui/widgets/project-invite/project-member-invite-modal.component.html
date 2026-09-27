@@ -1,0 +1,65 @@
+<!-- @format -->
+<app-project-invite-dialog
+  title="Пригласить участника"
+  description="Найдите участника и укажите его роль в проекте"
+  [trigger]="trigger()"
+  (closed)="closed.emit()"
+>
+  <label inviteSearch class="invite-search">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="m15 15 6 6" />
+    </svg>
+    <input
+      #searchInput
+      data-invite-autofocus
+      type="search"
+      aria-label="Поиск по имени или фамилии"
+      placeholder="Поиск по имени или фамилии…"
+      [formControl]="query"
+      [readOnly]="isLoading(ui.inviteFormIsSubmitting())"
+    />
+  </label>
+  <app-participant-picker
+    inviteList
+    [state]="search.state()"
+    [selected]="ui.selectedRecipient()"
+    [leaderId]="project()?.leader"
+    [collaborators]="ui.collaborators()"
+    [invites]="ui.invites()"
+    [busy]="isLoading(ui.inviteFormIsSubmitting())"
+    (chosen)="select($event)"
+    (cleared)="clear()"
+  />
+  <app-project-invite-role-input
+    inviteRole
+    [control]="ui.inviteForm.controls.role"
+    [readonly]="isLoading(ui.inviteFormIsSubmitting())"
+  />
+  @if (ui.inviteSubmitError(); as error) {
+    <p inviteError class="invite-error" role="alert">{{ error.message }}</p>
+  }
+  <div inviteFooter class="invite-actions">
+    <button type="button" class="invite-button" (click)="closed.emit()">Отмена</button>
+    <button
+      type="button"
+      class="invite-button invite-button--primary"
+      [disabled]="ui.inviteForm.invalid || isLoading(ui.inviteFormIsSubmitting())"
+      [attr.aria-busy]="isLoading(ui.inviteFormIsSubmitting())"
+      (click)="team.submitInvite(projectId())"
+    >
+      @if (isLoading(ui.inviteFormIsSubmitting())) {
+        <span class="invite-spinner" aria-hidden="true"></span>
+      }
+      {{ isLoading(ui.inviteFormIsSubmitting()) ? "Отправляем…" : "Отправить приглашение" }}
+    </button>
+  </div>
+</app-project-invite-dialog>

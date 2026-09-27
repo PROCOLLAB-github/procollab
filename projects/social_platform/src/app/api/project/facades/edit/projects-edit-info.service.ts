@@ -127,6 +127,7 @@ export class ProjectsEditInfoService {
     takeUntilDestroyed(this.destroyRef),
   );
 
+  readonly invitationProject = signal<Project | null>(null);
   readonly profileId = signal<number>(+this.route.snapshot.params["projectId"]);
 
   // Сигналы для управления состоянием
@@ -445,7 +446,9 @@ export class ProjectsEditInfoService {
         const id = Number(params["projectId"]);
         const project: Project | undefined = data["data"]?.[0];
         const matches = Number.isSafeInteger(id) && id > 0 && project?.id === id;
+        if (this.profileId() !== id) this.projectTeamUIService.applyCloseInviteModal();
         this.profileId.set(id);
+        this.invitationProject.set(matches ? project : null);
         this.projectAdditionalService.setContext(
           matches ? id : null,
           query["programLinkId"],

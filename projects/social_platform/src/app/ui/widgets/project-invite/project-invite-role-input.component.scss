@@ -1,0 +1,91 @@
+/** @format */
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.invite-role {
+  position: relative;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--black);
+    background: var(--white);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, white);
+    border-radius: var(--rounded-lg);
+  }
+
+  input::placeholder {
+    color: var(--grey-for-text);
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  p {
+    margin: 6px 0 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--grey-for-text);
+  }
+
+  p.invalid {
+    color: var(--error, #b42318);
+  }
+
+  &__options {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% - 18px);
+    left: 0;
+    z-index: 2;
+    max-height: 176px;
+    padding: 4px;
+    overflow: auto;
+    background: var(--white);
+    border: 1px solid var(--accent);
+    border-radius: var(--rounded-lg);
+    box-shadow: 0 6px 24px #0002;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--black);
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: var(--rounded-lg);
+  }
+
+  button.active,
+  button:hover {
+    background: color-mix(in srgb, var(--accent) 10%, white);
+  }
+
+  @media (width <= 600px) {
+    input {
+      font-size: 16px;
+    }
+  }
+}
