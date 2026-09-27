@@ -6,7 +6,10 @@ import { provideNoopAnimations } from "@angular/platform-browser/animations";
 import { provideRouter, Router } from "@angular/router";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { OverlayContainer } from "@angular/cdk/overlay";
-import { BehaviorSubject, firstValueFrom } from "rxjs";
+import { BehaviorSubject, firstValueFrom, of } from "rxjs";
+import { MemberStatisticsFacade } from "@api/member/facades/member-statistics.facade";
+import { GetMemberStatisticsUseCase } from "@api/member/use-cases/get-member-statistics.use-case";
+import { ok } from "@domain/shared/result.type";
 import { MembersInfoService } from "@api/member/facades/members-info.service";
 import { MembersUIInfoService } from "@api/member/facades/ui/members-ui-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
@@ -20,12 +23,16 @@ import { MembersFiltersComponent } from "./members-filters/members-filters.compo
 describe("Мобильное представление участников", () => {
   const layout = new BehaviorSubject({ matches: true, breakpoints: {} });
   const redirect = vi.fn();
+  const statistics = { total: 1248, inProjects: 684, inPrograms: 214, newLast30Days: 63 };
+  const loadStatistics = vi.fn();
   beforeEach(async () => {
     layout.next({ matches: true, breakpoints: {} });
     redirect.mockReset();
+    loadStatistics.mockReset().mockReturnValue(of(ok(statistics)));
     await TestBed.configureTestingModule({
       imports: [MembersComponent],
       providers: [
+        { provide: GetMemberStatisticsUseCase, useValue: { execute: loadStatistics } },
         provideRouter([]),
         provideNoopAnimations(),
         { provide: BreakpointObserver, useValue: { observe: () => layout, isMatched: () => true } },
@@ -43,6 +50,7 @@ describe("Мобильное представление участников", (
       .overrideComponent(MembersComponent, {
         set: {
           providers: [
+            MemberStatisticsFacade,
             MembersUIInfoService,
             {
               provide: MembersInfoService,
@@ -88,6 +96,29 @@ describe("Мобильное представление участников", (
     await f.whenStable();
     return primitive;
   }
+
+  it("держит статистику перед мобильным списком, под desktop-фильтрами и не перезагружает её при поиске", async () => {
+    const f = await page();
+    const ui = f.debugElement.injector.get(MembersUIInfoService);
+    const card = f.nativeElement.querySelector("app-member-statistics-card") as HTMLElement;
+    const list = f.nativeElement.querySelector(".page__list") as HTMLElement;
+    expect(card.compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(card.textContent).toContain("1 248");
+    expect(f.nativeElement.querySelector("app-soon-card")).toBeNull();
+    ui.searchForm.patchValue({ search: "Иван" });
+    ui.filterForm.patchValue({ keySkill: "Java", speciality: "Разработчик" });
+    layout.next({ matches: false, breakpoints: {} });
+    await f.whenStable();
+    const sidebar = f.nativeElement.querySelector(".page__left") as HTMLElement;
+    const filters = sidebar.querySelector("app-members-filters")!;
+    const desktopCard = sidebar.querySelector("app-member-statistics-card")!;
+    expect(
+      filters.compareDocumentPosition(desktopCard) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(desktopCard.textContent).toContain("1 248");
+    expect(loadStatistics).toHaveBeenCalledExactlyOnceWith();
+    await finish(f);
+  });
 
   it("использует прежний search control и переход в профиль, не держит фильтры рядом со списком", async () => {
     const f = await page();

@@ -1,0 +1,972 @@
+{
+  "measurements": [
+    {
+      "phase": "before",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 408.828125,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 365.828125,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 546,
+        "width": 684,
+        "x": 365.828125,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 162.65625,
+        "x": 1069.828125,
+        "y": 117
+      },
+      "sidebar": {
+        "height": 297.171875,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 142.59375
+      },
+      "viewport": 1440
+    },
+    {
+      "phase": "before",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 328.828125,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 285.828125,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 989.828125,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 546,
+        "width": 684,
+        "x": 285.828125,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 162.65625,
+        "x": 989.828125,
+        "y": 117
+      },
+      "sidebar": {
+        "height": 297.171875,
+        "width": 157,
+        "x": 989.828125,
+        "y": 142.59375
+      },
+      "viewport": 1280
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 408.828125,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 365.828125,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 546,
+        "width": 684,
+        "x": 365.828125,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 162.65625,
+        "x": 1069.828125,
+        "y": 117
+      },
+      "rowBorders": ["0px", "1px", "1px", "1px"],
+      "sidebar": {
+        "height": 436.1875,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 142.59375
+      },
+      "statistics": {
+        "height": 280,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 298.78125
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 33.546875
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 22.703125
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 22.703125
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 15.140625
+        }
+      ],
+      "viewport": 1440
+    },
+    {
+      "phase": "before",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 244.5,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 201.5,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 802,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 844,
+        "width": 580.5,
+        "x": 201.5,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 157,
+        "x": 802,
+        "y": 117
+      },
+      "rowBorders": [],
+      "sidebar": {
+        "height": 297.171875,
+        "width": 157,
+        "x": 802,
+        "y": 142.59375
+      },
+      "statistics": null,
+      "values": [],
+      "viewport": 1024
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 328.828125,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 285.828125,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 989.828125,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 546,
+        "width": 684,
+        "x": 285.828125,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 162.65625,
+        "x": 989.828125,
+        "y": 117
+      },
+      "rowBorders": ["0px", "1px", "1px", "1px"],
+      "sidebar": {
+        "height": 436.1875,
+        "width": 157,
+        "x": 989.828125,
+        "y": 142.59375
+      },
+      "statistics": {
+        "height": 280,
+        "width": 157,
+        "x": 989.828125,
+        "y": 298.78125
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 33.546875
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 22.703125
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 22.703125
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 15.140625
+        }
+      ],
+      "viewport": 1280
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 244.5,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 201.5,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 802,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 844,
+        "width": 580.5,
+        "x": 201.5,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 157,
+        "x": 802,
+        "y": 117
+      },
+      "rowBorders": ["0px", "1px", "1px", "1px"],
+      "sidebar": {
+        "height": 436.1875,
+        "width": 157,
+        "x": 802,
+        "y": 142.59375
+      },
+      "statistics": {
+        "height": 280,
+        "width": 157,
+        "x": 802,
+        "y": 298.78125
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 33.546875
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 22.703125
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 22.703125
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 15.140625
+        }
+      ],
+      "viewport": 1024
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 156.25,
+        "y": 434
+      },
+      "card": {
+        "height": 248,
+        "width": 350.5,
+        "x": 16,
+        "y": 468
+      },
+      "filters": null,
+      "grid": {
+        "height": 1142,
+        "width": 721,
+        "x": 16,
+        "y": 468
+      },
+      "overflow": 0,
+      "profile": null,
+      "rowBorders": ["0px", "0px", "0px", "0px"],
+      "sidebar": null,
+      "statistics": {
+        "height": 172,
+        "width": 721,
+        "x": 16,
+        "y": 241
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 315.5
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 315.5
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 315.5
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 315.5
+        }
+      ],
+      "viewport": 768
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 164.5,
+        "y": 434
+      },
+      "card": {
+        "height": 248,
+        "width": 367,
+        "x": 16,
+        "y": 468
+      },
+      "filters": null,
+      "grid": {
+        "height": 2036,
+        "width": 367,
+        "x": 16,
+        "y": 468
+      },
+      "overflow": 0,
+      "profile": null,
+      "rowBorders": ["0px", "0px", "0px", "0px"],
+      "sidebar": null,
+      "statistics": {
+        "height": 172,
+        "width": 367,
+        "x": 16,
+        "y": 241
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 138.5
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 138.5
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 138.5
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 138.5
+        }
+      ],
+      "viewport": 414
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 152.5,
+        "y": 434
+      },
+      "card": {
+        "height": 248,
+        "width": 343,
+        "x": 16,
+        "y": 468
+      },
+      "filters": null,
+      "grid": {
+        "height": 2036,
+        "width": 343,
+        "x": 16,
+        "y": 468
+      },
+      "overflow": 0,
+      "profile": null,
+      "rowBorders": ["0px", "0px", "0px", "0px"],
+      "sidebar": null,
+      "statistics": {
+        "height": 172,
+        "width": 343,
+        "x": 16,
+        "y": 241
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 126.5
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 126.5
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 126.5
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 126.5
+        }
+      ],
+      "viewport": 390
+    },
+    {
+      "phase": "after",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 145,
+        "y": 434
+      },
+      "card": {
+        "height": 248,
+        "width": 328,
+        "x": 16,
+        "y": 468
+      },
+      "filters": null,
+      "grid": {
+        "height": 2036,
+        "width": 328,
+        "x": 16,
+        "y": 468
+      },
+      "overflow": 0,
+      "profile": null,
+      "rowBorders": ["0px", "0px", "0px", "0px"],
+      "sidebar": null,
+      "statistics": {
+        "height": 172,
+        "width": 328,
+        "x": 16,
+        "y": 241
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248",
+          "width": 119
+        },
+        {
+          "inside": true,
+          "text": "684",
+          "width": 119
+        },
+        {
+          "inside": true,
+          "text": "214",
+          "width": 119
+        },
+        {
+          "inside": true,
+          "text": "63",
+          "width": 119
+        }
+      ],
+      "viewport": 375
+    },
+    {
+      "phase": "large-999999",
+      "avatar": {
+        "height": 70,
+        "width": 70,
+        "x": 408.828125,
+        "y": 184
+      },
+      "card": {
+        "height": 248,
+        "width": 156,
+        "x": 365.828125,
+        "y": 218
+      },
+      "filters": {
+        "height": 146.1875,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 152.59375
+      },
+      "grid": {
+        "height": 546,
+        "width": 684,
+        "x": 365.828125,
+        "y": 218
+      },
+      "overflow": 0,
+      "profile": {
+        "height": 25.59375,
+        "width": 162.65625,
+        "x": 1069.828125,
+        "y": 117
+      },
+      "rowBorders": ["0px", "1px", "1px", "1px"],
+      "sidebar": {
+        "height": 436.1875,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 142.59375
+      },
+      "statistics": {
+        "height": 280,
+        "width": 157,
+        "x": 1069.828125,
+        "y": 298.78125
+      },
+      "values": [
+        {
+          "inside": true,
+          "text": "999В 999",
+          "width": 48.6875
+        },
+        {
+          "inside": true,
+          "text": "999В 999",
+          "width": 48.6875
+        },
+        {
+          "inside": true,
+          "text": "999В 999",
+          "width": 48.6875
+        },
+        {
+          "inside": true,
+          "text": "999В 999",
+          "width": 48.6875
+        }
+      ],
+      "viewport": 1440
+    }
+  ],
+  "cases": [
+    {
+      "scenario": "value-0",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "0"
+        },
+        {
+          "inside": true,
+          "text": "0"
+        },
+        {
+          "inside": true,
+          "text": "0"
+        },
+        {
+          "inside": true,
+          "text": "0"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "value-9",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "9"
+        },
+        {
+          "inside": true,
+          "text": "9"
+        },
+        {
+          "inside": true,
+          "text": "9"
+        },
+        {
+          "inside": true,
+          "text": "9"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "value-63",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "63"
+        },
+        {
+          "inside": true,
+          "text": "63"
+        },
+        {
+          "inside": true,
+          "text": "63"
+        },
+        {
+          "inside": true,
+          "text": "63"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "value-999",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "999"
+        },
+        {
+          "inside": true,
+          "text": "999"
+        },
+        {
+          "inside": true,
+          "text": "999"
+        },
+        {
+          "inside": true,
+          "text": "999"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "value-1248",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "1В 248"
+        },
+        {
+          "inside": true,
+          "text": "1В 248"
+        },
+        {
+          "inside": true,
+          "text": "1В 248"
+        },
+        {
+          "inside": true,
+          "text": "1В 248"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "value-12345",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "12В 345"
+        },
+        {
+          "inside": true,
+          "text": "12В 345"
+        },
+        {
+          "inside": true,
+          "text": "12В 345"
+        },
+        {
+          "inside": true,
+          "text": "12В 345"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "value-12500",
+      "height": 280,
+      "overflow": 0,
+      "status": "РЎС‚Р°С‚РёСЃС‚РёРєР° СѓС‡Р°СЃС‚РЅРёРєРѕРІ Р·Р°РіСЂСѓР¶РµРЅР°",
+      "values": [
+        {
+          "inside": true,
+          "text": "12В 500"
+        },
+        {
+          "inside": true,
+          "text": "12В 500"
+        },
+        {
+          "inside": true,
+          "text": "12В 500"
+        },
+        {
+          "inside": true,
+          "text": "12В 500"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "loading",
+      "height": 280,
+      "overflow": 0,
+      "status": "Р—Р°РіСЂСѓР·РєР° СЃС‚Р°С‚РёСЃС‚РёРєРё СѓС‡Р°СЃС‚РЅРёРєРѕРІ",
+      "values": [
+        {
+          "inside": true,
+          "text": "вЂ”"
+        },
+        {
+          "inside": true,
+          "text": "вЂ”"
+        },
+        {
+          "inside": true,
+          "text": "вЂ”"
+        },
+        {
+          "inside": true,
+          "text": "вЂ”"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    },
+    {
+      "scenario": "error",
+      "height": 280,
+      "overflow": 0,
+      "status": "РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ СЃС‚Р°С‚РёСЃС‚РёРєСѓ СѓС‡Р°СЃС‚РЅРёРєРѕРІ",
+      "values": [
+        {
+          "inside": true,
+          "text": "вЂ”"
+        },
+        {
+          "inside": true,
+          "text": "вЂ”"
+        },
+        {
+          "inside": true,
+          "text": "вЂ”"
+        },
+        {
+          "inside": true,
+          "text": "вЂ”"
+        }
+      ],
+      "viewport": 1440,
+      "width": 157
+    }
+  ],
+  "mobileCases": [
+    {
+      "scenario": "value-999999",
+      "beforeList": true,
+      "height": 172,
+      "overflow": 0,
+      "values": [
+        {
+          "inside": true,
+          "text": "999 999"
+        },
+        {
+          "inside": true,
+          "text": "999 999"
+        },
+        {
+          "inside": true,
+          "text": "999 999"
+        },
+        {
+          "inside": true,
+          "text": "999 999"
+        }
+      ],
+      "viewport": 375,
+      "width": 328
+    },
+    {
+      "scenario": "value-0",
+      "beforeList": true,
+      "height": 172,
+      "overflow": 0,
+      "values": [
+        {
+          "inside": true,
+          "text": "0"
+        },
+        {
+          "inside": true,
+          "text": "0"
+        },
+        {
+          "inside": true,
+          "text": "0"
+        },
+        {
+          "inside": true,
+          "text": "0"
+        }
+      ],
+      "viewport": 375,
+      "width": 328
+    },
+    {
+      "scenario": "loading",
+      "beforeList": true,
+      "height": 172,
+      "overflow": 0,
+      "values": [
+        {
+          "inside": true,
+          "text": "—"
+        },
+        {
+          "inside": true,
+          "text": "—"
+        },
+        {
+          "inside": true,
+          "text": "—"
+        },
+        {
+          "inside": true,
+          "text": "—"
+        }
+      ],
+      "viewport": 375,
+      "width": 328
+    },
+    {
+      "scenario": "error",
+      "beforeList": true,
+      "height": 172,
+      "overflow": 0,
+      "values": [
+        {
+          "inside": true,
+          "text": "—"
+        },
+        {
+          "inside": true,
+          "text": "—"
+        },
+        {
+          "inside": true,
+          "text": "—"
+        },
+        {
+          "inside": true,
+          "text": "—"
+        }
+      ],
+      "viewport": 375,
+      "width": 328
+    }
+  ]
+}
