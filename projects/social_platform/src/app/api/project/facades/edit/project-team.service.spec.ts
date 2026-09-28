@@ -16,7 +16,7 @@ describe("Отправка приглашения из команды", () => {
   let ui: ProjectTeamUIService;
   let request: Subject<Invite>;
   const repo = { sendForUser: vi.fn() };
-  const snackbar = { success: vi.fn() };
+  const snackbar = { success: vi.fn(), error: vi.fn() };
   const update = { execute: vi.fn() };
   const revoke = { execute: vi.fn() };
   beforeEach(() => {
@@ -132,5 +132,21 @@ describe("Отправка приглашения из команды", () => {
     service.removeInvitation(10);
     expect(revoke.execute).toHaveBeenCalledWith(10);
     expect(ui.invites()).toEqual([]);
+  });
+  it("ошибки edit/revoke сохраняют карточку и явно сообщаются пользователю", () => {
+    const invite = { id: 10, role: "Аналитик", specialization: "Legacy" } as Invite;
+    ui.invites.set([invite]);
+    update.execute.mockReturnValue(of({ ok: false, error: { kind: "update_invite_error" } }));
+    revoke.execute.mockReturnValue(of({ ok: false, error: { kind: "revoke_invite_error" } }));
+    service.editInvitation({ inviteId: 10, role: "Дизайнер", specialization: "Legacy" });
+    expect(ui.invites()).toEqual([invite]);
+    expect(snackbar.error).toHaveBeenCalledWith(
+      "Не удалось изменить роль в приглашении. Попробуйте ещё раз.",
+    );
+    service.removeInvitation(10);
+    expect(ui.invites()).toEqual([invite]);
+    expect(snackbar.error).toHaveBeenCalledWith(
+      "Не удалось отозвать приглашение. Попробуйте ещё раз.",
+    );
   });
 });

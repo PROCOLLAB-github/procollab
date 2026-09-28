@@ -2,10 +2,10 @@
 
 // Стили portal ограничены оболочкой приглашения и не меняют остальные app-modal.
 .modal .modal__body.project-invite-body {
-  left: 50vw;
+  left: 50%;
   display: block;
-  width: min(552px, calc(100vw - 24px));
-  max-width: calc(100vw - 24px);
+  width: min(552px, calc(100% - 24px));
+  max-width: calc(100% - 24px);
   max-height: min(720px, calc(100dvh - 48px));
   padding: 0;
   overflow: visible;
