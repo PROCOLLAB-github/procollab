@@ -20,12 +20,17 @@ export default defineConfig({
     ],
   },
   test: {
-    // Один экземпляр Angular в TestBed и зависимостях: иначе Windows runner теряет platform.
-    server: {
-      deps: {
-        inline: [/@angular\//, /@analogjs\//, /ngx-/, /ng-click-outside/, /@sentry\/angular/],
-      },
-    },
+    // Windows TestBed без inline падает с NG0401 ещё в setup (Node 20/24).
+    // В Linux этот workaround вызывает OOM в vmThreads и не должен применяться.
+    ...(process.platform === "win32"
+      ? {
+          server: {
+            deps: {
+              inline: [/@angular\//, /@analogjs\//, /ngx-/, /ng-click-outside/, /@sentry\/angular/],
+            },
+          },
+        }
+      : {}),
     globals: true,
     environment: "jsdom",
     testTimeout: 10000,
