@@ -1,27 +1,40 @@
 /** @format */
-
 import { HttpErrorResponse } from "@angular/common/http";
 import { provideZonelessChangeDetection, signal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { provideNgxMask } from "ngx-mask";
-import { Subject } from "rxjs";
+import { Subject, of } from "rxjs";
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { UpdateInviteUseCase } from "@api/invite/use-cases/update-invite.use-case";
 import { RevokeInviteUseCase } from "@api/invite/use-cases/revoke-invite.use-case";
+import { GetMembersUseCase } from "@api/member/use-cases/get-members.use-case";
 import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.port";
 import { Invite } from "@domain/invite/invite.model";
+import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
 import { ProjectTeamStepComponent } from "./project-team-step.component";
 
-describe("ProjectTeamStepComponent invite form", () => {
+describe("Окно приглашения из редактора команды", () => {
   let fixture: ComponentFixture<ProjectTeamStepComponent>;
   let ui: ProjectTeamUIService;
   let request: Subject<Invite>;
   const repo = { sendForUser: vi.fn() };
-
+  const users = [1, 2, 3, 13].map(id => ({
+    id,
+    firstName: "Иван",
+    lastName: "Петров " + id,
+    personal: { speciality: "Аналитик", birthday: "2000-01-01" },
+    relations: {
+      skills: [
+        { id: 1, name: "SQL" },
+        { id: 2, name: "Аналитика" },
+        { id: 3, name: "Python" },
+      ],
+    },
+  }));
   beforeEach(async () => {
     request = new Subject<Invite>();
     repo.sendForUser.mockReset().mockReturnValue(request);
@@ -33,10 +46,21 @@ describe("ProjectTeamStepComponent invite form", () => {
         provideNgxMask(),
         ProjectTeamService,
         ProjectTeamUIService,
+        { provide: RemoveProjectCollaboratorUseCase, useValue: {} },
         { provide: InviteRepositoryPort, useValue: repo },
-        { provide: ProjectsEditInfoService, useValue: { profileId: signal(5) } },
+        {
+          provide: ProjectsEditInfoService,
+          useValue: {
+            profileId: signal(5),
+            invitationProject: signal({ id: 5, leader: 1, partnerProgram: { programId: 27 } }),
+          },
+        },
         { provide: UpdateInviteUseCase, useValue: {} },
         { provide: RevokeInviteUseCase, useValue: {} },
+        {
+          provide: GetMembersUseCase,
+          useValue: { execute: () => of({ ok: true, value: { results: users } }) },
+        },
         {
           provide: TooltipInfoService,
           useValue: {
@@ -49,99 +73,93 @@ describe("ProjectTeamStepComponent invite form", () => {
     }).compileComponents();
     ui = TestBed.inject(ProjectTeamUIService);
     fixture = TestBed.createComponent(ProjectTeamStepComponent);
+    document.body.appendChild(fixture.nativeElement);
     await fixture.whenStable();
   });
-
-  function button(): HTMLButtonElement {
-    return fixture.nativeElement.querySelector(".invite__submit button");
-  }
-
-  function link(): HTMLInputElement | null {
-    return fixture.nativeElement.querySelector('app-input[formControlName="link"] input');
-  }
-
-  async function fillForm(): Promise<void> {
-    button().click();
+  afterEach(() => fixture?.nativeElement.remove());
+  const dialog = () => document.querySelector(".project-invite")!;
+  async function open() {
+    fixture.nativeElement.querySelector(".invite__submit button").click();
     await fixture.whenStable();
-    const linkInput = link()!;
-    linkInput.value = "https://app.procollab.ru/office/profile/13";
-    linkInput.dispatchEvent(new Event("input", { bubbles: true }));
-    const role: HTMLInputElement = fixture.nativeElement.querySelector(
-      'app-input[formControlName="role"] input',
-    );
-    role.value = "Дизайнер";
-    role.dispatchEvent(new Event("input", { bubbles: true }));
+    await new Promise(resolve => setTimeout(resolve, 20));
     await fixture.whenStable();
   }
-
-  it("keeps inputs open through HTTP error, renders alert and succeeds on retry without manual detectChanges", async () => {
-    await fillForm();
-    button().click();
+  async function search() {
+    const input = dialog().querySelector('input[type="search"]') as HTMLInputElement;
+    input.value = "Иван";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await new Promise(resolve => setTimeout(resolve, 330));
     await fixture.whenStable();
-    expect(repo.sendForUser).toHaveBeenCalledTimes(1);
-    expect(link()?.value).toBe("https://app.procollab.ru/office/profile/13");
-    expect(button().disabled).toBe(true);
-    expect(button().querySelector("app-loader")).not.toBeNull();
-    button().click();
-    expect(repo.sendForUser).toHaveBeenCalledTimes(1);
-
-    request.error(
-      new HttpErrorResponse({
-        status: 400,
-        error: { user: ["Пользователь уже состоит в проекте."] },
-      }),
+  }
+  it("CTA открывает окно с поиском, URL отсутствует, отправка неактивна до выбора и роли", async () => {
+    await open();
+    expect(ui.isInviteModalOpen()).toBe(true);
+    expect(dialog().textContent).toContain("Введите имя или фамилию участника");
+    expect(document.querySelector('[formControlName="link"]')).toBeNull();
+    expect(dialog().textContent).not.toContain("ссылка на пользователя");
+    expect((dialog().querySelector(".invite-button--primary") as HTMLButtonElement).disabled).toBe(
+      true,
     );
+    expect(document.activeElement).toBe(dialog().querySelector('input[type="search"]'));
+  });
+  it("показывает public data, причины disabled, выбирает строку и очищает выбор", async () => {
+    await open();
+    ui.collaborators.set([
+      { userId: 2, firstName: "Иван", lastName: "Петров", role: "Аналитик", skills: [] },
+    ] as any);
+    ui.invites.set([{ id: 30, user: users[2], role: "Аналитик", isAccepted: null }] as any);
+    // Карточки вне окна не входят в предмет этой проверки.
+    await search();
+    const rows = Array.from(dialog().querySelectorAll<HTMLButtonElement>('[role="radio"]'));
+    expect(rows.map(row => row.disabled)).toEqual([true, true, true, false]);
+    expect(rows[0].textContent).toContain("Руководитель проекта");
+    expect(rows[1].textContent).toContain("Уже в команде");
+    expect(rows[2].textContent).toContain("Приглашение уже отправлено");
+    expect(rows[3].textContent).toContain("SQL");
+    expect(rows[3].textContent).toContain("+1");
+    rows[3].click();
     await fixture.whenStable();
-    expect(button().disabled).toBe(false);
-    expect(button().querySelector("app-loader")).toBeNull();
-    expect(link()).not.toBeNull();
-    expect(ui.role?.value).toBe("Дизайнер");
-    expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent.trim()).toBe(
-      "Пользователь уже состоит в команде проекта.",
-    );
-    expect(fixture.nativeElement.textContent).not.toContain("либо");
-
-    const input = link()!;
-    input.value = "https://app.procollab.ru/office/profile/14";
+    expect(ui.inviteForm.controls.recipientId.value).toBe(13);
+    expect(dialog().textContent).toContain("Выбранный участник");
+    (
+      dialog().querySelector('[aria-label="Очистить выбранного участника"]') as HTMLButtonElement
+    ).click();
+    await fixture.whenStable();
+    expect(ui.selectedRecipient()).toBeNull();
+    expect(ui.inviteForm.controls.recipientId.value).toBeNull();
+    expect(dialog().querySelectorAll('[role="radio"]').length).toBe(4);
+  });
+  it("ошибка inline сохраняет выбор/роль, повтор защищён, успех закрывает и возвращает фокус", async () => {
+    await open();
+    await search();
+    (dialog().querySelectorAll('[role="radio"]')[3] as HTMLButtonElement).click();
+    const input = dialog().querySelector('[role="combobox"]') as HTMLInputElement;
+    input.value = "Дизайнер";
     input.dispatchEvent(new Event("input", { bubbles: true }));
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector('[role="alert"]')).toBeNull();
+    const send = dialog().querySelector(".invite-button--primary") as HTMLButtonElement;
+    send.click();
+    send.click();
+    await fixture.whenStable();
+    expect(repo.sendForUser).toHaveBeenCalledExactlyOnceWith(13, 5, "Дизайнер", undefined);
+    expect(send.disabled).toBe(true);
+    request.error(new HttpErrorResponse({ status: 500, error: "private details" }));
+    await fixture.whenStable();
+    expect(dialog().querySelector('[role="alert"]')?.textContent).toContain(
+      "Попробуйте ещё раз позже",
+    );
+    expect(ui.selectedRecipient()?.id).toBe(13);
+    expect(ui.role?.value).toBe("Дизайнер");
     request = new Subject<Invite>();
     repo.sendForUser.mockReturnValue(request);
-    button().click();
+    send.click();
+    request.next({ id: 90, isAccepted: false } as Invite);
     await fixture.whenStable();
-    expect(repo.sendForUser).toHaveBeenLastCalledWith(14, 5, "Дизайнер", "");
-    const invite = { id: 10, isAccepted: false } as Invite;
-    request.next(invite);
-    request.complete();
-    await fixture.whenStable();
-    expect(ui.invites()).toEqual([invite]);
-    expect(link()).toBeNull();
-    expect(button().textContent).toContain("создать приглашение");
-    expect(ui.inviteForm.value).toEqual({ link: null, role: null, specialization: null });
-  });
-
-  it("invalid frontend form stays open and never calls the API", async () => {
-    button().click();
-    await fixture.whenStable();
-    button().click();
-    await fixture.whenStable();
-    expect(link()).not.toBeNull();
-    expect(ui.inviteForm.invalid).toBe(true);
-    expect(ui.link?.hasError("required")).toBe(true);
-    expect(repo.sendForUser).not.toHaveBeenCalled();
-  });
-
-  it("never renders raw 500 body", async () => {
-    await fillForm();
-    button().click();
-    request.error(new HttpErrorResponse({ status: 500, error: "error" }));
-    await fixture.whenStable();
-    const alert = fixture.nativeElement.querySelector('[role="alert"]');
-    expect(alert?.textContent.trim()).toBe(
-      "Не удалось отправить приглашение. Попробуйте ещё раз позже.",
+    expect(document.querySelector(".project-invite")).toBeNull();
+    expect(ui.invites()[0].id).toBe(90);
+    expect(ui.inviteForm.getRawValue()).toEqual({ recipientId: null, role: "" });
+    expect(document.activeElement).toBe(
+      fixture.nativeElement.querySelector(".invite__submit button"),
     );
-    expect(alert?.textContent).not.toContain("error");
-    expect(link()).not.toBeNull();
   });
 });

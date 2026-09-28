@@ -1,0 +1,56 @@
+{
+  "base": "01d59ad59578d26777625b0a32658acbf52ec6fc",
+  "browser": "154.0.8037.57",
+  "assertions": 9,
+  "errors": [],
+  "findings": [
+    {
+      "width": 1440,
+      "flow": "profile",
+      "key": "Enter",
+      "selectedProjectId": 1
+    },
+    {
+      "width": 1440,
+      "flow": "profile",
+      "key": "Space",
+      "selectedProjectId": 12
+    },
+    {
+      "width": 1440,
+      "flow": "team",
+      "key": "Enter",
+      "selectedRecipientId": 13
+    },
+    {
+      "width": 1440,
+      "flow": "team",
+      "key": "Space",
+      "selectedRecipientId": 14
+    },
+    {
+      "width": 375,
+      "flow": "profile",
+      "key": "Enter",
+      "selectedProjectId": 1
+    },
+    {
+      "width": 375,
+      "flow": "profile",
+      "key": "Space",
+      "selectedProjectId": 12
+    },
+    {
+      "width": 375,
+      "flow": "team",
+      "key": "Enter",
+      "selectedRecipientId": 13
+    },
+    {
+      "width": 375,
+      "flow": "team",
+      "key": "Space",
+      "selectedRecipientId": 14
+    }
+  ]
+}

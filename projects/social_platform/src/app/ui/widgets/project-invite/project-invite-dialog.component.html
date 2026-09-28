@@ -1,0 +1,44 @@
+<!-- @format -->
+<app-modal [open]="open()" bodyClass="project-invite-body" (openChange)="close()">
+  <section
+    #dialog
+    class="project-invite"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="title()"
+    [cdkTrapFocus]="attached()"
+  >
+    <header class="project-invite__header">
+      <span class="project-invite__symbol" aria-hidden="true">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+        >
+          <circle cx="9" cy="7" r="4" />
+          <path d="M2 21v-3a7 7 0 0 1 14 0v3H2m17-14v8m-4-4h8" />
+        </svg>
+      </span>
+      <div>
+        <h2>{{ title() }}</h2>
+        <p>{{ description() }}</p>
+      </div>
+      <button
+        type="button"
+        class="project-invite__close"
+        aria-label="Закрыть приглашение"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+    <div class="project-invite__search"><ng-content select="[inviteSearch]" /></div>
+    <div class="project-invite__list"><ng-content select="[inviteList]" /></div>
+    <div class="project-invite__role"><ng-content select="[inviteRole]" /></div>
+    <div class="project-invite__error"><ng-content select="[inviteError]" /></div>
+    <footer class="project-invite__footer"><ng-content select="[inviteFooter]" /></footer>
+  </section>
+</app-modal>

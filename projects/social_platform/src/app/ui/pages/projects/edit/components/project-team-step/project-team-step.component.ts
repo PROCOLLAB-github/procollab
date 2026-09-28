@@ -1,13 +1,9 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, ButtonComponent } from "@ui/primitives";
-import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy } from "@angular/core";
+import { ButtonComponent } from "@ui/primitives";
 import { InviteCardComponent } from "./invite-card/invite-card.component";
-import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "./collaborator-card/collaborator-card.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
@@ -16,6 +12,7 @@ import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ProjectMemberInviteModalComponent } from "@ui/widgets/project-invite/project-member-invite-modal.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 /** Шаг редактирования проекта: команда. */
@@ -25,34 +22,24 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
   styleUrl: "./project-team-step.component.scss",
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    InputComponent,
     ButtonComponent,
     IconComponent,
-    ControlErrorPipe,
     InviteCardComponent,
     CollaboratorCardComponent,
     TooltipComponent,
     ModalComponent,
+    ProjectMemberInviteModalComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectTeamStepComponent implements OnInit {
+export class ProjectTeamStepComponent implements OnInit, OnDestroy {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
   private readonly projectTeamService = inject(ProjectTeamService);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   protected readonly tooltipInfoService = inject(TooltipInfoService);
 
-  // Константы для селектов
-  protected readonly rolesMembersList = rolesMembersList;
-  protected readonly showInputFields = this.projectTeamUIService.showInviteFields;
-
-  // Геттеры для формы
-  protected readonly inviteForm = this.projectTeamUIService.inviteForm;
-
-  protected readonly role = this.projectTeamUIService.role;
-  protected readonly link = this.projectTeamUIService.link;
-  protected readonly specialization = this.projectTeamUIService.specialization;
+  protected inviteTrigger: HTMLElement | null = null;
+  protected readonly invitationProject = this.projectsEditInfoService.invitationProject;
 
   // Геттеры для данных
   protected readonly invites = this.projectTeamUIService.invites;
@@ -60,9 +47,7 @@ export class ProjectTeamStepComponent implements OnInit {
   protected readonly invitesFill = this.projectTeamUIService.invitesFill;
 
   protected readonly isInviteModalOpen = this.projectTeamUIService.isInviteModalOpen;
-  protected readonly inviteSubmitError = this.projectTeamUIService.inviteSubmitError;
   protected readonly isLoading = isLoading;
-  protected readonly inviteSubmitInitiated = this.projectTeamUIService.inviteSubmitInitiated;
   protected readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
 
   protected readonly projectId = this.projectsEditInfoService.profileId;
@@ -79,8 +64,6 @@ export class ProjectTeamStepComponent implements OnInit {
   /** Состояние видимости подсказки */
   protected readonly isTooltipVisible = this.tooltipInfoService.isVisible;
 
-  protected readonly errorMessage = ErrorMessage;
-
   ngOnInit(): void {
     // Настраиваем динамическую валидацию
     this.projectTeamService.setupDynamicValidation();
@@ -91,14 +74,10 @@ export class ProjectTeamStepComponent implements OnInit {
     this.tooltipInfoService.toggleTooltip(key);
   }
 
-  /**
-   * Открытие блоков для создания приглашения
-   */
-  createInvitationBlock(): void {
-    this.showInputFields.set(true);
-  }
-
-  openInviteModal(): void {
+  openInviteModal(event: Event): void {
+    this.inviteTrigger =
+      (event.currentTarget as HTMLElement).querySelector("button") ??
+      (event.currentTarget as HTMLElement);
     this.projectTeamUIService.applyOpenInviteModal();
   }
 
@@ -106,8 +85,8 @@ export class ProjectTeamStepComponent implements OnInit {
     this.projectTeamUIService.applyCloseInviteModal();
   }
 
-  submitInvite(): void {
-    this.projectTeamService.submitInvite(this.projectId());
+  ngOnDestroy(): void {
+    this.closeInviteModal();
   }
 
   editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
@@ -116,12 +95,6 @@ export class ProjectTeamStepComponent implements OnInit {
 
   removeInvitation(invitationId: number): void {
     this.projectTeamService.removeInvitation(invitationId);
-  }
-
-  onModalOpenChange(open: boolean): void {
-    if (!open) {
-      this.closeInviteModal();
-    }
   }
 
   onCollaboratorRemove(collaboratorId: number): void {

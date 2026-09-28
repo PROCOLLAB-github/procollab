@@ -6,10 +6,11 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
 import { saveFile } from "@utils/export-file";
 import { SendForUserUseCase } from "@api/invite/use-cases/send-for-user.use-case";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
-import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { createProjectInviteForm } from "@api/invite/project-invite-form";
+import { InviteSendError } from "@domain/invite/invite-send-error";
+import { normalizeInviteText } from "@domain/invite/project-role-suggestions";
 import { User } from "@domain/auth/user.model";
-import { Project } from "@domain/project/project.model";
-import { filter, finalize, take } from "rxjs";
+import { filter, finalize, Subject, take, takeUntil } from "rxjs";
 import { DownloadCvUseCase } from "@api/auth/use-cases/download-cv.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
@@ -25,14 +26,16 @@ export class DetailProfileInfoService {
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly profileInfoService = inject(ProfileInfoService);
-  private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly authRepository = inject(AuthRepositoryPort);
 
   private readonly downloadCvUseCase = inject(DownloadCvUseCase);
   private readonly sendForUserUseCase = inject(SendForUserUseCase);
 
-  readonly inviteForm = this.projectTeamUIService.inviteForm;
+  readonly inviteForm = createProjectInviteForm();
+  readonly inviteLoading = signal(false);
+  readonly inviteError = signal<InviteSendError | null>(null);
+  private readonly inviteClosed = new Subject<void>();
 
   readonly profile = this.profileInfoService.profile;
   readonly profileProjects = signal<User["relations"]["projects"]>([]);
@@ -41,15 +44,10 @@ export class DetailProfileInfoService {
   readonly profileFillAcknowledgementPending = signal<boolean>(false);
   readonly showApproveSkillModal = signal<boolean>(false);
   readonly showSendInviteModal = signal<boolean>(false);
-  readonly showNoProjectsModal = signal<boolean>(false);
-  readonly showActiveInviteModal = signal<boolean>(false);
-  readonly showNoInProgramModal = signal<boolean>(false);
-  readonly showSuccessInviteModal = signal<boolean>(false);
   readonly isDelayModalOpen = signal<boolean>(false);
 
   // Переменные для работы с модалкой подачи проекта
   readonly selectedProjectId = signal<number | null>(null);
-  readonly memberProjects = signal<Project[]>([]);
 
   initializationLeaderProjects(): void {
     const viewedId = Number(this.route.snapshot.params["id"]);
@@ -76,6 +74,7 @@ export class DetailProfileInfoService {
   initializationProfile(): void {
     this.route.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: r => {
+        this.closeInvite();
         this.profileDetailUIInfoService.applyInitProfile(r, this.profile()?.id);
       },
     });
@@ -121,58 +120,51 @@ export class DetailProfileInfoService {
     );
   }
 
-  onProjectRadioChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.selectedProjectId.set(+target.value);
-
-    if (this.selectedProjectId) {
-      this.memberProjects().find(project => project.id === this.selectedProjectId());
-    }
+  inviteUser(): void {
+    this.closeInvite();
+    this.inviteForm.controls.recipientId.setValue(Number(this.route.snapshot.params["id"]));
+    this.showSendInviteModal.set(true);
   }
 
-  inviteUser(): void {
-    if (!this.profileProjects().length) {
-      this.showNoProjectsModal.set(true);
-    } else {
-      this.showSendInviteModal.set(true);
-    }
+  closeInvite(): void {
+    this.inviteClosed.next();
+    this.showSendInviteModal.set(false);
+    this.inviteForm.reset();
+    this.selectedProjectId.set(null);
+    this.inviteError.set(null);
+    this.inviteLoading.set(false);
   }
 
   sendInvite(): void {
-    const roleControl = this.inviteForm.get("role");
-    const role = roleControl?.value;
-    const userId = this.route.snapshot.params["id"];
-
-    roleControl?.markAsTouched({ onlySelf: true });
-
-    if (roleControl?.invalid || this.selectedProjectId() === null) {
+    if (this.inviteLoading()) return;
+    const role = this.inviteForm.controls.role;
+    role.setValue(normalizeInviteText(role.value));
+    this.inviteForm.markAllAsTouched();
+    const projectId = this.selectedProjectId();
+    if (
+      this.inviteForm.invalid ||
+      !projectId ||
+      !this.profileProjects().some(project => project.id === projectId)
+    )
       return;
-    }
 
+    this.inviteLoading.set(true);
+    this.inviteError.set(null);
     this.sendForUserUseCase
       .execute({
-        userId,
-        projectId: this.selectedProjectId()!,
-        role: role!,
+        userId: this.inviteForm.controls.recipientId.value!,
+        projectId,
+        role: role.value,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            if (result.error.kind === "not_program_participant") {
-              this.showNoInProgramModal.set(true);
-            } else if (result.error.kind === "already_invited") {
-              this.showActiveInviteModal.set(true);
-            }
-            return;
-          }
-
-          this.showSendInviteModal.set(false);
-          this.showSuccessInviteModal.set(true);
-
-          this.inviteForm.reset();
-          this.selectedProjectId.set(null);
-        },
+      .pipe(takeUntil(this.inviteClosed), takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        this.inviteLoading.set(false);
+        if (!result.ok) {
+          this.inviteError.set(result.error);
+          return;
+        }
+        this.closeInvite();
+        this.snackbarService.success("Приглашение отправлено");
       });
   }
 

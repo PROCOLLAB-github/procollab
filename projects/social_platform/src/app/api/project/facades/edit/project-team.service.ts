@@ -8,12 +8,16 @@ import { UpdateInviteUseCase } from "../../../invite/use-cases/update-invite.use
 import { RevokeInviteUseCase } from "../../../invite/use-cases/revoke-invite.use-case";
 import { isLoading, loading } from "@domain/shared/async-state";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntil } from "rxjs";
+import { normalizeInviteText } from "@domain/invite/project-role-suggestions";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 /** Сервис для управления приглашениями участников команды проекта. */
 @Injectable()
 export class ProjectTeamService {
   private readonly validationService = inject(ValidationService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
 
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
 
@@ -27,7 +31,11 @@ export class ProjectTeamService {
 
   public submitInvite(projectId: number): void {
     if (isLoading(this.inviteFormIsSubmitting())) return;
-    this.projectTeamUIService.applyClearLinkError();
+    if (!Number.isSafeInteger(projectId) || projectId <= 0) return;
+    this.projectTeamUIService.applyClearInviteError();
+    this.inviteForm.controls.role.setValue(
+      normalizeInviteText(this.inviteForm.controls.role.value),
+    );
     this.inviteSubmitInitiated.set(true);
     // Проверка валидности формы
     if (!this.validationService.getFormValidation(this.inviteForm)) {
@@ -36,19 +44,13 @@ export class ProjectTeamService {
 
     this.inviteFormIsSubmitting.set(loading());
 
-    // Извлечение profileId из URL ссылки
-    const linkUrl = new URL(this.inviteForm.get("link")?.value ?? "");
-    const pathSegments = linkUrl.pathname.split("/");
-    const profileId = Number(pathSegments[pathSegments.length - 1]);
-
     this.sendForUserUseCase
       .execute({
-        userId: profileId,
+        userId: this.inviteForm.controls.recipientId.value!,
         projectId,
-        role: this.inviteForm.get("role")?.value ?? "",
-        specialization: this.inviteForm.get("specialization")?.value ?? "",
+        role: this.inviteForm.controls.role.value,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.projectTeamUIService.inviteClosed), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
@@ -57,6 +59,7 @@ export class ProjectTeamService {
           }
 
           this.projectTeamUIService.applySubmitInvite(result.value);
+          this.snackbar.success("Приглашение отправлено");
         },
       });
   }
@@ -87,9 +90,9 @@ export class ProjectTeamService {
   }
 
   public setupDynamicValidation(): void {
-    // Clear only the backend error; required/pattern validators remain independent.
+    // Правки убирают серверную ошибку, но не меняют клиентские валидаторы.
     this.inviteForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.projectTeamUIService.applyClearLinkError();
+      this.projectTeamUIService.applyClearInviteError();
     });
   }
 }
