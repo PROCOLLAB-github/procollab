@@ -26,16 +26,20 @@
       gap: 6px;
       align-items: baseline;
     }
+
     dt {
       font-size: 12px;
       color: var(--dark-grey);
     }
+
     dd {
       margin: 0;
       font-weight: 600;
     }
+
     @include responsive.apply-desktop {
       display: flex;
+
       div + div {
         padding-left: 12px;
         border-left: 1px solid var(--medium-grey-for-outline);
@@ -48,11 +52,14 @@
     gap: 6px;
     margin-bottom: 16px;
     font-size: 12px;
+
     app-button {
       width: 100%;
     }
+
     @include responsive.apply-desktop {
       justify-items: start;
+
       app-button {
         width: 220px;
       }
@@ -70,9 +77,11 @@
 
   .analytics-drilldown__search-controls {
     max-width: 520px;
+
     input {
       flex-basis: 100%;
       border-radius: var(--rounded-xxl);
+
       @include responsive.apply-desktop {
         flex-basis: 220px;
       }
@@ -85,26 +94,32 @@
       margin-top: 4px;
       font-size: 12px;
     }
+
     @include responsive.apply-desktop {
       th,
       td {
         padding: 10px 8px;
       }
+
       th {
         font-size: 13px;
       }
+
       th:first-child,
       td:first-child {
         width: 32%;
       }
+
       th:nth-child(2),
       td:nth-child(2) {
         width: 28%;
       }
+
       th:nth-child(3),
       td:nth-child(3) {
         width: 20%;
       }
+
       th:last-child,
       td:last-child {
         width: 20%;
