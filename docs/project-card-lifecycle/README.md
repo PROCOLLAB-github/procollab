@@ -14,15 +14,16 @@
 В существующем `InfoCardComponent.myProjectPresentation`:
 
 - Lifecycle использует только `Project`: `partnerProgram?.isSubmitted === true`
-  → `draft === true` → `partnerProgram != null` → опубликованный проект.
-  При одновременных draft и submitted побеждает сдача.
+  → `partnerProgram != null` → `draft === true` → опубликованный проект.
+  Связь с программой имеет приоритет над draft; при сдаче побеждает submitted.
 - Факт сдачи — только `isSubmitted`. `canSubmit` не участвует: запрет отправки
   может означать закрытый срок и не доказывает, что проект сдан.
 - Роль: известный `loggedUserId` совпадает с `project.leader` → «Лидер»;
   иначе «Участник». Отсутствующие ID не считаются совпадением.
 - Текущий пользователь по-прежнему приходит из `ProfileInfoService.profile()?.id`
   в Dashboard и ProjectsList. Новых запросов, чтения JWT/localStorage нет.
-- `canEdit = isLeader && !isSubmitted` определяет только подпись доступа.
+- `canEdit = isLeader && (project.partnerProgram == null || project.partnerProgram.isSubmitted === false)`
+  определяет только подпись доступа.
   Она не вычисляется из lifecycle label и не предоставляет новых прав.
 
 | Lifecycle        | Лидер               | Участник        |
@@ -66,7 +67,7 @@ SCSS не менялся. «В программе» — `--accent-light/dark`, �
 Дополнительно в браузере проверено отсутствие профиля: lifecycle не меняется,
 все карточки показывают «Участник / только просмотр» и detail route.
 
-## Проверки
+## Проверки исходной доработки
 
 Node 20.20.2, npm 10.8.2.
 
@@ -94,3 +95,54 @@ Node 20.20.2, npm 10.8.2.
 
 **Backend untouched. React untouched. Permissions untouched. Card size unchanged.**
 Merge/deploy не выполнялись.
+
+## Исправление приоритета — 28.09.2026
+
+Исходная база: `origin/dev`, `69f84902`; перед PR ветка обновлена до `cda836a2`.
+Изменено только вычисление lifecycle:
+`submitted > program > draft > published`. Шаблон и SCSS не менялись:
+одна статусная плашка сверху, независимая роль и подпись доступа снизу.
+`canEdit`, guards, API приглашений и поиск с `partner_program` не менялись.
+`partnerProgramsTags` не участвует в определении lifecycle.
+
+В component tests проверены все шесть сочетаний draft / связи / сдачи для
+лидера, участника и неизвестного профиля, включая `canEdit` и единственную плашку.
+В HTTP contract test воспроизведён переданный пользователем DEV-кейс:
+проект 286, связь 105, программа 9, `draft=true`, `is_submitted=false`,
+`partner_program_tags=[]` → «В программе / Лидер / можно редактировать».
+До исправления четыре регрессионные проверки падали; после него проходят.
+
+Проверки на Node 24.18.0 / npm 11.16.0:
+
+- `npm run test:ci -- --pool=forks info-card projects/list/list.component.spec.ts projects/dashboard/dashboard.component.spec.ts`:
+  67 тестов в 5 файлах, exit 0.
+- `npm run test:ci -- --pool=forks`: два запуска, каждый — 1879 успешных тестов
+  в 395 файлах, но exit 1 из-за unhandled `window is not defined` после teardown
+  в `ngx-autosize`. Первый запуск: `news-form.component.spec.ts`; повторный:
+  также `profile-mid-side.component.spec.ts`. Эти файлы не изменены.
+  Три уже исключённых файла из `vitest.config.ts` не запускались; конфигурация не менялась.
+- `npm run build:prod`: exit 0; для существующего glob использован
+  `npm_config_script_shell=C:\Program Files\Git\bin\bash.exe`.
+  Сохраняются Sass/CommonJS/budget warnings.
+- `npm run lint:ts`: exit 0, шесть прежних warnings вне изменённых файлов.
+- Prettier для пяти изменённых файлов: exit 0.
+  `npm run format:check`: exit 1, 1567 файлов при Windows checkout с CRLF;
+  `npm run format:check -- --end-of-line auto`: exit 0 без изменения файлов.
+- `git diff --check`: exit 0.
+
+В браузере проверен реальный Angular `InfoCardComponent` на локальных фикстурах:
+desktop 1280, mobile 390 и 320 px; все шесть состояний для обеих ролей.
+Карточки сохранили 156×180 px и Mont, горизонтального переполнения нет.
+Tab фокусирует ссылку проекта с видимым outline; ошибок консоли нет.
+Проверка развёрнутого DEV и фактическое редактирование проекта 286 не выполнялись:
+его параметры проверены через HTTP mock и локальный браузерный стенд.
+
+После обновления до `cda836a2` с новой конфигурацией Vitest из `dev`:
+
+- `npm run test:ci -- --pool=forks`: **1940/1940, 400 файлов, exit 0**,
+  без unhandled errors. Ошибки teardown предыдущих запусков не повторились.
+- `npm run build:prod`: exit 0; прежние предупреждения сборки.
+- `npm run lint:ts`: exit 0; прежние шесть warnings.
+
+В этой задаче конфигурация Vitest и соседние формы не изменялись.
+Review не выявил дефектов в изменённой логике; requirements и ограничения scope соблюдены.
