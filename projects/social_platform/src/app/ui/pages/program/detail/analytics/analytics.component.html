@@ -262,27 +262,6 @@
         @if (caseEmptyMessage(); as message) {
           <p class="analytics-empty-state text-body-10">{{ message }}</p>
         }
-        <div class="cases-card__export">
-          <app-button
-            appearance="outline"
-            size="big"
-            [disabled]="!caseExport.canExport()"
-            [loader]="caseExport.exportPending()"
-            (click)="caseExport.download()"
-            >Выгрузить все проекты</app-button
-          >
-          @if (caseExport.pending()) {
-            <p class="text-body-10" role="status">Проверяем доступность выгрузки…</p>
-          }
-          @if (caseExport.error() || caseExport.exportError(); as error) {
-            <p class="text-body-10" role="alert">{{ caseErrorMessage(error) }}</p>
-            @if (caseExport.error()?.kind === "network") {
-              <button type="button" class="cases-card__retry" (click)="caseExport.load()">
-                Повторить проверку
-              </button>
-            }
-          }
-        </div>
         @if (caseRows().length) {
           <ul class="cases-card__list" tabindex="0" aria-labelledby="analytics-cases-title">
             @for (row of caseRows(); track row.key) {

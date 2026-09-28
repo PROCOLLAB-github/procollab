@@ -401,26 +401,6 @@
   }
 }
 
-.cases-card__export {
-  app-button {
-    width: min(100%, 220px);
-  }
-
-  display: grid;
-  flex: 0 0 auto;
-  gap: 6px;
-  justify-items: start;
-  margin-top: 12px;
-}
-
-.cases-card__retry {
-  font: inherit;
-  color: var(--accent-dark);
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-}
-
 .funnel {
   display: flex;
   flex-direction: column;
