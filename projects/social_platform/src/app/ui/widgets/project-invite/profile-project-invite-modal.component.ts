@@ -25,12 +25,13 @@ export class ProfileProjectInviteModalComponent {
   readonly closed = output<void>();
   readonly projectsRequested = output<void>();
   readonly query = signal("");
+  readonly getProjectDisplayName = (project: Project): string =>
+    normalizeInviteText(project.name ?? "") || "Проект без названия";
+
   readonly filteredProjects = computed(() => {
     const query = normalizeInviteText(this.query()).toLocaleLowerCase();
     return this.projects().filter(project =>
-      normalizeInviteText(project.name ?? "")
-        .toLocaleLowerCase()
-        .includes(query),
+      this.getProjectDisplayName(project).toLocaleLowerCase().includes(query),
     );
   });
 }

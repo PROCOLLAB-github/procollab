@@ -72,4 +72,71 @@ describe("Окно выбора проекта", () => {
     expect(dialog.textContent).toContain("Перейти в проекты");
     expect(dialog.querySelector('input[type="search"]')).toBeNull();
   });
+  async function setupSearch() {
+    const context = await setup();
+    context.fixture.componentRef.setInput("projects", [
+      ...[null, undefined, "", "   "].map((name, i) => ({ id: i + 1, name })),
+      { id: 15, name: "  Молодёжный   кейс-чемпионат PROCOLLAB " },
+      { id: 16, name: "Аналитика рынка" },
+      { id: 17, name: "Дизайн сервиса" },
+    ]);
+    await context.fixture.whenStable();
+    return context;
+  }
+  it("все пустые варианты name отображаются одним fallback, реальное имя нормализуется", async () => {
+    const { dialog } = await setupSearch();
+    const names = [...dialog.querySelectorAll(".invite-copy strong")].map(row => row.textContent);
+    expect(names.slice(0, 4)).toEqual(Array(4).fill("Проект без названия"));
+    expect(names[4]).toBe("Молодёжный кейс-чемпионат PROCOLLAB");
+  });
+  it.each([
+    "проект",
+    "без",
+    "названия",
+    "без названия",
+    "проект без",
+    "роект",
+    "назван",
+    "БЕЗ НАЗВАНИЯ",
+    "Без Названия",
+    "   без     названия   ",
+  ])("ищет fallback по подстроке %s", async query => {
+    const { fixture, dialog } = await setupSearch();
+    fixture.componentInstance.query.set(query);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.filteredProjects().map(project => project.id)).toEqual([
+      1, 2, 3, 4,
+    ]);
+    expect(dialog.querySelectorAll('[role="radio"]')).toHaveLength(4);
+  });
+  it.each(["молодёжный", "кейс", "чемпионат", "PROCOLLAB", "procollab", "кейс-чемпионат"])(
+    "ищет реальное название по подстроке %s",
+    async query => {
+      const { fixture } = await setupSearch();
+      fixture.componentInstance.query.set(query);
+      await fixture.whenStable();
+      expect(fixture.componentInstance.filteredProjects().map(project => project.id)).toEqual([15]);
+    },
+  );
+  it("очистка восстанавливает все проекты и выбранный ID после скрытия поиском", async () => {
+    const { fixture, dialog } = await setupSearch();
+    fixture.componentRef.setInput("selectedProjectId", 15);
+    const selected = vi.fn();
+    fixture.componentInstance.selected.subscribe(selected);
+    fixture.componentInstance.query.set("без названия");
+    await fixture.whenStable();
+    expect(fixture.componentInstance.selectedProjectId()).toBe(15);
+    expect(dialog.querySelector('[aria-checked="true"]')).toBeNull();
+    fixture.componentInstance.query.set("несуществующий проект");
+    await fixture.whenStable();
+    expect(dialog.textContent).toContain("Проекты не найдены");
+    for (const query of ["", "   "]) {
+      fixture.componentInstance.query.set(query);
+      await fixture.whenStable();
+      expect(dialog.querySelectorAll('[role="radio"]')).toHaveLength(7);
+      expect(dialog.querySelector('[aria-checked="true"]')?.textContent).toContain("Молодёжный");
+      expect(fixture.componentInstance.selectedProjectId()).toBe(15);
+    }
+    expect(selected).not.toHaveBeenCalled();
+  });
 });

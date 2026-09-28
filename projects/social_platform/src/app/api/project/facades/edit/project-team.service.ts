@@ -71,7 +71,10 @@ export class ProjectTeamService {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
-          if (!result.ok) return;
+          if (!result.ok) {
+            this.snackbar.error("Не удалось изменить роль в приглашении. Попробуйте ещё раз.");
+            return;
+          }
 
           this.projectTeamUIService.applyEditInvitation(params);
         },
@@ -83,7 +86,10 @@ export class ProjectTeamService {
       .execute(invitationId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
-        if (!result.ok) return;
+        if (!result.ok) {
+          this.snackbar.error("Не удалось отозвать приглашение. Попробуйте ещё раз.");
+          return;
+        }
 
         this.projectTeamUIService.applyRemoveInvitation(invitationId);
       });

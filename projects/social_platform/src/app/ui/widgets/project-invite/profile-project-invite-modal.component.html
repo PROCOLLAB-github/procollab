@@ -50,11 +50,11 @@
               @if (project.imageAddress) {
                 <img [src]="project.imageAddress" alt="" />
               } @else {
-                {{ (project.name || "П").slice(0, 1) }}
+                {{ getProjectDisplayName(project).slice(0, 1) }}
               }
             </span>
             <span class="invite-copy"
-              ><strong>{{ project.name || "Проект без названия" }}</strong>
+              ><strong>{{ getProjectDisplayName(project) }}</strong>
               @if (project.shortDescription) {
                 <span class="invite-meta">{{ project.shortDescription }}</span>
               }
