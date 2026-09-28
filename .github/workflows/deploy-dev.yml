@@ -20,7 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint:ts
-      - run: npm run test:ci -- --maxWorkers=2
+      - run: npm run test:ci -- --pool=forks --maxWorkers=2 --minWorkers=1
       - run: npm run build:pr
       - name: Deploy to dev-stage
         if: github.ref == 'refs/heads/dev'
