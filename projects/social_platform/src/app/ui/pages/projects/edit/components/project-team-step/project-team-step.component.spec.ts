@@ -74,6 +74,7 @@ describe("Окно приглашения из редактора команды
       ],
     }).compileComponents();
     ui = TestBed.inject(ProjectTeamUIService);
+    ui.applySetCollaborators([]);
     fixture = TestBed.createComponent(ProjectTeamStepComponent);
     document.body.appendChild(fixture.nativeElement);
     await fixture.whenStable();
@@ -155,6 +156,8 @@ describe("Окно приглашения из редактора команды
     request = new Subject<Invite>();
     repo.sendForUser.mockReturnValue(request);
     send.click();
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector(".invite__submit button").disabled).toBe(true);
     request.next({ id: 90, isAccepted: null, user: users[3], role: "Дизайнер" } as any);
     await fixture.whenStable();
     expect(document.querySelector(".project-invite")).toBeNull();
@@ -164,7 +167,7 @@ describe("Окно приглашения из редактора команды
       fixture.nativeElement.querySelector(".invite__submit button"),
     );
   });
-  it("считает только участников и pending, группирует реальные роли без нормативов", async () => {
+  it("считает только участников и pending, показывает роли у людей", async () => {
     ui.collaborators.set([
       {
         userId: 1,
@@ -197,16 +200,16 @@ describe("Окно приглашения из редактора команды
     expect(root.querySelector('[data-team-count="members"]')?.textContent).toBe("3");
     expect(root.querySelector('[data-team-count="pending"]')?.textContent).toBe("1");
     expect(root.querySelectorAll("app-invite-card")).toHaveLength(1);
-    expect(root.querySelectorAll(".team-roles li")).toHaveLength(1);
-    expect(root.querySelector(".team-roles li")?.textContent).toContain("Аналитик");
-    expect(root.querySelector(".team-roles li strong")?.textContent).toBe("2");
-    expect(root.querySelector(".member-row__you")?.textContent).toBe("Вы");
+    expect(root.querySelectorAll("app-collaborator-card .member-row__role")).toHaveLength(3);
+    expect(root.querySelector(".member-row__role")?.textContent).toContain("Аналитик");
+    expect(root.textContent).toContain("Роль не указана");
+    expect(root.querySelector(".member-row__you")?.textContent).toContain("Вы");
     expect(root.textContent).toContain("Руководитель проекта");
     ui.applyRemoveCollaborator(2);
     ui.applyRemoveInvitation(1);
     await fixture.whenStable();
     expect(root.querySelector('[data-team-count="members"]')?.textContent).toBe("2");
-    expect(root.querySelector('[data-team-count="pending"]')?.textContent).toBe("0");
+    expect(root.querySelector('[data-team-count="pending"]')).toBeNull();
     expect(root.querySelector("#team-pending-title")).toBeNull();
   });
   it("пустая команда показывает понятное состояние и доступный CTA", async () => {
@@ -216,5 +219,40 @@ describe("Окно приглашения из редактора команды
     expect(root.querySelector("#team-pending-title")).toBeNull();
     await open();
     expect(ui.isInviteModalOpen()).toBe(true);
+  });
+  it("до инициализации скрывает ложные счётчики и блокирует приглашение", async () => {
+    ui.teamLoading.set(true);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelector('[role="status"]')?.textContent).toContain("Загрузка команды");
+    expect(root.querySelector("[data-team-count]")).toBeNull();
+    const trigger = root.querySelector<HTMLButtonElement>(".invite__submit button")!;
+    expect(trigger.disabled).toBe(true);
+    trigger.click();
+    expect(ui.isInviteModalOpen()).toBe(false);
+    ui.applySetCollaborators([]);
+    await fixture.whenStable();
+    expect(root.querySelector('[role="status"]')).toBeNull();
+    expect(root.querySelector('[data-team-count="members"]')?.textContent).toBe("0");
+    expect(trigger.disabled).toBe(false);
+  });
+  it("сохраняет владельца в empty и не называет чужого участника текущим пользователем", async () => {
+    const owner = {
+      userId: 1,
+      firstName: "Анна",
+      lastName: "Смирнова",
+      role: "Основатель",
+      skills: [],
+      avatar: "",
+    };
+    ui.applySetCollaborators([owner]);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelectorAll("app-collaborator-card")).toHaveLength(1);
+    expect(root.textContent).toContain("В команде пока только вы");
+    expect(root.querySelector('[data-team-count="members"]')?.textContent).toBe("1");
+    ui.applySetCollaborators([{ ...owner, userId: 2 }]);
+    await fixture.whenStable();
+    expect(root.textContent).not.toContain("В команде пока только вы");
   });
 });
