@@ -20,6 +20,12 @@ export default defineConfig({
     ],
   },
   test: {
+    // Один экземпляр Angular в TestBed и зависимостях: иначе Windows runner теряет platform.
+    server: {
+      deps: {
+        inline: [/@angular\//, /@analogjs\//, /ngx-/, /ng-click-outside/, /@sentry\/angular/],
+      },
+    },
     globals: true,
     environment: "jsdom",
     testTimeout: 10000,

@@ -1,6 +1,118 @@
 /** @format */
 @use "styles/responsive";
 
+// Только case-вариант: shared modal задаёт width своим stylesheet после подключения overlay.
+.modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
+  box-sizing: border-box;
+  width: min(880px, calc(100% - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.analytics-case {
+  &__metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 10px 12px;
+    margin: 0 0 16px;
+    background: var(--light-gray);
+    border-radius: 8px;
+
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: baseline;
+    }
+    dt {
+      font-size: 12px;
+      color: var(--dark-grey);
+    }
+    dd {
+      margin: 0;
+      font-weight: 600;
+    }
+    @include responsive.apply-desktop {
+      display: flex;
+      div + div {
+        padding-left: 12px;
+        border-left: 1px solid var(--medium-grey-for-outline);
+      }
+    }
+  }
+
+  &__export {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    app-button {
+      width: 100%;
+    }
+    @include responsive.apply-desktop {
+      justify-items: start;
+      app-button {
+        width: 220px;
+      }
+    }
+  }
+
+  &__loading {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 12px;
+    color: var(--dark-grey);
+  }
+
+  .analytics-drilldown__search-controls {
+    max-width: 520px;
+    input {
+      flex-basis: 100%;
+      border-radius: var(--rounded-xxl);
+      @include responsive.apply-desktop {
+        flex-basis: 220px;
+      }
+    }
+  }
+
+  .analytics-case__table {
+    small {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+    }
+    @include responsive.apply-desktop {
+      th,
+      td {
+        padding: 10px 8px;
+      }
+      th {
+        font-size: 13px;
+      }
+      th:first-child,
+      td:first-child {
+        width: 32%;
+      }
+      th:nth-child(2),
+      td:nth-child(2) {
+        width: 28%;
+      }
+      th:nth-child(3),
+      td:nth-child(3) {
+        width: 20%;
+      }
+      th:last-child,
+      td:last-child {
+        width: 20%;
+      }
+    }
+  }
+}
+
 // Overlay лежит вне host: единственное глобальное правило ограничено собственным bodyClass.
 .modal__body.analytics-drilldown-body {
   box-sizing: border-box;

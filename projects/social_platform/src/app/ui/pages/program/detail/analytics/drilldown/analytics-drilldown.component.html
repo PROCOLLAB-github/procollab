@@ -4,7 +4,9 @@
   [bodyClass]="
     state.view() === 'assignments'
       ? 'analytics-drilldown-body analytics-drilldown-body--assignments'
-      : 'analytics-drilldown-body'
+      : state.view() === 'case'
+        ? 'analytics-drilldown-body analytics-drilldown-body--case'
+        : 'analytics-drilldown-body'
   "
   (openChange)="onOpenChange($event)"
 >
@@ -24,6 +26,11 @@
             </button>
           }
           <h2 #heading tabindex="-1" [id]="'analytics-dialog-' + state.view()">{{ title() }}</h2>
+          @if (state.view() === "case" && cases.selection()?.scope === "without_case") {
+            <p class="analytics-drilldown__secondary">
+              Проекты, для которых кейс не выбран или больше недоступен.
+            </p>
+          }
           @if (state.view() === "backlog") {
             <p>Ожидающие назначения</p>
           }
@@ -67,6 +74,197 @@
         </button>
       </header>
 
+      @if (state.view() === "case") {
+        <div class="analytics-case" data-testid="case-drilldown">
+          @if (cases.metrics(); as metrics) {
+            <dl class="analytics-case__metrics">
+              <div>
+                <dt>Проекты</dt>
+                <dd>{{ metrics.projectsTotal }}</dd>
+              </div>
+              <div>
+                <dt>Участники</dt>
+                <dd>{{ metrics.participantsTotal }}</dd>
+              </div>
+              @if (cases.submissionApplicable()) {
+                <div>
+                  <dt>Сдано</dt>
+                  <dd>{{ metrics.submitted }}</dd>
+                </div>
+                <div>
+                  <dt>Не сдано</dt>
+                  <dd>{{ metrics.notSubmitted }}</dd>
+                </div>
+              }
+            </dl>
+          }
+          <div class="analytics-case__export">
+            <app-button
+              appearance="outline"
+              size="big"
+              [disabled]="!cases.canExport()"
+              [loader]="cases.exportPending()"
+              (click)="cases.download()"
+              >Выгрузить проекты кейса</app-button
+            >
+            <p class="analytics-drilldown__secondary">
+              {{
+                cases.metrics()?.projectsTotal === 0
+                  ? "В кейсе пока нет проектов"
+                  : "Все проекты кейса, без учёта поиска"
+              }}
+            </p>
+            @if (cases.exportError(); as error) {
+              <p role="alert">{{ caseErrorMessage(error) }}</p>
+            }
+          </div>
+          <form
+            class="analytics-drilldown__search"
+            (submit)="$event.preventDefault(); cases.applySearch()"
+          >
+            <label for="analytics-case-search" class="analytics-drilldown__secondary"
+              >Поиск по названию проекта</label
+            >
+            <div class="analytics-drilldown__search-controls">
+              <input
+                id="analytics-case-search"
+                type="search"
+                placeholder="Название проекта"
+                [disabled]="cases.pending() && !cases.page()"
+                [value]="cases.searchDraft()"
+                (input)="cases.searchDraft.set($any($event.target).value)"
+              />
+              <button
+                type="submit"
+                class="analytics-drilldown__action"
+                [disabled]="cases.pending()"
+              >
+                Найти
+              </button>
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                [disabled]="!cases.searchDraft() && !cases.search()"
+                (click)="cases.clearSearch()"
+              >
+                Очистить
+              </button>
+            </div>
+          </form>
+          <div [attr.aria-busy]="cases.pending()" aria-live="polite">
+            @if (cases.pending()) {
+              <p class="analytics-case__loading" role="status">
+                <app-loader color="var(--dark-grey)" />Загружаем список…
+              </p>
+            } @else if (cases.error(); as error) {
+              <div class="analytics-drilldown__error" role="alert">
+                <strong>Не удалось загрузить проекты</strong>
+                <p class="analytics-drilldown__secondary">{{ caseErrorMessage(error) }}</p>
+              </div>
+              @if (error.kind === "network") {
+                <button type="button" class="analytics-drilldown__action" (click)="cases.load()">
+                  Повторить загрузку
+                </button>
+              }
+            } @else if (cases.page(); as page) {
+              <p class="analytics-drilldown__count">Найдено: {{ page.count }}</p>
+              @if (!page.results.length) {
+                <div class="analytics-drilldown__empty">
+                  <strong>{{
+                    cases.search()
+                      ? "По запросу ничего не найдено"
+                      : "В этом кейсе пока нет проектов"
+                  }}</strong>
+                  <p class="analytics-drilldown__secondary">
+                    {{
+                      cases.search()
+                        ? "Измените запрос или очистите поиск."
+                        : "Проекты появятся здесь после выбора этого кейса."
+                    }}
+                  </p>
+                </div>
+              } @else {
+                <table class="analytics-drilldown__table analytics-case__table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Проект</th>
+                      <th scope="col">Лидер / команда</th>
+                      <th scope="col">Сдача решения</th>
+                      <th scope="col">Презентация</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of page.results; track item.programProjectId) {
+                      <tr>
+                        <td data-label="Проект">
+                          <a
+                            [routerLink]="['/office/projects', item.project.id]"
+                            (click)="leaveAnalytics()"
+                            >{{ item.project.name }}</a
+                          >
+                        </td>
+                        <td data-label="Лидер / команда">
+                          <span>{{ item.leader?.fullName || "Лидер не указан" }}</span>
+                          <small class="analytics-drilldown__secondary"
+                            >Размер команды: {{ item.teamSize }}</small
+                          >
+                        </td>
+                        <td data-label="Сдача решения">
+                          @if (!page.submissionApplicable) {
+                            <span>Не требуется</span>
+                          } @else {
+                            <span
+                              class="analytics-drilldown__badge"
+                              [class.analytics-drilldown__badge--completed]="item.submitted"
+                              [class.analytics-drilldown__badge--pending]="!item.submitted"
+                              >{{ item.submitted ? "Сдано" : "Не сдано" }}</span
+                            >
+                            <small class="analytics-drilldown__secondary">{{
+                              item.submittedAt ? (item.submittedAt | date: "dd.MM.yyyy") : "—"
+                            }}</small>
+                          }
+                        </td>
+                        <td data-label="Презентация">
+                          @if (presentationHref(item.project.presentationAddress); as href) {
+                            <a [href]="href" target="_blank" rel="noopener noreferrer"
+                              >Открыть презентацию</a
+                            >
+                          } @else {
+                            <span class="analytics-drilldown__secondary">{{
+                              item.project.presentationAddress
+                                ? "Ссылка недоступна"
+                                : "Не добавлена"
+                            }}</span>
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
+              @if (page.count > cases.limit || cases.offset() > 0) {
+                <nav class="analytics-drilldown__pagination" aria-label="Страницы проектов кейса">
+                  <app-button
+                    appearance="outline"
+                    size="medium"
+                    [disabled]="cases.offset() === 0"
+                    (click)="cases.changePage(-1)"
+                    >Назад</app-button
+                  >
+                  <span>{{ cases.range() }}</span>
+                  <app-button
+                    appearance="outline"
+                    size="medium"
+                    [disabled]="!cases.hasNext()"
+                    (click)="cases.changePage(1)"
+                    >Далее</app-button
+                  >
+                </nav>
+              }
+            }
+          </div>
+        </div>
+      }
       @if (state.isAttentionView()) {
         <form
           class="analytics-drilldown__search"
@@ -333,7 +531,7 @@
             }
           </ul>
         }
-      } @else {
+      } @else if (state.view() !== "case") {
         @if (state.view() === "delayed") {
           <ul class="analytics-drilldown__experts">
             @for (expert of state.delayedExperts(); track expert.expertId) {

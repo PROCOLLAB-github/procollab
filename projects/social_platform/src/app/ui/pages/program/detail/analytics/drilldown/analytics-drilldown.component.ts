@@ -1,5 +1,10 @@
 /** @format */
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
+import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
+import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
+import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
+import { ButtonComponent, LoaderComponent } from "@ui/primitives";
+import { caseErrorMessage, presentationHref } from "@utils/program-case-analytics";
 import {
   AfterViewInit,
   afterRenderEffect,
@@ -43,16 +48,29 @@ import {
   selector: "app-analytics-drilldown",
   templateUrl: "./analytics-drilldown.component.html",
   styleUrl: "./analytics-drilldown.component.scss",
-  imports: [A11yModule, ModalComponent, AvatarComponent, NgTemplateOutlet, DatePipe, RouterLink],
-  providers: [ProgramAnalyticsDrilldownService],
+  imports: [
+    A11yModule,
+    ModalComponent,
+    AvatarComponent,
+    NgTemplateOutlet,
+    DatePipe,
+    RouterLink,
+    ButtonComponent,
+    LoaderComponent,
+  ],
+  providers: [ProgramAnalyticsDrilldownService, ProgramCaseProjectsService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class AnalyticsDrilldownComponent implements AfterViewInit {
   readonly programId = input<number | null>(null);
+  readonly programName = input("program");
   readonly notSubmittedApplicable = input(false);
   readonly delayedExperts = input<ProgramAnalyticsDelayedExperts>({ total: 0, items: [] });
   protected readonly state = inject(ProgramAnalyticsDrilldownService);
+  protected readonly cases = this.state.cases;
+  protected readonly caseErrorMessage = caseErrorMessage;
+  protected readonly presentationHref = presentationHref;
   private readonly destroyRef = inject(DestroyRef);
   private trigger: HTMLElement | null = null;
   private focusedView = this.state.view();
@@ -72,6 +90,12 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   protected readonly requestError = analyticsRequestError;
   protected readonly title = computed(() => {
     switch (this.state.view()) {
+      case "case": {
+        const selection = this.cases.selection();
+        return selection?.scope === "selected"
+          ? `Кейс: ${selection.caseName}`
+          : "Без выбранного кейса";
+      }
       case "participants-without-team":
         return "Участники без команды";
       case "projects-awaiting-evaluation":
@@ -200,6 +224,18 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
     if (id === null || this.state.open() || this.attached()) return;
     this.trigger = trigger;
     this.state.openDelayed(id, this.delayedExperts());
+  }
+
+  openCase(
+    selection: ProgramCaseSelection,
+    metrics: ProgramAnalyticsCaseMetrics,
+    applicable: boolean,
+    trigger: HTMLElement,
+  ): void {
+    const id = this.programId();
+    if (id === null || this.state.open() || this.attached()) return;
+    this.trigger = trigger;
+    this.state.openCase(id, selection, metrics, applicable, this.programName());
   }
 
   /** Attention root сохраняет конкретную строку-trigger для обычного закрытия. */

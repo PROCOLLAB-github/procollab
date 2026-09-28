@@ -1,4 +1,7 @@
 /** @format */
+
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+
 import { TestBed } from "@angular/core/testing";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
@@ -29,6 +32,10 @@ describe("ProgramAnalyticsDrilldownService", () => {
     scores.execute.mockReset().mockReturnValue(of(ok(scoreDetail())));
     TestBed.configureTestingModule({
       providers: [
+        {
+          provide: ProgramRepositoryPort,
+          useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+        },
         provideRouter([]),
         { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: { execute: vi.fn() } },
         {

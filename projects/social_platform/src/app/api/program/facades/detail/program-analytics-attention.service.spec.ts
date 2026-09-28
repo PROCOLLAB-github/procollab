@@ -1,4 +1,7 @@
 /** @format */
+
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+
 import { TestBed } from "@angular/core/testing";
 import { of, Subject } from "rxjs";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
@@ -46,6 +49,10 @@ describe.each([
     assignments.execute.mockClear();
     TestBed.configureTestingModule({
       providers: [
+        {
+          provide: ProgramRepositoryPort,
+          useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+        },
         ProgramAnalyticsDrilldownService,
         { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: notSubmitted },
         { provide: GetProgramManagerParticipantsWithoutTeamUseCase, useValue: participants },
