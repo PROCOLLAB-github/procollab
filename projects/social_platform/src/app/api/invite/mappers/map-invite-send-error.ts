@@ -4,7 +4,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { InviteSendError } from "@domain/invite/invite-send-error";
 
 const messages: Record<InviteSendError["kind"], string> = {
-  user_not_found: "Пользователь не найден. Проверьте ссылку на профиль.",
+  user_not_found: "Пользователь не найден. Выберите другого участника.",
   already_leader: "Вы уже являетесь руководителем этого проекта.",
   already_member: "Пользователь уже состоит в команде проекта.",
   already_invited: "Этому пользователю уже отправлено приглашение.",

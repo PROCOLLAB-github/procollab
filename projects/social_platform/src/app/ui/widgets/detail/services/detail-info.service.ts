@@ -38,7 +38,6 @@ export class DetailInfoService {
   readonly info = signal<any | undefined>(undefined);
   readonly listType = signal<"project" | "program" | "profile">("project");
   readonly projectForm = this.projectFormService.getForm();
-  readonly memberProjects = this.detailProfileInfoService.memberProjects;
   readonly profile = this.detailProfileInfoService.profile;
   // userType вытягивается реактивно из текущего профиля: подписка раньше делалась
   // через authRepository.profile.pipe(...).subscribe(set), после миграции на сигнал

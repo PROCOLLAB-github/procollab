@@ -1,121 +1,136 @@
 /** @format */
-
 import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { Subject, of, throwError } from "rxjs";
+import { Subject, of } from "rxjs";
 import { Invite } from "@domain/invite/invite.model";
+import { User } from "@domain/auth/user.model";
 import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.port";
 import { UpdateInviteUseCase } from "@api/invite/use-cases/update-invite.use-case";
 import { RevokeInviteUseCase } from "@api/invite/use-cases/revoke-invite.use-case";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProjectTeamService } from "./project-team.service";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 
-describe("ProjectTeamService invite submission", () => {
+describe("Отправка приглашения из команды", () => {
   let service: ProjectTeamService;
   let ui: ProjectTeamUIService;
   let request: Subject<Invite>;
   const repo = { sendForUser: vi.fn() };
-  const link = "https://app.procollab.ru/office/profile/13";
-
+  const snackbar = { success: vi.fn() };
+  const update = { execute: vi.fn() };
+  const revoke = { execute: vi.fn() };
   beforeEach(() => {
+    vi.clearAllMocks();
     request = new Subject<Invite>();
-    repo.sendForUser.mockReset().mockReturnValue(request);
+    repo.sendForUser.mockReturnValue(request);
     TestBed.configureTestingModule({
       providers: [
         ProjectTeamService,
         ProjectTeamUIService,
         { provide: InviteRepositoryPort, useValue: repo },
-        { provide: UpdateInviteUseCase, useValue: {} },
-        { provide: RevokeInviteUseCase, useValue: {} },
+        { provide: SnackbarService, useValue: snackbar },
+        { provide: UpdateInviteUseCase, useValue: update },
+        { provide: RevokeInviteUseCase, useValue: revoke },
       ],
     });
     service = TestBed.inject(ProjectTeamService);
     ui = TestBed.inject(ProjectTeamUIService);
     service.setupDynamicValidation();
-    ui.showInviteFields.set(true);
-    ui.inviteForm.patchValue({ link, role: "Дизайнер" });
+    ui.applyOpenInviteModal();
+    ui.selectRecipient({ id: 13 } as User);
+    ui.inviteForm.controls.role.setValue("  Эксперт   по работе с промышленными партнёрами  ");
   });
 
-  it("keeps the form open while pending, blocks duplicate sends, hides/reset only on success", () => {
+  it("передаёт ID и нормализованную свободную роль, блокирует повтор, добавляет pending и сбрасывает окно", () => {
     service.submitInvite(5);
     service.submitInvite(5);
-    expect(repo.sendForUser).toHaveBeenCalledExactlyOnceWith(13, 5, "Дизайнер", "");
-    expect(ui.showInviteFields()).toBe(true);
+    expect(repo.sendForUser).toHaveBeenCalledExactlyOnceWith(
+      13,
+      5,
+      "Эксперт по работе с промышленными партнёрами",
+      undefined,
+    );
+    expect(ui.isInviteModalOpen()).toBe(true);
     expect(ui.inviteFormIsSubmitting().status).toBe("loading");
     const invite = { id: 10, isAccepted: null } as Invite;
     request.next(invite);
-    request.complete();
     expect(ui.invites()).toEqual([invite]);
-    expect(ui.showInviteFields()).toBe(false);
-    expect(ui.link?.value).toBeNull();
-    expect(ui.role?.value).toBeNull();
-    expect(ui.inviteSubmitError()).toBeNull();
-    expect(ui.inviteSubmitInitiated()).toBe(false);
+    expect(ui.isInviteModalOpen()).toBe(false);
+    expect(ui.inviteForm.getRawValue()).toEqual({ recipientId: null, role: "" });
+    expect(ui.selectedRecipient()).toBeNull();
     expect(ui.inviteFormIsSubmitting().status).toBe("initial");
-    service.submitInvite(5);
-    expect(repo.sendForUser).toHaveBeenCalledTimes(1);
-    expect(ui.link?.hasError("required")).toBe(true);
+    expect(snackbar.success).toHaveBeenCalledWith("Приглашение отправлено");
   });
 
-  it.each(["", "not-a-profile-link"])(
-    "invalid link '%s' never calls API through real ValidationService",
-    value => {
-      ui.link?.setValue(value);
-      service.submitInvite(5);
-      expect(repo.sendForUser).not.toHaveBeenCalled();
-      expect(ui.link?.touched).toBe(true);
-      expect(ui.inviteForm.invalid).toBe(true);
-      expect(ui.inviteFormIsSubmitting().status).toBe("initial");
-    },
-  );
-
-  it("invalid role blocks API and a new submission clears a previous backend error", () => {
-    ui.role?.setValue("");
-    ui.applyErrorSubmitInvite({ kind: "unknown", message: "Controlled" });
+  it.each([null, 0, -1, 1.5, NaN])("не отправляет невалидный recipientId %s", id => {
+    ui.inviteForm.controls.recipientId.setValue(id);
     service.submitInvite(5);
     expect(repo.sendForUser).not.toHaveBeenCalled();
-    expect(ui.inviteSubmitError()).toBeNull();
-    expect(ui.role?.hasError("required")).toBe(true);
   });
 
-  it("maps actual HTTP error, preserves values and permits retry", () => {
+  it.each(["", "   ", "я".repeat(129)])("не отправляет невалидную роль", role => {
+    ui.inviteForm.controls.role.setValue(role);
     service.submitInvite(5);
-    request.error(
-      new HttpErrorResponse({
-        status: 400,
-        error: { user: ["Пользователь уже является лидером проекта."] },
-      }),
-    );
-    expect(ui.inviteSubmitError()?.kind).toBe("already_leader");
+    expect(repo.sendForUser).not.toHaveBeenCalled();
+    expect(ui.role?.touched).toBe(true);
+  });
+
+  it.each([
+    [400, { user: ["Пользователь уже состоит в проекте."] }, "already_member"],
+    [
+      400,
+      { user: ["У пользователя уже есть активное приглашение в этот проект."] },
+      "already_invited",
+    ],
+    [
+      400,
+      {
+        user: [
+          "Нельзя пригласить пользователя: проект относится к программе, а пользователь не является её участником.",
+        ],
+      },
+      "not_program_participant",
+    ],
+    [403, {}, "forbidden"],
+    [0, {}, "network"],
+    [500, "private details", "server"],
+  ])("сохраняет выбор и роль после typed error %s", (status, error, kind) => {
+    service.submitInvite(5);
+    request.error(new HttpErrorResponse({ status: status as number, error }));
+    expect(ui.inviteSubmitError()?.kind).toBe(kind);
+    expect(ui.isInviteModalOpen()).toBe(true);
+    expect(ui.selectedRecipient()?.id).toBe(13);
+    expect(ui.role?.value).toBe("Эксперт по работе с промышленными партнёрами");
     expect(ui.inviteFormIsSubmitting().status).toBe("failure");
-    expect(ui.showInviteFields()).toBe(true);
-    expect(ui.inviteForm.value).toMatchObject({ link, role: "Дизайнер" });
-    expect(ui.invites()).toEqual([]);
-    repo.sendForUser.mockReturnValue(of({ id: 11 } as Invite));
-    service.submitInvite(5);
-    expect(repo.sendForUser).toHaveBeenCalledTimes(2);
-    expect(ui.showInviteFields()).toBe(false);
-    expect(ui.inviteSubmitError()).toBeNull();
+    expect(ui.inviteSubmitError()?.message).not.toContain("private details");
   });
 
-  it.each(["link", "role", "specialization"])("editing %s clears only the backend error", field => {
-    repo.sendForUser.mockReturnValue(
-      throwError(() => new HttpErrorResponse({ status: 500, error: "error" })),
-    );
-    service.submitInvite(5);
-    expect(ui.inviteSubmitError()?.kind).toBe("server");
-    ui.inviteForm.get(field)?.setValue(null);
-    expect(ui.inviteSubmitError()).toBeNull();
-    ui.link?.setValue("");
-    expect(ui.link?.hasError("required")).toBe(true);
-    ui.link?.setValue("bad");
-    expect(ui.link?.hasError("pattern")).toBe(true);
-  });
-
-  it("destroy cancels pending request", () => {
+  it("закрытие отменяет запрос; поздний ответ не затрагивает следующее открытие", () => {
     service.submitInvite(5);
     expect(request.observed).toBe(true);
+    ui.applyCloseInviteModal();
+    expect(request.observed).toBe(false);
+    ui.applyOpenInviteModal();
+    request.next({ id: 99 } as Invite);
+    expect(ui.invites()).toEqual([]);
+    expect(ui.isInviteModalOpen()).toBe(true);
+    expect(ui.inviteFormIsSubmitting().status).toBe("initial");
+  });
+
+  it("демонтаж отменяет запрос", () => {
+    service.submitInvite(5);
     TestBed.resetTestingModule();
     expect(request.observed).toBe(false);
+  });
+
+  it("legacy edit сохраняет specialization, revoke удаляет карточку", () => {
+    ui.invites.set([{ id: 10, role: "Старая", specialization: "Legacy" } as Invite]);
+    update.execute.mockReturnValue(of({ ok: true }));
+    revoke.execute.mockReturnValue(of({ ok: true }));
+    service.editInvitation({ inviteId: 10, role: "Новая", specialization: "Legacy2" });
+    expect(ui.invites()[0]).toMatchObject({ role: "Новая", specialization: "Legacy2" });
+    service.removeInvitation(10);
+    expect(revoke.execute).toHaveBeenCalledWith(10);
+    expect(ui.invites()).toEqual([]);
   });
 });

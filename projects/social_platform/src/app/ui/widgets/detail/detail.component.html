@@ -631,7 +631,7 @@
                   size="medium"
                   appearance="outline"
                   customTypographyClass="text-body-12"
-                  (click)="inviteUser()"
+                  (click)="inviteUser($event)"
                   >пригласить</app-button
                 >
               }
@@ -692,179 +692,21 @@
                 </app-modal>
               }
 
-              @defer (when !showNoProjectsModal() && showSendInviteModal()) {
-                <app-modal
-                  [open]="showSendInviteModal()"
-                  (openChange)="showSendInviteModal.set(!showSendInviteModal())"
-                >
-                  <form class="project__invites" [formGroup]="inviteForm">
-                    @if (profileProjects().length) {
-                      <ul
-                        class="approve project__list"
-                        style="padding: 0"
-                        [class.project__list--scrollable]="profileProjects().length > 3"
-                      >
-                        <div class="lists__section">
-                          <h3 class="text-body-12 lists__title">
-                            выберите проект и роль для приглашения.
-                          </h3>
-                          <i
-                            appIcon
-                            icon="medal"
-                            class="lists__icon"
-                            style="margin-top: 1px"
-                            appSquare="12"
-                          ></i>
-                        </div>
-
-                        @for (project of profileProjects(); track project.id) {
-                          <li class="project__item">
-                            <div class="project__item--info">
-                              <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
-                              <p class="text-body-12">
-                                {{ project.name ?? "Проект без названия" | truncate: 20 }}
-                              </p>
-                            </div>
-                            <app-input
-                              type="radio"
-                              [appValue]="project.id.toString()"
-                              [checked]="selectedProjectId() === project.id"
-                              (change)="onProjectRadioChange($event)"
-                            ></app-input>
-                          </li>
-                        }
-                        @if (inviteForm.get("role"); as role) {
-                          <fieldset class="invite__role">
-                            <app-input
-                              size="big"
-                              id="invite_role"
-                              formControlName="role"
-                              [error]="role | controlError"
-                              placeholder="укажите роль в проекте"
-                            ></app-input>
-                            @if (role | controlError: "required") {
-                              <div class="text-body-10 error">
-                                {{ errorMessage.VALIDATION_REQUIRED }}
-                              </div>
-                            }
-                          </fieldset>
-                        }
-
-                        <app-button
-                          (click)="sendInvite()"
-                          customTypographyClass="text-body-12"
-                          appearance="outline"
-                          size="big"
-                        >
-                          <span>отправить приглашение</span>
-                          <i appIcon icon="plus" appSquare="8"></i>
-                        </app-button>
-                      </ul>
-                    }
-                  </form>
-                </app-modal>
-              }
-
-              @defer (when showNoProjectsModal()) {
-                <app-modal
-                  [open]="showNoProjectsModal()"
-                  (openChange)="showNoProjectsModal.set(!showNoProjectsModal())"
-                >
-                  <div class="cancel" style="padding: 0px">
-                    <div class="cancel__top">
-                      <p class="cancel__title text-body-14">
-                        вы не являетесь лидером ни в одном проекте
-                      </p>
-                    </div>
-
-                    <i appIcon icon="sad-smile" appSquare="50" style="margin: 36px 0px"></i>
-
-                    <app-button
-                      style="width: 100%"
-                      customTypographyClass="text-body-12"
-                      size="big"
-                      (click)="routingToMyProjects()"
-                      >перейти в проекты</app-button
-                    >
-                  </div>
-                </app-modal>
-              }
-
-              @defer (when showActiveInviteModal()) {
-                <app-modal
-                  [open]="showActiveInviteModal()"
-                  (openChange)="showActiveInviteModal.set(!showActiveInviteModal())"
-                >
-                  <div class="cancel" style="padding: 0px; width: 300px">
-                    <div class="cancel__top">
-                      <p class="cancel__title text-body-14">
-                        У данного участника уже есть активное приглашение в проект
-                      </p>
-                    </div>
-
-                    <i appIcon icon="straight-face" appSquare="50" style="margin: 36px 0px"></i>
-
-                    <app-button
-                      style="width: 100%"
-                      customTypographyClass="text-body-12"
-                      size="big"
-                      (click)="routingToMyProjects()"
-                      >перейти в проекты</app-button
-                    >
-                  </div>
-                </app-modal>
-              }
-
-              @defer (when showNoInProgramModal()) {
-                <app-modal
-                  [open]="showNoInProgramModal()"
-                  (openChange)="showNoInProgramModal.set(!showNoInProgramModal())"
-                >
-                  <div class="cancel" style="padding: 0px; width: 300px">
-                    <div class="cancel__top">
-                      <p class="cancel__title text-body-14">
-                        Пользователь не зарегистрирован в программе, поэтому нельзя отправить
-                        приглашение в данный проект
-                      </p>
-                    </div>
-
-                    <i appIcon icon="sad-smile" appSquare="50" style="margin: 36px 0px"></i>
-
-                    <app-button
-                      style="width: 100%"
-                      customTypographyClass="text-body-12"
-                      size="big"
-                      (click)="routingToMyProjects()"
-                      >перейти в проекты</app-button
-                    >
-                  </div>
-                </app-modal>
-              }
-
-              @defer (when showSuccessInviteModal()) {
-                <app-modal
-                  [open]="showSuccessInviteModal()"
-                  (openChange)="showSuccessInviteModal.set(!showSuccessInviteModal())"
-                >
-                  <div class="cancel" style="padding: 0px; width: 350px">
-                    <i appIcon icon="check" class="cancel__success" appSquare="60"></i>
-
-                    <p
-                      class="cancel__title text-body-12"
-                      style="color: var(--grey-for-text); margin: 17px 0px"
-                    >
-                      приглашение отправлено
-                    </p>
-
-                    <app-button
-                      style="width: 100%"
-                      customTypographyClass="text-body-12"
-                      size="big"
-                      (click)="routingToMyProjects()"
-                      >перейти в проекты</app-button
-                    >
-                  </div>
-                </app-modal>
+              @if (showSendInviteModal()) {
+                <app-profile-project-invite-modal
+                  [projects]="profileProjects()"
+                  [form]="inviteForm"
+                  [selectedProjectId]="selectedProjectId()"
+                  [loading]="detailProfileInfoService.inviteLoading()"
+                  [error]="detailProfileInfoService.inviteError()"
+                  [trigger]="inviteTrigger"
+                  (selected)="selectedProjectId.set($event)"
+                  (sent)="sendInvite()"
+                  (closed)="detailProfileInfoService.closeInvite()"
+                  (projectsRequested)="
+                    detailProfileInfoService.closeInvite(); routingToMyProjects()
+                  "
+                />
               }
             }
             @if (profile()) {
