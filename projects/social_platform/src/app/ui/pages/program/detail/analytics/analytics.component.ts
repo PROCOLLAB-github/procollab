@@ -4,17 +4,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
-  untracked,
   inject,
   OnInit,
   signal,
 } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
-import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
-import { caseErrorMessage } from "@utils/program-case-analytics";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
 import {
   ProgramAnalyticsActivityPoint,
@@ -70,26 +66,12 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
     TooltipComponent,
     AnalyticsDrilldownComponent,
   ],
-  providers: [ProgramAnalyticsInfoService, ExportFileInfoService, ProgramCaseProjectsService],
+  providers: [ProgramAnalyticsInfoService, ExportFileInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramAnalyticsComponent implements OnInit {
   private readonly analytics = inject(ProgramAnalyticsInfoService);
   private readonly exports = inject(ExportFileInfoService);
-  protected readonly caseExport = inject(ProgramCaseProjectsService);
-  protected readonly caseErrorMessage = caseErrorMessage;
-
-  constructor() {
-    effect(() => {
-      const id = this.programId();
-      const overview = this.data();
-      const name = this.programName();
-      untracked(() => {
-        if (id !== null && overview) this.caseExport.open(id, { scope: "all" }, null, false, name);
-        else this.caseExport.reset();
-      });
-    });
-  }
 
   protected caseSelection(row: AnalyticsCaseRow): ProgramCaseSelection {
     return row.isWithoutCase

@@ -171,6 +171,20 @@ describe("ProgramAnalyticsComponent", () => {
   });
 
   describe("cases from manager overview", () => {
+    it("не показывает общую выгрузку и не запрашивает проекты до открытия кейса", () => {
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      const repo = fixture.debugElement.injector.get(ProgramRepositoryPort);
+      const list = vi.spyOn(repo, "getCaseProjects");
+      fixture.detectChanges();
+
+      const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        '[data-testid="cases-card"]',
+      )!;
+      expect(card.textContent).not.toContain("Выгрузить все проекты");
+      expect(card.textContent).not.toContain("Проверяем доступность выгрузки");
+      expect(list).not.toHaveBeenCalled();
+    });
+
     it.each([0, 2, 3])("клик строки %s передаёт точный scope, включая нулевой кейс", index => {
       const { fixture, rows } = renderCases();
       const drilldown = fixture.debugElement.query(
