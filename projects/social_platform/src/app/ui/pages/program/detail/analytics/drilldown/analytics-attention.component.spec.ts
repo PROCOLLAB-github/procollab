@@ -1,4 +1,7 @@
 /** @format */
+
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
@@ -48,6 +51,10 @@ describe("Attention views: real overlay", () => {
     await TestBed.configureTestingModule({
       imports: [AnalyticsDrilldownComponent],
       providers: [
+        {
+          provide: ProgramRepositoryPort,
+          useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+        },
         provideRouter([]),
         { provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: "UTC" } },
         { provide: GetProgramManagerParticipantsWithoutTeamUseCase, useValue: participants },

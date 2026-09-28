@@ -308,11 +308,26 @@
 }
 
 .case-row {
+  display: block;
   flex-shrink: 0;
+  width: 100%;
   min-width: 0;
   padding: 10px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   background: var(--light-gray);
+  border: 1px solid transparent;
   border-radius: 8px;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 
   &--without-case {
     border: 1px dashed var(--medium-grey-for-outline);
@@ -384,6 +399,26 @@
       font-weight: 600;
     }
   }
+}
+
+.cases-card__export {
+  app-button {
+    width: min(100%, 220px);
+  }
+
+  display: grid;
+  flex: 0 0 auto;
+  gap: 6px;
+  justify-items: start;
+  margin-top: 12px;
+}
+
+.cases-card__retry {
+  font: inherit;
+  color: var(--accent-dark);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
 }
 
 .funnel {
@@ -499,7 +534,9 @@
     background: var(--light-gray);
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 8px;
-    transition: background-color 0.15s, border-color 0.15s;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s;
 
     &:hover:not(:disabled),
     &:active:not(:disabled) {

@@ -1,4 +1,7 @@
 /** @format */
+
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
@@ -25,7 +28,13 @@ import { AnalyticsDrilldownComponent } from "./analytics-drilldown.component";
 
 @Component({
   imports: [AnalyticsDrilldownComponent],
-  providers: [ProgramAnalyticsInfoService],
+  providers: [
+    {
+      provide: ProgramRepositoryPort,
+      useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+    },
+    ProgramAnalyticsInfoService,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<button
       #trigger
@@ -58,6 +67,10 @@ describe("Attention SPA: observable route → resolver → overview", () => {
     await TestBed.configureTestingModule({
       imports: [RouteHost],
       providers: [
+        {
+          provide: ProgramRepositoryPort,
+          useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+        },
         provideRouter([]),
         ProgramDetailMainUIInfoService,
         { provide: ActivatedRoute, useValue: { parent: { paramMap: params.asObservable() } } },

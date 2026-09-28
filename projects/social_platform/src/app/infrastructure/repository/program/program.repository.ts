@@ -1,6 +1,10 @@
 /** @format */
 
 import { HttpParams } from "@angular/common/http";
+import {
+  ProgramCaseQuery,
+  ProgramCaseSelection,
+} from "@domain/program/program-case-analytics.model";
 import { ProgramRoleWidget } from "@domain/program/program-role-widget.model";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable, tap, throwError } from "rxjs";
@@ -36,6 +40,14 @@ import {
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
+  getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown> {
+    return this.programAdapter.getCaseProjects(programId, query);
+  }
+
+  exportCaseProjects(programId: number, selection: ProgramCaseSelection): Observable<Blob> {
+    return this.programAdapter.exportCaseProjects(programId, selection);
+  }
+
   getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
     return this.programAdapter.getRoleWidget(programId);
   }

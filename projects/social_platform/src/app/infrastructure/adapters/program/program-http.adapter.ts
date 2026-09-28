@@ -5,6 +5,10 @@ import { ProgramRoleWidget } from "@domain/program/program-role-widget.model";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
+import {
+  ProgramCaseQuery,
+  ProgramCaseSelection,
+} from "@domain/program/program-case-analytics.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "@domain/auth/user.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
@@ -31,6 +35,28 @@ import {
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
+  getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown> {
+    let params = this.caseParams(query.selection)
+      .set("limit", query.limit ?? 25)
+      .set("offset", query.offset ?? 0);
+    if (query.search?.trim()) params = params.set("search", query.search.trim());
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/`, params);
+  }
+
+  exportCaseProjects(programId: number, selection: ProgramCaseSelection): Observable<Blob> {
+    return this.apiService.getFile(
+      `${this.PROGRAMS_URL}/${programId}/export-projects/`,
+      this.caseParams(selection),
+    );
+  }
+
+  private caseParams(selection: ProgramCaseSelection): HttpParams {
+    const params = new HttpParams()
+      .set("view", "case_analytics")
+      .set("case_scope", selection.scope);
+    return selection.scope === "selected" ? params.set("case_name", selection.caseName) : params;
+  }
+
   getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/analytics-widget/`);
   }

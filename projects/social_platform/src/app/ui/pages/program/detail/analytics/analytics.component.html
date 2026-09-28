@@ -261,39 +261,74 @@
         </div>
         @if (caseEmptyMessage(); as message) {
           <p class="analytics-empty-state text-body-10">{{ message }}</p>
-        } @else {
+        }
+        <div class="cases-card__export">
+          <app-button
+            appearance="outline"
+            size="big"
+            [disabled]="!caseExport.canExport()"
+            [loader]="caseExport.exportPending()"
+            (click)="caseExport.download()"
+            >Выгрузить все проекты</app-button
+          >
+          @if (caseExport.pending()) {
+            <p class="text-body-10" role="status">Проверяем доступность выгрузки…</p>
+          }
+          @if (caseExport.error() || caseExport.exportError(); as error) {
+            <p class="text-body-10" role="alert">{{ caseErrorMessage(error) }}</p>
+            @if (caseExport.error()?.kind === "network") {
+              <button type="button" class="cases-card__retry" (click)="caseExport.load()">
+                Повторить проверку
+              </button>
+            }
+          }
+        </div>
+        @if (caseRows().length) {
           <ul class="cases-card__list" tabindex="0" aria-labelledby="analytics-cases-title">
             @for (row of caseRows(); track row.key) {
-              <li
-                class="case-row"
-                [class.case-row--without-case]="row.isWithoutCase"
-                [attr.aria-label]="overview.cases.submissionApplicable ? null : row.description"
-              >
-                <div class="case-row__header">
-                  <span class="case-row__name" [title]="row.name">{{ row.name }}</span>
-                  <span class="case-row__total">
-                    <strong class="case-row__total-value">{{ row.projectsTotal }}</strong>
-                    <span class="case-row__total-label">{{ row.totalLabel }}</span>
-                  </span>
-                </div>
-                <div class="case-row__bar" role="img" [attr.aria-label]="row.description">
-                  <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
-                </div>
-                <div class="case-row__meta">
-                  @if (overview.cases.submissionApplicable) {
+              <li>
+                <button
+                  type="button"
+                  #caseTrigger
+                  class="case-row"
+                  [class.case-row--without-case]="row.isWithoutCase"
+                  [attr.aria-label]="row.description + '. Открыть проекты кейса'"
+                  aria-haspopup="dialog"
+                  (click)="
+                    drilldown.openCase(
+                      caseSelection(row),
+                      row,
+                      overview.cases.submissionApplicable,
+                      caseTrigger
+                    )
+                  "
+                >
+                  <div class="case-row__header">
+                    <span class="case-row__name" [title]="row.name">{{ row.name }}</span>
+                    <span class="case-row__total">
+                      <strong class="case-row__total-value">{{ row.projectsTotal }}</strong>
+                      <span class="case-row__total-label">{{ row.totalLabel }}</span>
+                    </span>
+                  </div>
+                  <div class="case-row__bar" role="img" [attr.aria-label]="row.description">
+                    <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
+                  </div>
+                  <div class="case-row__meta">
+                    @if (overview.cases.submissionApplicable) {
+                      <span
+                        >Сдано <strong>{{ row.submitted }}</strong></span
+                      >
+                      <span aria-hidden="true">·</span>
+                      <span
+                        >Не сдано <strong>{{ row.notSubmitted }}</strong></span
+                      >
+                      <span aria-hidden="true">·</span>
+                    }
                     <span
-                      >Сдано <strong>{{ row.submitted }}</strong></span
+                      >Участников <strong>{{ row.participantsTotal }}</strong></span
                     >
-                    <span aria-hidden="true">·</span>
-                    <span
-                      >Не сдано <strong>{{ row.notSubmitted }}</strong></span
-                    >
-                    <span aria-hidden="true">·</span>
-                  }
-                  <span
-                    >Участников <strong>{{ row.participantsTotal }}</strong></span
-                  >
-                </div>
+                  </div>
+                </button>
               </li>
             }
           </ul>
@@ -608,6 +643,7 @@
 <app-analytics-drilldown
   #drilldown
   [programId]="programId()"
+  [programName]="programName()"
   [notSubmittedApplicable]="data()?.attention?.projectsNotSubmitted?.applicable ?? false"
   [delayedExperts]="data()?.attention?.delayedExperts ?? { total: 0, items: [] }"
 />
