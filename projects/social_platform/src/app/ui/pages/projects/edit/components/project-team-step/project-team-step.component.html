@@ -1,37 +1,47 @@
 <!-- @format -->
-<section class="team" aria-labelledby="team-title">
-  <div class="team__main">
-    <header class="team__header">
+<section class="team" aria-labelledby="team-title" [attr.aria-busy]="teamLoading()">
+  <header class="team__header">
+    <div class="team__intro">
       <h2 id="team-title">Команда проекта</h2>
       <p>Управляйте участниками проекта, приглашайте новых и назначайте роли.</p>
-    </header>
+    </div>
+    <app-button
+      class="invite__submit"
+      appearance="outline"
+      size="big"
+      [disabled]="teamLoading() || isLoading(inviteFormIsSubmitting())"
+      (click)="openInviteModal($event)"
+    >
+      <i
+        appIcon
+        icon="plus"
+        appWidth="12"
+        appHeight="12"
+        appViewBox="0 0 19 19"
+        aria-hidden="true"
+      ></i>
+      <span>Пригласить участника</span>
+    </app-button>
+  </header>
 
-    <section class="team-invite" aria-labelledby="team-invite-title">
-      <span class="team-invite__icon" aria-hidden="true"
-        ><i appIcon icon="team" appSquare="28"></i
-      ></span>
-      <div class="team-invite__copy">
-        <h3 id="team-invite-title">Пригласить участника</h3>
-        <p>Найдите участника на PROCOLLAB и укажите его роль в проекте.</p>
+  @if (teamLoading()) {
+    <div class="team-loading">
+      <p role="status">Загрузка команды…</p>
+      <div aria-hidden="true">
+        @for (row of [1, 2, 3]; track row) {
+          <div class="team-skeleton">
+            <span class="team-skeleton__avatar"></span>
+            <div class="team-skeleton__copy"><span></span><span></span></div>
+          </div>
+        }
       </div>
-      <div class="invite__submit">
-        <button
-          type="button"
-          class="team-invite__button"
-          (click)="openInviteModal($event)"
-          [disabled]="isLoading(inviteFormIsSubmitting())"
-        >
-          <i appIcon icon="plus" appSquare="18" aria-hidden="true"></i>
-          <span>Пригласить участника</span>
-        </button>
-      </div>
-    </section>
-
+    </div>
+  } @else {
     <section class="team-section" aria-labelledby="team-members-title">
-      <div class="team-section__heading">
-        <h3 id="team-members-title">Участники команды</h3>
-        <span class="team-count">{{ collaborators().length }}</span>
-      </div>
+      <h3 id="team-members-title">
+        Участники команды <span aria-hidden="true">·</span>
+        <span data-team-count="members">{{ collaborators().length }}</span>
+      </h3>
       <ul class="team-list">
         @for (collaborator of collaborators(); track collaborator.userId) {
           <li>
@@ -42,21 +52,26 @@
               (collaboratorRemoved)="onCollaboratorRemove($event)"
             />
           </li>
-        } @empty {
-          <li class="team-empty">
-            <strong>Здесь будут участники вашей команды</strong>
-            <p>Отправьте приглашение. После подтверждения участник появится в этом списке.</p>
-          </li>
         }
       </ul>
+      @if (!collaborators().length || (onlyCurrentUser() && !pendingInvites().length)) {
+        <div class="team-empty">
+          <p class="team-empty__title">
+            {{
+              onlyCurrentUser() ? "В команде пока только вы" : "Здесь будут участники вашей команды"
+            }}
+          </p>
+          <p>Пригласите участника и укажите его роль в проекте.</p>
+        </div>
+      }
     </section>
 
     @if (pendingInvites().length) {
       <section class="team-section" aria-labelledby="team-pending-title">
-        <div class="team-section__heading">
-          <h3 id="team-pending-title">Ожидают подтверждения</h3>
-          <span class="team-count team-count--pending">{{ pendingInvites().length }}</span>
-        </div>
+        <h3 id="team-pending-title">
+          Ожидают подтверждения <span aria-hidden="true">·</span>
+          <span data-team-count="pending">{{ pendingInvites().length }}</span>
+        </h3>
         <p class="team-section__description">
           Участники появятся в команде, когда примут приглашение.
         </p>
@@ -72,45 +87,10 @@
           }
         </ul>
       </section>
+    } @else {
+      <p class="team__no-invites">Нет ожидающих приглашений.</p>
     }
-  </div>
-
-  <aside class="team__sidebar" aria-label="Информация о команде">
-    <section class="team-summary">
-      <h3>О команде</h3>
-      <dl class="team-stats">
-        <div>
-          <dt>Участников в команде</dt>
-          <dd data-team-count="members">{{ collaborators().length }}</dd>
-        </div>
-        <div>
-          <dt>Ожидают подтверждения</dt>
-          <dd data-team-count="pending">{{ pendingInvites().length }}</dd>
-        </div>
-      </dl>
-      <div class="team-roles">
-        <h3>Ключевые роли</h3>
-        <p>Роли участников, которые уже в команде</p>
-        <ul>
-          @for (role of teamRoles(); track role.name) {
-            <li>
-              <span>{{ role.name }}</span
-              ><strong [attr.aria-label]="'Участников с ролью: ' + role.count">{{
-                role.count
-              }}</strong>
-            </li>
-          } @empty {
-            <li class="team-roles__empty">Роли появятся после вступления участников.</li>
-          }
-        </ul>
-      </div>
-    </section>
-    <section class="team-helper">
-      <span aria-hidden="true"><i appIcon icon="team" appSquare="24"></i></span>
-      <h3>Соберите сильную команду</h3>
-      <p>Разнообразные навыки и опыт помогают быстрее достигать целей проекта.</p>
-    </section>
-  </aside>
+  }
 </section>
 
 @if (isInviteModalOpen()) {

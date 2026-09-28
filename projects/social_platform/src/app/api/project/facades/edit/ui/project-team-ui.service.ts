@@ -17,6 +17,8 @@ export class ProjectTeamUIService {
 
   readonly invites = signal<Invite[]>([]);
   readonly collaborators = signal<Collaborator[]>([]);
+  // До инициализации из resolver пустой массив ещё не означает пустую команду.
+  readonly teamLoading = signal(true);
   readonly isInviteModalOpen = signal<boolean>(false);
   readonly inviteSubmitError = signal<InviteSendError | null>(null);
 
@@ -51,6 +53,7 @@ export class ProjectTeamUIService {
 
   applySetCollaborators(collaborators: Collaborator[]): void {
     this.collaborators.set(collaborators);
+    this.teamLoading.set(false);
   }
 
   applyOpenInviteModal(): void {

@@ -7,11 +7,10 @@ import {
   OnInit,
   OnDestroy,
 } from "@angular/core";
-import { IconComponent } from "@ui/primitives";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { InviteCardComponent } from "./invite-card/invite-card.component";
 import { CollaboratorCardComponent } from "./collaborator-card/collaborator-card.component";
 import { isLoading } from "@domain/shared/async-state";
-import { normalizeInviteText } from "@domain/invite/project-role-suggestions";
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
@@ -24,6 +23,7 @@ import { ProjectMemberInviteModalComponent } from "@ui/widgets/project-invite/pr
   templateUrl: "./project-team-step.component.html",
   styleUrl: "./project-team-step.component.scss",
   imports: [
+    ButtonComponent,
     IconComponent,
     InviteCardComponent,
     CollaboratorCardComponent,
@@ -42,18 +42,12 @@ export class ProjectTeamStepComponent implements OnInit, OnDestroy {
   protected readonly pendingInvites = computed(() =>
     this.projectTeamUIService.invites().filter(invite => invite.isAccepted === null),
   );
-  protected readonly teamRoles = computed(() => {
-    const roles = new Map<string, { name: string; count: number }>();
-    for (const member of this.collaborators()) {
-      const name = normalizeInviteText(member.role ?? "");
-      if (!name) continue;
-      const key = name.toLocaleLowerCase();
-      const role = roles.get(key);
-      if (role) role.count++;
-      else roles.set(key, { name, count: 1 });
-    }
-    return [...roles.values()];
-  });
+  protected readonly teamLoading = this.projectTeamUIService.teamLoading;
+  protected readonly onlyCurrentUser = computed(
+    () =>
+      this.collaborators().length === 1 &&
+      this.collaborators()[0].userId === this.currentUser()?.id,
+  );
   protected readonly isInviteModalOpen = this.projectTeamUIService.isInviteModalOpen;
   protected readonly isLoading = isLoading;
   protected readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;

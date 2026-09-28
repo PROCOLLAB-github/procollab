@@ -3,6 +3,7 @@
   <section
     #dialog
     class="project-invite"
+    [class.project-invite--compact]="compact()"
     role="dialog"
     aria-modal="true"
     [attr.aria-label]="title()"
@@ -32,7 +33,11 @@
         aria-label="Закрыть приглашение"
         (click)="close()"
       >
-        ×
+        @if (compact()) {
+          <i appIcon icon="cross" appSquare="24" aria-hidden="true"></i>
+        } @else {
+          ×
+        }
       </button>
     </header>
     <div class="project-invite__search"><ng-content select="[inviteSearch]" /></div>
