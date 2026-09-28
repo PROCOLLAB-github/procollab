@@ -1,0 +1,3327 @@
+{
+  "browser": "154.0.8037.57",
+  "checks": 709,
+  "viewports": [1440, 1280, 1024, 768, 414, 390, 375],
+  "errors": [],
+  "findings": [
+    {
+      "scenario": "profile-2",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 176.5234375,
+        "width": 552,
+        "height": 546.953125
+      },
+      "footer": {
+        "top": 638.4765625,
+        "bottom": 699.4765625
+      },
+      "list": {
+        "height": 188.5625,
+        "client": 189,
+        "scroll": 189
+      },
+      "headerTop": 200.5234375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 122.3046875,
+        "width": 552,
+        "height": 655.390625
+      },
+      "footer": {
+        "top": 692.6953125,
+        "bottom": 753.6953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1048
+      },
+      "headerTop": 146.3046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1070
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 238.40625,
+        "width": 552,
+        "height": 423.1875
+      },
+      "footer": {
+        "top": 576.59375,
+        "bottom": 637.59375
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 262.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 237.40625,
+        "width": 552,
+        "height": 425.1875
+      },
+      "footer": {
+        "top": 577.59375,
+        "bottom": 638.59375
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 261.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 218.359375,
+        "width": 552,
+        "height": 463.28125
+      },
+      "footer": {
+        "top": 596.640625,
+        "bottom": 657.640625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 242.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 215.359375,
+        "width": 552,
+        "height": 469.28125
+      },
+      "footer": {
+        "top": 599.640625,
+        "bottom": 660.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 239.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 200.359375,
+        "width": 552,
+        "height": 499.28125
+      },
+      "footer": {
+        "top": 614.640625,
+        "bottom": 675.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 224.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-2",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 176.5234375,
+        "width": 552,
+        "height": 546.953125
+      },
+      "footer": {
+        "top": 638.4765625,
+        "bottom": 699.4765625
+      },
+      "list": {
+        "height": 188.5625,
+        "client": 189,
+        "scroll": 189
+      },
+      "headerTop": 200.5234375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 122.3046875,
+        "width": 552,
+        "height": 655.390625
+      },
+      "footer": {
+        "top": 692.6953125,
+        "bottom": 753.6953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1048
+      },
+      "headerTop": 146.3046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1070
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 238.40625,
+        "width": 552,
+        "height": 423.1875
+      },
+      "footer": {
+        "top": 576.59375,
+        "bottom": 637.59375
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 262.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 237.40625,
+        "width": 552,
+        "height": 425.1875
+      },
+      "footer": {
+        "top": 577.59375,
+        "bottom": 638.59375
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 261.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 218.359375,
+        "width": 552,
+        "height": 463.28125
+      },
+      "footer": {
+        "top": 596.640625,
+        "bottom": 657.640625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 242.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 215.359375,
+        "width": 552,
+        "height": 469.28125
+      },
+      "footer": {
+        "top": 599.640625,
+        "bottom": 660.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 239.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 1280,
+      "height": 900,
+      "dialog": {
+        "x": 364,
+        "y": 200.359375,
+        "width": 552,
+        "height": 499.28125
+      },
+      "footer": {
+        "top": 614.640625,
+        "bottom": 675.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 224.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-2",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 176.5234375,
+        "width": 552,
+        "height": 546.953125
+      },
+      "footer": {
+        "top": 638.4765625,
+        "bottom": 699.4765625
+      },
+      "list": {
+        "height": 188.5625,
+        "client": 189,
+        "scroll": 189
+      },
+      "headerTop": 200.5234375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 122.3046875,
+        "width": 552,
+        "height": 655.390625
+      },
+      "footer": {
+        "top": 692.6953125,
+        "bottom": 753.6953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1048
+      },
+      "headerTop": 146.3046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1070
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 238.40625,
+        "width": 552,
+        "height": 423.1875
+      },
+      "footer": {
+        "top": 576.59375,
+        "bottom": 637.59375
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 262.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 237.40625,
+        "width": 552,
+        "height": 425.1875
+      },
+      "footer": {
+        "top": 577.59375,
+        "bottom": 638.59375
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 261.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 218.359375,
+        "width": 552,
+        "height": 463.28125
+      },
+      "footer": {
+        "top": 596.640625,
+        "bottom": 657.640625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 242.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 215.359375,
+        "width": 552,
+        "height": 469.28125
+      },
+      "footer": {
+        "top": 599.640625,
+        "bottom": 660.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 239.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 1024,
+      "height": 900,
+      "dialog": {
+        "x": 236,
+        "y": 200.359375,
+        "width": 552,
+        "height": 499.28125
+      },
+      "footer": {
+        "top": 614.640625,
+        "bottom": 675.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 224.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-2",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 176.5234375,
+        "width": 552,
+        "height": 546.953125
+      },
+      "footer": {
+        "top": 638.4765625,
+        "bottom": 699.4765625
+      },
+      "list": {
+        "height": 188.5625,
+        "client": 189,
+        "scroll": 189
+      },
+      "headerTop": 200.5234375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 122.3046875,
+        "width": 552,
+        "height": 655.390625
+      },
+      "footer": {
+        "top": 692.6953125,
+        "bottom": 753.6953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1048
+      },
+      "headerTop": 146.3046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1070
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 238.40625,
+        "width": 552,
+        "height": 423.1875
+      },
+      "footer": {
+        "top": 576.59375,
+        "bottom": 637.59375
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 262.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 237.40625,
+        "width": 552,
+        "height": 425.1875
+      },
+      "footer": {
+        "top": 577.59375,
+        "bottom": 638.59375
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 261.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 120.8046875,
+        "width": 552,
+        "height": 658.390625
+      },
+      "footer": {
+        "top": 694.1953125,
+        "bottom": 755.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 144.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 218.359375,
+        "width": 552,
+        "height": 463.28125
+      },
+      "footer": {
+        "top": 596.640625,
+        "bottom": 657.640625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 242.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 215.359375,
+        "width": 552,
+        "height": 469.28125
+      },
+      "footer": {
+        "top": 599.640625,
+        "bottom": 660.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 239.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 768,
+      "height": 900,
+      "dialog": {
+        "x": 108,
+        "y": 200.359375,
+        "width": 552,
+        "height": 499.28125
+      },
+      "footer": {
+        "top": 614.640625,
+        "bottom": 675.640625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 224.359375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-2",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 152.5234375,
+        "width": 390,
+        "height": 506.953125
+      },
+      "footer": {
+        "top": 586.4765625,
+        "bottom": 643.4765625
+      },
+      "list": {
+        "height": 188.5625,
+        "client": 189,
+        "scroll": 189
+      },
+      "headerTop": 168.5234375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 98.3046875,
+        "width": 390,
+        "height": 615.390625
+      },
+      "footer": {
+        "top": 640.6953125,
+        "bottom": 697.6953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1087
+      },
+      "headerTop": 114.3046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 96.8046875,
+        "width": 390,
+        "height": 618.390625
+      },
+      "footer": {
+        "top": 642.1953125,
+        "bottom": 699.1953125
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1090
+      },
+      "headerTop": 112.8046875,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 207.0078125,
+        "width": 390,
+        "height": 397.984375
+      },
+      "footer": {
+        "top": 531.9921875,
+        "bottom": 588.9921875
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 223.0078125,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 206.0078125,
+        "width": 390,
+        "height": 399.984375
+      },
+      "footer": {
+        "top": 532.9921875,
+        "bottom": 589.9921875
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 222.0078125,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 89.40625,
+        "width": 390,
+        "height": 633.1875
+      },
+      "footer": {
+        "top": 649.59375,
+        "bottom": 706.59375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 105.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 186.9609375,
+        "width": 390,
+        "height": 438.078125
+      },
+      "footer": {
+        "top": 552.0390625,
+        "bottom": 609.0390625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 202.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 183.9609375,
+        "width": 390,
+        "height": 444.078125
+      },
+      "footer": {
+        "top": 555.0390625,
+        "bottom": 612.0390625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 199.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 414,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 168.9609375,
+        "width": 390,
+        "height": 474.078125
+      },
+      "footer": {
+        "top": 570.0390625,
+        "bottom": 627.0390625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 184.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 132.0625
+        },
+        {
+          "height": 44,
+          "width": 217.921875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-2",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 135.375,
+        "width": 366,
+        "height": 541.25
+      },
+      "footer": {
+        "top": 603.625,
+        "bottom": 660.625
+      },
+      "list": {
+        "height": 208.0625,
+        "client": 208,
+        "scroll": 208
+      },
+      "headerTop": 151.375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 90.90625,
+        "width": 366,
+        "height": 630.1875
+      },
+      "footer": {
+        "top": 648.09375,
+        "bottom": 705.09375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1106
+      },
+      "headerTop": 106.90625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 89.40625,
+        "width": 366,
+        "height": 633.1875
+      },
+      "footer": {
+        "top": 649.59375,
+        "bottom": 706.59375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1109
+      },
+      "headerTop": 105.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 207.0078125,
+        "width": 366,
+        "height": 397.984375
+      },
+      "footer": {
+        "top": 531.9921875,
+        "bottom": 588.9921875
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 223.0078125,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 206.0078125,
+        "width": 366,
+        "height": 399.984375
+      },
+      "footer": {
+        "top": 532.9921875,
+        "bottom": 589.9921875
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 222.0078125,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 89.40625,
+        "width": 366,
+        "height": 633.1875
+      },
+      "footer": {
+        "top": 649.59375,
+        "bottom": 706.59375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 105.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 186.9609375,
+        "width": 366,
+        "height": 438.078125
+      },
+      "footer": {
+        "top": 552.0390625,
+        "bottom": 609.0390625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 202.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 183.9609375,
+        "width": 366,
+        "height": 444.078125
+      },
+      "footer": {
+        "top": 555.0390625,
+        "bottom": 612.0390625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 199.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 390,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 168.9609375,
+        "width": 366,
+        "height": 474.078125
+      },
+      "footer": {
+        "top": 570.0390625,
+        "bottom": 627.0390625
+      },
+      "list": {
+        "height": 110.890625,
+        "client": 111,
+        "scroll": 111
+      },
+      "headerTop": 184.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 123.015625
+        },
+        {
+          "height": 44,
+          "width": 202.96875
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-2",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 135.375,
+        "width": 351,
+        "height": 541.25
+      },
+      "footer": {
+        "top": 603.625,
+        "bottom": 660.625
+      },
+      "list": {
+        "height": 208.0625,
+        "client": 208,
+        "scroll": 208
+      },
+      "headerTop": 151.375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-12",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 90.90625,
+        "width": 351,
+        "height": 630.1875
+      },
+      "footer": {
+        "top": 648.09375,
+        "bottom": 705.09375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1106
+      },
+      "headerTop": 106.90625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-last-selected",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 89.40625,
+        "width": 351,
+        "height": 633.1875
+      },
+      "footer": {
+        "top": 649.59375,
+        "bottom": 706.59375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 1129
+      },
+      "headerTop": 105.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-empty",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 207.0078125,
+        "width": 351,
+        "height": 397.984375
+      },
+      "footer": {
+        "top": 531.9921875,
+        "bottom": 588.9921875
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 223.0078125,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-loading",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 206.0078125,
+        "width": 351,
+        "height": 399.984375
+      },
+      "footer": {
+        "top": 532.9921875,
+        "bottom": 589.9921875
+      },
+      "list": {
+        "height": 66.796875,
+        "client": 67,
+        "scroll": 67
+      },
+      "headerTop": 222.0078125,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-8-results",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 89.40625,
+        "width": 351,
+        "height": 633.1875
+      },
+      "footer": {
+        "top": 649.59375,
+        "bottom": 706.59375
+      },
+      "list": {
+        "height": 300,
+        "client": 300,
+        "scroll": 781
+      },
+      "headerTop": 105.40625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        },
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-1-result",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 186.9609375,
+        "width": 351,
+        "height": 438.078125
+      },
+      "footer": {
+        "top": 552.0390625,
+        "bottom": 609.0390625
+      },
+      "list": {
+        "height": 104.890625,
+        "client": 105,
+        "scroll": 105
+      },
+      "headerTop": 202.9609375,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [
+        {
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-custom-role",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 176.265625,
+        "width": 351,
+        "height": 459.46875
+      },
+      "footer": {
+        "top": 562.734375,
+        "bottom": 619.734375
+      },
+      "list": {
+        "height": 126.28125,
+        "client": 126,
+        "scroll": 126
+      },
+      "headerTop": 192.265625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "team-error",
+      "width": 375,
+      "height": 812,
+      "dialog": {
+        "x": 12,
+        "y": 152.265625,
+        "width": 351,
+        "height": 507.46875
+      },
+      "footer": {
+        "top": 586.734375,
+        "bottom": 643.734375
+      },
+      "list": {
+        "height": 126.28125,
+        "client": 126,
+        "scroll": 126
+      },
+      "headerTop": 168.265625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 117.34375
+        },
+        {
+          "height": 44,
+          "width": 193.65625
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    },
+    {
+      "scenario": "profile-no-projects",
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 444,
+        "y": 306.1015625,
+        "width": 552,
+        "height": 287.796875
+      },
+      "footer": {
+        "top": 508.8984375,
+        "bottom": 569.8984375
+      },
+      "list": {
+        "height": 64.796875,
+        "client": 65,
+        "scroll": 65
+      },
+      "headerTop": 330.1015625,
+      "overflow": 0,
+      "dialogOverflow": 0,
+      "outsideList": true,
+      "buttons": [
+        {
+          "height": 44,
+          "width": 185.65625
+        },
+        {
+          "height": 44,
+          "width": 306.328125
+        }
+      ],
+      "radios": [],
+      "font": "Mont, sans-serif"
+    }
+  ]
+}

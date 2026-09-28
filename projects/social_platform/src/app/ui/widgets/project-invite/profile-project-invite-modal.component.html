@@ -1,0 +1,109 @@
+<!-- @format -->
+<app-project-invite-dialog
+  title="Пригласить в проект"
+  description="Выберите проект и укажите роль участника"
+  [trigger]="trigger()"
+  (closed)="closed.emit()"
+>
+  <div inviteSearch>
+    @if (projects().length) {
+      <label class="invite-search">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <circle cx="10" cy="10" r="7" />
+          <path d="m15 15 6 6" />
+        </svg>
+        <input
+          data-invite-autofocus
+          type="search"
+          aria-label="Поиск среди ваших проектов"
+          placeholder="Поиск среди ваших проектов…"
+          [value]="query()"
+          (input)="query.set($any($event.target).value)"
+          [readOnly]="loading()"
+        />
+      </label>
+    }
+  </div>
+  <div inviteList>
+    @if (projects().length) {
+      <p class="invite-label">Ваши проекты</p>
+      <div class="invite-rows" role="radiogroup" aria-label="Ваши проекты">
+        @for (project of filteredProjects(); track project.id) {
+          <button
+            type="button"
+            class="invite-row"
+            role="radio"
+            [class.invite-row--selected]="selectedProjectId() === project.id"
+            [attr.aria-checked]="selectedProjectId() === project.id"
+            [disabled]="loading()"
+            (click)="selected.emit(project.id)"
+          >
+            <span class="invite-avatar">
+              @if (project.imageAddress) {
+                <img [src]="project.imageAddress" alt="" />
+              } @else {
+                {{ (project.name || "П").slice(0, 1) }}
+              }
+            </span>
+            <span class="invite-copy"
+              ><strong>{{ project.name || "Проект без названия" }}</strong>
+              @if (project.shortDescription) {
+                <span class="invite-meta">{{ project.shortDescription }}</span>
+              }
+              @if (project.numberOfCollaborators !== undefined) {
+                <span class="invite-meta">Участников: {{ project.numberOfCollaborators }}</span>
+              }
+            </span>
+            <span class="invite-radio" aria-hidden="true"></span>
+          </button>
+        } @empty {
+          <p class="invite-helper" role="status">Проекты не найдены. Попробуйте другое название.</p>
+        }
+      </div>
+    } @else {
+      <p class="invite-helper">Вы не являетесь лидером ни в одном проекте.</p>
+    }
+  </div>
+  <div inviteRole>
+    @if (projects().length) {
+      <app-project-invite-role-input [control]="form().controls.role" [readonly]="loading()" />
+    }
+  </div>
+  @if (error(); as error) {
+    <p inviteError class="invite-error" role="alert">{{ error.message }}</p>
+  }
+  <div inviteFooter class="invite-actions">
+    <button type="button" class="invite-button" (click)="closed.emit()">Отмена</button>
+    @if (projects().length) {
+      <button
+        type="button"
+        class="invite-button invite-button--primary"
+        [disabled]="!selectedProjectId() || form().invalid || loading()"
+        [attr.aria-busy]="loading()"
+        (click)="sent.emit()"
+      >
+        @if (loading()) {
+          <span class="invite-spinner" aria-hidden="true"></span>
+        }
+        {{ loading() ? "Отправляем…" : "Отправить приглашение" }}
+      </button>
+    } @else {
+      <button
+        data-invite-autofocus
+        type="button"
+        class="invite-button invite-button--primary"
+        (click)="projectsRequested.emit()"
+      >
+        Перейти в проекты
+      </button>
+    }
+  </div>
+</app-project-invite-dialog>

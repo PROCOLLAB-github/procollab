@@ -1,7 +1,9 @@
 /** @format */
 
-import { computed, inject, Injectable, signal } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { computed, Injectable, signal } from "@angular/core";
+import { Subject } from "rxjs";
+import { createProjectInviteForm } from "@api/invite/project-invite-form";
+import { User } from "@domain/auth/user.model";
 import { Invite } from "@domain/invite/invite.model";
 import { InviteSendError } from "@domain/invite/invite-send-error";
 import { Collaborator } from "@domain/project/collaborator.model";
@@ -10,13 +12,13 @@ import { AsyncState, failure, initial } from "@domain/shared/async-state";
 /** UI-состояние команды проекта в форме редактирования. */
 @Injectable()
 export class ProjectTeamUIService {
-  private readonly fb = inject(FormBuilder);
+  readonly inviteClosed = new Subject<void>();
+  readonly selectedRecipient = signal<User | null>(null);
 
   readonly invites = signal<Invite[]>([]);
   readonly collaborators = signal<Collaborator[]>([]);
   readonly isInviteModalOpen = signal<boolean>(false);
   readonly inviteSubmitError = signal<InviteSendError | null>(null);
-  readonly showInviteFields = signal(false);
 
   // Состояние отправки формы
   readonly inviteSubmitInitiated = signal(false);
@@ -26,32 +28,20 @@ export class ProjectTeamUIService {
 
   readonly invitesFill = computed(() => this.invites().some(inv => inv.isAccepted === null));
 
-  readonly inviteForm = this.fb.group({
-    role: ["", [Validators.required]],
-    link: [
-      "",
-      [
-        Validators.required,
-        Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
-      ],
-    ],
-    specialization: [null],
-  });
+  readonly inviteForm = createProjectInviteForm();
 
   // Геттеры для контролов формы приглашения
   get role() {
     return this.inviteForm.get("role");
   }
 
-  get link() {
-    return this.inviteForm.get("link");
+  selectRecipient(user: User | null): void {
+    this.selectedRecipient.set(user);
+    this.inviteForm.controls.recipientId.setValue(user?.id ?? null);
+    this.inviteSubmitError.set(null);
   }
 
-  get specialization() {
-    return this.inviteForm.get("specialization");
-  }
-
-  applyClearLinkError(): void {
+  applyClearInviteError(): void {
     this.inviteSubmitError.set(null);
   }
 
@@ -64,6 +54,8 @@ export class ProjectTeamUIService {
   }
 
   applyOpenInviteModal(): void {
+    this.inviteClosed.next();
+    this.resetInviteForm();
     this.isInviteModalOpen.set(true);
   }
 
@@ -72,13 +64,13 @@ export class ProjectTeamUIService {
   }
 
   applyCloseInviteModal(): void {
+    this.inviteClosed.next();
     this.isInviteModalOpen.set(false);
+    this.resetInviteForm();
   }
 
   applySubmitInvite(invite: Invite): void {
     this.invites.update(list => [...list, invite]);
-    this.resetInviteForm();
-    this.showInviteFields.set(false);
     this.applyCloseInviteModal();
   }
 
@@ -112,6 +104,7 @@ export class ProjectTeamUIService {
 
   resetInviteForm(): void {
     this.inviteForm.reset();
+    this.selectedRecipient.set(null);
     this.inviteSubmitInitiated.set(false);
     this.inviteSubmitError.set(null);
     this.inviteFormIsSubmitting.set(initial());

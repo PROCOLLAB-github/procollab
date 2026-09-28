@@ -28,12 +28,12 @@ describe("mapInviteSendError", () => {
     [
       'Invalid pk "999" - object does not exist.',
       "user_not_found",
-      "Пользователь не найден. Проверьте ссылку на профиль.",
+      "Пользователь не найден. Выберите другого участника.",
     ],
     [
       'Недопустимый первичный ключ "999" - объект не существует.',
       "user_not_found",
-      "Пользователь не найден. Проверьте ссылку на профиль.",
+      "Пользователь не найден. Выберите другого участника.",
     ],
   ])("maps expected user validation: %s", (message, kind, text) => {
     const result = mapInviteSendError(

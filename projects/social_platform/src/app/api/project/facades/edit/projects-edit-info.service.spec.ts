@@ -155,7 +155,11 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
         },
         {
           provide: ProjectTeamUIService,
-          useValue: { applySetInvites: vi.fn(), applySetCollaborators: vi.fn() },
+          useValue: {
+            applySetInvites: vi.fn(),
+            applySetCollaborators: vi.fn(),
+            applyCloseInviteModal: vi.fn(),
+          },
         },
         {
           provide: ProjectVacancyUIService,
@@ -333,11 +337,16 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
       .mockReturnValueOnce(old)
       .mockReturnValue(of(programLinkFields({ projectId: 56 })));
     service.loadProgramTagsAndProject();
+    expect(service.invitationProject()?.id).toBe(55);
+    expect(service.invitationProject()?.partnerProgram.programId).toBe(99);
     params.next({ projectId: "56" });
+    expect(service.invitationProject()).toBeNull();
+    expect(TestBed.inject(ProjectTeamUIService).applyCloseInviteModal).toHaveBeenCalledOnce();
     expect(old.observed).toBe(false);
     expect(service.activeProgramLinkId()).toBeNull();
     expect(repo.getProgramLinkFields).toHaveBeenCalledTimes(1);
     data.next({ data: [project(56), [], [], [], []] });
+    expect(service.invitationProject()?.id).toBe(56);
     expect(repo.getProgramLinkFields).toHaveBeenCalledTimes(2);
     expect(service.activeProgramLinkId()).toBe(700);
   });
