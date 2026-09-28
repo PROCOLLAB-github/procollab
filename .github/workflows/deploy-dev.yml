@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 79417c0e1251a9e91a268da55c3b69ea7f49dc79
+          ref: e49d48fb7af915d55efc2f7b3bf0bbe79a392521
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
@@ -23,7 +23,7 @@ jobs:
       - run: npm run format:check
       - run: npm run lint:ts
       - run: npm run test:ci
-      - run: npm run build:pr
+      - run: npm run build:prod
       - name: Deploy to dev-stage
         if: github.ref == 'refs/heads/dev'
         uses: burnett01/rsync-deployments@5.2.1
