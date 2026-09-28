@@ -185,19 +185,70 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     );
   });
 
-  it("draft имеет приоритет над обычной связью с программой", () => {
-    fixture.componentRef.setInput(
-      "info",
-      projectCardFixture({ draft: true, partnerProgram: projectCardProgram(false) }),
-    );
-    fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Черновик");
-    expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
-      "Открыть",
-    );
-    fixture.detectChanges();
-    expect(card().querySelector(".card__info--project-partner")).toBeNull();
-    expect(card().textContent).not.toContain("привязан к программе");
+  it.each([
+    { draft: true, submitted: null, lifecycle: "draft", label: "Черновик", leaderCanEdit: true },
+    {
+      draft: false,
+      submitted: null,
+      lifecycle: "published",
+      label: "Опубликован",
+      leaderCanEdit: true,
+    },
+    {
+      draft: true,
+      submitted: false,
+      lifecycle: "program",
+      label: "В программе",
+      leaderCanEdit: true,
+    },
+    {
+      draft: false,
+      submitted: false,
+      lifecycle: "program",
+      label: "В программе",
+      leaderCanEdit: true,
+    },
+    {
+      draft: true,
+      submitted: true,
+      lifecycle: "submitted",
+      label: "Сдан в программу",
+      leaderCanEdit: false,
+    },
+    {
+      draft: false,
+      submitted: true,
+      lifecycle: "submitted",
+      label: "Сдан в программу",
+      leaderCanEdit: false,
+    },
+  ])("draft=$draft, submitted=$submitted: $label независимо от роли", item => {
+    const project = projectCardFixture({
+      draft: item.draft,
+      partnerProgram: item.submitted === null ? null : projectCardProgram(item.submitted),
+      partnerProgramsTags: [],
+    });
+    fixture.componentRef.setInput("info", project);
+    for (const userId of [7, 99, undefined]) {
+      fixture.componentRef.setInput("loggedUserId", userId);
+      fixture.detectChanges();
+      const canEdit = userId === 7 && item.leaderCanEdit;
+      expect(component["myProjectPresentation"]()).toMatchObject({
+        lifecycle: item.lifecycle,
+        role: userId === 7 ? "leader" : "participant",
+        canEdit,
+      });
+      expect(card().querySelectorAll(".card__status")).toHaveLength(1);
+      expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
+      expect(card().querySelector(".card__footer .card__role")?.textContent).toBe(
+        userId === 7 ? "Лидер" : "Участник",
+      );
+      expect(card().querySelector(".card__access-label")?.textContent).toBe(
+        canEdit ? "можно редактировать" : "только просмотр",
+      );
+      expect(card().querySelector(".card__project-action")?.textContent?.trim()).toBe("Открыть");
+      expect(card().querySelector(".card__info--project-partner")).toBeNull();
+    }
   });
 
   it("отсутствующая связь не превращает опубликованный проект в программный", () => {

@@ -390,3 +390,160 @@
     animation: none;
   }
 }
+
+// Opt-in для окон команды: приглашение из профиля сохраняет прежнюю композицию.
+.project-invite.project-invite--compact {
+  .project-invite__symbol {
+    display: none;
+  }
+
+  .project-invite__header {
+    display: grid;
+    grid-template-areas: "title close" "description description";
+    grid-template-columns: minmax(0, 1fr) 36px;
+    gap: 20px 8px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .project-invite__header > div {
+    display: contents;
+  }
+
+  .project-invite__header h2 {
+    grid-area: title;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+  }
+
+  .project-invite__header p {
+    grid-area: description;
+    margin-top: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .project-invite__close {
+    display: grid;
+    grid-area: close;
+    place-items: center;
+    min-width: 36px;
+    height: 36px;
+    margin: 0;
+    border-radius: 8px;
+  }
+
+  .invite-label,
+  app-project-invite-role-input .invite-role label {
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--black);
+  }
+
+  .invite-search,
+  app-project-invite-role-input .invite-role input {
+    min-height: 41px;
+    border-color: var(--gray);
+    border-width: 0.5px;
+    border-radius: var(--rounded-xxl);
+  }
+
+  .invite-search {
+    padding: 0 16px;
+  }
+
+  .invite-search input {
+    min-height: 39px;
+    font-size: 12px;
+  }
+
+  app-project-invite-role-input .invite-role input {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  app-project-invite-role-input .invite-role p,
+  .invite-meta {
+    font-size: 12px;
+  }
+
+  .invite-error {
+    color: var(--red);
+  }
+
+  .invite-row {
+    border-radius: 8px;
+  }
+
+  .invite-row--selected {
+    background: var(--light-gray);
+    border-color: var(--medium-grey-for-outline);
+  }
+
+  .invite-copy strong {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .invite-avatar {
+    border-radius: 50%;
+  }
+
+  .project-invite__footer {
+    padding-top: 0;
+    margin-top: 24px;
+    border: 0;
+  }
+
+  .invite-actions {
+    grid-template-columns: 140px 208px;
+    gap: 12px;
+    justify-content: start;
+  }
+
+  .invite-button {
+    min-height: 25px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    border-width: 0.5px;
+    border-radius: var(--rounded-xxl);
+  }
+
+  @media (width <= 600px) {
+    .project-invite__header {
+      grid-template-columns: minmax(0, 1fr) 44px;
+      row-gap: 12px;
+    }
+
+    .project-invite__close {
+      min-width: 44px;
+      height: 44px;
+    }
+
+    .project-invite__header p {
+      font-size: 12px;
+    }
+
+    .invite-actions {
+      grid-template-columns: 1fr;
+    }
+
+    .invite-button {
+      min-height: 44px;
+    }
+
+    .invite-search,
+    app-project-invite-role-input .invite-role input {
+      min-height: 44px;
+    }
+
+    .invite-search input,
+    app-project-invite-role-input .invite-role input {
+      font-size: 16px;
+    }
+  }
+}

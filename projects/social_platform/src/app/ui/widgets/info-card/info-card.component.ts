@@ -83,7 +83,7 @@ export class InfoCardComponent {
   );
 
   /**
-   * Lifecycle зависит только от проекта: submitted > draft > program > published.
+   * Lifecycle зависит только от проекта: submitted > program > draft > published.
    * Роль определяется отдельно по текущему профилю. Отсутствующие ID не делают
    * пользователя лидером; после сдачи даже лидер видит «только просмотр».
    * Единственный признак сдачи — isSubmitted: canSubmit описывает возможность
@@ -100,10 +100,10 @@ export class InfoCardComponent {
     const isSubmitted = project.partnerProgram?.isSubmitted === true;
     const lifecycle = isSubmitted
       ? "submitted"
-      : project.draft === true
-        ? "draft"
-        : project.partnerProgram != null
-          ? "program"
+      : project.partnerProgram != null
+        ? "program"
+        : project.draft === true
+          ? "draft"
           : "published";
     const labels: Record<MyProjectPresentation["lifecycle"], MyProjectPresentation["statusLabel"]> =
       {

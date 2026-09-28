@@ -1,4 +1,7 @@
 /** @format */
+
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+
 import { CdkTrapFocus } from "@angular/cdk/a11y";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
@@ -44,6 +47,10 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await TestBed.configureTestingModule({
       imports: [AnalyticsDrilldownComponent],
       providers: [
+        {
+          provide: ProgramRepositoryPort,
+          useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+        },
         provideRouter([]),
         {
           provide: GetProgramManagerProjectsNotSubmittedUseCase,
