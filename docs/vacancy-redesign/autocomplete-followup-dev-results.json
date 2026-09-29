@@ -1,0 +1,254 @@
+{
+  "started": "2026-09-29",
+  "before": {
+    "memberRequest": "GET /auth/public-users/?user_type=1&limit=20&offset=0&fullname=",
+    "filterInputsEmpty": true,
+    "longSkillDeleteWidth": 0,
+    "profileViewport": 390
+  },
+  "checks": [
+    {
+      "scenario": "desktop reload all URL filters",
+      "requests": [
+        {
+          "level": "debug",
+          "message": "[20:41:22.292] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=false 200 90ms",
+          "timestamp": "2026-09-29T17:41:22.293Z",
+          "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+        }
+      ],
+      "fields": [
+        "Angular",
+        "Front-end"
+      ]
+    },
+    {
+      "scenario": "desktop and mobile 390/320 reset, reselect, Back/Forward, rapid fullname",
+      "passed": true
+    },
+    {
+      "scenario": "age + student true",
+      "requests": [
+        {
+          "level": "debug",
+          "message": "[20:44:25.598] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=true 200 97ms",
+          "timestamp": "2026-09-29T17:44:25.600Z",
+          "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+        }
+      ]
+    },
+    {
+      "scenario": "onboarding long skill DEV search, 320/390, mouse delete",
+      "passed": true,
+      "submitted": false
+    },
+    {
+      "scenario": "vacancy 104 long skill, 390/320, Space delete, save and reload",
+      "skills": "Angular\nCSS",
+      "salary": 100,
+      "save": [
+        {
+          "level": "debug",
+          "message": "[20:50:34.227] [DEBUG] [HTTP] PATCH /dev-api/vacancies/104/ 200 114ms",
+          "timestamp": "2026-09-29T17:50:34.227Z",
+          "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+        }
+      ],
+      "source": "final 1e17d297 build",
+      "observedSalary": 100
+    },
+    {
+      "scenario": "all five supported URL filters on final build",
+      "request": [
+        {
+          "level": "debug",
+          "message": "[20:51:40.483] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&fullname=%D0%A2%D0%B5%D1%81%D1%82&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=false 200 75ms",
+          "timestamp": "2026-09-29T17:51:40.483Z",
+          "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+        }
+      ]
+    },
+    {
+      "scenario": "profile final source 1e17d297 long skill 390/320 Enter delete",
+      "remainingSkills": "AR\nВидео",
+      "viewport": 320,
+      "overflow": {
+        "scrollWidth": 305,
+        "viewport": 320
+      },
+      "saved": false
+    }
+  ],
+  "api": "https://dev.procollab.ru via loopback proxy",
+  "fixtureResponses": false,
+  "profileSaved": false,
+  "onboardingSubmitted": false,
+  "httpLogs": [
+    {
+      "level": "debug",
+      "message": "[19:36:30.568] [DEBUG] [HTTP] GET /dev-api/vacancies/104/ 200 87ms",
+      "timestamp": "2026-09-29T17:29:34.678Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "error",
+      "message": "[20:29:35.248] [ERROR] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&fullname= 401 54ms \"Http failure response for http://127.0.0.1:4360/dev-api/auth/public-users/?user_type=1&limit=20&offset=0&fullname=: 401 Unauthorized\"",
+      "timestamp": "2026-09-29T17:29:35.249Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:29:35.431] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&fullname= 200 90ms",
+      "timestamp": "2026-09-29T17:29:35.431Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:30:32.782] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 200 70ms",
+      "timestamp": "2026-09-29T17:30:32.783Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:37:10.824] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 200 63ms",
+      "timestamp": "2026-09-29T17:37:10.824Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:40:46.856] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=false 200 94ms",
+      "timestamp": "2026-09-29T17:40:46.857Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:41:22.292] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=false 200 90ms",
+      "timestamp": "2026-09-29T17:41:22.293Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "error",
+      "message": "[20:41:53.764] [ERROR] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0 401 86ms \"Http failure response for http://127.0.0.1:4360/dev-api/auth/public-users/?user_type=1&limit=20&offset=0: 401 Unauthorized\"",
+      "timestamp": "2026-09-29T17:41:53.764Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:41:53.930] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0 200 99ms",
+      "timestamp": "2026-09-29T17:41:53.932Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:41:59.114] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=false 200 95ms",
+      "timestamp": "2026-09-29T17:41:59.115Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:42:06.780] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0 200 84ms",
+      "timestamp": "2026-09-29T17:42:06.780Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:42:07.113] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=Angular 200 70ms",
+      "timestamp": "2026-09-29T17:42:07.113Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:42:24.263] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular 200 108ms",
+      "timestamp": "2026-09-29T17:42:24.263Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:42:49.776] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end 200 94ms",
+      "timestamp": "2026-09-29T17:42:49.777Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:43:13.986] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end 200 123ms",
+      "timestamp": "2026-09-29T17:43:13.987Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:43:24.035] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&fullname=%D0%A2%D0%B5%D1%81%D1%82%20%D0%9F%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F&skills__contains=Angular&speciality__icontains=Front-end 200 79ms",
+      "timestamp": "2026-09-29T17:43:24.035Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:44:25.598] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=true 200 97ms",
+      "timestamp": "2026-09-29T17:44:25.600Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:44:42.437] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 200 79ms",
+      "timestamp": "2026-09-29T17:44:42.438Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "error",
+      "message": "[20:47:47.808] [ERROR] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 401 45ms \"Http failure response for http://127.0.0.1:4360/dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5: 401 Unauthorized\"",
+      "timestamp": "2026-09-29T17:47:47.809Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:47:47.952] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 200 71ms",
+      "timestamp": "2026-09-29T17:47:47.953Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:49:40.632] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 200 91ms",
+      "timestamp": "2026-09-29T17:49:40.633Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:50:34.227] [DEBUG] [HTTP] PATCH /dev-api/vacancies/104/ 200 114ms",
+      "timestamp": "2026-09-29T17:50:34.227Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:51:40.483] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0&fullname=%D0%A2%D0%B5%D1%81%D1%82&skills__contains=Angular&speciality__icontains=Front-end&age=18,30&is_mospolytech_student=false 200 75ms",
+      "timestamp": "2026-09-29T17:51:40.483Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:52:06.872] [DEBUG] [HTTP] GET /dev-api/auth/public-users/?user_type=1&limit=20&offset=0 200 133ms",
+      "timestamp": "2026-09-29T17:52:06.873Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "error",
+      "message": "[20:53:18.089] [ERROR] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 401 48ms \"Http failure response for http://127.0.0.1:4360/dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5: 401 Unauthorized\"",
+      "timestamp": "2026-09-29T17:53:18.090Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    },
+    {
+      "level": "debug",
+      "message": "[20:53:18.227] [DEBUG] [HTTP] GET /dev-api/core/skills/inline/?limit=1000&offset=0&name__icontains=%D0%A3%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5 200 69ms",
+      "timestamp": "2026-09-29T17:53:18.227Z",
+      "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
+    }
+  ],
+  "limits": [
+    "DEV response ordering was not forced",
+    "age/student controls are hidden in current UI; URL/API and unit hydration verified",
+    "touch tested by Chromium emulation on local fixtures; no physical mobile device",
+    "profile save and onboarding submit not performed"
+  ],
+  "javaScriptErrors": [],
+  "validatedCommit": "f1ea89bec92e2e37b89044aa4663b40807ba0be0",
+  "runtimeSourceCommit": "1e17d2974891b30668d10eb9255864eb6f3426a8",
+  "commitNote": "Only members-mobile.spec.ts and news-form.component.spec.ts differ; runtime code is identical."
+}

@@ -1,56 +1,41 @@
-## Что изменено
+## Что меняется
 
-Редизайн шести областей вакансий по согласованным [экранам Figma](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=51-1751) и исправление выбора навыков. Поздний ответ поиска больше не заменяет новый; повторный поиск после выбора работает, библиотека и корзина сохраняют одинаковые выбранные id.
+Шесть областей вакансий приведены к согласованным [экранам Figma](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=51-1751): вакансии проекта, общий список, страница вакансии, успешное создание, отклики и «Мои отклики». Исправлены гонки поиска навыков и синхронизация Autocomplete, библиотеки и корзины.
 
-## Зачем
+Закрыты оба замечания дополнительного ревью общих форм:
 
-Прежние карточки плохо обрабатывали длинные названия, большое число навыков и мобильную ширину. Независимые подписки поиска и общий inlineSkills создавали гонки и нестабильное отображение выбранных навыков.
+- После reload участники, поля и URL теперь используют один набор `fullname`, `skills__contains`, `speciality__icontains`, `age`, `is_mospolytech_student`. Начальное состояние загружается resolver без второго запроса. Back/Forward, сброс и повторный выбор восстанавливают форму. Отложенные навигации сериализованы; более ранний URL не стирает последующую правку, а Back/сброс отменяют устаревшую очередь.
+- Длинный навык при 390/320 px переносится, кнопка удаления остаётся видимой. Нативная кнопка имеет доступное имя, focus-visible, disabled CVA, не отправляет форму. На mobile цель 44×44 px. Исправлена сетка мобильного профиля; общая корзина проверена также в онбординге и редакторе вакансии.
 
-## Реализация
+[Воспроизведение, причины, DEV-проверки и мобильные скриншоты](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/autocomplete-followup-review.md). До исправления обеих проблем — 4 failing regressions; добавлено 20 тестов.
 
-Локальный SearchesService в редакторе вакансии, switchMap и немедленная отмена до debounce, согласованный сброс Autocomplete/CVA, checked библиотеки вычисляется по id независимо от порядка загрузки. Доменные VacancyStatus/Skills/Letter и окно успешного создания переиспользуют Button/Tag/Modal. Защита от двойного создания, состояние ошибок и обновление карточки после успеха. Named modals поддерживают focus trap, Escape и возврат фокуса. На DEV дополнительно выявлена и исправлена потеря числовой зарплаты при редактировании только навыков; пустая сумма остаётся null, разделители разрядов нормализуются (3 регрессионных теста).
+## Проверки финального кода
 
-Дополнительная ручная проверка общих форм выявила ошибки, исправленные в этом PR: онбординг читает результат поиска inlineSkills и нормализует пустой черновик без обратного цикла; фильтры участников синхронизируются одним потоком, общий сброс и повтор того же выбора работают. Добавлено 7 регрессионных тестов. [Ручные действия и результаты](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/autocomplete-consumers-review.md).
+Кодовый коммит **`f1ea89bec92e2e37b89044aa4663b40807ba0be0`**. Последующий коммит содержит только отчёты и скриншоты.
 
-## API
+- Полный настроенный Vitest: **404 файла / 1991 тест passed**, exit 0, 605.44 с. Node 20.20.2, heap 8 GB, 2 workers. [SHA, команда, число тестов и хэш лога](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/full-suite-results.json).
+- `npm run build:prod`: exit 0, 45.855 с; initial 1.39 MB / transfer 313.29 kB.
+- Целевые ESLint и Stylelint без автофикса: exit 0; git diff --check: passed.
+- 32 целевых Vitest-проверки, включая асинхронный Router, reload без повторного запроса, age/false, сброс пустого URL и доступное удаление.
+- 25 браузерных проверок корзины на 390/320, с Mont, длинным словом без пробелов, эмуляцией касания, Space/Enter и отсутствием overflow/submit; JS errors []. Это **локальные fixtures**, [результаты](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/basket-layout-results.json).
+- Повторены 18 браузерных проверок skills-acceptance: отмена конкурирующих ответов, поиск/библиотека/удаление/create/update/reopen на fixtures; JS errors []. Скриншоты редактора навыков обновлены.
+- **Ручной DEV smoke**: один GET после reload со всеми фильтрами; true/false и возраст; сброс, повторный выбор, Back/Forward, мобильное окно, быстрый fullname. Профиль/онбординг/редактор проверены при 390/320. В QA-вакансии 104: удалить длинный навык → PATCH 200 → reload → Angular/CSS и 100 ₽. [HTTP evidence](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/autocomplete-followup-dev-results.json).
 
-Endpoints, payload requiredSkillsIds, модели и маршруты не менялись. Production entry point не включает тестовые fixtures/proxy. Миграции backend не требуются.
+Предыдущие проверки шести экранов (399 assertions / 52 состояния) и первоначального DEV create/update/reopen сохранены в отчёте как история; это не новый прогон всех визуальных сценариев на текущем SHA.
 
-## UI
+Первый полный прогон этого дополнения на `1e17d297` нашёл старый mock resetFilters в мобильном тесте и таймер ngx-autosize после teardown в news-form. Исправлены только два spec-файла; тесты не исключались. Полный набор и production повторены на финальном SHA. Runtime-код ручного DEV smoke идентичен финальному.
 
-Шесть областей, desktop/mobile, пустые и граничные состояния; реальные Mont и CTA #8A63E6. Существующие Button и токены сохранены. PROPOSED используются только для вакансий, не утверждены глобально. [Соответствие компонентов](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/README.md#figma-и-ui-kit), [Figma-аудит](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/figma/design-review.md), [скриншоты](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/README.md#скриншоты).
+## UI KIT и API
 
-Контраст канонического CTA ≈4,02:1; обычный текст не проходит AA 4,5:1. Есть ограничения hover/outline/secondary. Полный contrast PASS не заявляется. Figma Inter — временный предпросмотр; runtime использует Mont.
+Реальный Mont, CTA `#8A63E6`, глобальные токены и существующие Button/Tag/Modal сохранены. PROPOSED применяются только к вакансиям и не объявлены утверждёнными глобальными компонентами. [Соответствие Figma → Angular](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/README.md#figma-и-ui-kit). Endpoints, payload requiredSkillsIds, права и маршруты не менялись; миграции backend не нужны. Fixture/proxy entry points не входят в production.
 
-## Permissions
+## Ограничения
 
-Server-side permissions не менялись. Существующие canManageResponses/canRespond/hasResponded сохранены. Решение по отклику отображается после успешного ответа. Отрицательные backend permission-сценарии не выполнялись.
+- Контраст существующего CTA ≈4,02:1, ниже AA 4,5:1 для обычного текста. Полный contrast PASS не заявляется; глобальные токены не изменены. Inter в Figma остаётся временным предпросмотром.
+- Age/student скрыты в существующем шаблоне: вручную проверены URL и DEV API, гидратация/изменения контролов покрыты тестами. Проверка видимых контролов не заявляется.
+- Профиль не сохранялся, стадии онбординга не отправлялись. Реальные решения по откликам и отрицательные backend permission-сценарии не выполнялись. QA-вакансия 104 оставлена закрытой.
+- Принудительное переупорядочивание ответов и touch проверены локальными тестами/эмуляцией; физическое мобильное устройство не использовалось.
+- Существующие Angular/Sass/CommonJS/budget warnings и три исключения Vitest остаются; бюджеты и конфигурация исключений не менялись. Repo-wide pre-commit с Stylelint --fix пропущен для коммита, целевые проверки выполнены отдельно без изменения hooks.
+- CSS корзины: 4.37 → 4.97 kB при уже превышенном warning-пороге 2 kB; порог не повышался.
 
-## Проверки
-
-- [x] До исправления: 8 failing regressions в 4 файлах.
-- [x] Полный Vitest на запрошенном 3ef4586: 403 файла / 1964 теста, Node 20.20.2, heap 8 GB, 2 workers, exit 0.
-- [x] Новые регрессии: сначала 4 failed, затем ещё 2 failed; после исправлений затронутые 3 файла / 14 тестов passed (7 новых тестов).
-- [x] Финальный полный Vitest на 43dc70ff: 403 файла / 1971 тест passed, exit 0; [машинный результат](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/full-suite-results.json).
-- [x] npm run build:prod — exit 0; Angular/Sass/CommonJS/budget warnings остаются.
-- [x] Браузерные состояния и адаптивность: 399 проверок / 52 состояния, результаты в visual-results.json; реальные Angular-компоненты, синтетические use cases, 1440/768/390/320 px, JS errors [].
-- [x] Редактор навыков: 18 браузерных проверок с управляемыми HTTP-ответами; поиск/библиотека/удаление/create/update/reopen и изоляция root inlineSkills; JS errors [].
-- [x] Целевые ESLint/Stylelint без автофикса; Impeccable detector [].
-- [x] DEV API, последняя локальная сборка: поиск, повтор запроса, библиотека, удаление, создание 201, изменение 200 и новое открытие 200; вакансия 104 в проекте 131. На mobile сохранены Angular/CSS и зарплата 100 ₽. [Evidence](https://github.com/PROCOLLAB-github/procollab/blob/feat/dev-vacancy-interface-redesign/docs/vacancy-redesign/dev-results.json).
-
-## Acceptance criteria
-
-- [x] Согласованные шесть областей, CTA/токены/Mont, PROPOSED feature-only.
-- [x] Причины гонок воспроизведены и исправлены, локальные round-trip проверки прошли.
-- [x] Отчёт различает fixtures и DEV, ограничение контраста описано.
-- [x] Подтверждение исправленной ветки через DEV API; штатный refresh после 401 также прошёл.
-
-## Не проверено
-
-Принудительное переупорядочивание ответов проверено на fixtures; на DEV — обычный быстрый ввод. Ручной smoke остальных consumers выполнен: профиль, специальности/навыки онбординга, фильтры участников, desktop/mobile. Сохранение профиля/отправка стадий онбординга, реальные решения по откликам и backend negative permissions не выполнялись. Галерея использует локальное обрамление; глобальная оболочка кабинета и её mobile header не заявляются pixel-for-pixel реализацией Figma.
-
-Ручной smoke не является безусловным PASS. Остались существующие ограничения: после полной перезагрузки не восстанавливаются фильтры участников из URL; на mobile-профиле обрезана кнопка удаления длинного навыка (снятие через библиотеку работает). Они перечислены для решения перед ready for review.
-
-## Риски / migration
-
-Shared Autocomplete/SearchesService затрагивают другие формы; полный набор повторён на 3ef4586 и на последнем коде 43dc70ff после дополнительного smoke. Точный commit/count записан в full-suite-results.json. Figma temporary Inter отличается метриками от Mont. Общий contrast/token review требуется отдельно, глобальные токены здесь не меняются. PR остаётся draft, ready for review не выставлялся; закрытая тестовая вакансия 104 оставлена на DEV с явной QA-маркировкой. Merge и deploy не выполнялись.
+**PR остаётся draft** для решения ревьюера о ready for review. Merge и deploy не выполнялись.

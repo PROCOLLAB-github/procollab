@@ -27,6 +27,18 @@
       "timezone": "Europe/Moscow",
       "logPath": "tmp/vitest-final-autocomplete.log",
       "logSha256": "3f5b0c5c5deac6465c113eb94cee62d1f9409a025abde7f90c5fa38a1f3df263"
+    },
+    {
+      "commit": "f1ea89bec92e2e37b89044aa4663b40807ba0be0",
+      "command": "node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --pool=forks --maxWorkers=2",
+      "filesPassed": 404,
+      "testsPassed": 1991,
+      "exitCode": 0,
+      "durationSeconds": 605.44,
+      "startedAtLocal": "20:57:20",
+      "timezone": "Europe/Moscow",
+      "logPath": "tmp/final-f1ea89be-vitest.log",
+      "logSha256": "9fdab555906e0d1e4a2df27da836211947a2af991d41b4ba2c527569f4a7aae4"
     }
   ],
   "existingConfigExclusions": [
@@ -40,5 +52,22 @@
     "status": "stopped before completion",
     "reason": "manual follow-up exposed repeated filter selection regression; superseded by complete final run"
   },
-  "readyForReview": false
+  "readyForReview": false,
+  "followupFailedRun": {
+    "commit": "1e17d2974891b30668d10eb9255864eb6f3426a8",
+    "filesPassed": 403,
+    "filesFailed": 1,
+    "testsPassed": 1990,
+    "testsFailed": 1,
+    "unhandledErrors": 1,
+    "exitCode": 1,
+    "durationSeconds": 608.25,
+    "logPath": "tmp/final-1e17d297-vitest.log",
+    "logSha256": "0abe90d21b19db739d0e4926c835210b5789a28f7a9ee0212513b3177a8be20f",
+    "causes": [
+      "members-mobile service mock lacked resetFilters after delegation changed",
+      "news-form ngx-autosize timer ran after DOM teardown"
+    ],
+    "resolution": "f1ea89be updates mock expectation and drains real directive timers with fake clock before teardown; no tests excluded"
+  }
 }
