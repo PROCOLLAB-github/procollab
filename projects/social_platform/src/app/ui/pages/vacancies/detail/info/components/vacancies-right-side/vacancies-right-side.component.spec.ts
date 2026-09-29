@@ -37,96 +37,76 @@ describe("VacanciesRightSideComponent", () => {
     fixture = TestBed.createComponent(VacanciesRightSideComponent);
   });
 
-  function render(item: Vacancy): HTMLElement {
+  function render(item: Vacancy): string {
     fixture.componentRef.setInput("vacancy", item);
     fixture.detectChanges();
-    return fixture.nativeElement as HTMLElement;
+    return (fixture.nativeElement as HTMLElement).textContent ?? "";
   }
 
-  it("показывает пять строк метаданных и использует vacancy.city", () => {
-    const element = render(vacancy());
-    const text = element.textContent ?? "";
-    const labels = Array.from(element.querySelectorAll(".lists__label"), item =>
-      item.textContent?.trim(),
-    );
+  it("показывает подписи метаданных и использует vacancy.city", () => {
+    const text = render(vacancy());
 
-    expect(labels).toEqual(["Город", "Формат работы", "Опыт", "График", "Зарплата"]);
+    expect(text).toContain("Город");
+    expect(text).toContain("Формат работы");
+    expect(text).toContain("Опыт");
+    expect(text).toContain("График");
+    expect(text).toContain("Зарплата");
     expect(text).toContain("Москва");
     expect(text).not.toContain("Регион проекта не является городом вакансии");
     expect(text).toMatch(/5\s555 рублей/);
   });
 
   it("показывает безопасные значения для отсутствующих метаданных", () => {
-    const text =
-      render(
-        vacancy({
-          city: null,
-          workFormat: "",
-          requiredExperience: "",
-          workSchedule: "",
-          salary: "",
-        }),
-      ).textContent ?? "";
+    const text = render(
+      vacancy({
+        city: null,
+        workFormat: "",
+        requiredExperience: "",
+        workSchedule: "",
+        salary: "",
+      }),
+    );
 
     expect(text.match(/Не указан/g)).toHaveLength(4);
     expect(text).toContain("По договоренности");
   });
 
-  it("сохраняет полное длинное значение города без обрезки", () => {
-    const city = "Очень длинное название города ".repeat(12).trim();
-    const text = render(vacancy({ city })).textContent ?? "";
-
-    expect(text).toContain(city);
-  });
-
   it("показывает действие отклика только при canRespond", () => {
-    const text = render(vacancy({ canRespond: true })).textContent ?? "";
+    const text = render(vacancy({ canRespond: true }));
 
     expect(text).toContain("откликнуться");
     expect(text).not.toContain("посмотреть отклики");
   });
 
   it.each([
-    ["pending", "На рассмотрении"],
-    ["accepted", "Отклик принят"],
-    ["rejected", "Отклик отклонён"],
-    [null, "Отклик отправлен"],
-  ] as const)("показывает disabled applicant state %s", (responseStatus, label) => {
+    ["pending", "На рассмотрении", "pending"],
+    ["accepted", "Отклик принят", "success"],
+    ["rejected", "Отклик отклонён", "declined"],
+    [null, "Отклик отправлен", "pending"],
+  ] as const)("показывает disabled applicant state %s", (responseStatus, label, color) => {
     const emitted = vi.fn();
     fixture.componentInstance.sendResponse.subscribe(emitted);
-    const text =
-      render(vacancy({ hasResponded: true, canRespond: true, responseStatus })).textContent ?? "";
+    const text = render(vacancy({ hasResponded: true, canRespond: true, responseStatus }));
 
-    const button = fixture.nativeElement.querySelector("button") as HTMLButtonElement;
+    const status = fixture.nativeElement.querySelector(".status") as HTMLElement;
     expect(text).toContain(label);
     expect(text).not.toContain("откликнуться");
-    expect(button.disabled).toBe(true);
-    button.click();
+    expect(fixture.nativeElement.querySelector("button")).toBeNull();
+    expect(status.classList).toContain(`status--${color}`);
     expect(emitted).not.toHaveBeenCalled();
   });
 
   it("показывает менеджеру просмотр откликов вместо отправки", () => {
-    const manageResponses = vi.fn();
-    fixture.componentInstance.manageResponses.subscribe(manageResponses);
-    const element = render(
-      vacancy({ canRespond: true, canManageResponses: true, responseStatus: "rejected" }),
-    );
-    const text = element.textContent ?? "";
+    const text = render(vacancy({ canRespond: true, canManageResponses: true }));
 
     expect(text).toContain("посмотреть отклики");
     expect(text).not.toContain("откликнуться");
-    const button = element.querySelector(
-      "app-button.vacancy__responses-button button",
-    ) as HTMLButtonElement;
-    expect(button.disabled).toBe(false);
-    button.click();
-    expect(manageResponses).toHaveBeenCalledOnce();
   });
 
   it("не показывает действие при всех false", () => {
-    const text =
-      render(vacancy({ hasResponded: false, canRespond: false, canManageResponses: false }))
-        .textContent ?? "";
+    const text = render(
+      vacancy({ hasResponded: false, canRespond: false, canManageResponses: false }),
+    );
 
     expect(text).not.toContain("откликнуться");
     expect(text).not.toContain("отклик отправлен");

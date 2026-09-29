@@ -24,21 +24,15 @@ import { Skill } from "@domain/skills/skill.model";
 })
 export class SkillsGroupComponent {
   @Input({ required: true }) set options(value: Skill[]) {
-    this._options.set(value);
+    this._options.set(value ?? []);
   }
 
   get options(): (Skill & { checked?: boolean })[] {
-    return this._options();
+    return this.checkedOptions();
   }
 
   @Input({ required: true }) set selected(value: Skill[]) {
-    this._selected.set(value);
-
-    const options = this.options.map(opt => {
-      return { ...opt, checked: value.some(skill => skill.id === opt.id) };
-    });
-
-    this._options.set(options);
+    this._selected.set(value ?? []);
   }
 
   get selected(): Skill[] {
@@ -55,6 +49,10 @@ export class SkillsGroupComponent {
 
   _options = signal<(Skill & { checked?: boolean })[]>([]);
   _selected = signal<Skill[]>([]);
+  private readonly checkedOptions = computed(() => {
+    const selectedIds = new Set(this._selected().map(skill => skill.id));
+    return this._options().map(option => ({ ...option, checked: selectedIds.has(option.id) }));
+  });
   private readonly internalContentVisible = signal(false);
   readonly contentVisible = computed(() => this.isOpen() ?? this.internalContentVisible());
 

@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { OnboardingStageTwoComponent } from "./stage-two.component";
-import { EMPTY, of } from "rxjs";
+import { BehaviorSubject, of, Subject } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { provideRouter } from "@angular/router";
@@ -14,12 +14,34 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { OnboardingService } from "@api/onboarding/onboarding.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { signal } from "@angular/core";
+import { provideNoopAnimations } from "@angular/platform-browser/animations";
+import { UserInput } from "@domain/auth/user.model";
+import { Skill } from "@domain/skills/skill.model";
+import { OnboardingStageTwoUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";
 
 describe("StageTwoComponent", () => {
   let component: OnboardingStageTwoComponent;
   let fixture: ComponentFixture<OnboardingStageTwoComponent>;
+  let draft: BehaviorSubject<UserInput>;
+  let results: Subject<any>;
+  let getSkillsInline: ReturnType<typeof vi.fn>;
+  let setFormValue: ReturnType<typeof vi.fn>;
+  const angular: Skill = {
+    id: 1,
+    name: "Angular",
+    category: { id: 1, name: "Front-end" },
+    approves: [],
+  };
 
   beforeEach(async () => {
+    vi.useFakeTimers();
+    draft = new BehaviorSubject<UserInput>({});
+    results = new Subject();
+    getSkillsInline = vi.fn(() => results.asObservable());
+    setFormValue = vi.fn((value: UserInput) => {
+      // Ограничитель делает регрессию цикла draft -> form -> draft безопасной для runner.
+      if (setFormValue.mock.calls.length <= 5) draft.next({ ...draft.value, ...value });
+    });
     const authSpy = {
       profile: of({}),
       saveProfile: of({}),
@@ -35,7 +57,7 @@ describe("StageTwoComponent", () => {
 
     const skillsSpy = {
       getSkillsNested: () => of([]),
-      getSkillsInline: () => of({ count: 0, results: [], next: "", previous: "" }),
+      getSkillsInline,
     };
 
     const specializationsSpy = {
@@ -43,7 +65,7 @@ describe("StageTwoComponent", () => {
       getSpecializationsInline: () => of({ count: 0, results: [], next: "", previous: "" }),
     };
 
-    const onboardingSpy = { formValue$: EMPTY, setFormValue: () => {} };
+    const onboardingSpy = { formValue$: draft.asObservable(), setFormValue };
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, HttpClientTestingModule, OnboardingStageTwoComponent],
@@ -55,6 +77,7 @@ describe("StageTwoComponent", () => {
         { provide: OnboardingService, useValue: onboardingSpy },
         { provide: ProfileInfoService, useValue: { profile: signal(null) } },
         provideRouter([]),
+        provideNoopAnimations(),
       ],
     }).compileComponents();
   });
@@ -67,5 +90,64 @@ describe("StageTwoComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
+    vi.useRealTimers();
+  });
+
+  function type(query: string): void {
+    const input: HTMLInputElement = fixture.nativeElement.querySelector(
+      "app-autocomplete-input input",
+    );
+    input.value = query;
+    input.dispatchEvent(new Event("input"));
+    fixture.detectChanges();
+    vi.advanceTimersByTime(300);
+  }
+
+  it("показывает ответ поиска в настоящем Autocomplete и добавляет выбранный навык без дубля", () => {
+    type("Angular");
+    expect(getSkillsInline).toHaveBeenCalledWith("Angular", 1000, 0);
+    results.next({ count: 1, results: [angular], next: "", previous: "" });
+    fixture.detectChanges();
+    const option: HTMLElement = fixture.nativeElement.querySelector(
+      ".field__dropdown--options .field__option",
+    );
+    expect(option?.textContent).toContain("Angular");
+    option.click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("input").value).toBe("");
+    expect(fixture.nativeElement.querySelectorAll(".basket__skill")).toHaveLength(1);
+    type("Angular");
+    results.next({ count: 1, results: [angular], next: "", previous: "" });
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector(".field__dropdown--options .field__option").click();
+    fixture.detectChanges();
+    expect(getSkillsInline).toHaveBeenCalledTimes(2);
+    expect(fixture.nativeElement.querySelectorAll(".basket__skill")).toHaveLength(1);
+  });
+
+  it("пустой черновик допускает выбор и снятие навыка из библиотеки", () => {
+    const ui = fixture.debugElement.injector.get(OnboardingStageTwoUIInfoService);
+    expect(ui.stageForm.controls.skills.value).toEqual([]);
+    component.onOptionToggled(angular);
+    fixture.detectChanges();
+    expect(ui.stageForm.controls.skills.value).toEqual([angular]);
+    component.onOptionToggled(angular);
+    fixture.detectChanges();
+    expect(ui.stageForm.controls.skills.value).toEqual([]);
+  });
+
+  it("синхронизация черновика и формы не создаёт обратный цикл", () => {
+    expect(setFormValue).not.toHaveBeenCalled();
+    component.onAddSkill(angular);
+    expect(setFormValue).toHaveBeenCalledTimes(1);
+    expect(draft.value.skills).toEqual([angular]);
+    draft.next({ skills: [] });
+    fixture.detectChanges();
+    expect(setFormValue).toHaveBeenCalledTimes(1);
+    expect(fixture.nativeElement.querySelectorAll(".basket__skill")).toHaveLength(0);
   });
 });

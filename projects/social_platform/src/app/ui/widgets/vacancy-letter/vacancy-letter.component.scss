@@ -1,0 +1,39 @@
+/** @format */
+
+@use "styles/components/vacancy-ui";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.letter {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--black);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  /* stylelint-disable value-no-vendor-prefix */
+  &--collapsed {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+  }
+  /* stylelint-enable value-no-vendor-prefix */
+  &__toggle {
+    min-height: 36px;
+    padding: 6px 16px;
+    margin-top: 8px;
+    font: inherit;
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    background: transparent;
+    border: 0.5px solid var(--accent);
+    border-radius: var(--rounded-xxl);
+
+    @include vacancy-ui.focus;
+  }
+}

@@ -1,131 +1,72 @@
 <!-- @format -->
 
-@if (vacancy()!.project; as project) {
-  <div class="vacancy__right">
-    <div class="vacancy__right--project">
-      <app-avatar
-        style="cursor: pointer"
-        [size]="68"
-        [url]="project.imageAddress"
-        class="vacancy__right--project-image"
-        [routerLink]="AppRoutes.projects.detail(project.id)"
-      ></app-avatar>
-      <p class="text-body-12 vacancy__right--title">{{ project.name | truncate: 20 }}</p>
-
-      @if (vacancy()!.canManageResponses) {
-        <app-button
-          class="vacancy__responses-button"
-          size="big"
-          customTypographyClass="text-body-12"
-          (click)="onManageResponsesClick()"
+@if (vacancy(); as item) {
+  <aside class="conditions">
+    <h2>Условия и отклики</h2>
+    <dl>
+      <div>
+        <dt>Город</dt>
+        <dd>{{ item.city ? (item.city | capitalize) : "Не указан" }}</dd>
+      </div>
+      <div>
+        <dt>Формат работы</dt>
+        <dd>{{ item.workFormat ? (item.workFormat | capitalize) : "Не указан" }}</dd>
+      </div>
+      <div>
+        <dt>Опыт</dt>
+        <dd>
+          {{ item.requiredExperience ? (item.requiredExperience | capitalize) : "Не указан" }}
+        </dd>
+      </div>
+      <div>
+        <dt>График</dt>
+        <dd>{{ item.workSchedule ? (item.workSchedule | capitalize) : "Не указан" }}</dd>
+      </div>
+      <div>
+        <dt>Зарплата</dt>
+        <dd>
+          {{
+            !item.salary || +item.salary === 0
+              ? "По договоренности"
+              : (item.salary | salaryTransform) + " рублей"
+          }}
+        </dd>
+      </div>
+    </dl>
+    <div class="conditions__actions">
+      @if (item.canManageResponses) {
+        <app-button class="vacancy__responses-button" size="big" (click)="onManageResponsesClick()"
           >посмотреть отклики</app-button
         >
-      } @else if (vacancy()!.hasResponded) {
-        <app-button
-          size="big"
-          customTypographyClass="text-body-12"
-          [color]="responseStatusColor(vacancy()!.responseStatus)"
-          [disabled]="true"
-          >{{ responseStatusLabel(vacancy()!.responseStatus) }}</app-button
-        >
-      } @else if (vacancy()!.canRespond) {
-        <app-button size="big" customTypographyClass="text-body-12" (click)="onSendResponseClick()"
-          >откликнуться</app-button
-        >
+      } @else if (item.hasResponded) {
+        <app-vacancy-status
+          [label]="responseStatusLabel(item.responseStatus)"
+          [tone]="
+            item.responseStatus === 'accepted'
+              ? 'success'
+              : item.responseStatus === 'rejected'
+                ? 'declined'
+                : 'pending'
+          "
+        ></app-vacancy-status>
+        <a [routerLink]="AppRoutes.office.vacanciesMy()">Мои отклики</a>
+      } @else if (item.canRespond) {
+        <app-button size="big" (click)="onSendResponseClick()">откликнуться</app-button>
       }
     </div>
-
-    <div class="lists vacancy__content">
-      <div class="lists__section">
-        <h3 class="text-body-12 lists__title">метаданные</h3>
-        <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
-      </div>
-
-      <ul class="lists__list">
-        <li class="lists__item">
-          <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">Город</span>
-            <p class="text-body-10 lists__value">
-              @if (vacancy()!.city; as city) {
-                {{ city | capitalize }}
-              } @else {
-                Не указан
-              }
-            </p>
-          </div>
-        </li>
-
-        <li class="lists__item">
-          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">Формат работы</span>
-            <p class="text-body-10 lists__value">
-              {{ vacancy()!.workFormat ? (vacancy()!.workFormat | capitalize) : "Не указан" }}
-            </p>
-          </div>
-        </li>
-
-        <li class="lists__item">
-          <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">Опыт</span>
-            <p class="text-body-10 lists__value">
-              {{
-                vacancy()!.requiredExperience
-                  ? (vacancy()!.requiredExperience | capitalize)
-                  : "Не указан"
-              }}
-            </p>
-          </div>
-        </li>
-
-        <li class="lists__item">
-          <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">График</span>
-            <p class="text-body-10 lists__value">
-              {{ vacancy()!.workSchedule ? (vacancy()!.workSchedule | capitalize) : "Не указан" }}
-            </p>
-          </div>
-        </li>
-
-        <li class="lists__item">
-          <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
-          <div class="lists__item-content">
-            <span class="text-body-10 lists__label">Зарплата</span>
-            <p class="text-body-10 lists__value">
-              {{
-                vacancy()!.salary
-                  ? (vacancy()!.salary | salaryTransform | capitalize) + " " + "рублей"
-                  : "По договоренности"
-              }}
-            </p>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    @if (project.links.length) {
-      <div class="lists vacancy__content">
-        <div class="lists__section">
-          <h3 class="text-body-12 lists__title">контакты</h3>
-          <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
-        </div>
-
-        <ul class="lists__list">
-          @for (link of project.links; track $index) {
-            <li class="lists__item text-body-10">
-              @if (link | userLinks; as l) {
-                <a class="lists__item" target="_blank" [href]="link">
-                  <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span class="lists__contact">{{ l.tag }}</span>
-                </a>
-              }
-            </li>
+    @if (item.project?.links?.length) {
+      <section class="conditions__contacts">
+        <h2>Контакты проекта</h2>
+        <ul>
+          @for (link of item.project.links; track $index) {
+            @if (link | userLinks; as contact) {
+              <li>
+                <a [href]="link" target="_blank" rel="noopener noreferrer">{{ contact.tag }}</a>
+              </li>
+            }
           }
         </ul>
-      </div>
+      </section>
     }
-  </div>
+  </aside>
 }

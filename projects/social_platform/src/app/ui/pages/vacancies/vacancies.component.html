@@ -3,14 +3,18 @@
 <!-- vacancies.component.html -->
 <!-- @format -->
 
-<main class="page">
+<main class="page" [attr.aria-label]="isAll() === 'all' ? 'Вакансии' : 'Мои отклики'">
   <div class="page__bar">
     <app-back
+      #back
+      role="link"
+      tabindex="0"
+      (keydown.enter)="back.onClick()"
       [namespace]="isAll() === 'all' ? 'вакансии' : 'мои отклики'"
-      [path]="isAll() === 'all' ? basePath + '/feed' : basePath + 'vacancies/all'"
+      [path]="isAll() === 'all' ? AppRoutes.office.feed() : AppRoutes.office.vacancies()"
     ></app-back>
 
-    <div class="page__info">
+    <div class="page__info" [class.page__info--my]="isAll() !== 'all'">
       <div class="page__outlet">
         @if (isAll() === "all") {
           <form [formGroup]="searchForm" (submit)="onSearchSubmit()">

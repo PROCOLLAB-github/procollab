@@ -7,14 +7,22 @@
         class="basket__skill"
         [class.basket__skill--soft]="skill.category.name.includes('Soft skills')"
       >
-        <span class="text-body-12">{{ skill.name }}</span>
-        <i
-          appIcon
-          class="basket__skill-delete-icon"
-          icon="basket"
-          appSquare="14"
+        <span class="basket__skill-name text-body-12">{{ skill.name }}</span>
+        <button
+          type="button"
+          class="basket__skill-delete"
+          [attr.aria-label]="'Удалить навык ' + skill.name"
+          [disabled]="disabled()"
           (click)="deleteSkill(skill.id)"
-        ></i>
+        >
+          <i
+            appIcon
+            class="basket__skill-delete-icon"
+            icon="basket"
+            appSquare="14"
+            aria-hidden="true"
+          ></i>
+        </button>
       </div>
     } @empty {
       <div class="basket__empty-placeholder">

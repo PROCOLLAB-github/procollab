@@ -67,7 +67,9 @@ describe("VacancyResponsesComponent", () => {
     item.user!.skills = [{ id: 9, name: longSkill }];
     const element = render([item]);
 
-    expect(element.querySelector(".response__skill")?.textContent?.trim()).toBe(longSkill);
+    expect(element.querySelector("app-vacancy-skills app-tag")?.textContent?.trim()).toBe(
+      longSkill,
+    );
   });
 
   it.each([
@@ -143,7 +145,7 @@ describe("VacancyResponsesComponent", () => {
 
     expect(element.textContent).toContain(message);
     expect(element.textContent).toContain("Повторить");
-    (element.querySelector("button") as HTMLButtonElement).click();
+    (element.querySelector(".responses__state button") as HTMLButtonElement).click();
     expect(retry).toHaveBeenCalledTimes(1);
   });
 });

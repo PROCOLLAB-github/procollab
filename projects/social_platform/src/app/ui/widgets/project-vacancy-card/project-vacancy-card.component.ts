@@ -1,75 +1,32 @@
 /** @format */
-import { CommonModule } from "@angular/common";
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  inject,
-  input,
-  Input,
-  OnInit,
-  viewChild,
-} from "@angular/core";
+
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
-import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/primitives";
 import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ExpandService } from "@api/expand/expand.service";
-
-/** Компонент карточки вакансии проекта с возможностью раскрытия описания. */
+import { VacancyStatusComponent } from "../vacancy-status/vacancy-status.component";
+import { VacancySkillsComponent } from "../vacancy-skills/vacancy-skills.component";
 @Component({
   selector: "app-project-vacancy-card",
   imports: [
-    CommonModule,
     RouterLink,
-    IconComponent,
     ButtonComponent,
     ParseLinksPipe,
     ParseBreaksPipe,
-    TagComponent,
     AvatarComponent,
     DayjsPipe,
+    VacancyStatusComponent,
+    VacancySkillsComponent,
   ],
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ExpandService],
 })
-export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
-  private readonly expandService = inject(ExpandService);
-
+export class ProjectVacancyCardComponent {
   protected readonly AppRoutes = AppRoutes;
   readonly vacancy = input.required<Vacancy>();
   readonly type = input<"vacancies" | "project">("project");
-
-  private readonly descEl = viewChild<ElementRef>("descEl");
-
-  endSliceOfSkills = 0;
-
-  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
-  protected readonly readFullDescription = this.expandService.readFullDescription;
-
-  ngOnInit(): void {
-    this.endSliceOfSkills = this.type() === "project" ? 5 : 3;
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.descEl());
-    });
-  }
-
-  protected onExpandDescription(elem: HTMLElement): void {
-    this.expandService.onExpand(
-      "description",
-      elem,
-      "expanded",
-      this.expandService.readFullDescription(),
-    );
-  }
 }

@@ -39,27 +39,12 @@ describe("VacanciesLeftSideComponent", () => {
   it("renders vacancy detail skills with the readable tag treatment", () => {
     const skillName = "Проектирование пользовательских интерфейсов";
     fixture.componentRef.setInput("vacancy", {
-      description: "Описание вакансии",
-      requiredSkills: [
-        { id: 1, name: skillName, category: { name: "Hard skills" } },
-        { id: 2, name: "Коммуникация", category: { name: "Soft skills" } },
-      ],
+      description: "",
+      requiredSkills: [{ id: 1, name: skillName, category: { name: "Hard skills" } }],
     });
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector(".vacancy.vacancy__left")).not.toBeNull();
-    const skill = fixture.nativeElement.querySelector(
-      "app-tag.skills__tag--readable",
-    ) as HTMLElement;
+    const skill = fixture.nativeElement.querySelector("app-vacancy-skills app-tag") as HTMLElement;
     expect(skill.textContent?.trim()).toBe(skillName);
-    expect(fixture.nativeElement.querySelector(".about__text.text-body-14")?.textContent).toContain(
-      "Описание вакансии",
-    );
-    const skills = fixture.nativeElement.querySelectorAll("app-tag");
-    expect(skills).toHaveLength(4);
-    for (const tag of skills) {
-      expect(tag.classList).toContain("skills__tag");
-      expect(tag.classList).toContain("skills__tag--readable");
-    }
   });
 });

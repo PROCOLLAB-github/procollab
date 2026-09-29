@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="project__inner">
+<div class="project__inner" [class.project__inner--list]="!showInputFields()">
   <div class="vacancy project__left">
     @if (showInputFields()) {
       <form [formGroup]="vacancyForm">
@@ -159,6 +159,7 @@
               [forceSelect]="true"
               [clearInputOnSelect]="true"
               (searchStart)="onSearchSkill($event)"
+              (queryChanged)="cancelSkillSearch()"
               (optionSelected)="onAddSkill($event)"
             >
             </app-autocomplete-input>
@@ -185,12 +186,23 @@
       appearance="outline"
       customTypographyClass="text-body-12"
       class="vacancy__submit"
+      #vacancySubmitButton
       [loader]="vacancyIsSubmitting()"
+      [disabled]="vacancyIsSubmitting()"
       (click)="showInputFields() ? submitVacancy() : createVacancyBlock()"
     >
-      <span>{{ showInputFields() ? "добавить вакансию" : "создать вакансию" }}</span>
+      <span>{{
+        isEditing()
+          ? "Сохранить изменения"
+          : showInputFields()
+            ? "Добавить вакансию"
+            : "Создать вакансию"
+      }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
     </app-button>
+    @if (vacancySubmitFailed()) {
+      <p class="vacancy__error" role="alert">Не удалось сохранить вакансию. Попробуйте ещё раз.</p>
+    }
   </div>
 
   <div class="project__right">
@@ -199,6 +211,7 @@
         <li class="vacancy__item">
           <app-vacancy-card
             [vacancy]="vacancy"
+            [disabled]="vacancyIsSubmitting()"
             (edit)="editVacancy(vacancies().indexOf(vacancy))"
             (remove)="removeVacancy($event)"
           ></app-vacancy-card>
@@ -211,6 +224,13 @@
     <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
   }
 </div>
+
+@if (createdVacancyId(); as vacancyId) {
+  <app-vacancy-created-dialog
+    [vacancyId]="vacancyId"
+    (closed)="closeCreatedDialog()"
+  ></app-vacancy-created-dialog>
+}
 
 <app-modal [open]="skillsGroupsModalOpen()" (openChange)="closeSkillsGroupsModal()" class="modal">
   <div class="modal__wrapper">

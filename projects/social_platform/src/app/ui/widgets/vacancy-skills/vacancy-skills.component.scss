@@ -1,0 +1,80 @@
+/** @format */
+
+@use "styles/components/vacancy-skill";
+@use "styles/components/vacancy-ui";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  &__toggle {
+    min-height: 28px;
+    padding: 4px 10px;
+    font: inherit;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--black);
+    cursor: pointer;
+    background: var(--accent-light);
+    border: 1px solid var(--accent-light);
+    border-radius: var(--rounded-xxl);
+
+    @include vacancy-ui.focus;
+
+    &:hover {
+      color: var(--black);
+      background: var(--accent-light);
+    }
+
+    &[aria-expanded="true"] {
+      color: var(--accent);
+      background: transparent;
+      border-color: var(--accent);
+    }
+  }
+
+  &__empty {
+    font-size: 12px;
+    line-height: 18px;
+
+    @include vacancy-ui.secondary;
+  }
+}
+
+.skill {
+  display: block;
+  max-width: 100%;
+
+  ::ng-deep .tag.tag--outline {
+    @include vacancy-skill.detail-tag;
+
+    padding: 4px 10px;
+    color: var(--green-dark);
+    background: var(--green-light);
+    border: 1px solid transparent;
+
+    p {
+      color: inherit;
+      text-align: left;
+    }
+  }
+
+  &--soft ::ng-deep .tag.tag--outline {
+    color: var(--black);
+    background: var(--accent-light);
+  }
+}
