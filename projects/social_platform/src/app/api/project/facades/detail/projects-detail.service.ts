@@ -1,4 +1,7 @@
 /** @format */
+import { teamOperationErrorMessage } from "@api/project/team-operation-error";
+import { isTeamFrozen, teamProgramLinkId } from "@domain/project/team-policy";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 import { DestroyRef, inject, Injectable } from "@angular/core";
 import { filter, map, Observable, tap } from "rxjs";
@@ -25,6 +28,19 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 /** Фасад детали проекта: участники (удаление/передача владения) и новости проекта (CRUD, лайк, read по видимости). */
 @Injectable()
 export class ProjectsDetailService {
+  private readonly snackbar = inject(SnackbarService);
+  private teamMutable(): boolean {
+    const project = this.project();
+    if (project && isTeamFrozen(project)) {
+      this.snackbar.error("Состав команды зафиксирован после сдачи проекта.");
+      return false;
+    }
+    return true;
+  }
+  private teamContext(): number | undefined {
+    const project = this.project();
+    return project ? teamProgramLinkId(project) : undefined;
+  }
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
   private readonly expandService = inject(ExpandService);
@@ -112,15 +128,20 @@ export class ProjectsDetailService {
   }
 
   removeCollaboratorFromProject(userId: number): void {
+    if (!this.teamMutable()) return;
     const projectId = this.projectId();
     if (!projectId) return;
 
     this.removeProjectCollaboratorUseCase
-      .execute(this.projectId()!, userId)
+      .execute(this.projectId()!, userId, this.teamContext())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
           if (!result.ok) {
+            this.snackbar.error(
+              teamOperationErrorMessage(result.error.cause) ??
+                "Не удалось изменить команду. Попробуйте ещё раз.",
+            );
             return;
           }
 
@@ -205,11 +226,16 @@ export class ProjectsDetailService {
   }
 
   onRemoveMember(id: Collaborator["userId"]) {
+    if (!this.teamMutable()) return;
     this.removeProjectCollaboratorUseCase
-      .execute(this.projectId()!, id)
+      .execute(this.projectId()!, id, this.teamContext())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
+          this.snackbar.error(
+            teamOperationErrorMessage(result.error.cause) ??
+              "Не удалось изменить команду. Попробуйте ещё раз.",
+          );
           return;
         }
 
@@ -218,11 +244,16 @@ export class ProjectsDetailService {
   }
 
   onTransferOwnership(id: Collaborator["userId"]) {
+    if (!this.teamMutable()) return;
     this.transferProjectOwnershipUseCase
-      .execute(this.projectId()!, id)
+      .execute(this.projectId()!, id, this.teamContext())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
+          this.snackbar.error(
+            teamOperationErrorMessage(result.error.cause) ??
+              "Не удалось изменить команду. Попробуйте ещё раз.",
+          );
           return;
         }
 

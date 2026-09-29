@@ -130,7 +130,7 @@ export class OfficeInfoService {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
-          this.officeUIInfoService.applyOpenInviteErrorModal();
+          // InviteInfoService показывает ошибку и перечитывает список.
         }
       });
   }
@@ -144,7 +144,7 @@ export class OfficeInfoService {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
-          this.officeUIInfoService.applyOpenInviteErrorModal();
+          // InviteInfoService показывает ошибку и перечитывает список.
           return;
         }
 

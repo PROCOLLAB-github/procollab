@@ -59,7 +59,7 @@
       class="invite-button invite-button--primary"
       [disabled]="ui.inviteForm.invalid || isLoading(ui.inviteFormIsSubmitting())"
       [attr.aria-busy]="isLoading(ui.inviteFormIsSubmitting())"
-      (click)="team.submitInvite(projectId())"
+      (click)="team.submitInvite(projectId(), project(), programLinkId())"
     >
       @if (isLoading(ui.inviteFormIsSubmitting())) {
         <span class="invite-spinner" aria-hidden="true"></span>

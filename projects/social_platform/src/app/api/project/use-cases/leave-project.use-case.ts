@@ -12,10 +12,13 @@ export class LeaveProjectUseCase {
 
   execute(
     projectId: number,
+    programLinkId?: number,
   ): Observable<Result<void, { kind: "leave_project_error"; cause?: unknown }>> {
-    return this.projectCollaboratorsRepositoryPort.deleteLeave(projectId).pipe(
-      map(() => ok<void>(undefined)),
-      catchError(error => of(fail({ kind: "leave_project_error" as const, cause: error }))),
-    );
+    return this.projectCollaboratorsRepositoryPort
+      .deleteLeave(projectId, ...[programLinkId].filter((id): id is number => id !== undefined))
+      .pipe(
+        map(() => ok<void>(undefined)),
+        catchError(error => of(fail({ kind: "leave_project_error" as const, cause: error }))),
+      );
   }
 }
