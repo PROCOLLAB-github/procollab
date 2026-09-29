@@ -85,6 +85,7 @@ export class MembersFiltersComponent {
       })
       .then(() => this.loggerService.info("Query change from ProjectsComponent"));
 
-    this.filterForm().reset();
+    // Контролы синхронизируют URL по отдельности; общий сброс делает один переход выше.
+    this.filterForm().reset(undefined, { emitEvent: false });
   }
 }

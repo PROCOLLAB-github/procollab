@@ -13,8 +13,6 @@ export class OnboardingStageTwoUIInfoService {
   readonly isChooseSkill = signal<boolean>(false);
   readonly isChooseSkillText = signal<string>("");
 
-  readonly searchedSkills = signal<Skill[]>([]);
-
   readonly openSkillGroup = signal<string | null>(null);
 
   readonly stageForm = this.nnFb.group({
@@ -38,7 +36,8 @@ export class OnboardingStageTwoUIInfoService {
   }
 
   applyInitSkills(fv: UserInput): void {
-    this.stageForm.patchValue({ skills: fv.skills });
+    // Черновик уже обновлён; обратная эмиссия замкнёт form -> draft -> form.
+    this.stageForm.patchValue({ skills: fv.skills ?? [] }, { emitEvent: false });
   }
 
   applySubmitErrorModal(err: any): void {
