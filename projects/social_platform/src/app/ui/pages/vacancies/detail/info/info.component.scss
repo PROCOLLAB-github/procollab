@@ -3,11 +3,15 @@
 @use "styles/responsive";
 @use "styles/typography";
 
+::ng-deep .modal__body.vacancy-response-modal {
+  width: min(600px, calc(100vw - 32px));
+}
+
 .vacancy {
   &__content {
     padding: 24px;
     margin-bottom: 20px;
-    background-color: var(--light-white);
+    background-color: var(--white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
   }
@@ -86,7 +90,7 @@
 .cancel {
   display: flex;
   flex-direction: column;
-  width: min(600px, 100%);
+  width: 100%;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 
