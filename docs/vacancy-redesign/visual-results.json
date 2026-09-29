@@ -1749,366 +1749,158 @@
       "samples": [
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +8",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Редактировать",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Удалить",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "QA",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Навыки не указаны",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Редактировать",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Удалить",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Дизайнер",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Редактировать",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Удалить",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Аналитик",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Редактировать",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Удалить",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         }
       ]
@@ -2118,394 +1910,170 @@
       "samples": [
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +8",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "посмотреть отклики",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "QA",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Навыки не указаны",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "откликнуться",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Дизайнер",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Аналитик",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         }
       ]
@@ -2519,366 +2087,158 @@
       "samples": [
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Описание вакансии",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Навыки",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "SCSS",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "JavaScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Figma",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Git",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "CSS",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +3",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Условия и отклики",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Город",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Москва",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Формат работы",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Удаленная работа",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Опыт",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "От 1 года до 3 лет",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "График",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Гибкий график",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Зарплата",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "120 000 рублей",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "посмотреть отклики",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Контакты проекта",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         }
       ]
@@ -2888,506 +2248,218 @@
       "samples": [
         {
           "text": "Отклики на вакансию",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            250,
-            250,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [250, 250, 250],
           "ratio": 12.10488152194292
         },
         {
           "text": "Анна Смирнова",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ожидает решения",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Отклик от 29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "SCSS",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "JavaScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Figma",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +5",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "отклонить",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "принять",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Анна Смирнова",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Принят",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Отклик от 29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "SCSS",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "JavaScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Figma",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +5",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Сопроводительное письмо не добавлено",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Анна Смирнова",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Отклонён",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            244,
-            226,
-            231
-          ],
+          "foreground": [51, 51, 51],
+          "background": [244, 226, 231],
           "ratio": 10.155293660371566
         },
         {
           "text": "Отклик от 29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "SCSS",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "JavaScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Figma",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +5",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         }
       ]
@@ -3397,254 +2469,110 @@
       "samples": [
         {
           "text": "Frontend-разработчик Angular",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Описание вакансии",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Навыки",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Навыки не указаны",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Условия и отклики",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Город",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Не указан",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Формат работы",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Не указан",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Опыт",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "От 1 года до 3 лет",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "График",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Не указан",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Зарплата",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "По договоренности",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "посмотреть отклики",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Контакты проекта",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         }
       ]
@@ -3654,212 +2582,92 @@
       "samples": [
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Отклик от 29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "На рассмотрении",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "Сопроводительное письмо",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Отклик от 29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Принят",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Сопроводительное письмо",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Сопроводительное письмо не добавлено",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Отклик от 29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Отклонён",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            244,
-            226,
-            231
-          ],
+          "foreground": [51, 51, 51],
+          "background": [244, 226, 231],
           "ratio": 10.155293660371566
         },
         {
           "text": "Сопроводительное письмо",
-          "foreground": [
-            123,
-            99,
-            179
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [123, 99, 179],
+          "background": [255, 255, 255],
           "ratio": 4.908994838122275
         },
         {
           "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         }
       ]
@@ -3877,394 +2685,170 @@
       "samples": [
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +8",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "посмотреть отклики",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            151,
-            100,
-            186
-          ],
+          "foreground": [250, 250, 250],
+          "background": [151, 100, 186],
           "ratio": 4.150256652519602
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "QA",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Навыки не указаны",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "откликнуться",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Дизайнер",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Аналитик",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         }
       ]
@@ -4274,394 +2858,170 @@
       "samples": [
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Frontend-разработчик для развития образовательной платформы ",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Angular",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "Ещё +8",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            232,
-            224,
-            250
-          ],
+          "foreground": [51, 51, 51],
+          "background": [232, 224, 250],
           "ratio": 9.911494258825572
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "посмотреть отклики",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            151,
-            100,
-            187
-          ],
+          "foreground": [250, 250, 250],
+          "background": [151, 100, 187],
           "ratio": 4.142960707008987
         },
         {
           "text": "Активна",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "QA",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Навыки не указаны",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "откликнуться",
-          "foreground": [
-            250,
-            250,
-            250
-          ],
-          "background": [
-            138,
-            99,
-            230
-          ],
+          "foreground": [250, 250, 250],
+          "background": [138, 99, 230],
           "ratio": 4.017445405627107
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Дизайнер",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Проектирование пользовательских интерфейсов",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         },
         {
           "text": "Закрыта",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            249,
-            249,
-            249
-          ],
+          "foreground": [51, 51, 51],
+          "background": [249, 249, 249],
           "ratio": 12.000593682945214
         },
         {
           "text": "29.09.2026",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "Аналитик",
-          "foreground": [
-            51,
-            51,
-            51
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [51, 51, 51],
+          "background": [255, 255, 255],
           "ratio": 12.63465434445799
         },
         {
           "text": "Ищем: Разработчик",
-          "foreground": [
-            130,
-            126,
-            128
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [130, 126, 128],
+          "background": [255, 255, 255],
           "ratio": 4.00365314113804
         },
         {
           "text": "TypeScript",
-          "foreground": [
-            41,
-            115,
-            115
-          ],
-          "background": [
-            227,
-            240,
-            232
-          ],
+          "foreground": [41, 115, 115],
+          "background": [227, 240, 232],
           "ratio": 4.716605957832591
         },
         {
           "text": "подробнее",
-          "foreground": [
-            138,
-            99,
-            230
-          ],
-          "background": [
-            255,
-            255,
-            255
-          ],
+          "foreground": [138, 99, 230],
+          "background": [255, 255, 255],
           "ratio": 4.193269794158393
         }
       ]
@@ -4672,1051 +3032,491 @@
     {
       "state": "project",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "project",
       "text": "Редактировать",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "project",
       "text": "Навыки не указаны",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "project",
       "text": "Редактировать",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "project",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "project",
       "text": "Редактировать",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "project",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "project",
       "text": "Редактировать",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "catalog",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "catalog",
       "text": "посмотреть отклики",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "catalog",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "Навыки не указаны",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "catalog",
       "text": "откликнуться",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "catalog",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "catalog",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "catalog",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "detail",
       "text": "Город",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail",
       "text": "Формат работы",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail",
       "text": "Опыт",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail",
       "text": "График",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail",
       "text": "Зарплата",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail",
       "text": "посмотреть отклики",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "responses",
       "text": "Отклик от 29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "responses",
       "text": "принять",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "responses",
       "text": "Отклик от 29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "responses",
       "text": "Отклик от 29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "Навыки не указаны",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "Город",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "Формат работы",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "Опыт",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "График",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "Зарплата",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "detail-empty",
       "text": "посмотреть отклики",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "my",
       "text": "Отклик от 29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "my",
       "text": "Отклик от 29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "my",
       "text": "Отклик от 29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "primary-hover",
       "text": "посмотреть отклики",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        151,
-        100,
-        186
-      ],
+      "foreground": [250, 250, 250],
+      "background": [151, 100, 186],
       "ratio": 4.150256652519602
     },
     {
       "state": "primary-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "Навыки не указаны",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "primary-hover",
       "text": "откликнуться",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "primary-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "primary-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "primary-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "skills-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "skills-hover",
       "text": "посмотреть отклики",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        151,
-        100,
-        187
-      ],
+      "foreground": [250, 250, 250],
+      "background": [151, 100, 187],
       "ratio": 4.142960707008987
     },
     {
       "state": "skills-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "Навыки не указаны",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "skills-hover",
       "text": "откликнуться",
-      "foreground": [
-        250,
-        250,
-        250
-      ],
-      "background": [
-        138,
-        99,
-        230
-      ],
+      "foreground": [250, 250, 250],
+      "background": [138, 99, 230],
       "ratio": 4.017445405627107
     },
     {
       "state": "skills-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     },
     {
       "state": "skills-hover",
       "text": "29.09.2026",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "Ищем: Разработчик",
-      "foreground": [
-        130,
-        126,
-        128
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [130, 126, 128],
+      "background": [255, 255, 255],
       "ratio": 4.00365314113804
     },
     {
       "state": "skills-hover",
       "text": "подробнее",
-      "foreground": [
-        138,
-        99,
-        230
-      ],
-      "background": [
-        255,
-        255,
-        255
-      ],
+      "foreground": [138, 99, 230],
+      "background": [255, 255, 255],
       "ratio": 4.193269794158393
     }
   ],

@@ -41,9 +41,15 @@ const check = (value, message) => {
     await page.goto("http://127.0.0.1:4358" + path);
     await page.waitForFunction(() => !!window.__vacancyPreview);
     await settle();
-    check(await page.evaluate(() => document.fonts.check('400 14px Mont') &&
-      [...document.fonts].some(font => font.family === 'Mont' && font.status === 'loaded') &&
-      getComputedStyle(document.body).fontFamily.includes('Mont')), 'real Mont loaded');
+    check(
+      await page.evaluate(
+        () =>
+          document.fonts.check("400 14px Mont") &&
+          [...document.fonts].some(font => font.family === "Mont" && font.status === "loaded") &&
+          getComputedStyle(document.body).fontFamily.includes("Mont"),
+      ),
+      "real Mont loaded",
+    );
   };
   async function geometry(state, width) {
     const result = await page.evaluate(() => {
@@ -144,13 +150,25 @@ const check = (value, message) => {
     );
 
     await go("/office/vacancies/all?empty");
-    check((await page.locator("app-project-vacancy-card").count()) === 0, "empty catalog has no cards");
-    check(await page.getByText("Вакансии не найдены", { exact: true }).isVisible(), "empty catalog message");
-    check(await page.getByRole("button", { name: "Сбросить фильтры", exact: true }).isVisible(), "empty catalog reset action");
+    check(
+      (await page.locator("app-project-vacancy-card").count()) === 0,
+      "empty catalog has no cards",
+    );
+    check(
+      await page.getByText("Вакансии не найдены", { exact: true }).isVisible(),
+      "empty catalog message",
+    );
+    check(
+      await page.getByRole("button", { name: "Сбросить фильтры", exact: true }).isVisible(),
+      "empty catalog reset action",
+    );
     await geometry("catalog-empty", width);
 
     await go("/office/vacancies/10");
-    check(await page.locator("app-back span").isVisible(), "detail back label visible on every width");
+    check(
+      await page.locator("app-back span").isVisible(),
+      "detail back label visible on every width",
+    );
     await geometry("detail", width);
     if (width !== 320)
       await page.screenshot({ path: out + "/detail-" + width + ".png", fullPage: true });
@@ -268,11 +286,17 @@ const check = (value, message) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await go("/office/vacancies/all");
   const primary = page.locator("app-project-vacancy-card").first().locator(".button--inline");
-  check(await primary.evaluate(el => getComputedStyle(el).backgroundColor === 'rgb(138, 99, 230)'), 'canonical CTA #8A63E6');
+  check(
+    await primary.evaluate(el => getComputedStyle(el).backgroundColor === "rgb(138, 99, 230)"),
+    "canonical CTA #8A63E6",
+  );
   await primary.hover();
   await page.waitForTimeout(250);
-  contrastResults.push({ state: 'primary-hover', samples: await contrast(page) });
-  check(await primary.evaluate(el => getComputedStyle(el).backgroundColor === 'rgb(151, 100, 186)'), 'canonical Button hover');
+  contrastResults.push({ state: "primary-hover", samples: await contrast(page) });
+  check(
+    await primary.evaluate(el => getComputedStyle(el).backgroundColor === "rgb(151, 100, 186)"),
+    "canonical Button hover",
+  );
   await page.keyboard.press("Tab");
   await primary.focus();
   await page.waitForTimeout(250);
@@ -285,7 +309,7 @@ const check = (value, message) => {
   );
   const skillsToggle = page.locator("app-project-vacancy-card").first().locator(".skills__toggle");
   await skillsToggle.hover();
-  contrastResults.push({ state: 'skills-hover', samples: await contrast(page) });
+  contrastResults.push({ state: "skills-hover", samples: await contrast(page) });
   await go("/office/projects/5/edit");
   await page.evaluate(() => window.__vacancyPreview.fill());
   await settle();
@@ -337,11 +361,21 @@ const check = (value, message) => {
   check(errors.length === 0, "browser errors: " + errors.join("\n"));
   fs.writeFileSync(
     "docs/vacancy-redesign/visual-results.json",
-    JSON.stringify({ checks, errors, measurements, contrastResults,
-      contrastPassed: false,
-      contrastLimitations: contrastResults.flatMap(({state, samples}) => samples.filter(sample => sample.ratio < 4.5).map(sample => ({state, ...sample}))),
-      note: 'Глобальные токены сохранены. Контраст измерен, полного WCAG AA PASS нет: основной CTA, outline и вторичный текст имеют ограничения.'
-    }, null, 2),
+    JSON.stringify(
+      {
+        checks,
+        errors,
+        measurements,
+        contrastResults,
+        contrastPassed: false,
+        contrastLimitations: contrastResults.flatMap(({ state, samples }) =>
+          samples.filter(sample => sample.ratio < 4.5).map(sample => ({ state, ...sample })),
+        ),
+        note: "Глобальные токены сохранены. Контраст измерен, полного WCAG AA PASS нет: основной CTA, outline и вторичный текст имеют ограничения.",
+      },
+      null,
+      2,
+    ),
   );
   console.log(JSON.stringify({ checks, errors, states: measurements.length }));
   await browser.close();

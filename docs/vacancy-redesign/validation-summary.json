@@ -38,18 +38,8 @@
   },
   "skillsBrowser": {
     "checks": 18,
-    "queries": [
-      "ang",
-      "Type",
-      "Type",
-      "ang",
-      "Type",
-      "Angular"
-    ],
-    "cancelled": [
-      "name__icontains=ang",
-      "name__icontains=ang"
-    ],
+    "queries": ["ang", "Type", "Type", "ang", "Type", "Angular"],
+    "cancelled": ["name__icontains=ang", "name__icontains=ang"],
     "errors": [],
     "mobileGeometry": {
       "contentWidth": 375,
@@ -72,10 +62,7 @@
     "createStatus": 201,
     "updateStatus": 200,
     "reopenStatus": 200,
-    "finalSkills": [
-      "Angular",
-      "CSS"
-    ],
+    "finalSkills": ["Angular", "CSS"],
     "finalSalary": 100,
     "mobileWidth": 390,
     "contentWidth": 375,
@@ -93,12 +80,7 @@
     "contrastPassed": false,
     "backend": "controlled local fixtures",
     "minimumTextContrast": 4.00365314113804,
-    "widths": [
-      1440,
-      768,
-      390,
-      320
-    ],
+    "widths": [1440, 768, 390, 320],
     "scope": "earlier vacancy-design validation, not rerun by this follow-up; current basket/mobile evidence is separate"
   },
   "additionalRegression": {
@@ -115,11 +97,7 @@
     "evidence": "autocomplete-followup-dev-results.json",
     "report": "autocomplete-followup-review.md",
     "api": "DEV",
-    "forms": [
-      "profile skills",
-      "onboarding speciality and skills",
-      "member filters"
-    ],
+    "forms": ["profile skills", "onboarding speciality and skills", "member filters"],
     "targeted": {
       "filesPassed": 4,
       "testsPassed": 32,

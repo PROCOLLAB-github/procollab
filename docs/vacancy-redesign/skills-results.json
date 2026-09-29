@@ -1,17 +1,7 @@
 {
   "checks": 18,
-  "queries": [
-    "ang",
-    "Type",
-    "Type",
-    "ang",
-    "Type",
-    "Angular"
-  ],
-  "cancelled": [
-    "name__icontains=ang",
-    "name__icontains=ang"
-  ],
+  "queries": ["ang", "Type", "Type", "ang", "Type", "Angular"],
+  "cancelled": ["name__icontains=ang", "name__icontains=ang"],
   "errors": [],
   "mobileGeometry": {
     "contentWidth": 375,

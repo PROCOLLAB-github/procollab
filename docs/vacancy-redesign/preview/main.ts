@@ -321,7 +321,8 @@ TestBed.configureTestingModule({
       useFactory: () => {
         const http = inject(HttpClient);
         return {
-          getSkillsInline: (name: string) => http.get("/fixture-api/core/skills/inline/", { params: { name__icontains: name } }),
+          getSkillsInline: (name: string) =>
+            http.get("/fixture-api/core/skills/inline/", { params: { name__icontains: name } }),
           getSkillsNested: () => of([{ id: 1, name: "Разработка", skills }]),
         };
       },
@@ -340,9 +341,19 @@ TestBed.configureTestingModule({
     },
     {
       provide: UpdateVacancyUseCase,
-      useValue: { execute: (id: number, payload: any) => of(ok(vacancy(id, {
-        ...payload, requiredSkills: skills.filter(skill => payload.requiredSkillsIds.includes(skill.id)),
-      }))) },
+      useValue: {
+        execute: (id: number, payload: any) =>
+          of(
+            ok(
+              vacancy(id, {
+                ...payload,
+                requiredSkills: skills.filter(skill =>
+                  payload.requiredSkillsIds.includes(skill.id),
+                ),
+              }),
+            ),
+          ),
+      },
     },
     { provide: DeleteVacancyUseCase, useValue: { execute: () => of(ok(undefined)) } },
     { provide: GetVacanciesUseCase, useValue: { execute: () => of(ok(vacancies)) } },
@@ -422,10 +433,16 @@ TestBed.compileComponents().then(async () => {
       TestBed.inject(ProjectVacancyService).submitVacancy(5);
     },
     succeed() {
-      request.next(ok(vacancy(99, {
-        role: "Новая вакансия Angular",
-        requiredSkills: skills.filter(skill => lastCreatePayload.requiredSkillsIds.includes(skill.id)),
-      })));
+      request.next(
+        ok(
+          vacancy(99, {
+            role: "Новая вакансия Angular",
+            requiredSkills: skills.filter(skill =>
+              lastCreatePayload.requiredSkillsIds.includes(skill.id),
+            ),
+          }),
+        ),
+      );
       request.complete();
     },
     fail() {

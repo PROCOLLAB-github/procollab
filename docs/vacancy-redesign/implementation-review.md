@@ -1,21 +1,23 @@
+<!-- @format -->
+
 # Реализация после согласования Figma
 
 Дизайн согласован 29.09.2026: [Feature Design / Vacancies](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=51-1751). PROPOSED используются только для вакансий. Канонический CTA #8A63E6, Mont и глобальные токены сохранены.
 
 ## Критерии и evidence
 
-| Критерий | Результат |
-|---|---|
-| Сохранить существующую ветку и дизайн | Checked by source: feat/dev-vacancy-interface-redesign, прежние изменения сохранены |
-| Подтвердить причину нестабильного выбора навыков | 8 регрессий воспроизведены до исправления; [перечень](skills-regressions-before.json) |
-| Быстрые запросы и общий inlineSkills | switchMap, немедленная отмена до debounce, component provider; service/component tests и управляемые HTTP-ответы в браузере |
-| Поиск, библиотека, удаление, повторный запрос | Checked by tests / browser: 17 локальных проверок |
-| Создание, редактирование, save/reopen | Checked на fixtures и DEV: вакансия 104, create/edit/save/reopen, поиск и библиотека, mobile |
-| Шесть экранов, desktop/mobile, Mont | Figma contexts со скриншотами + текущие Angular screenshots, 1440/768/390/320 |
-| Не менять токены и статус UI KIT | Diff глобальных colors/typography/font assets пуст; Figma masters в implementation-этапе не менялись |
-| Честно описать контраст | 4,02:1 основной CTA; контраст AA не пройден |
-| Последние tests/build/browser | [Точные команды и результаты](README.md#проверки), [JSON](validation-summary.json) |
-| Draft PR в dev | [Draft PR #393](https://github.com/PROCOLLAB-github/procollab/pull/393) открыт после финальной DEV-проверки. Merge/deploy не выполнялись |
+| Критерий                                         | Результат                                                                                                                                |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Сохранить существующую ветку и дизайн            | Checked by source: feat/dev-vacancy-interface-redesign, прежние изменения сохранены                                                      |
+| Подтвердить причину нестабильного выбора навыков | 8 регрессий воспроизведены до исправления; [перечень](skills-regressions-before.json)                                                    |
+| Быстрые запросы и общий inlineSkills             | switchMap, немедленная отмена до debounce, component provider; service/component tests и управляемые HTTP-ответы в браузере              |
+| Поиск, библиотека, удаление, повторный запрос    | Checked by tests / browser: 17 локальных проверок                                                                                        |
+| Создание, редактирование, save/reopen            | Checked на fixtures и DEV: вакансия 104, create/edit/save/reopen, поиск и библиотека, mobile                                             |
+| Шесть экранов, desktop/mobile, Mont              | Figma contexts со скриншотами + текущие Angular screenshots, 1440/768/390/320                                                            |
+| Не менять токены и статус UI KIT                 | Diff глобальных colors/typography/font assets пуст; Figma masters в implementation-этапе не менялись                                     |
+| Честно описать контраст                          | 4,02:1 основной CTA; контраст AA не пройден                                                                                              |
+| Последние tests/build/browser                    | [Точные команды и результаты](README.md#проверки), [JSON](validation-summary.json)                                                       |
+| Draft PR в dev                                   | [Draft PR #393](https://github.com/PROCOLLAB-github/procollab/pull/393) открыт после финальной DEV-проверки. Merge/deploy не выполнялись |
 
 ## Причина и исправление
 
