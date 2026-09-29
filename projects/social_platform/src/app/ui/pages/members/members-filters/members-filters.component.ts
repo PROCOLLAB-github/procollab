@@ -1,24 +1,13 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  input,
-  Input,
-  output,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input, output } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { Specialization } from "@domain/specializations/specialization.model";
-import { ActivatedRoute, Router } from "@angular/router";
 import { MembersComponent } from "@ui/pages/members/members.component";
 import { Skill } from "@domain/skills/skill.model";
 import { SearchesService } from "@api/searches/searches.service";
-import { LoggerService } from "@corelib";
 
 /** Фильтры для списка участников с синхронизацией через URL. */
 @Component({
@@ -30,12 +19,9 @@ import { LoggerService } from "@corelib";
 })
 export class MembersFiltersComponent {
   readonly filterForm = input.required<MembersComponent["filterForm"]>();
-  readonly filtersChanged = output();
+  readonly resetRequested = output<void>();
 
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly searchesService = inject(SearchesService);
-  private readonly loggerService = inject(LoggerService);
 
   protected readonly specsOptions = this.searchesService.inlineSpecs;
 
@@ -72,20 +58,6 @@ export class MembersFiltersComponent {
   }
 
   clearFilters(): void {
-    this.router
-      .navigate([], {
-        queryParams: {
-          fullname: undefined,
-          is_mospolytech_student: undefined,
-          skills__contains: undefined,
-          speciality__icontains: undefined,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => this.loggerService.info("Query change from ProjectsComponent"));
-
-    // Общий сброс уже обновляет URL; отдельная синхронизация формы здесь не нужна.
-    this.filterForm().reset(undefined, { emitEvent: false });
+    this.resetRequested.emit();
   }
 }

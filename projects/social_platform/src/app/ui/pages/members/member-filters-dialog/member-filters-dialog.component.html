@@ -13,7 +13,7 @@
       <button #closeButton type="button" aria-label="Закрыть фильтры" (click)="close()">×</button>
     </header>
     <div class="member-filters-dialog__content">
-      <app-members-filters [filterForm]="filterForm()" />
+      <app-members-filters [filterForm]="filterForm()" (resetRequested)="resetRequested.emit()" />
     </div>
     <button type="button" class="member-filters-dialog__done" (click)="close()">Готово</button>
   </section>

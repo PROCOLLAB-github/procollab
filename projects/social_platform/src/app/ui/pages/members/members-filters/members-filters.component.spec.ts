@@ -45,28 +45,24 @@ describe("MembersFiltersComponent ", () => {
     expect(component).toBeTruthy();
   });
 
-  it("общий сброс не запускает конкурирующие переходы от отдельных контролов", () => {
+  it("общий сброс делегируется владельцу обеих форм без навигации из дочернего компонента", () => {
     const form = new FormGroup({
       keySkill: new FormControl("Angular"),
       speciality: new FormControl("Front-end"),
-      age: new FormControl([null, null]),
+      age: new FormControl([18, 30]),
       isMosPolytechStudent: new FormControl(false),
     });
     fixture.componentRef.setInput("filterForm", form);
     const router = TestBed.inject(Router);
     const navigate = vi.spyOn(router, "navigate").mockResolvedValue(true);
-    // Как в MembersInfoService: каждый контрол отдельно синхронизируется с URL.
+    const reset = vi.fn();
+    component.resetRequested.subscribe(reset);
     const subscriptions = Object.values(form.controls).map(control =>
       control.valueChanges.subscribe(() => router.navigate([], { queryParamsHandling: "merge" })),
     );
     component.clearFilters();
-    expect(form.controls.keySkill.value).toBeNull();
-    expect(form.controls.speciality.value).toBeNull();
-    expect(navigate).toHaveBeenCalledTimes(1);
-    expect(navigate.mock.calls[0][1]?.queryParams).toMatchObject({
-      skills__contains: undefined,
-      speciality__icontains: undefined,
-    });
+    expect(reset).toHaveBeenCalledTimes(1);
+    expect(navigate).not.toHaveBeenCalled();
     subscriptions.forEach(subscription => subscription.unsubscribe());
   });
 });

@@ -33,6 +33,7 @@ export class MemberFiltersDialogComponent implements AfterViewInit {
   readonly filterForm = input.required<MembersUIInfoService["filterForm"]>();
   readonly trigger = input<HTMLElement | null>(null);
   readonly closed = output<void>();
+  readonly resetRequested = output<void>();
   protected readonly open = signal(true);
   protected readonly attached = signal(false);
   private readonly destroyRef = inject(DestroyRef);

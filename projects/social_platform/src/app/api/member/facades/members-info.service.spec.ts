@@ -27,13 +27,12 @@ describe("Поиск участников", () => {
   const execute = vi.fn();
   const navigate = vi.fn();
   let ui: MembersUIInfoService, service: MembersInfoService;
-  beforeEach(() => {
-    vi.useFakeTimers();
-    params.next({ fullname: "  Иван  Иванов " });
+  const setup = (initialParams: Record<string, string> = { fullname: "  Иван  Иванов " }) => {
+    params.next(initialParams);
     execute.mockReset().mockReturnValue(of(ok(page([1], 1))));
     navigate.mockReset().mockImplementation((_commands, options) => {
       const next = { ...params.value, ...options.queryParams };
-      if (!next.fullname) delete next.fullname;
+      for (const key of Object.keys(next)) if (next[key] == null) delete next[key];
       params.next(next);
       return Promise.resolve(true);
     });
@@ -44,7 +43,9 @@ describe("Поиск участников", () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { queryParams: params.value },
+            get snapshot() {
+              return { queryParams: params.value };
+            },
             queryParams: params,
             data: of({ data: page([1, 2], 100) }),
           },
@@ -64,6 +65,10 @@ describe("Поиск участников", () => {
     ui = TestBed.inject(MembersUIInfoService);
     service = TestBed.inject(MembersInfoService);
     service.initializationMembers();
+  };
+  beforeEach(() => {
+    vi.useFakeTimers();
+    setup();
   });
   afterEach(() => {
     TestBed.resetTestingModule();
@@ -73,16 +78,167 @@ describe("Поиск участников", () => {
     expect(normalizeMemberSearch("  иВан\t  Иванов  ")).toBe("иВан Иванов");
     expect(normalizeMemberSearch(null)).toBe("");
   });
+  it("resolver передаёт все фильтры URL, включая false и возраст", () => {
+    const queryParams = {
+      fullname: "  Анна  ",
+      skills__contains: "Angular",
+      speciality__icontains: "Front-end",
+      age: "18,30",
+      is_mospolytech_student: "false",
+    };
+    TestBed.runInInjectionContext(() => MembersResolver({ queryParams } as any, {} as any));
+    expect(execute).toHaveBeenLastCalledWith(0, 20, { ...queryParams, fullname: "Анна" });
+  });
+  it("начальная форма гидратируется из полного URL без навигации и второго запроса", async () => {
+    TestBed.resetTestingModule();
+    setup({
+      fullname: "Анна",
+      skills__contains: "Angular",
+      speciality__icontains: "Front-end",
+      age: "18,30",
+      is_mospolytech_student: "true",
+    });
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(ui.filterForm.getRawValue()).toEqual({
+      keySkill: "Angular",
+      speciality: "Front-end",
+      age: [18, 30],
+      isMosPolytechStudent: true,
+    });
+    expect(ui.searchForm.controls.search.value).toBe("Анна");
+    expect(ui.members().map(user => user.id)).toEqual([1, 2]);
+    expect(navigate).not.toHaveBeenCalled();
+    expect(execute).not.toHaveBeenCalled();
+  });
+  it("асинхронные переходы сериализованы, поздний URL не стирает новую правку формы", async () => {
+    let finish!: () => void;
+    navigate.mockImplementationOnce(
+      (_commands, options) =>
+        new Promise<boolean>(resolve => {
+          finish = () => {
+            params.next(options.queryParams);
+            resolve(true);
+          };
+        }),
+    );
+    ui.filterForm.patchValue({ keySkill: "Angular" });
+    await vi.advanceTimersByTimeAsync(150);
+    ui.filterForm.patchValue({ keySkill: "CSS", speciality: "Front-end" });
+    ui.searchForm.patchValue({ search: "Анна" });
+    await vi.advanceTimersByTimeAsync(400);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    finish();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(navigate).toHaveBeenCalledTimes(2);
+    expect(execute).toHaveBeenLastCalledWith(0, 20, {
+      fullname: "Анна",
+      skills__contains: "CSS",
+      speciality__icontains: "Front-end",
+    });
+    expect(ui.filterForm.controls.keySkill.value).toBe("CSS");
+    expect(ui.searchForm.controls.search.value).toBe("Анна");
+  });
+  it("Back отбрасывает очередь правок при незавершённой навигации", async () => {
+    let finish!: (value: boolean) => void;
+    navigate.mockImplementationOnce(
+      () =>
+        new Promise<boolean>(resolve => {
+          finish = resolve;
+        }),
+    );
+    ui.filterForm.patchValue({ keySkill: "SQL" });
+    await vi.advanceTimersByTimeAsync(150);
+    ui.filterForm.patchValue({ keySkill: "CSS" });
+    await vi.advanceTimersByTimeAsync(150);
+    params.next({ skills__contains: "Angular" });
+    finish(false);
+    await vi.advanceTimersByTimeAsync(500);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(ui.filterForm.controls.keySkill.value).toBe("Angular");
+    expect(execute).toHaveBeenLastCalledWith(0, 20, { skills__contains: "Angular" });
+  });
+  it("Back/Forward восстанавливает все контролы без дополнительной навигации", async () => {
+    params.next({
+      fullname: "Анна",
+      skills__contains: "Angular",
+      speciality__icontains: "Front-end",
+      age: "18,30",
+      is_mospolytech_student: "false",
+    });
+    await vi.advanceTimersByTimeAsync(500);
+    expect(ui.searchForm.controls.search.value).toBe("Анна");
+    expect(ui.filterForm.getRawValue()).toEqual({
+      keySkill: "Angular",
+      speciality: "Front-end",
+      age: [18, 30],
+      isMosPolytechStudent: false,
+    });
+    expect(navigate).not.toHaveBeenCalled();
+    params.next({});
+    await vi.advanceTimersByTimeAsync(500);
+    expect(ui.searchForm.controls.search.value).toBe("");
+    expect(ui.filterForm.getRawValue()).toEqual({
+      keySkill: "",
+      speciality: "",
+      age: [null, null],
+      isMosPolytechStudent: null,
+    });
+    expect(execute).toHaveBeenLastCalledWith(0, 20, {});
+  });
+  it("Back отменяет отложенное изменение поиска и фильтра", async () => {
+    ui.searchForm.patchValue({ search: "Не отправлять" });
+    ui.filterForm.patchValue({ keySkill: "SQL" });
+    await vi.advanceTimersByTimeAsync(50);
+    params.next({ skills__contains: "Angular" });
+    await vi.advanceTimersByTimeAsync(600);
+    expect(navigate).not.toHaveBeenCalled();
+    expect(execute).toHaveBeenLastCalledWith(0, 20, { skills__contains: "Angular" });
+  });
+  it("сброс при уже пустом URL отменяет ввод даже без эмиссии Router", async () => {
+    params.next({});
+    navigate.mockImplementation(() => Promise.resolve(true));
+    ui.searchForm.patchValue({ search: "Не отправлять" });
+    ui.filterForm.patchValue({ keySkill: "SQL", age: [18, 30], isMosPolytechStudent: false });
+    await vi.advanceTimersByTimeAsync(50);
+    service.resetFilters();
+    await vi.advanceTimersByTimeAsync(600);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate.mock.calls[0][1].queryParams).toEqual({
+      fullname: null,
+      skills__contains: null,
+      speciality__icontains: null,
+      age: null,
+      is_mospolytech_student: null,
+    });
+    expect(ui.searchForm.controls.search.value).toBe("");
+    expect(ui.filterForm.getRawValue()).toEqual({
+      keySkill: "",
+      speciality: "",
+      age: [null, null],
+      isMosPolytechStudent: null,
+    });
+  });
+  it("форма сохраняет возраст и false вместе с новым поиском", async () => {
+    ui.filterForm.patchValue({ age: [18, 30], isMosPolytechStudent: false });
+    ui.searchForm.patchValue({ search: "Анна" });
+    await vi.advanceTimersByTimeAsync(500);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(execute).toHaveBeenLastCalledWith(0, 20, {
+      fullname: "Анна",
+      age: "18,30",
+      is_mospolytech_student: "false",
+    });
+  });
   it("быстрый ввод отправляет последнюю строку, а очистка возвращает полный список", async () => {
-    for (const value of ["И", "Ив", "Ива", "Иван Иванов"]) {
+    for (const value of ["И", "Ив", "Ива", "Иван Петров"]) {
       ui.searchForm.patchValue({ search: value });
       await vi.advanceTimersByTimeAsync(60);
     }
     await vi.advanceTimersByTimeAsync(450);
     expect(navigate).toHaveBeenCalledTimes(1);
-    expect(execute).toHaveBeenLastCalledWith(0, 20, { fullname: "Иван Иванов" });
+    expect(execute).toHaveBeenLastCalledWith(0, 20, { fullname: "Иван Петров" });
     expect(ui.membersTotalCount()).toBe(1);
-    ui.searchForm.patchValue({ search: "  Иван   Иванов  " });
+    ui.searchForm.patchValue({ search: "  Иван   Петров  " });
     await vi.advanceTimersByTimeAsync(450);
     expect(navigate).toHaveBeenCalledTimes(1);
     ui.searchForm.patchValue({ search: null });
