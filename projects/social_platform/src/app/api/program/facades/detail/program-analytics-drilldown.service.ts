@@ -2,6 +2,9 @@
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Subject, takeUntil } from "rxjs";
+import { ProgramCaseProjectsService } from "./program-case-projects.service";
+import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
+import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
@@ -28,6 +31,7 @@ export type AnalyticsAttentionView =
   | "projects-awaiting-evaluation"
   | "projects-not-submitted";
 export type AnalyticsDrilldownView =
+  | "case"
   | "assignments"
   | "scores"
   | "delayed"
@@ -37,6 +41,20 @@ export type AnalyticsDrilldownView =
 /** Живёт вместе с одной analytics-модалкой, не сохраняет manager-данные между открытиями. */
 @Injectable()
 export class ProgramAnalyticsDrilldownService {
+  readonly cases = inject(ProgramCaseProjectsService);
+
+  openCase(
+    programId: number,
+    selection: ProgramCaseSelection,
+    metrics: ProgramAnalyticsCaseMetrics,
+    applicable: boolean,
+    programName = "program",
+  ): void {
+    if (!this.start(programId)) return;
+    this.view.set("case");
+    this.cases.open(programId, selection, metrics, applicable, programName);
+  }
+
   private readonly getAssignments = inject(GetProgramManagerAssignmentsUseCase);
   private readonly getScores = inject(GetProgramManagerAssignmentScoresUseCase);
   private readonly getParticipants = inject(GetProgramManagerParticipantsWithoutTeamUseCase);
@@ -272,6 +290,7 @@ export class ProgramAnalyticsDrilldownService {
 
   /** Закрытие и смена программы уничтожают весь локальный контекст и активные запросы. */
   close(): void {
+    this.cases.reset();
     this.cancelAssignments.next();
     this.cancelScores.next();
     this.cancelAttention.next();

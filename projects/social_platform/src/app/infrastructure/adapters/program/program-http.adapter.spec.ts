@@ -17,7 +17,7 @@ describe("ProgramHttpAdapter", () => {
   let api: any;
 
   function setup(): void {
-    api = { get: vi.fn(), post: vi.fn() };
+    api = { get: vi.fn(), post: vi.fn(), getFile: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProgramHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -30,6 +30,48 @@ describe("ProgramHttpAdapter", () => {
     next: "",
     previous: "",
   });
+
+  it("case list передаёт exact option, opt-in, поиск и страницу", () => {
+    setup();
+    api.get.mockReturnValue(of({}));
+    adapter
+      .getCaseProjects(12, {
+        selection: { scope: "selected", caseName: " Кейс & A " },
+        search: "  Проект ",
+        limit: 25,
+        offset: 50,
+      })
+      .subscribe();
+    const [url, params] = api.get.mock.lastCall;
+    expect(url).toBe("/programs/12/projects/");
+    expect(Object.fromEntries(params.keys().map((key: string) => [key, params.get(key)]))).toEqual({
+      view: "case_analytics",
+      case_scope: "selected",
+      case_name: " Кейс & A ",
+      search: "Проект",
+      limit: "25",
+      offset: "50",
+    });
+  });
+
+  it.each(["all", "without_case", "selected"] as const)(
+    "case XLSX %s не принимает search/pagination",
+    scope => {
+      setup();
+      api.getFile.mockReturnValue(of(new Blob()));
+      const selection =
+        scope === "selected" ? { scope, caseName: "Без выбранного кейса" } : { scope };
+      adapter.exportCaseProjects(12, selection).subscribe();
+      const [url, params] = api.getFile.mock.lastCall;
+      expect(url).toBe("/programs/12/export-projects/");
+      expect(params.keys().sort()).toEqual(
+        scope === "selected" ? ["case_name", "case_scope", "view"] : ["case_scope", "view"],
+      );
+      expect(params.get("view")).toBe("case_analytics");
+      expect(params.get("case_scope")).toBe(scope);
+      expect(params.get("case_name")).toBe(scope === "selected" ? "Без выбранного кейса" : null);
+    },
+  );
 
   it("getAll идёт в GET /programs/ c limit/offset и дополнительными фильтрами", () => {
     setup();

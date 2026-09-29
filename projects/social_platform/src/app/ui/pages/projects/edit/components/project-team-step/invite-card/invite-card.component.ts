@@ -1,90 +1,70 @@
 /** @format */
-
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  input,
-  Input,
-  OnInit,
-  output,
-  Output,
-  signal,
-} from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from "@angular/core";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Invite } from "@domain/invite/invite.model";
-import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from "@ui/primitives";
-import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
+import { normalizeInviteText } from "@domain/invite/project-role-suggestions";
+import { inviteRoleValidator } from "@api/invite/project-invite-form";
+import { IconComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { TruncatePipe, ControlErrorPipe } from "@corelib";
+import { ProjectInviteDialogComponent } from "@ui/widgets/project-invite/project-invite-dialog.component";
+import { ProjectInviteRoleInputComponent } from "@ui/widgets/project-invite/project-invite-role-input.component";
 
-/** Карточка приглашения в команду с редактированием и удалением. */
+/** Ожидающее приглашение: существующие PATCH роли и DELETE приглашения. */
 @Component({
   selector: "app-invite-card",
   templateUrl: "./invite-card.component.html",
   styleUrl: "./invite-card.component.scss",
   imports: [
     IconComponent,
-    ButtonComponent,
-    ModalComponent,
-    SelectComponent,
-    ControlErrorPipe,
-    TruncatePipe,
-    ReactiveFormsModule,
-    InputComponent,
     AvatarComponent,
+    ReactiveFormsModule,
+    ProjectInviteDialogComponent,
+    ProjectInviteRoleInputComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InviteCardComponent implements OnInit {
-  constructor(private readonly fb: FormBuilder) {
-    this.inviteForm = this.fb.group({
-      role: [""],
-      specialization: [null],
-    });
-  }
-
-  readonly rolesMembersList = rolesMembersList;
-
-  inviteForm: FormGroup;
-  errorMessage = ErrorMessage;
-
+export class InviteCardComponent {
   readonly invite = input.required<Invite>();
-
   readonly remove = output<number>();
   readonly edit = output<{ inviteId: number; role: string; specialization: string }>();
-
-  ngOnInit(): void {
-    if (this.invite()) {
-      this.inviteForm.patchValue({
-        role: this.invite().role,
-        specialization: this.invite().specialization,
-      });
-    }
+  readonly role = new FormControl("", { nonNullable: true, validators: [inviteRoleValidator] });
+  readonly isRemoveInviteModal = signal(false);
+  readonly isEditInviteModal = signal(false);
+  protected trigger: HTMLElement | null = null;
+  readonly sentDate = computed(() => {
+    const value = this.invite().datetimeCreated;
+    if (!value) return null;
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? null
+      : new Intl.DateTimeFormat("ru-RU", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }).format(date);
+  });
+  openEdit(event: Event): void {
+    this.trigger = event.currentTarget as HTMLElement;
+    this.role.reset(this.invite().role ?? "");
+    this.isEditInviteModal.set(true);
   }
-
-  // Сигналы для управления состоянием модальных окон
-  isRemoveInviteModal = signal(false);
-  isEditInviteModal = signal(false);
-
-  onRemove(event: MouseEvent): void {
-    event.stopPropagation();
-    event.preventDefault();
-
-    this.remove.emit(this.invite()?.id);
+  openRemove(event: Event): void {
+    this.trigger = event.currentTarget as HTMLElement;
+    this.isRemoveInviteModal.set(true);
   }
-
-  onEdit(event: MouseEvent): void {
-    event.stopPropagation();
-    event.preventDefault();
-    this.isEditInviteModal.set(false);
-
+  onRemove(): void {
+    this.isRemoveInviteModal.set(false);
+    this.remove.emit(this.invite().id);
+  }
+  onEdit(): void {
+    this.role.setValue(normalizeInviteText(this.role.value));
+    this.role.markAsTouched();
+    if (this.role.invalid) return;
     this.edit.emit({
-      inviteId: this.invite()?.id,
-      role: this.inviteForm.value.role,
-      specialization: this.inviteForm.value.specialization,
+      inviteId: this.invite().id,
+      role: this.role.value,
+      specialization: this.invite().specialization ?? "",
     });
+    this.isEditInviteModal.set(false);
   }
 }

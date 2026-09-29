@@ -1,6 +1,10 @@
 /** @format */
 
 import { HttpParams } from "@angular/common/http";
+import {
+  ProgramCaseQuery,
+  ProgramCaseSelection,
+} from "@domain/program/program-case-analytics.model";
 import { ProgramRoleWidget } from "../program-role-widget.model";
 import { Observable } from "rxjs";
 import { ApiPagination } from "../../other/api-pagination.model";
@@ -28,6 +32,9 @@ import {
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
+  abstract getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown>;
+  abstract exportCaseProjects(programId: number, selection: ProgramCaseSelection): Observable<Blob>;
+
   /** Сводка текущего пользователя без обращения к manager-only API. */
   abstract getRoleWidget(programId: number): Observable<ProgramRoleWidget>;
   abstract getAll(

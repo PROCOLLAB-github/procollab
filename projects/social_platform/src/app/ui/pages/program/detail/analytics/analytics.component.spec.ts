@@ -1,5 +1,7 @@
 /** @format */
 
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
@@ -99,6 +101,7 @@ describe("ProgramAnalyticsComponent", () => {
   const error = signal<any>(null);
   const analytics = {
     programId: signal<number | null>(12),
+    programName: signal("Тестовая программа"),
     data,
     pending,
     failed,
@@ -128,6 +131,10 @@ describe("ProgramAnalyticsComponent", () => {
     TestBed.configureTestingModule({
       imports: [ProgramAnalyticsComponent],
       providers: [
+        {
+          provide: ProgramRepositoryPort,
+          useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+        },
         provideRouter([]),
         { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: { execute: vi.fn() } },
         {
@@ -151,6 +158,10 @@ describe("ProgramAnalyticsComponent", () => {
       .overrideComponent(ProgramAnalyticsComponent, {
         set: {
           providers: [
+            {
+              provide: ProgramRepositoryPort,
+              useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
+            },
             { provide: ProgramAnalyticsInfoService, useValue: analytics },
             { provide: ExportFileInfoService, useValue: exports },
           ],
@@ -160,6 +171,36 @@ describe("ProgramAnalyticsComponent", () => {
   });
 
   describe("cases from manager overview", () => {
+    it("не показывает общую выгрузку и не запрашивает проекты до открытия кейса", () => {
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      const repo = fixture.debugElement.injector.get(ProgramRepositoryPort);
+      const list = vi.spyOn(repo, "getCaseProjects");
+      fixture.detectChanges();
+
+      const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        '[data-testid="cases-card"]',
+      )!;
+      expect(card.textContent).not.toContain("Выгрузить все проекты");
+      expect(card.textContent).not.toContain("Проверяем доступность выгрузки");
+      expect(list).not.toHaveBeenCalled();
+    });
+
+    it.each([0, 2, 3])("клик строки %s передаёт точный scope, включая нулевой кейс", index => {
+      const { fixture, rows } = renderCases();
+      const drilldown = fixture.debugElement.query(
+        By.directive(AnalyticsDrilldownComponent),
+      ).componentInstance;
+      const open = vi.spyOn(drilldown, "openCase").mockImplementation(() => {});
+      rows[index].click();
+      expect(open).toHaveBeenCalledWith(
+        index === 3
+          ? { scope: "without_case" }
+          : { scope: "selected", caseName: index === 0 ? "Case A" : "Case C" },
+        expect.objectContaining({ projectsTotal: index === 0 ? 3 : index === 2 ? 0 : 2 }),
+        true,
+        rows[index],
+      );
+    });
     function renderCases() {
       const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
       fixture.detectChanges();
@@ -207,7 +248,11 @@ describe("ProgramAnalyticsComponent", () => {
         "Case A: 3 проекта, сдано 2, не сдано 1, участников 7",
       );
       expect(rows[3].classList.contains("case-row--without-case")).toBe(true);
-      expect(card.querySelector("button, a")).toBeNull();
+      expect(
+        rows.every(
+          row => row.tagName === "BUTTON" && row.getAttribute("aria-haspopup") === "dialog",
+        ),
+      ).toBe(true);
       expect(JSON.stringify(data())).toBe(before);
       expect(analytics.initialize).toHaveBeenCalledOnce();
       const tooltip = fixture.debugElement.query(By.css(".cases-card app-tooltip"))
@@ -252,12 +297,13 @@ describe("ProgramAnalyticsComponent", () => {
     ])("renders controlled empty state when configured=%s", (configured, message) => {
       const model = overview();
       model.cases.configured = configured;
-      if (configured) model.cases.items = [];
+      model.cases.items = [];
       data.set(model);
       const { card, rows } = renderCases();
-      expect(rows).toHaveLength(0);
+      expect(rows).toHaveLength(1);
       expect(card.querySelector(".analytics-empty-state.text-body-10")?.textContent).toBe(message);
-      expect(card.textContent).not.toContain("Без выбранного кейса");
+      expect(card.textContent).toContain("Без выбранного кейса");
+      expect(rows[0].tagName).toBe("BUTTON");
     });
 
     it("keeps all configured zero options, without an empty state or fake bar values", () => {
@@ -286,7 +332,9 @@ describe("ProgramAnalyticsComponent", () => {
       expect(card.textContent).toContain("Участников 7");
       expect(card.textContent).not.toMatch(/Сдано|Не сдано/);
       expect(rows[0].querySelector<HTMLElement>(".case-row__volume")!.style.width).toBe("100%");
-      expect(rows[0].getAttribute("aria-label")).toBe("Case A: 3 проекта, участников 7");
+      expect(rows[0].getAttribute("aria-label")).toBe(
+        "Case A: 3 проекта, участников 7. Открыть проекты кейса",
+      );
       expect(model.cases.items[0].submitted).toBe(2);
       expect(
         fixture.nativeElement.querySelector('[data-testid="solution-funnel"]').textContent,

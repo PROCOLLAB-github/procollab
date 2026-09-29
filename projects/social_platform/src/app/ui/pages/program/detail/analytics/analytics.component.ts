@@ -10,6 +10,7 @@ import {
 } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
+import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
 import {
   ProgramAnalyticsActivityPoint,
@@ -71,10 +72,17 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
 export class ProgramAnalyticsComponent implements OnInit {
   private readonly analytics = inject(ProgramAnalyticsInfoService);
   private readonly exports = inject(ExportFileInfoService);
+
+  protected caseSelection(row: AnalyticsCaseRow): ProgramCaseSelection {
+    return row.isWithoutCase
+      ? { scope: "without_case" }
+      : { scope: "selected", caseName: row.name };
+  }
   private readonly pluralize = new PluralizePipe();
 
   protected readonly data = this.analytics.data;
   protected readonly programId = this.analytics.programId;
+  protected readonly programName = this.analytics.programName;
   protected readonly pending = this.analytics.pending;
   protected readonly failed = this.analytics.failed;
   protected readonly error = this.analytics.error;
@@ -98,7 +106,7 @@ export class ProgramAnalyticsComponent implements OnInit {
   /** Preserve backend order/counts; only bar percentages and presentation are derived. */
   protected readonly caseRows = computed<AnalyticsCaseRow[]>(() => {
     const cases = this.data()?.cases;
-    if (!cases?.configured || !cases.items.length) return [];
+    if (!cases) return [];
     const rows = cases.items.map((item, index) => ({
       ...item,
       key: `case:${index}`,

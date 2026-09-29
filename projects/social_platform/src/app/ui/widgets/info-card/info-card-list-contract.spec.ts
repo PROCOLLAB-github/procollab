@@ -52,7 +52,11 @@ describe("Мои проекты: HTTP list → преобразование ко
    * Передаёт настоящий сокращённый snake_case payload через HTTP/interceptor,
    * адаптер, репозиторий и use case. Готовая camelCase-фикстура скрыла бы дефект.
    */
-  async function loadProject(submitted: boolean | undefined, draft = false): Promise<void> {
+  async function loadProject(
+    submitted: boolean | undefined,
+    draft = false,
+    ids = { projectId: 101, programLinkId: 120, programId: 12 },
+  ): Promise<Project> {
     const resultPromise = firstValueFrom(TestBed.inject(GetMyProjectsUseCase).execute());
     const request = http.expectOne("/api/auth/users/projects/");
     expect(request.request.method).toBe("GET");
@@ -62,7 +66,7 @@ describe("Мои проекты: HTTP list → преобразование ко
       previous: null,
       results: [
         {
-          id: 101,
+          id: ids.projectId,
           name: "Проект программы",
           leader: 7,
           short_description: "Описание проекта",
@@ -71,12 +75,17 @@ describe("Мои проекты: HTTP list → преобразование ко
           views_count: 0,
           draft,
           is_company: false,
+          partner_program_tags: [],
           partner_program: {
-            id: 12,
+            id: ids.programId,
             name: "Программа",
             ...(submitted === undefined
               ? {}
-              : { program_link_id: 120, program_id: 12, is_submitted: submitted }),
+              : {
+                  program_link_id: ids.programLinkId,
+                  program_id: ids.programId,
+                  is_submitted: submitted,
+                }),
           },
         },
       ],
@@ -89,11 +98,12 @@ describe("Мои проекты: HTTP list → преобразование ко
     expect(project.shortDescription).toBe("Описание проекта");
     expect(project.partnerProgram?.isSubmitted).toBe(submitted);
     if (submitted !== undefined) {
-      expect(project.partnerProgram?.programLinkId).toBe(120);
-      expect(project.partnerProgram?.programId).toBe(12);
+      expect(project.partnerProgram?.programLinkId).toBe(ids.programLinkId);
+      expect(project.partnerProgram?.programId).toBe(ids.programId);
     }
     fixture.componentRef.setInput("info", project);
     fixture.detectChanges();
+    return project;
   }
 
   const text = (selector: string): string =>
@@ -103,9 +113,9 @@ describe("Мои проекты: HTTP list → преобразование ко
     { submitted: true, draft: false, status: "Сдан в программу" },
     { submitted: true, draft: true, status: "Сдан в программу" },
     { submitted: false, draft: false, status: "В программе" },
-    { submitted: false, draft: true, status: "Черновик" },
+    { submitted: false, draft: true, status: "В программе" },
     { submitted: undefined, draft: false, status: "В программе" },
-    { submitted: undefined, draft: true, status: "Черновик" },
+    { submitted: undefined, draft: true, status: "В программе" },
   ])("is_submitted=$submitted, draft=$draft: lifecycle и доступ независимы", async item => {
     await loadProject(item.submitted, item.draft);
     for (const userId of [7, 99, undefined]) {
@@ -123,6 +133,21 @@ describe("Мои проекты: HTTP list → преобразование ко
       );
       expect(link.urlTree!.queryParams).toEqual({});
     }
+  });
+
+  it("DEV 286: связь 105 с программой 9 важнее draft и пустых тегов", async () => {
+    const project = await loadProject(false, true, {
+      projectId: 286,
+      programLinkId: 105,
+      programId: 9,
+    });
+    expect(project.id).toBe(286);
+    expect(project.draft).toBe(true);
+    expect(text(".card__status")).toBe("В программе");
+    expect(fixture.nativeElement.querySelectorAll(".card__status")).toHaveLength(1);
+    expect(text(".card__role")).toBe("Лидер");
+    expect(text(".card__access-label")).toBe("можно редактировать");
+    expect(fixture.componentInstance["myProjectPresentation"]()?.canEdit).toBe(true);
   });
 
   it("обновляет доступ после получения состояния и не сохраняет его для неполного ответа", async () => {

@@ -34,6 +34,7 @@ export class ProgramAnalyticsInfoService {
   private routeProgramId: number | null = null;
   private loadedProgram: Program | undefined;
   readonly programId = signal<number | null>(null);
+  readonly programName = computed(() => this.programUI.program()?.name ?? "program");
 
   constructor() {
     this.route.parent?.paramMap

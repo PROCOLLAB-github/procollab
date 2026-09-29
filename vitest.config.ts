@@ -20,9 +20,17 @@ export default defineConfig({
     ],
   },
   test: {
-    // На Node 20/Windows стандартный vmThreads плагина не создаёт платформу TestBed.
-    // Изоляция процессами позволяет запускать весь набор, сохраняя ошибки teardown.
-    pool: "forks",
+    // Windows TestBed без inline падает с NG0401 ещё в setup (Node 20/24).
+    // В Linux этот workaround вызывает OOM в vmThreads и не должен применяться.
+    ...(process.platform === "win32"
+      ? {
+          server: {
+            deps: {
+              inline: [/@angular\//, /@analogjs\//, /ngx-/, /ng-click-outside/, /@sentry\/angular/],
+            },
+          },
+        }
+      : {}),
     globals: true,
     environment: "jsdom",
     testTimeout: 10000,

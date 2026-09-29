@@ -4,6 +4,17 @@ import { ProjectTeamUIService } from "./project-team-ui.service";
 import { User } from "@domain/auth/user.model";
 import { Collaborator } from "@domain/project/collaborator.model";
 describe("ProjectTeamUIService", () => {
+  it("отличает начальную загрузку от пустого результата resolver", () => {
+    TestBed.configureTestingModule({ providers: [ProjectTeamUIService] });
+    const ui = TestBed.inject(ProjectTeamUIService);
+    expect(ui.teamLoading()).toBe(true);
+    ui.applySetCollaborators([]);
+    expect(ui.teamLoading()).toBe(false);
+    expect(ui.collaborators()).toEqual([]);
+    ui.applyOpenInviteModal();
+    ui.applyCloseInviteModal();
+    expect(ui.teamLoading()).toBe(false);
+  });
   it("reset очищает только создание приглашения, сохраняет участников и валидаторы", () => {
     TestBed.configureTestingModule({ providers: [ProjectTeamUIService] });
     const ui = TestBed.inject(ProjectTeamUIService);

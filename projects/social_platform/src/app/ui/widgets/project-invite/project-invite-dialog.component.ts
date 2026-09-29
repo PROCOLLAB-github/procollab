@@ -17,10 +17,11 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { IconComponent } from "@ui/primitives/icon/icon.component";
 
 @Component({
   selector: "app-project-invite-dialog",
-  imports: [ModalComponent, A11yModule],
+  imports: [ModalComponent, IconComponent, A11yModule],
   templateUrl: "./project-invite-dialog.component.html",
   styleUrl: "./project-invite-dialog.component.scss",
   encapsulation: ViewEncapsulation.None,
@@ -30,6 +31,7 @@ export class ProjectInviteDialogComponent implements AfterViewInit {
   readonly title = input.required<string>();
   readonly description = input.required<string>();
   readonly trigger = input<HTMLElement | null>(null);
+  readonly compact = input(false);
   readonly closed = output<void>();
   protected readonly open = signal(true);
   protected readonly attached = signal(false);
@@ -97,6 +99,11 @@ export class ProjectInviteDialogComponent implements AfterViewInit {
 
   private restoreFocus(): void {
     const trigger = this.trigger();
-    if (trigger?.isConnected) trigger.focus();
+    const restore = () => {
+      if (trigger?.isConnected) trigger.focus();
+    };
+    // Button снимает disabled после обновления родителя; ждём завершения текущей отрисовки.
+    if (this.compact()) queueMicrotask(restore);
+    else restore();
   }
 }

@@ -1,126 +1,103 @@
 <!-- @format -->
-
-<div class="project__team">
-  <div class="project__invite">
-    <ul
-      class="invite__team"
-      [style.overflow-x]="collaborators().length > 8 ? 'auto' : 'none'"
-      [style.display]="collaborators().length ? 'grid' : 'none'"
+<section class="team" aria-labelledby="team-title" [attr.aria-busy]="teamLoading()">
+  <header class="team__header">
+    <div class="team__intro">
+      <h2 id="team-title">Команда проекта</h2>
+      <p>Управляйте участниками проекта, приглашайте новых и назначайте роли.</p>
+    </div>
+    <app-button
+      class="invite__submit"
+      appearance="outline"
+      size="big"
+      [disabled]="teamLoading() || isLoading(inviteFormIsSubmitting())"
+      (click)="openInviteModal($event)"
     >
-      @for (collaborator of collaborators(); track collaborator.userId) {
-        <li class="invite__item">
-          <app-collaborator-card
-            (collaboratorRemoved)="onCollaboratorRemove($event)"
-            [collaborator]="collaborator"
-          ></app-collaborator-card>
-        </li>
-      }
-    </ul>
-  </div>
+      <i
+        appIcon
+        icon="plus"
+        appWidth="12"
+        appHeight="12"
+        appViewBox="0 0 19 19"
+        aria-hidden="true"
+      ></i>
+      <span>Пригласить участника</span>
+    </app-button>
+  </header>
 
-  @if (isInviteModalOpen()) {
-    <app-project-member-invite-modal
-      [project]="invitationProject()"
-      [projectId]="projectId()"
-      [trigger]="inviteTrigger"
-      (closed)="closeInviteModal()"
-    />
-  }
-
-  <div class="invite__link" [style.flex-direction]="!invites().length ? 'row' : 'row-reverse'">
-    <ul
-      class="invite__link--wrapper"
-      [style.overflow-x]="invites().length > 8 ? 'auto' : 'none'"
-      [style.display]="invitesFill() ? 'flex' : 'none'"
-    >
-      @for (user of invites(); track user.id) {
-        @if (user.isAccepted === null) {
-          <li class="invite__item">
-            <app-invite-card
-              [invite]="user"
-              (edit)="editInvitation($event)"
-              (remove)="removeInvitation($event)"
-            ></app-invite-card>
+  @if (teamLoading()) {
+    <div class="team-loading">
+      <p role="status">Загрузка команды…</p>
+      <div aria-hidden="true">
+        @for (row of [1, 2, 3]; track row) {
+          <div class="team-skeleton">
+            <span class="team-skeleton__avatar"></span>
+            <div class="team-skeleton__copy"><span></span><span></span></div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <section class="team-section" aria-labelledby="team-members-title">
+      <h3 id="team-members-title">
+        Участники команды <span aria-hidden="true">·</span>
+        <span data-team-count="members">{{ collaborators().length }}</span>
+      </h3>
+      <ul class="team-list">
+        @for (collaborator of collaborators(); track collaborator.userId) {
+          <li>
+            <app-collaborator-card
+              [collaborator]="collaborator"
+              [isCurrentUser]="collaborator.userId === currentUser()?.id"
+              [isLeader]="collaborator.userId === invitationProject()?.leader"
+              (collaboratorRemoved)="onCollaboratorRemove($event)"
+            />
           </li>
         }
-      }
-    </ul>
-    <app-button
-      size="big"
-      appearance="outline"
-      (click)="openInviteModal($event)"
-      [disabled]="isLoading(inviteFormIsSubmitting())"
-      [loader]="isLoading(inviteFormIsSubmitting())"
-      class="invite__submit"
-      customTypographyClass="text-body-12"
-    >
-      <span>Пригласить участника</span>
-      <i appIcon icon="plus" appSquare="10"></i>
-
-      <app-tooltip
-        [text]="'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'"
-        [isVisible]="isTooltipVisible('base')"
-        [position]="'right'"
-        [tooltipWidth]="400"
-        customClass="content__hint"
-        (show)="toggleTooltip('base')"
-        (hide)="toggleTooltip('base')"
-      ></app-tooltip>
-    </app-button>
-
-    @if (!invites().length || !collaborators().length) {
-      <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
-    }
-  </div>
-
-  <div class="project__tooltip">
-    <div class="tooltip">
-      <app-tooltip
-        color="grey"
-        iconSize="40"
-        (show)="tooltipInfoService.show('team')"
-      ></app-tooltip>
-
-      @if (isHintTeamVisible("team")) {
-        <div class="tooltip__wrapper" (mouseleave)="tooltipInfoService.hide('team')">
-          <p class="tooltip__text text-body-10">
-            Напишите зону ответственности участника, приглашаемого в команду
+      </ul>
+      @if (!collaborators().length || (onlyCurrentUser() && !pendingInvites().length)) {
+        <div class="team-empty">
+          <p class="team-empty__title">
+            {{
+              onlyCurrentUser() ? "В команде пока только вы" : "Здесь будут участники вашей команды"
+            }}
           </p>
-          <p class="tooltip__text text-body-10" (click)="openHintModal($event)">подробнее</p>
+          <p>Пригласите участника и укажите его роль в проекте.</p>
         </div>
       }
-    </div>
-  </div>
+    </section>
 
-  <app-modal [open]="isHintTeamModal()" (openChange)="isHintTeamModal.set(false)">
-    <div class="cancel">
-      <div class="cancel__top">
-        <p class="cancel__title text-body-14">Уверены, большие дела не делаются в одиночку!</p>
-      </div>
-
-      <div class="cancel__text-block">
-        <p class="text-body-12">
-          После создания проекта пригласите в команду тех, кто вместе с вами будет причастен к его
-          реализации
+    @if (pendingInvites().length) {
+      <section class="team-section" aria-labelledby="team-pending-title">
+        <h3 id="team-pending-title">
+          Ожидают подтверждения <span aria-hidden="true">·</span>
+          <span data-team-count="pending">{{ pendingInvites().length }}</span>
+        </h3>
+        <p class="team-section__description">
+          Участники появятся в команде, когда примут приглашение.
         </p>
+        <ul class="team-list">
+          @for (invite of pendingInvites(); track invite.id) {
+            <li>
+              <app-invite-card
+                [invite]="invite"
+                (edit)="editInvitation($event)"
+                (remove)="removeInvitation($event)"
+              />
+            </li>
+          }
+        </ul>
+      </section>
+    } @else {
+      <p class="team__no-invites">Нет ожидающих приглашений.</p>
+    }
+  }
+</section>
 
-        <p class="text-body-12">
-          Найдите участника PROCOLLAB по имени или фамилии, выберите его и укажите роль или зону
-          ответственности в проекте.
-        </p>
-
-        <p class="text-body-12">
-          Участник получит приглашение стать частью команды – это приглашение необходимо принять.
-          Ваш со-командник получит уведомление или может найти приглашение во вкладке «проект»
-        </p>
-      </div>
-
-      <app-button
-        customTypographyClass="text-body-12"
-        size="medium"
-        (click)="isHintTeamModal.set(false)"
-        >спасибо, понятно</app-button
-      >
-    </div>
-  </app-modal>
-</div>
+@if (isInviteModalOpen()) {
+  <app-project-member-invite-modal
+    [project]="invitationProject()"
+    [projectId]="projectId()"
+    [trigger]="inviteTrigger"
+    (closed)="closeInviteModal()"
+  />
+}
