@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-29",
+  "node": "20.20.2",
+  "vitest": "3.2.6",
+  "scope": "complete configured suite; no test filter; source unchanged during each completed run",
+  "runs": [
+    {
+      "commit": "3ef45868c41454ee17b0c744765f5662d972c57e",
+      "command": "node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --pool=forks --maxWorkers=2",
+      "filesPassed": 403,
+      "testsPassed": 1964,
+      "exitCode": 0,
+      "durationSeconds": 594.01,
+      "startedAtLocal": "19:12:22",
+      "timezone": "Europe/Moscow",
+      "logPath": "tmp/vitest-final-3ef4586.log",
+      "logSha256": "6f731bf76b6f2cc0401bed30aa5973548b944ba24978062208e50d3807717c35"
+    },
+    {
+      "commit": "43dc70ff5d3f1a1b2b5410b7476f52b9882ee20e",
+      "command": "node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --pool=forks --maxWorkers=2",
+      "filesPassed": 403,
+      "testsPassed": 1971,
+      "exitCode": 0,
+      "durationSeconds": 594.14,
+      "startedAtLocal": "19:32:39",
+      "timezone": "Europe/Moscow",
+      "logPath": "tmp/vitest-final-autocomplete.log",
+      "logSha256": "3f5b0c5c5deac6465c113eb94cee62d1f9409a025abde7f90c5fa38a1f3df263"
+    }
+  ],
+  "existingConfigExclusions": [
+    "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts",
+    "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",
+    "projects/social_platform/src/app/ui/pages/profile/edit/editor-submit-button.directive.spec.ts"
+  ],
+  "warnings": "Existing NG0912 component-ID collisions",
+  "intermediateRun": {
+    "commit": "d9d95717",
+    "status": "stopped before completion",
+    "reason": "manual follow-up exposed repeated filter selection regression; superseded by complete final run"
+  },
+  "readyForReview": false
+}

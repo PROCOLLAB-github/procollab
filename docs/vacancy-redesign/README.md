@@ -40,9 +40,10 @@ Angular загружает **настоящий Mont**. В Figma явно обо
 | Проверка | Результат |
 |---|---|
 | Регрессии до исправления | 4 файла: 8 failed / 5 passed |
-| Полный Vitest после исправления навыков | **403 файла / 1960 тестов passed**, Node 20.20.2, heap 8 GB, 2 workers |
-| Повторный Vitest после последних UI-изменений | **17 файлов / 85 тестов passed** |
-| Production npm run build:prod после последних изменений | exit 0; initial 1,39 MB, transfer estimate 313,30 kB |
+| Полный Vitest на запрошенном 3ef4586 | **403 файла / 1964 теста passed**, Node 20.20.2, heap 8 GB, 2 workers |
+| Полный Vitest после дополнительного ручного smoke | **403 файла / 1971 тест passed** на 43dc70ff; [evidence](full-suite-results.json) |
+| Регрессии дополнительных форм | **3 файла / 14 тестов passed**, 7 новых тестов |
+| Production npm run build:prod после последних изменений | exit 0; initial 1,39 MB, transfer estimate 313,29 kB |
 | Браузер: дизайн / состояния | **399 проверок / 52 состояния**, ширины 1440/768/390/320; JS errors [] |
 | Браузер: навыки | **18 проверок**, два отменённых запроса, поиск/библиотека/round-trip на fixtures; JS errors [] |
 | Шрифт / CTA | Загруженный FontFace Mont, computed font-family, #8A63E6 и hover подтверждены |
@@ -50,7 +51,9 @@ Angular загружает **настоящий Mont**. В Figma явно обо
 | Impeccable detector | [] |
 | DEV API | **Passed**: поиск, библиотека, удаление, create/edit/save/reopen, mobile; [evidence](dev-results.json) |
 
-Полный Vitest выполнен после исправления поиска, до последних UI-правок и найденной на DEV ошибки преобразования зарплаты. После последних исходников прошли затронутый набор 17/85, production build, оба браузерных набора и DEV round-trip. Новый полный прогон не заявляется.
+Полный набор повторён на точном `3ef4586`: 403/1964, exit 0. Дополнительная ручная проверка профиля, обоих шагов онбординга и фильтров участников выполнялась с DEV API на desktop/mobile. Она выявила и позволила исправить привязку подсказок и пустой черновик онбординга, а также синхронизацию/сброс фильтров. Последний код — `43dc70ff`; полный прогон **403/1971 passed**, exit 0. Последующие изменения относятся только к отчётам. [Действия, найденные дефекты и ограничения](autocomplete-consumers-review.md).
+
+**Ручной smoke не является безусловным PASS:** полная перезагрузка участников не восстанавливает фильтры из URL, а мобильная вёрстка профиля обрезает удаление длинного навыка (через библиотеку снятие работает). PR остаётся draft. Профиль и стадия онбординга не сохранялись/не менялись; проверка формы не выдаётся за их DEV save/reopen.
 
 Проверены длинные строки без пробелов, 0/1/11 навыков, пустые данные, статусы, ошибка/повтор создания, guard двойной отправки, обе кнопки success dialog, вложение, accept/reject на fixtures, клавиатура/focus/Escape/возврат фокуса и отсутствие горизонтального переполнения. Это не полный аудит доступности.
 
@@ -100,7 +103,7 @@ npx ng build social_platform --configuration=development --browser=docs/vacancy-
 
 Из tmp/vacancy-dev/browser запустить Python с абсолютным путём к preview/serve-dev.py и открыть http://127.0.0.1:4360/auth/login. Proxy слушает только loopback, пересылает запросы на фиксированный https://dev.procollab.ru, не записывает credentials/body/query в логи. Нужен вход именно в локальную вкладку. После пересборки переходите напрямую к рабочему маршруту, чтобы загрузить новый набор JS-модулей; не возвращайтесь на login при уже действующей сессии. Proxy отдаёт no-store и 404 для отсутствующих assets. Ошибка прошлой проверки была вызвана stale lazy chunk, а вход и загрузка профиля фактически отвечали 200. Не открывать параллельно новые /auth/login: существующий LoginComponent очищает токены при инициализации. Вспомогательные entry points не включены в production bundle.
 
-Артефакты: [dev-results.json](dev-results.json), [validation-summary.json](validation-summary.json), [visual-results.json](visual-results.json), [skills-results.json](skills-results.json), [skills-regressions-before.json](skills-regressions-before.json), [design-detector.json](design-detector.json).
+Артефакты: [dev-results.json](dev-results.json), [validation-summary.json](validation-summary.json), [full-suite-results.json](full-suite-results.json), [autocomplete-consumers-review.md](autocomplete-consumers-review.md), [visual-results.json](visual-results.json), [skills-results.json](skills-results.json), [skills-regressions-before.json](skills-regressions-before.json), [design-detector.json](design-detector.json).
 
 
 

@@ -10,15 +10,22 @@
     "command": "npm run build:prod",
     "warnings": "Angular template diagnostics, Sass deprecations, CommonJS, stylesheet/initial warning budgets",
     "exitCode": 0,
-    "transferEstimate": "313.30 kB"
+    "transferEstimate": "313.29 kB",
+    "commit": "43dc70ff5d3f1a1b2b5410b7476f52b9882ee20e"
   },
   "unitTests": {
-    "filesPassed": 403,
-    "runtime": "Node 20.20.2",
-    "scope": "after skills fix, before last UI adjustments",
-    "testsPassed": 1960,
+    "commit": "43dc70ff5d3f1a1b2b5410b7476f52b9882ee20e",
     "command": "node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --pool=forks --maxWorkers=2",
-    "exitCode": 0
+    "filesPassed": 403,
+    "testsPassed": 1971,
+    "exitCode": 0,
+    "durationSeconds": 594.14,
+    "startedAtLocal": "19:32:39",
+    "timezone": "Europe/Moscow",
+    "logPath": "tmp/vitest-final-autocomplete.log",
+    "logSha256": "3f5b0c5c5deac6465c113eb94cee62d1f9409a025abde7f90c5fa38a1f3df263",
+    "runtime": "Node 20.20.2",
+    "scope": "complete configured suite after all consumer fixes"
   },
   "affectedTests": {
     "filesPassed": 17,
@@ -97,5 +104,27 @@
     },
     "after": "passed in 17/85 affected tests and final DEV round-trip"
   },
-  "pullRequestUrl": "https://github.com/PROCOLLAB-github/procollab/pull/393"
+  "pullRequestUrl": "https://github.com/PROCOLLAB-github/procollab/pull/393",
+  "fullSuiteEvidence": "full-suite-results.json",
+  "autocompleteConsumers": {
+    "evidence": "autocomplete-consumers-results.json",
+    "report": "autocomplete-consumers-review.md",
+    "api": "DEV",
+    "forms": [
+      "profile skills",
+      "onboarding speciality and skills",
+      "member filters"
+    ],
+    "targeted": {
+      "filesPassed": 3,
+      "testsPassed": 14,
+      "newTests": 7
+    },
+    "unconditionalPass": false,
+    "remainingIssues": [
+      "filtered URL reload",
+      "profile long-chip delete clipping at 390px"
+    ]
+  },
+  "readyForReview": false
 }
