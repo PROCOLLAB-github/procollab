@@ -10,11 +10,10 @@
       namespace="Вакансии"
       path="/office/vacancies/all"
     ></app-back>
-    <h1>Вакансия</h1>
   </nav>
   <header class="detail__header">
     <div class="detail__heading">
-      <h2>{{ item.role }}</h2>
+      <h1>{{ item.role }}</h1>
       <app-vacancy-status
         [label]="item.isActive ? 'Активна' : 'Закрыта'"
         [tone]="item.isActive ? 'success' : 'neutral'"
