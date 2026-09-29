@@ -1,0 +1,22 @@
+{
+  "checks": 18,
+  "queries": [
+    "ang",
+    "Type",
+    "Type",
+    "ang",
+    "Type",
+    "Angular"
+  ],
+  "cancelled": [
+    "name__icontains=ang",
+    "name__icontains=ang"
+  ],
+  "errors": [],
+  "mobileGeometry": {
+    "contentWidth": 375,
+    "viewportWidth": 390
+  },
+  "api": "local controlled fixtures; not DEV",
+  "rootCauseReproduction": "8 failing regressions before fix"
+}

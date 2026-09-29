@@ -1,0 +1,63 @@
+/** @format */
+
+@use "styles/components/vacancy-ui";
+
+::ng-deep .modal__body.vacancy-created-modal {
+  width: min(520px, calc(100vw - 32px));
+}
+
+.created {
+  position: relative;
+  width: 100%;
+  max-height: calc(100dvh - 96px);
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--black);
+  overflow-wrap: anywhere;
+
+  &__title {
+    padding-right: 40px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 27px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--black);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: var(--rounded-md);
+
+    @include vacancy-ui.focus;
+
+    &:hover {
+      background: var(--accent-light);
+    }
+  }
+
+  &__actions {
+    @include vacancy-ui.actions;
+
+    flex-direction: column;
+    margin-top: 20px;
+
+    app-button {
+      flex-basis: auto;
+    }
+
+    ::ng-deep .button {
+      min-height: 40px;
+    }
+  }
+}

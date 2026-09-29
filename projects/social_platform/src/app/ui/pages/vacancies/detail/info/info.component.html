@@ -109,16 +109,24 @@
   }
 
   @defer (when responsesModal()) {
-    <app-modal [open]="responsesModal()" (openChange)="onCloseResponses()">
-      <app-vacancy-responses
-        [responses]="responses()"
-        [loading]="responsesLoading()"
-        [error]="responsesError()"
-        [processingResponseIds]="processingResponseIds()"
-        (retry)="onRetryResponses()"
-        (accept)="onAcceptResponse($event)"
-        (decline)="onDeclineResponse($event)"
-      ></app-vacancy-responses>
-    </app-modal>
+    @if (responsesModal()) {
+      <app-modal
+        [open]="responsesModal()"
+        labelledBy="vacancy-responses-title"
+        bodyClass="vacancy-responses-modal"
+        (openChange)="onCloseResponses()"
+      >
+        <app-vacancy-responses
+          [responses]="responses()"
+          [loading]="responsesLoading()"
+          [error]="responsesError()"
+          [processingResponseIds]="processingResponseIds()"
+          (retry)="onRetryResponses()"
+          (accept)="onAcceptResponse($event)"
+          (decline)="onDeclineResponse($event)"
+          (close)="onCloseResponses()"
+        ></app-vacancy-responses>
+      </app-modal>
+    }
   }
 }

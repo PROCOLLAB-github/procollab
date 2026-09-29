@@ -1,69 +1,59 @@
-@use "styles/responsive";
-@use "styles/typography";
+/** @format */
+
+@use "styles/components/vacancy-ui";
+
+:host {
+  display: block;
+  min-width: 0;
+}
 
 .page {
+  min-width: 0;
+
   &__vacancies {
     display: grid;
-    grid-template-columns: 333px 333px;
-    grid-gap: 20px;
-
-    &--no-items {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      margin-top: 70px;
-      text-align: center;
-
-      i,
-      p {
-        color: var(--grey-for-text);
-      }
-    }
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
   }
 
   &__item {
-    width: 100%;
-    cursor: pointer;
+    min-width: 0;
   }
 
-  &__title {
-    margin-top: 40px;
-    color: var(--black);
-  }
-}
-
-.cancel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 350px;
-  height: 175px;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-
-  &__top {
+  &__vacancies--no-items {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
     align-items: center;
-    justify-content: space-between;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-  }
-
-  &__title {
-    color: var(--grey-for-text);
-    text-align: center;
-  }
-
-  &__icon {
-    color: var(--accent);
-  }
-
-  &__text {
-    margin-bottom: 8px;
+    padding: 48px 20px;
     color: var(--black);
+    text-align: center;
+
+    h2 {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 21px;
+
+      @include vacancy-ui.secondary;
+    }
+
+    a {
+      @include vacancy-ui.link;
+    }
+
+    app-button {
+      display: block;
+      width: min(280px, 100%);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    &__vacancies {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 }

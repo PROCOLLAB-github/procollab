@@ -3,11 +3,11 @@
 // list.component.ts
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { isSuccess } from "@domain/shared/async-state";
 import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/project-vacancy-card.component";
 import { ResponseCardComponent } from "./response-card/response-card.component";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
@@ -23,10 +23,9 @@ import { AppRoutes } from "@api/paths/app-routes";
     CommonModule,
     ResponseCardComponent,
     ProjectVacancyCardComponent,
-    ButtonComponent,
     IconComponent,
-    ModalComponent,
     RouterLink,
+    ButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [VacancyInfoService, VacancyUIInfoService],
@@ -37,6 +36,9 @@ export class VacanciesListComponent {
 
   protected readonly type = this.vacancyUIInfoService.listType;
   protected readonly vacancyList = this.vacancyUIInfoService.vacancyList;
+  protected readonly hasNoResults = computed(
+    () => isSuccess(this.vacancyUIInfoService.vacancies$()) && !this.vacancyList().length,
+  );
   protected readonly responsesList = this.vacancyUIInfoService.responsesList;
   protected readonly isMyModal = this.vacancyUIInfoService.isMyModal;
 

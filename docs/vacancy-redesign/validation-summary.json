@@ -1,0 +1,100 @@
+{
+  "branch": "feat/dev-vacancy-interface-redesign",
+  "base": "origin/dev @ c1dddf03",
+  "date": "2026-09-29",
+  "designApproval": true,
+  "figma": "https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=51-1751",
+  "proposedScope": "vacancies only",
+  "productionBuild": {
+    "initialBundle": "1.39 MB",
+    "command": "npm run build:prod",
+    "warnings": "Angular template diagnostics, Sass deprecations, CommonJS, stylesheet/initial warning budgets",
+    "exitCode": 0,
+    "transferEstimate": "313.30 kB"
+  },
+  "unitTests": {
+    "filesPassed": 403,
+    "runtime": "Node 20.20.2",
+    "scope": "after skills fix, before last UI adjustments",
+    "testsPassed": 1960,
+    "command": "node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --pool=forks --maxWorkers=2",
+    "exitCode": 0
+  },
+  "affectedTests": {
+    "filesPassed": 17,
+    "testsPassed": 85,
+    "exitCode": 0,
+    "scope": "after final DEV salary fix"
+  },
+  "skillsBrowser": {
+    "checks": 18,
+    "queries": [
+      "ang",
+      "Type",
+      "Type",
+      "ang",
+      "Type",
+      "Angular"
+    ],
+    "cancelled": [
+      "name__icontains=ang",
+      "name__icontains=ang"
+    ],
+    "errors": [],
+    "mobileGeometry": {
+      "contentWidth": 375,
+      "viewportWidth": 390
+    },
+    "api": "local controlled fixtures; not DEV",
+    "rootCauseReproduction": "8 failing regressions before fix"
+  },
+  "lint": {
+    "stylelint": "passed changed SCSS",
+    "eslint": "passed changed TypeScript",
+    "gitDiffCheck": "passed",
+    "designDetector": []
+  },
+  "devApi": {
+    "verified": true,
+    "projectId": 131,
+    "vacancyId": 104,
+    "createStatus": 201,
+    "updateStatus": 200,
+    "reopenStatus": 200,
+    "finalSkills": [
+      "Angular",
+      "CSS"
+    ],
+    "finalSalary": 100,
+    "mobileWidth": 390,
+    "contentWidth": 375,
+    "evidence": "dev-results.json",
+    "testRecord": "closed, left for review"
+  },
+  "pullRequestCreated": false,
+  "browser": {
+    "contrastSamples": 205,
+    "states": 52,
+    "errors": [],
+    "checksPassed": 399,
+    "screenshots": 21,
+    "belowAA": 70,
+    "contrastPassed": false,
+    "backend": "controlled local fixtures",
+    "minimumTextContrast": 4.00365314113804,
+    "widths": [
+      1440,
+      768,
+      390,
+      320
+    ]
+  },
+  "additionalRegression": {
+    "cause": "numeric DEV salary lost when editing skills",
+    "before": {
+      "failed": 3,
+      "passed": 10
+    },
+    "after": "passed in 17/85 affected tests and final DEV round-trip"
+  }
+}

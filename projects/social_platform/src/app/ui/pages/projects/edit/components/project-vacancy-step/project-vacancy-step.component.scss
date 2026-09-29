@@ -2,6 +2,7 @@
 
 @use "styles/responsive";
 @use "styles/typography";
+@use "styles/components/vacancy-ui";
 
 .project {
   position: relative;
@@ -11,7 +12,8 @@
     margin-bottom: 25px;
 
     @include responsive.apply-desktop {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
       gap: 20px;
       justify-content: space-between;
       margin-bottom: 0;
@@ -23,22 +25,38 @@
     margin-bottom: 20px;
   }
 
+  &__inner--list {
+    display: block;
+
+    .project__left {
+      max-width: 280px;
+    }
+
+    .vacancy__list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .vacancy__item {
+      margin: 0;
+    }
+
+    @media (max-width: 800px) {
+      .vacancy__list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+
   &__left {
     flex-basis: 60%;
+    min-width: 0;
     margin-bottom: 20px;
   }
 
   &__right {
-    flex-basis: 30%;
-
-    :first-child & :not(span, fieldset, label, h4, p, i, ul, li) {
-      margin-top: 26px;
-      margin-bottom: 10px;
-    }
-
-    :last-child & :not(i, span) {
-      margin-top: 10px;
-    }
+    min-width: 0;
   }
 
   &__no-items {
@@ -90,6 +108,15 @@
 
   &__submit {
     display: block;
+
+    @include vacancy-ui.actions;
+  }
+
+  &__error {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--black);
   }
 
   &__city {
@@ -113,7 +140,7 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    width: 672px;
+    width: min(672px, 100%);
   }
 
   &__close {

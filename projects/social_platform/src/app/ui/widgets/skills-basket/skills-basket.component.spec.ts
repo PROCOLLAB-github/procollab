@@ -23,4 +23,10 @@ describe("SkillsBasketComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("сброс формы удаляет ранее выбранные навыки", () => {
+    component.writeValue([{ id: 9, name: "Angular" } as any]);
+    component.writeValue(null as any);
+    expect(component.value()).toEqual([]);
+  });
 });

@@ -8,7 +8,7 @@
       [value]="inputValue()"
       (input)="onInput($event)"
       (blur)="onBlur()"
-      (paste)="handlePaste($event)"
+      [disabled]="disabled()"
       [placeholder]="value() ? '' : placeholder()"
       [class]="slimVersion() ? 'field__input-slim' : 'field__input'"
       [class.field__input--no-icon]="!searchIcon()"

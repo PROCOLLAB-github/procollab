@@ -24,6 +24,7 @@ describe("VacanciesListComponent", () => {
       vacancyList: signal<any[]>([]),
       responsesList: signal<any[]>([]),
       isMyModal: signal(false),
+      vacancies$: signal<any>({ status: "initial" }),
     };
 
     await TestBed.configureTestingModule({
@@ -95,6 +96,17 @@ describe("VacanciesListComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("показывает отсутствие результатов только после успешного пустого ответа", () => {
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансии не найдены");
+    vacancyUIInfoService.vacancies$.set({ status: "loading" });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансии не найдены");
+    vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("Вакансии не найдены");
+  });
+
   it("не показывает empty-state при непустом списке моих откликов", () => {
     vacancyUIInfoService.listType.set("my");
     vacancyUIInfoService.responsesList.set([
@@ -126,6 +138,6 @@ describe("VacanciesListComponent", () => {
 
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain("в данном разделе пока нет ваших откликов");
+    expect(fixture.nativeElement.textContent).toContain("У вас пока нет откликов");
   });
 });

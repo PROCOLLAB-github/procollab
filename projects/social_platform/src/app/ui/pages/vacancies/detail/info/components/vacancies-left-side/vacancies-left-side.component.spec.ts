@@ -44,9 +44,7 @@ describe("VacanciesLeftSideComponent", () => {
     });
     fixture.detectChanges();
 
-    const skill = fixture.nativeElement.querySelector(
-      "app-tag.skills__tag--readable",
-    ) as HTMLElement;
+    const skill = fixture.nativeElement.querySelector("app-vacancy-skills app-tag") as HTMLElement;
     expect(skill.textContent?.trim()).toBe(skillName);
   });
 });

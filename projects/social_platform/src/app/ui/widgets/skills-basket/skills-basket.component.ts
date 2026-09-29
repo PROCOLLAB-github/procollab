@@ -39,10 +39,8 @@ export class SkillsBasketComponent {
   onChange: (val: Skill[]) => void = noop;
   onTouched: () => void = noop;
 
-  writeValue(val: Skill[]): void {
-    if (val) {
-      this.value.set(val);
-    }
+  writeValue(val: Skill[] | null): void {
+    this.value.set(val ?? []);
   }
 
   registerOnChange(fn: (v: unknown) => void): void {
@@ -58,5 +56,6 @@ export class SkillsBasketComponent {
 
     this.value.set(filtered);
     this.onChange(filtered);
+    this.onTouched();
   }
 }

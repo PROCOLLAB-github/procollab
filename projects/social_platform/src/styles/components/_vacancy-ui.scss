@@ -1,0 +1,96 @@
+/** @format */
+
+@mixin surface {
+  min-width: 0;
+  padding: 20px;
+  color: var(--black);
+  overflow-wrap: anywhere;
+  background: var(--light-white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+}
+
+@mixin secondary {
+  color: var(--grey-for-text);
+}
+
+@mixin focus {
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+@mixin link {
+  color: var(--accent-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+
+  @include focus;
+
+  &:hover {
+    color: var(--black);
+  }
+}
+
+// Feature-адаптер Pattern / PageHeader; глобальный BackComponent не меняется.
+@mixin page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+  }
+
+  app-back {
+    align-self: flex-start;
+
+    @include focus;
+  }
+
+  ::ng-deep app-back .back {
+    margin: 0;
+    font-size: 12px;
+    color: var(--accent-dark);
+
+    span {
+      display: inline;
+      margin-left: 4px;
+      line-height: 18px;
+    }
+  }
+}
+
+@mixin actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  app-button {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+
+  ::ng-deep .button {
+    gap: 6px;
+    width: 100%;
+    min-height: 36px;
+    max-height: none;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 18px;
+
+    @include focus;
+
+    // PROPOSED Destructive outline: feature-only расширение Button, без смены токенов.
+    &.button--outline.button--red {
+      color: var(--black);
+      background: transparent;
+    }
+  }
+}

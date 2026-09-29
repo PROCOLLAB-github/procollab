@@ -119,9 +119,7 @@ describe("ProjectVacancyCardComponent", () => {
     });
     fixture.detectChanges();
 
-    const skill = fixture.nativeElement.querySelector(
-      "app-tag.vacancy__skill--compact",
-    ) as HTMLElement;
+    const skill = fixture.nativeElement.querySelector("app-vacancy-skills app-tag") as HTMLElement;
     expect(skill.textContent?.trim()).toBe(skillName);
   });
 

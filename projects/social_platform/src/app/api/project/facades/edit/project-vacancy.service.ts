@@ -41,6 +41,7 @@ export class ProjectVacancyService {
   }
 
   public submitVacancy(projectId: number) {
+    if (this.projectVacancyUIService.vacancyIsSubmittingFlag()) return;
     // Настройка валидаторов для обязательных полей
     this.vacancyForm.get("role")?.setValidators([Validators.required]);
     this.vacancyForm.get("skills")?.setValidators([Validators.required]);
@@ -79,7 +80,7 @@ export class ProjectVacancyService {
       city: this.projectVacancyUIService.isCityRequired() ? form.city?.trim() || null : null,
       workSchedule: form.workSchedule!,
       specialization: form.specialization ?? undefined,
-      salary: typeof form.salary === "string" ? +form.salary : null,
+      salary: form.salary ? Number(form.salary.replace(/ /g, "")) : null,
     };
 
     const editIdx = this.projectFormService.editIndex();
@@ -102,6 +103,7 @@ export class ProjectVacancyService {
 
             this.projectVacancyUIService.applyUpdateVacancy(result.value);
           },
+          error: () => this.vacancyIsSubmitting.set(failure("vacancy_error")),
         });
       return;
     }
@@ -119,6 +121,7 @@ export class ProjectVacancyService {
 
           this.projectVacancyUIService.applySubmitVacancy(result.value);
         },
+        error: () => this.vacancyIsSubmitting.set(failure("vacancy_error")),
       });
   }
 

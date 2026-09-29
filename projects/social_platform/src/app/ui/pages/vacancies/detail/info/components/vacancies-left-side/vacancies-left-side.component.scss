@@ -1,174 +1,43 @@
-@use "styles/responsive";
-@use "styles/components/vacancy-skill";
+/** @format */
 
-@mixin expandable-list {
-  &__remaining {
-    display: grid;
-    grid-template-rows: 0fr;
-    overflow: hidden;
-    transition: all 0.5s ease-in-out;
+@use "styles/components/vacancy-ui";
 
-    &--show {
-      grid-template-rows: 1fr;
-      margin-top: 12px;
-    }
-
-    ul {
-      min-height: 0;
-    }
-
-    li {
-      &:first-child {
-        margin-top: 12px;
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 12px;
-      }
-    }
-  }
+:host {
+  display: block;
+  min-width: 0;
 }
 
-.vacancy {
-  &__content {
-    padding: 24px;
-    margin-bottom: 20px;
-    background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
+.content {
+  @include vacancy-ui.surface;
+
+  &__section + &__section {
+    padding-top: 24px;
+    margin-top: 24px;
+    border-top: 1px solid var(--medium-grey-for-outline);
   }
 
-  .read-more {
-    margin-top: 12px;
-    color: var(--accent);
-    cursor: pointer;
-    transition: color 0.2s;
-
-    &:hover {
-      color: var(--accent-dark);
-    }
+  h2 {
+    margin-bottom: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 21px;
+    color: var(--accent-dark);
   }
 
-  .about {
+  &__description {
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
 
-    /* stylelint-disable value-no-vendor-prefix */
-    &__text {
-      p {
-        display: -webkit-box;
-        overflow: hidden;
-        font-size: 14px;
-        line-height: 21px;
-        color: var(--black) !important;
-        text-overflow: ellipsis;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 5;
-        transition: all 0.7s ease-in-out;
-
-        &.expanded {
-          -webkit-line-clamp: unset;
-        }
-      }
-
-      ::ng-deep a {
-        color: var(--accent);
-        text-decoration: underline;
-        text-decoration-color: transparent;
-        text-underline-offset: 3px;
-        transition: text-decoration-color 0.2s;
-
-        &:hover {
-          text-decoration-color: var(--accent);
-        }
-      }
-    }
-
-    /* stylelint-enable value-no-vendor-prefix */
-
-    &__read-full {
-      margin-top: 2px;
-      color: var(--accent);
-      cursor: pointer;
+    ::ng-deep a {
+      @include vacancy-ui.link;
     }
   }
 
-  .skills {
-    &__list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+  &__empty {
+    font-size: 14px;
+    line-height: 21px;
 
-    li {
-      &:not(:last-child) {
-        margin-bottom: 12px;
-      }
-    }
-
-    &__tag {
-      min-width: 0;
-
-      &--readable {
-        ::ng-deep .tag {
-          @include vacancy-skill.detail-tag;
-        }
-      }
-    }
-
-    @include expandable-list;
-  }
-}
-
-.lists {
-  &__section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    border-bottom: 0.5px solid var(--accent);
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  &__icon {
-    color: var(--accent);
-  }
-
-  &__title {
-    margin-bottom: 8px;
-    color: var(--accent);
-  }
-
-  &__item {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-
-    &--status {
-      padding: 8px;
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: var(--rounded-xl);
-    }
-
-    &--title {
-      color: var(--black);
-    }
-
-    i {
-      padding: 6px;
-      background-color: var(--light-white);
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: var(--rounded-xl);
-    }
-
-    p {
-      color: var(--accent);
-    }
-
-    span {
-      cursor: pointer;
-    }
+    @include vacancy-ui.secondary;
   }
 }

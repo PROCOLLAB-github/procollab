@@ -1,0 +1,384 @@
+{
+  "sectionId": "51:1751",
+  "sectionBounds": [
+    2130,
+    13049
+  ],
+  "instances": 358,
+  "inventory": [
+    {
+      "id": "5:85",
+      "name": "Variant=Image slot",
+      "count": 24,
+      "example": "56:2151"
+    },
+    {
+      "id": "3:501",
+      "name": "Icon / person",
+      "count": 8,
+      "example": "I56:2151;5:86"
+    },
+    {
+      "id": "11:289",
+      "name": "Pattern / PageHeader",
+      "count": 8,
+      "example": "56:2161"
+    },
+    {
+      "id": "5:265",
+      "name": "Variant=Outline, State=Default",
+      "count": 28,
+      "example": "56:2174"
+    },
+    {
+      "id": "55:1756",
+      "name": "Proposed / Vacancy pattern / Project · active",
+      "count": 2,
+      "example": "56:2181"
+    },
+    {
+      "id": "53:1751",
+      "name": "Proposed / Card / Vacancy content",
+      "count": 37,
+      "example": "I56:2181;55:1757"
+    },
+    {
+      "id": "53:1791",
+      "name": "Domain key=vacancy.active",
+      "count": 11,
+      "example": "I56:2181;55:1757;53:1762;56:2224"
+    },
+    {
+      "id": "53:1778",
+      "name": "Kind=Hard",
+      "count": 95,
+      "example": "I56:2181;55:1757;53:1762;56:2227"
+    },
+    {
+      "id": "53:1781",
+      "name": "Kind=Soft",
+      "count": 19,
+      "example": "I56:2181;55:1757;53:1762;56:2230"
+    },
+    {
+      "id": "53:1807",
+      "name": "Proposed / Button / Destructive outline",
+      "count": 10,
+      "example": "I56:2181;55:1757;53:1762;56:2233"
+    },
+    {
+      "id": "55:1796",
+      "name": "Proposed / Vacancy pattern / Project · empty skills",
+      "count": 2,
+      "example": "56:2205"
+    },
+    {
+      "id": "55:1822",
+      "name": "Proposed / Vacancy pattern / Project · closed",
+      "count": 2,
+      "example": "56:2244"
+    },
+    {
+      "id": "53:1794",
+      "name": "Domain key=vacancy.closed",
+      "count": 8,
+      "example": "I56:2244;55:1823;53:1762;56:2290"
+    },
+    {
+      "id": "55:1862",
+      "name": "Proposed / Vacancy pattern / Project · one skill",
+      "count": 2,
+      "example": "56:2268"
+    },
+    {
+      "id": "6:825",
+      "name": "Presentation=Toolbar, State=Default",
+      "count": 3,
+      "example": "56:2494"
+    },
+    {
+      "id": "3:447",
+      "name": "Icon / search",
+      "count": 3,
+      "example": "I56:2494;6:827"
+    },
+    {
+      "id": "55:1893",
+      "name": "Proposed / Vacancy pattern / Catalog · active",
+      "count": 2,
+      "example": "56:2507"
+    },
+    {
+      "id": "5:233",
+      "name": "Variant=Primary, State=Default",
+      "count": 17,
+      "example": "I56:2507;55:1894;53:1762;56:2584"
+    },
+    {
+      "id": "55:1955",
+      "name": "Proposed / Vacancy pattern / Catalog · empty",
+      "count": 2,
+      "example": "56:2540"
+    },
+    {
+      "id": "55:2001",
+      "name": "Proposed / Vacancy pattern / Catalog · closed",
+      "count": 2,
+      "example": "56:2602"
+    },
+    {
+      "id": "55:2053",
+      "name": "Proposed / Vacancy pattern / Catalog · one skill",
+      "count": 2,
+      "example": "56:2631"
+    },
+    {
+      "id": "6:568",
+      "name": "Value=Unchecked, State=Default",
+      "count": 9,
+      "example": "56:2706"
+    },
+    {
+      "id": "55:2373",
+      "name": "Proposed / Vacancy pattern / Detail · header",
+      "count": 2,
+      "example": "56:2990"
+    },
+    {
+      "id": "55:2403",
+      "name": "Proposed / Vacancy pattern / Detail · description and skills",
+      "count": 2,
+      "example": "56:3008"
+    },
+    {
+      "id": "55:2446",
+      "name": "Proposed / Vacancy pattern / Detail · conditions",
+      "count": 2,
+      "example": "56:3036"
+    },
+    {
+      "id": "62:3224",
+      "name": "Proposed / Modal / Vacancy created",
+      "count": 2,
+      "example": "56:3187"
+    },
+    {
+      "id": "5:423",
+      "name": "Variant=Neutral, State=Default",
+      "count": 4,
+      "example": "I56:3187;62:3227"
+    },
+    {
+      "id": "3:457",
+      "name": "Icon / cross",
+      "count": 6,
+      "example": "I56:3187;62:3227;5:424"
+    },
+    {
+      "id": "53:1763",
+      "name": "Proposed / Modal / Vacancy responses",
+      "count": 2,
+      "example": "56:3251"
+    },
+    {
+      "id": "55:2105",
+      "name": "Proposed / Vacancy pattern / Response · pending",
+      "count": 2,
+      "example": "I56:3251;53:1777;56:3303"
+    },
+    {
+      "id": "53:1797",
+      "name": "Domain key=response.pending",
+      "count": 4,
+      "example": "I56:3251;53:1777;56:3303;55:2106;53:1762;59:3235"
+    },
+    {
+      "id": "55:2178",
+      "name": "Proposed / Vacancy pattern / Response · accepted",
+      "count": 2,
+      "example": "I56:3251;53:1777;56:3376"
+    },
+    {
+      "id": "53:1800",
+      "name": "Domain key=response.accepted",
+      "count": 4,
+      "example": "I56:3251;53:1777;56:3376;55:2179;55:2203"
+    },
+    {
+      "id": "55:2235",
+      "name": "Proposed / Vacancy pattern / Response · rejected",
+      "count": 2,
+      "example": "I56:3251;53:1777;56:3442"
+    },
+    {
+      "id": "53:1803",
+      "name": "Domain key=response.rejected",
+      "count": 4,
+      "example": "I56:3251;53:1777;56:3442;55:2236;55:2260"
+    },
+    {
+      "id": "55:2294",
+      "name": "Proposed / Vacancy pattern / My response · pending",
+      "count": 2,
+      "example": "56:3797"
+    },
+    {
+      "id": "55:2319",
+      "name": "Proposed / Vacancy pattern / My response · accepted",
+      "count": 2,
+      "example": "56:3811"
+    },
+    {
+      "id": "55:2342",
+      "name": "Proposed / Vacancy pattern / My response · rejected",
+      "count": 2,
+      "example": "56:3824"
+    },
+    {
+      "id": "9:365",
+      "name": "Reason=No data",
+      "count": 2,
+      "example": "58:3092"
+    },
+    {
+      "id": "9:375",
+      "name": "Reason=No results",
+      "count": 1,
+      "example": "58:3111"
+    },
+    {
+      "id": "6:456",
+      "name": "Presentation=Searchable adapter, State=Default",
+      "count": 2,
+      "example": "58:3249"
+    },
+    {
+      "id": "3:467",
+      "name": "Icon / arrow-down",
+      "count": 3,
+      "example": "I58:3249;6:460"
+    },
+    {
+      "id": "6:507",
+      "name": "Presentation=Searchable adapter, State=Loading",
+      "count": 1,
+      "example": "58:3269"
+    },
+    {
+      "id": "5:37",
+      "name": "Type=Circle",
+      "count": 1,
+      "example": "I58:3269;6:514"
+    },
+    {
+      "id": "53:1784",
+      "name": "Kind=Removable",
+      "count": 2,
+      "example": "58:3291"
+    },
+    {
+      "id": "6:589",
+      "name": "Value=Checked, State=Default",
+      "count": 3,
+      "example": "58:3310"
+    },
+    {
+      "id": "3:472",
+      "name": "Icon / check",
+      "count": 3,
+      "example": "I58:3310;6:592"
+    }
+  ],
+  "boundNodeCount": 1169,
+  "fontUsage": {
+    "Inter / Bold": 23,
+    "Inter / Semi Bold": 58,
+    "Inter / Regular": 431
+  },
+  "clippedChildren": [],
+  "screenRows": [
+    {
+      "id": "56:2139",
+      "name": "00 / Design review status",
+      "width": 2010,
+      "height": 150
+    },
+    {
+      "id": "56:2144",
+      "name": "01-project / 01 · Вакансии проекта",
+      "width": 2010,
+      "height": 1777
+    },
+    {
+      "id": "56:2468",
+      "name": "02-catalog / 02 · Общий список вакансий",
+      "width": 2010,
+      "height": 2567
+    },
+    {
+      "id": "56:2964",
+      "name": "03-detail / 03 · Страница вакансии",
+      "width": 2010,
+      "height": 1685
+    },
+    {
+      "id": "56:3182",
+      "name": "04-created / 04 · После создания вакансии",
+      "width": 2010,
+      "height": 1065
+    },
+    {
+      "id": "56:3246",
+      "name": "05-responses / 05 · Просмотр откликов",
+      "width": 2010,
+      "height": 1864
+    },
+    {
+      "id": "56:3771",
+      "name": "06-my / 06 · Мои отклики",
+      "width": 2010,
+      "height": 1722
+    },
+    {
+      "id": "58:3086",
+      "name": "07-states / Empty + skills states",
+      "width": 2010,
+      "height": 1591
+    }
+  ],
+  "originalPrimary": {
+    "id": "5:233",
+    "width": 157,
+    "height": 24,
+    "fills": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.5411764979362488,
+          "g": 0.38823530077934265,
+          "b": 0.9019607901573181
+        },
+        "boundVariables": {
+          "color": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:2:41"
+          }
+        }
+      }
+    ]
+  },
+  "originalConfirmationActions": {
+    "id": "8:538",
+    "layout": "HORIZONTAL"
+  },
+  "temporaryCaptureRemoved": true,
+  "deletedNodeIds": [
+    "50:1751"
+  ],
+  "mutatedNodeIds": [
+    "51:1751"
+  ]
+}

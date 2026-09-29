@@ -1,0 +1,208 @@
+{
+  "fileKey": "tvog0fpEgWgEtr7KUTjbyE",
+  "pageId": "0:1",
+  "sectionId": "51:1751",
+  "proposedSectionId": "51:1752",
+  "wrapperId": "51:1753",
+  "stage": "IMPLEMENTATION_VERIFIED_FOR_DRAFT_REVIEW",
+  "approved": true,
+  "approvalScope": "User approved vacancy screens and feature-only PROPOSED components; preserve #8A63E6, Mont and global tokens. No global UI KIT promotion.",
+  "angularChangesThisTurn": true,
+  "pullRequestCreated": false,
+  "font": "Canonical Mont; Inter is an explicitly labelled temporary Figma preview",
+  "screens": [
+    {
+      "id": "56:2144",
+      "name": "01-project / 01 · Вакансии проекта",
+      "width": 2010,
+      "height": 1503,
+      "screens": [
+        {
+          "id": "56:2148",
+          "name": "project / Desktop 1440",
+          "width": 1440,
+          "height": 960
+        },
+        {
+          "id": "56:2311",
+          "name": "project / Mobile 390",
+          "width": 390,
+          "height": 1398
+        }
+      ]
+    },
+    {
+      "id": "56:2468",
+      "name": "02-catalog / 02 · Общий список вакансий",
+      "width": 2010,
+      "height": 2543,
+      "screens": [
+        {
+          "id": "56:2472",
+          "name": "catalog / Desktop 1440",
+          "width": 1440,
+          "height": 1403
+        },
+        {
+          "id": "56:2736",
+          "name": "catalog / Mobile 390",
+          "width": 390,
+          "height": 2438
+        }
+      ]
+    },
+    {
+      "id": "56:2964",
+      "name": "03-detail / 03 · Страница вакансии",
+      "width": 2010,
+      "height": 1674,
+      "screens": [
+        {
+          "id": "56:2968",
+          "name": "detail / Desktop 1440",
+          "width": 1440,
+          "height": 960
+        },
+        {
+          "id": "56:3062",
+          "name": "detail / Mobile 390",
+          "width": 390,
+          "height": 1569
+        }
+      ]
+    },
+    {
+      "id": "56:3182",
+      "name": "04-created / 04 · После создания вакансии",
+      "width": 2010,
+      "height": 1065,
+      "screens": [
+        {
+          "id": "56:3186",
+          "name": "created / Desktop 1440",
+          "width": 1440,
+          "height": 960
+        },
+        {
+          "id": "56:3218",
+          "name": "created / Mobile 390",
+          "width": 390,
+          "height": 844
+        }
+      ]
+    },
+    {
+      "id": "56:3246",
+      "name": "05-responses / 05 · Просмотр откликов",
+      "width": 2010,
+      "height": 1877,
+      "screens": [
+        {
+          "id": "56:3250",
+          "name": "responses / Desktop 1440",
+          "width": 1440,
+          "height": 1238
+        },
+        {
+          "id": "56:3475",
+          "name": "responses / Mobile 390",
+          "width": 390,
+          "height": 1772
+        }
+      ]
+    },
+    {
+      "id": "56:3771",
+      "name": "06-my / 06 · Мои отклики",
+      "width": 2010,
+      "height": 1656,
+      "screens": [
+        {
+          "id": "56:3775",
+          "name": "my / Desktop 1440",
+          "width": 1440,
+          "height": 1141
+        },
+        {
+          "id": "56:3841",
+          "name": "my / Mobile 390",
+          "width": 390,
+          "height": 1551
+        }
+      ]
+    }
+  ],
+  "stateBoardId": "58:3086",
+  "proposalComponents": {
+    "card": "53:1751",
+    "modal": "53:1763",
+    "badge": "53:1790",
+    "status": "53:1806",
+    "destructive": "53:1807",
+    "createdModal": "62:3224"
+  },
+  "proposalVariants": {
+    "badges": [
+      {
+        "id": "53:1778",
+        "name": "Kind=Hard"
+      },
+      {
+        "id": "53:1781",
+        "name": "Kind=Soft"
+      },
+      {
+        "id": "53:1784",
+        "name": "Kind=Removable"
+      }
+    ],
+    "statuses": [
+      {
+        "id": "53:1791",
+        "name": "Domain key=vacancy.active"
+      },
+      {
+        "id": "53:1794",
+        "name": "Domain key=vacancy.closed"
+      },
+      {
+        "id": "53:1797",
+        "name": "Domain key=response.pending"
+      },
+      {
+        "id": "53:1800",
+        "name": "Domain key=response.accepted"
+      },
+      {
+        "id": "53:1803",
+        "name": "Domain key=response.rejected"
+      }
+    ]
+  },
+  "featureCompositions": {
+    "Project · active": "55:1756",
+    "Project · empty skills": "55:1796",
+    "Project · closed": "55:1822",
+    "Project · one skill": "55:1862",
+    "Catalog · active": "55:1893",
+    "Catalog · empty": "55:1955",
+    "Catalog · closed": "55:2001",
+    "Catalog · one skill": "55:2053",
+    "Response · pending": "55:2105",
+    "Response · accepted": "55:2178",
+    "Response · rejected": "55:2235",
+    "My response · pending": "55:2294",
+    "My response · accepted": "55:2319",
+    "My response · rejected": "55:2342",
+    "Detail · header": "55:2373",
+    "Detail · description and skills": "55:2403",
+    "Detail · conditions": "55:2446"
+  },
+  "verification": {
+    "instances": 358,
+    "boundNodes": 1169,
+    "clippedChildren": 0,
+    "temporaryCaptureRemoved": true
+  },
+  "nextStage": "Only after explicit user design approval: Angular alignment, reproduce/fix skills, tests/build/browser and DEV API verification, draft PR to dev; no merge/deploy."
+}
