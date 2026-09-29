@@ -1,17 +1,7 @@
 /** @format */
 
-@use "styles/components/vacancy-ui";
-
 .page {
-  margin-top: 24px;
-
-  &__header {
-    @include vacancy-ui.page-header;
-
-    &--my {
-      margin-bottom: 16px;
-    }
-  }
+  margin-top: 30px;
 
   app-search ::ng-deep .search {
     padding: 12px;
@@ -37,7 +27,7 @@
     flex-direction: column;
     gap: 20px;
     min-width: 0;
-    margin-top: 10px;
+    margin-top: 0;
   }
 
   &__left {
@@ -46,10 +36,6 @@
 
   &__info--my {
     grid-template-columns: minmax(0, 1fr);
-
-    .page__outlet {
-      margin-top: 0;
-    }
   }
 
   @media (max-width: 800px) {

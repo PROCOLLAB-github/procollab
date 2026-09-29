@@ -3,19 +3,16 @@
 <!-- vacancies.component.html -->
 <!-- @format -->
 
-<main class="page">
+<main class="page" [attr.aria-label]="isAll() === 'all' ? 'Вакансии' : 'Мои отклики'">
   <div class="page__bar">
-    <header class="page__header" [class.page__header--my]="isAll() !== 'all'">
-      <app-back
-        #back
-        role="link"
-        tabindex="0"
-        (keydown.enter)="back.onClick()"
-        namespace="Назад"
-        [path]="isAll() === 'all' ? AppRoutes.office.feed() : AppRoutes.office.vacancies()"
-      ></app-back>
-      <h1>{{ isAll() === "all" ? "Вакансии" : "Мои отклики" }}</h1>
-    </header>
+    <app-back
+      #back
+      role="link"
+      tabindex="0"
+      (keydown.enter)="back.onClick()"
+      [namespace]="isAll() === 'all' ? 'вакансии' : 'мои отклики'"
+      [path]="isAll() === 'all' ? AppRoutes.office.feed() : AppRoutes.office.vacancies()"
+    ></app-back>
 
     <div class="page__info" [class.page__info--my]="isAll() !== 'all'">
       <div class="page__outlet">
