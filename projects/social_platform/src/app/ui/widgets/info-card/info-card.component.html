@@ -189,6 +189,7 @@
             color="red"
             appearance="outline"
             (click)="removeCollaboratorFromProject(info()?.userId)"
+            [disabled]="teamFrozen()"
             >удалить</app-button
           >
         </div>

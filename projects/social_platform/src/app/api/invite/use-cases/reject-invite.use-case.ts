@@ -13,7 +13,7 @@ export class RejectInviteUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);
   private readonly eventBus = inject(EventBus);
 
-  execute(inviteId: number): Observable<Result<void, { kind: "unknown" }>> {
+  execute(inviteId: number): Observable<Result<void, { kind: "unknown"; cause?: unknown }>> {
     return this.inviteRepositoryPort.rejectInvite(inviteId).pipe(
       tap(invite => {
         // best-effort: тонкий ответ reject не должен ронять успешную операцию.
@@ -22,7 +22,7 @@ export class RejectInviteUseCase {
         }
       }),
       map(() => ok<void>(undefined)),
-      catchError(() => of(fail({ kind: "unknown" as const }))),
+      catchError(cause => of(fail({ kind: "unknown" as const, cause }))),
     );
   }
 }

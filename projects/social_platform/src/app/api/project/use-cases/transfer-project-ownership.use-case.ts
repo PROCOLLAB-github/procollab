@@ -13,12 +13,19 @@ export class TransferProjectOwnershipUseCase {
   execute(
     projectId: number,
     userId: number,
+    programLinkId?: number,
   ): Observable<Result<number, { kind: "transfer_project_ownership_error"; cause?: unknown }>> {
-    return this.projectCollaboratorsRepositoryPort.patchSwitchLeader(projectId, userId).pipe(
-      map(() => ok<number>(userId)),
-      catchError(error =>
-        of(fail({ kind: "transfer_project_ownership_error" as const, cause: error })),
-      ),
-    );
+    return this.projectCollaboratorsRepositoryPort
+      .patchSwitchLeader(
+        projectId,
+        userId,
+        ...[programLinkId].filter((id): id is number => id !== undefined),
+      )
+      .pipe(
+        map(() => ok<number>(userId)),
+        catchError(error =>
+          of(fail({ kind: "transfer_project_ownership_error" as const, cause: error })),
+        ),
+      );
   }
 }

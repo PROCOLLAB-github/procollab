@@ -37,6 +37,7 @@ import { ParticipantPickerComponent } from "./participant-picker.component";
 })
 export class ProjectMemberInviteModalComponent {
   readonly project = input<Project | null>(null);
+  readonly programLinkId = input<number | null>(null);
   readonly projectId = input.required<number>();
   readonly trigger = input<HTMLElement | null>(null);
   readonly closed = output<void>();

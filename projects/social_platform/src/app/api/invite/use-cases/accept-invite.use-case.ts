@@ -13,7 +13,7 @@ export class AcceptInviteUseCase {
   private readonly inviteRepositoryPort = inject(InviteRepositoryPort);
   private readonly eventBus = inject(EventBus);
 
-  execute(inviteId: number): Observable<Result<void, { kind: "unknown" }>> {
+  execute(inviteId: number): Observable<Result<void, { kind: "unknown"; cause?: unknown }>> {
     return this.inviteRepositoryPort.acceptInvite(inviteId).pipe(
       tap(invite => {
         if (invite?.project && invite?.user) {
@@ -23,7 +23,7 @@ export class AcceptInviteUseCase {
         }
       }),
       map(() => ok<void>(undefined)),
-      catchError(() => of(fail({ kind: "unknown" as const }))),
+      catchError(cause => of(fail({ kind: "unknown" as const, cause }))),
     );
   }
 }

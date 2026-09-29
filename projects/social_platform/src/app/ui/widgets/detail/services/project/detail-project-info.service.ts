@@ -1,4 +1,7 @@
 /** @format */
+import { teamOperationErrorMessage } from "@api/project/team-operation-error";
+import { teamProgramLinkId } from "@domain/project/team-policy";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -10,6 +13,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class DetailProjectInfoService {
+  private readonly snackbar = inject(SnackbarService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly logger = inject(LoggerService);
@@ -59,12 +63,17 @@ export class DetailProjectInfoService {
     this.route.data
       .pipe(
         map(r => r["data"][0]),
-        concatMap(p => this.leaveProjectUseCase.execute(p.id)),
+        concatMap(p => this.leaveProjectUseCase.execute(p.id, teamProgramLinkId(p))),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {
         if (!result.ok) {
-          this.leaderLeaveModal.set(true);
+          const message = teamOperationErrorMessage(result.error.cause);
+          if (message) this.snackbar.error(message);
+          else
+            this.snackbar.error(
+              "Не удалось выйти из команды. Обновите страницу и попробуйте ещё раз.",
+            );
           return;
         }
 

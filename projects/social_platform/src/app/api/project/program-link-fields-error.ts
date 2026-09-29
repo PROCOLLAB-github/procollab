@@ -3,6 +3,8 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { ProgramLinkFieldsError } from "@domain/project/program-link-fields.model";
 
+import { teamOperationErrorMessage } from "./team-operation-error";
+
 export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsError {
   if (cause instanceof HttpErrorResponse) {
     if (cause.status === 0) return { kind: "network", cause };
@@ -33,6 +35,8 @@ export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsErro
 }
 
 export function programLinkFieldsErrorMessage(error: ProgramLinkFieldsError): string {
+  const teamMessage = teamOperationErrorMessage(error.cause);
+  if (teamMessage) return teamMessage;
   switch (error.kind) {
     case "submission_closed":
       return "Срок подачи проектов в программу завершён.";

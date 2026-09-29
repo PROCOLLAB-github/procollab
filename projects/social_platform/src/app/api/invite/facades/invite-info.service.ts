@@ -1,4 +1,6 @@
 /** @format */
+import { teamOperationErrorMessage } from "@api/project/team-operation-error";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 import { Injectable, computed, inject, signal } from "@angular/core";
 import { Invite } from "@domain/invite/invite.model";
@@ -21,6 +23,7 @@ import { GetMyInvitesUseCase } from "../use-cases/get-my-invites.use-case";
 /** Facade приглашений: список «моих» инвайтов + accept/reject через use-case'ы. */
 @Injectable({ providedIn: "root" })
 export class InviteInfoService {
+  private readonly snackbar = inject(SnackbarService);
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
   private readonly getMyInvitesUseCase = inject(GetMyInvitesUseCase);
@@ -88,7 +91,13 @@ export class InviteInfoService {
       tap(result => {
         // На ошибке (в т.ч. 409 «уже обработан») ре-синк с сервером, а не revert:
         // иначе стухший инвайт возвращается в список и «не пропадает».
-        if (!result.ok) this.refresh();
+        if (!result.ok) {
+          this.snackbar.error(
+            teamOperationErrorMessage(result.error.cause) ??
+              "Не удалось обработать приглашение. Обновите список и попробуйте ещё раз.",
+          );
+          this.refresh();
+        }
       }),
     );
   }
@@ -98,7 +107,13 @@ export class InviteInfoService {
 
     return this.acceptInviteUseCase.execute(inviteId).pipe(
       tap(result => {
-        if (!result.ok) this.refresh();
+        if (!result.ok) {
+          this.snackbar.error(
+            teamOperationErrorMessage(result.error.cause) ??
+              "Не удалось обработать приглашение. Обновите список и попробуйте ещё раз.",
+          );
+          this.refresh();
+        }
       }),
     );
   }
