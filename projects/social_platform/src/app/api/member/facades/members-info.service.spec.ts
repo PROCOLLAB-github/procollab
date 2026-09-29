@@ -121,4 +121,43 @@ describe("Поиск участников", () => {
     old.complete();
     expect(ui.members().map(u => u.id)).toEqual([1]);
   });
+
+  it("быстрые изменения фильтров передают последний полный набор одним переходом", async () => {
+    ui.filterForm.patchValue({ keySkill: "Angular" });
+    await vi.advanceTimersByTimeAsync(30);
+    ui.filterForm.patchValue({ speciality: "Front-end" });
+    await vi.advanceTimersByTimeAsync(30);
+    ui.filterForm.patchValue({ keySkill: "CSS" });
+    await vi.advanceTimersByTimeAsync(250);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(execute).toHaveBeenLastCalledWith(0, 20, {
+      fullname: "Иван Иванов",
+      skills__contains: "CSS",
+      speciality__icontains: "Front-end",
+    });
+  });
+
+  it("повторный выбор после общего сброса снова применяет ту же специальность", async () => {
+    ui.filterForm.patchValue({ speciality: "Front-end" });
+    await vi.advanceTimersByTimeAsync(350);
+    ui.filterForm.reset(undefined, { emitEvent: false });
+    params.next({});
+    await vi.advanceTimersByTimeAsync(350);
+    navigate.mockClear();
+    ui.filterForm.patchValue({ speciality: "Front-end" });
+    await vi.advanceTimersByTimeAsync(350);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(execute).toHaveBeenLastCalledWith(0, 20, {
+      speciality__icontains: "Front-end",
+    });
+  });
+
+  it("общий сброс во время debounce не восстанавливает отложенный фильтр", async () => {
+    ui.filterForm.patchValue({ keySkill: "Angular", speciality: "Front-end" });
+    await vi.advanceTimersByTimeAsync(50);
+    ui.filterForm.reset(undefined, { emitEvent: false });
+    params.next({});
+    await vi.advanceTimersByTimeAsync(350);
+    expect(execute).toHaveBeenLastCalledWith(0, 20, {});
+  });
 });

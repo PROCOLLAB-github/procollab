@@ -17,7 +17,6 @@ import {
   throttleTime,
 } from "rxjs";
 import { User } from "@domain/auth/user.model";
-import { AbstractControl } from "@angular/forms";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
@@ -83,12 +82,8 @@ export class MembersInfoService {
     this.searchForm.patchValue({ search: fullname }, { emitEvent: false });
     this.searchParams.set(fullname ? { fullname } : {});
 
-    // Остальные фильтры сохраняют существующую синхронизацию с URL.
-    this.saveControlValue(this.searchForm.get("search"), "fullname");
-    this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
-    this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
-    this.saveControlValue(this.filterForm.get("age"), "age");
-    this.saveControlValue(this.filterForm.get("isMosPolytechStudent"), "is_mospolytech_student");
+    this.saveSearchValue();
+    this.saveFilterValues();
   }
 
   private initializationQueryParams(): void {
@@ -180,25 +175,46 @@ export class MembersInfoService {
       .subscribe();
   }
 
-  private saveControlValue(control: AbstractControl | null, queryName: string): void {
-    if (!control) return;
+  private saveSearchValue(): void {
+    this.searchForm.controls.search.valueChanges
+      .pipe(
+        map(normalizeMemberSearch),
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(value => {
+        this.router
+          .navigate([], {
+            queryParams: { fullname: value || null },
+            relativeTo: this.route,
+            queryParamsHandling: "merge",
+          })
+          .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
+      });
+  }
 
-    const changes =
-      queryName === "fullname"
-        ? control.valueChanges.pipe(map(normalizeMemberSearch), debounceTime(300))
-        : control.valueChanges.pipe(throttleTime(300));
-    // Для текста ждём завершения ввода: throttle без trailing теряет последние символы.
-    changes.pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef)).subscribe(value => {
-      this.router
-        .navigate([], {
-          queryParams: {
-            [queryName]: queryName === "fullname" ? value || null : value?.toString(),
-          },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
-    });
+  private saveFilterValues(): void {
+    this.filterForm.valueChanges
+      .pipe(debounceTime(100), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        // Один переход для всего набора. Читаем текущую форму, чтобы общий сброс
+        // во время debounce не вернул старые значения из отложенной эмиссии.
+        const filters = this.filterForm.getRawValue();
+        const age = filters.age?.join(",");
+        this.router
+          .navigate([], {
+            queryParams: {
+              skills__contains: filters.keySkill || null,
+              speciality__icontains: filters.speciality || null,
+              age: age && /^\d+,\d+$/.test(age) ? age : null,
+              is_mospolytech_student: filters.isMosPolytechStudent ? "true" : null,
+            },
+            relativeTo: this.route,
+            queryParamsHandling: "merge",
+          })
+          .then(() => this.logger.debug("Filters changed from MembersComponent"));
+      });
   }
 
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {

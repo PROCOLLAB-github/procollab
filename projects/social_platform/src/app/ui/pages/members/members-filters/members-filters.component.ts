@@ -85,7 +85,7 @@ export class MembersFiltersComponent {
       })
       .then(() => this.loggerService.info("Query change from ProjectsComponent"));
 
-    // Контролы синхронизируют URL по отдельности; общий сброс делает один переход выше.
+    // Общий сброс уже обновляет URL; отдельная синхронизация формы здесь не нужна.
     this.filterForm().reset(undefined, { emitEvent: false });
   }
 }
