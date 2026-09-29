@@ -5,7 +5,7 @@
 
 <main class="page">
   <div class="page__bar">
-    <header class="page__header">
+    <header class="page__header" [class.page__header--my]="isAll() !== 'all'">
       <app-back
         #back
         role="link"

@@ -14,7 +14,11 @@
   </div>
 
   @defer (when openModal()) {
-    <app-modal [open]="openModal()" (openChange)="closeSendResponseModal()">
+    <app-modal
+      [open]="openModal()"
+      bodyClass="vacancy-response-modal"
+      (openChange)="closeSendResponseModal()"
+    >
       <div class="cancel">
         <div class="lists__section">
           <p class="text-body-12 lists__title">отклик на вакансию</p>
