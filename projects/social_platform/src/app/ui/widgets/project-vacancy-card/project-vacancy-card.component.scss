@@ -1,203 +1,141 @@
-@use "styles/components/vacancy-skill";
+/** @format */
+
+@use "styles/components/vacancy-ui";
+
+:host {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+}
 
 .vacancy {
-  padding: 24px;
-  border: 0.5px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
+  @include vacancy-ui.surface;
 
-  &__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+
+  &__header {
     display: flex;
+    flex-direction: column;
     gap: 12px;
+    min-width: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
-    min-width: 0;
-    padding-bottom: 8px;
-    border-bottom: 0.5px solid var(--accent);
+  }
 
-    p {
-      color: var(--grey-for-text);
-    }
+  &__date,
+  &__project-label {
+    font-size: 12px;
+    line-height: 18px;
 
-    &--top {
-      display: flex;
-      flex: 1 1 auto;
-      flex-direction: column;
-      gap: 3px;
-      align-items: flex-end;
-      min-width: 0;
+    @include vacancy-ui.secondary;
+  }
+
+  &__role {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+
+    a {
+      color: var(--black);
+
+      @include vacancy-ui.focus;
+
+      &:hover {
+        color: var(--accent-dark);
+      }
     }
   }
 
   &__project {
     display: flex;
-    flex: 0 1 auto;
     gap: 10px;
     align-items: center;
     min-width: 0;
 
-    &-avatar {
-      display: block;
-      flex: 0 0 40px;
-      width: 40px;
-      height: 40px;
-    }
-
-    &--info {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
+    @include vacancy-ui.focus;
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
+  &__project-avatar {
+    display: block;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  &__project-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
   &__project-name {
-    display: -webkit-box;
-    overflow: hidden;
-    color: var(--black) !important;
-    overflow-wrap: anywhere;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--black);
   }
-  /* stylelint-enable value-no-vendor-prefix */
 
-  /* stylelint-disable value-no-vendor-prefix */
-  &__role {
-    display: -webkit-box;
-    max-width: 100%;
-    overflow: hidden;
-    color: var(--accent);
-    text-align: right;
-    overflow-wrap: anywhere;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+  &__specialization {
+    font-size: 12px;
+    line-height: 18px;
+
+    @include vacancy-ui.secondary;
   }
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__salary {
-    display: flex;
-    flex: 0 0 auto;
-    gap: 6px;
-    align-items: center;
-    color: var(--grey-for-text);
-
-    p {
-      white-space: nowrap;
-    }
+    font-size: 14px;
+    line-height: 21px;
+  }
+  /* stylelint-disable value-no-vendor-prefix */
+  &__role,
+  &__project-name,
+  &__specialization,
+  &__salary,
+  &__description p {
+    display: -webkit-box;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   &__description {
-    min-width: 0;
-    margin: 8px 0;
-  }
+    font-size: 14px;
+    line-height: 21px;
 
-  &__actions {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 8px;
-    align-items: center;
-    justify-content: space-between;
-
-    app-button {
-      flex: 0 0 auto;
-    }
-
-    .vacancy__secondary-action {
-      ::ng-deep .button {
-        width: 131px;
-      }
-    }
-
-    .vacancy__primary-action,
-    .vacancy__response-action {
-      ::ng-deep .button {
-        width: 146px;
-        white-space: nowrap;
-      }
-    }
-
-    @media screen and (max-width: 420px) {
-      flex-flow: column nowrap;
-      gap: 10px;
-
-      app-button {
-        flex: 0 0 100%;
-      }
-
-      ::ng-deep app-button .button {
-        width: 100%;
-      }
-    }
-  }
-
-  &__skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2px;
-    align-items: center;
-    margin-top: 8px;
-  }
-
-  &__skill {
-    min-width: 0;
-
-    &--compact {
-      ::ng-deep .tag {
-        @include vacancy-skill.compact-tag;
-      }
-    }
-
-    &--more {
-      color: var(--accent);
-    }
-  }
-}
-
-.about {
-  /* stylelint-disable value-no-vendor-prefix */
-  &__text {
     p {
-      display: -webkit-box;
-      overflow: hidden;
-      color: var(--black);
-      text-overflow: ellipsis;
-      word-break: break-word;
-      transition: all 0.7s ease-in-out;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5;
-
-      &.expanded {
-        -webkit-line-clamp: unset;
-      }
+      -webkit-line-clamp: 3;
     }
 
     ::ng-deep a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-color: transparent;
-      text-underline-offset: 3px;
-      transition: text-decoration-color 0.2s;
-
-      &:hover {
-        text-decoration-color: var(--accent);
-      }
+      @include vacancy-ui.link;
     }
   }
-
   /* stylelint-enable value-no-vendor-prefix */
-
-  &__read-full {
-    margin-top: 2px;
-    color: var(--accent);
-    cursor: pointer;
+  &__empty {
+    @include vacancy-ui.secondary;
   }
-}
 
-.read-more {
-  margin-top: 12px;
-  color: var(--accent);
-  cursor: pointer;
-  transition: color 0.2s;
+  &__actions {
+    @include vacancy-ui.actions;
 
-  &:hover {
-    color: var(--accent-dark);
+    margin-top: auto;
+
+    @media (max-width: 520px) {
+      flex-direction: column;
+
+      app-button {
+        flex-basis: auto;
+        width: 100%;
+      }
+    }
   }
 }

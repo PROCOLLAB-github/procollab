@@ -48,15 +48,15 @@ describe("VacancyCardComponent", () => {
   });
 
   it.each([
-    [true, "Активна", "active"],
-    [false, "Закрыта", "closed"],
+    [true, "Активна", "success"],
+    [false, "Закрыта", "neutral"],
   ] as const)("показывает статус вакансии isActive=%s", (isActive, label, className) => {
     fixture.componentRef.setInput("vacancy", createVacancy(isActive));
     fixture.detectChanges();
 
-    const status = fixture.nativeElement.querySelector(".vacancy__status");
+    const status = fixture.nativeElement.querySelector(".status");
     expect(status.textContent.trim()).toBe(label);
-    expect(status.classList).toContain(`vacancy__status--${className}`);
+    expect(status.classList).toContain(`status--${className}`);
   });
 
   it("не удаляет часть длинного названия вакансии из DOM", () => {
@@ -65,5 +65,17 @@ describe("VacancyCardComponent", () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector(".vacancy__role").textContent.trim()).toBe(longRole);
+  });
+
+  it("показывает полное название навыка в readable tag", () => {
+    const skillName = "Управление распределённой командой разработки";
+    fixture.componentRef.setInput("vacancy", {
+      ...createVacancy(true),
+      requiredSkills: [{ id: 4, name: skillName, category: { name: "Soft skills" } }],
+    });
+    fixture.detectChanges();
+
+    const skill = fixture.nativeElement.querySelector("app-vacancy-skills app-tag") as HTMLElement;
+    expect(skill.textContent?.trim()).toBe(skillName);
   });
 });

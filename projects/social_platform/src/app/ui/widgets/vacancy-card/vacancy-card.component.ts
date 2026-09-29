@@ -1,48 +1,32 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  input,
-  Input,
-  OnInit,
-  output,
-  Output,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
-import { TagComponent } from "@ui/primitives/tag/tag.component";
+import { VacancyStatusComponent } from "../vacancy-status/vacancy-status.component";
+import { VacancySkillsComponent } from "../vacancy-skills/vacancy-skills.component";
 
-/** Компонент карточки вакансии с кнопками редактирования и удаления. */
 @Component({
   selector: "app-vacancy-card",
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
-  imports: [IconComponent, ButtonComponent, TagComponent],
+  imports: [IconComponent, ButtonComponent, VacancyStatusComponent, VacancySkillsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VacancyCardComponent implements OnInit {
+export class VacancyCardComponent {
   readonly vacancy = input<Vacancy | undefined>();
-
+  readonly disabled = input(false);
   readonly remove = output<number>();
   readonly edit = output<number>();
-
-  skillString = "";
-
-  ngOnInit(): void {}
 
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
-
-    this.remove.emit(this.vacancy()!.id);
+    if (!this.disabled() && this.vacancy()) this.remove.emit(this.vacancy()!.id);
   }
-
   onEdit(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
-
-    this.edit.emit(this.vacancy()!.id);
+    if (!this.disabled() && this.vacancy()) this.edit.emit(this.vacancy()!.id);
   }
 }

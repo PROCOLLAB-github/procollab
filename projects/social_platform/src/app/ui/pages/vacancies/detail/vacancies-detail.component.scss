@@ -1,28 +1,88 @@
-@use "styles/responsive";
+/** @format */
+
+@use "styles/components/vacancy-ui";
 
 :host {
   display: block;
   min-width: 0;
+  padding-bottom: 32px;
 }
 
-.detail__back {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
+.detail {
+  &__back {
+    @include vacancy-ui.page-header;
 
-  @include responsive.apply-desktop {
-    // Keep the title clear of the bell, logout and profile controls.
-    max-width: calc(100% - 200px);
+    margin: 24px 0;
+  }
 
-    ::ng-deep .back {
-      min-width: 0;
+  &__header {
+    @include vacancy-ui.surface;
 
-      span {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    margin-bottom: 20px;
+  }
+
+  &__heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    align-items: flex-start;
+  }
+
+  &__heading h1 {
+    flex: 1 1 280px;
+    min-width: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  &__project {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--black);
+
+    app-avatar {
+      flex: 0 0 40px;
     }
+
+    @include vacancy-ui.focus;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__specialization {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 20px;
+
+    @include vacancy-ui.secondary;
+  }
+
+  &__conditions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 16px 0 0;
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 21px;
+    list-style: none;
+    border-top: 1px solid var(--medium-grey-for-outline);
+
+    li {
+      min-width: 0;
+    }
+  }
+
+  &__body {
+    min-width: 0;
   }
 }

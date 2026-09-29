@@ -54,7 +54,11 @@
           перейти в профиль
         </app-button>
         <div class="page__left">
-          <app-members-filters class="page__filter" [filterForm]="filterForm" />
+          <app-members-filters
+            class="page__filter"
+            [filterForm]="filterForm"
+            (resetRequested)="resetFilters()"
+          />
           <ng-container *ngTemplateOutlet="statistics" />
         </div>
       </div>
@@ -78,6 +82,7 @@
       [filterForm]="filterForm"
       [trigger]="filtersTrigger"
       (closed)="filtersOpen.set(false)"
+      (resetRequested)="resetFilters()"
     />
   }
 </section>

@@ -1,96 +1,77 @@
 <!-- @format -->
 
-<div class="vacancy">
-  <div class="vacancy__info">
-    @if (type() === "vacancies") {
-      <div class="vacancy__project">
+<article class="vacancy">
+  <header class="vacancy__header">
+    <div class="vacancy__meta">
+      <app-vacancy-status
+        [label]="vacancy().isActive ? 'Активна' : 'Закрыта'"
+        [tone]="vacancy().isActive ? 'success' : 'neutral'"
+      ></app-vacancy-status>
+      @if (vacancy().datetimeCreated) {
+        <time class="vacancy__date" [attr.datetime]="vacancy().datetimeCreated">{{
+          vacancy().datetimeCreated | dayjs: "format" : "DD.MM.YYYY"
+        }}</time>
+      }
+    </div>
+    <h3 class="vacancy__role" [title]="vacancy().role">
+      <a [routerLink]="AppRoutes.office.vacancy(vacancy().id)">{{ vacancy().role }}</a>
+    </h3>
+    @if (type() === "vacancies" && vacancy().project; as project) {
+      <a class="vacancy__project" [routerLink]="AppRoutes.projects.detail(project.id)">
         <app-avatar
           class="vacancy__project-avatar"
-          [url]="vacancy().project.imageAddress"
+          [url]="project.imageAddress"
           [size]="40"
-          [hasBorder]="true"
-          borderColor="accent"
         ></app-avatar>
-        <div class="vacancy__project--info">
-          <p class="text-body-10 vacancy__project-name">
-            {{ vacancy().project.name }}
-          </p>
-          <p class="text-body-10">
-            {{ vacancy().datetimeCreated | dayjs: "format" : "DD.MM.YY • HH:MM" }}
-          </p>
+        <div class="vacancy__project-info">
+          <span class="vacancy__project-label">Проект</span>
+          <span class="vacancy__project-name" [title]="project.name">{{ project.name }}</span>
         </div>
-      </div>
-    } @else {
-      <p class="text-body-12 vacancy__role">
-        {{ vacancy().role }}
+      </a>
+    }
+    @if (vacancy().specialization) {
+      <p class="vacancy__specialization" [title]="vacancy().specialization">
+        Ищем: {{ vacancy().specialization }}
       </p>
     }
-    <div class="vacancy__info--top">
-      @if (type() === "vacancies") {
-        <p class="text-body-12 vacancy__role">
-          {{ vacancy().role }}
-        </p>
-      }
-      <div class="vacancy__salary">
-        <i appIcon icon="contacts" appWidth="5" appHeight="8"></i>
-        <p class="text-body-12">
-          {{ +vacancy().salary === 0 ? "по договоренности" : vacancy().salary }}
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="vacancy__skills">
-    @for (skill of vacancy().requiredSkills.slice(0, endSliceOfSkills); track $index) {
-      <app-tag
-        [appearance]="skill.category.name.includes('Soft skills') ? 'outline' : 'inline'"
-        [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
-        class="vacancy__skill vacancy__skill--compact"
-        >{{ skill.name }}</app-tag
-      >
-    }
-    @if (vacancy().requiredSkills.length > 5) {
-      <p class="vacancy__skill--more text-body-10">+ {{ vacancy().requiredSkills.length - 5 }}</p>
-    }
-  </div>
-
+  </header>
+  <p class="vacancy__salary">
+    {{
+      !vacancy().salary || +vacancy().salary === 0 ? "По договоренности" : vacancy().salary + " ₽"
+    }}
+  </p>
+  <app-vacancy-skills [skills]="vacancy().requiredSkills || []" [limit]="3"></app-vacancy-skills>
   <div class="vacancy__description">
     @if (vacancy().description) {
-      <div class="text-body-10 about__text">
-        <p #descEl [innerHTML]="vacancy().description | parseLinks | parseBreaks"></p>
-        @if (descriptionExpandable()) {
-          <div class="read-more text-body-10" (click)="onExpandDescription(descEl)">
-            {{ readFullDescription() ? "cкрыть" : "подробнее" }}
-          </div>
-        }
-      </div>
+      <p [innerHTML]="vacancy().description | parseLinks | parseBreaks"></p>
+    } @else {
+      <p class="vacancy__empty">Описание пока не добавлено</p>
     }
   </div>
-
-  <div class="vacancy__actions" [class.vacancy__actions--vacancies]="type() === 'vacancies'">
+  <div class="vacancy__actions">
     <app-button
       class="vacancy__secondary-action"
       [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
       appearance="outline"
-      size="medium"
+      size="big"
       >подробнее</app-button
     >
-    @if (type() === "vacancies" && vacancy().canManageResponses) {
+    @if (vacancy().canManageResponses) {
       <app-button
         class="vacancy__primary-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
         [queryParams]="{ manageResponses: true }"
-        size="medium"
+        size="big"
         >посмотреть отклики</app-button
       >
-    } @else if (type() !== "vacancies" || (vacancy().canRespond && !vacancy().hasResponded)) {
+    } @else if (vacancy().canRespond && !vacancy().hasResponded) {
       <app-button
         class="vacancy__response-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
         [queryParams]="{ sendResponse: true }"
-        size="medium"
+        size="big"
         >откликнуться</app-button
       >
     }
   </div>
-</div>
+</article>

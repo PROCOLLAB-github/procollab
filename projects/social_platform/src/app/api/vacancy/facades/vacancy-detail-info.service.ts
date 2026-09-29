@@ -201,6 +201,7 @@ export class VacancyDetailInfoService {
         }
 
         this.vacancyDetailUIInfoService.applyVacancyAccepted();
+        this.vacancyDetailUIInfoService.applyResponseDecision(responseId, true);
         this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
         this.snackbarService.success("Кандидат принят в проект");
         this.loadVacancyResponses();
@@ -223,6 +224,7 @@ export class VacancyDetailInfoService {
 
         this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
         this.snackbarService.success("Отклик отклонён");
+        this.vacancyDetailUIInfoService.applyResponseDecision(responseId, false);
         this.loadVacancyResponses();
       });
   }
