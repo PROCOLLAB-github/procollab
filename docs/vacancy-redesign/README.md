@@ -2,7 +2,7 @@
 
 Дизайн согласован пользователем 29.09.2026: [Feature Design / Vacancies в Figma](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=51-1751). Ветка `feat/dev-vacancy-interface-redesign`, база `origin/dev @ c1dddf03`. PROPOSED разрешены только для вакансий; глобальные компоненты и токены UI KIT не изменены.
 
-**DEV round-trip подтверждён на исправленной локальной сборке:** тестовая вакансия №104 в проекте №131, POST 201 → GET 200 → PATCH 200 → новый GET 200. После изменения навыков сохранены Angular, CSS и зарплата 100 ₽. Подготовлен draft для ревью в dev; merge/deploy не выполнялись. [Подробный отчёт реализации](implementation-review.md).
+**DEV round-trip подтверждён на исправленной локальной сборке:** тестовая вакансия №104 в проекте №131, POST 201 → GET 200 → PATCH 200 → новый GET 200. После изменения навыков сохранены Angular, CSS и зарплата 100 ₽. [Draft PR #393](https://github.com/PROCOLLAB-github/procollab/pull/393) открыт в dev; merge/deploy не выполнялись. [Подробный отчёт реализации](implementation-review.md).
 
 ## Исправление навыков
 

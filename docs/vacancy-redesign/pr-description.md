@@ -48,4 +48,4 @@ Server-side permissions не менялись. Существующие canManag
 
 ## Риски / migration
 
-Shared Autocomplete/SearchesService затрагивают другие формы; полный unit suite проходит. Figma temporary Inter отличается метриками от Mont. Общий contrast/token review требуется отдельно, глобальные токены здесь не меняются. Draft для ревью; закрытая тестовая вакансия 104 оставлена на DEV с явной QA-маркировкой. Merge и deploy не выполнялись.
+Shared Autocomplete/SearchesService затрагивают другие формы; полный набор прошёл после основного исправления поиска, а после последней правки повторён затронутый набор 17/85. Figma temporary Inter отличается метриками от Mont. Общий contrast/token review требуется отдельно, глобальные токены здесь не меняются. Draft для ревью; закрытая тестовая вакансия 104 оставлена на DEV с явной QA-маркировкой. Merge и deploy не выполнялись.

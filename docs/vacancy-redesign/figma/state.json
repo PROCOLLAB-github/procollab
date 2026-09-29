@@ -8,7 +8,7 @@
   "approved": true,
   "approvalScope": "User approved vacancy screens and feature-only PROPOSED components; preserve #8A63E6, Mont and global tokens. No global UI KIT promotion.",
   "angularChangesThisTurn": true,
-  "pullRequestCreated": false,
+  "pullRequestCreated": true,
   "font": "Canonical Mont; Inter is an explicitly labelled temporary Figma preview",
   "screens": [
     {
@@ -204,5 +204,6 @@
     "clippedChildren": 0,
     "temporaryCaptureRemoved": true
   },
-  "nextStage": "Only after explicit user design approval: Angular alignment, reproduce/fix skills, tests/build/browser and DEV API verification, draft PR to dev; no merge/deploy."
+  "nextStage": "Only after explicit user design approval: Angular alignment, reproduce/fix skills, tests/build/browser and DEV API verification, draft PR to dev; no merge/deploy.",
+  "pullRequestUrl": "https://github.com/PROCOLLAB-github/procollab/pull/393"
 }

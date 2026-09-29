@@ -15,7 +15,7 @@
 | Не менять токены и статус UI KIT | Diff глобальных colors/typography/font assets пуст; Figma masters в implementation-этапе не менялись |
 | Честно описать контраст | 4,02:1 основной CTA; контраст AA не пройден |
 | Последние tests/build/browser | [Точные команды и результаты](README.md#проверки), [JSON](validation-summary.json) |
-| Draft PR в dev | Описание подготовлено после финальной DEV-проверки; готово для draft review. Merge/deploy не выполнялись |
+| Draft PR в dev | [Draft PR #393](https://github.com/PROCOLLAB-github/procollab/pull/393) открыт после финальной DEV-проверки. Merge/deploy не выполнялись |
 
 ## Причина и исправление
 

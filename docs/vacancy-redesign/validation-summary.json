@@ -71,7 +71,7 @@
     "evidence": "dev-results.json",
     "testRecord": "closed, left for review"
   },
-  "pullRequestCreated": false,
+  "pullRequestCreated": true,
   "browser": {
     "contrastSamples": 205,
     "states": 52,
@@ -96,5 +96,6 @@
       "passed": 10
     },
     "after": "passed in 17/85 affected tests and final DEV round-trip"
-  }
+  },
+  "pullRequestUrl": "https://github.com/PROCOLLAB-github/procollab/pull/393"
 }
