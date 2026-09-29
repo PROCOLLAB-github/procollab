@@ -1,14 +1,29 @@
 <!-- @format -->
+<ng-template #contentTemplate><ng-content></ng-content></ng-template>
 <ng-template #modalTemplate>
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal__overlay" (click)="$event.stopPropagation(); openChange.emit(false)"></div>
-    <div
-      class="modal__body {{ bodyClass() ?? '' }}"
-      [ngClass]="{
-        'modal__body--gradient': color() === 'gradient',
-      }"
-    >
-      <ng-content></ng-content>
-    </div>
+    @if (labelledBy()) {
+      <div
+        class="modal__body {{ bodyClass() ?? '' }}"
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-labelledby]="labelledBy()"
+        [attr.aria-describedby]="describedBy()"
+        cdkTrapFocus
+        [cdkTrapFocusAutoCapture]="true"
+        (keydown.escape)="onEscape($event)"
+        [class.modal__body--gradient]="color() === 'gradient'"
+      >
+        <ng-container [ngTemplateOutlet]="contentTemplate"></ng-container>
+      </div>
+    } @else {
+      <div
+        class="modal__body {{ bodyClass() ?? '' }}"
+        [class.modal__body--gradient]="color() === 'gradient'"
+      >
+        <ng-container [ngTemplateOutlet]="contentTemplate"></ng-container>
+      </div>
+    }
   </div>
 </ng-template>

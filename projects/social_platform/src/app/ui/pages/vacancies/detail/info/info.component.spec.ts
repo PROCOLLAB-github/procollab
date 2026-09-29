@@ -18,6 +18,7 @@ import { VacancyInfoComponent } from "./info.component";
   template: "<ng-content></ng-content>",
 })
 class ModalStubComponent {
+  readonly labelledBy = input<string>();
   readonly open = input.required<boolean>();
   readonly openChange = output<boolean>();
 }

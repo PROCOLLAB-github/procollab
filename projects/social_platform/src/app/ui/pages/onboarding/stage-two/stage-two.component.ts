@@ -53,7 +53,7 @@ export class OnboardingStageTwoComponent implements OnInit {
 
   protected readonly nestedSkills$ = this.searchesService.getSkillsNested();
 
-  protected readonly searchedSkills = this.onboardingStageTwoUIInfoService.searchedSkills;
+  protected readonly searchedSkills = this.searchesService.inlineSkills;
 
   // Для управления открытыми группами навыков
   protected readonly openSkillGroup = this.onboardingStageTwoUIInfoService.openSkillGroup;

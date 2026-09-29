@@ -1,0 +1,34 @@
+<!-- @format -->
+
+<app-modal
+  [open]="true"
+  labelledBy="vacancy-created-title"
+  describedBy="vacancy-created-description"
+  bodyClass="vacancy-created-modal"
+  (openChange)="closed.emit()"
+>
+  <section class="created">
+    <button
+      type="button"
+      class="created__close"
+      aria-label="Закрыть подтверждение"
+      (click)="closed.emit()"
+    >
+      <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+    </button>
+    <h2 id="vacancy-created-title" class="created__title" tabindex="-1" cdkFocusInitial>
+      Вакансия создана
+    </h2>
+    <p id="vacancy-created-description">
+      Теперь управлять вакансией и работать с откликами можно во вкладке „Вакансии“.
+    </p>
+    <div class="created__actions">
+      <app-button size="big" [routerLink]="AppRoutes.office.vacancy(vacancyId())"
+        >Перейти к вакансиям</app-button
+      >
+      <app-button size="big" appearance="outline" (click)="closed.emit()"
+        >Остаться в проекте</app-button
+      >
+    </div>
+  </section>
+</app-modal>

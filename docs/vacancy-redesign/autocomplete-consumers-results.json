@@ -1,0 +1,141 @@
+{
+  "date": "2026-09-29",
+  "api": "https://dev.procollab.ru via http://127.0.0.1:4360/dev-api",
+  "fixtures": false,
+  "baselineCommit": "3ef45868c41454ee17b0c744765f5662d972c57e",
+  "finalSourceCommit": "f1ea89bec92e2e37b89044aa4663b40807ba0be0",
+  "mode": "manual CUA interactions; DOM observations and HTTP status logs",
+  "coverage": {
+    "profileSkills": {
+      "desktop": [
+        "rapid query replacement",
+        "search selection",
+        "repeat query without duplicate",
+        "library checked state",
+        "add and remove",
+        "no-results and forceSelect"
+      ],
+      "mobile390": [
+        "search and selection",
+        "library checked state",
+        "deselection in library"
+      ],
+      "saved": false,
+      "originalSkillsRestored": true,
+      "status": "passed; long skill delete checked at 390/320 with visible native button"
+    },
+    "onboardingSpeciality": {
+      "desktop": [
+        "search",
+        "chip selection",
+        "chip removal",
+        "library selection"
+      ],
+      "submitted": false,
+      "status": "passed"
+    },
+    "onboardingSkills": {
+      "desktop": [
+        "rapid query replacement",
+        "search selection",
+        "repeat query without duplicate",
+        "library selection",
+        "delete and checked sync",
+        "empty basket"
+      ],
+      "mobile390": [
+        "TypeScript search/selection",
+        "delete",
+        "no-results",
+        "forceSelect clear"
+      ],
+      "submitted": false,
+      "status": "passed after fix"
+    },
+    "memberFilters": {
+      "desktop": [
+        "skill and speciality selection",
+        "combined URL and DEV result",
+        "global reset",
+        "repeat same selection after reset"
+      ],
+      "mobile390": [
+        "state survives desktop/mobile switch",
+        "combined filters",
+        "close and reopen dialog",
+        "global reset restores unfiltered first page"
+      ],
+      "status": "passed; URL hydration, reload, all five filters, reset, reselect, Back/Forward and mobile dialog"
+    }
+  },
+  "regressions": {
+    "initial": {
+      "files": 2,
+      "failed": 4,
+      "passed": 2
+    },
+    "repeatFilters": {
+      "files": 1,
+      "failed": 2,
+      "passed": 5
+    },
+    "finalTargeted": {
+      "files": 3,
+      "passed": 14,
+      "failed": 0
+    },
+    "addedTests": 7,
+    "followup": {
+      "before": {
+        "failed": 4,
+        "passed": 10,
+        "files": 2
+      },
+      "after": {
+        "passed": 32,
+        "files": 4
+      },
+      "addedTests": 20
+    }
+  },
+  "remainingIssues": [],
+  "limits": [
+    "No profile save or onboarding submission/stage change",
+    "DEV response ordering not forced",
+    "No backend negative permission scenarios"
+  ],
+  "authentication": {
+    "existingSession": true,
+    "credentialsRead": false,
+    "refresh401Then200Observed": true
+  },
+  "design": {
+    "changed": false,
+    "cta": "#8A63E6",
+    "font": "Mont",
+    "globalTokensChanged": false
+  },
+  "report": "autocomplete-consumers-review.md",
+  "readyForReview": false,
+  "previousSourceCommit": "43dc70ff5d3f1a1b2b5410b7476f52b9882ee20e",
+  "resolvedIssues": [
+    {
+      "area": "member filters",
+      "case": "full page reload with skills__contains/speciality__icontains",
+      "observation": "URL retains parameters, fields are empty, resolver GET sends only fullname; unrelated to opening mobile dialog",
+      "preexisting": true,
+      "resolvedBy": "f1ea89bec92e2e37b89044aa4663b40807ba0be0",
+      "evidence": "autocomplete-followup-review.md"
+    },
+    {
+      "area": "profile skills at 390px",
+      "case": "delete long TypeScript chip directly",
+      "observation": "icon clipped; click could not complete, library deselection works; original profile restored without save",
+      "preexisting": true,
+      "resolvedBy": "f1ea89bec92e2e37b89044aa4663b40807ba0be0",
+      "evidence": "autocomplete-followup-review.md"
+    }
+  ],
+  "followupEvidence": "autocomplete-followup-dev-results.json",
+  "followupReport": "autocomplete-followup-review.md"
+}

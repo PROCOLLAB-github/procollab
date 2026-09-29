@@ -32,7 +32,6 @@ import { VacancyResponsesComponent } from "./components/vacancy-responses/vacanc
     UploadFileComponent,
     VacancyResponsesComponent,
   ],
-  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyInfoComponent implements OnInit {
@@ -58,7 +57,6 @@ export class VacancyInfoComponent implements OnInit {
   protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {
-    this.vacancyDetailInfoService.initializeDetailInfo();
     this.vacancyDetailInfoService.initializeDetailInfoQueryParams();
   }
 

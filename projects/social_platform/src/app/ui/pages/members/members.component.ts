@@ -107,4 +107,8 @@ export class MembersComponent implements OnInit, AfterViewInit {
   redirectToProfile(): void {
     this.membersInfoService.redirectToProfile();
   }
+
+  resetFilters(): void {
+    this.membersInfoService.resetFilters();
+  }
 }

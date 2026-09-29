@@ -17,7 +17,7 @@ import {
 import { IconComponent } from "@uilib";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
-import { debounce, distinctUntilChanged, fromEvent, map, of, timer } from "rxjs";
+import { debounce, distinctUntilChanged, of, Subject, timer } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { LoaderComponent } from "../loader/loader.component";
@@ -68,6 +68,8 @@ export class AutoCompleteInputComponent<T> {
 
   readonly openSkillsFunc = output<void>();
   readonly searchStart = output<string>();
+  /** Сразу инвалидирует запрос родителя, не дожидаясь debounce следующего поиска. */
+  readonly queryChanged = output<string>();
   readonly optionSelected = output<Skill>();
   readonly inputCleared = output();
 
@@ -82,23 +84,29 @@ export class AutoCompleteInputComponent<T> {
   disabled = signal(false);
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly queries = new Subject<string>();
+  private activeQuery: string | null = null;
 
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    fromEvent<Event>(this.inputElem()!.nativeElement, "input")
+  constructor() {
+    this.queries
       .pipe(
-        map(e => (e.target as HTMLInputElement).value.trim()),
-        debounce(val => (val ? timer(this.delay()) : of({}))),
         distinctUntilChanged(),
+        debounce(val => (val ? timer(this.delay()) : of({}))),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(val => this.handleSearch(val));
+      .subscribe(val => {
+        if (val) this.handleSearch(val);
+      });
   }
 
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value.trim();
+    if (value === this.inputValue()) return;
     this.inputValue.set(value);
+    this.invalidateSearch();
+    this.queryChanged.emit(value);
+    this.queries.next(value);
+    if (!value) this.inputCleared.emit();
   }
 
   onBlur(): void {
@@ -146,9 +154,10 @@ export class AutoCompleteInputComponent<T> {
 
   onClearValue(event: Event): void {
     event.stopPropagation();
-    this.inputValue.set("");
+    this.resetSearch();
     this.value.set(null);
     this.onChange(null);
+    this.inputCleared.emit();
   }
 
   onClickOutside(): void {
@@ -161,12 +170,14 @@ export class AutoCompleteInputComponent<T> {
       this.value.set(newValue);
       this.onChange(newValue);
     } else if (this.forceSelect() && this.isOpen() && !value) {
-      this.inputValue.set("");
+      this.resetSearch();
       this.value.set(null);
       this.onChange(null);
     }
 
-    this.isOpen.set(false);
+    this.invalidateSearch();
+    this.queries.next("");
+    this.queryChanged.emit("");
   }
 
   handleSearch(query: string): void {
@@ -176,37 +187,37 @@ export class AutoCompleteInputComponent<T> {
       return;
     }
 
+    this.activeQuery = query;
     this.loading.set(true);
     this.searchStart.emit(query);
   }
 
-  handlePaste(event: ClipboardEvent): void {
-    const query = event.clipboardData?.getData("text");
-
-    if (query) {
-      this.handleSearch(query.trim());
-    }
+  resetSearch(): void {
+    this.inputValue.set("");
+    this.invalidateSearch();
+    // Программный сброс участвует в distinctUntilChanged, но не очищает CVA-значение.
+    this.queries.next("");
+    this.queryChanged.emit("");
   }
 
   handleSuggestionsChange(suggestions: any[]): void {
-    if (!suggestions?.length && this.loading()) {
-      this.noResults.set(true);
-      this.isOpen.set(true);
-    }
-
-    if (this.suggestions?.length) {
-      this.noResults.set(false);
-      this.isOpen.set(true);
-    }
-
+    if (!this.activeQuery || this.activeQuery !== this.inputValue().trim()) return;
+    this.noResults.set(!suggestions?.length);
+    this.isOpen.set(true);
     this.loading.set(false);
   }
 
+  private invalidateSearch(): void {
+    this.activeQuery = null;
+    this.isOpen.set(false);
+    this.loading.set(false);
+    this.noResults.set(false);
+  }
+
   handleProgrammaticInputValueChange(appValue: any): void {
-    if (this.fieldToDisplayMode() === "chip" || this.clearInputOnSelect()) {
-      this.inputValue.set("");
-    } else {
-      this.inputValue.set(appValue?.[this.fieldToDisplay()] ?? appValue);
+    this.resetSearch();
+    if (this.fieldToDisplayMode() !== "chip" && !this.clearInputOnSelect()) {
+      this.inputValue.set(appValue?.[this.fieldToDisplay()] ?? appValue ?? "");
     }
   }
 

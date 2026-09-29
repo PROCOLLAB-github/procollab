@@ -1,0 +1,85 @@
+{
+  "date": "2026-09-29",
+  "api": "https://dev.procollab.ru",
+  "localBranch": "http://127.0.0.1:4360",
+  "projectId": 131,
+  "vacancyId": 104,
+  "role": "[QA 2026-09-29] Проверка навыков — не для найма",
+  "state": "closed; parent test project is draft",
+  "create": {
+    "method": "POST",
+    "path": "/vacancies/",
+    "status": 201,
+    "skills": [
+      "CSS",
+      "Angular"
+    ]
+  },
+  "reloadAfterCreate": {
+    "method": "GET",
+    "path": "/vacancies/104/",
+    "status": 200,
+    "skills": [
+      "CSS",
+      "Angular"
+    ]
+  },
+  "update": {
+    "method": "PATCH",
+    "path": "/vacancies/104/",
+    "firstStatus": 401,
+    "refreshStatus": 200,
+    "retryStatus": 200,
+    "skills": [
+      "CSS",
+      "TypeScript"
+    ]
+  },
+  "reloadAfterUpdate": {
+    "skills": [
+      "CSS",
+      "TypeScript"
+    ],
+    "checkedLibrary": {
+      "CSS": true,
+      "TypeScript": true,
+      "Angular": false
+    },
+    "mobileWidth": 390,
+    "contentWidth": 375,
+    "font": "Mont, sans-serif"
+  },
+  "queries": [
+    "A→Ang→Angular",
+    "Angular repeated after select",
+    "Ang→Ty→Type"
+  ],
+  "searchStatus": 200,
+  "forcedResponseReordering": "tested only with controlled fixtures; DEV exercised normal rapid input",
+  "salaryRegression": {
+    "beforeFix": "editing only skills sent null for numeric salary from API",
+    "testsBefore": "3 failed / 10 passed",
+    "fix": "normalize server numeric salary to string control; strip grouping spaces, empty -> null"
+  },
+  "authDiagnosis": "login and profile requests were 200; stale lazy chunk from rebuilt local output prevented navigation; fresh navigation to office preserved session",
+  "finalVerification": {
+    "time": "2026-09-29T18:57:17+03:00",
+    "updateStatus": 200,
+    "reopenStatus": 200,
+    "skills": [
+      "Angular",
+      "CSS"
+    ],
+    "salary": 100,
+    "mobileWidth": 390,
+    "contentWidth": 375,
+    "font": "Mont, sans-serif",
+    "result": "passed after final source changes"
+  },
+  "remaining": [
+    "Forced reversal of HTTP responses checked only with local controlled fixtures",
+    "Actual accept/reject candidate decisions not performed on DEV",
+    "Global CTA/outline/secondary contrast below AA for normal text",
+    "Test vacancy 104 remains closed in DEV test project"
+  ]
+}

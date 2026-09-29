@@ -1,0 +1,212 @@
+<!-- @format -->
+
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  /><title>PROCOLLAB — вакансии</title
+  ><style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 28px;
+      font:
+        15px/1.5 system-ui,
+        sans-serif;
+      color: #333;
+      background: #f7f7f9;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    p {
+      margin: 8px 0 20px;
+      color: #666;
+    }
+    nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    button {
+      border: 1px solid #7b63b3;
+      border-radius: 20px;
+      padding: 8px 20px;
+      background: white;
+      color: #62459c;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] {
+      background: #8a63e6;
+      color: white;
+    }
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #297373;
+      outline-offset: 3px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    article {
+      min-width: 0;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      overflow: hidden;
+    }
+    h2 {
+      font-size: 16px;
+      margin: 0;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    .image {
+      display: block;
+      height: 350px;
+      overflow: auto;
+      background: #fff;
+    }
+    .image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .grid[data-size="390"] .image img {
+      width: min(100%, 390px);
+      margin: auto;
+    }
+    .grid[data-size="768"] .image img {
+      width: 100%;
+      margin: auto;
+    }
+    footer {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+    a {
+      color: #62459c;
+    }
+    body[data-capture] .image {
+      height: 370px;
+      overflow: hidden;
+    }
+    body[data-capture] footer {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 560px) {
+      body {
+        padding: 16px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <h1>PROCOLLAB · вакансии и отклики</h1>
+  <p>
+    Согласованный дизайн реализован в Angular с реальным Mont и CTA #8A63E6.
+    Скриншоты на синтетических данных; контраст существующих токенов имеет ограничения.
+    <a href="https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=51-1751">Экраны Figma</a> ·
+    <a href="README.md">Отчёт о проверках</a>. Нажмите на изображение для полного скриншота.
+  </p>
+  <nav aria-label="Размер экрана">
+    <button data-size="1440" aria-pressed="true">Desktop · 1440</button
+    ><button data-size="768" aria-pressed="false">Tablet · 768</button
+    ><button data-size="390" aria-pressed="false">Mobile · 390</button>
+  </nav>
+  <main class="grid" data-size="1440">
+    <article>
+      <h2>1. Вакансии проекта</h2>
+      <a class="image" href="screenshots/project-1440.png" target="_blank" rel="noopener"
+        ><img data-key="project" src="screenshots/project-1440.png" alt="Вакансии проекта"
+      /></a>
+      <footer>
+        <a href="screenshots/project-1440.png">Desktop</a> ·
+        <a href="screenshots/project-768.png">Tablet</a> ·
+        <a href="screenshots/project-390.png">Mobile</a>
+      </footer>
+    </article>
+    <article>
+      <h2>2. Каталог вакансий</h2>
+      <a class="image" href="screenshots/catalog-1440.png" target="_blank" rel="noopener"
+        ><img data-key="catalog" src="screenshots/catalog-1440.png" alt="Каталог вакансий"
+      /></a>
+      <footer>
+        <a href="screenshots/catalog-1440.png">Desktop</a> ·
+        <a href="screenshots/catalog-768.png">Tablet</a> ·
+        <a href="screenshots/catalog-390.png">Mobile</a>
+      </footer>
+    </article>
+    <article>
+      <h2>3. Страница вакансии</h2>
+      <a class="image" href="screenshots/detail-1440.png" target="_blank" rel="noopener"
+        ><img data-key="detail" src="screenshots/detail-1440.png" alt="Страница вакансии"
+      /></a>
+      <footer>
+        <a href="screenshots/detail-1440.png">Desktop</a> ·
+        <a href="screenshots/detail-768.png">Tablet</a> ·
+        <a href="screenshots/detail-390.png">Mobile</a>
+      </footer>
+    </article>
+    <article>
+      <h2>4. Отклики кандидатов</h2>
+      <a class="image" href="screenshots/responses-1440.png" target="_blank" rel="noopener"
+        ><img data-key="responses" src="screenshots/responses-1440.png" alt="Отклики кандидатов"
+      /></a>
+      <footer>
+        <a href="screenshots/responses-1440.png">Desktop</a> ·
+        <a href="screenshots/responses-768.png">Tablet</a> ·
+        <a href="screenshots/responses-390.png">Mobile</a>
+      </footer>
+    </article>
+    <article>
+      <h2>5. Мои отклики</h2>
+      <a class="image" href="screenshots/my-1440.png" target="_blank" rel="noopener"
+        ><img data-key="my" src="screenshots/my-1440.png" alt="Мои отклики"
+      /></a>
+      <footer>
+        <a href="screenshots/my-1440.png">Desktop</a> ·
+        <a href="screenshots/my-768.png">Tablet</a> · <a href="screenshots/my-390.png">Mobile</a>
+      </footer>
+    </article>
+    <article>
+      <h2>6. Вакансия создана</h2>
+      <a class="image" href="screenshots/created-1440.png" target="_blank" rel="noopener"
+        ><img data-key="created" src="screenshots/created-1440.png" alt="Вакансия создана"
+      /></a>
+      <footer>
+        <a href="screenshots/created-1440.png">Desktop</a> ·
+        <a href="screenshots/created-768.png">Tablet</a> ·
+        <a href="screenshots/created-390.png">Mobile</a>
+      </footer>
+    </article>
+  </main>
+  <script>
+    document.querySelectorAll("button").forEach(button =>
+      button.addEventListener("click", () => {
+        document
+          .querySelectorAll("button")
+          .forEach(b => b.setAttribute("aria-pressed", String(b === button)));
+        document.querySelector(".grid").dataset.size = button.dataset.size;
+        document.querySelectorAll("img").forEach(img => {
+          img.src = "screenshots/" + img.dataset.key + "-" + button.dataset.size + ".png";
+          img.parentElement.href = img.src;
+          img.parentElement.scrollTop = 0;
+        });
+      }),
+    );
+    if (location.search.includes("capture")) document.body.dataset.capture = "";
+  </script>
+</html>

@@ -4,7 +4,6 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   input,
   Input,
   OnDestroy,
@@ -16,6 +15,7 @@ import {
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
 import { CommonModule } from "@angular/common";
+import { A11yModule } from "@angular/cdk/a11y";
 
 /**
  * Универсальный компонент модального окна с overlay.
@@ -42,7 +42,7 @@ import { CommonModule } from "@angular/common";
   selector: "app-modal",
   templateUrl: "./modal.component.html",
   styleUrl: "./modal.component.scss",
-  imports: [CommonModule],
+  imports: [CommonModule, A11yModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent implements AfterViewInit, OnDestroy {
@@ -57,11 +57,17 @@ export class ModalComponent implements AfterViewInit, OnDestroy {
   /** Дополнительный CSS-класс для modal__body */
   bodyClass = input<string>();
 
+  /** Accessible dialog mode. Focus trap must live inside the attached portal. */
+  labelledBy = input<string>();
+  describedBy = input<string>();
+  private openTimer?: ReturnType<typeof setTimeout>;
+
   /** Состояние открытия модального окна — setter input, нельзя конвертировать в signal */
   @Input({ required: true }) set open(value: boolean) {
-    setTimeout(() => {
-      if (value) this.overlayRef?.attach(this.portal);
-      else this.overlayRef?.detach();
+    clearTimeout(this.openTimer);
+    this.openTimer = setTimeout(() => {
+      if (value && !this.overlayRef?.hasAttached()) this.overlayRef?.attach(this.portal);
+      else if (!value) this.overlayRef?.detach();
     });
   }
 
@@ -76,14 +82,25 @@ export class ModalComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     const tpl = this.modalTemplate();
     if (tpl) {
-      this.overlayRef = this.overlay.create({});
+      this.overlayRef = this.overlay.create({
+        scrollStrategy: this.labelledBy()
+          ? this.overlay.scrollStrategies.block()
+          : this.overlay.scrollStrategies.noop(),
+      });
       this.portal = new TemplatePortal(tpl, this.viewContainerRef);
     }
   }
 
   /** Очистка ресурсов при уничтожении */
   ngOnDestroy(): void {
-    this.overlayRef?.detach();
+    clearTimeout(this.openTimer);
+    this.overlayRef?.dispose();
+  }
+
+  onEscape(event: Event): void {
+    if (!this.labelledBy()) return;
+    event.stopPropagation();
+    this.openChange.emit(false);
   }
 
   /** Ссылка на шаблон модального окна */

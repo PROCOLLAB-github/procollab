@@ -1,182 +1,70 @@
-@use "styles/responsive";
+/** @format */
 
-.vacancy {
-  &__content {
-    padding: 24px;
-    margin-bottom: 20px;
-    background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
-  }
+@use "styles/components/vacancy-ui";
 
-  &__right {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-
-    &--title {
-      margin: 12px 0;
-    }
-
-    &--project {
-      position: relative;
-      padding: 48px 24px 24px;
-      background-color: var(--light-white);
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: var(--rounded-lg);
-
-      &-image {
-        position: absolute;
-        top: -70px;
-        left: 50%;
-        display: block;
-        transform: translate(-50%, 50%);
-      }
-    }
-  }
+:host {
+  display: block;
+  min-width: 0;
 }
 
-.cancel {
-  display: flex;
-  flex-direction: column;
-  width: 600px;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
+.conditions {
+  @include vacancy-ui.surface;
 
-  &__top {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  h2 {
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 21px;
+    color: var(--accent-dark);
   }
 
-  &__image {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-    justify-content: space-between;
-
-    @include responsive.apply-desktop {
-      display: flex;
-      flex-direction: row;
-      gap: 15px;
-      align-items: center;
-      justify-content: space-between;
-      margin: 30px 0;
-    }
+  dl {
+    display: grid;
+    gap: 14px;
   }
 
-  &__cross {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
+  dt {
+    margin-bottom: 2px;
+    font-size: 12px;
+    line-height: 18px;
 
-    @include responsive.apply-desktop {
-      top: 8px;
-      right: 8px;
-    }
+    @include vacancy-ui.secondary;
   }
 
-  &__title {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-}
-
-.lists {
-  &__section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    border-bottom: 0.5px solid var(--accent);
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  &__icon {
-    color: var(--accent);
-  }
-
-  &__title {
-    margin-bottom: 8px;
-    color: var(--accent);
-  }
-
-  &__item {
-    display: flex;
-    gap: 6px;
-    align-items: flex-start;
-    min-width: 0;
-
-    &--status {
-      padding: 8px;
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: var(--rounded-xl);
-    }
-
-    &--title {
-      color: var(--black);
-    }
-
-    i {
-      padding: 6px;
-      background-color: var(--light-white);
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: var(--rounded-xl);
-    }
-
-    p {
-      color: var(--accent);
-    }
-
-    span {
-      cursor: pointer;
-    }
-  }
-
-  &__item-content {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-    text-align: left;
-  }
-
-  &__label {
-    color: var(--dark-grey);
-  }
-
-  &__value {
-    min-width: 0;
+  dd {
     margin: 0;
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    font-size: 14px;
+    line-height: 21px;
   }
 
-  &__contact {
-    min-width: 0;
-    text-align: left;
-    word-break: normal;
-    overflow-wrap: anywhere;
-  }
+  &__actions {
+    @include vacancy-ui.actions;
 
-  &__responses-button {
-    display: block;
+    flex-direction: column;
+    margin-top: 20px;
 
-    ::ng-deep .button {
-      min-height: 40px;
-      padding: 10px 24px;
+    app-button {
+      flex-basis: auto;
     }
+  }
+
+  &__contacts {
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid var(--medium-grey-for-outline);
+  }
+
+  ul {
+    display: grid;
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    font-size: 13px;
+    line-height: 20px;
+
+    @include vacancy-ui.link;
   }
 }

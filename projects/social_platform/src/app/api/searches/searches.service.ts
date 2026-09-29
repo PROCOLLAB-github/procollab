@@ -1,7 +1,7 @@
 /** @format */
 
 import { DestroyRef, inject, Injectable, signal } from "@angular/core";
-import { Observable, of, take } from "rxjs";
+import { catchError, Observable, of, Subject, switchMap, take } from "rxjs";
 import { Specialization } from "@domain/specializations/specialization.model";
 import { FormGroup } from "@angular/forms";
 import { Skill } from "@domain/skills/skill.model";
@@ -22,6 +22,23 @@ export class SearchesService {
 
   readonly inlineSpecs = signal<Specialization[]>([]);
   readonly inlineSkills = signal<Skill[]>([]);
+  private readonly skillQueries = new Subject<string>();
+
+  constructor() {
+    this.skillQueries
+      .pipe(
+        // Новый запрос (включая очистку) отменяет предыдущий HTTP-запрос.
+        switchMap(query =>
+          query
+            ? this.skillsRepository
+                .getSkillsInline(query, 1000, 0)
+                .pipe(catchError(() => of({ results: [] as Skill[] })))
+            : of({ results: [] as Skill[] }),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(({ results }) => this.inlineSkills.set(results));
+  }
 
   onSelectSpec(form: FormGroup, speciality: Specialization): void {
     form.patchValue({ speciality: speciality.name });
@@ -43,7 +60,7 @@ export class SearchesService {
   }
 
   onToggleSkill(toggledSkill: Skill, form: FormGroup): void {
-    const { skills }: { skills: Skill[] } = form.value;
+    const skills: Skill[] = form.value.skills ?? [];
 
     const isPresent = skills.some(skill => skill.id === toggledSkill.id);
 
@@ -55,7 +72,7 @@ export class SearchesService {
   }
 
   onAddSkill(newSkill: Skill, form: FormGroup): void {
-    const { skills }: { skills: Skill[] } = form.value;
+    const skills: Skill[] = form.value.skills ?? [];
 
     const isPresent = skills.some(skill => skill.id === newSkill.id);
 
@@ -65,14 +82,12 @@ export class SearchesService {
   }
 
   onRemoveSkill(oddSkill: Skill, form: FormGroup): void {
-    const { skills }: { skills: Skill[] } = form.value;
+    const skills: Skill[] = form.value.skills ?? [];
 
     form.patchValue({ skills: skills.filter(skill => skill.id !== oddSkill.id) });
   }
 
   onSearchSkill(query: string): void {
-    this.skillsRepository.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
-      this.inlineSkills.set(results);
-    });
+    this.skillQueries.next(query.trim());
   }
 }

@@ -1,0 +1,5724 @@
+{
+  "checks": 399,
+  "errors": [],
+  "measurements": [
+    {
+      "state": "project",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 256.5,
+          "y": 206,
+          "right": 810.5,
+          "bottom": 462,
+          "height": 256,
+          "width": 554
+        },
+        {
+          "x": 826.5,
+          "y": 206,
+          "right": 1380.5,
+          "bottom": 462,
+          "height": 256,
+          "width": 554
+        },
+        {
+          "x": 256.5,
+          "y": 478,
+          "right": 810.5,
+          "bottom": 676,
+          "height": 198,
+          "width": 554
+        },
+        {
+          "x": 826.5,
+          "y": 478,
+          "right": 1380.5,
+          "bottom": 676,
+          "height": 198,
+          "width": 554
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 256.5,
+          "y": 294,
+          "right": 671.5,
+          "bottom": 806,
+          "height": 512,
+          "width": 415
+        },
+        {
+          "x": 691.5,
+          "y": 294,
+          "right": 1106.5,
+          "bottom": 806,
+          "height": 512,
+          "width": 415
+        },
+        {
+          "x": 256.5,
+          "y": 826,
+          "right": 671.5,
+          "bottom": 1242,
+          "height": 416,
+          "width": 415
+        },
+        {
+          "x": 691.5,
+          "y": 826,
+          "right": 1106.5,
+          "bottom": 1242,
+          "height": 416,
+          "width": 415
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-empty",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 256.5,
+        "y": 429,
+        "right": 992.5,
+        "bottom": 925,
+        "height": 496,
+        "width": 736
+      },
+      "right": {
+        "x": 1012.5,
+        "y": 429,
+        "right": 1380.5,
+        "bottom": 925,
+        "height": 496,
+        "width": 368
+      }
+    },
+    {
+      "state": "responses",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 336.5,
+          "y": 104,
+          "right": 1088.5,
+          "bottom": 471,
+          "height": 367,
+          "width": 752
+        },
+        {
+          "x": 336.5,
+          "y": 487,
+          "right": 1088.5,
+          "bottom": 724,
+          "height": 237,
+          "width": 752
+        },
+        {
+          "x": 336.5,
+          "y": 740,
+          "right": 1088.5,
+          "bottom": 1141,
+          "height": 401,
+          "width": 752
+        }
+      ],
+      "dialog": {
+        "x": 312.5,
+        "y": 24,
+        "right": 1112.5,
+        "bottom": 976,
+        "height": 952,
+        "width": 800
+      },
+      "left": {
+        "x": 256.5,
+        "y": 429,
+        "right": 992.5,
+        "bottom": 925,
+        "height": 496,
+        "width": 736
+      },
+      "right": {
+        "x": 1012.5,
+        "y": 429,
+        "right": 1380.5,
+        "bottom": 925,
+        "height": 496,
+        "width": 368
+      }
+    },
+    {
+      "state": "detail-empty",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 256.5,
+        "y": 429,
+        "right": 992.5,
+        "bottom": 925,
+        "height": 496,
+        "width": 736
+      },
+      "right": {
+        "x": 1012.5,
+        "y": 429,
+        "right": 1380.5,
+        "bottom": 925,
+        "height": 496,
+        "width": 368
+      }
+    },
+    {
+      "state": "my",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 256.5,
+          "y": 228,
+          "right": 1380.5,
+          "bottom": 514,
+          "height": 286,
+          "width": 1124
+        },
+        {
+          "x": 256.5,
+          "y": 530,
+          "right": 1380.5,
+          "bottom": 742,
+          "height": 212,
+          "width": 1124
+        },
+        {
+          "x": 256.5,
+          "y": 758,
+          "right": 1380.5,
+          "bottom": 1151,
+          "height": 393,
+          "width": 1124
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "my-empty",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "created",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 878.671875,
+          "y": 94,
+          "right": 1380.5,
+          "bottom": 350,
+          "height": 256,
+          "width": 501.828125
+        },
+        {
+          "x": 878.671875,
+          "y": 362,
+          "right": 1380.5,
+          "bottom": 516,
+          "height": 154,
+          "width": 501.828125
+        },
+        {
+          "x": 878.671875,
+          "y": 528,
+          "right": 1380.5,
+          "bottom": 726,
+          "height": 198,
+          "width": 501.828125
+        },
+        {
+          "x": 878.671875,
+          "y": 738,
+          "right": 1380.5,
+          "bottom": 936,
+          "height": 198,
+          "width": 501.828125
+        },
+        {
+          "x": 878.671875,
+          "y": 948,
+          "right": 1380.5,
+          "bottom": 1182,
+          "height": 234,
+          "width": 501.828125
+        }
+      ],
+      "dialog": {
+        "x": 452.5,
+        "y": 377.5,
+        "right": 972.5,
+        "bottom": 622.5,
+        "height": 245,
+        "width": 520
+      },
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project-stress",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 256.5,
+          "y": 206,
+          "right": 810.5,
+          "bottom": 762,
+          "height": 556,
+          "width": 554
+        },
+        {
+          "x": 826.5,
+          "y": 206,
+          "right": 1380.5,
+          "bottom": 762,
+          "height": 556,
+          "width": 554
+        },
+        {
+          "x": 256.5,
+          "y": 778,
+          "right": 810.5,
+          "bottom": 1048,
+          "height": 270,
+          "width": 554
+        },
+        {
+          "x": 826.5,
+          "y": 778,
+          "right": 1380.5,
+          "bottom": 1048,
+          "height": 270,
+          "width": 554
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-stress",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 256.5,
+          "y": 294,
+          "right": 671.5,
+          "bottom": 914,
+          "height": 620,
+          "width": 415
+        },
+        {
+          "x": 691.5,
+          "y": 294,
+          "right": 1106.5,
+          "bottom": 914,
+          "height": 620,
+          "width": 415
+        },
+        {
+          "x": 256.5,
+          "y": 934,
+          "right": 671.5,
+          "bottom": 1458,
+          "height": 524,
+          "width": 415
+        },
+        {
+          "x": 691.5,
+          "y": 934,
+          "right": 1106.5,
+          "bottom": 1458,
+          "height": 524,
+          "width": 415
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail-stress",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 256.5,
+        "y": 560,
+        "right": 992.5,
+        "bottom": 1056,
+        "height": 496,
+        "width": 736
+      },
+      "right": {
+        "x": 1012.5,
+        "y": 560,
+        "right": 1380.5,
+        "bottom": 1056,
+        "height": 496,
+        "width": 368
+      }
+    },
+    {
+      "state": "my-stress",
+      "width": 1440,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 256.5,
+          "y": 228,
+          "right": 1380.5,
+          "bottom": 829,
+          "height": 601,
+          "width": 1124
+        },
+        {
+          "x": 256.5,
+          "y": 845,
+          "right": 1380.5,
+          "bottom": 1173,
+          "height": 328,
+          "width": 1124
+        },
+        {
+          "x": 256.5,
+          "y": 1189,
+          "right": 1380.5,
+          "bottom": 1768,
+          "height": 579,
+          "width": 1124
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 237,
+          "right": 737,
+          "bottom": 457,
+          "height": 220,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 473,
+          "right": 737,
+          "bottom": 627,
+          "height": 154,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 643,
+          "right": 737,
+          "bottom": 841,
+          "height": 198,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 857,
+          "right": 737,
+          "bottom": 1055,
+          "height": 198,
+          "width": 721
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 325,
+          "right": 737,
+          "bottom": 723,
+          "height": 398,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 743,
+          "right": 737,
+          "bottom": 1059,
+          "height": 316,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1079,
+          "right": 737,
+          "bottom": 1477,
+          "height": 398,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1497,
+          "right": 737,
+          "bottom": 1895,
+          "height": 398,
+          "width": 721
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-empty",
+      "width": 768,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail",
+      "width": 768,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 487,
+        "right": 737,
+        "bottom": 830.984375,
+        "height": 343.984375,
+        "width": 721
+      },
+      "right": {
+        "x": 16,
+        "y": 850.984375,
+        "right": 737,
+        "bottom": 1346.984375,
+        "height": 496,
+        "width": 721
+      }
+    },
+    {
+      "state": "responses",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 32.5,
+          "y": 104,
+          "right": 720.5,
+          "bottom": 471,
+          "height": 367,
+          "width": 688
+        },
+        {
+          "x": 32.5,
+          "y": 487,
+          "right": 720.5,
+          "bottom": 724,
+          "height": 237,
+          "width": 688
+        },
+        {
+          "x": 32.5,
+          "y": 740,
+          "right": 720.5,
+          "bottom": 1141,
+          "height": 401,
+          "width": 688
+        }
+      ],
+      "dialog": {
+        "x": 8.5,
+        "y": 24,
+        "right": 744.5,
+        "bottom": 976,
+        "height": 952,
+        "width": 736
+      },
+      "left": {
+        "x": 16,
+        "y": 84,
+        "right": 737,
+        "bottom": 427.984375,
+        "height": 343.984375,
+        "width": 721
+      },
+      "right": {
+        "x": 16,
+        "y": 447.984375,
+        "right": 737,
+        "bottom": 943.984375,
+        "height": 496,
+        "width": 721
+      }
+    },
+    {
+      "state": "detail-empty",
+      "width": 768,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 228,
+        "right": 737,
+        "bottom": 428,
+        "height": 200,
+        "width": 721
+      },
+      "right": {
+        "x": 16,
+        "y": 448,
+        "right": 737,
+        "bottom": 944,
+        "height": 496,
+        "width": 721
+      }
+    },
+    {
+      "state": "my",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 259,
+          "right": 737,
+          "bottom": 590,
+          "height": 331,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 606,
+          "right": 737,
+          "bottom": 842,
+          "height": 236,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 858,
+          "right": 737,
+          "bottom": 1275,
+          "height": 417,
+          "width": 721
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "my-empty",
+      "width": 768,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "created",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 258.75,
+          "right": 737,
+          "bottom": 478.75,
+          "height": 220,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 490.75,
+          "right": 737,
+          "bottom": 644.75,
+          "height": 154,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 656.75,
+          "right": 737,
+          "bottom": 854.75,
+          "height": 198,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 866.75,
+          "right": 737,
+          "bottom": 1064.75,
+          "height": 198,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1076.75,
+          "right": 737,
+          "bottom": 1274.75,
+          "height": 198,
+          "width": 721
+        }
+      ],
+      "dialog": {
+        "x": 116.5,
+        "y": 377.5,
+        "right": 636.5,
+        "bottom": 622.5,
+        "height": 245,
+        "width": 520
+      },
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project-stress",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 237,
+          "right": 737,
+          "bottom": 703,
+          "height": 466,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 719,
+          "right": 737,
+          "bottom": 873,
+          "height": 154,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 889,
+          "right": 737,
+          "bottom": 1141,
+          "height": 252,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1157,
+          "right": 737,
+          "bottom": 1355,
+          "height": 198,
+          "width": 721
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-stress",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 325,
+          "right": 737,
+          "bottom": 891,
+          "height": 566,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 911,
+          "right": 737,
+          "bottom": 1245,
+          "height": 334,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1265,
+          "right": 737,
+          "bottom": 1735,
+          "height": 470,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1755,
+          "right": 737,
+          "bottom": 2171,
+          "height": 416,
+          "width": 721
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail-stress",
+      "width": 768,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 714,
+        "right": 737,
+        "bottom": 1147.984375,
+        "height": 433.984375,
+        "width": 721
+      },
+      "right": {
+        "x": 16,
+        "y": 1167.984375,
+        "right": 737,
+        "bottom": 1663.984375,
+        "height": 496,
+        "width": 721
+      }
+    },
+    {
+      "state": "my-stress",
+      "width": 768,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 259,
+          "right": 737,
+          "bottom": 994,
+          "height": 735,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1010,
+          "right": 737,
+          "bottom": 1454,
+          "height": 444,
+          "width": 721
+        },
+        {
+          "x": 16,
+          "y": 1470,
+          "right": 737,
+          "bottom": 2181,
+          "height": 711,
+          "width": 721
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 262,
+          "right": 359,
+          "bottom": 674,
+          "height": 412,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 690,
+          "right": 359,
+          "bottom": 920,
+          "height": 230,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 936,
+          "right": 359,
+          "bottom": 1228,
+          "height": 292,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1244,
+          "right": 359,
+          "bottom": 1518,
+          "height": 274,
+          "width": 343
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 350,
+          "right": 359,
+          "bottom": 924,
+          "height": 574,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 944,
+          "right": 359,
+          "bottom": 1322,
+          "height": 378,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1342,
+          "right": 359,
+          "bottom": 1776,
+          "height": 434,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1796,
+          "right": 359,
+          "bottom": 2212,
+          "height": 416,
+          "width": 343
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-empty",
+      "width": 390,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail",
+      "width": 390,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 608,
+        "right": 359,
+        "bottom": 1184.765625,
+        "height": 576.765625,
+        "width": 343
+      },
+      "right": {
+        "x": 16,
+        "y": 1204.765625,
+        "right": 359,
+        "bottom": 1700.765625,
+        "height": 496,
+        "width": 343
+      }
+    },
+    {
+      "state": "responses",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 24.5,
+          "y": 104,
+          "right": 350.5,
+          "bottom": 722,
+          "height": 618,
+          "width": 326
+        },
+        {
+          "x": 24.5,
+          "y": 738,
+          "right": 350.5,
+          "bottom": 1140,
+          "height": 402,
+          "width": 326
+        },
+        {
+          "x": 24.5,
+          "y": 1156,
+          "right": 350.5,
+          "bottom": 1701,
+          "height": 545,
+          "width": 326
+        }
+      ],
+      "dialog": {
+        "x": 8.5,
+        "y": 32,
+        "right": 366.5,
+        "bottom": 968,
+        "height": 936,
+        "width": 358
+      },
+      "left": {
+        "x": 16,
+        "y": -149,
+        "right": 359,
+        "bottom": 427.765625,
+        "height": 576.765625,
+        "width": 343
+      },
+      "right": {
+        "x": 16,
+        "y": 447.765625,
+        "right": 359,
+        "bottom": 943.765625,
+        "height": 496,
+        "width": 343
+      }
+    },
+    {
+      "state": "detail-empty",
+      "width": 390,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 228,
+        "right": 359,
+        "bottom": 428,
+        "height": 200,
+        "width": 343
+      },
+      "right": {
+        "x": 16,
+        "y": 448,
+        "right": 359,
+        "bottom": 944,
+        "height": 496,
+        "width": 343
+      }
+    },
+    {
+      "state": "my",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 284,
+          "right": 359,
+          "bottom": 762,
+          "height": 478,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 778,
+          "right": 359,
+          "bottom": 1119,
+          "height": 341,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1135,
+          "right": 359,
+          "bottom": 1636,
+          "height": 501,
+          "width": 343
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "my-empty",
+      "width": 390,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "created",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 161.75,
+          "right": 359,
+          "bottom": 573.75,
+          "height": 412,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 585.75,
+          "right": 359,
+          "bottom": 815.75,
+          "height": 230,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 827.75,
+          "right": 359,
+          "bottom": 1119.75,
+          "height": 292,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1131.75,
+          "right": 359,
+          "bottom": 1405.75,
+          "height": 274,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1417.75,
+          "right": 359,
+          "bottom": 1745.75,
+          "height": 328,
+          "width": 343
+        }
+      ],
+      "dialog": {
+        "x": 8.5,
+        "y": 377.5,
+        "right": 366.5,
+        "bottom": 622.5,
+        "height": 245,
+        "width": 358
+      },
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project-stress",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 262,
+          "right": 359,
+          "bottom": 1046,
+          "height": 784,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1062,
+          "right": 359,
+          "bottom": 1292,
+          "height": 230,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1308,
+          "right": 359,
+          "bottom": 1708,
+          "height": 400,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1724,
+          "right": 359,
+          "bottom": 1998,
+          "height": 274,
+          "width": 343
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-stress",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 350,
+          "right": 359,
+          "bottom": 1032,
+          "height": 682,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1052,
+          "right": 359,
+          "bottom": 1430,
+          "height": 378,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1450,
+          "right": 359,
+          "bottom": 1992,
+          "height": 542,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 2012,
+          "right": 359,
+          "bottom": 2428,
+          "height": 416,
+          "width": 343
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail-stress",
+      "width": 390,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 1100,
+        "right": 359,
+        "bottom": 1784.765625,
+        "height": 684.765625,
+        "width": 343
+      },
+      "right": {
+        "x": 16,
+        "y": 1804.765625,
+        "right": 359,
+        "bottom": 2300.765625,
+        "height": 496,
+        "width": 343
+      }
+    },
+    {
+      "state": "my-stress",
+      "width": 390,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 284,
+          "right": 359,
+          "bottom": 1327,
+          "height": 1043,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 1343,
+          "right": 359,
+          "bottom": 2080,
+          "height": 737,
+          "width": 343
+        },
+        {
+          "x": 16,
+          "y": 2096,
+          "right": 359,
+          "bottom": 3139,
+          "height": 1043,
+          "width": 343
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 262,
+          "right": 289,
+          "bottom": 692,
+          "height": 430,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 708,
+          "right": 289,
+          "bottom": 938,
+          "height": 230,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 954,
+          "right": 289,
+          "bottom": 1264,
+          "height": 310,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1280,
+          "right": 289,
+          "bottom": 1554,
+          "height": 274,
+          "width": 273
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 350,
+          "right": 289,
+          "bottom": 942,
+          "height": 592,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 962,
+          "right": 289,
+          "bottom": 1340,
+          "height": 378,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1360,
+          "right": 289,
+          "bottom": 1812,
+          "height": 452,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1832,
+          "right": 289,
+          "bottom": 2248,
+          "height": 416,
+          "width": 273
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-empty",
+      "width": 320,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail",
+      "width": 320,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 656,
+        "right": 289,
+        "bottom": 1322.15625,
+        "height": 666.15625,
+        "width": 273
+      },
+      "right": {
+        "x": 16,
+        "y": 1342.15625,
+        "right": 289,
+        "bottom": 1838.15625,
+        "height": 496,
+        "width": 273
+      }
+    },
+    {
+      "state": "responses",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 24.5,
+          "y": 122,
+          "right": 280.5,
+          "bottom": 847,
+          "height": 725,
+          "width": 256
+        },
+        {
+          "x": 24.5,
+          "y": 863,
+          "right": 280.5,
+          "bottom": 1283,
+          "height": 420,
+          "width": 256
+        },
+        {
+          "x": 24.5,
+          "y": 1299,
+          "right": 280.5,
+          "bottom": 1888,
+          "height": 589,
+          "width": 256
+        }
+      ],
+      "dialog": {
+        "x": 8.5,
+        "y": 32,
+        "right": 296.5,
+        "bottom": 968,
+        "height": 936,
+        "width": 288
+      },
+      "left": {
+        "x": 16,
+        "y": -238,
+        "right": 289,
+        "bottom": 428.15625,
+        "height": 666.15625,
+        "width": 273
+      },
+      "right": {
+        "x": 16,
+        "y": 448.15625,
+        "right": 289,
+        "bottom": 944.15625,
+        "height": 496,
+        "width": 273
+      }
+    },
+    {
+      "state": "detail-empty",
+      "width": 320,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 228,
+        "right": 289,
+        "bottom": 428,
+        "height": 200,
+        "width": 273
+      },
+      "right": {
+        "x": 16,
+        "y": 448,
+        "right": 289,
+        "bottom": 944,
+        "height": 496,
+        "width": 273
+      }
+    },
+    {
+      "state": "my",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 284,
+          "right": 289,
+          "bottom": 804,
+          "height": 520,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 820,
+          "right": 289,
+          "bottom": 1161,
+          "height": 341,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1177,
+          "right": 289,
+          "bottom": 1678,
+          "height": 501,
+          "width": 273
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "my-empty",
+      "width": 320,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "created",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 161.75,
+          "right": 289,
+          "bottom": 591.75,
+          "height": 430,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 603.75,
+          "right": 289,
+          "bottom": 833.75,
+          "height": 230,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 845.75,
+          "right": 289,
+          "bottom": 1155.75,
+          "height": 310,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1167.75,
+          "right": 289,
+          "bottom": 1441.75,
+          "height": 274,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1453.75,
+          "right": 289,
+          "bottom": 1799.75,
+          "height": 346,
+          "width": 273
+        }
+      ],
+      "dialog": {
+        "x": 8.5,
+        "y": 367,
+        "right": 296.5,
+        "bottom": 633,
+        "height": 266,
+        "width": 288
+      },
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "project-stress",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 262,
+          "right": 289,
+          "bottom": 1196,
+          "height": 934,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1212,
+          "right": 289,
+          "bottom": 1442,
+          "height": 230,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1458,
+          "right": 289,
+          "bottom": 1912,
+          "height": 454,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1928,
+          "right": 289,
+          "bottom": 2202,
+          "height": 274,
+          "width": 273
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "catalog-stress",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 350,
+          "right": 289,
+          "bottom": 1086,
+          "height": 736,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1106,
+          "right": 289,
+          "bottom": 1484,
+          "height": 378,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1504,
+          "right": 289,
+          "bottom": 2100,
+          "height": 596,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 2120,
+          "right": 289,
+          "bottom": 2536,
+          "height": 416,
+          "width": 273
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    },
+    {
+      "state": "detail-stress",
+      "width": 320,
+      "overflow": 0,
+      "cards": [],
+      "dialog": null,
+      "left": {
+        "x": 16,
+        "y": 1298,
+        "right": 289,
+        "bottom": 2108.15625,
+        "height": 810.15625,
+        "width": 273
+      },
+      "right": {
+        "x": 16,
+        "y": 2128.15625,
+        "right": 289,
+        "bottom": 2624.15625,
+        "height": 496,
+        "width": 273
+      }
+    },
+    {
+      "state": "my-stress",
+      "width": 320,
+      "overflow": 0,
+      "cards": [
+        {
+          "x": 16,
+          "y": 284,
+          "right": 289,
+          "bottom": 1527,
+          "height": 1243,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 1543,
+          "right": 289,
+          "bottom": 2420,
+          "height": 877,
+          "width": 273
+        },
+        {
+          "x": 16,
+          "y": 2436,
+          "right": 289,
+          "bottom": 3679,
+          "height": 1243,
+          "width": 273
+        }
+      ],
+      "dialog": null,
+      "left": null,
+      "right": null
+    }
+  ],
+  "contrastResults": [
+    {
+      "state": "project",
+      "samples": [
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +8",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Редактировать",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Удалить",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "QA",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Навыки не указаны",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Редактировать",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Удалить",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Дизайнер",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Редактировать",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Удалить",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Аналитик",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Редактировать",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Удалить",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        }
+      ]
+    },
+    {
+      "state": "catalog",
+      "samples": [
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +8",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "посмотреть отклики",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "QA",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Навыки не указаны",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "откликнуться",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Дизайнер",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Аналитик",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        }
+      ]
+    },
+    {
+      "state": "catalog-empty",
+      "samples": []
+    },
+    {
+      "state": "detail",
+      "samples": [
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Описание вакансии",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Навыки",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "SCSS",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "JavaScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Figma",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Git",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "CSS",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +3",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Условия и отклики",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Город",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Москва",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Формат работы",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Удаленная работа",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Опыт",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "От 1 года до 3 лет",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "График",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Гибкий график",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Зарплата",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "120 000 рублей",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "посмотреть отклики",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Контакты проекта",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        }
+      ]
+    },
+    {
+      "state": "responses",
+      "samples": [
+        {
+          "text": "Отклики на вакансию",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 12.10488152194292
+        },
+        {
+          "text": "Анна Смирнова",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ожидает решения",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Отклик от 29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "SCSS",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "JavaScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Figma",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +5",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "отклонить",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "принять",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Анна Смирнова",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Принят",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Отклик от 29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "SCSS",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "JavaScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Figma",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +5",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Сопроводительное письмо не добавлено",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Анна Смирнова",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Отклонён",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            244,
+            226,
+            231
+          ],
+          "ratio": 10.155293660371566
+        },
+        {
+          "text": "Отклик от 29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "SCSS",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "JavaScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Figma",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +5",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        }
+      ]
+    },
+    {
+      "state": "detail-empty",
+      "samples": [
+        {
+          "text": "Frontend-разработчик Angular",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Описание вакансии",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Навыки",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Навыки не указаны",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Условия и отклики",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Город",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Не указан",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Формат работы",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Не указан",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Опыт",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "От 1 года до 3 лет",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "График",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Не указан",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Зарплата",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "По договоренности",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "посмотреть отклики",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Контакты проекта",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        }
+      ]
+    },
+    {
+      "state": "my",
+      "samples": [
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Отклик от 29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "На рассмотрении",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "Сопроводительное письмо",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Отклик от 29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Принят",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Сопроводительное письмо",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Сопроводительное письмо не добавлено",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Отклик от 29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Отклонён",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            244,
+            226,
+            231
+          ],
+          "ratio": 10.155293660371566
+        },
+        {
+          "text": "Сопроводительное письмо",
+          "foreground": [
+            123,
+            99,
+            179
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.908994838122275
+        },
+        {
+          "text": "Хочу участвовать в развитии PROCOLLAB. Два года работаю с An",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        }
+      ]
+    },
+    {
+      "state": "my-empty",
+      "samples": []
+    },
+    {
+      "state": "created",
+      "samples": []
+    },
+    {
+      "state": "primary-hover",
+      "samples": [
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +8",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "посмотреть отклики",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            151,
+            100,
+            186
+          ],
+          "ratio": 4.150256652519602
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "QA",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Навыки не указаны",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "откликнуться",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Дизайнер",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Аналитик",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        }
+      ]
+    },
+    {
+      "state": "skills-hover",
+      "samples": [
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Frontend-разработчик для развития образовательной платформы ",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Angular",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "Ещё +8",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            232,
+            224,
+            250
+          ],
+          "ratio": 9.911494258825572
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "посмотреть отклики",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            151,
+            100,
+            187
+          ],
+          "ratio": 4.142960707008987
+        },
+        {
+          "text": "Активна",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "QA",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Навыки не указаны",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "откликнуться",
+          "foreground": [
+            250,
+            250,
+            250
+          ],
+          "background": [
+            138,
+            99,
+            230
+          ],
+          "ratio": 4.017445405627107
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Дизайнер",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Проектирование пользовательских интерфейсов",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        },
+        {
+          "text": "Закрыта",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            249,
+            249,
+            249
+          ],
+          "ratio": 12.000593682945214
+        },
+        {
+          "text": "29.09.2026",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "Аналитик",
+          "foreground": [
+            51,
+            51,
+            51
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.63465434445799
+        },
+        {
+          "text": "Ищем: Разработчик",
+          "foreground": [
+            130,
+            126,
+            128
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.00365314113804
+        },
+        {
+          "text": "TypeScript",
+          "foreground": [
+            41,
+            115,
+            115
+          ],
+          "background": [
+            227,
+            240,
+            232
+          ],
+          "ratio": 4.716605957832591
+        },
+        {
+          "text": "подробнее",
+          "foreground": [
+            138,
+            99,
+            230
+          ],
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 4.193269794158393
+        }
+      ]
+    }
+  ],
+  "contrastPassed": false,
+  "contrastLimitations": [
+    {
+      "state": "project",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "project",
+      "text": "Редактировать",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "project",
+      "text": "Навыки не указаны",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "project",
+      "text": "Редактировать",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "project",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "project",
+      "text": "Редактировать",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "project",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "project",
+      "text": "Редактировать",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "catalog",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "catalog",
+      "text": "посмотреть отклики",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "catalog",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "Навыки не указаны",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "catalog",
+      "text": "откликнуться",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "catalog",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "catalog",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "catalog",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "detail",
+      "text": "Город",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail",
+      "text": "Формат работы",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail",
+      "text": "Опыт",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail",
+      "text": "График",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail",
+      "text": "Зарплата",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail",
+      "text": "посмотреть отклики",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "responses",
+      "text": "Отклик от 29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "responses",
+      "text": "принять",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "responses",
+      "text": "Отклик от 29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "responses",
+      "text": "Отклик от 29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "Навыки не указаны",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "Город",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "Формат работы",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "Опыт",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "График",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "Зарплата",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "detail-empty",
+      "text": "посмотреть отклики",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "my",
+      "text": "Отклик от 29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "my",
+      "text": "Отклик от 29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "my",
+      "text": "Отклик от 29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "primary-hover",
+      "text": "посмотреть отклики",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        151,
+        100,
+        186
+      ],
+      "ratio": 4.150256652519602
+    },
+    {
+      "state": "primary-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "Навыки не указаны",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "primary-hover",
+      "text": "откликнуться",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "primary-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "primary-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "primary-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "skills-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "skills-hover",
+      "text": "посмотреть отклики",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        151,
+        100,
+        187
+      ],
+      "ratio": 4.142960707008987
+    },
+    {
+      "state": "skills-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "Навыки не указаны",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "skills-hover",
+      "text": "откликнуться",
+      "foreground": [
+        250,
+        250,
+        250
+      ],
+      "background": [
+        138,
+        99,
+        230
+      ],
+      "ratio": 4.017445405627107
+    },
+    {
+      "state": "skills-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    },
+    {
+      "state": "skills-hover",
+      "text": "29.09.2026",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "Ищем: Разработчик",
+      "foreground": [
+        130,
+        126,
+        128
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.00365314113804
+    },
+    {
+      "state": "skills-hover",
+      "text": "подробнее",
+      "foreground": [
+        138,
+        99,
+        230
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 4.193269794158393
+    }
+  ],
+  "note": "Глобальные токены сохранены. Контраст измерен, полного WCAG AA PASS нет: основной CTA, outline и вторичный текст имеют ограничения."
+}

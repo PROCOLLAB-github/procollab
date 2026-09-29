@@ -1,14 +1,12 @@
 /** @format */
 
-import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
-import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { UserLinksPipe, TruncatePipe, CapitalizePipe, SalaryTransformPipe } from "@corelib";
+import { ButtonComponent } from "@ui/primitives";
+import { UserLinksPipe, CapitalizePipe, SalaryTransformPipe } from "@corelib";
 import { RouterModule } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
-import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutes } from "@api/paths/app-routes";
+import { VacancyStatusComponent } from "@ui/widgets/vacancy-status/vacancy-status.component";
 
 /** Правая колонка детали вакансии. */
 @Component({
@@ -16,15 +14,11 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./vacancies-right-side.component.html",
   styleUrl: "./vacancies-right-side.component.scss",
   imports: [
-    CommonModule,
-    AvatarComponent,
+    VacancyStatusComponent,
     ButtonComponent,
-    ReactiveFormsModule,
     RouterModule,
     UserLinksPipe,
-    TruncatePipe,
     CapitalizePipe,
-    IconComponent,
     SalaryTransformPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,19 +40,6 @@ export class VacanciesRightSideComponent {
         return "Отклик отклонён";
       default:
         return "Отклик отправлен";
-    }
-  }
-
-  protected responseStatusColor(
-    status: Vacancy["responseStatus"] | undefined,
-  ): "gold" | "green" | "red" {
-    switch (status) {
-      case "accepted":
-        return "green";
-      case "rejected":
-        return "red";
-      default:
-        return "gold";
     }
   }
 

@@ -1,11 +1,49 @@
 <!-- @format -->
 
-@if (vacancy()) {
-  <div class="detail">
-    <app-back [namespace]="vacancy()!.role" path="/office/vacancies/all"></app-back>
-  </div>
-
-  <div class="detail__body">
-    <router-outlet></router-outlet>
-  </div>
+@if (vacancy(); as item) {
+  <nav class="detail__back" aria-label="Назад">
+    <app-back
+      #back
+      role="link"
+      tabindex="0"
+      (keydown.enter)="back.onClick()"
+      namespace="Вакансии"
+      path="/office/vacancies/all"
+    ></app-back>
+    <h1>Вакансия</h1>
+  </nav>
+  <header class="detail__header">
+    <div class="detail__heading">
+      <h2>{{ item.role }}</h2>
+      <app-vacancy-status
+        [label]="item.isActive ? 'Активна' : 'Закрыта'"
+        [tone]="item.isActive ? 'success' : 'neutral'"
+      ></app-vacancy-status>
+    </div>
+    @if (item.project; as project) {
+      <a class="detail__project" [routerLink]="AppRoutes.projects.detail(project.id)">
+        <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
+        <span>Проект: {{ project.name }}</span>
+      </a>
+    }
+    @if (item.specialization) {
+      <p class="detail__specialization">Ищем: {{ item.specialization }}</p>
+    }
+    <ul class="detail__conditions" aria-label="Основные условия">
+      <li>
+        {{
+          !item.salary || +item.salary === 0
+            ? "По договоренности"
+            : (item.salary | salaryTransform) + " ₽"
+        }}
+      </li>
+      @if (item.workFormat) {
+        <li>{{ item.workFormat | capitalize }}</li>
+      }
+      @if (item.city) {
+        <li>{{ item.city | capitalize }}</li>
+      }
+    </ul>
+  </header>
+  <div class="detail__body"><router-outlet></router-outlet></div>
 }
