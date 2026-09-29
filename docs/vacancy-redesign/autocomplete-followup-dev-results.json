@@ -17,10 +17,7 @@
           "url": "http://127.0.0.1:4360/chunk-HG2YEWYN.js"
         }
       ],
-      "fields": [
-        "Angular",
-        "Front-end"
-      ]
+      "fields": ["Angular", "Front-end"]
     },
     {
       "scenario": "desktop and mobile 390/320 reset, reselect, Back/Forward, rapid fullname",

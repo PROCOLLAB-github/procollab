@@ -1,17 +1,102 @@
+/** @format */
 
-const area=await figma.getNodeByIdAsync("51:1752");const source=await figma.getNodeByIdAsync("8:538");const modal=mark(source.clone());area.appendChild(modal);modal.name="Proposed / Modal / Vacancy created";modal.x=1640;modal.y=360;modal.description="PROPOSED variant derived from Modal / Confirmation 8:538. The current Angular VacancyCreatedDialogComponent uses stacked full-width actions: Primary / Перейти к вакансиям and Outline / Остаться в проекте. The original Confirmation stays unchanged; Figma instance-only layout direction overrides did not persist. Header, content and nested Button instances are reused. Canonical Mont, Inter preview.";
-const titleText=modal.children.find(n=>n.name==="Header").children.find(n=>n.type==="TEXT");
-titleText.characters="Вакансия создана";titleText.componentPropertyReferences={characters:modal.addComponentProperty("Title","TEXT",titleText.characters)};
-const bodyText=modal.children.find(n=>n.type==="TEXT");bodyText.characters="Теперь управлять вакансией и работать с откликами можно во вкладке „Вакансии“.";bodyText.componentPropertyReferences={characters:modal.addComponentProperty("Content","TEXT",bodyText.characters)};
-for(const ch of modal.children)ch.layoutSizingHorizontal="FILL";
-const act=modal.children.find(n=>n.name==="Actions");act.layoutMode="VERTICAL";act.primaryAxisAlignItems="MIN";act.counterAxisAlignItems="MIN";bind(act,{itemSpacing:"space/8"});act.clipsContent=false;
-const buttons=act.children.filter(n=>n.type==="INSTANCE");buttons[0].swapComponent(sources["5:233"]);prop(buttons[0],"Label","Перейти к вакансиям");buttons[1].swapComponent(sources["5:265"]);prop(buttons[1],"Label","Остаться в проекте");
-for(const b of act.children){b.resize(472,40);b.layoutSizingHorizontal="FILL";b.layoutSizingVertical="FIXED";b.minHeight=40;}act.layoutSizingVertical="HUG";act.layoutSizingHorizontal="FILL";modal.layoutSizingVertical="HUG";
-for(const id of ["56:3187","56:3219"]){const n=await figma.getNodeByIdAsync(id);const w=n.width;n.swapComponent(modal);n.name="Modal / Vacancy created / proposed stacked actions";n.resize(w,n.height);n.layoutSizingVertical="HUG";prop(n,"Title","Вакансия создана");prop(n,"Content","Теперь управлять вакансией и работать с откликами можно во вкладке „Вакансии“.");}
-const section=await figma.getNodeByIdAsync("51:1751");const state=await figma.getNodeByIdAsync("58:3086");const badgesChanged=[];
-for(const b of state.findAll(n=>n.type==="INSTANCE"&&n.name.startsWith("Badge /"))){const value=Object.values(b.componentProperties).find(p=>p.type==="TEXT")?.value;if(typeof value==="string"&&value.length<24){const w=Math.min(b.parent.width,value.length*8+30);b.resize(w,b.height);b.layoutSizingVertical="HUG";badgesChanged.push(b.id);}}
-const changed=[];
-for(const id of ["56:2148","56:2472"]){const root=await figma.getNodeByIdAsync(id);for(const row of root.findAll(n=>n.type==="FRAME"&&n.name==="Card row"))for(const n of row.children){n.layoutSizingVertical="HUG";const card=n.children[0];card.layoutSizingVertical="HUG";const slot=card.findOne(x=>x.type==="SLOT");slot.layoutSizingVertical="HUG";const content=slot.children[0];content.layoutSizingVertical="HUG";content.primaryAxisAlignItems="MIN";bind(content,{itemSpacing:"space/16"});changed.push(n.id,card.id,slot.id,content.id);}}
-const note=section.findOne(n=>n.type==="TEXT"&&n.characters.includes("Existing Modal / Confirmation:"));if(note)note.characters="Только после успешного ответа сервера. Modal / Confirmation → proposed stacked actions: сохранена вертикальная композиция Angular-кандидата. Primary открывает созданную вакансию, secondary оставляет в проекте. Escape и возврат фокуса.";
-const wrapper=await figma.getNodeByIdAsync("51:1753");section.resizeWithoutConstraints(2130,wrapper.height+180);
-return {createdNodeIds:allIds(modal),createdModalId:modal.id,mutatedNodeIds:["56:3187","56:3219",...badgesChanged,...changed,...(note?[note.id]:[])],existingMastersMutated:[]};
+const area = await figma.getNodeByIdAsync("51:1752");
+const source = await figma.getNodeByIdAsync("8:538");
+const modal = mark(source.clone());
+area.appendChild(modal);
+modal.name = "Proposed / Modal / Vacancy created";
+modal.x = 1640;
+modal.y = 360;
+modal.description =
+  "PROPOSED variant derived from Modal / Confirmation 8:538. The current Angular VacancyCreatedDialogComponent uses stacked full-width actions: Primary / Перейти к вакансиям and Outline / Остаться в проекте. The original Confirmation stays unchanged; Figma instance-only layout direction overrides did not persist. Header, content and nested Button instances are reused. Canonical Mont, Inter preview.";
+const titleText = modal.children
+  .find(n => n.name === "Header")
+  .children.find(n => n.type === "TEXT");
+titleText.characters = "Вакансия создана";
+titleText.componentPropertyReferences = {
+  characters: modal.addComponentProperty("Title", "TEXT", titleText.characters),
+};
+const bodyText = modal.children.find(n => n.type === "TEXT");
+bodyText.characters =
+  "Теперь управлять вакансией и работать с откликами можно во вкладке „Вакансии“.";
+bodyText.componentPropertyReferences = {
+  characters: modal.addComponentProperty("Content", "TEXT", bodyText.characters),
+};
+for (const ch of modal.children) ch.layoutSizingHorizontal = "FILL";
+const act = modal.children.find(n => n.name === "Actions");
+act.layoutMode = "VERTICAL";
+act.primaryAxisAlignItems = "MIN";
+act.counterAxisAlignItems = "MIN";
+bind(act, { itemSpacing: "space/8" });
+act.clipsContent = false;
+const buttons = act.children.filter(n => n.type === "INSTANCE");
+buttons[0].swapComponent(sources["5:233"]);
+prop(buttons[0], "Label", "Перейти к вакансиям");
+buttons[1].swapComponent(sources["5:265"]);
+prop(buttons[1], "Label", "Остаться в проекте");
+for (const b of act.children) {
+  b.resize(472, 40);
+  b.layoutSizingHorizontal = "FILL";
+  b.layoutSizingVertical = "FIXED";
+  b.minHeight = 40;
+}
+act.layoutSizingVertical = "HUG";
+act.layoutSizingHorizontal = "FILL";
+modal.layoutSizingVertical = "HUG";
+for (const id of ["56:3187", "56:3219"]) {
+  const n = await figma.getNodeByIdAsync(id);
+  const w = n.width;
+  n.swapComponent(modal);
+  n.name = "Modal / Vacancy created / proposed stacked actions";
+  n.resize(w, n.height);
+  n.layoutSizingVertical = "HUG";
+  prop(n, "Title", "Вакансия создана");
+  prop(
+    n,
+    "Content",
+    "Теперь управлять вакансией и работать с откликами можно во вкладке „Вакансии“.",
+  );
+}
+const section = await figma.getNodeByIdAsync("51:1751");
+const state = await figma.getNodeByIdAsync("58:3086");
+const badgesChanged = [];
+for (const b of state.findAll(n => n.type === "INSTANCE" && n.name.startsWith("Badge /"))) {
+  const value = Object.values(b.componentProperties).find(p => p.type === "TEXT")?.value;
+  if (typeof value === "string" && value.length < 24) {
+    const w = Math.min(b.parent.width, value.length * 8 + 30);
+    b.resize(w, b.height);
+    b.layoutSizingVertical = "HUG";
+    badgesChanged.push(b.id);
+  }
+}
+const changed = [];
+for (const id of ["56:2148", "56:2472"]) {
+  const root = await figma.getNodeByIdAsync(id);
+  for (const row of root.findAll(n => n.type === "FRAME" && n.name === "Card row"))
+    for (const n of row.children) {
+      n.layoutSizingVertical = "HUG";
+      const card = n.children[0];
+      card.layoutSizingVertical = "HUG";
+      const slot = card.findOne(x => x.type === "SLOT");
+      slot.layoutSizingVertical = "HUG";
+      const content = slot.children[0];
+      content.layoutSizingVertical = "HUG";
+      content.primaryAxisAlignItems = "MIN";
+      bind(content, { itemSpacing: "space/16" });
+      changed.push(n.id, card.id, slot.id, content.id);
+    }
+}
+const note = section.findOne(
+  n => n.type === "TEXT" && n.characters.includes("Existing Modal / Confirmation:"),
+);
+if (note)
+  note.characters =
+    "Только после успешного ответа сервера. Modal / Confirmation → proposed stacked actions: сохранена вертикальная композиция Angular-кандидата. Primary открывает созданную вакансию, secondary оставляет в проекте. Escape и возврат фокуса.";
+const wrapper = await figma.getNodeByIdAsync("51:1753");
+section.resizeWithoutConstraints(2130, wrapper.height + 180);
+return {
+  createdNodeIds: allIds(modal),
+  createdModalId: modal.id,
+  mutatedNodeIds: ["56:3187", "56:3219", ...badgesChanged, ...changed, ...(note ? [note.id] : [])],
+  existingMastersMutated: [],
+};

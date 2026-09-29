@@ -15,22 +15,13 @@
         "add and remove",
         "no-results and forceSelect"
       ],
-      "mobile390": [
-        "search and selection",
-        "library checked state",
-        "deselection in library"
-      ],
+      "mobile390": ["search and selection", "library checked state", "deselection in library"],
       "saved": false,
       "originalSkillsRestored": true,
       "status": "passed; long skill delete checked at 390/320 with visible native button"
     },
     "onboardingSpeciality": {
-      "desktop": [
-        "search",
-        "chip selection",
-        "chip removal",
-        "library selection"
-      ],
+      "desktop": ["search", "chip selection", "chip removal", "library selection"],
       "submitted": false,
       "status": "passed"
     },
@@ -43,12 +34,7 @@
         "delete and checked sync",
         "empty basket"
       ],
-      "mobile390": [
-        "TypeScript search/selection",
-        "delete",
-        "no-results",
-        "forceSelect clear"
-      ],
+      "mobile390": ["TypeScript search/selection", "delete", "no-results", "forceSelect clear"],
       "submitted": false,
       "status": "passed after fix"
     },

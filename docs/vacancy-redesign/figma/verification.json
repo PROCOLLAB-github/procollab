@@ -1,9 +1,6 @@
 {
   "sectionId": "51:1751",
-  "sectionBounds": [
-    2130,
-    13049
-  ],
+  "sectionBounds": [2130, 13049],
   "instances": 358,
   "inventory": [
     {
@@ -375,10 +372,6 @@
     "layout": "HORIZONTAL"
   },
   "temporaryCaptureRemoved": true,
-  "deletedNodeIds": [
-    "50:1751"
-  ],
-  "mutatedNodeIds": [
-    "51:1751"
-  ]
+  "deletedNodeIds": ["50:1751"],
+  "mutatedNodeIds": ["51:1751"]
 }

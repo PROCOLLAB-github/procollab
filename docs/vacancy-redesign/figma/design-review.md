@@ -1,3 +1,5 @@
+<!-- @format -->
+
 > **Архив design-этапа. Дизайн согласован 29.09.2026.** PROPOSED разрешены для вакансий без глобального утверждения. Упоминания «ожидается», «пока только в Figma», «баг не исправлен» ниже описывают состояние до approval. Актуальные изменения Angular и проверки: [отчёт реализации](../implementation-review.md) и [README](../README.md).
 
 # Вакансии — дизайн на проверку
@@ -17,15 +19,15 @@
 
 ## Ссылки на экраны
 
-| Область | Desktop + mobile | Экспорт для отчёта |
-|---|---|---|
-| Вакансии проекта | [01](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-2144) | [PNG](01-project.png) |
-| Общий список вакансий | [02](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-2468) | [PNG](02-catalog.png) |
-| Страница вакансии | [03](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-2964) | [PNG](03-detail.png) |
-| После создания | [04](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-3182) | [PNG](04-created.png) |
-| Просмотр откликов | [05](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-3246) | [PNG](05-responses.png) |
-| Мои отклики | [06](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-3771) | [PNG](06-my.png) |
-| Пустые данные, длинные строки, навыки | [07](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=58-3086) | [PNG](07-states.png) |
+| Область                               | Desktop + mobile                                                          | Экспорт для отчёта      |
+| ------------------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| Вакансии проекта                      | [01](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-2144) | [PNG](01-project.png)   |
+| Общий список вакансий                 | [02](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-2468) | [PNG](02-catalog.png)   |
+| Страница вакансии                     | [03](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-2964) | [PNG](03-detail.png)    |
+| После создания                        | [04](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-3182) | [PNG](04-created.png)   |
+| Просмотр откликов                     | [05](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-3246) | [PNG](05-responses.png) |
+| Мои отклики                           | [06](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=56-3771) | [PNG](06-my.png)        |
+| Пустые данные, длинные строки, навыки | [07](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=58-3086) | [PNG](07-states.png)    |
 
 PNG — вспомогательные экспорты. Основной результат — редактируемые экраны по Figma-ссылкам.
 
@@ -33,14 +35,14 @@ PNG — вспомогательные экспорты. Основной рез
 
 В рабочем diff уже были 49 изменённых tracked-исходников и 11 новых исходников. Проверены README, галерея, shared SCSS, domain widgets, Button/Modal/Tag/Avatar и форма навыков. Существующие изменения сохранены.
 
-| Область | Уже есть в Angular | Фактически использовано в кандидате |
-|---|---|---|
-| Вакансии проекта | VacancyCardComponent, ProjectVacancyStepComponent, ButtonComponent | Новый VacancyStatusComponent; VacancySkillsComponent поверх TagComponent; shared surface/actions mixins; role, isActive, requiredSkills; прежнее подтверждение удаления |
-| Каталог | ProjectVacancyCardComponent, AvatarComponent, ButtonComponent, поиск/фильтры | VacancyStatus/Skills; role как главный заголовок; проект отдельно; условный CTA по существующим правам |
-| Страница | VacanciesDetailComponent, VacancyInfoComponent, VacanciesLeftSideComponent, VacanciesRightSideComponent | Те же shared surface/actions, статус и навыки; условия и контекстные действия |
-| После создания | ModalComponent, ButtonComponent, ProjectVacancyService | Новый VacancyCreatedDialogComponent; окно только после успеха; guard повторной отправки; Router на созданную вакансию |
-| Просмотр откликов | VacancyResponsesComponent, AvatarComponent, ModalComponent, ButtonComponent | VacancyStatus/Skills/Letter; подтверждённый сервером статус; действия только pending |
-| Мои отклики | VacanciesListComponent, ResponseCardComponent | VacancyStatusComponent и VacancyLetterComponent; объединённая карточка, письмо/файл, empty state |
+| Область           | Уже есть в Angular                                                                                      | Фактически использовано в кандидате                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Вакансии проекта  | VacancyCardComponent, ProjectVacancyStepComponent, ButtonComponent                                      | Новый VacancyStatusComponent; VacancySkillsComponent поверх TagComponent; shared surface/actions mixins; role, isActive, requiredSkills; прежнее подтверждение удаления |
+| Каталог           | ProjectVacancyCardComponent, AvatarComponent, ButtonComponent, поиск/фильтры                            | VacancyStatus/Skills; role как главный заголовок; проект отдельно; условный CTA по существующим правам                                                                  |
+| Страница          | VacanciesDetailComponent, VacancyInfoComponent, VacanciesLeftSideComponent, VacanciesRightSideComponent | Те же shared surface/actions, статус и навыки; условия и контекстные действия                                                                                           |
+| После создания    | ModalComponent, ButtonComponent, ProjectVacancyService                                                  | Новый VacancyCreatedDialogComponent; окно только после успеха; guard повторной отправки; Router на созданную вакансию                                                   |
+| Просмотр откликов | VacancyResponsesComponent, AvatarComponent, ModalComponent, ButtonComponent                             | VacancyStatus/Skills/Letter; подтверждённый сервером статус; действия только pending                                                                                    |
+| Мои отклики       | VacanciesListComponent, ResponseCardComponent                                                           | VacancyStatusComponent и VacancyLetterComponent; объединённая карточка, письмо/файл, empty state                                                                        |
 
 **Generic Angular CardComponent и StatusComponent, эквивалентных всему Figma-каталогу, в этом flow нет.** Поверхности реализованы доменными шаблонами и mixin surface; VacancyStatus — новый доменный адаптер. Не следует выдавать эти композиции за готовые универсальные runtime Card/Status.
 
@@ -48,21 +50,21 @@ Code Connect файлов для этих компонентов не найде
 
 ### Уже существующие локальные Figma-компоненты
 
-| Семейство | Реальные узлы и варианты | Вывод |
-|---|---|---|
-| Button | Set 5:361; Primary 5:233, Outline 5:265, Neutral 5:297, Destructive 5:329; Default/Hover/Pressed/Focus/Disabled/Loading | Основной CTA не требует нового цвета или нового Primary |
-| Badge | Set 5:142; Category 5:133, Count 5:135, Removable 5:137 | Есть базовые badges; нет адаптации длинного навыка кандидата с wrap/min-height 28 |
-| Status | Set 5:193, D03 proposed mapping: project.draft, evaluation.pending/completed, program.active, request.failed, invitation.pending | Семейство есть. Нет именно vacancy.active/closed и response.pending/accepted/rejected |
-| Card | Set 9:498; Project 9:446, Member 9:457, Feed 9:470, Summary 9:484 | База есть. Feed содержит фиксированные поля; generic content slot и vacancy-анатомии отсутствуют |
-| Modal | Set 8:561; Standard 8:408, Wide 8:515, Confirmation 8:538; Focus/Loading/Error у Standard | Есть основа, но Wide содержит текстовое поле, а Confirmation — горизонтальные actions |
-| Patterns | PageHeader 11:289, ListPage 11:311, DetailPage 11:450, FormPage 11:506 | PageHeader использован настоящими instances; List/Detail/Form — контракты композиции. Полные шаблонные экземпляры с чужими доменными полями не вставлялись |
-| Сопутствующие | Avatar 5:94; Search 6:873; Select 6:529; Checkbox 6:651; EmptyState 9:407; IconButton 5:489 | Переиспользованы в экранах и доске состояний |
+| Семейство     | Реальные узлы и варианты                                                                                                         | Вывод                                                                                                                                                      |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Button        | Set 5:361; Primary 5:233, Outline 5:265, Neutral 5:297, Destructive 5:329; Default/Hover/Pressed/Focus/Disabled/Loading          | Основной CTA не требует нового цвета или нового Primary                                                                                                    |
+| Badge         | Set 5:142; Category 5:133, Count 5:135, Removable 5:137                                                                          | Есть базовые badges; нет адаптации длинного навыка кандидата с wrap/min-height 28                                                                          |
+| Status        | Set 5:193, D03 proposed mapping: project.draft, evaluation.pending/completed, program.active, request.failed, invitation.pending | Семейство есть. Нет именно vacancy.active/closed и response.pending/accepted/rejected                                                                      |
+| Card          | Set 9:498; Project 9:446, Member 9:457, Feed 9:470, Summary 9:484                                                                | База есть. Feed содержит фиксированные поля; generic content slot и vacancy-анатомии отсутствуют                                                           |
+| Modal         | Set 8:561; Standard 8:408, Wide 8:515, Confirmation 8:538; Focus/Loading/Error у Standard                                        | Есть основа, но Wide содержит текстовое поле, а Confirmation — горизонтальные actions                                                                      |
+| Patterns      | PageHeader 11:289, ListPage 11:311, DetailPage 11:450, FormPage 11:506                                                           | PageHeader использован настоящими instances; List/Detail/Form — контракты композиции. Полные шаблонные экземпляры с чужими доменными полями не вставлялись |
+| Сопутствующие | Avatar 5:94; Search 6:873; Select 6:529; Checkbox 6:651; EmptyState 9:407; IconButton 5:489                                      | Переиспользованы в экранах и доске состояний                                                                                                               |
 
 ### Источник нового CTA
 
-В **projects/social_platform/src/styles/components/_vacancy-ui.scss:62** правило .button.button--inline задаёт background: var(--accent-dark). Это локальное переопределение добавлено в предыдущем redesign-кандидате при работе над контрастом.
+В **projects/social_platform/src/styles/components/\_vacancy-ui.scss:62** правило .button.button--inline задаёт background: var(--accent-dark). Это локальное переопределение добавлено в предыдущем redesign-кандидате при работе над контрастом.
 
-Канонический Button и **styles/_colors.scss:9** используют --accent: **#8A63E6**. --accent-dark вычисляется Sass color.adjust и в кандидатском CSS даёт около **#7B63B3**. Это другой токен; его существование не разрешает подменять Primary. Дополнительно .button--green был затемнён до --green-dark, а outline/secondary/pending использовали собственные color-mix.
+Канонический Button и **styles/\_colors.scss:9** используют --accent: **#8A63E6**. --accent-dark вычисляется Sass color.adjust и в кандидатском CSS даёт около **#7B63B3**. Это другой токен; его существование не разрешает подменять Primary. Дополнительно .button--green был затемнён до --green-dark, а outline/secondary/pending использовали собственные color-mix.
 
 В Figma основной CTA теперь — instance существующего **Primary 5:233 → VariableID:2:41 color/action/primary → purple/500 #8A63E6**. Глобальный Primary не менялся. Принятие отклика тоже предложено единым Primary; переход статуса остаётся серверным. Реальный Angular override будет исправляться только после design approval.
 
@@ -70,30 +72,30 @@ Code Connect файлов для этих компонентов не найде
 
 Обозначение **P** означает «предлагаемое расширение, ещё не утверждено». Имена токенов ниже — существующие переменные UI KIT.
 
-| Экран / элемент | Figma-компонент и вариант | Токен | Angular-компонент | Отклонение / статус |
-|---|---|---|---|---|
-| Заголовки 4 основных страниц | Pattern / PageHeader 11:289, Show action=false | text/primary; Heading/Large preview; space/24 | Заголовки ProjectVacancyStep, Vacancies, VacanciesDetail, VacanciesList | В Angular нет отдельного PageHeader primitive. Figma typography preview отличается метриками от Mont |
-| Проект / карточка | Card / Vacancy content **P 53:1751**, производное Feed 9:470 | background/primary, border/default, radius/medium, space/20 | VacancyCardComponent; surface mixin | Content slot, radius 8 вместо radius 15 базового Feed — явное расширение под кандидат |
-| Проект / статус | Status **P 53:1806**, vacancy.active / vacancy.closed | successSurface, success, green/700; background/subtle, border/strong | VacancyStatusComponent | Новые доменные ключи; семантика active/closed сохранена |
-| Проект / действия | Button / Outline 5:265; Destructive outline **P 53:1807** | action/primary; status/error; text/primary; focus/ring | ButtonComponent: outline; color=red | Primary/outline цвет возвращён контракту. Destructive outline оформлен отдельно; подтверждение удаления сохраняется |
-| Все / навыки | Badge / Vacancy skill **P 53:1790**, Hard / Soft / Removable | successSurface, green/700; action/secondary, text/primary; radius/pill | TagComponent + VacancySkillsComponent; SkillsBasketComponent | Wrap, 13px, min-height 28. Цвет Soft и промежуток 8px вместо color-mix/6px кандидата — предложение на review |
-| Все / раскрытие навыков | Badge / Soft **P**, подпись «Ещё +N»; Button / Outline «Свернуть» | action/secondary; text/primary; action/primary | VacancySkillsComponent toggle | В текущей галерее toggle прозрачный outline; здесь lavender fill и полная подпись. Нужна проверка данного отклонения |
-| Каталог / карточка | Vacancy pattern / Catalog **P 55:1893 и состояния** → Card content | background/primary, border/default, text/primary, space/16 | ProjectVacancyCardComponent | Переиспользуемая feature-композиция, не новый global Card contract |
-| Каталог / CTA | Button / Primary 5:233 и Outline 5:265 | action/primary **#8A63E6**, text/onAction | ButtonComponent | Галерея использует --accent-dark; исправление пока только в Figma |
-| Каталог / поиск и фильтры | Search / Toolbar 6:825; Checkbox 6:568; Button / Primary | background/secondary, border/default, action/primary | SearchComponent, существующий UI фильтров | Mobile filter trigger показан компактно; полный runtime flow не перерабатывался |
-| Detail / header и описание | Detail-композиции **P 55:2373, 55:2403** → Card content + Avatar 5:85 | text/primary, action/link, background/primary | VacancyInfoComponent, VacanciesLeftSideComponent | Полный заголовок; placeholder-превью аватара из fixture |
-| Detail / условия и действие | Detail / conditions **P 55:2446** + Button / Primary | text/secondary, action/link, action/primary | VacanciesRightSideComponent | На mobile блок идёт после описания; права на respond/manage не меняются |
-| Успех / модалка | Modal / Vacancy created **P 62:3224**, производное Confirmation 8:538; вложенные Primary/Outline | background/secondary, radius/large, space/24, action/primary | VacancyCreatedDialogComponent + ModalComponent | Новый вариант только для вертикальных CTA. Существующий Confirmation остался горизонтальным |
-| Успех / поведение | Перейти к вакансиям / Остаться в проекте | Существующие Button состояния | AppRoutes.office.vacancy(id), closed.emit | Окно только после успеха; первичный переход на созданную вакансию сохранён. Figma не выполняет Router/API |
-| Отклики / модалка | Modal / Vacancy responses **P 53:1763**, производное Wide 8:515 | background/secondary, radius/large, space/24; mobile space/16 | ModalComponent + VacancyResponsesComponent | Slot вместо одного текстового Content. Для ревью контент показан целиком; runtime max-height/scroll сохраняются |
-| Отклики / карточка кандидата | Response-композиции **P 55:2105, 55:2178, 55:2235** + Avatar | background/primary, border/default, action/link | VacancyResponsesComponent, VacancyLetterComponent, AvatarComponent | Письмо/файл редактируемые; отсутствующие данные показаны отдельным состоянием |
-| Отклики / статус | Status **P**, response.pending / accepted / rejected | action/secondary; successSurface; errorSurface; text/primary | VacancyStatusComponent | Pending текст из color-mix переведён на text/primary; принято/отклонено — после успеха API |
-| Отклики / решения | Primary 5:233 «Принять», Destructive outline **P** «Отклонить» | action/primary; status/error | ButtonComponent; Accept/RejectResponseUseCase | «Принять» предложено purple вместо green-dark галереи; только pending имеет действия |
-| Мои отклики / единая карточка | My response-композиции **P 55:2294, 55:2319, 55:2342** → Card + Status | background/primary, border/default, status surfaces, action/link | ResponseCardComponent + VacancyLetterComponent | «На рассмотрении» — тот же pending для кандидата; письмо/файл внутри одной карточки |
-| Мои отклики / пусто | EmptyState / No data 9:365 + Primary | text/primary, text/secondary, action/primary | VacanciesListComponent empty template | В Angular нет отдельного generic EmptyState; повторно использовать существующий шаблон/минимальный адаптер |
-| Каталог / нет результатов | EmptyState / No results 9:375 + Outline | text/primary, text/secondary, action/primary | Каталог вакансий / фильтры | Дизайн состояния; соответствие реальным backend-ответам ещё не проверено |
-| Форма / поиск навыков | Select / Searchable adapter 6:456, Loading 6:507 | border/default, action/primary, text/secondary | **AutocompleteInputComponent**, SearchesService; не простой SelectComponent | Figma adapter представляет autocomplete; Angular primitive заменять на select не требуется |
-| Форма / выбранные и библиотека | Badge / Removable **P 53:1784**, Checkbox Checked 6:589 / Unchecked 6:568, Search / Toolbar | action/secondary, action/primary, text/primary | SkillsBasketComponent, SkillsGroupComponent, AutocompleteInputComponent | Общие выбранные id, удаление и сохранение — контракт для проверки; баг пока не исправлен |
+| Экран / элемент                | Figma-компонент и вариант                                                                        | Токен                                                                  | Angular-компонент                                                           | Отклонение / статус                                                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Заголовки 4 основных страниц   | Pattern / PageHeader 11:289, Show action=false                                                   | text/primary; Heading/Large preview; space/24                          | Заголовки ProjectVacancyStep, Vacancies, VacanciesDetail, VacanciesList     | В Angular нет отдельного PageHeader primitive. Figma typography preview отличается метриками от Mont                 |
+| Проект / карточка              | Card / Vacancy content **P 53:1751**, производное Feed 9:470                                     | background/primary, border/default, radius/medium, space/20            | VacancyCardComponent; surface mixin                                         | Content slot, radius 8 вместо radius 15 базового Feed — явное расширение под кандидат                                |
+| Проект / статус                | Status **P 53:1806**, vacancy.active / vacancy.closed                                            | successSurface, success, green/700; background/subtle, border/strong   | VacancyStatusComponent                                                      | Новые доменные ключи; семантика active/closed сохранена                                                              |
+| Проект / действия              | Button / Outline 5:265; Destructive outline **P 53:1807**                                        | action/primary; status/error; text/primary; focus/ring                 | ButtonComponent: outline; color=red                                         | Primary/outline цвет возвращён контракту. Destructive outline оформлен отдельно; подтверждение удаления сохраняется  |
+| Все / навыки                   | Badge / Vacancy skill **P 53:1790**, Hard / Soft / Removable                                     | successSurface, green/700; action/secondary, text/primary; radius/pill | TagComponent + VacancySkillsComponent; SkillsBasketComponent                | Wrap, 13px, min-height 28. Цвет Soft и промежуток 8px вместо color-mix/6px кандидата — предложение на review         |
+| Все / раскрытие навыков        | Badge / Soft **P**, подпись «Ещё +N»; Button / Outline «Свернуть»                                | action/secondary; text/primary; action/primary                         | VacancySkillsComponent toggle                                               | В текущей галерее toggle прозрачный outline; здесь lavender fill и полная подпись. Нужна проверка данного отклонения |
+| Каталог / карточка             | Vacancy pattern / Catalog **P 55:1893 и состояния** → Card content                               | background/primary, border/default, text/primary, space/16             | ProjectVacancyCardComponent                                                 | Переиспользуемая feature-композиция, не новый global Card contract                                                   |
+| Каталог / CTA                  | Button / Primary 5:233 и Outline 5:265                                                           | action/primary **#8A63E6**, text/onAction                              | ButtonComponent                                                             | Галерея использует --accent-dark; исправление пока только в Figma                                                    |
+| Каталог / поиск и фильтры      | Search / Toolbar 6:825; Checkbox 6:568; Button / Primary                                         | background/secondary, border/default, action/primary                   | SearchComponent, существующий UI фильтров                                   | Mobile filter trigger показан компактно; полный runtime flow не перерабатывался                                      |
+| Detail / header и описание     | Detail-композиции **P 55:2373, 55:2403** → Card content + Avatar 5:85                            | text/primary, action/link, background/primary                          | VacancyInfoComponent, VacanciesLeftSideComponent                            | Полный заголовок; placeholder-превью аватара из fixture                                                              |
+| Detail / условия и действие    | Detail / conditions **P 55:2446** + Button / Primary                                             | text/secondary, action/link, action/primary                            | VacanciesRightSideComponent                                                 | На mobile блок идёт после описания; права на respond/manage не меняются                                              |
+| Успех / модалка                | Modal / Vacancy created **P 62:3224**, производное Confirmation 8:538; вложенные Primary/Outline | background/secondary, radius/large, space/24, action/primary           | VacancyCreatedDialogComponent + ModalComponent                              | Новый вариант только для вертикальных CTA. Существующий Confirmation остался горизонтальным                          |
+| Успех / поведение              | Перейти к вакансиям / Остаться в проекте                                                         | Существующие Button состояния                                          | AppRoutes.office.vacancy(id), closed.emit                                   | Окно только после успеха; первичный переход на созданную вакансию сохранён. Figma не выполняет Router/API            |
+| Отклики / модалка              | Modal / Vacancy responses **P 53:1763**, производное Wide 8:515                                  | background/secondary, radius/large, space/24; mobile space/16          | ModalComponent + VacancyResponsesComponent                                  | Slot вместо одного текстового Content. Для ревью контент показан целиком; runtime max-height/scroll сохраняются      |
+| Отклики / карточка кандидата   | Response-композиции **P 55:2105, 55:2178, 55:2235** + Avatar                                     | background/primary, border/default, action/link                        | VacancyResponsesComponent, VacancyLetterComponent, AvatarComponent          | Письмо/файл редактируемые; отсутствующие данные показаны отдельным состоянием                                        |
+| Отклики / статус               | Status **P**, response.pending / accepted / rejected                                             | action/secondary; successSurface; errorSurface; text/primary           | VacancyStatusComponent                                                      | Pending текст из color-mix переведён на text/primary; принято/отклонено — после успеха API                           |
+| Отклики / решения              | Primary 5:233 «Принять», Destructive outline **P** «Отклонить»                                   | action/primary; status/error                                           | ButtonComponent; Accept/RejectResponseUseCase                               | «Принять» предложено purple вместо green-dark галереи; только pending имеет действия                                 |
+| Мои отклики / единая карточка  | My response-композиции **P 55:2294, 55:2319, 55:2342** → Card + Status                           | background/primary, border/default, status surfaces, action/link       | ResponseCardComponent + VacancyLetterComponent                              | «На рассмотрении» — тот же pending для кандидата; письмо/файл внутри одной карточки                                  |
+| Мои отклики / пусто            | EmptyState / No data 9:365 + Primary                                                             | text/primary, text/secondary, action/primary                           | VacanciesListComponent empty template                                       | В Angular нет отдельного generic EmptyState; повторно использовать существующий шаблон/минимальный адаптер           |
+| Каталог / нет результатов      | EmptyState / No results 9:375 + Outline                                                          | text/primary, text/secondary, action/primary                           | Каталог вакансий / фильтры                                                  | Дизайн состояния; соответствие реальным backend-ответам ещё не проверено                                             |
+| Форма / поиск навыков          | Select / Searchable adapter 6:456, Loading 6:507                                                 | border/default, action/primary, text/secondary                         | **AutocompleteInputComponent**, SearchesService; не простой SelectComponent | Figma adapter представляет autocomplete; Angular primitive заменять на select не требуется                           |
+| Форма / выбранные и библиотека | Badge / Removable **P 53:1784**, Checkbox Checked 6:589 / Unchecked 6:568, Search / Toolbar      | action/secondary, action/primary, text/primary                         | SkillsBasketComponent, SkillsGroupComponent, AutocompleteInputComponent     | Общие выбранные id, удаление и сохранение — контракт для проверки; баг пока не исправлен                             |
 
 ## Что изменено относительно текущей галереи
 
@@ -107,33 +109,33 @@ Code Connect файлов для этих компонентов не найде
 
 ## Предлагаемые расширения UI KIT
 
-| Предложение | Почему существующего варианта недостаточно | Связь с Angular |
-|---|---|---|
-| Card / Vacancy content 53:1751 | Feed имеет фиксированные Source/Title/Description/Badge/Button; нужны разные композиции с редактируемым content slot и radius 8 кандидата | Shared surface + VacancyCard / ProjectVacancyCard / ResponseCard / detail |
-| Modal / Vacancy responses 53:1763 | Wide содержит одно текстовое поле, нужен список карточек откликов | Modal + VacancyResponses |
-| Modal / Vacancy created 62:3224 | Confirmation содержит горизонтальные actions; вертикальное направление не сохранялось как instance-only override через connector | Существующая вертикальная композиция VacancyCreatedDialog |
-| Badge / Vacancy skill 53:1790 | Category/Removable не задают перенос длинного названия и адаптивную высоту кандидата | Tag + VacancySkills / SkillsBasket |
-| Status / Vacancy domain mapping 53:1806 | Нет конкретных ключей вакансий и откликов; D03 остаётся proposed | VacancyStatus; существующие isActive/responseStatus |
-| Button / Destructive outline 53:1807 | Нужна вторичная опасная outline-кнопка из текущего Angular-кандидата | app-button appearance=outline color=red |
-| 17 Vacancy pattern-композиций | Переиспользование anatomy и состояний между desktop/mobile без detach | Доменные widgets, не новый универсальный Angular-компонент |
+| Предложение                             | Почему существующего варианта недостаточно                                                                                                | Связь с Angular                                                           |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Card / Vacancy content 53:1751          | Feed имеет фиксированные Source/Title/Description/Badge/Button; нужны разные композиции с редактируемым content slot и radius 8 кандидата | Shared surface + VacancyCard / ProjectVacancyCard / ResponseCard / detail |
+| Modal / Vacancy responses 53:1763       | Wide содержит одно текстовое поле, нужен список карточек откликов                                                                         | Modal + VacancyResponses                                                  |
+| Modal / Vacancy created 62:3224         | Confirmation содержит горизонтальные actions; вертикальное направление не сохранялось как instance-only override через connector          | Существующая вертикальная композиция VacancyCreatedDialog                 |
+| Badge / Vacancy skill 53:1790           | Category/Removable не задают перенос длинного названия и адаптивную высоту кандидата                                                      | Tag + VacancySkills / SkillsBasket                                        |
+| Status / Vacancy domain mapping 53:1806 | Нет конкретных ключей вакансий и откликов; D03 остаётся proposed                                                                          | VacancyStatus; существующие isActive/responseStatus                       |
+| Button / Destructive outline 53:1807    | Нужна вторичная опасная outline-кнопка из текущего Angular-кандидата                                                                      | app-button appearance=outline color=red                                   |
+| 17 Vacancy pattern-композиций           | Переиспользование anatomy и состояний между desktop/mobile без detach                                                                     | Доменные widgets, не новый универсальный Angular-компонент                |
 
 Новых global colors/spacing/text styles не создано; D01–D05 не мигрированы. Primary, Outline, Avatar, Search, Checkbox, EmptyState, IconButton и PageHeader продолжают ссылаться на исходные local masters.
 
 ## States, responsive и accessibility
 
-| Состояние / поведение | Где показано / зафиксировано | Что ещё проверять в реализации |
-|---|---|---|
-| Desktop 1440 / mobile 390 | Все 6 пар | Mont metrics; 768 и 320 после последней правки Angular |
-| Длинный русский заголовок | Проект, каталог, detail, my | Полный title на detail; clamp только превью |
-| Строка без пробелов | Доска 07 mobile | overflow-wrap:anywhere без горизонтального scroll |
-| 0 / 1 / 11 навыков | Проект, карточки, доска 07 | Точный hidden count; раскрытие/сворачивание |
-| Нет описания/условий/письма/файла | QA, accepted response, доска 07 | Отсутствующее значение отдельно от валидного нуля |
-| Нет откликов / нет результатов | EmptyState instances на доске 07 | Реальная ветка UI по API |
-| Pending / accepted / rejected | Отклики и «Мои отклики» | Повторное чтение с сервера после решения |
-| Success | Модалка 04 | Только после успешного create; обе кнопки и close |
-| Поиск / loading / no-results / выбранные | Доска 07 | Гонки запросов, синхронизация библиотеки, delete/edit/save/reopen |
-| Focus / Escape / return focus | Аннотация поведения; существующий Button/Modal contract | Новый браузерный прогон после реализации |
-| Ошибка сохранения / disabled submit | Текстовый контракт на доске 07; прежний Angular-кандидат | Сохранность полей; retry; двойная отправка |
+| Состояние / поведение                    | Где показано / зафиксировано                             | Что ещё проверять в реализации                                    |
+| ---------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
+| Desktop 1440 / mobile 390                | Все 6 пар                                                | Mont metrics; 768 и 320 после последней правки Angular            |
+| Длинный русский заголовок                | Проект, каталог, detail, my                              | Полный title на detail; clamp только превью                       |
+| Строка без пробелов                      | Доска 07 mobile                                          | overflow-wrap:anywhere без горизонтального scroll                 |
+| 0 / 1 / 11 навыков                       | Проект, карточки, доска 07                               | Точный hidden count; раскрытие/сворачивание                       |
+| Нет описания/условий/письма/файла        | QA, accepted response, доска 07                          | Отсутствующее значение отдельно от валидного нуля                 |
+| Нет откликов / нет результатов           | EmptyState instances на доске 07                         | Реальная ветка UI по API                                          |
+| Pending / accepted / rejected            | Отклики и «Мои отклики»                                  | Повторное чтение с сервера после решения                          |
+| Success                                  | Модалка 04                                               | Только после успешного create; обе кнопки и close                 |
+| Поиск / loading / no-results / выбранные | Доска 07                                                 | Гонки запросов, синхронизация библиотеки, delete/edit/save/reopen |
+| Focus / Escape / return focus            | Аннотация поведения; существующий Button/Modal contract  | Новый браузерный прогон после реализации                          |
+| Ошибка сохранения / disabled submit      | Текстовый контракт на доске 07; прежний Angular-кандидат | Сохранность полей; retry; двойная отправка                        |
 
 Контраст **#FAFAFA / #8A63E6 ≈ 4,02:1**, по формуле относительной яркости sRGB. Это ниже 4,5:1 для обычного мелкого текста. Канонический Primary сохранён по запросу пользователя; это известный вопрос D02, а не основание незаметно затемнять CTA. AA всего нового дизайна не заявляется. Прежний минимум 4,67:1 относится только к предыдущему Angular-кандидату с другим CTA.
 
@@ -164,17 +166,17 @@ Code Connect файлов для этих компонентов не найде
 
 ## Статус проверок и разрешений
 
-| Категория | Статус |
-|---|---|
-| Figma access / write / local UI KIT inventory | Проверено успешно |
-| Figma screenshots и structural bindings | Выполнено в этом этапе |
-| Source audit текущей ветки / shared skills signal | Выполнено, исходники не изменены |
-| Angular tests/build/browser | Не перезапускались в design-этапе. Ранее: 401 файл / 1949 тестов, build success, 534 browser assertions / 48 состояний |
-| Рабочий DEV API: навыки, save/reopen | **Не проверено** |
-| Root cause и исправление навыков | **Не завершено** |
-| Полное соответствие Angular новому Figma | **Ещё не проверено** |
-| Design approval пользователя | **Ожидается** |
-| Draft PR / merge / deploy | **Не выполнялись** |
+| Категория                                         | Статус                                                                                                                 |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Figma access / write / local UI KIT inventory     | Проверено успешно                                                                                                      |
+| Figma screenshots и structural bindings           | Выполнено в этом этапе                                                                                                 |
+| Source audit текущей ветки / shared skills signal | Выполнено, исходники не изменены                                                                                       |
+| Angular tests/build/browser                       | Не перезапускались в design-этапе. Ранее: 401 файл / 1949 тестов, build success, 534 browser assertions / 48 состояний |
+| Рабочий DEV API: навыки, save/reopen              | **Не проверено**                                                                                                       |
+| Root cause и исправление навыков                  | **Не завершено**                                                                                                       |
+| Полное соответствие Angular новому Figma          | **Ещё не проверено**                                                                                                   |
+| Design approval пользователя                      | **Ожидается**                                                                                                          |
+| Draft PR / merge / deploy                         | **Не выполнялись**                                                                                                     |
 
 Пауза задана пользователем на этапе 3 и skill **procollab-design-screen**: «Дождись явного approval пользователя; наличие Figma-ссылки или утверждённой spec его не заменяет». Конкретный дизайн готов для ревью; текущая ветка не объявляется завершённой.
 
@@ -183,4 +185,4 @@ Code Connect файлов для этих компонентов не найде
 - [state.json](state.json) — логическое состояние и node ids.
 - [verification.json](verification.json) — экземпляры, токены, исходные Primary/Confirmation, результат проверки clipping.
 - common.js, proposals.js, domains.js, screens.js, states.js, layout-fixes.js, success-variant.js — журнал использованных Figma-сценариев. Они создают объекты и **не предназначены для слепого повторного запуска**; продолжать следует по сохранённым node ids.
-- review-*.png — первый проход QA, содержит выявленные дефекты; финальные экспорты имеют названия 01-project.png … 07-states.png.
+- review-\*.png — первый проход QA, содержит выявленные дефекты; финальные экспорты имеют названия 01-project.png … 07-states.png.

@@ -10,19 +10,13 @@
     "method": "POST",
     "path": "/vacancies/",
     "status": 201,
-    "skills": [
-      "CSS",
-      "Angular"
-    ]
+    "skills": ["CSS", "Angular"]
   },
   "reloadAfterCreate": {
     "method": "GET",
     "path": "/vacancies/104/",
     "status": 200,
-    "skills": [
-      "CSS",
-      "Angular"
-    ]
+    "skills": ["CSS", "Angular"]
   },
   "update": {
     "method": "PATCH",
@@ -30,16 +24,10 @@
     "firstStatus": 401,
     "refreshStatus": 200,
     "retryStatus": 200,
-    "skills": [
-      "CSS",
-      "TypeScript"
-    ]
+    "skills": ["CSS", "TypeScript"]
   },
   "reloadAfterUpdate": {
-    "skills": [
-      "CSS",
-      "TypeScript"
-    ],
+    "skills": ["CSS", "TypeScript"],
     "checkedLibrary": {
       "CSS": true,
       "TypeScript": true,
@@ -49,11 +37,7 @@
     "contentWidth": 375,
     "font": "Mont, sans-serif"
   },
-  "queries": [
-    "A→Ang→Angular",
-    "Angular repeated after select",
-    "Ang→Ty→Type"
-  ],
+  "queries": ["A→Ang→Angular", "Angular repeated after select", "Ang→Ty→Type"],
   "searchStatus": 200,
   "forcedResponseReordering": "tested only with controlled fixtures; DEV exercised normal rapid input",
   "salaryRegression": {
@@ -66,10 +50,7 @@
     "time": "2026-09-29T18:57:17+03:00",
     "updateStatus": 200,
     "reopenStatus": 200,
-    "skills": [
-      "Angular",
-      "CSS"
-    ],
+    "skills": ["Angular", "CSS"],
     "salary": 100,
     "mobileWidth": 390,
     "contentWidth": 375,

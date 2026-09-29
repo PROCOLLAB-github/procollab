@@ -1,3 +1,5 @@
+<!-- @format -->
+
 # Закрытие двух замечаний Autocomplete
 
 Код: `f1ea89bec92e2e37b89044aa4663b40807ba0be0`, ветка `feat/dev-vacancy-interface-redesign`. Дата: 2026-09-29. PR [#393](https://github.com/PROCOLLAB-github/procollab/pull/393) остаётся draft; перевод в ready — решение ревьюера.
@@ -36,17 +38,17 @@
 
 Среда: AppComponent этой ветки, `127.0.0.1:4360/dev-api` → фиксированный `https://dev.procollab.ru`; без подмены API. Использована существующая сессия. Credentials не читались. Штатный 401 → refresh 200 → повтор GET 200 отделён от JS-ошибок.
 
-| Сценарий | Результат |
-|---|---|
-| Desktop: полная перезагрузка четырёх фильтров | Ровно один GET с Angular, Front-end, age=18,30 и student=false, HTTP 200 (20:41:22 MSK). Поля Angular/Front-end восстановлены, один соответствующий участник |
-| student=true с тем же возрастом | HTTP 200 (20:44:25), пустая выдача соответствует сочетанию фильтров. false не превращается в true |
-| Сброс / повторный выбор из подсказок | Все пять параметров удаляются; повтор Angular/Front-end возвращает выбранные значения и DEV-выдачу |
-| Back/Forward | Возвращаются и поля, и набор API-параметров; Forward после сброса даёт пустые поля и выдачу без фильтров |
-| Mobile 390/320 | Окно показывает тот же набор, закрытие/повторное открытие сохраняет его; сброс и Back работают даже при открытом окне. При 320 ширина диалога и scrollWidth равны 233 px |
-| Быстрый fullname при активных фильтрах | Последний fullname + Angular + Front-end уходят вместе, HTTP 200; фильтры не теряются |
-| Профиль 390/320 | Длинный навык выбран из DEV-поиска; кнопка 44×44, Mont, без горизонтального overflow; Enter удаляет его и оставляет исходные AR/Видео |
-| Онбординг 390/320 | Тот же длинный навык из DEV-поиска; видимая кнопка, без overflow; мышь удаляет навык до пустой корзины |
-| Редактор вакансии 390/320 | Длинный навык из DEV-поиска добавлен и удалён Space; кнопка и иконка видимы. PATCH /vacancies/104/ → 200 (20:50:34 MSK), после reload редактор показывает Angular/CSS и зарплату 100 ₽ |
+| Сценарий                                      | Результат                                                                                                                                                                              |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Desktop: полная перезагрузка четырёх фильтров | Ровно один GET с Angular, Front-end, age=18,30 и student=false, HTTP 200 (20:41:22 MSK). Поля Angular/Front-end восстановлены, один соответствующий участник                           |
+| student=true с тем же возрастом               | HTTP 200 (20:44:25), пустая выдача соответствует сочетанию фильтров. false не превращается в true                                                                                      |
+| Сброс / повторный выбор из подсказок          | Все пять параметров удаляются; повтор Angular/Front-end возвращает выбранные значения и DEV-выдачу                                                                                     |
+| Back/Forward                                  | Возвращаются и поля, и набор API-параметров; Forward после сброса даёт пустые поля и выдачу без фильтров                                                                               |
+| Mobile 390/320                                | Окно показывает тот же набор, закрытие/повторное открытие сохраняет его; сброс и Back работают даже при открытом окне. При 320 ширина диалога и scrollWidth равны 233 px               |
+| Быстрый fullname при активных фильтрах        | Последний fullname + Angular + Front-end уходят вместе, HTTP 200; фильтры не теряются                                                                                                  |
+| Профиль 390/320                               | Длинный навык выбран из DEV-поиска; кнопка 44×44, Mont, без горизонтального overflow; Enter удаляет его и оставляет исходные AR/Видео                                                  |
+| Онбординг 390/320                             | Тот же длинный навык из DEV-поиска; видимая кнопка, без overflow; мышь удаляет навык до пустой корзины                                                                                 |
+| Редактор вакансии 390/320                     | Длинный навык из DEV-поиска добавлен и удалён Space; кнопка и иконка видимы. PATCH /vacancies/104/ → 200 (20:50:34 MSK), после reload редактор показывает Angular/CSS и зарплату 100 ₽ |
 
 Возраст и признак студента **уже скрыты в существующем шаблоне**. Их API-контракт проверен через URL на DEV, гидратация и изменения form controls — регрессионными тестами. Ручной проверки видимых контролов возраста/студента не заявляется.
 
@@ -56,13 +58,13 @@
 
 Первые четыре строки — реальное приложение с DEV API и Mont; stress — локальный Angular fixture с длинным словом без пробелов.
 
-| Экран | 390 px | 320 px |
-|---|---|---|
-| Профиль | [PNG](screenshots/autocomplete-followup/profile-390-after.png) | [PNG](screenshots/autocomplete-followup/profile-320-after.png) |
-| Онбординг | [PNG](screenshots/autocomplete-followup/onboarding-390.png) | [PNG](screenshots/autocomplete-followup/onboarding-320.png) |
+| Экран              | 390 px                                                           | 320 px                                                           |
+| ------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Профиль            | [PNG](screenshots/autocomplete-followup/profile-390-after.png)   | [PNG](screenshots/autocomplete-followup/profile-320-after.png)   |
+| Онбординг          | [PNG](screenshots/autocomplete-followup/onboarding-390.png)      | [PNG](screenshots/autocomplete-followup/onboarding-320.png)      |
 | Фильтры участников | [PNG](screenshots/autocomplete-followup/members-filters-390.png) | [PNG](screenshots/autocomplete-followup/members-filters-320.png) |
-| Редактор вакансии | [PNG](screenshots/autocomplete-followup/vacancy-dev-390.png) | [PNG](screenshots/autocomplete-followup/vacancy-dev-320.png) |
-| Stress корзины | [PNG](screenshots/autocomplete-followup/vacancy-stress-390.png) | [PNG](screenshots/autocomplete-followup/vacancy-stress-320.png) |
+| Редактор вакансии  | [PNG](screenshots/autocomplete-followup/vacancy-dev-390.png)     | [PNG](screenshots/autocomplete-followup/vacancy-dev-320.png)     |
+| Stress корзины     | [PNG](screenshots/autocomplete-followup/vacancy-stress-390.png)  | [PNG](screenshots/autocomplete-followup/vacancy-stress-320.png)  |
 
 ## Оставшиеся ограничения
 
