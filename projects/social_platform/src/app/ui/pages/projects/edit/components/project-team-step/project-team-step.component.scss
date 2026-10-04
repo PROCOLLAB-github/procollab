@@ -31,12 +31,12 @@
 
   h2 {
     margin-bottom: 4px;
-    font-size: 18px;
+    font-size: var(--ui-font-h2);
     line-height: 27px;
   }
 
   h3 {
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 21px;
 
     [aria-hidden] {
@@ -45,7 +45,7 @@
   }
 
   p {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 1.3;
     color: var(--grey-for-text);
   }
@@ -55,10 +55,6 @@
   }
 
   ::ng-deep .invite__submit button {
-    min-height: 25px;
-    padding: 4px 12px;
-    line-height: 16px;
-
     &:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
@@ -89,14 +85,14 @@
 
   .team-empty__title {
     margin-bottom: 4px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     color: var(--black);
   }
 }
 
 .team-loading > p {
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: var(--ui-font-body);
 }
 
 .team-skeleton {
@@ -143,9 +139,6 @@
   }
 
   .team ::ng-deep .invite__submit button {
-    min-height: 44px;
-    max-height: none;
-
     i {
       position: absolute;
       left: 12px;

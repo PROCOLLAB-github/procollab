@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -16,12 +20,6 @@
   &__input {
     width: 100%;
     padding: 12px;
-    color: var(--black);
-    background-color: var(--white);
-    border: 0.5px solid var(--gray);
-    border-radius: var(--rounded-xxl);
-    outline: none;
-    transition: all 0.2s;
 
     &::placeholder {
       color: var(--dark-grey);
@@ -33,20 +31,20 @@
 
     &:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      box-shadow: var(--ui-focus-ring);
     }
 
     &--no-icon {
       padding-right: 45px;
     }
 
-    @include typography.body-12;
+    @include ui-foundation.control;
   }
 
   &__input-slim {
     width: 100%;
     padding: 6px 30px 6px 10px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--grey-button);
@@ -63,6 +61,8 @@
         }
       }
     }
+
+    @include ui-foundation.control;
   }
 
   &__dropdown {
@@ -174,7 +174,7 @@
     min-width: 0;
     max-width: 100%;
     min-height: 44px;
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
   }
 
   .field--small,
@@ -209,4 +209,9 @@
   .field__input[type="date"] {
     padding-right: 48px;
   }
+}
+
+.field__input,
+.field__input-slim {
+  padding-right: 44px;
 }

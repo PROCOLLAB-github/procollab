@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { BackComponent } from "@uilib";
+import { BackComponent, TabsComponent } from "@uilib";
 
 /**
  * Компонент навигационной панели с табами и кнопкой "Назад".
@@ -35,7 +35,7 @@ interface BarLinks {
 /** Примитив: индикатор-полоса (progress/bar). */
 @Component({
   selector: "app-bar",
-  imports: [CommonModule, RouterLink, RouterLinkActive, BackComponent],
+  imports: [TabsComponent, CommonModule, RouterLink, RouterLinkActive, BackComponent],
   templateUrl: "./bar.component.html",
   styleUrl: "./bar.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

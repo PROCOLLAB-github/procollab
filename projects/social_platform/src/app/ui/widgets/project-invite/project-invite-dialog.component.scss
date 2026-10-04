@@ -1,25 +1,25 @@
 /** @format */
 
-// Стили portal ограничены оболочкой приглашения и не меняют остальные app-modal.
+/* Стили portal ограничены оболочкой приглашения и не меняют остальные app-modal. */
 .modal .modal__body.project-invite-body {
   left: 50%;
   display: block;
-  width: min(552px, calc(100% - 24px));
+  width: min(var(--ui-dialog-md), calc(100% - 24px));
   max-width: calc(100% - 24px);
   max-height: min(720px, calc(var(--visual-viewport-height, 100dvh) - 48px));
   padding: 0;
   overflow: visible;
-  border-radius: var(--rounded-lg);
+  border-radius: var(--ui-radius-dialog);
 }
 
 .project-invite {
   display: flex;
   flex-direction: column;
   max-height: min(720px, calc(var(--visual-viewport-height, 100dvh) - 48px));
-  padding: 24px;
+  padding: var(--ui-dialog-padding);
   color: var(--black);
   background: var(--white);
-  border-radius: var(--rounded-lg);
+  border-radius: var(--ui-radius-dialog);
 
   &,
   * {
@@ -66,7 +66,7 @@
 
   &__header p {
     margin-top: 5px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 1.5;
     color: var(--grey-for-text);
   }
@@ -78,7 +78,7 @@
     height: 48px;
     color: var(--accent);
     background: color-mix(in srgb, var(--accent) 8%, white);
-    border-radius: var(--rounded-lg);
+    border-radius: var(--ui-radius-dialog);
   }
 
   &__close {
@@ -144,13 +144,13 @@
     justify-content: center;
     min-height: 44px;
     padding: 9px 12px;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 1.4;
     color: var(--accent);
     background: var(--white);
     border: 1px solid var(--accent);
-    border-radius: var(--rounded-lg);
+    border-radius: var(--ui-radius-dialog);
   }
 
   .invite-button--primary {
@@ -170,7 +170,7 @@
     padding: 0 12px;
     color: var(--grey-for-text);
     border: 1px solid color-mix(in srgb, var(--accent) 45%, white);
-    border-radius: var(--rounded-lg);
+    border-radius: var(--ui-radius-dialog);
   }
 
   .invite-search:focus-within {
@@ -182,7 +182,7 @@
     width: 100%;
     min-width: 0;
     min-height: 42px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     color: var(--black);
     background: transparent;
     border: 0;
@@ -196,7 +196,7 @@
   .invite-label {
     display: block;
     margin-bottom: 8px;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     color: var(--accent);
   }
@@ -217,7 +217,7 @@
     text-align: left;
     background: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
+    border-radius: var(--ui-radius-dialog);
   }
 
   .invite-row--selected {
@@ -260,7 +260,7 @@
 
   .invite-copy strong {
     display: block;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 1.5;
     overflow-wrap: anywhere;
@@ -269,7 +269,7 @@
   .invite-meta {
     display: block;
     margin-top: 3px;
-    font-size: 11px;
+    font-size: var(--ui-font-caption);
     line-height: 1.4;
     color: var(--grey-for-text);
     overflow-wrap: anywhere;
@@ -282,11 +282,11 @@
     width: 40px;
     height: 40px;
     overflow: hidden;
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
     color: var(--accent);
     background: color-mix(in srgb, var(--accent) 9%, white);
-    border-radius: var(--rounded-lg);
+    border-radius: var(--ui-radius-dialog);
   }
 
   .invite-avatar img {
@@ -297,7 +297,7 @@
 
   .invite-helper {
     padding: 22px 12px;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     line-height: 1.6;
     color: var(--grey-for-text);
     text-align: center;
@@ -305,9 +305,9 @@
 
   .invite-error {
     margin-top: 12px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 1.5;
-    color: var(--error, #b42318);
+    color: var(--error, var(--ui-error-text));
   }
 
   .invite-spinner {
@@ -331,11 +331,11 @@
     }
 
     &__header h2 {
-      font-size: 16px;
+      font-size: var(--ui-font-h3);
     }
 
     &__header p {
-      font-size: 11px;
+      font-size: var(--ui-font-caption);
     }
 
     &__symbol {
@@ -364,11 +364,11 @@
 
     .invite-button {
       padding: 9px 8px;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
     }
 
     .invite-search input {
-      font-size: 16px;
+      font-size: var(--ui-font-h3);
     }
   }
 }
@@ -391,7 +391,7 @@
   }
 }
 
-// Opt-in для окон команды: приглашение из профиля сохраняет прежнюю композицию.
+/* Opt-in для окон команды: приглашение из профиля сохраняет прежнюю композицию. */
 .project-invite.project-invite--compact {
   .project-invite__symbol {
     display: none;
@@ -412,7 +412,7 @@
 
   .project-invite__header h2 {
     grid-area: title;
-    font-size: 18px;
+    font-size: var(--ui-font-h2);
     font-weight: 400;
     line-height: 27px;
   }
@@ -420,7 +420,7 @@
   .project-invite__header p {
     grid-area: description;
     margin-top: 0;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 1.5;
   }
 
@@ -437,7 +437,7 @@
   .invite-label,
   app-project-invite-role-input .invite-role label {
     margin-bottom: 6px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     color: var(--black);
   }
@@ -456,17 +456,17 @@
 
   .invite-search input {
     min-height: 39px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
   }
 
   app-project-invite-role-input .invite-role input {
     padding: 10px 16px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
   }
 
   app-project-invite-role-input .invite-role p,
   .invite-meta {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
   }
 
   .invite-error {
@@ -483,7 +483,7 @@
   }
 
   .invite-copy strong {
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 400;
   }
 
@@ -506,7 +506,7 @@
   .invite-button {
     min-height: 25px;
     padding: 4px 12px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 400;
     line-height: 16px;
     border-width: 0.5px;
@@ -525,7 +525,7 @@
     }
 
     .project-invite__header p {
-      font-size: 12px;
+      font-size: var(--ui-font-small);
     }
 
     .invite-actions {
@@ -543,7 +543,7 @@
 
     .invite-search input,
     app-project-invite-role-input .invite-role input {
-      font-size: 16px;
+      font-size: var(--ui-font-h3);
     }
   }
 }

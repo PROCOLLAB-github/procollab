@@ -1,5 +1,8 @@
 /** @format */
 
+import { ChoiceDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/primitives";
@@ -10,7 +13,7 @@ import { noop } from "rxjs";
   selector: "app-boolean-criterion",
   templateUrl: "./boolean-criterion.component.html",
   styleUrl: "./boolean-criterion.component.scss",
-  imports: [IconComponent],
+  imports: [ChoiceDirective, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {

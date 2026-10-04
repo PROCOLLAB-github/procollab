@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 @mixin expandable-list {
@@ -96,7 +98,7 @@
     min-width: 0;
 
     &--text {
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       font-weight: 500;
       line-height: 17px;
       color: var(--black) !important;
@@ -105,7 +107,7 @@
     }
 
     &--subtext {
-      font-size: 11px;
+      font-size: var(--ui-font-caption);
       line-height: 16px;
       color: var(--grey-for-text) !important;
       word-break: break-word;
@@ -113,7 +115,7 @@
     }
 
     &--more {
-      font-size: 11px;
+      font-size: var(--ui-font-caption);
       line-height: 16px;
       color: var(--accent) !important;
     }
@@ -127,7 +129,7 @@
   &__project-name {
     display: -webkit-box;
     overflow: hidden;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     line-height: 16px;
     color: var(--black);
@@ -138,7 +140,7 @@
 
   &__project-role {
     margin-top: 3px;
-    font-size: 11px;
+    font-size: var(--ui-font-caption);
     line-height: 15px;
     color: var(--dark-grey);
     overflow-wrap: anywhere;
@@ -156,7 +158,7 @@
     border-radius: var(--rounded-xl);
 
     p {
-      font-size: 11px;
+      font-size: var(--ui-font-caption);
       line-height: 14px;
       color: var(--dark-grey);
     }

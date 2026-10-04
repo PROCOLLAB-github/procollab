@@ -53,11 +53,11 @@
 
   .rating__field label {
     min-width: 0;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 20px;
   }
 
   .rating .rating__comment app-textarea ::ng-deep .field__input {
-    font-size: 16px !important;
+    font-size: var(--ui-font-h3) !important;
   }
 }

@@ -1,5 +1,8 @@
 /** @format */
 
+import { StateComponent } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
@@ -12,7 +15,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 /** Страница списка курсов. */
 @Component({
   selector: "app-list",
-  imports: [CommonModule, RouterModule, CourseComponent, LoaderComponent],
+  imports: [StateComponent, CommonModule, RouterModule, CourseComponent, LoaderComponent],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   providers: [CoursesListInfoService, CoursesListUIInfoService],

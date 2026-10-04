@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective, FieldDirective, StateComponent } from "@uilib";
+/** @format */
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from "@angular/core";
 import { Project } from "@domain/project/project.model";
 import { ProjectInviteForm } from "@api/invite/project-invite-form";
@@ -9,7 +12,13 @@ import { ProjectInviteRoleInputComponent } from "./project-invite-role-input.com
 
 @Component({
   selector: "app-profile-project-invite-modal",
-  imports: [ProjectInviteDialogComponent, ProjectInviteRoleInputComponent],
+  imports: [
+    StateComponent,
+    ButtonDirective,
+    FieldDirective,
+    ProjectInviteDialogComponent,
+    ProjectInviteRoleInputComponent,
+  ],
   templateUrl: "./profile-project-invite-modal.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

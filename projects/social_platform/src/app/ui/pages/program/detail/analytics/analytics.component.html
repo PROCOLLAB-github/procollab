@@ -58,9 +58,12 @@
           </app-button>
         </div>
         @if (exportFailed()) {
-          <p class="exports__error text-body-10" role="alert">
-            Не удалось подготовить выгрузку. Повторите попытку.
-          </p>
+          <app-state
+            class="exports__error text-body-10"
+            [compact]="true"
+            kind="error"
+            title="Не удалось подготовить выгрузку. Повторите попытку."
+          />
         }
       </section>
     }
@@ -123,6 +126,7 @@
           <div class="analytics__heading-row">
             <h2 [id]="card.key + '-title'" class="text-body-12">{{ card.title }}</h2>
             <button
+              appButton="secondary"
               type="button"
               class="regions__export"
               [attr.aria-label]="'Выгрузить ' + card.title.toLowerCase() + ' в Excel'"
@@ -143,12 +147,20 @@
             ></app-tooltip>
           </div>
           @if (regionExportState()[card.key].pending) {
-            <p class="regions__export-message" role="status">Подготавливаем Excel…</p>
+            <app-state
+              class="regions__export-message"
+              [compact]="true"
+              kind="loading"
+              title="Подготавливаем Excel…"
+            />
           }
           @if (regionExportState()[card.key].failed) {
-            <p class="regions__export-message exports__error" role="alert">
-              Не удалось создать Excel. Попробуйте ещё раз.
-            </p>
+            <app-state
+              class="regions__export-message exports__error"
+              [compact]="true"
+              kind="error"
+              title="Не удалось создать Excel. Попробуйте ещё раз."
+            />
           }
           @if (card.items.length > 0) {
             <ul class="regions__list">
@@ -267,6 +279,7 @@
             @for (row of caseRows(); track row.key) {
               <li>
                 <button
+                  appButton="secondary"
                   type="button"
                   #caseTrigger
                   class="case-row"
@@ -379,6 +392,7 @@
             @for (item of assignmentStatuses(); track item.key) {
               <li>
                 <button
+                  appButton="secondary"
                   #assignmentTrigger
                   type="button"
                   class="evaluation__assignment-action"
@@ -426,6 +440,7 @@
               <li [class.attention__row--disabled]="item.value === 0">
                 @if (item.key === "delayed-experts") {
                   <button
+                    appButton="secondary"
                     #delayedTrigger
                     type="button"
                     class="attention__action"
@@ -445,6 +460,7 @@
                   </button>
                 } @else {
                   <button
+                    appButton="primary"
                     #attentionTrigger
                     type="button"
                     class="attention__action"
@@ -584,6 +600,7 @@
               </svg>
               @for (point of activityChart(); track point.date) {
                 <button
+                  appButton="secondary"
                   type="button"
                   class="activity__date-target"
                   [class.activity__date-target--selected]="selectedActivityDate() === point.date"

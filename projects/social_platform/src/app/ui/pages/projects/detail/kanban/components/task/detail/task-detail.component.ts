@@ -29,7 +29,7 @@ import {
   ValidationService,
 } from "@corelib";
 import { expandElement } from "@utils/expand-element";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective, FormLayoutDirective } from "@uilib";
 import { nanoid } from "nanoid";
 import { DropdownComponent } from "@ui/primitives/dropdown/dropdown.component";
 import { priorityInfoList } from "@core/consts/lists/priority-info-list.const";
@@ -67,6 +67,8 @@ import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.por
   templateUrl: "./task-detail.component.html",
   styleUrl: "./task-detail.component.scss",
   imports: [
+    ButtonDirective,
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,

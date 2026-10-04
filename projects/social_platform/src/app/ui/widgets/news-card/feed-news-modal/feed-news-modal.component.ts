@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective, DialogBodyDirective, DialogFooterDirective } from "@uilib";
+/** @format */
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import {
   AfterViewInit,
@@ -27,6 +30,9 @@ import { CarouselComponent } from "../carousel/carousel.component";
 @Component({
   selector: "app-feed-news-modal",
   imports: [
+    DialogBodyDirective,
+    DialogFooterDirective,
+    ButtonDirective,
     ModalComponent,
     A11yModule,
     RouterLink,

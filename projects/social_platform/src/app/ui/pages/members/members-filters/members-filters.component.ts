@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, FormLayoutDirective, FiltersDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input, output } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -12,7 +15,14 @@ import { SearchesService } from "@api/searches/searches.service";
 /** Фильтры для списка участников с синхронизацией через URL. */
 @Component({
   selector: "app-members-filters",
-  imports: [CommonModule, ReactiveFormsModule, AutoCompleteInputComponent],
+  imports: [
+    FiltersDirective,
+    ButtonDirective,
+    FormLayoutDirective,
+    CommonModule,
+    ReactiveFormsModule,
+    AutoCompleteInputComponent,
+  ],
   templateUrl: "./members-filters.component.html",
   styleUrl: "./members-filters.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

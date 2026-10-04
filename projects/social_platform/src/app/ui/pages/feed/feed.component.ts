@@ -1,5 +1,8 @@
 /** @format */
 
+import { StateComponent } from "@uilib";
+/** @format */
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -28,6 +31,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     IconComponent,
     NewProjectComponent,

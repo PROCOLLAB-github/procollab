@@ -19,6 +19,7 @@
           publishedAt() | dayjs: "format" : "DD.MM.YYYY"
         }}</time>
         <button
+          appButton="icon"
           #closeButton
           type="button"
           class="feed-news-modal__close"
@@ -30,6 +31,7 @@
       </header>
       <div
         class="feed-news-modal__scroll"
+        appDialogBody
         tabindex="0"
         role="region"
         aria-label="Содержимое новости"
@@ -59,8 +61,9 @@
             }
           </ul>
         }
-        <footer class="feed-news-modal__actions">
+        <footer appDialogFooter class="feed-news-modal__actions">
           <button
+            appButton="secondary"
             type="button"
             aria-label="Нравится"
             [attr.aria-pressed]="news().isUserLiked"
@@ -69,7 +72,12 @@
           >
             <i appIcon icon="like" appSquare="16"></i>{{ news().likesCount }}
           </button>
-          <button type="button" aria-label="Скопировать ссылку на новость" (click)="share.emit()">
+          <button
+            appButton="secondary"
+            type="button"
+            aria-label="Скопировать ссылку на новость"
+            (click)="share.emit()"
+          >
             <i appIcon icon="share" appSquare="16"></i>
           </button>
           <span [attr.aria-label]="'Просмотров: ' + news().viewsCount"

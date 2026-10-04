@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective, DialogBodyDirective, DialogFooterDirective } from "@uilib";
+/** @format */
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { Overlay } from "@angular/cdk/overlay";
 import {
@@ -21,7 +24,14 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
 
 @Component({
   selector: "app-project-invite-dialog",
-  imports: [ModalComponent, IconComponent, A11yModule],
+  imports: [
+    DialogBodyDirective,
+    DialogFooterDirective,
+    ButtonDirective,
+    ModalComponent,
+    IconComponent,
+    A11yModule,
+  ],
   templateUrl: "./project-invite-dialog.component.html",
   styleUrl: "./project-invite-dialog.component.scss",
   encapsulation: ViewEncapsulation.None,

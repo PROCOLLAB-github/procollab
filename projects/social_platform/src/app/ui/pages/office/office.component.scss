@@ -40,7 +40,7 @@
     align-items: center;
     justify-content: space-between;
     padding: max(8px, env(safe-area-inset-top)) var(--page-gutter) 8px;
-    background: linear-gradient(var(--accent), #4d3780);
+    background: linear-gradient(var(--accent), var(--ui-nav-gradient-end));
 
     @include responsive.apply-desktop {
       position: static;

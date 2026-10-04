@@ -1,8 +1,14 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/responsive";
 
 .field {
+  @include ui-foundation.choice;
+
   position: relative;
   display: flex;
   align-items: center;
@@ -20,6 +26,16 @@
 
   &__check {
     color: var(--light-white);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--ui-disabled-opacity);
   }
 }
 

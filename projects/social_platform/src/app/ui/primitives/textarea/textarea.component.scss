@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -19,13 +23,7 @@
     width: 100%;
     min-height: 162px;
     padding: 12px 18px;
-    color: var(--black);
     resize: none;
-    background-color: var(--white);
-    border: 0.5px solid var(--gray);
-    border-radius: var(--rounded-xl);
-    outline: none;
-    transition: all 0.2s;
 
     &::placeholder {
       color: var(--dark-grey);
@@ -41,6 +39,7 @@
 
     &--with-tooltip {
       padding-right: 130px;
+      padding-right: 60px;
     }
 
     &--error,
@@ -49,14 +48,18 @@
 
       &:focus {
         border-color: var(--red) !important;
-        box-shadow: 0 0 6px rgb(255 40 40 / 30.8%) !important;
+        box-shadow: var(--ui-error-ring) !important;
       }
     }
 
     &:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      box-shadow: var(--ui-focus-ring);
     }
+
+    @include ui-foundation.control;
+
+    border-radius: var(--ui-radius-card);
   }
 
   &__error-icon {
@@ -126,7 +129,7 @@
     min-width: 0;
     max-width: 100%;
     min-height: 44px;
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
   }
 
   .field--small,

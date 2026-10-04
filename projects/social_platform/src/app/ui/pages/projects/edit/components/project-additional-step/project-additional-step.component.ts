@@ -15,7 +15,7 @@ import { SwitchComponent } from "@ui/primitives/switch/switch.component";
 import { ControlErrorPipe, ToSelectOptionsPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
-import { IconComponent } from "@uilib";
+import { IconComponent, StateComponent } from "@uilib";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
@@ -28,6 +28,7 @@ import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.cons
   templateUrl: "./project-additional-step.component.html",
   styleUrl: "./project-additional-step.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,

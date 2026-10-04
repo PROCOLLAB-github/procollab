@@ -1,0 +1,398 @@
+[
+  {
+    "width": 320,
+    "route": "/office/feed",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/projects/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/projects/my",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/projects/subscriptions",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/projects/invites",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/projects/dashboard",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/vacancies/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/program/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/courses/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/members",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/profile/1",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 320,
+    "route": "/office/profile/edit?editingStep=main",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/feed",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/projects/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/projects/my",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/projects/subscriptions",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/projects/invites",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/projects/dashboard",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/vacancies/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/program/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/courses/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/members",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/profile/1",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 390,
+    "route": "/office/profile/edit?editingStep=main",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": 24
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/feed",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/projects/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/projects/my",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/projects/subscriptions",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/projects/invites",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/projects/dashboard",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/vacancies/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/program/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/courses/all",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/members",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/profile/1",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "route": "/office/profile/edit?editingStep=main",
+    "metrics": {
+      "smallActions": [],
+      "outsideCards": [],
+      "wrappedLabels": [],
+      "menuIcon": null
+    },
+    "passed": true
+  }
+]

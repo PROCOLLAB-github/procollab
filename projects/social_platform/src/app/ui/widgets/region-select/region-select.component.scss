@@ -10,7 +10,7 @@
     input {
       width: 100%;
       padding: 12px 44px 12px 12px;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       line-height: 16px;
       color: var(--black);
       background: var(--white);
@@ -24,7 +24,7 @@
 
       &:focus {
         border-color: var(--accent);
-        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+        box-shadow: var(--ui-focus-ring);
       }
     }
 
@@ -36,7 +36,7 @@
   &__clear {
     position: absolute;
     top: 50%;
-    right: 14px;
+    right: var(--ui-space-xs);
     display: grid;
     place-items: center;
     padding: 4px;
@@ -78,7 +78,7 @@
     button {
       width: 100%;
       padding: 9px 10px;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       line-height: 16px;
       color: var(--black);
       text-align: left;

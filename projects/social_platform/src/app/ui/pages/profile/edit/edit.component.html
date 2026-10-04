@@ -2,26 +2,14 @@
 
 @if (profileForm.get("userType"); as currentType) {
   <div class="profile__top">
-    <div class="profile__back" [routerLink]="AppRoutes.profile.detail(profileId()!)">
-      <i appIcon icon="left-arrow" appSquare="24"></i>
-      <h1 class="profile__title">редактирование профиля</h1>
-    </div>
-
-    <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
-      <app-button
-        size="medium"
-        [disabled]="
-          editEducationClick() ||
-          editWorkClick() ||
-          editLanguageClick() ||
-          isEducationDirty ||
-          isWorkDirty ||
-          isLanguageDirty ||
-          isAchievementsDirty
-        "
-        [loader]="profileFormSubmitting()"
-        [ngStyle]="{
-          opacity:
+    <app-page-header
+      title="редактирование профиля"
+      [backRoute]="AppRoutes.profile.detail(profileId()!)"
+    >
+      <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
+        <app-button
+          size="medium"
+          [disabled]="
             editEducationClick() ||
             editWorkClick() ||
             editLanguageClick() ||
@@ -29,29 +17,41 @@
             isWorkDirty ||
             isLanguageDirty ||
             isAchievementsDirty
-              ? '0.6'
-              : '1',
-          cursor:
-            editEducationClick() ||
-            editWorkClick() ||
-            editLanguageClick() ||
-            isEducationDirty ||
-            isWorkDirty ||
-            isLanguageDirty ||
-            isAchievementsDirty
-              ? 'not-allowed'
-              : 'pointer',
-        }"
-        customTypographyClass="text-body-12"
-        (click)="saveProfile()"
-      >
-        cохранить</app-button
-      >
-    </div>
+          "
+          [loader]="profileFormSubmitting()"
+          [ngStyle]="{
+            opacity:
+              editEducationClick() ||
+              editWorkClick() ||
+              editLanguageClick() ||
+              isEducationDirty ||
+              isWorkDirty ||
+              isLanguageDirty ||
+              isAchievementsDirty
+                ? '0.6'
+                : '1',
+            cursor:
+              editEducationClick() ||
+              editWorkClick() ||
+              editLanguageClick() ||
+              isEducationDirty ||
+              isWorkDirty ||
+              isLanguageDirty ||
+              isAchievementsDirty
+                ? 'not-allowed'
+                : 'pointer',
+          }"
+          customTypographyClass="text-body-12"
+          (click)="saveProfile()"
+        >
+          cохранить</app-button
+        >
+      </div>
+    </app-page-header>
   </div>
 
   <main class="profile">
-    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
+    <form appFormLayout [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
       <app-project-navigation
         (stepChange)="navigateStep($event)"
         [navItems]="navProfileItems"
@@ -192,6 +192,7 @@
   <app-modal [open]="skillsGroupsModalOpen()" (openChange)="closeSkillsGroupsModal()" class="modal">
     <div class="modal__wrapper">
       <button
+        appButton="icon"
         type="button"
         class="modal__close"
         aria-label="Закрыть библиотеку навыков"

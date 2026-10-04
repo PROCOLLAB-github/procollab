@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
@@ -21,6 +24,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   styleUrl: "./login.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    ButtonDirective,
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     RouterLink,

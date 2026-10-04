@@ -21,6 +21,7 @@
           <path d="m15 15 6 6" />
         </svg>
         <input
+          appField
           data-invite-autofocus
           type="search"
           aria-label="Поиск среди ваших проектов"
@@ -38,6 +39,7 @@
       <div class="invite-rows" role="radiogroup" aria-label="Ваши проекты">
         @for (project of filteredProjects(); track project.id) {
           <button
+            appButton="secondary"
             type="button"
             class="invite-row"
             role="radio"
@@ -78,12 +80,21 @@
     }
   </div>
   @if (error(); as error) {
-    <p inviteError class="invite-error" role="alert">{{ error.message }}</p>
+    <app-state
+      inviteError
+      class="invite-error"
+      [compact]="true"
+      kind="error"
+      title="{{ error.message }}"
+    />
   }
   <div inviteFooter class="invite-actions">
-    <button type="button" class="invite-button" (click)="closed.emit()">Отмена</button>
+    <button appButton="secondary" type="button" class="invite-button" (click)="closed.emit()">
+      Отмена
+    </button>
     @if (projects().length) {
       <button
+        appButton="secondary"
         type="button"
         class="invite-button invite-button--primary"
         [disabled]="!selectedProjectId() || form().invalid || loading()"
@@ -97,6 +108,7 @@
       </button>
     } @else {
       <button
+        appButton="secondary"
         data-invite-autofocus
         type="button"
         class="invite-button invite-button--primary"

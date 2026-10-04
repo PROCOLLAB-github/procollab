@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, FiltersDirective } from "@uilib";
+/** @format */
+
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import {
@@ -28,6 +31,8 @@ import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service"
 @Component({
   selector: "app-vacancy-filter",
   imports: [
+    ButtonDirective,
+    FiltersDirective,
     CommonModule,
     CheckboxComponent,
     ClickOutsideModule,

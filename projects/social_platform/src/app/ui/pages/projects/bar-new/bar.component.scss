@@ -1,72 +1,7 @@
-@use "styles/responsive";
+/** @format */
 
-.bar {
+:host {
   display: block;
-  background-color: var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
-
-  &__nav {
-    display: flex;
-    align-items: center;
-  }
-
-  &__tabs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 2px;
-  }
-
-  &__item {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    padding: 5px 30px;
-    color: var(--grey-for-text);
-    cursor: pointer;
-    border-radius: var(--rounded-xl);
-    transition: color 0.2s;
-
-    &:hover {
-      i {
-        color: var(--accent);
-      }
-    }
-  }
-
-  &__link {
-    color: var(--black);
-
-    &--active {
-      .bar__item {
-        background-color: var(--light-white);
-        border: 0.5px solid var(--dark-grey);
-      }
-    }
-
-    &:hover {
-      .bar__item {
-        background-color: var(--white);
-      }
-    }
-  }
-
-  @media (max-width: 999px) {
-    // Перенос вкладок не даёт навигации растягивать сетку фиксированных карточек.
-    &__tabs {
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    &__link {
-      flex: 1 1 140px;
-      min-width: 0;
-    }
-
-    &__item {
-      justify-content: center;
-      padding: 5px 8px;
-    }
-  }
+  min-width: 0;
+  max-width: 100%;
 }

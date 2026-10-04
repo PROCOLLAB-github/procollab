@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -117,7 +121,7 @@
     }
 
     .card__feed-summary {
-      font-size: 14px;
+      font-size: var(--ui-font-body);
       line-height: 1.5;
       color: var(--grey-for-text);
       -webkit-line-clamp: 3;
@@ -250,4 +254,8 @@
       display: none;
     }
   }
+}
+
+.news {
+  @include ui-foundation.card;
 }

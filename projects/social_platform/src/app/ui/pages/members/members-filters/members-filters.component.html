@@ -1,15 +1,20 @@
 <!-- @format -->
 
-<div class="filters">
-  <div class="filters__titles">
+<div appFilters class="filters">
+  <div class="filters__titles ui-filters__header">
     <p class="text-body-14 filters__title">фильтры</p>
-    <button type="button" class="text-body-10 filters__clear" (click)="clearFilters()">
+    <button
+      appButton="text"
+      type="button"
+      class="text-body-10 filters__clear"
+      (click)="clearFilters()"
+    >
       сбросить
     </button>
   </div>
 
   <div class="filters__controls">
-    <form [formGroup]="filterForm()">
+    <form appFormLayout [formGroup]="filterForm()">
       <div class="filters__block">
         <app-autocomplete-input
           class="filter__autocomplete"

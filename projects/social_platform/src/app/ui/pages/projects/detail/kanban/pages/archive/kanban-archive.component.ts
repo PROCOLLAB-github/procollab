@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
@@ -15,7 +18,13 @@ import { TaskPreview } from "@domain/kanban/task.model";
   selector: "app-kanban-archive",
   templateUrl: "./kanban-archive.component.html",
   styleUrl: "./kanban-archive.component.scss",
-  imports: [CommonModule, SearchComponent, ReactiveFormsModule, KanbanTaskComponent],
+  imports: [
+    FormLayoutDirective,
+    CommonModule,
+    SearchComponent,
+    ReactiveFormsModule,
+    KanbanTaskComponent,
+  ],
   standalone: true,
 })
 export class KanbanArhiveComponent implements OnInit, OnDestroy {

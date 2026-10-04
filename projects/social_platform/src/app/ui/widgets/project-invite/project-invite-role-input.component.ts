@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective, FieldDirective } from "@uilib";
+/** @format */
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -18,7 +21,7 @@ import { filterProjectRoles } from "@domain/invite/project-role-suggestions";
 let nextRoleId = 0;
 @Component({
   selector: "app-project-invite-role-input",
-  imports: [ReactiveFormsModule],
+  imports: [ButtonDirective, FieldDirective, ReactiveFormsModule],
   templateUrl: "./project-invite-role-input.component.html",
   styleUrl: "./project-invite-role-input.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

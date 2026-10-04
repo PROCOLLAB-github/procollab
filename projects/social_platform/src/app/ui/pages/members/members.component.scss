@@ -25,7 +25,7 @@
       grid-template-columns: repeat(4, 2fr);
     }
 
-    // Четыре карточки фиксированной ширины не помещаются рядом с фильтрами на узком desktop.
+    /* Четыре карточки фиксированной ширины не помещаются рядом с фильтрами на узком desktop. */
     @media (min-width: responsive.$desktop) and (max-width: #{responsive.$container-md - 1px}) {
       grid-template-columns: repeat(3, 2fr);
     }
@@ -80,7 +80,7 @@
       min-width: 0;
       height: 44px;
       padding: 8px 12px;
-      font-size: 16px;
+      font-size: var(--ui-font-h3);
       color: var(--black);
       background: var(--light-white);
       border: 1px solid var(--medium-grey-for-outline);
@@ -96,7 +96,7 @@
     &__action {
       min-height: 44px;
       padding: 8px;
-      font-size: 13px;
+      font-size: var(--ui-font-body);
       line-height: 18px;
       color: var(--white);
       cursor: pointer;

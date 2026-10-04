@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -16,6 +19,7 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
   templateUrl: "./cancel-task-form.component.html",
   styleUrl: "./cancel-task-form.component.scss",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     ButtonComponent,

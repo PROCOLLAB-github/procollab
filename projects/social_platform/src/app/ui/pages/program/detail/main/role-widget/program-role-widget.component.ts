@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,7 +25,7 @@ import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/de
 /** Компактный виджет только страницы программы. Габариты соответствуют исходному SoonCard. */
 @Component({
   selector: "app-program-role-widget",
-  imports: [RouterLink, MatTooltipModule],
+  imports: [ButtonDirective, RouterLink, MatTooltipModule],
   providers: [ProgramRoleWidgetService],
   templateUrl: "./program-role-widget.component.html",
   styleUrl: "./program-role-widget.component.scss",

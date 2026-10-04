@@ -1,6 +1,11 @@
 /** @format */
 
-import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
+import {
+  InviteManageCardComponent,
+  ProfileInfoComponent,
+  ButtonDirective,
+  DrawerDirective,
+} from "@uilib";
 import { NotificationService } from "@ui/services/notification/notification.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -60,6 +65,8 @@ import { desktop } from "@utils/responsive";
   templateUrl: "./nav.component.html",
   styleUrl: "./nav.component.scss",
   imports: [
+    DrawerDirective,
+    ButtonDirective,
     CommonModule,
     IconComponent,
     RouterLink,

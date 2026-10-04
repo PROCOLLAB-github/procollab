@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
 
@@ -12,6 +12,7 @@ import { LoaderComponent } from "../loader/loader.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
+  variant = input<"primary" | "secondary" | "danger">();
   color = input<"primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white">("primary");
   loader = input(false);
   size = input<"extra-small" | "small" | "medium" | "big">("small");
@@ -21,4 +22,10 @@ export class ButtonComponent {
   backgroundColor = input<string>();
   disabled = input(false);
   customTypographyClass = input<string>();
+  protected readonly effectiveColor = computed(() =>
+    this.variant() === "danger" ? "red" : this.color(),
+  );
+  protected readonly effectiveAppearance = computed(() =>
+    this.variant() === "secondary" ? "outline" : this.appearance(),
+  );
 }

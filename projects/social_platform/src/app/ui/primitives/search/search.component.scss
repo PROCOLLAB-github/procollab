@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/responsive";
 
 .search {
@@ -44,6 +48,8 @@
       &::placeholder {
         color: var(--dark-grey);
       }
+
+      @include ui-foundation.control;
     }
   }
 }
@@ -68,7 +74,7 @@
     min-width: 0;
     max-width: 100%;
     min-height: 44px;
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
   }
 
   .field--small,

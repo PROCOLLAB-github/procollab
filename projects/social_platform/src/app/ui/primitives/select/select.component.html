@@ -9,7 +9,13 @@
     [class.field__input--small]="size() === 'small'"
     [class.field__input--big]="size() === 'big'"
     [class.field__input--disabled]="disabled"
-    (click)="isOpen = !isOpen; highlightedIndex = -1"
+    role="combobox"
+    aria-haspopup="listbox"
+    [attr.tabindex]="disabled ? -1 : 0"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-disabled]="disabled"
+    (click)="!disabled && (isOpen = !isOpen); highlightedIndex = -1"
+    (keydown)="onTriggerKeyDown($event)"
   >
     {{
       selectedId === -1

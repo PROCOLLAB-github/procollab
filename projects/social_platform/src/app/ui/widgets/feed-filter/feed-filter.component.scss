@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -9,13 +11,6 @@
 
   @include responsive.apply-desktop {
     display: none;
-  }
-
-  app-button {
-    &::ng-deep .button--inline {
-      min-height: 38px;
-      padding: 0;
-    }
   }
 }
 
@@ -144,9 +139,9 @@
     }
   }
 
-  // Одна двухстрочная область названия задаёт общую базовую линию всех счётчиков.
+  /* Одна двухстрочная область названия задаёт общую базовую линию всех счётчиков. */
   &__title {
-    font-size: 11px;
+    font-size: var(--ui-font-caption);
     line-height: 16px;
     color: var(--grey-for-text);
     text-align: center;
@@ -154,7 +149,7 @@
 
   &__count {
     display: block;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 18px;

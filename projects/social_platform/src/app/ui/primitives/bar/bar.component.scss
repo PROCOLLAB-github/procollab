@@ -1,113 +1,18 @@
 /** @format */
 
-@use "styles/responsive";
-
-.bar {
+:host {
   display: block;
-  height: 63px !important;
-  margin-bottom: 15px;
-  overflow: hidden;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
-
-  &__nav {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    margin-right: 25px;
-  }
-
-  &__tabs {
-    display: flex;
-
-    li {
-      text-align: center;
-    }
-  }
-
-  &__item {
-    display: flex;
-    align-items: center;
-    padding: 20px 10px;
-    color: var(--dark-grey);
-    cursor: pointer;
-    transition: color 0.2s;
-
-    @include responsive.apply-desktop {
-      padding: 20px;
-    }
-  }
-
-  &__ball {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 22px;
-    min-height: 22px;
-    padding: 1px 6px;
-    margin-left: 6px;
-    line-height: 1;
-    color: var(--white);
-    background-color: var(--gray);
-    border-radius: 7px;
-    transition: background-color 0.2s;
-
-    &--small {
-      padding: 0;
-      border-radius: 100px;
-    }
-  }
-
-  &__link {
-    &--active {
-      .bar__item {
-        color: var(--black);
-        border-bottom: 2px solid var(--black);
-      }
-
-      .bar__ball {
-        background-color: var(--accent);
-      }
-    }
-
-    &:hover {
-      .bar__item {
-        color: var(--black);
-      }
-
-      .bar__ball {
-        background-color: var(--accent);
-      }
-    }
-  }
-
-  &__back {
-    margin-top: 45px;
-  }
+  min-width: 0;
+  max-width: 100%;
 }
 
-@include responsive.apply-below-desktop {
-  .bar {
-    height: auto !important;
-    min-height: 56px;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-  }
+.bar {
+  display: flex;
+  gap: var(--ui-space-sm);
+  align-items: center;
+  min-width: 0;
+}
 
-  .bar__nav {
-    width: max-content;
-    min-width: 100%;
-    margin-right: 0;
-  }
-
-  .bar__tabs {
-    flex-shrink: 0;
-  }
-
-  .bar__item {
-    min-height: 56px;
-    padding: 12px;
-    white-space: nowrap;
-  }
+app-tabs {
+  flex: 1;
 }

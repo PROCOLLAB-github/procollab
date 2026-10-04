@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -7,12 +11,6 @@
   position: relative;
 
   &__input {
-    color: var(--black) !important;
-    background-color: var(--white);
-    border: none;
-    outline: none;
-    transition: all 0.2s;
-
     &::placeholder {
       color: var(--dark-grey);
     }
@@ -42,7 +40,7 @@
 
       &:focus {
         border-color: var(--accent);
-        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+        box-shadow: var(--ui-focus-ring);
       }
     }
 
@@ -52,15 +50,15 @@
 
       &:focus {
         border-color: var(--red);
-        box-shadow: 0 0 6px rgb(255 40 40 / 30.8%);
+        box-shadow: var(--ui-error-ring);
       }
     }
-
-    @include typography.body-10;
 
     @include responsive.apply-desktop {
       @include typography.body-12;
     }
+
+    @include ui-foundation.control;
   }
 
   &__input[type="date"]::-webkit-inner-spin-button,
@@ -215,7 +213,7 @@
     min-width: 0;
     max-width: 100%;
     min-height: 44px;
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
   }
 
   .field--small,

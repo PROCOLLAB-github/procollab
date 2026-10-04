@@ -6,7 +6,7 @@ const path = require("node:path");
 const { launch, assertViewport } = require("./browser-harness.cjs");
 const fixtures = require("./fixtures.cjs");
 const rows = [];
-const screenshots = path.join(__dirname, "screenshots");
+const screenshots = path.resolve(__dirname, process.env.RESPONSIVE_SCREENSHOTS || "screenshots");
 fs.mkdirSync(screenshots, { recursive: true });
 
 async function run(width, name, action) {
@@ -430,7 +430,7 @@ async function modalFits(page, selector = ".modal__body") {
     });
   }
   fs.writeFileSync(
-    path.join(__dirname, process.env.RESPONSIVE_FLOW_OUTPUT || "flow-results.json"),
+    path.resolve(__dirname, process.env.RESPONSIVE_FLOW_OUTPUT || "flow-results.json"),
     JSON.stringify(rows, null, 2),
   );
   if (rows.some(row => !row.passed)) process.exitCode = 1;

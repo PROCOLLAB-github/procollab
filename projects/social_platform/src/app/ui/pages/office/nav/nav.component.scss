@@ -99,7 +99,7 @@
     position: fixed;
     inset: 0;
     z-index: 200;
-    background: rgb(51 46 45 / 50%);
+    background: var(--ui-scrim);
   }
 
   &__close {

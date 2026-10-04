@@ -16,7 +16,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgb(51 46 45 / 50%);
+    background-color: var(--ui-backdrop);
   }
 
   &__body {
@@ -25,20 +25,18 @@
     left: 50%;
     display: flex;
     justify-content: center;
-    width: 90%;
+    width: min(var(--ui-dialog-width, var(--ui-dialog-md)), calc(100vw - 24px));
     min-width: 0;
     max-width: calc(100vw - 24px);
     max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
-    padding: 24px;
+    padding: var(--ui-dialog-padding);
     overflow-y: auto;
     overscroll-behavior: contain;
     background: var(--white);
-    border-radius: var(--rounded-xl);
+    border-radius: var(--ui-radius-dialog);
     transform: translate(-50%, -50%);
 
     @include responsive.apply-desktop {
-      width: unset;
-      max-height: 98vh;
       overflow-y: auto;
     }
 
@@ -58,8 +56,7 @@
 
     @include responsive.apply-below-desktop {
       top: calc(var(--visual-viewport-top, 0px) + var(--visual-viewport-height, 100dvh) / 2);
-      width: calc(100% - 24px);
-      padding: 16px;
+      padding: var(--ui-dialog-padding);
 
       ::ng-deep .cancel {
         min-width: 0;
@@ -105,4 +102,12 @@
       }
     }
   }
+}
+
+.modal__body--small {
+  --ui-dialog-width: var(--ui-dialog-sm);
+}
+
+.modal__body--large {
+  --ui-dialog-width: var(--ui-dialog-lg);
 }

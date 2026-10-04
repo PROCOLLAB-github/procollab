@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/components/vacancy-ui";
 
 :host {
@@ -9,6 +13,7 @@
 }
 
 .vacancy {
+  @include ui-foundation.card;
   @include vacancy-ui.surface;
 
   display: flex;
@@ -33,14 +38,14 @@
 
   &__date,
   &__project-label {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 18px;
 
     @include vacancy-ui.secondary;
   }
 
   &__role {
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
     line-height: 24px;
 
@@ -78,20 +83,20 @@
   }
 
   &__project-name {
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     line-height: 20px;
     color: var(--black);
   }
 
   &__specialization {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 18px;
 
     @include vacancy-ui.secondary;
   }
 
   &__salary {
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 21px;
   }
   /* stylelint-disable value-no-vendor-prefix */
@@ -108,7 +113,7 @@
   }
 
   &__description {
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 21px;
 
     p {

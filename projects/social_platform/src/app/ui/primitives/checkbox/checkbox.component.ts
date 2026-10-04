@@ -28,4 +28,9 @@ export class CheckboxComponent {
   checked = model(false);
 
   size = input<string>();
+  disabled = input(false);
+  label = input("Выбрать");
+  protected toggle(): void {
+    if (!this.disabled()) this.checked.set(!this.checked());
+  }
 }

@@ -473,6 +473,7 @@
   >
     <div class="modal__wrapper" (click)="$event.stopPropagation()">
       <button
+        appButton="icon"
         type="button"
         class="modal__close"
         aria-label="Закрыть библиотеку навыков"
@@ -618,7 +619,7 @@
       </div>
     </cdk-virtual-scroll-viewport>
 
-    <form class="form" [formGroup]="messageForm" (submit)="onSubmitMessage()">
+    <form appFormLayout class="form" [formGroup]="messageForm" (submit)="onSubmitMessage()">
       @if (messageForm.get("text"); as text) {
         <div class="form__row">
           <app-input
@@ -639,7 +640,7 @@
               <i appIcon icon="attach" appSquare="20"></i>
             </label>
 
-            <button class="form__send" type="submit">
+            <button appButton="primary" class="form__send" type="submit">
               <i appIcon icon="send" appSquare="7"></i>
             </button>
           </div>
@@ -656,7 +657,7 @@
       <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
     </div>
 
-    <form class="result__form" [formGroup]="sendResultForm" (ngSubmit)="onSubmit()">
+    <form appFormLayout class="result__form" [formGroup]="sendResultForm" (ngSubmit)="onSubmit()">
       @if (sendResultForm.get("description"); as description) {
         <fieldset>
           <app-textarea

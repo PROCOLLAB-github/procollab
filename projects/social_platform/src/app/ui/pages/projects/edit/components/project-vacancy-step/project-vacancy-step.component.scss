@@ -114,7 +114,7 @@
 
   &__error {
     margin-top: 12px;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     line-height: 20px;
     color: var(--black);
   }

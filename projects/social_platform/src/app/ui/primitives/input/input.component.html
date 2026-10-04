@@ -12,6 +12,7 @@
 
   @if (type() === "radio") {
     <input
+      appChoice
       type="radio"
       [name]="name()"
       [value]="appValue()"
@@ -41,6 +42,7 @@
         [class.field__input--border]="hasBorder()"
       />
       <button
+        appButton="icon"
         type="button"
         class="field__calendar-button"
         aria-label="Открыть календарь"

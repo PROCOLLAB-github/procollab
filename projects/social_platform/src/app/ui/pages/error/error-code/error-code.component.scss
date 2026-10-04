@@ -18,8 +18,8 @@
     background:
       radial-gradient(
         50% 50% at 50% 50%,
-        rgb(0 200 147 / 51%) 0%,
-        rgb(0 200 147 / 0%) 100%
+        var(--ui-success-glow) 0%,
+        var(--ui-success-glow-end) 100%
       );
   }
 

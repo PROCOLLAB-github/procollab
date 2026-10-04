@@ -13,12 +13,14 @@
     min-width: 0;
     max-width: calc(100vw - 24px);
     max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
-    padding: 12px;
+    padding: var(--ui-space-sm);
     overflow-y: auto;
     overscroll-behavior: contain;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
+    border-color: var(--ui-border);
+    border-radius: var(--ui-radius-card);
+    box-shadow: var(--ui-card-hover-shadow);
   }
 
   &__option {
@@ -28,7 +30,10 @@
     justify-content: space-between;
     width: 100%;
     min-width: 0;
+    min-height: var(--ui-control-height);
+    padding: 8px 12px;
     cursor: pointer;
+    border-radius: var(--rounded-lg);
     transition: color 0.2s ease-in-out;
 
     &--add-object {

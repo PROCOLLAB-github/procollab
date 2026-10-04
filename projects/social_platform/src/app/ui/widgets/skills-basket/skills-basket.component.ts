@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, forwardRef, input, signal } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
@@ -12,7 +15,7 @@ import { Skill } from "@domain/skills/skill.model";
   selector: "app-skills-basket",
   templateUrl: "./skills-basket.component.html",
   styleUrl: "./skills-basket.component.scss",
-  imports: [CommonModule, IconComponent],
+  imports: [ButtonDirective, CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {

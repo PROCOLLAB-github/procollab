@@ -3,6 +3,7 @@
 <div class="nav-bar">
   <div class="nav-bar__inner">
     <button
+      appButton="icon"
       type="button"
       class="nav-bar__toggle"
       aria-label="Открыть меню"
@@ -24,6 +25,7 @@
   @if (mobileMenuOpen) {
     <div class="nav-bar__backdrop" (click)="closeMenu()"></div>
     <div
+      appDrawer
       id="mobile-navigation"
       class="nav-bar__mobile-menu"
       role="dialog"
@@ -35,6 +37,7 @@
     >
       <div class="nav-bar__top">
         <button
+          appButton="icon"
           type="button"
           class="nav-bar__close"
           aria-label="Закрыть меню"

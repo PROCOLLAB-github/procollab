@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const base = "http://127.0.0.1:4360";
 const output = __dirname;
+const screenshotOutput = path.resolve(output, process.env.RESPONSIVE_SCREENSHOTS || "screenshots");
 const widths = process.env.RESPONSIVE_WIDTHS?.split(",").map(Number) || [
   320, 360, 375, 390, 430, 768, 820, 1024, 1280, 1440, 1920,
 ];
@@ -71,11 +72,10 @@ if (resetIndex >= 0) urls[resetIndex] += "?token=responsive-fixture";
           "/office/courses/1/lesson/1/results",
         ].includes(url)
       ) {
-        fs.mkdirSync(path.join(output, "screenshots"), { recursive: true });
+        fs.mkdirSync(screenshotOutput, { recursive: true });
         await page.screenshot({
           path: path.join(
-            output,
-            "screenshots",
+            screenshotOutput,
             `${url.replaceAll("/", "-").slice(1)}-${width}.png`,
           ),
           fullPage: true,

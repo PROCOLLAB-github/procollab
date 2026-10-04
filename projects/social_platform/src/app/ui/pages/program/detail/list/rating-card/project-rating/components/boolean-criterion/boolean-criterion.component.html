@@ -1,7 +1,13 @@
 <!-- @format -->
 
 <label class="container">
-  <input type="checkbox" [checked]="isChecked" (change)="onChanged($event)" [disabled]="disabled" />
+  <input
+    appChoice
+    type="checkbox"
+    [checked]="isChecked"
+    (change)="onChanged($event)"
+    [disabled]="disabled"
+  />
   <div class="checkbox" [class.checkbox__checked]="isChecked">
     <i appIcon icon="check" appSquare="14" (click)="onClickLog()"></i>
   </div>
