@@ -122,4 +122,23 @@ describe("UniversitySelectComponent", () => {
     expect(component.open()).toBe(false);
     expect(fixture.nativeElement.querySelector("input").disabled).toBe(true);
   });
+
+  it("keeps the load-more button focused and ignores duplicate clicks while loading", async () => {
+    const nextPage = new Subject<typeof page>();
+    search.mockReturnValueOnce(of({ ...page, count: 2 })).mockReturnValue(nextPage);
+    component.browse();
+    await vi.waitFor(() => expect(component.universities()).toHaveLength(1));
+    fixture.detectChanges();
+    const more: HTMLButtonElement = fixture.nativeElement.querySelector(".university__more");
+    more.focus();
+    more.click();
+    fixture.detectChanges();
+    expect(more.disabled).toBe(false);
+    expect(more.getAttribute("aria-disabled")).toBe("true");
+    more.click();
+    await vi.waitFor(() => expect(search).toHaveBeenCalledTimes(2));
+    nextPage.next({ ...page, results: [{ ...university, id: 2 }], count: 2 });
+    expect(component.open()).toBe(true);
+    expect(component.universities()).toHaveLength(2);
+  });
 });

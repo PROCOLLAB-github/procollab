@@ -80,7 +80,12 @@
         </div>
       </div>
       @if (universities().length < total()) {
-        <button type="button" class="university__more" [disabled]="loading()" (click)="loadMore()">
+        <button
+          type="button"
+          class="university__more"
+          [attr.aria-disabled]="loading()"
+          (click)="loadMore()"
+        >
           Показать ещё
         </button>
       }
