@@ -28,7 +28,7 @@ import { Project } from "@domain/project/project.model";
 
 interface MyProjectPresentation {
   lifecycle: "submitted" | "draft" | "program" | "published";
-  statusLabel: "Черновик" | "Опубликован" | "В программе" | "Сдан в программу";
+  statusLabel: "Черновик" | "Опубликован" | "Привязан к программе" | "Сдан в программу";
   role: "leader" | "participant";
   roleLabel: "Лидер" | "Участник";
   accessLabel: "можно редактировать" | "только просмотр";
@@ -109,7 +109,7 @@ export class InfoCardComponent {
       {
         submitted: "Сдан в программу",
         draft: "Черновик",
-        program: "В программе",
+        program: "Привязан к программе",
         published: "Опубликован",
       };
     const userId = this.loggedUserId();
@@ -124,6 +124,13 @@ export class InfoCardComponent {
       accessLabel: canEdit ? "можно редактировать" : "только просмотр",
       canEdit,
     };
+  });
+
+  /** Имя той же связи, которая определяет статус; без дополнительных запросов. */
+  protected readonly programName = computed(() => {
+    if (!this.myProjectPresentation()) return null;
+    const project: Project | undefined = this.info();
+    return project?.partnerProgram?.name?.trim() || null;
   });
 
   readonly onAcceptingInvite = output<number>();

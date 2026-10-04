@@ -14,6 +14,8 @@ import { Resource } from "./resource.model";
 
 export class PartnerProgramInfo {
   id!: number;
+  /** Имя из list/detail API; optional для совместимости со старым сервером. */
+  name?: string;
   programLinkId!: number;
   programId!: number;
   isSubmitted!: boolean;

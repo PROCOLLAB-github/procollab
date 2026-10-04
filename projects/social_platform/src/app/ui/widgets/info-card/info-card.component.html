@@ -39,7 +39,12 @@
       <a
         class="card__project-link"
         [routerLink]="AppRoutes.projects.detail(info()?.id)"
-        [attr.aria-label]="'Открыть проект «' + info()?.name + '»'"
+        [attr.aria-label]="
+          'Открыть проект «' +
+          info()?.name +
+          '»' +
+          (programName() ? '. Программа: ' + programName() : '')
+        "
       >
         <ng-container *ngTemplateOutlet="cardContent"></ng-container>
       </a>
@@ -57,6 +62,25 @@
   <div class="card__content" [class.card__content--empty]="appereance() === 'empty'">
     @if (myProjectPresentation(); as presentation) {
       <p [class]="'card__context card__status card__status--' + presentation.lifecycle">
+        @if (presentation.lifecycle === "program") {
+          <i
+            appIcon
+            icon="program"
+            appWidth="12"
+            appHeight="12"
+            appViewBox="0 0 21 16"
+            aria-hidden="true"
+          ></i>
+        } @else if (presentation.lifecycle === "submitted") {
+          <i
+            appIcon
+            icon="lock"
+            appWidth="12"
+            appHeight="12"
+            appViewBox="0 0 11 12"
+            aria-hidden="true"
+          ></i>
+        }
         {{ presentation.statusLabel }}
       </p>
     }
@@ -66,6 +90,9 @@
           <ng-container *ngTemplateOutlet="emptyCardContent"></ng-container>
         } @else {
           <ng-container *ngTemplateOutlet="regularCardHeader"></ng-container>
+        }
+        @if (programName(); as name) {
+          <p class="card__program-name" [title]="'Программа: ' + name">Программа: {{ name }}</p>
         }
       </div>
     </div>
@@ -136,6 +163,7 @@
   <div
     class="card__description"
     [class.card__description--project]="type() === 'projects'"
+    [class.card__description--with-program]="programName() !== null"
     [style.max-height]="
       isProjectCard() || type() === 'invite' ? null : type() === 'members' ? '50px' : '24px'
     "

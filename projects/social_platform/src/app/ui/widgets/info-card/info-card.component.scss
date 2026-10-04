@@ -346,6 +346,26 @@
         line-height: 12px;
         -webkit-line-clamp: 2;
       }
+
+      &--with-program {
+        flex-basis: 12px;
+        height: 12px;
+        min-height: 12px;
+
+        p {
+          -webkit-line-clamp: 1;
+        }
+      }
+    }
+
+    .card__program-name {
+      width: 100%;
+      overflow: hidden;
+      font-size: 9px;
+      line-height: 12px;
+      color: var(--grey-for-text);
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .card__footer {
@@ -464,6 +484,15 @@
   }
 
   &__status {
+    gap: 4px;
+    padding-inline: 5px;
+    color: var(--black);
+
+    i {
+      display: flex;
+      flex-shrink: 0;
+    }
+
     &::before {
       flex: 0 0 6px;
       width: 6px;
@@ -479,13 +508,18 @@
     }
 
     &--program {
-      color: var(--accent-dark);
-      background: var(--accent-light);
+      &::before {
+        display: none;
+      }
     }
 
     &--submitted {
-      color: var(--gold-dark);
-      background: var(--gold-light);
+      color: var(--green-dark);
+      background: var(--green-light);
+
+      &::before {
+        display: none;
+      }
     }
   }
 }
