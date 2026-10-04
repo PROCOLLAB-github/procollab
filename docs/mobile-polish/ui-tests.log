@@ -1,0 +1,15 @@
+
+ RUN  v3.2.6 Z:/Документы/PROCOLLAB-dev/procollab-dev-platform-responsive
+
+ ✓ projects/ui/src/lib/components/layout/profile-info/profile-info.component.spec.ts (1 test) 104ms
+ ✓ projects/social_platform/src/app/ui/pages/feed/open-vacancy/open-vacancy.component.spec.ts (1 test) 213ms
+stdout | projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.spec.ts > FeedComponent > показывает счётчики всех шести категорий независимо от фильтра
+[23:05:50.477] [DEBUG] Query change from FeedFilterComponent
+
+ ✓ projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.spec.ts (2 tests) 159ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  23:05:32
+   Duration  8.12s (transform 5.94s, setup 8.08s, collect 5.88s, tests 476ms, environment 3.24s, prepare 3.87s)
+
