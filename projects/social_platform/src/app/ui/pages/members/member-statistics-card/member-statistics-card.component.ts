@@ -5,7 +5,7 @@ import { MemberStatistics } from "@domain/member/member-statistics.model";
 import { AsyncState } from "@domain/shared/async-state";
 import { IconComponent } from "@ui/primitives/icon/icon.component";
 
-/** Четыре глобальные метрики: одна разметка для узкого sidebar и мобильной сетки. */
+/** Три глобальные метрики: одна разметка для узкого sidebar и мобильной сетки. */
 @Component({
   selector: "app-member-statistics-card",
   imports: [IconComponent],
@@ -41,13 +41,6 @@ export class MemberStatisticsCardComponent {
         icon: "academic-hat",
         viewBox: "0 0 28 15",
         value: value("inPrograms"),
-      },
-      {
-        key: "new",
-        label: "Новых за 30 дней",
-        icon: "graph",
-        viewBox: "0 0 12 12",
-        value: value("newLast30Days"),
       },
     ];
   });
