@@ -1,3 +1,9 @@
+@use "styles/profile-form";
+
+/** @format */
+
+@use "styles/responsive";
+
 .profile__wrapper--education {
   display: grid;
   grid-template-columns: 6fr 4fr;
@@ -112,3 +118,5 @@
     }
   }
 }
+
+@include profile-form.responsive-layout;

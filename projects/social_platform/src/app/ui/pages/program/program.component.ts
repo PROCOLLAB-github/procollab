@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
-import { BackComponent } from "@uilib";
+import { BackComponent, FormLayoutDirective, PageHeaderComponent } from "@uilib";
 import { ProgramInfoService } from "@api/program/facades/program-info.service";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 
@@ -13,7 +13,14 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
   selector: "app-program",
   templateUrl: "./program.component.html",
   styleUrl: "./program.component.scss",
-  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BackComponent],
+  imports: [
+    PageHeaderComponent,
+    FormLayoutDirective,
+    ReactiveFormsModule,
+    SearchComponent,
+    RouterOutlet,
+    BackComponent,
+  ],
   providers: [ProgramInfoService, ProgramMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

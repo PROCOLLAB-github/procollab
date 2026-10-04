@@ -1,0 +1,218 @@
+[
+  {
+    "file": "projects/social_platform/src/app/ui/pages/auth/email-verification/email-verification.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/auth/login/login.component.html",
+    "adapters": ["ButtonDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/auth/register/register.component.html",
+    "adapters": ["ButtonDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/auth/reset-password/reset-password.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/auth/set-password/set-password.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/courses/courses.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/courses/lesson/shared/radio-select-task/radio-select-task.component.html",
+    "adapters": ["ChoiceDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/members/member-filters-dialog/member-filters-dialog.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/members/members-filters/members-filters.component.html",
+    "adapters": ["ButtonDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/members/members.component.html",
+    "adapters": ["ButtonDirective", "FieldDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/office/nav/nav.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/profile/edit/edit.component.html",
+    "adapters": ["ButtonDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.html",
+    "adapters": ["ButtonDirective", "FieldDirective", "TableDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/list/list.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/project-rating/components/boolean-criterion/boolean-criterion.component.html",
+    "adapters": ["ChoiceDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/project-rating/components/range-criterion-input/range-criterion-input.component.html",
+    "adapters": ["FieldDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/project-rating/project-rating.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/main/role-widget/program-role-widget.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/detail/register/register.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/program/program.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/detail/info/components/projects-mid-side/projects-mid-side.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/detail/kanban/components/cancel-task-form/cancel-task-form.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/detail/kanban/components/create-board-form/create-board-form.component.html",
+    "adapters": ["FieldDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/detail/kanban/components/create-tag-form/create-tag-form.component.html",
+    "adapters": ["FieldDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/detail/kanban/components/task/detail/task-detail.component.html",
+    "adapters": ["ButtonDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/detail/kanban/pages/archive/kanban-archive.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/edit/components/project-achievement-step/project-achievement-step.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/collaborator-card/collaborator-card.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/invite-card/invite-card.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/edit/components/project-vacancy-step/project-vacancy-step.component.html",
+    "adapters": ["ButtonDirective", "FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/edit/edit.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/projects/projects.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancy-responses/vacancy-responses.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/vacancies/detail/info/info.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/pages/vacancies/vacancies.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/primitives/input/input.component.html",
+    "adapters": ["ButtonDirective", "ChoiceDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/primitives/upload-file/upload-file.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/chat-window/chat-window.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/info-card/info-card.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/message-input/message-input.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/news-card/carousel/carousel.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/news-card/feed-news-modal/feed-news-modal.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/news-card/feed-news-preview/feed-news-preview.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/news-form/news-form.component.html",
+    "adapters": ["FormLayoutDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/project-invite/profile-project-invite-modal.component.html",
+    "adapters": ["ButtonDirective", "FieldDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/project-invite/project-invite-dialog.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/project-invite/project-invite-role-input.component.html",
+    "adapters": ["ButtonDirective", "FieldDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/project-invite/project-member-invite-modal.component.html",
+    "adapters": ["ButtonDirective", "FieldDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/region-select/region-select.component.html",
+    "adapters": ["ButtonDirective", "FieldDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/skills-basket/skills-basket.component.html",
+    "adapters": ["ButtonDirective"]
+  },
+  {
+    "file": "projects/social_platform/src/app/ui/widgets/vacancy-created-dialog/vacancy-created-dialog.component.html",
+    "adapters": ["ButtonDirective"]
+  }
+]

@@ -12,12 +12,12 @@ import {
   Output,
 } from "@angular/core";
 import { FileModel } from "@domain/file/file.model";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective } from "@uilib";
 
 /** Компонент карусели для просмотра изображений с навигацией и лайками. */
 @Component({
   selector: "app-carousel",
-  imports: [IconComponent],
+  imports: [ButtonDirective, IconComponent],
   templateUrl: "./carousel.component.html",
   styleUrls: ["./carousel.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

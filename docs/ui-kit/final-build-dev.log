@@ -1,0 +1,906 @@
+
+> procollab@0.0.0 build:pr
+> npm run build:social:dev
+
+
+> procollab@0.0.0 build:social:dev
+> npm run build:sprite && ng build social_platform --configuration=development
+
+
+> procollab@0.0.0 build:sprite
+> svg-sprite -s --dest=projects/social_platform/src/assets/icons "projects/social_platform/src/assets/icons/svg/**/*.svg"
+
+> Building...
+√ Building...
+Initial chunk files | Names                       |  Raw size
+chunk-RS3RL4Z4.js   | -                           |   1.12 MB |
+chunk-PM7TXECV.js   | -                           |   1.11 MB |
+main.js             | main                        | 551.75 kB |
+chunk-LFQK7FXB.js   | -                           | 360.26 kB |
+chunk-KT3WWCWY.js   | -                           | 228.53 kB |
+chunk-5ESBC6V7.js   | -                           | 213.76 kB |
+chunk-P5TDV3UK.js   | -                           | 203.55 kB |
+styles.css          | styles                      | 149.82 kB |
+chunk-AST6FPRY.js   | -                           | 149.23 kB |
+chunk-4FEAVS3A.js   | -                           |  93.96 kB |
+chunk-EHAUNVY6.js   | -                           |  64.15 kB |
+chunk-OQDFPHDB.js   | -                           |  27.02 kB |
+chunk-O3QNNUUG.js   | -                           |  25.83 kB |
+chunk-EYFPBQ3F.js   | -                           |  12.98 kB |
+chunk-J5GKTPL5.js   | -                           |   9.53 kB |
+chunk-XZYDVL2T.js   | -                           |   6.10 kB |
+chunk-R327OCYJ.js   | -                           |   3.00 kB |
+chunk-APWN5C4V.js   | -                           |   2.23 kB |
+chunk-7OVPMX7O.js   | -                           |   1.24 kB |
+chunk-ZLGJHKGI.js   | -                           |   1.23 kB |
+chunk-MBB5O3CJ.js   | -                           |   1.08 kB |
+chunk-Q4FBY7EI.js   | -                           | 876 bytes |
+chunk-5ZUULSOA.js   | -                           | 821 bytes |
+chunk-EIWB4VPJ.js   | -                           | 718 bytes |
+chunk-CS7GP7Q7.js   | -                           | 501 bytes |
+chunk-FKQ7IRJX.js   | -                           | 446 bytes |
+chunk-JHLFDKYY.js   | -                           | 399 bytes |
+chunk-TV2PQITN.js   | -                           | 386 bytes |
+chunk-NEVDF5BX.js   | -                           | 362 bytes |
+chunk-C454DSFA.js   | -                           | 322 bytes |
+chunk-EUIJUANF.js   | -                           | 243 bytes |
+chunk-HKS55ZP7.js   | -                           | 235 bytes |
+chunk-HZ2UKREA.js   | -                           | 222 bytes |
+chunk-IKTFJP2R.js   | -                           | 219 bytes |
+chunk-KSTG5TD2.js   | -                           | 207 bytes |
+chunk-HWZWVSN7.js   | -                           | 207 bytes |
+chunk-P5QPL7N7.js   | -                           | 203 bytes |
+chunk-7NJFHSYD.js   | -                           | 203 bytes |
+chunk-4EUDH5XD.js   | -                           | 203 bytes |
+chunk-72QYU4Z3.js   | -                           | 199 bytes |
+chunk-UQMTB5DO.js   | -                           | 199 bytes |
+chunk-4WE7PW6P.js   | -                           | 199 bytes |
+chunk-PMVJSVMO.js   | -                           | 191 bytes |
+chunk-DM75OASF.js   | -                           | 163 bytes |
+chunk-L7GWYG76.js   | -                           |  43 bytes |
+chunk-6EWJ6D6B.js   | -                           |  43 bytes |
+
+                    | Initial total               |   4.34 MB
+
+Lazy chunk files    | Names                       |  Raw size
+chunk-FGDD23RP.js   | detail-routes               | 707.45 kB |
+chunk-DDNRBXIV.js   | onboarding-routes           | 282.42 kB |
+chunk-6TXCR5Q6.js   | office-routes               | 261.41 kB |
+chunk-Z26VYZM3.js   | detail-routes               | 243.65 kB |
+chunk-JFHQNS33.js   | -                           | 226.76 kB |
+chunk-ACZKYWIM.js   | lesson-routes               | 210.40 kB |
+chunk-SF5AWXTI.js   | auth-routes                 | 197.77 kB |
+chunk-5T6XTIE7.js   | projects-routes             | 188.56 kB |
+chunk-B6LUUNQA.js   | -                           | 173.02 kB |
+chunk-RILFP5F4.js   | index                       | 148.54 kB |
+chunk-3GZ4KTWJ.js   | profile-detail-routes       | 121.70 kB |
+chunk-2MXPD3EZ.js   | project-team-step-component | 107.47 kB |
+chunk-2B5JY3US.js   | course-detail-routes        | 106.77 kB |
+chunk-4KJSXXSX.js   | vacancies-detail-routes     | 106.72 kB |
+chunk-L5YEA2XJ.js   | project-main-step-component |  99.45 kB |
+...and 87 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [32.745 seconds] - 2026-10-04T18:48:42.027Z
+
+▲ [WARNING] 2 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings. [plugin angular-sass]
+
+  null
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of CoursesComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/courses/courses.component.ts:19:4:
+      19 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: ButtonComponent is not used within the template of CourseComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/courses/list/course/course.component.ts:32:4:
+      32 │     ButtonComponent,
+         ╵     ~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: LoaderComponent is not used within the template of CoursesListComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/courses/list/list.component.ts:18:73:
+      18 │ ...nt, CommonModule, RouterModule, CourseComponent, LoaderComponent],
+         ╵                                                     ~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of FeedComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/feed/feed.component.ts:36:4:
+      36 │     IconComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:9:67:
+      9 │ ...card__photo" [url]="member().personal?.avatar || ''" [size]="70" />
+        ╵                                           ~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:15:66:
+      15 │ ...er-card__secondary" [title]="member().personal?.speciality || ''">
+         ╵                                                    ~~~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:16:28:
+      16 │       {{ member().personal?.speciality }}
+         ╵                             ~~~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:17:30:
+      17 │       @if (member().personal?.birthday; as birthday) {
+         ╵                               ~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:18:30:
+      18 │         {{ member().personal?.speciality ? " • " : "" }}{{ birth...
+         ╵                               ~~~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: DialogFooterDirective is not used within the template of MemberFiltersDialogComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-filters-dialog/member-filters-dialog.component.ts:37:4:
+      37 │     DialogFooterDirective,
+         ╵     ~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: ProfileInfoComponent is not used within the template of NavComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/office/nav/nav.component.ts:75:4:
+      75 │     ProfileInfoComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: AlertDirective is not used within the template of SnackbarComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/office/snackbar/snackbar.component.ts:37:12:
+      37 │   imports: [AlertDirective, CommonModule, IconComponent],
+         ╵             ~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.html:435:45:
+      435 │ ...               @if (achievements.at(i)?.get("title"); as title) {
+          ╵                                            ~~~
+
+  Warning occurs in the template of component OnboardingStageZeroComponent.
+
+    projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.ts:23:15:
+      23 │   templateUrl: "./stage-zero.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8102: The left side of this nullish coalescing operation does not include 'null' or 'undefined' in its type, therefore the '??' operator can be safely removed. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.html:28:15:
+      28 │ ...        {{ user()!.personal.speciality ?? "не указана" }}
+         ╵               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Warning occurs in the template of component ProfileLeftSideComponent.
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.ts:23:15:
+      23 │   templateUrl: "./profile-left-side.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: TruncatePipe is not used within the template of ProfileLeftSideComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.ts:25:78:
+      25 │ ...RouterModule, IconComponent, YearsFromBirthdayPipe, TruncatePipe],
+         ╵                                                        ~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: TruncatePipe is not used within the template of ProfileRightSideComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-right-side/profile-right-side.component.ts:32:4:
+      32 │     TruncatePipe,
+         ╵     ~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: UploadFileComponent is not used within the template of ProfileMainStepComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/edit/components/profile-main-step/profile-main-step.component.ts:33:4:
+      33 │     UploadFileComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.html:95:52:
+      95 │ ...      [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
+         ╵                                                ~~~~~~~~
+
+  Warning occurs in the template of component ProgramListComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts:40:15:
+      40 │   templateUrl: "./list.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.html:103:54:
+      103 │ ...     [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
+          ╵                                               ~~~~~~~~
+
+  Warning occurs in the template of component ProgramListComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts:40:15:
+      40 │   templateUrl: "./list.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.html:73:64:
+      73 │ ...)!.isUserMember && program()!.links?.length && program()!.links) {
+         ╵                                         ~~~~~~
+
+  Warning occurs in the template of component ProgramDetailMainComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.ts:38:15:
+      38 │   templateUrl: "./main.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.html:82:68:
+      82 │ ...   @if (program()!.isUserMember && program()!.materials?.length) {
+         ╵                                                             ~~~~~~
+
+  Warning occurs in the template of component ProgramDetailMainComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.ts:38:15:
+      38 │   templateUrl: "./main.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of ProgramComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/program.component.ts:22:4:
+      22 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLink is not used within the template of BarNewComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.ts:11:41:
+      11 │ ...bsComponent, CommonModule, RouterLink, RouterLinkActive, IconCo...
+         ╵                               ~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLinkActive is not used within the template of BarNewComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.ts:11:53:
+      11 │ ...onent, CommonModule, RouterLink, RouterLinkActive, IconComponent],
+         ╵                                     ~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of BarNewComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.ts:11:71:
+      11 │ ...onent, CommonModule, RouterLink, RouterLinkActive, IconComponent],
+         ╵                                                       ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: MessageInputComponent is not used within the template of ProjectChatComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/detail/chat/chat.component.ts:34:4:
+      34 │     MessageInputComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-achievement-step/project-achievement-step.component.html:10:39:
+      10 │ ...     @if (achievements.at(i)?.get("title"); as achievementsName) {
+         ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectAchievementStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-achievement-step/project-achievement-step.component.ts:17:15:
+      17 │   templateUrl: "./project-achievement-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.html:315:32:
+      315 │               @if (goals.at(i)?.get("title"); as goalName) {
+          ╵                                 ~~~
+
+  Warning occurs in the template of component ProjectMainStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.ts:39:15:
+      39 │   templateUrl: "./project-main-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.html:331:32:
+      331 │               @if (goals.at(i)?.get("completionDate"); as goalDat...
+          ╵                                 ~~~
+
+  Warning occurs in the template of component ProjectMainStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.ts:39:15:
+      39 │   templateUrl: "./project-main-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.html:353:32:
+      353 │               @if (goals.at(i)?.get("responsible"); as goalLeader) {
+          ╵                                 ~~~
+
+  Warning occurs in the template of component ProjectMainStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.ts:39:15:
+      39 │   templateUrl: "./project-main-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of ProjectNavigationComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-navigation/project-navigation.component.ts:25:27:
+      25 │   imports: [TabsComponent, IconComponent, CommonModule],
+         ╵                            ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:11:37:
+      11 │                 @if (partners.at(i)?.get("name"); as name) {
+         ╵                                      ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:27:37:
+      27 │                 @if (partners.at(i)?.get("inn"); as inn) {
+         ╵                                      ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:46:35:
+      46 │ ...         @if (partners.at(i)?.get("contribution"); as contribut...
+         ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:63:35:
+      63 │ ...         @if (partners.at(i)?.get("decisionMaker"); as decision...
+         ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:116:36:
+      116 │               @if (resources.at(i)?.get("type"); as type) {
+          ╵                                     ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:133:36:
+      133 │ ...        @if (resources.at(i)?.get("description"); as descripti...
+          ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:150:36:
+      150 │ ...        @if (resources.at(i)?.get("partnerCompany"); as partne...
+          ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8109: isFilterOpen is a function and should be invoked: isFilterOpen() [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/projects.component.html:94:73:
+      94 │ ...s="filter page__filter" [class.page__filter--open]="isFilterOpen">
+         ╵                                                        ~~~~~~~~~~~~
+
+  Warning occurs in the template of component ProjectsComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/projects.component.ts:30:15:
+      30 │   templateUrl: "./projects.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of ProjectsComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/projects.component.ts:42:4:
+      42 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-left-side/vacancies-left-side.component.html:7:29:
+      7 │       @if (item.description?.trim()) {
+        ╵                              ~~~~
+
+  Warning occurs in the template of component VacanciesLeftSideComponent.
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-left-side/vacancies-left-side.component.ts:9:15:
+      9 │   templateUrl: "./vacancies-left-side.component.html",
+        ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-right-side/vacancies-right-side.component.html:57:23:
+      57 │     @if (item.project?.links?.length) {
+         ╵                        ~~~~~
+
+  Warning occurs in the template of component VacanciesRightSideComponent.
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-right-side/vacancies-right-side.component.ts:14:15:
+      14 │   templateUrl: "./vacancies-right-side.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of VacanciesListComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/list/list.component.ts:30:4:
+      30 │     IconComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of VacanciesComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/vacancies.component.ts:27:4:
+      27 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLink is not used within the template of BarComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/primitives/bar/bar.component.ts:38:41:
+      38 │ ...bsComponent, CommonModule, RouterLink, RouterLinkActive, BackCo...
+         ╵                               ~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLinkActive is not used within the template of BarComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/primitives/bar/bar.component.ts:38:53:
+      38 │ ...onent, CommonModule, RouterLink, RouterLinkActive, BackComponent],
+         ╵                                     ~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: CardDirective is not used within the template of NewsCardComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/widgets/news-card/news-card.component.ts:58:4:
+      58 │     CardDirective,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.scss:121:4:
+      121 │     margin-top: auto;
+          ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.scss:128:2:
+      128 │   padding-top: 45px;
+          ╵   ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/dashboard/dashboardItem/dashboardItem.component.scss:55:4:
+      55 │     row-gap: 48px;
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/detail/team/team.component.scss:19:4:
+      19 │     row-gap: 48px;
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-additional-step/project-additional-step.component.scss:24:2:
+      24 │   position: relative;
+         ╵   ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/list/list.component.scss:183:4:
+      183 │     row-gap: 48px;
+          ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/autocomplete-input/autocomplete-input.component.scss:56:6:
+      56 │       + &_arrow {
+         ╵       ^
+
+
+  The selector "+ .field__input-slim:focus_arrow" is invalid CSS.
+  This will be an error in Dart Sass 2.0.0.
+
+  More info: https://sass-lang.com/d/bogus-combinators
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/autocomplete-input/autocomplete-input.component.scss:59:8:
+      59 │         i {
+         ╵         ^
+
+
+  The selector "+ .field__input-slim:focus_arrow i" is invalid CSS.
+  This will be an error in Dart Sass 2.0.0.
+
+  More info: https://sass-lang.com/d/bogus-combinators
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:71:8:
+      71 │         position: sticky;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:72:8:
+      72 │         bottom: 0;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:73:8:
+      73 │         z-index: 2;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:74:8:
+      74 │         justify-content: center;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:75:8:
+      75 │         padding-top: 8px;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/textarea/textarea.component.scss:62:4:
+      62 │     border-radius: var(--ui-radius-card);
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/widgets/info-card/info-card.component.scss:59:4:
+      59 │     width: 100%;
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/ui/src/lib/components/primitives/button/button.component.scss:14:2:
+      14 │   position: relative;
+         ╵   ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:9:8:
+      9 │ @import "styles/colors.scss";
+        ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:10:8:
+      10 │ @import "styles/global.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:11:8:
+      11 │ @import "styles/responsive.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:12:8:
+      12 │ @import "styles/rounded.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:13:8:
+      13 │ @import "styles/typography.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] 11 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings. [plugin angular-sass]
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  null
+
+
+Output location: Z:\Документы\PROCOLLAB-dev\procollab-dev-platform-responsive\dist\social_platform

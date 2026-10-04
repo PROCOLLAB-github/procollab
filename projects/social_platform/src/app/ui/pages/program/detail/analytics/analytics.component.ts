@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, StateComponent } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -60,6 +63,8 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
   templateUrl: "./analytics.component.html",
   styleUrl: "./analytics.component.scss",
   imports: [
+    StateComponent,
+    ButtonDirective,
     ButtonComponent,
     IconComponent,
     MatProgressBarModule,

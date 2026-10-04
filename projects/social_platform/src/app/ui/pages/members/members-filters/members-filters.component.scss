@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -11,14 +13,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  &__clear {
-    padding: 0;
-    color: var(--accent);
-    cursor: pointer;
-    background: transparent;
-    border: 0;
   }
 
   &__title {
@@ -53,7 +47,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     color: var(--black);
 
     span {

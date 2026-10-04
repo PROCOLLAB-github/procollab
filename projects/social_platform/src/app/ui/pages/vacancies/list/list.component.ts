@@ -1,5 +1,8 @@
 /** @format */
 
+import { StateComponent } from "@uilib";
+/** @format */
+
 // list.component.ts
 /** @format */
 
@@ -20,6 +23,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     ResponseCardComponent,
     ProjectVacancyCardComponent,

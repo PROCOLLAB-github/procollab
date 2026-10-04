@@ -3,7 +3,7 @@
 <div class="project__inner" [class.project__inner--list]="!showInputFields()">
   <div class="vacancy project__left">
     @if (showInputFields()) {
-      <form [formGroup]="vacancyForm">
+      <form appFormLayout [formGroup]="vacancyForm">
         @if (role; as role) {
           <fieldset class="vacancy__role">
             <label class="field-label">название вакансии</label>
@@ -201,7 +201,12 @@
       <i appIcon icon="plus" appSquare="10"></i>
     </app-button>
     @if (vacancySubmitFailed()) {
-      <p class="vacancy__error" role="alert">Не удалось сохранить вакансию. Попробуйте ещё раз.</p>
+      <app-state
+        class="vacancy__error"
+        [compact]="true"
+        kind="error"
+        title="Не удалось сохранить вакансию. Попробуйте ещё раз."
+      />
     }
   </div>
 
@@ -235,6 +240,7 @@
 <app-modal [open]="skillsGroupsModalOpen()" (openChange)="closeSkillsGroupsModal()" class="modal">
   <div class="modal__wrapper">
     <button
+      appButton="icon"
       type="button"
       class="modal__close"
       aria-label="Закрыть библиотеку навыков"

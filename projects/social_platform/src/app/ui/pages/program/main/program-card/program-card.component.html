@@ -6,7 +6,7 @@
       <app-avatar [url]="program().imageAddress" [size]="100"></app-avatar>
     </div>
 
-    <div class="card__info">
+    <div appCard [interactive]="true" class="card__info">
       <p class="text-body-10 card__name" style="padding-left: 25px">{{ program().name }}</p>
 
       <p

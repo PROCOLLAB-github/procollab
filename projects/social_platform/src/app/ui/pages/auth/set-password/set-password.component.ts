@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
@@ -14,7 +17,13 @@ import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
   templateUrl: "./set-password.component.html",
   styleUrl: "./set-password.component.scss",
   providers: [AuthPasswordService, AuthUIInfoService],
-  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
+  imports: [
+    FormLayoutDirective,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    ControlErrorPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetPasswordComponent implements OnInit {

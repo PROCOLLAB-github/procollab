@@ -1,0 +1,17 @@
+{
+  "baseline": "bc4940c57eab9eff59219593cfc8ed08f1a416bb",
+  "sourceFiles": 284,
+  "changedTemplates": 86,
+  "migratedTemplates": 80,
+  "removedDuplicateTemplates": 6,
+  "canonicalComponents": 10,
+  "testFiles": 406,
+  "tests": 2002,
+  "targetedTests": 30,
+  "browserMeasurements": 912,
+  "widths": [320, 360, 375, 390, 430, 749, 750, 768, 820, 999, 1000, 1001, 1024, 1280, 1440, 1920],
+  "routes": 57,
+  "flows": 24,
+  "geometryChecks": 36,
+  "screenshotPairs": 24
+}

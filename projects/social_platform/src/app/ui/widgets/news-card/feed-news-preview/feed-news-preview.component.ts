@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective, CardDirective } from "@uilib";
+/** @format */
 import {
   afterRenderEffect,
   ChangeDetectionStrategy,
@@ -22,7 +25,15 @@ import { FeedNewsModalComponent } from "../feed-news-modal/feed-news-modal.compo
 /** Компактное представление только глобальной ленты; данные и действия остаются у NewsCard. */
 @Component({
   selector: "app-feed-news-preview",
-  imports: [RouterLink, DayjsPipe, IconComponent, ClickOutsideModule, FeedNewsModalComponent],
+  imports: [
+    CardDirective,
+    ButtonDirective,
+    RouterLink,
+    DayjsPipe,
+    IconComponent,
+    ClickOutsideModule,
+    FeedNewsModalComponent,
+  ],
   templateUrl: "./feed-news-preview.component.html",
   styleUrl: "./feed-news-preview.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

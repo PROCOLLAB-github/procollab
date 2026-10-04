@@ -16,7 +16,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgb(51 46 45 / 50%);
+    background-color: var(--ui-backdrop);
   }
 
   &__body {
@@ -25,16 +25,18 @@
     left: 50%;
     display: flex;
     justify-content: center;
-    width: 90%;
-    padding: 24px;
-    overflow: hidden;
+    width: min(var(--ui-dialog-width, var(--ui-dialog-md)), calc(100vw - 24px));
+    min-width: 0;
+    max-width: calc(100vw - 24px);
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
+    padding: var(--ui-dialog-padding);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--white);
-    border-radius: var(--rounded-xl);
+    border-radius: var(--ui-radius-dialog);
     transform: translate(-50%, -50%);
 
     @include responsive.apply-desktop {
-      width: unset;
-      max-height: 98vh;
       overflow-y: auto;
     }
 
@@ -45,5 +47,67 @@
     &--no-flex {
       display: block;
     }
+
+    ::ng-deep > * {
+      flex-shrink: 1;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    @include responsive.apply-below-desktop {
+      top: calc(var(--visual-viewport-top, 0px) + var(--visual-viewport-height, 100dvh) / 2);
+      padding: var(--ui-dialog-padding);
+
+      ::ng-deep .cancel {
+        min-width: 0;
+        max-width: 100%;
+        max-height: none;
+        padding: 12px;
+      }
+
+      ::ng-deep .cancel__buttons {
+        @include responsive.mobile-actions;
+
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+        justify-content: center;
+        padding-top: 8px;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        background: var(--white);
+      }
+
+      ::ng-deep .cancel__text {
+        width: 100%;
+      }
+
+      ::ng-deep .cancel__top {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--white);
+      }
+
+      ::ng-deep .cancel__cross {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+
+        svg {
+          max-width: 16px;
+          max-height: 16px;
+        }
+      }
+    }
   }
+}
+
+.modal__body--small {
+  --ui-dialog-width: var(--ui-dialog-sm);
+}
+
+.modal__body--large {
+  --ui-dialog-width: var(--ui-dialog-lg);
 }

@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
@@ -14,7 +17,13 @@ import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
   templateUrl: "./reset-password.component.html",
   styleUrl: "./reset-password.component.scss",
   providers: [AuthPasswordService, AuthUIInfoService],
-  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
+  imports: [
+    FormLayoutDirective,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    ControlErrorPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent implements OnInit {

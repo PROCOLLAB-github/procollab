@@ -3,7 +3,7 @@
 <div class="register">
   <app-bar class="bar register__bar" [backHave]="true" [links]="[]"></app-bar>
   @if (registerForm && schema) {
-    <form class="register__form form" [formGroup]="registerForm">
+    <form appFormLayout class="register__form form" [formGroup]="registerForm">
       @for (f of schema | keyvalue; track f.key) {
         <fieldset class="form__fieldset">
           <label [for]="f.key" class="field-label">{{ f.value.name }}</label>

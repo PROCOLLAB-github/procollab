@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -41,5 +43,21 @@
         @include typography.body-10;
       }
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  .rating__input {
+    flex-shrink: 0;
+  }
+
+  .rating__field label {
+    min-width: 0;
+    font-size: var(--ui-font-body);
+    line-height: 20px;
+  }
+
+  .rating .rating__comment app-textarea ::ng-deep .field__input {
+    font-size: var(--ui-font-h3) !important;
   }
 }

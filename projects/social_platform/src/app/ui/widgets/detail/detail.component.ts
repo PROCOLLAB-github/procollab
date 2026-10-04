@@ -10,7 +10,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
-import { IconComponent } from "@uilib";
+import { IconComponent, PageHeaderComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -34,6 +34,7 @@ import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/p
   templateUrl: "./detail.component.html",
   styleUrl: "./detail.component.scss",
   imports: [
+    PageHeaderComponent,
     CommonModule,
     RouterModule,
     IconComponent,

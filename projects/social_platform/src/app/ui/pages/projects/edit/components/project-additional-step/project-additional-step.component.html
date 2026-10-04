@@ -4,7 +4,12 @@
   <div [formGroup]="additionalForm" class="project__team">
     <div class="project__additional-wrapper">
       @if (pending()) {
-        <p class="text-body-12" role="status">Загружаем дополнительные сведения программы…</p>
+        <app-state
+          class="text-body-12"
+          [compact]="true"
+          kind="loading"
+          title="Загружаем дополнительные сведения программы…"
+        />
       } @else if (loadFailed()) {
         <div role="alert">
           <p class="text-body-12">Не удалось загрузить дополнительные сведения программы.</p>
@@ -12,7 +17,12 @@
         </div>
       } @else {
         @if (saveError(); as message) {
-          <p class="text-body-12 error" role="alert">{{ message }}</p>
+          <app-state
+            class="text-body-12 error"
+            [compact]="true"
+            kind="error"
+            title="{{ message }}"
+          />
         }
         @if (submitted()) {
           <p class="text-body-12" role="status">

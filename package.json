@@ -9,7 +9,7 @@
     "build:prod": "npm run build:social:prod",
     "build:pr": "npm run build:social:dev",
     "watch": "ng build --watch social_platform --configuration=development",
-    "build:sprite": "svg-sprite -s --dest=projects/social_platform/src/assets/icons 'projects/social_platform/src/assets/icons/svg/**/*.svg'",
+    "build:sprite": "svg-sprite -s --dest=projects/social_platform/src/assets/icons \"projects/social_platform/src/assets/icons/svg/**/*.svg\"",
     "test": "ng test",
     "test:ci": "vitest run",
     "lint:ts": "eslint projects/**/*.ts",

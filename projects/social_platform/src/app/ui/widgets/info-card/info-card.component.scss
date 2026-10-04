@@ -1,18 +1,21 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/responsive";
 
 .card {
   &__body {
+    @include ui-foundation.card;
+
     position: relative;
     display: flex;
     flex-direction: column;
     width: 156px;
-    height: 180px;
-    padding: 15px 0 12px;
-    background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
+    height: auto;
+    min-height: 180px;
 
     &--empty {
       background: transparent;
@@ -35,7 +38,7 @@
     }
   }
 
-  // Ссылка занимает прежнее место контента; CTA внутри не создаёт второй tab stop.
+  /* Ссылка занимает прежнее место контента; CTA внутри не создаёт второй tab stop. */
   &__project-link {
     display: flex;
     flex: 1;
@@ -49,23 +52,11 @@
     }
   }
 
-  // CTA занимает ширину контента, сохраняя единственную ссылку на проект.
+  /* CTA занимает ширину контента, сохраняя единственную ссылку на проект. */
   &__project-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 4px 24px;
-    color: var(--white);
-    background: var(--accent);
-    border: 0.5px solid transparent;
-    border-radius: var(--rounded-xxl);
-    transition: all 0.2s;
+    @include ui-foundation.button;
 
-    &:hover {
-      background-color: var(--accent-medium);
-      box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
-    }
+    width: 100%;
   }
 
   &__subscription-action {
@@ -246,7 +237,7 @@
     width: 100px;
   }
 
-  // Общая геометрия проектов не затрагивает приглашения, участников и пустые карточки.
+  /* Общая геометрия проектов не затрагивает приглашения, участников и пустые карточки. */
   &--project {
     .card__content {
       padding: 27px 12px 0;
@@ -255,7 +246,7 @@
     .card__head {
       width: 100%;
 
-      // Короткое название не резервирует пустую вторую строку перед описанием.
+      /* Короткое название не резервирует пустую вторую строку перед описанием. */
       margin-bottom: 2px;
 
       > div {
@@ -269,7 +260,7 @@
       display: -webkit-box;
       max-height: 30px;
       margin: 0;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       font-weight: 600;
       line-height: 15px;
       overflow-wrap: anywhere;
@@ -279,7 +270,7 @@
     }
 
     .card__description {
-      // Место удалённой отрасли отдано описанию без увеличения внешней карточки.
+      /* Место удалённой отрасли отдано описанию без увеличения внешней карточки. */
       flex: 0 0 52px;
       width: 100%;
       height: 52px;
@@ -289,7 +280,7 @@
         /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс ограничивает описание четырьмя строками. */
         display: -webkit-box;
         overflow: hidden;
-        font-size: 10px;
+        font-size: var(--ui-font-caption);
         line-height: 13px;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
@@ -297,7 +288,7 @@
     }
 
     .card__project-action-label {
-      font-size: 10px;
+      font-size: var(--ui-font-caption);
       font-weight: 600;
       line-height: 12px;
       white-space: nowrap;
@@ -310,7 +301,7 @@
     }
   }
 
-  // Нижний блок имеет постоянную высоту: длинный текст не сдвигает роль и CTA.
+  /* Нижний блок имеет постоянную высоту: длинный текст не сдвигает роль и CTA. */
   &--my-project {
     .card__body {
       padding-bottom: 8px;
@@ -330,7 +321,7 @@
 
     .card__name {
       max-height: 28px;
-      font-size: 11px;
+      font-size: var(--ui-font-caption);
       line-height: 14px;
       text-align: center;
     }
@@ -376,7 +367,7 @@
     }
   }
 
-  // Приглашения в списке и правой колонке используют одну компактную геометрию.
+  /* Приглашения в списке и правой колонке используют одну компактную геометрию. */
   &--invite {
     .card__body {
       padding-bottom: 6px;
@@ -414,7 +405,7 @@
     }
 
     .card__user {
-      font-size: 10px;
+      font-size: var(--ui-font-caption);
       line-height: 13px;
     }
 
@@ -422,7 +413,7 @@
       /* stylelint-disable-next-line value-no-vendor-prefix -- Две строки сохраняют место для действий. */
       display: -webkit-box;
       overflow: hidden;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       font-weight: 600;
       line-height: 15px;
       overflow-wrap: anywhere;
@@ -562,5 +553,81 @@
     display: flex;
     gap: 12px;
     margin-top: 16px;
+  }
+}
+
+@include responsive.apply-mobile {
+  :host {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .card__body {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .card__content {
+    padding-right: 16px;
+    padding-left: 16px;
+    overflow: visible;
+  }
+
+  .card__head {
+    width: 100%;
+  }
+
+  .card__name {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .card--project,
+  .card--my-project {
+    .card__name {
+      display: block;
+      max-height: none;
+      font-size: var(--ui-font-body);
+      line-height: 20px;
+      -webkit-line-clamp: unset;
+    }
+
+    .card__description {
+      height: auto;
+      font-size: var(--ui-font-body);
+      line-height: 20px;
+    }
+  }
+
+  .card__context {
+    height: auto;
+    min-height: 24px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .card__role,
+  .card__access-label {
+    font-size: var(--ui-font-small);
+    line-height: 16px;
+  }
+
+  .card__description {
+    flex-basis: auto;
+    width: 100%;
+    height: auto;
+    min-height: 24px;
+  }
+
+  .card__project-action {
+    min-height: 44px;
+  }
+
+  .card__subscription-action {
+    width: 44px;
+    height: 44px;
   }
 }

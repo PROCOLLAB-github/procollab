@@ -1,10 +1,12 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { BadgeComponent } from "@uilib";
 
 @Component({
   selector: "app-vacancy-status",
-  template: `<span [class]="'status status--' + tone()" role="status">{{ label() }}</span>`,
+  imports: [BadgeComponent],
+  template: `<app-badge [class]="'status status--' + tone()" [label]="label()" [tone]="tone()" />`,
   styleUrl: "./vacancy-status.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

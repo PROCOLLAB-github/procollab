@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 :host {
   display: block;
   width: 157px;
@@ -10,10 +14,10 @@
   row-gap: 5px;
   width: 100%;
 
-  // Исходная карточка при 100%: 157 × 140.984375 CSS px (Mont, desktop).
+  /* Исходная карточка при 100%: 157 × 140.984375 CSS px (Mont, desktop). */
   height: 140.9844px;
   padding: 7px 8px;
-  font-size: 10px;
+  font-size: var(--ui-font-caption);
   line-height: 13px;
   color: var(--black);
   background: var(--light-white);
@@ -38,7 +42,7 @@
   }
 
   h3 {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     line-height: 15px;
     color: var(--accent);
@@ -83,7 +87,7 @@
   &__stage-state {
     height: 12px;
     margin-top: 3px;
-    font-size: 10px;
+    font-size: var(--ui-font-caption);
     line-height: 12px;
     color: var(--grey-for-text);
   }
@@ -157,7 +161,7 @@
   }
 
   dt {
-    font-size: 10px;
+    font-size: var(--ui-font-caption);
     line-height: 12px;
     color: var(--grey-for-text);
   }
@@ -165,7 +169,7 @@
   dd {
     margin: 0;
     overflow: hidden;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 18px;
     text-overflow: ellipsis;
@@ -210,7 +214,7 @@
     align-content: center;
     min-height: 28px;
     margin-top: 6px;
-    font-size: 10px;
+    font-size: var(--ui-font-caption);
     line-height: 12px;
   }
 
@@ -219,7 +223,7 @@
   }
 
   &__status-value--time {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     line-height: 16px;
   }
@@ -290,5 +294,37 @@
   [tabindex]:focus-visible {
     outline: 1px solid var(--accent);
     outline-offset: 1px;
+  }
+}
+
+@include responsive.apply-below-desktop {
+  :host {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .widget {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    height: auto;
+    min-height: 160px;
+    padding: 16px;
+    font-size: var(--ui-font-body);
+    line-height: 1.5;
+  }
+
+  .widget__footer a,
+  .widget__footer button {
+    min-height: 44px;
+    font-size: var(--ui-font-body);
+  }
+
+  .widget__ellipsis {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .widget__badge {
+    font-size: var(--ui-font-small);
   }
 }

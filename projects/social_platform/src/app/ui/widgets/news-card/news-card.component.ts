@@ -1,5 +1,8 @@
 /** @format */
 
+import { CardDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -52,6 +55,7 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
   templateUrl: "./news-card.component.html",
   styleUrl: "./news-card.component.scss",
   imports: [
+    CardDirective,
     FeedNewsPreviewComponent,
     ClickOutsideModule,
     RouterLink,

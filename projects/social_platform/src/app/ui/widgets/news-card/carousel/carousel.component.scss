@@ -8,10 +8,10 @@
   align-items: center;
   justify-content: center;
 
-  // Лента задаёт высоту preview; остальные страницы сохраняют естественный размер изображения.
+  /* Лента задаёт высоту preview; остальные страницы сохраняют естественный размер изображения. */
   height: var(--carousel-height, auto);
 
-  // Опциональный режим чтения: contain сохраняет весь кадр даже при ограничении по высоте.
+  /* Опциональный режим чтения: contain сохраняет весь кадр даже при ограничении по высоте. */
   &--contain {
     height: auto;
 
@@ -54,7 +54,7 @@
     right: 10px;
     z-index: 10;
     padding: 2px 20px;
-    background-color: #81818180;
+    background-color: var(--ui-media-button);
     border-radius: var(--rounded-xl);
 
     span {
@@ -71,7 +71,7 @@
     z-index: 1;
     padding: 5px;
     cursor: pointer;
-    background-color: #37373780;
+    background-color: var(--ui-media-button-active);
     border: none;
     border-radius: 100%;
   }

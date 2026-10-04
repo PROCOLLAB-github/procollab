@@ -1,5 +1,8 @@
 /** @format */
 
+import { FiltersDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,6 +25,7 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
   templateUrl: "./program-projects-filter.component.html",
   styleUrl: "./program-projects-filter.component.scss",
   imports: [
+    FiltersDirective,
     CommonModule,
     ReactiveFormsModule,
     CheckboxComponent,

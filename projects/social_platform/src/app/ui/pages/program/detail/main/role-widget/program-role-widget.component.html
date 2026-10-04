@@ -174,7 +174,12 @@
               >Открыть →</a
             >
           } @else if (data.participant.submissionOpen) {
-            <button type="button" [disabled]="applicationPending()" (click)="createApplication()">
+            <button
+              appButton="primary"
+              type="button"
+              [disabled]="applicationPending()"
+              (click)="createApplication()"
+            >
               Создать заявку →
             </button>
           } @else {
@@ -188,7 +193,7 @@
       <p class="widget__error" role="status">{{ errorMessages[state.error] }}</p>
       <footer class="widget__footer">
         @if (state.error === "network") {
-          <button type="button" (click)="service.retry()">Повторить</button>
+          <button appButton="secondary" type="button" (click)="service.retry()">Повторить</button>
         }
       </footer>
     } @else {

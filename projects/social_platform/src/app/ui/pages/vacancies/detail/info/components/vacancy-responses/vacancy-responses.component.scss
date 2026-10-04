@@ -32,7 +32,7 @@
   }
 
   &__title {
-    font-size: 18px;
+    font-size: var(--ui-font-h2);
     font-weight: 600;
     line-height: 27px;
   }
@@ -63,7 +63,7 @@
     gap: 16px;
     align-items: center;
     padding: 24px 12px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 21px;
     text-align: center;
   }
@@ -106,14 +106,14 @@
   }
 
   &__name {
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
     line-height: 24px;
   }
 
   &__specialization,
   &__date {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 18px;
 
     @include vacancy-ui.secondary;
@@ -132,7 +132,7 @@
 
   &__label {
     margin-bottom: 8px;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 20px;
     color: var(--accent-dark);
@@ -142,7 +142,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px 10px;
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     line-height: 20px;
   }
 

@@ -14,7 +14,9 @@
 
           <div class="card__naming">
             <a [routerLink]="AppRoutes.projects.detail(project.id)">
-              <p class="text-body-12 card__naming--text">{{ project.name | truncate: 15 }}</p>
+              <p class="text-body-12 card__naming--text">
+                {{ (desktopMode$ | async) ? (project.name | truncate: 15) : project.name }}
+              </p>
             </a>
 
             @if (industryRepositoryGetOne(project.industry); as industry) {

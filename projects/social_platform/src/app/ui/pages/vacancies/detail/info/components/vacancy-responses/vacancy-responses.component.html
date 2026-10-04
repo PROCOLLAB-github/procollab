@@ -6,6 +6,7 @@
       Отклики на вакансию
     </h2>
     <button
+      appButton="icon"
       type="button"
       class="responses__close"
       aria-label="Закрыть отклики"
@@ -15,7 +16,12 @@
     </button>
   </header>
   @if (loading()) {
-    <p class="responses__state" role="status">Загрузка откликов…</p>
+    <app-state
+      class="responses__state"
+      [compact]="true"
+      kind="loading"
+      title="Загрузка откликов…"
+    />
   }
   @if (error(); as loadError) {
     <div class="responses__state" role="alert">

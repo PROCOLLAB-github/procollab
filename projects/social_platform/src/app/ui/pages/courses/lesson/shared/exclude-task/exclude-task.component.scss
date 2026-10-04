@@ -1,3 +1,6 @@
+/** @format */
+
+@use "styles/course-task";
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -11,10 +14,13 @@
     gap: 20px;
   }
 
-  // &--hasContent {
-  //   display: flex;
-  //   flex-direction: row-reverse;
-  // }
+  /* &--hasContent { */
+
+  /*   display: flex; */
+
+  /*   flex-direction: row-reverse; */
+
+  /* } */
 
   &__answer {
     color: var(--grey-for-text);
@@ -169,3 +175,5 @@
     @include typography.body-14;
   }
 }
+
+@include course-task.responsive-layout("exclude");

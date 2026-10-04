@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, StateComponent } from "@uilib";
+/** @format */
+
 import { DatePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { VacancyResponsesLoadError } from "@api/vacancy/vacancy-response-error";
@@ -14,6 +17,8 @@ import { VacancyLetterComponent } from "@ui/widgets/vacancy-letter/vacancy-lette
   templateUrl: "./vacancy-responses.component.html",
   styleUrl: "./vacancy-responses.component.scss",
   imports: [
+    StateComponent,
+    ButtonDirective,
     AvatarComponent,
     ButtonComponent,
     IconComponent,

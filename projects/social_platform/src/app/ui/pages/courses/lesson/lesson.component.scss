@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -118,5 +120,31 @@
     @include responsive.apply-desktop {
       position: static;
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  .task__actions {
+    @include responsive.single-column;
+  }
+
+  .task__actions :last-child {
+    width: 100%;
+  }
+
+  .task__main,
+  .task__content,
+  .task__wrapper {
+    min-width: 0;
+  }
+
+  .action__button {
+    position: static;
+    width: 100%;
+  }
+
+  .progress__task {
+    min-width: 44px;
+    min-height: 44px;
   }
 }

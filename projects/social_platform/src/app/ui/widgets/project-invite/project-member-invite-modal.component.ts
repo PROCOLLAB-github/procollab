@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective, FieldDirective, StateComponent } from "@uilib";
+/** @format */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,6 +29,9 @@ import { ParticipantPickerComponent } from "./participant-picker.component";
 @Component({
   selector: "app-project-member-invite-modal",
   imports: [
+    StateComponent,
+    ButtonDirective,
+    FieldDirective,
     ReactiveFormsModule,
     ProjectInviteDialogComponent,
     ProjectInviteRoleInputComponent,

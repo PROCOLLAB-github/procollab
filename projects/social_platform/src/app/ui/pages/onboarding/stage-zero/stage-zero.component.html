@@ -6,7 +6,7 @@
       <h3 class="auth__title">Привет, {{ profile()!.firstName }} {{ profile()!.lastName }}! ✌️</h3>
       <p class="auth__info">Расскажите о себе, чтобы ваше резюме было сильным и отражало опыт</p>
     </div>
-    <form [formGroup]="stageForm" class="page__form" (submit)="onSubmit()">
+    <form appFormLayout [formGroup]="stageForm" class="page__form" (submit)="onSubmit()">
       <div class="page__first-row">
         @if (stageForm.get("avatar"); as avatar) {
           <fieldset class="page__field">
@@ -430,7 +430,7 @@
           <ul>
             @for (control of achievements.controls; track control.value.id; let i = $index) {
               <li class="page__achievement">
-                <form [formGroupName]="i" class="achievement">
+                <form appFormLayout [formGroupName]="i" class="achievement">
                   <div class="achievement__first-row">
                     @if (achievements.at(i)?.get("title"); as title) {
                       <fieldset>

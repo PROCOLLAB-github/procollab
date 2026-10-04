@@ -1,10 +1,15 @@
+/** @format */
+
 @use "styles/responsive";
 
 .back {
   display: flex;
   align-items: center;
+  min-width: 44px;
+  min-height: 44px;
   margin-top: 20px;
   margin-bottom: 45px;
+  font: inherit;
   cursor: pointer;
 
   &__icon {
@@ -21,4 +26,13 @@
       display: unset;
     }
   }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
+  }
+}
+
+.back--compact {
+  margin: 0;
 }

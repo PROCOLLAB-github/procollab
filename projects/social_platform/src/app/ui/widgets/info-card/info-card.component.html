@@ -14,9 +14,15 @@
         : null
   "
 >
-  <div class="card__body" [class.card__body--empty]="appereance() === 'empty'">
+  <div
+    appCard
+    [interactive]="true"
+    class="card__body"
+    [class.card__body--empty]="appereance() === 'empty'"
+  >
     @if (shouldShowSubscriptionBadge()) {
       <button
+        appButton="icon"
         type="button"
         class="card__subscription-action"
         [attr.aria-label]="isSubscribed ? 'Отписаться от проекта' : 'Подписаться на проект'"

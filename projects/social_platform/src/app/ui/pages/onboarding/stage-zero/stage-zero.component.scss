@@ -192,3 +192,82 @@ i {
     text-align: center;
   }
 }
+
+@include responsive.apply-below-desktop {
+  :host,
+  .page,
+  .page__form {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .page {
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+  }
+
+  .page__form {
+    width: 100%;
+  }
+
+  .page__buttons {
+    position: static;
+    width: 100%;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    margin-top: 24px;
+  }
+}
+
+@include responsive.apply-mobile {
+  .page__years,
+  .education__years,
+  .achievement__first-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .page__years .years__left,
+  .page__years .years__right,
+  .education__years .years__left,
+  .education__years .years__right,
+  .achievement__remove {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .achievement__first-row {
+    margin-bottom: 12px;
+
+    > :first-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .education__info {
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .education__text {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .education__remove {
+    flex-shrink: 0;
+    gap: 0;
+  }
+
+  .education__remove i {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    min-height: 44px;
+  }
+
+  .content {
+    flex-wrap: wrap;
+  }
+}

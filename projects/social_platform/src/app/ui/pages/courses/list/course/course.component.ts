@@ -1,5 +1,8 @@
 /** @format */
 
+import { CardDirective, BadgeComponent } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, input, Input, OnInit, signal } from "@angular/core";
 import { RouterModule } from "@angular/router";
@@ -19,6 +22,8 @@ import { TruncatePipe } from "@corelib";
 @Component({
   selector: "app-course",
   imports: [
+    BadgeComponent,
+    CardDirective,
     CommonModule,
     RouterModule,
     TruncatePipe,

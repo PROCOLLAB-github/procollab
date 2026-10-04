@@ -5,19 +5,15 @@
 
 <main class="page" [attr.aria-label]="isAll() === 'all' ? 'Вакансии' : 'Мои отклики'">
   <div class="page__bar">
-    <app-back
-      #back
-      role="link"
-      tabindex="0"
-      (keydown.enter)="back.onClick()"
-      [namespace]="isAll() === 'all' ? 'вакансии' : 'мои отклики'"
-      [path]="isAll() === 'all' ? AppRoutes.office.feed() : AppRoutes.office.vacancies()"
-    ></app-back>
+    <app-page-header
+      [title]="isAll() === 'all' ? 'вакансии' : 'мои отклики'"
+      [backRoute]="isAll() === 'all' ? AppRoutes.office.feed() : AppRoutes.office.vacancies()"
+    />
 
     <div class="page__info" [class.page__info--my]="isAll() !== 'all'">
       <div class="page__outlet">
         @if (isAll() === "all") {
-          <form [formGroup]="searchForm" (submit)="onSearchSubmit()">
+          <form appFormLayout [formGroup]="searchForm" (submit)="onSearchSubmit()">
             <app-search formControlName="search"></app-search>
           </form>
         }

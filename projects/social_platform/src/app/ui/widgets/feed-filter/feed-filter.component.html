@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="desktop">
+<div appFilters class="desktop">
   <ng-container *ngTemplateOutlet="filter"></ng-container>
 </div>
 
@@ -23,7 +23,7 @@
     @if (filterOpen()) {
       <div class="select__dropdown" @dropdownAnimation>
         <ng-container *ngTemplateOutlet="filter"></ng-container>
-        <a class="text-body-12" (click)="resetFilter()">сбросить</a>
+        <button appButton="text" type="button" (click)="resetFilter()">сбросить</button>
       </div>
     }
   </div>
@@ -33,6 +33,7 @@
   <div class="filter">
     @for (filterItem of feedFilterOptions; track $index) {
       <button
+        appButton="secondary"
         type="button"
         class="filter__option"
         [disabled]="filterItem.id === 5"

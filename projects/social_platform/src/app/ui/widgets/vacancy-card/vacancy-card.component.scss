@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/components/vacancy-ui";
 
 :host {
@@ -9,11 +13,12 @@
 }
 
 .vacancy {
+  @include ui-foundation.card;
+
   display: flex;
   flex-direction: column;
   gap: 16px;
   height: 100%;
-  padding: 16px;
 
   @include vacancy-ui.surface;
 
@@ -27,13 +32,13 @@
   &__role {
     flex: 1 1 150px;
     min-width: 0;
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
     line-height: 1.5;
   }
 
   &__specialization {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 18px;
 
     @include vacancy-ui.secondary;

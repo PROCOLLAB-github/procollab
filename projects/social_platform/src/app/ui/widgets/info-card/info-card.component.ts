@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, CardDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -43,6 +46,8 @@ interface MyProjectPresentation {
   templateUrl: "./info-card.component.html",
   styleUrl: "./info-card.component.scss",
   imports: [
+    CardDirective,
+    ButtonDirective,
     CommonModule,
     AvatarComponent,
     IconComponent,

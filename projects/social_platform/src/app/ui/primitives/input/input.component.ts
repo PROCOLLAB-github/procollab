@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, ChoiceDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -35,6 +38,8 @@ import { IconComponent } from "../icon/icon.component";
     },
   ],
   imports: [
+    ButtonDirective,
+    ChoiceDirective,
     CommonModule,
     FormsModule,
     NgxMaskDirective,

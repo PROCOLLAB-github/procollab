@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 .control {
@@ -14,7 +16,7 @@
     align-items: center;
     justify-content: center;
     color: var(--white);
-    background-color: rgb(51 46 45 / 50%);
+    background-color: var(--ui-scrim);
     opacity: 0;
     transition: opacity 0.2s;
   }
@@ -114,9 +116,9 @@
     max-width: 500px;
     margin: 20px 0;
     overflow: hidden;
-    background: var(--background-secondary, #f8f9fa);
+    background: var(--background-secondary, var(--ui-crop-surface));
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+    box-shadow: var(--ui-crop-shadow);
 
     ::ng-deep {
       .ngx-ic-main {
@@ -130,17 +132,17 @@
 
       .ngx-ic-crop {
         border-radius: 50%;
-        box-shadow: 0 0 0 9999px rgb(0 0 0 / 50%);
+        box-shadow: 0 0 0 9999px var(--ui-crop-scrim);
       }
 
       .ngx-ic-move,
       .ngx-ic-resize {
         border: 2px solid white;
-        box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+        box-shadow: var(--ui-crop-handle-shadow);
       }
 
       .ngx-ic-crop::before {
-        border-color: rgb(255 255 255 / 50%);
+        border-color: var(--ui-crop-border);
       }
     }
   }

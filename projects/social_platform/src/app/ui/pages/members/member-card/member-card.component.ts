@@ -1,4 +1,7 @@
 /** @format */
+
+import { CardDirective } from "@uilib";
+/** @format */
 import { ChangeDetectionStrategy, Component, computed, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { YearsFromBirthdayPipe } from "@corelib";
@@ -9,7 +12,7 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 /** Карточка каталога участников; не меняет карточки команды и права внутри проекта. */
 @Component({
   selector: "app-member-card",
-  imports: [AvatarComponent, RouterLink, YearsFromBirthdayPipe],
+  imports: [CardDirective, AvatarComponent, RouterLink, YearsFromBirthdayPipe],
   templateUrl: "./member-card.component.html",
   styleUrl: "./member-card.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

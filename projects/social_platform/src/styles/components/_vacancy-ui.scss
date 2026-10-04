@@ -1,13 +1,17 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
 @mixin surface {
+  @include ui-foundation.card;
+
   min-width: 0;
-  padding: 20px;
+  padding: var(--ui-card-padding);
   color: var(--black);
   overflow-wrap: anywhere;
   background: var(--white);
   border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-lg);
+  border-radius: var(--ui-radius-card);
 }
 
 @mixin secondary {
@@ -74,23 +78,5 @@
   app-button {
     flex: 1 1 140px;
     min-width: 0;
-  }
-
-  ::ng-deep .button {
-    gap: 6px;
-    width: 100%;
-    min-height: 36px;
-    max-height: none;
-    padding: 8px 12px;
-    font-size: 12px;
-    line-height: 18px;
-
-    @include focus;
-
-    // PROPOSED Destructive outline: feature-only расширение Button, без смены токенов.
-    &.button--outline.button--red {
-      color: var(--black);
-      background: transparent;
-    }
   }
 }

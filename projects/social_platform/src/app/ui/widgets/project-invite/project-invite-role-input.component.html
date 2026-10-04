@@ -2,6 +2,7 @@
 <div class="invite-role">
   <label [for]="id">Роль в проекте</label>
   <input
+    appField
     [id]="id"
     [formControl]="control()"
     [readOnly]="readonly()"
@@ -28,6 +29,7 @@
     >
       @for (role of suggestions(); track role; let index = $index) {
         <button
+          appButton="secondary"
           type="button"
           role="option"
           tabindex="-1"

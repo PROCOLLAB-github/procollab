@@ -37,7 +37,11 @@
     @include responsive.apply-desktop {
       bottom: 0%;
       left: 30%;
-      min-width: 852px;
+      width: min(852px, 70vw);
+      min-width: 0;
+      max-width: 70vw;
+      max-height: 92dvh;
+      object-fit: contain;
     }
   }
 
@@ -49,5 +53,20 @@
   &__text {
     max-width: 185px;
     color: var(--dark-grey);
+  }
+}
+
+@include responsive.apply-below-desktop {
+  .verification__img {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    max-height: 40dvh;
+    object-fit: contain;
+  }
+
+  .verification__action {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 }

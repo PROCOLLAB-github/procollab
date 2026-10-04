@@ -203,3 +203,33 @@
     margin-top: 20px;
   }
 }
+
+@include responsive.apply-below-desktop {
+  :host {
+    display: block;
+    min-width: 0;
+  }
+
+  .project {
+    padding: 16px var(--page-gutter) max(24px, env(safe-area-inset-bottom));
+  }
+
+  .project__top {
+    position: static;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 8px var(--page-gutter);
+  }
+
+  .project__left form {
+    width: 100%;
+  }
+
+  .project__save {
+    @include responsive.mobile-actions;
+  }
+
+  .project__wrapper--settings {
+    min-width: 0;
+  }
+}

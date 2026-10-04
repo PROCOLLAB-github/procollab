@@ -22,6 +22,7 @@
         <path d="m15 15 6 6" />
       </svg>
       <input
+        appField
         #searchInput
         id="team-invite-search"
         data-invite-autofocus
@@ -50,11 +51,20 @@
     [readonly]="isLoading(ui.inviteFormIsSubmitting())"
   />
   @if (ui.inviteSubmitError(); as error) {
-    <p inviteError class="invite-error" role="alert">{{ error.message }}</p>
+    <app-state
+      inviteError
+      class="invite-error"
+      [compact]="true"
+      kind="error"
+      title="{{ error.message }}"
+    />
   }
   <div inviteFooter class="invite-actions">
-    <button type="button" class="invite-button" (click)="closed.emit()">Отмена</button>
+    <button appButton="secondary" type="button" class="invite-button" (click)="closed.emit()">
+      Отмена
+    </button>
     <button
+      appButton="primary"
       type="button"
       class="invite-button invite-button--primary"
       [disabled]="ui.inviteForm.invalid || isLoading(ui.inviteFormIsSubmitting())"

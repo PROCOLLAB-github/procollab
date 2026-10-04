@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/responsive";
 
 .card {
@@ -22,14 +26,13 @@
   }
 
   &__info {
+    @include ui-foundation.card;
+
     position: relative;
     z-index: 1;
     min-width: 0;
-    padding: 22px;
     margin-left: -18%;
     overflow: hidden;
-    border: 0.5px solid var(--dark-grey);
-    border-radius: var(--rounded-lg);
   }
 
   &__name {

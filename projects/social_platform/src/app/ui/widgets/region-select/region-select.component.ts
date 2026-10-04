@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, FieldDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -18,7 +21,7 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
 
 @Component({
   selector: "app-region-select",
-  imports: [CommonModule, IconComponent],
+  imports: [ButtonDirective, FieldDirective, CommonModule, IconComponent],
   templateUrl: "./region-select.component.html",
   styleUrl: "./region-select.component.scss",
   providers: [

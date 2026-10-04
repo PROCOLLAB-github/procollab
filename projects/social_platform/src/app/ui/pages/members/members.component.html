@@ -1,11 +1,12 @@
 <!-- @format -->
 <section class="page" #membersRoot>
-  <app-back namespace="участники" [path]="AppRoutes.office.feed()"></app-back>
+  <app-page-header title="участники" [backRoute]="AppRoutes.office.feed()" />
 
   @if (compactLayout()) {
     <div class="page__bar">
-      <form class="page__search" [formGroup]="searchForm">
+      <form appFormLayout class="page__search" [formGroup]="searchForm">
         <input
+          appField
           class="page__search-input"
           type="search"
           formControlName="search"
@@ -15,6 +16,7 @@
       </form>
       <div class="page__actions">
         <button
+          appButton="secondary"
           #filtersButton
           type="button"
           class="page__action page__action--filters"
@@ -24,7 +26,12 @@
         >
           Фильтры
         </button>
-        <button type="button" class="page__action" (click)="redirectToProfile()">
+        <button
+          appButton="secondary"
+          type="button"
+          class="page__action"
+          (click)="redirectToProfile()"
+        >
           Перейти в профиль
         </button>
       </div>
@@ -35,7 +42,7 @@
     <div class="page__bar">
       <div class="page__info">
         <div class="page__outlet">
-          <form [formGroup]="searchForm">
+          <form appFormLayout [formGroup]="searchForm">
             <app-search
               formControlName="search"
               placeholder="имя или фамилия участника"
@@ -69,6 +76,8 @@
     <ul class="page__list">
       @for (member of members(); track member.id) {
         <li><app-member-card [member]="member" /></li>
+      } @empty {
+        <li><app-state title="Ничего не найдено" /></li>
       }
     </ul>
   </ng-template>

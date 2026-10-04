@@ -30,12 +30,12 @@
     text-align: center;
 
     h2 {
-      font-size: 16px;
+      font-size: var(--ui-font-h3);
       line-height: 24px;
     }
 
     p {
-      font-size: 14px;
+      font-size: var(--ui-font-body);
       line-height: 21px;
 
       @include vacancy-ui.secondary;

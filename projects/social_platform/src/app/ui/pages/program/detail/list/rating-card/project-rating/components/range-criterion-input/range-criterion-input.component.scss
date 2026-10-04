@@ -36,12 +36,12 @@
 
     &:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      box-shadow: var(--ui-focus-ring);
     }
   }
 }
 
-// stylelint-disable property-no-vendor-prefix
+/* stylelint-disable property-no-vendor-prefix */
 input {
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -50,5 +50,13 @@ input {
 
   &[type="number"] {
     -moz-appearance: textfield;
+  }
+}
+
+@include responsive.apply-mobile {
+  .field__input {
+    width: 44px;
+    height: 44px;
+    font-size: var(--ui-font-h3);
   }
 }

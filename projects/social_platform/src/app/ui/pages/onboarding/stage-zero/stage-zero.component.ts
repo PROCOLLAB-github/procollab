@@ -6,7 +6,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
-import { IconComponent } from "@uilib";
+import { IconComponent, FormLayoutDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { generateOptionsList } from "@utils/generate-options-list";
@@ -23,6 +23,7 @@ import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.c
   templateUrl: "./stage-zero.component.html",
   styleUrl: "./stage-zero.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     InputComponent,
     ButtonComponent,

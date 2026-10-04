@@ -1,0 +1,14 @@
+
+ RUN  v3.2.6 Z:/Документы/PROCOLLAB-dev/procollab-dev-platform-responsive
+
+ ✓ projects/social_platform/src/app/ui/widgets/region-select/region-select.component.spec.ts (12 tests) 720ms
+ ✓ projects/social_platform/src/app/ui/pages/members/members.component.spec.ts (1 test) 815ms
+   ✓ MembersComponent > should create  813ms
+ ✓ projects/social_platform/src/app/ui/pages/profile/edit/edit.component.spec.ts (3 tests) 1634ms
+   ✓ ProfileEditComponent > should create  1013ms
+   ✓ ProfileEditComponent > closes the skills library with the explicit close button  402ms
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  20:47:33
+   Duration  21.59s (transform 15.41s, setup 20.80s, collect 19.70s, tests 3.17s, environment 8.88s, prepare 10.42s)

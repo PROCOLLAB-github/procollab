@@ -1,4 +1,7 @@
 /** @format */
+
+import { ButtonDirective } from "@uilib";
+/** @format */
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Invite } from "@domain/invite/invite.model";
@@ -15,6 +18,7 @@ import { ProjectInviteRoleInputComponent } from "@ui/widgets/project-invite/proj
   templateUrl: "./invite-card.component.html",
   styleUrl: "./invite-card.component.scss",
   imports: [
+    ButtonDirective,
     IconComponent,
     AvatarComponent,
     ReactiveFormsModule,

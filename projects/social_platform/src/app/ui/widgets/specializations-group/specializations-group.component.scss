@@ -45,7 +45,7 @@
 
       &:hover {
         color: var(--accent);
-        background-color: rgb(109 40 255 / 6%);
+        background-color: var(--ui-accent-tint-subtle);
       }
 
       .heading--open &,
@@ -94,13 +94,13 @@
 
       &:hover {
         color: var(--accent);
-        background-color: rgb(109 40 255 / 6%);
+        background-color: var(--ui-accent-tint-subtle);
         transform: translateX(2px);
       }
 
       &--selected {
         color: var(--accent);
-        background-color: rgb(109 40 255 / 12%);
+        background-color: var(--ui-accent-tint-hover);
         border-color: var(--accent);
 
         span {

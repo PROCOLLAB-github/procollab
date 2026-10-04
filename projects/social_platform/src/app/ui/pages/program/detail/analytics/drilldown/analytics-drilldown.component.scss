@@ -1,11 +1,11 @@
 /** @format */
 @use "styles/responsive";
 
-// Только case-вариант: shared modal задаёт width своим stylesheet после подключения overlay.
+/* Только case-вариант: shared modal задаёт width своим stylesheet после подключения overlay. */
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
   box-sizing: border-box;
   width: min(880px, calc(100% - 24px));
-  max-height: calc(100dvh - 32px);
+  max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
   padding: 20px;
   overflow-y: auto;
 }
@@ -28,7 +28,7 @@
     }
 
     dt {
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       color: var(--dark-grey);
     }
 
@@ -51,7 +51,7 @@
     display: grid;
     gap: 6px;
     margin-bottom: 16px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
 
     app-button {
       width: 100%;
@@ -92,7 +92,7 @@
     small {
       display: block;
       margin-top: 4px;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
     }
 
     @include responsive.apply-desktop {
@@ -102,7 +102,7 @@
       }
 
       th {
-        font-size: 13px;
+        font-size: var(--ui-font-body);
       }
 
       th:first-child,
@@ -128,16 +128,16 @@
   }
 }
 
-// Overlay лежит вне host: единственное глобальное правило ограничено собственным bodyClass.
+/* Overlay лежит вне host: единственное глобальное правило ограничено собственным bodyClass. */
 .modal__body.analytics-drilldown-body {
   box-sizing: border-box;
   width: min(880px, calc(100vw - 24px));
-  max-height: calc(100dvh - 32px);
+  max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
   padding: 20px;
   overflow-y: auto;
 }
 
-// Тот же шаблон используется в backlog: оформление меняется только у трёх списков назначений.
+/* Тот же шаблон используется в backlog: оформление меняется только у трёх списков назначений. */
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--assignments {
   width: min(980px, calc(100vw - 32px));
   padding: 16px;
@@ -151,7 +151,7 @@
     margin-bottom: 24px;
 
     h2 {
-      font-size: 24px;
+      font-size: var(--ui-font-h1);
       line-height: 30px;
     }
   }
@@ -171,7 +171,7 @@
 .analytics-drilldown {
   width: 100%;
   min-width: 0;
-  font-size: 14px;
+  font-size: var(--ui-font-body);
   line-height: 1.5;
   color: var(--black);
   overflow-wrap: anywhere;
@@ -182,7 +182,7 @@
   }
 
   h3 {
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
   }
 
@@ -359,7 +359,7 @@
   &__badge {
     display: inline-block;
     padding: 3px 7px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     line-height: 18px;
     color: var(--dark-grey);
@@ -415,7 +415,7 @@
 
     td::before {
       display: block;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       font-weight: 600;
       color: var(--dark-grey);
       content: attr(data-label);
@@ -446,7 +446,7 @@
       }
 
       th {
-        font-size: 13px;
+        font-size: var(--ui-font-body);
         font-weight: 600;
       }
 
@@ -520,7 +520,7 @@
 
     .analytics-drilldown__action {
       padding: 4px 0;
-      font-size: 13px;
+      font-size: var(--ui-font-body);
       font-weight: 500;
       line-height: 20px;
     }

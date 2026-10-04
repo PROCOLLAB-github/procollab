@@ -11,7 +11,7 @@
   padding: 10px;
 
   &--unread {
-    background-color: #f7f3ff;
+    background-color: var(--ui-message-surface);
   }
 
   &--active {
@@ -97,7 +97,7 @@
   padding: 10px;
   background-color: var(--white);
   border-radius: var(--rounded-lg);
-  box-shadow: 5px 5px 25px rgb(159 159 159 / 15%);
+  box-shadow: var(--ui-message-shadow);
 
   &__item {
     padding: 10px;

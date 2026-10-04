@@ -1,33 +1,26 @@
 <!-- @format -->
+
 <button
   [type]="type() === 'icon' ? 'button' : type()"
-  [class]="'button text-body-12' + ' ' + customTypographyClass()"
-  [ngClass]="{
-    'button--red': color() === 'red',
-    'button--inline': appearance() === 'inline',
-    'button--outline': appearance() === 'outline',
-    'button--no-border': hasBorder() === false,
-    'button--green': color() === 'green',
-    'button--grey': color() === 'grey',
-    'button--gold': color() === 'gold',
-    'button--gradient': color() === 'gradient',
-    'button--white': color() === 'white',
-    'button--small': size() === 'small',
-    'button--extra-small': size() === 'extra-small',
-    'button--medium': size() === 'medium',
-    'button--big': size() === 'big',
-    'button--small--icon': size() === 'small' && type() === 'icon',
-    'button--medium--icon': size() === 'medium' && type() === 'icon',
-    'button--big--icon': size() === 'big' && type() === 'icon',
-  }"
+  [class]="
+    'button button--' +
+    size() +
+    ' button--' +
+    effectiveColor() +
+    ' button--' +
+    effectiveAppearance() +
+    ' ' +
+    (customTypographyClass() || '')
+  "
+  [class.button--no-border]="!hasBorder()"
   [style.background-color]="backgroundColor()"
-  [disabled]="disabled()"
+  [disabled]="disabled() || loader()"
+  [attr.aria-busy]="loader() || null"
 >
+  <span class="button__content" [class.button__content--loading]="loader()"><ng-content /></span>
   @if (loader()) {
-    <app-loader [color]="appearance() === 'inline' ? 'white' : 'gray'"></app-loader>
-  } @else {
-    <ng-container>
-      <ng-content></ng-content>
-    </ng-container>
+    <span class="button__loader" aria-hidden="true"
+      ><app-loader [color]="effectiveAppearance() === 'inline' ? 'white' : 'accent'"
+    /></span>
   }
 </button>

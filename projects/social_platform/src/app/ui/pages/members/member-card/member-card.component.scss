@@ -1,4 +1,8 @@
 /** @format */
+
+@use "styles/ui-foundation";
+
+/** @format */
 @use "styles/responsive";
 
 :host {
@@ -7,16 +11,13 @@
 }
 
 .member-card {
+  @include ui-foundation.card;
+
   position: relative;
   box-sizing: border-box;
   display: block;
   width: 156px;
   height: 248px;
-  padding: 45px 12px 12px;
-  color: var(--black);
-  background: var(--light-white);
-  border: 0.5px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
 
   &:focus-visible {
     outline: 2px solid var(--accent-dark);
@@ -41,7 +42,7 @@
   &__name {
     height: 36px;
     margin: 0 0 6px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 18px;
     text-align: center;
@@ -59,7 +60,7 @@
     height: 30px;
     margin: 0 0 10px;
     overflow: hidden;
-    font-size: 11px;
+    font-size: var(--ui-font-caption);
     line-height: 15px;
     color: var(--grey-for-text);
     text-align: center;
@@ -92,7 +93,7 @@
     height: 22px;
     padding: 3px 7px;
     overflow: hidden;
-    font-size: 10px;
+    font-size: var(--ui-font-caption);
     font-weight: 400;
     line-height: 16px;
     color: var(--accent-dark);
@@ -115,21 +116,16 @@
   }
 
   &__action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 32px;
+    @include ui-foundation.button;
+
     margin-top: auto;
-    font-size: 12px;
-    line-height: 16px;
-    color: var(--white);
-    background: var(--accent);
-    border-radius: var(--rounded-xxl);
   }
 
   &:hover &__action {
     background: var(--accent-medium);
   }
+
+  padding-top: 45px;
 }
 
 @media (max-width: #{responsive.$desktop - 1px}) {

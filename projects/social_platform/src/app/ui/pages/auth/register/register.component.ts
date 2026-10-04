@@ -8,7 +8,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective, FormLayoutDirective } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
@@ -20,6 +20,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./register.component.html",
   styleUrl: "./register.component.scss",
   imports: [
+    ButtonDirective,
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,

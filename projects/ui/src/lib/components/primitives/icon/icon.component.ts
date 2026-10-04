@@ -99,6 +99,7 @@ export class IconComponent implements OnInit {
 
   /** Название иконки из спрайта (обязательный параметр) */
   readonly icon = input.required<string>();
+  readonly size = input<"small" | "medium" | "large">("medium");
 
   /** Внутреннее хранение размера квадратной иконки */
   square?: string;

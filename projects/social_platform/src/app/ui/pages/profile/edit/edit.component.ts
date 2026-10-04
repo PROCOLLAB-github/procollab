@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, FormLayoutDirective, PageHeaderComponent } from "@uilib";
+/** @format */
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -54,6 +57,9 @@ import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/pr
   templateUrl: "./edit.component.html",
   styleUrl: "./edit.component.scss",
   imports: [
+    PageHeaderComponent,
+    ButtonDirective,
+    FormLayoutDirective,
     ReactiveFormsModule,
     CommonModule,
     IconComponent,

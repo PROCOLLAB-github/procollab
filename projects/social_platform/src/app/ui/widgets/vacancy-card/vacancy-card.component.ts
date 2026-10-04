@@ -1,5 +1,8 @@
 /** @format */
 
+import { CardDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
@@ -10,7 +13,13 @@ import { VacancySkillsComponent } from "../vacancy-skills/vacancy-skills.compone
   selector: "app-vacancy-card",
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
-  imports: [IconComponent, ButtonComponent, VacancyStatusComponent, VacancySkillsComponent],
+  imports: [
+    CardDirective,
+    IconComponent,
+    ButtonComponent,
+    VacancyStatusComponent,
+    VacancySkillsComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyCardComponent {

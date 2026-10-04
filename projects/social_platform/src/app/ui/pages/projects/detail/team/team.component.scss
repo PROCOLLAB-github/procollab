@@ -1,9 +1,21 @@
+/** @format */
+
+@use "styles/responsive";
+
 .project {
   &__team {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 156px), 1fr));
     grid-gap: 20px;
     align-items: center;
     margin-top: 30px;
+  }
+}
+
+@include responsive.apply-mobile {
+  .project__team {
+    @include responsive.single-column;
+
+    row-gap: 48px;
   }
 }

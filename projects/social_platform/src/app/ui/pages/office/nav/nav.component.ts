@@ -1,6 +1,11 @@
 /** @format */
 
-import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
+import {
+  InviteManageCardComponent,
+  ProfileInfoComponent,
+  ButtonDirective,
+  DrawerDirective,
+} from "@uilib";
 import { NotificationService } from "@ui/services/notification/notification.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -11,6 +16,7 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -21,6 +27,9 @@ import { IconComponent } from "@ui/primitives";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { NavService } from "@api/shared/nav.service";
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
+import { A11yModule } from "@angular/cdk/a11y";
+import { Overlay } from "@angular/cdk/overlay";
+import { desktop } from "@utils/responsive";
 
 /**
  * Компонент навигационного меню
@@ -56,6 +65,8 @@ import { InviteInfoService } from "@api/invite/facades/invite-info.service";
   templateUrl: "./nav.component.html",
   styleUrl: "./nav.component.scss",
   imports: [
+    DrawerDirective,
+    ButtonDirective,
     CommonModule,
     IconComponent,
     RouterLink,
@@ -63,6 +74,7 @@ import { InviteInfoService } from "@api/invite/facades/invite-info.service";
     InviteManageCardComponent,
     ProfileInfoComponent,
     AsyncPipe,
+    A11yModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -70,6 +82,8 @@ export class NavComponent implements OnInit, OnDestroy {
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly navService = inject(NavService);
+  private readonly menuScrollStrategy = inject(Overlay).scrollStrategies.block();
+  private menuTrigger?: HTMLElement;
 
   readonly invites = this.inviteInfoService.invites;
 
@@ -85,7 +99,8 @@ export class NavComponent implements OnInit, OnDestroy {
     // Подписка на события роутера для закрытия мобильного меню
     this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.mobileMenuOpen = false;
+        this.closeMenu();
+        this.cdref.markForCheck();
       }
     });
 
@@ -96,7 +111,31 @@ export class NavComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.menuScrollStrategy.disable();
+  }
+
+  @HostListener("window:resize")
+  onViewportResize(): void {
+    if (this.mobileMenuOpen && window.innerWidth >= desktop) this.closeMenu();
+  }
+
+  toggleMenu(event: Event): void {
+    if (this.mobileMenuOpen) {
+      this.closeMenu();
+      return;
+    }
+    this.menuTrigger = event.currentTarget as HTMLElement;
+    this.mobileMenuOpen = true;
+    this.notificationsOpen = false;
+    this.menuScrollStrategy.enable();
+  }
+
+  closeMenu(): void {
+    this.mobileMenuOpen = false;
+    this.menuScrollStrategy.disable();
+    this.menuTrigger?.focus();
+  }
 
   mobileMenuOpen = false;
   notificationsOpen = false;
@@ -125,7 +164,7 @@ export class NavComponent implements OnInit, OnDestroy {
         }
 
         this.notificationsOpen = false;
-        this.mobileMenuOpen = false;
+        this.closeMenu();
       });
   }
 
@@ -147,7 +186,7 @@ export class NavComponent implements OnInit, OnDestroy {
         }
 
         this.notificationsOpen = false;
-        this.mobileMenuOpen = false;
+        this.closeMenu();
 
         this.router
           .navigateByUrl(AppRoutes.projects.detail(invite.project.id))

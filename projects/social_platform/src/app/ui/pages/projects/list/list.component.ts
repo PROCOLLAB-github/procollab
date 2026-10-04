@@ -1,5 +1,8 @@
 /** @format */
 
+import { StateComponent } from "@uilib";
+/** @format */
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -28,7 +31,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
   selector: "app-list",
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
-  imports: [IconComponent, RouterLink, InfoCardComponent, NgTemplateOutlet],
+  imports: [StateComponent, IconComponent, RouterLink, InfoCardComponent, NgTemplateOutlet],
   providers: [
     ProjectsListInfoService,
     ProjectsInfoService,

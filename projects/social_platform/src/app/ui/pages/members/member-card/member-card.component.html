@@ -1,5 +1,7 @@
 <!-- @format -->
 <a
+  appCard
+  [interactive]="true"
   class="member-card"
   [routerLink]="AppRoutes.profile.detail(member().id)"
   [attr.aria-label]="'Открыть профиль: ' + name()"

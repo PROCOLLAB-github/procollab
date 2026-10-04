@@ -1,18 +1,30 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
+@use "styles/responsive";
+
+/** @format */
+
 .tag {
+  @include ui-foundation.badge;
+
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   max-width: 120px;
-  padding: 2px 20px;
+  padding: 4px 12px;
   overflow: hidden;
+  font-size: var(--ui-font-caption);
+  line-height: 1.5;
   color: var(--accent);
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-radius: var(--rounded-xxl);
+  border-radius: var(--ui-radius-control);
 
   p {
     margin: 0 10px;
@@ -177,5 +189,28 @@
         opacity: 0.7;
       }
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  .tag {
+    max-width: 100%;
+    padding: 4px 12px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .tag p {
+    min-width: 0;
+  }
+
+  .tag:has(.tag__icons) {
+    padding-right: 40px;
+  }
+
+  .tag__icons {
+    top: 0;
+    bottom: 0;
+    align-items: center;
   }
 }

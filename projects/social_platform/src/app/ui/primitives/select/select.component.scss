@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -13,12 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: var(--black);
     cursor: pointer;
-    background-color: var(--white);
-    border: 0.5px solid var(--gray);
-    border-radius: var(--rounded-xxl);
-    outline: none;
 
     &--small {
       max-width: 70px;
@@ -37,7 +36,7 @@
 
     &--open {
       border-color: var(--accent);
-      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      box-shadow: var(--ui-focus-ring);
     }
 
     &--error {
@@ -49,7 +48,7 @@
       opacity: 0.5;
     }
 
-    @include typography.body-12;
+    @include ui-foundation.control;
   }
 
   &__options {
@@ -107,4 +106,72 @@
       background: transparent;
     }
   }
+}
+
+:host {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.field,
+.search,
+.search__input {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@include responsive.apply-mobile {
+  .field__input,
+  .field__input-slim,
+  .search__input input {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: var(--ui-font-h3);
+  }
+
+  .field--small,
+  .field__input--small {
+    min-width: 0;
+  }
+
+  .field__input--with-tooltip {
+    padding-right: 44px;
+  }
+
+  .field__option {
+    min-height: 44px;
+    overflow-wrap: anywhere;
+  }
+
+  .field__chip {
+    max-width: calc(100% - 44px);
+  }
+
+  .field__chip span {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .field__calendar-button {
+    right: 4px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .field__input[type="date"] {
+    padding-right: 48px;
+  }
+}
+
+.field__input > span,
+.field__input > p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.field__arrow,
+.field__error-icon {
+  flex-shrink: 0;
 }

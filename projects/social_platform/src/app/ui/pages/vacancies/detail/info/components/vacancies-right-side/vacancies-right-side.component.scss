@@ -12,7 +12,7 @@
 
   h2 {
     margin-bottom: 16px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 21px;
     color: var(--accent-dark);
@@ -25,7 +25,7 @@
 
   dt {
     margin-bottom: 2px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 18px;
 
     @include vacancy-ui.secondary;
@@ -33,7 +33,7 @@
 
   dd {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 21px;
   }
 
@@ -62,7 +62,7 @@
   }
 
   a {
-    font-size: 13px;
+    font-size: var(--ui-font-body);
     line-height: 20px;
 
     @include vacancy-ui.link;
