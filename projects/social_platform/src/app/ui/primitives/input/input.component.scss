@@ -77,7 +77,9 @@
     cursor: pointer;
     border: 0.5px solid var(--dark-grey);
     border-radius: 50%;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
     appearance: none;
 
     &:hover::after {
@@ -190,5 +192,62 @@
     &--overflow {
       color: var(--red) !important;
     }
+  }
+}
+
+:host {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.field,
+.search,
+.search__input {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@include responsive.apply-mobile {
+  .field__input,
+  .field__input-slim,
+  .search__input input {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .field--small,
+  .field__input--small {
+    min-width: 0;
+  }
+
+  .field__input--with-tooltip {
+    padding-right: 44px;
+  }
+
+  .field__option {
+    min-height: 44px;
+    overflow-wrap: anywhere;
+  }
+
+  .field__chip {
+    max-width: calc(100% - 44px);
+  }
+
+  .field__chip span {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .field__calendar-button {
+    right: 4px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .field__input[type="date"] {
+    padding-right: 48px;
   }
 }

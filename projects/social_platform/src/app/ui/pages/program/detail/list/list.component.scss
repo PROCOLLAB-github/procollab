@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -136,10 +138,7 @@
 
   &__tooltip {
     position: fixed;
-    right:
-      calc(
-        (100vw - 1080px) / 2
-      );
+    right: calc((100vw - 1080px) / 2);
     bottom: 24px;
     z-index: 30;
   }
@@ -309,5 +308,42 @@
       gap: 12px;
       margin: 30px 0;
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  .page__list {
+    @include responsive.single-column;
+  }
+
+  .page__mobile-filter-row {
+    @include responsive.mobile-actions;
+  }
+
+  .page__tooltip {
+    right: var(--page-gutter);
+    bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .tooltip__wrapper {
+    position: fixed;
+    right: var(--page-gutter);
+    bottom: 60px;
+    left: auto;
+    width: calc(100vw - 2 * var(--page-gutter));
+  }
+}
+
+@include responsive.apply-below-desktop {
+  .filter {
+    position: fixed;
+    z-index: 300;
+  }
+
+  .filter__body {
+    min-height: 0;
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    overscroll-behavior: contain;
   }
 }

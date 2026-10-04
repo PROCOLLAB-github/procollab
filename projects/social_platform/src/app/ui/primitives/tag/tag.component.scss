@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/responsive";
+
+/** @format */
+
 .tag {
   position: relative;
   display: flex;
@@ -177,5 +181,28 @@
         opacity: 0.7;
       }
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  .tag {
+    max-width: 100%;
+    padding: 4px 12px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .tag p {
+    min-width: 0;
+  }
+
+  .tag:has(.tag__icons) {
+    padding-right: 40px;
+  }
+
+  .tag__icons {
+    top: 0;
+    bottom: 0;
+    align-items: center;
   }
 }

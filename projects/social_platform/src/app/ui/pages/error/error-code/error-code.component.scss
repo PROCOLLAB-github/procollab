@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 .error {
   display: flex;
   align-items: center;
@@ -11,7 +15,12 @@
     height: 580px;
     margin-bottom: 20px;
     color: var(--error-code);
-    background: radial-gradient(50% 50% at 50% 50%, rgb(0 200 147 / 51%) 0%, rgb(0 200 147 / 0%) 100%);
+    background:
+      radial-gradient(
+        50% 50% at 50% 50%,
+        rgb(0 200 147 / 51%) 0%,
+        rgb(0 200 147 / 0%) 100%
+      );
   }
 
   &__title {
@@ -23,5 +32,27 @@
   &__link {
     display: block;
     text-align: center;
+  }
+}
+
+@include responsive.apply-below-desktop {
+  .error {
+    padding: 24px var(--page-gutter);
+  }
+
+  .error__body {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .error__code {
+    width: 100%;
+    height: auto;
+    min-height: 240px;
+    font-size: clamp(96px, 30vw, 240px);
+  }
+
+  .error__link {
+    min-height: 44px;
   }
 }

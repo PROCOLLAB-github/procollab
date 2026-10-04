@@ -242,3 +242,38 @@
     }
   }
 }
+
+@include responsive.apply-mobile {
+  .auth {
+    padding: 24px 0;
+  }
+
+  .auth__logo {
+    position: static;
+    margin-bottom: 24px;
+  }
+
+  .auth__row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .auth__row fieldset {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .auth__field app-input.auth__password-input {
+    --auth-password-eye-size: 44px;
+  }
+
+  .auth__password-toggle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .auth__agreement,
+  .auth__checkbox {
+    min-height: 44px;
+  }
+}

@@ -52,3 +52,11 @@ input {
     -moz-appearance: textfield;
   }
 }
+
+@include responsive.apply-mobile {
+  .field__input {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+}

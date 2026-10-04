@@ -420,3 +420,33 @@ $detail-bar-mb: 12px;
     white-space: nowrap;
   }
 }
+
+@include responsive.apply-below-desktop {
+  .detail {
+    height: auto;
+    margin: 0 var(--page-gutter);
+  }
+
+  .detail__body {
+    max-height: none;
+  }
+
+  .info__row {
+    @include responsive.mobile-actions;
+  }
+
+  .approve {
+    min-width: 0;
+    padding: 8px;
+  }
+
+  .project__item,
+  .project__item--info {
+    @include responsive.mobile-actions;
+  }
+
+  .approves__text {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}

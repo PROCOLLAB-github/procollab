@@ -89,10 +89,30 @@ export class AppComponent implements OnInit {
     const loadEvent = fromEvent(window, "load");
     const resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
 
+    // visualViewport shrinks when the mobile keyboard opens; overlays must follow it.
+    const updateViewport = () => {
+      const viewport = window.visualViewport;
+      document.documentElement.style.setProperty(
+        "--visual-viewport-height",
+        `${viewport?.height ?? window.innerHeight}px`,
+      );
+      document.documentElement.style.setProperty(
+        "--visual-viewport-top",
+        `${viewport?.offsetTop ?? 0}px`,
+      );
+    };
+    updateViewport();
+    if (window.visualViewport) {
+      merge(fromEvent(window.visualViewport, "resize"), fromEvent(window.visualViewport, "scroll"))
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(updateViewport);
+    }
+
     merge(loadEvent, resizeEvent)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+        updateViewport();
       });
   }
 

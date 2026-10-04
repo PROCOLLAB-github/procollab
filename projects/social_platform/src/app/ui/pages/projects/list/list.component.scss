@@ -161,3 +161,29 @@
     color: var(--dark-grey);
   }
 }
+
+@include responsive.apply-below-desktop {
+  .filter {
+    position: fixed;
+    z-index: 300;
+  }
+
+  .filter__body {
+    min-height: 0;
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    overscroll-behavior: contain;
+  }
+}
+
+@include responsive.apply-mobile {
+  .page__list {
+    @include responsive.single-column;
+
+    row-gap: 48px;
+  }
+
+  .page__filter {
+    min-width: 0;
+  }
+}

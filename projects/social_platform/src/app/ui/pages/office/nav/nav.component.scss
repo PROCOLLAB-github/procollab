@@ -14,6 +14,8 @@
 
   &__inner {
     display: flex;
+    gap: 8px;
+    align-items: center;
     justify-content: space-between;
     max-width: responsive.$container-md;
     margin: 0 auto;
@@ -45,7 +47,7 @@
     cursor: pointer;
     border-radius: var(--rounded-sm);
 
-    >.attention {
+    > .attention {
       top: 9px;
       right: 11px;
     }
@@ -59,10 +61,15 @@
   &__toggle {
     position: relative;
     z-index: 100;
-    display: block;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
 
-    >.attention {
+    > .attention {
       top: 8px;
       right: 2px;
     }
@@ -75,14 +82,50 @@
   &__mobile-menu {
     position: fixed;
     top: 0;
-    right: 0;
     bottom: 0;
     left: 0;
-    z-index: 50;
+    z-index: 201;
     display: flex;
     flex-direction: column;
-    padding: 25px 15px 30px;
+    width: min(360px, calc(100% - 32px));
+    max-height: 100dvh;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background-color: var(--white);
+  }
+
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgb(51 46 45 / 50%);
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-right: auto;
+    color: var(--dark-grey);
+    cursor: pointer;
+  }
+
+  &__title {
+    min-width: 0;
+    color: var(--white);
+    overflow-wrap: anywhere;
+  }
+
+  ::ng-deep .nav__link {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  ::ng-deep .nav__item {
+    min-height: 44px;
   }
 
   &__user {

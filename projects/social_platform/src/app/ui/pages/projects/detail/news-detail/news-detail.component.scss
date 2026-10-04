@@ -1,9 +1,12 @@
+/** @format */
+
 @use "styles/responsive";
 
 .item {
   display: block;
 
   @include responsive.apply-desktop {
-    min-width: 800px;
+    width: 100%;
+    min-width: 0;
   }
 }

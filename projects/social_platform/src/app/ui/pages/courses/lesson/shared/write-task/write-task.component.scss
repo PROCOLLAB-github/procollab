@@ -1,3 +1,4 @@
+@use "styles/course-task";
 @use "styles/responsive";
 
 .write-task {
@@ -176,3 +177,5 @@
     }
   }
 }
+
+@include course-task.responsive-layout("write-task");

@@ -269,3 +269,21 @@
     }
   }
 }
+
+@include responsive.apply-mobile {
+  .project__grid,
+  .project__info--additional {
+    @include responsive.single-column;
+  }
+
+  .invite__item {
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .invite__item--info {
+    min-width: 0;
+  }
+}

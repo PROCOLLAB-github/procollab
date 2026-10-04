@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 .field {
   &__options {
     z-index: 1000;
@@ -6,9 +10,12 @@
     gap: 5px;
     align-items: flex-start;
     width: 100%;
-    max-height: 200px;
+    min-width: 0;
+    max-width: calc(100vw - 24px);
+    max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
     padding: 12px;
     overflow-y: auto;
+    overscroll-behavior: contain;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
@@ -19,6 +26,8 @@
     gap: 5px;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    min-width: 0;
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 
@@ -84,5 +93,16 @@
         }
       }
     }
+  }
+}
+
+.field__option p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@include responsive.apply-mobile {
+  .field__option {
+    min-height: 44px;
   }
 }

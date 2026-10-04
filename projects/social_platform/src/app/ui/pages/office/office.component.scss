@@ -36,9 +36,10 @@
     left: 0;
     z-index: 100;
     display: flex;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
-    padding: 30px 5px 30px 17px;
+    padding: max(8px, env(safe-area-inset-top)) var(--page-gutter) 8px;
     background: linear-gradient(var(--accent), #4d3780);
 
     @include responsive.apply-desktop {
@@ -93,15 +94,15 @@
 
     &--wrapper {
       display: grid;
-      grid-template-columns: 2fr 10fr;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 10fr);
       width: 100%;
 
       @include responsive.apply-desktop {
         margin-top: 18px;
       }
 
-      @media (max-width: 992px) {
-        grid-template-columns: 1fr;
+      @include responsive.apply-below-desktop {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
@@ -130,6 +131,11 @@
 
   &__policy-link {
     cursor: pointer;
+  }
+
+  &__top > app-nav {
+    flex: 1;
+    min-width: 0;
   }
 
   &__header {

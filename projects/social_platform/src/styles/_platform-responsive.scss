@@ -1,0 +1,120 @@
+/** @format */
+
+@use "responsive";
+
+// Intrinsic sizing is shared by every page and every projected control.
+app-root,
+app-input,
+app-textarea,
+app-select,
+app-autocomplete-input,
+app-search,
+app-upload-file,
+app-file-item,
+app-file-upload-item,
+app-button,
+ui-button {
+  min-width: 0;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+label,
+.error {
+  overflow-wrap: anywhere;
+}
+
+video,
+iframe,
+canvas {
+  max-width: 100%;
+}
+
+// Connected controls opened inside the shared modal must stay above its backdrop.
+.cdk-overlay-container {
+  z-index: 10010;
+}
+
+// Opt-in primitives for new screens; use the same boundaries as existing components.
+.responsive-header,
+.responsive-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.responsive-table {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.responsive-dialog-header,
+.responsive-dialog-actions {
+  position: sticky;
+  z-index: 2;
+  background: inherit;
+}
+
+.responsive-dialog-header {
+  top: 0;
+}
+
+.responsive-dialog-actions {
+  bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+@include responsive.apply-mobile {
+  html {
+    scrollbar-gutter: auto;
+  }
+
+  .text-body-10 {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .text-body-12 {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  input:not([type="checkbox"], [type="radio"]),
+  textarea,
+  select {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .responsive-header,
+  .responsive-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cdk-overlay-pane {
+    max-width: calc(100vw - 24px);
+  }
+
+  .mat-datepicker-content {
+    max-width: 100%;
+    max-height: calc(100dvh - 24px);
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 359px) {
+  :root {
+    --page-gutter: 12px;
+  }
+}

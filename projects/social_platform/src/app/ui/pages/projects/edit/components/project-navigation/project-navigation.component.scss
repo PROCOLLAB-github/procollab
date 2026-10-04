@@ -79,3 +79,31 @@
     }
   }
 }
+
+@include responsive.apply-below-desktop {
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .project__navigation {
+    padding: 12px 0;
+    margin-bottom: 16px;
+  }
+
+  .project__nav {
+    @include responsive.scroll-tabs;
+
+    padding: 4px 12px;
+  }
+
+  .project__item {
+    padding: 0 8px;
+    margin: 0;
+  }
+
+  .project__subtitle {
+    font-size: 14px;
+  }
+}

@@ -37,3 +37,20 @@
     }
   }
 }
+
+@include responsive.apply-below-desktop {
+  .complete {
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .complete__block {
+    margin: 24px 0;
+  }
+
+  .complete__button {
+    position: static;
+    width: 100%;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}

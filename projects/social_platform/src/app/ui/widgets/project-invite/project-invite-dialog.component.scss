@@ -6,7 +6,7 @@
   display: block;
   width: min(552px, calc(100% - 24px));
   max-width: calc(100% - 24px);
-  max-height: min(720px, calc(100dvh - 48px));
+  max-height: min(720px, calc(var(--visual-viewport-height, 100dvh) - 48px));
   padding: 0;
   overflow: visible;
   border-radius: var(--rounded-lg);
@@ -15,7 +15,7 @@
 .project-invite {
   display: flex;
   flex-direction: column;
-  max-height: min(720px, calc(100dvh - 48px));
+  max-height: min(720px, calc(var(--visual-viewport-height, 100dvh) - 48px));
   padding: 24px;
   color: var(--black);
   background: var(--white);

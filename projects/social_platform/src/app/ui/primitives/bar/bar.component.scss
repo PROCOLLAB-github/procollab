@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 .bar {
@@ -82,5 +84,30 @@
 
   &__back {
     margin-top: 45px;
+  }
+}
+
+@include responsive.apply-below-desktop {
+  .bar {
+    height: auto !important;
+    min-height: 56px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  .bar__nav {
+    width: max-content;
+    min-width: 100%;
+    margin-right: 0;
+  }
+
+  .bar__tabs {
+    flex-shrink: 0;
+  }
+
+  .bar__item {
+    min-height: 56px;
+    padding: 12px;
+    white-space: nowrap;
   }
 }

@@ -1,0 +1,14 @@
+
+ RUN  v3.2.6 Z:/Документы/PROCOLLAB-dev/procollab-dev-platform-responsive
+
+stderr | projects/social_platform/src/app/ui/pages/office/office.component.spec.ts > OfficeComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+NG0912: Component ID generation collision detected. Components 'ButtonComponent' and 'ButtonComponent' with selector 'app-button' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/office/office.component.spec.ts (3 tests) 528ms
+   ✓ OfficeComponent > should create  418ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  18:46:16
+   Duration  21.17s (transform 6.74s, setup 4.57s, collect 4.92s, tests 528ms, environment 9.94s, prepare 10.38s)

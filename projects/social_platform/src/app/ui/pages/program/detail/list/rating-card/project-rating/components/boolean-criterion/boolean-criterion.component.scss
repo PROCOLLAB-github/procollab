@@ -1,5 +1,17 @@
+/** @format */
+
+@use "styles/responsive";
+
 :host {
   display: block;
+}
+
+@include responsive.apply-mobile {
+  .container {
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 .container {

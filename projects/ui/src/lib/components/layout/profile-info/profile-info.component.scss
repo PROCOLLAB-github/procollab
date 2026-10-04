@@ -62,3 +62,22 @@
     color: var(--red);
   }
 }
+
+@include responsive.apply-below-desktop {
+  :host,
+  .user,
+  .user__row {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .user__name,
+  .user__email {
+    overflow-wrap: anywhere;
+  }
+
+  .user__avatar {
+    flex-shrink: 0;
+    margin-right: 0;
+  }
+}

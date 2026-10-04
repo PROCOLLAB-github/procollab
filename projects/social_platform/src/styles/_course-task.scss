@@ -1,0 +1,37 @@
+/** @format */
+
+@use "responsive";
+
+@mixin responsive-layout($name) {
+  @include responsive.apply-mobile {
+    :host,
+    .#{$name},
+    .#{$name}__header,
+    .#{$name}__body,
+    .#{$name}__content {
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .#{$name}__header,
+    .#{$name}__body,
+    .#{$name}__content {
+      min-height: 0;
+      padding: 16px;
+    }
+
+    .#{$name}__files,
+    .#{$name}__content {
+      ::ng-deep app-upload-file .control {
+        max-height: none;
+      }
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+}

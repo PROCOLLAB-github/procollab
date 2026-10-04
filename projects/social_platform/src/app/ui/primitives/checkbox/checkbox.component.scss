@@ -1,5 +1,7 @@
 /** @format */
 
+@use "styles/responsive";
+
 .field {
   position: relative;
   display: flex;
@@ -18,5 +20,21 @@
 
   &__check {
     color: var(--light-white);
+  }
+}
+
+@include responsive.apply-mobile {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .field::before {
+    position: absolute;
+    inset: -12px;
+    content: "";
   }
 }

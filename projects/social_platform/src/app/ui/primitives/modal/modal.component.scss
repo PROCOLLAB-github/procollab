@@ -26,8 +26,12 @@
     display: flex;
     justify-content: center;
     width: 90%;
+    min-width: 0;
+    max-width: calc(100vw - 24px);
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
     padding: 24px;
-    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--white);
     border-radius: var(--rounded-xl);
     transform: translate(-50%, -50%);
@@ -44,6 +48,61 @@
 
     &--no-flex {
       display: block;
+    }
+
+    ::ng-deep > * {
+      flex-shrink: 1;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    @include responsive.apply-below-desktop {
+      top: calc(var(--visual-viewport-top, 0px) + var(--visual-viewport-height, 100dvh) / 2);
+      width: calc(100% - 24px);
+      padding: 16px;
+
+      ::ng-deep .cancel {
+        min-width: 0;
+        max-width: 100%;
+        max-height: none;
+        padding: 12px;
+      }
+
+      ::ng-deep .cancel__buttons {
+        @include responsive.mobile-actions;
+
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+        justify-content: center;
+        padding-top: 8px;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        background: var(--white);
+      }
+
+      ::ng-deep .cancel__text {
+        width: 100%;
+      }
+
+      ::ng-deep .cancel__top {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--white);
+      }
+
+      ::ng-deep .cancel__cross {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+
+        svg {
+          max-width: 16px;
+          max-height: 16px;
+        }
+      }
     }
   }
 }

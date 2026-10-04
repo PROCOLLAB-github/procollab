@@ -15,17 +15,13 @@
         </div>
       } @else {
         <div class="program__details">
-          @if (appWidth > 1000) {
-            <div class="program__left">
-              <aside class="program__aside">
-                @if (
-                  program()!.isUserMember || program()!.isUserManager || program()!.isUserExpert
-                ) {
-                  <app-program-role-widget></app-program-role-widget>
-                }
-              </aside>
-            </div>
-          }
+          <div class="program__left">
+            <aside class="program__aside">
+              @if (program()!.isUserMember || program()!.isUserManager || program()!.isUserExpert) {
+                <app-program-role-widget></app-program-role-widget>
+              }
+            </aside>
+          </div>
 
           <div class="program__content">
             <div class="about program__about">

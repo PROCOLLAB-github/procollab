@@ -530,3 +530,79 @@
     margin-top: 16px;
   }
 }
+
+@include responsive.apply-mobile {
+  :host {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .card__body {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .card__content {
+    padding-right: 16px;
+    padding-left: 16px;
+    overflow: visible;
+  }
+
+  .card__head {
+    width: 100%;
+  }
+
+  .card__name {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .card--project,
+  .card--my-project {
+    .card__name {
+      display: block;
+      max-height: none;
+      font-size: 14px;
+      line-height: 20px;
+      -webkit-line-clamp: unset;
+    }
+
+    .card__description {
+      height: auto;
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+
+  .card__context {
+    height: auto;
+    min-height: 24px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .card__role,
+  .card__access-label {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .card__description {
+    flex-basis: auto;
+    width: 100%;
+    height: auto;
+    min-height: 24px;
+  }
+
+  .card__project-action {
+    min-height: 44px;
+  }
+
+  .card__subscription-action {
+    width: 44px;
+    height: 44px;
+  }
+}

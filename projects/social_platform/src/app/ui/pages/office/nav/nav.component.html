@@ -2,21 +2,46 @@
 
 <div class="nav-bar">
   <div class="nav-bar__inner">
-    <div class="nav-bar__toggle">
+    <button
+      type="button"
+      class="nav-bar__toggle"
+      aria-label="Открыть меню"
+      aria-controls="mobile-navigation"
+      [attr.aria-expanded]="mobileMenuOpen"
+      (click)="toggleMenu($event)"
+    >
       <i
         appIcon
         [ngStyle]="{ color: mobileMenuOpen ? 'var(--dark-grey)' : 'var(--light-white)' }"
         [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
         appSquare="24"
-        (click)="mobileMenuOpen = !mobileMenuOpen"
         class="nav-bar__icon"
       >
       </i>
-    </div>
+    </button>
+    <span class="nav-bar__title text-body-14">{{ title }}</span>
   </div>
   @if (mobileMenuOpen) {
-    <div class="nav-bar__mobile-menu">
+    <div class="nav-bar__backdrop" (click)="closeMenu()"></div>
+    <div
+      id="mobile-navigation"
+      class="nav-bar__mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Навигация"
+      cdkTrapFocus
+      [cdkTrapFocusAutoCapture]="true"
+      (keydown.escape)="closeMenu()"
+    >
       <div class="nav-bar__top">
+        <button
+          type="button"
+          class="nav-bar__close"
+          aria-label="Закрыть меню"
+          (click)="closeMenu()"
+        >
+          <i appIcon icon="menu-cross" appSquare="24"></i>
+        </button>
         <div
           class="nav-bar__notifications-toggle"
           [class.nav-bar__notifications-toggle--active]="notificationsOpen"

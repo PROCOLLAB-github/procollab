@@ -1,5 +1,9 @@
 /** @format */
 
+@use "styles/responsive";
+
+/** @format */
+
 @use "styles/typography";
 
 .button {
@@ -159,5 +163,32 @@
       width: 100%;
       padding: 12px 24px;
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  :host {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .button {
+    min-width: 44px;
+    max-width: 100%;
+    min-height: 44px;
+    max-height: none;
+    padding: 10px 16px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .button--extra-small,
+  .button--small,
+  .button--medium {
+    width: auto;
+  }
+
+  .button--big {
+    width: 100%;
   }
 }

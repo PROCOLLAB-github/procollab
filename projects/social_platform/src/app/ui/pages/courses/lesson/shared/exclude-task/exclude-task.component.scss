@@ -1,3 +1,4 @@
+@use "styles/course-task";
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -169,3 +170,5 @@
     @include typography.body-14;
   }
 }
+
+@include course-task.responsive-layout("exclude");

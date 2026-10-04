@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 .switch {
   position: relative;
   width: 40px;
@@ -24,5 +28,21 @@
       right: 4px;
       left: unset;
     }
+  }
+}
+
+@include responsive.apply-mobile {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .switch::before {
+    position: absolute;
+    inset: -12px -2px;
+    content: "";
   }
 }

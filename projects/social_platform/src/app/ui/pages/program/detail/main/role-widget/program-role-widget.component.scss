@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 :host {
   display: block;
   width: 157px;
@@ -290,5 +294,37 @@
   [tabindex]:focus-visible {
     outline: 1px solid var(--accent);
     outline-offset: 1px;
+  }
+}
+
+@include responsive.apply-below-desktop {
+  :host {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .widget {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    height: auto;
+    min-height: 160px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .widget__footer a,
+  .widget__footer button {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .widget__ellipsis {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .widget__badge {
+    font-size: 12px;
   }
 }

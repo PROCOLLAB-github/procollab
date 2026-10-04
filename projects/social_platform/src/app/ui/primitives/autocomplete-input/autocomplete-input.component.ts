@@ -16,16 +16,16 @@ import {
 } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { ClickOutsideModule } from "ng-click-outside";
 import { debounce, distinctUntilChanged, of, Subject, timer } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { LoaderComponent } from "../loader/loader.component";
 import { Skill } from "@domain/skills/skill.model";
+import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 
 @Component({
   selector: "app-autocomplete-input",
-  imports: [CommonModule, IconComponent, ClickOutsideModule, LoaderComponent],
+  imports: [CommonModule, IconComponent, LoaderComponent, OverlayModule],
   templateUrl: "./autocomplete-input.component.html",
   styleUrl: "./autocomplete-input.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,6 +74,10 @@ export class AutoCompleteInputComponent<T> {
   readonly inputCleared = output();
 
   readonly inputElem = viewChild<ElementRef<HTMLInputElement>>("input");
+  readonly positions: ConnectedPosition[] = [
+    { originX: "start", originY: "bottom", overlayX: "start", overlayY: "top", offsetY: 4 },
+    { originX: "start", originY: "top", overlayX: "start", overlayY: "bottom", offsetY: -4 },
+  ];
 
   value = signal(null);
   inputValue = signal("");
