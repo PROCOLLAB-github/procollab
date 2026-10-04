@@ -20,7 +20,7 @@
         'Исключить участника: ' + collaborator().firstName + ' ' + collaborator().lastName
       "
       title="Исключить участника"
-      [disabled]="removing()"
+      [disabled]="removing() || frozen() || isLeader()"
       [attr.aria-busy]="removing()"
       (click)="onDeleteCollaborator(collaborator().userId)"
     >

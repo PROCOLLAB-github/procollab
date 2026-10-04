@@ -22,7 +22,15 @@ export class PartnerProgramInfo {
   programFieldValues!: PartnerProgramFieldsValues[];
 }
 
+export interface TeamPolicy {
+  isFrozen: boolean;
+  programLinkId: number | null;
+  requiresProgramContext: boolean;
+  programLinks: { id: number; programId: number; isSubmitted: boolean; isCompetitive: boolean }[];
+}
+
 export class Project {
+  teamPolicy?: TeamPolicy;
   id!: number;
   name!: string;
   description!: string;

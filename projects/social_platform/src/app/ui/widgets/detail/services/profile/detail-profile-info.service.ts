@@ -1,4 +1,5 @@
 /** @format */
+import { isTeamFrozen, teamProgramLinkId } from "@domain/project/team-policy";
 
 import { DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -68,7 +69,9 @@ export class DetailProfileInfoService {
 
     toObservable(this.profileInfoService.leaderProjects, { injector: this.injector })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(projects => this.profileProjects.set(projects));
+      .subscribe(projects =>
+        this.profileProjects.set(projects.filter(project => !isTeamFrozen(project))),
+      );
   }
 
   initializationProfile(): void {
@@ -148,12 +151,15 @@ export class DetailProfileInfoService {
     )
       return;
 
+    const project = this.profileProjects().find(item => item.id === projectId)!;
+    if (isTeamFrozen(project)) return;
     this.inviteLoading.set(true);
     this.inviteError.set(null);
     this.sendForUserUseCase
       .execute({
         userId: this.inviteForm.controls.recipientId.value!,
         projectId,
+        programLinkId: teamProgramLinkId(project),
         role: role.value,
       })
       .pipe(takeUntil(this.inviteClosed), takeUntilDestroyed(this.destroyRef))

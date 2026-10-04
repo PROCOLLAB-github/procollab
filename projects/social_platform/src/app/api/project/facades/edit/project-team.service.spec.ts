@@ -10,6 +10,7 @@ import { RevokeInviteUseCase } from "@api/invite/use-cases/revoke-invite.use-cas
 import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProjectTeamService } from "./project-team.service";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
+import { Project } from "@domain/project/project.model";
 
 describe("Отправка приглашения из команды", () => {
   let service: ProjectTeamService;
@@ -147,6 +148,34 @@ describe("Отправка приглашения из команды", () => {
     expect(ui.invites()).toEqual([invite]);
     expect(snackbar.error).toHaveBeenCalledWith(
       "Не удалось отозвать приглашение. Попробуйте ещё раз.",
+    );
+  });
+  it("не отправляет invite для frozen snapshot", () => {
+    service.submitInvite(5, { teamPolicy: { isFrozen: true } } as Project);
+    expect(repo.sendForUser).not.toHaveBeenCalled();
+  });
+  it("передаёт выбранный link ID через use-case и repository port", () => {
+    service.submitInvite(
+      5,
+      {
+        teamPolicy: {
+          isFrozen: false,
+          requiresProgramContext: true,
+          programLinkId: null,
+          programLinks: [
+            { id: 901, programId: 9 },
+            { id: 902, programId: 10 },
+          ],
+        },
+      } as Project,
+      902,
+    );
+    expect(repo.sendForUser).toHaveBeenCalledWith(
+      13,
+      5,
+      "Эксперт по работе с промышленными партнёрами",
+      undefined,
+      902,
     );
   });
 });

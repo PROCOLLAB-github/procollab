@@ -1,4 +1,7 @@
 /** @format */
+import { teamOperationErrorMessage } from "@api/project/team-operation-error";
+import { isTeamFrozen, teamProgramLinkId } from "@domain/project/team-policy";
+import { Project } from "@domain/project/project.model";
 
 import { DestroyRef, inject, Injectable } from "@angular/core";
 import { ValidationService } from "@corelib";
@@ -29,8 +32,19 @@ export class ProjectTeamService {
   private readonly inviteSubmitInitiated = this.projectTeamUIService.inviteSubmitInitiated;
   private readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
 
-  public submitInvite(projectId: number): void {
+  public submitInvite(
+    projectId: number,
+    project?: Project | null,
+    selectedLinkId?: number | null,
+  ): void {
     if (isLoading(this.inviteFormIsSubmitting())) return;
+    if (project && isTeamFrozen(project)) {
+      this.projectTeamUIService.applyErrorSubmitInvite({
+        kind: "validation",
+        message: "Состав команды зафиксирован после сдачи проекта.",
+      });
+      return;
+    }
     if (!Number.isSafeInteger(projectId) || projectId <= 0) return;
     this.projectTeamUIService.applyClearInviteError();
     this.inviteForm.controls.role.setValue(
@@ -48,6 +62,7 @@ export class ProjectTeamService {
       .execute({
         userId: this.inviteForm.controls.recipientId.value!,
         projectId,
+        ...(project ? { programLinkId: teamProgramLinkId(project, selectedLinkId) } : {}),
         role: this.inviteForm.controls.role.value,
       })
       .pipe(takeUntil(this.projectTeamUIService.inviteClosed), takeUntilDestroyed(this.destroyRef))
@@ -72,7 +87,10 @@ export class ProjectTeamService {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            this.snackbar.error("Не удалось изменить роль в приглашении. Попробуйте ещё раз.");
+            this.snackbar.error(
+              teamOperationErrorMessage(result.error.cause) ??
+                "Не удалось изменить роль в приглашении. Попробуйте ещё раз.",
+            );
             return;
           }
 
@@ -87,7 +105,10 @@ export class ProjectTeamService {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (!result.ok) {
-          this.snackbar.error("Не удалось отозвать приглашение. Попробуйте ещё раз.");
+          this.snackbar.error(
+            teamOperationErrorMessage(result.error.cause) ??
+              "Не удалось отозвать приглашение. Попробуйте ещё раз.",
+          );
           return;
         }
 

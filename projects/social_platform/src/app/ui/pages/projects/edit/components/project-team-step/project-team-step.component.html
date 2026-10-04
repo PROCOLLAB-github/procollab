@@ -9,7 +9,7 @@
       class="invite__submit"
       appearance="outline"
       size="big"
-      [disabled]="teamLoading() || isLoading(inviteFormIsSubmitting())"
+      [disabled]="frozen() || teamLoading() || isLoading(inviteFormIsSubmitting())"
       (click)="openInviteModal($event)"
     >
       <i
@@ -47,6 +47,8 @@
           <li>
             <app-collaborator-card
               [collaborator]="collaborator"
+              [frozen]="frozen()"
+              [programLinkId]="programLinkId()"
               [isCurrentUser]="collaborator.userId === currentUser()?.id"
               [isLeader]="collaborator.userId === invitationProject()?.leader"
               (collaboratorRemoved)="onCollaboratorRemove($event)"
@@ -80,6 +82,7 @@
             <li>
               <app-invite-card
                 [invite]="invite"
+                [frozen]="frozen()"
                 (edit)="editInvitation($event)"
                 (remove)="removeInvitation($event)"
               />
@@ -97,6 +100,7 @@
   <app-project-member-invite-modal
     [project]="invitationProject()"
     [projectId]="projectId()"
+    [programLinkId]="programLinkId() ?? null"
     [trigger]="inviteTrigger"
     (closed)="closeInviteModal()"
   />

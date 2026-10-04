@@ -1,4 +1,5 @@
 /** @format */
+import { isTeamFrozen, teamProgramLinkId } from "@domain/project/team-policy";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -51,12 +52,23 @@ export class ProjectTeamStepComponent implements OnInit, OnDestroy {
   protected readonly isInviteModalOpen = this.projectTeamUIService.isInviteModalOpen;
   protected readonly isLoading = isLoading;
   protected readonly inviteFormIsSubmitting = this.projectTeamUIService.inviteFormIsSubmitting;
+  protected readonly frozen = computed(() => {
+    const project = this.invitationProject();
+    return project ? isTeamFrozen(project) : false;
+  });
+  protected readonly programLinkId = computed(() => {
+    const project = this.invitationProject();
+    return project
+      ? teamProgramLinkId(project, this.projectsEditInfoService.activeProgramLinkId?.())
+      : undefined;
+  });
   protected readonly projectId = this.projectsEditInfoService.profileId;
 
   ngOnInit(): void {
     this.projectTeamService.setupDynamicValidation();
   }
   openInviteModal(event: Event): void {
+    if (this.frozen()) return;
     this.inviteTrigger =
       (event.currentTarget as HTMLElement).querySelector("button") ??
       (event.currentTarget as HTMLElement);
@@ -69,7 +81,7 @@ export class ProjectTeamStepComponent implements OnInit, OnDestroy {
     this.closeInviteModal();
   }
   editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
-    this.projectTeamService.editInvitation(params);
+    if (!this.frozen()) this.projectTeamService.editInvitation(params);
   }
   removeInvitation(invitationId: number): void {
     this.projectTeamService.removeInvitation(invitationId);

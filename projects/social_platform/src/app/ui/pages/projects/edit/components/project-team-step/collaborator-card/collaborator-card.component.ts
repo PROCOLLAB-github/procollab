@@ -1,4 +1,5 @@
 /** @format */
+import { teamOperationErrorMessage } from "@api/project/team-operation-error";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,19 +30,21 @@ export class CollaboratorCardComponent {
   private readonly destroyRef = inject(DestroyRef);
   readonly collaborator = input.required<Collaborator>();
   readonly isCurrentUser = input(false);
+  readonly frozen = input(false);
+  readonly programLinkId = input<number>();
   readonly isLeader = input(false);
   readonly collaboratorRemoved = output<number>();
   readonly removing = signal(false);
   readonly error = signal("");
 
   onDeleteCollaborator(collaboratorId: number): void {
-    if (this.removing()) return;
+    if (this.removing() || this.frozen() || this.isLeader()) return;
     const projectId = this.route.snapshot.params["projectId"];
     if (!confirm("Вы точно хотите удалить участника проекта?")) return;
     this.removing.set(true);
     this.error.set("");
     this.removeProjectCollaboratorUseCase
-      .execute(+projectId, collaboratorId)
+      .execute(+projectId, collaboratorId, this.programLinkId())
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.removing.set(false)),
@@ -49,7 +52,10 @@ export class CollaboratorCardComponent {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            this.error.set("Не удалось исключить участника. Попробуйте ещё раз.");
+            this.error.set(
+              teamOperationErrorMessage(result.error.cause) ??
+                "Не удалось исключить участника. Попробуйте ещё раз.",
+            );
             return;
           }
           this.collaboratorRemoved.emit(result.value);

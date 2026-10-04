@@ -18,6 +18,7 @@
       type="button"
       class="member-row__action"
       (click)="openEdit($event)"
+      [disabled]="frozen()"
       [attr.aria-label]="
         'Изменить роль в приглашении: ' + invite().user.firstName + ' ' + invite().user.lastName
       "
