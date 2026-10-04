@@ -68,17 +68,8 @@
       "pageWidth": 986,
       "bodyWidth": 986,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -99,13 +90,7 @@
         "app-button",
         "app-cookie-consent"
       ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "visibleApps": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -126,13 +111,7 @@
         "app-button",
         "app-cookie-consent"
       ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "visibleApps": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -145,17 +124,8 @@
       "pageWidth": 986,
       "bodyWidth": 986,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -217,16 +187,8 @@
       "pageWidth": 986,
       "bodyWidth": 986,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -239,17 +201,8 @@
       "pageWidth": 986,
       "bodyWidth": 986,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -2587,17 +2540,8 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -2618,13 +2562,7 @@
         "app-button",
         "app-cookie-consent"
       ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "visibleApps": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -2645,13 +2583,7 @@
         "app-button",
         "app-cookie-consent"
       ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "visibleApps": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -2664,17 +2596,8 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -2736,16 +2659,8 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -2758,17 +2673,8 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -5106,17 +5012,8 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -5137,13 +5034,7 @@
         "app-button",
         "app-cookie-consent"
       ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "visibleApps": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -5164,13 +5055,7 @@
         "app-button",
         "app-cookie-consent"
       ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "visibleApps": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -5183,17 +5068,8 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -5255,16 +5131,8 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -5277,17 +5145,8 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },

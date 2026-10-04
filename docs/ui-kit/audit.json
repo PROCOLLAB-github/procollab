@@ -1,38 +1,25 @@
 {
   "implementations": {
-    "app-button": [
-      "projects/ui/src/lib/components/primitives/button/button.component.ts"
-    ],
-    "[appIcon]": [
-      "projects/ui/src/lib/components/primitives/icon/icon.component.ts"
-    ],
-    "app-avatar": [
-      "projects/ui/src/lib/components/primitives/avatar/avatar.component.ts"
-    ],
-    "app-loader": [
-      "projects/ui/src/lib/components/primitives/loader/loader.component.ts"
-    ],
+    "app-button": ["projects/ui/src/lib/components/primitives/button/button.component.ts"],
+    "[appIcon]": ["projects/ui/src/lib/components/primitives/icon/icon.component.ts"],
+    "app-avatar": ["projects/ui/src/lib/components/primitives/avatar/avatar.component.ts"],
+    "app-loader": ["projects/ui/src/lib/components/primitives/loader/loader.component.ts"],
     "app-project-navigation": [
       "projects/social_platform/src/app/ui/pages/projects/edit/components/project-navigation/project-navigation.component.ts"
     ],
-    "app-tabs": [
-      "projects/ui/src/lib/components/primitives/tabs/tabs.component.ts"
-    ],
-    "app-state": [
-      "projects/ui/src/lib/components/layout/state/state.component.ts"
-    ],
+    "app-tabs": ["projects/ui/src/lib/components/primitives/tabs/tabs.component.ts"],
+    "app-state": ["projects/ui/src/lib/components/layout/state/state.component.ts"],
     "app-page-header": [
       "projects/ui/src/lib/components/layout/page-header/page-header.component.ts"
     ],
-    "app-badge": [
-      "projects/ui/src/lib/components/primitives/badge/badge.component.ts"
-    ],
+    "app-badge": ["projects/ui/src/lib/components/primitives/badge/badge.component.ts"],
     "app-pagination": [
       "projects/ui/src/lib/components/primitives/pagination/pagination.component.ts"
     ]
   },
   "rawColors": [],
   "changedFiles": [
+    "projects/social_platform/src/app/ui/pages/auth/auth.component.scss",
     "projects/social_platform/src/app/ui/pages/auth/email-verification/email-verification.component.html",
     "projects/social_platform/src/app/ui/pages/auth/email-verification/email-verification.component.ts",
     "projects/social_platform/src/app/ui/pages/auth/login/login.component.html",

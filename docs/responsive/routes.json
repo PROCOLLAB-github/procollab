@@ -2,9 +2,7 @@
   {
     "route": "/",
     "component": "AppComponent",
-    "layout": [
-      "AppComponent"
-    ],
+    "layout": ["AppComponent"],
     "source": "projects/social_platform/src/app/app.routes.ts",
     "componentSource": "projects/social_platform/src/app/app.component.ts",
     "issues": []
@@ -12,18 +10,14 @@
   {
     "route": "/auth/",
     "component": "AuthComponent",
-    "layout": [
-      "AuthComponent"
-    ],
+    "layout": ["AuthComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/auth.component.ts",
     "issues": []
   },
   {
     "route": "/auth/",
-    "layout": [
-      "AuthComponent"
-    ],
+    "layout": ["AuthComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "redirect": "login",
     "issues": []
@@ -31,49 +25,31 @@
   {
     "route": "/auth/login",
     "component": "LoginComponent",
-    "layout": [
-      "AuthComponent",
-      "LoginComponent"
-    ],
+    "layout": ["AuthComponent", "LoginComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/login/login.component.ts",
-    "issues": [
-      "legacy viewport height"
-    ]
+    "issues": ["legacy viewport height"]
   },
   {
     "route": "/auth/register",
     "component": "RegisterComponent",
-    "layout": [
-      "AuthComponent",
-      "RegisterComponent"
-    ],
+    "layout": ["AuthComponent", "RegisterComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/register/register.component.ts",
-    "issues": [
-      "legacy viewport height"
-    ]
+    "issues": ["legacy viewport height"]
   },
   {
     "route": "/auth/verification/email",
     "component": "EmailVerificationComponent",
-    "layout": [
-      "AuthComponent",
-      "EmailVerificationComponent"
-    ],
+    "layout": ["AuthComponent", "EmailVerificationComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/email-verification/email-verification.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/auth/reset_password/send_email",
     "component": "ResetPasswordComponent",
-    "layout": [
-      "AuthComponent",
-      "ResetPasswordComponent"
-    ],
+    "layout": ["AuthComponent", "ResetPasswordComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/reset-password/reset-password.component.ts",
     "issues": []
@@ -81,10 +57,7 @@
   {
     "route": "/auth/reset_password",
     "component": "SetPasswordComponent",
-    "layout": [
-      "AuthComponent",
-      "SetPasswordComponent"
-    ],
+    "layout": ["AuthComponent", "SetPasswordComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/set-password/set-password.component.ts",
     "issues": []
@@ -92,10 +65,7 @@
   {
     "route": "/auth/reset_password/confirm",
     "component": "ConfirmPasswordResetComponent",
-    "layout": [
-      "AuthComponent",
-      "ConfirmPasswordResetComponent"
-    ],
+    "layout": ["AuthComponent", "ConfirmPasswordResetComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/confirm-password-reset/confirm-password-reset.component.ts",
     "issues": []
@@ -103,9 +73,7 @@
   {
     "route": "/auth/verification",
     "component": "ConfirmEmailComponent",
-    "layout": [
-      "ConfirmEmailComponent"
-    ],
+    "layout": ["ConfirmEmailComponent"],
     "source": "projects/social_platform/src/app/ui/routes/auth/auth.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/auth/confirm-email/confirm-email.component.ts",
     "issues": []
@@ -113,22 +81,15 @@
   {
     "route": "/error/",
     "component": "ErrorComponent",
-    "layout": [
-      "ErrorComponent"
-    ],
+    "layout": ["ErrorComponent"],
     "source": "projects/social_platform/src/app/ui/routes/error/error.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/error/error.component.ts",
-    "issues": [
-      "legacy viewport height"
-    ]
+    "issues": ["legacy viewport height"]
   },
   {
     "route": "/error/404",
     "component": "ErrorNotFoundComponent",
-    "layout": [
-      "ErrorComponent",
-      "ErrorNotFoundComponent"
-    ],
+    "layout": ["ErrorComponent", "ErrorNotFoundComponent"],
     "source": "projects/social_platform/src/app/ui/routes/error/error.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/error/not-found/error-not-found.component.ts",
     "issues": []
@@ -136,10 +97,7 @@
   {
     "route": "/error/:code",
     "component": "ErrorCodeComponent",
-    "layout": [
-      "ErrorComponent",
-      "ErrorCodeComponent"
-    ],
+    "layout": ["ErrorComponent", "ErrorCodeComponent"],
     "source": "projects/social_platform/src/app/ui/routes/error/error.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/error/error-code/error-code.component.ts",
     "issues": []
@@ -147,9 +105,7 @@
   {
     "route": "/office/onboarding/",
     "component": "OnboardingComponent",
-    "layout": [
-      "OnboardingComponent"
-    ],
+    "layout": ["OnboardingComponent"],
     "source": "projects/social_platform/src/app/ui/routes/onboarding/onboarding.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/onboarding/onboarding.component.ts",
     "issues": []
@@ -157,51 +113,31 @@
   {
     "route": "/office/onboarding/stage-0",
     "component": "OnboardingStageZeroComponent",
-    "layout": [
-      "OnboardingComponent",
-      "OnboardingStageZeroComponent"
-    ],
+    "layout": ["OnboardingComponent", "OnboardingStageZeroComponent"],
     "source": "projects/social_platform/src/app/ui/routes/onboarding/onboarding.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.ts",
-    "issues": [
-      "legacy viewport height"
-    ]
+    "issues": ["legacy viewport height"]
   },
   {
     "route": "/office/onboarding/stage-1",
     "component": "OnboardingStageOneComponent",
-    "layout": [
-      "OnboardingComponent",
-      "OnboardingStageOneComponent"
-    ],
+    "layout": ["OnboardingComponent", "OnboardingStageOneComponent"],
     "source": "projects/social_platform/src/app/ui/routes/onboarding/onboarding.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/onboarding/stage-one/stage-one.component.ts",
-    "issues": [
-      "fixed minimum width",
-      "legacy viewport height"
-    ]
+    "issues": ["fixed minimum width", "legacy viewport height"]
   },
   {
     "route": "/office/onboarding/stage-2",
     "component": "OnboardingStageTwoComponent",
-    "layout": [
-      "OnboardingComponent",
-      "OnboardingStageTwoComponent"
-    ],
+    "layout": ["OnboardingComponent", "OnboardingStageTwoComponent"],
     "source": "projects/social_platform/src/app/ui/routes/onboarding/onboarding.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/onboarding/stage-two/stage-two.component.ts",
-    "issues": [
-      "fixed minimum width",
-      "legacy viewport height"
-    ]
+    "issues": ["fixed minimum width", "legacy viewport height"]
   },
   {
     "route": "/office/onboarding/stage-3",
     "component": "OnboardingStageThreeComponent",
-    "layout": [
-      "OnboardingComponent",
-      "OnboardingStageThreeComponent"
-    ],
+    "layout": ["OnboardingComponent", "OnboardingStageThreeComponent"],
     "source": "projects/social_platform/src/app/ui/routes/onboarding/onboarding.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/onboarding/stage-three/stage-three.component.ts",
     "issues": []
@@ -209,21 +145,14 @@
   {
     "route": "/office/",
     "component": "OfficeComponent",
-    "layout": [
-      "OfficeComponent"
-    ],
+    "layout": ["OfficeComponent"],
     "source": "projects/social_platform/src/app/ui/routes/office/office.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/office/office.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/",
-    "layout": [
-      "OfficeComponent"
-    ],
+    "layout": ["OfficeComponent"],
     "source": "projects/social_platform/src/app/ui/routes/office/office.routes.ts",
     "redirect": "program",
     "issues": []
@@ -231,33 +160,22 @@
   {
     "route": "/office/feed/",
     "component": "FeedComponent",
-    "layout": [
-      "OfficeComponent",
-      "FeedComponent"
-    ],
+    "layout": ["OfficeComponent", "FeedComponent"],
     "source": "projects/social_platform/src/app/ui/routes/feed/feed.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/feed/feed.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/vacancies/",
     "component": "VacanciesComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/vacancies.component.ts",
     "issues": []
   },
   {
     "route": "/office/vacancies/",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies.routes.ts",
     "redirect": "all",
     "issues": []
@@ -265,38 +183,23 @@
   {
     "route": "/office/vacancies/my/",
     "component": "VacanciesListComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesComponent",
-      "VacanciesListComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesComponent", "VacanciesListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/list.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/list/list.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/vacancies/all",
     "component": "VacanciesListComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesComponent",
-      "VacanciesListComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesComponent", "VacanciesListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/list/list.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/vacancies/:vacancyId/",
     "component": "VacanciesDetailComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesDetailComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesDetailComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/detail/vacancies-detail.component.ts",
     "issues": []
@@ -304,35 +207,22 @@
   {
     "route": "/office/vacancies/:vacancyId/",
     "component": "VacancyInfoComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesDetailComponent",
-      "VacancyInfoComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesDetailComponent", "VacancyInfoComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/detail/info/info.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/projects/",
     "component": "ProjectsComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/projects.component.ts",
     "issues": []
   },
   {
     "route": "/office/projects/",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "redirect": "dashboard",
     "issues": []
@@ -340,11 +230,7 @@
   {
     "route": "/office/projects/dashboard",
     "component": "DashboardProjectsComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent",
-      "DashboardProjectsComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent", "DashboardProjectsComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/dashboard/dashboard.component.ts",
     "issues": []
@@ -352,189 +238,110 @@
   {
     "route": "/office/projects/my",
     "component": "ProjectsListComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent",
-      "ProjectsListComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent", "ProjectsListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/list/list.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/office/projects/subscriptions",
     "component": "ProjectsListComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent",
-      "ProjectsListComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent", "ProjectsListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/list/list.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/office/projects/invites",
     "component": "ProjectsListComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent",
-      "ProjectsListComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent", "ProjectsListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/list/list.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/office/projects/all",
     "component": "ProjectsListComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectsComponent",
-      "ProjectsListComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectsComponent", "ProjectsListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/list/list.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/office/projects/:projectId/edit",
     "component": "ProjectEditComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProjectEditComponent"
-    ],
+    "layout": ["OfficeComponent", "ProjectEditComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/projects.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/edit/edit.component.ts",
-    "issues": [
-      "legacy viewport height"
-    ]
+    "issues": ["legacy viewport height"]
   },
   {
     "route": "/office/projects/:projectId/",
     "component": "DeatilComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/widgets/detail/detail.component.ts",
-    "issues": [
-      "fixed minimum width",
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["fixed minimum width", "legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/projects/:projectId/",
     "component": "ProjectInfoComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProjectInfoComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProjectInfoComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/detail/info/info.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/projects/:projectId/news/:newsId",
     "component": "NewsDetailComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProjectInfoComponent",
-      "NewsDetailComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProjectInfoComponent", "NewsDetailComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/detail/news-detail/news-detail.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/office/projects/:projectId/vacancies",
     "component": "ProjectVacanciesComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProjectVacanciesComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProjectVacanciesComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/detail/vacancies/vacancies.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/projects/:projectId/team",
     "component": "ProjectTeamComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProjectTeamComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProjectTeamComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/detail/team/team.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/projects/:projectId/work-section",
     "component": "ProjectWorkSectionComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProjectWorkSectionComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProjectWorkSectionComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/detail/work-section/work-section.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/projects/:projectId/chat",
     "component": "ProjectChatComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProjectChatComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProjectChatComponent"],
     "source": "projects/social_platform/src/app/ui/routes/projects/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/projects/detail/chat/chat.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/program/",
     "component": "ProgramComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProgramComponent"
-    ],
+    "layout": ["OfficeComponent", "ProgramComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/program.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/program.component.ts",
     "issues": []
   },
   {
     "route": "/office/program/",
-    "layout": [
-      "OfficeComponent",
-      "ProgramComponent"
-    ],
+    "layout": ["OfficeComponent", "ProgramComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/program.routes.ts",
     "redirect": "all",
     "issues": []
@@ -542,134 +349,76 @@
   {
     "route": "/office/program/all",
     "component": "ProgramMainComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProgramComponent",
-      "ProgramMainComponent"
-    ],
+    "layout": ["OfficeComponent", "ProgramComponent", "ProgramMainComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/program.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/main/main.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/program/:programId/",
     "component": "DeatilComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/widgets/detail/detail.component.ts",
-    "issues": [
-      "fixed minimum width",
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["fixed minimum width", "legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/program/:programId/",
     "component": "ProgramDetailMainComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProgramDetailMainComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProgramDetailMainComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/detail/main/main.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/program/:programId/projects",
     "component": "ProgramListComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProgramListComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProgramListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/program/:programId/members",
     "component": "ProgramListComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProgramListComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProgramListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/program/:programId/projects-rating",
     "component": "ProgramListComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProgramListComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProgramListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/program/:programId/analytics",
     "component": "ProgramAnalyticsComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProgramAnalyticsComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProgramAnalyticsComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.ts",
-    "issues": [
-      "fixed minimum width",
-      "multi-column layout"
-    ]
+    "issues": ["fixed minimum width", "multi-column layout"]
   },
   {
     "route": "/office/program/:programId/register",
-    "layout": [
-      "OfficeComponent"
-    ],
+    "layout": ["OfficeComponent"],
     "source": "projects/social_platform/src/app/ui/routes/program/detail.routes.ts",
     "issues": []
   },
   {
     "route": "/office/courses/",
     "component": "CoursesComponent",
-    "layout": [
-      "OfficeComponent",
-      "CoursesComponent"
-    ],
+    "layout": ["OfficeComponent", "CoursesComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/courses.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/courses.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/courses/",
-    "layout": [
-      "OfficeComponent",
-      "CoursesComponent"
-    ],
+    "layout": ["OfficeComponent", "CoursesComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/courses.routes.ts",
     "redirect": "all",
     "issues": []
@@ -677,24 +426,15 @@
   {
     "route": "/office/courses/all",
     "component": "CoursesListComponent",
-    "layout": [
-      "OfficeComponent",
-      "CoursesComponent",
-      "CoursesListComponent"
-    ],
+    "layout": ["OfficeComponent", "CoursesComponent", "CoursesListComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/courses.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/list/list.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/courses/:courseId/",
     "component": "CourseDetailComponent",
-    "layout": [
-      "OfficeComponent",
-      "CourseDetailComponent"
-    ],
+    "layout": ["OfficeComponent", "CourseDetailComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/course-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/detail/course-detail.component.ts",
     "issues": []
@@ -702,31 +442,18 @@
   {
     "route": "/office/courses/:courseId/",
     "component": "CourseInfoComponent",
-    "layout": [
-      "OfficeComponent",
-      "CourseDetailComponent",
-      "CourseInfoComponent"
-    ],
+    "layout": ["OfficeComponent", "CourseDetailComponent", "CourseInfoComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/course-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/detail/info/info.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/courses/:courseId/lesson/:lessonId",
     "component": "LessonComponent",
-    "layout": [
-      "OfficeComponent",
-      "CourseDetailComponent",
-      "LessonComponent"
-    ],
+    "layout": ["OfficeComponent", "CourseDetailComponent", "LessonComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/lesson.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/lesson/lesson.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/courses/:courseId/lesson/:lessonId/results",
@@ -744,80 +471,47 @@
   {
     "route": "/office/members",
     "component": "MembersComponent",
-    "layout": [
-      "OfficeComponent",
-      "MembersComponent"
-    ],
+    "layout": ["OfficeComponent", "MembersComponent"],
     "source": "projects/social_platform/src/app/ui/routes/office/office.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/members/members.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/profile/edit",
     "component": "ProfileEditComponent",
-    "layout": [
-      "OfficeComponent",
-      "ProfileEditComponent"
-    ],
+    "layout": ["OfficeComponent", "ProfileEditComponent"],
     "source": "projects/social_platform/src/app/ui/routes/office/office.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/profile/edit/edit.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/profile/:id/",
     "component": "DeatilComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent"],
     "source": "projects/social_platform/src/app/ui/routes/profile/profile-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/widgets/detail/detail.component.ts",
-    "issues": [
-      "fixed minimum width",
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["fixed minimum width", "legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/profile/:id/",
     "component": "ProfileMainComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProfileMainComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProfileMainComponent"],
     "source": "projects/social_platform/src/app/ui/routes/profile/profile-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/profile/detail/main/main.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/profile/:id/news/:newsId",
     "component": "ProfileNewsComponent",
-    "layout": [
-      "OfficeComponent",
-      "DeatilComponent",
-      "ProfileNewsComponent"
-    ],
+    "layout": ["OfficeComponent", "DeatilComponent", "ProfileNewsComponent"],
     "source": "projects/social_platform/src/app/ui/routes/profile/profile-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/profile/detail/profile-news/profile-news.component.ts",
-    "issues": [
-      "fixed minimum width"
-    ]
+    "issues": ["fixed minimum width"]
   },
   {
     "route": "/office/courses/",
     "component": "CourseDetailComponent",
-    "layout": [
-      "OfficeComponent",
-      "CourseDetailComponent"
-    ],
+    "layout": ["OfficeComponent", "CourseDetailComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/course-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/detail/course-detail.component.ts",
     "issues": []
@@ -825,31 +519,18 @@
   {
     "route": "/office/courses/",
     "component": "CourseInfoComponent",
-    "layout": [
-      "OfficeComponent",
-      "CourseDetailComponent",
-      "CourseInfoComponent"
-    ],
+    "layout": ["OfficeComponent", "CourseDetailComponent", "CourseInfoComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/course-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/detail/info/info.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/courses/lesson/:lessonId",
     "component": "LessonComponent",
-    "layout": [
-      "OfficeComponent",
-      "CourseDetailComponent",
-      "LessonComponent"
-    ],
+    "layout": ["OfficeComponent", "CourseDetailComponent", "LessonComponent"],
     "source": "projects/social_platform/src/app/ui/routes/courses/lesson.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/courses/lesson/lesson.component.ts",
-    "issues": [
-      "multi-column layout"
-    ]
+    "issues": ["multi-column layout"]
   },
   {
     "route": "/office/courses/lesson/:lessonId/results",
@@ -867,10 +548,7 @@
   {
     "route": "/office/vacancies/",
     "component": "VacanciesDetailComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesDetailComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesDetailComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/detail/vacancies-detail.component.ts",
     "issues": []
@@ -878,23 +556,14 @@
   {
     "route": "/office/vacancies/",
     "component": "VacancyInfoComponent",
-    "layout": [
-      "OfficeComponent",
-      "VacanciesDetailComponent",
-      "VacancyInfoComponent"
-    ],
+    "layout": ["OfficeComponent", "VacanciesDetailComponent", "VacancyInfoComponent"],
     "source": "projects/social_platform/src/app/ui/routes/vacancy/vacancies-detail.routes.ts",
     "componentSource": "projects/social_platform/src/app/ui/pages/vacancies/detail/info/info.component.ts",
-    "issues": [
-      "legacy viewport height",
-      "multi-column layout"
-    ]
+    "issues": ["legacy viewport height", "multi-column layout"]
   },
   {
     "route": "/office/**",
-    "layout": [
-      "OfficeComponent"
-    ],
+    "layout": ["OfficeComponent"],
     "source": "projects/social_platform/src/app/ui/routes/office/office.routes.ts",
     "redirect": "/error/404",
     "issues": []

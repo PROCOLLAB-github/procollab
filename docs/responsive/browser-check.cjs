@@ -74,10 +74,7 @@ if (resetIndex >= 0) urls[resetIndex] += "?token=responsive-fixture";
       ) {
         fs.mkdirSync(screenshotOutput, { recursive: true });
         await page.screenshot({
-          path: path.join(
-            screenshotOutput,
-            `${url.replaceAll("/", "-").slice(1)}-${width}.png`,
-          ),
+          path: path.join(screenshotOutput, `${url.replaceAll("/", "-").slice(1)}-${width}.png`),
           fullPage: true,
         });
       }

@@ -1,0 +1,48 @@
+{
+  "baseline": "bc4940c57eab9eff59219593cfc8ed08f1a416bb",
+  "uiHead": "74a94c9b49f237c95e9c94bb7917882b794fd022",
+  "sourceFiles": 284,
+  "protectedChanges": [],
+  "methodChanges": [
+    {
+      "file": "projects/social_platform/src/app/ui/pages/projects/edit/components/project-navigation/project-navigation.component.ts",
+      "methods": ["onTabSelected"],
+      "review": "Tabs adapter delegates the same stepChange event through the existing onStepClick handler."
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/primitives/checkbox/checkbox.component.ts",
+      "methods": ["toggle"],
+      "review": "Native role/keyboard accessibility; disabled guard prevents toggling."
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/primitives/icon/icon.component.ts",
+      "methods": ["appSquare", "appViewBox", "appWidth", "appHeight", "ngOnInit", "viewBoxInfo"],
+      "review": "Legacy path reexports the canonical Icon class; the duplicate class is removed."
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/primitives/select/select.component.ts",
+      "methods": ["onKeyDown", "trackHighlightScroll", "onTriggerKeyDown"],
+      "review": "Keyboard opening/navigation, disabled guard and safe highlight scroll; CVA mapping is unchanged."
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/widgets/project-navigation/project-navigation.component.ts",
+      "methods": ["onStepClick"],
+      "review": "Duplicate class replaced by the same canonical navigation adapter."
+    },
+    {
+      "file": "projects/ui/src/lib/components/primitives/avatar/avatar.component.ts",
+      "methods": ["constructor", "ngOnInit"],
+      "review": "Presentation consolidated with the existing app Avatar; empty lifecycle methods removed."
+    },
+    {
+      "file": "projects/ui/src/lib/components/primitives/loader/loader.component.ts",
+      "methods": ["ngOnInit"],
+      "review": "Loader color/appearance consolidated; empty lifecycle method removed."
+    }
+  ],
+  "scope": "UI Kit only; imported responsive commit is disclosed separately",
+  "responsiveInitializationExceptions": [
+    "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-zero-info.service.ts",
+    "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service.ts"
+  ]
+}

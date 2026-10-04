@@ -9,14 +9,7 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -29,14 +22,7 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -49,13 +35,7 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -68,11 +48,7 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -85,13 +61,7 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -128,17 +98,8 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -151,11 +112,7 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -168,16 +125,8 @@
       "pageWidth": 320,
       "bodyWidth": 320,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -1513,14 +1462,7 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -1533,14 +1475,7 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -1553,13 +1488,7 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -1572,11 +1501,7 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -1589,13 +1514,7 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -1632,17 +1551,8 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -1655,11 +1565,7 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -1672,16 +1578,8 @@
       "pageWidth": 360,
       "bodyWidth": 360,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -3017,14 +2915,7 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -3037,14 +2928,7 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -3057,13 +2941,7 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -3076,11 +2954,7 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -3093,13 +2967,7 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -3136,17 +3004,8 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -3159,11 +3018,7 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -3176,16 +3031,8 @@
       "pageWidth": 375,
       "bodyWidth": 375,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -4521,14 +4368,7 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -4541,14 +4381,7 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -4561,13 +4394,7 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -4580,11 +4407,7 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -4597,13 +4420,7 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -4640,17 +4457,8 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -4663,11 +4471,7 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -4680,16 +4484,8 @@
       "pageWidth": 390,
       "bodyWidth": 390,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -6025,14 +5821,7 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -6045,14 +5834,7 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -6065,13 +5847,7 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -6084,11 +5860,7 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -6101,13 +5873,7 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -6144,17 +5910,8 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -6167,11 +5924,7 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -6184,16 +5937,8 @@
       "pageWidth": 430,
       "bodyWidth": 430,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -8039,14 +7784,7 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -8059,14 +7797,7 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -8079,13 +7810,7 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -8098,11 +7823,7 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -8115,13 +7836,7 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -8158,17 +7873,8 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -8181,11 +7887,7 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -8198,16 +7900,8 @@
       "pageWidth": 753,
       "bodyWidth": 753,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -9543,14 +9237,7 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -9563,14 +9250,7 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -9583,13 +9263,7 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -9602,11 +9276,7 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -9619,13 +9289,7 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -9662,17 +9326,8 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -9685,11 +9340,7 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -9702,16 +9353,8 @@
       "pageWidth": 805,
       "bodyWidth": 805,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -11812,14 +11455,7 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -11832,14 +11468,7 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -11852,13 +11481,7 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -11871,11 +11494,7 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -11888,13 +11507,7 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -11934,17 +11547,8 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -11957,11 +11561,7 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -11974,16 +11574,8 @@
       "pageWidth": 1009,
       "bodyWidth": 1009,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -13342,14 +12934,7 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -13362,14 +12947,7 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -13382,13 +12960,7 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -13401,11 +12973,7 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -13418,13 +12986,7 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -13464,17 +13026,8 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -13487,11 +13040,7 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -13504,16 +13053,8 @@
       "pageWidth": 1265,
       "bodyWidth": 1265,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -14872,14 +14413,7 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -14892,14 +14426,7 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -14912,13 +14439,7 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -14931,11 +14452,7 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -14948,13 +14465,7 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -14994,17 +14505,8 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -15017,11 +14519,7 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -15034,16 +14532,8 @@
       "pageWidth": 1425,
       "bodyWidth": 1425,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },
@@ -16402,14 +15892,7 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-button",
-        "app-tooltip"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-button", "app-tooltip"],
       "text": "почта\nпароль\nзабыли пароль?\nвойти\n\nнет аккаунта? зарегистрируйтесь\n\nЕсли вы регистрировались через форму на сайте программы кейс-чемпионата, введите данные, которые вы указывали ранее",
       "errors": []
     },
@@ -16422,14 +15905,7 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-login",
-        "app-input",
-        "app-checkbox",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-login", "app-input", "app-checkbox", "app-button"],
       "text": "имя\nфамилия\nдата рождения\nпочта\nпароль\nповторите пароль\nя прочитал соглашение и даю согласие на обработку персональных данных\nнажимая на кнопку подтверждаете, что вам больше 14 лет\nзарегистрироваться\n\nесли есть аккаунт? - войдите",
       "errors": []
     },
@@ -16442,13 +15918,7 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-set-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-set-password", "app-input", "app-button"],
       "text": "Новый пароль\n\nВведите новый пароль\n\nГотово",
       "errors": []
     },
@@ -16461,11 +15931,7 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-confirm-password-reset"
-      ],
+      "rendered": ["app-root", "app-auth", "app-confirm-password-reset"],
       "text": "Подтвердите почту\n\nСейчас к вам на почту придет письмо с подтверждением. Перейдите к личному профилю по ссылке в письме.",
       "errors": []
     },
@@ -16478,13 +15944,7 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-reset-password",
-        "app-input",
-        "app-button"
-      ],
+      "rendered": ["app-root", "app-auth", "app-reset-password", "app-input", "app-button"],
       "text": "Забыли пароль?\n\nЧтобы сбросить пароль, введите свой электронный адрес.\n\nОтправить",
       "errors": []
     },
@@ -16524,17 +15984,8 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-auth",
-        "app-email-verification",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-auth",
-        "app-email-verification"
-      ],
+      "rendered": ["app-root", "app-auth", "app-email-verification", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-auth", "app-email-verification"],
       "text": "Мы отправили ссылку подтверждения\n\nДля продолжения регистрации и заполнения резюме подтверди свою почту, для этого мы отправили тебе письмо со ссылкой подтверждения\n\nНе получил письмо? Проверь папку спам или\n\nотправь снова",
       "errors": []
     },
@@ -16547,11 +15998,7 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-code"
-      ],
+      "rendered": ["app-root", "app-error", "app-code"],
       "text": "1\nКакая-то непонятная ошибка\nВернуться на главную",
       "errors": []
     },
@@ -16564,16 +16011,8 @@
       "pageWidth": 1905,
       "bodyWidth": 1905,
       "overflows": [],
-      "rendered": [
-        "app-root",
-        "app-error",
-        "app-not-found",
-        "app-cookie-consent"
-      ],
-      "visibleApps": [
-        "app-root",
-        "app-error"
-      ],
+      "rendered": ["app-root", "app-error", "app-not-found", "app-cookie-consent"],
+      "visibleApps": ["app-root", "app-error"],
       "text": "Страница не найдена",
       "errors": []
     },

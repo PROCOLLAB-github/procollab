@@ -12,7 +12,7 @@
   @include responsive.apply-desktop {
     padding: 0 200px;
 
-    &:has(app-login) {
+    &:has(.login) {
       padding: 0;
     }
   }
