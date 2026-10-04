@@ -64,7 +64,7 @@
   }
 
   i {
-    color: var(--light-white);
+    color: var(--ui-text-muted);
 
     @include responsive.apply-desktop {
       color: var(--dark-grey);
@@ -79,7 +79,7 @@
 
   .control-panel__actions {
     gap: 0;
-    margin-right: 4px;
+    margin-right: 0;
   }
 
   .control-panel__action {
@@ -87,6 +87,18 @@
     align-items: center;
     justify-content: center;
     min-width: 44px;
+    min-height: 44px;
+  }
+
+  .control-panel__action--logout {
+    display: none;
+  }
+
+  .control-panel__profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
     min-height: 44px;
   }
 

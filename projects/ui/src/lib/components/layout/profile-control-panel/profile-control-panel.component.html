@@ -2,8 +2,16 @@
 
 <div class="control-panel">
   <div class="control-panel__actions">
-    <div class="control-panel__action" (click)="showNotifications = true">
-      <div (clickOutside)="onClickOutside()" class="control-panel__bell">
+    <button
+      appButton="icon"
+      type="button"
+      aria-label="Уведомления"
+      [attr.aria-expanded]="showNotifications"
+      class="control-panel__action"
+      (click)="showNotifications = true"
+      (clickOutside)="onClickOutside()"
+    >
+      <div class="control-panel__bell">
         @if (hasNotifications() || hasInvites) {
           <div class="attention"></div>
         }
@@ -12,7 +20,7 @@
           <div class="control-panel__bell--hasInvites"></div>
         }
       </div>
-    </div>
+    </button>
     @if (showNotifications) {
       <div class="control-panel__notifications notifications">
         <ul class="notifications__invites">
@@ -30,7 +38,7 @@
         </ul>
       </div>
     }
-    <a class="control-panel__action" (click)="logout.emit()">
+    <a class="control-panel__action control-panel__action--logout" (click)="logout.emit()">
       <div class="control-panel__bell">
         <i appIcon icon="logout3" appWidth="15" appHeight="17"></i>
       </div>

@@ -21,10 +21,17 @@ import {
   OnDestroy,
   OnInit,
   inject,
+  output,
 } from "@angular/core";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { IconComponent } from "@ui/primitives";
-import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
+import {
+  NavigationEnd,
+  NavigationStart,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from "@angular/router";
 import { NavService } from "@api/shared/nav.service";
 import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 import { A11yModule } from "@angular/cdk/a11y";
@@ -86,6 +93,7 @@ export class NavComponent implements OnInit, OnDestroy {
   private menuTrigger?: HTMLElement;
 
   readonly invites = this.inviteInfoService.invites;
+  readonly logout = output<void>();
 
   constructor(
     private readonly router: Router,
@@ -96,23 +104,47 @@ export class NavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.title = this.routeTitle(this.router.url);
     // Подписка на события роутера для закрытия мобильного меню
     this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(event => {
       if (event instanceof NavigationStart) {
         this.closeMenu();
         this.cdref.markForCheck();
       }
+      if (event instanceof NavigationEnd) {
+        this.title = this.routeTitle(event.urlAfterRedirects) || this.title;
+        this.cdref.markForCheck();
+      }
     });
 
     // Подписка на изменения заголовка страницы
     this.navService.navTitle.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(title => {
-      this.title = title;
+      this.title = this.routeTitle(this.router.url) || title;
       this.cdref.detectChanges();
     });
   }
 
   ngOnDestroy(): void {
     this.menuScrollStrategy.disable();
+  }
+
+  private routeTitle(url: string): string {
+    const path = url.split(/[?#]/)[0];
+    if (/^\/office\/profile\/edit(?:\/|$)/.test(path)) return "Редактирование профиля";
+    if (/^\/office\/projects\/create(?:\/|$)/.test(path)) return "Создание проекта";
+    if (/^\/office\/projects\/\d+\/edit(?:\/|$)/.test(path)) return "Редактирование проекта";
+    if (/^\/office\/projects\/\d+(?:\/|$)/.test(path)) return "Профиль проекта";
+    const sections: Record<string, string> = {
+      feed: "Новости",
+      projects: "Проекты",
+      members: "Участники",
+      program: "Программы",
+      courses: "Курсы",
+      vacancies: "Вакансии",
+      profile: "Профиль",
+      chats: "Чаты",
+    };
+    return sections[path.split("/")[2]] || "";
   }
 
   @HostListener("window:resize")

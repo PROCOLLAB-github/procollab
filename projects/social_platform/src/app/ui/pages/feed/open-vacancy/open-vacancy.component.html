@@ -29,21 +29,7 @@
   ></p>
   <div class="feed-card__metadata">
     @if (feedItem().requiredSkills.length) {
-      <ul class="card__skills feed-card__skills" aria-label="Навыки вакансии">
-        @for (skill of feedItem().requiredSkills.slice(0, 3); track skill.id) {
-          <li class="card__skill feed-card__chip feed-card__chip--skill" [title]="skill.name">
-            {{ skill.name }}
-          </li>
-        }
-        @if (feedItem().requiredSkills.length > 3) {
-          <li
-            class="feed-card__chip"
-            [attr.aria-label]="'Ещё навыков: ' + (feedItem().requiredSkills.length - 3)"
-          >
-            +{{ feedItem().requiredSkills.length - 3 }}
-          </li>
-        }
-      </ul>
+      <app-vacancy-skills class="card__skills" [skills]="feedItem().requiredSkills" [limit]="3" />
     }
     @if (feedItem().project.industry; as industryId) {
       @if (industryRepository.getOne(industryId); as industry) {

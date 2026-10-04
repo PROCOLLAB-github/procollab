@@ -139,6 +139,7 @@
 
   .feed-card__skills {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     width: 100%;
     padding: 0;
@@ -150,21 +151,20 @@
     box-sizing: border-box;
     flex-shrink: 0;
     max-width: 100%;
-    height: 24px;
+    min-height: 24px;
     padding: 4px 8px;
-    overflow: hidden;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     line-height: 16px;
     color: var(--accent-dark);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
+    white-space: normal;
     background: var(--accent-light);
     border-radius: var(--rounded-lg);
 
     &--skill {
       flex-shrink: 1;
-      max-width: calc((100% - 18px) / 4);
+      max-width: 100%;
     }
 
     &--industry {
@@ -177,10 +177,11 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    align-self: flex-start;
     justify-content: center;
-    width: 100%;
-    height: 36px;
-    padding: 0 12px;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 10px 16px;
     margin-top: auto;
     font-size: 12px;
     font-weight: 600;

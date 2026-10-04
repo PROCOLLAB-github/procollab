@@ -18,6 +18,7 @@ import type { Invite } from "projects/social_platform/src/app/domain/invite/invi
 import { RouterLink } from "@angular/router";
 import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
 import { User } from "@domain/auth/user.model";
+import { ButtonDirective } from "../../primitives/button/button.directive";
 
 /**
  * Компонент панели управления профилем
@@ -48,6 +49,7 @@ import { User } from "@domain/auth/user.model";
     ClickOutsideModule,
     IconComponent,
     EmptyManageCardComponent,
+    ButtonDirective,
   ],
   templateUrl: "./profile-control-panel.component.html",
   styleUrl: "./profile-control-panel.component.scss",

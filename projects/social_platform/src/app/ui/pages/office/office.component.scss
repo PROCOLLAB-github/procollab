@@ -35,18 +35,22 @@
     top: 0;
     left: 0;
     z-index: 100;
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 88px;
     align-items: center;
     justify-content: space-between;
+    min-height: 64px;
     padding: max(8px, env(safe-area-inset-top)) var(--page-gutter) 8px;
-    background: linear-gradient(var(--accent), var(--ui-nav-gradient-end));
+    background: var(--ui-surface);
+    border-bottom: 1px solid var(--ui-border-subtle);
 
     @include responsive.apply-desktop {
       position: static;
+      display: flex;
       flex-shrink: 0;
       padding: 0;
       background: none;
+      border-bottom: 0;
     }
   }
 
@@ -134,7 +138,15 @@
   }
 
   &__top > app-nav {
-    flex: 1;
+    grid-row: 1;
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  &__top > app-profile-control-panel {
+    grid-row: 1;
+    grid-column: 3;
+    justify-self: end;
     min-width: 0;
   }
 

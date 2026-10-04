@@ -12,8 +12,11 @@
   padding-top: 50px;
   padding-right: 50px;
   overflow-x: hidden;
+  pointer-events: none;
 
   &__item {
+    pointer-events: auto;
+
     &:not(:last-child) {
       margin-bottom: 10px;
     }

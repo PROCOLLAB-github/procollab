@@ -13,7 +13,6 @@
     >
       <i
         appIcon
-        [ngStyle]="{ color: mobileMenuOpen ? 'var(--dark-grey)' : 'var(--light-white)' }"
         [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
         appSquare="24"
         class="nav-bar__icon"
@@ -166,6 +165,14 @@
           </ul>
         </div>
       }
+      <button
+        appButton="secondary"
+        type="button"
+        class="nav-bar__logout"
+        (click)="logout.emit(); closeMenu()"
+      >
+        Выйти
+      </button>
     </div>
   }
 </div>

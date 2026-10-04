@@ -1,137 +1,31 @@
 /** @format */
 
-@use "styles/typography";
 @use "styles/responsive";
-
-.mobile {
-  display: grid;
-  grid-template-columns: 0.6fr 0.4fr;
-  gap: 5px;
-  margin-bottom: 20px;
-
-  @include responsive.apply-desktop {
-    display: none;
-  }
-}
-
-.select {
-  position: relative;
-
-  &__input {
-    position: relative;
-    z-index: 4;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 38px;
-    padding: 13px 80px 13px 20px;
-    background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
-    transition: all 0.2s;
-
-    &::placeholder {
-      color: var(--dark-grey);
-    }
-
-    &:hover,
-    &--open {
-      cursor: pointer;
-      border-color: var(--accent);
-    }
-
-    @include typography.body-14;
-  }
-
-  &__dropdown {
-    position: absolute;
-    top: 80%;
-    right: 0;
-    left: 0;
-    z-index: 3;
-    padding: 20px 10px 10px;
-    background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
-    box-shadow: 5px 5px 25px 0 var(--gray-for-shadow);
-    transform-origin: center top;
-  }
-
-  &__dropdown-icon {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    z-index: 4;
-    color: var(--dark-grey);
-    pointer-events: none;
-    transform: translateY(-50%) rotate(180deg);
-  }
-}
 
 .filter {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 30px 12px;
-  padding-top: 25px;
+  gap: 8px;
 
   @include responsive.apply-desktop {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
-  &__option {
+  &__option.ui-button {
     position: relative;
     display: grid;
-    grid-template-rows: 32px 18px;
-    row-gap: 4px;
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 4px 8px;
     align-items: center;
-    justify-items: center;
     min-width: 0;
-    height: 104px;
-    padding: 36px 6px 12px;
+    height: auto;
+    min-height: 64px;
+    padding: 12px;
+    white-space: normal;
     cursor: pointer;
-    background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
-
-    &--disable {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    &--active {
-      border-color: var(--accent);
-
-      i {
-        color: var(--light-white) !important;
-      }
-
-      .filter__option--icon {
-        background-color: var(--accent);
-      }
-
-      .filter__title {
-        color: var(--accent);
-      }
-    }
-
-    &--icon {
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 50px;
-      height: 50px;
-      background-color: var(--light-white);
-      border: 0.5px solid var(--medium-grey-for-outline);
-      border-radius: 50%;
-      transform: translate(-50%, 50%);
-
-      i {
-        color: var(--accent);
-      }
-    }
+    background-color: var(--ui-surface);
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: var(--rounded-lg);
 
     &:focus-visible {
       outline: 2px solid var(--accent-dark);
@@ -139,36 +33,43 @@
     }
   }
 
-  /* Одна двухстрочная область названия задаёт общую базовую линию всех счётчиков. */
+  &__option--active.ui-button {
+    background-color: var(--accent-light);
+    border-color: var(--accent);
+  }
+
+  &__option--disable.ui-button {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &__option--icon {
+    position: static;
+    display: flex;
+    grid-row: 1 / 3;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+  }
+
   &__title {
-    font-size: var(--ui-font-caption);
+    font-size: var(--ui-font-small);
     line-height: 16px;
-    color: var(--grey-for-text);
-    text-align: center;
+    color: var(--ui-text-muted);
+    text-align: left;
+    overflow-wrap: anywhere;
   }
 
   &__count {
     display: block;
+    grid-column: 2;
     font-size: var(--ui-font-body);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 18px;
     color: var(--accent);
+    text-align: left;
   }
-
-  &__checkbox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 6px;
-    color: var(--black);
-    cursor: pointer;
-
-    app-checkbox {
-      margin-right: 15px;
-    }
-  }
-}
-
-a:hover {
-  cursor: pointer;
 }

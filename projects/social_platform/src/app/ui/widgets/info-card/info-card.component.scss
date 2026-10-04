@@ -556,17 +556,17 @@
   }
 }
 
-@include responsive.apply-mobile {
+@include responsive.apply-below-desktop {
   :host {
     display: block;
-    width: 100%;
+    width: min(100%, var(--ui-mobile-entity-card-width));
     min-width: 0;
   }
 
   .card__body {
     width: 100%;
     height: auto;
-    min-height: 200px;
+    min-height: 244px;
   }
 
   .card__content {
@@ -623,7 +623,20 @@
   }
 
   .card__project-action {
+    align-self: center;
+    width: auto;
     min-height: 44px;
+  }
+
+  .card--my-project .card__program-name {
+    font-size: var(--ui-font-small);
+    line-height: 16px;
+  }
+
+  .card--project .card__description p,
+  .card--my-project .card__description p {
+    font-size: var(--ui-font-small);
+    line-height: 18px;
   }
 
   .card__subscription-action {

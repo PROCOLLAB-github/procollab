@@ -47,7 +47,7 @@
         [routerLink]="AppRoutes.projects.detail(info()?.id)"
         [attr.aria-label]="
           'Открыть проект «' +
-          info()?.name +
+          (info()?.name?.trim() || 'Проект без названия') +
           '»' +
           (programName() ? '. Программа: ' + programName() : '')
         "
@@ -143,7 +143,11 @@
 
 <ng-template #regularCardHeader>
   @if (isProjectCard()) {
-    <p class="card__name">{{ info().name }}</p>
+    <p
+      class="card__name"
+      [title]="info().name"
+      [textContent]="info()?.name?.trim() || 'Проект без названия'"
+    ></p>
   } @else if (type() === "projects" || type() === "invite") {
     @if (info().name) {
       <p class="text-body-12 card__name" [title]="info().name">{{ info().name }}</p>

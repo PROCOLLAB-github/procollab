@@ -3,6 +3,10 @@
 @use "styles/responsive";
 @use "styles/typography";
 
+.nav-bar__logout {
+  margin-top: auto;
+}
+
 .nav-bar {
   display: block;
 
@@ -13,10 +17,9 @@
   }
 
   &__inner {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 88px;
     align-items: center;
-    justify-content: space-between;
     max-width: responsive.$container-md;
     margin: 0 auto;
 
@@ -114,8 +117,13 @@
   }
 
   &__title {
+    grid-row: 1;
+    grid-column: 2;
     min-width: 0;
-    color: var(--white);
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--ui-text);
+    text-align: center;
     overflow-wrap: anywhere;
   }
 

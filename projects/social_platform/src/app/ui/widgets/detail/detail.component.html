@@ -5,20 +5,16 @@
     @if (info()) {
       <div class="info detail__section detail__info">
         <div class="info__cover" [class.info__cover--program]="listType() === 'program'">
-          @if (appWidth > 1000) {
-            <img
-              class="info__cover"
-              [class.info__cover--program]="listType() === 'program'"
-              [src]="
-                info().coverImageAddress
-                  ? info().coverImageAddress
-                  : '/assets/images/office/profile/detail/cover.png'
-              "
-              alt="cover"
-            />
-          }
-
-          <div class="info__cover--mobile"></div>
+          <img
+            class="info__cover"
+            [class.info__cover--program]="listType() === 'program'"
+            [src]="
+              info().coverImageAddress
+                ? info().coverImageAddress
+                : '/assets/images/office/profile/detail/cover.png'
+            "
+            alt="cover"
+          />
 
           <div
             class="info__avatar"
@@ -50,36 +46,17 @@
                 "
                 [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
               ></app-avatar>
-              @if (listType() === "project") {
-                <h1
-                  class="info__title text-body-12"
-                  [style.width]="
-                    listType() === 'project' || listType() === 'profile' ? '300px' : '100%'
-                  "
-                  [class.info__title--project]="
-                    listType() === 'project' || listType() === 'profile'
-                  "
-                >
-                  {{
-                    listType() === "project"
-                      ? info().name
-                      : listType() === "profile"
-                        ? info().firstName + " " + info().lastName
-                        : ""
-                  }}
-                </h1>
-              }
             }
           </div>
         </div>
 
         <div class="info__body">
-          @if (listType() === "profile") {
-            <app-page-header
-              class="info__page-header"
-              [title]="info().firstName + ' ' + info().lastName"
-            />
-          }
+          <app-page-header
+            class="info__page-header"
+            [title]="
+              listType() === 'profile' ? info().firstName + ' ' + info().lastName : info().name
+            "
+          />
           <div class="info__actions">
             <ng-container
               *ngTemplateOutlet="
@@ -121,6 +98,7 @@
                   (click)="isContactsModalOpen.set(true)"
                 >
                   <i appIcon icon="phone" appSquare="12"></i>
+                  <span>Контакты</span>
                 </app-button>
 
                 <app-modal
@@ -186,7 +164,7 @@
                 @if (isUserManager()) {
                   <a [routerLink]="AppRoutes.program.analytics(info().id)">
                     <app-button
-                      [appearance]="isAnalyticsPage() || appWidth < 1000 ? 'inline' : 'outline'"
+                      [appearance]="isAnalyticsPage() ? 'inline' : 'outline'"
                       [size]="appWidth > 1000 ? 'medium' : 'big'"
                       customTypographyClass="text-body-12"
                     >
@@ -200,13 +178,11 @@
                       [size]="appWidth > 1000 ? 'medium' : 'small'"
                       customTypographyClass="text-body-12"
                     >
-                      @if (appWidth > 1000) {
-                        <span>{{
-                          info().name.includes("Технолидеры Будущего")
-                            ? "Каталог лучших стартапов 2022/23"
-                            : "положение"
-                        }}</span>
-                      }
+                      <span>{{
+                        info().name.includes("Технолидеры Будущего")
+                          ? "Каталог лучших стартапов 2022/23"
+                          : "положение"
+                      }}</span>
                       <i
                         appIcon
                         class="info__presentation-icon"
@@ -230,6 +206,7 @@
                     (click)="isContactsModalOpen.set(true)"
                   >
                     <i appIcon icon="phone" appSquare="12"></i>
+                    <span>Контакты</span>
                   </app-button>
                 }
                 @if (isUserManager() || (isUserExpert() && appWidth > 1000)) {

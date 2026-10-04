@@ -1,16 +1,16 @@
 <!-- @format -->
 
 @if (program()) {
-  <div class="card">
+  <div appCard [interactive]="true" class="card">
     <div class="card__photo">
-      <app-avatar [url]="program().imageAddress" [size]="100"></app-avatar>
+      <app-avatar [url]="program().imageAddress" [size]="64"></app-avatar>
     </div>
 
-    <div appCard [interactive]="true" class="card__info">
-      <p class="text-body-10 card__name" style="padding-left: 25px">{{ program().name }}</p>
+    <div class="card__info">
+      <h3 class="card__name" [title]="program().name">{{ program().name }}</h3>
 
       <p
-        class="text-body-10 card__description card__registration"
+        class="card__description card__registration"
         [ngClass]="{
           'card__registration--ended': registerDateExpired,
           'card__registration--participating': !registerDateExpired && program().isUserMember,
@@ -29,15 +29,12 @@
       </p>
 
       <div class="card__dates">
-        <p class="text-body-10 card__description" style="padding-left: 25px">
-          {{ program().datetimeStarted | date: "dd.MM.yyyy" }}
-        </p>
-        <p class="text-body-10 card__description">-</p>
-        <p class="text-body-10 card__description">
+        <p class="card__description">
+          {{ program().datetimeStarted | date: "dd.MM.yyyy" }} -
           {{ program().datetimeFinished | date: "dd.MM.yyyy" }}
         </p>
         <!-- TODO: изменить когда на бэке для программ будет возможность для регионов поле -->
-        <p class="text-body-10 card__description">• для всей России</p>
+        <p class="card__description card__region">для всей России</p>
       </div>
     </div>
   </div>

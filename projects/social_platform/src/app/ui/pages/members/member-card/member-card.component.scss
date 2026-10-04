@@ -131,11 +131,30 @@
 @media (max-width: #{responsive.$desktop - 1px}) {
   :host,
   .member-card {
-    width: 100%;
+    width: min(100%, var(--ui-mobile-entity-card-width));
   }
 
   .member-card {
+    height: auto;
+    min-height: 248px;
     padding-right: 16px;
     padding-left: 16px;
+  }
+
+  .member-card__action {
+    align-self: center;
+  }
+
+  .member-card__skill {
+    flex: 0 1 auto;
+    height: auto;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .member-card__skills,
+  .member-card__skills-area {
+    height: auto;
+    min-height: 22px;
   }
 }

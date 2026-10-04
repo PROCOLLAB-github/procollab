@@ -7,59 +7,55 @@
 @use "styles/responsive";
 
 .card {
+  @include ui-foundation.card;
+
   position: relative;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  max-width: 333px;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
 
   &__photo {
-    position: relative;
-    z-index: 10;
-    flex-shrink: 0;
-    width: 123px;
-    height: 123px;
-    padding: 12px;
-    background: var(--white);
-    border: 0.5px solid var(--dark-grey);
-    border-radius: 50%;
+    width: 64px;
+    height: 64px;
   }
 
   &__info {
-    @include ui-foundation.card;
-
-    position: relative;
-    z-index: 1;
+    display: grid;
+    gap: 8px;
     min-width: 0;
-    margin-left: -18%;
-    overflow: hidden;
   }
 
   &__name {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
+    display: -webkit-box;
     overflow: hidden;
+    font-size: var(--ui-font-body);
+    font-weight: 600;
+    line-height: 20px;
     color: var(--black);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 
   &__dates {
-    display: flex;
-    gap: 2px;
-    white-space: nowrap;
+    display: grid;
+    gap: 4px;
   }
 
   &__description {
+    font-size: var(--ui-font-small);
+    line-height: 18px;
     color: var(--dark-grey);
   }
 
   &__registration {
-    padding: 2px 2px 2px 25px;
-    margin-top: 2px;
-    margin-bottom: 6px;
-    overflow: hidden;
+    justify-self: start;
+    max-width: 100%;
+    padding: 4px 8px;
     color: var(--white);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
     border-radius: var(--rounded-lg);
 
     &--actual {
