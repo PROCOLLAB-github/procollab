@@ -72,7 +72,14 @@ describe("InfoCardComponent: статусы моих проектов", () => {
           ".card__info--vacancies, .card__info--collaborators, .card__info--program-icon, .card__industry, .card__info--project-partner",
         ),
       ).toBeNull();
-      expect(fixture.debugElement.queryAll(By.directive(IconComponent))).toHaveLength(0);
+      const icons = fixture.debugElement.queryAll(By.directive(IconComponent));
+      const hasProgram = item.key === "program" || item.key === "submitted";
+      expect(icons).toHaveLength(hasProgram ? 1 : 0);
+      if (hasProgram) {
+        expect(icons[0].componentInstance.icon()).toBe(
+          item.key === "submitted" ? "lock" : "program",
+        );
+      }
       const avatar = fixture.debugElement.query(By.directive(AvatarComponent)).componentInstance;
       expect(avatar.size()).toBe(70);
       expect(avatar.url()).toBe(item.project.imageAddress);
@@ -118,6 +125,37 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     const link = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
     expect(link.urlTree!.queryParams).toEqual({});
     expect(TestBed.inject(Router).serializeUrl(link.urlTree!)).toBe(AppRoutes.projects.detail(101));
+  });
+
+  it("показывает имя программы и оставляет полный текст доступным без вложенной ссылки", () => {
+    const name = "Очень длинное название программы для студенческих технологических проектов";
+    fixture.componentRef.setInput(
+      "info",
+      projectCardFixture({
+        partnerProgram: { ...projectCardProgram(false), name },
+      }),
+    );
+    fixture.detectChanges();
+    const label = card().querySelector<HTMLElement>(".card__program-name")!;
+    expect(label.textContent?.trim()).toBe("Программа: " + name);
+    expect(label.title).toBe("Программа: " + name);
+    expect(card().querySelector("a")?.getAttribute("aria-label")).toContain(name);
+    expect(card().querySelectorAll("a")).toHaveLength(1);
+    expect(card().querySelector(".card__description--with-program")).not.toBeNull();
+  });
+
+  it("legacy ответ без имени сохраняет статус, доступ и геометрию описания", () => {
+    fixture.componentRef.setInput(
+      "info",
+      projectCardFixture({
+        partnerProgram: { ...projectCardProgram(false), name: undefined },
+      }),
+    );
+    fixture.detectChanges();
+    expect(card().querySelector(".card__program-name")).toBeNull();
+    expect(card().querySelector(".card__description--with-program")).toBeNull();
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Привязан к программе");
+    expect(card().querySelector(".card__access-label")?.textContent).toBe("можно редактировать");
   });
 
   it.each(myProjectCardFixtures.slice(0, 4))(
@@ -179,7 +217,7 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       }),
     );
     fixture.detectChanges();
-    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("В программе");
+    expect(card().querySelector(".card__status")?.textContent?.trim()).toBe("Привязан к программе");
     expect(card().querySelector<HTMLElement>(".card__project-action")?.textContent?.trim()).toBe(
       "Открыть",
     );
@@ -198,14 +236,14 @@ describe("InfoCardComponent: статусы моих проектов", () => {
       draft: true,
       submitted: false,
       lifecycle: "program",
-      label: "В программе",
+      label: "Привязан к программе",
       leaderCanEdit: true,
     },
     {
       draft: false,
       submitted: false,
       lifecycle: "program",
-      label: "В программе",
+      label: "Привязан к программе",
       leaderCanEdit: true,
     },
     {

@@ -8,6 +8,33 @@
     </div>
 
     <ul class="lists__list">
+      @if (project()?.partnerProgram; as program) {
+        <li class="lists__item lists__item--program" lang="ru">
+          <i
+            appIcon
+            icon="program"
+            class="lists__icon"
+            appWidth="10"
+            appHeight="10"
+            appViewBox="0 0 21 16"
+            aria-hidden="true"
+          ></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Программа</span>
+            @if (program.programId > 0) {
+              <a
+                class="text-body-10 lists__value lists__value--link"
+                [routerLink]="AppRoutes.program.detail(program.programId)"
+                >{{ program.name?.trim() || "Название не указано" }}</a
+              >
+            } @else {
+              <p class="text-body-10 lists__value">
+                {{ program.name?.trim() || "Название не указано" }}
+              </p>
+            }
+          </div>
+        </li>
+      }
       <li class="lists__item">
         <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
         <div class="lists__item-content">

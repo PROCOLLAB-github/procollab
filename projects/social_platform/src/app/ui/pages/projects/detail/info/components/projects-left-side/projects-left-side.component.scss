@@ -68,6 +68,24 @@
     align-items: flex-start;
     min-width: 0;
 
+    // Длинное имя программы использует всю ширину существующего metadata блока.
+    &--program {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 4px 6px;
+      align-items: center;
+
+      .lists__item-content {
+        display: contents;
+      }
+
+      .lists__value {
+        grid-column: 1 / -1;
+        hyphens: auto;
+        word-break: normal;
+      }
+    }
+
     &--status {
       padding: 8px;
       border: 0.5px solid var(--medium-grey-for-outline);
