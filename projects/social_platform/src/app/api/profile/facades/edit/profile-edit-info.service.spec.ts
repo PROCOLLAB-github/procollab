@@ -2,6 +2,7 @@
 
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
+import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
 import { Skill } from "@domain/skills/skill.model";
@@ -125,5 +126,29 @@ describe("ProfileEditInfoService", () => {
     expect(saveProfileUseCase.execute).not.toHaveBeenCalled();
     expect(service.isModalErrorSkillChooseText()).toContain("Регион");
     expect(service.isModalErrorSkillChooseText()).not.toContain("Город");
+  });
+
+  it("preserves legacy education names over 100 characters when saving other profile fields", () => {
+    const legacyName = "Название университета ".repeat(7);
+    profileFormService.profileId.set(42);
+    profileFormService.education.push(
+      new FormGroup({ organizationName: new FormControl(legacyName) }),
+    );
+    profileFormService.getForm().patchValue({
+      firstName: "Иван",
+      lastName: "Иванов",
+      birthday: "25.03.1990",
+      city: "Москва",
+      speciality: "Frontend developer",
+      skills: [{ id: 1, name: "Angular" }] as Skill[],
+      organizationName: legacyName,
+    });
+
+    service.saveProfile();
+
+    expect(saveProfileUseCase.execute).toHaveBeenCalledOnce();
+    expect(saveProfileUseCase.execute.mock.calls[0][1].education).toEqual([
+      { organizationName: legacyName },
+    ]);
   });
 });

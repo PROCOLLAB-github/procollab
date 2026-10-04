@@ -1,0 +1,89 @@
+<!-- @format -->
+
+<div class="university" (focusout)="onFocusOut($event)">
+  <div class="university__field">
+    <input
+      #nameInput
+      [id]="inputId()"
+      class="university__input"
+      [class.university__input--error]="error()"
+      [value]="text()"
+      [disabled]="disabled()"
+      maxlength="255"
+      autocomplete="off"
+      [placeholder]="custom() ? 'введите название учреждения' : 'выберите вуз или начните писать'"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
+      [attr.aria-expanded]="open()"
+      [attr.aria-controls]="inputId() + '-list'"
+      [attr.aria-invalid]="error()"
+      [attr.aria-activedescendant]="
+        activeIndex() >= 0 ? inputId() + '-option-' + activeIndex() : null
+      "
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (keydown)="onKeyDown($event)"
+    />
+    <button
+      type="button"
+      class="university__toggle"
+      [disabled]="disabled()"
+      aria-label="Открыть список вузов"
+      (mousedown)="$event.preventDefault()"
+      (click)="browse()"
+    >
+      ⌄
+    </button>
+  </div>
+  @if (custom()) {
+    <p class="university__hint">Другое — укажите название учреждения</p>
+  }
+  @if (open()) {
+    <div class="university__dropdown">
+      <div class="university__status" aria-live="polite">
+        @if (loading()) {
+          Поиск вузов…
+        } @else if (failed()) {
+          Не удалось загрузить список. Попробуйте снова или выберите «Другое».
+        } @else if (!universities().length) {
+          Совпадений нет. Выберите «Другое», чтобы указать название.
+        }
+      </div>
+      <div [id]="inputId() + '-list'" role="listbox" aria-label="Учебные учреждения">
+        @for (university of universities(); track university.id; let index = $index) {
+          <div
+            [id]="inputId() + '-option-' + index"
+            role="option"
+            class="university__option"
+            [class.university__option--active]="activeIndex() === index"
+            [attr.aria-selected]="text() === university.name"
+            (mousedown)="$event.preventDefault()"
+            (click)="select(university)"
+          >
+            <span>{{ university.name }}</span>
+            @if (university.city) {
+              <small>{{ university.city }}</small>
+            }
+          </div>
+        }
+        <div
+          [id]="inputId() + '-option-' + universities().length"
+          role="option"
+          class="university__option university__option--other"
+          [class.university__option--active]="activeIndex() === universities().length"
+          aria-selected="false"
+          (mousedown)="$event.preventDefault()"
+          (click)="selectOther()"
+        >
+          Другое
+        </div>
+      </div>
+      @if (universities().length < total()) {
+        <button type="button" class="university__more" [disabled]="loading()" (click)="loadMore()">
+          Показать ещё
+        </button>
+      }
+    </div>
+  }
+</div>

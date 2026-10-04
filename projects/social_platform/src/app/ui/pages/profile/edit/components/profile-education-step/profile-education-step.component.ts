@@ -10,6 +10,7 @@ import { ProfileFormService } from "@api/profile/facades/edit/profile-form.servi
 import { ProfileEditEducationInfoService } from "@api/profile/facades/edit/profile-edit-education-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { TruncatePipe, ControlErrorPipe } from "@corelib";
+import { UniversitySelectComponent } from "../university-select/university-select.component";
 
 /** Шаг редактирования образования в общей форме профиля. */
 @Component({
@@ -22,6 +23,7 @@ import { TruncatePipe, ControlErrorPipe } from "@corelib";
     SelectComponent,
     ButtonComponent,
     InputComponent,
+    UniversitySelectComponent,
     ReactiveFormsModule,
     ControlErrorPipe,
     TruncatePipe,

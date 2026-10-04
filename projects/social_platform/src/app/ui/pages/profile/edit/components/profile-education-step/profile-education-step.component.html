@@ -48,14 +48,11 @@
       <div class="profile__column">
         @if (profileForm.get("organizationName"); as organizationName) {
           <fieldset>
-            <label for="organizationName" class="field-label">название учереждения</label>
-            <app-input
-              size="big"
+            <label for="organizationName" class="field-label">название учреждения</label>
+            <app-university-select
               [error]="organizationName | controlError"
-              placeholder="вуз / колледж / школа"
               formControlName="organizationName"
-              [maxLength]="100"
-            ></app-input>
+            ></app-university-select>
             @if (organizationName | controlError: "required") {
               <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
