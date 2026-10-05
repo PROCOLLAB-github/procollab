@@ -1,9 +1,6 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/components/vacancy-ui";
 
 :host {
@@ -13,12 +10,18 @@
 }
 
 .vacancy {
-  @include ui-foundation.card;
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.card;
+  }
 
   display: flex;
   flex-direction: column;
   gap: 16px;
   height: 100%;
+
+  @media screen and (min-width: 1000px) {
+    padding: 16px;
+  }
 
   @include vacancy-ui.surface;
 

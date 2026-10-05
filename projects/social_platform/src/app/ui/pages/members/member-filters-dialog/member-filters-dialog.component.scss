@@ -1,6 +1,5 @@
 /** @format */
 
-/* Portal находится вне host; стили ограничены только локальным классом окна фильтров. */
 .modal .modal__body.member-filters-dialog-body {
   box-sizing: border-box;
   display: block;
@@ -34,8 +33,16 @@
       color: var(--dark-grey);
       cursor: pointer;
       background: transparent;
-      border: 0;
-      border-radius: var(--ui-radius-dialog);
+
+      @media screen and (max-width: 999px) {
+        border: 0;
+        border-radius: var(--ui-radius-dialog);
+      }
+
+      @media screen and (min-width: 1000px) {
+        border: 0;
+        border-radius: var(--rounded-lg);
+      }
     }
   }
 
@@ -52,7 +59,14 @@
 
     .filters__clear {
       min-height: 32px;
-      font-size: var(--ui-font-body);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-body);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 13px;
+      }
     }
 
     input {

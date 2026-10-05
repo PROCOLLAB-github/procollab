@@ -1,0 +1,32 @@
+[
+  {
+    "screen": "feed",
+    "width": 1000,
+    "preserved": true
+  },
+  {
+    "screen": "feed",
+    "width": 768,
+    "preserved": true
+  },
+  {
+    "screen": "feed",
+    "width": 390,
+    "preserved": true
+  },
+  {
+    "screen": "projects",
+    "width": 1000,
+    "preserved": true
+  },
+  {
+    "screen": "projects",
+    "width": 768,
+    "preserved": true
+  },
+  {
+    "screen": "projects",
+    "width": 390,
+    "preserved": true
+  }
+]

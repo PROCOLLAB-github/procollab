@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 @mixin expandable-list {
@@ -70,7 +72,6 @@
     align-items: flex-start;
     min-width: 0;
 
-    // Длинное имя программы использует всю ширину существующего metadata блока.
     &--program {
       display: grid;
       grid-template-columns: 22px minmax(0, 1fr);
@@ -144,20 +145,22 @@
   @include expandable-list;
 }
 
-@include responsive.apply-below-desktop {
-  .project__left {
-    width: 100%;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .project__left {
+      width: 100%;
+    }
 
-  .project__section {
-    padding: 16px;
-  }
+    .project__section {
+      padding: 16px;
+    }
 
-  .lists__list {
-    gap: 16px;
-  }
+    .lists__list {
+      gap: 16px;
+    }
 
-  .lists__item {
-    gap: 12px;
+    .lists__item {
+      gap: 12px;
+    }
   }
 }

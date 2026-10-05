@@ -31,18 +31,20 @@
   }
 }
 
-@include responsive.apply-mobile {
-  :host {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    :host {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
 
-  .switch::before {
-    position: absolute;
-    inset: -12px -2px;
-    content: "";
+    .switch::before {
+      position: absolute;
+      inset: -12px -2px;
+      content: "";
+    }
   }
 }

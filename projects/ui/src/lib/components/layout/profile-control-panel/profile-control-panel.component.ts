@@ -1,7 +1,11 @@
 /** @format */
 
+import { DesktopLayoutService } from "../../../services/desktop-layout.service";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
+  inject,
   ChangeDetectionStrategy,
   Component,
   Input,
@@ -56,6 +60,7 @@ import { ButtonDirective } from "../../primitives/button/button.directive";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileControlPanelComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   /** Данные текущего пользователя */
   readonly user = input.required<User | null>();
 

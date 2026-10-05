@@ -14,14 +14,6 @@
     gap: 20px;
   }
 
-  /* &--hasContent { */
-
-  /*   display: flex; */
-
-  /*   flex-direction: row-reverse; */
-
-  /* } */
-
   &__answer {
     color: var(--grey-for-text);
   }
@@ -176,4 +168,6 @@
   }
 }
 
-@include course-task.responsive-layout("exclude");
+@media screen and (max-width: 999px) {
+  @include course-task.responsive-layout("exclude");
+}

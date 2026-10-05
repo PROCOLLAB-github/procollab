@@ -1,6 +1,11 @@
 /** @format */
 
-import { ButtonDirective, FormLayoutDirective, PageHeaderComponent } from "@uilib";
+import {
+  ButtonDirective,
+  DesktopLayoutService,
+  FormLayoutDirective,
+  PageHeaderComponent,
+} from "@uilib";
 /** @format */
 
 import {
@@ -93,6 +98,7 @@ import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/pr
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileEditComponent implements OnInit, AfterViewInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly projectStepService = inject(ProjectStepService);

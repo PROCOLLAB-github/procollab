@@ -8,8 +8,10 @@
   max-height: 100%;
 }
 
-:host {
-  display: inline-flex;
-  flex: 0 0 auto;
-  vertical-align: middle;
+@media screen and (max-width: 999px) {
+  :host {
+    display: inline-flex;
+    flex: 0 0 auto;
+    vertical-align: middle;
+  }
 }

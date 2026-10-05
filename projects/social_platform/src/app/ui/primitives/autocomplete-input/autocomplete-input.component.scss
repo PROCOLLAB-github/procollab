@@ -1,217 +1,367 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
-.field {
-  position: relative;
-  width: 100%;
-
-  &__input-wrapper {
-    z-index: 3;
+@media screen and (max-width: 999px) {
+  .field {
+    position: relative;
     width: 100%;
-    overflow: hidden;
-  }
 
-  &__input {
-    width: 100%;
-    padding: 12px;
+    &__input-wrapper {
+      z-index: 3;
+      width: 100%;
+      overflow: hidden;
+    }
 
-    &::placeholder {
+    &__input {
+      width: 100%;
+      padding: 12px;
+
+      &::placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--error {
+        border-color: var(--red);
+      }
+
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: var(--ui-focus-ring);
+      }
+
+      &--no-icon {
+        padding-right: 45px;
+      }
+
+      @include ui-foundation.control;
+    }
+
+    &__input-slim {
+      width: 100%;
+      padding: 6px 30px 6px 10px;
+      font-size: var(--ui-font-small);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--grey-button);
+      outline: none;
+
+      &:focus {
+        border-color: var(--accent);
+
+        + &_arrow {
+          color: var(--accent);
+
+          i {
+            transform: rotate(0);
+          }
+        }
+      }
+
+      @include ui-foundation.control;
+    }
+
+    &__dropdown {
+      position: relative;
+      right: 0;
+      left: 0;
+      z-index: 4;
+      background-color: transparent;
+      box-shadow: 5px 5px 25px 0 var(--gray);
+      transform-origin: center top;
+
+      &--options,
+      &--no-results {
+        max-height: 300px;
+        max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
+        padding: 10px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        background-color: var(--white);
+        scrollbar-width: thin;
+      }
+    }
+
+    &__option {
+      padding: 7px;
       color: var(--dark-grey);
+      cursor: pointer;
+      border-radius: var(--rounded-lg);
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: var(--light-gray);
+      }
+
+      @include typography.body-12;
+
+      &-slim {
+        padding: 3px;
+      }
     }
 
-    &--error {
-      border-color: var(--red);
+    &__chip {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      padding: 5px 10px;
+      color: var(--white);
+      background-color: var(--accent);
+      border-radius: var(--rounded-md);
+      transform: translateY(-50%);
+
+      span {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      i {
+        flex-shrink: 0;
+        margin-left: 10px;
+        cursor: pointer;
+      }
     }
 
-    &:focus {
-      border-color: var(--accent);
-      box-shadow: var(--ui-focus-ring);
+    &__icons {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      opacity: 1;
+      transform: translateY(-50%);
+
+      &:hover {
+        opacity: 0.6;
+      }
     }
 
-    &--no-icon {
-      padding-right: 45px;
+    &__loading-icon {
+      margin-right: 5px;
     }
-
-    @include ui-foundation.control;
   }
 
-  &__input-slim {
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .field,
+  .search,
+  .search__input {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
+
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
+
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
+
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
+
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
+
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
+    }
+  }
+
+  .field__input,
+  .field__input-slim {
+    padding-right: 44px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .field {
+    position: relative;
     width: 100%;
-    padding: 6px 30px 6px 10px;
-    font-size: var(--ui-font-small);
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--grey-button);
-    outline: none;
 
-    &:focus {
-      border-color: var(--accent);
+    &__input-wrapper {
+      z-index: 3;
+      width: 100%;
+      overflow: hidden;
+    }
 
-      + &_arrow {
-        color: var(--accent);
+    &__input {
+      width: 100%;
+      padding: 12px;
+      color: var(--black);
+      background-color: var(--white);
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-xxl);
+      outline: none;
+      transition: all 0.2s;
 
-        i {
-          transform: rotate(0);
+      &::placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--error {
+        border-color: var(--red);
+      }
+
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
+
+      &--no-icon {
+        padding-right: 45px;
+      }
+
+      @include typography.body-12;
+    }
+
+    &__input-slim {
+      width: 100%;
+      padding: 6px 30px 6px 10px;
+      font-size: 12px;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--grey-button);
+      outline: none;
+
+      &:focus {
+        border-color: var(--accent);
+
+        +&_arrow {
+          color: var(--accent);
+
+          i {
+            transform: rotate(0);
+          }
         }
       }
     }
 
-    @include ui-foundation.control;
-  }
+    &__dropdown {
+      position: absolute;
+      right: 0;
+      left: 0;
+      z-index: 4;
+      background-color: transparent;
+      box-shadow: 5px 5px 25px 0 var(--gray);
+      transform-origin: center top;
 
-  &__dropdown {
-    position: relative;
-    right: 0;
-    left: 0;
-    z-index: 4;
-    background-color: transparent;
-    box-shadow: 5px 5px 25px 0 var(--gray);
-    transform-origin: center top;
-
-    &--options,
-    &--no-results {
-      max-height: 300px;
-      max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
-      padding: 10px;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      background-color: var(--white);
-      scrollbar-width: thin;
-    }
-  }
-
-  &__option {
-    padding: 7px;
-    color: var(--dark-grey);
-    cursor: pointer;
-    border-radius: var(--rounded-lg);
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: var(--light-gray);
+      &--options,
+      &--no-results {
+        scrollbar-width: thin;
+        max-height: 300px;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: var(--white);
+      }
     }
 
-    @include typography.body-12;
-
-    &-slim {
-      padding: 3px;
-    }
-  }
-
-  &__chip {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    z-index: 4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    padding: 5px 10px;
-    color: var(--white);
-    background-color: var(--accent);
-    border-radius: var(--rounded-md);
-    transform: translateY(-50%);
-
-    span {
-      display: inline-block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    i {
-      flex-shrink: 0;
-      margin-left: 10px;
+    &__option {
+      padding: 7px;
+      color: var(--dark-grey);
       cursor: pointer;
+      border-radius: var(--rounded-lg);
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: var(--light-gray);
+      }
+
+      @include typography.body-12;
+
+      &-slim {
+        padding: 3px;
+      }
+    }
+
+    &__chip {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      padding: 5px 10px;
+      color: var(--white);
+      background-color: var(--accent);
+      border-radius: var(--rounded-md);
+      transform: translateY(-50%);
+
+      span {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      i {
+        flex-shrink: 0;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+
+    &__icons {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      opacity: 1;
+      transform: translateY(-50%);
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    &__loading-icon {
+      margin-right: 5px;
     }
   }
-
-  &__icons {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    opacity: 1;
-    transform: translateY(-50%);
-
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-
-  &__loading-icon {
-    margin-right: 5px;
-  }
-}
-
-:host {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.field,
-.search,
-.search__input {
-  min-width: 0;
-  max-width: 100%;
-}
-
-@include responsive.apply-mobile {
-  .field__input,
-  .field__input-slim,
-  .search__input input {
-    min-width: 0;
-    max-width: 100%;
-    min-height: 44px;
-    font-size: var(--ui-font-h3);
-  }
-
-  .field--small,
-  .field__input--small {
-    min-width: 0;
-  }
-
-  .field__input--with-tooltip {
-    padding-right: 44px;
-  }
-
-  .field__option {
-    min-height: 44px;
-    overflow-wrap: anywhere;
-  }
-
-  .field__chip {
-    max-width: calc(100% - 44px);
-  }
-
-  .field__chip span {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
-
-  .field__calendar-button {
-    right: 4px;
-    width: 44px;
-    height: 44px;
-  }
-
-  .field__input[type="date"] {
-    padding-right: 48px;
-  }
-}
-
-.field__input,
-.field__input-slim {
-  padding-right: 44px;
 }

@@ -10,15 +10,27 @@
     ' button--' +
     effectiveAppearance() +
     ' ' +
-    (customTypographyClass() || '')
+    (customTypographyClass() || 'text-body-12')
   "
+  [class.button--small--icon]="size() === 'small' && type() === 'icon'"
+  [class.button--medium--icon]="size() === 'medium' && type() === 'icon'"
+  [class.button--big--icon]="size() === 'big' && type() === 'icon'"
   [class.button--no-border]="!hasBorder()"
+  [class.button--loading]="loader()"
+  [class.button--disabled]="disabled()"
   [style.background-color]="backgroundColor()"
   [disabled]="disabled() || loader()"
   [attr.aria-busy]="loader() || null"
 >
-  <span class="button__content" [class.button__content--loading]="loader()"><ng-content /></span>
-  @if (loader()) {
+  <span
+    class="button__content"
+    [class.button__content--loading]="loader()"
+    [class.button__content--desktop-loading]="desktopLayout() && loader()"
+    ><ng-content
+  /></span>
+  @if (loader() && desktopLayout()) {
+    <app-loader [color]="effectiveAppearance() === 'inline' ? 'white' : 'gray'" />
+  } @else if (loader()) {
     <span class="button__loader" aria-hidden="true"
       ><app-loader [color]="effectiveAppearance() === 'inline' ? 'white' : 'accent'"
     /></span>

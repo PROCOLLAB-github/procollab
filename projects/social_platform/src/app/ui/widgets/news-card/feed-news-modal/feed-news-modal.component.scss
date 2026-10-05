@@ -1,6 +1,5 @@
 /** @format */
 
-/* Overlay находится вне host. Все правила ограничены локальным классом окна чтения. */
 .modal .modal__body.feed-news-modal-body {
   box-sizing: border-box;
   display: block;
@@ -35,19 +34,35 @@
 
   &__badge {
     padding: 4px 10px;
-    font-size: var(--ui-font-caption);
-    font-weight: 600;
     color: var(--accent-dark);
     background: var(--accent-light);
     border-radius: var(--rounded-xxl);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+      font-weight: 600;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+      font-weight: 600;
+    }
   }
 
   time {
     margin-left: auto;
-    font-size: var(--ui-font-caption);
-    font-variant-numeric: tabular-nums;
     color: var(--grey-for-text);
     white-space: nowrap;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
   }
 
   button {
@@ -69,7 +84,14 @@
     padding: 0;
     font-size: 28px;
     line-height: 1;
-    border-radius: var(--ui-radius-dialog);
+
+    @media screen and (max-width: 999px) {
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    @media screen and (min-width: 1000px) {
+      border-radius: var(--rounded-lg);
+    }
   }
 
   &__scroll {
@@ -101,8 +123,15 @@
   }
 
   &__source span {
-    font-size: var(--ui-font-caption);
     color: var(--grey-for-text);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+    }
   }
 
   &__source a {

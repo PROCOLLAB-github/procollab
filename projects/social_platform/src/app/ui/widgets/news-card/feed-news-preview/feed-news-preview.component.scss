@@ -1,9 +1,6 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/feed-card";
 
 :host {
@@ -12,7 +9,9 @@
 }
 
 .feed-preview {
-  @include ui-foundation.card;
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.card;
+  }
 
   cursor: pointer;
 
@@ -23,7 +22,6 @@
     outline-offset: 3px;
   }
 
-  /* Ссылки полного текста доступны в окне: скрытая часть clamp не создаёт невидимые tab-stop. */
   .feed-card__description {
     white-space: pre-line;
   }
@@ -98,10 +96,17 @@
     right: 4px;
     bottom: 4px;
     padding: 2px 4px;
-    font-size: var(--ui-font-caption);
     color: var(--white);
     background: var(--ui-media-backdrop);
     border-radius: 4px;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 10px;
+    }
   }
 
   button.feed-preview__more {
@@ -112,9 +117,16 @@
   }
 
   &__attachments {
-    font-size: var(--ui-font-caption);
     line-height: 16px;
     color: var(--grey-for-text);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+    }
   }
 
   &__actions {

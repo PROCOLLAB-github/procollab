@@ -1,73 +1,145 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/responsive";
 
-.card {
-  @include ui-foundation.card;
+@media screen and (max-width: 999px) {
+  .card {
+    @include ui-foundation.card;
 
-  position: relative;
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
-
-  &__photo {
-    width: 64px;
-    height: 64px;
-  }
-
-  &__info {
+    position: relative;
     display: grid;
-    gap: 8px;
-    min-width: 0;
-  }
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
 
-  &__name {
-    /* stylelint-disable-next-line value-no-vendor-prefix */
-    display: -webkit-box;
-    overflow: hidden;
-    font-size: var(--ui-font-body);
-    font-weight: 600;
-    line-height: 20px;
-    color: var(--black);
-    overflow-wrap: anywhere;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-  }
-
-  &__dates {
-    display: grid;
-    gap: 4px;
-  }
-
-  &__description {
-    font-size: var(--ui-font-small);
-    line-height: 18px;
-    color: var(--dark-grey);
-  }
-
-  &__registration {
-    justify-self: start;
-    max-width: 100%;
-    padding: 4px 8px;
-    color: var(--white);
-    overflow-wrap: anywhere;
-    border-radius: var(--rounded-lg);
-
-    &--actual {
-      background-color: var(--accent);
+    &__photo {
+      width: 64px;
+      height: 64px;
     }
 
-    &--ended {
-      background-color: var(--red) !important;
+    &__info {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
     }
 
-    &--participating {
-      background-color: var(--green);
+    &__name {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
+      display: -webkit-box;
+      overflow: hidden;
+      font-size: var(--ui-font-body);
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--black);
+      overflow-wrap: anywhere;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    &__dates {
+      display: grid;
+      gap: 4px;
+    }
+
+    &__description {
+      font-size: var(--ui-font-small);
+      line-height: 18px;
+      color: var(--dark-grey);
+    }
+
+    &__registration {
+      justify-self: start;
+      max-width: 100%;
+      padding: 4px 8px;
+      color: var(--white);
+      overflow-wrap: anywhere;
+      border-radius: var(--rounded-lg);
+
+      &--actual {
+        background-color: var(--accent);
+      }
+
+      &--ended {
+        background-color: var(--red) !important;
+      }
+
+      &--participating {
+        background-color: var(--green);
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .card {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    max-width: 333px;
+
+    &__photo {
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+      width: 123px;
+      height: 123px;
+      padding: 12px;
+      background: var(--white);
+      border: 0.5px solid var(--dark-grey);
+      border-radius: 50%;
+    }
+
+    &__info {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      padding: 22px;
+      margin-left: -18%;
+      overflow: hidden;
+      border: 0.5px solid var(--dark-grey);
+      border-radius: var(--rounded-lg);
+    }
+
+    &__name {
+      overflow: hidden;
+      color: var(--black);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__dates {
+      display: flex;
+      gap: 2px;
+      white-space: nowrap;
+    }
+
+    &__description {
+      color: var(--dark-grey);
+    }
+
+    &__registration {
+      padding: 2px 2px 2px 25px;
+      margin-top: 2px;
+      margin-bottom: 6px;
+      overflow: hidden;
+      color: var(--white);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border-radius: var(--rounded-lg);
+
+      &--actual {
+        background-color: var(--accent);
+      }
+
+      &--ended {
+        background-color: var(--red) !important;
+      }
+
+      &--participating {
+        background-color: var(--green);
+      }
     }
   }
 }

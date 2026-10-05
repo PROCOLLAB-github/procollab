@@ -11,10 +11,6 @@
 
   @include responsive.apply-desktop {
     padding: 0 200px;
-
-    &:has(.login) {
-      padding: 0;
-    }
   }
 
   &__header {
@@ -30,16 +26,18 @@
   }
 }
 
-@include responsive.apply-below-desktop {
-  .page {
-    height: auto;
-    min-height: 100dvh;
-    padding: 0 var(--page-gutter);
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .page {
+      height: auto;
+      min-height: 100dvh;
+      padding: 0 var(--page-gutter);
+    }
 
-  .page__body {
-    justify-content: flex-start;
-    height: auto;
-    min-height: 100dvh;
+    .page__body {
+      justify-content: flex-start;
+      height: auto;
+      min-height: 100dvh;
+    }
   }
 }

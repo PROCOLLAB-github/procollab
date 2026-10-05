@@ -1,13 +1,20 @@
 /** @format */
+
 @use "styles/responsive";
 
-/* Только case-вариант: shared modal задаёт width своим stylesheet после подключения overlay. */
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
   box-sizing: border-box;
   width: min(880px, calc(100% - 24px));
-  max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
   padding: 20px;
   overflow-y: auto;
+
+  @media screen and (max-width: 999px) {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
+  }
+
+  @media screen and (min-width: 1000px) {
+    max-height: calc(100dvh - 32px);
+  }
 }
 
 .analytics-case {
@@ -102,7 +109,7 @@
       }
 
       th {
-        font-size: var(--ui-font-body);
+        font-size: 13px;
       }
 
       th:first-child,
@@ -128,16 +135,21 @@
   }
 }
 
-/* Overlay лежит вне host: единственное глобальное правило ограничено собственным bodyClass. */
 .modal__body.analytics-drilldown-body {
   box-sizing: border-box;
   width: min(880px, calc(100vw - 24px));
-  max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
   padding: 20px;
   overflow-y: auto;
+
+  @media screen and (max-width: 999px) {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
+  }
+
+  @media screen and (min-width: 1000px) {
+    max-height: calc(100dvh - 32px);
+  }
 }
 
-/* Тот же шаблон используется в backlog: оформление меняется только у трёх списков назначений. */
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--assignments {
   width: min(980px, calc(100vw - 32px));
   padding: 16px;
@@ -151,8 +163,15 @@
     margin-bottom: 24px;
 
     h2 {
-      font-size: var(--ui-font-h1);
       line-height: 30px;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-h1);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 24px;
+      }
     }
   }
 
@@ -446,7 +465,7 @@
       }
 
       th {
-        font-size: var(--ui-font-body);
+        font-size: 13px;
         font-weight: 600;
       }
 
@@ -520,9 +539,17 @@
 
     .analytics-drilldown__action {
       padding: 4px 0;
-      font-size: var(--ui-font-body);
-      font-weight: 500;
       line-height: 20px;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-body);
+        font-weight: 500;
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 13px;
+        font-weight: 500;
+      }
     }
 
     @include responsive.apply-desktop {

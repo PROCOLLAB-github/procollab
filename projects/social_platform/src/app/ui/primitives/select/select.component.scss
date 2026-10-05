@@ -1,177 +1,284 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
 
-.field {
-  position: relative;
-  width: 100%;
-
-  &__input {
+@media screen and (max-width: 999px) {
+  .field {
     position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
+    width: 100%;
 
-    &--small {
-      max-width: 70px;
-      padding: 12px;
-      text-align: center;
+    &__input {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+
+      &--small {
+        max-width: 70px;
+        padding: 12px;
+        text-align: center;
+      }
+
+      &--big {
+        width: 100%;
+        padding: 12px;
+      }
+
+      &--placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--open {
+        border-color: var(--accent);
+        box-shadow: var(--ui-focus-ring);
+      }
+
+      &--error {
+        border-color: var(--red) !important;
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      @include ui-foundation.control;
     }
 
-    &--big {
-      width: 100%;
-      padding: 12px;
+    &__options {
+      position: absolute;
+      right: 0;
+      bottom: -6px;
+      left: 5%;
+      z-index: 11;
+      width: 90%;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: var(--white);
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-lg);
+      transform: translateY(100%);
     }
 
-    &--placeholder {
+    &__option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
       color: var(--dark-grey);
+      cursor: pointer;
+      border-radius: var(--rounded-lg);
+      transition: background-color 0.2s;
+
+      &--highlighted {
+        background-color: var(--light-gray);
+      }
+
+      &:hover {
+        color: var(--accent);
+      }
     }
 
-    &--open {
-      border-color: var(--accent);
-      box-shadow: var(--ui-focus-ring);
+    &__arrow {
+      color: var(--dark-grey);
+      transition: all 0.2s;
+      transform: rotate(180deg);
+
+      &--filpped {
+        color: var(--accent);
+        transform: rotate(0deg);
+      }
     }
 
-    &--error {
-      border-color: var(--red) !important;
-    }
+    &__error-icon {
+      flex: 0 0 auto;
+      color: var(--red);
+      pointer-events: none;
 
-    &--disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    @include ui-foundation.control;
-  }
-
-  &__options {
-    position: absolute;
-    right: 0;
-    bottom: -6px;
-    left: 5%;
-    z-index: 11;
-    width: 90%;
-    max-height: 200px;
-    overflow-y: auto;
-    background-color: var(--white);
-    border: 0.5px solid var(--gray);
-    border-radius: var(--rounded-lg);
-    transform: translateY(100%);
-  }
-
-  &__option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 18px;
-    color: var(--dark-grey);
-    cursor: pointer;
-    border-radius: var(--rounded-lg);
-    transition: background-color 0.2s;
-
-    &--highlighted {
-      background-color: var(--light-gray);
-    }
-
-    &:hover {
-      color: var(--accent);
+      &--bare {
+        padding: 0;
+        background: transparent;
+      }
     }
   }
 
-  &__arrow {
-    color: var(--dark-grey);
-    transition: all 0.2s;
-    transform: rotate(180deg);
-
-    &--filpped {
-      color: var(--accent);
-      transform: rotate(0deg);
-    }
-  }
-
-  &__error-icon {
-    flex: 0 0 auto;
-    color: var(--red);
-    pointer-events: none;
-
-    &--bare {
-      padding: 0;
-      background: transparent;
-    }
-  }
-}
-
-:host {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.field,
-.search,
-.search__input {
-  min-width: 0;
-  max-width: 100%;
-}
-
-@include responsive.apply-mobile {
-  .field__input,
-  .field__input-slim,
-  .search__input input {
+  :host {
+    display: block;
     min-width: 0;
     max-width: 100%;
-    min-height: 44px;
-    font-size: var(--ui-font-h3);
   }
 
-  .field--small,
-  .field__input--small {
+  .field,
+  .search,
+  .search__input {
     min-width: 0;
+    max-width: 100%;
   }
 
-  .field__input--with-tooltip {
-    padding-right: 44px;
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
+
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
+
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
+
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
+
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
+
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
+    }
   }
 
-  .field__option {
-    min-height: 44px;
+  .field__input > span,
+  .field__input > p {
+    min-width: 0;
     overflow-wrap: anywhere;
   }
 
-  .field__chip {
-    max-width: calc(100% - 44px);
-  }
-
-  .field__chip span {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
-
-  .field__calendar-button {
-    right: 4px;
-    width: 44px;
-    height: 44px;
-  }
-
-  .field__input[type="date"] {
-    padding-right: 48px;
+  .field__arrow,
+  .field__error-icon {
+    flex-shrink: 0;
   }
 }
 
-.field__input > span,
-.field__input > p {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
+@media screen and (min-width: 1000px) {
+  .field {
+    position: relative;
+    width: 100%;
 
-.field__arrow,
-.field__error-icon {
-  flex-shrink: 0;
+    &__input {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--black);
+      cursor: pointer;
+      background-color: var(--white);
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-xxl);
+      outline: none;
+
+      &--small {
+        max-width: 70px;
+        padding: 12px;
+        text-align: center;
+      }
+
+      &--big {
+        width: 100%;
+        padding: 12px;
+      }
+
+      &--placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--open {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
+
+      &--error {
+        border-color: var(--red) !important;
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      @include typography.body-12;
+    }
+
+    &__options {
+      position: absolute;
+      right: 0;
+      bottom: -6px;
+      left: 5%;
+      z-index: 11;
+      width: 90%;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: var(--white);
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-lg);
+      transform: translateY(100%);
+    }
+
+    &__option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      color: var(--dark-grey);
+      cursor: pointer;
+      border-radius: var(--rounded-lg);
+      transition: background-color 0.2s;
+
+      &--highlighted {
+        background-color: var(--light-gray);
+      }
+
+      &:hover {
+        color: var(--accent);
+      }
+    }
+
+    &__arrow {
+      color: var(--dark-grey);
+      transition: all 0.2s;
+      transform: rotate(180deg);
+
+      &--filpped {
+        color: var(--accent);
+        transform: rotate(0deg);
+      }
+    }
+
+    &__error-icon {
+      flex: 0 0 auto;
+      color: var(--red);
+      pointer-events: none;
+
+      &--bare {
+        padding: 0;
+        background: transparent;
+      }
+    }
+  }
 }

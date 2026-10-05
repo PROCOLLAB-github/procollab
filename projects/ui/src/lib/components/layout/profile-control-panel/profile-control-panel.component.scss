@@ -64,7 +64,13 @@
   }
 
   i {
-    color: var(--ui-text-muted);
+    @media screen and (max-width: 999px) {
+      color: var(--ui-text-muted);
+    }
+
+    @media screen and (min-width: 1000px) {
+      color: var(--light-white);
+    }
 
     @include responsive.apply-desktop {
       color: var(--dark-grey);
@@ -72,42 +78,44 @@
   }
 }
 
-@include responsive.apply-below-desktop {
-  .control-panel {
-    position: static;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .control-panel {
+      position: static;
+    }
 
-  .control-panel__actions {
-    gap: 0;
-    margin-right: 0;
-  }
+    .control-panel__actions {
+      gap: 0;
+      margin-right: 0;
+    }
 
-  .control-panel__action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
+    .control-panel__action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
 
-  .control-panel__action--logout {
-    display: none;
-  }
+    .control-panel__action--logout {
+      display: none;
+    }
 
-  .control-panel__profile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    min-height: 44px;
-  }
+    .control-panel__profile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      min-height: 44px;
+    }
 
-  .control-panel__notifications {
-    position: fixed;
-    top: 64px;
-    right: var(--page-gutter);
-    left: var(--page-gutter);
-    max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
-    overflow-y: auto;
+    .control-panel__notifications {
+      position: fixed;
+      top: 64px;
+      right: var(--page-gutter);
+      left: var(--page-gutter);
+      max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
+      overflow-y: auto;
+    }
   }
 }

@@ -1,7 +1,6 @@
-@use "styles/profile-form";
-
 /** @format */
 
+@use "styles/profile-form";
 @use "styles/responsive";
 
 :host,
@@ -129,4 +128,6 @@ fieldset {
   }
 }
 
-@include profile-form.responsive-layout;
+@media screen and (max-width: 999px) {
+  @include profile-form.responsive-layout;
+}

@@ -1,6 +1,6 @@
 /** @format */
 
-import { StateComponent } from "@uilib";
+import { DesktopLayoutService, StateComponent } from "@uilib";
 /** @format */
 
 // list.component.ts
@@ -35,6 +35,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   providers: [VacancyInfoService, VacancyUIInfoService],
 })
 export class VacanciesListComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly vacancyInfoService = inject(VacancyInfoService);
   private readonly vacancyUIInfoService = inject(VacancyUIInfoService);
 

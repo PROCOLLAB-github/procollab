@@ -12,7 +12,7 @@ import {
   output,
 } from "@angular/core";
 import { ProjectStepService } from "@api/project/project-step.service";
-import { IconComponent, TabsComponent } from "@uilib";
+import { DesktopLayoutService, IconComponent, TabsComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { Navigation } from "@core/lib/models/navigation.model";
 import { EditStep } from "@core/lib/models/edit-step";
@@ -26,6 +26,7 @@ import { EditStep } from "@core/lib/models/edit-step";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectNavigationComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly navItems = input.required<Navigation[]>();
   readonly stepChange = output<EditStep>();
   protected readonly tabs = computed(() =>

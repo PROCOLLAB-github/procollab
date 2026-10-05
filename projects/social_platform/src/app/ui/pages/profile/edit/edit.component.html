@@ -2,10 +2,21 @@
 
 @if (profileForm.get("userType"); as currentType) {
   <div class="profile__top">
-    <app-page-header
-      title="редактирование профиля"
-      [backRoute]="AppRoutes.profile.detail(profileId()!)"
-    >
+    @if (desktopLayout()) {
+      <div class="profile__back" [routerLink]="AppRoutes.profile.detail(profileId()!)">
+        <i appIcon icon="left-arrow" appSquare="24"></i>
+        <h1 class="profile__title">редактирование профиля</h1>
+      </div>
+      <ng-container [ngTemplateOutlet]="saveButton" />
+    } @else {
+      <app-page-header
+        title="редактирование профиля"
+        [backRoute]="AppRoutes.profile.detail(profileId()!)"
+      >
+        <ng-container [ngTemplateOutlet]="saveButton" />
+      </app-page-header>
+    }
+    <ng-template #saveButton>
       <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
         <app-button
           size="medium"
@@ -47,7 +58,7 @@
           cохранить</app-button
         >
       </div>
-    </app-page-header>
+    </ng-template>
   </div>
 
   <main class="profile">

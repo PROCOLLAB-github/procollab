@@ -37,11 +37,7 @@
     @include responsive.apply-desktop {
       bottom: 0%;
       left: 30%;
-      width: min(852px, 70vw);
-      min-width: 0;
-      max-width: 70vw;
-      max-height: 92dvh;
-      object-fit: contain;
+      min-width: 852px;
     }
   }
 
@@ -56,17 +52,19 @@
   }
 }
 
-@include responsive.apply-below-desktop {
-  .verification__img {
-    position: static;
-    width: 100%;
-    min-width: 0;
-    max-height: 40dvh;
-    object-fit: contain;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .verification__img {
+      position: static;
+      width: 100%;
+      min-width: 0;
+      max-height: 40dvh;
+      object-fit: contain;
+    }
 
-  .verification__action {
-    flex-wrap: wrap;
-    gap: 12px;
+    .verification__action {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
   }
 }

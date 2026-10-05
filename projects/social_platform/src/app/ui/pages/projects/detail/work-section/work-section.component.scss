@@ -39,12 +39,14 @@
   }
 }
 
-@include responsive.apply-below-desktop {
-  .work-section {
-    @include responsive.single-column;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .work-section {
+      @include responsive.single-column;
+    }
 
-  .work-section__section {
-    padding: 16px;
+    .work-section__section {
+      padding: 16px;
+    }
   }
 }

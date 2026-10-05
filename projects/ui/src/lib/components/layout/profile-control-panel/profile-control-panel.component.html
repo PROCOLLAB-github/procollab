@@ -2,25 +2,39 @@
 
 <div class="control-panel">
   <div class="control-panel__actions">
-    <button
-      appButton="icon"
-      type="button"
-      aria-label="Уведомления"
-      [attr.aria-expanded]="showNotifications"
-      class="control-panel__action"
-      (click)="showNotifications = true"
-      (clickOutside)="onClickOutside()"
-    >
-      <div class="control-panel__bell">
-        @if (hasNotifications() || hasInvites) {
-          <div class="attention"></div>
-        }
-        <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
-        @if (invites().length) {
-          <div class="control-panel__bell--hasInvites"></div>
-        }
+    @if (desktopLayout()) {
+      <div class="control-panel__action" (click)="showNotifications = true">
+        <div (clickOutside)="onClickOutside()" class="control-panel__bell">
+          @if (hasNotifications() || hasInvites) {
+            <div class="attention"></div>
+          }
+          <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
+          @if (invites().length) {
+            <div class="control-panel__bell--hasInvites"></div>
+          }
+        </div>
       </div>
-    </button>
+    } @else {
+      <button
+        appButton="icon"
+        type="button"
+        aria-label="Уведомления"
+        [attr.aria-expanded]="showNotifications"
+        class="control-panel__action"
+        (click)="showNotifications = true"
+        (clickOutside)="onClickOutside()"
+      >
+        <div class="control-panel__bell">
+          @if (hasNotifications() || hasInvites) {
+            <div class="attention"></div>
+          }
+          <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
+          @if (invites().length) {
+            <div class="control-panel__bell--hasInvites"></div>
+          }
+        </div>
+      </button>
+    }
     @if (showNotifications) {
       <div class="control-panel__notifications notifications">
         <ul class="notifications__invites">

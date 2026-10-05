@@ -5,3 +5,38 @@
   flex-shrink: 0;
   max-width: 100%;
 }
+
+@media screen and (min-width: 1000px) {
+  .status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: var(--black);
+    overflow-wrap: anywhere;
+    background: var(--light-gray);
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-xxl);
+
+    &--success {
+      color: var(--green-dark);
+      background: var(--green-light);
+      border-color: var(--green);
+    }
+
+    &--pending {
+      color: var(--black);
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+
+    &--declined {
+      color: var(--black);
+      background: var(--red-light);
+      border-color: var(--red-light);
+    }
+  }
+}

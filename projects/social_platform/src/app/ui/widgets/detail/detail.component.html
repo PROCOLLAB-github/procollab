@@ -46,17 +46,38 @@
                 "
                 [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
               ></app-avatar>
+              @if (appWidth >= 1000 && (listType() === "project" || listType() === "profile")) {
+                <h1
+                  class="info__title text-body-12"
+                  [style.width]="
+                    listType() === 'project' || listType() === 'profile' ? '300px' : '100%'
+                  "
+                  [class.info__title--project]="
+                    listType() === 'project' || listType() === 'profile'
+                  "
+                >
+                  {{
+                    listType() === "project"
+                      ? info().name
+                      : listType() === "profile"
+                        ? info().firstName + " " + info().lastName
+                        : ""
+                  }}
+                </h1>
+              }
             }
           </div>
         </div>
 
         <div class="info__body">
-          <app-page-header
-            class="info__page-header"
-            [title]="
-              listType() === 'profile' ? info().firstName + ' ' + info().lastName : info().name
-            "
-          />
+          @if (appWidth < 1000) {
+            <app-page-header
+              class="info__page-header"
+              [title]="
+                listType() === 'profile' ? info().firstName + ' ' + info().lastName : info().name
+              "
+            />
+          }
           <div class="info__actions">
             <ng-container
               *ngTemplateOutlet="
@@ -98,7 +119,9 @@
                   (click)="isContactsModalOpen.set(true)"
                 >
                   <i appIcon icon="phone" appSquare="12"></i>
-                  <span>Контакты</span>
+                  @if (appWidth < 1000) {
+                    <span>Контакты</span>
+                  }
                 </app-button>
 
                 <app-modal
@@ -132,7 +155,7 @@
                   }
                   @if (isUserMember() && !isUserManager() && !isUserExpert()) {
                     <app-button
-                      [size]="appWidth > 1000 ? 'medium' : 'big'"
+                      [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       [disabled]="
                         !!submissionProjectDateExpired ||
                         isProjectAssigned() ||
@@ -152,7 +175,7 @@
                         [appearance]="
                           isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'
                         "
-                        [size]="appWidth > 1000 ? 'medium' : 'big'"
+                        [size]="appWidth >= 1000 ? 'medium' : 'big'"
                         customTypographyClass="text-body-12"
                       >
                         оценка проектов
@@ -165,7 +188,7 @@
                   <a [routerLink]="AppRoutes.program.analytics(info().id)">
                     <app-button
                       [appearance]="isAnalyticsPage() ? 'inline' : 'outline'"
-                      [size]="appWidth > 1000 ? 'medium' : 'big'"
+                      [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       customTypographyClass="text-body-12"
                     >
                       аналитика
@@ -175,7 +198,7 @@
                   <a [href]="info().presentationAddress" download="" target="_blank">
                     <app-button
                       appearance="outline"
-                      [size]="appWidth > 1000 ? 'medium' : 'small'"
+                      [size]="appWidth >= 1000 ? 'medium' : 'small'"
                       customTypographyClass="text-body-12"
                     >
                       <span>{{
@@ -186,14 +209,14 @@
                       <i
                         appIcon
                         class="info__presentation-icon"
-                        [icon]="appWidth > 1000 ? 'arrow-down' : 'file'"
-                        [appSquare]="appWidth > 1000 ? '8' : '12'"
+                        [icon]="appWidth >= 1000 ? 'arrow-down' : 'file'"
+                        [appSquare]="appWidth >= 1000 ? '8' : '12'"
                       ></i>
                     </app-button>
                   </a>
                 }
 
-                @if (appWidth > 1000) {
+                @if (appWidth >= 1000) {
                   <div class="info__divider"></div>
                 }
                 @if (appWidth < 1000) {
@@ -206,10 +229,12 @@
                     (click)="isContactsModalOpen.set(true)"
                   >
                     <i appIcon icon="phone" appSquare="12"></i>
-                    <span>Контакты</span>
+                    @if (appWidth < 1000) {
+                      <span>Контакты</span>
+                    }
                   </app-button>
                 }
-                @if (isUserManager() || (isUserExpert() && appWidth > 1000)) {
+                @if (isUserManager() || (isUserExpert() && appWidth >= 1000)) {
                   <a [routerLink]="AppRoutes.program.projects(info().id)">
                     <app-button
                       [appearance]="isProjectsPage() ? 'inline' : 'outline'"
@@ -221,7 +246,7 @@
                     </app-button>
                   </a>
                 }
-                @if (!isUserManager() && !isUserExpert() && appWidth > 1000) {
+                @if (!isUserManager() && !isUserExpert() && appWidth >= 1000) {
                   <a class="info__more">
                     <app-button
                       appearance="outline"
@@ -233,7 +258,7 @@
                     </app-button>
                   </a>
                 }
-                @if (isUserManager() || (isUserExpert() && appWidth > 1000)) {
+                @if (isUserManager() || (isUserExpert() && appWidth >= 1000)) {
                   <a [routerLink]="AppRoutes.program.members(info().id)" class="info__members">
                     <app-button
                       [appearance]="isMembersPage() ? 'inline' : 'outline'"
@@ -267,10 +292,10 @@
                     "
                     appearance="outline"
                     [disabled]="!info().courses?.length"
-                    [size]="appWidth > 1000 ? 'medium' : 'big'"
+                    [size]="appWidth >= 1000 ? 'medium' : 'big'"
                     customTypographyClass="text-body-12"
                   >
-                    {{ appWidth > 1000 ? "перейти в курс" : "курс" }}
+                    {{ appWidth >= 1000 ? "перейти в курс" : "курс" }}
                   </app-button>
                 }
 

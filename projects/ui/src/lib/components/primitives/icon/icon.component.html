@@ -2,9 +2,17 @@
 
 <svg
   class="icon"
-  [attr.width]="square || width || (size() === 'small' ? '16' : size() === 'large' ? '24' : '20')"
-  [attr.height]="square || height || (size() === 'small' ? '16' : size() === 'large' ? '24' : '20')"
-  [attr.viewBox]="viewBox || '0 0 24 24'"
+  [attr.width]="
+    square ||
+    width ||
+    (desktopLayout() ? null : size() === 'small' ? '16' : size() === 'large' ? '24' : '20')
+  "
+  [attr.height]="
+    square ||
+    height ||
+    (desktopLayout() ? null : size() === 'small' ? '16' : size() === 'large' ? '24' : '20')
+  "
+  [attr.viewBox]="viewBox || (desktopLayout() ? null : '0 0 24 24')"
   aria-hidden="true"
 >
   <use [attr.xlink:href]="'assets/icons/symbol/svg/sprite.css.svg#' + icon()"></use>

@@ -2,8 +2,6 @@
 
 @use "styles/responsive";
 
-/** @format */
-
 .cookie-consent {
   position: fixed;
   right: 20px;
@@ -38,18 +36,20 @@
   }
 }
 
-@include responsive.apply-mobile {
-  .cookie-consent {
-    right: var(--page-gutter);
-    bottom: max(12px, env(safe-area-inset-bottom));
-    left: var(--page-gutter);
-    max-width: none;
-    max-height: calc(100dvh - 24px);
-    padding: 16px;
-    overflow-y: auto;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .cookie-consent {
+      right: var(--page-gutter);
+      bottom: max(12px, env(safe-area-inset-bottom));
+      left: var(--page-gutter);
+      max-width: none;
+      max-height: calc(100dvh - 24px);
+      padding: 16px;
+      overflow-y: auto;
+    }
 
-  .cookie-consent__buttons {
-    @include responsive.mobile-actions;
+    .cookie-consent__buttons {
+      @include responsive.mobile-actions;
+    }
   }
 }

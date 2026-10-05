@@ -35,22 +35,51 @@
     top: 0;
     left: 0;
     z-index: 100;
-    display: grid;
-    grid-template-columns: 88px minmax(0, 1fr) 88px;
+
+    @media screen and (max-width: 999px) {
+      display: grid;
+    }
+
+    @media screen and (min-width: 1000px) {
+      display: flex;
+    }
+
+    @media screen and (max-width: 999px) {
+      grid-template-columns: 88px minmax(0, 1fr) 88px;
+    }
+
     align-items: center;
     justify-content: space-between;
-    min-height: 64px;
-    padding: max(8px, env(safe-area-inset-top)) var(--page-gutter) 8px;
-    background: var(--ui-surface);
-    border-bottom: 1px solid var(--ui-border-subtle);
+
+    @media screen and (max-width: 999px) {
+      min-height: 64px;
+    }
+
+    @media screen and (max-width: 999px) {
+      padding: max(8px, env(safe-area-inset-top)) var(--page-gutter) 8px;
+    }
+
+    @media screen and (min-width: 1000px) {
+      padding: 30px 5px 30px 17px;
+    }
+
+    @media screen and (max-width: 999px) {
+      background: var(--ui-surface);
+    }
+
+    @media screen and (min-width: 1000px) {
+      background: linear-gradient(var(--accent), #4d3780);
+    }
+
+    @media screen and (max-width: 999px) {
+      border-bottom: 1px solid var(--ui-border-subtle);
+    }
 
     @include responsive.apply-desktop {
       position: static;
-      display: flex;
       flex-shrink: 0;
       padding: 0;
       background: none;
-      border-bottom: 0;
     }
   }
 
@@ -98,15 +127,25 @@
 
     &--wrapper {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 10fr);
+
+      @media screen and (max-width: 999px) {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 10fr);
+      }
+
+      @media screen and (min-width: 1000px) {
+        grid-template-columns: 2fr 10fr;
+      }
+
       width: 100%;
 
       @include responsive.apply-desktop {
         margin-top: 18px;
       }
 
-      @include responsive.apply-below-desktop {
-        grid-template-columns: minmax(0, 1fr);
+      @media screen and (max-width: 999px) {
+        @include responsive.apply-below-desktop {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
     }
 
@@ -137,17 +176,21 @@
     cursor: pointer;
   }
 
-  &__top > app-nav {
-    grid-row: 1;
-    grid-column: 1 / -1;
-    min-width: 0;
+  @media screen and (max-width: 999px) {
+    &__top > app-nav {
+      grid-row: 1;
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
   }
 
-  &__top > app-profile-control-panel {
-    grid-row: 1;
-    grid-column: 3;
-    justify-self: end;
-    min-width: 0;
+  @media screen and (max-width: 999px) {
+    &__top > app-profile-control-panel {
+      grid-row: 1;
+      grid-column: 3;
+      justify-self: end;
+      min-width: 0;
+    }
   }
 
   &__header {

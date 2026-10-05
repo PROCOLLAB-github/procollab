@@ -12,12 +12,6 @@
   @include responsive.apply-desktop {
     flex-direction: row;
     gap: 20px;
-
-    /* &--hasContent { */
-
-    /*   flex-direction: row-reverse; */
-
-    /* } */
   }
 
   &__answer {
@@ -195,21 +189,25 @@
   }
 }
 
-@include responsive.apply-mobile {
-  .radio__item {
-    min-width: 0;
-    min-height: 44px;
-    padding: 4px 0;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .radio__item {
+      min-width: 0;
+      min-height: 44px;
+      padding: 4px 0;
+    }
 
-  .radio__item input {
-    flex-shrink: 0;
-  }
+    .radio__item input {
+      flex-shrink: 0;
+    }
 
-  .radio__item label {
-    min-width: 0;
-    overflow-wrap: anywhere;
+    .radio__item label {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
   }
 }
 
-@include course-task.responsive-layout("radio");
+@media screen and (max-width: 999px) {
+  @include course-task.responsive-layout("radio");
+}

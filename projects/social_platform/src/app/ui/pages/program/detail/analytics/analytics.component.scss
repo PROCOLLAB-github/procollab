@@ -208,10 +208,18 @@
   &__value {
     display: block;
     margin-top: 6px;
-    font-size: var(--ui-font-h1);
-    font-weight: 700;
     line-height: 1;
     color: var(--black);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-h1);
+      font-weight: 700;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 24px;
+      font-weight: 700;
+    }
   }
 
   &--skeleton {
@@ -258,10 +266,18 @@
   }
 
   &__section-label {
-    font-size: var(--ui-font-body);
-    font-weight: 600;
     line-height: 18px;
     color: var(--black);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+      font-weight: 600;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 }
 
@@ -279,7 +295,6 @@
   max-height: 380px;
 
   @include responsive.apply-desktop {
-    /* Let the evaluation card size the row; keep the case list scrolling inside it. */
     align-self: stretch;
     max-height: none;
     contain: size;
@@ -341,7 +356,7 @@
   }
 
   &__name {
-    /* stylelint-disable-next-line value-no-vendor-prefix -- Required for two-line clamp. */
+    /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
     min-width: 0;
     overflow: hidden;
@@ -363,17 +378,33 @@
   }
 
   &__total-value {
-    font-size: var(--ui-font-h2);
-    font-weight: 700;
     line-height: 20px;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-h2);
+      font-weight: 700;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 17px;
+      font-weight: 700;
+    }
   }
 
   &__total-label,
   &__meta {
-    font-size: var(--ui-font-caption);
-    font-weight: 500;
     line-height: 16px;
     color: var(--dark-grey);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+      font-weight: 500;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 10px;
+      font-weight: 500;
+    }
   }
 
   &__bar {
@@ -470,10 +501,18 @@
     }
 
     strong {
-      font-size: var(--ui-font-h2);
-      font-weight: 700;
       line-height: 20px;
       color: var(--black);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-h2);
+        font-weight: 700;
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 17px;
+        font-weight: 700;
+      }
     }
   }
 
@@ -569,8 +608,15 @@
     color: var(--dark-grey);
 
     strong {
-      font-size: var(--ui-font-body);
       color: var(--black);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-body);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 13px;
+      }
     }
 
     .text-body-10 {
@@ -851,8 +897,15 @@
 
     span {
       position: absolute;
-      font-size: var(--ui-font-caption);
       transform: translateX(-50%);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
   }
 }

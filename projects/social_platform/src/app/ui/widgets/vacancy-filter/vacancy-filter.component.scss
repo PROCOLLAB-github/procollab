@@ -53,6 +53,10 @@
 
   > a ::ng-deep .button {
     width: 100%;
+
+    @media screen and (min-width: 1000px) {
+      height: 38px;
+    }
   }
 
   @include responsive.apply-desktop {
@@ -165,4 +169,15 @@
 
 a:hover {
   cursor: pointer;
+}
+
+@media screen and (min-width: 1000px) {
+  .desktop__header button.ui-button {
+    font-family: Mont, sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: var(--accent);
+  }
 }

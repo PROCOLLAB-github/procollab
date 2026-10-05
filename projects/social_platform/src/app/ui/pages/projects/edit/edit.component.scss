@@ -144,6 +144,12 @@
 }
 
 .cancel {
+  @media screen and (min-width: 1000px) {
+    &.cancel--fixed-width {
+      width: 605px;
+    }
+  }
+
   display: flex;
   flex-direction: column;
   align-items: center;

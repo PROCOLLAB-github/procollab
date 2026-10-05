@@ -1,6 +1,9 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
+import { DesktopLayoutService } from "@uilib";
+/** @format */
+
+import { inject, ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { IconComponent, TabsComponent } from "@uilib";
@@ -14,6 +17,8 @@ import { IconComponent, TabsComponent } from "@uilib";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarNewComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   /** Массив навигационных ссылок */
   readonly links = input.required<
     {

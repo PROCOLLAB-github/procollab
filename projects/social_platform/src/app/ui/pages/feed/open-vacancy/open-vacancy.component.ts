@@ -1,5 +1,6 @@
 /** @format */
 
+import { DesktopLayoutService } from "@uilib";
 import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
@@ -25,6 +26,7 @@ import { VacancySkillsComponent } from "@ui/widgets/vacancy-skills/vacancy-skill
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenVacancyComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly feedItem = input.required<Vacancy>();
   readonly publishedAt = input<string>("");
 

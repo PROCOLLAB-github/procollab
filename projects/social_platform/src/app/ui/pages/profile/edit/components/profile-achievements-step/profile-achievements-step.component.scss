@@ -1,7 +1,6 @@
-@use "styles/profile-form";
-
 /** @format */
 
+@use "styles/profile-form";
 @use "styles/responsive";
 
 .profile__wrapper--education {
@@ -119,4 +118,6 @@
   }
 }
 
-@include profile-form.responsive-layout;
+@media screen and (max-width: 999px) {
+  @include profile-form.responsive-layout;
+}

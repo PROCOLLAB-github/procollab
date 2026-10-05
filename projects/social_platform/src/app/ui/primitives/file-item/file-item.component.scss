@@ -2,8 +2,6 @@
 
 @use "styles/responsive";
 
-/** @format */
-
 .file {
   display: flex;
   gap: 10px;
@@ -23,9 +21,12 @@
 
   &__left {
     display: flex;
-    flex: 1;
     gap: 5px;
     align-items: center;
+
+    @media screen and (max-width: 999px) {
+      flex: 1;
+    }
   }
 
   &__meta {
@@ -34,7 +35,6 @@
 
   &__icon {
     display: flex;
-    flex-shrink: 0;
     align-items: center;
     align-self: center;
     justify-content: center;
@@ -43,6 +43,10 @@
     cursor: pointer;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xxl);
+
+    @media screen and (max-width: 999px) {
+      flex-shrink: 0;
+    }
 
     &--delete {
       color: var(--red);
@@ -61,23 +65,27 @@
   }
 }
 
-.file,
-.file__left {
-  min-width: 0;
+@media screen and (max-width: 999px) {
+  .file,
+  .file__left {
+    min-width: 0;
+  }
 }
 
-@include responsive.apply-mobile {
-  .file {
-    flex-wrap: wrap;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .file {
+      flex-wrap: wrap;
+    }
 
-  .file__name {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+    .file__name {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
 
-  .file__icon {
-    width: 44px;
-    height: 44px;
+    .file__icon {
+      width: 44px;
+      height: 44px;
+    }
   }
 }

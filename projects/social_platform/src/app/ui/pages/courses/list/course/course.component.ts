@@ -1,10 +1,18 @@
 /** @format */
 
-import { CardDirective, BadgeComponent } from "@uilib";
+import { DesktopLayoutService, CardDirective, BadgeComponent } from "@uilib";
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, input, Input, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -36,6 +44,7 @@ import { TruncatePipe } from "@corelib";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseComponent implements OnInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly course = input.required<CourseCard>();
 
   ngOnInit(): void {

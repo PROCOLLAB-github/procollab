@@ -12,28 +12,49 @@
       }
     </div>
     @if (hasNoResults()) {
-      <app-state
-        title="Вакансии не найдены"
-        description="Попробуйте изменить запрос или сбросить фильтры."
-      >
-        <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
-          >Сбросить фильтры</app-button
+      @if (desktopLayout()) {
+        <section class="page__vacancies--no-items">
+          <h2>Вакансии не найдены</h2>
+          <p>Попробуйте изменить запрос или сбросить фильтры.</p>
+          <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
+            >Сбросить фильтры</app-button
+          >
+        </section>
+      } @else {
+        <app-state
+          title="Вакансии не найдены"
+          description="Попробуйте изменить запрос или сбросить фильтры."
         >
-      </app-state>
+          <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
+            >Сбросить фильтры</app-button
+          >
+        </app-state>
+      }
     }
   }
   @if (type() === "my") {
     @for (response of responsesList(); track response.id) {
       <app-response-card [response]="response"></app-response-card>
     } @empty {
-      <app-state
-        title="У вас пока нет откликов"
-        description="Найдите подходящую вакансию и расскажите проекту о себе."
-      >
-        <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
-          >Перейти к вакансиям</app-button
+      @if (desktopLayout()) {
+        <section class="page__vacancies--no-items">
+          <i appIcon icon="empty-chat" appSquare="38" aria-hidden="true"></i>
+          <h2>У вас пока нет откликов</h2>
+          <p>Найдите подходящую вакансию и расскажите проекту о себе.</p>
+          <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
+            >Перейти к вакансиям</app-button
+          >
+        </section>
+      } @else {
+        <app-state
+          title="У вас пока нет откликов"
+          description="Найдите подходящую вакансию и расскажите проекту о себе."
         >
-      </app-state>
+          <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
+            >Перейти к вакансиям</app-button
+          >
+        </app-state>
+      }
     }
   }
 </div>

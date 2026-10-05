@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 .page {
@@ -32,11 +34,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    @include responsive.apply-desktop {
-      flex: 0 0 var(--ui-compact-sidebar-width);
-      width: var(--ui-compact-sidebar-width);
-    }
   }
 
   &__left {
@@ -85,34 +82,42 @@
 }
 
 .bar__add-project {
-  margin-bottom: 0;
+  @media screen and (max-width: 999px) {
+    margin-bottom: 0;
+  }
+
+  @media screen and (min-width: 1000px) {
+    margin-bottom: 15px;
+  }
 }
 
-@include responsive.apply-below-desktop {
-  .page {
-    margin: 24px var(--page-gutter) 0;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .page {
+      margin: 24px var(--page-gutter) 0;
+    }
 
-  .page__info {
-    gap: 24px;
-    padding-bottom: 32px;
-  }
+    .page__info {
+      gap: 24px;
+      padding-bottom: 32px;
+    }
 
-  .page__outlet {
-    order: 2;
-  }
+    .page__outlet {
+      order: 2;
+    }
 
-  .page__create,
-  .page__left {
-    display: contents;
-  }
+    .page__create,
+    .page__left {
+      display: contents;
+    }
 
-  .page__left > app-project-activity-card {
-    order: 1;
-  }
+    .page__left > app-project-activity-card {
+      order: 1;
+    }
 
-  .page__invites {
-    order: 3;
-    margin-top: 16px;
+    .page__invites {
+      order: 3;
+      margin-top: 16px;
+    }
   }
 }

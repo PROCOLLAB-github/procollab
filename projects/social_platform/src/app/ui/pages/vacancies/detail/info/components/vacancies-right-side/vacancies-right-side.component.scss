@@ -62,7 +62,14 @@
   }
 
   a {
-    font-size: var(--ui-font-body);
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+    }
+
     line-height: 20px;
 
     @include vacancy-ui.link;

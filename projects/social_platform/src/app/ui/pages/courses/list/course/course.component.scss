@@ -5,7 +5,11 @@
 @use "styles/typography";
 
 .course {
-  @include ui-foundation.card;
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.card;
+
+    max-width: 333px;
+  }
 
   position: relative;
   width: 100%;
@@ -13,8 +17,49 @@
   overflow: hidden;
   cursor: pointer;
 
+  @media screen and (min-width: 1000px) {
+    background-color: var(--light-white);
+  }
+
+  @media screen and (min-width: 1000px) {
+    border: 0.5px solid var(--medium-grey-for-outline);
+  }
+
+  @media screen and (min-width: 1000px) {
+    border-radius: var(--rounded-lg);
+  }
+
   &__cover {
     border-radius: var(--rounded-lg);
+
+    @media screen and (min-width: 1000px) {
+      app-button {
+        ::ng-deep {
+          .button {
+            position: absolute;
+            top: 15px;
+            right: 24px;
+            width: 166px;
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      app-avatar {
+        ::ng-deep {
+          .avatar {
+            img {
+              position: absolute;
+              top: 35px;
+              left: 24px;
+              box-shadow: 0 0 8px rgba($color: #333, $alpha: 30%);
+            }
+          }
+        }
+      }
+    }
   }
 
   &__image {
@@ -66,18 +111,22 @@
   }
 }
 
-.course__cover app-avatar {
-  position: absolute;
-  top: 35px;
-  left: 24px;
-  z-index: 1;
-  border-radius: 50%;
-  box-shadow: var(--ui-card-hover-shadow);
+@media screen and (max-width: 999px) {
+  .course__cover app-avatar {
+    position: absolute;
+    top: 35px;
+    left: 24px;
+    z-index: 1;
+    border-radius: 50%;
+    box-shadow: var(--ui-card-hover-shadow);
+  }
 }
 
-.course__access {
-  position: absolute;
-  top: 15px;
-  right: 24px;
-  max-width: 166px;
+@media screen and (max-width: 999px) {
+  .course__access {
+    position: absolute;
+    top: 15px;
+    right: 24px;
+    max-width: 166px;
+  }
 }

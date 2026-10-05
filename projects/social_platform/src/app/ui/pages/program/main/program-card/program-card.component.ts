@@ -1,9 +1,12 @@
 /** @format */
 
+import { DesktopLayoutService } from "@uilib";
+/** @format */
+
 import { CardDirective } from "@uilib";
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input, Input, OnInit } from "@angular/core";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { DatePipe, NgClass } from "@angular/common";
 import { Program } from "@domain/program/program.model";
@@ -17,6 +20,8 @@ import { Program } from "@domain/program/program.model";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramCardComponent implements OnInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   readonly program = input.required<Program>();
 
   ngOnInit(): void {

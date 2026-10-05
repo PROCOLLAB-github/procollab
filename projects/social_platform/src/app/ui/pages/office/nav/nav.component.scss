@@ -3,8 +3,10 @@
 @use "styles/responsive";
 @use "styles/typography";
 
-.nav-bar__logout {
-  margin-top: auto;
+@media screen and (max-width: 999px) {
+  .nav-bar__logout {
+    margin-top: auto;
+  }
 }
 
 .nav-bar {
@@ -17,9 +19,26 @@
   }
 
   &__inner {
-    display: grid;
-    grid-template-columns: 88px minmax(0, 1fr) 88px;
-    align-items: center;
+    @media screen and (max-width: 999px) {
+      display: grid;
+    }
+
+    @media screen and (min-width: 1000px) {
+      display: flex;
+    }
+
+    @media screen and (max-width: 999px) {
+      grid-template-columns: 88px minmax(0, 1fr) 88px;
+    }
+
+    @media screen and (max-width: 999px) {
+      align-items: center;
+    }
+
+    @media screen and (min-width: 1000px) {
+      justify-content: space-between;
+    }
+
     max-width: responsive.$container-md;
     margin: 0 auto;
 
@@ -50,9 +69,18 @@
     cursor: pointer;
     border-radius: var(--rounded-sm);
 
-    > .attention {
-      top: 9px;
-      right: 11px;
+    @media screen and (max-width: 999px) {
+      > .attention {
+        top: 9px;
+        right: 11px;
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      >.attention {
+        top: 9px;
+        right: 11px;
+      }
     }
 
     &--active {
@@ -64,17 +92,49 @@
   &__toggle {
     position: relative;
     z-index: 100;
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
+
+    @media screen and (max-width: 999px) {
+      display: flex;
+    }
+
+    @media screen and (min-width: 1000px) {
+      display: block;
+    }
+
+    @media screen and (max-width: 999px) {
+      flex-shrink: 0;
+    }
+
+    @media screen and (max-width: 999px) {
+      align-items: center;
+    }
+
+    @media screen and (max-width: 999px) {
+      justify-content: center;
+    }
+
+    @media screen and (max-width: 999px) {
+      width: 44px;
+    }
+
+    @media screen and (max-width: 999px) {
+      height: 44px;
+    }
+
     cursor: pointer;
 
-    > .attention {
-      top: 8px;
-      right: 2px;
+    @media screen and (max-width: 999px) {
+      > .attention {
+        top: 8px;
+        right: 2px;
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      >.attention {
+        top: 8px;
+        right: 2px;
+      }
     }
 
     @include responsive.apply-desktop {
@@ -87,53 +147,72 @@
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 201;
     display: flex;
     flex-direction: column;
-    width: min(360px, calc(100% - 32px));
-    max-height: 100dvh;
-    padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
-    overflow-y: auto;
-    overscroll-behavior: contain;
     background-color: var(--white);
+
+    @media screen and (max-width: 999px) {
+      z-index: 201;
+      width: min(360px, calc(100% - 32px));
+      max-height: 100dvh;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    @media screen and (min-width: 1000px) {
+      right: 0;
+      z-index: 50;
+      padding: 25px 15px 30px;
+    }
   }
 
-  &__backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: var(--ui-scrim);
+  @media screen and (max-width: 999px) {
+    &__backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--ui-scrim);
+    }
   }
 
-  &__close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    margin-right: auto;
-    color: var(--dark-grey);
-    cursor: pointer;
+  @media screen and (max-width: 999px) {
+    &__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-right: auto;
+      color: var(--dark-grey);
+      cursor: pointer;
+    }
   }
 
-  &__title {
-    grid-row: 1;
-    grid-column: 2;
-    min-width: 0;
-    font-weight: 600;
-    line-height: 18px;
-    color: var(--ui-text);
-    text-align: center;
-    overflow-wrap: anywhere;
+  @media screen and (max-width: 999px) {
+    &__title {
+      grid-row: 1;
+      grid-column: 2;
+      min-width: 0;
+      font-weight: 600;
+      line-height: 18px;
+      color: var(--ui-text);
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
   }
 
-  ::ng-deep .nav__link {
-    width: 100%;
-    margin-bottom: 12px;
+  @media screen and (max-width: 999px) {
+    ::ng-deep .nav__link {
+      width: 100%;
+      margin-bottom: 12px;
+    }
   }
 
-  ::ng-deep .nav__item {
-    min-height: 44px;
+  @media screen and (max-width: 999px) {
+    ::ng-deep .nav__item {
+      min-height: 44px;
+    }
   }
 
   &__user {

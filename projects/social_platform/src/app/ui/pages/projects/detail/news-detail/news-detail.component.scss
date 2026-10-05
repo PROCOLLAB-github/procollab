@@ -6,7 +6,6 @@
   display: block;
 
   @include responsive.apply-desktop {
-    width: 100%;
-    min-width: 0;
+    min-width: 800px;
   }
 }
