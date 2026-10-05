@@ -1,8 +1,9 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { BackComponent } from "../../primitives/back/back.component";
+import { DesktopLayoutService } from "../../../services/desktop-layout.service";
 
 export interface PageBreadcrumb {
   label: string;
@@ -28,7 +29,11 @@ export interface PageBreadcrumb {
         }
         <div class="page-header__title-row">
           @if (backRoute()) {
-            <app-back [path]="backRoute()" [compact]="true" />
+            <app-back
+              [path]="backRoute()"
+              [compact]="!desktopLayout()"
+              [namespace]="desktopLayout() ? title() : ''"
+            />
           }
           <h1 class="page-header__title">{{ title() }}</h1>
         </div>
@@ -43,6 +48,7 @@ export interface PageBreadcrumb {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeaderComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly title = input.required<string>();
   readonly description = input<string>();
   readonly breadcrumbs = input<PageBreadcrumb[]>([]);

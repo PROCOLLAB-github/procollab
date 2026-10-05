@@ -132,18 +132,33 @@
 
   &__label {
     margin-bottom: 8px;
-    font-size: var(--ui-font-body);
-    font-weight: 600;
     line-height: 20px;
     color: var(--accent-dark);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+      font-weight: 600;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 
   &__file-row {
     display: flex;
     flex-wrap: wrap;
     gap: 6px 10px;
-    font-size: var(--ui-font-body);
     line-height: 20px;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+    }
   }
 
   &__file {

@@ -55,6 +55,12 @@
   }
 
   ::ng-deep .invite__submit button {
+    @media screen and (min-width: 1000px) {
+      min-height: 25px;
+      padding: 4px 12px;
+      line-height: 16px;
+    }
+
     &:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
@@ -139,6 +145,11 @@
   }
 
   .team ::ng-deep .invite__submit button {
+    @media screen and (min-width: 1000px) {
+      min-height: 44px;
+      max-height: none;
+    }
+
     i {
       position: absolute;
       left: 12px;

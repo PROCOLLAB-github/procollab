@@ -4,31 +4,6 @@
   <ng-container *ngTemplateOutlet="filter"></ng-container>
 </div>
 
-<div class="mobile">
-  <div class="select" (clickOutside)="onClickOutside()">
-    <div
-      class="select__input"
-      [class.select__input--open]="filterOpen()"
-      (click)="filterOpen.set(!filterOpen())"
-    >
-      Фильтр
-    </div>
-    <i
-      appIcon
-      icon="arrow-no-body"
-      appSquare="15"
-      class="select__dropdown-icon"
-      (click)="filterOpen.set(!filterOpen())"
-    ></i>
-    @if (filterOpen()) {
-      <div class="select__dropdown" @dropdownAnimation>
-        <ng-container *ngTemplateOutlet="filter"></ng-container>
-        <button appButton="text" type="button" (click)="resetFilter()">сбросить</button>
-      </div>
-    }
-  </div>
-</div>
-
 <ng-template #filter>
   <div class="filter">
     @for (filterItem of feedFilterOptions; track $index) {

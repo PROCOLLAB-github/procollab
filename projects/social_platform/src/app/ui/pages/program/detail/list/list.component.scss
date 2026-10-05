@@ -138,9 +138,19 @@
 
   &__tooltip {
     position: fixed;
-    right: calc((100vw - 1080px) / 2);
     bottom: 24px;
     z-index: 30;
+
+    @media screen and (max-width: 999px) {
+      right: calc((100vw - 1080px) / 2);
+    }
+
+    @media screen and (min-width: 1000px) {
+      right:
+        calc(
+          (100vw - 1080px) / 2
+        );
+    }
   }
 }
 
@@ -265,11 +275,33 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
+
+  @media screen and (max-width: 999px) {
+    width: 100%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    width: 80%;
+  }
+
+  @media screen and (max-width: 999px) {
+    min-width: 0;
+  }
+
+  @media screen and (max-width: 999px) {
+    max-width: 100%;
+  }
+
   max-height: calc(100vh - 40px);
-  padding: 0;
+
+  @media screen and (max-width: 999px) {
+    padding: 0;
+  }
+
+  @media screen and (min-width: 1000px) {
+    padding: 0 24px;
+  }
+
   overflow-y: auto;
 
   @include responsive.apply-desktop {
@@ -313,39 +345,43 @@
   }
 }
 
-@include responsive.apply-mobile {
-  .page__list {
-    @include responsive.single-column;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .page__list {
+      @include responsive.single-column;
+    }
 
-  .page__mobile-filter-row {
-    @include responsive.mobile-actions;
-  }
+    .page__mobile-filter-row {
+      @include responsive.mobile-actions;
+    }
 
-  .page__tooltip {
-    right: var(--page-gutter);
-    bottom: max(16px, env(safe-area-inset-bottom));
-  }
+    .page__tooltip {
+      right: var(--page-gutter);
+      bottom: max(16px, env(safe-area-inset-bottom));
+    }
 
-  .tooltip__wrapper {
-    position: fixed;
-    right: var(--page-gutter);
-    bottom: 60px;
-    left: auto;
-    width: calc(100vw - 2 * var(--page-gutter));
+    .tooltip__wrapper {
+      position: fixed;
+      right: var(--page-gutter);
+      bottom: 60px;
+      left: auto;
+      width: calc(100vw - 2 * var(--page-gutter));
+    }
   }
 }
 
-@include responsive.apply-below-desktop {
-  .filter {
-    position: fixed;
-    z-index: 300;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .filter {
+      position: fixed;
+      z-index: 300;
+    }
 
-  .filter__body {
-    min-height: 0;
-    max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
-    padding-bottom: env(safe-area-inset-bottom, 0);
-    overscroll-behavior: contain;
+    .filter__body {
+      min-height: 0;
+      max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      overscroll-behavior: contain;
+    }
   }
 }

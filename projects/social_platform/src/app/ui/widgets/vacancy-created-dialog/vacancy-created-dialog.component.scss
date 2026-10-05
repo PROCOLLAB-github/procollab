@@ -55,5 +55,11 @@
     app-button {
       flex-basis: auto;
     }
+
+    @media screen and (min-width: 1000px) {
+      ::ng-deep .button {
+        min-height: 40px;
+      }
+    }
   }
 }

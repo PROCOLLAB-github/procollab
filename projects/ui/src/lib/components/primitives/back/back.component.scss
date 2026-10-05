@@ -5,12 +5,15 @@
 .back {
   display: flex;
   align-items: center;
-  min-width: 44px;
-  min-height: 44px;
   margin-top: 20px;
   margin-bottom: 45px;
-  font: inherit;
   cursor: pointer;
+
+  @media screen and (max-width: 999px) {
+    min-width: 44px;
+    min-height: 44px;
+    font: inherit;
+  }
 
   &__icon {
     flex-shrink: 0;
@@ -27,12 +30,16 @@
     }
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--accent-dark);
-    outline-offset: 3px;
+  @media screen and (max-width: 999px) {
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
   }
 }
 
-.back--compact {
-  margin: 0;
+@media screen and (max-width: 999px) {
+  .back--compact {
+    margin: 0;
+  }
 }

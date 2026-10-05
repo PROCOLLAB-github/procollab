@@ -24,7 +24,14 @@
 
       &:focus {
         border-color: var(--accent);
-        box-shadow: var(--ui-focus-ring);
+
+        @media screen and (max-width: 999px) {
+          box-shadow: var(--ui-focus-ring);
+        }
+
+        @media screen and (min-width: 1000px) {
+          box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+        }
       }
     }
 
@@ -36,7 +43,6 @@
   &__clear {
     position: absolute;
     top: 50%;
-    right: var(--ui-space-xs);
     display: grid;
     place-items: center;
     padding: 4px;
@@ -45,6 +51,14 @@
     background: transparent;
     border: 0;
     transform: translateY(-50%);
+
+    @media screen and (max-width: 999px) {
+      right: var(--ui-space-xs);
+    }
+
+    @media screen and (min-width: 1000px) {
+      right: 14px;
+    }
   }
 
   &__legacy {

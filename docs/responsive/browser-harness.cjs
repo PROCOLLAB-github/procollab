@@ -3,9 +3,10 @@
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const assert = require("node:assert/strict");
 const fixtures = require("./fixtures.cjs");
-const base = "http://127.0.0.1:4360";
+const defaultBase = "http://127.0.0.1:4360";
 
 async function launch(width = 390, options = {}) {
+  const { baseUrl: base = defaultBase, ...contextOptions } = options;
   const browser = await chromium.launch({
     headless: true,
     executablePath: process.env.CHROME_PATH,
@@ -13,7 +14,7 @@ async function launch(width = 390, options = {}) {
   const context = await browser.newContext({
     viewport: { width, height: 844 },
     reducedMotion: "reduce",
-    ...options,
+    ...contextOptions,
   });
   await context.addCookies(
     ["accessToken", "refreshToken", "devAccessToken", "devRefreshToken"].map(name => ({
@@ -117,4 +118,4 @@ async function assertViewport(page) {
   return result;
 }
 
-module.exports = { launch, measure, assertViewport, base };
+module.exports = { launch, measure, assertViewport, base: defaultBase };

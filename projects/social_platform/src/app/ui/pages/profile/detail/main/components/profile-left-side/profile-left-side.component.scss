@@ -111,8 +111,8 @@
     background-color: var(--accent-light);
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
   &__program-name {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
     min-width: 0;
     overflow: hidden;
@@ -122,14 +122,21 @@
     -webkit-line-clamp: 2;
 
     &--compact {
-      font-size: var(--ui-font-caption);
-      font-weight: 400;
       line-height: 14px;
       word-break: normal;
       overflow-wrap: normal;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+        font-weight: 400;
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 10px;
+        font-weight: 400;
+      }
     }
   }
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__icon {
     color: var(--accent);

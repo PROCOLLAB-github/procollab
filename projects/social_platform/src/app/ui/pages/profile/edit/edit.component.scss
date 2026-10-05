@@ -327,10 +327,17 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    padding: 0;
+
+    @media screen and (max-width: 999px) {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 0;
+    }
+
+    @media screen and (min-width: 1000px) {
+      width: 672px;
+    }
   }
 
   &__close {
@@ -416,32 +423,34 @@
   }
 }
 
-@include responsive.apply-below-desktop {
-  :host {
-    display: block;
-    min-width: 0;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    :host {
+      display: block;
+      min-width: 0;
+    }
 
-  .profile {
-    padding: 16px var(--page-gutter) max(24px, env(safe-area-inset-bottom));
-  }
+    .profile {
+      padding: 16px var(--page-gutter) max(24px, env(safe-area-inset-bottom));
+    }
 
-  .profile__top {
-    position: static;
-    gap: 12px;
-    justify-content: space-between;
-    padding: 8px var(--page-gutter);
-  }
+    .profile__top {
+      position: static;
+      gap: 12px;
+      justify-content: space-between;
+      padding: 8px var(--page-gutter);
+    }
 
-  .profile__left form {
-    width: 100%;
-  }
+    .profile__left form {
+      width: 100%;
+    }
 
-  .profile__save {
-    @include responsive.mobile-actions;
-  }
+    .profile__save {
+      @include responsive.mobile-actions;
+    }
 
-  .profile__wrapper--settings {
-    min-width: 0;
+    .profile__wrapper--settings {
+      min-width: 0;
+    }
   }
 }

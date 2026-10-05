@@ -48,10 +48,9 @@
   }
 }
 
-@include responsive.apply-mobile {
+@include responsive.apply-below-desktop {
   .dashboard__list {
-    @include responsive.single-column;
-
+    grid-template-columns: repeat(auto-fill, minmax(0, var(--ui-mobile-entity-card-width)));
     row-gap: 48px;
   }
 

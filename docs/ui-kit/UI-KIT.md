@@ -2,7 +2,17 @@
 
 # UI Kit PROCOLLAB
 
-Единые компоненты находятся в `projects/ui/src/lib/components` и экспортируются через `@uilib`. FormControl-компоненты приложения остаются в `@ui/primitives`: их CVA, валидация и доменные интеграции не меняются. Старые импорты Button, Avatar, Icon, Loader и канбан Badge — реэкспорты тех же классов, без второй Angular-реализации.
+Единые компоненты находятся в `projects/ui/src/lib/components` и экспортируются через `@uilib`. FormControl-компоненты приложения остаются в `@ui/primitives`: их CVA, валидация и доменные интеграции не меняются. Старые импорты Button, Icon, Loader и канбан Badge — реэкспорты тех же классов. Social Avatar наследует inputs canonical Avatar и сохраняет прежнюю desktop presentation через compatibility adapter.
+
+## Desktop compatibility
+
+Responsive/UI Kit presentation ограничена `<1000px`. На desktop ≥1000px legacy consumers сохраняют
+композицию и геометрию `dev` до #401: общие Card/Field/Form/Filters adapters не навязывают размеры,
+отступы и сетки. Button, Icon, Avatar и PageHeader сохраняют прежние desktop contracts;
+требование 44 px для мобильных targets не увеличивает старые desktop кнопки.
+
+Перед изменениями shared styles обязательны desktop pixel comparisons на 1440/1920 и
+mobile/tablet проверки на 320/390/768: [gate, эталон и evidence](../desktop-regression/README.md).
 
 | Семейство                                     | Источник                                                                                  | Правило                                                                                                                                                                              |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |

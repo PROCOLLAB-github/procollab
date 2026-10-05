@@ -37,7 +37,9 @@ describe("OpenVacancyComponent", () => {
       "Создание интерфейсов",
     );
     expect(
-      Array.from(element.querySelectorAll(".card__skill")).map(node => node.textContent?.trim()),
+      Array.from(element.querySelectorAll(".card__skills app-tag")).map(node =>
+        node.textContent?.trim(),
+      ),
     ).toEqual(["Angular", "TypeScript"]);
     expect(element.querySelector(".card__industry")?.textContent?.trim()).toBe("IT");
     expect(element.querySelector(".card__cta")?.textContent).toContain("Подробнее о вакансии");
@@ -53,13 +55,21 @@ describe("OpenVacancyComponent", () => {
     });
     fixture.detectChanges();
     expect(
-      Array.from(element.querySelectorAll(".card__skills li")).map(node =>
+      Array.from(element.querySelectorAll(".card__skills app-tag")).map(node =>
         node.textContent?.trim(),
       ),
-    ).toEqual(["QA", "Postman", "API", "+3"]);
-    expect(element.querySelector(".card__skills li:last-child")?.getAttribute("aria-label")).toBe(
-      "Ещё навыков: 3",
-    );
+    ).toEqual(["QA", "Postman", "API"]);
+    const toggle = element.querySelector<HTMLButtonElement>(".skills__toggle")!;
+    expect(toggle.textContent?.trim()).toBe("Ещё +3");
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    toggle.click();
+    fixture.detectChanges();
+    expect(
+      Array.from(element.querySelectorAll(".card__skills app-tag")).map(node =>
+        node.textContent?.trim(),
+      ),
+    ).toEqual(["QA", "Postman", "API", "SQL", "Git", "Аналитика"]);
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
     expect(fixture.componentInstance.feedItem().requiredSkills).toHaveLength(6);
   });
 });

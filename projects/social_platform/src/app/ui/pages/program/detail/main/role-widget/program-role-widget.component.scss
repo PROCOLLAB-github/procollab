@@ -13,16 +13,21 @@
   grid-template-rows: 18px minmax(0, 1fr) 22px;
   row-gap: 5px;
   width: 100%;
-
-  /* Исходная карточка при 100%: 157 × 140.984375 CSS px (Mont, desktop). */
   height: 140.9844px;
   padding: 7px 8px;
-  font-size: var(--ui-font-caption);
   line-height: 13px;
   color: var(--black);
   background: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-lg);
+
+  @media screen and (max-width: 999px) {
+    font-size: var(--ui-font-caption);
+  }
+
+  @media screen and (min-width: 1000px) {
+    font-size: 10px;
+  }
 
   &__header {
     display: flex;
@@ -87,9 +92,16 @@
   &__stage-state {
     height: 12px;
     margin-top: 3px;
-    font-size: var(--ui-font-caption);
     line-height: 12px;
     color: var(--grey-for-text);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 10px;
+    }
   }
 
   &__steps {
@@ -161,9 +173,16 @@
   }
 
   dt {
-    font-size: var(--ui-font-caption);
     line-height: 12px;
     color: var(--grey-for-text);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 10px;
+    }
   }
 
   dd {
@@ -214,8 +233,15 @@
     align-content: center;
     min-height: 28px;
     margin-top: 6px;
-    font-size: var(--ui-font-caption);
     line-height: 12px;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 10px;
+    }
   }
 
   &__status-label {
@@ -297,34 +323,36 @@
   }
 }
 
-@include responsive.apply-below-desktop {
-  :host {
-    width: 100%;
-    min-width: 0;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    :host {
+      width: 100%;
+      min-width: 0;
+    }
 
-  .widget {
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    gap: 12px;
-    height: auto;
-    min-height: 160px;
-    padding: 16px;
-    font-size: var(--ui-font-body);
-    line-height: 1.5;
-  }
+    .widget {
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      height: auto;
+      min-height: 160px;
+      padding: 16px;
+      font-size: var(--ui-font-body);
+      line-height: 1.5;
+    }
 
-  .widget__footer a,
-  .widget__footer button {
-    min-height: 44px;
-    font-size: var(--ui-font-body);
-  }
+    .widget__footer a,
+    .widget__footer button {
+      min-height: 44px;
+      font-size: var(--ui-font-body);
+    }
 
-  .widget__ellipsis {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+    .widget__ellipsis {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
 
-  .widget__badge {
-    font-size: var(--ui-font-small);
+    .widget__badge {
+      font-size: var(--ui-font-small);
+    }
   }
 }

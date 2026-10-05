@@ -1,6 +1,6 @@
 /** @format */
 
-import { StateComponent } from "@uilib";
+import { DesktopLayoutService, StateComponent } from "@uilib";
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
@@ -22,6 +22,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesListComponent implements OnInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly coursesListInfoService = inject(CoursesListInfoService);
   private readonly coursesListUIInfoService = inject(CoursesListUIInfoService);
 

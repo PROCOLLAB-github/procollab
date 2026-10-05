@@ -1,0 +1,185 @@
+<!-- @format -->
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PROCOLLAB — visual regression</title>
+    <style>
+      body {
+        margin: 0;
+        background: #f3f4f6;
+        color: #20242c;
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+      }
+      header {
+        padding: 16px 24px;
+        background: white;
+        border-bottom: 1px solid #d8dce2;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 20px;
+      }
+      p {
+        margin: 8px 0;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+      }
+      label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      select {
+        padding: 6px;
+        font: inherit;
+      }
+      #status {
+        font-weight: 600;
+      }
+      main {
+        padding: 16px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        padding: 8px;
+        background: white;
+      }
+      .frame {
+        position: relative;
+        overflow: auto;
+        border: 1px solid #d8dce2;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .actual img {
+        width: auto;
+        max-width: none;
+      }
+      .overlay {
+        grid-template-columns: 1fr;
+      }
+      .overlay figure:last-child {
+        display: none;
+      }
+      #blend {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .overlay #blend {
+        display: block;
+      }
+      a {
+        color: #3448a0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PROCOLLAB · visual regression</h1>
+      <p>Desktop: dev до #401 (<code>5fe4d5c6</code>). Mobile: адаптив <code>1138fe0c</code>.</p>
+      <div class="controls">
+        <label
+          >Ширина
+          <select id="width">
+            <option>1440</option>
+            <option>1920</option>
+            <option>320</option>
+            <option>390</option>
+            <option>768</option>
+          </select></label
+        >
+        <label
+          >Экран
+          <select id="screen"></select
+        ></label>
+        <label><input type="checkbox" id="overlay" /> Наложение</label>
+        <label>После <input id="opacity" type="range" min="0" max="100" value="50" /></label>
+        <label><input type="checkbox" id="actual" /> Масштаб 1:1</label>
+      </div>
+      <p id="status" role="status"></p>
+      <p>
+        <a href="README.md">Отчёт, команды и ограничения</a> · Высота viewport 844 px, внутренний
+        scroll Office. Изображения без масок.
+      </p>
+    </header>
+    <main class="pair" id="pair">
+      <figure>
+        <figcaption><a id="before-link">Эталон</a></figcaption>
+        <div class="frame">
+          <img id="before" alt="Эталон" /><img id="blend" alt="Исправление для наложения" />
+        </div>
+      </figure>
+      <figure>
+        <figcaption><a id="after-link">После исправления</a></figcaption>
+        <div class="frame"><img id="after" alt="После исправления" /></div>
+      </figure>
+    </main>
+    <script src="comparison-data.js"></script>
+    <script>
+      const width = document.querySelector("#width");
+      const screen = document.querySelector("#screen");
+      const pair = document.querySelector("#pair");
+      const overlay = document.querySelector("#overlay");
+      const opacity = document.querySelector("#opacity");
+      const actual = document.querySelector("#actual");
+      function options() {
+        const selected = screen.value;
+        screen.replaceChildren();
+        const group = Number(width.value) >= 1000 ? "desktop" : "mobile";
+        for (const row of pixelComparisons[group].filter(row =>
+          row.screen.endsWith("-" + width.value),
+        )) {
+          const name = row.screen.replace(/-\d+$/, "");
+          screen.add(new Option(name, name));
+        }
+        if ([...screen.options].some(option => option.value === selected)) screen.value = selected;
+        update();
+      }
+      function update() {
+        const group = Number(width.value) >= 1000 ? "desktop" : "mobile";
+        const name = screen.value + "-" + width.value;
+        const row = pixelComparisons[group].find(row => row.screen === name);
+        const before = "screenshots/" + group + "-before/" + name + ".png";
+        const after = "screenshots/" + group + "-after/" + name + ".png";
+        document.querySelector("#before").src = before;
+        document.querySelector("#after").src = after;
+        document.querySelector("#blend").src = after;
+        document.querySelector("#blend").style.opacity = opacity.value / 100;
+        document.querySelector("#before-link").href = before;
+        document.querySelector("#after-link").href = after;
+        pair.classList.toggle("overlay", overlay.checked);
+        pair.classList.toggle("actual", actual.checked);
+        document.querySelector("#status").textContent = row
+          ? `${row.passed ? "PASS" : "FAIL"} · отличающихся RGB-пикселей: ${row.exactChangedPixels}`
+          : "Нет результата";
+      }
+      width.addEventListener("change", options);
+      for (const control of [screen, overlay, opacity, actual])
+        control.addEventListener("input", update);
+      options();
+    </script>
+  </body>
+</html>

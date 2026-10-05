@@ -1,251 +1,442 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
 
-.field {
-  position: relative;
-
-  &__input {
-    &::placeholder {
-      color: var(--dark-grey);
-    }
-
-    &--small {
-      max-width: 70px;
-      padding: 12px 0;
-      text-align: center;
-
-      &--error {
-        text-align: start;
-      }
-    }
-
-    &--big {
-      width: 100%;
-      padding: 12px;
-    }
-
-    &--with-tooltip {
-      padding-right: 60px;
-    }
-
-    &--border {
-      border: 0.5px solid var(--gray);
-      border-radius: var(--rounded-xxl);
-
-      &:focus {
-        border-color: var(--accent);
-        box-shadow: var(--ui-focus-ring);
-      }
-    }
-
-    &--error,
-    &--overflow {
-      border: 0.5px solid var(--red);
-
-      &:focus {
-        border-color: var(--red);
-        box-shadow: var(--ui-error-ring);
-      }
-    }
-
-    @include responsive.apply-desktop {
-      @include typography.body-12;
-    }
-
-    @include ui-foundation.control;
-  }
-
-  &__input[type="date"]::-webkit-inner-spin-button,
-  &__input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    appearance: none;
-  }
-
-  &__input[type="radio"] {
+@media screen and (max-width: 999px) {
+  .field {
     position: relative;
-    width: 10px;
-    height: 10px;
-    padding: 4px;
-    cursor: pointer;
-    border: 0.5px solid var(--dark-grey);
-    border-radius: 50%;
-    transition:
-      border-color 0.2s,
-      background-color 0.2s;
-    appearance: none;
 
-    &:hover::after {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 4px;
-      height: 4px;
-      content: "";
-      background-color: var(--accent);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
+    &__input {
+      &::placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--small {
+        max-width: 70px;
+        padding: 12px 0;
+        text-align: center;
+
+        &--error {
+          text-align: start;
+        }
+      }
+
+      &--big {
+        width: 100%;
+        padding: 12px;
+      }
+
+      &--with-tooltip {
+        padding-right: 60px;
+      }
+
+      &--border {
+        border: 0.5px solid var(--gray);
+        border-radius: var(--rounded-xxl);
+
+        &:focus {
+          border-color: var(--accent);
+          box-shadow: var(--ui-focus-ring);
+        }
+      }
+
+      &--error,
+      &--overflow {
+        border: 0.5px solid var(--red);
+
+        &:focus {
+          border-color: var(--red);
+          box-shadow: var(--ui-error-ring);
+        }
+      }
+
+      @include responsive.apply-desktop {
+        @include typography.body-12;
+      }
+
+      @include ui-foundation.control;
     }
 
-    &:checked {
-      z-index: 1;
-      background-color: var(--accent);
-      border-color: var(--accent);
+    &__input[type="date"]::-webkit-inner-spin-button,
+    &__input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none;
+      appearance: none;
+    }
 
-      &::after {
+    &__input[type="radio"] {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      padding: 4px;
+      cursor: pointer;
+      border: 0.5px solid var(--dark-grey);
+      border-radius: 50%;
+      transition:
+        border-color 0.2s,
+        background-color 0.2s;
+      appearance: none;
+
+      &:hover::after {
         position: absolute;
         top: 50%;
         left: 50%;
         width: 4px;
         height: 4px;
         content: "";
-        background-color: var(--light-gray);
+        background-color: var(--accent);
         border-radius: 50%;
         transform: translate(-50%, -50%);
+      }
+
+      &:checked {
+        z-index: 1;
+        background-color: var(--accent);
+        border-color: var(--accent);
+
+        &::after {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 4px;
+          height: 4px;
+          content: "";
+          background-color: var(--light-gray);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    &__error-icon {
+      position: absolute;
+      top: 50%;
+      right: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red) !important;
+      pointer-events: none;
+      transform: translateY(-50%);
+
+      &--bare {
+        padding: 0;
+        background: transparent;
+      }
+    }
+
+    &__right-icon {
+      position: absolute;
+      top: 27%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__calendar-button {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      color: var(--accent);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transform: translateY(-50%);
+    }
+
+    &__datepicker-anchor {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      padding: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    &__tooltip-wrapper {
+      position: absolute;
+      top: 55%;
+      right: 20px;
+      z-index: 10;
+      padding: 2px;
+      background-color: var(--light-gray);
+      border-radius: 100%;
+      transform: translateY(-50%);
+
+      &--small {
+        top: 15%;
+        right: -3px;
+      }
+    }
+
+    &__counter {
+      position: absolute;
+      right: 18px;
+      bottom: 0;
+
+      p {
+        color: var(--dark-grey);
+      }
+
+      &--overflow {
+        color: var(--red) !important;
       }
     }
   }
 
-  &__error-icon {
-    position: absolute;
-    top: 50%;
-    right: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--red) !important;
-    pointer-events: none;
-    transform: translateY(-50%);
-
-    &--bare {
-      padding: 0;
-      background: transparent;
-    }
-  }
-
-  &__right-icon {
-    position: absolute;
-    top: 27%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__calendar-button {
-    position: absolute;
-    top: 50%;
-    right: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    color: var(--accent);
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    transform: translateY(-50%);
-  }
-
-  &__datepicker-anchor {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    padding: 0;
-    pointer-events: none;
-    opacity: 0;
-  }
-
-  &__tooltip-wrapper {
-    position: absolute;
-    top: 55%;
-    right: 20px;
-    z-index: 10;
-    padding: 2px;
-    background-color: var(--light-gray);
-    border-radius: 100%;
-    transform: translateY(-50%);
-
-    &--small {
-      top: 15%;
-      right: -3px;
-    }
-  }
-
-  &__counter {
-    position: absolute;
-    right: 18px;
-    bottom: 0;
-
-    p {
-      color: var(--dark-grey);
-    }
-
-    &--overflow {
-      color: var(--red) !important;
-    }
-  }
-}
-
-:host {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.field,
-.search,
-.search__input {
-  min-width: 0;
-  max-width: 100%;
-}
-
-@include responsive.apply-mobile {
-  .field__input,
-  .field__input-slim,
-  .search__input input {
+  :host {
+    display: block;
     min-width: 0;
     max-width: 100%;
-    min-height: 44px;
-    font-size: var(--ui-font-h3);
   }
 
-  .field--small,
-  .field__input--small {
+  .field,
+  .search,
+  .search__input {
     min-width: 0;
+    max-width: 100%;
   }
 
-  .field__input--with-tooltip {
-    padding-right: 44px;
-  }
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
 
-  .field__option {
-    min-height: 44px;
-    overflow-wrap: anywhere;
-  }
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
 
-  .field__chip {
-    max-width: calc(100% - 44px);
-  }
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
 
-  .field__chip span {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
 
-  .field__calendar-button {
-    right: 4px;
-    width: 44px;
-    height: 44px;
-  }
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
 
-  .field__input[type="date"] {
-    padding-right: 48px;
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
+    }
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .field {
+    position: relative;
+
+    &__input {
+      color: var(--black) !important;
+      background-color: var(--white);
+      border: none;
+      outline: none;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--small {
+        max-width: 70px;
+        padding: 12px 0;
+        text-align: center;
+
+        &--error {
+          text-align: start;
+        }
+      }
+
+      &--big {
+        width: 100%;
+        padding: 12px;
+      }
+
+      &--with-tooltip {
+        padding-right: 60px;
+      }
+
+      &--border {
+        border: 0.5px solid var(--gray);
+        border-radius: var(--rounded-xxl);
+
+        &:focus {
+          border-color: var(--accent);
+          box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+        }
+      }
+
+      &--error,
+      &--overflow {
+        border: 0.5px solid var(--red);
+
+        &:focus {
+          border-color: var(--red);
+          box-shadow: 0 0 6px rgb(255 40 40 / 30.8%);
+        }
+      }
+
+      @include typography.body-10;
+
+      @include responsive.apply-desktop {
+        @include typography.body-12;
+      }
+    }
+
+    &__input[type="date"]::-webkit-inner-spin-button,
+    &__input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none;
+      appearance: none;
+    }
+
+    &__input[type="radio"] {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      padding: 4px;
+      cursor: pointer;
+      border: 0.5px solid var(--dark-grey);
+      border-radius: 50%;
+      transition: border-color 0.2s, background-color 0.2s;
+      appearance: none;
+
+      &:hover::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        content: "";
+        background-color: var(--accent);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      &:checked {
+        z-index: 1;
+        background-color: var(--accent);
+        border-color: var(--accent);
+
+        &::after {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 4px;
+          height: 4px;
+          content: "";
+          background-color: var(--light-gray);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    &__error-icon {
+      position: absolute;
+      top: 50%;
+      right: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red) !important;
+      pointer-events: none;
+      transform: translateY(-50%);
+
+      &--bare {
+        padding: 0;
+        background: transparent;
+      }
+    }
+
+    &__right-icon {
+      position: absolute;
+      top: 27%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__calendar-button {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      color: var(--accent);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transform: translateY(-50%);
+    }
+
+    &__datepicker-anchor {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      padding: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    &__tooltip-wrapper {
+      position: absolute;
+      top: 55%;
+      right: 20px;
+      z-index: 10;
+      padding: 2px;
+      background-color: var(--light-gray);
+      border-radius: 100%;
+      transform: translateY(-50%);
+
+      &--small {
+        top: 15%;
+        right: -3px;
+      }
+    }
+
+    &__counter {
+      position: absolute;
+      right: 18px;
+      bottom: 0;
+
+      p {
+        color: var(--dark-grey);
+      }
+
+      &--overflow {
+        color: var(--red) !important;
+      }
+    }
   }
 }

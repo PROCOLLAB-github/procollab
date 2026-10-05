@@ -1,5 +1,8 @@
 /** @format */
 
+import { DesktopLayoutService } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -48,6 +51,8 @@ import { ProjectActivityCardComponent } from "./project-activity-card/project-ac
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
 
   private readonly projectsInfoService = inject(ProjectsInfoService);

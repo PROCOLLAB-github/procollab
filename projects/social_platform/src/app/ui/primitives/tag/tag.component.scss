@@ -1,15 +1,12 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/responsive";
 
-/** @format */
-
 .tag {
-  @include ui-foundation.badge;
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.badge;
+  }
 
   position: relative;
   display: flex;
@@ -17,10 +14,25 @@
   justify-content: center;
   width: 100%;
   max-width: 120px;
-  padding: 4px 12px;
+
+  @media screen and (max-width: 999px) {
+    padding: 4px 12px;
+  }
+
+  @media screen and (min-width: 1000px) {
+    padding: 2px 20px;
+  }
+
   overflow: hidden;
-  font-size: var(--ui-font-caption);
-  line-height: 1.5;
+
+  @media screen and (max-width: 999px) {
+    font-size: var(--ui-font-caption);
+  }
+
+  @media screen and (max-width: 999px) {
+    line-height: 1.5;
+  }
+
   color: var(--accent);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -192,25 +204,27 @@
   }
 }
 
-@include responsive.apply-mobile {
-  .tag {
-    max-width: 100%;
-    padding: 4px 12px;
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .tag {
+      max-width: 100%;
+      padding: 4px 12px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
 
-  .tag p {
-    min-width: 0;
-  }
+    .tag p {
+      min-width: 0;
+    }
 
-  .tag:has(.tag__icons) {
-    padding-right: 40px;
-  }
+    .tag:has(.tag__icons) {
+      padding-right: 40px;
+    }
 
-  .tag__icons {
-    top: 0;
-    bottom: 0;
-    align-items: center;
+    .tag__icons {
+      top: 0;
+      bottom: 0;
+      align-items: center;
+    }
   }
 }

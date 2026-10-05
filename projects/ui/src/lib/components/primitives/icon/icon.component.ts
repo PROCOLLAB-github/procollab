@@ -1,6 +1,14 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  type OnInit,
+} from "@angular/core";
+import { DesktopLayoutService } from "../../../services/desktop-layout.service";
 
 /**
  * Компонент для отображения SVG иконок из спрайта
@@ -32,6 +40,7 @@ import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   /**
    * Устанавливает размер квадратной иконки
    * Автоматически создает viewBox если он не задан

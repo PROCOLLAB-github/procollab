@@ -1,0 +1,19 @@
+
+> procollab@0.0.0 lint:ts
+> eslint projects/**/*.ts
+
+
+Z:\Документы\PROCOLLAB-dev\procollab-dev-platform-responsive\projects\core\src\lib\services\logger\logger.service.ts
+  47:3  warning  Unused eslint-disable directive (no problems were reported from 'no-console')
+  61:3  warning  Unused eslint-disable directive (no problems were reported from 'no-console')
+  73:3  warning  Unused eslint-disable directive (no problems were reported from 'no-console')
+  85:3  warning  Unused eslint-disable directive (no problems were reported from 'no-console')
+
+Z:\Документы\PROCOLLAB-dev\procollab-dev-platform-responsive\projects\social_platform\src\app\domain\chat\chat-message.model.ts
+  22:3  warning  Unused eslint-disable directive (no problems were reported from 'no-use-before-define')
+
+Z:\Документы\PROCOLLAB-dev\procollab-dev-platform-responsive\projects\social_platform\src\app\ui\widgets\message-input\message-input.component.ts
+  176:3  warning  Unused eslint-disable directive (no problems were reported from 'no-use-before-define')
+
+✖ 6 problems (0 errors, 6 warnings)
+  0 errors and 6 warnings potentially fixable with the `--fix` option.

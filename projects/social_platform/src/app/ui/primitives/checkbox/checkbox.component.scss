@@ -1,13 +1,12 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/responsive";
 
 .field {
-  @include ui-foundation.choice;
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.choice;
+  }
 
   position: relative;
   display: flex;
@@ -28,29 +27,35 @@
     color: var(--light-white);
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--accent-dark);
-    outline-offset: 3px;
+  @media screen and (max-width: 999px) {
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
   }
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: var(--ui-disabled-opacity);
+  @media screen and (max-width: 999px) {
+    &:disabled {
+      cursor: not-allowed;
+      opacity: var(--ui-disabled-opacity);
+    }
   }
 }
 
-@include responsive.apply-mobile {
-  :host {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    :host {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
 
-  .field::before {
-    position: absolute;
-    inset: -12px;
-    content: "";
+    .field::before {
+      position: absolute;
+      inset: -12px;
+      content: "";
+    }
   }
 }

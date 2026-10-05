@@ -107,17 +107,31 @@
     }
 
     &--subtext {
-      font-size: var(--ui-font-caption);
       line-height: 16px;
       color: var(--grey-for-text) !important;
       word-break: break-word;
       overflow-wrap: anywhere;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
 
     &--more {
-      font-size: var(--ui-font-caption);
       line-height: 16px;
       color: var(--accent) !important;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
 
     img {
@@ -125,8 +139,8 @@
     }
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
   &__project-name {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
     overflow: hidden;
     font-size: var(--ui-font-small);
@@ -140,12 +154,18 @@
 
   &__project-role {
     margin-top: 3px;
-    font-size: var(--ui-font-caption);
     line-height: 15px;
     color: var(--dark-grey);
     overflow-wrap: anywhere;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+    }
   }
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__date {
     display: flex;
@@ -158,9 +178,16 @@
     border-radius: var(--rounded-xl);
 
     p {
-      font-size: var(--ui-font-caption);
       line-height: 14px;
       color: var(--dark-grey);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
   }
 

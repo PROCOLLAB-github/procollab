@@ -1,8 +1,46 @@
 <!-- @format -->
 
-<section class="bar">
-  @if (backHave()) {
-    <app-back [path]="backRoute()" />
-  }
-  <app-tabs [items]="links()" [showCounts]="ballHave()" /><ng-content />
-</section>
+@if (desktopLayout()) {
+  <section class="bar">
+    <nav class="bar__nav">
+      @if (backHave()) {
+        <app-back [path]="backRoute()" class="bar__back"></app-back>
+      }
+      <ul class="bar__tabs">
+        @for (link of links(); track $index) {
+          <a
+            class="bar__link"
+            [routerLinkActiveOptions]="
+              link.isRouterLinkActiveOptions ? { exact: true } : { exact: false }
+            "
+            [routerLink]="[link.link]"
+            routerLinkActive="bar__link--active"
+          >
+            <li class="text-body-14 bar__item">
+              {{ link.linkText }}
+
+              @if (ballHave()) {
+                <div class="bar__ball" [class.bar__ball--small]="link.count! < 10">
+                  {{ link.count }}
+                </div>
+              }
+            </li>
+          </a>
+        }
+      </ul>
+
+      <ng-container *ngTemplateOutlet="content" />
+    </nav>
+  </section>
+} @else {
+  <section class="bar">
+    @if (backHave()) {
+      <app-back [path]="backRoute()" />
+    }
+    <app-tabs [items]="links()" [showCounts]="ballHave()" /><ng-container
+      *ngTemplateOutlet="content"
+    />
+  </section>
+}
+
+<ng-template #content><ng-content /></ng-template>

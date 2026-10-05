@@ -1,112 +1,159 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/responsive";
 
-.search {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  cursor: pointer;
-  border-bottom: 0.5px solid var(--dark-grey);
-
-  &__other {
-    flex-grow: 1;
-  }
-
-  &__icon {
-    margin-right: 4px;
-    margin-bottom: 2px;
-    color: var(--dark-grey);
-
-    &--open {
-      margin-top: 4px;
-      margin-bottom: 0;
-    }
-  }
-
-  &__text {
-    color: var(--dark-grey);
-  }
-
-  &__input {
+@media screen and (max-width: 999px) {
+  .search {
+    display: flex;
+    align-items: center;
     width: 100%;
+    cursor: pointer;
+    border-bottom: 0.5px solid var(--dark-grey);
 
-    @include responsive.apply-desktop {
-      width: 200px;
+    &__other {
+      flex-grow: 1;
     }
 
-    input {
-      width: 100%;
-      background-color: transparent;
-      border: none;
-      outline: none;
+    &__icon {
+      margin-right: 4px;
+      margin-bottom: 2px;
+      color: var(--dark-grey);
 
-      &::placeholder {
-        color: var(--dark-grey);
+      &--open {
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+    }
+
+    &__text {
+      color: var(--dark-grey);
+    }
+
+    &__input {
+      width: 100%;
+
+      @include responsive.apply-desktop {
+        width: 200px;
       }
 
-      @include ui-foundation.control;
+      input {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        outline: none;
+
+        &::placeholder {
+          color: var(--dark-grey);
+        }
+
+        @include ui-foundation.control;
+      }
+    }
+  }
+
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .field,
+  .search,
+  .search__input {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
+
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
+
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
+
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
+
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
+
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
     }
   }
 }
 
-:host {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-}
+@media screen and (min-width: 1000px) {
+  .search {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    border-bottom: 0.5px solid var(--dark-grey);
 
-.field,
-.search,
-.search__input {
-  min-width: 0;
-  max-width: 100%;
-}
+    &__other {
+      flex-grow: 1;
+    }
 
-@include responsive.apply-mobile {
-  .field__input,
-  .field__input-slim,
-  .search__input input {
-    min-width: 0;
-    max-width: 100%;
-    min-height: 44px;
-    font-size: var(--ui-font-h3);
-  }
+    &__icon {
+      margin-right: 4px;
+      margin-bottom: 2px;
+      color: var(--dark-grey);
 
-  .field--small,
-  .field__input--small {
-    min-width: 0;
-  }
+      &--open {
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+    }
 
-  .field__input--with-tooltip {
-    padding-right: 44px;
-  }
+    &__text {
+      color: var(--dark-grey);
+    }
 
-  .field__option {
-    min-height: 44px;
-    overflow-wrap: anywhere;
-  }
+    &__input {
+      width: 100%;
 
-  .field__chip {
-    max-width: calc(100% - 44px);
-  }
+      @include responsive.apply-desktop {
+        width: 200px;
+      }
 
-  .field__chip span {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+      input {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        outline: none;
 
-  .field__calendar-button {
-    right: 4px;
-    width: 44px;
-    height: 44px;
-  }
-
-  .field__input[type="date"] {
-    padding-right: 48px;
+        &::placeholder {
+          color: var(--dark-grey);
+        }
+      }
+    }
   }
 }

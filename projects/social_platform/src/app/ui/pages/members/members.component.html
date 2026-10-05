@@ -77,7 +77,9 @@
       @for (member of members(); track member.id) {
         <li><app-member-card [member]="member" /></li>
       } @empty {
-        <li><app-state title="Ничего не найдено" /></li>
+        @if (compactLayout()) {
+          <li><app-state title="Ничего не найдено" /></li>
+        }
       }
     </ul>
   </ng-template>

@@ -1,0 +1,69 @@
+{"name":"projects","width":320,"passed":true}
+{"name":"vacancies","width":320,"passed":true}
+{"name":"programs","width":320,"passed":true}
+{"name":"courses","width":320,"passed":true}
+{"name":"profile","width":320,"passed":true}
+{"name":"profile-edit","width":320,"passed":true}
+{"name":"onboarding-0","width":320,"passed":true}
+{"name":"onboarding-1","width":320,"passed":true}
+{"name":"loading-page","width":320,"passed":true}
+{"name":"loading-action","width":320,"passed":true}
+{"name":"empty","width":320,"passed":true}
+{"name":"error","width":320,"passed":true}
+{"name":"disabled-action","width":320,"passed":true}
+{"name":"disabled-filter","width":320,"passed":true}
+{"name":"validation-register","width":320,"passed":true}
+{"name":"validation-onboarding","width":320,"passed":true}
+{"name":"projects","width":390,"passed":true}
+{"name":"vacancies","width":390,"passed":true}
+{"name":"programs","width":390,"passed":true}
+{"name":"courses","width":390,"passed":true}
+{"name":"profile","width":390,"passed":true}
+{"name":"profile-edit","width":390,"passed":true}
+{"name":"onboarding-0","width":390,"passed":true}
+{"name":"onboarding-1","width":390,"passed":true}
+{"name":"loading-page","width":390,"passed":true}
+{"name":"loading-action","width":390,"passed":true}
+{"name":"empty","width":390,"passed":true}
+{"name":"error","width":390,"passed":true}
+{"name":"disabled-action","width":390,"passed":true}
+{"name":"disabled-filter","width":390,"passed":true}
+{"name":"validation-register","width":390,"passed":true}
+{"name":"validation-onboarding","width":390,"passed":true}
+{"name":"projects","width":768,"passed":true}
+{"name":"vacancies","width":768,"passed":true}
+{"name":"programs","width":768,"passed":true}
+{"name":"courses","width":768,"passed":true}
+{"name":"profile","width":768,"passed":true}
+{"name":"profile-edit","width":768,"passed":true}
+{"name":"onboarding-0","width":768,"passed":true}
+{"name":"onboarding-1","width":768,"passed":true}
+{"name":"loading-page","width":768,"passed":true}
+{"name":"loading-action","width":768,"passed":true}
+{"name":"empty","width":768,"passed":true}
+{"name":"error","width":768,"passed":true}
+{"name":"disabled-action","width":768,"passed":true}
+{"name":"disabled-filter","width":768,"passed":true}
+{"name":"validation-register","width":768,"passed":true}
+{"name":"validation-onboarding","width":768,"passed":true}
+48 UI state checks passed
+navigation-feed-skills 320: passed
+projects-activity 320: passed
+members 320: passed
+profile-actions 320: passed
+project-actions 320: passed
+program-actions 320: passed
+navigation-feed-skills 390: passed
+projects-activity 390: passed
+members 390: passed
+profile-actions 390: passed
+project-actions 390: passed
+program-actions 390: passed
+navigation-feed-skills 768: passed
+projects-activity 768: passed
+members 768: passed
+profile-actions 768: passed
+project-actions 768: passed
+program-actions 768: passed
+18 interaction screens passed
+6 resize checks passed; routed hosts, search and filters preserved

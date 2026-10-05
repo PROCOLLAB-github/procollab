@@ -2,38 +2,42 @@
 
 @use "styles/ui-foundation";
 
-:host {
-  display: inline-flex;
-  flex-shrink: 0;
-  max-width: 100%;
+@media screen and (max-width: 999px) {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+    max-width: 100%;
+  }
 }
 
-.badge {
-  @include ui-foundation.badge;
+@media screen and (max-width: 999px) {
+  .badge {
+    @include ui-foundation.badge;
 
-  color: var(--ui-text);
-  background: var(--light-gray);
-  border: 1px solid var(--ui-border);
+    color: var(--ui-text);
+    background: var(--light-gray);
+    border: 1px solid var(--ui-border);
 
-  &--success {
-    color: var(--green-dark);
-    background: var(--green-light);
-    border-color: var(--green);
-  }
+    &--success {
+      color: var(--green-dark);
+      background: var(--green-light);
+      border-color: var(--green);
+    }
 
-  &--pending {
-    background: var(--accent-light);
-    border-color: var(--accent-light);
-  }
+    &--pending {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
 
-  &--declined {
-    background: var(--red-light);
-    border-color: var(--red-light);
-  }
+    &--declined {
+      background: var(--red-light);
+      border-color: var(--red-light);
+    }
 
-  &--warning {
-    color: var(--gold-dark);
-    background: var(--gold-light);
-    border-color: var(--gold);
+    &--warning {
+      color: var(--gold-dark);
+      background: var(--gold-light);
+      border-color: var(--gold);
+    }
   }
 }

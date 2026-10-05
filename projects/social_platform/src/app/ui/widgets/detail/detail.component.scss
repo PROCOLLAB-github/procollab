@@ -64,15 +64,17 @@ $detail-bar-mb: 12px;
       object-position: center;
     }
 
-    &--mobile {
-      display: block;
-      max-width: 100%;
-      height: 136px;
-      background: linear-gradient(90deg, var(--accent) 0%, var(--lime) 100%);
-      border-radius: 15px;
+    @media screen and (min-width: 1000px) {
+      &--mobile {
+        display: block;
+        max-width: 100%;
+        height: 136px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--lime) 100%);
+        border-radius: 15px;
 
-      @include responsive.apply-desktop {
-        display: none;
+        @include responsive.apply-desktop {
+          display: none;
+        }
       }
     }
   }
@@ -421,55 +423,119 @@ $detail-bar-mb: 12px;
   }
 }
 
-@include responsive.apply-below-desktop {
-  .detail {
-    height: auto;
-    margin: 0 var(--page-gutter);
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .detail {
+      height: auto;
+      margin: 0 var(--page-gutter);
+    }
 
-  .detail__body {
-    max-height: none;
-  }
+    .detail__body {
+      max-height: none;
+    }
 
-  .info__row {
-    @include responsive.mobile-actions;
-  }
+    .info__row {
+      @include responsive.mobile-actions;
+    }
 
-  .approve {
-    min-width: 0;
-    padding: 8px;
-  }
+    .approve {
+      min-width: 0;
+      padding: 8px;
+    }
 
-  .project__item,
-  .project__item--info {
-    @include responsive.mobile-actions;
-  }
+    .project__item,
+    .project__item--info {
+      @include responsive.mobile-actions;
+    }
 
-  .approves__text {
-    overflow-wrap: anywhere;
-    white-space: normal;
+    .approves__text {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
   }
 }
 
-.info__page-header {
-  padding-top: 80px;
-}
-
-@media (max-width: 999px) {
+@media screen and (max-width: 999px) {
   .info__page-header {
-    padding-top: 150px;
+    padding-top: 80px;
   }
 }
 
-.approve,
-.cancel,
-.support {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  padding: 0;
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .info__cover,
+    .info__cover--program {
+      height: 136px;
+    }
+
+    .info__avatar,
+    .info__avatar--program {
+      bottom: -32px;
+      left: 16px;
+      transform: none;
+    }
+
+    .info__page-header {
+      padding-top: 52px;
+      margin-bottom: 16px;
+    }
+
+    .info__actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      padding: 0 0 24px;
+
+      > a,
+      > app-button,
+      > .info__unavailable,
+      > .info__primary-action {
+        display: block;
+        justify-self: stretch;
+        width: 100%;
+        min-width: 0;
+      }
+
+      ::ng-deep app-button {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      ::ng-deep app-button > button {
+        width: 100%;
+        height: 100%;
+        padding-right: 12px;
+        padding-left: 12px;
+      }
+    }
+
+    .info__divider {
+      display: none;
+    }
+
+    .info__primary-action {
+      order: 0;
+    }
+
+    .info__materials--full {
+      grid-column: auto;
+    }
+  }
 }
 
-.info__page-header + .info__actions {
-  padding-top: 0;
+@media screen and (max-width: 999px) {
+  .approve,
+  .cancel,
+  .support {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .info__page-header + .info__actions {
+    padding-top: 0;
+  }
 }

@@ -114,9 +114,16 @@
 
   &__error {
     margin-top: 12px;
-    font-size: var(--ui-font-body);
     line-height: 20px;
     color: var(--black);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+    }
   }
 
   &__city {

@@ -5,20 +5,28 @@
 
 .login {
   display: flex;
-  width: 100%;
-  min-width: 0;
-  min-height: 100vh;
+
+  @media screen and (max-width: 999px) {
+    width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+  }
+
+  @media screen and (min-width: 1000px) {
+    min-width: 95vw;
+    min-height: 100vh;
+  }
 
   &__left {
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-width: 0;
-    padding-left: 10px;
 
-    @include responsive.apply-desktop {
-      padding-left: clamp(32px, 14vw, 200px);
+    @media screen and (max-width: 999px) {
+      min-width: 0;
     }
+
+    padding-left: 10px;
   }
 
   &__left-content {
@@ -124,37 +132,39 @@
   cursor: pointer;
 }
 
-@include responsive.apply-below-desktop {
-  .login {
-    width: 100%;
-    min-width: 0;
-    min-height: 100dvh;
-  }
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .login {
+      width: 100%;
+      min-width: 0;
+      min-height: 100dvh;
+    }
 
-  .login__left {
-    min-width: 0;
-    padding-left: 0;
-  }
+    .login__left {
+      min-width: 0;
+      padding-left: 0;
+    }
 
-  .login__left-content {
-    padding: 24px 0;
-  }
+    .login__left-content {
+      padding: 24px 0;
+    }
 
-  .login .auth__wrapper {
-    width: 100%;
-    max-width: none;
-  }
+    .login .auth__wrapper {
+      width: 100%;
+      max-width: none;
+    }
 
-  .login__password {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
+    .login__password {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
 
-  .tooltip__wrapper {
-    position: fixed;
-    right: var(--page-gutter);
-    bottom: max(16px, env(safe-area-inset-bottom));
-    left: var(--page-gutter);
-    width: auto;
+    .tooltip__wrapper {
+      position: fixed;
+      right: var(--page-gutter);
+      bottom: max(16px, env(safe-area-inset-bottom));
+      left: var(--page-gutter);
+      width: auto;
+    }
   }
 }

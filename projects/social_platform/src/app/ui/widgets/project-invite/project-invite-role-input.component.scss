@@ -1,4 +1,5 @@
 /** @format */
+
 :host {
   display: block;
   min-width: 0;
@@ -10,9 +11,17 @@
   label {
     display: block;
     margin-bottom: 8px;
-    font-size: var(--ui-font-body);
-    font-weight: 600;
     color: var(--accent);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+      font-weight: 600;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 
   input {
@@ -39,9 +48,16 @@
 
   p {
     margin: 6px 0 0;
-    font-size: var(--ui-font-caption);
     line-height: 1.4;
     color: var(--grey-for-text);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+    }
   }
 
   p.invalid {
@@ -68,14 +84,22 @@
     width: 100%;
     min-height: 44px;
     padding: 10px;
-    font: inherit;
-    font-size: var(--ui-font-body);
     color: var(--black);
     text-align: left;
     cursor: pointer;
     background: transparent;
     border: 0;
     border-radius: var(--rounded-lg);
+
+    @media screen and (max-width: 999px) {
+      font: inherit;
+      font-size: var(--ui-font-body);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font: inherit;
+      font-size: 13px;
+    }
   }
 
   button.active,

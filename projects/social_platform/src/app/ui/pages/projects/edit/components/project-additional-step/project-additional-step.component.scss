@@ -166,8 +166,16 @@
   }
 
   &__list {
-    width: 100%;
     margin-top: 10px;
+
+    @media screen and (max-width: 999px) {
+      width: 100%;
+    }
+
+    @media screen and (min-width: 1000px) {
+      width: 557px;
+      width: 100%;
+    }
   }
 }
 

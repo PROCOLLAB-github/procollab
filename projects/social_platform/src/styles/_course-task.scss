@@ -13,14 +13,12 @@
       max-width: 100%;
       overflow-wrap: anywhere;
     }
-
     .#{$name}__header,
     .#{$name}__body,
     .#{$name}__content {
       min-height: 0;
       padding: 16px;
     }
-
     .#{$name}__files,
     .#{$name}__content {
       ::ng-deep app-upload-file .control {

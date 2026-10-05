@@ -1,7 +1,11 @@
 /** @format */
 
+import { DesktopLayoutService } from "../../../services/desktop-layout.service";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
+  inject,
   ChangeDetectionStrategy,
   Component,
   Input,
@@ -18,6 +22,7 @@ import type { Invite } from "projects/social_platform/src/app/domain/invite/invi
 import { RouterLink } from "@angular/router";
 import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
 import { User } from "@domain/auth/user.model";
+import { ButtonDirective } from "../../primitives/button/button.directive";
 
 /**
  * Компонент панели управления профилем
@@ -48,12 +53,14 @@ import { User } from "@domain/auth/user.model";
     ClickOutsideModule,
     IconComponent,
     EmptyManageCardComponent,
+    ButtonDirective,
   ],
   templateUrl: "./profile-control-panel.component.html",
   styleUrl: "./profile-control-panel.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileControlPanelComponent {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   /** Данные текущего пользователя */
   readonly user = input.required<User | null>();
 

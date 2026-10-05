@@ -10,17 +10,27 @@
     gap: 5px;
     align-items: flex-start;
     width: 100%;
-    min-width: 0;
-    max-width: calc(100vw - 24px);
-    max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
-    padding: var(--ui-space-sm);
     overflow-y: auto;
-    overscroll-behavior: contain;
     background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-color: var(--ui-border);
-    border-radius: var(--ui-radius-card);
-    box-shadow: var(--ui-card-hover-shadow);
+
+    @media screen and (max-width: 999px) {
+      min-width: 0;
+      max-width: calc(100vw - 24px);
+      max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
+      padding: var(--ui-space-sm);
+      overscroll-behavior: contain;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-color: var(--ui-border);
+      border-radius: var(--ui-radius-card);
+      box-shadow: var(--ui-card-hover-shadow);
+    }
+
+    @media screen and (min-width: 1000px) {
+      max-height: 200px;
+      padding: 12px;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
+    }
   }
 
   &__option {
@@ -28,13 +38,16 @@
     gap: 5px;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    min-width: 0;
-    min-height: var(--ui-control-height);
-    padding: 8px 12px;
     cursor: pointer;
-    border-radius: var(--rounded-lg);
     transition: color 0.2s ease-in-out;
+
+    @media screen and (max-width: 999px) {
+      width: 100%;
+      min-width: 0;
+      min-height: var(--ui-control-height);
+      padding: 8px 12px;
+      border-radius: var(--rounded-lg);
+    }
 
     &--add-object {
       display: flex;
@@ -101,13 +114,17 @@
   }
 }
 
-.field__option p {
-  min-width: 0;
-  overflow-wrap: anywhere;
+@media screen and (max-width: 999px) {
+  .field__option p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 }
 
-@include responsive.apply-mobile {
-  .field__option {
-    min-height: 44px;
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .field__option {
+      min-height: 44px;
+    }
   }
 }

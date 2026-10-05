@@ -1,21 +1,46 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/responsive";
 
 .card {
   &__body {
-    @include ui-foundation.card;
+    @media screen and (max-width: 999px) {
+      @include ui-foundation.card;
+    }
 
     position: relative;
     display: flex;
     flex-direction: column;
     width: 156px;
-    height: auto;
-    min-height: 180px;
+
+    @media screen and (max-width: 999px) {
+      height: auto;
+    }
+
+    @media screen and (min-width: 1000px) {
+      height: 180px;
+    }
+
+    @media screen and (max-width: 999px) {
+      min-height: 180px;
+    }
+
+    @media screen and (min-width: 1000px) {
+      padding: 15px 0 12px;
+    }
+
+    @media screen and (min-width: 1000px) {
+      background-color: var(--light-white);
+    }
+
+    @media screen and (min-width: 1000px) {
+      border: 0.5px solid var(--medium-grey-for-outline);
+    }
+
+    @media screen and (min-width: 1000px) {
+      border-radius: var(--rounded-xl);
+    }
 
     &--empty {
       background: transparent;
@@ -38,7 +63,6 @@
     }
   }
 
-  /* Ссылка занимает прежнее место контента; CTA внутри не создаёт второй tab stop. */
   &__project-link {
     display: flex;
     flex: 1;
@@ -52,11 +76,55 @@
     }
   }
 
-  /* CTA занимает ширину контента, сохраняя единственную ссылку на проект. */
   &__project-action {
-    @include ui-foundation.button;
+    @media screen and (max-width: 999px) {
+      @include ui-foundation.button;
+    }
+
+    @media screen and (min-width: 1000px) {
+      display: inline-flex;
+    }
+
+    @media screen and (min-width: 1000px) {
+      align-items: center;
+    }
+
+    @media screen and (min-width: 1000px) {
+      justify-content: center;
+    }
 
     width: 100%;
+
+    @media screen and (min-width: 1000px) {
+      padding: 4px 24px;
+    }
+
+    @media screen and (min-width: 1000px) {
+      color: var(--white);
+    }
+
+    @media screen and (min-width: 1000px) {
+      background: var(--accent);
+    }
+
+    @media screen and (min-width: 1000px) {
+      border: 0.5px solid transparent;
+    }
+
+    @media screen and (min-width: 1000px) {
+      border-radius: var(--rounded-xxl);
+    }
+
+    @media screen and (min-width: 1000px) {
+      transition: all 0.2s;
+    }
+
+    @media screen and (min-width: 1000px) {
+      &:hover {
+        background-color: var(--accent-medium);
+        box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
+      }
+    }
   }
 
   &__subscription-action {
@@ -237,7 +305,6 @@
     width: 100px;
   }
 
-  /* Общая геометрия проектов не затрагивает приглашения, участников и пустые карточки. */
   &--project {
     .card__content {
       padding: 27px 12px 0;
@@ -245,8 +312,6 @@
 
     .card__head {
       width: 100%;
-
-      /* Короткое название не резервирует пустую вторую строку перед описанием. */
       margin-bottom: 2px;
 
       > div {
@@ -256,7 +321,7 @@
     }
 
     .card__name {
-      /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс нужен для двухстрочного ellipsis. */
+      /* stylelint-disable-next-line value-no-vendor-prefix */
       display: -webkit-box;
       max-height: 30px;
       margin: 0;
@@ -270,28 +335,42 @@
     }
 
     .card__description {
-      /* Место удалённой отрасли отдано описанию без увеличения внешней карточки. */
       flex: 0 0 52px;
       width: 100%;
       height: 52px;
       min-height: 52px;
 
       p {
-        /* stylelint-disable-next-line value-no-vendor-prefix -- Префикс ограничивает описание четырьмя строками. */
+        /* stylelint-disable-next-line value-no-vendor-prefix */
         display: -webkit-box;
         overflow: hidden;
-        font-size: var(--ui-font-caption);
         line-height: 13px;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
+
+        @media screen and (max-width: 999px) {
+          font-size: var(--ui-font-caption);
+        }
+
+        @media screen and (min-width: 1000px) {
+          font-size: 10px;
+        }
       }
     }
 
     .card__project-action-label {
-      font-size: var(--ui-font-caption);
-      font-weight: 600;
       line-height: 12px;
       white-space: nowrap;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+        font-weight: 600;
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 10px;
+        font-weight: 600;
+      }
     }
 
     .card__footer,
@@ -301,7 +380,6 @@
     }
   }
 
-  /* Нижний блок имеет постоянную высоту: длинный текст не сдвигает роль и CTA. */
   &--my-project {
     .card__body {
       padding-bottom: 8px;
@@ -321,9 +399,16 @@
 
     .card__name {
       max-height: 28px;
-      font-size: var(--ui-font-caption);
       line-height: 14px;
       text-align: center;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
 
     .card__description {
@@ -367,7 +452,6 @@
     }
   }
 
-  /* Приглашения в списке и правой колонке используют одну компактную геометрию. */
   &--invite {
     .card__body {
       padding-bottom: 6px;
@@ -388,7 +472,7 @@
     }
 
     .card__name {
-      /* stylelint-disable-next-line value-no-vendor-prefix -- Освободившаяся строка сохраняет длинное название. */
+      /* stylelint-disable-next-line value-no-vendor-prefix */
       display: -webkit-box;
       max-height: 30px;
       overflow: hidden;
@@ -405,12 +489,19 @@
     }
 
     .card__user {
-      font-size: var(--ui-font-caption);
       line-height: 13px;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 10px;
+      }
     }
 
     .card__user--invite {
-      /* stylelint-disable-next-line value-no-vendor-prefix -- Две строки сохраняют место для действий. */
+      /* stylelint-disable-next-line value-no-vendor-prefix */
       display: -webkit-box;
       overflow: hidden;
       font-size: var(--ui-font-small);
@@ -556,78 +647,93 @@
   }
 }
 
-@include responsive.apply-mobile {
-  :host {
-    display: block;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .card__body {
-    width: 100%;
-    height: auto;
-    min-height: 200px;
-  }
-
-  .card__content {
-    padding-right: 16px;
-    padding-left: 16px;
-    overflow: visible;
-  }
-
-  .card__head {
-    width: 100%;
-  }
-
-  .card__name {
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
-
-  .card--project,
-  .card--my-project {
-    .card__name {
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    :host {
       display: block;
-      max-height: none;
-      font-size: var(--ui-font-body);
-      line-height: 20px;
-      -webkit-line-clamp: unset;
+      width: min(100%, var(--ui-mobile-entity-card-width));
+      min-width: 0;
+    }
+
+    .card__body {
+      width: 100%;
+      height: auto;
+      min-height: 244px;
+    }
+
+    .card__content {
+      padding-right: 16px;
+      padding-left: 16px;
+      overflow: visible;
+    }
+
+    .card__head {
+      width: 100%;
+    }
+
+    .card__name {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .card--project,
+    .card--my-project {
+      .card__name {
+        display: block;
+        max-height: none;
+        font-size: var(--ui-font-body);
+        line-height: 20px;
+        -webkit-line-clamp: unset;
+      }
+
+      .card__description {
+        height: auto;
+        font-size: var(--ui-font-body);
+        line-height: 20px;
+      }
+    }
+
+    .card__context {
+      height: auto;
+      min-height: 24px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .card__role,
+    .card__access-label {
+      font-size: var(--ui-font-small);
+      line-height: 16px;
     }
 
     .card__description {
+      flex-basis: auto;
+      width: 100%;
       height: auto;
-      font-size: var(--ui-font-body);
-      line-height: 20px;
+      min-height: 24px;
     }
-  }
 
-  .card__context {
-    height: auto;
-    min-height: 24px;
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+    .card__project-action {
+      align-self: center;
+      width: auto;
+      min-height: 44px;
+    }
 
-  .card__role,
-  .card__access-label {
-    font-size: var(--ui-font-small);
-    line-height: 16px;
-  }
+    .card--my-project .card__program-name {
+      font-size: var(--ui-font-small);
+      line-height: 16px;
+    }
 
-  .card__description {
-    flex-basis: auto;
-    width: 100%;
-    height: auto;
-    min-height: 24px;
-  }
+    .card--project .card__description p,
+    .card--my-project .card__description p {
+      font-size: var(--ui-font-small);
+      line-height: 18px;
+    }
 
-  .card__project-action {
-    min-height: 44px;
-  }
-
-  .card__subscription-action {
-    width: 44px;
-    height: 44px;
+    .card__subscription-action {
+      width: 44px;
+      height: 44px;
+    }
   }
 }

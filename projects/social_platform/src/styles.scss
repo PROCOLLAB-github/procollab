@@ -27,10 +27,13 @@
 
 :root {
   --app-height: 100vh;
-  --page-gutter: 16px;
 
-  @supports (height: 100dvh) {
-    --app-height: 100dvh;
+  @media screen and (max-width: 999px) {
+    --page-gutter: 16px;
+
+    @supports (height: 100dvh) {
+      --app-height: 100dvh;
+    }
   }
 }
 

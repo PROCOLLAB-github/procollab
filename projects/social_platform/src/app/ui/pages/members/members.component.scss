@@ -25,7 +25,6 @@
       grid-template-columns: repeat(4, 2fr);
     }
 
-    /* Четыре карточки фиксированной ширины не помещаются рядом с фильтрами на узком desktop. */
     @media (min-width: responsive.$desktop) and (max-width: #{responsive.$container-md - 1px}) {
       grid-template-columns: repeat(3, 2fr);
     }
@@ -96,13 +95,20 @@
     &__action {
       min-height: 44px;
       padding: 8px;
-      font-size: var(--ui-font-body);
       line-height: 18px;
       color: var(--white);
       cursor: pointer;
       background: var(--accent);
       border: 1px solid var(--accent);
       border-radius: var(--rounded-xxl);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-body);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 13px;
+      }
 
       &--filters {
         color: var(--accent-dark);
@@ -117,9 +123,17 @@
     }
 
     &__list {
-      grid-template-columns: minmax(0, 1fr);
       width: 100%;
       margin-top: 35px;
+
+      @media screen and (max-width: 999px) {
+        grid-template-columns: repeat(auto-fill, minmax(0, var(--ui-mobile-entity-card-width)));
+        justify-content: center;
+      }
+
+      @media screen and (min-width: 1000px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
       li {
         min-width: 0;
@@ -131,11 +145,5 @@
       min-width: 0;
       margin: 4px 0 0;
     }
-  }
-}
-
-@include responsive.apply-tablet {
-  .page__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

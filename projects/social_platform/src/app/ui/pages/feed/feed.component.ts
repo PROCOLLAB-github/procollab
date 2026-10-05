@@ -1,6 +1,6 @@
 /** @format */
 
-import { StateComponent } from "@uilib";
+import { DesktopLayoutService, StateComponent } from "@uilib";
 /** @format */
 
 import {
@@ -42,6 +42,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
   providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
 })
 export class FeedComponent implements AfterViewInit, OnDestroy {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly feedRoot = viewChild<ElementRef<HTMLElement>>("feedRoot");
 
   private readonly feedInfoService = inject(FeedInfoService);

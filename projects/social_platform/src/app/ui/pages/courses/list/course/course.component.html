@@ -4,17 +4,33 @@
   <div appCard [interactive]="true" class="course">
     <div class="course__cover">
       <app-avatar [size]="68" [url]="course().avatarUrl"></app-avatar>
-      <app-badge
-        class="course__access"
-        [tone]="isMember() ? 'pending' : isSubs() ? 'declined' : 'success'"
-        [label]="
-          isMember()
-            ? 'для участников программы'
-            : isSubs()
-              ? 'доступно по подписке'
-              : 'доступно всем пользователям'
-        "
-      />
+      @if (desktopLayout()) {
+        <app-button
+          customTypographyClass="text-body-10"
+          [color]="isMember() ? 'primary' : isSubs() ? 'red' : 'green'"
+          size="big"
+        >
+          {{
+            isMember()
+              ? "для участников программы"
+              : isSubs()
+                ? "доступно по подписке"
+                : "доступно всем пользователям"
+          }}
+        </app-button>
+      } @else {
+        <app-badge
+          class="course__access"
+          [tone]="isMember() ? 'pending' : isSubs() ? 'declined' : 'success'"
+          [label]="
+            isMember()
+              ? 'для участников программы'
+              : isSubs()
+                ? 'доступно по подписке'
+                : 'доступно всем пользователям'
+          "
+        />
+      }
 
       <img alt="course-cover" [src]="course().cardCoverUrl" class="course__image" />
     </div>

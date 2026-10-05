@@ -1,33 +1,12 @@
 /** @format */
 
 @use "styles/ui-foundation";
-
-/** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
 
-.field {
-  position: relative;
-
-  &--small {
-    min-width: 245px;
-  }
-
-  &--big {
-    width: 100%;
-  }
-
-  &__input {
-    display: block;
-    width: 100%;
-    min-height: 162px;
-    padding: 12px 18px;
-    resize: none;
-
-    &::placeholder {
-      color: var(--dark-grey);
-    }
+@media screen and (max-width: 999px) {
+  .field {
+    position: relative;
 
     &--small {
       min-width: 245px;
@@ -37,131 +16,256 @@
       width: 100%;
     }
 
-    &--with-tooltip {
-      padding-right: 130px;
-      padding-right: 60px;
-    }
+    &__input {
+      display: block;
+      width: 100%;
+      min-height: 162px;
+      padding: 12px 18px;
+      resize: none;
 
-    &--error,
-    &--overflow {
-      border: 0.5px solid var(--red);
+      &::placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--small {
+        min-width: 245px;
+      }
+
+      &--big {
+        width: 100%;
+      }
+
+      &--with-tooltip {
+        padding-right: 130px;
+        padding-right: 60px;
+      }
+
+      &--error,
+      &--overflow {
+        border: 0.5px solid var(--red);
+
+        &:focus {
+          border-color: var(--red) !important;
+          box-shadow: var(--ui-error-ring) !important;
+        }
+      }
 
       &:focus {
-        border-color: var(--red) !important;
-        box-shadow: var(--ui-error-ring) !important;
+        border-color: var(--accent);
+        box-shadow: var(--ui-focus-ring);
+      }
+
+      @include ui-foundation.control;
+
+      border-radius: var(--ui-radius-card);
+    }
+
+    &__error-icon {
+      position: absolute;
+      top: 25px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red) !important;
+      pointer-events: none;
+      transform: translateY(-50%);
+
+      i {
+        color: var(--red) !important;
+      }
+
+      &--bare {
+        padding: 0;
+        background: transparent;
       }
     }
 
-    &:focus {
-      border-color: var(--accent);
-      box-shadow: var(--ui-focus-ring);
+    &__tooltip-wrapper {
+      position: absolute;
+      top: 25px;
+      right: 15px;
+      z-index: 10;
+      padding: 2px;
+      background-color: var(--light-gray);
+      border-radius: 100%;
+      transform: translateY(-50%);
     }
 
-    @include ui-foundation.control;
+    &__counter {
+      position: absolute;
+      right: 18px;
+      bottom: 4px;
 
-    border-radius: var(--ui-radius-card);
-  }
+      p {
+        color: var(--dark-grey);
+      }
 
-  &__error-icon {
-    position: absolute;
-    top: 25px;
-    right: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--red) !important;
-    pointer-events: none;
-    transform: translateY(-50%);
-
-    i {
-      color: var(--red) !important;
-    }
-
-    &--bare {
-      padding: 0;
-      background: transparent;
+      &--overflow {
+        color: var(--red) !important;
+      }
     }
   }
 
-  &__tooltip-wrapper {
-    position: absolute;
-    top: 25px;
-    right: 15px;
-    z-index: 10;
-    padding: 2px;
-    background-color: var(--light-gray);
-    border-radius: 100%;
-    transform: translateY(-50%);
-  }
-
-  &__counter {
-    position: absolute;
-    right: 18px;
-    bottom: 4px;
-
-    p {
-      color: var(--dark-grey);
-    }
-
-    &--overflow {
-      color: var(--red) !important;
-    }
-  }
-}
-
-:host {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.field,
-.search,
-.search__input {
-  min-width: 0;
-  max-width: 100%;
-}
-
-@include responsive.apply-mobile {
-  .field__input,
-  .field__input-slim,
-  .search__input input {
+  :host {
+    display: block;
     min-width: 0;
     max-width: 100%;
-    min-height: 44px;
-    font-size: var(--ui-font-h3);
   }
 
-  .field--small,
-  .field__input--small {
+  .field,
+  .search,
+  .search__input {
     min-width: 0;
+    max-width: 100%;
   }
 
-  .field__input--with-tooltip {
-    padding-right: 44px;
-  }
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
 
-  .field__option {
-    min-height: 44px;
-    overflow-wrap: anywhere;
-  }
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
 
-  .field__chip {
-    max-width: calc(100% - 44px);
-  }
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
 
-  .field__chip span {
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
 
-  .field__calendar-button {
-    right: 4px;
-    width: 44px;
-    height: 44px;
-  }
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
 
-  .field__input[type="date"] {
-    padding-right: 48px;
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
+    }
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .field {
+    position: relative;
+
+    &--small {
+      min-width: 245px;
+    }
+
+    &--big {
+      width: 100%;
+    }
+
+    &__input {
+      display: block;
+      width: 100%;
+      min-height: 162px;
+      padding: 12px 18px;
+      color: var(--black);
+      resize: none;
+      background-color: var(--white);
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-xl);
+      outline: none;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: var(--dark-grey);
+      }
+
+      &--small {
+        min-width: 245px;
+      }
+
+      &--big {
+        width: 100%;
+      }
+
+      &--with-tooltip {
+        padding-right: 130px;
+      }
+
+      &--error,
+      &--overflow {
+        border: 0.5px solid var(--red);
+
+        &:focus {
+          border-color: var(--red) !important;
+          box-shadow: 0 0 6px rgb(255 40 40 / 30.8%) !important;
+        }
+      }
+
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
+    }
+
+    &__error-icon {
+      position: absolute;
+      top: 25px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red) !important;
+      pointer-events: none;
+      transform: translateY(-50%);
+
+      i {
+        color: var(--red) !important;
+      }
+
+      &--bare {
+        padding: 0;
+        background: transparent;
+      }
+    }
+
+    &__tooltip-wrapper {
+      position: absolute;
+      top: 25px;
+      right: 15px;
+      z-index: 10;
+      padding: 2px;
+      background-color: var(--light-gray);
+      border-radius: 100%;
+      transform: translateY(-50%);
+    }
+
+    &__counter {
+      position: absolute;
+      right: 18px;
+      bottom: 4px;
+
+      p {
+        color: var(--dark-grey);
+      }
+
+      &--overflow {
+        color: var(--red) !important;
+      }
+    }
   }
 }

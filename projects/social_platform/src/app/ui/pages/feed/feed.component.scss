@@ -41,6 +41,11 @@
 }
 
 @include responsive.apply-below-desktop {
+  .page {
+    padding-top: 24px;
+    margin: 0 var(--page-gutter);
+  }
+
   .filter {
     position: fixed;
     z-index: 300;
