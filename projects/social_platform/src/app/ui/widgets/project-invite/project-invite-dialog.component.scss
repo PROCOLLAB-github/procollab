@@ -634,3 +634,30 @@
     }
   }
 }
+
+@media screen and (max-width: 999px) {
+  .project-invite .invite-search input {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .project-invite .invite-search input:focus-visible {
+    outline: none;
+  }
+
+  .project-invite.project-invite--compact .project-invite__footer {
+    display: block;
+  }
+
+  .project-invite.project-invite--compact .invite-actions {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .project-invite .invite-actions > button.ui-button {
+    width: 100%;
+  }
+}

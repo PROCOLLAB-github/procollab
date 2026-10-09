@@ -6,4 +6,5 @@ export class Snack {
   text!: string;
   timeout!: number;
   type!: "error" | "success" | "info";
+  dismissible?: boolean;
 }

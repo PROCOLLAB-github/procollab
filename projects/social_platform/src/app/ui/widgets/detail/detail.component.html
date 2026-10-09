@@ -110,19 +110,21 @@
                   </app-button>
                 </a>
 
-                <app-button
-                  appearance="outline"
-                  size="small"
-                  [disabled]="!info().links?.length"
-                  class="info__contacts"
-                  customTypographyClass="text-body-12"
-                  (click)="isContactsModalOpen.set(true)"
-                >
-                  <i appIcon icon="phone" appSquare="12"></i>
-                  @if (appWidth < 1000) {
-                    <span>Контакты</span>
-                  }
-                </app-button>
+                @if (isUserMember() && info().links?.length) {
+                  <app-button
+                    appearance="outline"
+                    size="small"
+                    [disabled]="!info().links?.length"
+                    class="info__contacts"
+                    customTypographyClass="text-body-12"
+                    (click)="isContactsModalOpen.set(true)"
+                  >
+                    <i appIcon icon="phone" appSquare="12"></i>
+                    @if (appWidth < 1000) {
+                      <span>Контакты</span>
+                    }
+                  </app-button>
+                }
 
                 <app-modal
                   [open]="isContactsModalOpen()"
@@ -220,19 +222,21 @@
                   <div class="info__divider"></div>
                 }
                 @if (appWidth < 1000) {
-                  <app-button
-                    appearance="outline"
-                    size="small"
-                    [disabled]="!info().links?.length"
-                    class="info__contacts"
-                    customTypographyClass="text-body-12"
-                    (click)="isContactsModalOpen.set(true)"
-                  >
-                    <i appIcon icon="phone" appSquare="12"></i>
-                    @if (appWidth < 1000) {
-                      <span>Контакты</span>
-                    }
-                  </app-button>
+                  @if (isUserMember() && info().links?.length) {
+                    <app-button
+                      appearance="outline"
+                      size="small"
+                      [disabled]="!info().links?.length"
+                      class="info__contacts"
+                      customTypographyClass="text-body-12"
+                      (click)="isContactsModalOpen.set(true)"
+                    >
+                      <i appIcon icon="phone" appSquare="12"></i>
+                      @if (appWidth < 1000) {
+                        <span>Контакты</span>
+                      }
+                    </app-button>
+                  }
                 }
                 @if (isUserManager() || (isUserExpert() && appWidth >= 1000)) {
                   <a [routerLink]="AppRoutes.program.projects(info().id)">

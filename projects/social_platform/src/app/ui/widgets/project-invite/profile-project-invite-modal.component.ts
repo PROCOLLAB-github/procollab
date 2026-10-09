@@ -1,6 +1,6 @@
 /** @format */
 
-import { ButtonDirective, FieldDirective, StateComponent } from "@uilib";
+import { ButtonDirective, StateComponent } from "@uilib";
 /** @format */
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from "@angular/core";
 import { Project } from "@domain/project/project.model";
@@ -15,7 +15,6 @@ import { ProjectInviteRoleInputComponent } from "./project-invite-role-input.com
   imports: [
     StateComponent,
     ButtonDirective,
-    FieldDirective,
     ProjectInviteDialogComponent,
     ProjectInviteRoleInputComponent,
   ],

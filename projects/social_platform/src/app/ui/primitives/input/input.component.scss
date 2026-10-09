@@ -324,7 +324,9 @@
       cursor: pointer;
       border: 0.5px solid var(--dark-grey);
       border-radius: 50%;
-      transition: border-color 0.2s, background-color 0.2s;
+      transition:
+        border-color 0.2s,
+        background-color 0.2s;
       appearance: none;
 
       &:hover::after {
@@ -438,5 +440,55 @@
         color: var(--red) !important;
       }
     }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .field--compact {
+    width: 100% !important;
+  }
+
+  .field__input--with-tooltip {
+    padding-right: 68px;
+  }
+
+  .field--compact .field__input--small {
+    width: 100%;
+    max-width: none;
+    padding-inline: 16px;
+    text-align: left;
+  }
+
+  .field--compact.field--with-hint .field__input,
+  .field--compact:has(.field__calendar-button) .field__input {
+    padding-right: 64px;
+  }
+
+  .field--compact.field--with-hint:has(.field__calendar-button) .field__input {
+    padding-right: 108px;
+  }
+
+  .field--compact.field--with-hint .field__calendar-button {
+    right: 48px;
+  }
+
+  .field__tooltip-wrapper--small {
+    top: 50%;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    transform: translateY(-50%);
+  }
+
+  .field--compact .field__error-icon {
+    right: 16px !important;
+  }
+
+  .field--compact.field--error .field__input {
+    padding-right: 52px;
   }
 }

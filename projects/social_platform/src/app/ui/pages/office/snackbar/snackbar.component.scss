@@ -34,6 +34,25 @@
   padding: 20px;
   border-radius: 10px;
 
+  &__close {
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+
+    &:focus-visible {
+      outline: 2px solid currentcolor;
+      outline-offset: 2px;
+    }
+  }
+
   &--success {
     color: var(--white);
     background-color: var(--green);

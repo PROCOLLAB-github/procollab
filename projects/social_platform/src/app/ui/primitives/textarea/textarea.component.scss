@@ -269,3 +269,9 @@
     }
   }
 }
+
+@media screen and (max-width: 999px) {
+  .field__input--with-tooltip {
+    padding-right: 68px;
+  }
+}

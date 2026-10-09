@@ -11,12 +11,23 @@
       }"
       @slideInOut
     >
-      {{ snack.text }}
-      <i
-        appIcon
-        [icon]="snack.type === 'success' ? 'check' : snack.type === 'info' ? '' : 'error'"
-        appSquare="12"
-      ></i>
+      <span>{{ snack.text }}</span>
+      @if (snack.dismissible) {
+        <button
+          type="button"
+          class="item__close"
+          aria-label="Закрыть уведомление"
+          (click)="onClose(snack)"
+        >
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+        </button>
+      } @else {
+        <i
+          appIcon
+          [icon]="snack.type === 'success' ? 'check' : snack.type === 'info' ? '' : 'error'"
+          appSquare="12"
+        ></i>
+      }
     </li>
   }
 </ul>
