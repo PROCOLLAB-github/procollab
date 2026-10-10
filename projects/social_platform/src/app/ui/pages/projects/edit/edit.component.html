@@ -267,14 +267,6 @@
         <app-button
           size="medium"
           customTypographyClass="text-body-12"
-          color="red"
-          (click)="deleteProject()"
-        >
-          удалить проект
-        </app-button>
-        <app-button
-          size="medium"
-          customTypographyClass="text-body-12"
           appearance="outline"
           [loader]="projFormIsSubmittingAsDraft()"
           [disabled]="coverReset.pending()"
@@ -291,6 +283,14 @@
           [style.opacity]="onEditClicked() ? '0.5' : '1'"
         >
           {{ isCompetitive() && !submitted() ? "отправить заявку" : "сохранить" }}
+        </app-button>
+        <app-button
+          size="medium"
+          customTypographyClass="text-body-12"
+          color="red"
+          (click)="deleteProject()"
+        >
+          удалить проект
         </app-button>
       </div>
     </div>

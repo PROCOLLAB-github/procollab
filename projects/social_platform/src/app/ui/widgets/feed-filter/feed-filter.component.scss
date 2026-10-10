@@ -225,6 +225,14 @@ a:hover {
       width: 20px;
       height: 20px;
       color: var(--accent);
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      transform: none;
+
+      i {
+        color: var(--accent) !important;
+      }
     }
 
     &__title {
@@ -239,5 +247,9 @@ a:hover {
       font-size: var(--ui-font-body);
       text-align: left;
     }
+  }
+
+  .filter__option--active .filter__option--icon {
+    background: transparent;
   }
 }

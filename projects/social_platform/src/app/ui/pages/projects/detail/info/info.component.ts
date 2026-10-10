@@ -1,6 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
+import { DesktopLayoutService } from "@uilib";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -35,6 +36,7 @@ import { ProjectsMidSideComponent } from "./components/projects-mid-side/project
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
 

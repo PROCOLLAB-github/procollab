@@ -1,3 +1,5 @@
+/** @format */
+
 .direction-card {
   position: relative;
   display: flex;
@@ -244,6 +246,39 @@
     app-tag {
       display: inline-flex;
       width: 70px;
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  :host {
+    display: block;
+    min-width: 0;
+  }
+
+  .direction-card {
+    flex-direction: row;
+    gap: 8px;
+    justify-content: flex-start;
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    padding: 12px;
+    text-align: left;
+
+    &__icon {
+      position: static;
+      flex-shrink: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      transform: none;
+    }
+
+    &__text {
+      width: auto;
+      font-size: var(--ui-font-small);
+      line-height: 1.5;
     }
   }
 }

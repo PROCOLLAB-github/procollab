@@ -2,6 +2,7 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { DesktopLayoutService } from "@uilib";
 import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ExpandService } from "@api/expand/expand.service";
@@ -24,6 +25,7 @@ import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-m
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, OnDestroy {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly profileDetailInfoService = inject(ProfileDetailInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 

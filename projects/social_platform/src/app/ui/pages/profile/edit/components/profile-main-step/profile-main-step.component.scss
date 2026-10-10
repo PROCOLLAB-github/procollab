@@ -115,4 +115,8 @@
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
   @include profile-form.responsive-layout;
+
+  .profile__wrapper--main > .profile__row {
+    justify-content: center;
+  }
 }

@@ -8,6 +8,9 @@ module.exports = async function preview(context, baseUrl) {
   if (!process.env.QA_BUILD_ROOT) return;
   let root = path.resolve(process.env.QA_BUILD_ROOT);
   if (fs.existsSync(path.join(root, "browser/index.html"))) root = path.join(root, "browser");
+  const sprite = path.join(root, "assets/icons/symbol/svg/sprite.css.svg");
+  if (!fs.readFileSync(sprite, "utf8").includes("<symbol"))
+    throw new Error("Build sprite is empty: generate SVGs correctly before visual verification");
   const types = {
     ".html": "text/html",
     ".js": "text/javascript",

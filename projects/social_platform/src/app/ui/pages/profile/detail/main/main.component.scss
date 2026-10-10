@@ -25,3 +25,16 @@
     }
   }
 }
+
+@media screen and (max-width: 999px) {
+  .profile__context {
+    display: grid;
+    gap: 24px;
+    min-width: 0;
+    margin: 24px 0;
+
+    > * {
+      min-width: 0;
+    }
+  }
+}

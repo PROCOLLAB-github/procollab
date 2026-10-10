@@ -437,7 +437,19 @@
       position: static;
       gap: 12px;
       justify-content: space-between;
-      padding: 8px var(--page-gutter);
+      padding: 16px var(--page-gutter);
+      background: transparent;
+      border-radius: 0;
+
+      ::ng-deep .page-header {
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 0;
+      }
+
+      ::ng-deep .page-header__actions {
+        width: 100%;
+      }
     }
 
     .profile__left form {
@@ -446,6 +458,13 @@
 
     .profile__save {
       @include responsive.mobile-actions;
+
+      width: 100%;
+
+      app-button,
+      ::ng-deep button {
+        width: 100%;
+      }
     }
 
     .profile__wrapper--settings {
