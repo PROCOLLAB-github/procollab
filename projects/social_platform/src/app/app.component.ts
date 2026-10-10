@@ -20,7 +20,6 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoadingService } from "@api/shared/loading.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ConnectionStatusToastService } from "@api/connection-status/connection-status-toast.service";
 
 /**
  * Корневой компонент приложения
@@ -44,10 +43,7 @@ export class AppComponent implements OnInit {
     private tokenService: TokenService,
     private router: Router,
     private loadingService: LoadingService,
-  ) {
-    // Инстанциируем listener для toast'а при потере WS-соединения.
-    inject(ConnectionStatusToastService);
-  }
+  ) {}
 
   ngOnInit(): void {
     const showLoaderEvents = this.router.events.pipe(
