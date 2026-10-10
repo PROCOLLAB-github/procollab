@@ -114,7 +114,7 @@ export class ProfileEditInfoService {
     const lengthLimits: { field: string; limit: number }[] = [
       { field: "city", limit: 100 },
       { field: "aboutMe", limit: 300 },
-      { field: "organizationName", limit: 100 },
+      { field: "organizationName", limit: 255 },
       { field: "description", limit: 400 },
       { field: "organization", limit: 50 },
       { field: "descriptionWork", limit: 400 },
