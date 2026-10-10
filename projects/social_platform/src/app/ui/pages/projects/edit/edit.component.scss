@@ -218,7 +218,7 @@
     .project__top {
       position: static;
       display: grid;
-      grid-template-columns: 44px minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
       gap: 12px;
       justify-content: space-between;
       padding: 8px var(--page-gutter);
@@ -246,8 +246,14 @@
 
     .project__back {
       align-self: start;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 44px;
+    }
+
+    .project__title {
+      display: block;
+      font-size: var(--ui-font-h3);
+      line-height: 1.3;
     }
 
     .project__wrapper--settings {

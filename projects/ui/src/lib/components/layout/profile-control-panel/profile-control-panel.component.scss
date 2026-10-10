@@ -451,8 +451,9 @@
   }
 
   .control-panel__notifications {
-    top: 100%;
-    right: 0%;
+    top: 64px;
+    right: var(--page-gutter);
+    left: var(--page-gutter);
     z-index: 20;
     width: auto;
     max-width: none;

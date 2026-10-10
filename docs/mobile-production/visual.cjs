@@ -157,6 +157,90 @@ async function inspect(page, name) {
   }, name);
 }
 
+async function verifyMobileComposition(page, name) {
+  const failures = await page.evaluate(name => {
+    const failures = [];
+    const check = (condition, message) => {
+      if (!condition) failures.push(message);
+    };
+    const rect = el => el.getBoundingClientRect();
+    if (name === "programs") {
+      for (const card of document.querySelectorAll("app-program-card .card")) {
+        const info = card.querySelector(".card__info");
+        const avatar = rect(card.querySelector(".card__photo"));
+        const title = rect(card.querySelector(".card__name"));
+        check(getComputedStyle(info).borderTopWidth === "0px", "Program card has a second border");
+        check(title.left >= avatar.right + 8, "Program avatar overlaps title");
+      }
+    }
+    if (["program", "profile", "project"].includes(name)) {
+      const cover = rect(document.querySelector(".info__cover"));
+      const avatar = rect(document.querySelector(".info__avatar"));
+      check(
+        Math.abs(avatar.left + avatar.right - cover.left - cover.right) < 2,
+        "Detail avatar is not centered",
+      );
+    }
+    if (["profile", "project"].includes(name)) {
+      const prefix = name === "profile" ? "profile" : "project";
+      const overview = document.querySelector(`.${prefix}__about`);
+      const context = document.querySelector(`.${prefix}__context`);
+      const news = document.querySelector(`.${prefix}__context ~ .news__form`);
+      check(
+        overview && context && rect(overview).bottom <= rect(context).top,
+        "Main description must precede secondary blocks",
+      );
+      if (news) check(rect(context).bottom <= rect(news).top, "News must follow context");
+    }
+    if (name === "feed") {
+      for (const option of document.querySelectorAll(".filter__option")) {
+        const icon = option.querySelector(".filter__option--icon");
+        const r = rect(icon);
+        const parent = rect(option);
+        check(getComputedStyle(icon).transform === "none", "Feed icon retains desktop transform");
+        check(
+          r.left >= parent.left + 8 && r.right <= parent.right - 8,
+          "Feed icon escapes card padding",
+        );
+        check(icon.querySelector("use").getBBox().width > 0, "Feed icon is missing");
+      }
+    }
+    if (name === "vacancies") {
+      const filter = document.querySelector("app-vacancy-filter");
+      const card = document.querySelector("app-project-vacancy-card");
+      check(rect(filter).bottom <= rect(card).top, "Vacancy filters must precede results");
+      check(
+        Boolean(filter.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING),
+        "Filter DOM order must precede results",
+      );
+      for (const badge of document.querySelectorAll("app-vacancy-status app-badge"))
+        check(
+          getComputedStyle(badge).borderTopWidth === "0px",
+          "Vacancy badge has an outer border",
+        );
+    }
+    if (name === "profile-edit") {
+      const header =
+        document.querySelector("app-profile-edit .profile__top") ||
+        document.querySelector(".profile__top");
+      const action = header.querySelector("button.button");
+      const heading = header.querySelector(".page-header__actions");
+      check(
+        Math.abs(rect(action).width - rect(heading).width) < 2,
+        "Profile save does not fill action row",
+      );
+      const row = document.querySelector(".profile__wrapper--main > .profile__row");
+      const avatar = row.querySelector("app-avatar-control");
+      check(
+        Math.abs(rect(avatar).left + rect(avatar).right - rect(row).left - rect(row).right) < 2,
+        "Profile editor avatar is not centered",
+      );
+    }
+    return failures;
+  }, name);
+  assert.deepEqual(failures, [], `${name}: mobile composition`);
+}
+
 function verify(name, layout) {
   const gap = actions => {
     for (let i = 1; i < actions.length; i++)
@@ -301,6 +385,8 @@ function verify(name, layout) {
           });
         if (name === "program" && width > 1000)
           await page.locator("app-program-role-widget").waitFor({ state: "attached" });
+        if (["program", "profile", "project"].includes(name))
+          await page.locator(".info__avatar").waitFor({ state: "visible" });
         await settle(page);
         if (name === "team-invite") {
           await page.locator(".invite__submit button").click();
@@ -313,8 +399,17 @@ function verify(name, layout) {
         if (checkMobile && width < 1000) {
           try {
             verify(name, layout);
+            await verifyMobileComposition(page, name);
           } catch (error) {
             console.error(JSON.stringify({ name, width, layout }));
+            await page.screenshot({
+              path: path.join(output, phase, `failure-${name}-${width}.png`),
+              fullPage: true,
+            });
+            fs.writeFileSync(
+              path.join(output, phase, `failure-${name}-${width}.html`),
+              await page.content(),
+            );
             throw error;
           }
         }

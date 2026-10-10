@@ -173,12 +173,15 @@
   .button {
     @include ui-foundation.button;
 
-    &__content {
+    max-height: none;
+
+    &__label {
       display: inline-flex;
       gap: var(--ui-space-sm);
       align-items: center;
       justify-content: center;
       min-width: 0;
+      max-width: 100%;
     }
 
     &__content--loading {
@@ -191,6 +194,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+  }
+
+  .button.button--inline .button__label,
+  .button.button--outline .button__label {
+    display: inline-flex;
+    margin-right: 0;
+
+    ::ng-deep > * {
+      margin-right: 0;
+    }
+
+    ::ng-deep i {
+      flex-shrink: 0;
     }
   }
 }

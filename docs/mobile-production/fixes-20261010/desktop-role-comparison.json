@@ -1,0 +1,130 @@
+[
+  {
+    "screen": "achievements-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "achievements-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "contacts-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "contacts-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "controls-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "controls-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "create-project-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "create-project-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "notifications-empty-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "notifications-empty-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "notifications-loaded-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "notifications-loaded-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "organizer-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "organizer-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "participant-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "participant-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  }
+]

@@ -472,13 +472,22 @@ $detail-bar-mb: 12px;
     .info__avatar,
     .info__avatar--program {
       bottom: -32px;
-      left: 16px;
-      transform: none;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .info__page-header {
       padding-top: 52px;
       margin-bottom: 16px;
+
+      ::ng-deep .page-header,
+      ::ng-deep .page-header__title-row {
+        justify-content: center;
+      }
+
+      ::ng-deep .page-header__title {
+        text-align: center;
+      }
     }
 
     .info__actions {
@@ -520,6 +529,12 @@ $detail-bar-mb: 12px;
 
     .info__materials--full {
       grid-column: auto;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .info__actions {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 

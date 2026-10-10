@@ -356,5 +356,36 @@
     .widget__badge {
       font-size: var(--ui-font-small);
     }
+
+    .widget__project-lines {
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .widget__stage-state {
+      height: auto;
+      font-size: var(--ui-font-small);
+      line-height: 1.5;
+    }
+
+    .widget__steps {
+      margin-top: 12px;
+    }
+
+    .widget__steps li {
+      font-size: var(--ui-font-small);
+      line-height: 1.5;
+    }
+
+    .widget__steps li:not(:last-child)::after {
+      top: 8px;
+    }
+
+    .widget__dot {
+      width: 16px;
+      height: 16px;
+      margin-bottom: 8px;
+      line-height: 16px;
+    }
   }
 }

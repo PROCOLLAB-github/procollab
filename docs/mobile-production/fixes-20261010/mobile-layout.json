@@ -1,0 +1,415 @@
+[
+  {
+    "width": 320,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 320,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 320,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 142,
+          "y": 174,
+          "right": 152,
+          "bottom": 184,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 29,
+          "y": 159,
+          "right": 152,
+          "bottom": 199,
+          "width": 123,
+          "height": 40
+        },
+        "textBox": {
+          "x": 52.4375,
+          "y": 159,
+          "right": 110.5625,
+          "bottom": 198,
+          "width": 58.125,
+          "height": 39
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 320,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 320,
+    "variant": "notifications-loaded",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 347,
+          "y": 114,
+          "right": 357,
+          "bottom": 124,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 234,
+          "y": 99,
+          "right": 357,
+          "bottom": 139,
+          "width": 123,
+          "height": 40
+        },
+        "textBox": {
+          "x": 257.4375,
+          "y": 99,
+          "right": 315.5625,
+          "bottom": 138,
+          "width": 58.125,
+          "height": 39
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "variant": "notifications-loaded",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 702,
+          "y": 109.59375,
+          "right": 712,
+          "bottom": 119.59375,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 605,
+          "y": 99,
+          "right": 712,
+          "bottom": 130.1875,
+          "width": 107,
+          "height": 31.1875
+        },
+        "textBox": {
+          "x": 624.59375,
+          "y": 98,
+          "right": 674.40625,
+          "bottom": 130.59375,
+          "width": 49.8125,
+          "height": 32.59375
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 768,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "variant": "notifications-loaded",
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 1202.359375,
+          "y": 157.796875,
+          "right": 1212.359375,
+          "bottom": 167.796875,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 0,
+          "y": 0,
+          "right": 0,
+          "bottom": 0,
+          "width": 0,
+          "height": 0
+        },
+        "textBox": {
+          "x": 1095.609375,
+          "y": 154,
+          "right": 1192.359375,
+          "bottom": 171,
+          "width": 96.75,
+          "height": 17
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "variant": "notifications-loaded",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 1442.359375,
+          "y": 157.796875,
+          "right": 1452.359375,
+          "bottom": 167.796875,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 0,
+          "y": 0,
+          "right": 0,
+          "bottom": 0,
+          "width": 0,
+          "height": 0
+        },
+        "textBox": {
+          "x": 1335.609375,
+          "y": 154,
+          "right": 1432.359375,
+          "bottom": 171,
+          "width": 96.75,
+          "height": 17
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 1920,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "notifications-loaded",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 1442.359375,
+          "y": 157.796875,
+          "right": 1452.359375,
+          "bottom": 167.796875,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 0,
+          "y": 0,
+          "right": 0,
+          "bottom": 0,
+          "width": 0,
+          "height": 0
+        },
+        "textBox": {
+          "x": 1335.609375,
+          "y": 154,
+          "right": 1432.359375,
+          "bottom": 171,
+          "width": 96.75,
+          "height": 17
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 1920,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "notifications-loaded",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "organizer",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "participant",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "create-project",
+    "icons": [
+      {
+        "text": "создать проект",
+        "icon": {
+          "x": 1442.359375,
+          "y": 157.796875,
+          "right": 1452.359375,
+          "bottom": 167.796875,
+          "width": 10,
+          "height": 10
+        },
+        "label": {
+          "x": 0,
+          "y": 0,
+          "right": 0,
+          "bottom": 0,
+          "width": 0,
+          "height": 0
+        },
+        "textBox": {
+          "x": 1335.609375,
+          "y": 154,
+          "right": 1432.359375,
+          "bottom": 171,
+          "width": 96.75,
+          "height": 17
+        },
+        "drawn": 9.7694730758667
+      }
+    ]
+  },
+  {
+    "width": 1920,
+    "variant": "controls",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "notifications-empty",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "variant": "notifications-loaded",
+    "passed": true
+  }
+]

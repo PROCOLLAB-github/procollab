@@ -716,6 +716,16 @@
     .card--my-project .card__description p {
       font-size: var(--ui-font-small);
       line-height: 18px;
+      -webkit-line-clamp: 3;
+    }
+
+    .card--project .card__description,
+    .card--my-project .card__description,
+    .card--my-project .card__description--with-program {
+      flex: 0 0 auto;
+      height: auto;
+      min-height: 0;
+      margin-bottom: 12px;
     }
 
     .card__subscription-action {

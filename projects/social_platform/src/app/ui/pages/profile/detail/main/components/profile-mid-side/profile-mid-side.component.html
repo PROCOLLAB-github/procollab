@@ -27,6 +27,7 @@
         }
       </div>
     }
+    <ng-content />
     @if (isProfileEmpty()) {
       @if (loggedUserId() === user()!.id) {
         <div class="profile__empty" data-testid="empty-profile-state">

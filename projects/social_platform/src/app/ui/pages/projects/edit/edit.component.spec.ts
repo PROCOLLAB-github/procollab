@@ -154,9 +154,11 @@ describe("ProjectEditComponent", () => {
   it("на любом шаге блокирует сохранение старой обложки во время reset", () => {
     fixture.debugElement.injector.get(ProjectCoverResetService).pending.set(true);
     fixture.detectChanges();
-    const buttons = fixture.nativeElement.querySelectorAll(".project__save app-button button");
-    expect(buttons[1].disabled).toBe(true);
-    expect(buttons[2].disabled).toBe(true);
+    const buttons = fixture.nativeElement.querySelectorAll(
+      ".project__save button:not(.button--red)",
+    );
+    expect(buttons).toHaveLength(2);
+    expect([...buttons].every((button: HTMLButtonElement) => button.disabled)).toBe(true);
   });
 
   it("uses canonical competition/submitted state for the primary action label", () => {
@@ -165,12 +167,15 @@ describe("ProjectEditComponent", () => {
     (facade.isCompetitive as ReturnType<typeof signal<boolean>>).set(true);
     fixture.detectChanges();
     expect(
-      fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent,
+      fixture.nativeElement.querySelector(".project__save .button--inline:not(.button--red)")
+        .textContent,
     ).toContain("отправить заявку");
     (facade.submitted as ReturnType<typeof signal<boolean>>).set(true);
     fixture.detectChanges();
     expect(
-      fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent.trim(),
+      fixture.nativeElement
+        .querySelector(".project__save .button--inline:not(.button--red)")
+        .textContent.trim(),
     ).toBe("сохранить");
   });
 });

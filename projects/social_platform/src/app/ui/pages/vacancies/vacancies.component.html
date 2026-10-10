@@ -57,18 +57,18 @@
             </form>
           }
 
+          @if (isAll() === "all") {
+            <div class="page__left">
+              <app-vacancy-filter
+                (searchValueChange)="onSearhValueChanged($event)"
+                [searchValue]="this.searchForm.get('search')?.value!"
+                class="page__filter"
+              ></app-vacancy-filter>
+            </div>
+          }
+
           <router-outlet></router-outlet>
         </div>
-
-        @if (isAll() === "all") {
-          <div class="page__left">
-            <app-vacancy-filter
-              (searchValueChange)="onSearhValueChanged($event)"
-              [searchValue]="this.searchForm.get('search')?.value!"
-              class="page__filter"
-            ></app-vacancy-filter>
-          </div>
-        }
       </div>
     </div>
   </main>

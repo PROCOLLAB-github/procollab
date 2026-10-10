@@ -44,3 +44,9 @@
     }
   }
 }
+
+@media screen and (max-width: 999px) {
+  .page__info {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
