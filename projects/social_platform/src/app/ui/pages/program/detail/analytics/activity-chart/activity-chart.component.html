@@ -1,0 +1,40 @@
+<!-- @format -->
+
+@for (item of series; track item.key) {
+  <section
+    class="activity-chart__series"
+    [class.activity-chart__series--solutions]="item.key === 'submittedSolutions'"
+  >
+    <h3 class="activity-chart__title"><span aria-hidden="true"></span>{{ item.label }}</h3>
+    <div
+      class="activity-chart__plot"
+      role="slider"
+      tabindex="0"
+      [attr.aria-label]="
+        item.label +
+        ': выбрать дату. Стрелки — соседняя дата, Home и End — начало и конец периода, Escape — сброс.'
+      "
+      aria-valuemin="1"
+      [attr.aria-valuemax]="points().length || 1"
+      [attr.aria-valuenow]="(selectedIndex() ?? 0) + 1"
+      [attr.aria-valuetext]="selectionLabel()"
+      (focus)="selectFirstDate()"
+      (keydown)="onKeydown($event)"
+    >
+      <canvas #canvas aria-hidden="true"></canvas>
+    </div>
+  </section>
+}
+<p class="activity-chart__readout" aria-live="polite" aria-atomic="true">
+  @if (selectedPoint(); as point) {
+    <strong>{{ dateLabel(point.date) }}</strong>
+    <span
+      >Регистрации <b>{{ point.registrations }}</b></span
+    >
+    <span
+      >Решения <b>{{ point.submittedSolutions }}</b></span
+    >
+  } @else {
+    Наведите указатель или выберите дату стрелками на клавиатуре
+  }
+</p>

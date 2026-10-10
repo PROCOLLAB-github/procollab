@@ -199,35 +199,6 @@
     min-height: 24px;
   }
 
-  &__without span {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__without {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-  }
-
-  &__without small {
-    display: flex;
-    flex-shrink: 0;
-    gap: 3px;
-    align-items: center;
-    font-size: 9px;
-    font-weight: 400;
-    line-height: 12px;
-  }
-
-  &__without i {
-    width: 3px;
-    height: 3px;
-    background: currentcolor;
-    border-radius: 50%;
-  }
-
   &__expert-state {
     display: grid;
     align-content: center;

@@ -110,7 +110,7 @@ describe("ProgramRoleWidgetComponent", () => {
     expect(f.nativeElement.textContent).toContain("Не отправлен");
     expect(f.nativeElement.querySelectorAll("a")).toHaveLength(2);
   });
-  it("shows four organizer counters and one inline percentage", () => {
+  it("shows four organizer counts without a standalone percentage", () => {
     const f = render({
       role: "organizer",
       programId: 12,
@@ -123,7 +123,10 @@ describe("ProgramRoleWidgetComponent", () => {
       },
     });
     expect(f.nativeElement.querySelectorAll("dd")).toHaveLength(4);
-    expect(f.nativeElement.textContent).toContain("7,7%");
+    expect(f.nativeElement.textContent).not.toContain("%");
+    expect(
+      [...f.nativeElement.querySelectorAll("dd")].map((el: HTMLElement) => el.textContent?.trim()),
+    ).toEqual(["248", "61", "54", "19"]);
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
       "/office/program/12/analytics",
     );

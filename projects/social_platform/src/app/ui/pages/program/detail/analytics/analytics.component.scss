@@ -140,37 +140,6 @@
   flex-direction: column;
   padding: 16px 18px;
 
-  &__list {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-    margin-top: 12px;
-
-    li {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-      min-width: 0;
-      padding: 8px 10px;
-      background: var(--light-gray);
-      border-radius: 8px;
-
-      span {
-        min-width: 0;
-        font-weight: 500;
-        color: var(--black);
-        overflow-wrap: anywhere;
-      }
-
-      strong {
-        flex-shrink: 0;
-        font-weight: 700;
-        color: var(--black);
-      }
-    }
-  }
-
   .analytics__heading-row app-tooltip {
     flex-shrink: 0;
   }
@@ -192,6 +161,11 @@
     color: var(--accent);
     background: var(--accent-light);
     border-radius: 12px;
+  }
+
+  &[data-metric="submitted-projects"] &__icon {
+    color: var(--green-dark);
+    background: var(--green-light);
   }
 
   &__content {
@@ -429,54 +403,6 @@
     strong {
       font-weight: 600;
     }
-  }
-}
-
-.funnel {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
-
-  &__item {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-    min-height: 35px;
-    padding: 8px 10px;
-    overflow: hidden;
-    border-radius: 8px;
-  }
-
-  &__item > span:not(.funnel__bar) {
-    position: relative;
-    z-index: 1;
-    color: var(--black);
-  }
-
-  &__item > strong {
-    position: relative;
-    z-index: 1;
-    font-weight: 700;
-    color: var(--black);
-  }
-
-  &__label {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    min-width: 0;
-    font-weight: 500;
-  }
-
-  &__bar {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(90deg, var(--accent-light), var(--ui-accent-gradient-end));
-    border-radius: 8px;
   }
 }
 
@@ -752,161 +678,6 @@
   &__note {
     margin-top: 2px;
     color: var(--dark-grey);
-  }
-
-  &__chart {
-    display: grid;
-    grid-template-columns: 32px minmax(0, 1fr);
-    min-width: 0;
-    margin-top: 16px;
-    margin-bottom: 26px;
-  }
-
-  &__plot,
-  &__y-axis {
-    position: relative;
-    min-width: 0;
-  }
-
-  &__y-axis span {
-    position: absolute;
-    right: 8px;
-    font-size: var(--ui-font-small);
-    color: var(--black);
-    transform: translateY(-50%);
-  }
-
-  &__helper,
-  &__readout {
-    margin-top: 12px;
-    font-size: var(--ui-font-small);
-    line-height: 18px;
-    color: var(--grey-for-text);
-  }
-
-  &__readout {
-    min-height: 54px;
-
-    strong {
-      color: var(--black);
-    }
-  }
-
-  &__date-target {
-    position: absolute;
-    top: 12%;
-    bottom: 12%;
-    padding: 0;
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-    transform: translateX(-50%);
-
-    &:hover,
-    &--selected {
-      background: var(--ui-accent-tint-chart);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--accent);
-    }
-  }
-
-  &__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 16px;
-    align-items: center;
-    margin-top: 12px;
-
-    span {
-      display: inline-flex;
-      gap: 6px;
-      align-items: center;
-      font-size: var(--ui-font-small);
-      font-weight: 500;
-      line-height: 18px;
-      color: var(--black);
-    }
-  }
-
-  &__marker {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-
-    &--registrations {
-      background: var(--accent);
-    }
-
-    &--solutions {
-      background: var(--green);
-    }
-  }
-
-  svg {
-    display: block;
-    width: 100%;
-    height: 220px;
-    overflow: visible;
-  }
-
-  &__grid-line {
-    stroke: var(--medium-grey-for-outline);
-    stroke-width: 0.6;
-    vector-effect: non-scaling-stroke;
-  }
-
-  &__line {
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
-
-    &--registrations {
-      stroke: var(--accent);
-    }
-
-    &--solutions {
-      stroke: var(--green);
-      stroke-dasharray: 5 3;
-    }
-  }
-
-  &__point {
-    stroke: var(--light-white);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-
-    &--registrations {
-      fill: var(--accent);
-    }
-
-    &--solutions {
-      fill: var(--green);
-    }
-  }
-
-  &__axis {
-    position: relative;
-    padding-top: 6px;
-    color: var(--grey-for-text);
-    border-top: 1px solid var(--medium-grey-for-outline);
-
-    span {
-      position: absolute;
-      transform: translateX(-50%);
-
-      @media screen and (max-width: 999px) {
-        font-size: var(--ui-font-caption);
-      }
-
-      @media screen and (min-width: 1000px) {
-        font-size: 11px;
-      }
-    }
   }
 }
 
