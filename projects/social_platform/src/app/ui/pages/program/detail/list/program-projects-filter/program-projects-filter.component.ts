@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FiltersDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,6 +27,7 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
   templateUrl: "./program-projects-filter.component.html",
   styleUrl: "./program-projects-filter.component.scss",
   imports: [
+    FiltersDirective,
     CommonModule,
     ReactiveFormsModule,
     CheckboxComponent,
@@ -32,6 +38,8 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramProjectsFilterComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly clear = output<void>();
 
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);

@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -36,6 +41,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
   templateUrl: "./chat-window.component.html",
   styleUrl: "./chat-window.component.scss",
   imports: [
+    FormLayoutDirective,
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
@@ -47,6 +53,8 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   private readonly modalService = inject(ModalService);

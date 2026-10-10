@@ -1,4 +1,5 @@
 /** @format */
+@use "styles/responsive";
 
 .file {
   display: flex;
@@ -51,6 +52,40 @@
     &--file {
       color: var(--accent);
       cursor: pointer;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .file {
+    &__left {
+      flex: 1;
+    }
+
+    &__icon {
+      flex-shrink: 0;
+    }
+  }
+
+  .file,
+  .file__left {
+    min-width: 0;
+  }
+
+  @include responsive.apply-mobile {
+    .file {
+      flex-wrap: wrap;
+    }
+
+    .file__name {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .file__icon {
+      width: 44px;
+      height: 44px;
     }
   }
 }

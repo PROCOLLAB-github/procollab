@@ -1,59 +1,124 @@
 <!-- @format -->
-
-<div #contentEl class="project__content">
-  <div class="about project__about">
-    <div class="about__head">
-      <h3 class="text-body-12 about__title">о проекте</h3>
-      <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div #contentEl class="project__content">
+    <div class="about project__about">
+      <div class="about__head">
+        <h3 class="text-body-12 about__title">о проекте</h3>
+        <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+      </div>
+      @if (fullDescription()) {
+        <div class="text-body-10 about__text">
+          <p [innerHTML]="visibleDescription() | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable()) {
+            <button type="button" class="read-more text-body-10" (click)="onToggleDescription()">
+              {{ descriptionExpanded() ? "Скрыть" : "Подробнее" }}
+            </button>
+          }
+        </div>
+      }
     </div>
-    @if (fullDescription()) {
-      <div class="text-body-10 about__text">
-        <p [innerHTML]="visibleDescription() | parseLinks | parseBreaks"></p>
-        @if (descriptionExpandable()) {
-          <button type="button" class="read-more text-body-10" (click)="onToggleDescription()">
-            {{ descriptionExpanded() ? "Скрыть" : "Подробнее" }}
-          </button>
+
+    @if (profile()) {
+      <div #newsEl class="project__news news">
+        @if (project()!.leader === profile()!.id) {
+          <app-news-form
+            class="news__form"
+            [pending]="newsPending()"
+            (addNews)="onAddNews($event)"
+          ></app-news-form>
+        }
+
+        <div class="project__directions">
+          @for (directionItem of directions(); track $index) {
+            <app-project-direction-card
+              [direction]="directionItem.direction"
+              [icon]="directionItem.icon"
+              [about]="directionItem.about"
+              [type]="directionItem.type"
+              [isOwner]="profile()!.id === project()!.leader"
+              [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
+            ></app-project-direction-card>
+          }
+        </div>
+
+        @for (n of news(); track n.id) {
+          <app-news-card
+            class="news__item"
+            [resourceLink]="[AppRoutes.projects.detail(project()!.id)]"
+            [contentId]="project()!.id"
+            [attr.data-id]="n.id"
+            [feedItem]="n"
+            [isOwner]="profile()!.id === project()!.leader"
+            (delete)="onDeleteNews($event)"
+            (like)="onLike($event)"
+            (edited)="onEditNews($event, n.id)"
+          ></app-news-card>
         }
       </div>
     }
   </div>
-
-  @if (profile()) {
-    <div #newsEl class="project__news news">
-      @if (project()!.leader === profile()!.id) {
-        <app-news-form
-          class="news__form"
-          [pending]="newsPending()"
-          (addNews)="onAddNews($event)"
-        ></app-news-form>
-      }
-
-      <div class="project__directions">
-        @for (directionItem of directions(); track $index) {
-          <app-project-direction-card
-            [direction]="directionItem.direction"
-            [icon]="directionItem.icon"
-            [about]="directionItem.about"
-            [type]="directionItem.type"
-            [isOwner]="profile()!.id === project()!.leader"
-            [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
-          ></app-project-direction-card>
-        }
+} @else {
+  <div #contentEl class="project__content">
+    <div class="about project__about">
+      <div class="about__head">
+        <h3 class="text-body-12 about__title">о проекте</h3>
+        <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
       </div>
-
-      @for (n of news(); track n.id) {
-        <app-news-card
-          class="news__item"
-          [resourceLink]="[AppRoutes.projects.detail(project()!.id)]"
-          [contentId]="project()!.id"
-          [attr.data-id]="n.id"
-          [feedItem]="n"
-          [isOwner]="profile()!.id === project()!.leader"
-          (delete)="onDeleteNews($event)"
-          (like)="onLike($event)"
-          (edited)="onEditNews($event, n.id)"
-        ></app-news-card>
+      @if (fullDescription()) {
+        <div class="text-body-10 about__text">
+          <p [innerHTML]="visibleDescription() | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable()) {
+            <button
+              appButton="secondary"
+              type="button"
+              class="read-more text-body-10"
+              (click)="onToggleDescription()"
+            >
+              {{ descriptionExpanded() ? "Скрыть" : "Подробнее" }}
+            </button>
+          }
+        </div>
       }
     </div>
-  }
-</div>
+
+    @if (profile()) {
+      <div #newsEl class="project__news news">
+        @if (project()!.leader === profile()!.id) {
+          <app-news-form
+            class="news__form"
+            [pending]="newsPending()"
+            (addNews)="onAddNews($event)"
+          ></app-news-form>
+        }
+
+        <div class="project__directions">
+          @for (directionItem of directions(); track $index) {
+            <app-project-direction-card
+              [direction]="directionItem.direction"
+              [icon]="directionItem.icon"
+              [about]="directionItem.about"
+              [type]="directionItem.type"
+              [isOwner]="profile()!.id === project()!.leader"
+              [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
+            ></app-project-direction-card>
+          }
+        </div>
+
+        @for (n of news(); track n.id) {
+          <app-news-card
+            class="news__item"
+            [resourceLink]="[AppRoutes.projects.detail(project()!.id)]"
+            [contentId]="project()!.id"
+            [attr.data-id]="n.id"
+            [feedItem]="n"
+            [isOwner]="profile()!.id === project()!.leader"
+            (delete)="onDeleteNews($event)"
+            (like)="onLike($event)"
+            (edited)="onEditNews($event, n.id)"
+          ></app-news-card>
+        }
+      </div>
+    }
+  </div>
+}

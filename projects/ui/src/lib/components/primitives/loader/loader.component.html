@@ -1,35 +1,70 @@
 <!-- @format -->
-<div>
-  @if (type() === "wave") {
-    <div
-      class="dot-wave"
-      [style]="
-        '--speed:' +
-        speed() +
-        ';' +
-        '--size:' +
-        size() +
-        ';' +
-        '--color:' +
-        'var(--' +
-        color() +
-        ');'
-      "
-    >
-      <div class="dot-wave__dot"></div>
-      <div class="dot-wave__dot"></div>
-      <div class="dot-wave__dot"></div>
-      <div class="dot-wave__dot"></div>
-    </div>
-  } @else if (type() === "circle") {
-    <div
-      class="lds-ring"
-      [style]="'--size:' + size() + ';' + '--color:' + 'var(--' + color() + ');'"
-    >
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  }
-</div>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div>
+    @if (type() === "wave") {
+      <div
+        class="dot-wave"
+        [style]="
+          '--speed:' +
+          speed() +
+          ';' +
+          '--size:' +
+          size() +
+          ';' +
+          '--color:' +
+          'var(--' +
+          color() +
+          ');'
+        "
+      >
+        <div class="dot-wave__dot"></div>
+        <div class="dot-wave__dot"></div>
+        <div class="dot-wave__dot"></div>
+        <div class="dot-wave__dot"></div>
+      </div>
+    } @else if (type() === "circle") {
+      <div
+        class="lds-ring"
+        [style]="'--size:' + size() + ';' + '--color:' + 'var(--' + color() + ');'"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    }
+  </div>
+} @else {
+  <div>
+    @if (type() === "wave") {
+      <div
+        class="dot-wave"
+        [style]="
+          '--speed:' +
+          speed() +
+          ';' +
+          '--size:' +
+          size() +
+          ';' +
+          '--color:' +
+          'var(--' +
+          color() +
+          ');'
+        "
+      >
+        <div class="dot-wave__dot"></div>
+        <div class="dot-wave__dot"></div>
+        <div class="dot-wave__dot"></div>
+        <div class="dot-wave__dot"></div>
+      </div>
+    } @else if (type() === "circle") {
+      <div class="lds-ring" [style]="'--size:' + size() + ';' + '--color:' + resolvedColor() + ';'">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    }
+  </div>
+}

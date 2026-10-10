@@ -21,3 +21,53 @@ $tablet: 750px;
     @content;
   }
 }
+
+@mixin apply-mobile {
+  @media screen and (max-width: #{$tablet - 1px}) {
+    @content;
+  }
+}
+
+@mixin apply-below-desktop {
+  @media screen and (max-width: #{$desktop - 1px}) {
+    @content;
+  }
+}
+
+@mixin single-column {
+  grid-template-columns: minmax(0, 1fr);
+
+  > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@mixin scroll-tabs {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+
+  > * {
+    flex-shrink: 0;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+}
+
+@mixin mobile-actions {
+  flex-wrap: wrap;
+  gap: 12px;
+  min-width: 0;
+
+  > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.

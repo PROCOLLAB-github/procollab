@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
@@ -15,10 +20,18 @@ import { TaskPreview } from "@domain/kanban/task.model";
   selector: "app-kanban-archive",
   templateUrl: "./kanban-archive.component.html",
   styleUrl: "./kanban-archive.component.scss",
-  imports: [CommonModule, SearchComponent, ReactiveFormsModule, KanbanTaskComponent],
+  imports: [
+    FormLayoutDirective,
+    CommonModule,
+    SearchComponent,
+    ReactiveFormsModule,
+    KanbanTaskComponent,
+  ],
   standalone: true,
 })
 export class KanbanArhiveComponent implements OnInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly kanbanBoardDetailInfoService = inject(KanbanBoardDetailInfoService);

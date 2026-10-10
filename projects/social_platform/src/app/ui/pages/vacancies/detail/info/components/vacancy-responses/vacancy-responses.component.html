@@ -1,113 +1,233 @@
 <!-- @format -->
-
-<section class="responses" aria-labelledby="vacancy-responses-title">
-  <header class="responses__header">
-    <h2 id="vacancy-responses-title" class="responses__title" tabindex="-1" cdkFocusInitial>
-      Отклики на вакансию
-    </h2>
-    <button
-      type="button"
-      class="responses__close"
-      aria-label="Закрыть отклики"
-      (click)="close.emit()"
-    >
-      <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-    </button>
-  </header>
-  @if (loading()) {
-    <p class="responses__state" role="status">Загрузка откликов…</p>
-  }
-  @if (error(); as loadError) {
-    <div class="responses__state" role="alert">
-      <p>{{ errorMessage(loadError) }}</p>
-      <app-button size="medium" appearance="outline" (click)="retry.emit()">Повторить</app-button>
-    </div>
-  } @else if (!loading() && responses().length === 0) {
-    <p class="responses__state">На эту вакансию пока нет откликов</p>
-  } @else {
-    <div class="responses__list">
-      @for (response of responses(); track response.id) {
-        <article class="response">
-          <header class="response__candidate" #candidateHeader tabindex="-1">
-            <div class="response__identity">
-              @if (response.user; as user) {
-                <app-avatar [size]="48" [url]="user.avatar ?? ''"></app-avatar>
-                <div class="response__identity-text">
-                  <h3 class="response__name">{{ user.firstName }} {{ user.lastName }}</h3>
-                  @if (user.specialization?.name; as specialization) {
-                    <p class="response__specialization">{{ specialization }}</p>
-                  }
-                </div>
-              } @else {
-                <h3 class="response__name">Кандидат</h3>
-              }
-            </div>
-            <div class="response__meta">
-              <app-vacancy-status
-                [label]="
-                  response.isApproved === true
-                    ? 'Принят'
-                    : response.isApproved === false
-                      ? 'Отклонён'
-                      : 'Ожидает решения'
-                "
-                [tone]="
-                  response.isApproved === true
-                    ? 'success'
-                    : response.isApproved === false
-                      ? 'declined'
-                      : 'pending'
-                "
-              ></app-vacancy-status>
-              @if (response.datetimeCreated) {
-                <p class="response__date">
-                  Отклик от {{ response.datetimeCreated | date: "dd.MM.yyyy" }}
-                </p>
-              }
-            </div>
-          </header>
-          <app-vacancy-skills
-            [skills]="response.user?.skills || []"
-            [limit]="6"
-          ></app-vacancy-skills>
-          <section class="response__section">
-            <h4 class="response__label">Сопроводительное письмо</h4>
-            <app-vacancy-letter [text]="response.whyMe || ''"></app-vacancy-letter>
-          </section>
-          @if (response.accompanyingFile; as file) {
-            <div class="response__file-row">
-              <span>Приложенный файл:</span>
-              <a
-                class="response__file"
-                [href]="file.link"
-                target="_blank"
-                rel="noopener noreferrer"
-                >{{ file.name || "Открыть файл" }}</a
-              >
-            </div>
-          }
-          @if (response.isApproved === null) {
-            <div class="response__actions">
-              <app-button
-                size="big"
-                appearance="outline"
-                color="red"
-                [disabled]="loading() || isProcessing(response.id)"
-                [loader]="isProcessing(response.id)"
-                (click)="decide(response.id, false, candidateHeader)"
-                >отклонить</app-button
-              >
-              <app-button
-                size="big"
-                [disabled]="loading() || isProcessing(response.id)"
-                [loader]="isProcessing(response.id)"
-                (click)="decide(response.id, true, candidateHeader)"
-                >принять</app-button
-              >
-            </div>
-          }
-        </article>
-      }
-    </div>
-  }
-</section>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <section class="responses" aria-labelledby="vacancy-responses-title">
+    <header class="responses__header">
+      <h2 id="vacancy-responses-title" class="responses__title" tabindex="-1" cdkFocusInitial>
+        Отклики на вакансию
+      </h2>
+      <button
+        type="button"
+        class="responses__close"
+        aria-label="Закрыть отклики"
+        (click)="close.emit()"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </header>
+    @if (loading()) {
+      <p class="responses__state" role="status">Загрузка откликов…</p>
+    }
+    @if (error(); as loadError) {
+      <div class="responses__state" role="alert">
+        <p>{{ errorMessage(loadError) }}</p>
+        <app-button size="medium" appearance="outline" (click)="retry.emit()">Повторить</app-button>
+      </div>
+    } @else if (!loading() && responses().length === 0) {
+      <p class="responses__state">На эту вакансию пока нет откликов</p>
+    } @else {
+      <div class="responses__list">
+        @for (response of responses(); track response.id) {
+          <article class="response">
+            <header class="response__candidate" #candidateHeader tabindex="-1">
+              <div class="response__identity">
+                @if (response.user; as user) {
+                  <app-avatar [size]="48" [url]="user.avatar ?? ''"></app-avatar>
+                  <div class="response__identity-text">
+                    <h3 class="response__name">{{ user.firstName }} {{ user.lastName }}</h3>
+                    @if (user.specialization?.name; as specialization) {
+                      <p class="response__specialization">{{ specialization }}</p>
+                    }
+                  </div>
+                } @else {
+                  <h3 class="response__name">Кандидат</h3>
+                }
+              </div>
+              <div class="response__meta">
+                <app-vacancy-status
+                  [label]="
+                    response.isApproved === true
+                      ? 'Принят'
+                      : response.isApproved === false
+                        ? 'Отклонён'
+                        : 'Ожидает решения'
+                  "
+                  [tone]="
+                    response.isApproved === true
+                      ? 'success'
+                      : response.isApproved === false
+                        ? 'declined'
+                        : 'pending'
+                  "
+                ></app-vacancy-status>
+                @if (response.datetimeCreated) {
+                  <p class="response__date">
+                    Отклик от {{ response.datetimeCreated | date: "dd.MM.yyyy" }}
+                  </p>
+                }
+              </div>
+            </header>
+            <app-vacancy-skills
+              [skills]="response.user?.skills || []"
+              [limit]="6"
+            ></app-vacancy-skills>
+            <section class="response__section">
+              <h4 class="response__label">Сопроводительное письмо</h4>
+              <app-vacancy-letter [text]="response.whyMe || ''"></app-vacancy-letter>
+            </section>
+            @if (response.accompanyingFile; as file) {
+              <div class="response__file-row">
+                <span>Приложенный файл:</span>
+                <a
+                  class="response__file"
+                  [href]="file.link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ file.name || "Открыть файл" }}</a
+                >
+              </div>
+            }
+            @if (response.isApproved === null) {
+              <div class="response__actions">
+                <app-button
+                  size="big"
+                  appearance="outline"
+                  color="red"
+                  [disabled]="loading() || isProcessing(response.id)"
+                  [loader]="isProcessing(response.id)"
+                  (click)="decide(response.id, false, candidateHeader)"
+                  >отклонить</app-button
+                >
+                <app-button
+                  size="big"
+                  [disabled]="loading() || isProcessing(response.id)"
+                  [loader]="isProcessing(response.id)"
+                  (click)="decide(response.id, true, candidateHeader)"
+                  >принять</app-button
+                >
+              </div>
+            }
+          </article>
+        }
+      </div>
+    }
+  </section>
+} @else {
+  <section class="responses" aria-labelledby="vacancy-responses-title">
+    <header class="responses__header">
+      <h2 id="vacancy-responses-title" class="responses__title" tabindex="-1" cdkFocusInitial>
+        Отклики на вакансию
+      </h2>
+      <button
+        appButton="icon"
+        type="button"
+        class="responses__close"
+        aria-label="Закрыть отклики"
+        (click)="close.emit()"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </header>
+    @if (loading()) {
+      <app-state
+        class="responses__state"
+        [compact]="true"
+        kind="loading"
+        title="Загрузка откликов…"
+      />
+    }
+    @if (error(); as loadError) {
+      <div class="responses__state" role="alert">
+        <p>{{ errorMessage(loadError) }}</p>
+        <app-button size="medium" appearance="outline" (click)="retry.emit()">Повторить</app-button>
+      </div>
+    } @else if (!loading() && responses().length === 0) {
+      <p class="responses__state">На эту вакансию пока нет откликов</p>
+    } @else {
+      <div class="responses__list">
+        @for (response of responses(); track response.id) {
+          <article class="response">
+            <header class="response__candidate" #candidateHeader tabindex="-1">
+              <div class="response__identity">
+                @if (response.user; as user) {
+                  <app-avatar [size]="48" [url]="user.avatar ?? ''"></app-avatar>
+                  <div class="response__identity-text">
+                    <h3 class="response__name">{{ user.firstName }} {{ user.lastName }}</h3>
+                    @if (user.specialization?.name; as specialization) {
+                      <p class="response__specialization">{{ specialization }}</p>
+                    }
+                  </div>
+                } @else {
+                  <h3 class="response__name">Кандидат</h3>
+                }
+              </div>
+              <div class="response__meta">
+                <app-vacancy-status
+                  [label]="
+                    response.isApproved === true
+                      ? 'Принят'
+                      : response.isApproved === false
+                        ? 'Отклонён'
+                        : 'Ожидает решения'
+                  "
+                  [tone]="
+                    response.isApproved === true
+                      ? 'success'
+                      : response.isApproved === false
+                        ? 'declined'
+                        : 'pending'
+                  "
+                ></app-vacancy-status>
+                @if (response.datetimeCreated) {
+                  <p class="response__date">
+                    Отклик от {{ response.datetimeCreated | date: "dd.MM.yyyy" }}
+                  </p>
+                }
+              </div>
+            </header>
+            <app-vacancy-skills
+              [skills]="response.user?.skills || []"
+              [limit]="6"
+            ></app-vacancy-skills>
+            <section class="response__section">
+              <h4 class="response__label">Сопроводительное письмо</h4>
+              <app-vacancy-letter [text]="response.whyMe || ''"></app-vacancy-letter>
+            </section>
+            @if (response.accompanyingFile; as file) {
+              <div class="response__file-row">
+                <span>Приложенный файл:</span>
+                <a
+                  class="response__file"
+                  [href]="file.link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ file.name || "Открыть файл" }}</a
+                >
+              </div>
+            }
+            @if (response.isApproved === null) {
+              <div class="response__actions">
+                <app-button
+                  size="big"
+                  appearance="outline"
+                  color="red"
+                  [disabled]="loading() || isProcessing(response.id)"
+                  [loader]="isProcessing(response.id)"
+                  (click)="decide(response.id, false, candidateHeader)"
+                  >отклонить</app-button
+                >
+                <app-button
+                  size="big"
+                  [disabled]="loading() || isProcessing(response.id)"
+                  [loader]="isProcessing(response.id)"
+                  (click)="decide(response.id, true, candidateHeader)"
+                  >принять</app-button
+                >
+              </div>
+            }
+          </article>
+        }
+      </div>
+    }
+  </section>
+}

@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { CommonModule } from "@angular/common";
 import {
@@ -37,6 +40,8 @@ import { IconComponent } from "../icon/icon.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   /** Состояние для определения списка элементов */
   options = input<
     {

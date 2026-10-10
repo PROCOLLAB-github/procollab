@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -235,5 +234,14 @@ $button-size: 40px;
     width: 325px;
     color: var(--dark-grey);
     text-align: center;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .files-list {
+    &__item {
+      box-shadow: var(--ui-composer-shadow);
+    }
   }
 }

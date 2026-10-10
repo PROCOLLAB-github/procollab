@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/components/vacancy-skill";
 @use "styles/components/vacancy-ui";
 
@@ -76,5 +75,19 @@
   &--soft ::ng-deep .tag.tag--outline {
     color: var(--black);
     background: var(--accent-light);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .skills {
+    &__toggle {
+      min-height: 44px;
+      font-size: var(--ui-font-body);
+    }
+
+    &__empty {
+      font-size: var(--ui-font-small);
+    }
   }
 }

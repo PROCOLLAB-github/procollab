@@ -1,4 +1,6 @@
 /** @format */
+@use "styles/ui-foundation";
+@use "styles/responsive";
 
 .tag {
   position: relative;
@@ -176,6 +178,41 @@
       &:hover {
         opacity: 0.7;
       }
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .tag {
+    @include ui-foundation.badge;
+
+    padding: 4px 12px;
+    font-size: var(--ui-font-caption);
+    line-height: 1.5;
+    border-radius: var(--ui-radius-control);
+  }
+
+  @include responsive.apply-mobile {
+    .tag {
+      max-width: 100%;
+      padding: 4px 12px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .tag p {
+      min-width: 0;
+    }
+
+    .tag:has(.tag__icons) {
+      padding-right: 40px;
+    }
+
+    .tag__icons {
+      top: 0;
+      bottom: 0;
+      align-items: center;
     }
   }
 }

@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -49,5 +48,23 @@
   &__text {
     max-width: 185px;
     color: var(--dark-grey);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .verification__img {
+      position: static;
+      width: 100%;
+      min-width: 0;
+      max-height: 40dvh;
+      object-fit: contain;
+    }
+
+    .verification__action {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
   }
 }

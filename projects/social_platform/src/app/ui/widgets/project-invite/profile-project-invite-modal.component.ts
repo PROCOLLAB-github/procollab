@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, StateComponent } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from "@angular/core";
 import { Project } from "@domain/project/project.model";
 import { ProjectInviteForm } from "@api/invite/project-invite-form";
@@ -9,11 +15,18 @@ import { ProjectInviteRoleInputComponent } from "./project-invite-role-input.com
 
 @Component({
   selector: "app-profile-project-invite-modal",
-  imports: [ProjectInviteDialogComponent, ProjectInviteRoleInputComponent],
+  imports: [
+    StateComponent,
+    ButtonDirective,
+    ProjectInviteDialogComponent,
+    ProjectInviteRoleInputComponent,
+  ],
   templateUrl: "./profile-project-invite-modal.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileProjectInviteModalComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly projects = input.required<Project[]>();
   readonly form = input.required<ProjectInviteForm>();
   readonly selectedProjectId = input<number | null>(null);

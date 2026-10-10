@@ -1,664 +1,1379 @@
 <!-- @format -->
-<app-modal
-  [open]="state.open()"
-  [bodyClass]="
-    state.view() === 'assignments'
-      ? 'analytics-drilldown-body analytics-drilldown-body--assignments'
-      : state.view() === 'case'
-        ? 'analytics-drilldown-body analytics-drilldown-body--case'
-        : 'analytics-drilldown-body'
-  "
-  (openChange)="onOpenChange($event)"
->
-  <section
-    class="analytics-drilldown"
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-labelledby]="'analytics-dialog-' + state.view()"
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <app-modal
+    [open]="state.open()"
+    [bodyClass]="
+      state.view() === 'assignments'
+        ? 'analytics-drilldown-body analytics-drilldown-body--assignments'
+        : state.view() === 'case'
+          ? 'analytics-drilldown-body analytics-drilldown-body--case'
+          : 'analytics-drilldown-body'
+    "
+    (openChange)="onOpenChange($event)"
   >
-    <!-- Trap anchors остаются внутри проецируемого section при каждом portal attachment. -->
-    <div [cdkTrapFocus]="attached()" [cdkTrapFocusAutoCapture]="false">
-      <header class="analytics-drilldown__header">
-        <div>
-          @if (state.view() === "scores" || state.view() === "backlog") {
-            <button type="button" class="analytics-drilldown__action" (click)="state.back()">
-              ← Назад к списку
-            </button>
-          }
-          <h2 #heading tabindex="-1" [id]="'analytics-dialog-' + state.view()">{{ title() }}</h2>
-          @if (state.view() === "case" && cases.selection()?.scope === "without_case") {
-            <p class="analytics-drilldown__secondary">
-              Проекты, для которых кейс не выбран или больше недоступен.
-            </p>
-          }
-          @if (state.view() === "backlog") {
-            <p>Ожидающие назначения</p>
-          }
-          @if (state.view() === "participants-without-team") {
-            <p class="analytics-drilldown__secondary">
-              Зарегистрированные участники, которые пока не состоят в команде проекта этой
-              программы.
-            </p>
-          }
-          @if (state.view() === "projects-awaiting-evaluation") {
-            <p class="analytics-drilldown__secondary">
-              Сданные работы, оценивание которых ещё не завершено.
-            </p>
-          }
-          @if (state.view() === "projects-not-submitted") {
-            <p class="analytics-drilldown__secondary">
-              Проекты программы, которые ещё не отправили решение.
-            </p>
-            @if (state.notSubmittedPage(); as page) {
-              @if (page.applicable) {
-                <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
-                  @if (page.submissionDeadline) {
-                    {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершён" }}
-                    {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
-                  } @else {
-                    Срок сдачи не указан
-                  }
-                </p>
-              }
+    <section
+      class="analytics-drilldown"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'analytics-dialog-' + state.view()"
+    >
+      <!-- Trap anchors остаются внутри проецируемого section при каждом portal attachment. -->
+      <div [cdkTrapFocus]="attached()" [cdkTrapFocusAutoCapture]="false">
+        <header class="analytics-drilldown__header">
+          <div>
+            @if (state.view() === "scores" || state.view() === "backlog") {
+              <button type="button" class="analytics-drilldown__action" (click)="state.back()">
+                ← Назад к списку
+              </button>
             }
-          }
-        </div>
-        <button
-          #closeButton
-          type="button"
-          class="analytics-drilldown__close"
-          aria-label="Закрыть детализацию аналитики"
-          (click)="closeAnalyticsModal()"
-        >
-          ×
-        </button>
-      </header>
-
-      @if (state.view() === "case") {
-        <div class="analytics-case" data-testid="case-drilldown">
-          @if (cases.metrics(); as metrics) {
-            <dl class="analytics-case__metrics">
-              <div>
-                <dt>Проекты</dt>
-                <dd>{{ metrics.projectsTotal }}</dd>
-              </div>
-              <div>
-                <dt>Участники</dt>
-                <dd>{{ metrics.participantsTotal }}</dd>
-              </div>
-              @if (cases.submissionApplicable()) {
-                <div>
-                  <dt>Сдано</dt>
-                  <dd>{{ metrics.submitted }}</dd>
-                </div>
-                <div>
-                  <dt>Не сдано</dt>
-                  <dd>{{ metrics.notSubmitted }}</dd>
-                </div>
+            <h2 #heading tabindex="-1" [id]="'analytics-dialog-' + state.view()">{{ title() }}</h2>
+            @if (state.view() === "case" && cases.selection()?.scope === "without_case") {
+              <p class="analytics-drilldown__secondary">
+                Проекты, для которых кейс не выбран или больше недоступен.
+              </p>
+            }
+            @if (state.view() === "backlog") {
+              <p>Ожидающие назначения</p>
+            }
+            @if (state.view() === "participants-without-team") {
+              <p class="analytics-drilldown__secondary">
+                Зарегистрированные участники, которые пока не состоят в команде проекта этой
+                программы.
+              </p>
+            }
+            @if (state.view() === "projects-awaiting-evaluation") {
+              <p class="analytics-drilldown__secondary">
+                Сданные работы, оценивание которых ещё не завершено.
+              </p>
+            }
+            @if (state.view() === "projects-not-submitted") {
+              <p class="analytics-drilldown__secondary">
+                Проекты программы, которые ещё не отправили решение.
+              </p>
+              @if (state.notSubmittedPage(); as page) {
+                @if (page.applicable) {
+                  <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
+                    @if (page.submissionDeadline) {
+                      {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершён" }}
+                      {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
+                    } @else {
+                      Срок сдачи не указан
+                    }
+                  </p>
+                }
               }
-            </dl>
-          }
-          <div class="analytics-case__export">
-            <app-button
-              appearance="outline"
-              size="big"
-              [disabled]="!cases.canExport()"
-              [loader]="cases.exportPending()"
-              (click)="cases.download()"
-              >Выгрузить проекты кейса</app-button
-            >
-            <p class="analytics-drilldown__secondary">
-              {{
-                cases.metrics()?.projectsTotal === 0
-                  ? "В кейсе пока нет проектов"
-                  : "Все проекты кейса, без учёта поиска"
-              }}
-            </p>
-            @if (cases.exportError(); as error) {
-              <p role="alert">{{ caseErrorMessage(error) }}</p>
             }
           </div>
+          <button
+            #closeButton
+            type="button"
+            class="analytics-drilldown__close"
+            aria-label="Закрыть детализацию аналитики"
+            (click)="closeAnalyticsModal()"
+          >
+            ×
+          </button>
+        </header>
+
+        @if (state.view() === "case") {
+          <div class="analytics-case" data-testid="case-drilldown">
+            @if (cases.metrics(); as metrics) {
+              <dl class="analytics-case__metrics">
+                <div>
+                  <dt>Проекты</dt>
+                  <dd>{{ metrics.projectsTotal }}</dd>
+                </div>
+                <div>
+                  <dt>Участники</dt>
+                  <dd>{{ metrics.participantsTotal }}</dd>
+                </div>
+                @if (cases.submissionApplicable()) {
+                  <div>
+                    <dt>Сдано</dt>
+                    <dd>{{ metrics.submitted }}</dd>
+                  </div>
+                  <div>
+                    <dt>Не сдано</dt>
+                    <dd>{{ metrics.notSubmitted }}</dd>
+                  </div>
+                }
+              </dl>
+            }
+            <div class="analytics-case__export">
+              <app-button
+                appearance="outline"
+                size="big"
+                [disabled]="!cases.canExport()"
+                [loader]="cases.exportPending()"
+                (click)="cases.download()"
+                >Выгрузить проекты кейса</app-button
+              >
+              <p class="analytics-drilldown__secondary">
+                {{
+                  cases.metrics()?.projectsTotal === 0
+                    ? "В кейсе пока нет проектов"
+                    : "Все проекты кейса, без учёта поиска"
+                }}
+              </p>
+              @if (cases.exportError(); as error) {
+                <p role="alert">{{ caseErrorMessage(error) }}</p>
+              }
+            </div>
+            <form
+              class="analytics-drilldown__search"
+              (submit)="$event.preventDefault(); cases.applySearch()"
+            >
+              <label for="analytics-case-search" class="analytics-drilldown__secondary"
+                >Поиск по названию проекта</label
+              >
+              <div class="analytics-drilldown__search-controls">
+                <input
+                  id="analytics-case-search"
+                  type="search"
+                  placeholder="Название проекта"
+                  [disabled]="cases.pending() && !cases.page()"
+                  [value]="cases.searchDraft()"
+                  (input)="cases.searchDraft.set($any($event.target).value)"
+                />
+                <button
+                  type="submit"
+                  class="analytics-drilldown__action"
+                  [disabled]="cases.pending()"
+                >
+                  Найти
+                </button>
+                <button
+                  type="button"
+                  class="analytics-drilldown__action"
+                  [disabled]="!cases.searchDraft() && !cases.search()"
+                  (click)="cases.clearSearch()"
+                >
+                  Очистить
+                </button>
+              </div>
+            </form>
+            <div [attr.aria-busy]="cases.pending()" aria-live="polite">
+              @if (cases.pending()) {
+                <p class="analytics-case__loading" role="status">
+                  <app-loader color="var(--dark-grey)" />Загружаем список…
+                </p>
+              } @else if (cases.error(); as error) {
+                <div class="analytics-drilldown__error" role="alert">
+                  <strong>Не удалось загрузить проекты</strong>
+                  <p class="analytics-drilldown__secondary">{{ caseErrorMessage(error) }}</p>
+                </div>
+                @if (error.kind === "network") {
+                  <button type="button" class="analytics-drilldown__action" (click)="cases.load()">
+                    Повторить загрузку
+                  </button>
+                }
+              } @else if (cases.page(); as page) {
+                <p class="analytics-drilldown__count">Найдено: {{ page.count }}</p>
+                @if (!page.results.length) {
+                  <div class="analytics-drilldown__empty">
+                    <strong>{{
+                      cases.search()
+                        ? "По запросу ничего не найдено"
+                        : "В этом кейсе пока нет проектов"
+                    }}</strong>
+                    <p class="analytics-drilldown__secondary">
+                      {{
+                        cases.search()
+                          ? "Измените запрос или очистите поиск."
+                          : "Проекты появятся здесь после выбора этого кейса."
+                      }}
+                    </p>
+                  </div>
+                } @else {
+                  <table class="analytics-drilldown__table analytics-case__table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Проект</th>
+                        <th scope="col">Лидер / команда</th>
+                        <th scope="col">Сдача решения</th>
+                        <th scope="col">Презентация</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (item of page.results; track item.programProjectId) {
+                        <tr>
+                          <td data-label="Проект">
+                            <a
+                              [routerLink]="['/office/projects', item.project.id]"
+                              (click)="leaveAnalytics()"
+                              >{{ item.project.name }}</a
+                            >
+                          </td>
+                          <td data-label="Лидер / команда">
+                            <span>{{ item.leader?.fullName || "Лидер не указан" }}</span>
+                            <small class="analytics-drilldown__secondary"
+                              >Размер команды: {{ item.teamSize }}</small
+                            >
+                          </td>
+                          <td data-label="Сдача решения">
+                            @if (!page.submissionApplicable) {
+                              <span>Не требуется</span>
+                            } @else {
+                              <span
+                                class="analytics-drilldown__badge"
+                                [class.analytics-drilldown__badge--completed]="item.submitted"
+                                [class.analytics-drilldown__badge--pending]="!item.submitted"
+                                >{{ item.submitted ? "Сдано" : "Не сдано" }}</span
+                              >
+                              <small class="analytics-drilldown__secondary">{{
+                                item.submittedAt ? (item.submittedAt | date: "dd.MM.yyyy") : "—"
+                              }}</small>
+                            }
+                          </td>
+                          <td data-label="Презентация">
+                            @if (presentationHref(item.project.presentationAddress); as href) {
+                              <a [href]="href" target="_blank" rel="noopener noreferrer"
+                                >Открыть презентацию</a
+                              >
+                            } @else {
+                              <span class="analytics-drilldown__secondary">{{
+                                item.project.presentationAddress
+                                  ? "Ссылка недоступна"
+                                  : "Не добавлена"
+                              }}</span>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+                @if (page.count > cases.limit || cases.offset() > 0) {
+                  <nav class="analytics-drilldown__pagination" aria-label="Страницы проектов кейса">
+                    <app-button
+                      appearance="outline"
+                      size="medium"
+                      [disabled]="cases.offset() === 0"
+                      (click)="cases.changePage(-1)"
+                      >Назад</app-button
+                    >
+                    <span>{{ cases.range() }}</span>
+                    <app-button
+                      appearance="outline"
+                      size="medium"
+                      [disabled]="!cases.hasNext()"
+                      (click)="cases.changePage(1)"
+                      >Далее</app-button
+                    >
+                  </nav>
+                }
+              }
+            </div>
+          </div>
+        }
+        @if (state.isAttentionView()) {
           <form
             class="analytics-drilldown__search"
-            (submit)="$event.preventDefault(); cases.applySearch()"
+            (submit)="$event.preventDefault(); state.applyAttentionSearch()"
           >
-            <label for="analytics-case-search" class="analytics-drilldown__secondary"
-              >Поиск по названию проекта</label
-            >
+            <label for="analytics-attention-search" class="analytics-drilldown__secondary">{{
+              state.view() === "participants-without-team"
+                ? "Поиск по имени"
+                : "Поиск по названию проекта"
+            }}</label>
             <div class="analytics-drilldown__search-controls">
               <input
-                id="analytics-case-search"
+                id="analytics-attention-search"
                 type="search"
-                placeholder="Название проекта"
-                [disabled]="cases.pending() && !cases.page()"
-                [value]="cases.searchDraft()"
-                (input)="cases.searchDraft.set($any($event.target).value)"
+                [placeholder]="
+                  state.view() === 'participants-without-team'
+                    ? 'Поиск по имени'
+                    : 'Поиск по названию проекта'
+                "
+                [value]="state.searchDraft()"
+                (input)="state.searchDraft.set($any($event.target).value)"
               />
-              <button
-                type="submit"
-                class="analytics-drilldown__action"
-                [disabled]="cases.pending()"
-              >
-                Найти
-              </button>
+              <button type="submit" class="analytics-drilldown__action">Найти</button>
               <button
                 type="button"
                 class="analytics-drilldown__action"
-                [disabled]="!cases.searchDraft() && !cases.search()"
-                (click)="cases.clearSearch()"
+                (click)="state.clearAttentionSearch()"
+                [disabled]="!state.searchDraft() && !state.appliedSearch()"
               >
                 Очистить
               </button>
             </div>
           </form>
-          <div [attr.aria-busy]="cases.pending()" aria-live="polite">
-            @if (cases.pending()) {
-              <p class="analytics-case__loading" role="status">
-                <app-loader color="var(--dark-grey)" />Загружаем список…
-              </p>
-            } @else if (cases.error(); as error) {
-              <div class="analytics-drilldown__error" role="alert">
-                <strong>Не удалось загрузить проекты</strong>
-                <p class="analytics-drilldown__secondary">{{ caseErrorMessage(error) }}</p>
-              </div>
-              @if (error.kind === "network") {
-                <button type="button" class="analytics-drilldown__action" (click)="cases.load()">
-                  Повторить загрузку
-                </button>
-              }
-            } @else if (cases.page(); as page) {
-              <p class="analytics-drilldown__count">Найдено: {{ page.count }}</p>
-              @if (!page.results.length) {
-                <div class="analytics-drilldown__empty">
-                  <strong>{{
-                    cases.search()
-                      ? "По запросу ничего не найдено"
-                      : "В этом кейсе пока нет проектов"
-                  }}</strong>
-                  <p class="analytics-drilldown__secondary">
-                    {{
-                      cases.search()
-                        ? "Измените запрос или очистите поиск."
-                        : "Проекты появятся здесь после выбора этого кейса."
-                    }}
-                  </p>
-                </div>
-              } @else {
-                <table class="analytics-drilldown__table analytics-case__table">
+          @if (state.attentionPending()) {
+            <p class="analytics-drilldown__empty" role="status">Загружаем список…</p>
+          } @else if (state.attentionError()) {
+            <div class="analytics-drilldown__error" role="alert">
+              <p>{{ attentionRequestError() }}</p>
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.loadAttention()"
+              >
+                Повторить загрузку
+              </button>
+            </div>
+          } @else if (state.attentionPage()) {
+            <p class="analytics-drilldown__count" role="status">
+              Найдено: {{ state.attentionCount() }}
+            </p>
+            @if (!state.attentionPage()?.results?.length) {
+              <p class="analytics-drilldown__empty">{{ attentionEmptyMessage() }}</p>
+            } @else {
+              @if (state.participantsPage(); as page) {
+                <table class="analytics-drilldown__table">
                   <thead>
                     <tr>
-                      <th scope="col">Проект</th>
-                      <th scope="col">Лидер / команда</th>
-                      <th scope="col">Сдача решения</th>
-                      <th scope="col">Презентация</th>
+                      <th scope="col">Участник</th>
+                      <th scope="col">Город</th>
+                      <th scope="col">Дата регистрации</th>
+                      <th scope="col">Действие</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @for (item of page.results; track item.programProjectId) {
-                      <tr>
-                        <td data-label="Проект">
+                    @for (item of page.results; track item.userId) {
+                      <tr [attr.data-user-id]="item.userId">
+                        <td data-label="Участник">
+                          <span class="analytics-drilldown__identity"
+                            ><app-avatar [url]="item.avatar || ''" [size]="36" /><span>{{
+                              item.fullName
+                            }}</span></span
+                          >
+                        </td>
+                        <td data-label="Город">{{ item.city || "Не указано" }}</td>
+                        <td data-label="Дата регистрации">
+                          {{
+                            item.registeredAt
+                              ? (item.registeredAt | date: "dd.MM.yyyy")
+                              : "Нет данных"
+                          }}
+                        </td>
+                        <td data-label="Действие">
                           <a
-                            [routerLink]="['/office/projects', item.project.id]"
+                            class="analytics-drilldown__action"
+                            [routerLink]="['/office/profile', item.userId]"
                             (click)="leaveAnalytics()"
-                            >{{ item.project.name }}</a
+                            >Открыть профиль</a
                           >
-                        </td>
-                        <td data-label="Лидер / команда">
-                          <span>{{ item.leader?.fullName || "Лидер не указан" }}</span>
-                          <small class="analytics-drilldown__secondary"
-                            >Размер команды: {{ item.teamSize }}</small
-                          >
-                        </td>
-                        <td data-label="Сдача решения">
-                          @if (!page.submissionApplicable) {
-                            <span>Не требуется</span>
-                          } @else {
-                            <span
-                              class="analytics-drilldown__badge"
-                              [class.analytics-drilldown__badge--completed]="item.submitted"
-                              [class.analytics-drilldown__badge--pending]="!item.submitted"
-                              >{{ item.submitted ? "Сдано" : "Не сдано" }}</span
-                            >
-                            <small class="analytics-drilldown__secondary">{{
-                              item.submittedAt ? (item.submittedAt | date: "dd.MM.yyyy") : "—"
-                            }}</small>
-                          }
-                        </td>
-                        <td data-label="Презентация">
-                          @if (presentationHref(item.project.presentationAddress); as href) {
-                            <a [href]="href" target="_blank" rel="noopener noreferrer"
-                              >Открыть презентацию</a
-                            >
-                          } @else {
-                            <span class="analytics-drilldown__secondary">{{
-                              item.project.presentationAddress
-                                ? "Ссылка недоступна"
-                                : "Не добавлена"
-                            }}</span>
-                          }
                         </td>
                       </tr>
                     }
                   </tbody>
                 </table>
               }
-              @if (page.count > cases.limit || cases.offset() > 0) {
-                <nav class="analytics-drilldown__pagination" aria-label="Страницы проектов кейса">
-                  <app-button
-                    appearance="outline"
-                    size="medium"
-                    [disabled]="cases.offset() === 0"
-                    (click)="cases.changePage(-1)"
-                    >Назад</app-button
-                  >
-                  <span>{{ cases.range() }}</span>
-                  <app-button
-                    appearance="outline"
-                    size="medium"
-                    [disabled]="!cases.hasNext()"
-                    (click)="cases.changePage(1)"
-                    >Далее</app-button
-                  >
-                </nav>
+              @if (state.projectsPage(); as page) {
+                <table class="analytics-drilldown__table analytics-drilldown__table--projects">
+                  <thead>
+                    <tr>
+                      <th scope="col">Проект</th>
+                      <th scope="col">Руководитель</th>
+                      <th scope="col">Дата сдачи</th>
+                      <th scope="col">Причина</th>
+                      <th scope="col">Прогресс</th>
+                      <th scope="col">Действие</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of page.results; track item.programProjectId) {
+                      <tr [attr.data-program-project-id]="item.programProjectId">
+                        <td data-label="Проект">{{ item.project.name }}</td>
+                        <td data-label="Руководитель">
+                          @if (item.leader; as leader) {
+                            <span class="analytics-drilldown__identity"
+                              ><app-avatar [url]="leader.avatar || ''" [size]="36" /><span>{{
+                                leader.fullName
+                              }}</span></span
+                            >
+                          } @else {
+                            Не указан
+                          }
+                        </td>
+                        <td data-label="Дата сдачи">
+                          {{
+                            item.submittedAt
+                              ? (item.submittedAt | date: "dd.MM.yyyy")
+                              : "Дата сдачи неизвестна"
+                          }}
+                        </td>
+                        <td data-label="Причина">
+                          <span
+                            class="analytics-drilldown__badge"
+                            [attr.data-reason]="item.reason"
+                            >{{ item.reasonLabel }}</span
+                          >
+                        </td>
+                        <td data-label="Прогресс">
+                          @if (page.mode === "open") {
+                            —
+                          } @else if (item.assignmentsTotal === 0) {
+                            Нет назначений
+                          } @else if (
+                            item.assignmentsTotal !== null && item.assignmentsCompleted !== null
+                          ) {
+                            Завершили: {{ item.assignmentsCompleted }} из
+                            {{ item.assignmentsTotal }}
+                          } @else {
+                            Нет данных
+                          }
+                        </td>
+                        <td data-label="Действие">
+                          <a
+                            class="analytics-drilldown__action"
+                            [routerLink]="['/office/projects', item.project.id]"
+                            (click)="leaveAnalytics()"
+                            >Открыть проект</a
+                          >
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
               }
             }
-          </div>
-        </div>
-      }
-      @if (state.isAttentionView()) {
-        <form
-          class="analytics-drilldown__search"
-          (submit)="$event.preventDefault(); state.applyAttentionSearch()"
-        >
-          <label for="analytics-attention-search" class="analytics-drilldown__secondary">{{
-            state.view() === "participants-without-team"
-              ? "Поиск по имени"
-              : "Поиск по названию проекта"
-          }}</label>
-          <div class="analytics-drilldown__search-controls">
-            <input
-              id="analytics-attention-search"
-              type="search"
-              [placeholder]="
-                state.view() === 'participants-without-team'
-                  ? 'Поиск по имени'
-                  : 'Поиск по названию проекта'
-              "
-              [value]="state.searchDraft()"
-              (input)="state.searchDraft.set($any($event.target).value)"
-            />
-            <button type="submit" class="analytics-drilldown__action">Найти</button>
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              (click)="state.clearAttentionSearch()"
-              [disabled]="!state.searchDraft() && !state.appliedSearch()"
-            >
-              Очистить
-            </button>
-          </div>
-        </form>
-        @if (state.attentionPending()) {
-          <p class="analytics-drilldown__empty" role="status">Загружаем список…</p>
-        } @else if (state.attentionError()) {
-          <div class="analytics-drilldown__error" role="alert">
-            <p>{{ attentionRequestError() }}</p>
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              (click)="state.loadAttention()"
-            >
-              Повторить загрузку
-            </button>
-          </div>
-        } @else if (state.attentionPage()) {
-          <p class="analytics-drilldown__count" role="status">
-            Найдено: {{ state.attentionCount() }}
-          </p>
-          @if (!state.attentionPage()?.results?.length) {
-            <p class="analytics-drilldown__empty">{{ attentionEmptyMessage() }}</p>
-          } @else {
-            @if (state.participantsPage(); as page) {
-              <table class="analytics-drilldown__table">
-                <thead>
-                  <tr>
-                    <th scope="col">Участник</th>
-                    <th scope="col">Город</th>
-                    <th scope="col">Дата регистрации</th>
-                    <th scope="col">Действие</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (item of page.results; track item.userId) {
-                    <tr [attr.data-user-id]="item.userId">
-                      <td data-label="Участник">
-                        <span class="analytics-drilldown__identity"
-                          ><app-avatar [url]="item.avatar || ''" [size]="36" /><span>{{
-                            item.fullName
-                          }}</span></span
-                        >
-                      </td>
-                      <td data-label="Город">{{ item.city || "Не указано" }}</td>
-                      <td data-label="Дата регистрации">
-                        {{
-                          item.registeredAt
-                            ? (item.registeredAt | date: "dd.MM.yyyy")
-                            : "Нет данных"
-                        }}
-                      </td>
-                      <td data-label="Действие">
-                        <a
-                          class="analytics-drilldown__action"
-                          [routerLink]="['/office/profile', item.userId]"
-                          (click)="leaveAnalytics()"
-                          >Открыть профиль</a
-                        >
-                      </td>
+            @if (state.notSubmittedPage(); as page) {
+              @if (page.applicable && page.results.length) {
+                <table class="analytics-drilldown__table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Проект</th>
+                      <th scope="col">Руководитель</th>
+                      <th scope="col">В программе с</th>
+                      <th scope="col">Статус</th>
+                      <th scope="col">Действие</th>
                     </tr>
-                  }
-                </tbody>
-              </table>
-            }
-            @if (state.projectsPage(); as page) {
-              <table class="analytics-drilldown__table analytics-drilldown__table--projects">
-                <thead>
-                  <tr>
-                    <th scope="col">Проект</th>
-                    <th scope="col">Руководитель</th>
-                    <th scope="col">Дата сдачи</th>
-                    <th scope="col">Причина</th>
-                    <th scope="col">Прогресс</th>
-                    <th scope="col">Действие</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (item of page.results; track item.programProjectId) {
-                    <tr [attr.data-program-project-id]="item.programProjectId">
-                      <td data-label="Проект">{{ item.project.name }}</td>
-                      <td data-label="Руководитель">
-                        @if (item.leader; as leader) {
-                          <span class="analytics-drilldown__identity"
-                            ><app-avatar [url]="leader.avatar || ''" [size]="36" /><span>{{
-                              leader.fullName
-                            }}</span></span
+                  </thead>
+                  <tbody>
+                    @for (item of page.results; track item.programProjectId) {
+                      <tr [attr.data-program-project-id]="item.programProjectId">
+                        <td data-label="Проект">{{ item.project.name }}</td>
+                        <td data-label="Руководитель">
+                          @if (item.leader; as leader) {
+                            <span class="analytics-drilldown__identity">
+                              <app-avatar [url]="leader.avatar || ''" [size]="36" />
+                              <span>{{ leader.fullName }}</span>
+                            </span>
+                          } @else {
+                            Не указан
+                          }
+                        </td>
+                        <td data-label="В программе с">{{ item.linkedAt | date: "dd.MM.yyyy" }}</td>
+                        <td data-label="Статус">
+                          <span class="analytics-drilldown__badge">{{
+                            page.submissionOpen ? "Не сдано" : "Срок сдачи завершён"
+                          }}</span>
+                        </td>
+                        <td data-label="Действие">
+                          <a
+                            class="analytics-drilldown__action"
+                            [routerLink]="['/office/projects', item.project.id]"
+                            (click)="leaveAnalytics()"
+                            >Открыть проект</a
                           >
-                        } @else {
-                          Не указан
-                        }
-                      </td>
-                      <td data-label="Дата сдачи">
-                        {{
-                          item.submittedAt
-                            ? (item.submittedAt | date: "dd.MM.yyyy")
-                            : "Дата сдачи неизвестна"
-                        }}
-                      </td>
-                      <td data-label="Причина">
-                        <span class="analytics-drilldown__badge" [attr.data-reason]="item.reason">{{
-                          item.reasonLabel
-                        }}</span>
-                      </td>
-                      <td data-label="Прогресс">
-                        @if (page.mode === "open") {
-                          —
-                        } @else if (item.assignmentsTotal === 0) {
-                          Нет назначений
-                        } @else if (
-                          item.assignmentsTotal !== null && item.assignmentsCompleted !== null
-                        ) {
-                          Завершили: {{ item.assignmentsCompleted }} из {{ item.assignmentsTotal }}
-                        } @else {
-                          Нет данных
-                        }
-                      </td>
-                      <td data-label="Действие">
-                        <a
-                          class="analytics-drilldown__action"
-                          [routerLink]="['/office/projects', item.project.id]"
-                          (click)="leaveAnalytics()"
-                          >Открыть проект</a
-                        >
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
             }
+            <nav class="analytics-drilldown__pagination" aria-label="Страницы списка">
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                [disabled]="state.attentionOffset() === 0"
+                (click)="state.changeAttentionPage(-1)"
+              >
+                Назад
+              </button>
+              <span>{{ state.attentionRange() }}</span>
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                [disabled]="!state.attentionHasNext()"
+                (click)="state.changeAttentionPage(1)"
+              >
+                Далее
+              </button>
+            </nav>
           }
-          @if (state.notSubmittedPage(); as page) {
-            @if (page.applicable && page.results.length) {
-              <table class="analytics-drilldown__table">
-                <thead>
-                  <tr>
-                    <th scope="col">Проект</th>
-                    <th scope="col">Руководитель</th>
-                    <th scope="col">В программе с</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Действие</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (item of page.results; track item.programProjectId) {
-                    <tr [attr.data-program-project-id]="item.programProjectId">
-                      <td data-label="Проект">{{ item.project.name }}</td>
-                      <td data-label="Руководитель">
-                        @if (item.leader; as leader) {
-                          <span class="analytics-drilldown__identity">
-                            <app-avatar [url]="leader.avatar || ''" [size]="36" />
-                            <span>{{ leader.fullName }}</span>
-                          </span>
-                        } @else {
-                          Не указан
-                        }
-                      </td>
-                      <td data-label="В программе с">{{ item.linkedAt | date: "dd.MM.yyyy" }}</td>
-                      <td data-label="Статус">
-                        <span class="analytics-drilldown__badge">{{
-                          page.submissionOpen ? "Не сдано" : "Срок сдачи завершён"
-                        }}</span>
-                      </td>
-                      <td data-label="Действие">
-                        <a
-                          class="analytics-drilldown__action"
-                          [routerLink]="['/office/projects', item.project.id]"
-                          (click)="leaveAnalytics()"
-                          >Открыть проект</a
-                        >
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            }
+        } @else if (state.view() === "scores") {
+          @if (state.scoreDetailPending()) {
+            <p class="analytics-drilldown__empty" role="status">Загружаем оценку…</p>
           }
-          <nav class="analytics-drilldown__pagination" aria-label="Страницы списка">
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              [disabled]="state.attentionOffset() === 0"
-              (click)="state.changeAttentionPage(-1)"
-            >
-              Назад
-            </button>
-            <span>{{ state.attentionRange() }}</span>
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              [disabled]="!state.attentionHasNext()"
-              (click)="state.changeAttentionPage(1)"
-            >
-              Далее
-            </button>
-          </nav>
-        }
-      } @else if (state.view() === "scores") {
-        @if (state.scoreDetailPending()) {
-          <p class="analytics-drilldown__empty" role="status">Загружаем оценку…</p>
-        }
-        @if (state.scoreDetailError()) {
-          <div class="analytics-drilldown__error" role="alert">
-            <p>Не удалось загрузить оценку</p>
-            <p>{{ requestError(state.scoreDetailError()) }}</p>
-            <button type="button" class="analytics-drilldown__action" (click)="state.retryScores()">
-              Повторить загрузку
-            </button>
-          </div>
-        }
-        @if (state.scoreDetail(); as detail) {
-          <div class="analytics-drilldown__identity">
-            <app-avatar [url]="detail.expert.avatar || ''" [size]="36" />
-            <div>
-              <p>Эксперт: {{ detail.expert.fullName || "Имя не указано" }}</p>
-              <p>Проект: {{ detail.project.name }}</p>
+          @if (state.scoreDetailError()) {
+            <div class="analytics-drilldown__error" role="alert">
+              <p>Не удалось загрузить оценку</p>
+              <p>{{ requestError(state.scoreDetailError()) }}</p>
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.retryScores()"
+              >
+                Повторить загрузку
+              </button>
             </div>
-          </div>
-          <ul class="analytics-drilldown__criteria">
-            @for (criterion of detail.scores; track criterion.criterionId) {
-              <li>
-                <h3>{{ criterion.name }}</h3>
-                @if (criterion.description) {
-                  <p>{{ criterion.description }}</p>
+          }
+          @if (state.scoreDetail(); as detail) {
+            <div class="analytics-drilldown__identity">
+              <app-avatar [url]="detail.expert.avatar || ''" [size]="36" />
+              <div>
+                <p>Эксперт: {{ detail.expert.fullName || "Имя не указано" }}</p>
+                <p>Проект: {{ detail.project.name }}</p>
+              </div>
+            </div>
+            <ul class="analytics-drilldown__criteria">
+              @for (criterion of detail.scores; track criterion.criterionId) {
+                <li>
+                  <h3>{{ criterion.name }}</h3>
+                  @if (criterion.description) {
+                    <p>{{ criterion.description }}</p>
+                  }
+                  @if (criterion.minValue !== null || criterion.maxValue !== null) {
+                    <p class="analytics-drilldown__secondary">
+                      Диапазон: {{ criterion.minValue ?? "—" }} – {{ criterion.maxValue ?? "—" }}
+                    </p>
+                  }
+                  <strong>{{ criterionValue(criterion) }}</strong>
+                </li>
+              } @empty {
+                <li class="analytics-drilldown__empty">Нет критериев</li>
+              }
+            </ul>
+          }
+        } @else if (state.view() !== "case") {
+          @if (state.view() === "delayed") {
+            <ul class="analytics-drilldown__experts">
+              @for (expert of state.delayedExperts(); track expert.expertId) {
+                <li>
+                  <button
+                    type="button"
+                    class="analytics-drilldown__expert"
+                    (click)="state.showBacklog(expert)"
+                  >
+                    <span class="analytics-drilldown__identity"
+                      ><app-avatar [url]="expert.avatar || ''" [size]="36" /><strong>{{
+                        expert.fullName || "Имя не указано"
+                      }}</strong></span
+                    >
+                    <span
+                      class="analytics-drilldown__badge"
+                      [class.analytics-drilldown__badge--critical]="expert.severity === 'critical'"
+                      [class.analytics-drilldown__badge--pending]="expert.severity === 'warning'"
+                      >{{
+                        expert.severity === "critical" ? "Критическая задержка" : "Требует внимания"
+                      }}</span
+                    >
+                    <span>Выполнено {{ expert.completed }} из {{ expert.assignmentsTotal }}</span
+                    ><span>Ожидает: {{ expert.pending }}</span>
+                    <span>Самое долгое ожидание: {{ waiting(expert.oldestWaitingSeconds) }}</span>
+                    <span class="analytics-drilldown__secondary">Посмотреть назначения →</span>
+                  </button>
+                </li>
+              } @empty {
+                <li class="analytics-drilldown__empty">Задержек оценивания нет</li>
+              }
+            </ul>
+          }
+          @if (state.assignmentsPending()) {
+            <p class="analytics-drilldown__empty" role="status">Загружаем назначения…</p>
+          }
+          @if (state.assignmentsError()) {
+            <div class="analytics-drilldown__error" role="alert">
+              <p>Не удалось загрузить назначения</p>
+              <p>{{ requestError(state.assignmentsError()) }}</p>
+              <button
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.loadAssignments()"
+              >
+                Повторить загрузку
+              </button>
+            </div>
+          } @else if (!state.assignmentsPending()) {
+            @if (state.view() === "assignments") {
+              @if (state.assignments().length) {
+                <ng-container
+                  *ngTemplateOutlet="assignmentTable; context: { $implicit: state.assignments() }"
+                />
+              } @else {
+                <p class="analytics-drilldown__empty">{{ emptyMessage() }}</p>
+              }
+            }
+            @if (state.view() === "backlog") {
+              @if (!state.backlog().length) {
+                <p class="analytics-drilldown__empty">У эксперта нет ожидающих назначений</p>
+              }
+              @if (state.waitingBacklog().length) {
+                <ng-container
+                  *ngTemplateOutlet="
+                    assignmentTable;
+                    context: { $implicit: state.waitingBacklog() }
+                  "
+                />
+              }
+              @if (state.notReadyBacklog().length) {
+                <h3 class="analytics-drilldown__section">Ещё не сданы</h3>
+                <ng-container
+                  *ngTemplateOutlet="
+                    assignmentTable;
+                    context: { $implicit: state.notReadyBacklog() }
+                  "
+                />
+              }
+            }
+          }
+        }
+      </div>
+    </section>
+  </app-modal>
+
+  <ng-template #assignmentTable let-assignments>
+    <table
+      class="analytics-drilldown__table"
+      [class.analytics-drilldown__table--assignments]="state.view() === 'assignments'"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Эксперт</th>
+          <th scope="col">Проект</th>
+          <th scope="col">Статус</th>
+          <th scope="col">Ожидание</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of assignments; track item.assignmentId) {
+          <tr [attr.data-assignment-id]="item.assignmentId">
+            <td data-label="Эксперт">
+              <span class="analytics-drilldown__identity"
+                ><app-avatar [url]="item.expert.avatar || ''" [size]="36" /><span>{{
+                  item.expert.fullName || "Имя не указано"
+                }}</span></span
+              >
+            </td>
+            <td data-label="Проект">{{ item.project.name }}</td>
+            <td data-label="Статус">
+              <span class="analytics-drilldown__assignment-status">
+                <span
+                  [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
+                  >{{ statusLabel(item.status) }}</span
+                >
+                @if (item.status === "completed") {
+                  <button
+                    type="button"
+                    class="analytics-drilldown__action"
+                    (click)="state.loadAssignmentScores(item.assignmentId)"
+                    [attr.aria-label]="
+                      'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
+                    "
+                  >
+                    Посмотреть оценку
+                  </button>
                 }
-                @if (criterion.minValue !== null || criterion.maxValue !== null) {
-                  <p class="analytics-drilldown__secondary">
-                    Диапазон: {{ criterion.minValue ?? "—" }} – {{ criterion.maxValue ?? "—" }}
+              </span>
+            </td>
+            <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </ng-template>
+} @else {
+  <app-modal
+    [open]="state.open()"
+    [bodyClass]="
+      state.view() === 'assignments'
+        ? 'analytics-drilldown-body analytics-drilldown-body--assignments'
+        : state.view() === 'case'
+          ? 'analytics-drilldown-body analytics-drilldown-body--case'
+          : 'analytics-drilldown-body'
+    "
+    (openChange)="onOpenChange($event)"
+  >
+    <section
+      class="analytics-drilldown"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'analytics-dialog-' + state.view()"
+    >
+      <!-- Trap anchors остаются внутри проецируемого section при каждом portal attachment. -->
+      <div [cdkTrapFocus]="attached()" [cdkTrapFocusAutoCapture]="false">
+        <header class="analytics-drilldown__header">
+          <div>
+            @if (state.view() === "scores" || state.view() === "backlog") {
+              <button
+                appButton="secondary"
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.back()"
+              >
+                ← Назад к списку
+              </button>
+            }
+            <h2 #heading tabindex="-1" [id]="'analytics-dialog-' + state.view()">{{ title() }}</h2>
+            @if (state.view() === "case" && cases.selection()?.scope === "without_case") {
+              <p class="analytics-drilldown__secondary">
+                Проекты, для которых кейс не выбран или больше недоступен.
+              </p>
+            }
+            @if (state.view() === "backlog") {
+              <p>Ожидающие назначения</p>
+            }
+            @if (state.view() === "participants-without-team") {
+              <p class="analytics-drilldown__secondary">
+                Зарегистрированные участники, которые пока не состоят в команде проекта этой
+                программы.
+              </p>
+            }
+            @if (state.view() === "projects-awaiting-evaluation") {
+              <p class="analytics-drilldown__secondary">
+                Сданные работы, оценивание которых ещё не завершено.
+              </p>
+            }
+            @if (state.view() === "projects-not-submitted") {
+              <p class="analytics-drilldown__secondary">
+                Проекты программы, которые ещё не отправили решение.
+              </p>
+              @if (state.notSubmittedPage(); as page) {
+                @if (page.applicable) {
+                  <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
+                    @if (page.submissionDeadline) {
+                      {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершён" }}
+                      {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
+                    } @else {
+                      Срок сдачи не указан
+                    }
                   </p>
                 }
-                <strong>{{ criterionValue(criterion) }}</strong>
-              </li>
-            } @empty {
-              <li class="analytics-drilldown__empty">Нет критериев</li>
+              }
             }
-          </ul>
-        }
-      } @else if (state.view() !== "case") {
-        @if (state.view() === "delayed") {
-          <ul class="analytics-drilldown__experts">
-            @for (expert of state.delayedExperts(); track expert.expertId) {
-              <li>
-                <button
-                  type="button"
-                  class="analytics-drilldown__expert"
-                  (click)="state.showBacklog(expert)"
-                >
-                  <span class="analytics-drilldown__identity"
-                    ><app-avatar [url]="expert.avatar || ''" [size]="36" /><strong>{{
-                      expert.fullName || "Имя не указано"
-                    }}</strong></span
-                  >
-                  <span
-                    class="analytics-drilldown__badge"
-                    [class.analytics-drilldown__badge--critical]="expert.severity === 'critical'"
-                    [class.analytics-drilldown__badge--pending]="expert.severity === 'warning'"
-                    >{{
-                      expert.severity === "critical" ? "Критическая задержка" : "Требует внимания"
-                    }}</span
-                  >
-                  <span>Выполнено {{ expert.completed }} из {{ expert.assignmentsTotal }}</span
-                  ><span>Ожидает: {{ expert.pending }}</span>
-                  <span>Самое долгое ожидание: {{ waiting(expert.oldestWaitingSeconds) }}</span>
-                  <span class="analytics-drilldown__secondary">Посмотреть назначения →</span>
-                </button>
-              </li>
-            } @empty {
-              <li class="analytics-drilldown__empty">Задержек оценивания нет</li>
-            }
-          </ul>
-        }
-        @if (state.assignmentsPending()) {
-          <p class="analytics-drilldown__empty" role="status">Загружаем назначения…</p>
-        }
-        @if (state.assignmentsError()) {
-          <div class="analytics-drilldown__error" role="alert">
-            <p>Не удалось загрузить назначения</p>
-            <p>{{ requestError(state.assignmentsError()) }}</p>
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              (click)="state.loadAssignments()"
-            >
-              Повторить загрузку
-            </button>
           </div>
-        } @else if (!state.assignmentsPending()) {
-          @if (state.view() === "assignments") {
-            @if (state.assignments().length) {
-              <ng-container
-                *ngTemplateOutlet="assignmentTable; context: { $implicit: state.assignments() }"
-              />
-            } @else {
-              <p class="analytics-drilldown__empty">{{ emptyMessage() }}</p>
-            }
-          }
-          @if (state.view() === "backlog") {
-            @if (!state.backlog().length) {
-              <p class="analytics-drilldown__empty">У эксперта нет ожидающих назначений</p>
-            }
-            @if (state.waitingBacklog().length) {
-              <ng-container
-                *ngTemplateOutlet="assignmentTable; context: { $implicit: state.waitingBacklog() }"
-              />
-            }
-            @if (state.notReadyBacklog().length) {
-              <h3 class="analytics-drilldown__section">Ещё не сданы</h3>
-              <ng-container
-                *ngTemplateOutlet="assignmentTable; context: { $implicit: state.notReadyBacklog() }"
-              />
-            }
-          }
-        }
-      }
-    </div>
-  </section>
-</app-modal>
+          <button
+            appButton="icon"
+            #closeButton
+            type="button"
+            class="analytics-drilldown__close"
+            aria-label="Закрыть детализацию аналитики"
+            (click)="closeAnalyticsModal()"
+          >
+            ×
+          </button>
+        </header>
 
-<ng-template #assignmentTable let-assignments>
-  <table
-    class="analytics-drilldown__table"
-    [class.analytics-drilldown__table--assignments]="state.view() === 'assignments'"
-  >
-    <thead>
-      <tr>
-        <th scope="col">Эксперт</th>
-        <th scope="col">Проект</th>
-        <th scope="col">Статус</th>
-        <th scope="col">Ожидание</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of assignments; track item.assignmentId) {
-        <tr [attr.data-assignment-id]="item.assignmentId">
-          <td data-label="Эксперт">
-            <span class="analytics-drilldown__identity"
-              ><app-avatar [url]="item.expert.avatar || ''" [size]="36" /><span>{{
-                item.expert.fullName || "Имя не указано"
-              }}</span></span
-            >
-          </td>
-          <td data-label="Проект">{{ item.project.name }}</td>
-          <td data-label="Статус">
-            <span class="analytics-drilldown__assignment-status">
-              <span
-                [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
-                >{{ statusLabel(item.status) }}</span
+        @if (state.view() === "case") {
+          <div class="analytics-case" data-testid="case-drilldown">
+            @if (cases.metrics(); as metrics) {
+              <dl class="analytics-case__metrics">
+                <div>
+                  <dt>Проекты</dt>
+                  <dd>{{ metrics.projectsTotal }}</dd>
+                </div>
+                <div>
+                  <dt>Участники</dt>
+                  <dd>{{ metrics.participantsTotal }}</dd>
+                </div>
+                @if (cases.submissionApplicable()) {
+                  <div>
+                    <dt>Сдано</dt>
+                    <dd>{{ metrics.submitted }}</dd>
+                  </div>
+                  <div>
+                    <dt>Не сдано</dt>
+                    <dd>{{ metrics.notSubmitted }}</dd>
+                  </div>
+                }
+              </dl>
+            }
+            <div class="analytics-case__export">
+              <app-button
+                appearance="outline"
+                size="big"
+                [disabled]="!cases.canExport()"
+                [loader]="cases.exportPending()"
+                (click)="cases.download()"
+                >Выгрузить проекты кейса</app-button
               >
-              @if (item.status === "completed") {
+              <p class="analytics-drilldown__secondary">
+                {{
+                  cases.metrics()?.projectsTotal === 0
+                    ? "В кейсе пока нет проектов"
+                    : "Все проекты кейса, без учёта поиска"
+                }}
+              </p>
+              @if (cases.exportError(); as error) {
+                <app-state [compact]="true" kind="error" title="{{ caseErrorMessage(error) }}" />
+              }
+            </div>
+            <form
+              appFormLayout
+              class="analytics-drilldown__search"
+              (submit)="$event.preventDefault(); cases.applySearch()"
+            >
+              <label for="analytics-case-search" class="analytics-drilldown__secondary"
+                >Поиск по названию проекта</label
+              >
+              <div class="analytics-drilldown__search-controls">
+                <input
+                  appField
+                  id="analytics-case-search"
+                  type="search"
+                  placeholder="Название проекта"
+                  [disabled]="cases.pending() && !cases.page()"
+                  [value]="cases.searchDraft()"
+                  (input)="cases.searchDraft.set($any($event.target).value)"
+                />
                 <button
+                  appButton="primary"
+                  type="submit"
+                  class="analytics-drilldown__action"
+                  [disabled]="cases.pending()"
+                >
+                  Найти
+                </button>
+                <button
+                  appButton="secondary"
                   type="button"
                   class="analytics-drilldown__action"
-                  (click)="state.loadAssignmentScores(item.assignmentId)"
-                  [attr.aria-label]="
-                    'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
-                  "
+                  [disabled]="!cases.searchDraft() && !cases.search()"
+                  (click)="cases.clearSearch()"
                 >
-                  Посмотреть оценку
+                  Очистить
                 </button>
+              </div>
+            </form>
+            <div [attr.aria-busy]="cases.pending()" aria-live="polite">
+              @if (cases.pending()) {
+                <p class="analytics-case__loading" role="status">
+                  <app-loader color="var(--dark-grey)" />Загружаем список…
+                </p>
+              } @else if (cases.error(); as error) {
+                <div class="analytics-drilldown__error" role="alert">
+                  <strong>Не удалось загрузить проекты</strong>
+                  <p class="analytics-drilldown__secondary">{{ caseErrorMessage(error) }}</p>
+                </div>
+                @if (error.kind === "network") {
+                  <button
+                    appButton="secondary"
+                    type="button"
+                    class="analytics-drilldown__action"
+                    (click)="cases.load()"
+                  >
+                    Повторить загрузку
+                  </button>
+                }
+              } @else if (cases.page(); as page) {
+                <p class="analytics-drilldown__count">Найдено: {{ page.count }}</p>
+                @if (!page.results.length) {
+                  <div class="analytics-drilldown__empty">
+                    <strong>{{
+                      cases.search()
+                        ? "По запросу ничего не найдено"
+                        : "В этом кейсе пока нет проектов"
+                    }}</strong>
+                    <p class="analytics-drilldown__secondary">
+                      {{
+                        cases.search()
+                          ? "Измените запрос или очистите поиск."
+                          : "Проекты появятся здесь после выбора этого кейса."
+                      }}
+                    </p>
+                  </div>
+                } @else {
+                  <table appTable class="analytics-drilldown__table analytics-case__table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Проект</th>
+                        <th scope="col">Лидер / команда</th>
+                        <th scope="col">Сдача решения</th>
+                        <th scope="col">Презентация</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (item of page.results; track item.programProjectId) {
+                        <tr>
+                          <td data-label="Проект">
+                            <a
+                              [routerLink]="['/office/projects', item.project.id]"
+                              (click)="leaveAnalytics()"
+                              >{{ item.project.name }}</a
+                            >
+                          </td>
+                          <td data-label="Лидер / команда">
+                            <span>{{ item.leader?.fullName || "Лидер не указан" }}</span>
+                            <small class="analytics-drilldown__secondary"
+                              >Размер команды: {{ item.teamSize }}</small
+                            >
+                          </td>
+                          <td data-label="Сдача решения">
+                            @if (!page.submissionApplicable) {
+                              <span>Не требуется</span>
+                            } @else {
+                              <span
+                                class="analytics-drilldown__badge"
+                                [class.analytics-drilldown__badge--completed]="item.submitted"
+                                [class.analytics-drilldown__badge--pending]="!item.submitted"
+                                >{{ item.submitted ? "Сдано" : "Не сдано" }}</span
+                              >
+                              <small class="analytics-drilldown__secondary">{{
+                                item.submittedAt ? (item.submittedAt | date: "dd.MM.yyyy") : "—"
+                              }}</small>
+                            }
+                          </td>
+                          <td data-label="Презентация">
+                            @if (presentationHref(item.project.presentationAddress); as href) {
+                              <a [href]="href" target="_blank" rel="noopener noreferrer"
+                                >Открыть презентацию</a
+                              >
+                            } @else {
+                              <span class="analytics-drilldown__secondary">{{
+                                item.project.presentationAddress
+                                  ? "Ссылка недоступна"
+                                  : "Не добавлена"
+                              }}</span>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+                @if (page.count > cases.limit || cases.offset() > 0) {
+                  <app-pagination
+                    [previousDisabled]="cases.offset() === 0"
+                    [nextDisabled]="!cases.hasNext()"
+                    (previous)="cases.changePage(-1)"
+                    (next)="cases.changePage(1)"
+                    >{{ cases.range() }}</app-pagination
+                  >
+                }
               }
-            </span>
-          </td>
-          <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
+            </div>
+          </div>
+        }
+        @if (state.isAttentionView()) {
+          <form
+            appFormLayout
+            class="analytics-drilldown__search"
+            (submit)="$event.preventDefault(); state.applyAttentionSearch()"
+          >
+            <label for="analytics-attention-search" class="analytics-drilldown__secondary">{{
+              state.view() === "participants-without-team"
+                ? "Поиск по имени"
+                : "Поиск по названию проекта"
+            }}</label>
+            <div class="analytics-drilldown__search-controls">
+              <input
+                appField
+                id="analytics-attention-search"
+                type="search"
+                [placeholder]="
+                  state.view() === 'participants-without-team'
+                    ? 'Поиск по имени'
+                    : 'Поиск по названию проекта'
+                "
+                [value]="state.searchDraft()"
+                (input)="state.searchDraft.set($any($event.target).value)"
+              />
+              <button appButton="primary" type="submit" class="analytics-drilldown__action">
+                Найти
+              </button>
+              <button
+                appButton="secondary"
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.clearAttentionSearch()"
+                [disabled]="!state.searchDraft() && !state.appliedSearch()"
+              >
+                Очистить
+              </button>
+            </div>
+          </form>
+          @if (state.attentionPending()) {
+            <app-state
+              class="analytics-drilldown__empty"
+              [compact]="true"
+              kind="loading"
+              title="Загружаем список…"
+            />
+          } @else if (state.attentionError()) {
+            <div class="analytics-drilldown__error" role="alert">
+              <p>{{ attentionRequestError() }}</p>
+              <button
+                appButton="secondary"
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.loadAttention()"
+              >
+                Повторить загрузку
+              </button>
+            </div>
+          } @else if (state.attentionPage()) {
+            <p class="analytics-drilldown__count" role="status">
+              Найдено: {{ state.attentionCount() }}
+            </p>
+            @if (!state.attentionPage()?.results?.length) {
+              <p class="analytics-drilldown__empty">{{ attentionEmptyMessage() }}</p>
+            } @else {
+              @if (state.participantsPage(); as page) {
+                <table appTable class="analytics-drilldown__table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Участник</th>
+                      <th scope="col">Город</th>
+                      <th scope="col">Дата регистрации</th>
+                      <th scope="col">Действие</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of page.results; track item.userId) {
+                      <tr [attr.data-user-id]="item.userId">
+                        <td data-label="Участник">
+                          <span class="analytics-drilldown__identity"
+                            ><app-avatar [url]="item.avatar || ''" [size]="36" /><span>{{
+                              item.fullName
+                            }}</span></span
+                          >
+                        </td>
+                        <td data-label="Город">{{ item.city || "Не указано" }}</td>
+                        <td data-label="Дата регистрации">
+                          {{
+                            item.registeredAt
+                              ? (item.registeredAt | date: "dd.MM.yyyy")
+                              : "Нет данных"
+                          }}
+                        </td>
+                        <td data-label="Действие">
+                          <a
+                            class="analytics-drilldown__action"
+                            [routerLink]="['/office/profile', item.userId]"
+                            (click)="leaveAnalytics()"
+                            >Открыть профиль</a
+                          >
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
+              @if (state.projectsPage(); as page) {
+                <table
+                  appTable
+                  class="analytics-drilldown__table analytics-drilldown__table--projects"
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Проект</th>
+                      <th scope="col">Руководитель</th>
+                      <th scope="col">Дата сдачи</th>
+                      <th scope="col">Причина</th>
+                      <th scope="col">Прогресс</th>
+                      <th scope="col">Действие</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of page.results; track item.programProjectId) {
+                      <tr [attr.data-program-project-id]="item.programProjectId">
+                        <td data-label="Проект">{{ item.project.name }}</td>
+                        <td data-label="Руководитель">
+                          @if (item.leader; as leader) {
+                            <span class="analytics-drilldown__identity"
+                              ><app-avatar [url]="leader.avatar || ''" [size]="36" /><span>{{
+                                leader.fullName
+                              }}</span></span
+                            >
+                          } @else {
+                            Не указан
+                          }
+                        </td>
+                        <td data-label="Дата сдачи">
+                          {{
+                            item.submittedAt
+                              ? (item.submittedAt | date: "dd.MM.yyyy")
+                              : "Дата сдачи неизвестна"
+                          }}
+                        </td>
+                        <td data-label="Причина">
+                          <span
+                            class="analytics-drilldown__badge"
+                            [attr.data-reason]="item.reason"
+                            >{{ item.reasonLabel }}</span
+                          >
+                        </td>
+                        <td data-label="Прогресс">
+                          @if (page.mode === "open") {
+                            —
+                          } @else if (item.assignmentsTotal === 0) {
+                            Нет назначений
+                          } @else if (
+                            item.assignmentsTotal !== null && item.assignmentsCompleted !== null
+                          ) {
+                            Завершили: {{ item.assignmentsCompleted }} из
+                            {{ item.assignmentsTotal }}
+                          } @else {
+                            Нет данных
+                          }
+                        </td>
+                        <td data-label="Действие">
+                          <a
+                            class="analytics-drilldown__action"
+                            [routerLink]="['/office/projects', item.project.id]"
+                            (click)="leaveAnalytics()"
+                            >Открыть проект</a
+                          >
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
+            }
+            @if (state.notSubmittedPage(); as page) {
+              @if (page.applicable && page.results.length) {
+                <table appTable class="analytics-drilldown__table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Проект</th>
+                      <th scope="col">Руководитель</th>
+                      <th scope="col">В программе с</th>
+                      <th scope="col">Статус</th>
+                      <th scope="col">Действие</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of page.results; track item.programProjectId) {
+                      <tr [attr.data-program-project-id]="item.programProjectId">
+                        <td data-label="Проект">{{ item.project.name }}</td>
+                        <td data-label="Руководитель">
+                          @if (item.leader; as leader) {
+                            <span class="analytics-drilldown__identity">
+                              <app-avatar [url]="leader.avatar || ''" [size]="36" />
+                              <span>{{ leader.fullName }}</span>
+                            </span>
+                          } @else {
+                            Не указан
+                          }
+                        </td>
+                        <td data-label="В программе с">{{ item.linkedAt | date: "dd.MM.yyyy" }}</td>
+                        <td data-label="Статус">
+                          <span class="analytics-drilldown__badge">{{
+                            page.submissionOpen ? "Не сдано" : "Срок сдачи завершён"
+                          }}</span>
+                        </td>
+                        <td data-label="Действие">
+                          <a
+                            class="analytics-drilldown__action"
+                            [routerLink]="['/office/projects', item.project.id]"
+                            (click)="leaveAnalytics()"
+                            >Открыть проект</a
+                          >
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
+            }
+            <app-pagination
+              [previousDisabled]="state.attentionOffset() === 0"
+              [nextDisabled]="!state.attentionHasNext()"
+              (previous)="state.changeAttentionPage(-1)"
+              (next)="state.changeAttentionPage(1)"
+              >{{ state.attentionRange() }}</app-pagination
+            >
+          }
+        } @else if (state.view() === "scores") {
+          @if (state.scoreDetailPending()) {
+            <app-state
+              class="analytics-drilldown__empty"
+              [compact]="true"
+              kind="loading"
+              title="Загружаем оценку…"
+            />
+          }
+          @if (state.scoreDetailError()) {
+            <div class="analytics-drilldown__error" role="alert">
+              <p>Не удалось загрузить оценку</p>
+              <p>{{ requestError(state.scoreDetailError()) }}</p>
+              <button
+                appButton="secondary"
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.retryScores()"
+              >
+                Повторить загрузку
+              </button>
+            </div>
+          }
+          @if (state.scoreDetail(); as detail) {
+            <div class="analytics-drilldown__identity">
+              <app-avatar [url]="detail.expert.avatar || ''" [size]="36" />
+              <div>
+                <p>Эксперт: {{ detail.expert.fullName || "Имя не указано" }}</p>
+                <p>Проект: {{ detail.project.name }}</p>
+              </div>
+            </div>
+            <ul class="analytics-drilldown__criteria">
+              @for (criterion of detail.scores; track criterion.criterionId) {
+                <li>
+                  <h3>{{ criterion.name }}</h3>
+                  @if (criterion.description) {
+                    <p>{{ criterion.description }}</p>
+                  }
+                  @if (criterion.minValue !== null || criterion.maxValue !== null) {
+                    <p class="analytics-drilldown__secondary">
+                      Диапазон: {{ criterion.minValue ?? "—" }} – {{ criterion.maxValue ?? "—" }}
+                    </p>
+                  }
+                  <strong>{{ criterionValue(criterion) }}</strong>
+                </li>
+              } @empty {
+                <li class="analytics-drilldown__empty">Нет критериев</li>
+              }
+            </ul>
+          }
+        } @else if (state.view() !== "case") {
+          @if (state.view() === "delayed") {
+            <ul class="analytics-drilldown__experts">
+              @for (expert of state.delayedExperts(); track expert.expertId) {
+                <li>
+                  <button
+                    appButton="secondary"
+                    type="button"
+                    class="analytics-drilldown__expert"
+                    (click)="state.showBacklog(expert)"
+                  >
+                    <span class="analytics-drilldown__identity"
+                      ><app-avatar [url]="expert.avatar || ''" [size]="36" /><strong>{{
+                        expert.fullName || "Имя не указано"
+                      }}</strong></span
+                    >
+                    <span
+                      class="analytics-drilldown__badge"
+                      [class.analytics-drilldown__badge--critical]="expert.severity === 'critical'"
+                      [class.analytics-drilldown__badge--pending]="expert.severity === 'warning'"
+                      >{{
+                        expert.severity === "critical" ? "Критическая задержка" : "Требует внимания"
+                      }}</span
+                    >
+                    <span>Выполнено {{ expert.completed }} из {{ expert.assignmentsTotal }}</span
+                    ><span>Ожидает: {{ expert.pending }}</span>
+                    <span>Самое долгое ожидание: {{ waiting(expert.oldestWaitingSeconds) }}</span>
+                    <span class="analytics-drilldown__secondary">Посмотреть назначения →</span>
+                  </button>
+                </li>
+              } @empty {
+                <li class="analytics-drilldown__empty">Задержек оценивания нет</li>
+              }
+            </ul>
+          }
+          @if (state.assignmentsPending()) {
+            <app-state
+              class="analytics-drilldown__empty"
+              [compact]="true"
+              kind="loading"
+              title="Загружаем назначения…"
+            />
+          }
+          @if (state.assignmentsError()) {
+            <div class="analytics-drilldown__error" role="alert">
+              <p>Не удалось загрузить назначения</p>
+              <p>{{ requestError(state.assignmentsError()) }}</p>
+              <button
+                appButton="secondary"
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.loadAssignments()"
+              >
+                Повторить загрузку
+              </button>
+            </div>
+          } @else if (!state.assignmentsPending()) {
+            @if (state.view() === "assignments") {
+              @if (state.assignments().length) {
+                <ng-container
+                  *ngTemplateOutlet="assignmentTable; context: { $implicit: state.assignments() }"
+                />
+              } @else {
+                <p class="analytics-drilldown__empty">{{ emptyMessage() }}</p>
+              }
+            }
+            @if (state.view() === "backlog") {
+              @if (!state.backlog().length) {
+                <p class="analytics-drilldown__empty">У эксперта нет ожидающих назначений</p>
+              }
+              @if (state.waitingBacklog().length) {
+                <ng-container
+                  *ngTemplateOutlet="
+                    assignmentTable;
+                    context: { $implicit: state.waitingBacklog() }
+                  "
+                />
+              }
+              @if (state.notReadyBacklog().length) {
+                <h3 class="analytics-drilldown__section">Ещё не сданы</h3>
+                <ng-container
+                  *ngTemplateOutlet="
+                    assignmentTable;
+                    context: { $implicit: state.notReadyBacklog() }
+                  "
+                />
+              }
+            }
+          }
+        }
+      </div>
+    </section>
+  </app-modal>
+
+  <ng-template #assignmentTable let-assignments>
+    <table
+      appTable
+      class="analytics-drilldown__table"
+      [class.analytics-drilldown__table--assignments]="state.view() === 'assignments'"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Эксперт</th>
+          <th scope="col">Проект</th>
+          <th scope="col">Статус</th>
+          <th scope="col">Ожидание</th>
         </tr>
-      }
-    </tbody>
-  </table>
-</ng-template>
+      </thead>
+      <tbody>
+        @for (item of assignments; track item.assignmentId) {
+          <tr [attr.data-assignment-id]="item.assignmentId">
+            <td data-label="Эксперт">
+              <span class="analytics-drilldown__identity"
+                ><app-avatar [url]="item.expert.avatar || ''" [size]="36" /><span>{{
+                  item.expert.fullName || "Имя не указано"
+                }}</span></span
+              >
+            </td>
+            <td data-label="Проект">{{ item.project.name }}</td>
+            <td data-label="Статус">
+              <span class="analytics-drilldown__assignment-status">
+                <span
+                  [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
+                  >{{ statusLabel(item.status) }}</span
+                >
+                @if (item.status === "completed") {
+                  <button
+                    appButton="secondary"
+                    type="button"
+                    class="analytics-drilldown__action"
+                    (click)="state.loadAssignmentScores(item.assignmentId)"
+                    [attr.aria-label]="
+                      'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
+                    "
+                  >
+                    Посмотреть оценку
+                  </button>
+                }
+              </span>
+            </td>
+            <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </ng-template>
+}

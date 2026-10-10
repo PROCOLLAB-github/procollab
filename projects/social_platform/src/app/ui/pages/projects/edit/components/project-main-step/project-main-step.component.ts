@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { Component, inject, OnInit, ChangeDetectionStrategy, input } from "@angular/core";
 import {
   AbstractControl,
@@ -59,6 +62,8 @@ import { ProjectCoverResetService } from "@api/project/facades/edit/project-cove
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMainStepComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly projSubmitInitiated = input<boolean>(false);
 
   private readonly fb = inject(FormBuilder);

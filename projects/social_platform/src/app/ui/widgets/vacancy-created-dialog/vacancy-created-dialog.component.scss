@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/components/vacancy-ui";
 
 ::ng-deep .modal__body.vacancy-created-modal {
@@ -58,6 +57,17 @@
 
     ::ng-deep .button {
       min-height: 40px;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .created {
+    font-size: var(--ui-font-body);
+
+    &__title {
+      font-size: var(--ui-font-h2);
     }
   }
 }

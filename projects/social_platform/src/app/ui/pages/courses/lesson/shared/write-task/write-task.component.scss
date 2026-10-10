@@ -1,4 +1,6 @@
+/** @format */
 @use "styles/responsive";
+@use "styles/course-task";
 
 .write-task {
   display: flex;
@@ -175,4 +177,9 @@
       color: var(--grey-for-text);
     }
   }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include course-task.responsive-layout("write-task");
 }

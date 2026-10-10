@@ -1,4 +1,5 @@
 /** @format */
+@use "styles/responsive";
 
 .control {
   position: relative;
@@ -82,6 +83,41 @@
 
     &:hover {
       color: var(--red-dark);
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .control {
+      height: auto;
+      min-height: 120px;
+    }
+
+    .control label {
+      min-height: 120px;
+      padding: 16px;
+    }
+
+    .control__success,
+    .file {
+      flex-wrap: wrap;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .file__title {
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .file__basket,
+    .file__replace {
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 }

@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, StateComponent } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -60,6 +65,8 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
   templateUrl: "./analytics.component.html",
   styleUrl: "./analytics.component.scss",
   imports: [
+    StateComponent,
+    ButtonDirective,
     ButtonComponent,
     IconComponent,
     MatProgressBarModule,
@@ -70,6 +77,8 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramAnalyticsComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly analytics = inject(ProgramAnalyticsInfoService);
   private readonly exports = inject(ExportFileInfoService);
 

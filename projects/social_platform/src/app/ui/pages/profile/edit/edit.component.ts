@@ -1,5 +1,15 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import {
+  ButtonDirective,
+  DesktopLayoutService,
+  FormLayoutDirective,
+  PageHeaderComponent,
+} from "@uilib";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -54,6 +64,9 @@ import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/pr
   templateUrl: "./edit.component.html",
   styleUrl: "./edit.component.scss",
   imports: [
+    PageHeaderComponent,
+    ButtonDirective,
+    FormLayoutDirective,
     ReactiveFormsModule,
     CommonModule,
     IconComponent,
@@ -87,6 +100,9 @@ import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/pr
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileEditComponent implements OnInit, AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly projectStepService = inject(ProjectStepService);

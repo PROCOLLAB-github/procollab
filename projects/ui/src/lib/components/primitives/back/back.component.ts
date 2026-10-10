@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../services/desktop-layout.service";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,6 +14,7 @@ import {
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { IconComponent } from "../icon/icon.component";
+import { ButtonDirective } from "../button/button.directive";
 import { LoggerService } from "@corelib";
 
 /**
@@ -33,10 +37,12 @@ import { LoggerService } from "@corelib";
   selector: "app-back",
   templateUrl: "./back.component.html",
   styleUrl: "./back.component.scss",
-  imports: [IconComponent],
+  imports: [IconComponent, ButtonDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BackComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly loggerService = inject(LoggerService);
@@ -44,6 +50,7 @@ export class BackComponent implements OnInit {
   /** Путь для перехода (если не указан, используется history.back()) */
   readonly path = input<string | undefined>();
   readonly namespace = input<string | undefined>();
+  readonly compact = input(false);
 
   ngOnInit(): void {}
 

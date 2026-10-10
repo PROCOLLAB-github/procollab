@@ -1,6 +1,17 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../services/desktop-layout.service";
+
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  type OnInit,
+} from "@angular/core";
+import { DesktopLayoutService } from "../../../services/desktop-layout.service";
 
 /**
  * Компонент для отображения SVG иконок из спрайта
@@ -32,6 +43,9 @@ import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   /**
    * Устанавливает размер квадратной иконки
    * Автоматически создает viewBox если он не задан
@@ -99,6 +113,7 @@ export class IconComponent implements OnInit {
 
   /** Название иконки из спрайта (обязательный параметр) */
   readonly icon = input.required<string>();
+  readonly size = input<"small" | "medium" | "large">("medium");
 
   /** Внутреннее хранение размера квадратной иконки */
   square?: string;

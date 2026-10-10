@@ -1,7 +1,11 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { DesktopLayoutService, StateComponent } from "@uilib";
+
 // list.component.ts
-/** @format */
 
 import { ChangeDetectionStrategy, Component, computed, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -20,6 +24,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     ResponseCardComponent,
     ProjectVacancyCardComponent,
@@ -31,6 +36,9 @@ import { AppRoutes } from "@api/paths/app-routes";
   providers: [VacancyInfoService, VacancyUIInfoService],
 })
 export class VacanciesListComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly vacancyInfoService = inject(VacancyInfoService);
   private readonly vacancyUIInfoService = inject(VacancyUIInfoService);
 

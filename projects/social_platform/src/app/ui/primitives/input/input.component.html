@@ -3,6 +3,8 @@
 <div
   class="field"
   [class.field--error]="error()"
+  [class.field--compact]="size() === 'small'"
+  [class.field--with-hint]="haveHint()"
   [style.width]="size() === 'small' ? '70px' : '100%'"
   (click)="focusInput()"
 >

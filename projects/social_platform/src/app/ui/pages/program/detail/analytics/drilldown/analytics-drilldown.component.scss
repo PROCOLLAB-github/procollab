@@ -582,3 +582,64 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
+  }
+
+  .analytics-case {
+    &__metrics {
+      dt {
+        font-size: var(--ui-font-small);
+      }
+    }
+
+    &__export {
+      font-size: var(--ui-font-small);
+    }
+
+    .analytics-case__table {
+      small {
+        font-size: var(--ui-font-small);
+      }
+    }
+  }
+
+  .modal__body.analytics-drilldown-body {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
+  }
+
+  .modal__body.analytics-drilldown-body.analytics-drilldown-body--assignments {
+    .analytics-drilldown__header {
+      h2 {
+        font-size: var(--ui-font-h1);
+      }
+    }
+  }
+
+  .analytics-drilldown {
+    font-size: var(--ui-font-body);
+
+    h3 {
+      font-size: var(--ui-font-h3);
+    }
+
+    &__badge {
+      font-size: var(--ui-font-small);
+    }
+
+    &__table {
+      td::before {
+        font-size: var(--ui-font-small);
+      }
+    }
+
+    &__table--assignments {
+      .analytics-drilldown__action {
+        font-size: var(--ui-font-body);
+      }
+    }
+  }
+}

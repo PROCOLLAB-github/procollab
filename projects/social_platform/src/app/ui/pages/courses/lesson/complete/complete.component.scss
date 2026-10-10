@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -34,6 +35,26 @@
 
     @include responsive.apply-desktop {
       position: static;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .complete {
+      min-height: 0;
+      padding: 20px;
+    }
+
+    .complete__block {
+      margin: 24px 0;
+    }
+
+    .complete__button {
+      position: static;
+      width: 100%;
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
   }
 }

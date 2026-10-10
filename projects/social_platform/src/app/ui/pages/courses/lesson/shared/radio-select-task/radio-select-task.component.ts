@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ChoiceDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -26,12 +31,21 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 /** Компонент задачи с одним вариантом ответа и локальным сбросом выбора при ошибке. */
 @Component({
   selector: "app-radio-select-task",
-  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
+  imports: [
+    ChoiceDirective,
+    CommonModule,
+    TruncatePipe,
+    TruncateHtmlPipe,
+    FileItemComponent,
+    ImagePreviewDirective,
+  ],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioSelectTaskComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly cdRef = inject(ChangeDetectorRef);
 
   readonly data = input.required<Task>();

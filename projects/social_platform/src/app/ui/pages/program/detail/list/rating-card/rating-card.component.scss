@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -227,5 +226,40 @@
     gap: 20px;
     align-items: center;
     justify-content: center;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .card__wrapper {
+      padding: 16px;
+    }
+
+    .card__inner,
+    .card__rated,
+    .card__experts,
+    .card__lower--info {
+      @include responsive.mobile-actions;
+    }
+
+    .card__info,
+    .card__naming {
+      min-width: 0;
+    }
+
+    .card__naming {
+      flex: 1;
+      width: auto;
+    }
+
+    .card__title {
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    .cancel__project {
+      flex-wrap: wrap;
+    }
   }
 }

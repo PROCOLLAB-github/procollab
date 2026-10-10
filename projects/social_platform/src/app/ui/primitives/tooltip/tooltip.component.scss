@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -114,6 +113,32 @@
         border-bottom: 9px solid transparent;
         transform: translateY(-50%);
       }
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .tooltip {
+    &__content {
+      box-shadow: var(--ui-tooltip-shadow);
+    }
+  }
+
+  @include responsive.apply-mobile {
+    .tooltip__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .tooltip__content {
+      max-width: calc(100vw - 32px);
+      max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
+      overflow-y: auto;
+      overflow-wrap: anywhere;
     }
   }
 }

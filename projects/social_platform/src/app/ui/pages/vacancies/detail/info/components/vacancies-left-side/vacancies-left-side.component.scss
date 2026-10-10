@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/components/vacancy-ui";
 
 :host {
@@ -39,5 +38,22 @@
     line-height: 21px;
 
     @include vacancy-ui.secondary;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .content {
+    h2 {
+      font-size: var(--ui-font-body);
+    }
+
+    &__description {
+      font-size: var(--ui-font-body);
+    }
+
+    &__empty {
+      font-size: var(--ui-font-body);
+    }
   }
 }

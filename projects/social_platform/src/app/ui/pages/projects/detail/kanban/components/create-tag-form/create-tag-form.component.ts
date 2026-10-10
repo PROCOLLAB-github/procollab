@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FieldDirective, FormLayoutDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import {
   Component,
@@ -26,9 +31,11 @@ import { TagDto } from "@domain/kanban/dto/tag.model.dto";
   selector: "app-create-tag-form",
   templateUrl: "./create-tag-form.component.html",
   styleUrl: "./create-tag-form.component.scss",
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [FieldDirective, FormLayoutDirective, CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class CreateTagFormComponent implements OnInit, OnChanges {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   @Input() editingTag: TagDto | null = null;
   @Output() createTag = new EventEmitter<TagDto>();
   @Output() updateTag = new EventEmitter<TagDto>();

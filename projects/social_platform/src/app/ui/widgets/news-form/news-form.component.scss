@@ -1,3 +1,6 @@
+/** @format */
+@use "styles/responsive";
+
 .form {
   padding: 20px 12px 10px;
   background-color: var(--light-white);
@@ -75,6 +78,30 @@
     i {
       color: var(--dark-grey);
       cursor: pointer;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .form__input {
+      min-width: 0;
+    }
+
+    .form__send {
+      flex-shrink: 0;
+      min-width: 44px;
+      min-height: 44px;
+      margin-left: 8px;
+    }
+
+    .footer__attach {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 }

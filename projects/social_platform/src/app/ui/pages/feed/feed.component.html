@@ -1,43 +1,91 @@
 <!-- @format -->
-
-<div class="page">
-  <app-feed-filter class="page__filter"></app-feed-filter>
-  <div #feedRoot class="page__feed">
-    @if (feedItems().length > 0) {
-      @for (item of feedItems(); track item.typeModel + ":" + item.content.id) {
-        @if (item.typeModel === "vacancy") {
-          <app-open-vacancy
-            class="page__item"
-            [attr.data-key]="item.typeModel + ':' + item.content.id"
-            [feedItem]="item.content"
-            [publishedAt]="item.publishedAt || item.content.datetimeCreated"
-          ></app-open-vacancy>
-        } @else if (item.typeModel === "project") {
-          <app-new-project
-            class="page__item"
-            [attr.data-key]="item.typeModel + ':' + item.content.id"
-            [feedItem]="item.content"
-            [publishedAt]="item.publishedAt || ''"
-          ></app-new-project>
-        } @else if (item.typeModel === "news") {
-          <app-news-card
-            class="page__item"
-            [attr.data-key]="item.typeModel + ':' + item.content.id"
-            [feedItem]="item.content"
-            [contentId]="item.content.contentObject.id"
-            [resourceLink]="resourceLink(item)"
-            [feedType]="isPersonNews(item) ? 'people' : 'project'"
-            [feedIndustryId]="item.content.contentObject.industry"
-            [publishedAt]="item.publishedAt || item.content.datetimeCreated"
-            (like)="onLike($event)"
-          ></app-news-card>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="page">
+    <app-feed-filter class="page__filter"></app-feed-filter>
+    <div #feedRoot class="page__feed">
+      @if (feedItems().length > 0) {
+        @for (item of feedItems(); track item.typeModel + ":" + item.content.id) {
+          @if (item.typeModel === "vacancy") {
+            <app-open-vacancy
+              class="page__item"
+              [attr.data-key]="item.typeModel + ':' + item.content.id"
+              [feedItem]="item.content"
+              [publishedAt]="item.publishedAt || item.content.datetimeCreated"
+            ></app-open-vacancy>
+          } @else if (item.typeModel === "project") {
+            <app-new-project
+              class="page__item"
+              [attr.data-key]="item.typeModel + ':' + item.content.id"
+              [feedItem]="item.content"
+              [publishedAt]="item.publishedAt || ''"
+            ></app-new-project>
+          } @else if (item.typeModel === "news") {
+            <app-news-card
+              class="page__item"
+              [attr.data-key]="item.typeModel + ':' + item.content.id"
+              [feedItem]="item.content"
+              [contentId]="item.content.contentObject.id"
+              [resourceLink]="resourceLink(item)"
+              [feedType]="isPersonNews(item) ? 'people' : 'project'"
+              [feedIndustryId]="item.content.contentObject.industry"
+              [publishedAt]="item.publishedAt || item.content.datetimeCreated"
+              (like)="onLike($event)"
+            ></app-news-card>
+          }
+        }
+      } @else {
+        <div class="page__feed--no-items">
+          <i appIcon icon="empty-chat" appSquare="38"></i>
+          <p class="text-body-12">в данном разделе пока нет новостей</p>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="page">
+    <app-feed-filter class="page__filter"></app-feed-filter>
+    <div #feedRoot class="page__feed">
+      @if (feedItems().length > 0) {
+        @for (item of feedItems(); track item.typeModel + ":" + item.content.id) {
+          @if (item.typeModel === "vacancy") {
+            <app-open-vacancy
+              class="page__item"
+              [attr.data-key]="item.typeModel + ':' + item.content.id"
+              [feedItem]="item.content"
+              [publishedAt]="item.publishedAt || item.content.datetimeCreated"
+            ></app-open-vacancy>
+          } @else if (item.typeModel === "project") {
+            <app-new-project
+              class="page__item"
+              [attr.data-key]="item.typeModel + ':' + item.content.id"
+              [feedItem]="item.content"
+              [publishedAt]="item.publishedAt || ''"
+            ></app-new-project>
+          } @else if (item.typeModel === "news") {
+            <app-news-card
+              class="page__item"
+              [attr.data-key]="item.typeModel + ':' + item.content.id"
+              [feedItem]="item.content"
+              [contentId]="item.content.contentObject.id"
+              [resourceLink]="resourceLink(item)"
+              [feedType]="isPersonNews(item) ? 'people' : 'project'"
+              [feedIndustryId]="item.content.contentObject.industry"
+              [publishedAt]="item.publishedAt || item.content.datetimeCreated"
+              (like)="onLike($event)"
+            ></app-news-card>
+          }
+        }
+      } @else {
+        @if (desktopLayout()) {
+          <div class="page__feed--no-items">
+            <i appIcon icon="empty-chat" appSquare="38"></i>
+            <p class="text-body-12">в данном разделе пока нет новостей</p>
+          </div>
+        } @else {
+          <app-state title="в данном разделе пока нет новостей" />
         }
       }
-    } @else {
-      <div class="page__feed--no-items">
-        <i appIcon icon="empty-chat" appSquare="38"></i>
-        <p class="text-body-12">в данном разделе пока нет новостей</p>
-      </div>
-    }
+    </div>
   </div>
-</div>
+}

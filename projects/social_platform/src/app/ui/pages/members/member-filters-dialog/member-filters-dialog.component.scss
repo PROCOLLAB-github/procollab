@@ -78,3 +78,32 @@
     outline-offset: 2px;
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .member-filters-dialog {
+    &__header {
+      h2 {
+        font-size: var(--ui-font-h2);
+      }
+
+      button {
+        border-radius: var(--ui-radius-dialog);
+      }
+    }
+
+    &__content {
+      .filters__clear {
+        font-size: var(--ui-font-body);
+      }
+
+      input {
+        font-size: var(--ui-font-h3);
+      }
+    }
+
+    &__done {
+      font-size: var(--ui-font-body);
+    }
+  }
+}

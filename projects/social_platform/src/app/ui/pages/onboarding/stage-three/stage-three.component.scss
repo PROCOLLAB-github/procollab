@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -35,6 +36,20 @@
 
     @include responsive.apply-desktop {
       max-width: 415px;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .page__list {
+      height: auto;
+      max-height: none;
+    }
+
+    .page__button {
+      width: 100%;
     }
   }
 }

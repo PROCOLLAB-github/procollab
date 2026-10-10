@@ -1,109 +1,223 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="office">
+    @if (profile()) {
+      <div class="office__wrapper">
+        <img
+          alt="background-image"
+          src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
+          class="office__background-image"
+        />
+        <div class="office__body">
+          <div class="office__inner">
+            <div class="office__inner--wrapper">
+              <ui-sidebar
+                class="office__sidebar"
+                logoSrc="/assets/images/shared/logo.svg"
+                [navItems]="navItems()"
+                style="align-self: flex-start"
+              >
+                <div class="office__sidebar--text">
+                  <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
+                  <span class="text-body-6 office__policy-link" (click)="downloadPolicy($event)">
+                    Политика обработки персональных данных
+                  </span>
+                  <p class="text-body-6">{{ currentYear() }}</p>
+                </div>
 
-<div class="office">
-  @if (profile()) {
-    <div class="office__wrapper">
-      <img
-        alt="background-image"
-        src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
-        class="office__background-image"
-      />
-      <div class="office__body">
-        <div class="office__inner">
-          <div class="office__inner--wrapper">
-            <ui-sidebar
-              class="office__sidebar"
-              logoSrc="/assets/images/shared/logo.svg"
-              [navItems]="navItems()"
-              style="align-self: flex-start"
-            >
-              <div class="office__sidebar--text">
-                <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
-                <span class="text-body-6 office__policy-link" (click)="downloadPolicy($event)">
-                  Политика обработки персональных данных
-                </span>
-                <p class="text-body-6">{{ currentYear() }}</p>
-              </div>
-
-              <div class="office__programs">
-                @if (programs().length) {
-                  @for (program of programs(); track program.id) {
-                    <app-program-sidebar-card
-                      [routerLink]="AppRoutes.program.detail(program.id)"
-                      [program]="program"
-                    ></app-program-sidebar-card>
+                <div class="office__programs">
+                  @if (programs().length) {
+                    @for (program of programs(); track program.id) {
+                      <app-program-sidebar-card
+                        [routerLink]="AppRoutes.program.detail(program.id)"
+                        [program]="program"
+                      ></app-program-sidebar-card>
+                    }
                   }
-                }
-              </div>
-            </ui-sidebar>
+                </div>
+              </ui-sidebar>
 
-            <div class="office__inner--content">
-              <div class="office__top">
-                <app-nav></app-nav>
+              <div class="office__inner--content">
+                <div class="office__top">
+                  <app-nav></app-nav>
 
-                @if (profile() !== undefined) {
-                  <app-profile-control-panel
-                    [notifications]="notifications()"
-                    [unreadCount]="notificationUnreadCount()"
-                    [loading]="notificationsLoading()"
-                    [loadingMore]="notificationsLoadingMore()"
-                    [markingAllRead]="notificationsMarkingAllRead()"
-                    [hasMore]="notificationsHasMore()"
-                    [error]="notificationsError()"
-                    [hasUnreads]="chatUnreadState.hasUnreads()"
-                    [user]="profile()"
-                    (notificationClick)="onNotificationClick($event)"
-                    (markAllRead)="onMarkAllNotificationsRead()"
-                    (loadMore)="onLoadMoreNotifications()"
-                    (retry)="onRetryNotifications()"
-                    (openChange)="onNotificationsOpenChange($event)"
-                    (logout)="onLogout()"
-                  ></app-profile-control-panel>
-                }
+                  @if (profile() !== undefined) {
+                    <app-profile-control-panel
+                      [notifications]="notifications()"
+                      [unreadCount]="notificationUnreadCount()"
+                      [loading]="notificationsLoading()"
+                      [loadingMore]="notificationsLoadingMore()"
+                      [markingAllRead]="notificationsMarkingAllRead()"
+                      [hasMore]="notificationsHasMore()"
+                      [error]="notificationsError()"
+                      [hasUnreads]="chatUnreadState.hasUnreads()"
+                      [user]="profile()"
+                      (notificationClick)="onNotificationClick($event)"
+                      (markAllRead)="onMarkAllNotificationsRead()"
+                      (loadMore)="onLoadMoreNotifications()"
+                      (retry)="onRetryNotifications()"
+                      (openChange)="onNotificationsOpenChange($event)"
+                      (logout)="onLogout()"
+                    ></app-profile-control-panel>
+                  }
+                </div>
+                <router-outlet></router-outlet>
               </div>
-              <router-outlet></router-outlet>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  }
-  <app-modal [open]="waitVerificationModal()">
-    <div class="message-modal">
-      <img
-        src="/assets/images/office/shared/wait.png"
-        alt="wait"
-        width="215px"
-        loading="lazy"
-        decoding="async"
-      />
-      <h3 class="message-modal__title text-body-14">Ваш аккаунт проходит подтверждение</h3>
-      <p class="message-modal__text text-body-12">
-        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже
-        пользоваться платформой
-      </p>
-      <app-button
-        class="message-modal__button"
-        [disabled]="verificationAcknowledgementPending()"
-        (click)="onAcceptWaitVerification()"
-      >
-        Хорошо
-      </app-button>
-    </div>
-  </app-modal>
+    }
+    <app-modal [open]="waitVerificationModal()">
+      <div class="message-modal">
+        <img
+          src="/assets/images/office/shared/wait.png"
+          alt="wait"
+          width="215px"
+          loading="lazy"
+          decoding="async"
+        />
+        <h3 class="message-modal__title text-body-14">Ваш аккаунт проходит подтверждение</h3>
+        <p class="message-modal__text text-body-12">
+          Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже
+          пользоваться платформой
+        </p>
+        <app-button
+          class="message-modal__button"
+          [disabled]="verificationAcknowledgementPending()"
+          (click)="onAcceptWaitVerification()"
+        >
+          Хорошо
+        </app-button>
+      </div>
+    </app-modal>
 
-  <app-modal [open]="inviteErrorModal()">
-    <div class="message-modal">
-      <h3 class="message-modal__title text-body-14">Приглашение на текущий проект было удалено</h3>
-      <p class="message-modal__text text-body-12">
-        Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта, чтобы
-        вас заново пригласили!
-      </p>
-      <app-button class="message-modal__button" (click)="inviteErrorModal.set(false)">
-        Хорошо
-      </app-button>
-    </div>
-  </app-modal>
-  <app-delete-confirm></app-delete-confirm>
-  <app-snackbar></app-snackbar>
-</div>
+    <app-modal [open]="inviteErrorModal()">
+      <div class="message-modal">
+        <h3 class="message-modal__title text-body-14">
+          Приглашение на текущий проект было удалено
+        </h3>
+        <p class="message-modal__text text-body-12">
+          Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта,
+          чтобы вас заново пригласили!
+        </p>
+        <app-button class="message-modal__button" (click)="inviteErrorModal.set(false)">
+          Хорошо
+        </app-button>
+      </div>
+    </app-modal>
+    <app-delete-confirm></app-delete-confirm>
+    <app-snackbar></app-snackbar>
+  </div>
+} @else {
+  <div class="office">
+    @if (profile()) {
+      <div class="office__wrapper">
+        <img
+          alt="background-image"
+          src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
+          class="office__background-image"
+        />
+        <div class="office__body">
+          <div class="office__inner">
+            <div class="office__inner--wrapper">
+              <ui-sidebar
+                class="office__sidebar"
+                logoSrc="/assets/images/shared/logo.svg"
+                [navItems]="navItems()"
+                style="align-self: flex-start"
+              >
+                <div class="office__sidebar--text">
+                  <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
+                  <span class="text-body-6 office__policy-link" (click)="downloadPolicy($event)">
+                    Политика обработки персональных данных
+                  </span>
+                  <p class="text-body-6">{{ currentYear() }}</p>
+                </div>
+
+                <div class="office__programs">
+                  @if (programs().length) {
+                    @for (program of programs(); track program.id) {
+                      <app-program-sidebar-card
+                        [routerLink]="AppRoutes.program.detail(program.id)"
+                        [program]="program"
+                      ></app-program-sidebar-card>
+                    }
+                  }
+                </div>
+              </ui-sidebar>
+
+              <div class="office__inner--content">
+                <div class="office__top">
+                  <app-nav (logout)="onLogout()"></app-nav>
+
+                  @if (profile() !== undefined) {
+                    <app-profile-control-panel
+                      [notifications]="notifications()"
+                      [unreadCount]="notificationUnreadCount()"
+                      [loading]="notificationsLoading()"
+                      [loadingMore]="notificationsLoadingMore()"
+                      [markingAllRead]="notificationsMarkingAllRead()"
+                      [hasMore]="notificationsHasMore()"
+                      [error]="notificationsError()"
+                      [hasUnreads]="chatUnreadState.hasUnreads()"
+                      [user]="profile()"
+                      (notificationClick)="onNotificationClick($event)"
+                      (markAllRead)="onMarkAllNotificationsRead()"
+                      (loadMore)="onLoadMoreNotifications()"
+                      (retry)="onRetryNotifications()"
+                      (openChange)="onNotificationsOpenChange($event)"
+                      (logout)="onLogout()"
+                    ></app-profile-control-panel>
+                  }
+                </div>
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    <app-modal [open]="waitVerificationModal()">
+      <div class="message-modal">
+        <img
+          src="/assets/images/office/shared/wait.png"
+          alt="wait"
+          width="215px"
+          loading="lazy"
+          decoding="async"
+        />
+        <h3 class="message-modal__title text-body-14">Ваш аккаунт проходит подтверждение</h3>
+        <p class="message-modal__text text-body-12">
+          Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже
+          пользоваться платформой
+        </p>
+        <app-button
+          class="message-modal__button"
+          [disabled]="verificationAcknowledgementPending()"
+          (click)="onAcceptWaitVerification()"
+        >
+          Хорошо
+        </app-button>
+      </div>
+    </app-modal>
+
+    <app-modal [open]="inviteErrorModal()">
+      <div class="message-modal">
+        <h3 class="message-modal__title text-body-14">
+          Приглашение на текущий проект было удалено
+        </h3>
+        <p class="message-modal__text text-body-12">
+          Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта,
+          чтобы вас заново пригласили!
+        </p>
+        <app-button class="message-modal__button" (click)="inviteErrorModal.set(false)">
+          Хорошо
+        </app-button>
+      </div>
+    </app-modal>
+    <app-delete-confirm></app-delete-confirm>
+    <app-snackbar></app-snackbar>
+  </div>
+}

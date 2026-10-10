@@ -97,3 +97,15 @@ $procollab-theme: mat.m2-define-light-theme(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($procollab-theme);
+
+@media screen and (max-width: 999px) {
+  :root {
+    --page-gutter: 16px;
+    @supports (height: 100dvh) {
+      --app-height: 100dvh;
+    }
+  }
+}
+@import "styles/platform-responsive.scss";
+@import "styles/ui-tokens.scss";
+@import "styles/ui-system.scss";

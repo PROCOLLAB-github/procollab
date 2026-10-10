@@ -1,3 +1,6 @@
+/** @format */
+@use "styles/responsive";
+
 .work-section {
   display: grid;
   grid-template-columns: 4fr 3fr 3fr;
@@ -32,5 +35,18 @@
   &__title {
     margin-bottom: 8px;
     color: var(--accent);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .work-section {
+      @include responsive.single-column;
+    }
+
+    .work-section__section {
+      padding: 16px;
+    }
   }
 }

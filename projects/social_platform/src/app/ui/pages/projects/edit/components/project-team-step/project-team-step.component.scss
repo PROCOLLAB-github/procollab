@@ -152,3 +152,30 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .team {
+    h2 {
+      font-size: var(--ui-font-h2);
+    }
+
+    h3 {
+      font-size: var(--ui-font-body);
+    }
+
+    p {
+      font-size: var(--ui-font-small);
+    }
+  }
+
+  .team-empty {
+    .team-empty__title {
+      font-size: var(--ui-font-body);
+    }
+  }
+
+  .team-loading > p {
+    font-size: var(--ui-font-body);
+  }
+}

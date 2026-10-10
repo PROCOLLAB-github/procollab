@@ -72,3 +72,10 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .notifications {
+    box-shadow: var(--ui-header-shadow);
+  }
+}

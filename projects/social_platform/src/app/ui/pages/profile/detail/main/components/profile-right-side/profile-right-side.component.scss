@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 @mixin expandable-list {
@@ -255,5 +256,39 @@
   &__text {
     margin-bottom: 8px;
     color: var(--black);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .lists {
+    &__info {
+      &--text {
+        font-size: var(--ui-font-small);
+      }
+
+      &--subtext {
+        font-size: var(--ui-font-caption);
+      }
+
+      &--more {
+        font-size: var(--ui-font-caption);
+      }
+    }
+
+    &__project-name {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
+      font-size: var(--ui-font-small);
+    }
+
+    &__project-role {
+      font-size: var(--ui-font-caption);
+    }
+
+    &__date {
+      p {
+        font-size: var(--ui-font-caption);
+      }
+    }
   }
 }

@@ -170,3 +170,79 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .member-row {
+    grid-template-areas:
+      "avatar name role status actions"
+      "avatar description role status actions";
+    grid-template-columns: 40px minmax(0, 1.18fr) minmax(0, 1fr) 148px 68px;
+
+    &__name {
+      font-size: var(--ui-font-body);
+    }
+
+    &__description {
+      font-size: var(--ui-font-small);
+    }
+
+    &__role {
+      font-size: var(--ui-font-small);
+    }
+
+    &__status {
+      font-size: var(--ui-font-small);
+    }
+
+    &__actions {
+      gap: 4px;
+    }
+
+    &__action {
+      width: 32px;
+      min-height: 32px;
+      padding: 0;
+      font-size: var(--ui-font-small);
+    }
+
+    &__action-label {
+      display: none;
+    }
+
+    &__error {
+      grid-column: 2 / -1;
+      font-size: var(--ui-font-small);
+      color: var(--error, var(--ui-error-text));
+    }
+  }
+
+  @media (width < 750px) {
+    .member-row {
+      grid-template-areas:
+        "avatar name"
+        "avatar role"
+        "avatar description"
+        "actions actions";
+      grid-template-columns: 40px minmax(0, 1fr);
+
+      &__actions {
+        gap: 4px 16px;
+      }
+
+      &__action {
+        width: auto;
+        min-height: 44px;
+        padding: 0 4px;
+      }
+
+      &__action-label {
+        display: inline;
+      }
+
+      &__error {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+}

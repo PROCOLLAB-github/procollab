@@ -1,4 +1,6 @@
+/** @format */
 @use "styles/responsive";
+@use "styles/profile-form";
 
 :host,
 fieldset {
@@ -123,4 +125,17 @@ fieldset {
       align-items: center;
     }
   }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .profile__wrapper--education {
+    grid-template-columns: minmax(0, 1fr);
+
+    @include responsive.apply-tablet-and-above {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+    }
+  }
+
+  @include profile-form.responsive-layout;
 }

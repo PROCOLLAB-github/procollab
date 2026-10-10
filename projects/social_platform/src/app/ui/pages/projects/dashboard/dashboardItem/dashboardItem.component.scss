@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 .dashboard {
@@ -42,6 +43,20 @@
 
     &:hover {
       opacity: 0.5;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .dashboard__list {
+      grid-template-columns: repeat(auto-fill, minmax(0, var(--ui-mobile-entity-card-width)));
+      row-gap: 48px;
+    }
+
+    .dashboard__top {
+      @include responsive.mobile-actions;
     }
   }
 }

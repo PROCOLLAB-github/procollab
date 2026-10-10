@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/components/vacancy-ui";
 
 ::ng-deep .modal__body.vacancy-responses-modal {
@@ -174,6 +173,60 @@
       app-button {
         flex-basis: auto;
         width: 100%;
+      }
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .responses {
+    &__title {
+      font-size: var(--ui-font-h2);
+    }
+
+    &__state {
+      font-size: var(--ui-font-body);
+    }
+  }
+
+  .response {
+    &__name {
+      font-size: var(--ui-font-h3);
+    }
+
+    &__specialization,
+    &__date {
+      font-size: var(--ui-font-small);
+    }
+
+    &__meta {
+      align-items: flex-end;
+    }
+
+    &__label {
+      font-size: var(--ui-font-body);
+    }
+
+    &__file-row {
+      font-size: var(--ui-font-body);
+    }
+
+    &__actions {
+      app-button {
+        flex-basis: 160px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      &__meta {
+        align-items: flex-start;
+      }
+
+      &__actions {
+        app-button {
+          flex-basis: auto;
+        }
       }
     }
   }

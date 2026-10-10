@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Invite } from "@domain/invite/invite.model";
@@ -15,6 +21,7 @@ import { ProjectInviteRoleInputComponent } from "@ui/widgets/project-invite/proj
   templateUrl: "./invite-card.component.html",
   styleUrl: "./invite-card.component.scss",
   imports: [
+    ButtonDirective,
     IconComponent,
     AvatarComponent,
     ReactiveFormsModule,
@@ -24,6 +31,8 @@ import { ProjectInviteRoleInputComponent } from "@ui/widgets/project-invite/proj
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteCardComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly invite = input.required<Invite>();
   readonly remove = output<number>();
   readonly edit = output<{ inviteId: number; role: string; specialization: string }>();

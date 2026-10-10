@@ -27,9 +27,17 @@ describe("StageZeroComponent", () => {
     };
 
     const authPortSpy = {
-      fetchProfile: of({}),
-      fetchUserRoles: of([]),
-      fetchChangeableRoles: of([]),
+      fetchProfile: vi.fn(() =>
+        of({
+          id: 1,
+          firstName: "Иван",
+          lastName: "Иванов",
+          personal: { avatar: "", city: "", onboardingStage: 0 },
+          relations: { education: [], workExperience: [], userLanguages: [], achievements: [] },
+        }),
+      ),
+      fetchUserRoles: vi.fn(() => of([])),
+      fetchChangeableRoles: vi.fn(() => of([])),
     };
 
     await TestBed.configureTestingModule({

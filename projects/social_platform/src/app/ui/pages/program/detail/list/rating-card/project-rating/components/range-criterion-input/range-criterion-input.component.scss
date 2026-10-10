@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -40,7 +39,6 @@
     }
   }
 }
-
 // stylelint-disable property-no-vendor-prefix
 input {
   &::-webkit-outer-spin-button,
@@ -50,5 +48,35 @@ input {
 
   &[type="number"] {
     -moz-appearance: textfield;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .field {
+    &__input {
+      &:focus {
+        box-shadow: var(--ui-focus-ring);
+      }
+    }
+  }
+
+  input {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+    }
+
+    &[type="number"] {
+      appearance: textfield;
+    }
+  }
+
+  @include responsive.apply-mobile {
+    .field__input {
+      width: 44px;
+      height: 44px;
+      font-size: var(--ui-font-h3);
+    }
   }
 }

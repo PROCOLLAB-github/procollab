@@ -29,10 +29,10 @@ describe("RangeCriterionInputComponent", () => {
 
   it("should set the value of the input element", () => {
     const fixture = TestBed.createComponent(RangeCriterionInputComponent);
-    const inputEl = fixture.nativeElement.querySelector("input");
     const component = fixture.componentInstance;
     component.value = 1;
     fixture.detectChanges();
+    const inputEl = fixture.nativeElement.querySelector("input");
     expect(inputEl.value).toBe("1");
   });
 

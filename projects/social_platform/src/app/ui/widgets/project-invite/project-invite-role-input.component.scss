@@ -1,4 +1,5 @@
 /** @format */
+
 :host {
   display: block;
   min-width: 0;
@@ -86,6 +87,41 @@
   @media (width <= 600px) {
     input {
       font-size: 16px;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .invite-role {
+    label {
+      font-size: var(--ui-font-body);
+    }
+
+    input {
+      font-size: var(--ui-font-body);
+    }
+
+    p {
+      font-size: var(--ui-font-caption);
+    }
+
+    p.invalid {
+      color: var(--error, var(--ui-error-text));
+    }
+
+    &__options {
+      box-shadow: 0 6px 24px var(--ui-overlay-shadow-color);
+    }
+
+    button {
+      font-size: var(--ui-font-body);
+    }
+
+    @media (width <= 600px) {
+      input {
+        font-size: var(--ui-font-h3);
+      }
     }
   }
 }

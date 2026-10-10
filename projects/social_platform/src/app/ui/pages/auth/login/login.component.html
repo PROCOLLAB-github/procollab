@@ -1,175 +1,355 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="login">
+    <div class="login__left">
+      <div class="login__left-content">
+        <form
+          class="auth"
+          [formGroup]="loginForm"
+          novalidate
+          (ngSubmit)="onSubmit()"
+          (keyup.enter)="onSubmit()"
+        >
+          <div class="auth__wrapper">
+            <img
+              class="login__logo"
+              src="/assets/images/shared/logo.svg"
+              alt="logo"
+              loading="lazy"
+              decoding="async"
+            />
 
-<div class="login">
-  <div class="login__left">
-    <div class="login__left-content">
-      <form
-        class="auth"
-        [formGroup]="loginForm"
-        novalidate
-        (ngSubmit)="onSubmit()"
-        (keyup.enter)="onSubmit()"
-      >
-        <div class="auth__wrapper">
-          <img
-            class="login__logo"
-            src="/assets/images/shared/logo.svg"
-            alt="logo"
-            loading="lazy"
-            decoding="async"
-          />
+            @if (loginForm.get("email"); as email) {
+              <fieldset class="auth__field">
+                <label for="email" class="field-label">почта*</label>
+                <app-input
+                  size="big"
+                  [error]="email | controlError"
+                  id="email"
+                  type="email"
+                  formControlName="email"
+                  placeholder="example@example.com"
+                ></app-input>
 
-          @if (loginForm.get("email"); as email) {
-            <fieldset class="auth__field">
-              <label for="email" class="field-label">почта*</label>
-              <app-input
-                size="big"
-                [error]="email | controlError"
-                id="email"
-                type="email"
-                formControlName="email"
-                placeholder="example@example.com"
-              ></app-input>
-
-              @if (email | controlError: "email") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_EMAIL }}
+                @if (email | controlError: "email") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_EMAIL }}
+                  </div>
+                }
+                @if (email | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+              </fieldset>
+            }
+            @if (loginForm.get("password"); as password) {
+              <fieldset class="auth__field">
+                <div class="login__password">
+                  <label class="field-label" for="password">пароль</label>
+                  <a [routerLink]="AppRoutes.auth.resetPasswordEmail()" class="login__forget">
+                    забыли пароль?
+                  </a>
                 </div>
-              }
-              @if (email | controlError: "required") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-              }
-            </fieldset>
-          }
-          @if (loginForm.get("password"); as password) {
-            <fieldset class="auth__field">
-              <div class="login__password">
-                <label class="field-label" for="password">пароль</label>
-                <a [routerLink]="AppRoutes.auth.resetPasswordEmail()" class="login__forget">
-                  забыли пароль?
-                </a>
-              </div>
 
-              <app-input
-                class="auth__password-input"
-                size="big"
-                [error]="password | controlError"
-                id="password"
-                [type]="showPassword() ? 'text' : 'password'"
-                formControlName="password"
-                name="password"
-                autocomplete="current-password"
-                placeholder="GJiwoeuhbn120="
-              >
-                <button
-                  type="button"
-                  class="auth__password-toggle auth__password-toggle--muted"
-                  [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
-                  [attr.aria-pressed]="showPassword()"
-                  (click)="$event.stopPropagation(); toggleShowPassword()"
+                <app-input
+                  class="auth__password-input"
+                  size="big"
+                  [error]="password | controlError"
+                  id="password"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  formControlName="password"
+                  name="password"
+                  autocomplete="current-password"
+                  placeholder="GJiwoeuhbn120="
                 >
-                  <i
-                    appIcon
-                    [icon]="showPassword() ? 'eye' : 'eye-off'"
-                    appSquare="15"
-                    aria-hidden="true"
-                  ></i>
-                </button>
-              </app-input>
+                  <button
+                    type="button"
+                    class="auth__password-toggle auth__password-toggle--muted"
+                    [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                    [attr.aria-pressed]="showPassword()"
+                    (click)="$event.stopPropagation(); toggleShowPassword()"
+                  >
+                    <i
+                      appIcon
+                      [icon]="showPassword() ? 'eye' : 'eye-off'"
+                      appSquare="15"
+                      aria-hidden="true"
+                    ></i>
+                  </button>
+                </app-input>
 
-              @if (password | controlError: "required") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-              }
-            </fieldset>
-          }
-          @if (errorWrongAuth()) {
-            <div class="text-body-10 error">
-              {{ errorMessage.AUTH_WRONG_AUTH }}
+                @if (password | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+              </fieldset>
+            }
+            @if (errorWrongAuth()) {
+              <div class="text-body-10 error">
+                {{ errorMessage.AUTH_WRONG_AUTH }}
+              </div>
+            }
+
+            <app-button
+              size="big"
+              [loader]="loginIsSubmitting()"
+              class="auth__button"
+              customTypographyClass="auth__button-typography"
+              type="submit"
+            >
+              войти
+              <i
+                class="auth__button-icon"
+                appIcon
+                icon="arrow-no-body"
+                appWidth="12"
+                appHeight="6"
+                appViewBox="0 0 18 9"
+              ></i>
+            </app-button>
+
+            <div class="login__additional">
+              <p class="login__reg text-body-12">
+                нет аккаунта?
+                <a [routerLink]="AppRoutes.auth.register()">зарегистрируйтесь</a>
+              </p>
+
+              <hr />
+
+              <p class="text-body-12 login__external">
+                Если вы регистрировались через форму на сайте программы кейс-чемпионата, введите
+                данные, которые вы указывали ранее
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="login__left-footer">
+        <div class="tooltip">
+          <app-tooltip
+            color="grey"
+            iconSize="40"
+            (click)="$event.stopPropagation(); toggleTooltip()"
+          ></app-tooltip>
+
+          @if (isHintLoginVisible()) {
+            <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
+              <p class="tooltip__text text-body-10">
+                Возникли технические сложности или остались вопросы?
+              </p>
+              <p class="tooltip__text text-body-10">
+                Все ответы в нашем боте поддержки
+                <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
+              </p>
+
+              <br />
+
+              <p class="tooltip__text text-body-10">
+                Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка
+                –
+                <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
+              </p>
+
+              <br />
+
+              <p class="tooltip__text text-body-10">
+                Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
+              </p>
             </div>
           }
-
-          <app-button
-            size="big"
-            [loader]="loginIsSubmitting()"
-            class="auth__button"
-            customTypographyClass="auth__button-typography"
-            type="submit"
-          >
-            войти
-            <i
-              class="auth__button-icon"
-              appIcon
-              icon="arrow-no-body"
-              appWidth="12"
-              appHeight="6"
-              appViewBox="0 0 18 9"
-            ></i>
-          </app-button>
-
-          <div class="login__additional">
-            <p class="login__reg text-body-12">
-              нет аккаунта?
-              <a [routerLink]="AppRoutes.auth.register()">зарегистрируйтесь</a>
-            </p>
-
-            <hr />
-
-            <p class="text-body-12 login__external">
-              Если вы регистрировались через форму на сайте программы кейс-чемпионата, введите
-              данные, которые вы указывали ранее
-            </p>
-          </div>
         </div>
-      </form>
-    </div>
-
-    <div class="login__left-footer">
-      <div class="tooltip">
-        <app-tooltip
-          color="grey"
-          iconSize="40"
-          (click)="$event.stopPropagation(); toggleTooltip()"
-        ></app-tooltip>
-
-        @if (isHintLoginVisible()) {
-          <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
-            <p class="tooltip__text text-body-10">
-              Возникли технические сложности или остались вопросы?
-            </p>
-            <p class="tooltip__text text-body-10">
-              Все ответы в нашем боте поддержки
-              <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
-            </p>
-
-            <br />
-
-            <p class="tooltip__text text-body-10">
-              Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка –
-              <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
-            </p>
-
-            <br />
-
-            <p class="tooltip__text text-body-10">
-              Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
-            </p>
-          </div>
-        }
       </div>
     </div>
-  </div>
 
-  <div class="login__right">
-    <img
-      class="login__image"
-      src="/assets/images/auth/login-img.png"
-      alt=""
-      loading="lazy"
-      decoding="async"
-    />
+    <div class="login__right">
+      <img
+        class="login__image"
+        src="/assets/images/auth/login-img.png"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
   </div>
-</div>
+} @else {
+  <div class="login">
+    <div class="login__left">
+      <div class="login__left-content">
+        <form
+          appFormLayout
+          class="auth"
+          [formGroup]="loginForm"
+          novalidate
+          (ngSubmit)="onSubmit()"
+          (keyup.enter)="onSubmit()"
+        >
+          <div class="auth__wrapper">
+            <img
+              class="login__logo"
+              src="/assets/images/shared/logo.svg"
+              alt="logo"
+              loading="lazy"
+              decoding="async"
+            />
+
+            @if (loginForm.get("email"); as email) {
+              <fieldset class="auth__field">
+                <label for="email" class="field-label">почта*</label>
+                <app-input
+                  size="big"
+                  [error]="email | controlError"
+                  id="email"
+                  type="email"
+                  formControlName="email"
+                  placeholder="example@example.com"
+                ></app-input>
+
+                @if (email | controlError: "email") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_EMAIL }}
+                  </div>
+                }
+                @if (email | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+              </fieldset>
+            }
+            @if (loginForm.get("password"); as password) {
+              <fieldset class="auth__field">
+                <div class="login__password">
+                  <label class="field-label" for="password">пароль</label>
+                  <a [routerLink]="AppRoutes.auth.resetPasswordEmail()" class="login__forget">
+                    забыли пароль?
+                  </a>
+                </div>
+
+                <app-input
+                  class="auth__password-input"
+                  size="big"
+                  [error]="password | controlError"
+                  id="password"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  formControlName="password"
+                  name="password"
+                  autocomplete="current-password"
+                  placeholder="GJiwoeuhbn120="
+                >
+                  <button
+                    appButton="icon"
+                    type="button"
+                    class="auth__password-toggle auth__password-toggle--muted"
+                    [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                    [attr.aria-pressed]="showPassword()"
+                    (click)="$event.stopPropagation(); toggleShowPassword()"
+                  >
+                    <i
+                      appIcon
+                      [icon]="showPassword() ? 'eye' : 'eye-off'"
+                      appSquare="15"
+                      aria-hidden="true"
+                    ></i>
+                  </button>
+                </app-input>
+
+                @if (password | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+              </fieldset>
+            }
+            @if (errorWrongAuth()) {
+              <div class="text-body-10 error">
+                {{ errorMessage.AUTH_WRONG_AUTH }}
+              </div>
+            }
+
+            <app-button
+              size="big"
+              [loader]="loginIsSubmitting()"
+              class="auth__button"
+              customTypographyClass="auth__button-typography"
+              type="submit"
+            >
+              войти
+              <i
+                class="auth__button-icon"
+                appIcon
+                icon="arrow-no-body"
+                appWidth="12"
+                appHeight="6"
+                appViewBox="0 0 18 9"
+              ></i>
+            </app-button>
+
+            <div class="login__additional">
+              <p class="login__reg text-body-12">
+                нет аккаунта?
+                <a [routerLink]="AppRoutes.auth.register()">зарегистрируйтесь</a>
+              </p>
+
+              <hr />
+
+              <p class="text-body-12 login__external">
+                Если вы регистрировались через форму на сайте программы кейс-чемпионата, введите
+                данные, которые вы указывали ранее
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="login__left-footer">
+        <div class="tooltip">
+          <app-tooltip
+            color="grey"
+            iconSize="40"
+            (click)="$event.stopPropagation(); toggleTooltip()"
+          ></app-tooltip>
+
+          @if (isHintLoginVisible()) {
+            <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
+              <p class="tooltip__text text-body-10">
+                Возникли технические сложности или остались вопросы?
+              </p>
+              <p class="tooltip__text text-body-10">
+                Все ответы в нашем боте поддержки
+                <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
+              </p>
+
+              <br />
+
+              <p class="tooltip__text text-body-10">
+                Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка
+                –
+                <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
+              </p>
+
+              <br />
+
+              <p class="tooltip__text text-body-10">
+                Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
+              </p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="login__right">
+      <img
+        class="login__image"
+        src="/assets/images/auth/login-img.png"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+}

@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 
 .office {
@@ -240,5 +239,90 @@
 
   @media (max-width: 768px) {
     padding: 0 15px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .office {
+    &__top {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr) 88px;
+      min-height: 64px;
+      padding: max(8px, env(safe-area-inset-top)) var(--page-gutter) 8px;
+      background: var(--ui-surface);
+      border-bottom: 1px solid var(--ui-border-subtle);
+    }
+
+    &__body {
+      padding: 0 200px;
+
+      @media (max-width: 1600px) {
+        padding: 0 150px;
+      }
+
+      @media (max-width: 1400px) {
+        padding: 0 100px;
+      }
+
+      @media (max-width: 1200px) {
+        padding: 0 50px;
+      }
+
+      @media (max-width: 992px) {
+        padding: 0 20px;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0;
+      }
+    }
+
+    &__inner {
+      &--wrapper {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 10fr);
+
+        @include responsive.apply-below-desktop {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    }
+
+    &__top > app-nav {
+      grid-row: 1;
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
+
+    &__top > app-profile-control-panel {
+      grid-row: 1;
+      grid-column: 3;
+      justify-self: end;
+      min-width: 0;
+    }
+  }
+
+  .container {
+    padding: 0 200px;
+
+    @media (max-width: 1600px) {
+      padding: 0 150px;
+    }
+
+    @media (max-width: 1400px) {
+      padding: 0 100px;
+    }
+
+    @media (max-width: 1200px) {
+      padding: 0 50px;
+    }
+
+    @media (max-width: 992px) {
+      padding: 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0 15px;
+    }
   }
 }

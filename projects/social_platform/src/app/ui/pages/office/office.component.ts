@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
@@ -47,6 +50,8 @@ import { Notification } from "@domain/notification/notification.model";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly officeInfoService = inject(OfficeInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly authRegisterService = inject(AuthRegisterService);

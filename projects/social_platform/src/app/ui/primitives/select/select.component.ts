@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -52,6 +55,8 @@ import { IconComponent } from "../icon/icon.component";
   imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent],
 })
 export class SelectComponent implements ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   /** Текст подсказки */
   placeholder = input("");
 
@@ -94,9 +99,22 @@ export class SelectComponent implements ControlValueAccessor {
   dropdown = viewChild<ElementRef<HTMLUListElement>>("dropdown");
 
   /** Обработчик клавиатурных событий для навигации */
+  onTriggerKeyDown(event: KeyboardEvent): void {
+    if (!this.disabled && !this.isOpen && ["Enter", " ", "ArrowDown"].includes(event.key)) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isOpen = true;
+      this.highlightedIndex = 0;
+    }
+  }
+
   @HostListener("document:keydown", ["$event"])
   onKeyDown(event: KeyboardEvent): void {
-    if (!this.isOpen || this.disabled) {
+    if (
+      !this.isOpen ||
+      this.disabled ||
+      !["ArrowUp", "ArrowDown", "Enter", "Escape"].includes(event.code)
+    ) {
       return;
     }
 
@@ -133,6 +151,7 @@ export class SelectComponent implements ControlValueAccessor {
     if (!ddElem) return;
 
     const highlightedElem = ddElem.children[this.highlightedIndex];
+    if (!highlightedElem) return;
 
     const ddBox = ddElem.getBoundingClientRect();
     const optBox = highlightedElem.getBoundingClientRect();

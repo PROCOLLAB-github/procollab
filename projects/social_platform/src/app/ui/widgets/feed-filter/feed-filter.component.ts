@@ -1,5 +1,6 @@
 /** @format */
 
+import { ButtonDirective, FiltersDirective, DesktopLayoutService } from "@uilib";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
@@ -15,7 +16,7 @@ import { FeedCategoryCounts } from "@domain/feed/feed-item.model";
 /** Компонент фильтрации ленты по типам контента с мгновенной синхронизацией через URL. */
 @Component({
   selector: "app-feed-filter",
-  imports: [CommonModule, ClickOutsideModule, IconComponent],
+  imports: [FiltersDirective, ButtonDirective, CommonModule, ClickOutsideModule, IconComponent],
   templateUrl: "./feed-filter.component.html",
   styleUrl: "./feed-filter.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +32,7 @@ import { FeedCategoryCounts } from "@domain/feed/feed-item.model";
   providers: [FeedFilterInfoService, ProfileDetailUIInfoService, DetailProfileInfoService],
 })
 export class FeedFilterComponent implements OnInit {
+  protected readonly releaseDesktop = inject(DesktopLayoutService).desktop;
   private readonly feedFilterInfoService = inject(FeedFilterInfoService);
   private readonly feedUIInfoService = inject(FeedUIInfoService);
 

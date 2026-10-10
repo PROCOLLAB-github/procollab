@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -61,6 +66,7 @@ export function buildProjectDescriptionPreview(
   templateUrl: "./projects-mid-side.component.html",
   styleUrl: "./projects-mid-side.component.scss",
   imports: [
+    ButtonDirective,
     CommonModule,
     NewsFormComponent,
     ProjectDirectionCard,
@@ -72,6 +78,8 @@ export function buildProjectDescriptionPreview(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsMidSideComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly project = input.required<Project | undefined>();
 
   // Ссылки на элементы DOM

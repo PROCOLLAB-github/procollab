@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, FormLayoutDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
@@ -21,6 +26,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   styleUrl: "./login.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    ButtonDirective,
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
@@ -34,6 +41,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   providers: [AuthLoginService, AuthUIInfoService, TooltipInfoService],
 })
 export class LoginComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly authLoginService = inject(AuthLoginService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
   private readonly tokenService = inject(TokenService);

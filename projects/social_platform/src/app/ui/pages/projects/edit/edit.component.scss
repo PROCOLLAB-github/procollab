@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -201,5 +200,58 @@
 
   &__button {
     margin-top: 20px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    :host {
+      display: block;
+      min-width: 0;
+    }
+
+    .project {
+      padding: 16px var(--page-gutter) max(24px, env(safe-area-inset-bottom));
+    }
+
+    .project__top {
+      position: static;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 12px;
+      justify-content: space-between;
+      padding: 8px var(--page-gutter);
+    }
+
+    .project__left form {
+      width: 100%;
+    }
+
+    .project__save {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      min-width: 0;
+
+      > app-button {
+        display: block;
+        width: 100%;
+      }
+
+      ::ng-deep .button {
+        width: 100%;
+      }
+    }
+
+    .project__back {
+      align-self: start;
+      justify-content: center;
+      min-height: 44px;
+    }
+
+    .project__wrapper--settings {
+      min-width: 0;
+    }
   }
 }

@@ -62,3 +62,32 @@
     color: var(--red);
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    :host,
+    .user,
+    .user__row {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .user__name,
+    .user__email {
+      overflow-wrap: anywhere;
+    }
+
+    .user__avatar {
+      flex-shrink: 0;
+      margin-right: 0;
+    }
+
+    .user {
+      align-items: center;
+      justify-content: center;
+      min-width: var(--ui-control-height);
+      min-height: var(--ui-control-height);
+    }
+  }
+}

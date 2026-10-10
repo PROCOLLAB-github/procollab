@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { CommonModule, Location } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -10,7 +13,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
-import { IconComponent } from "@uilib";
+import { IconComponent, PageHeaderComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -34,6 +37,7 @@ import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/p
   templateUrl: "./detail.component.html",
   styleUrl: "./detail.component.scss",
   imports: [
+    PageHeaderComponent,
     CommonModule,
     RouterModule,
     IconComponent,
@@ -55,6 +59,8 @@ import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/p
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   protected readonly AppRoutes = AppRoutes;
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);

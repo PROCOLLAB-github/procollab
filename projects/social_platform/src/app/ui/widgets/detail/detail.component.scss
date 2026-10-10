@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -418,5 +417,122 @@ $detail-bar-mb: 12px;
   &__text {
     color: var(--black);
     white-space: nowrap;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .info {
+    &__unavailable-tooltip {
+      font-size: var(--ui-font-small);
+      box-shadow: var(--ui-panel-shadow);
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    .detail {
+      height: auto;
+      margin: 0 var(--page-gutter);
+    }
+
+    .detail__body {
+      max-height: none;
+    }
+
+    .info__row {
+      @include responsive.mobile-actions;
+    }
+
+    .approve {
+      min-width: 0;
+      padding: 8px;
+    }
+
+    .project__item,
+    .project__item--info {
+      @include responsive.mobile-actions;
+    }
+
+    .approves__text {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+  }
+
+  .info__page-header {
+    padding-top: 80px;
+  }
+
+  @include responsive.apply-below-desktop {
+    .info__cover,
+    .info__cover--program {
+      height: 136px;
+    }
+
+    .info__avatar,
+    .info__avatar--program {
+      bottom: -32px;
+      left: 16px;
+      transform: none;
+    }
+
+    .info__page-header {
+      padding-top: 52px;
+      margin-bottom: 16px;
+    }
+
+    .info__actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      padding: 0 0 24px;
+
+      > a,
+      > app-button,
+      > .info__unavailable,
+      > .info__primary-action {
+        display: block;
+        justify-self: stretch;
+        width: 100%;
+        min-width: 0;
+      }
+
+      ::ng-deep app-button {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      ::ng-deep app-button > button {
+        width: 100%;
+        height: 100%;
+        padding-right: 12px;
+        padding-left: 12px;
+      }
+    }
+
+    .info__divider {
+      display: none;
+    }
+
+    .info__primary-action {
+      order: 0;
+    }
+
+    .info__materials--full {
+      grid-column: auto;
+    }
+  }
+
+  .approve,
+  .cancel,
+  .support {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .info__page-header + .info__actions {
+    padding-top: 0;
   }
 }

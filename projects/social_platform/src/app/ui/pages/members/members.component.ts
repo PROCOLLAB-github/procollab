@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -20,7 +23,14 @@ import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/primitives/search/search.component";
 import { MembersFiltersComponent } from "./members-filters/members-filters.component";
 import { MemberCardComponent } from "./member-card/member-card.component";
-import { BackComponent } from "@uilib";
+import {
+  BackComponent,
+  ButtonDirective,
+  FieldDirective,
+  FormLayoutDirective,
+  PageHeaderComponent,
+  StateComponent,
+} from "@uilib";
 import { ButtonComponent } from "@ui/primitives";
 import { MemberStatisticsCardComponent } from "./member-statistics-card/member-statistics-card.component";
 import { MemberStatisticsFacade } from "@api/member/facades/member-statistics.facade";
@@ -37,12 +47,17 @@ import { MemberFiltersDialogComponent } from "./member-filters-dialog/member-fil
   styleUrl: "./members.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    BackComponent,
+    StateComponent,
+    PageHeaderComponent,
+    ButtonDirective,
+    FieldDirective,
+    FormLayoutDirective,
     ReactiveFormsModule,
     SearchComponent,
     CommonModule,
     MembersFiltersComponent,
     MemberCardComponent,
-    BackComponent,
     ButtonComponent,
     MemberStatisticsCardComponent,
     MemberFiltersDialogComponent,
@@ -55,6 +70,8 @@ import { MemberFiltersDialogComponent } from "./member-filters-dialog/member-fil
   ],
 })
 export class MembersComponent implements OnInit, AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly membersRoot = viewChild<ElementRef<HTMLUListElement> | undefined>("membersRoot"); // Ссылка на корневой элемент списка
 
   private readonly membersInfoService = inject(MembersInfoService);

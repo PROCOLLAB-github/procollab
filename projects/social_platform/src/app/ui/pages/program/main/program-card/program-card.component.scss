@@ -1,6 +1,6 @@
 /** @format */
-
 @use "styles/responsive";
+@use "styles/ui-foundation";
 
 .card {
   position: relative;
@@ -69,6 +69,56 @@
 
     &--participating {
       background-color: var(--green);
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .card {
+    @include ui-foundation.card;
+
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+
+    &__photo {
+      width: 64px;
+      height: 64px;
+    }
+
+    &__info {
+      display: grid;
+      gap: 8px;
+    }
+
+    &__name {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
+      display: -webkit-box;
+      font-size: var(--ui-font-body);
+      font-weight: 600;
+      line-height: 20px;
+      overflow-wrap: anywhere;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    &__dates {
+      display: grid;
+      gap: 4px;
+    }
+
+    &__description {
+      font-size: var(--ui-font-small);
+      line-height: 18px;
+    }
+
+    &__registration {
+      justify-self: start;
+      max-width: 100%;
+      padding: 4px 8px;
+      overflow-wrap: anywhere;
     }
   }
 }

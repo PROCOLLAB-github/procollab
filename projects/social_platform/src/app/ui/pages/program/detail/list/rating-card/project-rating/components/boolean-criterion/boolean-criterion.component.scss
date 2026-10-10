@@ -1,3 +1,6 @@
+/** @format */
+@use "styles/responsive";
+
 :host {
   display: block;
 }
@@ -28,6 +31,17 @@
 
     &__checked {
       background-color: var(--accent);
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .container {
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 }

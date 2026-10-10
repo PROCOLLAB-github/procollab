@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -101,5 +100,25 @@
 
   i {
     color: var(--red) !important;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .register {
+      height: auto;
+      min-height: 100dvh;
+    }
+
+    .register__title {
+      inline-size: auto;
+      max-width: 100%;
+    }
+
+    .register__agreement {
+      gap: 8px;
+      align-items: flex-start;
+    }
   }
 }

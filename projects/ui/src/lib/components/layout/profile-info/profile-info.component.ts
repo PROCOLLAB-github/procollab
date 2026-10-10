@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../services/desktop-layout.service";
+
 import { ChangeDetectionStrategy, Component, input, type OnInit, output } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { User } from "@domain/auth/user.model";
@@ -27,6 +30,8 @@ import { AvatarComponent } from "../../primitives/avatar/avatar.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileInfoComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   constructor(readonly router: Router) {}
 
   ngOnInit(): void {}

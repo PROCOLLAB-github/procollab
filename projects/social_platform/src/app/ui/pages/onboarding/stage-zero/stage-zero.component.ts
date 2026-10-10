@@ -1,12 +1,15 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
-import { IconComponent } from "@uilib";
+import { IconComponent, FormLayoutDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { generateOptionsList } from "@utils/generate-options-list";
@@ -23,6 +26,7 @@ import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.c
   templateUrl: "./stage-zero.component.html",
   styleUrl: "./stage-zero.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     InputComponent,
     ButtonComponent,
@@ -44,6 +48,8 @@ import { RegionSelectComponent } from "@ui/widgets/region-select/region-select.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingStageZeroComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly onboardingStageZeroInfoService = inject(OnboardingStageZeroInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);

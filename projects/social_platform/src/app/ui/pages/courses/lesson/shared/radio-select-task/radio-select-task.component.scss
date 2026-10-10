@@ -1,5 +1,7 @@
+/** @format */
 @use "styles/typography";
 @use "styles/responsive";
+@use "styles/course-task";
 
 .radio {
   display: flex;
@@ -188,4 +190,26 @@
 
     @include typography.body-14;
   }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .radio__item {
+      min-width: 0;
+      min-height: 44px;
+      padding: 4px 0;
+    }
+
+    .radio__item input {
+      flex-shrink: 0;
+    }
+
+    .radio__item label {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  @include course-task.responsive-layout("radio");
 }

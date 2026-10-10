@@ -1,4 +1,17 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import {
+  ButtonDirective,
+  FieldDirective,
+  TableDirective,
+  FormLayoutDirective,
+  PaginationComponent,
+  StateComponent,
+} from "@uilib";
+
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
@@ -49,6 +62,12 @@ import {
   templateUrl: "./analytics-drilldown.component.html",
   styleUrl: "./analytics-drilldown.component.scss",
   imports: [
+    StateComponent,
+    PaginationComponent,
+    ButtonDirective,
+    FieldDirective,
+    TableDirective,
+    FormLayoutDirective,
     A11yModule,
     ModalComponent,
     AvatarComponent,
@@ -63,6 +82,8 @@ import {
   encapsulation: ViewEncapsulation.None,
 })
 export class AnalyticsDrilldownComponent implements AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly programId = input<number | null>(null);
   readonly programName = input("program");
   readonly notSubmittedApplicable = input(false);

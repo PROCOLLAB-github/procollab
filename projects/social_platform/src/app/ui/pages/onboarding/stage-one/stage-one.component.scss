@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -120,6 +121,32 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .content {
+      height: auto;
+
+      @include responsive.single-column;
+    }
+
+    .content__section {
+      min-width: 0;
+    }
+
+    .content__right {
+      height: auto;
+      min-height: 180px;
+      max-height: 40dvh;
+      overflow-y: auto;
+    }
+
+    .content__actions {
+      margin-top: 12px;
     }
   }
 }

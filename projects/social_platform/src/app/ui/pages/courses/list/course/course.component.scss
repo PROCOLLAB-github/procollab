@@ -1,5 +1,7 @@
+/** @format */
 @use "styles/responsive";
 @use "styles/typography";
+@use "styles/ui-foundation";
 
 .course {
   position: relative;
@@ -86,5 +88,28 @@
   p,
   i {
     color: var(--black);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .course {
+    @include ui-foundation.card;
+  }
+
+  .course__cover app-avatar {
+    position: absolute;
+    top: 35px;
+    left: 24px;
+    z-index: 1;
+    border-radius: 50%;
+    box-shadow: var(--ui-card-hover-shadow);
+  }
+
+  .course__access {
+    position: absolute;
+    top: 15px;
+    right: 24px;
+    max-width: 166px;
   }
 }

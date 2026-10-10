@@ -1,6 +1,17 @@
 /** @format */
 import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, Observer, retry, Subject, timer } from "rxjs";
+import {
+  BehaviorSubject,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  Observer,
+  retry,
+  Subject,
+  takeUntil,
+  timer,
+} from "rxjs";
 import { environment } from "@environment";
 import snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
@@ -20,10 +31,18 @@ export class WebsocketService {
   private socket: WebSocket | null = null;
   /** Subject для обработки входящих сообщений */
   private messages$ = new Subject<MessageEvent>();
+  private readonly closed$ = new Subject<void>();
   /** Subject потери соединения (после исчерпания retry) — приватный, наружу только Observable */
   private readonly _connectionLost$ = new Subject<void>();
   /** Сигнал потери WS-соединения. Потребитель отвечает за UX (toast/banner/etc). */
   public readonly connectionLost$ = this._connectionLost$.asObservable();
+  private readonly connectionStatusSubject = new BehaviorSubject<
+    "idle" | "connected" | "unavailable"
+  >("idle");
+  /** Статус именно чата, а не доступности HTTP API или интернета в целом. */
+  public readonly connectionStatus$ = this.connectionStatusSubject
+    .asObservable()
+    .pipe(distinctUntilChanged());
   /** Буфер исходящих сообщений, накопленных пока сокет не OPEN — флашится в onopen. */
   private outboundQueue: string[] = [];
 
@@ -50,9 +69,11 @@ export class WebsocketService {
       const tokenAccess = tokens?.access ? tokens.access : "";
 
       this.socket = new WebSocket(environment.websocketUrl + path, ["Bearer", tokenAccess]);
+      const socket = this.socket;
 
       this.socket.onopen = () => {
         this.isConnected = true;
+        this.connectionStatusSubject.next("connected");
         // Отправляем всё, что накопилось пока сокет был CONNECTING.
         const flush = this.outboundQueue;
         this.outboundQueue = [];
@@ -75,6 +96,18 @@ export class WebsocketService {
       this.socket.onmessage = message => {
         this.messages$.next(message);
       };
+
+      return () => {
+        socket.onopen = null;
+        socket.onerror = null;
+        socket.onclose = null;
+        socket.onmessage = null;
+        socket.close();
+        if (this.socket === socket) {
+          this.socket = null;
+          this.isConnected = false;
+        }
+      };
     }).pipe(
       // Resilient reconnect: НЕ сдаёмся насовсем по исчерпании попыток.
       // Первые maxAttempts — частые попытки (быстрое восстановление после idle-close сервера);
@@ -83,6 +116,7 @@ export class WebsocketService {
       retry({
         delay: (_error, retryCount) => {
           if (retryCount >= environment.websocketReconnectionMaxAttempts) {
+            this.connectionStatusSubject.next("unavailable");
             this._connectionLost$.next();
             return timer(Math.max(environment.websocketReconnectionInterval, 5000));
           }
@@ -90,6 +124,7 @@ export class WebsocketService {
         },
         resetOnSuccess: true,
       }),
+      takeUntil(this.closed$),
     );
   }
 
@@ -141,10 +176,14 @@ export class WebsocketService {
    * Очищает ссылку на socket и сбрасывает флаг подключения
    */
   public close(): void {
+    this.closed$.next();
     if (this.socket) {
+      this.socket.onclose = null;
+      this.socket.onerror = null;
       this.socket.close();
       this.socket = null;
       this.isConnected = false;
     }
+    this.connectionStatusSubject.next("idle");
   }
 }

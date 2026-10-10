@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -410,5 +409,47 @@
 
   &__text {
     text-align: center;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .modal {
+    &__wrapper {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 0;
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    :host {
+      display: block;
+      min-width: 0;
+    }
+
+    .profile {
+      padding: 16px var(--page-gutter) max(24px, env(safe-area-inset-bottom));
+    }
+
+    .profile__top {
+      position: static;
+      gap: 12px;
+      justify-content: space-between;
+      padding: 8px var(--page-gutter);
+    }
+
+    .profile__left form {
+      width: 100%;
+    }
+
+    .profile__save {
+      @include responsive.mobile-actions;
+    }
+
+    .profile__wrapper--settings {
+      min-width: 0;
+    }
   }
 }

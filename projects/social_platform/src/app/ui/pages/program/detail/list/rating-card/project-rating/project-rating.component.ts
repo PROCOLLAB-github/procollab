@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -34,6 +39,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 @Component({
   selector: "app-project-rating",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     TextareaComponent,
     RangeCriterionInputComponent,
@@ -57,6 +63,8 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
   ],
 })
 export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, Validator {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   @Input({ required: true })
   set criteria(val: ProjectRatingCriterion[]) {
     if (!val) return;

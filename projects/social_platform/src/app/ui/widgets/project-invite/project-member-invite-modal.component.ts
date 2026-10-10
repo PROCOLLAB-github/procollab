@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, StateComponent } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,6 +32,8 @@ import { ParticipantPickerComponent } from "./participant-picker.component";
 @Component({
   selector: "app-project-member-invite-modal",
   imports: [
+    StateComponent,
+    ButtonDirective,
     ReactiveFormsModule,
     ProjectInviteDialogComponent,
     ProjectInviteRoleInputComponent,
@@ -36,6 +44,8 @@ import { ParticipantPickerComponent } from "./participant-picker.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMemberInviteModalComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly project = input<Project | null>(null);
   readonly projectId = input.required<number>();
   readonly trigger = input<HTMLElement | null>(null);

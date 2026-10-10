@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ChoiceDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/primitives";
@@ -10,7 +15,7 @@ import { noop } from "rxjs";
   selector: "app-boolean-criterion",
   templateUrl: "./boolean-criterion.component.html",
   styleUrl: "./boolean-criterion.component.scss",
-  imports: [IconComponent],
+  imports: [ChoiceDirective, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -21,6 +26,8 @@ import { noop } from "rxjs";
   ],
 })
 export class BooleanCriterionComponent implements ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   @Input() disabled = false;
 
   isChecked = false;

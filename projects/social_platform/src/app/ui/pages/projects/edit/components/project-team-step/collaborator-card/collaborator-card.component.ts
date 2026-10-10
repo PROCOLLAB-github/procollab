@@ -1,4 +1,8 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +15,7 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { Collaborator } from "@domain/project/collaborator.model";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective, StateComponent } from "@uilib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
@@ -20,10 +24,12 @@ import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-
   selector: "app-collaborator-card",
   templateUrl: "./collaborator-card.component.html",
   styleUrl: "./collaborator-card.component.scss",
-  imports: [AvatarComponent, IconComponent],
+  imports: [StateComponent, ButtonDirective, AvatarComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollaboratorCardComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);

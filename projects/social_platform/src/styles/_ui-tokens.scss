@@ -1,0 +1,80 @@
+/** @format */
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  :root {
+    --ui-accent: var(--accent);
+    --accent-hover: var(--accent-medium);
+    --ui-text: var(--black);
+    --ui-text-muted: var(--grey-for-text);
+    --ui-surface: var(--light-white);
+    --ui-surface-subtle: var(--white);
+    --ui-border: var(--gray);
+    --ui-border-subtle: var(--medium-grey-for-outline);
+    --ui-danger: var(--red);
+    --ui-success: var(--green);
+    --ui-warning: var(--gold);
+    --ui-radius-control: var(--rounded-xxl);
+    --ui-radius-card: var(--rounded-xl);
+    --ui-radius-dialog: var(--rounded-xl);
+    --ui-control-height: 44px;
+    --ui-compact-sidebar-width: 157px;
+    --ui-mobile-entity-card-width: 260px;
+    --ui-control-padding: 12px 16px;
+    --ui-card-padding: 16px;
+    --ui-dialog-padding: 24px;
+    --ui-dialog-sm: 400px;
+    --ui-dialog-md: 560px;
+    --ui-dialog-lg: 800px;
+    --ui-space-xs: 4px;
+    --ui-space-sm: 8px;
+    --ui-space-md: 16px;
+    --ui-space-lg: 24px;
+    --ui-focus-ring: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+    --ui-error-ring: 0 0 0 3px color-mix(in srgb, var(--red) 25%, transparent);
+    --ui-card-shadow: none;
+    --ui-card-hover-shadow: 0 4px 12px color-mix(in srgb, var(--black) 8%, transparent);
+    --ui-backdrop: color-mix(in srgb, var(--black) 50%, transparent);
+    --ui-font-h1: 24px;
+    --ui-font-h2: 18px;
+    --ui-font-h3: 16px;
+    --ui-font-body: 14px;
+    --ui-font-small: 12px;
+    --ui-font-caption: 12px;
+    --ui-disabled-opacity: 0.5;
+    --ui-nav-gradient-end: #4d3780;
+    --ui-board-surface: #d9d9d9;
+    --ui-error-text: #b42318;
+    --ui-crop-surface: #f8f9fa;
+    --ui-message-surface: #f7f3ff;
+    --ui-media-button: #81818180;
+    --ui-media-button-active: #37373780;
+    --ui-media-backdrop: #333b;
+    --ui-overlay-shadow-color: #0002;
+    --ui-scrim: rgb(51 46 45 / 50%);
+    --ui-preview-scrim: rgb(0 0 0 / 60%);
+    --ui-crop-scrim: rgb(0 0 0 / 50%);
+    --ui-crop-border: rgb(255 255 255 / 50%);
+    --ui-success-glow: rgb(0 200 147 / 51%);
+    --ui-success-glow-end: rgb(0 200 147 / 0%);
+    --ui-accent-tint-subtle: rgb(109 40 255 / 6%);
+    --ui-accent-tint-hover: rgb(109 40 255 / 12%);
+    --ui-accent-tint-chart: rgb(109 40 255 / 8%);
+    --ui-accent-gradient-end: rgb(138 99 230 / 28%);
+    --ui-panel-shadow: 0 2px 8px rgb(51 51 51 / 8%);
+    --ui-chart-shadow: 0 6px 22px rgb(51 51 51 / 4%);
+    --ui-tooltip-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    --ui-crop-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+    --ui-crop-handle-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+    --ui-message-shadow: 5px 5px 25px rgb(159 159 159 / 15%);
+    --ui-header-shadow: 5px 5px 50px rgb(196 196 196 / 15%);
+    --ui-composer-shadow: 4px -4px 4px rgb(51 51 51 / 20%);
+  }
+
+  @media (max-width: 749px) {
+    :root {
+      --ui-dialog-padding: 16px;
+      --ui-font-h1: 18px;
+    }
+  }
+}

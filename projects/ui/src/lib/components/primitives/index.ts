@@ -17,3 +17,8 @@ export * from "./back/back.component";
 export * from "./button/button.component";
 export * from "./icon/icon.component";
 export * from "./loader/loader.component";
+
+export * from "./button/button.directive";
+export * from "./tabs/tabs.component";
+export * from "./pagination/pagination.component";
+export * from "./badge/badge.component";

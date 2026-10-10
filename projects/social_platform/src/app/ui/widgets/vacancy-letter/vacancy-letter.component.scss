@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/components/vacancy-ui";
 
 :host {
@@ -35,5 +34,17 @@
     border-radius: var(--rounded-xxl);
 
     @include vacancy-ui.focus;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .letter {
+    font-size: var(--ui-font-body);
+    /* stylelint-disable value-no-vendor-prefix */
+    /* stylelint-enable value-no-vendor-prefix */
+    &__toggle {
+      font-size: var(--ui-font-small);
+    }
   }
 }

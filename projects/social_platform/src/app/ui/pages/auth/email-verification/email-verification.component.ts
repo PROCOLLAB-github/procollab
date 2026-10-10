@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
 import { AuthEmailService } from "@api/auth/facades/auth-email.service";
@@ -11,10 +16,12 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./email-verification.component.html",
   styleUrl: "./email-verification.component.scss",
   providers: [AuthEmailService],
-  imports: [CommonModule, IconComponent],
+  imports: [ButtonDirective, CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailVerificationComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly authEmailService = inject(AuthEmailService);
 
   protected readonly counter = this.authEmailService.counter;

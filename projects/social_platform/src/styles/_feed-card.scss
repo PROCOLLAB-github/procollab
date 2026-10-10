@@ -195,4 +195,30 @@
       filter: brightness(0.95);
     }
   }
+
+  @media screen and (max-width: 999px) {
+    .feed-card__skills {
+      flex-wrap: wrap;
+    }
+
+    .feed-card__chip {
+      min-height: 24px;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+
+      &--skill {
+        max-width: 100%;
+      }
+    }
+
+    .feed-card__cta {
+      align-self: flex-start;
+      max-width: 100%;
+      min-height: 44px;
+      padding: 10px 16px;
+    }
+  }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.

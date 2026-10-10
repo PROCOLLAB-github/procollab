@@ -1,13 +1,27 @@
 <!-- @format -->
-
-@if (user()) {
-  <a class="user" [routerLink]="['/office/profile', user().id]">
-    <div class="user__row">
-      <app-avatar
-        class="user__avatar"
-        [size]="avatarSize"
-        [url]="user().personal.avatar"
-      ></app-avatar>
-    </div>
-  </a>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  @if (user()) {
+    <a class="user" [routerLink]="['/office/profile', user().id]">
+      <div class="user__row">
+        <app-avatar
+          class="user__avatar"
+          [size]="avatarSize"
+          [url]="user().personal.avatar"
+        ></app-avatar>
+      </div>
+    </a>
+  }
+} @else {
+  @if (user()) {
+    <a class="user" aria-label="Мой профиль" [routerLink]="['/office/profile', user().id]">
+      <div class="user__row">
+        <app-avatar
+          class="user__avatar"
+          [size]="avatarSize"
+          [url]="user().personal.avatar"
+        ></app-avatar>
+      </div>
+    </a>
+  }
 }

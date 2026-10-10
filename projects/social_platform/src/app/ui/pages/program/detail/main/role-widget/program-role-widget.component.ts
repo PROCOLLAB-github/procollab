@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,13 +27,15 @@ import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/de
 /** Компактный виджет только страницы программы. Габариты соответствуют исходному SoonCard. */
 @Component({
   selector: "app-program-role-widget",
-  imports: [RouterLink, MatTooltipModule],
+  imports: [ButtonDirective, RouterLink, MatTooltipModule],
   providers: [ProgramRoleWidgetService],
   templateUrl: "./program-role-widget.component.html",
   styleUrl: "./program-role-widget.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramRoleWidgetComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly service = inject(ProgramRoleWidgetService);
   private readonly applicationAction = inject(DetailProgramInfoService);
   readonly applicationPending = this.applicationAction.applicationPending;

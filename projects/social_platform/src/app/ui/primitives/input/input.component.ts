@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, ChoiceDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -35,6 +40,8 @@ import { IconComponent } from "../icon/icon.component";
     },
   ],
   imports: [
+    ButtonDirective,
+    ChoiceDirective,
     CommonModule,
     FormsModule,
     NgxMaskDirective,
@@ -48,6 +55,8 @@ import { IconComponent } from "../icon/icon.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   constructor(private readonly cdr: ChangeDetectorRef) {
     effect(() => {
       this.value = this.appValue();

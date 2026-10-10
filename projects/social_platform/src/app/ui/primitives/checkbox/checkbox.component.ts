@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { ChangeDetectionStrategy, Component, input, model } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
 
@@ -24,8 +27,15 @@ import { IconComponent } from "../icon/icon.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   /** Состояние чекбокса */
   checked = model(false);
 
   size = input<string>();
+  disabled = input(false);
+  label = input("Выбрать");
+  protected toggle(): void {
+    if (!this.disabled()) this.checked.set(!this.checked());
+  }
 }

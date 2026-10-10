@@ -2,6 +2,14 @@
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import {
+  parseTemplate,
+  TmplAstElement,
+  TmplAstForLoopBlock,
+  TmplAstIfBlock,
+  TmplAstNode,
+  TmplAstTemplate,
+} from "@angular/compiler";
 
 describe("ProjectsComponent: размещение проектной активности", () => {
   const template = readFileSync(
@@ -12,17 +20,35 @@ describe("ProjectsComponent: размещение проектной актив�
     "utf8",
   );
 
+  const activityConditions: string[][] = [];
+  const walk = (nodes: TmplAstNode[], conditions: string[] = []) => {
+    for (const node of nodes) {
+      if (node instanceof TmplAstIfBlock) {
+        for (const branch of node.branches) {
+          walk(branch.children, [...conditions, branch.expression?.source || "else"]);
+        }
+      } else if (node instanceof TmplAstElement || node instanceof TmplAstTemplate) {
+        if (node instanceof TmplAstElement && node.name === "app-project-activity-card") {
+          activityConditions.push(conditions);
+        }
+        walk(node.children, conditions);
+      } else if (node instanceof TmplAstForLoopBlock) {
+        walk(node.children, conditions);
+      }
+    }
+  };
+  walk(parseTemplate(template, "projects.component.html").nodes);
+
   it("показывает блок только для dashboard и my", () => {
-    expect(template).toMatch(
-      /@if \(isMy\(\) \|\| isDashboard\(\)\) \{\s*<app-project-activity-card/,
-    );
-    expect(template.match(/<app-project-activity-card/g)).toHaveLength(1);
+    expect(activityConditions.length).toBeGreaterThan(0);
+    for (const conditions of activityConditions) {
+      expect(conditions).toContain("isMy() || isDashboard()");
+    }
   });
 
   it.each(["isSubs()", "isInvites()", "isAll()"])("не привязывает блок к условию %s", condition => {
-    const conditionalBlock = new RegExp(
-      `@if \\(${condition.replace(/[()]/g, "\\$&")}\\) \\{[\\s\\S]*?<app-project-activity-card`,
-    );
-    expect(template).not.toMatch(conditionalBlock);
+    for (const conditions of activityConditions) {
+      expect(conditions).not.toContain(condition);
+    }
   });
 });

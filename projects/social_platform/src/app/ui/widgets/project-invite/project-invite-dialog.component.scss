@@ -547,3 +547,252 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .modal .modal__body.project-invite-body {
+    left: 50%;
+    width: min(var(--ui-dialog-md), calc(100% - 24px));
+    max-width: calc(100% - 24px);
+    max-height: min(720px, calc(var(--visual-viewport-height, 100dvh) - 48px));
+    border-radius: var(--ui-radius-dialog);
+  }
+
+  .project-invite {
+    max-height: min(720px, calc(var(--visual-viewport-height, 100dvh) - 48px));
+    padding: var(--ui-dialog-padding);
+    border-radius: var(--ui-radius-dialog);
+
+    &__header {
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    &__header h2 {
+      font-size: 19px;
+    }
+
+    &__header p {
+      font-size: var(--ui-font-small);
+    }
+
+    &__symbol {
+      height: 48px;
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    &__role {
+      margin-top: 18px;
+    }
+
+    &__footer {
+      padding-top: 16px;
+      margin-top: 18px;
+    }
+
+    .invite-actions {
+      gap: 12px;
+    }
+
+    .invite-button {
+      padding: 9px 12px;
+      font-size: var(--ui-font-body);
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    .invite-search {
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    .invite-label {
+      font-size: var(--ui-font-body);
+    }
+
+    .invite-row {
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    .invite-copy strong {
+      font-size: var(--ui-font-body);
+    }
+
+    .invite-meta {
+      font-size: var(--ui-font-caption);
+    }
+
+    .invite-avatar {
+      font-size: var(--ui-font-h3);
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    .invite-helper {
+      font-size: var(--ui-font-body);
+    }
+
+    .invite-error {
+      font-size: var(--ui-font-small);
+      color: var(--error, var(--ui-error-text));
+    }
+
+    @media (width <= 600px) {
+      max-height: calc(100dvh - 24px);
+      padding: 16px;
+
+      &__header {
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      &__header h2 {
+        font-size: var(--ui-font-h3);
+      }
+
+      &__header p {
+        font-size: var(--ui-font-caption);
+      }
+
+      &__symbol {
+        height: 44px;
+      }
+
+      &__role {
+        margin-top: 12px;
+      }
+
+      &__footer {
+        padding-top: 12px;
+        margin-top: 12px;
+      }
+
+      .invite-actions {
+        gap: 8px;
+      }
+
+      .invite-button {
+        padding: 9px 8px;
+        font-size: var(--ui-font-small);
+      }
+
+      .invite-search input {
+        font-size: var(--ui-font-h3);
+      }
+    }
+  }
+
+  @media (width <= 600px) {
+    .modal .modal__body.project-invite-body {
+      max-height: calc(100dvh - 24px);
+    }
+  }
+
+  .project-invite.project-invite--compact {
+    .project-invite__header {
+      grid-template-columns: minmax(0, 1fr) 36px;
+    }
+
+    .project-invite__header h2 {
+      font-size: var(--ui-font-h2);
+    }
+
+    .project-invite__header p {
+      font-size: var(--ui-font-body);
+    }
+
+    .project-invite__close {
+      min-width: 36px;
+      height: 36px;
+    }
+
+    .invite-label,
+    app-project-invite-role-input .invite-role label {
+      font-size: var(--ui-font-small);
+    }
+
+    .invite-search,
+    app-project-invite-role-input .invite-role input {
+      min-height: 41px;
+    }
+
+    .invite-search input {
+      font-size: var(--ui-font-small);
+    }
+
+    app-project-invite-role-input .invite-role input {
+      font-size: var(--ui-font-small);
+    }
+
+    app-project-invite-role-input .invite-role p,
+    .invite-meta {
+      font-size: var(--ui-font-small);
+    }
+
+    .invite-copy strong {
+      font-size: var(--ui-font-body);
+    }
+
+    .invite-button {
+      min-height: 25px;
+      font-size: var(--ui-font-small);
+    }
+
+    @media (width <= 600px) {
+      .project-invite__header {
+        grid-template-columns: minmax(0, 1fr) 44px;
+      }
+
+      .project-invite__close {
+        min-width: 44px;
+        height: 44px;
+      }
+
+      .project-invite__header p {
+        font-size: var(--ui-font-small);
+      }
+
+      .invite-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .invite-button {
+        min-height: 44px;
+      }
+
+      .invite-search,
+      app-project-invite-role-input .invite-role input {
+        min-height: 44px;
+      }
+
+      .invite-search input,
+      app-project-invite-role-input .invite-role input {
+        font-size: var(--ui-font-h3);
+      }
+    }
+  }
+
+  .project-invite .invite-search input {
+    padding: 0;
+    font-size: var(--ui-font-body);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .project-invite .invite-search input:focus-visible {
+    outline: none;
+  }
+
+  .project-invite.project-invite--compact .project-invite__footer {
+    display: block;
+  }
+
+  .project-invite.project-invite--compact .invite-actions {
+    grid-template-columns: 140px 208px;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .project-invite .invite-actions > button.ui-button {
+    width: 100%;
+  }
+}

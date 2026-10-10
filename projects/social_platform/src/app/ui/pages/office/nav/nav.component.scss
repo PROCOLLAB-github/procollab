@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -85,5 +84,125 @@
   &__profile {
     display: block;
     margin-top: auto;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .nav-bar__logout {
+    margin-top: auto;
+  }
+
+  .nav-bar {
+    &__inner {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr) 88px;
+      align-items: center;
+    }
+
+    &__notifications-toggle {
+      position: relative;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 40px;
+      cursor: pointer;
+      border-radius: var(--rounded-sm);
+
+      > .attention {
+        top: 9px;
+        right: 11px;
+      }
+
+      &--active {
+        color: var(--white);
+        background-color: var(--accent);
+      }
+    }
+
+    &__toggle {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+
+      > .attention {
+        top: 8px;
+        right: 2px;
+      }
+    }
+
+    &__mobile-menu {
+      z-index: 201;
+      width: min(360px, calc(100% - 32px));
+      max-height: 100dvh;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    &__backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--ui-scrim);
+    }
+
+    &__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-right: auto;
+      color: var(--dark-grey);
+      cursor: pointer;
+    }
+
+    &__title {
+      grid-row: 1;
+      grid-column: 2;
+      min-width: 0;
+      font-weight: 600;
+      line-height: 18px;
+      color: var(--ui-text);
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    ::ng-deep .nav__link {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    ::ng-deep .nav__item {
+      min-height: 44px;
+    }
+  }
+
+  .notifications {
+    &__title {
+      margin-bottom: 12px;
+    }
+
+    &__invite {
+      &:not(:last-child) {
+        padding-bottom: 16px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--gray);
+      }
+    }
+  }
+
+  .attention {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background-color: var(--red);
+    border-radius: 50%;
   }
 }

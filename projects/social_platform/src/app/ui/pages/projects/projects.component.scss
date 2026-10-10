@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 .page {
@@ -81,4 +82,47 @@
 
 .bar__add-project {
   margin-bottom: 15px;
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .bar__add-project {
+    margin-bottom: 0;
+  }
+
+  @include responsive.apply-below-desktop {
+    .page {
+      margin: 24px var(--page-gutter) 0;
+    }
+
+    .page__info {
+      gap: 24px;
+      padding-bottom: 32px;
+    }
+
+    .page__outlet {
+      order: 2;
+    }
+
+    .page__create,
+    .page__left {
+      display: contents;
+    }
+
+    .page__left > app-project-activity-card {
+      order: 1;
+    }
+
+    .page__invites {
+      order: 3;
+      margin-top: 16px;
+    }
+
+    .page__invites--list {
+      display: grid;
+      gap: 64px;
+      justify-items: center;
+      width: 100%;
+    }
+  }
 }

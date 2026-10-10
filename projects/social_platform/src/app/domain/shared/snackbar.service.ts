@@ -11,6 +11,8 @@ import { nanoid } from "nanoid";
 })
 export class SnackbarService {
   private readonly snacks$ = new Subject<Snack>();
+  private readonly dismissedSubject = new Subject<string>();
+  readonly dismissed$ = this.dismissedSubject.asObservable();
 
   snacks = this.snacks$.asObservable().pipe(distinctUntilChanged());
 
@@ -18,8 +20,23 @@ export class SnackbarService {
     this.snacks$.next({ id: nanoid(), text, timeout: options.timeout, type: "success" });
   }
 
-  error(text: string, options: { timeout: number } = { timeout: 5000 }): void {
-    this.snacks$.next({ id: nanoid(), text, timeout: options.timeout, type: "error" });
+  error(
+    text: string,
+    options: { timeout: number; dismissible?: boolean } = { timeout: 5000 },
+  ): string {
+    const id = nanoid();
+    this.snacks$.next({
+      id,
+      text,
+      timeout: options.timeout,
+      type: "error",
+      dismissible: options.dismissible,
+    });
+    return id;
+  }
+
+  dismiss(id: string): void {
+    this.dismissedSubject.next(id);
   }
 
   info(text: string, options: { timeout: number } = { timeout: 5000 }): void {

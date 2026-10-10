@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 
 .page {
@@ -137,5 +136,45 @@
 @include responsive.apply-tablet {
   .page__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .page {
+    &__bar {
+      display: grid;
+    }
+
+    &__list {
+      grid-template-columns: 1fr;
+      margin-top: 50px;
+
+      @media (min-width: responsive.$desktop) and (max-width: #{responsive.$container-md - 1px}) {
+        grid-template-columns: repeat(3, 2fr);
+      }
+    }
+  }
+
+  @media (max-width: #{responsive.$desktop - 1px}) {
+    .page {
+      &__bar {
+        display: flex;
+      }
+
+      &__search-input {
+        font-size: var(--ui-font-h3);
+      }
+
+      &__action {
+        font-size: var(--ui-font-body);
+      }
+
+      &__list {
+        grid-template-columns: repeat(auto-fill, minmax(0, var(--ui-mobile-entity-card-width)));
+        justify-content: center;
+        margin-top: 35px;
+      }
+    }
   }
 }

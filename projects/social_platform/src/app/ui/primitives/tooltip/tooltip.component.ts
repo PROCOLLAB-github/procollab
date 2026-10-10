@@ -1,12 +1,23 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   ConnectedOverlayPositionChange,
   ConnectedPosition,
   OverlayModule,
 } from "@angular/cdk/overlay";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, input, output, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  input,
+  output,
+  signal,
+} from "@angular/core";
+import { tablet } from "@utils/responsive";
 import { IconComponent } from "../icon/icon.component";
 
 /**
@@ -32,6 +43,21 @@ import { IconComponent } from "../icon/icon.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TooltipComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  readonly mobileOverlay = signal(this.prefersTouch());
+
+  private prefersTouch(): boolean {
+    return (
+      window.innerWidth < tablet ||
+      window.matchMedia?.("(hover: none), (pointer: coarse)")?.matches === true
+    );
+  }
+
+  @HostListener("window:resize")
+  updateViewport(): void {
+    this.mobileOverlay.set(this.prefersTouch());
+  }
   /** Текст подсказки */
   text = input("");
 
