@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -138,5 +137,18 @@
 
   &__message {
     color: var(--dark-grey);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .message {
+    &--unread {
+      background-color: var(--ui-message-surface);
+    }
+  }
+
+  .contextmenu {
+    box-shadow: var(--ui-message-shadow);
   }
 }

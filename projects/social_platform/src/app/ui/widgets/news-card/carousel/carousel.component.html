@@ -1,39 +1,81 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  @if (images().length) {
+    <div class="carousel" [class.carousel--contain]="fit() === 'contain'">
+      @if (images().length !== 1) {
+        <div class="carousel__indexes">
+          <span>{{ currentIndex + 1 }} / {{ images().length }}</span>
+        </div>
+        <button
+          type="button"
+          aria-label="Предыдущее изображение"
+          class="carousel__btn carousel__btn--prev"
+          (click)="prev()"
+        >
+          <i appIcon icon="arrowright" appSquare="20"></i>
+        </button>
 
-@if (images().length) {
-  <div class="carousel" [class.carousel--contain]="fit() === 'contain'">
-    @if (images().length !== 1) {
-      <div class="carousel__indexes">
-        <span>{{ currentIndex + 1 }} / {{ images().length }}</span>
-      </div>
-      <button
-        type="button"
-        aria-label="Предыдущее изображение"
-        class="carousel__btn carousel__btn--prev"
-        (click)="prev()"
-      >
-        <i appIcon icon="arrowright" appSquare="20"></i>
-      </button>
-
-      <button
-        type="button"
-        aria-label="Следующее изображение"
-        class="carousel__btn carousel__btn--next"
-        (click)="next()"
-      >
-        <i appIcon icon="arrowright" appSquare="20"></i>
-      </button>
-    }
-    <div class="carousel__image-wrapper" (touchend)="onTouchImg($event)">
-      <img
-        [src]="getImageUrl(images()[currentIndex])"
-        [alt]="getImageName(images()[currentIndex])"
-        loading="lazy"
-        decoding="async"
-      />
-      <div class="carousel__img-like" [class.carousel__img-like--show]="showLike">
-        <i appIcon icon="like" appSquare="40"></i>
+        <button
+          type="button"
+          aria-label="Следующее изображение"
+          class="carousel__btn carousel__btn--next"
+          (click)="next()"
+        >
+          <i appIcon icon="arrowright" appSquare="20"></i>
+        </button>
+      }
+      <div class="carousel__image-wrapper" (touchend)="onTouchImg($event)">
+        <img
+          [src]="getImageUrl(images()[currentIndex])"
+          [alt]="getImageName(images()[currentIndex])"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="carousel__img-like" [class.carousel__img-like--show]="showLike">
+          <i appIcon icon="like" appSquare="40"></i>
+        </div>
       </div>
     </div>
-  </div>
+  }
+} @else {
+  @if (images().length) {
+    <div class="carousel" [class.carousel--contain]="fit() === 'contain'">
+      @if (images().length !== 1) {
+        <div class="carousel__indexes">
+          <span>{{ currentIndex + 1 }} / {{ images().length }}</span>
+        </div>
+        <button
+          appButton="secondary"
+          type="button"
+          aria-label="Предыдущее изображение"
+          class="carousel__btn carousel__btn--prev"
+          (click)="prev()"
+        >
+          <i appIcon icon="arrowright" appSquare="20"></i>
+        </button>
+
+        <button
+          appButton="secondary"
+          type="button"
+          aria-label="Следующее изображение"
+          class="carousel__btn carousel__btn--next"
+          (click)="next()"
+        >
+          <i appIcon icon="arrowright" appSquare="20"></i>
+        </button>
+      }
+      <div class="carousel__image-wrapper" (touchend)="onTouchImg($event)">
+        <img
+          [src]="getImageUrl(images()[currentIndex])"
+          [alt]="getImageName(images()[currentIndex])"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="carousel__img-like" [class.carousel__img-like--show]="showLike">
+          <i appIcon icon="like" appSquare="40"></i>
+        </div>
+      </div>
+    </div>
+  }
 }

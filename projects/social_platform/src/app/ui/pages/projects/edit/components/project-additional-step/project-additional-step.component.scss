@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -175,5 +174,14 @@
 .vacancy {
   &__submit {
     display: block;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .invite {
+    &__list {
+      width: 100%;
+    }
   }
 }

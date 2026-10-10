@@ -1,39 +1,80 @@
 <!-- @format -->
-
-<div class="basket" [class.basket--error]="error()">
-  <div class="basket__content" [class.basket__content--empty]="!value().length">
-    @for (skill of value(); track skill.id) {
-      <div
-        class="basket__skill"
-        [class.basket__skill--soft]="skill.category.name.includes('Soft skills')"
-      >
-        <span class="basket__skill-name text-body-12">{{ skill.name }}</span>
-        <button
-          type="button"
-          class="basket__skill-delete"
-          [attr.aria-label]="'Удалить навык ' + skill.name"
-          [disabled]="disabled()"
-          (click)="deleteSkill(skill.id)"
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="basket" [class.basket--error]="error()">
+    <div class="basket__content" [class.basket__content--empty]="!value().length">
+      @for (skill of value(); track skill.id) {
+        <div
+          class="basket__skill"
+          [class.basket__skill--soft]="skill.category.name.includes('Soft skills')"
         >
-          <i
-            appIcon
-            class="basket__skill-delete-icon"
-            icon="basket"
-            appSquare="14"
-            aria-hidden="true"
-          ></i>
-        </button>
-      </div>
-    } @empty {
-      <div class="basket__empty-placeholder">
-        <img
-          src="/assets/images/office/onboarding/laptop-guy.svg"
-          alt=""
-          loading="lazy"
-          decoding="async"
-        />
-        <span class="text-body-14">Выберите навыки</span>
-      </div>
-    }
+          <span class="basket__skill-name text-body-12">{{ skill.name }}</span>
+          <button
+            type="button"
+            class="basket__skill-delete"
+            [attr.aria-label]="'Удалить навык ' + skill.name"
+            [disabled]="disabled()"
+            (click)="deleteSkill(skill.id)"
+          >
+            <i
+              appIcon
+              class="basket__skill-delete-icon"
+              icon="basket"
+              appSquare="14"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+      } @empty {
+        <div class="basket__empty-placeholder">
+          <img
+            src="/assets/images/office/onboarding/laptop-guy.svg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="text-body-14">Выберите навыки</span>
+        </div>
+      }
+    </div>
   </div>
-</div>
+} @else {
+  <div class="basket" [class.basket--error]="error()">
+    <div class="basket__content" [class.basket__content--empty]="!value().length">
+      @for (skill of value(); track skill.id) {
+        <div
+          class="basket__skill"
+          [class.basket__skill--soft]="skill.category.name.includes('Soft skills')"
+        >
+          <span class="basket__skill-name text-body-12">{{ skill.name }}</span>
+          <button
+            appButton="danger"
+            type="button"
+            class="basket__skill-delete"
+            [attr.aria-label]="'Удалить навык ' + skill.name"
+            [disabled]="disabled()"
+            (click)="deleteSkill(skill.id)"
+          >
+            <i
+              appIcon
+              class="basket__skill-delete-icon"
+              icon="basket"
+              appSquare="14"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+      } @empty {
+        <div class="basket__empty-placeholder">
+          <img
+            src="/assets/images/office/onboarding/laptop-guy.svg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="text-body-14">Выберите навыки</span>
+        </div>
+      }
+    </div>
+  </div>
+}

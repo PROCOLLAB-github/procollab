@@ -1,38 +1,48 @@
 <!-- @format -->
-
 <div class="nav-bar">
   <div class="nav-bar__inner">
-    <div class="nav-bar__toggle">
+    <button
+      appButton="icon"
+      type="button"
+      class="nav-bar__toggle"
+      aria-label="Открыть меню"
+      aria-controls="mobile-navigation"
+      [attr.aria-expanded]="mobileMenuOpen"
+      (click)="toggleMenu($event)"
+    >
       <i
         appIcon
-        [ngStyle]="{ color: mobileMenuOpen ? 'var(--dark-grey)' : 'var(--light-white)' }"
         [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
         appSquare="24"
-        (click)="mobileMenuOpen = !mobileMenuOpen"
         class="nav-bar__icon"
       ></i>
-    </div>
+    </button>
+    <span class="nav-bar__title text-body-14">{{ title }}</span>
   </div>
-
   @if (mobileMenuOpen) {
-    <div class="nav-bar__mobile-menu">
+    <div class="nav-bar__backdrop" (click)="closeMenu()"></div>
+    <div
+      appDrawer
+      id="mobile-navigation"
+      class="nav-bar__mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Навигация"
+      cdkTrapFocus
+      [cdkTrapFocusAutoCapture]="true"
+      (keydown.escape)="closeMenu()"
+    >
       <div class="nav-bar__top">
-        <a
-          class="nav-bar__chat-link"
-          [routerLink]="AppRoutes.office.chats()"
-          aria-label="Открыть чаты"
+        <button
+          appButton="icon"
+          type="button"
+          class="nav-bar__close"
+          aria-label="Закрыть меню"
+          (click)="closeMenu()"
         >
-          <i
-            appIcon
-            icon="chats"
-            appWidth="23"
-            appHeight="21"
-            appViewBox="0 0 23 21"
-            class="nav-bar__icon"
-          ></i>
-        </a>
+          <i appIcon icon="menu-cross" appSquare="24"></i>
+        </button>
       </div>
-
       <nav class="nav nav--vertical">
         <ul class="nav__list">
           <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
@@ -109,6 +119,9 @@
           </a>
         </ul>
       </nav>
+      <button appButton="secondary" type="button" class="nav-bar__logout" (click)="logout.emit()">
+        Выйти
+      </button>
     </div>
   }
 </div>

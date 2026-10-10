@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, DialogBodyDirective, DialogFooterDirective } from "@uilib";
+
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { Overlay } from "@angular/cdk/overlay";
 import {
@@ -21,13 +27,22 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
 
 @Component({
   selector: "app-project-invite-dialog",
-  imports: [ModalComponent, IconComponent, A11yModule],
+  imports: [
+    DialogBodyDirective,
+    DialogFooterDirective,
+    ButtonDirective,
+    ModalComponent,
+    IconComponent,
+    A11yModule,
+  ],
   templateUrl: "./project-invite-dialog.component.html",
   styleUrl: "./project-invite-dialog.component.scss",
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectInviteDialogComponent implements AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly title = input.required<string>();
   readonly description = input.required<string>();
   readonly trigger = input<HTMLElement | null>(null);

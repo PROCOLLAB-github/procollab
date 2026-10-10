@@ -1,29 +1,28 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../services/desktop-layout.service";
+
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 /**
- * Компонент аватара пользователя
+ * Компонент для отображения аватара пользователя.
+ * Поддерживает различные размеры, индикатор онлайн статуса и прогресс-бар.
  *
- * Отображает круглое изображение профиля с возможностью:
- * - Настройки размера
- * - Добавления рамки
- * - Показа индикатора онлайн статуса
- * - Использования placeholder изображения при отсутствии URL
+ * Входящие параметры:
+ * - url: URL изображения аватара (обязательный)
+ * - size: размер аватара в пикселях (по умолчанию 50)
+ * - hasBorder: отображать рамку вокруг аватара
+ * - isOnline: показывать индикатор онлайн статуса
+ * - progress: значение прогресса для отображения кольца прогресса
+ * - onlineBadgeSize: размер индикатора онлайн статуса (по умолчанию 16)
+ * - onlineBadgeBorder: толщина рамки индикатора (по умолчанию 3)
+ * - onlineBadgeOffset: смещение индикатора от края (по умолчанию 0)
  *
- * @example
- * \`\`\`html
- * <!-- Базовое использование -->
- * <app-avatar [url]="user.avatar"></app-avatar>
- *
- * <!-- С онлайн статусом и рамкой -->
- * <app-avatar
- *   [url]="user.avatar"
- *   [size]="60"
- *   [isOnline]="user.isOnline"
- *   [hasBorder]="true">
- * </app-avatar>
- * \`\`\`
+ * Функциональность:
+ * - Автоматическая подстановка placeholder при отсутствии изображения
+ * - Индикатор онлайн статуса в правом нижнем углу
+ * - Кольцо прогресса вокруг аватара
  */
 @Component({
   selector: "app-avatar",
@@ -32,33 +31,35 @@ import { ChangeDetectionStrategy, Component, input, Input, type OnInit } from "@
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AvatarComponent implements OnInit {
-  /** URL изображения аватара (опциональный, при отсутствии используется placeholder) */
-  readonly url = input.required<string | undefined>();
+export class AvatarComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
 
-  /** Размер аватара в пикселях (по умолчанию 50px) */
-  readonly size = input<number>(50);
+  /** URL изображения аватара */
+  url = input.required<string | undefined>();
 
-  /** Флаг отображения рамки вокруг аватара */
-  readonly hasBorder = input<boolean>(false);
+  /** Размер аватара в пикселях */
+  size = input(50);
 
-  /** Флаг отображения индикатора онлайн статуса */
-  readonly isOnline = input<boolean>(false);
+  /** Отображать рамку */
+  hasBorder = input(false);
 
-  /** Размер индикатора онлайн статуса в пикселях */
-  readonly onlineBadgeSize = input<number>(16);
+  borderColor = input<"dark-grey" | "white" | "black" | "accent">("white");
 
-  /** Толщина рамки индикатора онлайн статуса в пикселях */
-  readonly onlineBadgeBorder = input<number>(3);
+  /** Показывать индикатор онлайн статуса */
+  isOnline = input(false);
 
-  /** Смещение индикатора онлайн статуса от края аватара */
-  readonly onlineBadgeOffset = input<number>(0);
+  /** Значение прогресса (0-100) */
+  progress = input<number>();
 
-  /** URL placeholder изображения, используемого при отсутствии аватара */
-  placeholderUrl =
-    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
+  /** Размер индикатора онлайн статуса */
+  onlineBadgeSize = input(16);
 
-  constructor() {}
+  /** Толщина рамки индикатора */
+  onlineBadgeBorder = input(3);
 
-  ngOnInit(): void {}
+  /** Смещение индикатора от края */
+  onlineBadgeOffset = input(0);
+
+  /** URL placeholder изображения по умолчанию */
+  placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
 }

@@ -4,7 +4,7 @@ import { signal } from "@angular/core";
 import { FormArray, FormBuilder } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { Router } from "@angular/router";
-import { of } from "rxjs";
+import { BehaviorSubject, of } from "rxjs";
 import { ValidationService } from "@corelib";
 import { OnboardingStageZeroInfoService } from "./onboarding-stage-zero-info.service";
 import { OnboardingService } from "../../onboarding.service";
@@ -18,6 +18,17 @@ import { fail, ok } from "@domain/shared/result.type";
 import { initial } from "@domain/shared/async-state";
 
 describe("OnboardingStageZeroInfoService", () => {
+  const currentProfile = { id: 42 } as User;
+  let draft: BehaviorSubject<Partial<User>>;
+  let onboardingService: {
+    formValue$: ReturnType<BehaviorSubject<Partial<User>>["asObservable"]>;
+    setFormValue: ReturnType<typeof vi.fn>;
+  };
+  let profileInfoService: {
+    profile: ReturnType<typeof signal<User | null>>;
+    applyProfileUpdated: ReturnType<typeof vi.fn>;
+    ensureProfileLoaded: ReturnType<typeof vi.fn>;
+  };
   let service: OnboardingStageZeroInfoService;
   let profile: ReturnType<typeof signal<User | null>>;
   let updateProfile: ReturnType<typeof vi.fn>;
@@ -31,6 +42,8 @@ describe("OnboardingStageZeroInfoService", () => {
     userLanguages: FormArray;
     applySubmitModalError: ReturnType<typeof vi.fn>;
     applySkipRegistrationModalError: ReturnType<typeof vi.fn>;
+    applySetProfile: ReturnType<typeof vi.fn>;
+    applyInitStageZero: ReturnType<typeof vi.fn>;
   };
   let onboardingUI: {
     stageSubmitting$: ReturnType<typeof signal>;
@@ -56,6 +69,12 @@ describe("OnboardingStageZeroInfoService", () => {
     updateProfile = vi.fn();
     updateOnboardingStage = vi.fn();
     applyProfileUpdated = vi.fn();
+    draft = new BehaviorSubject<Partial<User>>({});
+    onboardingService = {
+      formValue$: draft.asObservable(),
+      setFormValue: vi.fn(value => draft.next(value)),
+    };
+    profileInfoService = { profile, applyProfileUpdated, ensureProfileLoaded: vi.fn() };
     stageZeroUI = {
       stageForm,
       achievements,
@@ -64,6 +83,8 @@ describe("OnboardingStageZeroInfoService", () => {
       userLanguages,
       applySubmitModalError: vi.fn(),
       applySkipRegistrationModalError: vi.fn(),
+      applySetProfile: vi.fn(),
+      applyInitStageZero: vi.fn(),
     };
     onboardingUI = {
       stageSubmitting$: signal(initial()),
@@ -77,13 +98,13 @@ describe("OnboardingStageZeroInfoService", () => {
         { provide: ValidationService, useValue: { getFormValidation: vi.fn(() => true) } },
         {
           provide: OnboardingService,
-          useValue: { formValue$: of({}), setFormValue: vi.fn() },
+          useValue: onboardingService,
         },
         { provide: OnboardingUIInfoService, useValue: onboardingUI },
         { provide: OnboardingStageZeroUIInfoService, useValue: stageZeroUI },
         {
           provide: ProfileInfoService,
-          useValue: { profile, applyProfileUpdated },
+          useValue: profileInfoService,
         },
         { provide: UpdateProfileUseCase, useValue: { execute: updateProfile } },
         {
@@ -93,6 +114,41 @@ describe("OnboardingStageZeroInfoService", () => {
       ],
     });
     service = TestBed.inject(OnboardingStageZeroInfoService);
+  });
+
+  it("ждет профиль при прямом входе и сохраняет введенный черновик", () => {
+    profile.set(null);
+    draft.next({ city: "Город из черновика", education: [] });
+    service.initializationStageZero();
+    TestBed.flushEffects();
+    expect(profileInfoService.ensureProfileLoaded).toHaveBeenCalledOnce();
+    expect(stageZeroUI.applySetProfile).not.toHaveBeenCalled();
+
+    const loadedProfile = {
+      ...currentProfile,
+      personal: { avatar: "saved-avatar.png", city: "Москва" },
+      relations: {
+        education: [{ organizationName: "Вуз" }],
+        workExperience: [],
+        userLanguages: [],
+        achievements: [],
+      },
+    } as unknown as User;
+    profile.set(loadedProfile);
+    TestBed.flushEffects();
+    expect(stageZeroUI.applySetProfile).toHaveBeenCalledExactlyOnceWith(loadedProfile);
+    expect(draft.value).toMatchObject({
+      avatar: "saved-avatar.png",
+      city: "Город из черновика",
+      education: [],
+    });
+
+    profile.set({
+      ...loadedProfile,
+      personal: { ...loadedProfile.personal, city: "Другой город" },
+    });
+    TestBed.flushEffects();
+    expect(onboardingService.setFormValue).toHaveBeenCalledOnce();
   });
 
   it("onSubmit передает profile.id отдельно от данных формы", () => {

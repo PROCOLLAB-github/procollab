@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, StateComponent } from "@uilib";
+
 import { DatePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { VacancyResponsesLoadError } from "@api/vacancy/vacancy-response-error";
@@ -14,6 +19,8 @@ import { VacancyLetterComponent } from "@ui/widgets/vacancy-letter/vacancy-lette
   templateUrl: "./vacancy-responses.component.html",
   styleUrl: "./vacancy-responses.component.scss",
   imports: [
+    StateComponent,
+    ButtonDirective,
     AvatarComponent,
     ButtonComponent,
     IconComponent,
@@ -25,6 +32,8 @@ import { VacancyLetterComponent } from "@ui/widgets/vacancy-letter/vacancy-lette
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyResponsesComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly responses = input<VacancyResponse[]>([]);
   readonly loading = input(false);
   readonly error = input<VacancyResponsesLoadError | null>(null);

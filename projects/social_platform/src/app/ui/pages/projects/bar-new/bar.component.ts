@@ -1,19 +1,28 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { DesktopLayoutService } from "@uilib";
+
+import { inject, ChangeDetectionStrategy, Component, input, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { IconComponent } from "@uilib";
+import { IconComponent, TabsComponent } from "@uilib";
 
 /** Горизонтальный список навигационных ссылок с индикаторами активности. */
 @Component({
   selector: "app-bar-new",
-  imports: [CommonModule, RouterLink, RouterLinkActive, IconComponent],
+  imports: [TabsComponent, CommonModule, RouterLink, RouterLinkActive, IconComponent],
   templateUrl: "./bar.component.html",
   styleUrl: "./bar.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarNewComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   /** Массив навигационных ссылок */
   readonly links = input.required<
     {

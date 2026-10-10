@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -49,9 +54,11 @@ import { IconComponent } from "../icon/icon.component";
       multi: true,
     },
   ],
-  imports: [IconComponent, LoaderComponent],
+  imports: [ButtonDirective, IconComponent, LoaderComponent],
 })
 export class UploadFileComponent implements ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly fileService = inject(FileService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly destroyRef = inject(DestroyRef);

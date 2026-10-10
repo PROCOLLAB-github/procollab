@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, FiltersDirective } from "@uilib";
+
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import {
@@ -28,6 +33,8 @@ import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service"
 @Component({
   selector: "app-vacancy-filter",
   imports: [
+    ButtonDirective,
+    FiltersDirective,
     CommonModule,
     CheckboxComponent,
     ClickOutsideModule,
@@ -50,6 +57,8 @@ import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service"
   providers: [VacancyFilterInfoService],
 })
 export class VacancyFilterComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly vacancyFilterInfoService = inject(VacancyFilterInfoService);
 
   @Input() set searchValue(value: string | undefined) {

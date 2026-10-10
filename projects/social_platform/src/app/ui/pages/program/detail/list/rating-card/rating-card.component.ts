@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   AfterViewInit,
   Component,
@@ -51,6 +54,8 @@ import { map } from "rxjs";
   providers: [RatingCardService, ExpandService],
 })
 export class RatingCardComponent implements AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly ratingCardService = inject(RatingCardService);
   private readonly expandService = inject(ExpandService);
   private readonly breakpointObserver = inject(BreakpointObserver);

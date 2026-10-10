@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 
 .control-panel {
@@ -376,5 +375,87 @@
     &__time {
       font-size: 10px;
     }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .control-panel {
+    z-index: 10;
+
+    &__action {
+      color: var(--black);
+    }
+
+    &__bell {
+      &--hasInvites {
+        position: absolute;
+        top: -5%;
+        left: 0%;
+        width: 6px;
+        height: 6px;
+        background-color: var(--red);
+        border-radius: 100%;
+      }
+    }
+
+    i {
+      color: var(--ui-text-muted);
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    .control-panel {
+      position: static;
+    }
+
+    .control-panel__actions {
+      gap: 0;
+      margin-right: 0;
+    }
+
+    .control-panel__action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .control-panel__action--logout {
+      display: none;
+    }
+
+    .control-panel__profile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      min-height: 44px;
+    }
+
+    .control-panel__notifications {
+      position: fixed;
+      top: 64px;
+      right: var(--page-gutter);
+      left: var(--page-gutter);
+      max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
+      overflow-y: auto;
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .control-panel__logout {
+    display: none;
+  }
+
+  .control-panel__notifications {
+    top: 100%;
+    right: 0%;
+    z-index: 20;
+    width: auto;
+    max-width: none;
+    margin-top: 10px;
   }
 }

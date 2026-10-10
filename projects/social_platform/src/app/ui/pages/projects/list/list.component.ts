@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { StateComponent } from "@uilib";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -28,7 +33,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
   selector: "app-list",
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
-  imports: [IconComponent, RouterLink, InfoCardComponent, NgTemplateOutlet],
+  imports: [StateComponent, IconComponent, RouterLink, InfoCardComponent, NgTemplateOutlet],
   providers: [
     ProjectsListInfoService,
     ProjectsInfoService,
@@ -41,6 +46,8 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
   readonly listRoot = viewChild<ElementRef<HTMLUListElement>>("listRoot");
 

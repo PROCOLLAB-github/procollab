@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/components/vacancy-ui";
 
 :host {
@@ -86,6 +85,33 @@
 
     a {
       @include vacancy-ui.link;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .response {
+    &__role {
+      font-size: var(--ui-font-h3);
+    }
+
+    &__project {
+      font-size: var(--ui-font-body);
+    }
+
+    &__date {
+      font-size: var(--ui-font-small);
+    }
+
+    &__letter {
+      h3 {
+        font-size: var(--ui-font-body);
+      }
+    }
+
+    &__file {
+      font-size: var(--ui-font-body);
     }
   }
 }

@@ -1,10 +1,30 @@
 <!-- @format -->
-
-<svg
-  class="icon"
-  [attr.width]="square || width"
-  [attr.height]="square || height"
-  [attr.viewBox]="viewBox"
->
-  <use [attr.xlink:href]="'assets/icons/symbol/svg/sprite.css.svg#' + icon()"></use>
-</svg>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <svg
+    class="icon"
+    [attr.width]="square || width"
+    [attr.height]="square || height"
+    [attr.viewBox]="viewBox"
+  >
+    <use [attr.xlink:href]="'assets/icons/symbol/svg/sprite.css.svg#' + icon()"></use>
+  </svg>
+} @else {
+  <svg
+    class="icon"
+    [attr.width]="
+      square ||
+      width ||
+      (desktopLayout() ? null : size() === 'small' ? '16' : size() === 'large' ? '24' : '20')
+    "
+    [attr.height]="
+      square ||
+      height ||
+      (desktopLayout() ? null : size() === 'small' ? '16' : size() === 'large' ? '24' : '20')
+    "
+    [attr.viewBox]="viewBox || (desktopLayout() ? null : '0 0 24 24')"
+    aria-hidden="true"
+  >
+    <use [attr.xlink:href]="'assets/icons/symbol/svg/sprite.css.svg#' + icon()"></use>
+  </svg>
+}

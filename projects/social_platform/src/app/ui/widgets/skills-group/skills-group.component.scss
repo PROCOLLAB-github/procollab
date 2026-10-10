@@ -1,3 +1,5 @@
+/** @format */
+
 :host {
   display: flex;
   flex-direction: column;
@@ -129,6 +131,20 @@
     i {
       color: var(--white);
       transform: rotate(0deg) !important;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  :host {
+    .heading {
+      &__top {
+        &:hover,
+        &--selected {
+          background-color: var(--ui-accent-tint-subtle);
+        }
+      }
     }
   }
 }

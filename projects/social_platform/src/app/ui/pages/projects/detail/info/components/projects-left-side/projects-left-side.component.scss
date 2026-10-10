@@ -1,3 +1,6 @@
+/** @format */
+@use "styles/responsive";
+
 @mixin expandable-list {
   &__remaining {
     display: grid;
@@ -122,4 +125,46 @@
   }
 
   @include expandable-list;
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .lists {
+    &__item {
+      &--program {
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        gap: 4px 6px;
+        align-items: center;
+
+        .lists__item-content {
+          display: contents;
+        }
+
+        .lists__value {
+          grid-column: 1 / -1;
+          hyphens: auto;
+          word-break: normal;
+        }
+      }
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    .project__left {
+      width: 100%;
+    }
+
+    .project__section {
+      padding: 16px;
+    }
+
+    .lists__list {
+      gap: 16px;
+    }
+
+    .lists__item {
+      gap: 12px;
+    }
+  }
 }

@@ -1,5 +1,7 @@
+/** @format */
 @use "styles/responsive";
 @use "styles/typography";
+@use "styles/course-task";
 
 .file-task {
   display: flex;
@@ -200,4 +202,9 @@
 
     @include typography.body-14;
   }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include course-task.responsive-layout("file-task");
 }

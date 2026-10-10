@@ -1,98 +1,217 @@
 <!-- @format -->
-<article class="member-row member-row--pending">
-  <app-avatar [url]="invite().user.personal.avatar" [size]="40" />
-  <div class="member-row__identity">
-    <h4 class="member-row__name">{{ invite().user.firstName }} {{ invite().user.lastName }}</h4>
-    <span class="member-row__role">{{ invite().role || "Роль не указана" }}</span>
-    <p class="member-row__description">
-      @if (sentDate(); as date) {
-        Отправлено {{ date }}
-      } @else {
-        Ожидает ответа участника
-      }
-    </p>
-  </div>
-  <span class="member-row__status">Приглашение отправлено</span>
-  <div class="member-row__actions">
-    <button
-      type="button"
-      class="member-row__action"
-      (click)="openEdit($event)"
-      [attr.aria-label]="
-        'Изменить роль в приглашении: ' + invite().user.firstName + ' ' + invite().user.lastName
-      "
-      title="Изменить роль"
-    >
-      <i
-        appIcon
-        icon="edit-pen"
-        appWidth="12"
-        appHeight="11"
-        appViewBox="0 0 12 11"
-        aria-hidden="true"
-      ></i>
-      <span class="member-row__action-label">Изменить роль</span>
-    </button>
-    <button
-      type="button"
-      class="member-row__action member-row__action--danger"
-      (click)="openRemove($event)"
-      [attr.aria-label]="
-        'Отозвать приглашение: ' + invite().user.firstName + ' ' + invite().user.lastName
-      "
-      title="Отозвать приглашение"
-    >
-      <i
-        appIcon
-        icon="basket"
-        appWidth="13"
-        appHeight="15"
-        appViewBox="0 0 13 15"
-        aria-hidden="true"
-      ></i>
-      <span class="member-row__action-label">Отозвать</span>
-    </button>
-  </div>
-</article>
-@if (isRemoveInviteModal()) {
-  <app-project-invite-dialog
-    title="Отозвать приглашение?"
-    [compact]="true"
-    description="Участник больше не сможет принять это приглашение."
-    [trigger]="trigger"
-    (closed)="isRemoveInviteModal.set(false)"
-  >
-    <div inviteFooter class="invite-actions">
-      <button type="button" class="invite-button" (click)="isRemoveInviteModal.set(false)">
-        Отмена
-      </button>
-      <button type="button" class="invite-button invite-button--primary" (click)="onRemove()">
-        Отозвать
-      </button>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <article class="member-row member-row--pending">
+    <app-avatar [url]="invite().user.personal.avatar" [size]="40" />
+    <div class="member-row__identity">
+      <h4 class="member-row__name">{{ invite().user.firstName }} {{ invite().user.lastName }}</h4>
+      <span class="member-row__role">{{ invite().role || "Роль не указана" }}</span>
+      <p class="member-row__description">
+        @if (sentDate(); as date) {
+          Отправлено {{ date }}
+        } @else {
+          Ожидает ответа участника
+        }
+      </p>
     </div>
-  </app-project-invite-dialog>
-}
-@if (isEditInviteModal()) {
-  <app-project-invite-dialog
-    title="Роль в приглашении"
-    [compact]="true"
-    description="Укажите зону ответственности участника в проекте."
-    [trigger]="trigger"
-    (closed)="isEditInviteModal.set(false)"
-  >
-    <div inviteRole><app-project-invite-role-input [control]="role" /></div>
-    <div inviteFooter class="invite-actions">
-      <button type="button" class="invite-button" (click)="isEditInviteModal.set(false)">
-        Отмена
+    <span class="member-row__status">Приглашение отправлено</span>
+    <div class="member-row__actions">
+      <button
+        type="button"
+        class="member-row__action"
+        (click)="openEdit($event)"
+        [attr.aria-label]="
+          'Изменить роль в приглашении: ' + invite().user.firstName + ' ' + invite().user.lastName
+        "
+        title="Изменить роль"
+      >
+        <i
+          appIcon
+          icon="edit-pen"
+          appWidth="12"
+          appHeight="11"
+          appViewBox="0 0 12 11"
+          aria-hidden="true"
+        ></i>
+        <span class="member-row__action-label">Изменить роль</span>
       </button>
       <button
         type="button"
-        class="invite-button invite-button--primary"
-        [disabled]="role.invalid"
-        (click)="onEdit()"
+        class="member-row__action member-row__action--danger"
+        (click)="openRemove($event)"
+        [attr.aria-label]="
+          'Отозвать приглашение: ' + invite().user.firstName + ' ' + invite().user.lastName
+        "
+        title="Отозвать приглашение"
       >
-        Сохранить
+        <i
+          appIcon
+          icon="basket"
+          appWidth="13"
+          appHeight="15"
+          appViewBox="0 0 13 15"
+          aria-hidden="true"
+        ></i>
+        <span class="member-row__action-label">Отозвать</span>
       </button>
     </div>
-  </app-project-invite-dialog>
+  </article>
+  @if (isRemoveInviteModal()) {
+    <app-project-invite-dialog
+      title="Отозвать приглашение?"
+      [compact]="true"
+      description="Участник больше не сможет принять это приглашение."
+      [trigger]="trigger"
+      (closed)="isRemoveInviteModal.set(false)"
+    >
+      <div inviteFooter class="invite-actions">
+        <button type="button" class="invite-button" (click)="isRemoveInviteModal.set(false)">
+          Отмена
+        </button>
+        <button type="button" class="invite-button invite-button--primary" (click)="onRemove()">
+          Отозвать
+        </button>
+      </div>
+    </app-project-invite-dialog>
+  }
+  @if (isEditInviteModal()) {
+    <app-project-invite-dialog
+      title="Роль в приглашении"
+      [compact]="true"
+      description="Укажите зону ответственности участника в проекте."
+      [trigger]="trigger"
+      (closed)="isEditInviteModal.set(false)"
+    >
+      <div inviteRole><app-project-invite-role-input [control]="role" /></div>
+      <div inviteFooter class="invite-actions">
+        <button type="button" class="invite-button" (click)="isEditInviteModal.set(false)">
+          Отмена
+        </button>
+        <button
+          type="button"
+          class="invite-button invite-button--primary"
+          [disabled]="role.invalid"
+          (click)="onEdit()"
+        >
+          Сохранить
+        </button>
+      </div>
+    </app-project-invite-dialog>
+  }
+} @else {
+  <article class="member-row member-row--pending">
+    <app-avatar [url]="invite().user.personal.avatar" [size]="40" />
+    <div class="member-row__identity">
+      <h4 class="member-row__name">{{ invite().user.firstName }} {{ invite().user.lastName }}</h4>
+      <span class="member-row__role">{{ invite().role || "Роль не указана" }}</span>
+      <p class="member-row__description">
+        @if (sentDate(); as date) {
+          Отправлено {{ date }}
+        } @else {
+          Ожидает ответа участника
+        }
+      </p>
+    </div>
+    <span class="member-row__status">Приглашение отправлено</span>
+    <div class="member-row__actions">
+      <button
+        appButton="secondary"
+        type="button"
+        class="member-row__action"
+        (click)="openEdit($event)"
+        [attr.aria-label]="
+          'Изменить роль в приглашении: ' + invite().user.firstName + ' ' + invite().user.lastName
+        "
+        title="Изменить роль"
+      >
+        <i
+          appIcon
+          icon="edit-pen"
+          appWidth="12"
+          appHeight="11"
+          appViewBox="0 0 12 11"
+          aria-hidden="true"
+        ></i>
+        <span class="member-row__action-label">Изменить роль</span>
+      </button>
+      <button
+        appButton="danger"
+        type="button"
+        class="member-row__action member-row__action--danger"
+        (click)="openRemove($event)"
+        [attr.aria-label]="
+          'Отозвать приглашение: ' + invite().user.firstName + ' ' + invite().user.lastName
+        "
+        title="Отозвать приглашение"
+      >
+        <i
+          appIcon
+          icon="basket"
+          appWidth="13"
+          appHeight="15"
+          appViewBox="0 0 13 15"
+          aria-hidden="true"
+        ></i>
+        <span class="member-row__action-label">Отозвать</span>
+      </button>
+    </div>
+  </article>
+  @if (isRemoveInviteModal()) {
+    <app-project-invite-dialog
+      title="Отозвать приглашение?"
+      [compact]="true"
+      description="Участник больше не сможет принять это приглашение."
+      [trigger]="trigger"
+      (closed)="isRemoveInviteModal.set(false)"
+    >
+      <div inviteFooter class="invite-actions">
+        <button
+          appButton="secondary"
+          type="button"
+          class="invite-button"
+          (click)="isRemoveInviteModal.set(false)"
+        >
+          Отмена
+        </button>
+        <button
+          appButton="secondary"
+          type="button"
+          class="invite-button invite-button--primary"
+          (click)="onRemove()"
+        >
+          Отозвать
+        </button>
+      </div>
+    </app-project-invite-dialog>
+  }
+  @if (isEditInviteModal()) {
+    <app-project-invite-dialog
+      title="Роль в приглашении"
+      [compact]="true"
+      description="Укажите зону ответственности участника в проекте."
+      [trigger]="trigger"
+      (closed)="isEditInviteModal.set(false)"
+    >
+      <div inviteRole><app-project-invite-role-input [control]="role" /></div>
+      <div inviteFooter class="invite-actions">
+        <button
+          appButton="secondary"
+          type="button"
+          class="invite-button"
+          (click)="isEditInviteModal.set(false)"
+        >
+          Отмена
+        </button>
+        <button
+          appButton="secondary"
+          type="button"
+          class="invite-button invite-button--primary"
+          [disabled]="role.invalid"
+          (click)="onEdit()"
+        >
+          Сохранить
+        </button>
+      </div>
+    </app-project-invite-dialog>
+  }
 }

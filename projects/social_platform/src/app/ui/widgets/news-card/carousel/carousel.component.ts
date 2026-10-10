@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,17 +15,19 @@ import {
   Output,
 } from "@angular/core";
 import { FileModel } from "@domain/file/file.model";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective } from "@uilib";
 
 /** Компонент карусели для просмотра изображений с навигацией и лайками. */
 @Component({
   selector: "app-carousel",
-  imports: [IconComponent],
+  imports: [ButtonDirective, IconComponent],
   templateUrl: "./carousel.component.html",
   styleUrls: ["./carousel.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly images = input<Array<FileModel | string>>([]);
   /** Полное изображение без обрезки включается только локальным окном чтения новости. */
   readonly fit = input<"cover" | "contain">("cover");

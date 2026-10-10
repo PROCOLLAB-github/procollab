@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, FiltersDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { SelectComponent } from "@ui/primitives";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -11,11 +16,13 @@ import { ProjectsFilterInfoService } from "./service/projects-filter-info.servic
   selector: "app-projects-filter",
   templateUrl: "./projects-filter.component.html",
   styleUrl: "./projects-filter.component.scss",
-  imports: [SelectComponent, ReactiveFormsModule],
+  imports: [ButtonDirective, FiltersDirective, SelectComponent, ReactiveFormsModule],
   providers: [ProjectsFilterInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsFilterComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly projectsFilterInfoService = inject(ProjectsFilterInfoService);
 
   // Константы для фильтрации по типу проекта

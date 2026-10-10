@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 .bar {
@@ -82,5 +83,25 @@
 
   &__back {
     margin-top: 45px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .bar {
+    display: flex;
+    gap: var(--ui-space-sm);
+    align-items: center;
+    min-width: 0;
+  }
+
+  app-tabs {
+    flex: 1;
   }
 }

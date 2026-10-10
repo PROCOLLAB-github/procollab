@@ -239,6 +239,11 @@
   font-weight: 400;
   line-height: 130%;
   color: var(--grey-button);
+
+  @media screen and (max-width: 999px) {
+    font-size: var(--ui-font-caption);
+    color: var(--ui-text-muted);
+  }
 }
 
 .text-body-10 {
@@ -251,8 +256,14 @@
   font-style: normal;
   font-weight: 400;
   line-height: 130%;
+
+  @media screen and (max-width: 999px) {
+    font-size: var(--ui-font-caption);
+  }
 }
 
 .text-body-6 {
   @include body-6;
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.

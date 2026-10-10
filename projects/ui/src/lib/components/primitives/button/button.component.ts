@@ -1,8 +1,12 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../services/desktop-layout.service";
+
+import { ChangeDetectionStrategy, Component, computed, inject, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
+import { DesktopLayoutService } from "../../../services/desktop-layout.service";
 
 @Component({
   selector: "app-button",
@@ -12,6 +16,10 @@ import { LoaderComponent } from "../loader/loader.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+  variant = input<"primary" | "secondary" | "danger">();
   color = input<"primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white">("primary");
   loader = input(false);
   size = input<"extra-small" | "small" | "medium" | "big">("small");
@@ -21,4 +29,10 @@ export class ButtonComponent {
   backgroundColor = input<string>();
   disabled = input(false);
   customTypographyClass = input<string>();
+  protected readonly effectiveColor = computed(() =>
+    this.variant() === "danger" ? "red" : this.color(),
+  );
+  protected readonly effectiveAppearance = computed(() =>
+    this.variant() === "secondary" ? "outline" : this.appearance(),
+  );
 }

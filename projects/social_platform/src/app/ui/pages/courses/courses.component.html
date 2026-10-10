@@ -1,18 +1,37 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="profile">
+    <app-back namespace="курсы" path="/office/program/all"></app-back>
 
-<div class="profile">
-  <app-back namespace="курсы" path="/office/program/all"></app-back>
+    <div class="profile__info">
+      <form class="profile__search" [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
 
-  <div class="profile__info">
-    <form class="profile__search" [formGroup]="searchForm">
-      <app-search formControlName="search"></app-search>
-    </form>
+      <router-outlet></router-outlet>
 
-    <router-outlet></router-outlet>
-
-    <app-soon-card
-      title="аналитика"
-      description="уровень включённости студентов, статистика достижения целей в проектах"
-    ></app-soon-card>
+      <app-soon-card
+        title="аналитика"
+        description="уровень включённости студентов, статистика достижения целей в проектах"
+      ></app-soon-card>
+    </div>
   </div>
-</div>
+} @else {
+  <div class="profile">
+    <app-page-header title="курсы" backRoute="/office/program/all" />
+
+    <div class="profile__info">
+      <form appFormLayout class="profile__search" [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+
+      <router-outlet></router-outlet>
+
+      <app-soon-card
+        title="аналитика"
+        description="уровень включённости студентов, статистика достижения целей в проектах"
+      ></app-soon-card>
+    </div>
+  </div>
+}

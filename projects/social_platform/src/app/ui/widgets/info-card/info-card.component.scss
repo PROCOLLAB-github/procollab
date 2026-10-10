@@ -1,6 +1,6 @@
 /** @format */
-
 @use "styles/responsive";
+@use "styles/ui-foundation";
 
 .card {
   &__body {
@@ -534,5 +534,193 @@
     display: flex;
     gap: 12px;
     margin-top: 16px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .card {
+    &__body {
+      @include ui-foundation.card;
+
+      height: auto;
+      min-height: 180px;
+    }
+
+    &__project-action {
+      @include ui-foundation.button;
+    }
+
+    &--project {
+      .card__name {
+        /* stylelint-disable-next-line value-no-vendor-prefix */
+        font-size: var(--ui-font-small);
+      }
+
+      .card__description {
+        p {
+          /* stylelint-disable-next-line value-no-vendor-prefix */
+          font-size: var(--ui-font-caption);
+        }
+      }
+
+      .card__project-action-label {
+        font-size: var(--ui-font-caption);
+      }
+    }
+
+    &--my-project {
+      .card__name {
+        font-size: var(--ui-font-caption);
+      }
+
+      .card__description {
+        &--with-program {
+          flex-basis: 12px;
+          height: 12px;
+          min-height: 12px;
+
+          p {
+            -webkit-line-clamp: 1;
+          }
+        }
+      }
+
+      .card__program-name {
+        width: 100%;
+        overflow: hidden;
+        font-size: 9px;
+        line-height: 12px;
+        color: var(--grey-for-text);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    &--invite {
+      .card__user {
+        font-size: var(--ui-font-caption);
+      }
+
+      .card__user--invite {
+        /* stylelint-disable-next-line value-no-vendor-prefix */
+        font-size: var(--ui-font-small);
+      }
+    }
+
+    &__status {
+      gap: 4px;
+      padding-inline: 5px;
+      color: var(--black);
+
+      i {
+        display: flex;
+        flex-shrink: 0;
+      }
+
+      &--program {
+        &::before {
+          display: none;
+        }
+      }
+
+      &--submitted {
+        color: var(--green-dark);
+        background: var(--green-light);
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    :host {
+      display: block;
+      width: min(100%, var(--ui-mobile-entity-card-width));
+      min-width: 0;
+    }
+
+    .card__body {
+      width: 100%;
+      height: auto;
+      min-height: 244px;
+    }
+
+    .card__content {
+      padding-right: 16px;
+      padding-left: 16px;
+      overflow: visible;
+    }
+
+    .card__head {
+      width: 100%;
+    }
+
+    .card__name {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .card--project,
+    .card--my-project {
+      .card__name {
+        display: block;
+        max-height: none;
+        font-size: var(--ui-font-body);
+        line-height: 20px;
+        -webkit-line-clamp: unset;
+      }
+
+      .card__description {
+        height: auto;
+        font-size: var(--ui-font-body);
+        line-height: 20px;
+      }
+    }
+
+    .card__context {
+      height: auto;
+      min-height: 24px;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .card__role,
+    .card__access-label {
+      font-size: var(--ui-font-small);
+      line-height: 16px;
+    }
+
+    .card__description {
+      flex-basis: auto;
+      width: 100%;
+      height: auto;
+      min-height: 24px;
+    }
+
+    .card__project-action {
+      align-self: center;
+      width: auto;
+      min-height: 44px;
+    }
+
+    .card--my-project .card__program-name {
+      font-size: var(--ui-font-small);
+      line-height: 16px;
+    }
+
+    .card--project .card__description p,
+    .card--my-project .card__description p {
+      font-size: var(--ui-font-small);
+      line-height: 18px;
+    }
+
+    .card__subscription-action {
+      width: 44px;
+      height: 44px;
+    }
   }
 }

@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -47,6 +52,7 @@ import { ProjectCoverResetService } from "@api/project/facades/edit/project-cove
   templateUrl: "./edit.component.html",
   styleUrl: "./edit.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
@@ -81,6 +87,8 @@ import { ProjectCoverResetService } from "@api/project/facades/edit/project-cove
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   protected readonly coverReset = inject(ProjectCoverResetService);
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
   protected readonly AppRoutes = AppRoutes;

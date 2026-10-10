@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 .bar {
@@ -68,5 +69,14 @@
       justify-content: center;
       padding: 5px 8px;
     }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
   }
 }

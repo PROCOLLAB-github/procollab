@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -77,5 +76,17 @@
     &--active {
       color: var(--black);
     }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    padding-block: var(--ui-space-md);
+    margin-bottom: var(--ui-space-md);
+    border-bottom: 1px solid var(--ui-border-subtle);
   }
 }

@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map } from "rxjs";
@@ -19,6 +24,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./register.component.html",
   styleUrl: "./register.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     InputComponent,
     ButtonComponent,
@@ -29,6 +35,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramRegisterComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly registerProgramUseCase = inject(RegisterProgramUseCase);

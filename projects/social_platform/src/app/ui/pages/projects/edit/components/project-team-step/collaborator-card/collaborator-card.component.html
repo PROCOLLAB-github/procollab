@@ -1,41 +1,86 @@
 <!-- @format -->
-<article class="member-row">
-  <app-avatar [url]="collaborator().avatar" [size]="40" />
-  <div class="member-row__identity">
-    <h4 class="member-row__name">{{ collaborator().firstName }} {{ collaborator().lastName }}</h4>
-    <span class="member-row__role">{{ collaborator().role || "Роль не указана" }}</span>
-    <p class="member-row__description">
-      {{ isLeader() ? "Руководитель проекта" : "Участник проекта" }}
-      @if (isCurrentUser()) {
-        <span class="member-row__you"> · Вы</span>
-      }
-    </p>
-  </div>
-  <span class="member-row__status">В команде</span>
-  <div class="member-row__actions">
-    <button
-      type="button"
-      class="member-row__action member-row__action--danger"
-      [attr.aria-label]="
-        'Исключить участника: ' + collaborator().firstName + ' ' + collaborator().lastName
-      "
-      title="Исключить участника"
-      [disabled]="removing()"
-      [attr.aria-busy]="removing()"
-      (click)="onDeleteCollaborator(collaborator().userId)"
-    >
-      <i
-        appIcon
-        icon="basket"
-        appWidth="13"
-        appHeight="15"
-        appViewBox="0 0 13 15"
-        aria-hidden="true"
-      ></i>
-      <span class="member-row__action-label">{{ removing() ? "Исключаем…" : "Исключить" }}</span>
-    </button>
-  </div>
-  @if (error()) {
-    <p class="member-row__error" role="alert">{{ error() }}</p>
-  }
-</article>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <article class="member-row">
+    <app-avatar [url]="collaborator().avatar" [size]="40" />
+    <div class="member-row__identity">
+      <h4 class="member-row__name">{{ collaborator().firstName }} {{ collaborator().lastName }}</h4>
+      <span class="member-row__role">{{ collaborator().role || "Роль не указана" }}</span>
+      <p class="member-row__description">
+        {{ isLeader() ? "Руководитель проекта" : "Участник проекта" }}
+        @if (isCurrentUser()) {
+          <span class="member-row__you"> · Вы</span>
+        }
+      </p>
+    </div>
+    <span class="member-row__status">В команде</span>
+    <div class="member-row__actions">
+      <button
+        type="button"
+        class="member-row__action member-row__action--danger"
+        [attr.aria-label]="
+          'Исключить участника: ' + collaborator().firstName + ' ' + collaborator().lastName
+        "
+        title="Исключить участника"
+        [disabled]="removing()"
+        [attr.aria-busy]="removing()"
+        (click)="onDeleteCollaborator(collaborator().userId)"
+      >
+        <i
+          appIcon
+          icon="basket"
+          appWidth="13"
+          appHeight="15"
+          appViewBox="0 0 13 15"
+          aria-hidden="true"
+        ></i>
+        <span class="member-row__action-label">{{ removing() ? "Исключаем…" : "Исключить" }}</span>
+      </button>
+    </div>
+    @if (error()) {
+      <p class="member-row__error" role="alert">{{ error() }}</p>
+    }
+  </article>
+} @else {
+  <article class="member-row">
+    <app-avatar [url]="collaborator().avatar" [size]="40" />
+    <div class="member-row__identity">
+      <h4 class="member-row__name">{{ collaborator().firstName }} {{ collaborator().lastName }}</h4>
+      <span class="member-row__role">{{ collaborator().role || "Роль не указана" }}</span>
+      <p class="member-row__description">
+        {{ isLeader() ? "Руководитель проекта" : "Участник проекта" }}
+        @if (isCurrentUser()) {
+          <span class="member-row__you"> · Вы</span>
+        }
+      </p>
+    </div>
+    <span class="member-row__status">В команде</span>
+    <div class="member-row__actions">
+      <button
+        appButton="danger"
+        type="button"
+        class="member-row__action member-row__action--danger"
+        [attr.aria-label]="
+          'Исключить участника: ' + collaborator().firstName + ' ' + collaborator().lastName
+        "
+        title="Исключить участника"
+        [disabled]="removing()"
+        [attr.aria-busy]="removing()"
+        (click)="onDeleteCollaborator(collaborator().userId)"
+      >
+        <i
+          appIcon
+          icon="basket"
+          appWidth="13"
+          appHeight="15"
+          appViewBox="0 0 13 15"
+          aria-hidden="true"
+        ></i>
+        <span class="member-row__action-label">{{ removing() ? "Исключаем…" : "Исключить" }}</span>
+      </button>
+    </div>
+    @if (error()) {
+      <app-state class="member-row__error" [compact]="true" kind="error" title="{{ error() }}" />
+    }
+  </article>
+}

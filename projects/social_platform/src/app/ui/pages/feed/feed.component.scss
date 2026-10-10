@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 
 .page {
@@ -37,5 +36,37 @@
   &__item {
     display: grid;
     min-width: 0;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .page {
+    &__feed {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      @media (max-width: 999px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    .page {
+      padding-top: 24px;
+      margin: 0 var(--page-gutter);
+    }
+
+    .filter {
+      position: fixed;
+      z-index: 300;
+    }
+
+    .filter__body {
+      min-height: 0;
+      max-height: calc(var(--visual-viewport-height, 100dvh) - 80px);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      overscroll-behavior: contain;
+    }
   }
 }

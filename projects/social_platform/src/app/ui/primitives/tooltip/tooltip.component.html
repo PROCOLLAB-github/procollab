@@ -1,43 +1,96 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <i
+    cdkOverlayOrigin
+    #tooltipOrigin="cdkOverlayOrigin"
+    appIcon
+    icon="hint"
+    [appSquare]="iconSize()"
+    class="tooltip__icon"
+    [class]="customClass()"
+    (mouseenter)="show.emit()"
+    (mouseleave)="hide.emit()"
+    [style.color]="color() === 'accent' ? 'var(--accent)' : 'var(--grey-for-text)'"
+  ></i>
+  @if (!useOverlay()) {
+    <span
+      class="tooltip__content text-body-10"
+      [class.tooltip__content--visible]="isVisible()"
+      [class.tooltip__content--left]="position() === 'left'"
+      [class.tooltip__content--right]="position() === 'right'"
+      [style.width.px]="tooltipWidth()"
+    >
+      {{ text() }}
+    </span>
+  }
 
-<i
-  cdkOverlayOrigin
-  #tooltipOrigin="cdkOverlayOrigin"
-  appIcon
-  icon="hint"
-  [appSquare]="iconSize()"
-  class="tooltip__icon"
-  [class]="customClass()"
-  (mouseenter)="show.emit()"
-  (mouseleave)="hide.emit()"
-  [style.color]="color() === 'accent' ? 'var(--accent)' : 'var(--grey-for-text)'"
-></i>
-@if (!useOverlay()) {
-  <span
-    class="tooltip__content text-body-10"
-    [class.tooltip__content--visible]="isVisible()"
-    [class.tooltip__content--left]="position() === 'left'"
-    [class.tooltip__content--right]="position() === 'right'"
-    [style.width.px]="tooltipWidth()"
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="tooltipOrigin"
+    [cdkConnectedOverlayOpen]="useOverlay() && isVisible()"
+    [cdkConnectedOverlayPositions]="overlayPositions"
+    [cdkConnectedOverlayPush]="true"
+    (positionChange)="onOverlayPositionChange($event)"
   >
-    {{ text() }}
-  </span>
+    <span
+      class="tooltip__content tooltip__content--overlay text-body-10"
+      [class.tooltip__content--overlay-left]="currentOverlayPlacement === 'left'"
+      [class.tooltip__content--overlay-right]="currentOverlayPlacement === 'right'"
+      [style.width.px]="tooltipWidth()"
+    >
+      {{ text() }}
+    </span>
+  </ng-template>
+} @else {
+  <i
+    cdkOverlayOrigin
+    #tooltipOrigin="cdkOverlayOrigin"
+    appIcon
+    icon="hint"
+    [appSquare]="iconSize()"
+    class="tooltip__icon"
+    [class]="customClass()"
+    tabindex="0"
+    role="button"
+    aria-label="Подсказка"
+    [attr.aria-expanded]="isVisible()"
+    (mouseenter)="!mobileOverlay() && show.emit()"
+    (mouseleave)="!mobileOverlay() && hide.emit()"
+    (click)="$event.stopPropagation(); isVisible() ? hide.emit() : show.emit()"
+    (keydown.enter)="$event.stopPropagation(); isVisible() ? hide.emit() : show.emit()"
+    (keydown.escape)="hide.emit()"
+    [style.color]="color() === 'accent' ? 'var(--accent)' : 'var(--grey-for-text)'"
+  ></i>
+  @if (!useOverlay() && !mobileOverlay()) {
+    <span
+      class="tooltip__content text-body-10"
+      [class.tooltip__content--visible]="isVisible()"
+      [class.tooltip__content--left]="position() === 'left'"
+      [class.tooltip__content--right]="position() === 'right'"
+      [style.width.px]="tooltipWidth()"
+    >
+      {{ text() }}
+    </span>
+  }
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="tooltipOrigin"
+    [cdkConnectedOverlayOpen]="(useOverlay() || mobileOverlay()) && isVisible()"
+    [cdkConnectedOverlayPositions]="overlayPositions"
+    [cdkConnectedOverlayPush]="true"
+    [cdkConnectedOverlayViewportMargin]="12"
+    (overlayOutsideClick)="hide.emit()"
+    (positionChange)="onOverlayPositionChange($event)"
+  >
+    <span
+      class="tooltip__content tooltip__content--overlay text-body-10"
+      [class.tooltip__content--overlay-left]="currentOverlayPlacement === 'left'"
+      [class.tooltip__content--overlay-right]="currentOverlayPlacement === 'right'"
+      [style.width.px]="tooltipWidth()"
+    >
+      {{ text() }}
+    </span>
+  </ng-template>
 }
-
-<ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="tooltipOrigin"
-  [cdkConnectedOverlayOpen]="useOverlay() && isVisible()"
-  [cdkConnectedOverlayPositions]="overlayPositions"
-  [cdkConnectedOverlayPush]="true"
-  (positionChange)="onOverlayPositionChange($event)"
->
-  <span
-    class="tooltip__content tooltip__content--overlay text-body-10"
-    [class.tooltip__content--overlay-left]="currentOverlayPlacement === 'left'"
-    [class.tooltip__content--overlay-right]="currentOverlayPlacement === 'right'"
-    [style.width.px]="tooltipWidth()"
-  >
-    {{ text() }}
-  </span>
-</ng-template>

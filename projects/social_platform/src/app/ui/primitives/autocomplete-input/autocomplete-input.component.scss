@@ -1,4 +1,7 @@
+/** @format */
 @use "styles/typography";
+@use "styles/ui-foundation";
+@use "styles/responsive";
 
 .field {
   position: relative;
@@ -52,7 +55,7 @@
     &:focus {
       border-color: var(--accent);
 
-      +&_arrow {
+      + &_arrow {
         color: var(--accent);
 
         i {
@@ -146,5 +149,106 @@
 
   &__loading-icon {
     margin-right: 5px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .field {
+    &__input {
+      &:focus {
+        box-shadow: var(--ui-focus-ring);
+      }
+
+      @include ui-foundation.control;
+    }
+
+    &__input-slim {
+      font-size: var(--ui-font-small);
+
+      &:focus {
+        + &_arrow {
+          color: var(--accent);
+
+          i {
+            transform: rotate(0);
+          }
+        }
+      }
+
+      @include ui-foundation.control;
+    }
+
+    &__dropdown {
+      position: relative;
+
+      &--options,
+      &--no-results {
+        max-height: min(300px, calc(var(--visual-viewport-height, 100dvh) - 24px));
+        overscroll-behavior: contain;
+      }
+    }
+  }
+
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .field,
+  .search,
+  .search__input {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
+
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
+
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
+
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
+
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
+
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
+    }
+  }
+
+  .field__input,
+  .field__input-slim {
+    padding-right: 44px;
   }
 }

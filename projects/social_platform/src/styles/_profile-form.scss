@@ -1,0 +1,60 @@
+/** @format */
+@use "responsive";
+
+@mixin responsive-layout {
+  :host,
+  fieldset,
+  .profile__column {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @include responsive.apply-mobile {
+    .profile__main--grid,
+    .profile__wrapper--links,
+    .profile__wrapper--education,
+    .profile__wrapper--experience,
+    .profile__wrapper--achievements,
+    .profile__language--list,
+    .profile__column--date {
+      @include responsive.single-column;
+    }
+
+    .profile__row {
+      flex-wrap: wrap;
+    }
+
+    .profile__column fieldset .error {
+      position: static;
+      margin-top: 6px;
+    }
+
+    .profile__education--card {
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .profile__education--info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .edit-icon,
+    .basket-icon {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  @include responsive.apply-tablet {
+    .profile__main--grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.

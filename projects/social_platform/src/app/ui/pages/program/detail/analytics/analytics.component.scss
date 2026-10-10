@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 
 .analytics {
@@ -216,13 +215,13 @@
 
   &--skeleton {
     min-height: 92px;
-    background:
-      linear-gradient(
-        90deg,
-        var(--light-gray) 20%,
-        var(--medium-grey-for-outline) 50%,
-        var(--light-gray) 80%
-      );
+    /* stylelint-disable-next-line declaration-colon-newline-after */
+    background: linear-gradient(
+      90deg,
+      var(--light-gray) 20%,
+      var(--medium-grey-for-outline) 50%,
+      var(--light-gray) 80%
+    );
     background-size: 200% 100%;
     animation: analytics-skeleton 1.3s ease-in-out infinite;
   }
@@ -928,5 +927,162 @@
 
   to {
     background-position: -100% 0;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .analytics {
+    &__heading-row {
+      h2 {
+        font-size: var(--ui-font-h3);
+      }
+    }
+  }
+
+  .summary {
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 600px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .summary-card,
+  .analytics-card,
+  .regions,
+  .attention,
+  .activity {
+    box-shadow: var(--ui-chart-shadow);
+  }
+
+  .summary-card {
+    &__value {
+      font-size: var(--ui-font-h1);
+    }
+  }
+
+  .analytics-card {
+    &__title {
+      font-size: var(--ui-font-h3);
+    }
+
+    &__subtitle {
+      font-size: var(--ui-font-body);
+    }
+
+    &__section-label {
+      font-size: var(--ui-font-body);
+    }
+  }
+
+  .cases-card {
+    &__title {
+      font-size: var(--ui-font-h3);
+    }
+  }
+
+  .case-row {
+    &__name {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
+      font-size: var(--ui-font-small);
+    }
+
+    &__total-value {
+      font-size: var(--ui-font-h2);
+    }
+
+    &__total-label,
+    &__meta {
+      font-size: var(--ui-font-caption);
+    }
+  }
+
+  .funnel {
+    &__bar {
+      background: linear-gradient(90deg, var(--accent-light), var(--ui-accent-gradient-end));
+    }
+  }
+
+  .status-list {
+    li {
+      strong {
+        font-size: var(--ui-font-h2);
+      }
+    }
+
+    &--compact {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+
+      li {
+        flex-direction: column;
+      }
+
+      @media screen and (max-width: 520px) {
+        grid-template-columns: 1fr;
+
+        li {
+          flex-direction: row;
+        }
+      }
+    }
+  }
+
+  .evaluation {
+    &__limit {
+      strong {
+        font-size: var(--ui-font-body);
+      }
+    }
+  }
+
+  .activity {
+    &__y-axis span {
+      font-size: var(--ui-font-small);
+    }
+
+    &__helper,
+    &__readout {
+      font-size: var(--ui-font-small);
+    }
+
+    &__date-target {
+      &:hover,
+      &--selected {
+        background: var(--ui-accent-tint-chart);
+      }
+    }
+
+    &__legend {
+      span {
+        font-size: var(--ui-font-small);
+      }
+    }
+
+    &__axis {
+      span {
+        font-size: var(--ui-font-caption);
+      }
+    }
+  }
+
+  .regions__export-message {
+    font-size: var(--ui-font-small);
+  }
+
+  .attention .attention__list .attention__action.ui-button {
+    width: 100%;
+    padding: 14px 12px;
+    font: inherit;
+    color: var(--black);
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      background: transparent;
+    }
   }
 }

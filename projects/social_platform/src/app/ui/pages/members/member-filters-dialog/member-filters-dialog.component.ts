@@ -1,4 +1,15 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import {
+  ButtonDirective,
+  DialogBodyDirective,
+  DialogFooterDirective,
+  DialogHeaderComponent,
+} from "@uilib";
+
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import {
   AfterViewInit,
@@ -23,13 +34,23 @@ import { MembersFiltersComponent } from "../members-filters/members-filters.comp
 /** Мобильная оболочка существующей формы фильтров; значения принадлежат странице, а не окну. */
 @Component({
   selector: "app-member-filters-dialog",
-  imports: [ModalComponent, A11yModule, MembersFiltersComponent],
+  imports: [
+    DialogHeaderComponent,
+    DialogBodyDirective,
+    DialogFooterDirective,
+    ButtonDirective,
+    ModalComponent,
+    A11yModule,
+    MembersFiltersComponent,
+  ],
   templateUrl: "./member-filters-dialog.component.html",
   styleUrl: "./member-filters-dialog.component.scss",
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemberFiltersDialogComponent implements AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly filterForm = input.required<MembersUIInfoService["filterForm"]>();
   readonly trigger = input<HTMLElement | null>(null);
   readonly closed = output<void>();

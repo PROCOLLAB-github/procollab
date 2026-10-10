@@ -1,7 +1,24 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input, OnInit } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../services/desktop-layout.service";
 
+import { ChangeDetectionStrategy, Component, computed, input } from "@angular/core";
+
+/**
+ * Компонент индикатора загрузки с настраиваемым внешним видом.
+ * Поддерживает различные типы анимации и настройки цвета, размера, скорости.
+ *
+ * Входящие параметры:
+ * - speed: скорость анимации (по умолчанию "1s")
+ * - size: размер индикатора (по умолчанию "47px")
+ * - color: цвет индикатора (по умолчанию "white")
+ * - type: тип анимации ("wave" | "circle", по умолчанию "wave")
+ *
+ * Использование:
+ * - Для показа состояния загрузки в кнопках, формах и других элементах
+ * - Настраиваемый размер и цвет под дизайн приложения
+ */
 @Component({
   selector: "app-loader",
   templateUrl: "./loader.component.html",
@@ -9,11 +26,23 @@ import { ChangeDetectionStrategy, Component, input, Input, OnInit } from "@angul
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoaderComponent implements OnInit {
-  readonly speed = input<string>("1s");
-  readonly size = input<string>("15px");
-  readonly color = input<string>("white");
-  readonly type = input<"wave" | "circle">("circle");
+export class LoaderComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
 
-  ngOnInit(): void {}
+  /** Скорость анимации */
+  speed = input("1s");
+
+  /** Размер индикатора */
+  size = input("15px");
+
+  /** Цвет индикатора */
+  color = input("white");
+
+  /** Тип анимации */
+  type = input<"wave" | "circle">("circle");
+  protected readonly resolvedColor = computed(() =>
+    /^(?:var\(|#|rgb|hsl|currentColor|transparent)/.test(this.color())
+      ? this.color()
+      : `var(--${this.color()})`,
+  );
 }

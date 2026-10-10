@@ -191,3 +191,46 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .feed-news-modal {
+    font-size: var(--ui-font-body);
+
+    &__header {
+      gap: 12px;
+      padding: 12px 20px;
+    }
+
+    &__badge {
+      font-size: var(--ui-font-caption);
+    }
+
+    time {
+      font-size: var(--ui-font-caption);
+    }
+
+    button.feed-news-modal__close {
+      border-radius: var(--ui-radius-dialog);
+    }
+
+    &__scroll {
+      padding: 20px;
+    }
+
+    &__source span {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media (max-width: 599px) {
+      &__header {
+        gap: 8px;
+        padding: 10px 12px;
+      }
+
+      &__scroll {
+        padding: 16px;
+      }
+    }
+  }
+}

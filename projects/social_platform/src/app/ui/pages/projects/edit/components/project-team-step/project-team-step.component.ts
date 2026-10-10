@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { StateComponent } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,6 +29,7 @@ import { ProjectMemberInviteModalComponent } from "@ui/widgets/project-invite/pr
   templateUrl: "./project-team-step.component.html",
   styleUrl: "./project-team-step.component.scss",
   imports: [
+    StateComponent,
     ButtonComponent,
     IconComponent,
     InviteCardComponent,
@@ -32,6 +39,8 @@ import { ProjectMemberInviteModalComponent } from "@ui/widgets/project-invite/pr
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
   private readonly projectTeamService = inject(ProjectTeamService);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);

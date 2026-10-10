@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, FieldDirective } from "@uilib";
+
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -18,12 +24,14 @@ import { filterProjectRoles } from "@domain/invite/project-role-suggestions";
 let nextRoleId = 0;
 @Component({
   selector: "app-project-invite-role-input",
-  imports: [ReactiveFormsModule],
+  imports: [ButtonDirective, FieldDirective, ReactiveFormsModule],
   templateUrl: "./project-invite-role-input.component.html",
   styleUrl: "./project-invite-role-input.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectInviteRoleInputComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly control = input.required<FormControl<string>>();
   readonly readonly = input(false);
   readonly id = "invite-role-" + ++nextRoleId;

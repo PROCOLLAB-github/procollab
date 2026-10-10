@@ -1,6 +1,6 @@
 /** @format */
-
 @use "styles/feed-card";
+@use "styles/ui-foundation";
 
 :host {
   display: grid;
@@ -178,5 +178,33 @@
     padding: 8px;
     font-size: 12px;
     text-align: left;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .feed-preview {
+    @include ui-foundation.card;
+
+    &__image-count {
+      font-size: var(--ui-font-caption);
+      background: var(--ui-media-backdrop);
+    }
+
+    button.feed-preview__more {
+      font-size: var(--ui-font-small);
+    }
+
+    &__attachments {
+      font-size: var(--ui-font-caption);
+    }
+
+    &__actions {
+      font-size: var(--ui-font-small);
+    }
+
+    &__options button {
+      font-size: var(--ui-font-small);
+    }
   }
 }

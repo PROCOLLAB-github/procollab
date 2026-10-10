@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -39,6 +44,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     },
   ],
   imports: [
+    ButtonDirective,
     IconComponent,
     NgxMaskDirective,
     AutosizeModule,
@@ -49,6 +55,8 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
 

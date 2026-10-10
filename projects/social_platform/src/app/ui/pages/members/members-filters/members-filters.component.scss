@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -58,6 +59,15 @@
 
     span {
       color: var(--dark-grey);
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .filters {
+    &__age {
+      font-size: var(--ui-font-small);
     }
   }
 }

@@ -1,4 +1,6 @@
 /** @format */
+@use "styles/ui-foundation";
+@use "styles/responsive";
 
 .field {
   position: relative;
@@ -18,5 +20,38 @@
 
   &__check {
     color: var(--light-white);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .field {
+    @include ui-foundation.choice;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: var(--ui-disabled-opacity);
+    }
+  }
+
+  @include responsive.apply-mobile {
+    :host {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .field::before {
+      position: absolute;
+      inset: -12px;
+      content: "";
+    }
   }
 }

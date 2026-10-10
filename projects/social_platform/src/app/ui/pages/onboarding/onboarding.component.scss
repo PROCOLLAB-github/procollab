@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 .page {
@@ -116,6 +117,29 @@
 
     @include responsive.apply-desktop {
       display: block;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .page {
+      padding: 16px var(--page-gutter);
+    }
+
+    .header {
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .header__steps {
+      @include responsive.scroll-tabs;
+    }
+
+    .step__number {
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 }

@@ -21,13 +21,19 @@
     'button--big--icon': size() === 'big' && type() === 'icon',
   }"
   [style.background-color]="backgroundColor()"
-  [disabled]="disabled()"
+  [disabled]="disabled() || (!releaseDesktop() && loader())"
+  [attr.aria-busy]="loader() || null"
 >
+  <span
+    class="button__label"
+    [style.display]="releaseDesktop() ? (loader() ? 'none' : 'contents') : null"
+    [style.visibility]="!releaseDesktop() && loader() ? 'hidden' : null"
+  >
+    <ng-content></ng-content>
+  </span>
   @if (loader()) {
-    <app-loader [color]="appearance() === 'inline' ? 'white' : 'gray'"></app-loader>
-  } @else {
-    <ng-container>
-      <ng-content></ng-content>
-    </ng-container>
+    <span class="button__loader" [style.display]="releaseDesktop() ? 'contents' : null">
+      <app-loader [color]="appearance() === 'inline' ? 'white' : 'gray'"></app-loader>
+    </span>
   }
 </button>

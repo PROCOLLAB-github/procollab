@@ -1,13 +1,27 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <main class="page">
+    <div class="page__bar">
+      <app-back namespace="программы" path="/office/feed"></app-back>
 
-<main class="page">
-  <div class="page__bar">
-    <app-back namespace="программы" path="/office/feed"></app-back>
+      <form class="page__search" [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    </div>
 
-    <form class="page__search" [formGroup]="searchForm">
-      <app-search formControlName="search"></app-search>
-    </form>
-  </div>
+    <router-outlet></router-outlet>
+  </main>
+} @else {
+  <main class="page">
+    <div class="page__bar">
+      <app-page-header title="программы" backRoute="/office/feed" />
 
-  <router-outlet></router-outlet>
-</main>
+      <form appFormLayout class="page__search" [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+}

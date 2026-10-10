@@ -1,3 +1,5 @@
+/** @format */
+
 @mixin expandable-list {
   &__remaining {
     display: grid;
@@ -238,5 +240,24 @@
 
   &:hover {
     color: var(--accent-dark);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .lists {
+    &__program-card {
+      &:hover {
+        box-shadow: var(--ui-panel-shadow);
+      }
+    }
+
+    &__program-name {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
+
+      &--compact {
+        font-size: var(--ui-font-caption);
+      }
+    }
   }
 }

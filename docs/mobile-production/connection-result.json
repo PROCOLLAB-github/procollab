@@ -1,0 +1,10 @@
+{
+  "width": 390,
+  "syntheticWebSocket": true,
+  "httpAvailable": true,
+  "noGlobalNotification": true,
+  "automaticReconnect": true,
+  "secondOutageSilent": true,
+  "onlineStatusesAfterReconnect": true,
+  "passed": true
+}

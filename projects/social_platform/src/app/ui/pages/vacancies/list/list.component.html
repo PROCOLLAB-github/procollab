@@ -1,38 +1,99 @@
 <!-- @format -->
-
-<div class="page" #vacancyRoot>
-  @if (type() === "all") {
-    <div class="page__vacancies">
-      @for (vacancy of vacancyList(); track vacancy.id) {
-        <app-project-vacancy-card
-          type="vacancies"
-          [vacancy]="vacancy"
-          class="page__item"
-        ></app-project-vacancy-card>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="page" #vacancyRoot>
+    @if (type() === "all") {
+      <div class="page__vacancies">
+        @for (vacancy of vacancyList(); track vacancy.id) {
+          <app-project-vacancy-card
+            type="vacancies"
+            [vacancy]="vacancy"
+            class="page__item"
+          ></app-project-vacancy-card>
+        }
+      </div>
+      @if (hasNoResults()) {
+        <section class="page__vacancies--no-items">
+          <h2>Вакансии не найдены</h2>
+          <p>Попробуйте изменить запрос или сбросить фильтры.</p>
+          <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
+            >Сбросить фильтры</app-button
+          >
+        </section>
       }
-    </div>
-    @if (hasNoResults()) {
-      <section class="page__vacancies--no-items">
-        <h2>Вакансии не найдены</h2>
-        <p>Попробуйте изменить запрос или сбросить фильтры.</p>
-        <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
-          >Сбросить фильтры</app-button
-        >
-      </section>
     }
-  }
-  @if (type() === "my") {
-    @for (response of responsesList(); track response.id) {
-      <app-response-card [response]="response"></app-response-card>
-    } @empty {
-      <section class="page__vacancies--no-items">
-        <i appIcon icon="empty-chat" appSquare="38" aria-hidden="true"></i>
-        <h2>У вас пока нет откликов</h2>
-        <p>Найдите подходящую вакансию и расскажите проекту о себе.</p>
-        <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
-          >Перейти к вакансиям</app-button
-        >
-      </section>
+    @if (type() === "my") {
+      @for (response of responsesList(); track response.id) {
+        <app-response-card [response]="response"></app-response-card>
+      } @empty {
+        <section class="page__vacancies--no-items">
+          <i appIcon icon="empty-chat" appSquare="38" aria-hidden="true"></i>
+          <h2>У вас пока нет откликов</h2>
+          <p>Найдите подходящую вакансию и расскажите проекту о себе.</p>
+          <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
+            >Перейти к вакансиям</app-button
+          >
+        </section>
+      }
     }
-  }
-</div>
+  </div>
+} @else {
+  <div class="page" #vacancyRoot>
+    @if (type() === "all") {
+      <div class="page__vacancies">
+        @for (vacancy of vacancyList(); track vacancy.id) {
+          <app-project-vacancy-card
+            type="vacancies"
+            [vacancy]="vacancy"
+            class="page__item"
+          ></app-project-vacancy-card>
+        }
+      </div>
+      @if (hasNoResults()) {
+        @if (desktopLayout()) {
+          <section class="page__vacancies--no-items">
+            <h2>Вакансии не найдены</h2>
+            <p>Попробуйте изменить запрос или сбросить фильтры.</p>
+            <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
+              >Сбросить фильтры</app-button
+            >
+          </section>
+        } @else {
+          <app-state
+            title="Вакансии не найдены"
+            description="Попробуйте изменить запрос или сбросить фильтры."
+          >
+            <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
+              >Сбросить фильтры</app-button
+            >
+          </app-state>
+        }
+      }
+    }
+    @if (type() === "my") {
+      @for (response of responsesList(); track response.id) {
+        <app-response-card [response]="response"></app-response-card>
+      } @empty {
+        @if (desktopLayout()) {
+          <section class="page__vacancies--no-items">
+            <i appIcon icon="empty-chat" appSquare="38" aria-hidden="true"></i>
+            <h2>У вас пока нет откликов</h2>
+            <p>Найдите подходящую вакансию и расскажите проекту о себе.</p>
+            <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
+              >Перейти к вакансиям</app-button
+            >
+          </section>
+        } @else {
+          <app-state
+            title="У вас пока нет откликов"
+            description="Найдите подходящую вакансию и расскажите проекту о себе."
+          >
+            <app-button size="big" [routerLink]="AppRoutes.office.vacancies()"
+              >Перейти к вакансиям</app-button
+            >
+          </app-state>
+        }
+      }
+    }
+  </div>
+}

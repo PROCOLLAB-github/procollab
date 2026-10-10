@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/typography";
 
 .carousel {
@@ -103,6 +102,23 @@
 
     &--show {
       transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .carousel {
+    /* Лента задаёт высоту preview; остальные страницы сохраняют естественный размер изображения. */
+
+    /* Опциональный режим чтения: contain сохраняет весь кадр даже при ограничении по высоте. */
+
+    &__indexes {
+      background-color: var(--ui-media-button);
+    }
+
+    &__btn {
+      background-color: var(--ui-media-button-active);
     }
   }
 }

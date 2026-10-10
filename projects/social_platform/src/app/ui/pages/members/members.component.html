@@ -1,88 +1,190 @@
 <!-- @format -->
-<section class="page" #membersRoot>
-  <app-back namespace="участники" [path]="AppRoutes.office.feed()"></app-back>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <section class="page" #membersRoot>
+    <app-back namespace="участники" [path]="AppRoutes.office.feed()"></app-back>
 
-  @if (compactLayout()) {
-    <div class="page__bar">
-      <form class="page__search" [formGroup]="searchForm">
-        <input
-          class="page__search-input"
-          type="search"
-          formControlName="search"
-          aria-label="Поиск участников"
-          placeholder="имя или фамилия участника"
-        />
-      </form>
-      <div class="page__actions">
-        <button
-          #filtersButton
-          type="button"
-          class="page__action page__action--filters"
-          aria-haspopup="dialog"
-          [attr.aria-expanded]="filtersOpen()"
-          (click)="openFilters(filtersButton)"
-        >
-          Фильтры
-        </button>
-        <button type="button" class="page__action" (click)="redirectToProfile()">
-          Перейти в профиль
-        </button>
-      </div>
-      <ng-container *ngTemplateOutlet="statistics" />
-      <ng-container *ngTemplateOutlet="membersList" />
-    </div>
-  } @else {
-    <div class="page__bar">
-      <div class="page__info">
-        <div class="page__outlet">
-          <form [formGroup]="searchForm">
-            <app-search
-              formControlName="search"
-              placeholder="имя или фамилия участника"
-              [openable]="containerSm < appWidth"
-            />
-          </form>
-          <ng-container *ngTemplateOutlet="membersList" />
-        </div>
-      </div>
-      <div class="page__create">
-        <app-button
-          size="medium"
-          (click)="redirectToProfile()"
-          customTypographyClass="text-body-12"
-        >
-          перейти в профиль
-        </app-button>
-        <div class="page__left">
-          <app-members-filters
-            class="page__filter"
-            [filterForm]="filterForm"
-            (resetRequested)="resetFilters()"
+    @if (compactLayout()) {
+      <div class="page__bar">
+        <form class="page__search" [formGroup]="searchForm">
+          <input
+            class="page__search-input"
+            type="search"
+            formControlName="search"
+            aria-label="Поиск участников"
+            placeholder="имя или фамилия участника"
           />
-          <ng-container *ngTemplateOutlet="statistics" />
+        </form>
+        <div class="page__actions">
+          <button
+            #filtersButton
+            type="button"
+            class="page__action page__action--filters"
+            aria-haspopup="dialog"
+            [attr.aria-expanded]="filtersOpen()"
+            (click)="openFilters(filtersButton)"
+          >
+            Фильтры
+          </button>
+          <button type="button" class="page__action" (click)="redirectToProfile()">
+            Перейти в профиль
+          </button>
+        </div>
+        <ng-container *ngTemplateOutlet="statistics" />
+        <ng-container *ngTemplateOutlet="membersList" />
+      </div>
+    } @else {
+      <div class="page__bar">
+        <div class="page__info">
+          <div class="page__outlet">
+            <form [formGroup]="searchForm">
+              <app-search
+                formControlName="search"
+                placeholder="имя или фамилия участника"
+                [openable]="containerSm < appWidth"
+              />
+            </form>
+            <ng-container *ngTemplateOutlet="membersList" />
+          </div>
+        </div>
+        <div class="page__create">
+          <app-button
+            size="medium"
+            (click)="redirectToProfile()"
+            customTypographyClass="text-body-12"
+          >
+            перейти в профиль
+          </app-button>
+          <div class="page__left">
+            <app-members-filters
+              class="page__filter"
+              [filterForm]="filterForm"
+              (resetRequested)="resetFilters()"
+            />
+            <ng-container *ngTemplateOutlet="statistics" />
+          </div>
         </div>
       </div>
-    </div>
-  }
+    }
 
-  <ng-template #membersList>
-    <ul class="page__list">
-      @for (member of members(); track member.id) {
-        <li><app-member-card [member]="member" /></li>
-      }
-    </ul>
-  </ng-template>
-  <ng-template #statistics>
-    <div class="page__statistics">
-      <app-member-statistics-card [state]="statisticsState()" />
-    </div>
-  </ng-template>
-  @if (filtersOpen() && compactLayout()) {
-    <app-member-filters-dialog
-      [filterForm]="filterForm"
-      [trigger]="filtersTrigger"
-      (closed)="filtersOpen.set(false)"
-      (resetRequested)="resetFilters()"
-    />
-  }
-</section>
+    <ng-template #membersList>
+      <ul class="page__list">
+        @for (member of members(); track member.id) {
+          <li><app-member-card [member]="member" /></li>
+        }
+      </ul>
+    </ng-template>
+    <ng-template #statistics>
+      <div class="page__statistics">
+        <app-member-statistics-card [state]="statisticsState()" />
+      </div>
+    </ng-template>
+    @if (filtersOpen() && compactLayout()) {
+      <app-member-filters-dialog
+        [filterForm]="filterForm"
+        [trigger]="filtersTrigger"
+        (closed)="filtersOpen.set(false)"
+        (resetRequested)="resetFilters()"
+      />
+    }
+  </section>
+} @else {
+  <section class="page" #membersRoot>
+    <app-page-header title="участники" [backRoute]="AppRoutes.office.feed()" />
+
+    @if (compactLayout()) {
+      <div class="page__bar">
+        <form appFormLayout class="page__search" [formGroup]="searchForm">
+          <input
+            appField
+            class="page__search-input"
+            type="search"
+            formControlName="search"
+            aria-label="Поиск участников"
+            placeholder="имя или фамилия участника"
+          />
+        </form>
+        <div class="page__actions">
+          <button
+            appButton="secondary"
+            #filtersButton
+            type="button"
+            class="page__action page__action--filters"
+            aria-haspopup="dialog"
+            [attr.aria-expanded]="filtersOpen()"
+            (click)="openFilters(filtersButton)"
+          >
+            Фильтры
+          </button>
+          <button
+            appButton="secondary"
+            type="button"
+            class="page__action"
+            (click)="redirectToProfile()"
+          >
+            Перейти в профиль
+          </button>
+        </div>
+        <ng-container *ngTemplateOutlet="statistics" />
+        <ng-container *ngTemplateOutlet="membersList" />
+      </div>
+    } @else {
+      <div class="page__bar">
+        <div class="page__info">
+          <div class="page__outlet">
+            <form appFormLayout [formGroup]="searchForm">
+              <app-search
+                formControlName="search"
+                placeholder="имя или фамилия участника"
+                [openable]="containerSm < appWidth"
+              />
+            </form>
+            <ng-container *ngTemplateOutlet="membersList" />
+          </div>
+        </div>
+        <div class="page__create">
+          <app-button
+            size="medium"
+            (click)="redirectToProfile()"
+            customTypographyClass="text-body-12"
+          >
+            перейти в профиль
+          </app-button>
+          <div class="page__left">
+            <app-members-filters
+              class="page__filter"
+              [filterForm]="filterForm"
+              (resetRequested)="resetFilters()"
+            />
+            <ng-container *ngTemplateOutlet="statistics" />
+          </div>
+        </div>
+      </div>
+    }
+
+    <ng-template #membersList>
+      <ul class="page__list">
+        @for (member of members(); track member.id) {
+          <li><app-member-card [member]="member" /></li>
+        } @empty {
+          @if (compactLayout()) {
+            <li><app-state title="Ничего не найдено" /></li>
+          }
+        }
+      </ul>
+    </ng-template>
+    <ng-template #statistics>
+      <div class="page__statistics">
+        <app-member-statistics-card [state]="statisticsState()" />
+      </div>
+    </ng-template>
+    @if (filtersOpen() && compactLayout()) {
+      <app-member-filters-dialog
+        [filterForm]="filterForm"
+        [trigger]="filtersTrigger"
+        (closed)="filtersOpen.set(false)"
+        (resetRequested)="resetFilters()"
+      />
+    }
+  </section>
+}

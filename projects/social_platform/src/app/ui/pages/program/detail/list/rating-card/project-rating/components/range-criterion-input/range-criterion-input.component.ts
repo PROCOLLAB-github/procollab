@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FieldDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,6 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 /** Поле ввода числовых критериев с ограничением диапазона и ControlValueAccessor. */
 @Component({
+  imports: [FieldDirective],
   selector: "app-range-criterion-input",
   templateUrl: "./range-criterion-input.component.html",
   styleUrl: "./range-criterion-input.component.scss",
@@ -26,6 +32,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
   standalone: true,
 })
 export class RangeCriterionInputComponent implements ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly max = input<number>(10);
   readonly error = input<boolean>(false);
 

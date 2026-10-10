@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, FieldDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -18,7 +23,7 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
 
 @Component({
   selector: "app-region-select",
-  imports: [CommonModule, IconComponent],
+  imports: [ButtonDirective, FieldDirective, CommonModule, IconComponent],
   templateUrl: "./region-select.component.html",
   styleUrl: "./region-select.component.scss",
   providers: [
@@ -31,6 +36,8 @@ import { IconComponent } from "@ui/primitives/icon/icon.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegionSelectComponent implements ControlValueAccessor {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly id = input("region");
   readonly placeholder = input("Выберите регион");
   readonly ariaLabel = input("Регион проекта");

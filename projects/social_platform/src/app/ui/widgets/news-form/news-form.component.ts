@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -44,6 +49,7 @@ type FileUploadItem = {
   templateUrl: "./news-form.component.html",
   styleUrl: "./news-form.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     AutosizeModule,
     IconComponent,
@@ -54,6 +60,8 @@ type FileUploadItem = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsFormComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(

@@ -33,12 +33,10 @@ export class OnboardingStageOneUIInfoService {
   }
 
   applyInitFormValues(fv: UserInput): void {
-    this.stageForm.patchValue({
-      speciality: fv.speciality,
-    });
+    this.stageForm.patchValue({ speciality: fv.speciality }, { emitEvent: false });
   }
 
   applyInitSpeciality(fv: UserInput): void {
-    this.stageForm.patchValue({ speciality: fv.speciality });
+    this.stageForm.patchValue({ speciality: fv.speciality }, { emitEvent: false });
   }
 }

@@ -1,9 +1,14 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { DesktopLayoutService } from "@uilib";
+
+import { inject, ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { BackComponent } from "@uilib";
+import { BackComponent, TabsComponent } from "@uilib";
 
 /**
  * Компонент навигационной панели с табами и кнопкой "Назад".
@@ -35,12 +40,16 @@ interface BarLinks {
 /** Примитив: индикатор-полоса (progress/bar). */
 @Component({
   selector: "app-bar",
-  imports: [CommonModule, RouterLink, RouterLinkActive, BackComponent],
+  imports: [TabsComponent, CommonModule, RouterLink, RouterLinkActive, BackComponent],
   templateUrl: "./bar.component.html",
   styleUrl: "./bar.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   /** Массив навигационных ссылок */
   links = input.required<BarLinks[]>();
 

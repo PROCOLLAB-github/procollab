@@ -1,77 +1,155 @@
 <!-- @format -->
-
-<article class="vacancy">
-  <header class="vacancy__header">
-    <div class="vacancy__meta">
-      <app-vacancy-status
-        [label]="vacancy().isActive ? 'Активна' : 'Закрыта'"
-        [tone]="vacancy().isActive ? 'success' : 'neutral'"
-      ></app-vacancy-status>
-      @if (vacancy().datetimeCreated) {
-        <time class="vacancy__date" [attr.datetime]="vacancy().datetimeCreated">{{
-          vacancy().datetimeCreated | dayjs: "format" : "DD.MM.YYYY"
-        }}</time>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <article class="vacancy">
+    <header class="vacancy__header">
+      <div class="vacancy__meta">
+        <app-vacancy-status
+          [label]="vacancy().isActive ? 'Активна' : 'Закрыта'"
+          [tone]="vacancy().isActive ? 'success' : 'neutral'"
+        ></app-vacancy-status>
+        @if (vacancy().datetimeCreated) {
+          <time class="vacancy__date" [attr.datetime]="vacancy().datetimeCreated">{{
+            vacancy().datetimeCreated | dayjs: "format" : "DD.MM.YYYY"
+          }}</time>
+        }
+      </div>
+      <h3 class="vacancy__role" [title]="vacancy().role">
+        <a [routerLink]="AppRoutes.office.vacancy(vacancy().id)">{{ vacancy().role }}</a>
+      </h3>
+      @if (type() === "vacancies" && vacancy().project; as project) {
+        <a class="vacancy__project" [routerLink]="AppRoutes.projects.detail(project.id)">
+          <app-avatar
+            class="vacancy__project-avatar"
+            [url]="project.imageAddress"
+            [size]="40"
+          ></app-avatar>
+          <div class="vacancy__project-info">
+            <span class="vacancy__project-label">Проект</span>
+            <span class="vacancy__project-name" [title]="project.name">{{ project.name }}</span>
+          </div>
+        </a>
+      }
+      @if (vacancy().specialization) {
+        <p class="vacancy__specialization" [title]="vacancy().specialization">
+          Ищем: {{ vacancy().specialization }}
+        </p>
+      }
+    </header>
+    <p class="vacancy__salary">
+      {{
+        !vacancy().salary || +vacancy().salary === 0 ? "По договоренности" : vacancy().salary + " ₽"
+      }}
+    </p>
+    <app-vacancy-skills [skills]="vacancy().requiredSkills || []" [limit]="3"></app-vacancy-skills>
+    <div class="vacancy__description">
+      @if (vacancy().description) {
+        <p [innerHTML]="vacancy().description | parseLinks | parseBreaks"></p>
+      } @else {
+        <p class="vacancy__empty">Описание пока не добавлено</p>
       }
     </div>
-    <h3 class="vacancy__role" [title]="vacancy().role">
-      <a [routerLink]="AppRoutes.office.vacancy(vacancy().id)">{{ vacancy().role }}</a>
-    </h3>
-    @if (type() === "vacancies" && vacancy().project; as project) {
-      <a class="vacancy__project" [routerLink]="AppRoutes.projects.detail(project.id)">
-        <app-avatar
-          class="vacancy__project-avatar"
-          [url]="project.imageAddress"
-          [size]="40"
-        ></app-avatar>
-        <div class="vacancy__project-info">
-          <span class="vacancy__project-label">Проект</span>
-          <span class="vacancy__project-name" [title]="project.name">{{ project.name }}</span>
-        </div>
-      </a>
-    }
-    @if (vacancy().specialization) {
-      <p class="vacancy__specialization" [title]="vacancy().specialization">
-        Ищем: {{ vacancy().specialization }}
-      </p>
-    }
-  </header>
-  <p class="vacancy__salary">
-    {{
-      !vacancy().salary || +vacancy().salary === 0 ? "По договоренности" : vacancy().salary + " ₽"
-    }}
-  </p>
-  <app-vacancy-skills [skills]="vacancy().requiredSkills || []" [limit]="3"></app-vacancy-skills>
-  <div class="vacancy__description">
-    @if (vacancy().description) {
-      <p [innerHTML]="vacancy().description | parseLinks | parseBreaks"></p>
-    } @else {
-      <p class="vacancy__empty">Описание пока не добавлено</p>
-    }
-  </div>
-  <div class="vacancy__actions">
-    <app-button
-      class="vacancy__secondary-action"
-      [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
-      appearance="outline"
-      size="big"
-      >подробнее</app-button
-    >
-    @if (vacancy().canManageResponses) {
+    <div class="vacancy__actions">
       <app-button
-        class="vacancy__primary-action"
+        class="vacancy__secondary-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
-        [queryParams]="{ manageResponses: true }"
+        appearance="outline"
         size="big"
-        >посмотреть отклики</app-button
+        >подробнее</app-button
       >
-    } @else if (vacancy().canRespond && !vacancy().hasResponded) {
+      @if (vacancy().canManageResponses) {
+        <app-button
+          class="vacancy__primary-action"
+          [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
+          [queryParams]="{ manageResponses: true }"
+          size="big"
+          >посмотреть отклики</app-button
+        >
+      } @else if (vacancy().canRespond && !vacancy().hasResponded) {
+        <app-button
+          class="vacancy__response-action"
+          [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
+          [queryParams]="{ sendResponse: true }"
+          size="big"
+          >откликнуться</app-button
+        >
+      }
+    </div>
+  </article>
+} @else {
+  <article appCard class="vacancy">
+    <header class="vacancy__header">
+      <div class="vacancy__meta">
+        <app-vacancy-status
+          [label]="vacancy().isActive ? 'Активна' : 'Закрыта'"
+          [tone]="vacancy().isActive ? 'success' : 'neutral'"
+        ></app-vacancy-status>
+        @if (vacancy().datetimeCreated) {
+          <time class="vacancy__date" [attr.datetime]="vacancy().datetimeCreated">{{
+            vacancy().datetimeCreated | dayjs: "format" : "DD.MM.YYYY"
+          }}</time>
+        }
+      </div>
+      <h3 class="vacancy__role" [title]="vacancy().role">
+        <a [routerLink]="AppRoutes.office.vacancy(vacancy().id)">{{ vacancy().role }}</a>
+      </h3>
+      @if (type() === "vacancies" && vacancy().project; as project) {
+        <a class="vacancy__project" [routerLink]="AppRoutes.projects.detail(project.id)">
+          <app-avatar
+            class="vacancy__project-avatar"
+            [url]="project.imageAddress"
+            [size]="40"
+          ></app-avatar>
+          <div class="vacancy__project-info">
+            <span class="vacancy__project-label">Проект</span>
+            <span class="vacancy__project-name" [title]="project.name">{{ project.name }}</span>
+          </div>
+        </a>
+      }
+      @if (vacancy().specialization) {
+        <p class="vacancy__specialization" [title]="vacancy().specialization">
+          Ищем: {{ vacancy().specialization }}
+        </p>
+      }
+    </header>
+    <p class="vacancy__salary">
+      {{
+        !vacancy().salary || +vacancy().salary === 0 ? "По договоренности" : vacancy().salary + " ₽"
+      }}
+    </p>
+    <app-vacancy-skills [skills]="vacancy().requiredSkills || []" [limit]="3"></app-vacancy-skills>
+    <div class="vacancy__description">
+      @if (vacancy().description) {
+        <p [innerHTML]="vacancy().description | parseLinks | parseBreaks"></p>
+      } @else {
+        <p class="vacancy__empty">Описание пока не добавлено</p>
+      }
+    </div>
+    <div class="vacancy__actions">
       <app-button
-        class="vacancy__response-action"
+        class="vacancy__secondary-action"
         [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
-        [queryParams]="{ sendResponse: true }"
+        appearance="outline"
         size="big"
-        >откликнуться</app-button
+        >подробнее</app-button
       >
-    }
-  </div>
-</article>
+      @if (vacancy().canManageResponses) {
+        <app-button
+          class="vacancy__primary-action"
+          [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
+          [queryParams]="{ manageResponses: true }"
+          size="big"
+          >посмотреть отклики</app-button
+        >
+      } @else if (vacancy().canRespond && !vacancy().hasResponded) {
+        <app-button
+          class="vacancy__response-action"
+          [routerLink]="AppRoutes.office.vacancy(vacancy().id)"
+          [queryParams]="{ sendResponse: true }"
+          size="big"
+          >откликнуться</app-button
+        >
+      }
+    </div>
+  </article>
+}

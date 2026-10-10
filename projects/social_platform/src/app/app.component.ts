@@ -20,7 +20,6 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoadingService } from "@api/shared/loading.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ConnectionStatusToastService } from "@api/connection-status/connection-status-toast.service";
 
 /**
  * Корневой компонент приложения
@@ -44,10 +43,7 @@ export class AppComponent implements OnInit {
     private tokenService: TokenService,
     private router: Router,
     private loadingService: LoadingService,
-  ) {
-    // Инстанциируем listener для toast'а при потере WS-соединения.
-    inject(ConnectionStatusToastService);
-  }
+  ) {}
 
   ngOnInit(): void {
     const showLoaderEvents = this.router.events.pipe(
@@ -89,10 +85,30 @@ export class AppComponent implements OnInit {
     const loadEvent = fromEvent(window, "load");
     const resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
 
+    // visualViewport shrinks when the mobile keyboard opens; overlays must follow it.
+    const updateViewport = () => {
+      const viewport = window.visualViewport;
+      document.documentElement.style.setProperty(
+        "--visual-viewport-height",
+        `${viewport?.height ?? window.innerHeight}px`,
+      );
+      document.documentElement.style.setProperty(
+        "--visual-viewport-top",
+        `${viewport?.offsetTop ?? 0}px`,
+      );
+    };
+    updateViewport();
+    if (window.visualViewport) {
+      merge(fromEvent(window.visualViewport, "resize"), fromEvent(window.visualViewport, "scroll"))
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(updateViewport);
+    }
+
     merge(loadEvent, resizeEvent)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+        updateViewport();
       });
   }
 

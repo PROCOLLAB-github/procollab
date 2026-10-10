@@ -1,4 +1,6 @@
+/** @format */
 @use "styles/responsive";
+@use "styles/course-task";
 
 .video {
   width: 100%;
@@ -111,4 +113,9 @@
       color: var(--accent-dark);
     }
   }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  @include course-task.responsive-layout("video");
 }

@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
 import { RouterModule } from "@angular/router";
@@ -17,6 +20,8 @@ import { IndustryRepositoryPort } from "@domain/industry/ports/industry.reposito
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsLeftSideComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly project = input.required<Project | undefined>();
 
   protected readonly industryRepository = inject(IndustryRepositoryPort);

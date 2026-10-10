@@ -1,65 +1,158 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  <div class="project__left">
+    <div class="lists project__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">основное</h3>
+        <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+      </div>
 
-<div class="project__left">
-  <div class="lists project__section">
-    <div class="lists__section">
-      <h3 class="text-body-12 lists__title">основное</h3>
-      <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+      <ul class="lists__list">
+        <li class="lists__item">
+          <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Сфера</span>
+            <p class="text-body-10 lists__value card__industry">
+              @if (industryRepository.getOne(project()!.industry); as industry) {
+                {{ displayValue(industry?.name) }}
+              } @else {
+                Не указан
+              }
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Регион</span>
+            <p class="text-body-10 lists__value">{{ displayValue(project()!.region) }}</p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">TRL</span>
+            <p class="text-body-10 lists__value">{{ displayTrl(project()!.trl) }}</p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Срок реализации</span>
+            <p class="text-body-10 lists__value">
+              {{ displayValue(project()!.implementationDeadline) }}
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Лидер</span>
+            <a
+              class="text-body-10 lists__value lists__value--link"
+              [routerLink]="AppRoutes.profile.detail(project()!.leader)"
+            >
+              {{ leaderName(project()!) }}
+            </a>
+          </div>
+        </li>
+      </ul>
     </div>
-
-    <ul class="lists__list">
-      <li class="lists__item">
-        <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
-        <div class="lists__item-content">
-          <span class="text-body-10 lists__label">Сфера</span>
-          <p class="text-body-10 lists__value card__industry">
-            @if (industryRepository.getOne(project()!.industry); as industry) {
-              {{ displayValue(industry?.name) }}
-            } @else {
-              Не указан
-            }
-          </p>
-        </div>
-      </li>
-
-      <li class="lists__item">
-        <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
-        <div class="lists__item-content">
-          <span class="text-body-10 lists__label">Регион</span>
-          <p class="text-body-10 lists__value">{{ displayValue(project()!.region) }}</p>
-        </div>
-      </li>
-
-      <li class="lists__item">
-        <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
-        <div class="lists__item-content">
-          <span class="text-body-10 lists__label">TRL</span>
-          <p class="text-body-10 lists__value">{{ displayTrl(project()!.trl) }}</p>
-        </div>
-      </li>
-
-      <li class="lists__item">
-        <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
-        <div class="lists__item-content">
-          <span class="text-body-10 lists__label">Срок реализации</span>
-          <p class="text-body-10 lists__value">
-            {{ displayValue(project()!.implementationDeadline) }}
-          </p>
-        </div>
-      </li>
-
-      <li class="lists__item">
-        <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
-        <div class="lists__item-content">
-          <span class="text-body-10 lists__label">Лидер</span>
-          <a
-            class="text-body-10 lists__value lists__value--link"
-            [routerLink]="AppRoutes.profile.detail(project()!.leader)"
-          >
-            {{ leaderName(project()!) }}
-          </a>
-        </div>
-      </li>
-    </ul>
   </div>
-</div>
+} @else {
+  <div class="project__left">
+    <div class="lists project__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">основное</h3>
+        <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+      </div>
+
+      <ul class="lists__list">
+        @if (project()?.partnerProgram; as program) {
+          <li class="lists__item lists__item--program" lang="ru">
+            <i
+              appIcon
+              icon="program"
+              class="lists__icon"
+              appWidth="10"
+              appHeight="10"
+              appViewBox="0 0 21 16"
+              aria-hidden="true"
+            ></i>
+            <div class="lists__item-content">
+              <span class="text-body-10 lists__label">Программа</span>
+              @if (program.programId > 0) {
+                <a
+                  class="text-body-10 lists__value lists__value--link"
+                  [routerLink]="AppRoutes.program.detail(program.programId)"
+                  >{{ program.name?.trim() || "Название не указано" }}</a
+                >
+              } @else {
+                <p class="text-body-10 lists__value">
+                  {{ program.name?.trim() || "Название не указано" }}
+                </p>
+              }
+            </div>
+          </li>
+        }
+        <li class="lists__item">
+          <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Сфера</span>
+            <p class="text-body-10 lists__value card__industry">
+              @if (industryRepository.getOne(project()!.industry); as industry) {
+                {{ displayValue(industry?.name) }}
+              } @else {
+                Не указан
+              }
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Регион</span>
+            <p class="text-body-10 lists__value">{{ displayValue(project()!.region) }}</p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">TRL</span>
+            <p class="text-body-10 lists__value">{{ displayTrl(project()!.trl) }}</p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Срок реализации</span>
+            <p class="text-body-10 lists__value">
+              {{ displayValue(project()!.implementationDeadline) }}
+            </p>
+          </div>
+        </li>
+
+        <li class="lists__item">
+          <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+          <div class="lists__item-content">
+            <span class="text-body-10 lists__label">Лидер</span>
+            <a
+              class="text-body-10 lists__value lists__value--link"
+              [routerLink]="AppRoutes.profile.detail(project()!.leader)"
+            >
+              {{ leaderName(project()!) }}
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+}

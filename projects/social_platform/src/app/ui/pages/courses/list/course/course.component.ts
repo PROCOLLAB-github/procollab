@@ -1,7 +1,20 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { DesktopLayoutService, CardDirective, BadgeComponent } from "@uilib";
+
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, input, Input, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent, ButtonComponent } from "@ui/primitives";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -19,6 +32,8 @@ import { TruncatePipe } from "@corelib";
 @Component({
   selector: "app-course",
   imports: [
+    BadgeComponent,
+    CardDirective,
     CommonModule,
     RouterModule,
     TruncatePipe,
@@ -31,6 +46,9 @@ import { TruncatePipe } from "@corelib";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly course = input.required<CourseCard>();
 
   ngOnInit(): void {

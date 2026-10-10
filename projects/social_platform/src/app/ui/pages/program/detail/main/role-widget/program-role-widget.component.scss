@@ -1,3 +1,6 @@
+/** @format */
+@use "styles/responsive";
+
 :host {
   display: block;
   width: 157px;
@@ -290,5 +293,68 @@
   [tabindex]:focus-visible {
     outline: 1px solid var(--accent);
     outline-offset: 1px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .widget {
+    font-size: var(--ui-font-caption);
+
+    h3 {
+      font-size: var(--ui-font-small);
+    }
+
+    &__stage-state {
+      font-size: var(--ui-font-caption);
+    }
+
+    dt {
+      font-size: var(--ui-font-caption);
+    }
+
+    dd {
+      font-size: var(--ui-font-body);
+    }
+
+    &__expert-state {
+      font-size: var(--ui-font-caption);
+    }
+
+    &__status-value--time {
+      font-size: var(--ui-font-small);
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    :host {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .widget {
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      height: auto;
+      min-height: 160px;
+      padding: 16px;
+      font-size: var(--ui-font-body);
+      line-height: 1.5;
+    }
+
+    .widget__footer a,
+    .widget__footer button {
+      min-height: 44px;
+      font-size: var(--ui-font-body);
+    }
+
+    .widget__ellipsis {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .widget__badge {
+      font-size: var(--ui-font-small);
+    }
   }
 }

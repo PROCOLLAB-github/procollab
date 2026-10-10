@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,6 +25,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskCompleteComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   route = inject(ActivatedRoute);
   router = inject(Router);
   courseId = signal<number | null>(null);

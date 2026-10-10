@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -16,6 +21,7 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
   templateUrl: "./cancel-task-form.component.html",
   styleUrl: "./cancel-task-form.component.scss",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     ButtonComponent,
@@ -26,6 +32,8 @@ import { TagComponent } from "@ui/primitives/tag/tag.component";
   standalone: true,
 })
 export class CancelTaskFormComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   @Output() submit = new EventEmitter<void>();
 
   private readonly fb = inject(FormBuilder);

@@ -1,4 +1,5 @@
 /** @format */
+@use "styles/responsive";
 
 .snackbar {
   position: absolute;
@@ -37,5 +38,55 @@
   &--info {
     color: var(--black);
     background-color: var(--lime);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .snackbar {
+    pointer-events: none;
+
+    &__item {
+      pointer-events: auto;
+    }
+  }
+
+  .item {
+    &__close {
+      display: grid;
+      flex: 0 0 44px;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      color: inherit;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+
+      &:focus-visible {
+        outline: 2px solid currentcolor;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  @include responsive.apply-mobile {
+    .snackbar {
+      position: fixed;
+      top: max(12px, env(safe-area-inset-top));
+      right: var(--page-gutter);
+      left: var(--page-gutter);
+      max-height: calc(100dvh - 24px);
+      padding: 0;
+      overflow-y: auto;
+    }
+
+    .item {
+      min-width: 0;
+      padding: 12px;
+      overflow-wrap: anywhere;
+    }
   }
 }

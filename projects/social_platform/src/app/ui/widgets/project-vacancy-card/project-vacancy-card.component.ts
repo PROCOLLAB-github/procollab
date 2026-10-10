@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { CardDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
@@ -12,6 +17,7 @@ import { VacancySkillsComponent } from "../vacancy-skills/vacancy-skills.compone
 @Component({
   selector: "app-project-vacancy-card",
   imports: [
+    CardDirective,
     RouterLink,
     ButtonComponent,
     ParseLinksPipe,
@@ -26,6 +32,8 @@ import { VacancySkillsComponent } from "../vacancy-skills/vacancy-skills.compone
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyCardComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   protected readonly AppRoutes = AppRoutes;
   readonly vacancy = input.required<Vacancy>();
   readonly type = input<"vacancies" | "project">("project");

@@ -1,4 +1,10 @@
 /** @format */
+
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { ButtonDirective, DialogBodyDirective, DialogFooterDirective } from "@uilib";
+
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import {
   AfterViewInit,
@@ -27,6 +33,9 @@ import { CarouselComponent } from "../carousel/carousel.component";
 @Component({
   selector: "app-feed-news-modal",
   imports: [
+    DialogBodyDirective,
+    DialogFooterDirective,
+    ButtonDirective,
     ModalComponent,
     A11yModule,
     RouterLink,
@@ -42,6 +51,8 @@ import { CarouselComponent } from "../carousel/carousel.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeedNewsModalComponent implements AfterViewInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly news = input.required<FeedNews>();
   readonly type = input.required<"project" | "people">();
   readonly images = input<FileModel[]>([]);

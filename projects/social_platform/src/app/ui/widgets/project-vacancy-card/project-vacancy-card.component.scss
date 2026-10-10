@@ -1,6 +1,6 @@
 /** @format */
-
 @use "styles/components/vacancy-ui";
+@use "styles/ui-foundation";
 
 :host {
   display: flex;
@@ -136,6 +136,38 @@
         flex-basis: auto;
         width: 100%;
       }
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .vacancy {
+    @include ui-foundation.card;
+
+    &__date,
+    &__project-label {
+      font-size: var(--ui-font-small);
+    }
+
+    &__role {
+      font-size: var(--ui-font-h3);
+    }
+
+    &__project-name {
+      font-size: var(--ui-font-body);
+    }
+
+    &__specialization {
+      font-size: var(--ui-font-small);
+    }
+
+    &__salary {
+      font-size: var(--ui-font-body);
+    }
+
+    &__description {
+      font-size: var(--ui-font-body);
     }
   }
 }

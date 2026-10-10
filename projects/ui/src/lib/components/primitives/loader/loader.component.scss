@@ -1,3 +1,5 @@
+/** @format */
+
 .dot-wave {
   --size: 47px;
   --speed: 1s;
@@ -87,5 +89,20 @@
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .lds-ring div {
+    margin: calc(var(--size) * 0.1);
+    border: max(2px, calc(var(--size) * 0.08)) solid var(--color);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot-wave__dot,
+    .lds-ring div {
+      animation-duration: 2s;
+    }
   }
 }

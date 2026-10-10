@@ -1,7 +1,7 @@
 /** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
+@use "styles/ui-foundation";
 
 .field {
   position: relative;
@@ -77,7 +77,9 @@
     cursor: pointer;
     border: 0.5px solid var(--dark-grey);
     border-radius: 50%;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
     appearance: none;
 
     &:hover::after {
@@ -190,5 +192,132 @@
     &--overflow {
       color: var(--red) !important;
     }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .field {
+    &__input {
+      &--border {
+        &:focus {
+          box-shadow: var(--ui-focus-ring);
+        }
+      }
+
+      &--error,
+      &--overflow {
+        &:focus {
+          box-shadow: var(--ui-error-ring);
+        }
+      }
+
+      @include ui-foundation.control;
+    }
+  }
+
+  :host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .field,
+  .search,
+  .search__input {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @include responsive.apply-mobile {
+    .field__input,
+    .field__input-slim,
+    .search__input input {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 44px;
+      font-size: var(--ui-font-h3);
+    }
+
+    .field--small,
+    .field__input--small {
+      min-width: 0;
+    }
+
+    .field__input--with-tooltip {
+      padding-right: 44px;
+    }
+
+    .field__option {
+      min-height: 44px;
+      overflow-wrap: anywhere;
+    }
+
+    .field__chip {
+      max-width: calc(100% - 44px);
+    }
+
+    .field__chip span {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .field__calendar-button {
+      right: 4px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .field__input[type="date"] {
+      padding-right: 48px;
+    }
+  }
+
+  .field--compact {
+    width: 100% !important;
+  }
+
+  .field__input--with-tooltip {
+    padding-right: 68px;
+  }
+
+  .field--compact .field__input--small {
+    width: 100%;
+    max-width: none;
+    padding-inline: 16px;
+    text-align: left;
+  }
+
+  .field--compact.field--with-hint .field__input,
+  .field--compact:has(.field__calendar-button) .field__input {
+    padding-right: 64px;
+  }
+
+  .field--compact.field--with-hint:has(.field__calendar-button) .field__input {
+    padding-right: 108px;
+  }
+
+  .field--compact.field--with-hint .field__calendar-button {
+    right: 48px;
+  }
+
+  .field__tooltip-wrapper--small {
+    top: 50%;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    transform: translateY(-50%);
+  }
+
+  .field--compact .field__error-icon {
+    right: 16px !important;
+  }
+
+  .field--compact.field--error .field__input {
+    padding-right: 52px;
   }
 }

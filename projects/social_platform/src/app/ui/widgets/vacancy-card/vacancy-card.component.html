@@ -1,31 +1,73 @@
 <!-- @format -->
-
-@if (vacancy(); as item) {
-  <article class="vacancy">
-    <header class="vacancy__header">
-      <h3 class="vacancy__role">{{ item.role }}</h3>
-      <app-vacancy-status
-        [label]="item.isActive ? 'Активна' : 'Закрыта'"
-        [tone]="item.isActive ? 'success' : 'neutral'"
-      ></app-vacancy-status>
-    </header>
-    @if (item.specialization) {
-      <p class="vacancy__specialization">Ищем: {{ item.specialization }}</p>
-    }
-    <app-vacancy-skills [skills]="item.requiredSkills || []" [limit]="3"></app-vacancy-skills>
-    <div class="vacancy__actions">
-      <app-button size="big" appearance="outline" [disabled]="disabled()" (click)="onEdit($event)">
-        <i appIcon icon="edit-pen" appSquare="12" aria-hidden="true"></i>Редактировать
-      </app-button>
-      <app-button
-        size="big"
-        appearance="outline"
-        color="red"
-        [disabled]="disabled()"
-        (click)="onRemove($event)"
-      >
-        <i appIcon icon="basket" appSquare="12" aria-hidden="true"></i>Удалить
-      </app-button>
-    </div>
-  </article>
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  @if (vacancy(); as item) {
+    <article class="vacancy">
+      <header class="vacancy__header">
+        <h3 class="vacancy__role">{{ item.role }}</h3>
+        <app-vacancy-status
+          [label]="item.isActive ? 'Активна' : 'Закрыта'"
+          [tone]="item.isActive ? 'success' : 'neutral'"
+        ></app-vacancy-status>
+      </header>
+      @if (item.specialization) {
+        <p class="vacancy__specialization">Ищем: {{ item.specialization }}</p>
+      }
+      <app-vacancy-skills [skills]="item.requiredSkills || []" [limit]="3"></app-vacancy-skills>
+      <div class="vacancy__actions">
+        <app-button
+          size="big"
+          appearance="outline"
+          [disabled]="disabled()"
+          (click)="onEdit($event)"
+        >
+          <i appIcon icon="edit-pen" appSquare="12" aria-hidden="true"></i>Редактировать
+        </app-button>
+        <app-button
+          size="big"
+          appearance="outline"
+          color="red"
+          [disabled]="disabled()"
+          (click)="onRemove($event)"
+        >
+          <i appIcon icon="basket" appSquare="12" aria-hidden="true"></i>Удалить
+        </app-button>
+      </div>
+    </article>
+  }
+} @else {
+  @if (vacancy(); as item) {
+    <article appCard class="vacancy">
+      <header class="vacancy__header">
+        <h3 class="vacancy__role">{{ item.role }}</h3>
+        <app-vacancy-status
+          [label]="item.isActive ? 'Активна' : 'Закрыта'"
+          [tone]="item.isActive ? 'success' : 'neutral'"
+        ></app-vacancy-status>
+      </header>
+      @if (item.specialization) {
+        <p class="vacancy__specialization">Ищем: {{ item.specialization }}</p>
+      }
+      <app-vacancy-skills [skills]="item.requiredSkills || []" [limit]="3"></app-vacancy-skills>
+      <div class="vacancy__actions">
+        <app-button
+          size="big"
+          appearance="outline"
+          [disabled]="disabled()"
+          (click)="onEdit($event)"
+        >
+          <i appIcon icon="edit-pen" appSquare="12" aria-hidden="true"></i>Редактировать
+        </app-button>
+        <app-button
+          size="big"
+          appearance="outline"
+          color="red"
+          [disabled]="disabled()"
+          (click)="onRemove($event)"
+        >
+          <i appIcon icon="basket" appSquare="12" aria-hidden="true"></i>Удалить
+        </app-button>
+      </div>
+    </article>
+  }
 }

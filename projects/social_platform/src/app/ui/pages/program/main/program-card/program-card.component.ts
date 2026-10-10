@@ -1,6 +1,13 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, Input, OnInit } from "@angular/core";
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { DesktopLayoutService } from "@uilib";
+
+import { CardDirective } from "@uilib";
+
+import { ChangeDetectionStrategy, Component, inject, input, Input, OnInit } from "@angular/core";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { DatePipe, NgClass } from "@angular/common";
 import { Program } from "@domain/program/program.model";
@@ -10,10 +17,14 @@ import { Program } from "@domain/program/program.model";
   selector: "app-program-card",
   templateUrl: "./program-card.component.html",
   styleUrl: "./program-card.component.scss",
-  imports: [AvatarComponent, DatePipe, NgClass],
+  imports: [CardDirective, AvatarComponent, DatePipe, NgClass],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramCardComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   readonly program = input.required<Program>();
 
   ngOnInit(): void {

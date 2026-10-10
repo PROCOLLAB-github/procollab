@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -165,3 +166,5 @@
 a:hover {
   cursor: pointer;
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.

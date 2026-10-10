@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -46,6 +49,9 @@ import { A11yModule } from "@angular/cdk/a11y";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent implements AfterViewInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  readonly size = input<"small" | "medium" | "large">("medium");
   constructor(
     private readonly overlay: Overlay,
     private readonly viewContainerRef: ViewContainerRef,

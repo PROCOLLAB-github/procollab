@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -7,7 +10,7 @@ import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
-import { IconComponent } from "@uilib";
+import { IconComponent, FormLayoutDirective } from "@uilib";
 import { ProjectAchievementsService } from "@api/project/facades/edit/project-achievements.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 
@@ -17,6 +20,7 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
   templateUrl: "./project-achievement-step.component.html",
   styleUrl: "./project-achievement-step.component.scss",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,
@@ -28,6 +32,8 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAchievementStepComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   readonly projSubmitInitiated = input<boolean>(false);
 
   private readonly projectAchievementService = inject(ProjectAchievementsService);

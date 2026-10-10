@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { DesktopLayoutService, StateComponent } from "@uilib";
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -28,6 +33,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     IconComponent,
     NewProjectComponent,
@@ -38,6 +44,9 @@ import { FeedItem } from "@domain/feed/feed-item.model";
   providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
 })
 export class FeedComponent implements AfterViewInit, OnDestroy {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly feedRoot = viewChild<ElementRef<HTMLElement>>("feedRoot");
 
   private readonly feedInfoService = inject(FeedInfoService);

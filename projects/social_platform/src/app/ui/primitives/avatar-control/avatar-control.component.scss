@@ -1,3 +1,4 @@
+/** @format */
 @use "styles/responsive";
 
 .control {
@@ -177,5 +178,47 @@
 
   &__button {
     margin-top: 20px;
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .control {
+    &__overlay {
+      background-color: var(--ui-scrim);
+    }
+  }
+
+  @include responsive.apply-below-desktop {
+    .control__tooltip-wrapper {
+      top: 50%;
+      right: -48px;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  .cancel {
+    &__cropper-container {
+      background: var(--background-secondary, var(--ui-crop-surface));
+      box-shadow: var(--ui-crop-shadow);
+
+      ::ng-deep {
+        .ngx-ic-crop {
+          box-shadow: 0 0 0 9999px var(--ui-crop-scrim);
+        }
+
+        .ngx-ic-move,
+        .ngx-ic-resize {
+          box-shadow: var(--ui-crop-handle-shadow);
+        }
+
+        .ngx-ic-crop::before {
+          border-color: var(--ui-crop-border);
+        }
+      }
+    }
   }
 }

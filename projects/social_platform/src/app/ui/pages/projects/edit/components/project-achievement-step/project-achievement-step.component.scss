@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -69,6 +68,15 @@
     &--text {
       margin-top: 2px;
       margin-right: 10px;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .invite {
+    &__list {
+      width: 100%;
     }
   }
 }

@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { initial } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -8,7 +11,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective, FormLayoutDirective } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
@@ -20,6 +23,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./register.component.html",
   styleUrl: "./register.component.scss",
   imports: [
+    ButtonDirective,
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,
@@ -34,6 +39,8 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly authRegisterService = inject(AuthRegisterService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
   private readonly tokenService = inject(TokenService);

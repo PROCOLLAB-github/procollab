@@ -1,6 +1,6 @@
 /** @format */
-
 @use "styles/typography";
+@use "styles/ui-foundation";
 
 .button {
   position: relative;
@@ -158,6 +158,39 @@
     &--icon {
       width: 100%;
       padding: 12px 24px;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  :host {
+    display: inline-block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .button {
+    @include ui-foundation.button;
+
+    &__content {
+      display: inline-flex;
+      gap: var(--ui-space-sm);
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    &__content--loading {
+      opacity: 0;
+    }
+
+    &__loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

@@ -1,136 +1,273 @@
 <!-- @format -->
+<!-- Desktop сохраняет production-разметку; адаптив ниже 1000px. -->
+@if (releaseDesktop()) {
+  @if (vacancy()) {
+    <div class="vacancy">
+      <div class="vacancy__split">
+        <app-vacancies-left-side [vacancy]="vacancy()"></app-vacancies-left-side>
 
-@if (vacancy()) {
-  <div class="vacancy">
-    <div class="vacancy__split">
-      <app-vacancies-left-side [vacancy]="vacancy()"></app-vacancies-left-side>
-
-      <app-vacancies-right-side
-        [vacancy]="vacancy()"
-        (sendResponse)="onOpenResponseModal()"
-        (manageResponses)="onOpenResponses()"
-      ></app-vacancies-right-side>
-    </div>
-  </div>
-
-  @defer (when openModal()) {
-    <app-modal
-      [open]="openModal()"
-      bodyClass="vacancy-response-modal"
-      (openChange)="closeSendResponseModal()"
-    >
-      <div class="cancel">
-        <div class="lists__section">
-          <p class="text-body-12 lists__title">отклик на вакансию</p>
-          <i appIcon icon="squiz" class="lists__icon" appSquare="12"></i>
-        </div>
-
-        <form class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
-          @if (sendForm.get("whyMe"); as whyMe) {
-            <fieldset>
-              <label for="whyMe" class="field-label text-body-10">сопроводительное письмо</label>
-              <app-textarea
-                size="big"
-                id="whyMe"
-                formControlName="whyMe"
-                [error]="whyMe | controlError"
-                placeholder="Проект начал свое существование с 2020 года"
-                [maxLength]="2000"
-              ></app-textarea>
-              @if (whyMe | controlError: "required") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-              }
-              @if (whyMe | controlError: "maxlength") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_TOO_LONG }}
-                  @if (whyMe.errors) {
-                    {{ whyMe.errors["maxlength"]["requiredLength"] }}
-                  }
-                </div>
-              }
-              @if (whyMe | controlError: "minlength") {
-                <div class="text-body-10 error">
-                  {{ errorMessage.VALIDATION_TOO_SHORT }}
-                  @if (whyMe.errors) {
-                    {{ whyMe.errors["minlength"]["requiredLength"] }}
-                  }
-                </div>
-              }
-            </fieldset>
-          }
-
-          <app-button
-            data-testid="attach-procollab-cv"
-            [disabled]="procollabCvLoading() || !!sendForm.controls.accompanyingFile.value"
-            [loader]="procollabCvLoading()"
-            (click)="onAttachProcollabCv()"
-            size="big"
-            class="text-body-12"
-            appearance="outline"
-            >прикрепить резюме PROCOLLAB</app-button
-          >
-
-          <p class="vacancy__form--or text-body-12">или</p>
-
-          @if (sendForm.get("accompanyingFile"); as accompanyingFile) {
-            <div
-              class="vacancy__form--cv"
-              [class.vacancy__form-error]="accompanyingFile | controlError: 'required'"
-            >
-              <app-upload-file
-                [error]="accompanyingFile | controlError"
-                id="accompanyingFile"
-                formControlName="accompanyingFile"
-                accept=".pdf, .docx"
-              >
-                <ng-container emptyPlaceholder>
-                  <div class="vacancy__form--cv-empty">
-                    <i appIcon icon="file" appSquare="10"></i>
-                    <p class="text-body-12 vacancy__form--cv-text">
-                      файл резюме в формате <br />.pdf, .word весом до 50МБ
-                    </p>
-                  </div>
-                  @if (accompanyingFile | controlError: "required") {
-                    <p class="error text-body-10">загрузите файл</p>
-                  }
-                </ng-container>
-              </app-upload-file>
-            </div>
-          }
-
-          <app-button
-            size="big"
-            [loader]="sendFormIsSubmitting()"
-            [disabled]="procollabCvLoading()"
-            type="submit"
-            >отправить отклик</app-button
-          >
-        </form>
+        <app-vacancies-right-side
+          [vacancy]="vacancy()"
+          (sendResponse)="onOpenResponseModal()"
+          (manageResponses)="onOpenResponses()"
+        ></app-vacancies-right-side>
       </div>
-    </app-modal>
-  }
+    </div>
 
-  @defer (when responsesModal()) {
-    @if (responsesModal()) {
+    @defer (when openModal()) {
       <app-modal
-        [open]="responsesModal()"
-        labelledBy="vacancy-responses-title"
-        bodyClass="vacancy-responses-modal"
-        (openChange)="onCloseResponses()"
+        [open]="openModal()"
+        bodyClass="vacancy-response-modal"
+        (openChange)="closeSendResponseModal()"
       >
-        <app-vacancy-responses
-          [responses]="responses()"
-          [loading]="responsesLoading()"
-          [error]="responsesError()"
-          [processingResponseIds]="processingResponseIds()"
-          (retry)="onRetryResponses()"
-          (accept)="onAcceptResponse($event)"
-          (decline)="onDeclineResponse($event)"
-          (close)="onCloseResponses()"
-        ></app-vacancy-responses>
+        <div class="cancel">
+          <div class="lists__section">
+            <p class="text-body-12 lists__title">отклик на вакансию</p>
+            <i appIcon icon="squiz" class="lists__icon" appSquare="12"></i>
+          </div>
+
+          <form class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+            @if (sendForm.get("whyMe"); as whyMe) {
+              <fieldset>
+                <label for="whyMe" class="field-label text-body-10">сопроводительное письмо</label>
+                <app-textarea
+                  size="big"
+                  id="whyMe"
+                  formControlName="whyMe"
+                  [error]="whyMe | controlError"
+                  placeholder="Проект начал свое существование с 2020 года"
+                  [maxLength]="2000"
+                ></app-textarea>
+                @if (whyMe | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+                @if (whyMe | controlError: "maxlength") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_TOO_LONG }}
+                    @if (whyMe.errors) {
+                      {{ whyMe.errors["maxlength"]["requiredLength"] }}
+                    }
+                  </div>
+                }
+                @if (whyMe | controlError: "minlength") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_TOO_SHORT }}
+                    @if (whyMe.errors) {
+                      {{ whyMe.errors["minlength"]["requiredLength"] }}
+                    }
+                  </div>
+                }
+              </fieldset>
+            }
+
+            <app-button
+              data-testid="attach-procollab-cv"
+              [disabled]="procollabCvLoading() || !!sendForm.controls.accompanyingFile.value"
+              [loader]="procollabCvLoading()"
+              (click)="onAttachProcollabCv()"
+              size="big"
+              class="text-body-12"
+              appearance="outline"
+              >прикрепить резюме PROCOLLAB</app-button
+            >
+
+            <p class="vacancy__form--or text-body-12">или</p>
+
+            @if (sendForm.get("accompanyingFile"); as accompanyingFile) {
+              <div
+                class="vacancy__form--cv"
+                [class.vacancy__form-error]="accompanyingFile | controlError: 'required'"
+              >
+                <app-upload-file
+                  [error]="accompanyingFile | controlError"
+                  id="accompanyingFile"
+                  formControlName="accompanyingFile"
+                  accept=".pdf, .docx"
+                >
+                  <ng-container emptyPlaceholder>
+                    <div class="vacancy__form--cv-empty">
+                      <i appIcon icon="file" appSquare="10"></i>
+                      <p class="text-body-12 vacancy__form--cv-text">
+                        файл резюме в формате <br />.pdf, .word весом до 50МБ
+                      </p>
+                    </div>
+                    @if (accompanyingFile | controlError: "required") {
+                      <p class="error text-body-10">загрузите файл</p>
+                    }
+                  </ng-container>
+                </app-upload-file>
+              </div>
+            }
+
+            <app-button
+              size="big"
+              [loader]="sendFormIsSubmitting()"
+              [disabled]="procollabCvLoading()"
+              type="submit"
+              >отправить отклик</app-button
+            >
+          </form>
+        </div>
       </app-modal>
+    }
+
+    @defer (when responsesModal()) {
+      @if (responsesModal()) {
+        <app-modal
+          [open]="responsesModal()"
+          labelledBy="vacancy-responses-title"
+          bodyClass="vacancy-responses-modal"
+          (openChange)="onCloseResponses()"
+        >
+          <app-vacancy-responses
+            [responses]="responses()"
+            [loading]="responsesLoading()"
+            [error]="responsesError()"
+            [processingResponseIds]="processingResponseIds()"
+            (retry)="onRetryResponses()"
+            (accept)="onAcceptResponse($event)"
+            (decline)="onDeclineResponse($event)"
+            (close)="onCloseResponses()"
+          ></app-vacancy-responses>
+        </app-modal>
+      }
+    }
+  }
+} @else {
+  @if (vacancy()) {
+    <div class="vacancy">
+      <div class="vacancy__split">
+        <app-vacancies-left-side [vacancy]="vacancy()"></app-vacancies-left-side>
+
+        <app-vacancies-right-side
+          [vacancy]="vacancy()"
+          (sendResponse)="onOpenResponseModal()"
+          (manageResponses)="onOpenResponses()"
+        ></app-vacancies-right-side>
+      </div>
+    </div>
+
+    @defer (when openModal()) {
+      <app-modal
+        [open]="openModal()"
+        bodyClass="vacancy-response-modal"
+        (openChange)="closeSendResponseModal()"
+      >
+        <div class="cancel">
+          <div class="lists__section">
+            <p class="text-body-12 lists__title">отклик на вакансию</p>
+            <i appIcon icon="squiz" class="lists__icon" appSquare="12"></i>
+          </div>
+
+          <form appFormLayout class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+            @if (sendForm.get("whyMe"); as whyMe) {
+              <fieldset>
+                <label for="whyMe" class="field-label text-body-10">сопроводительное письмо</label>
+                <app-textarea
+                  size="big"
+                  id="whyMe"
+                  formControlName="whyMe"
+                  [error]="whyMe | controlError"
+                  placeholder="Проект начал свое существование с 2020 года"
+                  [maxLength]="2000"
+                ></app-textarea>
+                @if (whyMe | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                }
+                @if (whyMe | controlError: "maxlength") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_TOO_LONG }}
+                    @if (whyMe.errors) {
+                      {{ whyMe.errors["maxlength"]["requiredLength"] }}
+                    }
+                  </div>
+                }
+                @if (whyMe | controlError: "minlength") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_TOO_SHORT }}
+                    @if (whyMe.errors) {
+                      {{ whyMe.errors["minlength"]["requiredLength"] }}
+                    }
+                  </div>
+                }
+              </fieldset>
+            }
+
+            <app-button
+              data-testid="attach-procollab-cv"
+              [disabled]="procollabCvLoading() || !!sendForm.controls.accompanyingFile.value"
+              [loader]="procollabCvLoading()"
+              (click)="onAttachProcollabCv()"
+              size="big"
+              class="text-body-12"
+              appearance="outline"
+              >прикрепить резюме PROCOLLAB</app-button
+            >
+
+            <p class="vacancy__form--or text-body-12">или</p>
+
+            @if (sendForm.get("accompanyingFile"); as accompanyingFile) {
+              <div
+                class="vacancy__form--cv"
+                [class.vacancy__form-error]="accompanyingFile | controlError: 'required'"
+              >
+                <app-upload-file
+                  [error]="accompanyingFile | controlError"
+                  id="accompanyingFile"
+                  formControlName="accompanyingFile"
+                  accept=".pdf, .docx"
+                >
+                  <ng-container emptyPlaceholder>
+                    <div class="vacancy__form--cv-empty">
+                      <i appIcon icon="file" appSquare="10"></i>
+                      <p class="text-body-12 vacancy__form--cv-text">
+                        файл резюме в формате <br />.pdf, .word весом до 50МБ
+                      </p>
+                    </div>
+                    @if (accompanyingFile | controlError: "required") {
+                      <p class="error text-body-10">загрузите файл</p>
+                    }
+                  </ng-container>
+                </app-upload-file>
+              </div>
+            }
+
+            <app-button
+              size="big"
+              [loader]="sendFormIsSubmitting()"
+              [disabled]="procollabCvLoading()"
+              type="submit"
+              >отправить отклик</app-button
+            >
+          </form>
+        </div>
+      </app-modal>
+    }
+
+    @defer (when responsesModal()) {
+      @if (responsesModal()) {
+        <app-modal
+          [open]="responsesModal()"
+          labelledBy="vacancy-responses-title"
+          bodyClass="vacancy-responses-modal"
+          (openChange)="onCloseResponses()"
+        >
+          <app-vacancy-responses
+            [responses]="responses()"
+            [loading]="responsesLoading()"
+            [error]="responsesError()"
+            [processingResponseIds]="processingResponseIds()"
+            (retry)="onRetryResponses()"
+            (accept)="onAcceptResponse($event)"
+            (decline)="onDeclineResponse($event)"
+            (close)="onCloseResponses()"
+          ></app-vacancy-responses>
+        </app-modal>
+      }
     }
   }
 }

@@ -1,5 +1,8 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { CommonModule } from "@angular/common";
 import { Component, computed, inject, ChangeDetectionStrategy } from "@angular/core";
 import { isFailure, isLoading } from "@domain/shared/async-state";
@@ -15,7 +18,7 @@ import { SwitchComponent } from "@ui/primitives/switch/switch.component";
 import { ControlErrorPipe, ToSelectOptionsPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
-import { IconComponent } from "@uilib";
+import { IconComponent, StateComponent } from "@uilib";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
@@ -28,6 +31,7 @@ import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.cons
   templateUrl: "./project-additional-step.component.html",
   styleUrl: "./project-additional-step.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,
@@ -45,6 +49,8 @@ import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.cons
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAdditionalStepComponent {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
 

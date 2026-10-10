@@ -1,7 +1,7 @@
 /** @format */
-
 @use "styles/typography";
 @use "styles/responsive";
+@use "styles/ui-foundation";
 
 .card {
   padding: 24px 12px;
@@ -249,5 +249,20 @@
     input {
       display: none;
     }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .card {
+    &__text {
+      .card__feed-summary {
+        font-size: var(--ui-font-body);
+      }
+    }
+  }
+
+  .news {
+    @include ui-foundation.card;
   }
 }

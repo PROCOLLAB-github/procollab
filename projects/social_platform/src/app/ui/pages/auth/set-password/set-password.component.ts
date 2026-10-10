@@ -1,5 +1,10 @@
 /** @format */
 
+import { inject as injectReleaseLayout } from "@angular/core";
+import { DesktopLayoutService as ReleaseDesktopLayoutService } from "../../../../../../../ui/src/lib/services/desktop-layout.service";
+
+import { FormLayoutDirective } from "@uilib";
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
@@ -14,10 +19,19 @@ import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
   templateUrl: "./set-password.component.html",
   styleUrl: "./set-password.component.scss",
   providers: [AuthPasswordService, AuthUIInfoService],
-  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, IconComponent, ControlErrorPipe],
+  imports: [
+    FormLayoutDirective,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    IconComponent,
+    ControlErrorPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetPasswordComponent implements OnInit {
+  protected readonly releaseDesktop = injectReleaseLayout(ReleaseDesktopLayoutService).desktop;
+
   private readonly authPasswordService = inject(AuthPasswordService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
 

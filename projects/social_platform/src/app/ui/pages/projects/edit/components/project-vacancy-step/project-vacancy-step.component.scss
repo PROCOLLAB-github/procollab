@@ -1,5 +1,4 @@
 /** @format */
-
 @use "styles/responsive";
 @use "styles/typography";
 @use "styles/components/vacancy-ui";
@@ -213,6 +212,29 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
+    }
+  }
+}
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
+@media screen and (max-width: 999px) {
+  .project {
+    &__inner--list {
+      .vacancy__list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      @media (max-width: 800px) {
+        .vacancy__list {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    }
+  }
+
+  .vacancy {
+    &__error {
+      font-size: var(--ui-font-body);
     }
   }
 }

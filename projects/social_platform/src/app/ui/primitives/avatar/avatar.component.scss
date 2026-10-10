@@ -1,4 +1,5 @@
 /** @format */
+@use "../../../../../../ui/src/lib/components/primitives/avatar/avatar.component.scss";
 
 .avatar {
   position: relative;
@@ -10,18 +11,18 @@
     z-index: 3;
     width: 100%;
     height: 100%;
-    background:
-      conic-gradient(
-        var(--progress-color) 0 var(--progress),
-        transparent var(--progress) 100%
-      );
+    /* stylelint-disable-next-line declaration-colon-newline-after */
+    background: conic-gradient(
+      var(--progress-color) 0 var(--progress),
+      transparent var(--progress) 100%
+    );
     border-radius: 50%;
-    mask:
-      radial-gradient(
-        circle,
-        transparent calc(50% - var(--progress-width)),
-        white calc(50% - var(--progress-width))
-      );
+    /* stylelint-disable-next-line declaration-colon-newline-after */
+    mask: radial-gradient(
+      circle,
+      transparent calc(50% - var(--progress-width)),
+      white calc(50% - var(--progress-width))
+    );
   }
 
   img {
@@ -51,3 +52,5 @@
     }
   }
 }
+
+// Адаптив из dev применяется только ниже desktop breakpoint.
