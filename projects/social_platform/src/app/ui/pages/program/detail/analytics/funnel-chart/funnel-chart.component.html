@@ -1,0 +1,35 @@
+<!-- @format -->
+
+<div class="funnel-chart__plot">
+  <canvas
+    #canvas
+    role="img"
+    [attr.aria-label]="label() + '. Значения и определения этапов доступны в таблице ниже.'"
+  ></canvas>
+</div>
+<details class="funnel-chart__data">
+  <summary>Данные и определения этапов</summary>
+  <table>
+    <caption>
+      {{
+        label()
+      }}
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Этап</th>
+        <th scope="col">Всего</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of items(); track item.key) {
+        <tr>
+          <th scope="row">
+            {{ item.label }}<span>{{ item.tooltip }}</span>
+          </th>
+          <td>{{ item.value ?? "Данные пока недоступны" }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</details>

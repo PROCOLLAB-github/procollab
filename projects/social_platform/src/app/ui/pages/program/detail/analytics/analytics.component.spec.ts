@@ -25,6 +25,27 @@ import { AnalyticsDrilldownComponent } from "./drilldown/analytics-drilldown.com
 
 vi.mock("@utils/export-regions", () => ({ exportRegions: vi.fn().mockResolvedValue(undefined) }));
 
+vi.mock("chart.js", async importOriginal => {
+  const actual = await importOriginal<typeof import("chart.js")>();
+  return {
+    ...actual,
+    Chart: Object.assign(
+      vi.fn(function (_canvas, config) {
+        return {
+          data: config.data,
+          options: config.options,
+          update: vi.fn(),
+          destroy: vi.fn(),
+          resize: vi.fn(),
+          setActiveElements: vi.fn(),
+          draw: vi.fn(),
+        };
+      }),
+      { register: vi.fn() },
+    ),
+  };
+});
+
 function activity(count = 30, allZero = false): ProgramAnalyticsOverview["activity"] {
   return Array.from({ length: count }, (_, index) => ({
     date: `2026-08-${String(index + 1).padStart(2, "0")}`,
@@ -57,6 +78,7 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
     participantFunnel: {
       registrations: 20,
       uniqueParticipants: 18,
+      onboardedParticipants: 16,
       withTeam: 12,
       projectCreators: 7,
       submittedProjectCreators: 2,
@@ -118,6 +140,13 @@ describe("ProgramAnalyticsComponent", () => {
 
   beforeEach(() => {
     vi.mocked(exportRegions).mockReset().mockResolvedValue(undefined);
+    vi.stubGlobal("matchMedia", () => ({
+      matches: true,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }));
     data.set(overview());
     pending.set(false);
     failed.set(false);
@@ -210,14 +239,14 @@ describe("ProgramAnalyticsComponent", () => {
       return { fixture, card, rows: [...card.querySelectorAll<HTMLElement>(".case-row")] };
     }
 
-    it("keeps cases and evaluation as adjacent cards in the same two-column grid row", () => {
+    it("keeps cases beside activity while evaluation stays in the priority row", () => {
       const { card } = renderCases();
       const grid = card.parentElement!;
-      expect(grid.classList.contains("analytics-grid")).toBe(true);
-      expect([...grid.children].indexOf(card)).toBe(2);
+      expect(grid.classList.contains("analytics-bottom")).toBe(true);
+      expect([...grid.children].indexOf(card)).toBe(0);
       expect(card.classList.contains("analytics-card")).toBe(true);
       expect(card.classList.contains("cases-card")).toBe(true);
-      expect(card.nextElementSibling?.matches(".analytics-card.evaluation")).toBe(true);
+      expect(card.nextElementSibling?.matches(".activity")).toBe(true);
     });
 
     it("preserves backend counts/order/zero rows and appends withoutCase without mutations", () => {
@@ -242,10 +271,10 @@ describe("ProgramAnalyticsComponent", () => {
         "проекта",
       ]);
       expect(rows[0].querySelector(".case-row__meta")?.textContent).toMatch(
-        /Сдано 2\s*·\s*Не сдано 1\s*·\s*Участников 7/,
+        /Сдано 2\s*·\s*Участников 7/,
       );
       expect(rows[0].querySelector('[role="img"]')?.getAttribute("aria-label")).toBe(
-        "Case A: 3 проекта, сдано 2, не сдано 1, участников 7",
+        "Case A: 3 проекта, сдано 2, участников 7",
       );
       expect(rows[3].classList.contains("case-row--without-case")).toBe(true);
       expect(
@@ -379,10 +408,12 @@ describe("ProgramAnalyticsComponent", () => {
     expect(root.textContent?.toLowerCase()).not.toContain("обезличенная");
     expect(root.querySelector('[data-testid="summary-participants"]')?.textContent).toContain("18");
     expect(root.querySelector('[data-testid="summary-projects"]')?.textContent).toContain("7");
-    expect(root.querySelector('[data-testid="summary-experts"]')?.textContent).toContain(
-      "Эксперты",
+    expect(root.querySelector('[data-testid="summary-submitted-projects"]')?.textContent).toContain(
+      "Сдано проектов",
     );
-    expect(root.querySelector('[data-testid="summary-experts"]')?.textContent).toContain("4");
+    expect(root.querySelector('[data-testid="summary-submitted-projects"]')?.textContent).toContain(
+      "6",
+    );
     expect(
       root.querySelector('[data-testid="summary-participants-per-project"]')?.textContent,
     ).toContain("Команда");
@@ -401,6 +432,30 @@ describe("ProgramAnalyticsComponent", () => {
     expect(tooltip.text()).toBe(
       "Среднее количество зарегистрированных участников программы на один проект.",
     );
+  });
+
+  it("puts actionable controls before funnels and geographical context in reading order", () => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    expect(
+      [...root.querySelectorAll("main > section > article")].map(el =>
+        el.getAttribute("data-testid"),
+      ),
+    ).toEqual([
+      "summary-participants",
+      "summary-projects",
+      "summary-submitted-projects",
+      "summary-participants-per-project",
+      "attention-block",
+      "evaluation-statuses",
+      "participant-funnel",
+      "solution-funnel",
+      "cases-card",
+      "activity-dynamics",
+      "project-regions",
+      "participant-regions",
+    ]);
   });
 
   it.each([
@@ -494,7 +549,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(open).toHaveBeenCalledTimes(1);
   });
 
-  it("not-submitted: порядок, активная/нулевая строка и tooltip отдельно", () => {
+  it("не дублирует счётчик несданных проектов в блоке внимания", () => {
     const base = overview();
     data.set({
       ...base,
@@ -502,40 +557,26 @@ describe("ProgramAnalyticsComponent", () => {
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
-      .componentInstance as AnalyticsDrilldownComponent;
-    const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
     const buttons = Array.from(
       fixture.nativeElement.querySelectorAll(".attention__action"),
     ) as HTMLButtonElement[];
     expect(buttons.map(button => button.querySelector("span")?.textContent)).toEqual([
       "Участники без команды",
       "Работы ожидают оценивания",
-      "Проекты не сдали решение",
       "Эксперты задерживают оценивание",
     ]);
-    const trigger = buttons[2];
-    expect(trigger.disabled).toBe(false);
-    expect(drilldown.notSubmittedApplicable()).toBe(true);
-    expect(trigger.querySelector("app-tooltip")).toBeNull();
-    trigger.parentElement!.querySelector<HTMLElement>("app-tooltip")!.click();
-    expect(open).not.toHaveBeenCalled();
-    trigger.click();
-    expect(open).toHaveBeenCalledExactlyOnceWith("projects-not-submitted", trigger);
+    expect(fixture.nativeElement.textContent).not.toContain("Проекты не сдали решение");
     data.set({
       ...base,
       attention: {
         participantsWithoutTeam: 0,
         projectsAwaitingEvaluation: 0,
         delayedExperts: { total: 0, items: [] },
-        projectsNotSubmitted: { applicable: true, total: 0 },
+        projectsNotSubmitted: { applicable: true, total: 4 },
       },
     });
     fixture.detectChanges();
-    expect(trigger.disabled).toBe(true);
     expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
-    trigger.click();
-    expect(open).toHaveBeenCalledTimes(1);
   });
 
   it("non-competitive скрывает строку даже с notSubmitted > 0 и не делает detail request", () => {
@@ -560,9 +601,9 @@ describe("ProgramAnalyticsComponent", () => {
     expect(cards[0].querySelector("h2")?.textContent).toBe("Регионы проектов");
     expect(cards[1].querySelector("h2")?.textContent).toBe("Регионы участников");
     const rows = (card: Element) =>
-      Array.from(card.querySelectorAll("li"), row => [
-        row.querySelector("span")?.textContent?.trim(),
-        row.querySelector("strong")?.textContent?.trim(),
+      Array.from(card.querySelectorAll("tbody tr"), row => [
+        row.querySelector("th")?.textContent?.trim(),
+        row.querySelector("td")?.textContent?.trim(),
       ]);
     expect(rows(cards[0])).toEqual([
       ["Москва", "5"],
@@ -583,7 +624,7 @@ describe("ProgramAnalyticsComponent", () => {
       fixture.detectChanges();
       const root = fixture.nativeElement as HTMLElement;
       expect(root.querySelectorAll(".regions .analytics-empty-state")).toHaveLength(1);
-      expect(root.querySelectorAll(".regions__list")).toHaveLength(1);
+      expect(root.querySelectorAll("app-analytics-region-chart")).toHaveLength(1);
       expect(root.querySelector(".regions .analytics-empty-state")?.textContent?.trim()).toBe(
         key === "regions"
           ? "У проектов пока не указаны регионы"
@@ -640,6 +681,7 @@ describe("ProgramAnalyticsComponent", () => {
       ...model.participantFunnel,
       registrations: 11,
       uniqueParticipants: 7,
+      onboardedParticipants: 6,
       withTeam: 4,
       projectCreators: 3,
     };
@@ -652,42 +694,52 @@ describe("ProgramAnalyticsComponent", () => {
 
     expect(participants).toContain("Зарегистрировались");
     expect(participants).not.toContain("Уникальные участники");
-    const rows = Array.from(root.querySelectorAll('[data-testid="participant-funnel"] li'));
-    expect(rows.map(row => row.querySelector(".funnel__label")?.textContent?.trim())).toEqual([
+    const rows = Array.from(root.querySelectorAll('[data-testid="participant-funnel"] tbody tr'));
+    expect(rows.map(row => row.querySelector("th")?.firstChild?.textContent?.trim())).toEqual([
       "Зарегистрировались",
-      "В команде",
-      "Создали проект",
+      "Завершили онбординг",
+      "Вступили в команду",
     ]);
-    expect(rows.map(row => row.querySelector("strong")?.textContent?.trim())).toEqual([
-      "7",
-      "4",
-      "3",
-    ]);
+    expect(rows.map(row => row.querySelector("td")?.textContent?.trim())).toEqual(["7", "6", "4"]);
     expect(data()?.participantFunnel.registrations).toBe(11);
     const tooltips = fixture.debugElement
       .queryAll(By.directive(TooltipComponent))
       .map(element => (element.componentInstance as TooltipComponent).text());
-    expect(tooltips).toContain("Уникальные зарегистрированные участники программы.");
-    expect(tooltips).toContain("Путь участников от регистрации до создания проекта.");
+    expect(participants).toContain("Уникальные зарегистрированные участники программы.");
+    expect(tooltips.some(text => text.includes("завершение онбординга платформы"))).toBe(true);
     expect(tooltips.some(text => text.includes("регистрационные записи"))).toBe(false);
     expect(root.querySelector('[data-testid="attention-block"]')?.textContent).toContain(
       "Участники без команды",
     );
-    expect(participants).toContain("В команде");
-    expect(participants).toContain("Создали проект");
+    expect(participants).toContain("Вступили в команду");
+    expect(participants).not.toContain("Создали проект");
     expect(participants).not.toContain("Сдали проект");
-    const submitted = Array.from(root.querySelectorAll('[data-testid="solution-funnel"] li')).find(
-      row => row.querySelector(".funnel__label")?.textContent?.trim().startsWith("Сдано"),
-    );
-    expect(submitted?.querySelector("strong")?.textContent?.trim()).toBe("6");
+    const submitted = Array.from(
+      root.querySelectorAll('[data-testid="solution-funnel"] tbody tr'),
+    ).find(row => row.querySelector("th")?.textContent?.trim().startsWith("Сдано"));
+    expect(submitted?.querySelector("td")?.textContent?.trim()).toBe("6");
     expect(solutions).toContain("Создано");
-    expect(solutions).toContain("Черновик / не сдано");
+    expect(solutions).not.toMatch(/не сдано|Черновик/i);
     expect(solutions).toContain("Сдано");
     expect(solutions).toContain("Оценено");
     expect(root.querySelector('[data-testid="solution-funnel"] h2')?.textContent?.trim()).toBe(
       "Воронка проектов",
     );
     expect(solutions).not.toContain("Воронка решений");
+    expect(root.querySelectorAll('[data-testid="solution-funnel"] tbody tr')).toHaveLength(3);
+    expect(root.querySelectorAll("app-analytics-funnel-chart canvas")).toHaveLength(2);
+  });
+
+  it("не выдаёт отсутствие новой метрики онбординга за ноль", () => {
+    const model = overview();
+    delete model.participantFunnel.onboardedParticipants;
+    data.set(model);
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const row = fixture.nativeElement.querySelector(
+      '[data-testid="participant-funnel"] tbody tr:nth-child(2)',
+    );
+    expect(row.querySelector("td").textContent).toBe("Данные пока недоступны");
   });
 
   it("technical registrations alone do not remove the participant zero state", () => {
@@ -723,7 +775,7 @@ describe("ProgramAnalyticsComponent", () => {
       ".attention__action > span",
       ".evaluation__limit .text-body-10",
     ];
-    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([4, 3, 4, 1]);
+    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([4, 3, 3, 1]);
     for (const selector of selectors) {
       for (const label of root.querySelectorAll(selector))
         expect(label.classList.contains("text-body-10")).toBe(true);
@@ -875,31 +927,31 @@ describe("ProgramAnalyticsComponent", () => {
     expect(open).toHaveBeenCalledOnce();
   });
 
-  it("строит две серии по всем 30 точкам activity", () => {
+  it("показывает раздельную динамику и общие значения выбранной даты", async () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
+    await fixture.whenStable();
     const chart = (fixture.nativeElement as HTMLElement).querySelector(
       '[data-testid="activity-dynamics"]',
     );
 
     expect(chart?.textContent).toContain("Новые регистрации");
     expect(chart?.textContent).toContain("Отправленные решения");
-    expect(chart?.querySelectorAll("circle").length).toBe(60);
-    expect(chart?.querySelectorAll("polyline").length).toBe(2);
-    expect(chart?.querySelector("title")?.textContent).toContain("01.08");
-    expect(chart?.querySelectorAll(".activity__grid-line")).toHaveLength(5);
-    expect(chart?.querySelector(".activity__y-axis")?.textContent).toContain("4");
-    expect(chart?.textContent).toContain("Количество событий в день");
-    const date = chart?.querySelectorAll<HTMLButtonElement>(".activity__date-target")[1];
-    expect(date?.getAttribute("aria-label")).toContain(
+    expect(chart?.querySelectorAll("canvas")).toHaveLength(2);
+    const plots = chart?.querySelectorAll<HTMLElement>('[role="slider"]');
+    expect(plots).toHaveLength(2);
+    plots?.[0].dispatchEvent(new FocusEvent("focus"));
+    plots?.[0].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+    fixture.detectChanges();
+    expect(plots?.[1].getAttribute("aria-valuetext")).toContain(
       "02.08: новые регистрации — 1, отправленные решения — 1",
     );
-    date?.dispatchEvent(new FocusEvent("focus"));
+    expect(chart?.querySelector(".activity-chart__readout")?.textContent).toContain("02.08");
+    plots?.[0].dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     fixture.detectChanges();
-    expect(chart?.querySelector(".activity__readout")?.textContent).toContain("02.08");
-    date?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-    fixture.detectChanges();
-    expect(chart?.querySelector(".activity__readout")?.textContent).toContain("Наведите указатель");
+    expect(chart?.querySelector(".activity-chart__readout")?.textContent).toContain(
+      "Наведите указатель",
+    );
   });
 
   it("exports each loaded region dataset independently and prevents repeated clicks", async () => {

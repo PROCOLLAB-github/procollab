@@ -58,6 +58,9 @@ describe("Case drilldown в существующем Overlay", () => {
   it("selected: четыре колонки, реальные поля, null presentation и только один modal", async () => {
     await open();
     expect(dialog().querySelector("h2")?.textContent).toBe("Кейс: Цифровая трансформация");
+    expect(
+      [...dialog().querySelectorAll(".analytics-case__metrics dt")].map(el => el.textContent),
+    ).toEqual(["Проекты", "Участники", "Сдано"]);
     expect([...dialog().querySelectorAll("th")].map(el => el.textContent)).toEqual([
       "Проект",
       "Лидер / команда",

@@ -13,6 +13,8 @@ export interface ProgramAnalyticsOverview {
   participantFunnel: {
     registrations: number;
     uniqueParticipants: number;
+    /** Completed platform onboarding; absent during a staggered API rollout. */
+    onboardedParticipants?: number;
     withTeam: number;
     projectCreators: number;
     submittedProjectCreators: number;

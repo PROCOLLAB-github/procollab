@@ -15,16 +15,19 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
-import {
-  ProgramAnalyticsActivityPoint,
-  ProgramAnalyticsCaseMetrics,
-} from "@domain/program/program-analytics.model";
+import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
 import { PluralizePipe } from "@corelib";
 import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { exportRegions, RegionExportKind } from "@utils/export-regions";
 import { AnalyticsDrilldownComponent } from "./drilldown/analytics-drilldown.component";
+import { AnalyticsRegionChartComponent } from "./region-chart/region-chart.component";
+import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart.component";
+import {
+  AnalyticsFunnelChartComponent,
+  AnalyticsFunnelStage,
+} from "./funnel-chart/funnel-chart.component";
 import { ProgramAnalyticsAssignmentScope } from "@domain/program/program-analytics.model";
 
 interface AnalyticsMetric {
@@ -34,13 +37,6 @@ interface AnalyticsMetric {
   tooltip: string;
   icon?: string;
   scope?: ProgramAnalyticsAssignmentScope;
-}
-
-interface ActivityChartPoint extends ProgramAnalyticsActivityPoint {
-  dateLabel: string;
-  x: number;
-  registrationsY: number;
-  submittedSolutionsY: number;
 }
 
 interface RegionExportState {
@@ -70,6 +66,9 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
     MatProgressBarModule,
     TooltipComponent,
     AnalyticsDrilldownComponent,
+    AnalyticsRegionChartComponent,
+    AnalyticsActivityChartComponent,
+    AnalyticsFunnelChartComponent,
   ],
   providers: [ProgramAnalyticsInfoService, ExportFileInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -93,7 +92,6 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly error = this.analytics.error;
   protected readonly activeTooltip = signal<string | null>(null);
   protected readonly pinnedTooltip = signal<string | null>(null);
-  protected readonly selectedActivityDate = signal<string | null>(null);
   protected readonly regionExportState = signal<Record<RegionExportKind, RegionExportState>>({
     "project-regions": { pending: false, failed: false },
     "participant-regions": { pending: false, failed: false },
@@ -132,9 +130,7 @@ export class ProgramAnalyticsComponent implements OnInit {
         "проекта",
         "проектов",
       ]);
-      const submission = cases.submissionApplicable
-        ? `, сдано ${row.submitted}, не сдано ${row.notSubmitted}`
-        : "";
+      const submission = cases.submissionApplicable ? `, сдано ${row.submitted}` : "";
       return {
         ...row,
         totalLabel,
@@ -158,7 +154,7 @@ export class ProgramAnalyticsComponent implements OnInit {
         key: "participants",
         label: "Участники",
         value: overview.summary.participants.total,
-        icon: "team",
+        icon: "person",
         tooltip: "Уникальные пользователи, зарегистрированные в программе.",
       },
       {
@@ -169,17 +165,17 @@ export class ProgramAnalyticsComponent implements OnInit {
         tooltip: "Все проекты, связанные с программой.",
       },
       {
-        key: "experts",
-        label: "Эксперты",
-        value: overview.summary.experts.total,
-        icon: "person",
-        tooltip: "Эксперты, добавленные в программу.",
+        key: "submitted-projects",
+        label: "Сдано проектов",
+        value: overview.solutionFunnel.submitted,
+        icon: "analytics-submitted",
+        tooltip: "Проекты программы с отправленным решением.",
       },
       {
         key: "participants-per-project",
         label: "Команда",
         value: averageParticipantsPerProject,
-        icon: "people",
+        icon: "analytics-team",
         tooltip: "Среднее количество зарегистрированных участников программы на один проект.",
       },
     ];
@@ -202,29 +198,37 @@ export class ProgramAnalyticsComponent implements OnInit {
     },
   ]);
 
-  protected readonly participantFunnel = computed<AnalyticsMetric[]>(() => {
+  protected readonly participantFunnel = computed<AnalyticsFunnelStage[]>(() => {
     const funnel = this.data()?.participantFunnel;
     if (!funnel) return [];
 
     return [
-      this.metric(
-        "registrations",
-        "Зарегистрировались",
-        funnel.uniqueParticipants,
-        "Уникальные зарегистрированные участники программы.",
-      ),
-      this.metric(
-        "with-team",
-        "В команде",
-        funnel.withTeam,
-        "Участники, которые являются руководителями или участниками команды проекта программы.",
-      ),
-      this.metric(
-        "project-creators",
-        "Создали проект",
-        funnel.projectCreators,
-        "Участники, ставшие руководителями проекта программы.",
-      ),
+      {
+        ...this.metric(
+          "registrations",
+          "Зарегистрировались",
+          funnel.uniqueParticipants,
+          "Уникальные зарегистрированные участники программы.",
+        ),
+        axisLabel: ["Регистрация"],
+      },
+      {
+        key: "onboarded",
+        label: "Завершили онбординг",
+        value: funnel.onboardedParticipants ?? null,
+        tooltip:
+          "Зарегистрированные участники, завершившие стартовый сценарий платформы. Шаги можно пропустить; это не показатель заполненности профиля или регулярного использования.",
+        axisLabel: ["Завершили", "онбординг"],
+      },
+      {
+        ...this.metric(
+          "with-team",
+          "Вступили в команду",
+          funnel.withTeam,
+          "Зарегистрированные участники, которые сейчас являются руководителями или участниками команды проекта программы. Учитываются и те, кто ещё не завершил онбординг.",
+        ),
+        axisLabel: ["Вступили", "в команду"],
+      },
     ];
   });
 
@@ -234,12 +238,6 @@ export class ProgramAnalyticsComponent implements OnInit {
 
     return [
       this.metric("solutions-created", "Создано", funnel.created, "Все проекты программы."),
-      this.metric(
-        "solutions-not-submitted",
-        "Черновик / не сдано",
-        funnel.notSubmitted,
-        "Проекты программы, решение по которым ещё не отправлено.",
-      ),
       this.metric(
         "solutions-submitted",
         "Сдано",
@@ -334,16 +332,6 @@ export class ProgramAnalyticsComponent implements OnInit {
         value: overview.attention.projectsAwaitingEvaluation,
         tooltip: this.awaitingEvaluationTooltip(overview.evaluationStatus.mode),
       },
-      ...(overview.attention.projectsNotSubmitted.applicable
-        ? [
-            {
-              key: "projects-not-submitted",
-              label: "Проекты не сдали решение",
-              value: overview.attention.projectsNotSubmitted.total,
-              tooltip: "Проекты конкурсной программы, которые ещё не отправили решение.",
-            },
-          ]
-        : []),
       {
         key: "delayed-experts",
         label: "Эксперты задерживают оценивание",
@@ -359,57 +347,6 @@ export class ProgramAnalyticsComponent implements OnInit {
       point => point.registrations > 0 || point.submittedSolutions > 0,
     ),
   );
-
-  protected readonly activityScale = computed(() => {
-    const activity = this.data()?.activity ?? [];
-    const maximum = Math.max(
-      1,
-      ...activity.flatMap(point => [point.registrations, point.submittedSolutions]),
-    );
-    // Integer counts, shared zero-based scale for both series; at most five grid labels.
-    const step = Math.max(1, Math.ceil(maximum / 4));
-    return { maximum: step * 4, ticks: [4, 3, 2, 1, 0].map(index => index * step) };
-  });
-
-  protected readonly activityChart = computed<ActivityChartPoint[]>(() => {
-    const activity = this.data()?.activity ?? [];
-    const maxValue = this.activityScale().maximum;
-    const divisor = Math.max(activity.length - 1, 1);
-
-    return activity.map((point, index) => ({
-      ...point,
-      dateLabel: this.formatDate(point.date),
-      x: 3 + (index / divisor) * 94,
-      registrationsY: 88 - (point.registrations / maxValue) * 76,
-      submittedSolutionsY: 88 - (point.submittedSolutions / maxValue) * 76,
-    }));
-  });
-
-  protected readonly registrationPolyline = computed(() =>
-    this.activityChart()
-      .map(point => `${point.x},${point.registrationsY}`)
-      .join(" "),
-  );
-
-  protected readonly submissionPolyline = computed(() =>
-    this.activityChart()
-      .map(point => `${point.x},${point.submittedSolutionsY}`)
-      .join(" "),
-  );
-
-  protected readonly activityAxisLabels = computed(() => {
-    const points = this.activityChart();
-    const interval = Math.max(1, Math.ceil((points.length - 1) / 3));
-    return points.filter((_, index) => index % interval === 0 || index === points.length - 1);
-  });
-
-  protected readonly selectedActivity = computed(() =>
-    this.activityChart().find(point => point.date === this.selectedActivityDate()),
-  );
-
-  protected activityPointLabel(point: ActivityChartPoint): string {
-    return `${point.dateLabel}: новые регистрации — ${point.registrations}, отправленные решения — ${point.submittedSolutions}`;
-  }
 
   protected async downloadRegions(kind: RegionExportKind): Promise<void> {
     const card = this.regionCards().find(item => item.key === kind);
@@ -478,13 +415,8 @@ export class ProgramAnalyticsComponent implements OnInit {
     return this.activeTooltip() === key;
   }
 
-  protected barWidth(value: number, metrics: AnalyticsMetric[]): number {
-    const max = Math.max(...metrics.map(item => item.value));
-    return max > 0 ? Math.max((value / max) * 100, value > 0 ? 8 : 0) : 0;
-  }
-
-  protected hasValues(metrics: AnalyticsMetric[]): boolean {
-    return metrics.some(item => item.value > 0);
+  protected hasValues(metrics: readonly { value: number | null }[]): boolean {
+    return metrics.some(item => (item.value ?? 0) > 0);
   }
 
   protected downloadProjects(): void {
@@ -507,10 +439,5 @@ export class ProgramAnalyticsComponent implements OnInit {
     return mode === "open"
       ? "Сданные проекты, которые ещё не получили ни одной оценки эксперта."
       : "Сданные проекты без выполненных назначений или с выполненной только частью назначений.";
-  }
-
-  private formatDate(date: string): string {
-    const [, month = "", day = ""] = date.split("-");
-    return `${day}.${month}`;
   }
 }

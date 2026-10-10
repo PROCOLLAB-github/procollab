@@ -18,7 +18,6 @@ import { ProgramRoleWidgetService } from "@api/program/facades/detail/program-ro
 import {
   expertWidgetPresentation,
   participantSteps,
-  withoutProjectPresentation,
 } from "@api/program/program-widget-presentation";
 import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/detail-program-info.service";
 
@@ -43,7 +42,6 @@ export class ProgramRoleWidgetComponent {
   readonly roleNames = { organizer: "организатор", expert: "эксперт", participant: "участник" };
   readonly routes = AppRoutes;
   readonly steps = participantSteps;
-  readonly withoutProject = withoutProjectPresentation;
   readonly now = signal(Date.now());
   readonly expertState = computed(() => {
     const data = this.data();

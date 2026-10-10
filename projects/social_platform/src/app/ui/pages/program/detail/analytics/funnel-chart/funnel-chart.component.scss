@@ -1,0 +1,64 @@
+/** @format */
+
+:host {
+  display: block;
+  min-width: 0;
+  margin-top: 12px;
+}
+
+.funnel-chart {
+  &__plot {
+    position: relative;
+    height: 230px;
+  }
+
+  &__data {
+    margin-top: 12px;
+    border-top: 1px solid var(--medium-grey-for-outline);
+
+    summary {
+      padding-top: 12px;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--accent-dark);
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+    }
+
+    table {
+      width: 100%;
+      margin-top: 12px;
+      font-size: 12px;
+      border-collapse: collapse;
+    }
+
+    caption {
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 10px 0;
+      text-align: left;
+      border-bottom: 1px solid var(--medium-grey-for-outline);
+    }
+
+    th span {
+      display: block;
+      margin-top: 4px;
+      font-weight: 400;
+      line-height: 18px;
+      color: var(--grey-for-text);
+    }
+
+    td,
+    th:last-child {
+      padding-left: 12px;
+      text-align: right;
+    }
+  }
+}
