@@ -222,6 +222,8 @@
 
   .project__top {
     position: static;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
     gap: 12px;
     justify-content: space-between;
     padding: 8px var(--page-gutter);
@@ -232,7 +234,25 @@
   }
 
   .project__save {
-    @include responsive.mobile-actions;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    min-width: 0;
+
+    > app-button {
+      display: block;
+      width: 100%;
+    }
+
+    ::ng-deep .button {
+      width: 100%;
+    }
+  }
+
+  .project__back {
+    align-self: start;
+    justify-content: center;
+    min-height: 44px;
   }
 
   .project__wrapper--settings {

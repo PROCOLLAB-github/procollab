@@ -1,6 +1,6 @@
 /** @format */
 
-import { ButtonDirective, FieldDirective, StateComponent } from "@uilib";
+import { ButtonDirective, StateComponent } from "@uilib";
 /** @format */
 import {
   ChangeDetectionStrategy,
@@ -31,7 +31,6 @@ import { ParticipantPickerComponent } from "./participant-picker.component";
   imports: [
     StateComponent,
     ButtonDirective,
-    FieldDirective,
     ReactiveFormsModule,
     ProjectInviteDialogComponent,
     ProjectInviteRoleInputComponent,

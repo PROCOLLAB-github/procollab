@@ -2,6 +2,8 @@
 
 <div
   class="field"
+  [class.field--compact]="size() === 'small' && type() !== 'radio'"
+  [class.field--with-hint]="haveHint() && tooltipText()"
   [class.field--error]="error()"
   [style.width]="size() === 'small' ? '70px' : '100%'"
   (click)="focusInput()"

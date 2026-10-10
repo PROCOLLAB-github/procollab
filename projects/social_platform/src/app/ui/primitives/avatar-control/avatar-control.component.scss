@@ -83,6 +83,17 @@
   background-color: var(--gray);
 }
 
+@include responsive.apply-below-desktop {
+  .control__tooltip-wrapper {
+    top: 50%;
+    right: -48px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+  }
+}
+
 .cancel {
   display: flex;
   flex-direction: column;

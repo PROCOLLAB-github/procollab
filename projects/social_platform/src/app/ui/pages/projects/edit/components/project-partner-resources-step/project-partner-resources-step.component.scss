@@ -57,3 +57,22 @@
     display: block;
   }
 }
+
+@include responsive.apply-below-desktop {
+  .project__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .project__info--general {
+    @include responsive.single-column;
+  }
+
+  .project__no-items {
+    position: static;
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+}

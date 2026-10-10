@@ -61,6 +61,10 @@ export class SnackbarComponent implements OnInit, OnDestroy {
     this.snackbarService.snacks
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(snack => this.addNotification(snack));
+    this.snackbarService.dismissed$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(id => {
+      this.snacks = this.snacks.filter(snack => snack.id !== id);
+      this.cdr.markForCheck();
+    });
   }
 
   /** Отписка от уведомлений при уничтожении */

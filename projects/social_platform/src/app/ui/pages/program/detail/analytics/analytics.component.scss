@@ -983,3 +983,22 @@
     background-position: -100% 0;
   }
 }
+
+@media screen and (max-width: 999px) {
+  .attention .attention__list .attention__action.ui-button {
+    width: 100%;
+    padding: 14px 12px;
+    font: inherit;
+    color: var(--black);
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      background: transparent;
+      border-color: transparent;
+    }
+  }
+}

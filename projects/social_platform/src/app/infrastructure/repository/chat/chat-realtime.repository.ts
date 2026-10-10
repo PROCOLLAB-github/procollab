@@ -13,25 +13,12 @@ import {
 } from "@domain/chat/chat.model";
 import { plainToInstance } from "class-transformer";
 import { filter, map } from "rxjs";
-import { WebsocketService } from "@core/public-api";
-import { SnackbarService } from "@domain/shared/snackbar.service";
 import { mapChatMessage } from "./chat.repository";
 
 /** ChatRealtimePort поверх WebSocket-адаптера: команды проксируются в сокет, входящие события типизируются. */
 @Injectable({ providedIn: "root" })
 export class ChatRealtimeRepository implements ChatRealtimePort {
   private readonly chatWsAdapter = inject(ChatWsAdapter);
-  private readonly websocketService = inject(WebsocketService);
-  private readonly snackbarService = inject(SnackbarService);
-
-  constructor() {
-    this.websocketService.connectionLost$.subscribe({
-      next: () => {
-        this.snackbarService.error("Соединение потеряно");
-      },
-    });
-  }
-
   connect() {
     return this.chatWsAdapter.connect();
   }
