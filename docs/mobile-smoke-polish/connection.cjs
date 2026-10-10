@@ -19,6 +19,19 @@ const directory = path.resolve(process.argv[3] || ".desktop-regression/mobile-sm
       window.qaChatOffline = true;
       window.qaChatConnected = false;
       window.qaChatSockets = [];
+      window.qaToastCount = 0;
+      new MutationObserver(records => {
+        for (const record of records) {
+          for (const node of record.addedNodes) {
+            if (
+              node.nodeType === 1 &&
+              (node.matches(".snackbar__item") || node.querySelector(".snackbar__item"))
+            ) {
+              window.qaToastCount++;
+            }
+          }
+        }
+      }).observe(document, { childList: true, subtree: true });
       window.WebSocket = class {
         static OPEN = 1;
         static CONNECTING = 0;
@@ -48,37 +61,68 @@ const directory = path.resolve(process.argv[3] || ".desktop-regression/mobile-sm
     });
     const page = harness.page;
     await page.goto(baseUrl + "/office/feed");
+    await page.locator("app-open-vacancy").first().waitFor({ state: "attached" });
     const toast = page.locator(".snackbar__item");
-    await toast.waitFor({ state: "visible", timeout: 30000 });
-    assert.equal(await toast.count(), 1);
-    assert.match(await toast.innerText(), /Чат временно недоступен/);
+    // Проходим порог быстрых retry и ещё две попытки; фон продолжает работать без toast.
+    await page.waitForFunction(() => window.qaChatSockets.length >= 7, null, { timeout: 20000 });
+    assert.equal(
+      await toast.count(),
+      0,
+      "Hidden chat outage must not create a global notification",
+    );
     await page.evaluate(() => document.fonts.ready);
-    await toast.screenshot({ path: path.join(directory, "unavailable-390.png") });
-    await page.getByLabel("Закрыть уведомление").click();
-    await toast.waitFor({ state: "hidden" });
-    const attempts = await page.evaluate(() => window.qaChatSockets.length);
-    await page.waitForFunction(attempts => window.qaChatSockets.length > attempts, attempts, {
-      timeout: 10000,
+    await page.screenshot({
+      path: path.join(directory, "background-outage-390.png"),
+      fullPage: true,
     });
-    assert.equal(await toast.count(), 0, "Dismissed toast must not reappear during same outage");
     await page.evaluate(() => {
       window.qaChatOffline = false;
     });
     await page.waitForFunction(() => window.qaChatConnected, null, { timeout: 10000 });
     assert.equal(await toast.count(), 0);
+
+    await page.evaluate(() => {
+      history.pushState({}, "", "/office/profile/1");
+      dispatchEvent(new PopStateEvent("popstate"));
+    });
+    await page.locator("app-profile-left-side").waitFor({ state: "attached" });
+    const onlineBadge = page.locator(".info__avatar .avatar__online");
+    assert.equal(await onlineBadge.count(), 0);
+    const emitStatus = type =>
+      page.evaluate(type => {
+        window.qaChatSockets.at(-1).onmessage(
+          new MessageEvent("message", {
+            data: JSON.stringify({ type, content: { user_id: 1 } }),
+          }),
+        );
+      }, type);
+    await emitStatus("set_online");
+    await onlineBadge.waitFor({ state: "visible" });
+    await emitStatus("set_offline");
+    await onlineBadge.waitFor({ state: "hidden" });
+
+    const attempts = await page.evaluate(() => window.qaChatSockets.length);
     await page.evaluate(() => {
       window.qaChatOffline = true;
       window.qaChatConnected = false;
       window.qaChatSockets.at(-1).onerror(new Event("error"));
     });
-    await toast.waitFor({ state: "visible", timeout: 30000 });
-    assert.equal(await toast.count(), 1, "New outage must produce one new notification");
+    await page.waitForFunction(attempts => window.qaChatSockets.length >= attempts + 6, attempts, {
+      timeout: 20000,
+    });
+    assert.equal(await toast.count(), 0, "Second outage must also stay silent");
     await page.evaluate(() => {
       window.qaChatOffline = false;
     });
     await page.waitForFunction(() => window.qaChatConnected, null, { timeout: 10000 });
-    await toast.waitFor({ state: "hidden" });
-    assert.equal(await toast.count(), 0, "Reconnect must dismiss notification automatically");
+    await emitStatus("set_online");
+    await onlineBadge.waitFor({ state: "visible" });
+    assert.equal(await toast.count(), 0);
+    assert.equal(
+      await page.evaluate(() => window.qaToastCount),
+      0,
+      "No transient toast during any outage",
+    );
     assert.deepEqual(harness.errors, []);
     fs.writeFileSync(
       path.join(directory, "result.json"),
@@ -87,11 +131,10 @@ const directory = path.resolve(process.argv[3] || ".desktop-regression/mobile-sm
           width: 390,
           syntheticWebSocket: true,
           httpAvailable: true,
-          oneNotificationPerOutage: true,
-          manualDismiss: true,
-          noRedisplayAfterDismiss: true,
-          secondOutage: true,
-          autoDismissOnReconnect: true,
+          noGlobalNotification: true,
+          automaticReconnect: true,
+          secondOutageSilent: true,
+          onlineStatusesAfterReconnect: true,
           passed: true,
         },
         null,
