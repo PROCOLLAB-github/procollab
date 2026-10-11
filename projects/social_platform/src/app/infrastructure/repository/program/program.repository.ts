@@ -82,6 +82,14 @@ export class ProgramRepository implements ProgramRepositoryPort {
   }
 
   /** Свежий manager-список при каждом открытии/поиске, без EntityCache. */
+  getManagerParticipantsWithoutOnboarding(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
+    return this.programAdapter.getManagerParticipantsWithoutOnboarding(programId, query);
+  }
+
+  /** Свежий manager-список при каждом открытии/поиске, без EntityCache. */
   getManagerParticipantsWithoutTeam(
     programId: number,
     query: ProgramAnalyticsAttentionQuery,

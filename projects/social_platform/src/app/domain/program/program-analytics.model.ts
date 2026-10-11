@@ -41,6 +41,8 @@ export interface ProgramAnalyticsOverview {
     };
   };
   attention: {
+    /** Absent until the API deployment provides the onboarding attention list. */
+    participantsWithoutOnboarding?: number;
     participantsWithoutTeam: number;
     projectsAwaitingEvaluation: number;
     /** Несданные связи: требование сдачи применимо только к конкурсной программе. */

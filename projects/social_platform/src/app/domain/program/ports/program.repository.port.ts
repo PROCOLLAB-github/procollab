@@ -46,6 +46,11 @@ export abstract class ProgramRepositoryPort {
 
   abstract getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview>;
 
+  abstract getManagerParticipantsWithoutOnboarding(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>>;
+
   /** Уникальные участники без команды текущей программы, серверный поиск/пагинация. */
   abstract getManagerParticipantsWithoutTeam(
     programId: number,

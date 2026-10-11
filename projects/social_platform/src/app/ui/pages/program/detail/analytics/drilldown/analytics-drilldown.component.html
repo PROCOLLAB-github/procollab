@@ -273,9 +273,7 @@
           (submit)="$event.preventDefault(); state.applyAttentionSearch()"
         >
           <label for="analytics-attention-search" class="analytics-drilldown__secondary">{{
-            state.view() === "participants-without-team"
-              ? "Поиск по имени"
-              : "Поиск по названию проекта"
+            state.isParticipantView() ? "Поиск по имени" : "Поиск по названию проекта"
           }}</label>
           <div class="analytics-drilldown__search-controls">
             <input
@@ -283,9 +281,7 @@
               id="analytics-attention-search"
               type="search"
               [placeholder]="
-                state.view() === 'participants-without-team'
-                  ? 'Поиск по имени'
-                  : 'Поиск по названию проекта'
+                state.isParticipantView() ? 'Поиск по имени' : 'Поиск по названию проекта'
               "
               [value]="state.searchDraft()"
               (input)="state.searchDraft.set($any($event.target).value)"

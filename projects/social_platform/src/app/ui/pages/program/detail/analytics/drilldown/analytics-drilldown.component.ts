@@ -114,6 +114,8 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       }
       case "participants-without-team":
         return "Участники без команды";
+      case "participants-without-onboarding":
+        return "Участники не завершили онбординг";
       case "projects-awaiting-evaluation":
         return "Работы ожидают оценивания";
       case "projects-not-submitted":
@@ -148,6 +150,8 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       return "Для этой программы сдача решения не требуется.";
     if (this.state.appliedSearch()) return "По вашему запросу ничего не найдено.";
     if (this.state.view() === "projects-not-submitted") return "Все проекты программы уже сданы.";
+    if (this.state.view() === "participants-without-onboarding")
+      return "Все зарегистрированные участники завершили онбординг.";
     return this.state.view() === "participants-without-team"
       ? "Все зарегистрированные участники уже состоят в командах."
       : "Нет работ, ожидающих оценивания.";
