@@ -170,9 +170,11 @@
                     [disabled]="item.value === 0"
                     (click)="
                       drilldown.openAttention(
-                        item.key === 'without-team'
-                          ? 'participants-without-team'
-                          : 'projects-awaiting-evaluation',
+                        item.key === 'without-onboarding'
+                          ? 'participants-without-onboarding'
+                          : item.key === 'without-team'
+                            ? 'participants-without-team'
+                            : 'projects-awaiting-evaluation',
                         attentionTrigger
                       )
                     "

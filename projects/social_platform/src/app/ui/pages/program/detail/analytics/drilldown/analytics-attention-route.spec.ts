@@ -11,6 +11,7 @@ import { GetProgramManagerOverviewUseCase } from "@api/program/use-cases/get-pro
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerParticipantsWithoutOnboardingUseCase } from "@api/program/use-cases/get-program-manager-participants-without-onboarding.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
 import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
@@ -56,6 +57,7 @@ class RouteHost {
 
 describe("Attention SPA: observable route → resolver → overview", () => {
   it.each([
+    "participants-without-onboarding",
     "participants-without-team",
     "projects-awaiting-evaluation",
     "projects-not-submitted",
@@ -76,6 +78,7 @@ describe("Attention SPA: observable route → resolver → overview", () => {
         { provide: ActivatedRoute, useValue: { parent: { paramMap: params.asObservable() } } },
         { provide: GetProgramManagerOverviewUseCase, useValue: overview },
         { provide: GetProgramManagerParticipantsWithoutTeamUseCase, useValue: attention },
+        { provide: GetProgramManagerParticipantsWithoutOnboardingUseCase, useValue: attention },
         { provide: GetProgramManagerProjectsAwaitingEvaluationUseCase, useValue: attention },
         { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: attention },
         { provide: GetProgramManagerAssignmentsUseCase, useValue: { execute: vi.fn() } },
@@ -98,7 +101,7 @@ describe("Attention SPA: observable route → resolver → overview", () => {
     await fixture.whenStable();
     old.next(
       ok(
-        view === "participants-without-team"
+        view === "participants-without-team" || view === "participants-without-onboarding"
           ? participantsPage()
           : view === "projects-not-submitted"
             ? notSubmittedPage()

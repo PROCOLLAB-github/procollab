@@ -318,7 +318,20 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly attention = computed<AnalyticsMetric[]>(() => {
     const overview = this.data();
     if (!overview) return [];
+    const onboarding: AnalyticsMetric[] =
+      overview.attention.participantsWithoutOnboarding == null
+        ? []
+        : [
+            {
+              key: "without-onboarding",
+              label: "Участники не завершили онбординг",
+              value: overview.attention.participantsWithoutOnboarding,
+              tooltip:
+                "Зарегистрированные участники программы, которые ещё не завершили стартовый онбординг платформы. Участие в команде и подтверждение почты не заменяют онбординг.",
+            },
+          ];
     return [
+      ...onboarding,
       {
         key: "without-team",
         label: "Участники без команды",
@@ -337,7 +350,7 @@ export class ProgramAnalyticsComponent implements OnInit {
         label: "Эксперты задерживают оценивание",
         value: overview.attention.delayedExperts.total,
         tooltip:
-          "Эксперты с просроченными назначениями: минимум два проекта ожидают оценки 24 часа или хотя бы один проект — 48 часов.",
+          "Появляется за 5 суток до окончания оценивания, если у эксперта есть незавершённая оценка сданной работы. После дедлайна остаётся до завершения оценок. Без даты окончания оценивания сигнал не появляется.",
       },
     ];
   });

@@ -549,6 +549,64 @@ describe("ProgramAnalyticsComponent", () => {
     expect(open).toHaveBeenCalledTimes(1);
   });
 
+  it("onboarding attention uses the API count, opens its list, and disables zero", () => {
+    const base = overview();
+    data.set({
+      ...base,
+      attention: { ...base.attention, participantsWithoutOnboarding: 7 },
+    });
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
+      .componentInstance as AnalyticsDrilldownComponent;
+    const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
+    const trigger = Array.from(
+      fixture.nativeElement.querySelectorAll(".attention__action") as NodeListOf<HTMLButtonElement>,
+    ).find(button => button.textContent?.includes("Участники не завершили онбординг"))!;
+    expect(trigger.querySelector("strong")?.textContent).toBe("7");
+    expect(trigger.disabled).toBe(false);
+    trigger.click();
+    expect(open).toHaveBeenCalledExactlyOnceWith("participants-without-onboarding", trigger);
+    data.set({ ...base, attention: { ...base.attention, participantsWithoutOnboarding: 0 } });
+    fixture.detectChanges();
+    expect(trigger.disabled).toBe(true);
+    trigger.click();
+    expect(open).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not invent an onboarding attention count when the API field is absent", () => {
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('[data-testid="attention-block"]').textContent,
+    ).not.toContain("Участники не завершили онбординг");
+  });
+
+  it("unfinished onboarding alone prevents the all-clear attention state", () => {
+    const base = overview();
+    data.set({
+      ...base,
+      attention: {
+        participantsWithoutOnboarding: 1,
+        participantsWithoutTeam: 0,
+        projectsAwaitingEvaluation: 0,
+        projectsNotSubmitted: { applicable: false, total: 0 },
+        delayedExperts: { total: 0, items: [] },
+      },
+    });
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".attention__empty")).toBeNull();
+    data.update(current => ({
+      ...current!,
+      attention: { ...current!.attention, participantsWithoutOnboarding: 0 },
+    }));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".attention__empty")?.textContent).toContain(
+      "Ничего не требует внимания",
+    );
+  });
+
   it("не дублирует счётчик несданных проектов в блоке внимания", () => {
     const base = overview();
     data.set({
