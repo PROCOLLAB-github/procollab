@@ -409,7 +409,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(root.querySelector('[data-testid="summary-participants"]')?.textContent).toContain("18");
     expect(root.querySelector('[data-testid="summary-projects"]')?.textContent).toContain("7");
     expect(root.querySelector('[data-testid="summary-submitted-projects"]')?.textContent).toContain(
-      "Сдано проектов",
+      "Сдано",
     );
     expect(root.querySelector('[data-testid="summary-submitted-projects"]')?.textContent).toContain(
       "6",
