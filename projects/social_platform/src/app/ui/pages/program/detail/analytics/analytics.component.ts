@@ -166,7 +166,7 @@ export class ProgramAnalyticsComponent implements OnInit {
       },
       {
         key: "submitted-projects",
-        label: "Сдано проектов",
+        label: "Сдано",
         value: overview.solutionFunnel.submitted,
         icon: "analytics-submitted",
         tooltip: "Проекты программы с отправленным решением.",
