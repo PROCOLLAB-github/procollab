@@ -565,6 +565,7 @@
 .attention {
   display: flex;
   flex-direction: column;
+  align-self: start;
   background: var(--light-white);
   border-color: var(--medium-grey-for-outline);
   border-left: 4px solid var(--red);
