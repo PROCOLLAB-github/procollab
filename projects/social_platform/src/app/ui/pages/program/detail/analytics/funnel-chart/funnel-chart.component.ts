@@ -30,6 +30,7 @@ export interface AnalyticsFunnelStage {
   value: number | null;
   tooltip: string;
   axisLabel?: string[];
+  tone?: "accent" | "success" | "muted";
 }
 
 @Component({
@@ -42,6 +43,8 @@ export class AnalyticsFunnelChartComponent {
   readonly items = input.required<readonly AnalyticsFunnelStage[]>();
   readonly label = input.required<string>();
   readonly kind = input<"participants" | "projects">("participants");
+  readonly categoryLabel = input("Этап");
+  readonly definitionsLabel = input("Данные и определения этапов");
 
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>("canvas");
   private readonly zone = inject(NgZone);
@@ -60,6 +63,19 @@ export class AnalyticsFunnelChartComponent {
     const canvas = this.canvas().nativeElement;
     const style = getComputedStyle(canvas);
     const color = style.getPropertyValue(kind === "projects" ? "--green-dark" : "--accent").trim();
+    const colors = items.map(item =>
+      item.tone
+        ? style
+            .getPropertyValue(
+              item.tone === "success"
+                ? "--green-dark"
+                : item.tone === "muted"
+                  ? "--grey-for-text"
+                  : "--accent",
+            )
+            .trim()
+        : color,
+    );
     const textColor = style.getPropertyValue("--black").trim();
     const mutedColor = style.getPropertyValue("--grey-for-text").trim();
     const gridColor = style.getPropertyValue("--medium-grey-for-outline").trim();
@@ -70,8 +86,8 @@ export class AnalyticsFunnelChartComponent {
     if (this.chart) {
       this.chart.data.labels = labels;
       this.chart.data.datasets[0].data = counts;
-      this.chart.data.datasets[0].backgroundColor = color;
-      this.chart.data.datasets[0].hoverBackgroundColor = color;
+      this.chart.data.datasets[0].backgroundColor = colors;
+      this.chart.data.datasets[0].hoverBackgroundColor = colors;
       this.chart.options.scales!["y"]!.suggestedMax = maximum;
       this.chart.update();
       return;
@@ -108,8 +124,8 @@ export class AnalyticsFunnelChartComponent {
         datasets: [
           {
             data: counts,
-            backgroundColor: color,
-            hoverBackgroundColor: color,
+            backgroundColor: colors,
+            hoverBackgroundColor: colors,
             borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 0, bottomRight: 0 },
             borderSkipped: "bottom",
             maxBarThickness: 64,

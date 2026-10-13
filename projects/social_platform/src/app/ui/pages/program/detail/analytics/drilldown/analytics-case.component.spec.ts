@@ -84,6 +84,45 @@ describe("Case drilldown в существующем Overlay", () => {
     expect(dialog().textContent).not.toContain("Назначений экспертов");
     expect(dialog().querySelectorAll("td[data-label]")).toHaveLength(8);
   });
+  it("combines submission and presentation filters with search and resets them together", async () => {
+    await open();
+    const input = dialog().querySelector("input")!;
+    input.value = "Проект";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    const submission = dialog().querySelector<HTMLSelectElement>("#analytics-case-submission")!;
+    submission.value = "submitted";
+    submission.dispatchEvent(new Event("change", { bubbles: true }));
+    await fixture.whenStable();
+    const presentation = dialog().querySelector<HTMLSelectElement>("#analytics-case-presentation")!;
+    presentation.value = "missing";
+    presentation.dispatchEvent(new Event("change", { bubbles: true }));
+    await fixture.whenStable();
+    expect(repo.getCaseProjects.mock.lastCall?.[1]).toMatchObject({
+      search: "Проект",
+      submission: "submitted",
+      presentation: "missing",
+      offset: 0,
+    });
+    expect(dialog().textContent).toMatch(/Найдено: 2\s+из 2/);
+    button("Сбросить фильтры").click();
+    await fixture.whenStable();
+    expect(repo.getCaseProjects.mock.lastCall?.[1]).toMatchObject({
+      search: "",
+      submission: "all",
+      presentation: "all",
+    });
+    expect(submission.value).toBe("all");
+    expect(presentation.value).toBe("all");
+  });
+  it("shows a readable name for blank projects", async () => {
+    const page = casePage();
+    page.results[0].project.name = "   ";
+    repo.getCaseProjects.mockReturnValue(of(page));
+    await open();
+    expect(dialog().querySelector("td[data-label='Проект'] a")?.textContent).toBe(
+      "Проект без названия",
+    );
+  });
   it("without_case не требует definition/options и не превращается в selected по label", async () => {
     repo.getCaseProjects.mockReturnValue(
       of(
@@ -100,10 +139,10 @@ describe("Case drilldown в существующем Overlay", () => {
     await open({ scope: "without_case" });
     expect(dialog().querySelector("h2")?.textContent).toBe("Без выбранного кейса");
     expect(dialog().textContent).toContain("больше недоступен");
-    expect(button("Выгрузить проекты кейса").disabled).toBe(false);
+    expect(button("Выгрузить найденные").disabled).toBe(false);
     expect(repo.getCaseProjects.mock.lastCall?.[1].selection).toEqual({ scope: "without_case" });
   });
-  it("zero case, затем search/no results сохраняет full-case export", async () => {
+  it("zero case и поиск без результатов запрещают export", async () => {
     repo.getCaseProjects.mockReturnValue(
       of(
         casePage({
@@ -115,7 +154,7 @@ describe("Case drilldown в существующем Overlay", () => {
     );
     await open();
     expect(dialog().textContent).toContain("В этом кейсе пока нет проектов");
-    expect(button("Выгрузить проекты кейса").disabled).toBe(true);
+    expect(button("Выгрузить найденные").disabled).toBe(true);
     const input = dialog().querySelector("input")!;
     input.value = "  нет совпадений  ";
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -124,8 +163,8 @@ describe("Case drilldown в существующем Overlay", () => {
     await fixture.whenStable();
     expect(repo.getCaseProjects.mock.lastCall?.[1].search).toBe("нет совпадений");
     expect(dialog().textContent).toContain("По запросу ничего не найдено");
-    expect(button("Выгрузить проекты кейса").disabled).toBe(false);
-    button("Очистить").click();
+    expect(button("Выгрузить найденные").disabled).toBe(true);
+    button("Сбросить фильтры").click();
     await fixture.whenStable();
     expect(input.value).toBe("");
   });
@@ -135,7 +174,7 @@ describe("Case drilldown в существующем Overlay", () => {
     await open();
     expect(dialog().textContent).toContain("Загружаем список");
     expect(dialog().querySelector("dl")?.textContent).toContain("Проекты2");
-    expect(button("Выгрузить проекты кейса").disabled).toBe(true);
+    expect(button("Выгрузить найденные").disabled).toBe(true);
     const detached = firstValueFrom(modal.overlayRef!.detachments());
     dialog()
       .querySelector<HTMLButtonElement>('[aria-label="Закрыть детализацию аналитики"]')!
@@ -160,7 +199,7 @@ describe("Case drilldown в существующем Overlay", () => {
     );
     await open();
     expect(dialog().querySelector('[role="alert"]')?.textContent).toContain(message);
-    expect(button("Выгрузить проекты кейса").disabled).toBe(true);
+    expect(button("Выгрузить найденные").disabled).toBe(true);
     if (status === 500) {
       repo.getCaseProjects.mockReturnValue(of(casePage()));
       button("Повторить загрузку").click();
@@ -172,7 +211,7 @@ describe("Case drilldown в существующем Overlay", () => {
     repo.getCaseProjects.mockReturnValue(of({ count: 2, results: [{ id: 73 }] }));
     await open();
     expect(dialog().textContent).toContain("пока недоступна на сервере");
-    button("Выгрузить проекты кейса").click();
+    button("Выгрузить найденные").click();
     expect(repo.exportCaseProjects).not.toHaveBeenCalled();
   });
   it("noncompetitive: сдача не требуется, evaluation не добавляется", async () => {

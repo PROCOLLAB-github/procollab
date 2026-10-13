@@ -3,6 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
 import {
   ProgramCaseError,
+  ProgramCaseFilters,
   ProgramCaseSelection,
 } from "@domain/program/program-case-analytics.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
@@ -17,15 +18,18 @@ export class ExportProgramCaseProjectsUseCase {
   private readonly repository = inject(ProgramRepositoryPort);
   private readonly getProjects = inject(GetProgramCaseProjectsUseCase);
 
-  /** Повторная проверка контракта перед файлом; search/offset/limit не попадают в export. */
+  /** Проверяет тот же отбор перед XLSX; файл содержит все совпадения без пагинации. */
   execute(
     programId: number,
     selection: ProgramCaseSelection,
+    filters: ProgramCaseFilters = {},
   ): Observable<Result<Blob, ProgramCaseError>> {
-    return this.getProjects.execute(programId, { selection, limit: 1, offset: 0 }).pipe(
+    return this.getProjects.execute(programId, { selection, ...filters, limit: 1, offset: 0 }).pipe(
       switchMap(result =>
         result.ok
-          ? this.repository.exportCaseProjects(programId, selection).pipe(map(blob => ok(blob)))
+          ? this.repository
+              .exportCaseProjects(programId, selection, filters)
+              .pipe(map(blob => ok(blob)))
           : of(fail(result.error)),
       ),
       catchError((error: unknown) => of(fail(caseRequestError(error)))),

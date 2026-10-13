@@ -239,7 +239,7 @@ describe("ProgramAnalyticsComponent", () => {
       return { fixture, card, rows: [...card.querySelectorAll<HTMLElement>(".case-row")] };
     }
 
-    it("keeps cases beside activity while evaluation stays in the priority row", () => {
+    it("places cases before activity while evaluation stays in the priority row", () => {
       const { card } = renderCases();
       const grid = card.parentElement!;
       expect(grid.classList.contains("analytics-bottom")).toBe(true);
@@ -258,23 +258,19 @@ describe("ProgramAnalyticsComponent", () => {
         "Case C",
         "Без выбранного кейса",
       ]);
-      expect(rows.map(row => row.querySelector(".case-row__total-value")?.textContent)).toEqual([
-        "3",
-        "1",
-        "0",
-        "2",
-      ]);
-      expect(rows.map(row => row.querySelector(".case-row__total-label")?.textContent)).toEqual([
-        "проекта",
-        "проект",
-        "проектов",
-        "проекта",
-      ]);
-      expect(rows[0].querySelector(".case-row__meta")?.textContent).toMatch(
-        /Сдано 2\s*·\s*Участников 7/,
+      expect(rows.map(row => row.querySelector(".case-row__projects strong")?.textContent)).toEqual(
+        ["3", "1", "0", "2"],
       );
-      expect(rows[0].querySelector('[role="img"]')?.getAttribute("aria-label")).toBe(
-        "Case A: 3 проекта, сдано 2, участников 7",
+      expect(
+        rows.map(
+          row => row.querySelector(".case-row__projects .case-row__mobile-label")?.textContent,
+        ),
+      ).toEqual(["проекта", "проект", "проектов", "проекта"]);
+      expect(
+        [...rows[0].querySelectorAll(".case-row__metric strong")].map(el => el.textContent),
+      ).toEqual(["2", "7"]);
+      expect(rows[0].getAttribute("aria-label")).toBe(
+        "Case A: 3 проекта, сдано 2, участников 7. Открыть проекты кейса",
       );
       expect(rows[3].classList.contains("case-row--without-case")).toBe(true);
       expect(
@@ -358,7 +354,7 @@ describe("ProgramAnalyticsComponent", () => {
       const { fixture, card, rows } = renderCases();
       expect(rows).toHaveLength(4);
       expect(card.textContent).toContain("Case A");
-      expect(card.textContent).toContain("Участников 7");
+      expect(rows[0].querySelector(".case-row__metric strong")?.textContent).toBe("7");
       expect(card.textContent).not.toMatch(/Сдано|Не сдано/);
       expect(rows[0].querySelector<HTMLElement>(".case-row__volume")!.style.width).toBe("100%");
       expect(rows[0].getAttribute("aria-label")).toBe(
@@ -370,7 +366,7 @@ describe("ProgramAnalyticsComponent", () => {
       ).toContain("Сдано");
     });
 
-    it("retains full long names and all 20 rows inside the bounded, keyboard-scrollable list", () => {
+    it("shows eight readable cases and reveals all remaining cases on demand", () => {
       const model = overview();
       const longName =
         "Разработка цифрового ассистента для персонализированного образовательного маршрута";
@@ -380,19 +376,19 @@ describe("ProgramAnalyticsComponent", () => {
       }));
       model.cases.withoutCase.projectsTotal = 0;
       data.set(model);
-      const { card, rows } = renderCases();
-      expect(rows).toHaveLength(20);
-      expect(rows[0].querySelector(".case-row__header > .case-row__name")?.textContent).toBe(
-        `${longName} 1`,
-      );
-      expect(
-        rows[0].querySelector(".case-row__header > .case-row__total .case-row__total-value"),
-      ).not.toBeNull();
-      expect(card.querySelector(".cases-card__title")?.textContent).toBe("Кейсы");
-      expect(card.querySelector(".cases-card__list")?.getAttribute("tabindex")).toBe("0");
-      expect(card.querySelector(".cases-card__list")?.getAttribute("aria-labelledby")).toBe(
-        card.querySelector("h2")?.id,
-      );
+      const { fixture, card, rows } = renderCases();
+      expect(rows).toHaveLength(8);
+      expect(rows[0].querySelector(".case-row__name")?.textContent).toBe(`${longName} 1`);
+      const expand = card.querySelector<HTMLButtonElement>(".cases-card__expand")!;
+      expect(expand.getAttribute("aria-expanded")).toBe("false");
+      expect(expand.getAttribute("aria-controls")).toBe(card.querySelector("ul")?.id);
+      expand.click();
+      fixture.detectChanges();
+      expect(card.querySelectorAll(".case-row")).toHaveLength(20);
+      expect(expand.getAttribute("aria-expanded")).toBe("true");
+      expand.click();
+      fixture.detectChanges();
+      expect(card.querySelectorAll(".case-row")).toHaveLength(8);
     });
   });
 
@@ -788,7 +784,11 @@ describe("ProgramAnalyticsComponent", () => {
     );
     expect(solutions).not.toContain("Воронка решений");
     expect(root.querySelectorAll('[data-testid="solution-funnel"] tbody tr')).toHaveLength(3);
-    expect(root.querySelectorAll("app-analytics-funnel-chart canvas")).toHaveLength(2);
+    expect(
+      root.querySelectorAll(
+        '[data-testid="participant-funnel"] canvas, [data-testid="solution-funnel"] canvas',
+      ),
+    ).toHaveLength(2);
   });
 
   it("не выдаёт отсутствие новой метрики посещения за ноль", () => {
@@ -837,7 +837,7 @@ describe("ProgramAnalyticsComponent", () => {
       ".attention__action > span",
       ".evaluation__limit .text-body-10",
     ];
-    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([4, 3, 3, 1]);
+    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([0, 3, 3, 1]);
     for (const selector of selectors) {
       for (const label of root.querySelectorAll(selector))
         expect(label.classList.contains("text-body-10")).toBe(true);
@@ -861,12 +861,19 @@ describe("ProgramAnalyticsComponent", () => {
     expect(evaluation?.querySelector(".analytics-card__title")?.textContent).toContain(
       "Статус оценивания",
     );
-    expect(evaluation?.textContent).toContain("Ожидают оценивания");
+    expect(evaluation?.textContent).not.toContain("Ожидают оценивания");
     expect(evaluation?.textContent).not.toContain("Частично оценено");
     expect(evaluation?.textContent).toContain("Максимум экспертов на проект");
     expect(evaluation?.textContent).not.toContain("требуется 3");
-    expect(evaluation?.querySelector(".status-list--projects")).not.toBeNull();
-    expect(evaluation?.querySelectorAll(".status-list--projects li strong").length).toBe(3);
+    expect(evaluation?.querySelector("app-analytics-funnel-chart canvas")).not.toBeNull();
+    expect(
+      [...evaluation!.querySelectorAll("app-analytics-funnel-chart tbody td")].map(el =>
+        el.textContent?.trim(),
+      ),
+    ).toEqual(["6", "4"]);
+    expect(fixture.nativeElement.querySelector(".attention").textContent).toContain(
+      "Работы ожидают оценивания",
+    );
     expect(evaluation?.querySelectorAll('[data-testid="assignment-statuses"] button')).toHaveLength(
       3,
     );
@@ -895,13 +902,15 @@ describe("ProgramAnalyticsComponent", () => {
 
     expect(evaluation?.textContent).toContain("Распределённое оценивание");
     expect(evaluation?.textContent).toContain("Частично оценено");
-    const partialTooltip = fixture.debugElement
-      .queryAll(By.directive(TooltipComponent))
-      .map(element => element.componentInstance as TooltipComponent)
-      .find(tooltip => tooltip.text().startsWith("Хотя бы один"));
-    expect(partialTooltip?.text()).toBe(
-      "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
+    expect(evaluation?.querySelector("app-analytics-funnel-chart table")?.textContent).toContain(
+      "Хотя бы один назначенный эксперт полностью оценил проект",
     );
+    expect(
+      [...evaluation!.querySelectorAll("app-analytics-funnel-chart tbody td")].map(el =>
+        el.textContent?.trim(),
+      ),
+    ).toEqual(["6", "1", "3"]);
+    expect(evaluation?.textContent).not.toContain("Ожидают оценивания");
     expect(evaluation?.querySelector('[data-testid="assignment-statuses"]')?.textContent).toContain(
       "Назначений всего",
     );

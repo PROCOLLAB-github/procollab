@@ -107,13 +107,13 @@
               [disabled]="!cases.canExport()"
               [loader]="cases.exportPending()"
               (click)="cases.download()"
-              >Выгрузить проекты кейса</app-button
+              >Выгрузить найденные</app-button
             >
             <p class="analytics-drilldown__secondary">
               {{
-                cases.metrics()?.projectsTotal === 0
-                  ? "В кейсе пока нет проектов"
-                  : "Все проекты кейса, без учёта поиска"
+                cases.page()?.count === 0
+                  ? "Нет проектов для выгрузки"
+                  : "Все найденные проекты с учётом поиска и фильтров"
               }}
             </p>
             @if (cases.exportError(); as error) {
@@ -150,13 +150,41 @@
                 appButton="secondary"
                 type="button"
                 class="analytics-drilldown__action"
-                [disabled]="!cases.searchDraft() && !cases.search()"
-                (click)="cases.clearSearch()"
+                [disabled]="!cases.hasFilters()"
+                (click)="cases.clearFilters()"
               >
-                Очистить
+                Сбросить фильтры
               </button>
             </div>
           </form>
+          <div class="analytics-case__filters">
+            @if (cases.submissionApplicable()) {
+              <label for="analytics-case-submission"
+                >Сдача решения
+                <select
+                  id="analytics-case-submission"
+                  [value]="cases.submission()"
+                  (change)="cases.setSubmission($any($event.target).value)"
+                >
+                  <option value="all">Все</option>
+                  <option value="submitted">Сдано</option>
+                  <option value="not_submitted">Не сдано</option>
+                </select>
+              </label>
+            }
+            <label for="analytics-case-presentation"
+              >Презентация
+              <select
+                id="analytics-case-presentation"
+                [value]="cases.presentation()"
+                (change)="cases.setPresentation($any($event.target).value)"
+              >
+                <option value="all">Все</option>
+                <option value="present">Есть</option>
+                <option value="missing">Нет</option>
+              </select>
+            </label>
+          </div>
           <div [attr.aria-busy]="cases.pending()" aria-live="polite">
             @if (cases.pending()) {
               <p class="analytics-case__loading" role="status">
@@ -178,18 +206,23 @@
                 </button>
               }
             } @else if (cases.page(); as page) {
-              <p class="analytics-drilldown__count">Найдено: {{ page.count }}</p>
+              <p class="analytics-drilldown__count">
+                Найдено: {{ page.count }}
+                @if (cases.metrics(); as metrics) {
+                  из {{ metrics.projectsTotal }}
+                }
+              </p>
               @if (!page.results.length) {
                 <div class="analytics-drilldown__empty">
                   <strong>{{
-                    cases.search()
+                    cases.hasFilters()
                       ? "По запросу ничего не найдено"
                       : "В этом кейсе пока нет проектов"
                   }}</strong>
                   <p class="analytics-drilldown__secondary">
                     {{
-                      cases.search()
-                        ? "Измените запрос или очистите поиск."
+                      cases.hasFilters()
+                        ? "Измените запрос или сбросьте фильтры."
                         : "Проекты появятся здесь после выбора этого кейса."
                     }}
                   </p>
@@ -211,7 +244,7 @@
                           <a
                             [routerLink]="['/office/projects', item.project.id]"
                             (click)="leaveAnalytics()"
-                            >{{ item.project.name }}</a
+                            >{{ item.project.name.trim() || "Проект без названия" }}</a
                           >
                         </td>
                         <td data-label="Лидер / команда">

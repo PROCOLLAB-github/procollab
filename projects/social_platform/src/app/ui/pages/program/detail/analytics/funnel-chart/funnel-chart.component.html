@@ -4,11 +4,11 @@
   <canvas
     #canvas
     role="img"
-    [attr.aria-label]="label() + '. Значения и определения этапов доступны в таблице ниже.'"
+    [attr.aria-label]="label() + '. Значения и определения доступны в таблице ниже.'"
   ></canvas>
 </div>
 <details class="funnel-chart__data">
-  <summary>Данные и определения этапов</summary>
+  <summary>{{ definitionsLabel() }}</summary>
   <table>
     <caption>
       {{
@@ -17,7 +17,7 @@
     </caption>
     <thead>
       <tr>
-        <th scope="col">Этап</th>
+        <th scope="col">{{ categoryLabel() }}</th>
         <th scope="col">Всего</th>
       </tr>
     </thead>
