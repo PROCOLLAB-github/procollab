@@ -78,7 +78,7 @@ function overview(overrides: Partial<ProgramAnalyticsOverview> = {}): ProgramAna
     participantFunnel: {
       registrations: 20,
       uniqueParticipants: 18,
-      onboardedParticipants: 16,
+      visitedParticipants: 16,
       withTeam: 12,
       projectCreators: 7,
       submittedProjectCreators: 2,
@@ -549,11 +549,11 @@ describe("ProgramAnalyticsComponent", () => {
     expect(open).toHaveBeenCalledTimes(1);
   });
 
-  it("onboarding attention uses the API count, opens its list, and disables zero", () => {
+  it("visit attention uses the API count, opens its list, and disables zero", () => {
     const base = overview();
     data.set({
       ...base,
-      attention: { ...base.attention, participantsWithoutOnboarding: 7 },
+      attention: { ...base.attention, participantsWithoutVisit: 7 },
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
@@ -562,32 +562,35 @@ describe("ProgramAnalyticsComponent", () => {
     const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
     const trigger = Array.from(
       fixture.nativeElement.querySelectorAll(".attention__action") as NodeListOf<HTMLButtonElement>,
-    ).find(button => button.textContent?.includes("Участники не завершили онбординг"))!;
+    ).find(button => button.textContent?.includes("Участники ещё не заходили на платформу"))!;
     expect(trigger.querySelector("strong")?.textContent).toBe("7");
     expect(trigger.disabled).toBe(false);
     trigger.click();
-    expect(open).toHaveBeenCalledExactlyOnceWith("participants-without-onboarding", trigger);
-    data.set({ ...base, attention: { ...base.attention, participantsWithoutOnboarding: 0 } });
+    expect(open).toHaveBeenCalledExactlyOnceWith("participants-without-visit", trigger);
+    data.set({ ...base, attention: { ...base.attention, participantsWithoutVisit: 0 } });
     fixture.detectChanges();
     expect(trigger.disabled).toBe(true);
     trigger.click();
     expect(open).toHaveBeenCalledTimes(1);
   });
 
-  it("does not invent an onboarding attention count when the API field is absent", () => {
+  it("does not invent a visit attention count when the API field is absent", () => {
+    const model = overview();
+    Object.assign(model.attention, { participantsWithoutOnboarding: 7 });
+    data.set(model);
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelector('[data-testid="attention-block"]').textContent,
-    ).not.toContain("Участники не завершили онбординг");
+    ).not.toContain("Участники ещё не заходили на платформу");
   });
 
-  it("unfinished onboarding alone prevents the all-clear attention state", () => {
+  it("participants without a visit alone prevent the all-clear attention state", () => {
     const base = overview();
     data.set({
       ...base,
       attention: {
-        participantsWithoutOnboarding: 1,
+        participantsWithoutVisit: 1,
         participantsWithoutTeam: 0,
         projectsAwaitingEvaluation: 0,
         projectsNotSubmitted: { applicable: false, total: 0 },
@@ -599,7 +602,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.querySelector(".attention__empty")).toBeNull();
     data.update(current => ({
       ...current!,
-      attention: { ...current!.attention, participantsWithoutOnboarding: 0 },
+      attention: { ...current!.attention, participantsWithoutVisit: 0 },
     }));
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".attention__empty")?.textContent).toContain(
@@ -739,7 +742,7 @@ describe("ProgramAnalyticsComponent", () => {
       ...model.participantFunnel,
       registrations: 11,
       uniqueParticipants: 7,
-      onboardedParticipants: 6,
+      visitedParticipants: 6,
       withTeam: 4,
       projectCreators: 3,
     };
@@ -755,7 +758,7 @@ describe("ProgramAnalyticsComponent", () => {
     const rows = Array.from(root.querySelectorAll('[data-testid="participant-funnel"] tbody tr'));
     expect(rows.map(row => row.querySelector("th")?.firstChild?.textContent?.trim())).toEqual([
       "Зарегистрировались",
-      "Завершили онбординг",
+      "Заходили на платформу",
       "Вступили в команду",
     ]);
     expect(rows.map(row => row.querySelector("td")?.textContent?.trim())).toEqual(["7", "6", "4"]);
@@ -764,7 +767,7 @@ describe("ProgramAnalyticsComponent", () => {
       .queryAll(By.directive(TooltipComponent))
       .map(element => (element.componentInstance as TooltipComponent).text());
     expect(participants).toContain("Уникальные зарегистрированные участники программы.");
-    expect(tooltips.some(text => text.includes("завершение онбординга платформы"))).toBe(true);
+    expect(tooltips.some(text => text.includes("зафиксированное посещение платформы"))).toBe(true);
     expect(tooltips.some(text => text.includes("регистрационные записи"))).toBe(false);
     expect(root.querySelector('[data-testid="attention-block"]')?.textContent).toContain(
       "Участники без команды",
@@ -788,9 +791,10 @@ describe("ProgramAnalyticsComponent", () => {
     expect(root.querySelectorAll("app-analytics-funnel-chart canvas")).toHaveLength(2);
   });
 
-  it("не выдаёт отсутствие новой метрики онбординга за ноль", () => {
+  it("не выдаёт отсутствие новой метрики посещения за ноль", () => {
     const model = overview();
-    delete model.participantFunnel.onboardedParticipants;
+    delete model.participantFunnel.visitedParticipants;
+    Object.assign(model.participantFunnel, { onboardedParticipants: 6 });
     data.set(model);
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();

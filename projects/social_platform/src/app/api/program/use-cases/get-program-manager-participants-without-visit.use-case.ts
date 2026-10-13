@@ -11,9 +11,9 @@ import { ProgramAnalyticsError } from "@domain/program/program-analytics.model";
 import { fail, ok, Result } from "@domain/shared/result.type";
 import { catchError, map, Observable, of } from "rxjs";
 
-/** Уникальные участники программы с незавершённым онбордингом платформы. */
+/** Уникальные участники программы без зафиксированного посещения платформы. */
 @Injectable({ providedIn: "root" })
-export class GetProgramManagerParticipantsWithoutOnboardingUseCase {
+export class GetProgramManagerParticipantsWithoutVisitUseCase {
   private readonly repository = inject(ProgramRepositoryPort);
 
   execute(
@@ -25,7 +25,7 @@ export class GetProgramManagerParticipantsWithoutOnboardingUseCase {
       ProgramAnalyticsError
     >
   > {
-    return this.repository.getManagerParticipantsWithoutOnboarding(programId, query).pipe(
+    return this.repository.getManagerParticipantsWithoutVisit(programId, query).pipe(
       map(value => ok(value)),
       catchError((error: unknown) => {
         const status = error instanceof HttpErrorResponse ? error.status : 0;
