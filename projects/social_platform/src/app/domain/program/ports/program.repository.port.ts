@@ -3,6 +3,7 @@
 import { HttpParams } from "@angular/common/http";
 import {
   ProgramCaseQuery,
+  ProgramCaseFilters,
   ProgramCaseSelection,
 } from "@domain/program/program-case-analytics.model";
 import { ProgramRoleWidget } from "../program-role-widget.model";
@@ -33,7 +34,11 @@ import {
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
   abstract getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown>;
-  abstract exportCaseProjects(programId: number, selection: ProgramCaseSelection): Observable<Blob>;
+  abstract exportCaseProjects(
+    programId: number,
+    selection: ProgramCaseSelection,
+    filters?: ProgramCaseFilters,
+  ): Observable<Blob>;
 
   abstract getRoleWidget(programId: number): Observable<ProgramRoleWidget>;
   abstract getAll(

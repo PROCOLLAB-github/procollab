@@ -240,26 +240,15 @@
           ></app-tooltip>
         </div>
         @if (overview.evaluationStatus.projects.submitted > 0) {
-          <ul class="status-list status-list--projects">
-            @for (item of evaluationStatuses(); track item.key) {
-              <li>
-                <span class="text-body-10"
-                  >{{ item.label }}
-                  @if (item.key === "evaluation-partial") {
-                    <app-tooltip
-                      [text]="item.tooltip"
-                      [isVisible]="isTooltipVisible(item.key)"
-                      [useOverlay]="true"
-                      (click)="toggleTooltip(item.key)"
-                      (show)="showTooltip(item.key)"
-                      (hide)="hideTooltip(item.key)"
-                    />
-                  }
-                </span>
-                <strong>{{ item.value }}</strong>
-              </li>
-            }
-          </ul>
+          <app-analytics-funnel-chart
+            [items]="evaluationChartItems()"
+            label="Статус оценивания проектов"
+            categoryLabel="Показатель"
+            definitionsLabel="Данные и определения показателей"
+          />
+          <p class="evaluation__note analytics-card__subtitle">
+            «Сдано» — общий объём работ. Остальные столбцы показывают, сколько из них оценено.
+          </p>
           @if (overview.evaluationStatus.maxEvaluationsPerProject !== null) {
             <div class="evaluation__limit" data-testid="evaluation-limit">
               <span>
@@ -375,15 +364,30 @@
           <p class="analytics-empty-state text-body-10">{{ message }}</p>
         }
         @if (caseRows().length) {
-          <ul class="cases-card__list" tabindex="0" aria-labelledby="analytics-cases-title">
-            @for (row of caseRows(); track row.key) {
+          <div
+            class="cases-card__columns"
+            aria-hidden="true"
+            [class.cases-card__columns--without-submission]="!overview.cases.submissionApplicable"
+          >
+            <span>Кейс</span><span>Проекты</span>
+            @if (overview.cases.submissionApplicable) {
+              <span>Сдано</span>
+            }
+            <span>Участники</span>
+          </div>
+          <ul
+            class="cases-card__list"
+            id="analytics-cases-list"
+            aria-labelledby="analytics-cases-title"
+          >
+            @for (row of casesExpanded() ? caseRows() : caseRows().slice(0, 8); track row.key) {
               <li>
                 <button
-                  appButton="secondary"
                   type="button"
                   #caseTrigger
                   class="case-row"
                   [class.case-row--without-case]="row.isWithoutCase"
+                  [class.case-row--without-submission]="!overview.cases.submissionApplicable"
                   [attr.aria-label]="row.description + '. Открыть проекты кейса'"
                   aria-haspopup="dialog"
                   (click)="
@@ -395,31 +399,40 @@
                     )
                   "
                 >
-                  <div class="case-row__header">
-                    <span class="case-row__name" [title]="row.name">{{ row.name }}</span>
-                    <span class="case-row__total">
-                      <strong class="case-row__total-value">{{ row.projectsTotal }}</strong>
-                      <span class="case-row__total-label">{{ row.totalLabel }}</span>
+                  <span class="case-row__name">{{ row.name }}</span>
+                  <span class="case-row__projects">
+                    <strong>{{ row.projectsTotal }}</strong>
+                    <span class="case-row__mobile-label">{{ row.totalLabel }}</span>
+                    <span class="case-row__bar" aria-hidden="true">
+                      <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
                     </span>
-                  </div>
-                  <div class="case-row__bar" role="img" [attr.aria-label]="row.description">
-                    <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
-                  </div>
-                  <div class="case-row__meta">
-                    @if (overview.cases.submissionApplicable) {
-                      <span
-                        >Сдано <strong>{{ row.submitted }}</strong></span
-                      >
-                      <span aria-hidden="true">·</span>
-                    }
-                    <span
-                      >Участников <strong>{{ row.participantsTotal }}</strong></span
+                  </span>
+                  @if (overview.cases.submissionApplicable) {
+                    <span class="case-row__metric"
+                      ><span class="case-row__mobile-label">Сдано</span
+                      ><strong>{{ row.submitted }}</strong></span
                     >
-                  </div>
+                  }
+                  <span class="case-row__metric"
+                    ><span class="case-row__mobile-label">Участники</span
+                    ><strong>{{ row.participantsTotal }}</strong></span
+                  >
                 </button>
               </li>
             }
           </ul>
+          @if (caseRows().length > 8) {
+            <button
+              appButton="secondary"
+              type="button"
+              class="cases-card__expand"
+              aria-controls="analytics-cases-list"
+              [attr.aria-expanded]="casesExpanded()"
+              (click)="casesExpanded.set(!casesExpanded())"
+            >
+              {{ casesExpanded() ? "Свернуть" : "Показать все кейсы (" + caseRows().length + ")" }}
+            </button>
+          }
         }
       </article>
 

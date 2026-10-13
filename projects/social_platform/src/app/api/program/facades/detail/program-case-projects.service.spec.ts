@@ -15,7 +15,7 @@ import { ProgramCaseProjectsService } from "./program-case-projects.service";
 
 vi.mock("@utils/program-case-analytics", () => ({ saveCaseProjects: vi.fn() }));
 
-describe("Case drilldown: контекст, поиск, страницы и независимый export", () => {
+describe("Case drilldown: контекст, фильтры, страницы и export найденных", () => {
   const get = { execute: vi.fn() };
   const download = { execute: vi.fn() };
   let service: ProgramCaseProjectsService;
@@ -43,7 +43,7 @@ describe("Case drilldown: контекст, поиск, страницы и не
     pending.next(ok(casePage()));
     expect(service.canExport()).toBe(true);
   });
-  it("search сбрасывает страницу; метрики/export сохраняют полный bucket при no results", () => {
+  it("search сбрасывает страницу, сохраняет метрики кейса и запрещает пустую выгрузку", () => {
     service.open(12, selectedCase);
     service.offset.set(25);
     service.searchDraft.set("  неизвестный проект  ");
@@ -52,14 +52,16 @@ describe("Case drilldown: контекст, поиск, страницы и не
     expect(get.execute).toHaveBeenLastCalledWith(12, {
       selection: selectedCase,
       search: "неизвестный проект",
+      submission: "all",
+      presentation: "all",
       limit: 25,
       offset: 0,
     });
     expect(service.page()?.count).toBe(0);
     expect(service.metrics()).toEqual(caseMetrics);
-    expect(service.canExport()).toBe(true);
+    expect(service.canExport()).toBe(false);
     service.download();
-    expect(download.execute).toHaveBeenCalledExactlyOnceWith(12, selectedCase);
+    expect(download.execute).not.toHaveBeenCalled();
     service.clearSearch();
     expect(get.execute.mock.lastCall?.[1].search).toBe("");
   });
@@ -137,7 +139,7 @@ describe("Case drilldown: контекст, поиск, страницы и не
       }
     },
   );
-  it("поиск отменяет предыдущий list, но не прерывает full-case export", () => {
+  it("поиск отменяет предыдущий list и файл с устаревшим отбором", () => {
     const first = new Subject<any>(),
       next = new Subject<any>(),
       file = new Subject<any>();
@@ -151,9 +153,9 @@ describe("Case drilldown: контекст, поиск, страницы и не
     service.searchDraft.set("Новый");
     service.applySearch();
     expect(first.observed).toBe(false);
-    expect(file.observed).toBe(true);
+    expect(file.observed).toBe(false);
     file.next(ok(new Blob(["xlsx"])));
-    expect(saveCaseProjects).toHaveBeenCalledTimes(1);
+    expect(saveCaseProjects).not.toHaveBeenCalled();
     next.next(ok(casePage()));
   });
   it("ошибка/retry сохраняет контекст, а отказ прав выключает export", () => {
@@ -170,6 +172,45 @@ describe("Case drilldown: контекст, поиск, страницы и не
     expect(service.exportError()?.kind).toBe("forbidden");
     expect(service.canExport()).toBe(false);
   });
+  it("combines filters and search, resets pagination, and exports all matching rows", () => {
+    service.open(12, selectedCase);
+    service.offset.set(25);
+    service.searchDraft.set("  Проект  ");
+    service.setSubmission("submitted");
+    service.setPresentation("missing");
+    const filters = { search: "Проект", submission: "submitted", presentation: "missing" };
+    expect(get.execute).toHaveBeenLastCalledWith(12, {
+      selection: selectedCase,
+      ...filters,
+      limit: 25,
+      offset: 0,
+    });
+    service.download();
+    expect(download.execute).toHaveBeenCalledExactlyOnceWith(12, selectedCase, filters);
+    service.clearFilters();
+    expect(service.hasFilters()).toBe(false);
+    expect(get.execute.mock.lastCall?.[1]).toMatchObject({
+      search: "",
+      submission: "all",
+      presentation: "all",
+      offset: 0,
+    });
+  });
+  it("filter changes cancel stale downloads and keep export disabled while loading", () => {
+    service.open(12, selectedCase);
+    const file = new Subject<any>();
+    const next = new Subject<any>();
+    download.execute.mockReturnValue(file);
+    service.download();
+    get.execute.mockReturnValue(next);
+    service.setPresentation("present");
+    expect(file.observed).toBe(false);
+    expect(service.canExport()).toBe(false);
+    file.next(ok(new Blob(["stale"])));
+    expect(saveCaseProjects).not.toHaveBeenCalled();
+    next.next(ok(casePage()));
+    expect(service.canExport()).toBe(true);
+  });
   it("all проверяет одну строку, но выгружает весь scope", () => {
     get.execute.mockReturnValue(
       of(ok(casePage({ selection: { scope: "all", caseName: null }, caseMetrics: null }))),
@@ -178,10 +219,16 @@ describe("Case drilldown: контекст, поиск, страницы и не
     expect(get.execute).toHaveBeenCalledExactlyOnceWith(12, {
       selection: { scope: "all" },
       search: "",
+      submission: "all",
+      presentation: "all",
       offset: 0,
       limit: 1,
     });
     service.download();
-    expect(download.execute).toHaveBeenCalledExactlyOnceWith(12, { scope: "all" });
+    expect(download.execute).toHaveBeenCalledExactlyOnceWith(
+      12,
+      { scope: "all" },
+      { search: "", submission: "all", presentation: "all" },
+    );
   });
 });

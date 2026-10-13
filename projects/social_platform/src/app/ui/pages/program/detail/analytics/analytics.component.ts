@@ -92,6 +92,7 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly error = this.analytics.error;
   protected readonly activeTooltip = signal<string | null>(null);
   protected readonly pinnedTooltip = signal<string | null>(null);
+  protected readonly casesExpanded = signal(false);
   protected readonly regionExportState = signal<Record<RegionExportKind, RegionExportState>>({
     "project-regions": { pending: false, failed: false },
     "participant-regions": { pending: false, failed: false },
@@ -264,12 +265,6 @@ export class ProgramAnalyticsComponent implements OnInit {
         status.projects.submitted,
         "Все проекты с отправленным решением.",
       ),
-      this.metric(
-        "evaluation-awaiting",
-        "Ожидают оценивания",
-        status.projects.awaitingEvaluation,
-        this.awaitingEvaluationTooltip(status.mode),
-      ),
     ];
 
     if (status.mode === "distributed") {
@@ -295,6 +290,19 @@ export class ProgramAnalyticsComponent implements OnInit {
     );
     return metrics;
   });
+
+  protected readonly evaluationChartItems = computed<AnalyticsFunnelStage[]>(() =>
+    this.evaluationStatuses().map<AnalyticsFunnelStage>(item => ({
+      ...item,
+      axisLabel: item.key === "evaluation-partial" ? ["Частично", "оценено"] : [item.label],
+      tone:
+        item.key === "evaluation-submitted"
+          ? "muted"
+          : item.key === "evaluation-evaluated"
+            ? "success"
+            : "accent",
+    })),
+  );
 
   protected readonly assignmentStatuses = computed<AnalyticsMetric[]>(() => {
     const assignments = this.data()?.evaluationStatus.assignments;
