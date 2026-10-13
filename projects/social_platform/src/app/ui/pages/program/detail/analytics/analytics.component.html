@@ -170,8 +170,8 @@
                     [disabled]="item.value === 0"
                     (click)="
                       drilldown.openAttention(
-                        item.key === 'without-onboarding'
-                          ? 'participants-without-onboarding'
+                        item.key === 'without-visit'
+                          ? 'participants-without-visit'
                           : item.key === 'without-team'
                             ? 'participants-without-team'
                             : 'projects-awaiting-evaluation',
@@ -315,7 +315,7 @@
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Воронка участников</h2>
           <app-tooltip
-            text="Регистрация в программе → завершение онбординга платформы → участие в команде. Показано текущее состояние участников: команда может появиться до завершения онбординга."
+            text="Регистрация в программе → зафиксированное посещение платформы → участие в команде. Показано текущее состояние участников; посещение учитывается и до регистрации в этой программе."
             [isVisible]="isTooltipVisible('participant-funnel')"
             [useOverlay]="true"
             (click)="toggleTooltip('participant-funnel')"

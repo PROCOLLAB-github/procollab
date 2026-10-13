@@ -12,7 +12,7 @@ import {
   notSubmittedPage,
 } from "@domain/program/program-analytics-attention.fixture";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "./get-program-manager-participants-without-team.use-case";
-import { GetProgramManagerParticipantsWithoutOnboardingUseCase } from "./get-program-manager-participants-without-onboarding.use-case";
+import { GetProgramManagerParticipantsWithoutVisitUseCase } from "./get-program-manager-participants-without-visit.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "./get-program-manager-projects-awaiting-evaluation.use-case";
 import { GetProgramManagerProjectsNotSubmittedUseCase } from "./get-program-manager-projects-not-submitted.use-case";
 
@@ -30,9 +30,9 @@ describe("Attention: adapter → repository → use cases", () => {
 
   for (const [method, endpoint, useCase, page] of [
     [
-      "getManagerParticipantsWithoutOnboarding",
-      "participants-without-onboarding",
-      GetProgramManagerParticipantsWithoutOnboardingUseCase,
+      "getManagerParticipantsWithoutVisit",
+      "participants-without-visit",
+      GetProgramManagerParticipantsWithoutVisitUseCase,
       participantsPage(),
     ],
     [
@@ -57,7 +57,7 @@ describe("Attention: adapter → repository → use cases", () => {
     const injectUseCase = () =>
       TestBed.inject<
         | GetProgramManagerParticipantsWithoutTeamUseCase
-        | GetProgramManagerParticipantsWithoutOnboardingUseCase
+        | GetProgramManagerParticipantsWithoutVisitUseCase
         | GetProgramManagerProjectsAwaitingEvaluationUseCase
         | GetProgramManagerProjectsNotSubmittedUseCase
       >(useCase);

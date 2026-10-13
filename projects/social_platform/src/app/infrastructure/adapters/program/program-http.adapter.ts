@@ -88,12 +88,12 @@ export class ProgramHttpAdapter {
   }
 
   /** Без автозагрузки остальных страниц; camelcase преобразует общий interceptor. */
-  getManagerParticipantsWithoutOnboarding(
+  getManagerParticipantsWithoutVisit(
     programId: number,
     query: ProgramAnalyticsAttentionQuery,
   ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
     return this.apiService.get(
-      `${this.PROGRAMS_URL}/${programId}/manager-overview/participants-without-onboarding/`,
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/participants-without-visit/`,
       this.attentionParams(query),
     );
   }

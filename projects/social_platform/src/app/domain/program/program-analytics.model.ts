@@ -13,8 +13,8 @@ export interface ProgramAnalyticsOverview {
   participantFunnel: {
     registrations: number;
     uniqueParticipants: number;
-    /** Completed platform onboarding; absent during a staggered API rollout. */
-    onboardedParticipants?: number;
+    /** Recorded platform activity or login; absent during a staggered API rollout. */
+    visitedParticipants?: number;
     withTeam: number;
     projectCreators: number;
     submittedProjectCreators: number;
@@ -41,8 +41,8 @@ export interface ProgramAnalyticsOverview {
     };
   };
   attention: {
-    /** Absent until the API deployment provides the onboarding attention list. */
-    participantsWithoutOnboarding?: number;
+    /** Registered users with neither recorded activity nor login; optional during rollout. */
+    participantsWithoutVisit?: number;
     participantsWithoutTeam: number;
     projectsAwaitingEvaluation: number;
     /** Несданные связи: требование сдачи применимо только к конкурсной программе. */

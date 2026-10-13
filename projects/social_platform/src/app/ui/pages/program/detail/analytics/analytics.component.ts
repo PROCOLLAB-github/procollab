@@ -213,19 +213,19 @@ export class ProgramAnalyticsComponent implements OnInit {
         axisLabel: ["Регистрация"],
       },
       {
-        key: "onboarded",
-        label: "Завершили онбординг",
-        value: funnel.onboardedParticipants ?? null,
+        key: "visited",
+        label: "Заходили на платформу",
+        value: funnel.visitedParticipants ?? null,
         tooltip:
-          "Зарегистрированные участники, завершившие стартовый сценарий платформы. Шаги можно пропустить; это не показатель заполненности профиля или регулярного использования.",
-        axisLabel: ["Завершили", "онбординг"],
+          "Зарегистрированные участники программы, для которых зафиксирован вход или активность на платформе. Учитываются и посещения до регистрации в этой программе.",
+        axisLabel: ["Заходили на", "платформу"],
       },
       {
         ...this.metric(
           "with-team",
           "Вступили в команду",
           funnel.withTeam,
-          "Зарегистрированные участники, которые сейчас являются руководителями или участниками команды проекта программы. Учитываются и те, кто ещё не завершил онбординг.",
+          "Зарегистрированные участники, которые сейчас являются руководителями или участниками команды проекта программы.",
         ),
         axisLabel: ["Вступили", "в команду"],
       },
@@ -318,20 +318,20 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly attention = computed<AnalyticsMetric[]>(() => {
     const overview = this.data();
     if (!overview) return [];
-    const onboarding: AnalyticsMetric[] =
-      overview.attention.participantsWithoutOnboarding == null
+    const visit: AnalyticsMetric[] =
+      overview.attention.participantsWithoutVisit == null
         ? []
         : [
             {
-              key: "without-onboarding",
-              label: "Участники не завершили онбординг",
-              value: overview.attention.participantsWithoutOnboarding,
+              key: "without-visit",
+              label: "Участники ещё не заходили на платформу",
+              value: overview.attention.participantsWithoutVisit,
               tooltip:
-                "Зарегистрированные участники программы, которые ещё не завершили стартовый онбординг платформы. Участие в команде и подтверждение почты не заменяют онбординг.",
+                "Зарегистрированные участники программы, у которых ещё не зафиксированы ни вход, ни активность на платформе. Участник исчезает из списка после первого зафиксированного посещения.",
             },
           ];
     return [
-      ...onboarding,
+      ...visit,
       {
         key: "without-team",
         label: "Участники без команды",

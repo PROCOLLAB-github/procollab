@@ -11,7 +11,7 @@ import { firstValueFrom, of, Subject } from "rxjs";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
-import { GetProgramManagerParticipantsWithoutOnboardingUseCase } from "@api/program/use-cases/get-program-manager-participants-without-onboarding.use-case";
+import { GetProgramManagerParticipantsWithoutVisitUseCase } from "@api/program/use-cases/get-program-manager-participants-without-visit.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
 import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import {
@@ -37,7 +37,7 @@ describe("Attention views: real overlay", () => {
   let modal: ModalComponent;
   let trigger: HTMLButtonElement;
   const participants = { execute: vi.fn() };
-  const onboarding = { execute: vi.fn() };
+  const visit = { execute: vi.fn() };
   const projects = { execute: vi.fn() };
   const notSubmitted = { execute: vi.fn() };
   const dialog = () => document.querySelector<HTMLElement>('[role="dialog"]')!;
@@ -48,7 +48,7 @@ describe("Attention views: real overlay", () => {
 
   beforeEach(async () => {
     participants.execute.mockReset().mockReturnValue(of(ok(participantsPage())));
-    onboarding.execute.mockReset().mockReturnValue(of(ok(participantsPage())));
+    visit.execute.mockReset().mockReturnValue(of(ok(participantsPage())));
     projects.execute.mockReset().mockReturnValue(of(ok(projectsPage())));
     notSubmitted.execute.mockReset().mockReturnValue(of(ok(notSubmittedPage())));
     await TestBed.configureTestingModule({
@@ -61,7 +61,7 @@ describe("Attention views: real overlay", () => {
         provideRouter([]),
         { provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: "UTC" } },
         { provide: GetProgramManagerParticipantsWithoutTeamUseCase, useValue: participants },
-        { provide: GetProgramManagerParticipantsWithoutOnboardingUseCase, useValue: onboarding },
+        { provide: GetProgramManagerParticipantsWithoutVisitUseCase, useValue: visit },
         { provide: GetProgramManagerProjectsAwaitingEvaluationUseCase, useValue: projects },
         { provide: GetProgramManagerProjectsNotSubmittedUseCase, useValue: notSubmitted },
         {
@@ -134,21 +134,21 @@ describe("Attention views: real overlay", () => {
     expect(dialog().textContent).not.toMatch(/Ищет команду|Вуз|email|Напомнить/);
   });
 
-  it("onboarding opens the participant list with server search and pagination", async () => {
-    onboarding.execute.mockReturnValue(of(ok(participantsPage({ count: 30 }))));
-    await open("participants-without-onboarding");
-    expect(dialog().textContent).toContain("Участники не завершили онбординг");
+  it("visit opens the participant list with server search and pagination", async () => {
+    visit.execute.mockReturnValue(of(ok(participantsPage({ count: 30 }))));
+    await open("participants-without-visit");
+    expect(dialog().textContent).toContain("Участники ещё не заходили на платформу");
     expect(dialog().textContent).toContain("Анна Петрова");
     expect(dialog().querySelector("input")?.placeholder).toBe("Поиск по имени");
     expect(dialog().querySelector("a")?.getAttribute("href")).toBe("/office/profile/123");
     expect(participants.execute).not.toHaveBeenCalled();
     button("Далее").click();
     await fixture.whenStable();
-    expect(onboarding.execute).toHaveBeenLastCalledWith(12, { search: "", limit: 25, offset: 25 });
+    expect(visit.execute).toHaveBeenLastCalledWith(12, { search: "", limit: 25, offset: 25 });
     state.searchDraft.set(" Анна ");
     state.applyAttentionSearch();
     await fixture.whenStable();
-    expect(onboarding.execute).toHaveBeenLastCalledWith(12, {
+    expect(visit.execute).toHaveBeenLastCalledWith(12, {
       search: "Анна",
       limit: 25,
       offset: 0,
@@ -387,21 +387,21 @@ describe("Attention views: real overlay", () => {
   });
 
   it.each([
-    "participants-without-onboarding",
+    "participants-without-visit",
     "participants-without-team",
     "projects-awaiting-evaluation",
     "projects-not-submitted",
   ] as const)("%s: loading, empty, search_empty, error и retry отдельно", async view => {
     const api =
-      view === "participants-without-onboarding"
-        ? onboarding
+      view === "participants-without-visit"
+        ? visit
         : view === "participants-without-team"
           ? participants
           : view === "projects-not-submitted"
             ? notSubmitted
             : projects;
     const page =
-      view === "participants-without-team" || view === "participants-without-onboarding"
+      view === "participants-without-team" || view === "participants-without-visit"
         ? participantsPage()
         : view === "projects-not-submitted"
           ? notSubmittedPage()
@@ -413,8 +413,8 @@ describe("Attention views: real overlay", () => {
     loading.next(ok({ ...page, count: 0, results: [] }));
     await fixture.whenStable();
     expect(dialog().textContent).toContain(
-      view === "participants-without-onboarding"
-        ? "Все зарегистрированные участники завершили онбординг."
+      view === "participants-without-visit"
+        ? "Все зарегистрированные участники уже заходили на платформу."
         : view === "participants-without-team"
           ? "Все зарегистрированные участники уже состоят в командах."
           : view === "projects-not-submitted"
@@ -445,7 +445,7 @@ describe("Attention views: real overlay", () => {
   });
 
   it.each([
-    "participants-without-onboarding",
+    "participants-without-visit",
     "participants-without-team",
     "projects-awaiting-evaluation",
     "projects-not-submitted",
@@ -481,7 +481,7 @@ describe("Attention views: real overlay", () => {
   });
 
   it.each([
-    "participants-without-onboarding",
+    "participants-without-visit",
     "participants-without-team",
     "projects-awaiting-evaluation",
     "projects-not-submitted",
