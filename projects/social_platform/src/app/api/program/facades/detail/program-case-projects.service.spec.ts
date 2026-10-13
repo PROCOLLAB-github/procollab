@@ -196,6 +196,29 @@ describe("Case drilldown: контекст, фильтры, страницы и 
       offset: 0,
     });
   });
+  it("changing pages preserves a download with the same filters", () => {
+    get.execute.mockReturnValue(
+      of(
+        ok(
+          casePage({
+            count: 26,
+            results: Array.from({ length: 25 }, (_, i) => caseProject({ programProjectId: i + 1 })),
+          }),
+        ),
+      ),
+    );
+    service.open(12, selectedCase);
+    const file = new Subject<any>();
+    download.execute.mockReturnValue(file);
+    service.download();
+    get.execute.mockReturnValue(of(ok(casePage({ count: 26, results: [caseProject()] }))));
+    service.changePage(1);
+    expect(service.offset()).toBe(25);
+    expect(file.observed).toBe(true);
+    expect(service.exportPending()).toBe(true);
+    file.next(ok(new Blob(["xlsx"])));
+    expect(saveCaseProjects).toHaveBeenCalledTimes(1);
+  });
   it("filter changes cancel stale downloads and keep export disabled while loading", () => {
     service.open(12, selectedCase);
     const file = new Subject<any>();

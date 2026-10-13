@@ -91,9 +91,6 @@ export class ProgramCaseProjectsService {
     const selection = this.selection();
     if (this.programId === null || !selection) return;
     this.cancelList.next();
-    this.cancelExport.next();
-    this.exportPending.set(false);
-    this.exportError.set(null);
     this.confirmed.set(false);
     this.page.set(null);
     this.pending.set(true);
@@ -123,6 +120,9 @@ export class ProgramCaseProjectsService {
   }
 
   applySearch(): void {
+    this.cancelExport.next();
+    this.exportPending.set(false);
+    this.exportError.set(null);
     this.search.set(this.searchDraft().trim());
     this.offset.set(0);
     this.load();
