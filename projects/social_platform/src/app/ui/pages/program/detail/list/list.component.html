@@ -513,13 +513,17 @@
           </div>
         </app-modal>
       }
+    }
 
+    @if (listType() !== "members") {
       @defer (when isFilterOpen()) {
         <app-modal
           [open]="isFilterOpen()"
           (openChange)="isFilterOpen.set($event)"
           bodyClass="modal__body--no-flex"
+          labelledBy="program-list-filter-title"
         >
+          <span id="program-list-filter-title" hidden>Фильтры проектов</span>
           <app-program-projects-filter
             (closeFilter)="isFilterOpen.set(false)"
           ></app-program-projects-filter>

@@ -325,9 +325,23 @@
     padding: 0;
   }
 
-  @include responsive.apply-mobile {
+  @include responsive.apply-below-desktop {
+    .page__outlet {
+      min-width: 0;
+    }
+
     .page__list {
-      @include responsive.single-column;
+      --ui-mobile-entity-card-width: 100%;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      &--rating {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      > li {
+        min-width: 0;
+      }
     }
 
     .page__mobile-filter-row {

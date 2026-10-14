@@ -87,7 +87,17 @@
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
   .bar__add-project {
+    width: max-content;
     margin-bottom: 0;
+
+    ::ng-deep button {
+      width: max-content;
+      white-space: nowrap;
+    }
+  }
+
+  .bar__add-project-text {
+    white-space: nowrap;
   }
 
   @include responsive.apply-below-desktop {

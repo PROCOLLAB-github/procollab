@@ -251,6 +251,53 @@
 }
 
 @media screen and (max-width: 999px) {
+  .cancel {
+    width: 100%;
+    height: auto;
+    min-height: 160px;
+  }
+
+  .cancel__skills,
+  .cancel__skills--block {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .cancel__skills--block {
+    display: grid;
+    gap: 12px;
+  }
+
+  .skills__info {
+    min-width: 0;
+    padding: 12px;
+    overflow-wrap: anywhere;
+  }
+
+  .skills__category {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+
+    app-tag {
+      flex: 0 1 auto;
+      width: auto;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    ::ng-deep .tag {
+      width: auto;
+      max-width: 100%;
+      padding: 4px 10px;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
   :host {
     display: block;
     min-width: 0;

@@ -2,7 +2,9 @@
 
 # Мобильный frontend-релиз без изменения desktop
 
-Следующий production fix: [мобильные дефекты после #407](./fixes-20261010/README.md).
+Актуальный production fix: [мобильные дефекты от 15.10](./fixes-20261015/README.md).
+
+Предыдущий production fix: [мобильные дефекты после #407](./fixes-20261010/README.md).
 Ниже сохранён исторический отчёт первоначального релиза #407.
 
 Дата проверки: 10.10.2026. Target: `master`, ветка `release/prod-mobile-responsive-20261010`.

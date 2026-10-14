@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
+import { DesktopLayoutService } from "../../../../../../../../../ui/src/lib/services/desktop-layout.service";
 import { ProgramProjectsFilterComponent } from "./program-projects-filter.component";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 import { ProgramProjectsFilterInfoService } from "./service/program-projects-filter-info.service";
@@ -12,11 +13,16 @@ describe("ProjectsFilterComponent", () => {
   let component: ProgramProjectsFilterComponent;
   let fixture: ComponentFixture<ProgramProjectsFilterComponent>;
   const filters = signal<any[]>([]);
+  const desktop = signal(true);
+  const listType = signal("projects");
   const filterForm = new FormBuilder().group({ caseDirection: [null] });
 
   beforeEach(async () => {
+    filters.set([]);
+    desktop.set(true);
+    listType.set("projects");
     const programDetailListUIInfoServiceSpy = {
-      listType: signal("projects"),
+      listType,
     };
 
     const programProjectsFilterInfoServiceSpy = {
@@ -29,7 +35,7 @@ describe("ProjectsFilterComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [ProgramProjectsFilterComponent],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: DesktopLayoutService, useValue: { desktop } }],
     })
       .overrideComponent(ProgramProjectsFilterComponent, {
         remove: {
@@ -81,5 +87,15 @@ describe("ProjectsFilterComponent", () => {
       "cбросить",
     );
     expect(fixture.nativeElement.querySelector(".filter__select app-select")).not.toBeNull();
+  });
+  it("shows the mobile rated-project filter when a program has no custom fields", () => {
+    desktop.set(false);
+    listType.set("rating");
+    fixture.detectChanges();
+    const toggle = fixture.nativeElement.querySelector(".filter__tags") as HTMLElement;
+    expect(toggle?.textContent).toContain("проекты с оценкой");
+    toggle.click();
+    const service = fixture.debugElement.injector.get(ProgramProjectsFilterInfoService);
+    expect(service.setValue).toHaveBeenCalledOnce();
   });
 });

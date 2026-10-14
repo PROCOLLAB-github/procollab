@@ -1,5 +1,7 @@
 /** @format */
 
+import { signal } from "@angular/core";
+import { DesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -38,6 +40,7 @@ describe("NewsFormComponent", () => {
         NewsFormComponent,
       ],
       providers: [
+        { provide: DesktopLayoutService, useValue: { desktop: signal(false) } },
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
         { provide: AuthRepository, useValue: authSpy },
         { provide: FileService, useValue: fileService },
@@ -201,6 +204,22 @@ describe("NewsFormComponent", () => {
       text: "News text",
       files: ["https://cdn.example.com/doc.pdf"],
     });
+  });
+  it("submits through the mobile footer button once and disables it while pending", () => {
+    const emit = vi.spyOn(component.addNews, "emit");
+    component.messageForm.patchValue({ text: "Новости команды" });
+    fixture.detectChanges();
+    const button = fixture.nativeElement.querySelector(
+      '.footer button[type="submit"]',
+    ) as HTMLButtonElement;
+    expect(button.getAttribute("aria-label")).toBe("Опубликовать новость");
+    button.click();
+    expect(emit).toHaveBeenCalledExactlyOnceWith({ text: "Новости команды", files: [] });
+    fixture.componentRef.setInput("pending", true);
+    fixture.detectChanges();
+    expect(button.disabled).toBe(true);
+    button.click();
+    expect(emit).toHaveBeenCalledOnce();
   });
 });
 

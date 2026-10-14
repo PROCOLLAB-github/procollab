@@ -179,8 +179,19 @@
 
   @include responsive.apply-below-desktop {
     .page__list {
-      grid-template-columns: repeat(auto-fill, minmax(0, var(--ui-mobile-entity-card-width)));
+      --ui-mobile-entity-card-width: 100%;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       row-gap: 48px;
+      column-gap: 12px;
+
+      > li {
+        min-width: 0;
+      }
+
+      > li:has(app-state) {
+        grid-column: 1 / -1;
+      }
     }
 
     .page__filter {

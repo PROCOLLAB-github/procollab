@@ -194,8 +194,28 @@
 
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
+  .modal .modal__body.feed-news-modal-body {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
+  }
+
   .feed-news-modal {
     font-size: var(--ui-font-body);
+
+    &__shell {
+      max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
+    }
+
+    &__bottom {
+      flex-shrink: 0;
+      padding: 12px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--medium-grey-for-outline);
+    }
+
+    &__actions {
+      justify-content: flex-start;
+      padding: 0;
+      margin: 0;
+    }
 
     &__header {
       gap: 12px;
