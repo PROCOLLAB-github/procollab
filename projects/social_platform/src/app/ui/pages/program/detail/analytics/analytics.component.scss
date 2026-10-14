@@ -219,6 +219,13 @@
   }
 }
 
+.analytics-priority__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
 .analytics-card {
   display: flex;
   flex-direction: column;
@@ -263,6 +270,101 @@
   margin: 16px 0 0;
   color: var(--grey-for-text);
   text-align: center;
+}
+
+.program-deadlines {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  &__title {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    i {
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+  }
+
+  &__list {
+    display: grid;
+    flex: 1 1 auto;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--light-gray);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 8px;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--black);
+  }
+
+  &__date,
+  &__hint {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--dark-grey);
+  }
+
+  &__hint {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  &__status {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--dark-grey);
+    text-align: right;
+  }
+
+  &__row--nearest {
+    background: var(--accent-light);
+    border-color: var(--accent);
+
+    .program-deadlines__status {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__row--ended {
+    .program-deadlines__label,
+    .program-deadlines__date,
+    .program-deadlines__status {
+      color: var(--grey-for-text);
+    }
+  }
+
+  @media screen and (max-width: 420px) {
+    &__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+
+    &__status {
+      text-align: left;
+    }
+  }
 }
 
 .cases-card {
@@ -566,6 +668,7 @@
   display: flex;
   flex-direction: column;
   align-self: start;
+  width: 100%;
   background: var(--light-white);
   border-color: var(--medium-grey-for-outline);
   border-left: 4px solid var(--red);

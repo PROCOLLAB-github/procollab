@@ -21,6 +21,7 @@ import {
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
 import { distinctUntilChanged, map, Subject, takeUntil } from "rxjs";
 import { Program } from "@domain/program/program.model";
+import { ProgramScheduleDates } from "@utils/program-deadlines";
 
 /** Состояние и загрузка внутренней вкладки аналитики программы. */
 @Injectable()
@@ -35,6 +36,15 @@ export class ProgramAnalyticsInfoService {
   private loadedProgram: Program | undefined;
   readonly programId = signal<number | null>(null);
   readonly programName = computed(() => this.programUI.program()?.name ?? "program");
+  readonly scheduleDates = computed<ProgramScheduleDates | null>(() => {
+    const program = this.programUI.program();
+    if (!program?.isUserManager || program.id !== this.programId()) return null;
+    return {
+      datetimeRegistrationEnds: program.datetimeRegistrationEnds,
+      datetimeProjectSubmissionEnds: program.datetimeProjectSubmissionEnds,
+      datetimeEvaluationEnds: program.datetimeEvaluationEnds,
+    };
+  });
 
   constructor() {
     this.route.parent?.paramMap
