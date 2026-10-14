@@ -96,6 +96,21 @@ describe("ProgramAnalyticsInfoService", () => {
 
     expect(service.error()?.kind).toBe("forbidden");
     expect(getOverview.execute).not.toHaveBeenCalled();
+    expect(service.scheduleDates()).toBeNull();
+  });
+
+  it("reads schedule dates from the authorized resolved program without extra API requests", () => {
+    const dates = {
+      datetimeRegistrationEnds: "2026-10-14T18:00:00+03:00",
+      datetimeProjectSubmissionEnds: "",
+      datetimeEvaluationEnds: "2026-10-20T18:00:00+03:00",
+    };
+    programUI.program.set({ ...Program.default(), id: 12, isUserManager: true, ...dates });
+    expect(service.scheduleDates()).toBeNull();
+    service.initialize();
+    TestBed.tick();
+    expect(service.scheduleDates()).toEqual(dates);
+    expect(getOverview.execute).toHaveBeenCalledExactlyOnceWith(12);
   });
 
   it("сохраняет loading до завершения manager overview", () => {
@@ -129,6 +144,7 @@ describe("ProgramAnalyticsInfoService", () => {
     expect(old.observed).toBe(false);
     expect(service.programId()).toBeNull();
     expect(service.data()).toBeNull();
+    expect(service.scheduleDates()).toBeNull();
     expect(service.pending()).toBe(true);
     expect(programUI.program()?.id).toBe(12);
     expect(getOverview.execute).toHaveBeenCalledExactlyOnceWith(12);
@@ -138,6 +154,11 @@ describe("ProgramAnalyticsInfoService", () => {
     programUI.program.set({ ...Program.default(), id: 13, isUserManager: true });
     TestBed.tick();
     expect(service.programId()).toBe(13);
+    expect(service.scheduleDates()).toEqual({
+      datetimeRegistrationEnds: "",
+      datetimeProjectSubmissionEnds: "",
+      datetimeEvaluationEnds: "",
+    });
     expect(getOverview.execute).toHaveBeenCalledTimes(2);
     expect(getOverview.execute).toHaveBeenLastCalledWith(13);
     old.next(

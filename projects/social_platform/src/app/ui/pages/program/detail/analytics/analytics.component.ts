@@ -7,11 +7,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
+  NgZone,
   OnInit,
   signal,
 } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { DOCUMENT } from "@angular/common";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
@@ -21,6 +24,7 @@ import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { exportRegions, RegionExportKind } from "@utils/export-regions";
+import { programDeadlines } from "@utils/program-deadlines";
 import { AnalyticsDrilldownComponent } from "./drilldown/analytics-drilldown.component";
 import { AnalyticsRegionChartComponent } from "./region-chart/region-chart.component";
 import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart.component";
@@ -76,6 +80,10 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
 export class ProgramAnalyticsComponent implements OnInit {
   private readonly analytics = inject(ProgramAnalyticsInfoService);
   private readonly exports = inject(ExportFileInfoService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly zone = inject(NgZone);
+  private readonly document = inject(DOCUMENT);
+  private readonly currentTime = signal(Date.now());
 
   protected caseSelection(row: AnalyticsCaseRow): ProgramCaseSelection {
     return row.isWithoutCase
@@ -90,6 +98,13 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly pending = this.analytics.pending;
   protected readonly failed = this.analytics.failed;
   protected readonly error = this.analytics.error;
+  protected readonly deadlines = computed(() =>
+    programDeadlines(
+      this.analytics.scheduleDates(),
+      this.data()?.cases.submissionApplicable ?? false,
+      new Date(this.currentTime()),
+    ),
+  );
   protected readonly activeTooltip = signal<string | null>(null);
   protected readonly pinnedTooltip = signal<string | null>(null);
   protected readonly casesExpanded = signal(false);
@@ -405,6 +420,18 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.analytics.initialize();
+    this.zone.runOutsideAngular(() => {
+      const refreshTime = () => this.zone.run(() => this.currentTime.set(Date.now()));
+      const timer = setInterval(refreshTime, 60_000);
+      const onVisibility = () => {
+        if (this.document.visibilityState === "visible") refreshTime();
+      };
+      this.document.addEventListener("visibilitychange", onVisibility);
+      this.destroyRef.onDestroy(() => {
+        clearInterval(timer);
+        this.document.removeEventListener("visibilitychange", onVisibility);
+      });
+    });
   }
 
   protected retry(): void {

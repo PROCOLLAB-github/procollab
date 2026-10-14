@@ -22,6 +22,7 @@ import { of } from "rxjs";
 import { ok } from "@domain/shared/result.type";
 import { delayedExpert, scoreDetail } from "@domain/program/program-analytics-assignment.fixture";
 import { AnalyticsDrilldownComponent } from "./drilldown/analytics-drilldown.component";
+import { ProgramScheduleDates } from "@utils/program-deadlines";
 
 vi.mock("@utils/export-regions", () => ({ exportRegions: vi.fn().mockResolvedValue(undefined) }));
 
@@ -124,6 +125,7 @@ describe("ProgramAnalyticsComponent", () => {
   const analytics = {
     programId: signal<number | null>(12),
     programName: signal("Тестовая программа"),
+    scheduleDates: signal<ProgramScheduleDates | null>(null),
     data,
     pending,
     failed,
@@ -148,6 +150,7 @@ describe("ProgramAnalyticsComponent", () => {
       removeEventListener: () => {},
     }));
     data.set(overview());
+    analytics.scheduleDates.set(null);
     pending.set(false);
     failed.set(false);
     error.set(null);
@@ -435,7 +438,7 @@ describe("ProgramAnalyticsComponent", () => {
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
     expect(
-      [...root.querySelectorAll("main > section > article")].map(el =>
+      [...root.querySelectorAll("main article[data-testid]")].map(el =>
         el.getAttribute("data-testid"),
       ),
     ).toEqual([
@@ -443,6 +446,7 @@ describe("ProgramAnalyticsComponent", () => {
       "summary-projects",
       "summary-submitted-projects",
       "summary-participants-per-project",
+      "program-deadlines",
       "attention-block",
       "evaluation-statuses",
       "participant-funnel",
@@ -452,6 +456,76 @@ describe("ProgramAnalyticsComponent", () => {
       "project-regions",
       "participant-regions",
     ]);
+  });
+
+  describe("program deadlines", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("shows actual dates and the effective submission fallback above attention", () => {
+      analytics.scheduleDates.set({
+        datetimeRegistrationEnds: "2026-10-17T18:00:00+03:00",
+        datetimeProjectSubmissionEnds: null,
+        datetimeEvaluationEnds: "invalid",
+      });
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      fixture.detectChanges();
+      const root = fixture.nativeElement as HTMLElement;
+      const card = root.querySelector<HTMLElement>('[data-testid="program-deadlines"]')!;
+      expect(card.querySelectorAll("time")).toHaveLength(2);
+      expect(card.querySelector('[data-deadline="submission"]')?.textContent).toContain(
+        "По сроку регистрации",
+      );
+      expect(card.textContent).not.toContain("Конец оценивания");
+      expect(card.nextElementSibling?.getAttribute("data-testid")).toBe("attention-block");
+    });
+
+    it("does not show a submission deadline in a noncompetitive program", () => {
+      const base = overview();
+      data.set({ ...base, cases: { ...base.cases, submissionApplicable: false } });
+      analytics.scheduleDates.set({
+        datetimeRegistrationEnds: "2026-10-17T18:00:00Z",
+        datetimeProjectSubmissionEnds: "2026-10-18T18:00:00Z",
+        datetimeEvaluationEnds: "2026-10-20T18:00:00Z",
+      });
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      fixture.detectChanges();
+      const card = fixture.nativeElement.querySelector(
+        '[data-testid="program-deadlines"]',
+      ) as HTMLElement;
+      expect(card.querySelectorAll("time")).toHaveLength(2);
+      expect(card.querySelector('[data-deadline="submission"]')).toBeNull();
+    });
+
+    it("shows an empty state when no valid dates are available", () => {
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      fixture.detectChanges();
+      const card = fixture.nativeElement.querySelector(
+        '[data-testid="program-deadlines"]',
+      ) as HTMLElement;
+      expect(card.textContent).toContain("Сроки программы пока не заданы");
+      expect(card.querySelector("time")).toBeNull();
+    });
+
+    it("updates an expired deadline while the page stays open and releases the clock on destroy", () => {
+      vi.useFakeTimers();
+      const now = new Date(2026, 9, 14, 12);
+      vi.setSystemTime(now);
+      analytics.scheduleDates.set({ datetimeRegistrationEnds: now.toISOString() });
+      const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+      fixture.detectChanges();
+      const row = fixture.nativeElement.querySelector(
+        '[data-deadline="registration"]',
+      ) as HTMLElement;
+      expect(row.textContent).toContain("Сегодня");
+      vi.advanceTimersByTime(60_000);
+      fixture.detectChanges();
+      expect(row.textContent).toContain("Срок завершён");
+      fixture.destroy();
+      vi.runOnlyPendingTimers();
+      expect(vi.getTimerCount()).toBe(0);
+    });
   });
 
   it.each([
@@ -1140,7 +1214,7 @@ describe("ProgramAnalyticsComponent", () => {
     const emptyStates = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll(".analytics-empty-state"),
     ) as HTMLElement[];
-    expect(emptyStates).toHaveLength(8);
+    expect(emptyStates).toHaveLength(9);
     expect(emptyStates.every(state => state.querySelector("i") === null)).toBe(true);
     expect(emptyStates.every(state => !state.textContent?.trim().endsWith("."))).toBe(true);
     expect(fixture.nativeElement.querySelector(".attention--empty")).not.toBeNull();
