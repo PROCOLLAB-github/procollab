@@ -1,0 +1,602 @@
+[
+  {
+    "name": "composer",
+    "width": 320,
+    "button": {
+      "x": 251,
+      "y": 475.390625,
+      "width": 44,
+      "height": 44,
+      "right": 295,
+      "bottom": 519.390625
+    },
+    "footer": {
+      "x": 25,
+      "y": 465.390625,
+      "width": 270,
+      "height": 54,
+      "right": 295,
+      "bottom": 519.390625
+    },
+    "passed": true
+  },
+  {
+    "name": "skills",
+    "width": 320,
+    "tags": [
+      {
+        "text": "hard",
+        "w": 99,
+        "sw": 99,
+        "h": 24
+      },
+      {
+        "text": "Back-end",
+        "w": 129,
+        "sw": 129,
+        "h": 24
+      },
+      {
+        "text": "hard",
+        "w": 99,
+        "sw": 99,
+        "h": 24
+      },
+      {
+        "text": "Разработка программного обеспечения",
+        "w": 212,
+        "sw": 212,
+        "h": 55
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "rating",
+    "width": 320,
+    "score": {
+      "x": 39,
+      "y": 437.09375,
+      "width": 48,
+      "height": 44,
+      "right": 87,
+      "bottom": 481.09375
+    },
+    "passed": true
+  },
+  {
+    "name": "filters-selected",
+    "width": 320,
+    "passed": true
+  },
+  {
+    "name": "filters-no-custom-fields",
+    "width": 320,
+    "passed": true
+  },
+  {
+    "name": "course",
+    "width": 320,
+    "analytics": {
+      "x": 20,
+      "y": 244,
+      "width": 134,
+      "height": 44,
+      "right": 154,
+      "bottom": 288
+    },
+    "passed": true
+  },
+  {
+    "name": "lesson",
+    "width": 320,
+    "alignment": [
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "projects-grid",
+    "width": 320,
+    "boxes": [
+      {
+        "x": 12,
+        "y": 475,
+        "width": 142,
+        "height": 309,
+        "right": 154,
+        "bottom": 784
+      },
+      {
+        "x": 166,
+        "y": 475,
+        "width": 142,
+        "height": 309,
+        "right": 308,
+        "bottom": 784
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "members-grid",
+    "width": 320,
+    "boxes": [
+      {
+        "x": 16,
+        "y": 531,
+        "width": 138,
+        "height": 248,
+        "right": 154,
+        "bottom": 779
+      },
+      {
+        "x": 166,
+        "y": 531,
+        "width": 138,
+        "height": 248,
+        "right": 304,
+        "bottom": 779
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "news-modal",
+    "width": 320,
+    "padding": "24px",
+    "passed": true
+  },
+  {
+    "name": "competition-empty",
+    "width": 320,
+    "passed": true
+  },
+  {
+    "name": "composer",
+    "width": 390,
+    "button": {
+      "x": 317,
+      "y": 475.390625,
+      "width": 44,
+      "height": 44,
+      "right": 361,
+      "bottom": 519.390625
+    },
+    "footer": {
+      "x": 29,
+      "y": 465.390625,
+      "width": 332,
+      "height": 54,
+      "right": 361,
+      "bottom": 519.390625
+    },
+    "passed": true
+  },
+  {
+    "name": "skills",
+    "width": 390,
+    "tags": [
+      {
+        "text": "hard",
+        "w": 99,
+        "sw": 99,
+        "h": 24
+      },
+      {
+        "text": "Back-end",
+        "w": 129,
+        "sw": 129,
+        "h": 24
+      },
+      {
+        "text": "hard",
+        "w": 99,
+        "sw": 99,
+        "h": 24
+      },
+      {
+        "text": "Разработка программного обеспечения",
+        "w": 282,
+        "sw": 282,
+        "h": 39
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "rating",
+    "width": 390,
+    "score": {
+      "x": 43,
+      "y": 444.5,
+      "width": 48,
+      "height": 44,
+      "right": 91,
+      "bottom": 488.5
+    },
+    "passed": true
+  },
+  {
+    "name": "filters-selected",
+    "width": 390,
+    "passed": true
+  },
+  {
+    "name": "filters-no-custom-fields",
+    "width": 390,
+    "passed": true
+  },
+  {
+    "name": "course",
+    "width": 390,
+    "analytics": {
+      "x": 20,
+      "y": 244,
+      "width": 169,
+      "height": 44,
+      "right": 189,
+      "bottom": 288
+    },
+    "passed": true
+  },
+  {
+    "name": "lesson",
+    "width": 390,
+    "alignment": [
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "projects-grid",
+    "width": 390,
+    "boxes": [
+      {
+        "x": 16,
+        "y": 415,
+        "width": 173,
+        "height": 309,
+        "right": 189,
+        "bottom": 724
+      },
+      {
+        "x": 201,
+        "y": 415,
+        "width": 173,
+        "height": 309,
+        "right": 374,
+        "bottom": 724
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "members-grid",
+    "width": 390,
+    "boxes": [
+      {
+        "x": 16,
+        "y": 531,
+        "width": 173,
+        "height": 248,
+        "right": 189,
+        "bottom": 779
+      },
+      {
+        "x": 201,
+        "y": 531,
+        "width": 173,
+        "height": 248,
+        "right": 374,
+        "bottom": 779
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "news-modal",
+    "width": 390,
+    "padding": "24px",
+    "passed": true
+  },
+  {
+    "name": "competition-empty",
+    "width": 390,
+    "passed": true
+  },
+  {
+    "name": "composer",
+    "width": 768,
+    "button": {
+      "x": 680,
+      "y": 472.875,
+      "width": 44,
+      "height": 44,
+      "right": 724,
+      "bottom": 516.875
+    },
+    "footer": {
+      "x": 29,
+      "y": 462.875,
+      "width": 695,
+      "height": 54,
+      "right": 724,
+      "bottom": 516.875
+    },
+    "passed": true
+  },
+  {
+    "name": "skills",
+    "width": 768,
+    "tags": [
+      {
+        "text": "hard",
+        "w": 69,
+        "sw": 69,
+        "h": 24
+      },
+      {
+        "text": "Back-end",
+        "w": 99,
+        "sw": 99,
+        "h": 24
+      },
+      {
+        "text": "hard",
+        "w": 69,
+        "sw": 69,
+        "h": 24
+      },
+      {
+        "text": "Разработка программного обеспечения",
+        "w": 296,
+        "sw": 296,
+        "h": 24
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "rating",
+    "width": 768,
+    "score": {
+      "x": 43,
+      "y": 631.9375,
+      "width": 48,
+      "height": 44,
+      "right": 91,
+      "bottom": 675.9375
+    },
+    "passed": true
+  },
+  {
+    "name": "filters-selected",
+    "width": 768,
+    "passed": true
+  },
+  {
+    "name": "filters-no-custom-fields",
+    "width": 768,
+    "passed": true
+  },
+  {
+    "name": "course",
+    "width": 768,
+    "analytics": {
+      "x": 20,
+      "y": 244,
+      "width": 350.5,
+      "height": 44,
+      "right": 370.5,
+      "bottom": 288
+    },
+    "passed": true
+  },
+  {
+    "name": "lesson",
+    "width": 768,
+    "alignment": [
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 0.0078125,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "projects-grid",
+    "width": 768,
+    "boxes": [
+      {
+        "x": 16,
+        "y": 412.59375,
+        "width": 354.5,
+        "height": 244,
+        "right": 370.5,
+        "bottom": 656.59375
+      },
+      {
+        "x": 382.5,
+        "y": 412.59375,
+        "width": 354.5,
+        "height": 244,
+        "right": 737,
+        "bottom": 656.59375
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "members-grid",
+    "width": 768,
+    "boxes": [
+      {
+        "x": 16,
+        "y": 533,
+        "width": 354.5,
+        "height": 248,
+        "right": 370.5,
+        "bottom": 781
+      },
+      {
+        "x": 382.5,
+        "y": 533,
+        "width": 354.5,
+        "height": 248,
+        "right": 737,
+        "bottom": 781
+      }
+    ],
+    "passed": true
+  },
+  {
+    "name": "news-modal",
+    "width": 768,
+    "padding": "24px",
+    "passed": true
+  },
+  {
+    "name": "competition-empty",
+    "width": 768,
+    "passed": true
+  }
+]

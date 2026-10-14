@@ -1,6 +1,6 @@
 /** @format */
 
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, DeferBlockState, TestBed } from "@angular/core/testing";
 import { provideRouter, Router, UrlTree } from "@angular/router";
 import { signal } from "@angular/core";
 import { of } from "rxjs";
@@ -14,6 +14,8 @@ import { ExportFileInfoService } from "@api/export-file/facades/export-file-info
 import { SwipeService } from "@api/swipe/swipe.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 
+import { DesktopLayoutService } from "../../../../../../../../ui/src/lib/services/desktop-layout.service";
+
 import { Project } from "@domain/project/project.model";
 import { projectCardFixture } from "@ui/widgets/info-card/info-card.fixture";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
@@ -25,9 +27,13 @@ describe("ProgramListComponent", () => {
   let component: ProgramListComponent;
   let fixture: ComponentFixture<ProgramListComponent>;
   const projects = signal<Project[]>([]);
+  const desktop = signal(true);
+  const listType = signal("projects");
 
   beforeEach(async () => {
     projects.set([]);
+    desktop.set(true);
+    listType.set("projects");
     const programDetailListInfoServiceSpy = {
       initializeSearchForm: vi.fn(),
       initializationListData: vi.fn(),
@@ -38,7 +44,7 @@ describe("ProgramListComponent", () => {
     const fb = new FormBuilder();
     const programDetailListUIInfoServiceSpy = {
       searchForm: fb.group({ search: [""] }),
-      listType: signal("projects"),
+      listType,
       searchedList: projects,
       profileProjSubsIds: signal([]),
       routerLink: vi.fn(),
@@ -81,6 +87,7 @@ describe("ProgramListComponent", () => {
       imports: [ProgramListComponent],
       providers: [
         provideRouter([]),
+        { provide: DesktopLayoutService, useValue: { desktop } },
         { provide: IndustryRepositoryPort, useValue: { getOne: () => ({ name: "Образование" }) } },
         {
           provide: AddProjectSubscriptionUseCase,
@@ -154,4 +161,28 @@ describe("ProgramListComponent", () => {
       navigate.mockRestore();
     }
   });
+  it.each(["projects", "rating"])(
+    "opens the mobile %s filter and closes it with Escape",
+    async type => {
+      desktop.set(false);
+      listType.set(type);
+      (component as any).appWidth = 390;
+      fixture.detectChanges();
+      fixture.nativeElement.querySelector(".page__mobile-controls app-button button").click();
+      fixture.detectChanges();
+      const blocks = await fixture.getDeferBlocks();
+      expect(blocks).toHaveLength(1);
+      await blocks[0].render(DeferBlockState.Complete);
+      fixture.detectChanges();
+      await new Promise(resolve => setTimeout(resolve));
+      const dialog = document.querySelector(
+        '[role="dialog"][aria-labelledby="program-list-filter-title"]',
+      );
+      expect(dialog?.querySelector("app-program-projects-filter")).not.toBeNull();
+      dialog!.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      fixture.detectChanges();
+      await new Promise(resolve => setTimeout(resolve));
+      expect(document.querySelector('[aria-labelledby="program-list-filter-title"]')).toBeNull();
+    },
+  );
 });

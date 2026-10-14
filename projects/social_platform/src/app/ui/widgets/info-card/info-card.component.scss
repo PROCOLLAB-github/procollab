@@ -649,8 +649,8 @@
     }
 
     .card__content {
-      padding-right: 16px;
-      padding-left: 16px;
+      padding-right: 12px;
+      padding-left: 12px;
       overflow: visible;
     }
 
@@ -692,6 +692,14 @@
     .card__access-label {
       font-size: var(--ui-font-small);
       line-height: 16px;
+    }
+
+    .card__access {
+      width: 100%;
+    }
+
+    .card__access-label {
+      overflow-wrap: normal;
     }
 
     .card__description {

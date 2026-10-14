@@ -72,11 +72,21 @@ input {
     }
   }
 
-  @include responsive.apply-mobile {
+  @include responsive.apply-below-desktop {
+    .field {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+
     .field__input {
-      width: 44px;
+      width: 48px;
       height: 44px;
-      font-size: var(--ui-font-h3);
+      min-height: 44px;
+      padding: 4px 6px;
+      font-size: 16px;
+      line-height: 24px;
+      border-radius: var(--rounded-md);
     }
   }
 }

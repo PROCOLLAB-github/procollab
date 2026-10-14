@@ -73,15 +73,6 @@
         (keydown.meta.enter)="onSubmit()"
         [maxLength]="maxTextLength"
       ></app-textarea>
-      <i
-        appIcon
-        icon="send"
-        appSquare="12"
-        class="form__send"
-        [style.opacity]="isSubmitDisabled() ? '0.5' : '1'"
-        [style.pointer-events]="isSubmitDisabled() ? 'none' : 'auto'"
-        (click)="onSubmit()"
-      ></i>
     </div>
     <div class="form__images">
       @for (i of imagesList(); track i.id) {
@@ -118,6 +109,14 @@
           (change)="onInputFiles($event)"
         />
       </label>
+      <button
+        type="submit"
+        class="form__send"
+        aria-label="Опубликовать новость"
+        [disabled]="isSubmitDisabled()"
+      >
+        <i appIcon icon="send" appSquare="20"></i>
+      </button>
     </div>
   </form>
 }

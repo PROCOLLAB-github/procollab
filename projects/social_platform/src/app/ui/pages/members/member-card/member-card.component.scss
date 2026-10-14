@@ -189,16 +189,14 @@
     }
 
     .member-card__skill {
-      flex: 0 1 auto;
-      height: auto;
-      overflow-wrap: anywhere;
-      white-space: normal;
+      flex: 1 1 auto;
+      height: 22px;
+      white-space: nowrap;
     }
 
     .member-card__skills,
     .member-card__skills-area {
-      height: auto;
-      min-height: 22px;
+      height: 22px;
     }
   }
 }

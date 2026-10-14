@@ -1,0 +1,140 @@
+[
+  {
+    "route": "/office/projects/all",
+    "width": 320,
+    "positions": [
+      {
+        "x": 12,
+        "y": 636,
+        "right": 154,
+        "height": 244
+      },
+      {
+        "x": 166,
+        "y": 636,
+        "right": 308,
+        "height": 244
+      }
+    ],
+    "empty": {
+      "state": 296,
+      "list": 296
+    },
+    "passed": true
+  },
+  {
+    "route": "/office/members",
+    "width": 320,
+    "positions": [
+      {
+        "x": 16,
+        "y": 531,
+        "right": 154,
+        "height": 248
+      },
+      {
+        "x": 166,
+        "y": 531,
+        "right": 304,
+        "height": 248
+      }
+    ],
+    "empty": {
+      "state": 288,
+      "list": 288
+    },
+    "passed": true
+  },
+  {
+    "route": "/office/projects/all",
+    "width": 390,
+    "positions": [
+      {
+        "x": 16,
+        "y": 558,
+        "right": 189,
+        "height": 244
+      },
+      {
+        "x": 201,
+        "y": 558,
+        "right": 374,
+        "height": 244
+      }
+    ],
+    "empty": {
+      "state": 358,
+      "list": 358
+    },
+    "passed": true
+  },
+  {
+    "route": "/office/members",
+    "width": 390,
+    "positions": [
+      {
+        "x": 16,
+        "y": 531,
+        "right": 189,
+        "height": 248
+      },
+      {
+        "x": 201,
+        "y": 531,
+        "right": 374,
+        "height": 248
+      }
+    ],
+    "empty": {
+      "state": 358,
+      "list": 358
+    },
+    "passed": true
+  },
+  {
+    "route": "/office/projects/all",
+    "width": 768,
+    "positions": [
+      {
+        "x": 16,
+        "y": 521.59375,
+        "right": 370.5,
+        "height": 244
+      },
+      {
+        "x": 382.5,
+        "y": 521.59375,
+        "right": 737,
+        "height": 244
+      }
+    ],
+    "empty": {
+      "state": 721,
+      "list": 721
+    },
+    "passed": true
+  },
+  {
+    "route": "/office/members",
+    "width": 768,
+    "positions": [
+      {
+        "x": 16,
+        "y": 533,
+        "right": 370.5,
+        "height": 248
+      },
+      {
+        "x": 382.5,
+        "y": 533,
+        "right": 737,
+        "height": 248
+      }
+    ],
+    "empty": {
+      "state": 721,
+      "list": 721
+    },
+    "passed": true
+  }
+]

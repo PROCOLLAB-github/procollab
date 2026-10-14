@@ -79,7 +79,7 @@
     <a class="text-body-12 filter__clear" (click)="clearFilters()">cбросить</a>
   </div>
 
-  @if (filters()?.length) {
+  @if (filters()?.length || listType() === "rating") {
     <div class="filter">
       <div class="filter__body" [formGroup]="filterForm">
         @if (filters()?.length && filterForm.controls) {
@@ -136,12 +136,13 @@
           }
         }
         @if (listType() === "rating") {
-          <label class="filter__tags" (click)="setValue($event)">
+          <div class="filter__tags" (click)="setValue($event)">
             <app-checkbox
+              label="Проекты с оценкой"
               [checked]="this.filterForm.get('is_rated_by_expert')?.value!"
             ></app-checkbox>
             <p class="text-body-12">проекты с оценкой</p>
-          </label>
+          </div>
         }
       </div>
     </div>

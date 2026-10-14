@@ -124,7 +124,7 @@
 
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
-  @include responsive.apply-mobile {
+  @include responsive.apply-below-desktop {
     .task__actions {
       @include responsive.single-column;
     }
@@ -145,8 +145,19 @@
     }
 
     .progress__task {
-      min-width: 44px;
-      min-height: 44px;
+      display: flex;
+      flex: 0 0 44px;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      line-height: 1;
+
+      p {
+        margin: 0;
+        line-height: 1;
+      }
     }
   }
 }

@@ -84,16 +84,40 @@
 
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
-  @include responsive.apply-mobile {
+  @include responsive.apply-below-desktop {
     .form__input {
       min-width: 0;
     }
 
     .form__send {
-      flex-shrink: 0;
-      min-width: 44px;
-      min-height: 44px;
-      margin-left: 8px;
+      display: inline-flex;
+      flex: 0 0 44px;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      margin-left: auto;
+      color: var(--white);
+      background: var(--accent);
+      border: 0;
+      border-radius: var(--rounded-md);
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--accent-dark);
+        outline-offset: 2px;
+      }
+    }
+
+    .footer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
     }
 
     .footer__attach {

@@ -1,0 +1,218 @@
+[
+  {
+    "screen": "competition-empty-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "competition-empty-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "competition-empty-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "composer-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "composer-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "composer-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "course-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "course-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "course-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "lesson-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "lesson-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "lesson-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-grid-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-grid-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-grid-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "news-modal-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "news-modal-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "news-modal-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-grid-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-grid-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-grid-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "rating-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "rating-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "rating-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "skills-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "skills-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "skills-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  }
+]

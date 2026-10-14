@@ -231,8 +231,18 @@
 
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
-  @include responsive.apply-mobile {
+  @include responsive.apply-below-desktop {
+    .card {
+      grid-template-columns: minmax(0, 1fr);
+      min-width: 0;
+    }
+
+    .card__lower {
+      min-width: 0;
+    }
+
     .card__wrapper {
+      min-width: 0;
       padding: 16px;
     }
 

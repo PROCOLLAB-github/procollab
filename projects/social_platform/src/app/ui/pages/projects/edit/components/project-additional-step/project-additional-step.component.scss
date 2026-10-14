@@ -179,6 +179,23 @@
 
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
+  .project__additional--no-items {
+    display: flex;
+    width: 100%;
+    padding-block: 8px;
+
+    app-tooltip {
+      position: static;
+      flex-shrink: 0;
+    }
+  }
+
+  .project__programs-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
   .invite {
     &__list {
       width: 100%;
