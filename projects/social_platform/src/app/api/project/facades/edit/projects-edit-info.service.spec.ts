@@ -2,7 +2,7 @@
 
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, provideRouter, Router } from "@angular/router";
 import { BehaviorSubject, of, Subject, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -100,6 +100,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     ui.applyCloseSendDescisionModal.mockClear();
     ui.applyOpenSendDescisionLateModal.mockClear();
     ui.applyOpenAssignProjectModal.mockClear();
+    step.setStepFromRoute.mockClear();
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
@@ -462,6 +463,120 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
       id: 55,
       data: { name: "Project", draft: true, partnerProgramId: 99 },
     });
+  });
+
+  it("invalid ordinary publication explains the error and allows saving after correction", () => {
+    data.next({ data: [{ ...project(), partnerProgram: null }, [], [], [], []] });
+    query.next({});
+    service.loadProgramTagsAndProject();
+    const name = service.projectForm.get("name")!;
+    name.addValidators(Validators.required);
+    name.setValue("");
+
+    service.saveProjectAsPublished();
+
+    expect(name.touched).toBe(true);
+    expect(service.projSubmitInitiated()).toBe(true);
+    expect(service.projFormIsSubmittingAsPublished()).toBe(false);
+    expect(service.submitMode()).toBeNull();
+    expect(TestBed.inject(SnackbarService).error).toHaveBeenCalledWith(
+      "Проверьте обязательные поля и исправьте ошибки перед сохранением.",
+    );
+    expect(update.execute).not.toHaveBeenCalled();
+
+    name.setValue("Completed project");
+    const save = new Subject<ReturnType<typeof ok<Project>>>();
+    update.execute.mockReturnValue(save);
+    service.saveProjectAsPublished();
+    expect(service.projFormIsSubmittingAsPublished()).toBe(true);
+    service.saveProjectAsPublished();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Completed project", draft: false, partnerProgramId: 99 },
+    });
+    save.next(ok(project()));
+    save.complete();
+    expect(service.projFormIsSubmittingAsPublished()).toBe(false);
+    expect(TestBed.inject(SnackbarService).success).toHaveBeenCalledOnce();
+  });
+
+  it("validates the main form before sending noncompetitive program fields", () => {
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ isCompetitive: false, canSubmit: false })),
+    );
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")!.setValue("B");
+    const name = service.projectForm.get("name")!;
+    name.addValidators(Validators.required);
+    name.setValue("");
+    service.saveProjectAsPublished();
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(service.projFormIsSubmittingAsPublished()).toBe(false);
+    name.setValue("Completed project");
+    service.saveProjectAsPublished();
+    expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
+    expect(update.execute).toHaveBeenCalledOnce();
+  });
+
+  it("invalid vacancy releases draft loading and can be corrected before retry", () => {
+    service.loadProgramTagsAndProject();
+    const vacancy = TestBed.inject(ProjectVacancyUIService);
+    const validation = vi.spyOn(vacancy, "applyValidateForm").mockReturnValue(true);
+    service.saveProjectAsDraft();
+    expect(service.projFormIsSubmittingAsDraft()).toBe(false);
+    expect(service.projSubmitInitiated()).toBe(false);
+    expect(service.submitMode()).toBeNull();
+    expect(step.setStepFromRoute).toHaveBeenCalledWith("vacancies");
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(update.execute).not.toHaveBeenCalled();
+    validation.mockReturnValue(false);
+    service.saveProjectAsDraft();
+    expect(update.execute).toHaveBeenCalledOnce();
+    expect(TestBed.inject(SnackbarService).success).toHaveBeenCalledOnce();
+  });
+
+  it("revalidates after asynchronous fields save without leaving publication loading", () => {
+    repo.getProgramLinkFields.mockReturnValue(
+      of(programLinkFields({ isCompetitive: false, canSubmit: false })),
+    );
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")!.setValue("B");
+    const name = service.projectForm.get("name")!;
+    name.addValidators(Validators.required);
+    const fields = new Subject<void>();
+    repo.updateProgramLinkFields.mockReturnValueOnce(fields);
+    service.saveProjectAsPublished();
+    expect(service.projFormIsSubmittingAsPublished()).toBe(true);
+    name.setValue("");
+    fields.next();
+    fields.complete();
+    expect(service.projFormIsSubmittingAsPublished()).toBe(false);
+    expect(service.projSubmitInitiated()).toBe(true);
+    expect(update.execute).not.toHaveBeenCalled();
+    name.setValue("Completed project");
+    service.saveProjectAsPublished();
+    expect(update.execute).toHaveBeenCalledOnce();
+  });
+
+  it("rechecks main fields before confirming a competitive submission", () => {
+    service.loadProgramTagsAndProject();
+    service.additionalForm.get("case")!.setValue("B");
+    const name = service.projectForm.get("name")!;
+    name.addValidators(Validators.required);
+    service.saveProjectAsPublished();
+    expect(ui.applySendDescision).toHaveBeenCalledOnce();
+    name.setValue("");
+    service.closeSendingDescisionModal();
+    expect(repo.updateProgramLinkFields).not.toHaveBeenCalled();
+    expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
+    expect(service.projFormIsSubmittingAsPublished()).toBe(false);
+    expect(service.projSubmitInitiated()).toBe(true);
+    name.setValue("Completed project");
+    service.saveProjectAsPublished();
+    service.closeSendingDescisionModal();
+    expect(programRepo.submitCompettetiveProject).toHaveBeenCalledOnce();
+    expect(update.execute).toHaveBeenCalledOnce();
   });
 
   it("preserves the explicit dedicated assignment action and its selected program ID", () => {
