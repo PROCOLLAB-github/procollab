@@ -2,6 +2,7 @@
 
 import { OverlayContainer } from "@angular/cdk/overlay";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { signal } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router, RouterLink, UrlTree } from "@angular/router";
 import { of } from "rxjs";
@@ -14,18 +15,22 @@ import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { IconComponent } from "@ui/primitives";
 import { InfoCardComponent } from "./info-card.component";
 import { myProjectCardFixtures, projectCardFixture, projectCardProgram } from "./info-card.fixture";
+import { DesktopLayoutService } from "../../../../../../ui/src/lib/services/desktop-layout.service";
 
 describe("InfoCardComponent: статусы моих проектов", () => {
   let fixture: ComponentFixture<InfoCardComponent>;
   let component: InfoCardComponent;
+  const desktop = signal(false);
   const addSubscription = { execute: vi.fn(() => of(ok(undefined))) };
   const deleteSubscription = { execute: vi.fn(() => of(ok(undefined))) };
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    desktop.set(false);
     await TestBed.configureTestingModule({
       imports: [InfoCardComponent],
       providers: [
+        { provide: DesktopLayoutService, useValue: { desktop } },
         {
           provide: IndustryRepositoryPort,
           useValue: { industries: () => [], getOne: () => ({ id: 1, name: "Образование" }) },
@@ -49,6 +54,35 @@ describe("InfoCardComponent: статусы моих проектов", () => {
     vi.restoreAllMocks();
   });
   const card = (): HTMLElement => fixture.nativeElement.querySelector(".card__body");
+
+  it.each([true, false])(
+    "desktop=%s: статусы и программа совпадают в обеих разметках",
+    isDesktop => {
+      desktop.set(isDesktop);
+      for (const item of myProjectCardFixtures) {
+        fixture.componentRef.setInput("info", item.project);
+        fixture.detectChanges();
+        expect(card().querySelector(".card__status")?.textContent?.trim()).toBe(item.label);
+        expect(card().querySelector(".card__access-label")?.textContent?.trim()).toBe(item.access);
+        const name = item.project.partnerProgram?.name;
+        const program = card().querySelector<HTMLElement>(".card__program-name");
+        if (name) {
+          expect(program?.textContent?.trim()).toBe("Программа: " + name);
+          expect(program?.title).toBe("Программа: " + name);
+          expect(card().querySelector("a")?.getAttribute("aria-label")).toContain(name);
+        } else {
+          expect(program).toBeNull();
+        }
+        const icons = fixture.debugElement.queryAll(By.directive(IconComponent));
+        const expectedIcon =
+          item.key === "submitted" ? "lock" : item.key === "program" ? "program" : null;
+        expect(icons).toHaveLength(expectedIcon ? 1 : 0);
+        if (expectedIcon) expect(icons[0].componentInstance.icon()).toBe(expectedIcon);
+        expect(card().querySelectorAll("a")).toHaveLength(1);
+        expect(card().querySelector("a a, a button")).toBeNull();
+      }
+    },
+  );
 
   it.each(myProjectCardFixtures)(
     "$key / $role: статус, доступ и единственный корректный маршрут",
