@@ -31,6 +31,8 @@ Native adapters Button/Field/Choice/Table, существующие Modal/Icon/P
 
 52 теста Vitest в семи файлах: management facade, компонент, HTTP contract, утилиты дат/статусов, ProgramRepository, ProgramShellInfoService и существующий FileService. Проверены отмена устаревших запросов и сброс приватных данных при 403, выбор, dirty confirmation, версия записи, загрузка multipart через FileService и кеш после сохранения.
 
+Полный настроенный Vitest-прогон: **2117 PASS / 416 файлов**. Ожидание ссылки organizer role widget обновлено на `/management/analytics`; прежний экспертный маршрут сохранён. Общая проверка Prettier проходит с `--end-of-line auto` для Windows checkout с CRLF; изменённые файлы отдельно проходят обычный `--check`.
+
 `ng build social_platform --configuration=production` проходит. Сохраняются предупреждения Sass/CommonJS и budget warnings; ошибок сборки нет. Новая SCSS укладывается в error budget. Targeted ESLint, Stylelint и форматирование проверены отдельно.
 
 Headless Chrome, реальная production-сборка + локальный Django/PostgreSQL: участники, почта, no-results/reset, выбор и команда с возвратом фокуса, возврат из оценки, readonly manager, settings save/error/dirty leave, обновление публичной страницы, повторное открытие срока (cancel/save), material URL CRUD, аналитика, 403. Проверены desktop1440/mobile390/360; переполнения нет. Часовой пояс браузера America/Los_Angeles подтверждает независимость московских полей.
