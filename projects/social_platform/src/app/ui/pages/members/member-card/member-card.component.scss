@@ -185,7 +185,9 @@
     }
 
     .member-card__action {
+      flex-shrink: 0;
       align-self: center;
+      margin-top: var(--ui-space-sm);
     }
 
     .member-card__skill {
