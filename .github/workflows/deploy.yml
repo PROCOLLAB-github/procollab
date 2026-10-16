@@ -1,39 +1,27 @@
-# @format
-
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy to server
-
+name: University PROD frontend backup
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [ops/prod-university-rollout-20261016]
   workflow_dispatch:
-
+permissions:
+  contents: read
+concurrency:
+  group: university-prod-frontend-backup-20261016
+  cancel-in-progress: false
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
+  backup:
+    if: github.ref == 'refs/heads/ops/prod-university-rollout-20261016'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint:ts
-      - run: npm run test:ci
-      - run: npm run build:prod
-      - name: deploy to server
-        uses: burnett01/rsync-deployments@5.2.1
-        with:
-          switches: -avzr --delete
-          path: dist/**
-          remote_path: /home/gh_deploy
-          remote_user: gh_deploy
-          remote_key: ${{ secrets.DEPLOY_KEY }}
-          remote_host: app.procollab.ru
+      - uses: actions/checkout@v4
+      - name: Preserve currently deployed frontend on its host
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          key="$RUNNER_TEMP/university-frontend-key"
+          trap 'rm -f "$key"' EXIT
+          printf '%s\n' "$SSH_KEY" > "$key"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -i "$key" gh_deploy@app.procollab.ru 'bash -se' < .github/scripts/university-frontend-snapshot.sh
