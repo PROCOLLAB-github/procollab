@@ -73,6 +73,28 @@ describe("InviteCardComponent", () => {
     });
     expect(component.isEditInviteModal()).toBe(false);
   });
+  it("freeze запрещает смену роли и сохраняет отзыв pending приглашения", () => {
+    fixture.componentRef.setInput("frozen", true);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const editButton = root.querySelector<HTMLButtonElement>('[title="Изменить роль"]')!;
+    const revokeButton = root.querySelector<HTMLButtonElement>('[title="Отозвать приглашение"]')!;
+    const edit = vi.fn();
+    const remove = vi.fn();
+    component.edit.subscribe(edit);
+    component.remove.subscribe(remove);
+    expect(editButton.disabled).toBe(true);
+    expect(revokeButton.disabled).toBe(false);
+    editButton.click();
+    component.role.setValue("Новая роль");
+    component.onEdit();
+    expect(component.isEditInviteModal()).toBe(false);
+    expect(edit).not.toHaveBeenCalled();
+    revokeButton.click();
+    expect(component.isRemoveInviteModal()).toBe(true);
+    component.onRemove();
+    expect(remove).toHaveBeenCalledExactlyOnceWith(1);
+  });
   it("отмена отзыва не удаляет, подтверждение передаёт ID приглашения", () => {
     const remove = vi.fn();
     component.remove.subscribe(remove);

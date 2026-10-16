@@ -63,7 +63,13 @@ export class DetailProjectInfoService {
     this.route.data
       .pipe(
         map(r => r["data"][0]),
-        concatMap(p => this.leaveProjectUseCase.execute(p.id, teamProgramLinkId(p))),
+        concatMap(p => {
+          const selected = this.route.snapshot?.queryParamMap?.get("programLinkId");
+          return this.leaveProjectUseCase.execute(
+            p.id,
+            teamProgramLinkId(p, selected ? Number(selected) : undefined),
+          );
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => {

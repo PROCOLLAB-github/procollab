@@ -19,6 +19,10 @@ mapping, multi-link/freeze, существующие facade tests, полный 
 новый StateComponent, и policy helpers. Дополнительный component regression проверяет,
 что server freeze блокирует реальный CTA даже при draft в legacy-связи.
 API contract C при переносе на свежий backend dev не менялся.
+Detail remove/switch/leave учитывают выбранный `programLinkId` из URL только после
+проверки по snapshot links. Leave tests различают link ID 902, program ID 9 и чужую
+связь; state conflict сохраняет страницу. InviteCard component test подтверждает:
+после freeze смена роли запрещена, pending revoke доступен.
 
 ## Проверка и границы
 

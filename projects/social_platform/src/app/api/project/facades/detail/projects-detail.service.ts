@@ -39,7 +39,10 @@ export class ProjectsDetailService {
   }
   private teamContext(): number | undefined {
     const project = this.project();
-    return project ? teamProgramLinkId(project) : undefined;
+    const selected = this.route.snapshot?.queryParamMap?.get("programLinkId");
+    return project
+      ? teamProgramLinkId(project, selected ? Number(selected) : undefined)
+      : undefined;
   }
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
