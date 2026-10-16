@@ -112,12 +112,17 @@ export function expertWidgetPresentation(
   );
 }
 
-/** Проверка остаётся текущей без галочки; серверный evaluated завершает всю цепочку. */
-export function participantSteps(stage: ParticipantStage) {
-  const current = ["submitted", "review", "evaluated"].indexOf(stage);
-  return ["Отправлен", "Проверка", "Оценён"].map((label, index) => ({
-    label,
-    current: stage !== "evaluated" && current === index,
-    completed: stage === "evaluated" || index < current,
-  }));
+/** Галочки отмечают факты: проект в программе, отправка и серверный evaluated. */
+export function participantSteps(stage: ParticipantStage, hasProject: boolean) {
+  const submitted = hasProject && ["submitted", "review", "evaluated"].includes(stage);
+  const evaluated = hasProject && stage === "evaluated";
+  return [
+    { label: "Создан", current: !hasProject, completed: hasProject },
+    {
+      label: "Отправлен",
+      current: hasProject && !submitted && stage !== "not_applicable",
+      completed: submitted,
+    },
+    { label: "Проверен", current: submitted && !evaluated, completed: evaluated },
+  ];
 }
