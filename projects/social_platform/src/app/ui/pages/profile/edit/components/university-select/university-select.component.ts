@@ -13,6 +13,7 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { IconComponent } from "@uilib";
 import { University } from "@domain/profile/university.model";
 import { UniversityHttpAdapter } from "@infrastructure/adapters/profile/university-http.adapter";
 import { catchError, map, of, Subject, switchMap, timer } from "rxjs";
@@ -23,6 +24,7 @@ import { catchError, map, of, Subject, switchMap, timer } from "rxjs";
   templateUrl: "./university-select.component.html",
   styleUrl: "./university-select.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [IconComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

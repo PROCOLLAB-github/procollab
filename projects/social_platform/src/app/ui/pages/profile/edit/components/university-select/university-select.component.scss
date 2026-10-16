@@ -36,13 +36,31 @@
   &__toggle {
     position: absolute;
     top: 0;
-    right: 8px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 44px;
     height: 100%;
-    padding: 0 10px;
+    padding: 0 12px;
     color: var(--dark-grey);
     cursor: pointer;
     background: transparent;
     border: none;
+  }
+
+  &__arrow {
+    flex-shrink: 0;
+    color: var(--dark-grey);
+    transition:
+      transform 0.2s,
+      color 0.2s;
+    transform: rotate(180deg);
+
+    &--open {
+      color: var(--accent);
+      transform: rotate(0deg);
+    }
   }
 
   &__dropdown {
