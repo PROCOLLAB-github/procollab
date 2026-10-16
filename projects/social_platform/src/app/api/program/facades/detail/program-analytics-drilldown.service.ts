@@ -8,6 +8,7 @@ import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.m
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import { GetProgramManagerAssignmentScoresUseCase } from "@api/program/use-cases/get-program-manager-assignment-scores.use-case";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "@api/program/use-cases/get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerParticipantsWithoutVisitUseCase } from "@api/program/use-cases/get-program-manager-participants-without-visit.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "@api/program/use-cases/get-program-manager-projects-awaiting-evaluation.use-case";
 import { GetProgramManagerProjectsNotSubmittedUseCase } from "@api/program/use-cases/get-program-manager-projects-not-submitted.use-case";
 import {
@@ -27,6 +28,7 @@ import {
 
 /** Root-списки внимания используют тот же modal context, не вложенную модалку. */
 export type AnalyticsAttentionView =
+  | "participants-without-visit"
   | "participants-without-team"
   | "projects-awaiting-evaluation"
   | "projects-not-submitted";
@@ -58,6 +60,7 @@ export class ProgramAnalyticsDrilldownService {
   private readonly getAssignments = inject(GetProgramManagerAssignmentsUseCase);
   private readonly getScores = inject(GetProgramManagerAssignmentScoresUseCase);
   private readonly getParticipants = inject(GetProgramManagerParticipantsWithoutTeamUseCase);
+  private readonly getWithoutVisit = inject(GetProgramManagerParticipantsWithoutVisitUseCase);
   private readonly getProjects = inject(GetProgramManagerProjectsAwaitingEvaluationUseCase);
   private readonly getNotSubmitted = inject(GetProgramManagerProjectsNotSubmittedUseCase);
   private readonly destroyRef = inject(DestroyRef);
@@ -89,14 +92,18 @@ export class ProgramAnalyticsDrilldownService {
   readonly notSubmittedPage = signal<ProgramAnalyticsNotSubmittedProjectsPage | null>(null);
   readonly attentionPending = signal(false);
   readonly attentionError = signal<ProgramAnalyticsError | null>(null);
+  readonly isParticipantView = computed(
+    () =>
+      this.view() === "participants-without-team" || this.view() === "participants-without-visit",
+  );
   readonly isAttentionView = computed(
     () =>
-      this.view() === "participants-without-team" ||
+      this.isParticipantView() ||
       this.view() === "projects-awaiting-evaluation" ||
       this.view() === "projects-not-submitted",
   );
   readonly attentionPage = computed(() =>
-    this.view() === "participants-without-team"
+    this.isParticipantView()
       ? this.participantsPage()
       : this.view() === "projects-not-submitted"
         ? this.notSubmittedPage()
@@ -167,8 +174,10 @@ export class ProgramAnalyticsDrilldownService {
       limit: this.attentionLimit,
       offset: this.attentionOffset(),
     };
-    if (this.view() === "participants-without-team") {
-      this.getParticipants
+    if (this.isParticipantView()) {
+      const useCase =
+        this.view() === "participants-without-visit" ? this.getWithoutVisit : this.getParticipants;
+      useCase
         .execute(this.programId, query)
         .pipe(takeUntil(this.cancelAttention), takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {

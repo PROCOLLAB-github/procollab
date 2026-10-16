@@ -238,38 +238,13 @@ export class ProjectsEditInfoService {
     this.projectForm.get("draft")?.patchValue(false);
     this.submitMode.set("published");
 
-    this.additionalForm.markAllAsTouched();
-    if (
-      !this.projectAdditionalService.submitted() &&
-      !this.validationService.getFormValidation(this.additionalForm)
-    ) {
-      this.projSubmitInitiated.set(true);
-      this.projectStepService.setStepFromRoute("additional");
-      return;
-    }
+    if (!this.validateProjectForms(false)) return;
 
     if (!this.isCompetitive() || this.projectAdditionalService.submitted()) {
       this.projFormIsSubmitting$.set(loading());
       if (this.activeProgramLinkId() && !this.projectAdditionalService.submitted()) {
         this.sendAdditionalFields(this.activeProgramLinkId()!, false);
       } else this.submitProjectForm();
-      return;
-    }
-
-    this.projectForm.markAllAsTouched();
-    this.projectFormService.achievements.markAllAsTouched();
-
-    const projectValid = this.validationService.getFormValidation(this.projectForm);
-    const additionalValid = this.validationService.getFormValidation(this.additionalForm);
-
-    if (!projectValid || !additionalValid) {
-      this.projSubmitInitiated.set(true);
-      if (!additionalValid) this.projectStepService.setStepFromRoute("additional");
-      return;
-    }
-
-    if (this.validateAdditionalFields()) {
-      this.projSubmitInitiated.set(true);
       return;
     }
 
@@ -282,6 +257,7 @@ export class ProjectsEditInfoService {
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
     this.submitMode.set("draft");
+    if (!this.validateProjectForms(true)) return;
     this.projFormIsSubmitting$.set(loading());
 
     if (this.activeProgramLinkId() && !this.projectAdditionalService.submitted()) {
@@ -296,10 +272,8 @@ export class ProjectsEditInfoService {
     if (this.projectFormService.coverResetPending) return;
     if (!this.additionalContextReady()) return;
     const isDraft = this.projectForm.get("draft")?.value === true;
-
-    this.projectFormService.achievements.controls.forEach(achievementForm => {
-      achievementForm.markAllAsTouched();
-    });
+    // Поля могли измениться, пока сохранялись дополнительные сведения программы.
+    if (!this.validateProjectForms(isDraft)) return;
 
     const rawPayload = this.projectFormService.getFormValue();
     const payload = { ...rawPayload };
@@ -310,24 +284,6 @@ export class ProjectsEditInfoService {
 
     if (this.projectVacancyUIService.isDirty()) {
       this.projectVacancyService.submitVacancy(projectId);
-    }
-
-    if (isDraft) {
-      if (
-        !this.validationService.getFormValidation(this.projectForm) ||
-        this.projectVacancyUIService.applyValidateForm()
-      ) {
-        return;
-      }
-    } else {
-      if (
-        !this.validationService.getFormValidation(this.projectForm) ||
-        (!this.projectAdditionalService.submitted() &&
-          !this.validationService.getFormValidation(this.additionalForm)) ||
-        this.projectVacancyUIService.applyValidateForm()
-      ) {
-        return;
-      }
     }
 
     this.saveProjectPayload(projectId, payload, isDraft)
@@ -393,10 +349,7 @@ export class ProjectsEditInfoService {
     this.projectsEditUIInfoService.applyCloseSendDescisionModal();
     if (isLoading(this.projFormIsSubmitting$()) || !this.additionalContextReady()) return;
     if (!this.submissionAvailable()) return;
-    if (this.validateAdditionalFields()) {
-      this.projSubmitInitiated.set(true);
-      return;
-    }
+    if (!this.validateProjectForms(false)) return;
     this.projFormIsSubmitting$.set(loading());
     if (this.projectAdditionalService.submitted()) this.submitProjectForm();
     else if (this.activeProgramLinkId())
@@ -498,21 +451,31 @@ export class ProjectsEditInfoService {
       });
   }
 
-  private validateAdditionalFields(): boolean {
-    const partnerProgramFields = this.projectAdditionalService.partnerProgramFields();
+  /** Проверка до запросов и повторно после асинхронного сохранения полей программы. */
+  private validateProjectForms(isDraft: boolean): boolean {
+    const projectValid = this.validationService.getFormValidation(this.projectForm);
+    const additionalValid =
+      isDraft ||
+      this.projectAdditionalService.submitted() ||
+      this.validationService.getFormValidation(this.additionalForm);
+    const vacancyInvalid = this.projectVacancyUIService.applyValidateForm();
+    if (projectValid && additionalValid && !vacancyInvalid) return true;
 
-    // Если нет дополнительных полей - пропускаем валидацию
-    if (!partnerProgramFields?.length) {
-      return false;
-    }
-
-    // Проверяем только обязательные поля
-    const hasInvalid = this.projectAdditionalService.validateRequiredFields();
-
-    if (hasInvalid) {
-      return true;
-    }
-
+    this.projectForm.markAllAsTouched();
+    if (!isDraft) this.additionalForm.markAllAsTouched();
+    this.projSubmitInitiated.set(!isDraft);
+    this.submitMode.set(null);
+    this.projFormIsSubmitting$.set(initial());
+    this.snackBarService.error("Проверьте обязательные поля и исправьте ошибки перед сохранением.");
+    this.projectStepService.setStepFromRoute(
+      !additionalValid
+        ? "additional"
+        : !projectValid
+          ? this.achievements.invalid
+            ? "achievements"
+            : "main"
+          : "vacancies",
+    );
     return false;
   }
 

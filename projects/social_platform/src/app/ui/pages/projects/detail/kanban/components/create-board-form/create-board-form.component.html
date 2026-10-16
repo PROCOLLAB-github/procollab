@@ -1,10 +1,10 @@
 <!-- @format -->
 
 <div class="create-board">
-  <form class="create-board__form" [formGroup]="createBoardForm">
+  <form appFormLayout class="create-board__form" [formGroup]="createBoardForm">
     <div class="create-board__title">
       @if (createBoardForm.get("title"); as title) {
-        <input formControlName="title" class="text-body-6" placeholder="название доски" />
+        <input appField formControlName="title" class="text-body-6" placeholder="название доски" />
         @if (title | controlError: "required") {
           <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}

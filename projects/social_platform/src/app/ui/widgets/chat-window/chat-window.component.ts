@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -36,6 +39,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
   templateUrl: "./chat-window.component.html",
   styleUrl: "./chat-window.component.scss",
   imports: [
+    FormLayoutDirective,
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,

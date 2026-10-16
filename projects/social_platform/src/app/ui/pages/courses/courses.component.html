@@ -1,10 +1,10 @@
 <!-- @format -->
 
 <div class="profile">
-  <app-back namespace="курсы" path="/office/program/all"></app-back>
+  <app-page-header title="курсы" backRoute="/office/program/all" />
 
   <div class="profile__info">
-    <form class="profile__search" [formGroup]="searchForm">
+    <form appFormLayout class="profile__search" [formGroup]="searchForm">
       <app-search formControlName="search"></app-search>
     </form>
 

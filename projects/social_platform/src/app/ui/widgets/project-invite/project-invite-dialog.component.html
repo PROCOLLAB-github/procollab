@@ -28,6 +28,7 @@
         <p>{{ description() }}</p>
       </div>
       <button
+        appButton="icon"
         type="button"
         class="project-invite__close"
         aria-label="Закрыть приглашение"
@@ -41,9 +42,11 @@
       </button>
     </header>
     <div class="project-invite__search"><ng-content select="[inviteSearch]" /></div>
-    <div class="project-invite__list"><ng-content select="[inviteList]" /></div>
+    <div class="project-invite__list" appDialogBody><ng-content select="[inviteList]" /></div>
     <div class="project-invite__role"><ng-content select="[inviteRole]" /></div>
     <div class="project-invite__error"><ng-content select="[inviteError]" /></div>
-    <footer class="project-invite__footer"><ng-content select="[inviteFooter]" /></footer>
+    <footer appDialogFooter class="project-invite__footer">
+      <ng-content select="[inviteFooter]" />
+    </footer>
   </section>
 </app-modal>

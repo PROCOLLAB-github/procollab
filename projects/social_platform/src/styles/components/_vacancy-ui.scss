@@ -1,13 +1,29 @@
 /** @format */
 
+@use "styles/ui-foundation";
+
 @mixin surface {
-  min-width: 0;
-  padding: 20px;
-  color: var(--black);
-  overflow-wrap: anywhere;
-  background: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-lg);
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.card;
+
+    min-width: 0;
+    padding: var(--ui-card-padding);
+    color: var(--black);
+    overflow-wrap: anywhere;
+    background: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: var(--ui-radius-card);
+  }
+
+  @media screen and (min-width: 1000px) {
+    min-width: 0;
+    padding: 20px;
+    color: var(--black);
+    overflow-wrap: anywhere;
+    background: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+  }
 }
 
 @mixin secondary {
@@ -34,7 +50,6 @@
   }
 }
 
-// Feature-адаптер Pattern / PageHeader; глобальный BackComponent не меняется.
 @mixin page-header {
   display: flex;
   flex-direction: column;
@@ -67,30 +82,42 @@
 }
 
 @mixin actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  @media screen and (max-width: 999px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 
-  app-button {
-    flex: 1 1 140px;
-    min-width: 0;
+    app-button {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
   }
 
-  ::ng-deep .button {
-    gap: 6px;
-    width: 100%;
-    min-height: 36px;
-    max-height: none;
-    padding: 8px 12px;
-    font-size: 12px;
-    line-height: 18px;
+  @media screen and (min-width: 1000px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 
-    @include focus;
+    app-button {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
 
-    // PROPOSED Destructive outline: feature-only расширение Button, без смены токенов.
-    &.button--outline.button--red {
-      color: var(--black);
-      background: transparent;
+    ::ng-deep .button {
+      gap: 6px;
+      width: 100%;
+      min-height: 36px;
+      max-height: none;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 18px;
+
+      @include focus;
+
+      &.button--outline.button--red {
+        color: var(--black);
+        background: transparent;
+      }
     }
   }
 }

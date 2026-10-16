@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -34,6 +37,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 @Component({
   selector: "app-project-rating",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     TextareaComponent,
     RangeCriterionInputComponent,

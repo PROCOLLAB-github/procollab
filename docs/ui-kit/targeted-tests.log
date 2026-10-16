@@ -1,0 +1,22 @@
+
+ RUN  v3.2.6 Z:/Документы/PROCOLLAB-dev/procollab-dev-platform-responsive
+
+ ✓ projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.spec.ts (7 tests) 574ms
+   ✓ Карточка каталога участников > показывает первый навык в исходном порядке и точный +N при 0 навыках  320ms
+ ✓ projects/social_platform/src/app/ui/pages/members/members-filters/members-filters.component.spec.ts (2 tests) 348ms
+   ✓ MembersFiltersComponent  > should create  307ms
+ ✓ projects/social_platform/src/app/ui/widgets/vacancy-filter/vacancy-filter.component.spec.ts (1 test) 279ms
+stdout | projects/social_platform/src/app/ui/widgets/projects-filter/projects-filter.component.spec.ts > ProjectsFilterComponent > сохраняет справочник отраслей и фильтрацию через query-параметр industry
+[20:44:40.811] [DEBUG] Query change from ProjectsComponent
+
+ ✓ projects/social_platform/src/app/ui/widgets/projects-filter/projects-filter.component.spec.ts (2 tests) 387ms
+   ✓ ProjectsFilterComponent > should create  345ms
+stdout | projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.spec.ts > FeedComponent > показывает счётчики всех шести категорий независимо от фильтра
+[20:44:40.908] [DEBUG] Query change from FeedFilterComponent
+
+ ✓ projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.spec.ts (2 tests) 318ms
+
+ Test Files  5 passed (5)
+      Tests  14 passed (14)
+   Start at  20:44:03
+   Duration  17.44s (transform 14.29s, setup 29.46s, collect 28.51s, tests 1.91s, environment 13.33s, prepare 15.71s)

@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -49,7 +52,7 @@ import { IconComponent } from "../icon/icon.component";
       multi: true,
     },
   ],
-  imports: [IconComponent, LoaderComponent],
+  imports: [ButtonDirective, IconComponent, LoaderComponent],
 })
 export class UploadFileComponent implements ControlValueAccessor {
   private readonly fileService = inject(FileService);

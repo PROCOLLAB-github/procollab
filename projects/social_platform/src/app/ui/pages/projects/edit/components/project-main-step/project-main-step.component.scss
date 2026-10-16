@@ -203,11 +203,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 700px;
   max-width: 100%;
   max-height: calc(100vh - 40px);
-  padding: 40px 0 80px;
   overflow-y: auto;
+
+  @media screen and (max-width: 999px) {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+  }
+
+  @media screen and (min-width: 1000px) {
+    width: 700px;
+    padding: 40px 0 80px;
+  }
 
   &__cross {
     position: absolute;
@@ -266,6 +275,91 @@
     &--scrollable {
       max-height: 180px;
       overflow-y: auto;
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .project__grid--main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project__image {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 0;
+  }
+
+  .project__options > app-button,
+  .project__link-options > app-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 0 !important;
+
+    ::ng-deep .button__content {
+      max-width: 100%;
+
+      > span {
+        min-width: 0;
+      }
+
+      > i {
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .project__options {
+    gap: 16px !important;
+    margin-top: 24px !important;
+  }
+
+  .project__link-options {
+    margin-top: 16px;
+  }
+
+  .project__links--wrapper > .project__links {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .project__links > .project__links {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .project__links fieldset {
+    width: 100%;
+  }
+
+  .field-label {
+    text-align: left !important;
+  }
+
+  .project__image .field-label {
+    text-align: center !important;
+  }
+
+  @include responsive.apply-mobile {
+    .project__grid,
+    .project__info--additional {
+      @include responsive.single-column;
+    }
+
+    .invite__item {
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .invite__item--info {
+      min-width: 0;
     }
   }
 }

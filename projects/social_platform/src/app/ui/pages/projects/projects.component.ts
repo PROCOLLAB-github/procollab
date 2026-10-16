@@ -1,5 +1,8 @@
 /** @format */
 
+import { DesktopLayoutService } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +18,7 @@ import { SearchComponent } from "@ui/primitives/search/search.component";
 import { ButtonComponent } from "@ui/primitives/button/button.component";
 import { IconComponent } from "@ui/primitives/icon/icon.component";
 import { BarNewComponent } from "./bar-new/bar.component";
-import { BackComponent } from "@uilib";
+import { BackComponent, FormLayoutDirective, PageHeaderComponent, StateComponent } from "@uilib";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.service";
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
@@ -30,6 +33,9 @@ import { ProjectActivityCardComponent } from "./project-activity-card/project-ac
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   imports: [
+    StateComponent,
+    PageHeaderComponent,
+    FormLayoutDirective,
     IconComponent,
     ReactiveFormsModule,
     SearchComponent,
@@ -45,6 +51,8 @@ import { ProjectActivityCardComponent } from "./project-activity-card/project-ac
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
+
   readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
 
   private readonly projectsInfoService = inject(ProjectsInfoService);

@@ -4,6 +4,7 @@
   <div class="login__left">
     <div class="login__left-content">
       <form
+        appFormLayout
         class="auth"
         [formGroup]="loginForm"
         novalidate
@@ -64,6 +65,7 @@
                 placeholder="GJiwoeuhbn120="
               >
                 <button
+                  appButton="icon"
                   type="button"
                   class="auth__password-toggle auth__password-toggle--muted"
                   [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"

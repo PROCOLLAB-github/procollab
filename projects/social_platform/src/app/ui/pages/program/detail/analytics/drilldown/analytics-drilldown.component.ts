@@ -1,4 +1,14 @@
 /** @format */
+
+import {
+  ButtonDirective,
+  FieldDirective,
+  TableDirective,
+  FormLayoutDirective,
+  PaginationComponent,
+  StateComponent,
+} from "@uilib";
+/** @format */
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
@@ -49,6 +59,12 @@ import {
   templateUrl: "./analytics-drilldown.component.html",
   styleUrl: "./analytics-drilldown.component.scss",
   imports: [
+    StateComponent,
+    PaginationComponent,
+    ButtonDirective,
+    FieldDirective,
+    TableDirective,
+    FormLayoutDirective,
     A11yModule,
     ModalComponent,
     AvatarComponent,
@@ -98,6 +114,8 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       }
       case "participants-without-team":
         return "Участники без команды";
+      case "participants-without-visit":
+        return "Участники ещё не заходили на платформу";
       case "projects-awaiting-evaluation":
         return "Работы ожидают оценивания";
       case "projects-not-submitted":
@@ -132,6 +150,8 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       return "Для этой программы сдача решения не требуется.";
     if (this.state.appliedSearch()) return "По вашему запросу ничего не найдено.";
     if (this.state.view() === "projects-not-submitted") return "Все проекты программы уже сданы.";
+    if (this.state.view() === "participants-without-visit")
+      return "Все зарегистрированные участники уже заходили на платформу.";
     return this.state.view() === "participants-without-team"
       ? "Все зарегистрированные участники уже состоят в командах."
       : "Нет работ, ожидающих оценивания.";

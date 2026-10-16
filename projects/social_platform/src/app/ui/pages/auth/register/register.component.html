@@ -10,7 +10,13 @@
       decoding="async"
     />
   </div>
-  <form class="auth__wrapper" [formGroup]="registerForm" novalidate (ngSubmit)="onSendForm()">
+  <form
+    appFormLayout
+    class="auth__wrapper"
+    [formGroup]="registerForm"
+    novalidate
+    (ngSubmit)="onSendForm()"
+  >
     <ng-container>
       <div class="auth__row">
         @if (registerForm.get("firstName"); as name) {
@@ -183,6 +189,7 @@
             placeholder="GJiwoeuhbn120="
           >
             <button
+              appButton="icon"
               type="button"
               class="auth__password-toggle auth__password-toggle--muted"
               [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
@@ -213,6 +220,7 @@
             placeholder="GJiwoeuhbn120="
           >
             <button
+              appButton="icon"
               type="button"
               class="auth__password-toggle auth__password-toggle--muted"
               [attr.aria-label]="

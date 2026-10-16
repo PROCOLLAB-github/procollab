@@ -97,6 +97,7 @@ describe("Мои проекты: HTTP list → преобразование ко
     expect(project).toBeInstanceOf(Project);
     expect(project.shortDescription).toBe("Описание проекта");
     expect(project.partnerProgram?.isSubmitted).toBe(submitted);
+    expect(project.partnerProgram?.name).toBe("Программа");
     if (submitted !== undefined) {
       expect(project.partnerProgram?.programLinkId).toBe(ids.programLinkId);
       expect(project.partnerProgram?.programId).toBe(ids.programId);
@@ -112,16 +113,17 @@ describe("Мои проекты: HTTP list → преобразование ко
   it.each([
     { submitted: true, draft: false, status: "Сдан в программу" },
     { submitted: true, draft: true, status: "Сдан в программу" },
-    { submitted: false, draft: false, status: "В программе" },
-    { submitted: false, draft: true, status: "В программе" },
-    { submitted: undefined, draft: false, status: "В программе" },
-    { submitted: undefined, draft: true, status: "В программе" },
+    { submitted: false, draft: false, status: "Привязан к программе" },
+    { submitted: false, draft: true, status: "Привязан к программе" },
+    { submitted: undefined, draft: false, status: "Привязан к программе" },
+    { submitted: undefined, draft: true, status: "Привязан к программе" },
   ])("is_submitted=$submitted, draft=$draft: lifecycle и доступ независимы", async item => {
     await loadProject(item.submitted, item.draft);
     for (const userId of [7, 99, undefined]) {
       fixture.componentRef.setInput("loggedUserId", userId);
       fixture.detectChanges();
       expect(text(".card__status")).toBe(item.status);
+      expect(text(".card__program-name")).toBe("Программа: Программа");
       expect(text(".card__role")).toBe(userId === 7 ? "Лидер" : "Участник");
       expect(text(".card__access-label")).toBe(
         userId === 7 && item.submitted === false ? "можно редактировать" : "только просмотр",
@@ -143,7 +145,7 @@ describe("Мои проекты: HTTP list → преобразование ко
     });
     expect(project.id).toBe(286);
     expect(project.draft).toBe(true);
-    expect(text(".card__status")).toBe("В программе");
+    expect(text(".card__status")).toBe("Привязан к программе");
     expect(fixture.nativeElement.querySelectorAll(".card__status")).toHaveLength(1);
     expect(text(".card__role")).toBe("Лидер");
     expect(text(".card__access-label")).toBe("можно редактировать");

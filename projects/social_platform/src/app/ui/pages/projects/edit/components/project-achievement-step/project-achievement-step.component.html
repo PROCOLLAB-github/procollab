@@ -6,7 +6,7 @@
       <ul formArrayName="achievements" class="project__achievements">
         @for (control of achievements.controls; track control.value.id; let i = $index) {
           <li class="profile__achievement">
-            <form [formGroupName]="i" class="achievement">
+            <form appFormLayout [formGroupName]="i" class="achievement">
               @if (achievements.at(i)?.get("title"); as achievementsName) {
                 <fieldset style="flex-grow: 1">
                   <label class="text-body-12 field-label">описание достижения</label>

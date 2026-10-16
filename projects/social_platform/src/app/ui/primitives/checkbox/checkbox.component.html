@@ -1,10 +1,21 @@
 <!-- @format -->
-<div class="field" [class.field--checked]="checked()" (click)="checked.set(!checked())">
+
+<button
+  type="button"
+  class="field"
+  role="checkbox"
+  [attr.aria-label]="label()"
+  [attr.aria-checked]="checked()"
+  [disabled]="disabled()"
+  [class.field--checked]="checked()"
+  (click)="toggle()"
+>
   <i
     appIcon
     icon="check"
     [appWidth]="size() ?? '12'"
     [appHeight]="size() ?? '10'"
     class="field__check"
+    aria-hidden="true"
   ></i>
-</div>
+</button>

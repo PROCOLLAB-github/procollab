@@ -21,7 +21,12 @@
       <header class="analytics-drilldown__header">
         <div>
           @if (state.view() === "scores" || state.view() === "backlog") {
-            <button type="button" class="analytics-drilldown__action" (click)="state.back()">
+            <button
+              appButton="secondary"
+              type="button"
+              class="analytics-drilldown__action"
+              (click)="state.back()"
+            >
               ← Назад к списку
             </button>
           }
@@ -64,6 +69,7 @@
           }
         </div>
         <button
+          appButton="icon"
           #closeButton
           type="button"
           class="analytics-drilldown__close"
@@ -91,10 +97,6 @@
                   <dt>Сдано</dt>
                   <dd>{{ metrics.submitted }}</dd>
                 </div>
-                <div>
-                  <dt>Не сдано</dt>
-                  <dd>{{ metrics.notSubmitted }}</dd>
-                </div>
               }
             </dl>
           }
@@ -105,20 +107,21 @@
               [disabled]="!cases.canExport()"
               [loader]="cases.exportPending()"
               (click)="cases.download()"
-              >Выгрузить проекты кейса</app-button
+              >Выгрузить найденные</app-button
             >
             <p class="analytics-drilldown__secondary">
               {{
-                cases.metrics()?.projectsTotal === 0
-                  ? "В кейсе пока нет проектов"
-                  : "Все проекты кейса, без учёта поиска"
+                cases.page()?.count === 0
+                  ? "Нет проектов для выгрузки"
+                  : "Все найденные проекты с учётом поиска и фильтров"
               }}
             </p>
             @if (cases.exportError(); as error) {
-              <p role="alert">{{ caseErrorMessage(error) }}</p>
+              <app-state [compact]="true" kind="error" title="{{ caseErrorMessage(error) }}" />
             }
           </div>
           <form
+            appFormLayout
             class="analytics-drilldown__search"
             (submit)="$event.preventDefault(); cases.applySearch()"
           >
@@ -127,6 +130,7 @@
             >
             <div class="analytics-drilldown__search-controls">
               <input
+                appField
                 id="analytics-case-search"
                 type="search"
                 placeholder="Название проекта"
@@ -135,6 +139,7 @@
                 (input)="cases.searchDraft.set($any($event.target).value)"
               />
               <button
+                appButton="primary"
                 type="submit"
                 class="analytics-drilldown__action"
                 [disabled]="cases.pending()"
@@ -142,15 +147,44 @@
                 Найти
               </button>
               <button
+                appButton="secondary"
                 type="button"
                 class="analytics-drilldown__action"
-                [disabled]="!cases.searchDraft() && !cases.search()"
-                (click)="cases.clearSearch()"
+                [disabled]="!cases.hasFilters()"
+                (click)="cases.clearFilters()"
               >
-                Очистить
+                Сбросить фильтры
               </button>
             </div>
           </form>
+          <div class="analytics-case__filters">
+            @if (cases.submissionApplicable()) {
+              <label for="analytics-case-submission"
+                >Сдача решения
+                <select
+                  id="analytics-case-submission"
+                  [value]="cases.submission()"
+                  (change)="cases.setSubmission($any($event.target).value)"
+                >
+                  <option value="all">Все</option>
+                  <option value="submitted">Сдано</option>
+                  <option value="not_submitted">Не сдано</option>
+                </select>
+              </label>
+            }
+            <label for="analytics-case-presentation"
+              >Презентация
+              <select
+                id="analytics-case-presentation"
+                [value]="cases.presentation()"
+                (change)="cases.setPresentation($any($event.target).value)"
+              >
+                <option value="all">Все</option>
+                <option value="present">Есть</option>
+                <option value="missing">Нет</option>
+              </select>
+            </label>
+          </div>
           <div [attr.aria-busy]="cases.pending()" aria-live="polite">
             @if (cases.pending()) {
               <p class="analytics-case__loading" role="status">
@@ -162,29 +196,39 @@
                 <p class="analytics-drilldown__secondary">{{ caseErrorMessage(error) }}</p>
               </div>
               @if (error.kind === "network") {
-                <button type="button" class="analytics-drilldown__action" (click)="cases.load()">
+                <button
+                  appButton="secondary"
+                  type="button"
+                  class="analytics-drilldown__action"
+                  (click)="cases.load()"
+                >
                   Повторить загрузку
                 </button>
               }
             } @else if (cases.page(); as page) {
-              <p class="analytics-drilldown__count">Найдено: {{ page.count }}</p>
+              <p class="analytics-drilldown__count">
+                Найдено: {{ page.count }}
+                @if (cases.metrics(); as metrics) {
+                  из {{ metrics.projectsTotal }}
+                }
+              </p>
               @if (!page.results.length) {
                 <div class="analytics-drilldown__empty">
                   <strong>{{
-                    cases.search()
+                    cases.hasFilters()
                       ? "По запросу ничего не найдено"
                       : "В этом кейсе пока нет проектов"
                   }}</strong>
                   <p class="analytics-drilldown__secondary">
                     {{
-                      cases.search()
-                        ? "Измените запрос или очистите поиск."
+                      cases.hasFilters()
+                        ? "Измените запрос или сбросьте фильтры."
                         : "Проекты появятся здесь после выбора этого кейса."
                     }}
                   </p>
                 </div>
               } @else {
-                <table class="analytics-drilldown__table analytics-case__table">
+                <table appTable class="analytics-drilldown__table analytics-case__table">
                   <thead>
                     <tr>
                       <th scope="col">Проект</th>
@@ -200,7 +244,7 @@
                           <a
                             [routerLink]="['/office/projects', item.project.id]"
                             (click)="leaveAnalytics()"
-                            >{{ item.project.name }}</a
+                            >{{ item.project.name.trim() || "Проект без названия" }}</a
                           >
                         </td>
                         <td data-label="Лидер / команда">
@@ -243,23 +287,13 @@
                 </table>
               }
               @if (page.count > cases.limit || cases.offset() > 0) {
-                <nav class="analytics-drilldown__pagination" aria-label="Страницы проектов кейса">
-                  <app-button
-                    appearance="outline"
-                    size="medium"
-                    [disabled]="cases.offset() === 0"
-                    (click)="cases.changePage(-1)"
-                    >Назад</app-button
-                  >
-                  <span>{{ cases.range() }}</span>
-                  <app-button
-                    appearance="outline"
-                    size="medium"
-                    [disabled]="!cases.hasNext()"
-                    (click)="cases.changePage(1)"
-                    >Далее</app-button
-                  >
-                </nav>
+                <app-pagination
+                  [previousDisabled]="cases.offset() === 0"
+                  [nextDisabled]="!cases.hasNext()"
+                  (previous)="cases.changePage(-1)"
+                  (next)="cases.changePage(1)"
+                  >{{ cases.range() }}</app-pagination
+                >
               }
             }
           </div>
@@ -267,28 +301,29 @@
       }
       @if (state.isAttentionView()) {
         <form
+          appFormLayout
           class="analytics-drilldown__search"
           (submit)="$event.preventDefault(); state.applyAttentionSearch()"
         >
           <label for="analytics-attention-search" class="analytics-drilldown__secondary">{{
-            state.view() === "participants-without-team"
-              ? "Поиск по имени"
-              : "Поиск по названию проекта"
+            state.isParticipantView() ? "Поиск по имени" : "Поиск по названию проекта"
           }}</label>
           <div class="analytics-drilldown__search-controls">
             <input
+              appField
               id="analytics-attention-search"
               type="search"
               [placeholder]="
-                state.view() === 'participants-without-team'
-                  ? 'Поиск по имени'
-                  : 'Поиск по названию проекта'
+                state.isParticipantView() ? 'Поиск по имени' : 'Поиск по названию проекта'
               "
               [value]="state.searchDraft()"
               (input)="state.searchDraft.set($any($event.target).value)"
             />
-            <button type="submit" class="analytics-drilldown__action">Найти</button>
+            <button appButton="primary" type="submit" class="analytics-drilldown__action">
+              Найти
+            </button>
             <button
+              appButton="secondary"
               type="button"
               class="analytics-drilldown__action"
               (click)="state.clearAttentionSearch()"
@@ -299,11 +334,17 @@
           </div>
         </form>
         @if (state.attentionPending()) {
-          <p class="analytics-drilldown__empty" role="status">Загружаем список…</p>
+          <app-state
+            class="analytics-drilldown__empty"
+            [compact]="true"
+            kind="loading"
+            title="Загружаем список…"
+          />
         } @else if (state.attentionError()) {
           <div class="analytics-drilldown__error" role="alert">
             <p>{{ attentionRequestError() }}</p>
             <button
+              appButton="secondary"
               type="button"
               class="analytics-drilldown__action"
               (click)="state.loadAttention()"
@@ -319,7 +360,7 @@
             <p class="analytics-drilldown__empty">{{ attentionEmptyMessage() }}</p>
           } @else {
             @if (state.participantsPage(); as page) {
-              <table class="analytics-drilldown__table">
+              <table appTable class="analytics-drilldown__table">
                 <thead>
                   <tr>
                     <th scope="col">Участник</th>
@@ -360,7 +401,10 @@
               </table>
             }
             @if (state.projectsPage(); as page) {
-              <table class="analytics-drilldown__table analytics-drilldown__table--projects">
+              <table
+                appTable
+                class="analytics-drilldown__table analytics-drilldown__table--projects"
+              >
                 <thead>
                   <tr>
                     <th scope="col">Проект</th>
@@ -427,7 +471,7 @@
           }
           @if (state.notSubmittedPage(); as page) {
             @if (page.applicable && page.results.length) {
-              <table class="analytics-drilldown__table">
+              <table appTable class="analytics-drilldown__table">
                 <thead>
                   <tr>
                     <th scope="col">Проект</th>
@@ -471,35 +515,33 @@
               </table>
             }
           }
-          <nav class="analytics-drilldown__pagination" aria-label="Страницы списка">
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              [disabled]="state.attentionOffset() === 0"
-              (click)="state.changeAttentionPage(-1)"
-            >
-              Назад
-            </button>
-            <span>{{ state.attentionRange() }}</span>
-            <button
-              type="button"
-              class="analytics-drilldown__action"
-              [disabled]="!state.attentionHasNext()"
-              (click)="state.changeAttentionPage(1)"
-            >
-              Далее
-            </button>
-          </nav>
+          <app-pagination
+            [previousDisabled]="state.attentionOffset() === 0"
+            [nextDisabled]="!state.attentionHasNext()"
+            (previous)="state.changeAttentionPage(-1)"
+            (next)="state.changeAttentionPage(1)"
+            >{{ state.attentionRange() }}</app-pagination
+          >
         }
       } @else if (state.view() === "scores") {
         @if (state.scoreDetailPending()) {
-          <p class="analytics-drilldown__empty" role="status">Загружаем оценку…</p>
+          <app-state
+            class="analytics-drilldown__empty"
+            [compact]="true"
+            kind="loading"
+            title="Загружаем оценку…"
+          />
         }
         @if (state.scoreDetailError()) {
           <div class="analytics-drilldown__error" role="alert">
             <p>Не удалось загрузить оценку</p>
             <p>{{ requestError(state.scoreDetailError()) }}</p>
-            <button type="button" class="analytics-drilldown__action" (click)="state.retryScores()">
+            <button
+              appButton="secondary"
+              type="button"
+              class="analytics-drilldown__action"
+              (click)="state.retryScores()"
+            >
               Повторить загрузку
             </button>
           </div>
@@ -537,6 +579,7 @@
             @for (expert of state.delayedExperts(); track expert.expertId) {
               <li>
                 <button
+                  appButton="secondary"
                   type="button"
                   class="analytics-drilldown__expert"
                   (click)="state.showBacklog(expert)"
@@ -551,11 +594,13 @@
                     [class.analytics-drilldown__badge--critical]="expert.severity === 'critical'"
                     [class.analytics-drilldown__badge--pending]="expert.severity === 'warning'"
                     >{{
-                      expert.severity === "critical" ? "Критическая задержка" : "Требует внимания"
+                      expert.severity === "critical"
+                        ? "Дедлайн оценивания прошёл"
+                        : "До дедлайна ≤ 5 дней"
                     }}</span
                   >
                   <span>Выполнено {{ expert.completed }} из {{ expert.assignmentsTotal }}</span
-                  ><span>Ожидает: {{ expert.pending }}</span>
+                  ><span>Не завершено: {{ expert.pending }}</span>
                   <span>Самое долгое ожидание: {{ waiting(expert.oldestWaitingSeconds) }}</span>
                   <span class="analytics-drilldown__secondary">Посмотреть назначения →</span>
                 </button>
@@ -566,13 +611,19 @@
           </ul>
         }
         @if (state.assignmentsPending()) {
-          <p class="analytics-drilldown__empty" role="status">Загружаем назначения…</p>
+          <app-state
+            class="analytics-drilldown__empty"
+            [compact]="true"
+            kind="loading"
+            title="Загружаем назначения…"
+          />
         }
         @if (state.assignmentsError()) {
           <div class="analytics-drilldown__error" role="alert">
             <p>Не удалось загрузить назначения</p>
             <p>{{ requestError(state.assignmentsError()) }}</p>
             <button
+              appButton="secondary"
               type="button"
               class="analytics-drilldown__action"
               (click)="state.loadAssignments()"
@@ -614,6 +665,7 @@
 
 <ng-template #assignmentTable let-assignments>
   <table
+    appTable
     class="analytics-drilldown__table"
     [class.analytics-drilldown__table--assignments]="state.view() === 'assignments'"
   >
@@ -644,6 +696,7 @@
               >
               @if (item.status === "completed") {
                 <button
+                  appButton="secondary"
                   type="button"
                   class="analytics-drilldown__action"
                   (click)="state.loadAssignmentScores(item.assignmentId)"

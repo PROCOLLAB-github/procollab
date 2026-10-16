@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -206,5 +208,20 @@
 
   &__button {
     margin-top: 20px;
+  }
+}
+
+@include responsive.apply-below-desktop {
+  .program__left {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .program__details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .program__content {
+    min-width: 0;
   }
 }

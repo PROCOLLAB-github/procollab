@@ -1,0 +1,256 @@
+/** @format */
+
+@mixin button($layout: true) {
+  --button-color: var(--ui-accent);
+  --button-hover: var(--accent-medium);
+  --button-text: var(--light-white);
+
+  @if $layout {
+    display: inline-flex;
+    gap: var(--ui-space-sm);
+    align-items: center;
+    justify-content: center;
+  }
+
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--ui-control-height);
+  padding: 10px 24px;
+  font: inherit;
+  font-size: var(--ui-font-small);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--button-text);
+  text-align: center;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  cursor: pointer;
+  background: var(--button-color);
+  border: 1px solid var(--button-color);
+  border-radius: var(--ui-radius-control);
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+
+  &:hover:not(:disabled) {
+    background: var(--button-hover);
+    border-color: var(--button-hover);
+  }
+
+  &:active:not(:disabled) {
+    background: var(--accent-dark);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--ui-disabled-opacity);
+  }
+
+  &--secondary,
+  &--outline {
+    color: var(--button-color);
+    background: transparent;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      color: var(--button-color);
+      background: var(--accent-light);
+    }
+  }
+
+  &--danger,
+  &--red {
+    --button-color: var(--ui-danger);
+    --button-hover: var(--red-dark);
+
+    &:active:not(:disabled) {
+      background: var(--red-dark);
+    }
+
+    &.button--outline:hover:not(:disabled) {
+      background: var(--red-light);
+    }
+  }
+
+  &--grey {
+    --button-color: var(--grey-button);
+    --button-hover: var(--gray);
+    --button-text: var(--black);
+  }
+
+  &--green {
+    --button-color: var(--green);
+    --button-hover: var(--green-dark);
+  }
+
+  &--gold {
+    --button-color: var(--gold);
+    --button-hover: var(--gold-dark);
+  }
+
+  &--white {
+    --button-color: var(--light-white);
+    --button-hover: var(--white);
+    --button-text: var(--black);
+  }
+
+  &--gradient {
+    background: var(--gradient);
+  }
+
+  &--no-border {
+    border-color: transparent;
+  }
+
+  &--medium {
+    min-width: min(157px, 100%);
+  }
+
+  &--big {
+    width: 100%;
+  }
+
+  &--extra-small {
+    padding-inline: 12px;
+  }
+
+  &--icon,
+  &--text {
+    color: var(--ui-accent);
+    background: transparent;
+    border-color: transparent;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      color: var(--accent-dark);
+      background: var(--accent-light);
+      border-color: transparent;
+    }
+  }
+
+  &--icon {
+    min-width: 44px;
+    padding: 10px;
+  }
+
+  &--text {
+    padding-inline: 12px;
+  }
+
+  @media (max-width: 749px) {
+    padding-inline: 16px;
+
+    &--icon {
+      padding: 9px;
+    }
+
+    &--text {
+      padding-inline: 12px;
+    }
+  }
+}
+
+@mixin control {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--ui-control-height);
+  padding: var(--ui-control-padding);
+  font: inherit;
+  font-size: var(--ui-font-body);
+  line-height: 1.4;
+  color: var(--ui-text);
+  background: var(--ui-surface-subtle);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-control);
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+
+  &::placeholder {
+    color: var(--dark-grey);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--dark-grey);
+  }
+
+  &:focus-visible,
+  &:focus-within,
+  &--open {
+    border-color: var(--ui-accent);
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  &--error,
+  &--overflow,
+  &[aria-invalid="true"] {
+    border: 1px solid var(--ui-danger);
+
+    &:focus,
+    &:focus-within {
+      box-shadow: var(--ui-error-ring);
+    }
+  }
+
+  &:disabled,
+  &--disabled {
+    cursor: not-allowed;
+    opacity: var(--ui-disabled-opacity);
+  }
+
+  @media (max-width: 749px) {
+    font-size: 16px;
+  }
+}
+
+@mixin card {
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--ui-card-padding);
+  color: var(--ui-text);
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--ui-radius-card);
+  box-shadow: var(--ui-card-shadow);
+}
+
+@mixin choice {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ui-accent);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--ui-disabled-opacity);
+  }
+}
+
+@mixin badge {
+  display: inline-flex;
+  gap: var(--ui-space-xs);
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 26px;
+  padding: 4px 12px;
+  font-size: var(--ui-font-caption);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  border-radius: var(--ui-radius-control);
+}

@@ -1,6 +1,13 @@
 <!-- @format -->
 
-<div class="back text-heading-1" (click)="onClick()">
-  <i class="back__icon" appIcon icon="left-arrow" appSquare="24"></i>
-  <span>{{ namespace() }}</span>
-</div>
+<button
+  [appButton]="compact() ? 'icon' : 'text'"
+  type="button"
+  class="back text-heading-1"
+  [class.back--compact]="compact()"
+  [attr.aria-label]="namespace() || 'Назад'"
+  (click)="onClick()"
+>
+  <i class="back__icon" appIcon icon="left-arrow" appSquare="24" aria-hidden="true"></i
+  ><span>{{ namespace() }}</span>
+</button>

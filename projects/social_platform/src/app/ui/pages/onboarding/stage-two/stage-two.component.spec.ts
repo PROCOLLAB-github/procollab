@@ -1,6 +1,7 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { OverlayContainer } from "@angular/cdk/overlay";
 
 import { OnboardingStageTwoComponent } from "./stage-two.component";
 import { BehaviorSubject, of, Subject } from "rxjs";
@@ -94,6 +95,8 @@ describe("StageTwoComponent", () => {
 
   afterEach(() => {
     fixture.destroy();
+    TestBed.inject(OverlayContainer).ngOnDestroy();
+    vi.clearAllTimers();
     vi.useRealTimers();
   });
 
@@ -112,9 +115,9 @@ describe("StageTwoComponent", () => {
     expect(getSkillsInline).toHaveBeenCalledWith("Angular", 1000, 0);
     results.next({ count: 1, results: [angular], next: "", previous: "" });
     fixture.detectChanges();
-    const option: HTMLElement = fixture.nativeElement.querySelector(
-      ".field__dropdown--options .field__option",
-    );
+    const option: HTMLElement = TestBed.inject(OverlayContainer)
+      .getContainerElement()
+      .querySelector(".field__dropdown--options .field__option");
     expect(option?.textContent).toContain("Angular");
     option.click();
     fixture.detectChanges();
@@ -123,7 +126,10 @@ describe("StageTwoComponent", () => {
     type("Angular");
     results.next({ count: 1, results: [angular], next: "", previous: "" });
     fixture.detectChanges();
-    fixture.nativeElement.querySelector(".field__dropdown--options .field__option").click();
+    TestBed.inject(OverlayContainer)
+      .getContainerElement()
+      .querySelector<HTMLElement>(".field__dropdown--options .field__option")!
+      .click();
     fixture.detectChanges();
     expect(getSkillsInline).toHaveBeenCalledTimes(2);
     expect(fixture.nativeElement.querySelectorAll(".basket__skill")).toHaveLength(1);

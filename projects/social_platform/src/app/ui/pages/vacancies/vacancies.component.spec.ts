@@ -76,17 +76,17 @@ describe("VacanciesComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("показывает название раздела в стандартной кнопке возврата без второго заголовка", () => {
-    expect(fixture.nativeElement.querySelector("app-back .back span").textContent.trim()).toBe(
+  it("показывает название раздела в общем Page Header", () => {
+    expect(fixture.nativeElement.querySelector("app-page-header h1").textContent.trim()).toBe(
       "вакансии",
     );
-    expect(fixture.nativeElement.querySelector("main h1")).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll("main h1")).toHaveLength(1);
 
     listType.set("my");
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector("app-back .back span").textContent.trim()).toBe(
+    expect(fixture.nativeElement.querySelector("app-page-header h1").textContent.trim()).toBe(
       "мои отклики",
     );
-    expect(fixture.nativeElement.querySelector("main h1")).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll("main h1")).toHaveLength(1);
   });
 });

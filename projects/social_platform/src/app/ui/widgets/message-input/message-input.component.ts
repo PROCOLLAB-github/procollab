@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -39,6 +42,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     },
   ],
   imports: [
+    ButtonDirective,
     IconComponent,
     NgxMaskDirective,
     AutosizeModule,

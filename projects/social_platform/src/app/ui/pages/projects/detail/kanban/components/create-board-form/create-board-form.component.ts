@@ -1,5 +1,8 @@
 /** @format */
 
+import { FieldDirective, FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -15,7 +18,14 @@ import { KanbanIcons } from "@core/consts/other/kanban-icons.const";
   selector: "app-create-board-form",
   templateUrl: "./create-board-form.component.html",
   styleUrl: "./create-board-form.component.scss",
-  imports: [CommonModule, ReactiveFormsModule, ControlErrorPipe, IconComponent],
+  imports: [
+    FieldDirective,
+    FormLayoutDirective,
+    CommonModule,
+    ReactiveFormsModule,
+    ControlErrorPipe,
+    IconComponent,
+  ],
   standalone: true,
 })
 export class CreateBoardFormComponent implements OnInit, OnDestroy {

@@ -14,7 +14,7 @@ import { Snack } from "@domain/shared/snack.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AnimationService } from "./animation/animation.service";
 import { CommonModule } from "@angular/common";
-import { IconComponent } from "@uilib";
+import { IconComponent, AlertDirective } from "@uilib";
 
 /**
  * Компонент для отображения всплывающих уведомлений (snackbar).
@@ -34,7 +34,7 @@ import { IconComponent } from "@uilib";
   templateUrl: "./snackbar.component.html",
   styleUrl: "./snackbar.component.scss",
   animations: [AnimationService.slideInOut],
-  imports: [CommonModule, IconComponent],
+  imports: [AlertDirective, CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnackbarComponent implements OnInit, OnDestroy {
@@ -61,6 +61,10 @@ export class SnackbarComponent implements OnInit, OnDestroy {
     this.snackbarService.snacks
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(snack => this.addNotification(snack));
+    this.snackbarService.dismissed$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(id => {
+      this.snacks = this.snacks.filter(snack => snack.id !== id);
+      this.cdr.markForCheck();
+    });
   }
 
   /** Отписка от уведомлений при уничтожении */

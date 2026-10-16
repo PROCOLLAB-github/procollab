@@ -1,4 +1,12 @@
 /** @format */
+
+import {
+  ButtonDirective,
+  DialogBodyDirective,
+  DialogFooterDirective,
+  DialogHeaderComponent,
+} from "@uilib";
+/** @format */
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import {
   AfterViewInit,
@@ -23,7 +31,15 @@ import { MembersFiltersComponent } from "../members-filters/members-filters.comp
 /** Мобильная оболочка существующей формы фильтров; значения принадлежат странице, а не окну. */
 @Component({
   selector: "app-member-filters-dialog",
-  imports: [ModalComponent, A11yModule, MembersFiltersComponent],
+  imports: [
+    DialogHeaderComponent,
+    DialogBodyDirective,
+    DialogFooterDirective,
+    ButtonDirective,
+    ModalComponent,
+    A11yModule,
+    MembersFiltersComponent,
+  ],
   templateUrl: "./member-filters-dialog.component.html",
   styleUrl: "./member-filters-dialog.component.scss",
   encapsulation: ViewEncapsulation.None,

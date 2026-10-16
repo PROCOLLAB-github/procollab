@@ -23,7 +23,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
 import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective, FormLayoutDirective, StateComponent } from "@uilib";
 import { Skill } from "@domain/skills/skill.model";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -41,6 +41,9 @@ import { isFailure } from "@domain/shared/async-state";
   templateUrl: "./project-vacancy-step.component.html",
   styleUrl: "./project-vacancy-step.component.scss",
   imports: [
+    StateComponent,
+    ButtonDirective,
+    FormLayoutDirective,
     VacancyCreatedDialogComponent,
     CommonModule,
     ReactiveFormsModule,

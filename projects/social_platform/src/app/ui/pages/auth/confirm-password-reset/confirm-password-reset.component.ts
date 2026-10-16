@@ -3,13 +3,14 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { AsyncPipe } from "@angular/common";
 import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 /** Страница подтверждения отправки письма для сброса пароля. */
 @Component({
   selector: "app-confirm-password-reset",
   templateUrl: "./confirm-password-reset.component.html",
   styleUrl: "./confirm-password-reset.component.scss",
-  providers: [AuthPasswordService],
+  providers: [AuthPasswordService, AuthUIInfoService],
   imports: [AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

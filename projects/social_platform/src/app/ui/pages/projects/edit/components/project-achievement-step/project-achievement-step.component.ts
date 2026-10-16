@@ -7,7 +7,7 @@ import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
-import { IconComponent } from "@uilib";
+import { IconComponent, FormLayoutDirective } from "@uilib";
 import { ProjectAchievementsService } from "@api/project/facades/edit/project-achievements.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 
@@ -17,6 +17,7 @@ import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.s
   templateUrl: "./project-achievement-step.component.html",
   styleUrl: "./project-achievement-step.component.scss",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,

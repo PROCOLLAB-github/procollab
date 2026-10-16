@@ -1,7 +1,7 @@
 /** @format */
 
-import { DestroyRef, inject, Injectable } from "@angular/core";
-import { concatMap, of } from "rxjs";
+import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
+import { concatMap, filter, of, take } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { Router } from "@angular/router";
@@ -13,7 +13,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { INVALID_PROFILE_ID_MESSAGE, isValidProfileId } from "@domain/auth/profile-id";
 
 /** Координирует первый шаг онбординга: профильные поля, FormArray, сохранение этапа. */
@@ -22,6 +22,7 @@ export class OnboardingStageZeroInfoService {
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
 
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
@@ -42,9 +43,26 @@ export class OnboardingStageZeroInfoService {
   private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
 
   initializationStageZero(): void {
-    if (this.profile()) {
-      this.onboardingStageZeroUIInfoService.applySetProfile(this.profile()!);
-    }
+    this.profileInfoService.ensureProfileLoaded();
+    toObservable(this.profile, { injector: this.injector })
+      .pipe(
+        filter((profile): profile is User => profile !== null),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(profile => {
+        this.onboardingStageZeroUIInfoService.applySetProfile(profile);
+        this.onboardingService.formValue$.pipe(take(1)).subscribe(draft => {
+          this.onboardingService.setFormValue({
+            avatar: draft.avatar ?? profile.personal.avatar,
+            city: draft.city ?? profile.personal.city,
+            education: draft.education ?? profile.relations.education,
+            workExperience: draft.workExperience ?? profile.relations.workExperience,
+            userLanguages: draft.userLanguages ?? profile.relations.userLanguages,
+            achievements: draft.achievements ?? profile.relations.achievements,
+          });
+        });
+      });
 
     this.onboardingService.formValue$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(fv => {
       this.onboardingStageZeroUIInfoService.applyInitStageZero(fv);

@@ -1,5 +1,8 @@
 /** @format */
 
+import { CardDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Vacancy } from "@domain/vacancy/vacancy.model";
@@ -12,6 +15,7 @@ import { VacancySkillsComponent } from "../vacancy-skills/vacancy-skills.compone
 @Component({
   selector: "app-project-vacancy-card",
   imports: [
+    CardDirective,
     RouterLink,
     ButtonComponent,
     ParseLinksPipe,

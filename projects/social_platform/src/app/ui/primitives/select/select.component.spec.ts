@@ -25,6 +25,23 @@ describe("SelectComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("does not open a disabled select by pointer or keyboard", () => {
+    component.setDisabledState(true);
+    fixture.detectChanges();
+    const control: HTMLElement = fixture.nativeElement.querySelector(".field__input");
+    control.click();
+    control.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(component.isOpen).toBe(false);
+    expect(control.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("opens the enabled select from its focused trigger", () => {
+    const control: HTMLElement = fixture.nativeElement.querySelector(".field__input");
+    control.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(component.isOpen).toBe(true);
+    expect(component.highlightedIndex).toBe(0);
+  });
+
   it("should display the placeholder text when no option is selected", () => {
     const placeholder = "Select an option";
     fixture.componentRef.setInput("placeholder", placeholder);

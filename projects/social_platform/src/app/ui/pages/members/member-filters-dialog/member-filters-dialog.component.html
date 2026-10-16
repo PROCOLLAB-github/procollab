@@ -9,12 +9,22 @@
     [cdkTrapFocusAutoCapture]="false"
   >
     <header class="member-filters-dialog__header">
-      <h2>Фильтры участников</h2>
-      <button #closeButton type="button" aria-label="Закрыть фильтры" (click)="close()">×</button>
+      <app-dialog-header title="Фильтры участников" [closable]="false" />
+      <button
+        appButton="icon"
+        #closeButton
+        type="button"
+        aria-label="Закрыть фильтры"
+        (click)="close()"
+      >
+        ×
+      </button>
     </header>
-    <div class="member-filters-dialog__content">
+    <div class="member-filters-dialog__content" appDialogBody>
       <app-members-filters [filterForm]="filterForm()" (resetRequested)="resetRequested.emit()" />
     </div>
-    <button type="button" class="member-filters-dialog__done" (click)="close()">Готово</button>
+    <button appButton="primary" type="button" class="member-filters-dialog__done" (click)="close()">
+      Готово
+    </button>
   </section>
 </app-modal>

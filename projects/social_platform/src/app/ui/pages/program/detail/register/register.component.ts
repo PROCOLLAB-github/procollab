@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map } from "rxjs";
@@ -19,6 +22,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   templateUrl: "./register.component.html",
   styleUrl: "./register.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     InputComponent,
     ButtonComponent,

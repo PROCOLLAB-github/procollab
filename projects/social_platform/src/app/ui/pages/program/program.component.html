@@ -2,9 +2,9 @@
 
 <main class="page">
   <div class="page__bar">
-    <app-back namespace="программы" path="/office/feed"></app-back>
+    <app-page-header title="программы" backRoute="/office/feed" />
 
-    <form class="page__search" [formGroup]="searchForm">
+    <form appFormLayout class="page__search" [formGroup]="searchForm">
       <app-search formControlName="search"></app-search>
     </form>
   </div>

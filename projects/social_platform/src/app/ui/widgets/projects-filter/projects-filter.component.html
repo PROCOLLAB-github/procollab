@@ -1,10 +1,10 @@
 <!-- @format -->
 
-<div class="filter">
+<div appFilters class="filter">
   <div class="filter__body">
-    <div class="filter__titles">
+    <div class="filter__titles ui-filters__header">
       <p class="text-body-14">фильтры</p>
-      <a class="text-body-10" (click)="clearFilters()">сбросить</a>
+      <button appButton="text" type="button" (click)="clearFilters()">сбросить</button>
     </div>
 
     <!-- Скрыть пока не появится программа для мос политеха -->

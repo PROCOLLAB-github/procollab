@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { IconComponent } from "@uilib";
+import { IconComponent, FormLayoutDirective } from "@uilib";
 import { ReactiveFormsModule } from "@angular/forms";
 import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
 import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
@@ -21,6 +21,7 @@ import { VacancyResponsesComponent } from "./components/vacancy-responses/vacanc
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
   imports: [
+    FormLayoutDirective,
     IconComponent,
     ButtonComponent,
     ModalComponent,

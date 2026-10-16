@@ -18,14 +18,14 @@
 
   h2 {
     margin-bottom: 14px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 21px;
     color: var(--accent-dark);
   }
 
   &__description {
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 1.7;
     overflow-wrap: anywhere;
 
@@ -35,7 +35,7 @@
   }
 
   &__empty {
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     line-height: 21px;
 
     @include vacancy-ui.secondary;

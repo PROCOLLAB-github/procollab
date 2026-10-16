@@ -15,6 +15,7 @@
   <span class="member-row__status">Приглашение отправлено</span>
   <div class="member-row__actions">
     <button
+      appButton="secondary"
       type="button"
       class="member-row__action"
       (click)="openEdit($event)"
@@ -34,6 +35,7 @@
       <span class="member-row__action-label">Изменить роль</span>
     </button>
     <button
+      appButton="danger"
       type="button"
       class="member-row__action member-row__action--danger"
       (click)="openRemove($event)"
@@ -63,10 +65,20 @@
     (closed)="isRemoveInviteModal.set(false)"
   >
     <div inviteFooter class="invite-actions">
-      <button type="button" class="invite-button" (click)="isRemoveInviteModal.set(false)">
+      <button
+        appButton="secondary"
+        type="button"
+        class="invite-button"
+        (click)="isRemoveInviteModal.set(false)"
+      >
         Отмена
       </button>
-      <button type="button" class="invite-button invite-button--primary" (click)="onRemove()">
+      <button
+        appButton="secondary"
+        type="button"
+        class="invite-button invite-button--primary"
+        (click)="onRemove()"
+      >
         Отозвать
       </button>
     </div>
@@ -82,10 +94,16 @@
   >
     <div inviteRole><app-project-invite-role-input [control]="role" /></div>
     <div inviteFooter class="invite-actions">
-      <button type="button" class="invite-button" (click)="isEditInviteModal.set(false)">
+      <button
+        appButton="secondary"
+        type="button"
+        class="invite-button"
+        (click)="isEditInviteModal.set(false)"
+      >
         Отмена
       </button>
       <button
+        appButton="secondary"
         type="button"
         class="invite-button invite-button--primary"
         [disabled]="role.invalid"

@@ -69,6 +69,10 @@ describe("ChatRealtimeRepository", () => {
     expect(adapter.connect).toHaveBeenCalledExactlyOnceWith();
   });
 
+  it("не создаёт второе уведомление об обрыве из транспортного repository", () => {
+    expect(snackbarService.error).not.toHaveBeenCalled();
+  });
+
   it("делегирует send/edit/delete/read/startTyping в WS adapter", () => {
     const sendPayload = {} as never;
     const editPayload = {} as never;

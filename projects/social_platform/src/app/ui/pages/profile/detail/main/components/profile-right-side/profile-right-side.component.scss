@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 @mixin expandable-list {
@@ -96,7 +98,7 @@
     min-width: 0;
 
     &--text {
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       font-weight: 500;
       line-height: 17px;
       color: var(--black) !important;
@@ -105,17 +107,31 @@
     }
 
     &--subtext {
-      font-size: 11px;
       line-height: 16px;
       color: var(--grey-for-text) !important;
       word-break: break-word;
       overflow-wrap: anywhere;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
 
     &--more {
-      font-size: 11px;
       line-height: 16px;
       color: var(--accent) !important;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
 
     img {
@@ -123,11 +139,11 @@
     }
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
   &__project-name {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
     overflow: hidden;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     line-height: 16px;
     color: var(--black);
@@ -138,12 +154,18 @@
 
   &__project-role {
     margin-top: 3px;
-    font-size: 11px;
     line-height: 15px;
     color: var(--dark-grey);
     overflow-wrap: anywhere;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+    }
   }
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__date {
     display: flex;
@@ -156,9 +178,16 @@
     border-radius: var(--rounded-xl);
 
     p {
-      font-size: 11px;
       line-height: 14px;
       color: var(--dark-grey);
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-caption);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 11px;
+      }
     }
   }
 

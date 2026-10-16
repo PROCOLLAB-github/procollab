@@ -19,7 +19,7 @@
     ></app-chat-message>
   </cdk-virtual-scroll-viewport>
 
-  <form class="chat__input" [formGroup]="messageForm">
+  <form appFormLayout class="chat__input" [formGroup]="messageForm">
     @if (typingPersons.length) {
       <span class="chat__typing text-body-10">
         @for (person of typingPersons.slice(0, 3); let last = $last; track person.userId) {

@@ -5,9 +5,15 @@ export type ProgramCaseSelection =
   | { scope: "selected"; caseName: string }
   | { scope: "all"; caseName?: never }
   | { scope: "without_case"; caseName?: never };
-export interface ProgramCaseQuery {
-  selection: ProgramCaseSelection;
+export type ProgramCaseSubmissionFilter = "all" | "submitted" | "not_submitted";
+export type ProgramCasePresentationFilter = "all" | "present" | "missing";
+export interface ProgramCaseFilters {
   search?: string;
+  submission?: ProgramCaseSubmissionFilter;
+  presentation?: ProgramCasePresentationFilter;
+}
+export interface ProgramCaseQuery extends ProgramCaseFilters {
+  selection: ProgramCaseSelection;
   limit?: number;
   offset?: number;
 }

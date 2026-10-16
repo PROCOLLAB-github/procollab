@@ -25,7 +25,7 @@
           <i appIcon icon="squiz" class="lists__icon" appSquare="12"></i>
         </div>
 
-        <form class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+        <form appFormLayout class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
           @if (sendForm.get("whyMe"); as whyMe) {
             <fieldset>
               <label for="whyMe" class="field-label text-body-10">сопроводительное письмо</label>

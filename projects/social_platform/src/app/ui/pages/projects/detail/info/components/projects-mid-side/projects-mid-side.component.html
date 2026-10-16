@@ -10,7 +10,12 @@
       <div class="text-body-10 about__text">
         <p [innerHTML]="visibleDescription() | parseLinks | parseBreaks"></p>
         @if (descriptionExpandable()) {
-          <button type="button" class="read-more text-body-10" (click)="onToggleDescription()">
+          <button
+            appButton="secondary"
+            type="button"
+            class="read-more text-body-10"
+            (click)="onToggleDescription()"
+          >
             {{ descriptionExpanded() ? "Скрыть" : "Подробнее" }}
           </button>
         }

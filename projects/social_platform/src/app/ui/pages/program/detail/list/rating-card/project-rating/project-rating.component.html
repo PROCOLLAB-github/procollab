@@ -1,5 +1,5 @@
 <!-- @format -->
-<form [formGroup]="form" class="rating">
+<form appFormLayout [formGroup]="form" class="rating">
   <section class="rating__columns">
     @for (criterion of criteria; track $index) {
       @if (criterion.type === "int") {

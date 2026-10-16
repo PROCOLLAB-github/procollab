@@ -22,10 +22,25 @@
   }
 
   &__toggle {
-    min-height: 28px;
+    @media screen and (max-width: 999px) {
+      min-height: 44px;
+    }
+
+    @media screen and (min-width: 1000px) {
+      min-height: 28px;
+    }
+
     padding: 4px 10px;
     font: inherit;
-    font-size: 13px;
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+    }
+
     line-height: 18px;
     color: var(--black);
     cursor: pointer;
@@ -48,7 +63,7 @@
   }
 
   &__empty {
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     line-height: 18px;
 
     @include vacancy-ui.secondary;

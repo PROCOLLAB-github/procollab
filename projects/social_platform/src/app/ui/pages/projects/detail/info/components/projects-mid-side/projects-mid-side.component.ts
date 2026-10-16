@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -61,6 +64,7 @@ export function buildProjectDescriptionPreview(
   templateUrl: "./projects-mid-side.component.html",
   styleUrl: "./projects-mid-side.component.scss",
   imports: [
+    ButtonDirective,
     CommonModule,
     NewsFormComponent,
     ProjectDirectionCard,

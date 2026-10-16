@@ -1,0 +1,1184 @@
+
+> procollab@0.0.0 build:social:prod
+> npm run build:sprite && ng build social_platform --configuration=production
+
+
+> procollab@0.0.0 build:sprite
+> svg-sprite -s --dest=projects/social_platform/src/assets/icons "projects/social_platform/src/assets/icons/svg/**/*.svg"
+
+> Building...
+√ Building...
+Initial chunk files | Names                       |  Raw size | Estimated transfer size
+chunk-XOPGUUSY.js   | -                           | 415.14 kB |                72.32 kB
+chunk-EMX2ZQ7G.js   | -                           | 213.04 kB |                60.81 kB
+main-Z7A65JLI.js    | main                        | 207.19 kB |                53.26 kB
+styles-WLVYAPXD.css | styles                      | 131.35 kB |                12.07 kB
+chunk-32JCLU4R.js   | -                           | 111.30 kB |                28.30 kB
+chunk-FQQXBL2D.js   | -                           |  83.07 kB |                25.83 kB
+chunk-IQWATLI4.js   | -                           |  73.82 kB |                17.10 kB
+chunk-DISFVWBZ.js   | -                           |  49.22 kB |                10.20 kB
+chunk-SEBII2ES.js   | -                           |  42.79 kB |                 8.66 kB
+chunk-LQCFT4Z5.js   | -                           |  28.10 kB |                 7.56 kB
+chunk-YCTQC4HE.js   | -                           |  26.33 kB |                 5.23 kB
+chunk-45WEGDSK.js   | -                           |  11.43 kB |                 2.59 kB
+chunk-OXVL6SS7.js   | -                           |   9.38 kB |                 3.00 kB
+chunk-JL552RI3.js   | -                           |   4.30 kB |                 1.19 kB
+chunk-6H4Z6P6E.js   | -                           |   4.04 kB |                 1.47 kB
+chunk-E7U6OH55.js   | -                           |   3.19 kB |                 1.27 kB
+chunk-JP4HTDU5.js   | -                           |   1.47 kB |               386 bytes
+chunk-VOSPIT4N.js   | -                           |   1.22 kB |               521 bytes
+chunk-UMKP35NR.js   | -                           | 695 bytes |               695 bytes
+chunk-JHUOFMVX.js   | -                           | 483 bytes |               483 bytes
+chunk-ZTXJLEZP.js   | -                           | 474 bytes |               474 bytes
+chunk-IAS7Y3HI.js   | -                           | 465 bytes |               465 bytes
+chunk-4WVOMZ3C.js   | -                           | 352 bytes |               352 bytes
+chunk-Y7FCNQPS.js   | -                           | 195 bytes |               195 bytes
+chunk-RQDRLMC2.js   | -                           | 180 bytes |               180 bytes
+chunk-W2ZPBHP5.js   | -                           | 160 bytes |               160 bytes
+chunk-N7PJCV3T.js   | -                           | 128 bytes |               128 bytes
+chunk-DKVRXEF2.js   | -                           | 127 bytes |               127 bytes
+chunk-PY5GJ2VA.js   | -                           |  51 bytes |                51 bytes
+chunk-GDMD5RKS.js   | -                           |  51 bytes |                51 bytes
+chunk-NCHAAQO5.js   | -                           |  30 bytes |                30 bytes
+chunk-KTRLVWC3.js   | -                           |  30 bytes |                30 bytes
+chunk-CRTRRB5R.js   | -                           |  30 bytes |                30 bytes
+chunk-PKT6RRYE.js   | -                           |  30 bytes |                30 bytes
+chunk-YIJ4Z6S4.js   | -                           |  30 bytes |                30 bytes
+chunk-KEPWQ2XV.js   | -                           |  30 bytes |                30 bytes
+chunk-FE3JRQRM.js   | -                           |  30 bytes |                30 bytes
+chunk-GAELZNYR.js   | -                           |  25 bytes |                25 bytes
+chunk-4CQUPGHG.js   | -                           |  25 bytes |                25 bytes
+chunk-PPZSTFUD.js   | -                           |  25 bytes |                25 bytes
+chunk-UYXSSEQD.js   | -                           |  25 bytes |                25 bytes
+chunk-FI4DW6KU.js   | -                           |  25 bytes |                25 bytes
+chunk-25HWN6II.js   | -                           |  25 bytes |                25 bytes
+chunk-SVFKPVOL.js   | -                           |  25 bytes |                25 bytes
+chunk-CRUTENDI.js   | -                           |   0 bytes |                 0 bytes
+chunk-S7EUWH5W.js   | -                           |   0 bytes |                 0 bytes
+
+                    | Initial total               |   1.42 MB |               315.50 kB
+
+Lazy chunk files    | Names                       |  Raw size | Estimated transfer size
+chunk-LJUPAPUP.js   | detail-routes               | 268.07 kB |                41.86 kB
+chunk-UCUPHUHO.js   | onboarding-routes           | 111.52 kB |                15.02 kB
+chunk-75I2JPWI.js   | office-routes               | 100.32 kB |                18.66 kB
+chunk-M3P4NRME.js   | detail-routes               |  89.54 kB |                16.58 kB
+chunk-O2NF2ZXQ.js   | lesson-routes               |  82.78 kB |                10.91 kB
+chunk-C5ZRO2SA.js   | -                           |  82.11 kB |                16.20 kB
+chunk-ICZOJFPY.js   | projects-routes             |  73.83 kB |                13.73 kB
+chunk-AJJJSWEY.js   | index                       |  72.43 kB |                17.54 kB
+chunk-T5M3PDUV.js   | auth-routes                 |  69.69 kB |                 9.71 kB
+chunk-YOEEE6QQ.js   | -                           |  66.19 kB |                13.34 kB
+chunk-TGM3AOXO.js   | vacancies-detail-routes     |  42.96 kB |                 8.81 kB
+chunk-ELERSQOO.js   | project-team-step-component |  40.41 kB |                 8.06 kB
+chunk-GNG4REXT.js   | profile-detail-routes       |  40.05 kB |                 7.67 kB
+chunk-FCGZV5FK.js   | course-detail-routes        |  39.61 kB |                 7.11 kB
+chunk-MHAHYMXK.js   | feed-routes                 |  37.73 kB |                 7.54 kB
+...and 87 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [34.691 seconds] - 2026-10-04T17:52:43.311Z
+
+▲ [WARNING] 2 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings. [plugin angular-sass]
+
+  null
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of CoursesComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/courses/courses.component.ts:19:4:
+      19 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: ButtonComponent is not used within the template of CourseComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/courses/list/course/course.component.ts:32:4:
+      32 │     ButtonComponent,
+         ╵     ~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: LoaderComponent is not used within the template of CoursesListComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/courses/list/list.component.ts:18:73:
+      18 │ ...nt, CommonModule, RouterModule, CourseComponent, LoaderComponent],
+         ╵                                                     ~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of FeedComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/feed/feed.component.ts:36:4:
+      36 │     IconComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:9:67:
+      9 │ ...card__photo" [url]="member().personal?.avatar || ''" [size]="70" />
+        ╵                                           ~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:15:66:
+      15 │ ...er-card__secondary" [title]="member().personal?.speciality || ''">
+         ╵                                                    ~~~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:16:28:
+      16 │       {{ member().personal?.speciality }}
+         ╵                             ~~~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:17:30:
+      17 │       @if (member().personal?.birthday; as birthday) {
+         ╵                               ~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.html:18:30:
+      18 │         {{ member().personal?.speciality ? " • " : "" }}{{ birth...
+         ╵                               ~~~~~~~~~~
+
+  Warning occurs in the template of component MemberCardComponent.
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.ts:16:15:
+      16 │   templateUrl: "./member-card.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: DialogFooterDirective is not used within the template of MemberFiltersDialogComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/members/member-filters-dialog/member-filters-dialog.component.ts:37:4:
+      37 │     DialogFooterDirective,
+         ╵     ~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: ProfileInfoComponent is not used within the template of NavComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/office/nav/nav.component.ts:75:4:
+      75 │     ProfileInfoComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: AlertDirective is not used within the template of SnackbarComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/office/snackbar/snackbar.component.ts:37:12:
+      37 │   imports: [AlertDirective, CommonModule, IconComponent],
+         ╵             ~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.html:435:45:
+      435 │ ...               @if (achievements.at(i)?.get("title"); as title) {
+          ╵                                            ~~~
+
+  Warning occurs in the template of component OnboardingStageZeroComponent.
+
+    projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.ts:23:15:
+      23 │   templateUrl: "./stage-zero.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8102: The left side of this nullish coalescing operation does not include 'null' or 'undefined' in its type, therefore the '??' operator can be safely removed. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.html:28:15:
+      28 │ ...        {{ user()!.personal.speciality ?? "не указана" }}
+         ╵               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Warning occurs in the template of component ProfileLeftSideComponent.
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.ts:23:15:
+      23 │   templateUrl: "./profile-left-side.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: TruncatePipe is not used within the template of ProfileLeftSideComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.ts:25:78:
+      25 │ ...RouterModule, IconComponent, YearsFromBirthdayPipe, TruncatePipe],
+         ╵                                                        ~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: TruncatePipe is not used within the template of ProfileRightSideComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-right-side/profile-right-side.component.ts:32:4:
+      32 │     TruncatePipe,
+         ╵     ~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: UploadFileComponent is not used within the template of ProfileMainStepComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/profile/edit/components/profile-main-step/profile-main-step.component.ts:33:4:
+      33 │     UploadFileComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.html:95:52:
+      95 │ ...      [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
+         ╵                                                ~~~~~~~~
+
+  Warning occurs in the template of component ProgramListComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts:40:15:
+      40 │   templateUrl: "./list.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.html:103:54:
+      103 │ ...     [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
+          ╵                                               ~~~~~~~~
+
+  Warning occurs in the template of component ProgramListComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/list/list.component.ts:40:15:
+      40 │   templateUrl: "./list.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.html:73:64:
+      73 │ ...)!.isUserMember && program()!.links?.length && program()!.links) {
+         ╵                                         ~~~~~~
+
+  Warning occurs in the template of component ProgramDetailMainComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.ts:38:15:
+      38 │   templateUrl: "./main.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.html:82:68:
+      82 │ ...   @if (program()!.isUserMember && program()!.materials?.length) {
+         ╵                                                             ~~~~~~
+
+  Warning occurs in the template of component ProgramDetailMainComponent.
+
+    projects/social_platform/src/app/ui/pages/program/detail/main/main.component.ts:38:15:
+      38 │   templateUrl: "./main.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of ProgramComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/program/program.component.ts:22:4:
+      22 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLink is not used within the template of BarNewComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.ts:11:41:
+      11 │ ...bsComponent, CommonModule, RouterLink, RouterLinkActive, IconCo...
+         ╵                               ~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLinkActive is not used within the template of BarNewComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.ts:11:53:
+      11 │ ...onent, CommonModule, RouterLink, RouterLinkActive, IconComponent],
+         ╵                                     ~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of BarNewComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.ts:11:71:
+      11 │ ...onent, CommonModule, RouterLink, RouterLinkActive, IconComponent],
+         ╵                                                       ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: MessageInputComponent is not used within the template of ProjectChatComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/detail/chat/chat.component.ts:34:4:
+      34 │     MessageInputComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-achievement-step/project-achievement-step.component.html:10:39:
+      10 │ ...     @if (achievements.at(i)?.get("title"); as achievementsName) {
+         ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectAchievementStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-achievement-step/project-achievement-step.component.ts:17:15:
+      17 │   templateUrl: "./project-achievement-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.html:315:32:
+      315 │               @if (goals.at(i)?.get("title"); as goalName) {
+          ╵                                 ~~~
+
+  Warning occurs in the template of component ProjectMainStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.ts:39:15:
+      39 │   templateUrl: "./project-main-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.html:331:32:
+      331 │               @if (goals.at(i)?.get("completionDate"); as goalDat...
+          ╵                                 ~~~
+
+  Warning occurs in the template of component ProjectMainStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.ts:39:15:
+      39 │   templateUrl: "./project-main-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.html:353:32:
+      353 │               @if (goals.at(i)?.get("responsible"); as goalLeader) {
+          ╵                                 ~~~
+
+  Warning occurs in the template of component ProjectMainStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.ts:39:15:
+      39 │   templateUrl: "./project-main-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of ProjectNavigationComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-navigation/project-navigation.component.ts:25:27:
+      25 │   imports: [TabsComponent, IconComponent, CommonModule],
+         ╵                            ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:11:37:
+      11 │                 @if (partners.at(i)?.get("name"); as name) {
+         ╵                                      ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:27:37:
+      27 │                 @if (partners.at(i)?.get("inn"); as inn) {
+         ╵                                      ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:46:35:
+      46 │ ...         @if (partners.at(i)?.get("contribution"); as contribut...
+         ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:63:35:
+      63 │ ...         @if (partners.at(i)?.get("decisionMaker"); as decision...
+         ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:116:36:
+      116 │               @if (resources.at(i)?.get("type"); as type) {
+          ╵                                     ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:133:36:
+      133 │ ...        @if (resources.at(i)?.get("description"); as descripti...
+          ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.html:150:36:
+      150 │ ...        @if (resources.at(i)?.get("partnerCompany"); as partne...
+          ╵                                  ~~~
+
+  Warning occurs in the template of component ProjectPartnerResourcesStepComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.ts:20:15:
+      20 │   templateUrl: "./project-partner-resources-step.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8109: isFilterOpen is a function and should be invoked: isFilterOpen() [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/projects.component.html:94:73:
+      94 │ ...s="filter page__filter" [class.page__filter--open]="isFilterOpen">
+         ╵                                                        ~~~~~~~~~~~~
+
+  Warning occurs in the template of component ProjectsComponent.
+
+    projects/social_platform/src/app/ui/pages/projects/projects.component.ts:30:15:
+      30 │   templateUrl: "./projects.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of ProjectsComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/projects/projects.component.ts:42:4:
+      42 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-left-side/vacancies-left-side.component.html:7:29:
+      7 │       @if (item.description?.trim()) {
+        ╵                              ~~~~
+
+  Warning occurs in the template of component VacanciesLeftSideComponent.
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-left-side/vacancies-left-side.component.ts:9:15:
+      9 │   templateUrl: "./vacancies-left-side.component.html",
+        ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-right-side/vacancies-right-side.component.html:57:23:
+      57 │     @if (item.project?.links?.length) {
+         ╵                        ~~~~~
+
+  Warning occurs in the template of component VacanciesRightSideComponent.
+
+    projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-right-side/vacancies-right-side.component.ts:14:15:
+      14 │   templateUrl: "./vacancies-right-side.component.html",
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: IconComponent is not used within the template of VacanciesListComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/list/list.component.ts:30:4:
+      30 │     IconComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: BackComponent is not used within the template of VacanciesComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/pages/vacancies/vacancies.component.ts:27:4:
+      27 │     BackComponent,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLink is not used within the template of BarComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/primitives/bar/bar.component.ts:38:41:
+      38 │ ...bsComponent, CommonModule, RouterLink, RouterLinkActive, BackCo...
+         ╵                               ~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: RouterLinkActive is not used within the template of BarComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/primitives/bar/bar.component.ts:38:53:
+      38 │ ...onent, CommonModule, RouterLink, RouterLinkActive, BackComponent],
+         ╵                                     ~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8113: CardDirective is not used within the template of NewsCardComponent [plugin angular-compiler]
+
+    projects/social_platform/src/app/ui/widgets/news-card/news-card.component.ts:58:4:
+      58 │     CardDirective,
+         ╵     ~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.scss:121:4:
+      121 │     margin-top: auto;
+          ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.scss:128:2:
+      128 │   padding-top: 45px;
+          ╵   ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/dashboard/dashboardItem/dashboardItem.component.scss:55:4:
+      55 │     row-gap: 48px;
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/detail/team/team.component.scss:19:4:
+      19 │     row-gap: 48px;
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/edit/components/project-additional-step/project-additional-step.component.scss:24:2:
+      24 │   position: relative;
+         ╵   ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/pages/projects/list/list.component.scss:183:4:
+      183 │     row-gap: 48px;
+          ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/autocomplete-input/autocomplete-input.component.scss:56:6:
+      56 │       + &_arrow {
+         ╵       ^
+
+
+  The selector "+ .field__input-slim:focus_arrow" is invalid CSS.
+  This will be an error in Dart Sass 2.0.0.
+
+  More info: https://sass-lang.com/d/bogus-combinators
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/autocomplete-input/autocomplete-input.component.scss:59:8:
+      59 │         i {
+         ╵         ^
+
+
+  The selector "+ .field__input-slim:focus_arrow i" is invalid CSS.
+  This will be an error in Dart Sass 2.0.0.
+
+  More info: https://sass-lang.com/d/bogus-combinators
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:71:8:
+      71 │         position: sticky;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:72:8:
+      72 │         bottom: 0;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:73:8:
+      73 │         z-index: 2;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:74:8:
+      74 │         justify-content: center;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/modal/modal.component.scss:75:8:
+      75 │         padding-top: 8px;
+         ╵         ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/primitives/textarea/textarea.component.scss:62:4:
+      62 │     border-radius: var(--ui-radius-card);
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/app/ui/widgets/info-card/info-card.component.scss:59:4:
+      59 │     width: 100%;
+         ╵     ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/ui/src/lib/components/primitives/button/button.component.scss:14:2:
+      14 │   position: relative;
+         ╵   ^
+
+
+  Sass's behavior for declarations that appear after nested
+  rules will be changing to match the behavior specified by CSS in an upcoming
+  version. To keep the existing behavior, move the declaration above the nested
+  rule. To opt into the new behavior, wrap the declaration in `& {}`.
+
+  More info: https://sass-lang.com/d/mixed-decls
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:9:8:
+      9 │ @import "styles/colors.scss";
+        ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:10:8:
+      10 │ @import "styles/global.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:11:8:
+      11 │ @import "styles/responsive.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:12:8:
+      12 │ @import "styles/rounded.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] Deprecation [plugin angular-sass]
+
+    projects/social_platform/src/styles.scss:13:8:
+      13 │ @import "styles/typography.scss";
+         ╵         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+▲ [WARNING] 11 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings. [plugin angular-sass]
+
+    angular:styles/global:styles:1:8:
+      1 │ @import 'projects/social_platform/src/styles.scss';
+        ╵         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  null
+
+
+▲ [WARNING] bundle initial exceeded maximum budget. Budget 500.00 kB was not met by 920.12 kB with a total of 1.42 MB.
+
+
+▲ [WARNING] projects/ui/src/lib/components/primitives/button/button.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 944 bytes with a total of 2.94 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.06 kB with a total of 3.06 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/project-invite/project-invite-dialog.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 7.79 kB with a total of 9.79 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/feed/open-vacancy/open-vacancy.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.10 kB with a total of 3.10 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/collaborator-card/collaborator-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 447 bytes with a total of 2.45 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/list/list.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 511 bytes with a total of 2.51 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/main/main.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.27 kB with a total of 6.27 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/project-vacancy-card/project-vacancy-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 426 bytes with a total of 2.43 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 8.02 kB with a total of 10.02 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/edit/edit.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 7.33 kB with a total of 9.33 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/message-input/message-input.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.54 kB with a total of 6.54 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/edit/components/profile-experience-step/profile-experience-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 328 bytes with a total of 2.33 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/avatar-control/avatar-control.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 262 bytes with a total of 2.26 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/textarea/textarea.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.48 kB with a total of 6.48 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.03 kB with a total of 5.03 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/tag/tag.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.12 kB with a total of 3.12 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/office/nav/nav.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.65 kB with a total of 5.66 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/detail/detail.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 7.61 kB with a total of 9.61 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 11.24 kB with a total of 13.24 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-achievement-step/project-achievement-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.19 kB with a total of 4.19 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/feed/new-project/new-project.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.26 kB with a total of 3.26 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/edit/components/profile-education-step/profile-education-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 328 bytes with a total of 2.33 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/office/office.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.13 kB with a total of 3.13 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/lesson/shared/file-task/file-task.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.87 kB with a total of 6.87 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/edit/components/profile-main-step/profile-main-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 239 bytes with a total of 2.24 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/main/role-widget/program-role-widget.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.50 kB with a total of 4.50 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-vacancy-step/project-vacancy-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.34 kB with a total of 6.34 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/lesson/shared/write-task/write-task.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.04 kB with a total of 3.04 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/edit/components/profile-achievements-step/profile-achievements-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 410 bytes with a total of 2.41 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/edit/components/profile-skills-step/profile-skills-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 587 bytes with a total of 2.59 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/project-direction-card/project-direction-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.74 kB with a total of 3.74 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/input/input.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 5.90 kB with a total of 7.90 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.25 kB with a total of 3.25 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/detail/info/info.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.16 kB with a total of 5.16 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/members/members-filters/members-filters.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.15 kB with a total of 4.15 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/lesson/complete/complete.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.27 kB with a total of 4.27 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/news-card/feed-news-modal/feed-news-modal.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 825 bytes with a total of 2.83 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/lesson/shared/radio-select-task/radio-select-task.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.75 kB with a total of 6.75 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/project-rating/components/range-criterion-input/range-criterion-input.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.24 kB with a total of 4.24 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/invite-card/invite-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 447 bytes with a total of 2.45 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancy-responses/vacancy-responses.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 888 bytes with a total of 2.89 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/vacancy-filter/vacancy-filter.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.55 kB with a total of 5.55 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/list/list.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 6.26 kB with a total of 8.26 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/news-card/feed-news-preview/feed-news-preview.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.95 kB with a total of 5.95 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/lesson/shared/exclude-task/exclude-task.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.25 kB with a total of 6.25 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/onboarding/stage-three/stage-three.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.13 kB with a total of 4.13 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/info-card/info-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 8.87 kB with a total of 10.87 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/search/search.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 323 bytes with a total of 2.32 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-additional-step/project-additional-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.22 kB with a total of 6.22 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-right-side/profile-right-side.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 1.40 kB with a total of 3.40 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/courses.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.07 kB with a total of 4.07 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-partner-resources-step/project-partner-resources-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.04 kB with a total of 4.04 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/vacancies/detail/info/info.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.11 kB with a total of 6.11 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/news-card/carousel/carousel.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.14 kB with a total of 5.14 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 5.04 kB with a total of 7.04 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/tooltip/tooltip.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.80 kB with a total of 5.80 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/onboarding/stage-three/user-type-card/user-type-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.27 kB with a total of 4.27 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/auth/login/login.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.44 kB with a total of 5.44 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/list/course/course.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.65 kB with a total of 4.65 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.22 kB with a total of 6.22 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/onboarding/stage-one/stage-one.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.50 kB with a total of 5.50 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/lesson/lesson.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.28 kB with a total of 5.28 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/skills-basket/skills-basket.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.01 kB with a total of 5.01 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/project-rating/project-rating.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.37 kB with a total of 4.37 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/detail/info/course-module-card/circle-progress-bar/circle-progress-bar.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.08 kB with a total of 4.08 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/auth/email-verification/email-verification.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.38 kB with a total of 4.38 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/projects/edit/edit.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.37 kB with a total of 6.37 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.63 kB with a total of 6.63 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/onboarding/stage-two/stage-two.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.49 kB with a total of 6.49 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/program/detail/list/program-projects-filter/program-projects-filter.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.26 kB with a total of 5.26 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/select/select.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.70 kB with a total of 6.70 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/chat-window/chat-message/chat-message.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.23 kB with a total of 5.23 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/courses/detail/course-detail.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.42 kB with a total of 5.42 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/pages/auth/register/register.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 3.09 kB with a total of 5.09 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/projects-filter/projects-filter.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 2.85 kB with a total of 4.85 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/primitives/autocomplete-input/autocomplete-input.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 6.50 kB with a total of 8.50 kB.
+
+
+▲ [WARNING] projects/social_platform/src/app/ui/widgets/news-card/news-card.component.scss exceeded maximum budget. Budget 2.00 kB was not met by 4.80 kB with a total of 6.80 kB.
+
+
+▲ [WARNING] Module 'dayjs' used by 'projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'snakecase-keys' used by 'projects/core/src/lib/interceptors/camelcase.interceptor.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'dayjs/plugin/customParseFormat' used by 'projects/core/src/lib/services/validation/validation.service.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'dayjs/plugin/relativeTime' used by 'projects/core/src/lib/services/validation/validation.service.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'dayjs/plugin/isToday' used by 'projects/core/src/lib/pipes/formatters/dayjs.pipe.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'dayjs/locale/ru' used by 'projects/core/src/lib/pipes/formatters/dayjs.pipe.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'file-saver' used by 'projects/social_platform/src/app/utils/export-file.ts' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+▲ [WARNING] Module 'map-obj' used by 'node_modules/camelcase-keys/index.js' is not ESM
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
+Output location: Z:\Документы\PROCOLLAB-dev\procollab-dev-platform-responsive\dist\social_platform

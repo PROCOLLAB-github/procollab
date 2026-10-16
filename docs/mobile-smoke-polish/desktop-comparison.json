@@ -1,0 +1,354 @@
+[
+  {
+    "screen": "analytics-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "analytics-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "analytics-attention-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "analytics-attention-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "course-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "course-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "courses-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "courses-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "feed-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "feed-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "partners-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "partners-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "profile-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "profile-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "profile-edit-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "profile-edit-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "program-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "program-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "programs-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "programs-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-fields-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-fields-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-goals-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-goals-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-new-goal-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "project-edit-new-goal-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-invites-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "projects-invites-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "team-invite-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "team-invite-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "team-invite-selected-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "team-invite-selected-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "vacancies-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "vacancies-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "vacancy-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "vacancy-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  }
+]

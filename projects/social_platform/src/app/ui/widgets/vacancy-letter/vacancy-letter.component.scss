@@ -9,7 +9,7 @@
 
 .letter {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--ui-font-body);
   line-height: 1.5;
   color: var(--black);
   overflow-wrap: anywhere;
@@ -27,7 +27,7 @@
     padding: 6px 16px;
     margin-top: 8px;
     font: inherit;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     color: var(--accent);
     cursor: pointer;
     background: transparent;

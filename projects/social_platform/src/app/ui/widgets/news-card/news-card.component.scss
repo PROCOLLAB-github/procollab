@@ -1,5 +1,6 @@
 /** @format */
 
+@use "styles/ui-foundation";
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -97,12 +98,12 @@
     align-items: center;
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
   &__text {
     color: var(--grey-for-text);
     white-space: break-spaces;
 
     p {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
       display: -webkit-box;
       overflow: hidden;
       color: var(--black);
@@ -117,13 +118,12 @@
     }
 
     .card__feed-summary {
-      font-size: 14px;
+      font-size: var(--ui-font-body);
       line-height: 1.5;
       color: var(--grey-for-text);
       -webkit-line-clamp: 3;
     }
   }
-  /* stylelint-enable value-no-vendor-prefix */
 
   &__edit-files {
     display: flex;
@@ -249,5 +249,11 @@
     input {
       display: none;
     }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .news {
+    @include ui-foundation.card;
   }
 }

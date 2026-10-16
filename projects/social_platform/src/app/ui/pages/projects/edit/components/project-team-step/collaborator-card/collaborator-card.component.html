@@ -14,6 +14,7 @@
   <span class="member-row__status">В команде</span>
   <div class="member-row__actions">
     <button
+      appButton="danger"
       type="button"
       class="member-row__action member-row__action--danger"
       [attr.aria-label]="
@@ -36,6 +37,6 @@
     </button>
   </div>
   @if (error()) {
-    <p class="member-row__error" role="alert">{{ error() }}</p>
+    <app-state class="member-row__error" [compact]="true" kind="error" title="{{ error() }}" />
   }
 </article>

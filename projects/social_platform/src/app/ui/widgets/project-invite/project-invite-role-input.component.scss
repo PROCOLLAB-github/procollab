@@ -1,4 +1,5 @@
 /** @format */
+
 :host {
   display: block;
   min-width: 0;
@@ -10,9 +11,17 @@
   label {
     display: block;
     margin-bottom: 8px;
-    font-size: 13px;
-    font-weight: 600;
     color: var(--accent);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-body);
+      font-weight: 600;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 
   input {
@@ -21,7 +30,7 @@
     min-height: 44px;
     padding: 10px 12px;
     font: inherit;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     color: var(--black);
     background: var(--white);
     border: 1px solid color-mix(in srgb, var(--accent) 35%, white);
@@ -39,13 +48,20 @@
 
   p {
     margin: 6px 0 0;
-    font-size: 11px;
     line-height: 1.4;
     color: var(--grey-for-text);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+    }
   }
 
   p.invalid {
-    color: var(--error, #b42318);
+    color: var(--error, var(--ui-error-text));
   }
 
   &__options {
@@ -60,7 +76,7 @@
     background: var(--white);
     border: 1px solid var(--accent);
     border-radius: var(--rounded-lg);
-    box-shadow: 0 6px 24px #0002;
+    box-shadow: 0 6px 24px var(--ui-overlay-shadow-color);
   }
 
   button {
@@ -68,14 +84,22 @@
     width: 100%;
     min-height: 44px;
     padding: 10px;
-    font: inherit;
-    font-size: 13px;
     color: var(--black);
     text-align: left;
     cursor: pointer;
     background: transparent;
     border: 0;
     border-radius: var(--rounded-lg);
+
+    @media screen and (max-width: 999px) {
+      font: inherit;
+      font-size: var(--ui-font-body);
+    }
+
+    @media screen and (min-width: 1000px) {
+      font: inherit;
+      font-size: 13px;
+    }
   }
 
   button.active,
@@ -85,7 +109,7 @@
 
   @media (width <= 600px) {
     input {
-      font-size: 16px;
+      font-size: var(--ui-font-h3);
     }
   }
 }

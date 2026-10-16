@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="field" (clickOutside)="onClickOutside()">
+<div class="field" cdkOverlayOrigin #origin="cdkOverlayOrigin">
   <div class="field__input-wrapper">
     <input
       #input
@@ -43,8 +43,17 @@
       ></i>
     }
   </div>
-  @if (isOpen()) {
-    <div class="field__dropdown" [@dropdownAnimation]>
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="origin"
+    [cdkConnectedOverlayOpen]="isOpen()"
+    [cdkConnectedOverlayPositions]="positions"
+    [cdkConnectedOverlayWidth]="origin.elementRef.nativeElement.getBoundingClientRect().width"
+    [cdkConnectedOverlayPush]="true"
+    [cdkConnectedOverlayViewportMargin]="12"
+    (overlayOutsideClick)="onClickOutside()"
+  >
+    <div class="field__dropdown" [@dropdownAnimation] (click)="$event.stopPropagation()">
       @if (noResults()) {
         <ul class="field__dropdown--no-results">
           <li class="text-body-12 field__option" [class.field__option-slim]="slimVersion()">
@@ -65,5 +74,5 @@
         </ul>
       }
     </div>
-  }
+  </ng-template>
 </div>

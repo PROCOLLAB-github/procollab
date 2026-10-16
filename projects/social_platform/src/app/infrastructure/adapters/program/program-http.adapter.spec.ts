@@ -55,7 +55,7 @@ describe("ProgramHttpAdapter", () => {
   });
 
   it.each(["all", "without_case", "selected"] as const)(
-    "case XLSX %s не принимает search/pagination",
+    "case XLSX %s без фильтров сохраняет прежний отбор",
     scope => {
       setup();
       api.getFile.mockReturnValue(of(new Blob()));
@@ -73,6 +73,26 @@ describe("ProgramHttpAdapter", () => {
     },
   );
 
+  it("list and export encode identical combined filters; export omits pagination", () => {
+    setup();
+    api.get.mockReturnValue(of({}));
+    api.getFile.mockReturnValue(of(new Blob()));
+    const selection = { scope: "selected", caseName: "Кейс & A" } as const;
+    const filters = {
+      search: "  Проект  ",
+      submission: "submitted",
+      presentation: "missing",
+    } as const;
+    adapter.getCaseProjects(12, { selection, ...filters, limit: 25, offset: 50 }).subscribe();
+    adapter.exportCaseProjects(12, selection, filters).subscribe();
+    const list = api.get.mock.lastCall[1] as HttpParams;
+    const file = api.getFile.mock.lastCall[1] as HttpParams;
+    expect(file.get("search")).toBe("Проект");
+    expect(file.get("submission")).toBe("submitted");
+    expect(file.get("presentation")).toBe("missing");
+    expect(file.has("limit") || file.has("offset")).toBe(false);
+    for (const key of file.keys()) expect(file.get(key)).toBe(list.get(key));
+  });
   it("getAll идёт в GET /programs/ c limit/offset и дополнительными фильтрами", () => {
     setup();
     api.get.mockReturnValue(of(pagination<Program>()));

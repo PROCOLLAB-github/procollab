@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 
 .back {
@@ -6,6 +8,12 @@
   margin-top: 20px;
   margin-bottom: 45px;
   cursor: pointer;
+
+  @media screen and (max-width: 999px) {
+    min-width: 44px;
+    min-height: 44px;
+    font: inherit;
+  }
 
   &__icon {
     flex-shrink: 0;
@@ -20,5 +28,18 @@
     @include responsive.apply-desktop {
       display: unset;
     }
+  }
+
+  @media screen and (max-width: 999px) {
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .back--compact {
+    margin: 0;
   }
 }

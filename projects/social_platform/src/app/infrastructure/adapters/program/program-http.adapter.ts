@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import {
   ProgramCaseQuery,
+  ProgramCaseFilters,
   ProgramCaseSelection,
 } from "@domain/program/program-case-analytics.model";
 import { ApiPagination } from "@domain/other/api-pagination.model";
@@ -36,24 +37,30 @@ import {
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
   getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown> {
-    let params = this.caseParams(query.selection)
+    const params = this.caseParams(query.selection, query)
       .set("limit", query.limit ?? 25)
       .set("offset", query.offset ?? 0);
-    if (query.search?.trim()) params = params.set("search", query.search.trim());
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/`, params);
   }
 
-  exportCaseProjects(programId: number, selection: ProgramCaseSelection): Observable<Blob> {
+  exportCaseProjects(
+    programId: number,
+    selection: ProgramCaseSelection,
+    filters: ProgramCaseFilters = {},
+  ): Observable<Blob> {
     return this.apiService.getFile(
       `${this.PROGRAMS_URL}/${programId}/export-projects/`,
-      this.caseParams(selection),
+      this.caseParams(selection, filters),
     );
   }
 
-  private caseParams(selection: ProgramCaseSelection): HttpParams {
-    const params = new HttpParams()
-      .set("view", "case_analytics")
-      .set("case_scope", selection.scope);
+  private caseParams(selection: ProgramCaseSelection, filters: ProgramCaseFilters): HttpParams {
+    let params = new HttpParams().set("view", "case_analytics").set("case_scope", selection.scope);
+    if (filters.search?.trim()) params = params.set("search", filters.search.trim());
+    if (filters.submission && filters.submission !== "all")
+      params = params.set("submission", filters.submission);
+    if (filters.presentation && filters.presentation !== "all")
+      params = params.set("presentation", filters.presentation);
     return selection.scope === "selected" ? params.set("case_name", selection.caseName) : params;
   }
 
@@ -85,6 +92,17 @@ export class ProgramHttpAdapter {
 
   getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/manager-overview/`);
+  }
+
+  /** Без автозагрузки остальных страниц; camelcase преобразует общий interceptor. */
+  getManagerParticipantsWithoutVisit(
+    programId: number,
+    query: ProgramAnalyticsAttentionQuery,
+  ): Observable<ProgramAnalyticsAttentionPage<ProgramAnalyticsAttentionParticipant>> {
+    return this.apiService.get(
+      `${this.PROGRAMS_URL}/${programId}/manager-overview/participants-without-visit/`,
+      this.attentionParams(query),
+    );
   }
 
   /** Без автозагрузки остальных страниц; camelcase преобразует общий interceptor. */

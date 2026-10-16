@@ -1,5 +1,8 @@
 /** @format */
 
+import { DesktopLayoutService, StateComponent } from "@uilib";
+/** @format */
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -28,6 +31,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
   imports: [
+    StateComponent,
     CommonModule,
     IconComponent,
     NewProjectComponent,
@@ -38,6 +42,7 @@ import { FeedItem } from "@domain/feed/feed-item.model";
   providers: [FeedInfoService, FeedUIInfoService, ProjectTeamUIService],
 })
 export class FeedComponent implements AfterViewInit, OnDestroy {
+  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   readonly feedRoot = viewChild<ElementRef<HTMLElement>>("feedRoot");
 
   private readonly feedInfoService = inject(FeedInfoService);
