@@ -33,7 +33,15 @@
       (mousedown)="$event.preventDefault()"
       (click)="browse()"
     >
-      ⌄
+      <i
+        class="university__arrow"
+        [class.university__arrow--open]="open()"
+        appIcon
+        icon="arrow-no-body"
+        appWidth="10"
+        appHeight="8"
+        aria-hidden="true"
+      ></i>
     </button>
   </div>
   @if (custom()) {
