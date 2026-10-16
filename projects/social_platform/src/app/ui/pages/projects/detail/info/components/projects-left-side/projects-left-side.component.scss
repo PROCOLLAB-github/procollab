@@ -73,17 +73,7 @@
     min-width: 0;
 
     &--program {
-      display: grid;
-      grid-template-columns: 22px minmax(0, 1fr);
-      gap: 4px 6px;
-      align-items: center;
-
-      .lists__item-content {
-        display: contents;
-      }
-
       .lists__value {
-        grid-column: 1 / -1;
         hyphens: auto;
         word-break: normal;
       }
