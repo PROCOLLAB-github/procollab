@@ -1,0 +1,93 @@
+[
+  {
+    "width": 320,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 360,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 480,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 580,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 640,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 749,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 750,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 999,
+    "before": [0, 0, 0, 0],
+    "after": [8, 8, 8, 8],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 1000,
+    "before": [15, 15, 15, 15],
+    "after": [15, 15, 15, 15],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "before": [15, 15, 15, 15],
+    "after": [15, 15, 15, 15],
+    "cards": 4,
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "before": [15, 15, 15, 15],
+    "after": [15, 15, 15, 15],
+    "cards": 4,
+    "passed": true
+  }
+]
