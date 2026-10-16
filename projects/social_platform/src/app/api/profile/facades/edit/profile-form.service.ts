@@ -96,7 +96,7 @@ export class ProfileFormService {
       coverImageAddress: [null],
 
       // education
-      organizationName: ["", Validators.maxLength(100)],
+      organizationName: ["", Validators.maxLength(255)],
       entryYear: [null],
       completionYear: [null],
       description: [null, Validators.maxLength(400)],
