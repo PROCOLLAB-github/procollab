@@ -33,12 +33,7 @@ import { Project } from "@domain/project/project.model";
 
 interface MyProjectPresentation {
   lifecycle: "submitted" | "draft" | "program" | "published";
-  statusLabel:
-    | "Черновик"
-    | "Опубликован"
-    | "В программе"
-    | "Привязан к программе"
-    | "Сдан в программу";
+  statusLabel: "Черновик" | "Опубликован" | "Привязан к программе" | "Сдан в программу";
   role: "leader" | "participant";
   roleLabel: "Лидер" | "Участник";
   accessLabel: "можно редактировать" | "только просмотр";
@@ -123,7 +118,7 @@ export class InfoCardComponent {
       {
         submitted: "Сдан в программу",
         draft: "Черновик",
-        program: this.releaseDesktop() ? "В программе" : "Привязан к программе",
+        program: "Привязан к программе",
         published: "Опубликован",
       };
     const userId = this.loggedUserId();

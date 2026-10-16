@@ -1,17 +1,22 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { signal } from "@angular/core";
+import { DesktopLayoutService } from "@uilib";
 import { provideRouter } from "@angular/router";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { ProjectsLeftSideComponent } from "./projects-left-side.component";
 
 describe("ProjectsLeftSideComponent", () => {
   let fixture: ComponentFixture<ProjectsLeftSideComponent>;
+  const desktop = signal(false);
 
   beforeEach(async () => {
+    desktop.set(false);
     await TestBed.configureTestingModule({
       imports: [ProjectsLeftSideComponent],
       providers: [
+        { provide: DesktopLayoutService, useValue: { desktop } },
         provideRouter([]),
         {
           provide: IndustryRepositoryPort,
@@ -53,7 +58,8 @@ describe("ProjectsLeftSideComponent", () => {
     expect(text).not.toContain(">0<");
   });
 
-  it("показывает полное имя и открывает именно программу, а не связь или проект", () => {
+  it.each([true, false])("desktop=%s: полное имя и маршрут программы", isDesktop => {
+    desktop.set(isDesktop);
     fixture.componentRef.setInput("project", {
       industry: 1,
       leader: 42,
@@ -72,7 +78,9 @@ describe("ProjectsLeftSideComponent", () => {
     expect(field.querySelector("a").getAttribute("href")).toBe("/office/program/12");
   });
 
-  it("не добавляет программу без связи и явно обозначает отсутствующее legacy имя", () => {
+  it.each([true, false])("desktop=%s: нет связи или отсутствует legacy имя", isDesktop => {
+    desktop.set(isDesktop);
+    fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".lists__item--program")).toBeNull();
     fixture.componentRef.setInput("project", {
       industry: 1,
