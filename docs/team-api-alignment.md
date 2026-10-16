@@ -13,7 +13,10 @@ AC D5: ошибка не удаляет участника из UI; пригла
 mapping, multi-link/freeze, существующие facade tests, полный Vitest, build и lint.
 Без React, новых экранов и recommendations UI. Развёртывание только после backend C.
 
-Актуализация 16.10.2026: база Angular dev `ae4a8a0a7ed2b8c588d4d671f2ef55fa60f4c211`.
+Актуализация 16.10.2026: база Angular dev `23663374c72d8ec4fec12b03cb2f46937bb05690`.
+Full Vitest проверен после интеграции `ae4a8a0…`; затем dev получил только независимую
+SCSS-правку выравнивания названия программы (#425). Она сохранена, связанные
+tests и обе сборки повторяются на окончательном head.
 Сохранены актуальные member rows, role labels, loading/empty states, формы приглашения
 и responsive UI из dev. Единственный merge conflict — импорты team step: нужны и
 новый StateComponent, и policy helpers. Дополнительный component regression проверяет,
