@@ -1,0 +1,110 @@
+@use "styles/typography";
+
+.university {
+  position: relative;
+  width: 100%;
+
+  &__field {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 12px 42px 12px 12px;
+    color: var(--black);
+    background: var(--white);
+    border: 0.5px solid var(--gray);
+    border-radius: var(--rounded-xxl);
+    outline: none;
+
+    @include typography.body-12;
+
+    &::placeholder {
+      color: var(--dark-grey);
+    }
+
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+    }
+
+    &--error {
+      border-color: var(--red);
+    }
+  }
+
+  &__toggle {
+    position: absolute;
+    top: 0;
+    right: 8px;
+    height: 100%;
+    padding: 0 10px;
+    color: var(--dark-grey);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+
+  &__dropdown {
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 20;
+    max-height: 300px;
+    padding: 6px;
+    margin-top: 4px;
+    overflow-y: auto;
+    background: var(--white);
+    border: 0.5px solid var(--gray);
+    border-radius: var(--rounded-lg);
+    box-shadow: 0 5px 20px rgb(0 0 0 / 10%);
+
+    @include typography.body-12;
+  }
+
+  &__option {
+    padding: 10px;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    border-radius: var(--rounded-lg);
+
+    &:hover,
+    &--active {
+      background: var(--light-gray);
+    }
+
+    small {
+      display: block;
+      margin-top: 3px;
+      color: var(--grey-for-text);
+    }
+
+    &--other {
+      color: var(--accent);
+    }
+  }
+
+  &__hint,
+  &__status {
+    color: var(--grey-for-text);
+
+    @include typography.body-10;
+  }
+
+  &__hint {
+    margin-top: 6px;
+  }
+
+  &__status:not(:empty) {
+    padding: 6px 10px;
+  }
+
+  &__more {
+    width: 100%;
+    padding: 10px;
+    color: var(--accent);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+}
