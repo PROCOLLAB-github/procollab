@@ -3,6 +3,12 @@ on:
   push:
     branches: [ops/prod-university-rollout-20261016]
   workflow_dispatch:
+    inputs:
+      phase:
+        type: choice
+        options: [validate, backup]
+        default: validate
+        required: true
 permissions:
   contents: read
 concurrency:
@@ -10,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   backup:
-    if: github.ref == 'refs/heads/ops/prod-university-rollout-20261016'
+    if: github.ref == 'refs/heads/ops/prod-university-rollout-20261016' && github.event_name == 'workflow_dispatch' && inputs.phase == 'backup'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -25,3 +31,29 @@ jobs:
           trap 'rm -f "$key"' EXIT
           printf '%s\n' "$SSH_KEY" > "$key"
           ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -i "$key" gh_deploy@app.procollab.ru 'bash -se' < .github/scripts/university-frontend-snapshot.sh
+
+  validate:
+    if: github.ref == 'refs/heads/ops/prod-university-rollout-20261016' && (github.event_name == 'push' || inputs.phase == 'validate')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: afbf6e851fd1aae91363f9c5c28c6a108326a894
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:ts
+      - run: npm run test:ci
+      - run: npm run build:prod
+      - name: Verify built standard chevron
+        run: |
+          node - <<'JS'
+          const fs = require('fs');
+          const sprite = fs.readFileSync('dist/social_platform/assets/icons/symbol/svg/sprite.css.svg', 'utf8');
+          if (!sprite.includes('id="arrow-no-body"')) throw new Error('Standard chevron missing from production sprite');
+          console.log('PRODUCTION_STANDARD_CHEVRON_PRESENT=true');
+          JS
