@@ -42,6 +42,8 @@ export const AppRoutes = {
   },
 
   program: {
+    management: (programId: number | string, section: string = "participants") =>
+      `/office/program/${programId}/management/${section}`,
     root: () => "/office/program",
     list: () => "/office/program/all",
     detail: (programId: number | string) => `/office/program/${programId}`,

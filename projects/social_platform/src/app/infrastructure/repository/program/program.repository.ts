@@ -24,6 +24,7 @@ import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program
 import { userFromRaw } from "@utils/userRaw";
 import { EventBus } from "@domain/shared/event-bus";
 import { LoggedOut } from "@domain/auth/events/logged-out.event";
+import { ProgramUpdated } from "@domain/program/program-updated.event";
 import {
   ProgramAnalyticsAttentionPage,
   ProgramAnalyticsAttentionParticipant,
@@ -65,6 +66,9 @@ export class ProgramRepository implements ProgramRepositoryPort {
   }
 
   private initializeEvents(): void {
+    this.eventBus
+      .on<ProgramUpdated>("ProgramUpdated")
+      .subscribe(event => this.entityCache.invalidate(event.payload.programId));
     this.eventBus.on<LoggedOut>("LoggedOut").subscribe({
       next: () => {
         this.entityCache.clear();
