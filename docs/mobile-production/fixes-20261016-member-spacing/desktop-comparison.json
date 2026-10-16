@@ -1,0 +1,26 @@
+[
+  {
+    "screen": "members-spacing-1000",
+    "beforeSize": [1000, 844],
+    "afterSize": [1000, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-spacing-1440",
+    "beforeSize": [1440, 844],
+    "afterSize": [1440, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  },
+  {
+    "screen": "members-spacing-1920",
+    "beforeSize": [1920, 844],
+    "afterSize": [1920, 844],
+    "exactChangedPixels": 0,
+    "maxChannelDelta": 0,
+    "passed": true
+  }
+]
