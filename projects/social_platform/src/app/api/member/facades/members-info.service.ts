@@ -5,19 +5,24 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@api/shared/nav.service";
 import {
   concatMap,
-  debounceTime,
+  catchError,
+  finalize,
+  from,
   distinctUntilChanged,
   EMPTY,
   fromEvent,
   map,
+  merge,
+  Subject,
   skip,
   switchMap,
   take,
+  takeUntil,
   tap,
   throttleTime,
+  timer,
 } from "rxjs";
 import { User } from "@domain/auth/user.model";
-import { AbstractControl } from "@angular/forms";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
@@ -26,7 +31,7 @@ import { GetMembersUseCase } from "../use-cases/get-members.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
-import { normalizeMemberSearch } from "../member-search";
+import { memberFilterQueryParams, memberFiltersFromUrl, memberFiltersKey } from "../member-filters";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Фасад списка участников: пагинация по скроллу, фильтры, `GetMembersUseCase`, переход в профиль. */
@@ -53,6 +58,10 @@ export class MembersInfoService {
 
   private readonly searchForm = this.membersUIInfoService.searchForm;
   private readonly filterForm = this.membersUIInfoService.filterForm;
+  private readonly cancelFormChanges = new Subject<void>();
+  private formRevision = 0;
+  private urlRevision = 0;
+  private pendingNavigation?: { key: string; formRevision: number };
 
   /** Инициализирует выдачу resolver и поиск из URL, не теряя запрос при обновлении страницы. */
   initializationMembers(): void {
@@ -66,6 +75,7 @@ export class MembersInfoService {
     // Подписываемся на изменения URL параметров для обновления списка участников
     // (skip(1) пропускает начальное значение — данные уже загружены resolver'ом)
     this.initializationQueryParams();
+    this.saveFormValues();
   }
 
   private initializationControls(): void {
@@ -78,53 +88,67 @@ export class MembersInfoService {
       .subscribe((members: ApiPagination<User>) => {
         this.membersUIInfoService.applyMembersPagination(members);
       });
-
-    const fullname = normalizeMemberSearch(this.route.snapshot.queryParams["fullname"]);
-    this.searchForm.patchValue({ search: fullname }, { emitEvent: false });
-    this.searchParams.set(fullname ? { fullname } : {});
-
-    // Остальные фильтры сохраняют существующую синхронизацию с URL.
-    this.saveControlValue(this.searchForm.get("search"), "fullname");
-    this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
-    this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
-    this.saveControlValue(this.filterForm.get("age"), "age");
-    this.saveControlValue(this.filterForm.get("isMosPolytechStudent"), "is_mospolytech_student");
   }
 
   private initializationQueryParams(): void {
     this.route.queryParams
       .pipe(
-        skip(1), // Пропускаем первое значение
-        distinctUntilChanged(), // Игнорируем одинаковые значения
-        debounceTime(100), // Задержка для предотвращения частых запросов
-        takeUntilDestroyed(this.destroyRef),
-        switchMap(params => {
-          // Формируем параметры для API запроса
-          const fetchParams: Record<string, string> = {};
-
-          const fullname = normalizeMemberSearch(params["fullname"]);
-          if (fullname) fetchParams["fullname"] = fullname;
-          if (params["skills__contains"])
-            fetchParams["skills__contains"] = params["skills__contains"];
-          if (params["speciality__icontains"])
-            fetchParams["speciality__icontains"] = params["speciality__icontains"];
-          if (params["is_mospolytech_student"])
-            fetchParams["is_mospolytech_student"] = params["is_mospolytech_student"];
-
-          // Проверяем формат параметра возраста (должен быть "число,число")
-          if (params["age"] && /\d+,\d+/.test(params["age"])) fetchParams["age"] = params["age"];
-
-          this.searchParams.set(fetchParams);
-
+        map(memberFiltersFromUrl),
+        tap(params => {
+          const ownNavigation = this.pendingNavigation?.key === memberFiltersKey(params);
+          if (!ownNavigation) {
+            // Back/Forward и сброс отменяют как debounce, так и очередь старых правок.
+            this.urlRevision++;
+            this.cancelFormChanges.next();
+          }
+          if (!ownNavigation || this.pendingNavigation?.formRevision === this.formRevision) {
+            this.restoreForm(params);
+          }
+        }),
+        distinctUntilChanged((a, b) => memberFiltersKey(a) === memberFiltersKey(b)),
+        tap(params => this.searchParams.set(params)),
+        skip(1), // Первый запрос уже выполнен resolver с тем же контрактом URL.
+        switchMap(fetchParams => {
           const prev = this.membersUIInfoService.members();
           this.membersUIInfoService.members$.set(loading(prev));
-
           return this.onFetch(0, 20, fetchParams);
         }),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(members => {
         this.membersUIInfoService.applyMembersPagination(members);
       });
+  }
+
+  private restoreForm(params: Record<string, string>): void {
+    this.searchForm.patchValue({ search: params["fullname"] ?? "" }, { emitEvent: false });
+    const age = params["age"]?.split(",").map(Number);
+    this.filterForm.patchValue(
+      {
+        keySkill: params["skills__contains"] ?? "",
+        speciality: params["speciality__icontains"] ?? "",
+        age: age ? [age[0], age[1]] : [null, null],
+        isMosPolytechStudent:
+          params["is_mospolytech_student"] === undefined
+            ? null
+            : params["is_mospolytech_student"] === "true",
+      },
+      { emitEvent: false },
+    );
+  }
+
+  /** Сброс работает и при пустом URL, когда Router не эмитит queryParams повторно. */
+  resetFilters(): void {
+    this.urlRevision++;
+    this.cancelFormChanges.next();
+    this.restoreForm({});
+    this.router
+      .navigate([], {
+        queryParams: memberFilterQueryParams({}),
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .catch(() => this.logger.debug("Members filters reset failed"));
   }
 
   private onScroll(target: HTMLElement, membersRoot: ElementRef<HTMLUListElement>) {
@@ -180,25 +204,52 @@ export class MembersInfoService {
       .subscribe();
   }
 
-  private saveControlValue(control: AbstractControl | null, queryName: string): void {
-    if (!control) return;
-
-    const changes =
-      queryName === "fullname"
-        ? control.valueChanges.pipe(map(normalizeMemberSearch), debounceTime(300))
-        : control.valueChanges.pipe(throttleTime(300));
-    // Для текста ждём завершения ввода: throttle без trailing теряет последние символы.
-    changes.pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef)).subscribe(value => {
-      this.router
-        .navigate([], {
-          queryParams: {
-            [queryName]: queryName === "fullname" ? value || null : value?.toString(),
-          },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
-    });
+  private saveFormValues(): void {
+    merge(
+      this.searchForm.valueChanges.pipe(map(() => 300)),
+      this.filterForm.valueChanges.pipe(map(() => 100)),
+    )
+      .pipe(
+        tap(() => this.formRevision++),
+        switchMap(delay => timer(delay).pipe(takeUntil(this.cancelFormChanges))),
+        map(() => this.urlRevision),
+        // Router.navigate асинхронный: следующая правка ждёт завершения текущей.
+        concatMap(urlRevision => {
+          if (urlRevision !== this.urlRevision) return EMPTY;
+          const filters = this.filterForm.getRawValue();
+          const params = memberFiltersFromUrl({
+            fullname: this.searchForm.controls.search.value,
+            skills__contains: filters.keySkill,
+            speciality__icontains: filters.speciality,
+            age: filters.age?.join(","),
+            is_mospolytech_student:
+              filters.isMosPolytechStudent == null
+                ? undefined
+                : String(filters.isMosPolytechStudent),
+          });
+          const key = memberFiltersKey(params);
+          if (key === memberFiltersKey(this.searchParams())) return EMPTY;
+          const navigation = { key, formRevision: this.formRevision };
+          this.pendingNavigation = navigation;
+          return from(
+            this.router.navigate([], {
+              queryParams: memberFilterQueryParams(params),
+              relativeTo: this.route,
+              queryParamsHandling: "merge",
+            }),
+          ).pipe(
+            catchError(() => {
+              this.logger.debug("Members filters navigation failed");
+              return EMPTY;
+            }),
+            finalize(() => {
+              if (this.pendingNavigation === navigation) this.pendingNavigation = undefined;
+            }),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {

@@ -1,7 +1,13 @@
 <!-- @format -->
 
-<form class="create-tag__form" [formGroup]="tagForm" (submit)="$event.preventDefault()">
+<form
+  appFormLayout
+  class="create-tag__form"
+  [formGroup]="tagForm"
+  (submit)="$event.preventDefault()"
+>
   <input
+    appField
     class="text-body-6 create-tag__input field__option--add-object"
     type="text"
     placeholder="введите тэг..."

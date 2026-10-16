@@ -19,8 +19,10 @@ const vacancyRepositorySpy = {
 describe("VacanciesComponent", () => {
   let component: VacanciesComponent;
   let fixture: ComponentFixture<VacanciesComponent>;
+  const listType = signal<"all" | "my" | null>("all");
 
   beforeEach(async () => {
+    listType.set("all");
     const vacancyInfoServiceSpy = {
       initializationSearchValueForm: vi.fn(),
       init: vi.fn(),
@@ -31,7 +33,7 @@ describe("VacanciesComponent", () => {
     const fb = new FormBuilder();
     const vacancyUIInfoServiceSpy = {
       searchForm: fb.group({ search: [""] }),
-      listType: signal<"all" | "my" | null>("all"),
+      listType,
       applySearhValueChanged: vi.fn(),
     };
 
@@ -72,5 +74,19 @@ describe("VacanciesComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("показывает название раздела в общем Page Header", () => {
+    expect(fixture.nativeElement.querySelector("app-page-header h1").textContent.trim()).toBe(
+      "вакансии",
+    );
+    expect(fixture.nativeElement.querySelectorAll("main h1")).toHaveLength(1);
+
+    listType.set("my");
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("app-page-header h1").textContent.trim()).toBe(
+      "мои отклики",
+    );
+    expect(fixture.nativeElement.querySelectorAll("main h1")).toHaveLength(1);
   });
 });

@@ -1,5 +1,8 @@
 /** @format */
 
+import { FieldDirective, FormLayoutDirective } from "@uilib";
+/** @format */
+
 import { CommonModule } from "@angular/common";
 import {
   Component,
@@ -26,7 +29,7 @@ import { TagDto } from "@domain/kanban/dto/tag.model.dto";
   selector: "app-create-tag-form",
   templateUrl: "./create-tag-form.component.html",
   styleUrl: "./create-tag-form.component.scss",
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [FieldDirective, FormLayoutDirective, CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class CreateTagFormComponent implements OnInit, OnChanges {
   @Input() editingTag: TagDto | null = null;

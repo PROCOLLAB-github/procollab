@@ -12,12 +12,14 @@ import { signal } from "@angular/core";
 describe("VacanciesDetailComponent", () => {
   let component: VacanciesDetailComponent;
   let fixture: ComponentFixture<VacanciesDetailComponent>;
+  const vacancy = signal<any>(undefined);
 
   beforeEach(async () => {
+    vacancy.set(undefined);
     const vacancyDetailInfoServiceSpy = { initializeDetailInfo: vi.fn(), destroy: vi.fn() };
 
     const vacancyDetailUIInfoServiceSpy = {
-      vacancy: signal(undefined),
+      vacancy,
     };
 
     const expandServiceSpy = { expanded: signal({}) };
@@ -47,5 +49,13 @@ describe("VacanciesDetailComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("использует роль вакансии как единственный заголовок страницы", () => {
+    vacancy.set({ role: "Дизайнер", isActive: true, salary: "0" });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector("h1")?.textContent.trim()).toBe("Дизайнер");
+    expect(fixture.nativeElement.querySelectorAll("h1")).toHaveLength(1);
   });
 });

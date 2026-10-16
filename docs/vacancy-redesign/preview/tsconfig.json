@@ -1,0 +1,6 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": { "outDir": "../../../out-tsc/vacancy-preview", "types": [] },
+  "files": ["main.ts"],
+  "include": ["../../../projects/**/*.d.ts"]
+}

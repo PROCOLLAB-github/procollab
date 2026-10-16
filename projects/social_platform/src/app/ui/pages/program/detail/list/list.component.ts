@@ -21,7 +21,7 @@ import { ProgramProjectsFilterComponent } from "./program-projects-filter/progra
 import { RatingCardComponent } from "./rating-card/rating-card.component";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ButtonComponent } from "@ui/primitives";
-import { IconComponent } from "@uilib";
+import { IconComponent, FormLayoutDirective } from "@uilib";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { tagsFilter } from "@core/consts/filters/tags-filter.const";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
@@ -40,6 +40,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   imports: [
+    FormLayoutDirective,
     CommonModule,
     ReactiveFormsModule,
     RouterModule,

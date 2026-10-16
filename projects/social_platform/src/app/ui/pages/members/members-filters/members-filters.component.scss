@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/responsive";
 @use "styles/typography";
 
@@ -13,12 +15,14 @@
     justify-content: space-between;
   }
 
-  &__clear {
-    padding: 0;
-    color: var(--accent);
-    cursor: pointer;
-    background: transparent;
-    border: 0;
+  @media screen and (min-width: 1000px) {
+    &__clear {
+      padding: 0;
+      color: var(--accent);
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+    }
   }
 
   &__title {
@@ -53,11 +57,22 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     color: var(--black);
 
     span {
       color: var(--dark-grey);
     }
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .filters__titles button.ui-button {
+    font-family: Mont, sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: var(--accent);
   }
 }

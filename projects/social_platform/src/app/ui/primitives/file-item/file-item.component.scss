@@ -1,5 +1,7 @@
 /** @format */
 
+@use "styles/responsive";
+
 .file {
   display: flex;
   gap: 10px;
@@ -21,6 +23,10 @@
     display: flex;
     gap: 5px;
     align-items: center;
+
+    @media screen and (max-width: 999px) {
+      flex: 1;
+    }
   }
 
   &__meta {
@@ -38,6 +44,10 @@
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xxl);
 
+    @media screen and (max-width: 999px) {
+      flex-shrink: 0;
+    }
+
     &--delete {
       color: var(--red);
       cursor: pointer;
@@ -51,6 +61,31 @@
     &--file {
       color: var(--accent);
       cursor: pointer;
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .file,
+  .file__left {
+    min-width: 0;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    .file {
+      flex-wrap: wrap;
+    }
+
+    .file__name {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .file__icon {
+      width: 44px;
+      height: 44px;
     }
   }
 }

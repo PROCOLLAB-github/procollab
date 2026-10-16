@@ -1,3 +1,6 @@
+/** @format */
+
+@use "styles/course-task";
 @use "styles/responsive";
 
 .video {
@@ -111,4 +114,8 @@
       color: var(--accent-dark);
     }
   }
+}
+
+@media screen and (max-width: 999px) {
+  @include course-task.responsive-layout("video");
 }

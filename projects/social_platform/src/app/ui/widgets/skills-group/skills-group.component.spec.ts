@@ -71,6 +71,15 @@ describe("SkillsGroupComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("сохраняет checked при поздней загрузке и обновлении options", () => {
+    const skill = { id: 9, name: "Angular", category: { id: 1, name: "Разработка" } };
+    fixture.componentRef.setInput("selected", [skill]);
+    fixture.componentRef.setInput("options", [{ ...skill }]);
+    expect(component.options[0].checked).toBe(true);
+    fixture.componentRef.setInput("options", [{ ...skill }]);
+    expect(component.options[0].checked).toBe(true);
+  });
+
   it("показывает options panel сверху правой области для активной категории", () => {
     fixture.componentRef.setInput("hasOpenGroups", true);
     fixture.componentRef.setInput("options", [

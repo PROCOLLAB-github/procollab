@@ -1,0 +1,12 @@
+[
+  {
+    "name": "loading-action",
+    "width": 1440,
+    "passed": true
+  },
+  {
+    "name": "loading-action",
+    "width": 1920,
+    "passed": true
+  }
+]

@@ -1,51 +1,40 @@
 <!-- @format -->
 
-@if (response()) {
-  <section class="response">
-    <div class="response__section response__summary">
-      @if (vacancyDetails(); as vacancy) {
-        <p class="text-body-14 response__role">{{ vacancy.role }}</p>
-        @if (vacancy.project; as project) {
-          <p class="text-body-10 response__project">{{ project.name }}</p>
-        }
-      } @else {
-        <p class="text-body-14 response__role">Вакансия #{{ response().vacancy }}</p>
+<article class="response">
+  <header class="response__header">
+    <div class="response__identity">
+      <h2 class="response__role">
+        <a [routerLink]="AppRoutes.office.vacancy(vacancyId())">{{
+          vacancyDetails()?.role || "Вакансия #" + vacancyId()
+        }}</a>
+      </h2>
+      @if (vacancyDetails()?.project; as project) {
+        <a class="response__project" [routerLink]="AppRoutes.projects.detail(project.id)"
+          >Проект: {{ project.name }}</a
+        >
       }
-
       @if (response().datetimeCreated) {
-        <p class="text-body-8 response__date">
+        <p class="response__date">
           Отклик от {{ response().datetimeCreated | date: "dd.MM.yyyy" }}
         </p>
       }
-
-      <p
-        class="text-body-10 response__status"
-        [class.response__status--accepted]="status().className === 'accepted'"
-        [class.response__status--declined]="status().className === 'declined'"
-        [class.response__status--pending]="status().className === 'pending'"
-      >
-        {{ status().label }}
-      </p>
     </div>
-
-    <div class="response__section">
-      <div class="lists__section">
-        <p class="text-body-12 lists__title">сопроводительное письмо</p>
-        <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
-      </div>
-
-      <p class="text-body-10">{{ response().whyMe }}</p>
-
-      @if (response().accompanyingFile; as file) {
-        <app-file-item
-          class="response__file"
-          [canDelete]="false"
-          [link]="file.link"
-          [name]="file.name"
-          [type]="file.mimeType"
-          [size]="file.size"
-        ></app-file-item>
-      }
-    </div>
+    <app-vacancy-status [label]="status().label" [tone]="status().tone"></app-vacancy-status>
+  </header>
+  <section class="response__letter">
+    <h3>Сопроводительное письмо</h3>
+    <app-vacancy-letter [text]="response().whyMe || ''"></app-vacancy-letter>
   </section>
-}
+  @if (response().accompanyingFile; as file) {
+    <div class="response__file">
+      <span>Приложенный файл</span>
+      <a
+        [href]="file.link"
+        [attr.download]="file.name || ''"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ file.name || "Открыть файл" }}</a
+      >
+    </div>
+  }
+</article>

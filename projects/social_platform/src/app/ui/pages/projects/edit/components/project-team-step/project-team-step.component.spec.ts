@@ -1,6 +1,6 @@
 /** @format */
 import { HttpErrorResponse } from "@angular/common/http";
-import { provideZonelessChangeDetection, signal } from "@angular/core";
+import { provideZonelessChangeDetection, signal, WritableSignal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { provideNgxMask } from "ngx-mask";
@@ -15,6 +15,7 @@ import { RevokeInviteUseCase } from "@api/invite/use-cases/revoke-invite.use-cas
 import { GetMembersUseCase } from "@api/member/use-cases/get-members.use-case";
 import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.port";
 import { Invite } from "@domain/invite/invite.model";
+import { Project } from "@domain/project/project.model";
 import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
 import { ProjectTeamStepComponent } from "./project-team-step.component";
 
@@ -104,6 +105,29 @@ describe("Окно приглашения из редактора команды
       true,
     );
     expect(document.activeElement).toBe(dialog().querySelector('input[type="search"]'));
+  });
+  it("server freeze блокирует CTA даже при draft в legacy-связи", async () => {
+    const project = TestBed.inject(ProjectsEditInfoService)
+      .invitationProject as WritableSignal<Project | null>;
+    project.set({
+      id: 5,
+      leader: 1,
+      partnerProgram: { programId: 27, isSubmitted: false },
+      teamPolicy: {
+        isFrozen: true,
+        requiresProgramContext: false,
+        programLinkId: 902,
+        programLinks: [{ id: 902, programId: 27, isSubmitted: true, isCompetitive: true }],
+      },
+    } as Project);
+    await fixture.whenStable();
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      ".invite__submit button",
+    )!;
+    expect(trigger.disabled).toBe(true);
+    trigger.click();
+    expect(ui.isInviteModalOpen()).toBe(false);
+    expect(repo.sendForUser).not.toHaveBeenCalled();
   });
   it("показывает public data, причины disabled, выбирает строку и очищает выбор", async () => {
     await open();

@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-29",
+  "stage": "before skills fix; existing candidate kept",
+  "filesFailed": 4,
+  "testsFailed": 8,
+  "testsPassed": 5,
+  "failures": [
+    "older search response overwrites newer results",
+    "empty query does not cancel pending request",
+    "destroyed search service keeps subscription",
+    "same query after selecting a suggestion is skipped",
+    "old response opens suggestions during next query debounce",
+    "late response opens suggestions after clearing input",
+    "SkillsBasket writeValue(null) keeps old selection",
+    "SkillsGroup loses checked state when options arrive after selection"
+  ],
+  "evidence": "Vitest run at 17:12:13, duration 15.43s; full local log tmp/skills-before.log (ignored)",
+  "scope": "local deterministic regressions, not DEV API"
+}

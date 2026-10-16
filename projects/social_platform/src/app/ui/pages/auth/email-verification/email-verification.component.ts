@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/primitives";
 import { AuthEmailService } from "@api/auth/facades/auth-email.service";
@@ -11,7 +14,7 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./email-verification.component.html",
   styleUrl: "./email-verification.component.scss",
   providers: [AuthEmailService],
-  imports: [CommonModule, IconComponent],
+  imports: [ButtonDirective, CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailVerificationComponent implements OnInit {

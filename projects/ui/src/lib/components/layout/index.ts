@@ -14,3 +14,8 @@ export * from "./invite-manage-card/invite-manage-card.component";
 export * from "./profile-control-panel/profile-control-panel.component";
 export * from "./profile-info/profile-info.component";
 export * from "./sidebar/sidebar.component";
+
+export * from "./page-header/page-header.component";
+export * from "./state/state.component";
+export * from "./dialog-header/dialog-header.component";
+export * from "./ui-adapters.directive";

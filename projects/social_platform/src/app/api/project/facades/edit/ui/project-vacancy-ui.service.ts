@@ -53,11 +53,13 @@ export class ProjectVacancyUIService {
   readonly vacancyIsSubmittingFlag = computed(() => isLoading(this.vacancyIsSubmitting()));
 
   readonly vacancies = signal<Vacancy[]>([]);
+  readonly createdVacancyId = signal<number | null>(null);
+  readonly isEditingVacancy = computed(() => this.projectFormService.editIndex() !== null);
   readonly onEditClicked = this.projectsEditUIInfoService.onEditClicked;
 
   readonly vacancyForm = this.fb.group({
     role: this.fb.control<string | null>(null),
-    skills: this.fb.control<Skill[]>([]),
+    skills: this.fb.nonNullable.control<Skill[]>([]),
     description: this.fb.control<string | null>("", [Validators.maxLength(3500)]),
     requiredExperience: this.fb.control<string | null>(null),
     workFormat: this.fb.control<string | null>(null),
@@ -158,6 +160,7 @@ export class ProjectVacancyUIService {
   applySubmitVacancy(vacancy: Vacancy): void {
     this.vacancies.update(list => [...list, vacancy]);
     this.applyResetVacancyForm();
+    this.createdVacancyId.set(vacancy.id);
   }
 
   applyUpdateVacancy(vacancy: Vacancy): void {
@@ -192,12 +195,13 @@ export class ProjectVacancyUIService {
     // Патчинг формы значениями вакансии
     this.applyPatchFormValues({
       role: item.role,
-      skills: item.requiredSkills,
+      skills: item.requiredSkills ?? [],
       description: item.description,
       requiredExperience: item.requiredExperience,
       workFormat: item.workFormat,
       city: item.city ?? null,
-      salary: item.salary ?? null,
+      // DEV может вернуть число: контрол ввода и валидаторы работают со строкой.
+      salary: item.salary == null ? null : String(item.salary),
       workSchedule: item.workSchedule,
       specialization: item.specialization,
     });

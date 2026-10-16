@@ -62,7 +62,7 @@
           [class.radio__item--disabled]="disabled()"
           (click)="onSelect(op.id)"
         >
-          <input type="radio" [id]="op.id" name="radio-group" [disabled]="disabled()" />
+          <input appChoice type="radio" [id]="op.id" name="radio-group" [disabled]="disabled()" />
           <label class="text-body-12" [for]="op.id">
             {{ op.text }}
           </label>

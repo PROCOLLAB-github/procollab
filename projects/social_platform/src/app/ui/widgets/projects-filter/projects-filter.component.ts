@@ -1,5 +1,8 @@
 /** @format */
 
+import { ButtonDirective, FiltersDirective } from "@uilib";
+/** @format */
+
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { SelectComponent } from "@ui/primitives";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -11,7 +14,7 @@ import { ProjectsFilterInfoService } from "./service/projects-filter-info.servic
   selector: "app-projects-filter",
   templateUrl: "./projects-filter.component.html",
   styleUrl: "./projects-filter.component.scss",
-  imports: [SelectComponent, ReactiveFormsModule],
+  imports: [ButtonDirective, FiltersDirective, SelectComponent, ReactiveFormsModule],
   providers: [ProjectsFilterInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -8,11 +8,18 @@
   [appSquare]="iconSize()"
   class="tooltip__icon"
   [class]="customClass()"
-  (mouseenter)="show.emit()"
-  (mouseleave)="hide.emit()"
+  tabindex="0"
+  role="button"
+  aria-label="Подсказка"
+  [attr.aria-expanded]="isVisible()"
+  (mouseenter)="!mobileOverlay() && show.emit()"
+  (mouseleave)="!mobileOverlay() && hide.emit()"
+  (click)="$event.stopPropagation(); isVisible() ? hide.emit() : show.emit()"
+  (keydown.enter)="$event.stopPropagation(); isVisible() ? hide.emit() : show.emit()"
+  (keydown.escape)="hide.emit()"
   [style.color]="color() === 'accent' ? 'var(--accent)' : 'var(--grey-for-text)'"
 ></i>
-@if (!useOverlay()) {
+@if (!useOverlay() && !mobileOverlay()) {
   <span
     class="tooltip__content text-body-10"
     [class.tooltip__content--visible]="isVisible()"
@@ -27,9 +34,11 @@
 <ng-template
   cdkConnectedOverlay
   [cdkConnectedOverlayOrigin]="tooltipOrigin"
-  [cdkConnectedOverlayOpen]="useOverlay() && isVisible()"
+  [cdkConnectedOverlayOpen]="(useOverlay() || mobileOverlay()) && isVisible()"
   [cdkConnectedOverlayPositions]="overlayPositions"
   [cdkConnectedOverlayPush]="true"
+  [cdkConnectedOverlayViewportMargin]="12"
+  (overlayOutsideClick)="hide.emit()"
   (positionChange)="onOverlayPositionChange($event)"
 >
   <span

@@ -1,3 +1,8 @@
+/** @format */
+
+@use "styles/profile-form";
+@use "styles/responsive";
+
 .profile__wrapper--main {
   display: flex;
   flex-direction: column;
@@ -106,4 +111,8 @@
 
 .error__phone-number {
   margin-bottom: 10px;
+}
+
+@media screen and (max-width: 999px) {
+  @include profile-form.responsive-layout;
 }

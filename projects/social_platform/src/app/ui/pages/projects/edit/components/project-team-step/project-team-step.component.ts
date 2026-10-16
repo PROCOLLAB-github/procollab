@@ -1,5 +1,6 @@
 /** @format */
 import { isTeamFrozen, teamProgramLinkId } from "@domain/project/team-policy";
+import { StateComponent } from "@uilib";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,6 +25,7 @@ import { ProjectMemberInviteModalComponent } from "@ui/widgets/project-invite/pr
   templateUrl: "./project-team-step.component.html",
   styleUrl: "./project-team-step.component.scss",
   imports: [
+    StateComponent,
     ButtonComponent,
     IconComponent,
     InviteCardComponent,

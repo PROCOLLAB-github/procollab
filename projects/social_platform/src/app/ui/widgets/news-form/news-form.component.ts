@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -44,6 +47,7 @@ type FileUploadItem = {
   templateUrl: "./news-form.component.html",
   styleUrl: "./news-form.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     AutosizeModule,
     IconComponent,

@@ -9,6 +9,8 @@
   [cdkConnectedOverlayOrigin]="dropdown"
   [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayPush]="true"
+  [cdkConnectedOverlayViewportMargin]="12"
   (overlayOutsideClick)="isOpen = false"
 >
   <ul class="field__options" (click)="$event.stopPropagation()">

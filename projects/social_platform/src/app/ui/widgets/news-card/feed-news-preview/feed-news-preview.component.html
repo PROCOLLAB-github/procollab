@@ -1,5 +1,7 @@
 <!-- @format -->
 <article
+  appCard
+  [interactive]="true"
   class="feed-preview"
   [id]="news().id"
   tabindex="0"
@@ -45,6 +47,7 @@
     @if (isOwner()) {
       <div class="feed-preview__menu" (clickOutside)="menuOpen.set(false)">
         <button
+          appButton="secondary"
           type="button"
           class="feed-preview__menu-trigger"
           aria-label="Действия с новостью"
@@ -55,8 +58,12 @@
         </button>
         @if (menuOpen()) {
           <div class="feed-preview__options">
-            <button type="button" (click)="menuOpen.set(false); edit.emit()">редактировать</button>
-            <button type="button" (click)="menuOpen.set(false); delete.emit()">удалить</button>
+            <button appButton="secondary" type="button" (click)="menuOpen.set(false); edit.emit()">
+              редактировать
+            </button>
+            <button appButton="danger" type="button" (click)="menuOpen.set(false); delete.emit()">
+              удалить
+            </button>
           </div>
         }
       </div>
@@ -70,6 +77,7 @@
       }
       @if (truncated()) {
         <button
+          appButton="secondary"
           #moreButton
           type="button"
           class="feed-preview__more"
@@ -99,6 +107,7 @@
   <footer class="feed-preview__actions">
     <div class="feed-preview__actions-left">
       <button
+        appButton="secondary"
         type="button"
         aria-label="Нравится"
         [attr.aria-pressed]="news().isUserLiked"
@@ -108,7 +117,12 @@
         <i appIcon icon="like" appSquare="16"></i>
         <span>{{ news().likesCount }}</span>
       </button>
-      <button type="button" aria-label="Скопировать ссылку на новость" (click)="share.emit()">
+      <button
+        appButton="secondary"
+        type="button"
+        aria-label="Скопировать ссылку на новость"
+        (click)="share.emit()"
+      >
         <i appIcon icon="share" appSquare="16"></i>
       </button>
     </div>

@@ -68,7 +68,7 @@ export class ProfileEditEducationInfoService {
     }
 
     const educationOverflow =
-      (this.profileForm.get("organizationName")?.value?.length ?? 0) > 100 ||
+      (this.profileForm.get("organizationName")?.value?.length ?? 0) > 255 ||
       (this.profileForm.get("description")?.value?.length ?? 0) > 400;
 
     if (educationOverflow) {

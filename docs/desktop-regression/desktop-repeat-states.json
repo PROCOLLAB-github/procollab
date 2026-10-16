@@ -1,0 +1,32 @@
+[
+  {
+    "name": "empty-feed",
+    "width": 1440,
+    "passed": true
+  },
+  {
+    "name": "empty-vacancies",
+    "width": 1440,
+    "passed": true
+  },
+  {
+    "name": "empty-courses",
+    "width": 1440,
+    "passed": true
+  },
+  {
+    "name": "empty-feed",
+    "width": 1920,
+    "passed": true
+  },
+  {
+    "name": "empty-vacancies",
+    "width": 1920,
+    "passed": true
+  },
+  {
+    "name": "empty-courses",
+    "width": 1920,
+    "passed": true
+  }
+]

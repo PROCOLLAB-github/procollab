@@ -1,13 +1,20 @@
 /** @format */
+
 @use "styles/responsive";
 
-// Только case-вариант: shared modal задаёт width своим stylesheet после подключения overlay.
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
   box-sizing: border-box;
   width: min(880px, calc(100% - 24px));
-  max-height: calc(100dvh - 32px);
   padding: 20px;
   overflow-y: auto;
+
+  @media screen and (max-width: 999px) {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
+  }
+
+  @media screen and (min-width: 1000px) {
+    max-height: calc(100dvh - 32px);
+  }
 }
 
 .analytics-case {
@@ -28,7 +35,7 @@
     }
 
     dt {
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       color: var(--dark-grey);
     }
 
@@ -51,7 +58,7 @@
     display: grid;
     gap: 6px;
     margin-bottom: 16px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
 
     app-button {
       width: 100%;
@@ -66,6 +73,42 @@
     }
   }
 
+  &__filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin: 12px 0 20px;
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: var(--ui-font-small);
+      color: var(--dark-grey);
+    }
+
+    select {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 14px;
+      color: var(--black);
+      background: var(--white);
+      border: 1px solid var(--medium-grey-for-outline);
+      border-radius: 8px;
+
+      &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+    }
+
+    @media screen and (min-width: 600px) {
+      grid-template-columns: repeat(2, minmax(0, 220px));
+    }
+  }
+
   &__loading {
     display: flex;
     gap: 8px;
@@ -76,7 +119,7 @@
   }
 
   .analytics-drilldown__search-controls {
-    max-width: 520px;
+    max-width: 100%;
 
     input {
       flex-basis: 100%;
@@ -92,7 +135,7 @@
     small {
       display: block;
       margin-top: 4px;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
     }
 
     @include responsive.apply-desktop {
@@ -128,16 +171,21 @@
   }
 }
 
-// Overlay лежит вне host: единственное глобальное правило ограничено собственным bodyClass.
 .modal__body.analytics-drilldown-body {
   box-sizing: border-box;
   width: min(880px, calc(100vw - 24px));
-  max-height: calc(100dvh - 32px);
   padding: 20px;
   overflow-y: auto;
+
+  @media screen and (max-width: 999px) {
+    max-height: calc(var(--visual-viewport-height, 100dvh) - 32px);
+  }
+
+  @media screen and (min-width: 1000px) {
+    max-height: calc(100dvh - 32px);
+  }
 }
 
-// Тот же шаблон используется в backlog: оформление меняется только у трёх списков назначений.
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--assignments {
   width: min(980px, calc(100vw - 32px));
   padding: 16px;
@@ -151,8 +199,15 @@
     margin-bottom: 24px;
 
     h2 {
-      font-size: 24px;
       line-height: 30px;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-h1);
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 24px;
+      }
     }
   }
 
@@ -171,7 +226,7 @@
 .analytics-drilldown {
   width: 100%;
   min-width: 0;
-  font-size: 14px;
+  font-size: var(--ui-font-body);
   line-height: 1.5;
   color: var(--black);
   overflow-wrap: anywhere;
@@ -182,7 +237,7 @@
   }
 
   h3 {
-    font-size: 16px;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
   }
 
@@ -359,7 +414,7 @@
   &__badge {
     display: inline-block;
     padding: 3px 7px;
-    font-size: 12px;
+    font-size: var(--ui-font-small);
     font-weight: 600;
     line-height: 18px;
     color: var(--dark-grey);
@@ -415,7 +470,7 @@
 
     td::before {
       display: block;
-      font-size: 12px;
+      font-size: var(--ui-font-small);
       font-weight: 600;
       color: var(--dark-grey);
       content: attr(data-label);
@@ -520,9 +575,17 @@
 
     .analytics-drilldown__action {
       padding: 4px 0;
-      font-size: 13px;
-      font-weight: 500;
       line-height: 20px;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-body);
+        font-weight: 500;
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 13px;
+        font-weight: 500;
+      }
     }
 
     @include responsive.apply-desktop {

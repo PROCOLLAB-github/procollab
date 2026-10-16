@@ -2,10 +2,11 @@
 
 import { PartnerProgramInfo, Project } from "@domain/project/project.model";
 
-/** Связь из list-контракта: имя программы для отображения статуса не требуется. */
+/** Связь из list-контракта: имя и статус относятся к одной программе. */
 export function projectCardProgram(isSubmitted: boolean): PartnerProgramInfo {
   return {
     id: 12,
+    name: "Акселератор студенческих проектов",
     programId: 12,
     programLinkId: 120,
     isSubmitted,
@@ -60,7 +61,7 @@ export const myProjectCardFixtures = [
   },
   {
     key: "program",
-    label: "В программе",
+    label: "Привязан к программе",
     action: "Открыть",
     role: "Лидер",
     access: "можно редактировать",
@@ -88,7 +89,7 @@ export const myProjectCardFixtures = [
   },
   {
     key: "program",
-    label: "В программе",
+    label: "Привязан к программе",
     action: "Открыть",
     role: "Участник",
     access: "только просмотр",

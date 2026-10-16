@@ -1,34 +1,46 @@
+/** @format */
+
 .page {
   margin-top: 30px;
 
-  &__info {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    padding-bottom: 100px;
+  app-search ::ng-deep .search {
+    padding: 12px;
+    background: var(--white);
+    border: 0.5px solid var(--gray);
+    border-radius: var(--rounded-xxl);
 
-    form {
-      width: 100%;
+    &:focus-within {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
+  }
+
+  &__info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: 24px;
+    padding-bottom: 40px;
   }
 
   &__outlet {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     gap: 20px;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  &__create {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
+    min-width: 0;
+    margin-top: 0;
   }
 
   &__left {
-    width: 100%;
+    min-width: 0;
+  }
+
+  &__info--my {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (max-width: 800px) {
+    &__info {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 }

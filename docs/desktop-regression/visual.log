@@ -1,0 +1,230 @@
+desktop-after: feed 1440
+desktop-after: projects 1440
+desktop-after: my-projects 1440
+desktop-after: members 1440
+desktop-after: programs 1440
+desktop-after: program 1440
+desktop-after: profile 1440
+desktop-after: project 1440
+desktop-after: vacancies 1440
+desktop-after: vacancy 1440
+desktop-after: courses 1440
+desktop-after: course 1440
+desktop-after: feed 1920
+desktop-after: projects 1920
+desktop-after: my-projects 1920
+desktop-after: members 1920
+desktop-after: programs 1920
+desktop-after: program 1920
+desktop-after: profile 1920
+desktop-after: project 1920
+desktop-after: vacancies 1920
+desktop-after: vacancy 1920
+desktop-after: courses 1920
+desktop-after: course 1920
+desktop-after: empty-feed 1440
+desktop-after: empty-vacancies 1440
+desktop-after: empty-courses 1440
+desktop-after: empty-feed 1920
+desktop-after: empty-vacancies 1920
+desktop-after: empty-courses 1920
+desktop-after: profile-edit 1440
+desktop-after: project-edit 1440
+desktop-after: profile-edit 1920
+desktop-after: project-edit 1920
+desktop-after: loading-action 1440
+desktop-after: loading-action 1920
+mobile-after: feed 320
+mobile-after: projects 320
+mobile-after: my-projects 320
+mobile-after: members 320
+mobile-after: programs 320
+mobile-after: program 320
+mobile-after: profile 320
+mobile-after: project 320
+mobile-after: vacancies 320
+mobile-after: vacancy 320
+mobile-after: courses 320
+mobile-after: course 320
+mobile-after: feed 390
+mobile-after: projects 390
+mobile-after: my-projects 390
+mobile-after: members 390
+mobile-after: programs 390
+mobile-after: program 390
+mobile-after: profile 390
+mobile-after: project 390
+mobile-after: vacancies 390
+mobile-after: vacancy 390
+mobile-after: courses 390
+mobile-after: course 390
+mobile-after: feed 768
+mobile-after: projects 768
+mobile-after: my-projects 768
+mobile-after: members 768
+mobile-after: programs 768
+mobile-after: program 768
+mobile-after: profile 768
+mobile-after: project 768
+mobile-after: vacancies 768
+mobile-after: vacancy 768
+mobile-after: courses 768
+mobile-after: course 768
+mobile-after: profile-edit 320
+mobile-after: project-edit 320
+mobile-after: profile-edit 390
+mobile-after: project-edit 390
+mobile-after: profile-edit 768
+mobile-after: project-edit 768
+PASS course-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS course-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS courses-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS courses-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-courses-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-courses-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-feed-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-feed-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-vacancies-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-vacancies-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS feed-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS feed-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+FAIL loading-action-1440: exact=1027px; delta>8=0.0812% (1440, 844) -> (1440, 844) bbox=[905, 733, 1237, 758]
+FAIL loading-action-1920: exact=1027px; delta>8=0.0609% (1920, 844) -> (1920, 844) bbox=[1443, 733, 1775, 758]
+PASS members-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS members-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS my-projects-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS my-projects-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS profile-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS profile-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS profile-edit-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS profile-edit-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS program-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS program-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS programs-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS programs-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS project-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS project-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS project-edit-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS project-edit-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS projects-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS projects-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS vacancies-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS vacancies-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS vacancy-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS vacancy-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+desktop-after: loading-action 1440
+desktop-after: loading-action 1920
+PASS course-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS course-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS courses-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS courses-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-courses-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-courses-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-feed-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-feed-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-vacancies-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-vacancies-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS feed-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS feed-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS loading-action-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS loading-action-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS members-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS members-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS my-projects-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS my-projects-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS profile-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS profile-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS profile-edit-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS profile-edit-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS program-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS program-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS programs-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS programs-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS project-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS project-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS project-edit-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS project-edit-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS projects-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS projects-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS vacancies-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS vacancies-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS vacancy-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS vacancy-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS course-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS course-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS courses-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS courses-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-courses-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-courses-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-feed-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-feed-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS empty-vacancies-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS empty-vacancies-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS feed-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS feed-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS loading-action-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS loading-action-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS members-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS members-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS my-projects-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS my-projects-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS profile-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS profile-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS profile-edit-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS profile-edit-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS program-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS program-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS programs-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS programs-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS project-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS project-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS project-edit-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS project-edit-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS projects-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS projects-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS vacancies-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS vacancies-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS vacancy-1440: exact=0px; delta>8=0.0000% (1440, 844) -> (1440, 844) bbox=None
+PASS vacancy-1920: exact=0px; delta>8=0.0000% (1920, 844) -> (1920, 844) bbox=None
+PASS course-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS course-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS course-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS courses-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS courses-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS courses-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS feed-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS feed-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS feed-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS members-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS members-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS members-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS my-projects-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS my-projects-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS my-projects-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS profile-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS profile-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS profile-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS profile-edit-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS profile-edit-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS profile-edit-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS program-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS program-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS program-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS programs-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS programs-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS programs-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS project-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS project-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS project-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS project-edit-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS project-edit-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS project-edit-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS projects-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS projects-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS projects-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS vacancies-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS vacancies-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS vacancies-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None
+PASS vacancy-320: exact=0px; delta>8=0.0000% (320, 844) -> (320, 844) bbox=None
+PASS vacancy-390: exact=0px; delta>8=0.0000% (390, 844) -> (390, 844) bbox=None
+PASS vacancy-768: exact=0px; delta>8=0.0000% (768, 844) -> (768, 844) bbox=None

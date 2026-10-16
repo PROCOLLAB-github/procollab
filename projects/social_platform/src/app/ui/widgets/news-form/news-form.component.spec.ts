@@ -46,9 +46,21 @@ describe("NewsFormComponent", () => {
   });
 
   beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     fixture = TestBed.createComponent(NewsFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(async () => {
+    try {
+      // ngx-autosize ищет вложенный textarea отложенно (100 мс). Его callback
+      // должен завершиться пока DOM жив, иначе он обращается к window после teardown.
+      await vi.runAllTimersAsync();
+      fixture.destroy();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("should create", () => {

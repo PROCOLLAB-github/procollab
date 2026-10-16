@@ -6,6 +6,8 @@ import { GetProgramCaseProjectsUseCase } from "@api/program/use-cases/get-progra
 import { ExportProgramCaseProjectsUseCase } from "@api/program/use-cases/export-program-case-projects.use-case";
 import {
   ProgramCaseError,
+  ProgramCasePresentationFilter,
+  ProgramCaseSubmissionFilter,
   ProgramCasePage,
   ProgramCaseSelection,
 } from "@domain/program/program-case-analytics.model";
@@ -30,14 +32,28 @@ export class ProgramCaseProjectsService {
   readonly error = signal<ProgramCaseError | null>(null);
   readonly searchDraft = signal("");
   readonly search = signal("");
+  readonly submission = signal<ProgramCaseSubmissionFilter>("all");
+  readonly presentation = signal<ProgramCasePresentationFilter>("all");
+  readonly filters = computed(() => ({
+    search: this.search(),
+    submission: this.submission(),
+    presentation: this.presentation(),
+  }));
+  readonly hasFilters = computed(
+    () =>
+      !!this.searchDraft() ||
+      !!this.search() ||
+      this.submission() !== "all" ||
+      this.presentation() !== "all",
+  );
   readonly offset = signal(0);
   readonly limit = 25;
   readonly exportPending = signal(false);
   readonly exportError = signal<ProgramCaseError | null>(null);
   private readonly confirmed = signal(false);
-  private readonly total = signal(0);
   readonly canExport = computed(
-    () => this.confirmed() && this.total() > 0 && !this.exportPending(),
+    () =>
+      this.confirmed() && !this.pending() && (this.page()?.count ?? 0) > 0 && !this.exportPending(),
   );
   readonly hasNext = computed(() => {
     const page = this.page();
@@ -75,13 +91,14 @@ export class ProgramCaseProjectsService {
     const selection = this.selection();
     if (this.programId === null || !selection) return;
     this.cancelList.next();
+    this.confirmed.set(false);
     this.page.set(null);
     this.pending.set(true);
     this.error.set(null);
     this.getProjects
       .execute(this.programId, {
         selection,
-        search: this.search(),
+        ...this.filters(),
         limit: selection.scope === "all" ? 1 : this.limit,
         offset: this.offset(),
       })
@@ -92,7 +109,6 @@ export class ProgramCaseProjectsService {
           this.page.set(result.value);
           this.metrics.set(result.value.caseMetrics);
           this.submissionApplicable.set(result.value.submissionApplicable);
-          this.total.set(result.value.caseMetrics?.projectsTotal ?? result.value.count);
           this.confirmed.set(true);
         } else {
           this.error.set(result.error);
@@ -104,6 +120,9 @@ export class ProgramCaseProjectsService {
   }
 
   applySearch(): void {
+    this.cancelExport.next();
+    this.exportPending.set(false);
+    this.exportError.set(null);
     this.search.set(this.searchDraft().trim());
     this.offset.set(0);
     this.load();
@@ -111,6 +130,21 @@ export class ProgramCaseProjectsService {
   clearSearch(): void {
     this.searchDraft.set("");
     this.applySearch();
+  }
+  setSubmission(value: string): void {
+    if (value !== "all" && value !== "submitted" && value !== "not_submitted") return;
+    this.submission.set(value);
+    this.applySearch();
+  }
+  setPresentation(value: string): void {
+    if (value !== "all" && value !== "present" && value !== "missing") return;
+    this.presentation.set(value);
+    this.applySearch();
+  }
+  clearFilters(): void {
+    this.submission.set("all");
+    this.presentation.set("all");
+    this.clearSearch();
   }
   changePage(direction: -1 | 1): void {
     if (this.pending() || (direction === 1 ? !this.hasNext() : this.offset() === 0)) return;
@@ -125,7 +159,7 @@ export class ProgramCaseProjectsService {
     this.exportPending.set(true);
     this.exportError.set(null);
     this.exportProjects
-      .execute(programId, selection)
+      .execute(programId, selection, this.filters())
       .pipe(takeUntil(this.cancelExport), takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.exportPending.set(false);
@@ -137,7 +171,7 @@ export class ProgramCaseProjectsService {
       });
   }
 
-  /** Поиск отменяет только list; смена кейса/программы и закрытие отменяют также файл. */
+  /** Смена отбора и закрытие отменяют устаревшие запросы списка и файла. */
   reset(): void {
     this.cancelList.next();
     this.cancelExport.next();
@@ -150,10 +184,11 @@ export class ProgramCaseProjectsService {
     this.error.set(null);
     this.searchDraft.set("");
     this.search.set("");
+    this.submission.set("all");
+    this.presentation.set("all");
     this.offset.set(0);
     this.exportPending.set(false);
     this.exportError.set(null);
     this.confirmed.set(false);
-    this.total.set(0);
   }
 }

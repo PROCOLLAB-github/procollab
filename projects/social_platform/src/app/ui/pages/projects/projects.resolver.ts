@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injector } from "@angular/core";
-import { forkJoin, map, switchMap } from "rxjs";
+import { filter, forkJoin, map, switchMap, take } from "rxjs";
 import { ResolveFn } from "@angular/router";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
@@ -34,7 +34,10 @@ export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
     results: [],
   });
 
+  profileInfoService.ensureProfileLoaded();
   return toObservable(profileInfoService.profile, { injector }).pipe(
+    filter(user => user !== null),
+    take(1),
     switchMap(user =>
       forkJoin({
         all: getAllProjectsUseCase
@@ -44,7 +47,7 @@ export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
           .execute(new HttpParams({ fromObject: { offset: 0, limit: 16 } }))
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
         subs: getProjectSubscriptionsUseCase
-          .execute(user!.id)
+          .execute(user.id)
           .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
       }),
     ),

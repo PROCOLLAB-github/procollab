@@ -58,7 +58,7 @@
             }
           </div>
           <ol class="widget__steps" aria-label="Этапы проекта">
-            @for (step of steps(participant.stage); track step.label) {
+            @for (step of steps(participant.stage, project !== null); track step.label) {
               <li
                 [class.widget__step--current]="step.current"
                 [class.widget__step--complete]="step.completed"
@@ -72,7 +72,6 @@
         }
         @case ("organizer") {
           @let metrics = data.organizer;
-          @let ratio = withoutProject(metrics);
           <dl class="widget__metrics widget__metrics--organizer">
             <div>
               <dt>Участники</dt>
@@ -100,15 +99,15 @@
             <div>
               <dt>Без проектов</dt>
               <dd
-                class="widget__without"
                 tabindex="0"
-                [matTooltip]="ratio.description"
-                [attr.aria-label]="ratio.description + ', ' + ratio.percentage"
+                [matTooltip]="
+                  metrics.participantsWithoutProject +
+                  ' из ' +
+                  metrics.participants +
+                  ' участников без проекта'
+                "
               >
-                <span>{{ count(metrics.participantsWithoutProject) }}</span>
-                <small [attr.data-tone]="ratio.tone"
-                  ><i aria-hidden="true"></i>{{ ratio.percentage }}</small
-                >
+                {{ count(metrics.participantsWithoutProject) }}
               </dd>
             </div>
           </dl>
@@ -174,7 +173,12 @@
               >Открыть →</a
             >
           } @else if (data.participant.submissionOpen) {
-            <button type="button" [disabled]="applicationPending()" (click)="createApplication()">
+            <button
+              appButton="primary"
+              type="button"
+              [disabled]="applicationPending()"
+              (click)="createApplication()"
+            >
               Создать заявку →
             </button>
           } @else {
@@ -188,7 +192,7 @@
       <p class="widget__error" role="status">{{ errorMessages[state.error] }}</p>
       <footer class="widget__footer">
         @if (state.error === "network") {
-          <button type="button" (click)="service.retry()">Повторить</button>
+          <button appButton="secondary" type="button" (click)="service.retry()">Повторить</button>
         }
       </footer>
     } @else {

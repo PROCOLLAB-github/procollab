@@ -58,15 +58,15 @@ describe("ResponseCardComponent", () => {
 
   it.each([
     [null, "На рассмотрении", "pending"],
-    [true, "Принят", "accepted"],
+    [true, "Принят", "success"],
     [false, "Отклонён", "declined"],
   ] as const)("отображает понятный статус для isApproved=%s", (isApproved, label, className) => {
     fixture.componentRef.setInput("response", createResponse(isApproved));
     fixture.detectChanges();
 
-    const status = fixture.nativeElement.querySelector(".response__status");
+    const status = fixture.nativeElement.querySelector(".status");
     expect(status.textContent.trim()).toBe(label);
-    expect(status.classList).toContain(`response__status--${className}`);
+    expect(status.classList).toContain(`status--${className}`);
   });
 
   it("показывает вакансию, проект и дату отклика", () => {

@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<form class="cancel__form" [formGroup]="cancelTaskForm" (ngSubmit)="onSubmit($event)">
+<form appFormLayout class="cancel__form" [formGroup]="cancelTaskForm" (ngSubmit)="onSubmit($event)">
   @if (cancelTaskForm.get("description"); as description) {
     <fieldset>
       <app-textarea

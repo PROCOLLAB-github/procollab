@@ -74,14 +74,29 @@ describe("TooltipComponent overlay mode", () => {
 
     expect(overlayContainerElement.textContent).toContain("Скоро здесь будет аналитика");
     const popup = overlayContainerElement.querySelector(
-      ".tooltip__content--overlay-left",
+      ".tooltip__content--overlay",
     ) as HTMLElement;
     expect(popup).toBeTruthy();
-    expect(popup.classList).toContain("tooltip__content--overlay-left");
+    expect(popup.className).toMatch(/tooltip__content--overlay-(left|right)/);
 
     icon.dispatchEvent(new MouseEvent("mouseleave"));
     fixture.detectChanges();
 
     expect(overlayContainerElement.textContent).not.toContain("Скоро здесь будет аналитика");
+  });
+
+  it("opens and closes with a tap on a mobile viewport", () => {
+    const previousWidth = window.innerWidth;
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
+    window.dispatchEvent(new Event("resize"));
+    fixture.detectChanges();
+    const icon = fixture.debugElement.query(By.css("app-tooltip .tooltip__icon")).nativeElement;
+    icon.click();
+    fixture.detectChanges();
+    expect(overlayContainerElement.textContent).toContain("Скоро здесь будет аналитика");
+    icon.click();
+    fixture.detectChanges();
+    expect(overlayContainerElement.textContent).not.toContain("Скоро здесь будет аналитика");
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: previousWidth });
   });
 });

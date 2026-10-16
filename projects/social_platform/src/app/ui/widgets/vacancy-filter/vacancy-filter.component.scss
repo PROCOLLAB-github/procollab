@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/typography";
 @use "styles/responsive";
 
@@ -9,7 +11,7 @@
   display: none;
   flex-direction: column;
   gap: 16px;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
 
   @include responsive.apply-desktop {
@@ -26,12 +28,36 @@
       color: var(--accent);
     }
   }
+
+  > a,
+  > a app-button {
+    display: block;
+    width: 100%;
+  }
+
+  > a ::ng-deep .button {
+    width: 100%;
+  }
 }
 
 .mobile {
   display: grid;
-  grid-template-columns: 0.6fr 0.4fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 5px;
+
+  > a,
+  > a app-button {
+    display: block;
+    width: 100%;
+  }
+
+  > a ::ng-deep .button {
+    width: 100%;
+
+    @media screen and (min-width: 1000px) {
+      height: 38px;
+    }
+  }
 
   @include responsive.apply-desktop {
     display: none;
@@ -143,4 +169,15 @@
 
 a:hover {
   cursor: pointer;
+}
+
+@media screen and (min-width: 1000px) {
+  .desktop__header button.ui-button {
+    font-family: Mont, sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: var(--accent);
+  }
 }

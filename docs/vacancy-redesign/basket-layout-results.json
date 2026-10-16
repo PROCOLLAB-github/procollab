@@ -1,0 +1,95 @@
+{
+  "environment": "local Angular fixture; no DEV requests",
+  "assertions": 25,
+  "results": [
+    {
+      "width": 390,
+      "geometry": {
+        "button": {
+          "x": 295,
+          "y": 826.921875,
+          "width": 44,
+          "height": 44,
+          "top": 826.921875,
+          "right": 339,
+          "bottom": 870.921875,
+          "left": 295
+        },
+        "basket": {
+          "x": 16,
+          "y": 699.75,
+          "width": 343,
+          "height": 236.34375,
+          "top": 699.75,
+          "right": 359,
+          "bottom": 936.09375,
+          "left": 16
+        },
+        "chip": {
+          "x": 29,
+          "y": 774.75,
+          "width": 317,
+          "height": 148.34375,
+          "top": 774.75,
+          "right": 346,
+          "bottom": 923.09375,
+          "left": 29
+        },
+        "textWidth": 246,
+        "textBox": 246,
+        "viewport": 390,
+        "document": 375,
+        "font": "Mont, sans-serif",
+        "fontLoaded": true
+      },
+      "touch": true,
+      "space": true,
+      "enter": true
+    },
+    {
+      "width": 320,
+      "geometry": {
+        "button": {
+          "x": 225,
+          "y": 427.90625,
+          "width": 44,
+          "height": 44,
+          "top": 427.90625,
+          "right": 269,
+          "bottom": 471.90625,
+          "left": 225
+        },
+        "basket": {
+          "x": 16,
+          "y": 215.34375,
+          "width": 273,
+          "height": 345.125,
+          "top": 215.34375,
+          "right": 289,
+          "bottom": 560.46875,
+          "left": 16
+        },
+        "chip": {
+          "x": 29,
+          "y": 352.34375,
+          "width": 247,
+          "height": 195.125,
+          "top": 352.34375,
+          "right": 276,
+          "bottom": 547.46875,
+          "left": 29
+        },
+        "textWidth": 176,
+        "textBox": 176,
+        "viewport": 320,
+        "document": 305,
+        "font": "Mont, sans-serif",
+        "fontLoaded": true
+      },
+      "touch": true,
+      "space": true,
+      "enter": true
+    }
+  ],
+  "errors": []
+}

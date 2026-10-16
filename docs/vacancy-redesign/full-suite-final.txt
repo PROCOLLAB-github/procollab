@@ -1,0 +1,11 @@
+Code commit: f1ea89bec92e2e37b89044aa4663b40807ba0be0
+Command: node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --pool=forks --maxWorkers=2
+Exit: 0
+Test Files: 404 passed
+Tests: 1991 passed
+Duration: 605.44s
+Start: 20:57:20 Europe/Moscow
+Log SHA256: 9fdab555906e0d1e4a2df27da836211947a2af991d41b4ba2c527569f4a7aae4
+Production build: exit 0, 45.855s
+ESLint: exit 0
+Stylelint: exit 0

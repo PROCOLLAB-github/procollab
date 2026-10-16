@@ -33,8 +33,9 @@ export class MembersUIInfoService {
   readonly filterForm = this.fb.group({
     keySkill: ["", Validators.required], // Ключевой навык
     speciality: ["", Validators.required], // Специальность
-    age: [[null, null]], // Диапазон возраста [от, до]
-    isMosPolytechStudent: [false], // Является ли студентом МосПолитеха
+    age: this.fb.control<[number | null, number | null]>([null, null]),
+    // null — фильтр выключен; false — явно искать не студентов.
+    isMosPolytechStudent: this.fb.control<boolean | null>(null),
   });
 
   applyMembersPagination(members: ApiPagination<User>) {

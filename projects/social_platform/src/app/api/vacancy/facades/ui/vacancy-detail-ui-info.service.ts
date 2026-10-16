@@ -112,6 +112,14 @@ export class VacancyDetailUIInfoService {
     this.responsesState.set(success(responses));
   }
 
+  applyResponseDecision(responseId: number, isApproved: boolean): void {
+    this.responsesState.set(
+      success(
+        this.responses().map(item => (item.id === responseId ? { ...item, isApproved } : item)),
+      ),
+    );
+  }
+
   applyResponsesError(error: VacancyResponsesLoadError): void {
     this.responsesState.set(failure(error, this.responses()));
   }

@@ -1,5 +1,8 @@
 /** @format */
 
+import { FormLayoutDirective } from "@uilib";
+/** @format */
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -47,6 +50,7 @@ import { ProjectCoverResetService } from "@api/project/facades/edit/project-cove
   templateUrl: "./edit.component.html",
   styleUrl: "./edit.component.scss",
   imports: [
+    FormLayoutDirective,
     ReactiveFormsModule,
     CommonModule,
     RouterModule,

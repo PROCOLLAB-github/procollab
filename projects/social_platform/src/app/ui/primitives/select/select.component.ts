@@ -94,9 +94,22 @@ export class SelectComponent implements ControlValueAccessor {
   dropdown = viewChild<ElementRef<HTMLUListElement>>("dropdown");
 
   /** Обработчик клавиатурных событий для навигации */
+  onTriggerKeyDown(event: KeyboardEvent): void {
+    if (!this.disabled && !this.isOpen && ["Enter", " ", "ArrowDown"].includes(event.key)) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isOpen = true;
+      this.highlightedIndex = 0;
+    }
+  }
+
   @HostListener("document:keydown", ["$event"])
   onKeyDown(event: KeyboardEvent): void {
-    if (!this.isOpen || this.disabled) {
+    if (
+      !this.isOpen ||
+      this.disabled ||
+      !["ArrowUp", "ArrowDown", "Enter", "Escape"].includes(event.code)
+    ) {
       return;
     }
 
@@ -133,6 +146,7 @@ export class SelectComponent implements ControlValueAccessor {
     if (!ddElem) return;
 
     const highlightedElem = ddElem.children[this.highlightedIndex];
+    if (!highlightedElem) return;
 
     const ddBox = ddElem.getBoundingClientRect();
     const optBox = highlightedElem.getBoundingClientRect();

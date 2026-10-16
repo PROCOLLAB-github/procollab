@@ -1,0 +1,4 @@
+# Collapse generated QA evidence in source review; files remain available in the report.
+*.json linguist-generated=true
+*.log linguist-generated=true
+screenshots/** linguist-generated=true

@@ -1,5 +1,8 @@
 /** @format */
 
+import { FieldDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,6 +15,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 /** Поле ввода числовых критериев с ограничением диапазона и ControlValueAccessor. */
 @Component({
+  imports: [FieldDirective],
   selector: "app-range-criterion-input",
   templateUrl: "./range-criterion-input.component.html",
   styleUrl: "./range-criterion-input.component.scss",

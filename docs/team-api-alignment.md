@@ -13,9 +13,16 @@ AC D5: ошибка не удаляет участника из UI; пригла
 mapping, multi-link/freeze, существующие facade tests, полный Vitest, build и lint.
 Без React, новых экранов и recommendations UI. Развёртывание только после backend C.
 
+Актуализация 16.10.2026: база Angular dev `ae4a8a0a7ed2b8c588d4d671f2ef55fa60f4c211`.
+Сохранены актуальные member rows, role labels, loading/empty states, формы приглашения
+и responsive UI из dev. Единственный merge conflict — импорты team step: нужны и
+новый StateComponent, и policy helpers. Дополнительный component regression проверяет,
+что server freeze блокирует реальный CTA даже при draft в legacy-связи.
+API contract C при переносе на свежий backend dev не менялся.
+
 ## Проверка и границы
 
-- Checked by tests: полный Vitest — 402 файла, 1958 tests PASS; после последних
+- На исходном D `4401dde0…`: полный Vitest — 402 файла, 1958 tests PASS; после последних
   изменений CTA/context дополнительно 72 targeted tests PASS.
 - Checked by build: `npm run build:pr` и `npm run build:prod` PASS.
 - `npm run lint:ts`: 0 errors, 6 существующих warnings вне изменённых файлов.
@@ -36,3 +43,6 @@ mapping, multi-link/freeze, существующие facade tests, полный 
 - Старый API поддерживается для обычных/однозначных операций. Полный snapshot
   `team_policy` требует backend C, включая компактный список проектов пользователя.
 - Schema/DB/permissions не меняются в этом PR; backend остаётся enforcement layer.
+
+Повторные tests/build/lint/format на обновлённом head и review AC D1–D5 фиксируются
+в PR #392. Результаты исходной версии не заменяют текущую verification.

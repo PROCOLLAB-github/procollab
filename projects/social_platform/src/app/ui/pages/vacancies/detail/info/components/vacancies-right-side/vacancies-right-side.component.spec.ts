@@ -79,21 +79,20 @@ describe("VacanciesRightSideComponent", () => {
   });
 
   it.each([
-    ["pending", "На рассмотрении", "gold"],
-    ["accepted", "Отклик принят", "green"],
-    ["rejected", "Отклик отклонён", "red"],
-    [null, "Отклик отправлен", "gold"],
+    ["pending", "На рассмотрении", "pending"],
+    ["accepted", "Отклик принят", "success"],
+    ["rejected", "Отклик отклонён", "declined"],
+    [null, "Отклик отправлен", "pending"],
   ] as const)("показывает disabled applicant state %s", (responseStatus, label, color) => {
     const emitted = vi.fn();
     fixture.componentInstance.sendResponse.subscribe(emitted);
     const text = render(vacancy({ hasResponded: true, canRespond: true, responseStatus }));
 
-    const button = fixture.nativeElement.querySelector("button") as HTMLButtonElement;
+    const status = fixture.nativeElement.querySelector(".status") as HTMLElement;
     expect(text).toContain(label);
     expect(text).not.toContain("откликнуться");
-    expect(button.disabled).toBe(true);
-    expect(button.classList).toContain(`button--${color}`);
-    button.click();
+    expect(fixture.nativeElement.querySelector("button")).toBeNull();
+    expect(status.classList).toContain(`status--${color}`);
     expect(emitted).not.toHaveBeenCalled();
   });
 

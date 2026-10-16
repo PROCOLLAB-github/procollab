@@ -1,7 +1,16 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  Injector,
+  viewChild,
+} from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   InputComponent,
@@ -14,7 +23,7 @@ import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
 import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
-import { IconComponent } from "@uilib";
+import { IconComponent, ButtonDirective, FormLayoutDirective, StateComponent } from "@uilib";
 import { Skill } from "@domain/skills/skill.model";
 import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -23,6 +32,8 @@ import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-va
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
 import { SearchesService } from "@api/searches/searches.service";
+import { VacancyCreatedDialogComponent } from "@ui/widgets/vacancy-created-dialog/vacancy-created-dialog.component";
+import { isFailure } from "@domain/shared/async-state";
 
 /** Шаг редактирования проекта: вакансии. */
 @Component({
@@ -30,6 +41,10 @@ import { SearchesService } from "@api/searches/searches.service";
   templateUrl: "./project-vacancy-step.component.html",
   styleUrl: "./project-vacancy-step.component.scss",
   imports: [
+    StateComponent,
+    ButtonDirective,
+    FormLayoutDirective,
+    VacancyCreatedDialogComponent,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,
@@ -44,10 +59,17 @@ import { SearchesService } from "@api/searches/searches.service";
     ModalComponent,
     SkillsGroupComponent,
   ],
-  providers: [ProjectsEditInfoService, ProjectVacancyService],
+  // Подсказки вакансии не разделяются с формами профиля и участниками проекта.
+  providers: [SearchesService, ProjectsEditInfoService, ProjectVacancyService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyStepComponent {
+  private readonly injector = inject(Injector);
+  private readonly skillSearch = viewChild(AutoCompleteInputComponent);
+  private readonly vacancySubmitButton = viewChild<unknown, ElementRef<HTMLElement>>(
+    "vacancySubmitButton",
+    { read: ElementRef },
+  );
   private readonly projectVacancyInfoService = inject(ProjectVacancyService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
@@ -85,8 +107,13 @@ export class ProjectVacancyStepComponent {
 
   protected readonly vacancySubmitInitiated = this.projectVacancyUIService.vacancySubmitInitiated;
   protected readonly vacancyIsSubmitting = this.projectVacancyUIService.vacancyIsSubmittingFlag;
+  protected readonly createdVacancyId = this.projectVacancyUIService.createdVacancyId;
+  protected readonly isEditing = this.projectVacancyUIService.isEditingVacancy;
+  protected readonly vacancySubmitFailed = computed(() =>
+    isFailure(this.projectVacancyUIService.vacancyIsSubmitting()),
+  );
 
-  protected readonly inlineSkills = this.projectsEditInfoService.inlineSkills;
+  protected readonly inlineSkills = this.searchesService.inlineSkills;
   protected readonly projectId = this.projectsEditInfoService.profileId;
   protected readonly showInputFields = this.toggleFieldsInfoService.showInputFields;
 
@@ -104,11 +131,26 @@ export class ProjectVacancyStepComponent {
   }
 
   createVacancyBlock(): void {
+    this.resetSkillSearch();
     this.toggleFieldsInfoService.showFields();
   }
 
   submitVacancy(): void {
+    this.resetSkillSearch();
     this.projectVacancyInfoService.submitVacancy(this.projectId());
+  }
+
+  closeCreatedDialog(): void {
+    this.createdVacancyId.set(null);
+    // Disabling submit during the request can blur it before the dialog opens.
+    afterNextRender(
+      () => {
+        this.vacancySubmitButton()
+          ?.nativeElement.querySelector<HTMLButtonElement>("button")
+          ?.focus();
+      },
+      { injector: this.injector },
+    );
   }
 
   removeVacancy(vacancyId: number): void {
@@ -116,6 +158,7 @@ export class ProjectVacancyStepComponent {
   }
 
   editVacancy(index: number): void {
+    this.resetSkillSearch();
     this.projectVacancyUIService.applyEditVacancy(index);
   }
 
@@ -132,10 +175,20 @@ export class ProjectVacancyStepComponent {
   }
 
   onSearchSkill(query: string): void {
-    this.projectsEditInfoService.onSearchSkill(query);
+    this.searchesService.onSearchSkill(query);
+  }
+
+  cancelSkillSearch(): void {
+    this.searchesService.onSearchSkill("");
+  }
+
+  private resetSkillSearch(): void {
+    this.skillSearch()?.resetSearch();
+    this.cancelSkillSearch();
   }
 
   onToggleSkillsGroupsModal(): void {
+    this.resetSkillSearch();
     this.skillsGroupsModalOpen.update(open => !open);
   }
 

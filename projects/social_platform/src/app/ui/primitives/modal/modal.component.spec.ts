@@ -1,13 +1,13 @@
 /** @format */
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { OverlayModule } from "@angular/cdk/overlay";
-import { Component, ViewChild } from "@angular/core";
+import { OverlayModule, OverlayContainer } from "@angular/cdk/overlay";
+import { Component, signal, ViewChild } from "@angular/core";
 import { ModalComponent } from "./modal.component";
 
 @Component({
   template: `
-    <app-modal [open]="open" (openChange)="onOpenChange($event)">
+    <app-modal [open]="open()" [labelledBy]="labelledBy()" (openChange)="onOpenChange($event)">
       <div class="content">Hello, world!</div>
     </app-modal>
   `,
@@ -15,9 +15,10 @@ import { ModalComponent } from "./modal.component";
 })
 class TestHostComponent {
   @ViewChild(ModalComponent) modalComponent!: ModalComponent;
-  open = false;
+  readonly open = signal(false);
+  readonly labelledBy = signal<string | undefined>(undefined);
   onOpenChange(value: boolean) {
-    this.open = value;
+    this.open.set(value);
   }
 }
 
@@ -41,6 +42,33 @@ describe("ModalComponent", () => {
 
   it("should create the component", () => {
     expect(hostComponent?.modalComponent).toBeTruthy();
+  });
+
+  it("enables named dialog semantics and Escape only when requested", async () => {
+    hostComponent.labelledBy.set("dialog-title");
+    hostComponent.open.set(true);
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    const dialog = overlay.querySelector('[role="dialog"]')!;
+    expect(dialog.getAttribute("aria-labelledby")).toBe("dialog-title");
+    expect(dialog.getAttribute("aria-modal")).toBe("true");
+    dialog.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(hostComponent.open()).toBe(false);
+  });
+
+  it("keeps the legacy Escape behavior when accessible mode is not enabled", async () => {
+    hostComponent.open.set(true);
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    expect(overlay.querySelector('[role="dialog"]')).toBeNull();
+    overlay
+      .querySelector(".modal__body")!
+      .dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(hostComponent.open()).toBe(true);
   });
 
   it("should create the modal overlay when modalTemplate is available", () => {

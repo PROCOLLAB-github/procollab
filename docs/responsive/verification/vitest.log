@@ -1,0 +1,1248 @@
+
+> procollab@0.0.0 test:ci
+> vitest run
+
+
+ RUN  v3.2.6 Z:/Документы/PROCOLLAB-dev/procollab-dev-platform-responsive
+
+ ✓ projects/social_platform/src/app/ui/widgets/project-invite/profile-project-invite-modal.component.spec.ts (21 tests) 2347ms
+   ✓ Окно выбора проекта > локальный поиск нормализует пробелы и регистр, строка выбирается целиком и выделяется  497ms
+stderr | projects/social_platform/src/app/ui/widgets/news-card/feed-news-preview/feed-news-preview.component.spec.ts > FeedNewsPreviewComponent > project: нет пустой media-области; thumbnail появляется только с изображением
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/profile/edit/components/profile-main-step/profile-main-step.component.spec.ts > ProfileMainStepComponent user region > loads canonical city as selected user region without API side effects
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.spec.ts > ProjectMainStepComponent > стандартная обложка предлагает загрузку и не выдаёт системный URL за загруженный файл
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/project-team-step.component.spec.ts > Окно приглашения из редактора команды > CTA открывает окно с поиском, URL отсутствует, отправка неактивна до выбора и роли
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-case.component.spec.ts (12 tests) 2296ms
+   ✓ Case drilldown в существующем Overlay > selected: четыре колонки, реальные поля, null presentation и только один modal  1123ms
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > keeps unrated CTA active and criteria editable when registration is past but evaluation is future
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > allows editing an existing rating until the evaluation deadline, then returns to readonly on success
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > allows editing an existing rating until the evaluation deadline, then returns to readonly on success
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > keeps expired CTA visible and all criteria readonly (rated=false)
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > keeps expired CTA visible and all criteria readonly (rated=true)
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > keeps CTA and criteria available for  deadline
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+ ✓ projects/social_platform/src/app/ui/pages/profile/edit/components/profile-main-step/profile-main-step.component.spec.ts (6 tests) 3229ms
+   ✓ ProfileMainStepComponent user region > loads canonical city as selected user region without API side effects  1823ms
+   ✓ ProfileMainStepComponent user region > preserves untouched legacy city Набережные Челны through focus, blur and Escape  356ms
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > keeps CTA and criteria available for invalid deadline
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts > RatingCardComponent > updates visible CTA and criteria on fresh closed/reopened program responses
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+  It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+  when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+  you. We recommend using this approach to avoid 'changed after checked' errors.
+
+  Example:
+  // Specify the `disabled` property at control creation time:
+  form = new FormGroup({
+    first: new FormControl({value: 'Nancy', disabled: true}, Validators.required),
+    last: new FormControl('Drew', Validators.required)
+  });
+
+  // Controls can also be enabled/disabled after creation:
+  form.get('first')?.enable();
+  form.get('last')?.disable();
+
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/rating-card.component.spec.ts (8 tests) 3018ms
+   ✓ RatingCardComponent > should create  1278ms
+   ✓ RatingCardComponent > keeps unrated CTA active and criteria editable when registration is past but evaluation is future  486ms
+   ✓ RatingCardComponent > allows editing an existing rating until the evaluation deadline, then returns to readonly on success  364ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/project-team-step.component.spec.ts (7 tests) 3132ms
+   ✓ Окно приглашения из редактора команды > CTA открывает окно с поиском, URL отсутствует, отправка неактивна до выбора и роли  1284ms
+   ✓ Окно приглашения из редактора команды > показывает public data, причины disabled, выбирает строку и очищает выбор  676ms
+   ✓ Окно приглашения из редактора команды > ошибка inline сохраняет выбор/роль, повтор защищён, успех закрывает и возвращает фокус  583ms
+ ✓ projects/social_platform/src/app/ui/widgets/news-card/feed-news-preview/feed-news-preview.component.spec.ts (23 tests) 3479ms
+   ✓ FeedNewsPreviewComponent > project: нет пустой media-области; thumbnail появляется только с изображением  1210ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.spec.ts (30 tests) 4319ms
+   ✓ AnalyticsDrilldownComponent: real overlay lifecycle > all: единое оформление списка и правильный заголовок  1341ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-attention.component.spec.ts (19 tests) 4519ms
+   ✓ Attention views: real overlay > participants: реальные поля, local date, legacy city, fallback, актуальный count  1075ms
+   ✓ Attention views: real overlay > server search только submit, clear, count и pagination из detail  394ms
+   ✓ Attention views: real overlay > projects-not-submitted: loading, empty, search_empty, error и retry отдельно  310ms
+   ✓ Attention views: real overlay > projects-awaiting-evaluation: один trap, focus, Escape/backdrop/button единый close  316ms
+ ✓ projects/social_platform/src/app/ui/widgets/info-card/info-card.component.spec.ts (39 tests) 4664ms
+   ✓ InfoCardComponent: статусы моих проектов > 'draft' / 'Лидер': статус, доступ и единственный корректный маршрут  1451ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/components/project-main-step/project-main-step.component.spec.ts (12 tests) 5603ms
+   ✓ ProjectMainStepComponent > стандартная обложка предлагает загрузку и не выдаёт системный URL за загруженный файл  1797ms
+   ✓ ProjectMainStepComponent > пользовательская обложка предлагает только замену с клавиатуры, без кнопки сброса  326ms
+   ✓ ProjectMainStepComponent > замена стандартной и пользовательской обложки загрузкой не вызывает DELETE  307ms
+   ✓ ProjectMainStepComponent > untouched fields are quiet; submit exposes matching borders, warning icons and required messages  374ms
+   ✓ ProjectMainStepComponent > valid fields do not become required errors after a submit attempt  428ms
+   ✓ ProjectMainStepComponent > renders every new project contact input in the originating UI cycle  447ms
+   ✓ ProjectMainStepComponent > writes immediately typed contact text into the source FormArray  899ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/list/list.component.spec.ts (9 tests) 2330ms
+   ✓ ProjectsListComponent: контекст и track > /my: CTA выполняет один переход в detail  945ms
+   ✓ ProjectsListComponent: контекст и track > полный список сохраняет независимые lifecycle/роль/доступ во всех восьми сочетаниях  337ms
+stderr | projects/social_platform/src/app/ui/widgets/info-card/info-card-subscription.spec.ts > InfoCard: асинхронная подписка (base) > не закрашивает закладку при ошибке подписки
+[15:25:31.295] [ERROR] Error subscribing to project: {"kind":"add_project_subscription_error","cause":{}}
+
+stderr | projects/social_platform/src/app/ui/widgets/info-card/info-card-subscription.spec.ts > InfoCard: асинхронная подписка (base) > сохраняет подписку и подтверждение при ошибке, после успешного повтора закрывает
+[15:25:31.452] [ERROR] Error unsubscribing from project: {"kind":"delete_project_subscription_error","cause":{}}
+
+stderr | projects/social_platform/src/app/ui/widgets/info-card/info-card-subscription.spec.ts > InfoCard: асинхронная подписка (subs) > не закрашивает закладку при ошибке подписки
+[15:25:31.841] [ERROR] Error subscribing to project: {"kind":"add_project_subscription_error","cause":{}}
+
+stderr | projects/social_platform/src/app/ui/pages/members/members-mobile.spec.ts > Мобильное представление участников > держит статистику перед мобильным списком, под desktop-фильтрами и не перезагружает её при поиске
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/main/role-widget/program-role-widget.component.spec.ts (11 tests) 1169ms
+   ✓ ProgramRoleWidgetComponent > shows skeleton without bogus zero counters  421ms
+stderr | projects/social_platform/src/app/ui/pages/projects/dashboard/dashboard.component.spec.ts > ProjectsDashboard: контексты карточек > передаёт my/subs/base, ID и подписки; показывает нужный контекст каждого раздела
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/widgets/info-card/info-card-subscription.spec.ts > InfoCard: асинхронная подписка (subs) > сохраняет подписку и подтверждение при ошибке, после успешного повтора закрывает
+[15:25:31.996] [ERROR] Error unsubscribing from project: {"kind":"delete_project_subscription_error","cause":{}}
+
+ ✓ projects/social_platform/src/app/ui/widgets/info-card/info-card-subscription.spec.ts (8 tests) 1491ms
+   ✓ InfoCard: асинхронная подписка (base) > закрашивает закладку после отложенного ответа без перезагрузки и второго клика  546ms
+stderr | projects/social_platform/src/app/ui/widgets/detail/detail-cleanup.component.spec.ts > Detail cleanup actions > renders create, open-existing and submitted CTA states without changing submitted disabling
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/widgets/info-card/info-card-list-contract.spec.ts (8 tests) 1545ms
+   ✓ Мои проекты: HTTP list → преобразование контракта → карточка > is_submitted=true, draft=false: lifecycle и доступ независимы  800ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/dashboard/dashboard.component.spec.ts (3 tests) 1630ms
+   ✓ ProjectsDashboard: контексты карточек > передаёт my/subs/base, ID и подписки; показывает нужный контекст каждого раздела  1496ms
+ ✓ projects/social_platform/src/app/ui/pages/members/members-mobile.spec.ts (7 tests) 1794ms
+   ✓ Мобильное представление участников > держит статистику перед мобильным списком, под desktop-фильтрами и не перезагружает её при поиске  656ms
+stderr | projects/social_platform/src/app/ui/pages/profile/edit/edit.component.spec.ts > ProfileEditComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/projects/projects-presentation.spec.ts > ProjectsComponent: приглашение и активность на странице > сохраняет размещение активности в разделе dashboard
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/widgets/detail/detail-cleanup.component.spec.ts (5 tests) 2424ms
+   ✓ Detail cleanup actions > renders create, open-existing and submitted CTA states without changing submitted disabling  1241ms
+   ✓ Detail cleanup actions > shares the viewed profile using the existing copy-link flow (id=7)  308ms
+   ✓ Detail cleanup actions > does not wait for the current profile before offering application creation  323ms
+stderr | projects/social_platform/src/app/ui/pages/projects/edit/components/project-additional-step/project-additional-step.component.spec.ts > ProjectAdditionalStepComponent canonical form > required indicators follow backend metadata; optional text has no fake required error
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/projects/projects-presentation.spec.ts (6 tests) 1837ms
+   ✓ ProjectsComponent: приглашение и активность на странице > сохраняет размещение активности в разделе dashboard  1087ms
+stderr | projects/social_platform/src/app/ui/pages/projects/edit/edit.component.spec.ts > ProjectEditComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/profile/edit/edit.component.spec.ts (3 tests) 3423ms
+   ✓ ProfileEditComponent > should create  2205ms
+   ✓ ProfileEditComponent > closes the skills library with the explicit close button  937ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/edit.component.spec.ts (3 tests) 2797ms
+   ✓ ProjectEditComponent > should create  2599ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/components/project-additional-step/project-additional-step.component.spec.ts (8 tests) 1696ms
+   ✓ ProjectAdditionalStepComponent canonical form > required indicators follow backend metadata; optional text has no fake required error  1071ms
+stderr | projects/social_platform/src/app/ui/pages/auth/register/register.component.spec.ts > RegisterComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/auth/register/register.component.spec.ts (4 tests) 945ms
+   ✓ RegisterComponent > should create  617ms
+stderr | projects/social_platform/src/app/ui/pages/program/detail/main/main.roles.spec.ts > Program page: program-scoped news and role visibility > loads and shows both existing and newly created news for manager without member role
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/main/main.roles.spec.ts (4 tests) 1111ms
+   ✓ Program page: program-scoped news and role visibility > loads and shows both existing and newly created news for manager without member role  809ms
+stderr | projects/social_platform/src/app/ui/widgets/news-card/news-card.component.spec.ts > NewsCardComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/register/register.component.spec.ts > ProgramRegisterComponent > ngOnInit строит форму из schema резолвера > создаёт FormGroup с полем под каждый ключ schema
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/primitives/input/input.component.spec.ts (20 tests) 952ms
+   ✓ InputComponent > should create the component  318ms
+stderr | projects/social_platform/src/app/ui/pages/program/detail/list/list.component.spec.ts > ProgramListComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.spec.ts (42 tests) 14719ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > не показывает общую выгрузку и не запрашивает проекты до открытия кейса  1971ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > клик строки 0 передаёт точный scope, включая нулевой кейс  470ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > клик строки 2 передаёт точный scope, включая нулевой кейс  444ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > клик строки 3 передаёт точный scope, включая нулевой кейс  394ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > keeps cases and evaluation as adjacent cards in the same two-column grid row  314ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > preserves backend counts/order/zero rows and appends withoutCase without mutations  582ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > normalizes bar widths by total projects, independently of submission share  385ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > includes the visible without-case bucket in the common scale  520ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > renders controlled empty state when configured=true  314ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > hides only case submission split for noncompetitive programs, retaining raw metrics  329ms
+   ✓ ProgramAnalyticsComponent > cases from manager overview > retains full long names and all 20 rows inside the bounded, keyboard-scrollable list  309ms
+   ✓ ProgramAnalyticsComponent > показывает authoritative summary и реальный разрез регионов  362ms
+   ✓ ProgramAnalyticsComponent > Работы ожидают оценивания: button, zero disabled, tooltip отдельно  306ms
+   ✓ ProgramAnalyticsComponent > not-submitted: порядок, активная/нулевая строка и tooltip отдельно  339ms
+   ✓ ProgramAnalyticsComponent > non-competitive скрывает строку даже с notSubmitted > 0 и не делает detail request  356ms
+   ✓ ProgramAnalyticsComponent > считает и форматирует отношение участников программы к проектам  339ms
+   ✓ ProgramAnalyticsComponent > строит воронки только из participantFunnel и solutionFunnel  493ms
+   ✓ ProgramAnalyticsComponent > technical registrations alone do not remove the participant zero state  370ms
+stdout | projects/social_platform/src/app/ui/pages/program/detail/register/register.component.spec.ts > ProgramRegisterComponent > onSubmit > вызывает use-case с programId и значениями формы
+[15:25:38.144] [DEBUG] Route changed from ProgramRegisterComponent
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/list/list.component.spec.ts (2 tests) 1087ms
+   ✓ ProgramListComponent > should create  895ms
+stdout | projects/social_platform/src/app/ui/pages/program/detail/register/register.component.spec.ts > ProgramRegisterComponent > onSubmit > навигирует на детальную страницу программы при успехе use-case
+[15:25:38.191] [DEBUG] Route changed from ProgramRegisterComponent
+
+stdout | projects/social_platform/src/app/ui/pages/program/detail/register/register.component.spec.ts > ProgramRegisterComponent > onSubmit > срабатывает по клику на кнопку submit в DOM
+[15:25:38.292] [DEBUG] Route changed from ProgramRegisterComponent
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/register/register.component.spec.ts (7 tests) 1062ms
+   ✓ ProgramRegisterComponent > ngOnInit строит форму из schema резолвера > создаёт FormGroup с полем под каждый ключ schema  724ms
+ ✓ projects/social_platform/src/app/ui/widgets/news-card/news-card.component.spec.ts (5 tests) 1240ms
+   ✓ NewsCardComponent > should create  873ms
+stderr | projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-mid-side/profile-mid-side.component.spec.ts > ProfileMidSideComponent > показывает центрируемый empty state владельцу пустого профиля
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-mid-side/profile-mid-side.component.spec.ts (4 tests) 865ms
+   ✓ ProfileMidSideComponent > показывает центрируемый empty state владельцу пустого профиля  585ms
+ ✓ projects/social_platform/src/app/ui/pages/auth/login/login.component.spec.ts (4 tests) 669ms
+   ✓ LoginComponent > should create  453ms
+ ✓ projects/social_platform/src/app/ui/widgets/news-form/news-form.component.spec.ts (7 tests) 820ms
+   ✓ NewsFormComponent > should create  368ms
+stderr | projects/social_platform/src/app/ui/pages/feed/feed.component.spec.ts > FeedComponent: порядок и представление карточек #372 > сохраняет шесть начальных карточек, ключи type:id и append в DOM без перестановки
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/feed/feed.component.spec.ts (1 test) 829ms
+   ✓ FeedComponent: порядок и представление карточек #372 > сохраняет шесть начальных карточек, ключи type:id и append в DOM без перестановки  828ms
+stderr | projects/social_platform/src/app/ui/pages/vacancies/detail/info/info.component.spec.ts > VacancyInfoComponent PROCOLLAB CV > разрешает прикрепить PROCOLLAB CV при пустом accompanyingFile
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/detail/info/info.component.spec.ts (3 tests) 748ms
+   ✓ VacancyInfoComponent PROCOLLAB CV > разрешает прикрепить PROCOLLAB CV при пустом accompanyingFile  503ms
+stderr | projects/social_platform/src/app/ui/pages/profile/detail/main/main.component.spec.ts > MainComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/program/detail/main/main.component.spec.ts > MainComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/widgets/project-vacancy-card/project-vacancy-card.component.spec.ts (10 tests) 628ms
+   ✓ ProjectVacancyCardComponent > should create  330ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/main/main.component.spec.ts (2 tests) 720ms
+   ✓ MainComponent > should create  661ms
+ ✓ projects/social_platform/src/app/ui/pages/profile/detail/main/main.component.spec.ts (1 test) 805ms
+   ✓ MainComponent > should create  803ms
+stderr | projects/social_platform/src/app/ui/pages/members/members.component.spec.ts > MembersComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-attention-route.spec.ts (3 tests) 886ms
+   ✓ Attention SPA: observable route → resolver → overview > participants-without-team отменяется до Program(13), без нового auto request  733ms
+ ✓ projects/social_platform/src/app/ui/pages/members/members.component.spec.ts (1 test) 637ms
+   ✓ MembersComponent > should create  633ms
+stderr | projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.spec.ts > StageZeroComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancy-responses/vacancy-responses.component.spec.ts (12 tests) 550ms
+   ✓ VacancyResponsesComponent > показывает два действия только для pending response  337ms
+ ✓ projects/social_platform/src/app/ui/pages/onboarding/stage-zero/stage-zero.component.spec.ts (3 tests) 1514ms
+   ✓ StageZeroComponent > should create  990ms
+stderr | projects/social_platform/src/app/ui/pages/office/office.component.spec.ts > OfficeComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+NG0912: Component ID generation collision detected. Components 'ButtonComponent' and 'ButtonComponent' with selector 'app-button' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/projects/detail/info/components/projects-mid-side/projects-mid-side.component.spec.ts > ProjectsMidSideComponent > shows the complete project description after expansion
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/info/components/projects-mid-side/projects-mid-side.component.spec.ts (4 tests) 740ms
+   ✓ ProjectsMidSideComponent > shows the complete project description after expansion  732ms
+ ✓ projects/social_platform/src/app/ui/pages/office/office.component.spec.ts (3 tests) 786ms
+   ✓ OfficeComponent > should create  626ms
+stderr | projects/social_platform/src/app/ui/pages/onboarding/stage-two/stage-two.component.spec.ts > StageTwoComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/primitives/avatar-control/avatar-control.component.spec.ts (1 test) 421ms
+   ✓ AvatarControlComponent > should create  419ms
+ ✓ projects/social_platform/src/app/ui/pages/onboarding/stage-two/stage-two.component.spec.ts (4 tests) 858ms
+   ✓ StageTwoComponent > should create  519ms
+stderr | projects/social_platform/src/app/ui/pages/profile/detail/profile-news/profile-news.component.spec.ts > ProfileNewsComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/primitives/textarea/textarea.component.spec.ts (6 tests) 422ms
+ ✓ projects/social_platform/src/app/ui/pages/profile/detail/profile-news/profile-news.component.spec.ts (1 test) 538ms
+   ✓ ProfileNewsComponent > should create  537ms
+stderr | projects/social_platform/src/app/ui/pages/auth/set-password/set-password.component.spec.ts > SetPasswordComponent > should create
+[15:25:43.931] [ERROR] Token is missing
+
+ ✓ projects/social_platform/src/app/ui/pages/auth/set-password/set-password.component.spec.ts (1 test) 484ms
+   ✓ SetPasswordComponent > should create  478ms
+stderr | projects/social_platform/src/app/ui/pages/chat/chat-direct/chat-direct.component.spec.ts > ChatDirectComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+stderr | projects/social_platform/src/app/ui/pages/projects/detail/info/info.component.spec.ts > ProjectInfoComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/auth/reset-password/reset-password.component.spec.ts (1 test) 460ms
+   ✓ ResetPasswordComponent > should create  458ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/info/info.component.spec.ts (1 test) 596ms
+   ✓ ProjectInfoComponent > should create  592ms
+ ✓ projects/social_platform/src/app/ui/pages/chat/chat-direct/chat-direct.component.spec.ts (1 test) 499ms
+   ✓ ChatDirectComponent > should create  497ms
+stderr | projects/social_platform/src/app/ui/widgets/news-card/feed-news-modal/feed-news-modal.component.spec.ts > FeedNewsModalComponent > показывает полный текст, переносы, ссылку, все файлы и contain-карусель без detail HTTP
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/widgets/news-card/feed-news-modal/feed-news-modal.component.spec.ts (1 test) 547ms
+   ✓ FeedNewsModalComponent > показывает полный текст, переносы, ссылку, все файлы и contain-карусель без detail HTTP  543ms
+stderr | projects/social_platform/src/app/ui/pages/projects/detail/news-detail/news-detail.component.spec.ts > NewsDetailComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/api/profile/facades/edit/profile-form.service.spec.ts (8 tests) 470ms
+ ✓ projects/social_platform/src/app/ui/widgets/chat-window/chat-window.component.spec.ts (1 test) 425ms
+   ✓ ChatWindowComponent > should create  423ms
+ ✓ projects/social_platform/src/app/ui/primitives/modal/modal.component.spec.ts (4 tests) 342ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/news-detail/news-detail.component.spec.ts (1 test) 478ms
+   ✓ NewsDetailComponent > should create  475ms
+ ✓ projects/social_platform/src/app/ui/widgets/region-select/region-select.component.spec.ts (12 tests) 582ms
+ ✓ projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-right-side/profile-right-side.component.spec.ts (2 tests) 574ms
+   ✓ ProfileRightSideComponent > keeps the complete long project title in the profile project list DOM  488ms
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/list/list.component.spec.ts (7 tests) 626ms
+   ✓ VacanciesListComponent > должен вызвать vacancyInfoService.init() при инициализации компонента  391ms
+ ✓ projects/social_platform/src/app/ui/pages/members/members-filters/members-filters.component.spec.ts (2 tests) 461ms
+   ✓ MembersFiltersComponent  > should create  390ms
+stderr | projects/social_platform/src/app/ui/pages/vacancies/vacancies.component.spec.ts > VacanciesComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/vacancies.component.spec.ts (2 tests) 653ms
+   ✓ VacanciesComponent > should create  571ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/invite-card/invite-card.component.spec.ts (4 tests) 507ms
+   ✓ InviteCardComponent > should create  414ms
+ ✓ projects/social_platform/src/app/ui/pages/members/member-card/member-card.component.spec.ts (7 tests) 676ms
+   ✓ Карточка каталога участников > показывает первый навык в исходном порядке и точный +N при 0 навыках  463ms
+ ✓ projects/social_platform/src/app/ui/pages/office/delete-confirm/delete-confirm.component.spec.ts (1 test) 289ms
+ ✓ projects/social_platform/src/app/ui/pages/members/member-statistics-card/member-statistics-card.component.spec.ts (11 tests) 435ms
+ ✓ projects/social_platform/src/app/ui/widgets/message-input/message-input.component.spec.ts (1 test) 278ms
+ ✓ projects/social_platform/src/app/ui/primitives/select/select.component.spec.ts (5 tests) 438ms
+   ✓ SelectComponent > should create  316ms
+ ✓ projects/social_platform/src/app/ui/widgets/skills-group/skills-group.component.spec.ts (4 tests) 315ms
+ ✓ projects/social_platform/src/app/ui/primitives/upload-file/upload-file.component.spec.ts (15 tests) 654ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/detail/info/course-module-card/course-module-card.component.spec.ts (7 tests) 480ms
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-right-side/vacancies-right-side.component.spec.ts (9 tests) 369ms
+ ✓ projects/social_platform/src/app/ui/primitives/tooltip/tooltip.component.spec.ts (4 tests) 378ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/chat/chat.component.spec.ts (1 test) 388ms
+   ✓ ChatComponent > should create  386ms
+ ✓ projects/social_platform/src/app/ui/widgets/vacancy-skills/vacancy-skills.component.spec.ts (2 tests) 266ms
+ ✓ projects/social_platform/src/app/ui/widgets/chat-window/chat-message/chat-message.component.spec.ts (1 test) 283ms
+ ✓ projects/social_platform/src/app/ui/primitives/search/search.component.spec.ts (2 tests) 198ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-additional.service.spec.ts (39 tests) 249ms
+ ✓ projects/social_platform/src/app/app.component.spec.ts (1 test) 262ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/components/project-team-step/collaborator-card/collaborator-card.component.spec.ts (2 tests) 241ms
+ ✓ projects/social_platform/src/app/ui/pages/profile/detail/main/components/profile-left-side/profile-left-side.component.spec.ts (6 tests) 486ms
+   ✓ ProfileLeftSideComponent > renders programs as compact named rectangular links  348ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/list/program-projects-filter/program-projects-filter.component.spec.ts (2 tests) 576ms
+   ✓ ProjectsFilterComponent > should create  464ms
+stdout | projects/social_platform/src/app/ui/widgets/projects-filter/projects-filter.component.spec.ts > ProjectsFilterComponent > сохраняет справочник отраслей и фильтрацию через query-параметр industry
+[15:25:51.439] [DEBUG] Query change from ProjectsComponent
+
+ ✓ projects/social_platform/src/app/ui/widgets/projects-filter/projects-filter.component.spec.ts (2 tests) 439ms
+   ✓ ProjectsFilterComponent > should create  387ms
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/detail/vacancies-detail.component.spec.ts (2 tests) 343ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/project-activity-card/project-activity-card.component.spec.ts (11 tests) 418ms
+ ✓ projects/social_platform/src/app/ui/widgets/vacancy-card/vacancy-card.component.spec.ts (5 tests) 365ms
+ ✓ projects/social_platform/src/app/ui/pages/feed/new-project/new-project.component.spec.ts (1 test) 249ms
+ ✓ projects/social_platform/src/app/ui/widgets/specializations-group/specializations-group.component.spec.ts (4 tests) 268ms
+ ✓ projects/social_platform/src/app/ui/pages/program/main/program-card/program-card.component.spec.ts (1 test) 241ms
+ ✓ projects/social_platform/src/app/ui/widgets/skills-basket/skills-basket.component.spec.ts (4 tests) 258ms
+ ✓ projects/social_platform/src/app/ui/primitives/autocomplete-input/autocomplete-input.component.spec.ts (3 tests) 389ms
+ ✓ projects/social_platform/src/app/ui/primitives/icon/icon.component.spec.ts (5 tests) 238ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/lesson/shared/write-task/write-task.component.spec.ts (1 test) 395ms
+   ✓ WriteTaskComponent > should create  393ms
+ ✓ projects/social_platform/src/app/ui/pages/program/main/main.component.spec.ts (1 test) 454ms
+   ✓ MainComponent > should create  449ms
+stderr | projects/social_platform/src/app/ui/pages/onboarding/stage-one/stage-one.component.spec.ts > StageOneComponent > should create
+NG0912: Component ID generation collision detected. Components 'IconComponent' and 'IconComponent' with selector '[appIcon]' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://v20.angular.dev/errors/NG0912
+
+ ✓ projects/social_platform/src/app/ui/pages/onboarding/stage-one/stage-one.component.spec.ts (1 test) 435ms
+   ✓ StageOneComponent > should create  433ms
+ ✓ projects/social_platform/src/app/ui/pages/chat/chat.component.spec.ts (1 test) 284ms
+ ✓ projects/social_platform/src/app/ui/pages/onboarding/onboarding.component.spec.ts (1 test) 220ms
+ ✓ projects/social_platform/src/app/utils/export-regions-workbook.spec.ts (1 test) 507ms
+   ✓ region XLSX workbook integration > generates a ZIP/OOXML workbook with real string and number cells  505ms
+ ✓ projects/social_platform/src/app/ui/pages/feed/open-vacancy/open-vacancy.component.spec.ts (1 test) 321ms
+   ✓ OpenVacancyComponent > показывает тип, дату, источник, роль, описание, навыки и CTA  319ms
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/list/response-card/response-card.component.spec.ts (6 tests) 337ms
+ ✓ projects/social_platform/src/app/ui/widgets/news-card/carousel/carousel.component.spec.ts (2 tests) 213ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/lesson/shared/video-task/info-task.component.spec.ts (1 test) 296ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/info/components/projects-left-side/projects-left-side.component.spec.ts (2 tests) 258ms
+ ✓ projects/social_platform/src/app/ui/widgets/cookie-consent/cookie-consent.component.spec.ts (5 tests) 527ms
+   ✓ CookieConsentComponent > показывает баннер, если решение ещё не сохранено  359ms
+ ✓ projects/social_platform/src/app/ui/widgets/project-invite/project-invite-role-input.component.spec.ts (4 tests) 308ms
+ ✓ projects/ui/src/lib/components/layout/invite-manage-card/invite-manage-card.component.spec.ts (1 test) 359ms
+   ✓ InviteManageCardComponent > should create  357ms
+ ✓ projects/social_platform/src/app/ui/primitives/bar/bar.component.spec.ts (1 test) 196ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service.spec.ts (22 tests) 352ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program-manager-attention.use-case.spec.ts (23 tests) 191ms
+ ✓ projects/social_platform/src/app/ui/primitives/img-card/img-card.component.spec.ts (1 test) 242ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-form-autosave.service.spec.ts (24 tests) 186ms
+ ✓ projects/social_platform/src/app/ui/primitives/button/button.component.spec.ts (6 tests) 253ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/list/course/course.component.spec.ts (1 test) 354ms
+   ✓ CourseComponent > should create  351ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/lesson/shared/exclude-task/exclude-task.component.spec.ts (1 test) 234ms
+ ✓ projects/social_platform/src/app/ui/widgets/vacancy-filter/vacancy-filter.component.spec.ts (1 test) 260ms
+stdout | projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.spec.ts > FeedComponent > показывает счётчики всех шести категорий независимо от фильтра
+[15:25:58.586] [DEBUG] Query change from FeedFilterComponent
+
+ ✓ projects/social_platform/src/app/ui/widgets/feed-filter/feed-filter.component.spec.ts (2 tests) 343ms
+ ✓ projects/ui/src/lib/components/layout/profile-info/profile-info.component.spec.ts (1 test) 180ms
+ ✓ projects/ui/src/lib/components/layout/sidebar/sidebar.component.spec.ts (1 test) 178ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-vacancy.service.spec.ts (13 tests) 224ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/lesson/shared/radio-select-task/radio-select-task.component.spec.ts (1 test) 265ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-cover-reset.service.spec.ts (11 tests) 270ms
+ ✓ projects/social_platform/src/app/ui/primitives/avatar/avatar.component.spec.ts (6 tests) 245ms
+ ✓ projects/ui/src/lib/components/primitives/avatar/avatar.component.spec.ts (6 tests) 226ms
+ ✓ projects/social_platform/src/app/ui/pages/vacancies/detail/info/components/vacancies-left-side/vacancies-left-side.component.spec.ts (1 test) 252ms
+ ✓ projects/social_platform/src/app/ui/primitives/loader/loader.component.spec.ts (4 tests) 201ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/project-rating/components/range-criterion-input/range-criterion-input.component.spec.ts (5 tests) 243ms
+ ✓ projects/social_platform/src/app/ui/widgets/detail/services/program/detail-program-info.service.spec.ts (15 tests) 143ms
+ ✓ projects/social_platform/src/app/ui/pages/auth/auth.component.spec.ts (1 test) 132ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project.repository.spec.ts (21 tests) 178ms
+ ✓ projects/social_platform/src/app/ui/pages/onboarding/stage-three/stage-three.component.spec.ts (1 test) 305ms
+   ✓ StageThreeComponent > should create  301ms
+ ✓ projects/social_platform/src/app/ui/primitives/switch/switch.component.spec.ts (4 tests) 171ms
+ ✓ projects/social_platform/src/app/ui/primitives/file-upload-item/file-upload-item.component.spec.ts (1 test) 221ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/program/program.repository.spec.ts (30 tests) 199ms
+ ✓ projects/social_platform/src/app/ui/widgets/header/header.component.spec.ts (1 test) 261ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/lesson/complete/complete.component.spec.ts (5 tests) 257ms
+ ✓ projects/ui/src/lib/components/primitives/icon/icon.component.spec.ts (5 tests) 163ms
+ ✓ projects/social_platform/src/app/ui/primitives/tag/tag.component.spec.ts (1 test) 183ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-form.service.spec.ts (13 tests) 224ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/program-analytics-attention.service.spec.ts (42 tests) 291ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/auth/auth.repository.spec.ts (17 tests) 170ms
+ ✓ projects/social_platform/src/app/ui/primitives/checkbox/checkbox.component.spec.ts (4 tests) 195ms
+ ✓ projects/social_platform/src/app/ui/pages/office/snackbar/snackbar.component.spec.ts (1 test) 149ms
+ ✓ projects/social_platform/src/app/api/vacancy/facades/vacancy-detail-info.service.spec.ts (17 tests) 170ms
+ ✓ projects/social_platform/src/app/ui/primitives/file-item/file-item.component.spec.ts (1 test) 199ms
+ ✓ projects/social_platform/src/app/ui/pages/auth/email-verification/email-verification.component.spec.ts (1 test) 208ms
+ ✓ projects/social_platform/src/app/ui/pages/error/error-code/error-code.component.spec.ts (1 test) 159ms
+ ✓ projects/social_platform/src/app/ui/pages/onboarding/stage-three/user-type-card/user-type-card.component.spec.ts (1 test) 151ms
+ ✓ projects/ui/src/lib/components/primitives/back/back.component.spec.ts (1 test) 194ms
+ ✓ projects/social_platform/src/app/api/member/facades/members-info.service.spec.ts (16 tests) 277ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/ui/project-vacancy-ui.service.spec.ts (17 tests) 213ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/bar-new/bar.component.spec.ts (1 test) 164ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository.spec.ts (16 tests) 138ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/program/program-http.adapter.spec.ts (22 tests) 131ms
+ ✓ projects/social_platform/src/app/ui/pages/auth/confirm-password-reset/confirm-password-reset.component.spec.ts (1 test) 163ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/auth/auth-http.adapter.spec.ts (24 tests) 164ms
+ ✓ projects/social_platform/src/app/ui/pages/error/not-found/error-not-found.component.spec.ts (1 test) 147ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-team.service.spec.ts (19 tests) 190ms
+ ✓ projects/social_platform/src/app/ui/pages/error/error.component.spec.ts (1 test) 154ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/fetch-project-news.use-case.spec.ts (3 tests) 130ms
+ ✓ projects/social_platform/src/app/ui/pages/courses/detail/info/course-module-card/circle-progress-bar/circle-progress-bar.component.spec.ts (1 test) 235ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-resource-http.adapter.spec.ts (4 tests) 67ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/program-case-projects.use-case.spec.ts (15 tests) 140ms
+ ✓ projects/social_platform/src/app/ui/pages/auth/confirm-email/confirm-email.component.spec.ts (1 test) 130ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/send-for-user.use-case.spec.ts (3 tests) 72ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/program-analytics-info.service.spec.ts (15 tests) 155ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/apply-project-to-program.use-case.spec.ts (3 tests) 82ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/chat/chat-ws.adapter.spec.ts (14 tests) 154ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/program-role-widget.service.spec.ts (11 tests) 153ms
+ ✓ projects/social_platform/src/app/api/skills/use-cases/get-skills-nested.use-case.spec.ts (3 tests) 49ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/reset-project-cover.use-case.spec.ts (13 tests) 117ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/invite/invite.repository.spec.ts (9 tests) 100ms
+ ✓ projects/social_platform/src/app/api/courses/use-cases/submit-task-answer.use-case.spec.ts (3 tests) 54ms
+ ✓ projects/social_platform/src/app/ui/widgets/detail/services/profile/detail-profile-invite.spec.ts (9 tests) 132ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/list/rating-card/services/rating-card.service.spec.ts (9 tests) 111ms
+ ✓ projects/social_platform/src/app/api/profile/facades/edit/profile-edit-info.service.spec.ts (4 tests) 143ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/chat/chat.repository.spec.ts (3 tests) 114ms
+ ✓ projects/social_platform/src/app/ui/pages/office/snackbar/animation/animation.service.spec.ts (1 test) 49ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/get-vacancies.use-case.spec.ts (3 tests) 73ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-subscription.repository.spec.ts (4 tests) 69ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/detail.resolver.spec.ts (10 tests) 121ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-my-projects.use-case.spec.ts (3 tests) 93ms
+ ✓ projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-zero-info.service.spec.ts (7 tests) 148ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/program-link-fields.use-cases.spec.ts (15 tests) 297ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/edit-news.use-case.spec.ts (3 tests) 91ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-collaborators.repository.spec.ts (3 tests) 75ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-http.adapter.spec.ts (8 tests) 124ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/program-analytics-drilldown.service.spec.ts (10 tests) 357ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/delete-news.use-case.spec.ts (3 tests) 79ms
+ ✓ projects/social_platform/src/app/api/feed/use-cases/toggle-feed-like.use-case.spec.ts (4 tests) 85ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/program-case-projects.service.spec.ts (11 tests) 173ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/reject-invite.use-case.spec.ts (3 tests) 90ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/set-password.use-case.spec.ts (3 tests) 161ms
+ ✓ projects/social_platform/src/app/api/invite/facades/invite-participant-search.facade.spec.ts (4 tests) 135ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-news.repository.spec.ts (8 tests) 230ms
+ ✓ projects/social_platform/src/app/api/feed/use-cases/read-feed-news.use-case.spec.ts (4 tests) 150ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-goals-http.adapter.spec.ts (4 tests) 83ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project-news-detail.use-case.spec.ts (3 tests) 179ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/member/member-statistics-contract.spec.ts (6 tests) 247ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-partner-http.adapter.spec.ts (4 tests) 99ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/read-news.use-case.spec.ts (3 tests) 246ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program-manager-assignments.use-case.spec.ts (6 tests) 157ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/check-unreads.use-case.spec.ts (3 tests) 107ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/remove-project-collaborator.use-case.spec.ts (3 tests) 68ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/program/program-news.repository.spec.ts (6 tests) 145ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/delete-project-news.use-case.spec.ts (3 tests) 100ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/update-resource.use-case.spec.ts (3 tests) 115ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/read-profile-news.use-case.spec.ts (3 tests) 94ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/get-my-vacancies.use-case.spec.ts (3 tests) 112ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/delete-profile-news.use-case.spec.ts (3 tests) 82ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/profile/profile-news.repository.spec.ts (8 tests) 155ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/delete-message.use-case.spec.ts (1 test) 69ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-cover-contract.spec.ts (3 tests) 116ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-partner.repository.spec.ts (4 tests) 89ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-rating.repository.spec.ts (6 tests) 105ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/update-form.use-case.spec.ts (3 tests) 82ms
+ ✓ projects/social_platform/src/app/api/kanban/use-cases/get-task.use-case.spec.ts (4 tests) 75ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program-data-schema.use-case.spec.ts (3 tests) 73ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/program/program-case-http.integration.spec.ts (2 tests) 157ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project-subscriptions.use-case.spec.ts (3 tests) 71ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/download-cv.use-case.spec.ts (3 tests) 98ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/profile/profile-news-http.adapter.spec.ts (7 tests) 174ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program-role-widget.use-case.spec.ts (7 tests) 225ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/create-goals.use-case.spec.ts (3 tests) 106ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-goals.repository.spec.ts (4 tests) 100ms
+ ✓ projects/social_platform/src/app/ui/primitives/modal/modal.service.spec.ts (1 test) 772ms
+   ✓ ModalService > should be created  769ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/send-vacancy-response.use-case.spec.ts (4 tests) 168ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/filter-project-ratings.use-case.spec.ts (3 tests) 399ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/courses/courses.repository.spec.ts (5 tests) 158ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-program.repository.spec.ts (5 tests) 193ms
+ ✓ projects/social_platform/src/app/api/vacancy/facades/vacancy-info.service.spec.ts (4 tests) 206ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/chat/chat-http.adapter.spec.ts (4 tests) 153ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/fetch-news.use-case.spec.ts (3 tests) 116ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/courses/courses-http.adapter.spec.ts (5 tests) 83ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/get-vacancy-responses.use-case.spec.ts (2 tests) 87ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-news-http.adapter.spec.ts (7 tests) 125ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/update-invite.use-case.spec.ts (3 tests) 225ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/edit-project-news.use-case.spec.ts (3 tests) 99ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/register.use-case.spec.ts (5 tests) 114ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-read-message.use-case.spec.ts (2 tests) 75ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/update-vacancy.use-case.spec.ts (3 tests) 86ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/add-project-subscription.use-case.spec.ts (3 tests) 210ms
+ ✓ projects/social_platform/src/app/api/member/use-cases/get-members.use-case.spec.ts (4 tests) 151ms
+ ✓ projects/social_platform/src/app/api/program/program-widget-presentation.spec.ts (30 tests) 88ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/update-profile.use-case.spec.ts (3 tests) 72ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/participating-program.use-case.spec.ts (3 tests) 71ms
+ ✓ projects/social_platform/src/app/api/courses/use-cases/get-course-structure.use-case.spec.ts (3 tests) 129ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/reset-password.use-case.spec.ts (3 tests) 180ms
+ ✓ projects/core/src/lib/interceptors/camelcase.interceptor.spec.ts (6 tests) 428ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/program-detail-main-info.service.spec.ts (3 tests) 169ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-programs.use-case.spec.ts (3 tests) 75ms
+ ✓ projects/social_platform/src/app/api/program/program-widget-refresh.spec.ts (8 tests) 142ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/toggle-like.use-case.spec.ts (3 tests) 73ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-all-projects.use-case.spec.ts (3 tests) 87ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/delete-resource.use-case.spec.ts (3 tests) 84ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/revoke-invite.use-case.spec.ts (3 tests) 61ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service.spec.ts (2 tests) 91ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program-filters.use-case.spec.ts (3 tests) 87ms
+ ✓ projects/social_platform/src/app/api/courses/facades/ui/course-detail-ui-info.service.spec.ts (5 tests) 130ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/create-resource.use-case.spec.ts (3 tests) 116ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/get-project-invites.use-case.spec.ts (3 tests) 137ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project.use-case.spec.ts (3 tests) 149ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/toggle-profile-news-like.use-case.spec.ts (3 tests) 99ms
+ ✓ projects/social_platform/src/app/api/feed/facades/feed-info.service.spec.ts (3 tests) 102ms
+ ✓ projects/social_platform/src/app/api/kanban/use-cases/get-board.use-case.spec.ts (4 tests) 108ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/start-typing.use-case.spec.ts (1 test) 64ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter.spec.ts (4 tests) 114ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/chat/chat-realtime.repository.spec.ts (3 tests) 129ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/save-profile.use-case.spec.ts (3 tests) 74ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/create-program-filters.use-case.spec.ts (3 tests) 99ms
+ ✓ projects/social_platform/src/app/api/member/facades/member-statistics.facade.spec.ts (5 tests) 132ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/program/program-news-http.adapter.spec.ts (6 tests) 193ms
+ ✓ projects/social_platform/src/app/api/courses/use-cases/get-course-lesson.use-case.spec.ts (3 tests) 91ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/register-program.use-case.spec.ts (3 tests) 130ms
+ ✓ projects/social_platform/src/app/api/searches/searches.service.spec.ts (5 tests) 563ms
+   ✓ SearchesService: подбор навыков > старый ответ не заменяет результат более нового запроса  444ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/invite/invite-http.adapter.spec.ts (7 tests) 232ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project-partners.use-case.spec.ts (3 tests) 88ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/toggle-project-news-like.use-case.spec.ts (3 tests) 78ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-project-ratings.use-case.spec.ts (3 tests) 100ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-rating-http.adapter.spec.ts (4 tests) 107ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/rate-project.use-case.spec.ts (3 tests) 121ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-count-contract.spec.ts (1 test) 155ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-edit-message.use-case.spec.ts (2 tests) 112ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/industry/industry-http.adapter.spec.ts (1 test) 55ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/login.use-case.spec.ts (4 tests) 368ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/create-partner.use-case.spec.ts (3 tests) 127ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/get-my-invites.use-case.spec.ts (3 tests) 154ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/get-profile-news-detail.use-case.spec.ts (3 tests) 124ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/vacancy/vacancy-http.adapter.spec.ts (5 tests) 80ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/load-project-files.use-case.spec.ts (3 tests) 84ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/leave-project.use-case.spec.ts (3 tests) 101ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/industry/industry.repository.spec.ts (3 tests) 92ms
+ ✓ projects/social_platform/src/app/api/invite/use-cases/accept-invite.use-case.spec.ts (3 tests) 126ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/project/project-resource.repository.spec.ts (4 tests) 90ms
+ ✓ projects/social_platform/src/app/api/onboarding/onboarding.service.spec.ts (1 test) 75ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/reject-response.use-case.spec.ts (3 tests) 109ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/get-vacancy-detail.use-case.spec.ts (3 tests) 128ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/add-news.use-case.spec.ts (3 tests) 75ms
+ ✓ projects/social_platform/src/app/ui/pages/chat/chat-direct/chat-direct.resolver.spec.ts (1 test) 68ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/accept-response.use-case.spec.ts (3 tests) 161ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/delete-project.use-case.spec.ts (3 tests) 118ms
+ ✓ projects/social_platform/src/app/api/project/facades/projects-info.service.spec.ts (3 tests) 100ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-contacts.service.spec.ts (3 tests) 107ms
+ ✓ projects/social_platform/src/app/api/skills/use-cases/search-skills.use-case.spec.ts (3 tests) 87ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/post-vacancy.use-case.spec.ts (3 tests) 101ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/submit-competitive-project.use-case.spec.ts (3 tests) 90ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-program-http.adapter.spec.ts (3 tests) 169ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/delete-goal.use-case.spec.ts (3 tests) 133ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/specializations/specializations.repository.spec.ts (2 tests) 211ms
+ ✓ projects/core/src/lib/services/file/file.service.spec.ts (1 test) 103ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/add-profile-news.use-case.spec.ts (3 tests) 72ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/read-project-news.use-case.spec.ts (3 tests) 115ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/skills/skills-http.adapter.spec.ts (2 tests) 50ms
+ ✓ projects/social_platform/src/app/api/auth/use-cases/resend-email.use-case.spec.ts (3 tests) 65ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/load-messages.use-case.spec.ts (3 tests) 88ms
+ ✓ projects/social_platform/src/app/api/feed/use-cases/fetch-feed.use-case.spec.ts (3 tests) 74ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project-goals.use-case.spec.ts (3 tests) 58ms
+ ✓ projects/core/src/lib/services/api/api.service.spec.ts (1 test) 65ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-set-offline.use-case.spec.ts (2 tests) 109ms
+ ✓ projects/social_platform/src/app/api/kanban/use-cases/get-column-tasks.use-case.spec.ts (3 tests) 110ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/get-project-responses.use-case.spec.ts (3 tests) 162ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/add-project-news.use-case.spec.ts (3 tests) 102ms
+ ✓ projects/social_platform/src/app/api/courses/use-cases/get-courses.use-case.spec.ts (3 tests) 87ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/edit-profile-news.use-case.spec.ts (3 tests) 114ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project-subscribers.use-case.spec.ts (3 tests) 107ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/assign-project-program.spec.ts (3 tests) 112ms
+ ✓ projects/core/src/lib/guards/auth/auth-required.guard.spec.ts (1 test) 103ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-all-projects.use-case.spec.ts (3 tests) 76ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-messages.use-case.spec.ts (2 tests) 70ms
+ ✓ projects/social_platform/src/app/api/courses/use-cases/get-course-detail.use-case.spec.ts (3 tests) 131ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/create-project.use-case.spec.ts (3 tests) 276ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/update-goal.use-case.spec.ts (3 tests) 179ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/member/member.repository.spec.ts (1 test) 231ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/delete-project-subscription.use-case.spec.ts (3 tests) 164ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/list/program-projects-filter/service/program-projects-filter-info.service.spec.ts (1 test) 167ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/transfer-project-ownership.use-case.spec.ts (3 tests) 106ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/skills/skills.repository.spec.ts (2 tests) 102ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-all-members.use-case.spec.ts (3 tests) 141ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/project/project-collaborators-http.adapter.spec.ts (3 tests) 176ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-set-online.use-case.spec.ts (2 tests) 139ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/projects.resolver.spec.ts (2 tests) 152ms
+ ✓ projects/social_platform/src/app/api/vacancy/use-cases/delete-vacancy.use-case.spec.ts (3 tests) 256ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program.use-case.spec.ts (3 tests) 185ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-typing.use-case.spec.ts (2 tests) 123ms
+ ✓ projects/social_platform/src/app/api/program/use-cases/get-program-manager-overview.use-case.spec.ts (2 tests) 125ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/delete-partner.use-case.spec.ts (3 tests) 228ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/member/member-http.adapter.spec.ts (2 tests) 133ms
+ ✓ projects/social_platform/src/app/api/profile/use-cases/fetch-profile-news.use-case.spec.ts (3 tests) 398ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/observe-delete-message.use-case.spec.ts (2 tests) 166ms
+ ✓ projects/core/src/lib/services/validation/validation.service.spec.ts (1 test) 56ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/read-message.use-case.spec.ts (1 test) 77ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/edit/edit.resolver.spec.ts (1 test) 37ms
+ ✓ projects/social_platform/src/app/api/project/use-cases/get-project-resources.use-case.spec.ts (3 tests) 128ms
+ ✓ projects/social_platform/src/app/api/auth/auth.service.spec.ts (1 test) 62ms
+ ✓ projects/core/src/lib/interceptors/bearer-token.interceptor.spec.ts (1 test) 84ms
+ ✓ projects/core/src/lib/services/error/error.service.spec.ts (1 test) 64ms
+ ✓ projects/social_platform/src/app/ui/widgets/detail/services/detail-info.service.spec.ts (1 test) 75ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/specializations/specializations-http.adapter.spec.ts (2 tests) 75ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/chat/chat.resolver.spec.ts (1 test) 49ms
+ ✓ projects/core/src/lib/services/error/global-error-handler.service.spec.ts (1 test) 52ms
+ ✓ projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service.spec.ts (1 test) 57ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/connect-chat.use-case.spec.ts (1 test) 63ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/feed/feed-http.adapter.spec.ts (1 test) 63ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/send-message.use-case.spec.ts (1 test) 70ms
+ ✓ projects/social_platform/src/app/infrastructure/repository/feed/feed.repository.spec.ts (1 test) 62ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/list/my.resolver.spec.ts (1 test) 50ms
+ ✓ projects/social_platform/src/app/ui/pages/chat/chat-groups.resolver.spec.ts (1 test) 46ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/list/all.resolver.spec.ts (1 test) 138ms
+ ✓ projects/social_platform/src/app/api/chat/use-cases/edit-message.use-case.spec.ts (1 test) 74ms
+ ✓ projects/core/src/lib/services/tokens/token.service.spec.ts (1 test) 238ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/news-detail/news-detail.resolver.spec.ts (1 test) 95ms
+ ✓ projects/social_platform/src/app/ui/services/notification/notification.service.spec.ts (1 test) 94ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/detail/info/info.resolver.spec.ts (1 test) 71ms
+ ✓ projects/social_platform/src/app/domain/shared/chat-state.service.spec.ts (1 test) 74ms
+ ✓ projects/social_platform/src/app/ui/pages/program/detail/register/register.resolver.spec.ts (1 test) 86ms
+ ✓ projects/social_platform/src/app/ui/pages/chat/chat.resolver.spec.ts (1 test) 68ms
+ ✓ projects/social_platform/src/app/api/project/facades/edit/project-form.factory.spec.ts (4 tests) 94ms
+ ✓ projects/social_platform/src/app/api/profile/facades/edit/profile-edit-validation.utils.spec.ts (9 tests) 314ms
+ ✓ projects/social_platform/src/app/domain/shared/entity-cache.spec.ts (11 tests) 245ms
+ ✓ projects/core/src/lib/services/websockets/websocket.service.spec.ts (1 test) 286ms
+ ✓ projects/core/src/consts/lists/russian-regions-list.const.spec.ts (7 tests) 64ms
+ ✓ projects/social_platform/src/app/utils/program-case-analytics.spec.ts (14 tests) 71ms
+ ✓ projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service.spec.ts (13 tests) 168ms
+ ✓ projects/social_platform/src/app/utils/export-regions.spec.ts (3 tests) 82ms
+ ✓ projects/social_platform/src/app/api/feed/facades/ui/feed-ui-info.service.spec.ts (1 test) 43ms
+ ✓ projects/social_platform/src/app/api/invite/mappers/map-invite-send-error.spec.ts (24 tests) 42ms
+ ✓ projects/social_platform/src/app/utils/program-analytics-assignment.spec.ts (9 tests) 25ms
+ ✓ projects/social_platform/src/app/api/vacancy/vacancy-response-error.spec.ts (8 tests) 22ms
+ ✓ projects/social_platform/src/app/infrastructure/adapters/courses/local-storage-seen-modules.adapter.spec.ts (4 tests) 20ms
+ ✓ projects/social_platform/src/app/ui/pages/projects/projects-activity-placement.spec.ts (4 tests) 33ms
+ ✓ projects/social_platform/src/app/api/member/member-filters.spec.ts (10 tests) 38ms
+ ✓ projects/social_platform/src/app/api/profile/facades/edit/profile-save-error.utils.spec.ts (5 tests) 33ms
+ ✓ projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service.spec.ts (1 test) 32ms
+ ✓ projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service.spec.ts (4 tests) 15ms
+ ✓ projects/social_platform/src/app/ui/pipes/file-type.pipe.spec.ts (1 test) 5ms
+ ✓ projects/social_platform/src/app/domain/invite/invite-candidates.spec.ts (2 tests) 29ms
+ ✓ projects/core/src/lib/pipes/controls/form-control.pipe.spec.ts (1 test) 18ms
+ ✓ projects/core/src/lib/pipes/formatters/years-from-birthday.pipe.spec.ts (1 test) 6ms
+ ✓ projects/core/src/lib/pipes/formatters/parse-breaks.pipe.spec.ts (1 test) 6ms
+ ✓ projects/core/src/lib/pipes/user/user-role.pipe.spec.ts (1 test) 22ms
+ ✓ projects/core/src/lib/pipes/transformers/link-transform.pipe.spec.ts (1 test) 6ms
+ ✓ projects/core/src/lib/pipes/user/user-links.pipe.spec.ts (1 test) 30ms
+ ✓ projects/core/src/lib/pipes/controls/control-error.pipe.spec.ts (1 test) 9ms
+ ✓ projects/core/src/lib/pipes/formatters/pluralize.pipe.spec.ts (1 test) 6ms
+ ✓ projects/core/src/lib/pipes/formatters/parse-links.pipe.spec.ts (1 test) 10ms
+ ✓ projects/core/src/lib/pipes/transformers/salary-trasform.pipe.spec.ts (1 test) 14ms
+ ✓ projects/core/src/lib/pipes/formatters/dayjs.pipe.spec.ts (1 test) 7ms
+ ✓ projects/social_platform/src/app/ui/routes/program/detail.routes.spec.ts (2 tests) 32ms
+
+ Test Files  405 passed (405)
+      Tests  1997 passed (1997)
+   Start at  15:24:54
+   Duration  128.64s (transform 49.47s, setup 710.32s, collect 345.27s, tests 156.77s, environment 45.99s, prepare 145.08s)

@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 @mixin expandable-list {
   &__remaining {
     display: grid;
@@ -68,6 +72,23 @@
     align-items: flex-start;
     min-width: 0;
 
+    &--program {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 4px 6px;
+      align-items: center;
+
+      .lists__item-content {
+        display: contents;
+      }
+
+      .lists__value {
+        grid-column: 1 / -1;
+        hyphens: auto;
+        word-break: normal;
+      }
+    }
+
     &--status {
       padding: 8px;
       border: 0.5px solid var(--medium-grey-for-outline);
@@ -122,4 +143,24 @@
   }
 
   @include expandable-list;
+}
+
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    .project__left {
+      width: 100%;
+    }
+
+    .project__section {
+      padding: 16px;
+    }
+
+    .lists__list {
+      gap: 16px;
+    }
+
+    .lists__item {
+      gap: 12px;
+    }
+  }
 }

@@ -24,6 +24,16 @@ describe("CheckboxComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("keeps a disabled checkbox unchanged", () => {
+    fixture.componentRef.setInput("disabled", true);
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector("button").click();
+    expect(component.checked()).toBe(false);
+    expect(fixture.nativeElement.querySelector("button").getAttribute("aria-checked")).toBe(
+      "false",
+    );
+  });
+
   it("should emit the checked value when the field is clicked", () => {
     const emitSpy = vi.fn();
     component.checked.subscribe(emitSpy);

@@ -3,7 +3,7 @@ import { TestBed } from "@angular/core/testing";
 import { signal } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { provideNoopAnimations } from "@angular/platform-browser/animations";
-import { provideRouter, Router } from "@angular/router";
+import { provideRouter } from "@angular/router";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { OverlayContainer } from "@angular/cdk/overlay";
 import { BehaviorSubject, firstValueFrom, of } from "rxjs";
@@ -23,11 +23,13 @@ import { MembersFiltersComponent } from "./members-filters/members-filters.compo
 describe("Мобильное представление участников", () => {
   const layout = new BehaviorSubject({ matches: true, breakpoints: {} });
   const redirect = vi.fn();
+  const resetFilters = vi.fn();
   const statistics = { total: 1248, inProjects: 684, inPrograms: 214, newLast30Days: 63 };
   const loadStatistics = vi.fn();
   beforeEach(async () => {
     layout.next({ matches: true, breakpoints: {} });
     redirect.mockReset();
+    resetFilters.mockReset();
     loadStatistics.mockReset().mockReturnValue(of(ok(statistics)));
     await TestBed.configureTestingModule({
       imports: [MembersComponent],
@@ -58,6 +60,7 @@ describe("Мобильное представление участников", (
                 initializationMembers: vi.fn(),
                 initScroll: vi.fn(),
                 redirectToProfile: redirect,
+                resetFilters,
               },
             },
             { provide: ProfileDetailUIInfoService, useValue: {} },
@@ -177,18 +180,14 @@ describe("Мобильное представление участников", (
     await finish(f);
   });
 
-  it("Сбросить вызывает существующий обработчик и очищает ту же форму", async () => {
+  it("Сбросить делегирует фасаду обеих форм через мобильное окно", async () => {
     const f = await page();
-    const router = TestBed.inject(Router);
-    const navigate = vi.spyOn(router, "navigate").mockResolvedValue(true);
     const ui = f.debugElement.injector.get(MembersUIInfoService);
     ui.filterForm.patchValue({ keySkill: "Java", speciality: "Разработчик" });
     await open(f);
     document.querySelector<HTMLButtonElement>(".member-filters-dialog .filters__clear")!.click();
     await f.whenStable();
-    expect(navigate).toHaveBeenCalledOnce();
-    expect(ui.filterForm.controls.keySkill.value).toBeNull();
-    expect(ui.filterForm.controls.speciality.value).toBeNull();
+    expect(resetFilters).toHaveBeenCalledExactlyOnceWith();
     await finish(f);
   });
 });

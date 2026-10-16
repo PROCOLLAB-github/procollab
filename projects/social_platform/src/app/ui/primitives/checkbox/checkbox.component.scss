@@ -1,6 +1,13 @@
 /** @format */
 
+@use "styles/ui-foundation";
+@use "styles/responsive";
+
 .field {
+  @media screen and (max-width: 999px) {
+    @include ui-foundation.choice;
+  }
+
   position: relative;
   display: flex;
   align-items: center;
@@ -18,5 +25,37 @@
 
   &__check {
     color: var(--light-white);
+  }
+
+  @media screen and (max-width: 999px) {
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+  }
+
+  @media screen and (max-width: 999px) {
+    &:disabled {
+      cursor: not-allowed;
+      opacity: var(--ui-disabled-opacity);
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  @include responsive.apply-mobile {
+    :host {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .field::before {
+      position: absolute;
+      inset: -12px;
+      content: "";
+    }
   }
 }

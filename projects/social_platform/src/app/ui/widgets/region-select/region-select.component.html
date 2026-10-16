@@ -3,6 +3,7 @@
 <div class="region-select" (focusout)="onFocusOut($event)">
   <div class="region-select__control" [class.region-select__control--error]="error()">
     <input
+      appField
       type="text"
       role="combobox"
       autocomplete="off"
@@ -23,6 +24,7 @@
     />
     @if (query()) {
       <button
+        appButton="icon"
         type="button"
         class="region-select__clear"
         aria-label="Очистить регион"
@@ -49,7 +51,9 @@
           [attr.aria-selected]="selectedValue() === option"
           [class.region-select__option--active]="activeIndex() === index"
         >
-          <button type="button" (click)="selectRegion(option)">{{ option }}</button>
+          <button appButton="secondary" type="button" (click)="selectRegion(option)">
+            {{ option }}
+          </button>
         </li>
       } @empty {
         <li class="region-select__empty text-body-12">Ничего не найдено</li>

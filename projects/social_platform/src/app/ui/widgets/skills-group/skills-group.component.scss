@@ -44,7 +44,7 @@
       &:hover,
       &--selected {
         color: var(--accent);
-        background-color: rgb(109 40 255 / 6%);
+        background-color: var(--ui-accent-tint-subtle);
       }
 
       .heading--open &,

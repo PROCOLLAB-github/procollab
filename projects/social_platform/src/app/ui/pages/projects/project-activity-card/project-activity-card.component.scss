@@ -1,3 +1,7 @@
+/** @format */
+
+@use "styles/responsive";
+
 :host {
   display: block;
   width: 156px;
@@ -17,7 +21,7 @@
 
   &__title {
     margin: 0 0 9px;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     line-height: 18px;
     color: var(--accent);
@@ -46,10 +50,18 @@
     gap: 4px;
     align-items: center;
     min-width: 0;
-    font-size: 11px;
-    font-weight: 400;
     line-height: 14px;
     color: var(--black);
+
+    @media screen and (max-width: 999px) {
+      font-size: var(--ui-font-caption);
+      font-weight: 400;
+    }
+
+    @media screen and (min-width: 1000px) {
+      font-size: 11px;
+      font-weight: 400;
+    }
   }
 
   &__icon {
@@ -65,12 +77,10 @@
 
   &__value {
     flex: 0 0 auto;
-
-    // Очень большие числа не вытесняют подпись; полное значение остаётся в DOM и title.
     max-width: 45px;
     margin: 0 0 0 4px;
     overflow: hidden;
-    font-size: 14px;
+    font-size: var(--ui-font-body);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 17px;
@@ -78,5 +88,32 @@
     text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  @include responsive.apply-below-desktop {
+    :host {
+      width: 100%;
+      height: auto;
+    }
+
+    .activity {
+      padding: 16px;
+    }
+
+    .activity__title {
+      color: var(--ui-text);
+    }
+
+    .activity__metrics {
+      grid-template-rows: auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+    }
+
+    .activity__metric + .activity__metric {
+      border-top: 0;
+    }
   }
 }

@@ -2,6 +2,8 @@
 @use "styles/typography";
 
 :host {
+  display: block;
+  min-width: 0;
   height: 100%;
 }
 
@@ -31,15 +33,48 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 3px 15px;
+    min-width: 0;
+    max-width: 100%;
+    padding: 3px 6px 3px 15px;
     color: var(--accent);
     background-color: var(--white);
     border: 0.5px solid var(--accent);
     border-radius: var(--rounded-xxl);
 
-    &-delete-icon {
-      margin-left: 10px;
+    &-name {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    &-delete {
+      display: inline-flex;
+      flex: 0 0 32px;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      margin-left: 4px;
+      color: inherit;
       cursor: pointer;
+      background: transparent;
+      border: 0;
+      border-radius: var(--rounded-xxl);
+
+      &:focus-visible {
+        outline: 2px solid currentcolor;
+        outline-offset: -2px;
+      }
+
+      &:disabled {
+        cursor: default;
+        opacity: 0.5;
+      }
+    }
+
+    &-delete-icon {
+      flex-shrink: 0;
     }
 
     &--soft {
@@ -60,5 +95,13 @@
 
   &--error {
     border-color: var(--red);
+  }
+}
+
+@media (pointer: coarse), (max-width: 749px) {
+  .basket__skill-delete {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
   }
 }

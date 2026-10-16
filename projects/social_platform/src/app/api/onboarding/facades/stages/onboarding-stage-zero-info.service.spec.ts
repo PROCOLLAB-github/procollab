@@ -5,11 +5,11 @@ import { TestBed } from "@angular/core/testing";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ValidationService } from "@corelib";
-import { of } from "rxjs";
+import { BehaviorSubject, of } from "rxjs";
 import { UpdateProfileUseCase } from "@api/auth/use-cases/update-profile.use-case";
 import { UpdateOnboardingStageUseCase } from "@api/auth/use-cases/update-onboarding-stage.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
-import { User } from "@domain/auth/user.model";
+import { User, UserInput } from "@domain/auth/user.model";
 import { initial } from "@domain/shared/async-state";
 import { fail, ok } from "@domain/shared/result.type";
 import { OnboardingService } from "../../onboarding.service";
@@ -25,6 +25,7 @@ describe("OnboardingStageZeroInfoService", () => {
   let profileInfoService: {
     profile: typeof profile;
     applyProfileUpdated: ReturnType<typeof vi.fn>;
+    ensureProfileLoaded: ReturnType<typeof vi.fn>;
   };
   let stageZeroUI: {
     stageForm: FormGroup;
@@ -34,7 +35,11 @@ describe("OnboardingStageZeroInfoService", () => {
     userLanguages: FormArray;
     applySkipRegistrationModalError: ReturnType<typeof vi.fn>;
     applySubmitModalError: ReturnType<typeof vi.fn>;
+    applySetProfile: ReturnType<typeof vi.fn>;
+    applyInitStageZero: ReturnType<typeof vi.fn>;
   };
+  let draft: BehaviorSubject<UserInput>;
+  let onboardingService: { formValue$: typeof draft; setFormValue: ReturnType<typeof vi.fn> };
   let stageSubmitting: WritableSignal<any>;
   let skipSubmitting: WritableSignal<any>;
 
@@ -60,6 +65,7 @@ describe("OnboardingStageZeroInfoService", () => {
     profileInfoService = {
       profile,
       applyProfileUpdated: vi.fn(),
+      ensureProfileLoaded: vi.fn(),
     };
     stageZeroUI = {
       stageForm,
@@ -69,6 +75,13 @@ describe("OnboardingStageZeroInfoService", () => {
       userLanguages: stageForm.get("userLanguages") as FormArray,
       applySkipRegistrationModalError: vi.fn(),
       applySubmitModalError: vi.fn(),
+      applySetProfile: vi.fn(),
+      applyInitStageZero: vi.fn(),
+    };
+    draft = new BehaviorSubject<UserInput>({});
+    onboardingService = {
+      formValue$: draft,
+      setFormValue: vi.fn(updates => draft.next({ ...draft.value, ...updates })),
     };
     stageSubmitting = signal(initial());
     skipSubmitting = signal(initial());
@@ -86,7 +99,7 @@ describe("OnboardingStageZeroInfoService", () => {
         },
         {
           provide: OnboardingService,
-          useValue: { setFormValue: vi.fn() },
+          useValue: onboardingService,
         },
         {
           provide: OnboardingUIInfoService,
@@ -115,6 +128,41 @@ describe("OnboardingStageZeroInfoService", () => {
     });
 
     service = TestBed.inject(OnboardingStageZeroInfoService);
+  });
+
+  it("ждет профиль при прямом входе и сохраняет введенный черновик", () => {
+    profile.set(null);
+    draft.next({ city: "Город из черновика", education: [] });
+    service.initializationStageZero();
+    TestBed.flushEffects();
+    expect(profileInfoService.ensureProfileLoaded).toHaveBeenCalledOnce();
+    expect(stageZeroUI.applySetProfile).not.toHaveBeenCalled();
+
+    const loadedProfile = {
+      ...currentProfile,
+      personal: { avatar: "saved-avatar.png", city: "Москва" },
+      relations: {
+        education: [{ organizationName: "Вуз" }],
+        workExperience: [],
+        userLanguages: [],
+        achievements: [],
+      },
+    } as unknown as User;
+    profile.set(loadedProfile);
+    TestBed.flushEffects();
+    expect(stageZeroUI.applySetProfile).toHaveBeenCalledExactlyOnceWith(loadedProfile);
+    expect(draft.value).toMatchObject({
+      avatar: "saved-avatar.png",
+      city: "Город из черновика",
+      education: [],
+    });
+
+    profile.set({
+      ...loadedProfile,
+      personal: { ...loadedProfile.personal, city: "Другой город" },
+    });
+    TestBed.flushEffects();
+    expect(onboardingService.setFormValue).toHaveBeenCalledOnce();
   });
 
   it("onSubmit передает profile.id отдельно от данных формы", () => {

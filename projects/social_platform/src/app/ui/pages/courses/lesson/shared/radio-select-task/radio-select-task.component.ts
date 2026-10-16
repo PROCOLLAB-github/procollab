@@ -1,5 +1,8 @@
 /** @format */
 
+import { ChoiceDirective } from "@uilib";
+/** @format */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -26,7 +29,14 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 /** Компонент задачи с одним вариантом ответа и локальным сбросом выбора при ошибке. */
 @Component({
   selector: "app-radio-select-task",
-  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
+  imports: [
+    ChoiceDirective,
+    CommonModule,
+    TruncatePipe,
+    TruncateHtmlPipe,
+    FileItemComponent,
+    ImagePreviewDirective,
+  ],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
