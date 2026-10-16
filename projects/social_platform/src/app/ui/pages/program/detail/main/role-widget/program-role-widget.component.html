@@ -58,7 +58,7 @@
             }
           </div>
           <ol class="widget__steps" aria-label="Этапы проекта">
-            @for (step of steps(participant.stage); track step.label) {
+            @for (step of steps(participant.stage, project !== null); track step.label) {
               <li
                 [class.widget__step--current]="step.current"
                 [class.widget__step--complete]="step.completed"
