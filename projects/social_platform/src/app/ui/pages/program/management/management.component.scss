@@ -277,6 +277,10 @@
     @media (max-width: 650px) {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      a:last-child {
+        grid-column: 1 / -1;
+      }
     }
 
     a {

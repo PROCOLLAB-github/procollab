@@ -30,7 +30,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
   standalone: true,
 })
 export class RangeCriterionInputComponent implements ControlValueAccessor {
-  readonly max = input<number>(10);
+  readonly max = input<number | null>(10);
+  readonly min = input<number | null>(0);
+  readonly step = input<number | "any">(1);
+  readonly label = input<string>("Оценка");
   readonly error = input<boolean>(false);
 
   value!: number | null;
@@ -39,7 +42,7 @@ export class RangeCriterionInputComponent implements ControlValueAccessor {
 
   onInput(event: Event): void {
     const target = event.currentTarget as HTMLInputElement;
-    const value = target.value ? Number.parseInt(target.value) : null;
+    const value = target.value ? Number(target.value) : null;
 
     this.value = value;
     this.onChange(value);
@@ -47,33 +50,28 @@ export class RangeCriterionInputComponent implements ControlValueAccessor {
 
   onPaste(event: ClipboardEvent): void {
     const pasteData = event.clipboardData?.getData("text/plain");
-    if (pasteData && pasteData.match(/[^0-9]/)) {
+    if (pasteData && !Number.isFinite(Number(pasteData))) {
       event.preventDefault();
     }
   }
 
   onKeydown(event: KeyboardEvent): void {
-    if (["e", "E", "+", "-"].some(char => event.key === char)) {
+    if (
+      ["e", "E", "+"].includes(event.key) ||
+      (event.key === "-" && this.min() !== null && this.min()! >= 0)
+    ) {
       event.preventDefault();
     }
   }
 
   onBlur(): void {
-    if (this.value) {
-      const val = Math.min(this.value, this.max());
-
-      this.value = val;
-      this.onChange(val);
-    }
     this.onTouch();
   }
 
   // Методы ControlValueAccessor
   writeValue(value: number): void {
-    setTimeout(() => {
-      this.value = value;
-      this.cdref.detectChanges();
-    });
+    this.value = value ?? null;
+    this.cdref.markForCheck();
   }
 
   onChange: (value: number | null) => void = () => {};
@@ -92,12 +90,6 @@ export class RangeCriterionInputComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
-  }
-
-  moveCursorToEnd(event: FocusEvent) {
-    const input = event.target as HTMLInputElement;
-    input.type = "text";
-    input.selectionStart = input.selectionEnd = input.value.length;
-    input.type = "number";
+    this.cdref.markForCheck();
   }
 }

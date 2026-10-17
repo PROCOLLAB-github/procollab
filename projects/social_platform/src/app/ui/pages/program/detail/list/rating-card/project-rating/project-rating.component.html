@@ -1,51 +1,78 @@
 <!-- @format -->
-<form appFormLayout [formGroup]="form" class="rating">
-  <section class="rating__columns">
-    @for (criterion of criteria; track $index) {
-      @if (criterion.type === "int") {
-        <div class="rating__field">
-          <app-range-criterion-input
-            class="rating__input"
-            [max]="criterion.maxValue!"
-            [formControlName]="criterion.id"
+<div class="rating" [formGroup]="form">
+  @for (criterion of criteria; track criterion.id) {
+    <section class="rating__criterion">
+      <h4>{{ criterion.name }}</h4>
+      @if (criterion.type === "int" || criterion.type === "float") {
+        <app-range-criterion-input
+          [label]="criterion.name"
+          [min]="criterion.minValue"
+          [max]="criterion.maxValue"
+          [step]="criterion.type === 'int' ? 1 : 'any'"
+          [formControlName]="criterion.id"
+          [error]="
+            !!form.get(criterion.id.toString())?.invalid &&
+            !!form.get(criterion.id.toString())?.touched
+          "
+        />
+        <p class="rating__hint">
+          {{ criterion.description }}
+          {{ criterion.type === "int" ? "Целые баллы" : "Дробные баллы" }} ·
+          {{ criterion.minValue === null ? "без минимума" : "от " + criterion.minValue
+          }}{{ criterion.maxValue === null ? ", без максимума" : " до " + criterion.maxValue }}
+        </p>
+      } @else if (criterion.type === "bool") {
+        @if (criterion.description) {
+          <p class="rating__description">{{ criterion.description }}</p>
+        }
+        <div class="rating__boolean" role="group" [attr.aria-label]="criterion.name">
+          <button
+            type="button"
+            [appButton]="
+              form.get(criterion.id.toString())?.value === true ? 'primary' : 'secondary'
+            "
+            [attr.aria-pressed]="form.get(criterion.id.toString())?.value === true"
             [disabled]="disabled"
-          ></app-range-criterion-input>
-          <label class="text-body-10">{{ criterion.name }}</label>
-        </div>
-      }
-      @if (criterion.type === "bool") {
-        <div class="rating__field">
-          <app-boolean-criterion
-            class="rating__input"
-            [formControlName]="criterion.id"
+            (click)="form.get(criterion.id.toString())?.setValue(true)"
+          >
+            Да
+          </button>
+          <button
+            type="button"
+            [appButton]="
+              form.get(criterion.id.toString())?.value === false ? 'primary' : 'secondary'
+            "
+            [attr.aria-pressed]="form.get(criterion.id.toString())?.value === false"
             [disabled]="disabled"
-          ></app-boolean-criterion>
-          <label class="text-body-10">{{ criterion.name }}</label>
+            (click)="form.get(criterion.id.toString())?.setValue(false)"
+          >
+            Нет
+          </button>
         </div>
+        <p class="rating__hint">«Нет» — заполненный ответ.</p>
+      } @else {
+        @if (criterion.description) {
+          <p class="rating__description">{{ criterion.description }}</p>
+        }
+        <textarea
+          appField
+          [attr.aria-label]="criterion.name"
+          [formControlName]="criterion.id"
+          maxlength="50"
+          rows="6"
+          placeholder="Впечатления и рекомендации эксперта"
+        ></textarea>
+        <p class="rating__hint rating__counter">
+          {{ form.get(criterion.id.toString())?.value?.length || 0 }} / 50 · необязательно
+        </p>
       }
-    }
-  </section>
-  <section>
-    @for (criterion of criteria; track $index) {
-      @if (criterion.type === "str") {
-        <div class="rating__comment">
-          <app-textarea
-            size="big"
-            [formControlName]="criterion.id"
-            placeholder="Небольшой комментарий, если необходимо"
-            [maxLength]="50"
-          ></app-textarea>
-
-          @if (form.get(criterion.id.toString())?.errors?.["maxlength"]) {
-            <div class="text-body-10 error">
-              {{ errorMessage.VALIDATION_TOO_LONG }}
-              максимум
-              {{ form.get(criterion.id.toString())?.errors?.["maxlength"]?.["requiredLength"] }}
-              символов
-            </div>
-          }
-        </div>
+      @if (
+        form.get(criterion.id.toString())?.invalid && form.get(criterion.id.toString())?.touched
+      ) {
+        <p class="rating__error" role="alert">Проверьте тип ответа и допустимый диапазон.</p>
       }
-    }
-  </section>
-</form>
+    </section>
+  } @empty {
+    <p class="rating__hint">Организатор ещё не настроил критерии.</p>
+  }
+</div>

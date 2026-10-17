@@ -1,0 +1,194 @@
+/** @format */
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+.criteria,
+.criteria__dialog {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--black);
+}
+
+.criteria__dialog {
+  width: 100%;
+}
+
+h2,
+h3,
+h4 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+h2,
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+h4 {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p {
+  margin: 6px 0 0;
+  color: var(--grey-for-text);
+  overflow-wrap: anywhere;
+}
+
+.criteria__heading,
+.criteria__row,
+.criteria__actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.criteria__heading {
+  align-items: flex-start;
+}
+
+.criteria__heading > div,
+.criteria__heading h2,
+.criteria__row > div {
+  min-width: 0;
+}
+
+.criteria__heading button,
+.criteria__row > .criteria__actions {
+  flex-shrink: 0;
+}
+
+.criteria__card {
+  padding: 24px;
+  background: var(--light-white);
+  border-radius: 15px;
+}
+
+.criteria__add {
+  margin: 16px 0;
+}
+
+.criteria__row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+}
+
+.criteria__actions {
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.criteria__quiet.ui-button {
+  color: var(--black);
+  background: var(--grey-button);
+  border-color: transparent;
+}
+
+.criteria__footer {
+  display: grid;
+  gap: 12px;
+}
+
+.criteria__range {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.criteria__dialog label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.criteria__dialog textarea {
+  min-height: 162px;
+  resize: vertical;
+  border-radius: 15px;
+}
+
+.criteria__dialog footer p {
+  margin: 0 0 20px;
+}
+
+.criteria__notice {
+  margin-top: 16px;
+}
+
+.criteria__empty {
+  padding: 20px 0;
+}
+
+.criteria__note,
+.ui-alert--error,
+.ui-alert--success {
+  padding: 16px;
+  background: var(--light-gray);
+  border-radius: 12px;
+}
+
+.ui-alert--error {
+  color: var(--red-dark);
+  background: var(--red-light);
+}
+
+.ui-alert--success {
+  color: var(--green-dark);
+  background: var(--green-light);
+}
+
+// The shared overlay is attached outside this component's host.
+::ng-deep .modal .modal__body.criteria-modal {
+  width: 648px;
+  max-width: calc(100vw - 40px);
+}
+
+@media (max-width: 650px) {
+  .criteria > .criteria__heading,
+  .criteria__row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .criteria__card {
+    padding: 16px;
+  }
+
+  .criteria__dialog .criteria__heading {
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .criteria__footer .criteria__actions,
+  .criteria__dialog footer .criteria__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  ::ng-deep .modal .modal__body.criteria-modal {
+    padding: 20px;
+  }
+}

@@ -1,63 +1,74 @@
 /** @format */
-
-@use "styles/typography";
-@use "styles/responsive";
+@use "styles/ui-foundation";
 
 :host {
+  display: block;
   width: 100%;
+  min-width: 0;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+
+  min-width: 96px;
+}
+
+.rating__boolean {
+  display: flex;
+  gap: 12px;
+}
+
+.rating__boolean .ui-button {
+  width: 96px;
+  min-width: 96px;
+}
+
+.rating__counter {
+  text-align: right;
 }
 
 .rating {
-  width: 100%;
-
-  &__columns {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__field {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-
-    label {
-      margin-top: 5px;
-      color: var(--grey-for-text);
-    }
-  }
-
-  &__input {
-    grid-column: 2/3;
-  }
-
-  &__comment {
-    margin-top: 25px;
-
-    app-textarea {
-      ::ng-deep .field__input {
-        min-height: 66px !important;
-        color: var(--grey-for-text) !important;
-        background-color: transparent;
-        border-color: var(--grey-button);
-
-        @include typography.body-10;
-      }
-    }
-  }
+  display: grid;
+  gap: 20px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-@include responsive.apply-mobile {
-  .rating__input {
-    flex-shrink: 0;
-  }
+.rating__criterion {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
 
-  .rating__field label {
-    min-width: 0;
-    font-size: var(--ui-font-body);
-    line-height: 20px;
-  }
+h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
 
-  .rating .rating__comment app-textarea ::ng-deep .field__input {
-    font-size: var(--ui-font-h3) !important;
-  }
+p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.rating__description,
+.rating__hint {
+  color: var(--grey-for-text);
+}
+
+.rating__error {
+  color: var(--red-dark);
+}
+
+.rating textarea.ui-field {
+  min-height: 162px;
+  resize: vertical;
+  border-radius: 15px;
 }

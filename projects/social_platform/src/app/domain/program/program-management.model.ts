@@ -8,7 +8,7 @@ export type ManagementSection =
   | "analytics"
   | "settings"
   | "evaluation";
-export type SettingsSection = "basic" | "dates" | "materials" | "project-form";
+export type SettingsSection = "basic" | "dates" | "materials" | "project-form" | "criteria";
 export interface ManagementMaterial {
   id: number;
   title: string;

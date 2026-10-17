@@ -18,10 +18,15 @@ export class RateProjectUseCase {
     projectId: number,
     criteria: ProjectRatingCriterion[],
     outputVals: Record<string, string | number | boolean>,
+    criteriaRevision?: string,
   ): Observable<Result<void, { kind: "rate_project_error"; cause?: unknown }>> {
     const dto = this.projectRatingRepositoryPort.formValuesToDTO(criteria, outputVals);
 
-    return this.projectRatingRepositoryPort.rate(projectId, dto).pipe(
+    const request =
+      criteriaRevision === undefined
+        ? this.projectRatingRepositoryPort.rate(projectId, dto)
+        : this.projectRatingRepositoryPort.rate(projectId, dto, criteriaRevision);
+    return request.pipe(
       tap(() =>
         this.events.emit({ type: "ProgramWidgetChanged", payload: {}, occurredAt: new Date() }),
       ),
