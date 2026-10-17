@@ -1,0 +1,81 @@
+<!-- @format -->
+
+<section
+  class="branding-preview"
+  aria-labelledby="branding-preview-title"
+  [attr.aria-busy]="busy()"
+>
+  <div class="branding-preview__heading">
+    <h3 id="branding-preview-title">Предпросмотр шапки и логотипа</h3>
+    <div class="branding-preview__devices" role="group" aria-label="Экран предпросмотра">
+      <button
+        type="button"
+        [appButton]="device() === 'desktop' ? 'primary' : 'secondary'"
+        [attr.aria-pressed]="device() === 'desktop'"
+        (click)="device.set('desktop')"
+      >
+        Компьютер
+      </button>
+      <button
+        type="button"
+        [appButton]="device() === 'mobile' ? 'primary' : 'secondary'"
+        [attr.aria-pressed]="device() === 'mobile'"
+        (click)="device.set('mobile')"
+      >
+        Телефон
+      </button>
+    </div>
+  </div>
+  <p class="branding-preview__hint">
+    Так будут выглядеть выбранные изображения. Изменения появятся на странице после сохранения.
+  </p>
+  <div #viewport class="branding-preview__viewport">
+    <div
+      class="branding-preview__stage"
+      [style.width.px]="stageWidth()"
+      [style.height.px]="stageHeight()"
+      [style.border-radius.px]="15 * scale() + 1"
+    >
+      <div
+        #canvas
+        class="branding-preview__canvas"
+        [class.branding-preview__canvas--mobile]="device() === 'mobile'"
+        [style.width.px]="canvasWidth()"
+        [style.transform]="'scale(' + scale() + ')'"
+        [style.--logo-size]="logoSize() + 'px'"
+      >
+        <div class="branding-preview__cover">
+          <img
+            class="branding-preview__cover-image"
+            [src]="coverUrl()"
+            alt="Обложка программы в предпросмотре"
+            (error)="coverFailed.set(true)"
+            (load)="coverFailed.set(false)"
+          />
+          <img
+            class="branding-preview__logo"
+            [src]="logoUrl()"
+            alt="Логотип программы в предпросмотре"
+            (error)="logoFailed.set(true)"
+            (load)="logoFailed.set(false)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="branding-preview__hint">
+    {{ device() === "desktop" ? "Пример для экрана 1440 px" : "Пример для экрана 360 px" }}. Края
+    обложки за пределами шапки обрезаются, логотип отображается в круге.
+  </p>
+  @if (busy()) {
+    <p role="status">Загружаем изображение — предпросмотр обновится после загрузки.</p>
+  }
+  @if (coverFailed() || logoFailed()) {
+    <p class="branding-preview__error" role="alert">
+      Не удалось показать
+      {{
+        coverFailed() && logoFailed() ? "обложку и логотип" : coverFailed() ? "обложку" : "логотип"
+      }}. Проверьте изображение или загрузите другое. Введённые данные остались в форме.
+    </p>
+  }
+</section>

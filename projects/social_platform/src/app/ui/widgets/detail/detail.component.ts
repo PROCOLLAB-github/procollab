@@ -27,6 +27,7 @@ import { ChatStateService } from "@domain/shared/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/profile-project-invite-modal.component";
+import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-branding";
 
 /** Виджет детального просмотра сущности. */
 @Component({
@@ -56,6 +57,13 @@ import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/p
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
+  protected get avatarSize(): number {
+    if (this.listType() === "program") {
+      return this.appWidth < 1000 ? PROGRAM_LOGO_SIZES.mobile : PROGRAM_LOGO_SIZES.desktop;
+    }
+    return this.appWidth < 1000 ? 105 : 110;
+  }
   protected readonly AppRoutes = AppRoutes;
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   protected readonly location = inject(Location);

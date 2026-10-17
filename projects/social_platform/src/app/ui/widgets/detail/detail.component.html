@@ -8,11 +8,7 @@
           <img
             class="info__cover"
             [class.info__cover--program]="listType() === 'program'"
-            [src]="
-              info().coverImageAddress
-                ? info().coverImageAddress
-                : '/assets/images/office/profile/detail/cover.png'
-            "
+            [src]="info().coverImageAddress || defaultCover"
             alt="cover"
           />
 
@@ -20,13 +16,7 @@
             class="info__avatar"
             (click)="redirectDetailInfo()"
             [class.info__avatar--program]="listType() === 'program'"
-            [style.width]="
-              appWidth < 1000
-                ? '105px'
-                : listType() === 'project' || listType() === 'profile'
-                  ? '110px'
-                  : '123px'
-            "
+            [style.width.px]="avatarSize"
           >
             @if (chatStateService.userOnlineStatusCache | async; as cache) {
               <app-avatar
@@ -37,13 +27,7 @@
                 [onlineBadgeSize]="15"
                 [onlineBadgeBorder]="0"
                 [onlineBadgeOffset]="8"
-                [size]="
-                  appWidth < 1000
-                    ? 105
-                    : listType() === 'project' || listType() === 'profile'
-                      ? 110
-                      : 123
-                "
+                [size]="avatarSize"
                 [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
               ></app-avatar>
               @if (appWidth >= 1000 && (listType() === "project" || listType() === "profile")) {

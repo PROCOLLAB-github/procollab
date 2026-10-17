@@ -48,6 +48,7 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { AppRoutes } from "@api/paths/app-routes";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.component";
+import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 
@@ -70,6 +71,7 @@ import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-
     AvatarComponent,
     ModalComponent,
     ProgramAnalyticsComponent,
+    ProgramBrandingPreviewComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -172,8 +174,8 @@ export class ProgramManagementComponent implements OnInit {
     {
       key: "advertisementImageAddress",
       label: "Баннер регистрации",
-      dimensions: "Рекомендуемая ширина: 1800 px. Высота — по содержимому.",
-      hint: "Показывается будущим участникам на странице программы. Изображение отображается целиком с сохранением пропорций.",
+      dimensions: "Рекомендуемая ширина: 1800 px.",
+      hint: "Высоту можно выбрать любую — баннер показывается целиком и не обрезается. Его видят будущие участники программы.",
     },
   ];
   readonly dateFields = [

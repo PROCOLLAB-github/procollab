@@ -1,0 +1,131 @@
+{
+  "checks": [
+    "Desktop/mobile crop, circular logo and overlap match real program header at wide and narrow editor widths",
+    "Keyboard mode switch neither submits nor dirties form",
+    "Real local upload updates draft preview before Save while API program remains unchanged",
+    "Failed upload preserves previous draft preview",
+    "Clear uses actual page defaults; cancelling changes restores saved branding",
+    "Preview image error is explicit and preserves form URL; banner height wording is clear"
+  ],
+  "errors": [],
+  "blockedExternal": [
+    "gc.kis.v2.scr.kaspersky-labs.com",
+    "fonts.googleapis.com",
+    "gc.kis.v2.scr.kaspersky-labs.com",
+    "fonts.googleapis.com"
+  ],
+  "geometry": [
+    {
+      "device": "desktop",
+      "editorWidth": 1440,
+      "real": {
+        "width": 866.65625,
+        "height": 155,
+        "logoSize": 123,
+        "left": 371.828125,
+        "top": 88.5,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 5.387096774193537,
+        "logoFit": "cover",
+        "scale": 1
+      },
+      "simulated": {
+        "width": 866.6560882889468,
+        "height": 154.99995895020442,
+        "logoSize": 122.9999744164843,
+        "left": 371.8280569362312,
+        "top": 88.50000802356617,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 5.387026774766696,
+        "logoFit": "cover",
+        "scale": 0.901154
+      }
+    },
+    {
+      "device": "desktop",
+      "editorWidth": 360,
+      "real": {
+        "width": 866.65625,
+        "height": 155,
+        "logoSize": 123,
+        "left": 371.828125,
+        "top": 88.5,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 5.387096774193537,
+        "logoFit": "cover",
+        "scale": 1
+      },
+      "simulated": {
+        "width": 866.656026375961,
+        "height": 155.000020192539,
+        "logoSize": 122.99996899812166,
+        "left": 371.8280286889197,
+        "top": 88.50000817031446,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 5.3874441570657154,
+        "logoFit": "cover",
+        "scale": 0.293077
+      }
+    },
+    {
+      "device": "mobile",
+      "editorWidth": 1440,
+      "real": {
+        "width": 328,
+        "height": 136,
+        "logoSize": 105,
+        "left": 16,
+        "top": 63,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 514.1176470588235,
+        "logoFit": "cover",
+        "scale": 1
+      },
+      "simulated": {
+        "width": 328,
+        "height": 136,
+        "logoSize": 105,
+        "left": 16,
+        "top": 63,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 514.1176470588235,
+        "logoFit": "cover",
+        "scale": 1
+      }
+    },
+    {
+      "device": "mobile",
+      "editorWidth": 360,
+      "real": {
+        "width": 328,
+        "height": 136,
+        "logoSize": 105,
+        "left": 16,
+        "top": 63,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 514.1176470588235,
+        "logoFit": "cover",
+        "scale": 1
+      },
+      "simulated": {
+        "width": 328.00010330711916,
+        "height": 136.00004860176236,
+        "logoSize": 105.00003114850882,
+        "left": 16.000004558779732,
+        "top": 62.9999871622745,
+        "fit": "cover",
+        "position": "50% 50%",
+        "crop": 514.1176634222247,
+        "logoFit": "cover",
+        "scale": 0.77439
+      }
+    }
+  ]
+}
