@@ -53,3 +53,20 @@ Detail remove/switch/leave учитывают выбранный `programLinkId`
 
 Повторные tests/build/lint/format на обновлённом head и review AC D1–D5 фиксируются
 в PR #392. Результаты исходной версии не заменяют текущую verification.
+
+## DEV rollout 17.10.2026
+
+Angular dev обновился до `e1ef88a353a85677cada45f286078897a6a6c1e8` с панелью
+организатора #428. Эта база включена обычным merge без конфликтов. Patch ID diff D
+к свежему dev совпадает с ранее проверенной версией: `bac1336a7657c6463a4944f93cddc0859240217f`.
+Изменений панели организатора или дополнительных изменений бизнес-логики нет.
+
+Backend C уже развёрнут в составе `09b29bf59155b9cda1a70d8959a6dc5de140ee17`.
+Read-only inspection [39035280096](https://github.com/PROCOLLAB-github/api/actions/runs/39035280096)
+подтвердила migrations Invite 0004 / PartnerProgram 0019, отсутствие pending migrations
+и расхождений backfill, совпадение runtime source и ответ team_policy в трёх GET views.
+Права БД, ownership, .env и legacy данные в рамках этой проверки не менялись.
+
+Новые результаты полного Vitest, обеих сборок и static checks перед Angular merge
+фиксируются в PR #392. Live browser E2E не подтверждён: browser tool не инициализируется;
+HTTP-проверка static assets не заменяет взаимодействие с реальными ролями в браузере.
