@@ -68,4 +68,28 @@
       }
     }
   }
+
+  &__crop {
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 50%;
+
+    &--border {
+      border-style: solid;
+      border-width: 0.5px;
+
+      @media (min-width: 1000px) {
+        border-width: 2px;
+      }
+    }
+  }
+
+  &.avatar--framed .avatar__framed-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
 }

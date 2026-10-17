@@ -1,0 +1,64 @@
+{
+  "checks": [
+    "Mode/target toggles keep form pristine; mobile uploader is optional and visible",
+    "Mouse drag and keyboard slider edit cover/logo draft without persisting program",
+    "Mobile fallback has independent crop; separate mobile upload resets only mobile crop and leaves desktop/logo unchanged",
+    "Save/reload roundtrip and real desktop/mobile header crop match preview exactly; sidebar logo uses saved framing",
+    "Cancel and failed upload preserve correct frame; real concurrent update returns409 without losing unsaved crop",
+    "Native touch drag, keyboard arrows and controls work at360/390px; both reference modes have no horizontal overflow",
+    "Removing mobile returns to main cover/default crop; removing all covers disables editing; cancel restores saved sources"
+  ],
+  "errors": [],
+  "blockedExternal": [
+    "gc.kis.v2.scr.kaspersky-labs.com",
+    "fonts.googleapis.com",
+    "gc.kis.v2.scr.kaspersky-labs.com",
+    "fonts.googleapis.com",
+    "gc.kis.v2.scr.kaspersky-labs.com",
+    "fonts.googleapis.com"
+  ],
+  "geometry": [
+    {
+      "device": "desktop",
+      "cover": {
+        "url": "https://example.com/preview-cover.svg",
+        "position": "60.68% 30.17%",
+        "origin": "525.887px 46.7635px",
+        "transform": "matrix(1.65, 0, 0, 1.65, 0, 0)",
+        "natural": [1800, 320],
+        "width": 867,
+        "height": 155
+      },
+      "logo": {
+        "url": "https://example.com/preview-logo.svg",
+        "position": "55.5% 35.33%",
+        "origin": "67.155px 42.7493px",
+        "transform": "matrix(1.5, 0, 0, 1.5, 0, 0)",
+        "natural": [600, 300],
+        "width": 121,
+        "height": 121
+      }
+    },
+    {
+      "device": "mobile",
+      "cover": {
+        "url": "https://example.com/local-material-mobile-1792253248780.svg",
+        "position": "68.29% 21.29%",
+        "origin": "223.991px 28.9544px",
+        "transform": "matrix(1.25, 0, 0, 1.25, 0, 0)",
+        "natural": [960, 400],
+        "width": 328,
+        "height": 136
+      },
+      "logo": {
+        "url": "https://example.com/preview-logo.svg",
+        "position": "55.5% 35.33%",
+        "origin": "57.165px 36.3899px",
+        "transform": "matrix(1.5, 0, 0, 1.5, 0, 0)",
+        "natural": [600, 300],
+        "width": 103,
+        "height": 103
+      }
+    }
+  ]
+}

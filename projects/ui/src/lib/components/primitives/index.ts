@@ -13,6 +13,7 @@
  */
 
 export * from "./avatar/avatar.component";
+export * from "./image-framing/image-framing.directive";
 export * from "./back/back.component";
 export * from "./button/button.component";
 export * from "./icon/icon.component";

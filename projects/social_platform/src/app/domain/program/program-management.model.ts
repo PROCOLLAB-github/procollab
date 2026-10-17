@@ -1,5 +1,7 @@
 /** @format */
 
+import { ProgramImageFraming } from "./program-image-framing.model";
+
 export type ManagementSection =
   | "participants"
   | "projects"
@@ -21,6 +23,8 @@ export interface ManagementBasic {
   description: string | null;
   imageAddress: string | null;
   coverImageAddress: string | null;
+  mobileCoverImageAddress?: string | null;
+  imageFraming?: ProgramImageFraming;
   advertisementImageAddress: string | null;
   registrationLink: string | null;
   presentationAddress: string | null;
@@ -112,7 +116,7 @@ export interface ManagementQuery {
 export interface ManagementSettingsWrite {
   expectedUpdatedAt: string;
   confirmReopen?: boolean;
-  [field: string]: string | boolean | null | undefined;
+  [field: string]: string | boolean | null | undefined | ProgramImageFraming;
 }
 export interface ManagementMaterialWrite {
   title: string;

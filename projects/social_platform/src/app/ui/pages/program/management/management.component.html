@@ -441,10 +441,7 @@
                     type="button"
                     appButton="text"
                     [disabled]="!!uploading() || saving()"
-                    (click)="
-                      basicForm.get(image.key)?.setValue('');
-                      basicForm.get(image.key)?.markAsDirty()
-                    "
+                    (click)="clearImage(image.key)"
                   >
                     Убрать
                   </button>
@@ -455,7 +452,11 @@
               <app-program-branding-preview
                 [cover]="href(basicForm.controls.coverImageAddress.value)"
                 [logo]="href(basicForm.controls.imageAddress.value)"
-                [busy]="uploading() === 'coverImageAddress' || uploading() === 'imageAddress'"
+                [mobileCover]="href(basicForm.controls.mobileCoverImageAddress.value)"
+                [framing]="basicForm.controls.imageFraming.value"
+                [disabled]="saving() || !!uploading()"
+                [busy]="!!uploading()"
+                (framingChange)="changeFraming($event)"
               />
             }
           }

@@ -4,7 +4,11 @@
   @if (program()) {
     <div class="card">
       <div class="card__photo">
-        <app-avatar [url]="program().imageAddress" [size]="100"></app-avatar>
+        <app-avatar
+          [url]="program().imageAddress"
+          [imageFraming]="program().imageFraming?.logo ?? null"
+          [size]="100"
+        ></app-avatar>
       </div>
 
       <div class="card__info">
@@ -47,7 +51,11 @@
   @if (program()) {
     <div appCard [interactive]="true" class="card">
       <div class="card__photo">
-        <app-avatar [url]="program().imageAddress" [size]="64"></app-avatar>
+        <app-avatar
+          [url]="program().imageAddress"
+          [imageFraming]="program().imageFraming?.logo ?? null"
+          [size]="64"
+        ></app-avatar>
       </div>
 
       <div class="card__info">

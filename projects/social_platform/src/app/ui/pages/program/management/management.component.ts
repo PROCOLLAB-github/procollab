@@ -51,6 +51,8 @@ import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.compone
 import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
+import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
+import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-image-framing.model";
 
 @Component({
   selector: "app-program-management",
@@ -136,6 +138,8 @@ export class ProgramManagementComponent implements OnInit {
     description: [""],
     imageAddress: [""],
     coverImageAddress: [""],
+    mobileCoverImageAddress: [""],
+    imageFraming: this.fb.control<ProgramImageFraming>(programImageFraming()),
     advertisementImageAddress: [""],
     registrationLink: [""],
     presentationAddress: [""],
@@ -164,6 +168,12 @@ export class ProgramManagementComponent implements OnInit {
       label: "Обложка (шапка)",
       dimensions: "Рекомендуемый размер: 1800 × 320 px (примерно 5,6:1).",
       hint: "Размещайте важные детали вверху по центру: на узком экране края обрезаются, а снизу расположен логотип.",
+    },
+    {
+      key: "mobileCoverImageAddress",
+      label: "Обложка для телефона",
+      dimensions: "Рекомендуемый размер: 960 × 400 px (примерно 2,4:1).",
+      hint: "Необязательно. Без отдельного файла используется основная обложка. Кадр для телефона можно настроить независимо.",
     },
     {
       key: "imageAddress",
@@ -379,6 +389,8 @@ export class ProgramManagementComponent implements OnInit {
       description: p.description ?? "",
       imageAddress: p.imageAddress ?? "",
       coverImageAddress: p.coverImageAddress ?? "",
+      mobileCoverImageAddress: p.mobileCoverImageAddress ?? "",
+      imageFraming: programImageFraming(p.imageFraming),
       advertisementImageAddress: p.advertisementImageAddress ?? "",
       registrationLink: p.registrationLink ?? "",
       presentationAddress: p.presentationAddress ?? "",
@@ -404,7 +416,10 @@ export class ProgramManagementComponent implements OnInit {
     const body: ManagementSettingsWrite = { expectedUpdatedAt: p.updatedAt, confirmReopen };
     for (const [name, control] of Object.entries(form.controls))
       if (control.dirty)
-        body[name] = section === "dates" ? fromMoscowInput(control.value) : control.value;
+        body[name] =
+          section === "dates" && typeof control.value === "string"
+            ? fromMoscowInput(control.value)
+            : control.value;
     this.saving.set(true);
     this.formError.set(null);
     this.saved.set(false);
@@ -466,6 +481,7 @@ export class ProgramManagementComponent implements OnInit {
             target === "material" ? this.materialForm.controls.file : this.basicForm.get(target);
           control?.setValue(url);
           control?.markAsDirty();
+          if (target !== "material") this.resetFrameForImage(target);
           if (target === "material") this.materialFileName.set(file.name);
         },
         error: (error: HttpErrorResponse) =>
@@ -475,6 +491,33 @@ export class ProgramManagementComponent implements OnInit {
               : this.errorMessage(error),
           ),
       });
+  }
+  clearImage(target: string): void {
+    if (this.saving() || this.uploading()) return;
+    const control = this.basicForm.get(target);
+    control?.setValue("");
+    control?.markAsDirty();
+    this.resetFrameForImage(target);
+  }
+  changeFraming(value: ProgramImageFraming): void {
+    if (this.saving() || this.uploading()) return;
+    this.basicForm.controls.imageFraming.setValue(value);
+    this.basicForm.controls.imageFraming.markAsDirty();
+  }
+  private resetFrameForImage(target: string): void {
+    const keys: Record<string, ProgramImageKey> = {
+      imageAddress: "logo",
+      coverImageAddress: "cover",
+      mobileCoverImageAddress: "mobileCover",
+    };
+    const key = keys[target];
+    if (!key) return;
+    const framing = programImageFraming(this.basicForm.controls.imageFraming.value);
+    framing[key] = { ...DEFAULT_IMAGE_FRAME };
+    if (key === "cover" && !this.basicForm.controls.mobileCoverImageAddress.value)
+      framing.mobileCover = { ...DEFAULT_IMAGE_FRAME };
+    this.basicForm.controls.imageFraming.setValue(framing);
+    this.basicForm.controls.imageFraming.markAsDirty();
   }
   onMaterialDragEnter(event: DragEvent): void {
     if (!event.dataTransfer?.types.includes("Files")) return;

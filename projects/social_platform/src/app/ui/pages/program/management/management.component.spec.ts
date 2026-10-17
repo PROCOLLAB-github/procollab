@@ -103,6 +103,36 @@ describe("Сохранение настроек организатора", () =>
     expect(component.basicForm.dirty).toBe(true);
     expect(component.formError()).toContain("Данные изменились");
   });
+  it("сохраняет mobile URL и полный framing; 409 оставляет кадр для повторной попытки", () => {
+    const { component, save } = setup();
+    component.settingsTab.set("basic");
+    const framing = {
+      cover: { x: 20, y: 70, zoom: 2 },
+      mobileCover: { x: 80, y: 30, zoom: 1.5 },
+      logo: { x: 50, y: 50, zoom: 1 },
+    };
+    component.changeFraming(framing);
+    component.basicForm.controls.mobileCoverImageAddress.setValue("https://example.com/mobile.png");
+    component.basicForm.controls.mobileCoverImageAddress.markAsDirty();
+    save.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 409,
+            error: { code: "stale_settings", detail: "Кадр изменён другим организатором" },
+          }),
+      ),
+    );
+    component.save();
+    expect(save).toHaveBeenCalledWith(1, "basic", {
+      expectedUpdatedAt: program.updatedAt,
+      confirmReopen: false,
+      mobileCoverImageAddress: "https://example.com/mobile.png",
+      imageFraming: framing,
+    });
+    expect(component.basicForm.controls.imageFraming.value).toEqual(framing);
+    expect(component.basicForm.dirty).toBe(true);
+  });
 });
 
 describe("Списки управления программой в DOM", () => {
@@ -187,6 +217,49 @@ describe("Списки управления программой в DOM", () => 
     });
     return event as DragEvent;
   }
+
+  it("замена и удаление изображений сбрасывают только зависимые кадры, включая mobile fallback", async () => {
+    const { component, harness, element, uploaded } = await setup("settings", "?tab=basic");
+    const framing = {
+      cover: { x: 20, y: 30, zoom: 2 },
+      mobileCover: { x: 80, y: 70, zoom: 3 },
+      logo: { x: 40, y: 60, zoom: 1.5 },
+    };
+    component.basicForm.controls.mobileCoverImageAddress.setValue("https://example.com/mobile.png");
+    component.changeFraming(framing);
+    const input = element().querySelector<HTMLInputElement>(
+      'input[type=file][aria-describedby="program-image-hint-coverImageAddress"]',
+    )!;
+    Object.defineProperty(input, "files", {
+      value: [new File(["image"], "cover.png", { type: "image/png" })],
+    });
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    uploaded.next({ url: "https://example.com/cover.png" });
+    uploaded.complete();
+    harness.detectChanges();
+    expect(component.basicForm.controls.imageFraming.value).toEqual({
+      ...framing,
+      cover: { x: 50, y: 50, zoom: 1 },
+    });
+    component.clearImage("mobileCoverImageAddress");
+    expect(component.basicForm.controls.imageFraming.value.mobileCover).toEqual({
+      x: 50,
+      y: 50,
+      zoom: 1,
+    });
+    component.changeFraming(framing);
+    component.clearImage("coverImageAddress");
+    expect(component.basicForm.controls.imageFraming.value).toEqual({
+      ...framing,
+      cover: { x: 50, y: 50, zoom: 1 },
+      mobileCover: { x: 50, y: 50, zoom: 1 },
+    });
+    component.clearImage("imageAddress");
+    expect(component.basicForm.controls.imageFraming.value.logo).toEqual({ x: 50, y: 50, zoom: 1 });
+    component.resetForms();
+    expect(component.basicForm.pristine).toBe(true);
+    expect(component.basicForm.controls.mobileCoverImageAddress.value).toBe("");
+  });
 
   it("предпросмотр использует несохранённую загрузку; переключение не сохраняет и не меняет dirty", async () => {
     const { component, harness, element, state, uploaded } = await setup("settings", "?tab=basic");

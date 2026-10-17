@@ -1,6 +1,7 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { ImageFraming, ImageFramingDirective } from "../image-framing/image-framing.directive";
 
 export const AVATAR_PLACEHOLDER_URL =
   "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
@@ -29,9 +30,12 @@ export const AVATAR_PLACEHOLDER_URL =
   templateUrl: "./avatar.component.html",
   styleUrl: "./avatar.component.scss",
   standalone: true,
+  imports: [ImageFramingDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarComponent {
+  /** Optional framing; existing avatars keep their original rendering. */
+  readonly imageFraming = input<ImageFraming | null>(null);
   /** URL изображения аватара */
   url = input.required<string | undefined>();
 

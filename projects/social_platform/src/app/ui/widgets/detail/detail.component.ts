@@ -10,7 +10,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
-import { IconComponent, PageHeaderComponent } from "@uilib";
+import { IconComponent, PageHeaderComponent, ImageFramingDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -36,6 +36,7 @@ import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-brandi
   styleUrl: "./detail.component.scss",
   imports: [
     PageHeaderComponent,
+    ImageFramingDirective,
     CommonModule,
     RouterModule,
     IconComponent,
@@ -58,6 +59,17 @@ import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-brandi
 })
 export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
+  protected get programCover(): string {
+    const program = this.info();
+    return (
+      (this.appWidth < 1000 && program?.mobileCoverImageAddress) ||
+      program?.coverImageAddress ||
+      this.defaultCover
+    );
+  }
+  protected get programCoverFraming() {
+    return this.info()?.imageFraming?.[this.appWidth < 1000 ? "mobileCover" : "cover"] ?? null;
+  }
   protected get avatarSize(): number {
     if (this.listType() === "program") {
       return this.appWidth < 1000 ? PROGRAM_LOGO_SIZES.mobile : PROGRAM_LOGO_SIZES.desktop;
