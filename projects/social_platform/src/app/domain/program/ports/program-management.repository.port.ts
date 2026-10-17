@@ -1,6 +1,7 @@
 /** @format */
 
 import { Observable } from "rxjs";
+import { ManagementCriteria, ManagementCriteriaWrite } from "../program-criteria.model";
 import { ManagementProjectForm, ManagementProjectFormWrite } from "../program-project-form.model";
 import {
   ManagementEvaluation,
@@ -16,6 +17,11 @@ import {
 } from "../program-management.model";
 
 export abstract class ProgramManagementRepositoryPort {
+  abstract criteria(programId: number): Observable<ManagementCriteria>;
+  abstract saveCriteria(
+    programId: number,
+    body: ManagementCriteriaWrite,
+  ): Observable<ManagementCriteria>;
   abstract projectForm(programId: number): Observable<ManagementProjectForm>;
   abstract saveProjectForm(
     programId: number,

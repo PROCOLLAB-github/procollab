@@ -2,6 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { tap } from "rxjs";
+import { ManagementCriteriaWrite } from "@domain/program/program-criteria.model";
 import { ManagementProjectFormWrite } from "@domain/program/program-project-form.model";
 import { EventBus } from "@domain/shared/event-bus";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
@@ -18,6 +19,12 @@ import {
 export class ProgramManagementRepository implements ProgramManagementRepositoryPort {
   private readonly adapter = inject(ProgramManagementHttpAdapter);
   private readonly events = inject(EventBus);
+  criteria(id: number) {
+    return this.adapter.criteria(id);
+  }
+  saveCriteria(id: number, body: ManagementCriteriaWrite) {
+    return this.adapter.saveCriteria(id, body).pipe(tap(() => this.changed(id)));
+  }
   projectForm(id: number) {
     return this.adapter.projectForm(id);
   }

@@ -394,6 +394,13 @@
           (savedAt)="projectFormSaved($event)"
           (materials)="changeQuery({ tab: 'materials' })"
         />
+      } @else if (settingsTab() === "criteria") {
+        <app-management-criteria
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="criteriaStatus.set($event)"
+          (savedAt)="projectFormSaved($event)"
+        />
       } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
           <h2>Основная информация</h2>

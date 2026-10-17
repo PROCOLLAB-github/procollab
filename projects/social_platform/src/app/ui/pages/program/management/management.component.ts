@@ -51,6 +51,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.component";
 import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
+import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -77,6 +78,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,
     ManagementProjectFormComponent,
+    ManagementCriteriaComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -112,6 +114,8 @@ export class ProgramManagementComponent implements OnInit {
   readonly saved = signal(false);
   readonly projectForm = viewChild(ManagementProjectFormComponent);
   readonly projectFormStatus = signal({ dirty: false, busy: false });
+  readonly criteriaForm = viewChild(ManagementCriteriaComponent);
+  readonly criteriaStatus = signal({ dirty: false, busy: false });
   readonly confirmProjectFormDiscard = () =>
     this.confirm(
       "Есть несохранённые изменения",
@@ -146,6 +150,7 @@ export class ProgramManagementComponent implements OnInit {
     { id: "dates", label: "Сроки" },
     { id: "materials", label: "Материалы" },
     { id: "project-form", label: "Кейсы и поля" },
+    { id: "criteria", label: "Оценивание" },
   ];
   readonly basicForm = this.fb.group({
     name: ["", [Validators.required, Validators.pattern(/\S/)]],
@@ -238,7 +243,13 @@ export class ProgramManagementComponent implements OnInit {
     this.mobile.set(window.innerWidth < 1000);
   }
   @HostListener("window:beforeunload", ["$event"]) onBeforeUnload(event: BeforeUnloadEvent): void {
-    if (this.dirty() || this.saving() || this.uploading() || this.projectFormStatus().busy) {
+    if (
+      this.dirty() ||
+      this.saving() ||
+      this.uploading() ||
+      this.projectFormStatus().busy ||
+      this.criteriaStatus().busy
+    ) {
       event.preventDefault();
       event.returnValue = "";
     }
@@ -269,7 +280,9 @@ export class ProgramManagementComponent implements OnInit {
         const q = this.route.snapshot.queryParamMap;
         const tab = q.get("tab");
         this.settingsTab.set(
-          tab === "dates" || tab === "materials" || tab === "project-form" ? tab : "basic",
+          tab === "dates" || tab === "materials" || tab === "project-form" || tab === "criteria"
+            ? tab
+            : "basic",
         );
         this.section.set(section);
         this.formError.set(null);
@@ -379,11 +392,18 @@ export class ProgramManagementComponent implements OnInit {
       this.basicForm.dirty ||
       this.datesForm.dirty ||
       this.materialForm.dirty ||
-      this.projectFormStatus().dirty
+      this.projectFormStatus().dirty ||
+      this.criteriaStatus().dirty
     );
   }
   async canLeave(): Promise<boolean> {
-    if (this.saving() || this.uploading() || this.projectFormStatus().busy) return false;
+    if (
+      this.saving() ||
+      this.uploading() ||
+      this.projectFormStatus().busy ||
+      this.criteriaStatus().busy
+    )
+      return false;
     if (!this.dirty()) return true;
     const yes = await this.confirm(
       "Есть несохранённые изменения",
@@ -398,6 +418,8 @@ export class ProgramManagementComponent implements OnInit {
       this.editingMaterial.set(null);
       this.projectForm()?.discard();
       this.projectFormStatus.set({ dirty: false, busy: false });
+      this.criteriaForm()?.discard();
+      this.criteriaStatus.set({ dirty: false, busy: false });
     }
     return yes;
   }
@@ -435,6 +457,7 @@ export class ProgramManagementComponent implements OnInit {
       !p ||
       section === "materials" ||
       section === "project-form" ||
+      section === "criteria" ||
       this.saving() ||
       this.uploading()
     )

@@ -4,6 +4,10 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import {
+  ManagementCriteria,
+  ManagementCriteriaWrite,
+} from "@domain/program/program-criteria.model";
+import {
   ManagementProjectForm,
   ManagementProjectFormWrite,
 } from "@domain/program/program-project-form.model";
@@ -24,6 +28,12 @@ import {
 @Injectable()
 export class ProgramManagementHttpAdapter implements ProgramManagementRepositoryPort {
   private readonly api = inject(ApiService);
+  criteria(id: number) {
+    return this.api.get<ManagementCriteria>(`${this.root(id)}/criteria/`);
+  }
+  saveCriteria(id: number, body: ManagementCriteriaWrite) {
+    return this.api.put<ManagementCriteria>(`${this.root(id)}/criteria/`, body);
+  }
   projectForm(id: number) {
     return this.api.get<ManagementProjectForm>(`${this.root(id)}/project-form/`);
   }
