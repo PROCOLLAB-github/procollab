@@ -635,14 +635,22 @@
         </button>
       </div>
     } @else if (editingMaterial()) {
-      <form [formGroup]="materialForm" (ngSubmit)="saveMaterial()" class="management__form">
+      <form
+        [formGroup]="materialForm"
+        (ngSubmit)="saveMaterial()"
+        class="management__form"
+        (dragenter)="onMaterialDragEnter($event)"
+        (dragover)="onMaterialDragOver($event)"
+        (dragleave)="onMaterialDragLeave()"
+        (drop)="onMaterialDrop($event)"
+      >
         <h2 id="management-dialog-title">
           {{ editingMaterial() === "new" ? "Добавить материал" : "Изменить материал" }}
         </h2>
         <label for="material-title"
           >Название *<input appField id="material-title" formControlName="title" maxlength="255"
         /></label>
-        <fieldset class="management__inline">
+        <fieldset class="management__inline" [disabled]="saving() || !!uploading()">
           <legend>Источник материала</legend>
           <label><input type="radio" appChoice formControlName="mode" value="link" /> Ссылка</label
           ><label><input type="radio" appChoice formControlName="mode" value="file" /> Файл</label>
@@ -651,25 +659,52 @@
           <label for="material-url"
             >Ссылка *<input type="url" appField id="material-url" formControlName="url"
           /></label>
-        } @else {
-          <div>
-            <input #materialFile type="file" hidden (change)="upload($event, 'material')" /><button
-              type="button"
-              appButton="secondary"
-              [disabled]="saving() || !!uploading()"
-              (click)="materialFile.click()"
-            >
-              {{ uploading() === "material" ? "Загружаем файл…" : "Выбрать файл" }}
-            </button>
-            @if (materialForm.controls.file.value) {
-              <p class="management__muted">Файл загружен.</p>
+        }
+        <div
+          class="management__dropzone"
+          [class.management__dropzone--active]="materialDragActive()"
+          [attr.aria-busy]="uploading() === 'material'"
+        >
+          <div aria-live="polite" role="status">
+            @if (uploading() === "material") {
+              <p class="management__dropzone-title">Загружаем файл…</p>
+              <p class="management__muted">Дождитесь окончания загрузки.</p>
+            } @else if (
+              materialForm.controls.mode.value === "file" && materialForm.controls.file.value
+            ) {
+              <p class="management__dropzone-title">{{ materialFileName() || "Файл загружен" }}</p>
+              <p class="management__muted">Можно сохранить материал или заменить файл.</p>
+            } @else {
+              <p class="management__dropzone-title">Перетащите файл сюда</p>
+              <p class="management__muted">
+                Или выберите его на устройстве. Один файл на материал.
+              </p>
             }
           </div>
-        }
+          <input
+            #materialFile
+            type="file"
+            hidden
+            [disabled]="saving() || !!uploading()"
+            (change)="upload($event, 'material')"
+          />
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="saving() || !!uploading()"
+            (click)="materialFile.click()"
+          >
+            {{
+              materialForm.controls.mode.value === "file" && materialForm.controls.file.value
+                ? "Заменить файл"
+                : "Выбрать файл"
+            }}
+          </button>
+        </div>
         @if (formError()) {
           <p appAlert="error">{{ formError() }}</p>
         }
-        <div class="management__inline">
+        <div class="management__inline management__dialog-actions">
           <button appButton="primary" [appButtonLoading]="saving()" [disabled]="!!uploading()">
             Сохранить материал</button
           ><button

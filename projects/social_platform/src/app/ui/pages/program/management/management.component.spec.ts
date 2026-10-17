@@ -5,7 +5,7 @@ import { signal } from "@angular/core";
 import { ActivatedRoute, Router, provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { HttpErrorResponse } from "@angular/common/http";
-import { of, Subject, throwError } from "rxjs";
+import { Observable, of, Subject, throwError } from "rxjs";
 import { FileService } from "@corelib";
 import {
   ManagementContext,
@@ -107,6 +107,8 @@ describe("Сохранение настроек организатора", () =>
 
 describe("Списки управления программой в DOM", () => {
   async function setup(section = "participants", query = "") {
+    const uploaded = new Subject<{ url: string }>();
+    const uploadFile = vi.fn<(file: File) => Observable<{ url: string }>>(() => uploaded);
     const project: ManagementProject = {
       id: 11,
       projectId: 91,
@@ -157,7 +159,7 @@ describe("Списки управления программой в DOM", () => 
             children: [{ path: "management/:section", component: ProgramManagementComponent }],
           },
         ]),
-        { provide: FileService, useValue: {} },
+        { provide: FileService, useValue: { uploadFile } },
       ],
     }).overrideComponent(ProgramManagementComponent, {
       set: { providers: [{ provide: ProgramManagementService, useValue: state }] },
@@ -168,8 +170,109 @@ describe("Списки управления программой в DOM", () => 
       ProgramManagementComponent,
     );
     const element = () => harness.routeNativeElement!;
-    return { harness, component, state, project, element };
+    return { harness, component, state, project, element, uploadFile, uploaded };
   }
+
+  function drag(type: string, files: File[] = [], types = ["Files"]): DragEvent {
+    const event = new Event(type, { bubbles: true, cancelable: true });
+    Object.defineProperty(event, "dataTransfer", {
+      value: { files, types, dropEffect: "none" },
+    });
+    return event as DragEvent;
+  }
+
+  async function materialDialog() {
+    const context = await setup("settings", "?tab=materials");
+    context.component.editMaterial("new");
+    context.harness.detectChanges();
+    await vi.waitFor(() => expect(document.querySelector(".management__dialog form")).toBeTruthy());
+    const form = document.querySelector<HTMLFormElement>(".management__dialog form")!;
+    return { ...context, form };
+  }
+
+  it("drop файла в режиме ссылки переключает источник; загрузка блокирует повторный drop и закрытие", async () => {
+    const { component, harness, form, uploadFile, uploaded } = await materialDialog();
+    component.materialForm.controls.title.setValue("Презентация");
+    const file = new File(["pdf"], "Презентация.pdf", { type: "application/pdf" });
+    const drop = drag("drop", [file]);
+    form.dispatchEvent(drop);
+    harness.detectChanges();
+    expect(drop.defaultPrevented).toBe(true);
+    expect(uploadFile).toHaveBeenCalledExactlyOnceWith(file);
+    expect(component.materialForm.controls.mode.value).toBe("file");
+    expect(form.textContent).toContain("Загружаем файл");
+    expect(form.querySelector("fieldset")!.disabled).toBe(true);
+    form.dispatchEvent(drag("drop", [new File(["other"], "other.pdf")]));
+    await component.closeMaterial();
+    expect(uploadFile).toHaveBeenCalledTimes(1);
+    expect(component.editingMaterial()).toBe("new");
+    uploaded.next({ url: "https://files.example.com/material.pdf" });
+    uploaded.complete();
+    harness.detectChanges();
+    expect(component.materialForm.controls.file.value).toBe(
+      "https://files.example.com/material.pdf",
+    );
+    expect(component.materialForm.controls.title.value).toBe("Презентация");
+    expect(form.textContent).toContain("Презентация.pdf");
+    expect(component.uploading()).toBeNull();
+  });
+
+  it("выбор через input использует ту же загрузку и позволяет выбрать тот же файл повторно", async () => {
+    const { component, form, uploadFile, uploaded } = await materialDialog();
+    const file = new File(["doc"], "Положение.docx");
+    const input = form.querySelector<HTMLInputElement>("input[type=file]")!;
+    Object.defineProperty(input, "files", { value: [file] });
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(uploadFile).toHaveBeenCalledExactlyOnceWith(file);
+    expect(component.materialForm.controls.mode.value).toBe("file");
+    expect(input.value).toBe("");
+    uploaded.error(new HttpErrorResponse({ status: 413 }));
+    expect(component.formError()).toContain("Файл слишком большой");
+    expect(component.uploading()).toBeNull();
+  });
+
+  it("текст не загружается, несколько файлов отклоняются без смены источника и потери ссылки", async () => {
+    const { component, form, uploadFile } = await materialDialog();
+    component.materialForm.controls.url.setValue("https://example.com/docs");
+    const text = drag("drop", [], ["text/plain"]);
+    form.dispatchEvent(text);
+    expect(text.defaultPrevented).toBe(false);
+    const multiple = drag("drop", [new File([], "a.pdf"), new File([], "b.pdf")]);
+    form.dispatchEvent(multiple);
+    expect(multiple.defaultPrevented).toBe(true);
+    expect(uploadFile).not.toHaveBeenCalled();
+    expect(component.formError()).toContain("по одному файлу");
+    expect(component.materialForm.controls.mode.value).toBe("link");
+    expect(component.materialForm.controls.url.value).toBe("https://example.com/docs");
+  });
+
+  it("ошибка замены сохраняет прежний файл и введённое название", async () => {
+    const { component, form, uploadFile, uploaded } = await materialDialog();
+    component.materialForm.patchValue({ title: "Мой материал", mode: "file", file: "old-file" });
+    form.dispatchEvent(drag("drop", [new File([], "replacement.pdf")]));
+    uploaded.error(new HttpErrorResponse({ status: 500 }));
+    expect(component.materialForm.controls.title.value).toBe("Мой материал");
+    expect(component.materialForm.controls.file.value).toBe("old-file");
+    expect(component.formError()).toContain("повторите попытку");
+    expect(component.uploading()).toBeNull();
+    uploadFile.mockReturnValue(of({ url: "new-file" }));
+    form.dispatchEvent(drag("drop", [new File([], "replacement.pdf")]));
+    expect(component.materialForm.controls.file.value).toBe("new-file");
+  });
+
+  it("подсветка не пропадает при переходе между дочерними элементами и очищается при выходе", async () => {
+    const { component, form } = await materialDialog();
+    form.dispatchEvent(drag("dragenter"));
+    form.querySelector("h2")!.dispatchEvent(drag("dragenter"));
+    form.querySelector("h2")!.dispatchEvent(drag("dragleave"));
+    expect(component.materialDragActive()).toBe(true);
+    const over = drag("dragover");
+    form.dispatchEvent(over);
+    expect(over.defaultPrevented).toBe(true);
+    expect(over.dataTransfer?.dropEffect).toBe("copy");
+    form.dispatchEvent(drag("dragleave"));
+    expect(component.materialDragActive()).toBe(false);
+  });
 
   it.each(["participants", "projects"])(
     "%s: обновление списка не уничтожает поле поиска и его ввод",
