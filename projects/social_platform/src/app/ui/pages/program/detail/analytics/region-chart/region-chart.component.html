@@ -1,0 +1,38 @@
+<!-- @format -->
+
+<p class="region-chart__note">{{ unit() }} по регионам · по убыванию</p>
+<div class="region-chart__scroll" tabindex="0" [attr.aria-label]="label()">
+  <div class="region-chart__plot" [style.height.px]="chartHeight()">
+    <canvas
+      #canvas
+      role="img"
+      [attr.aria-label]="label() + '. Точные значения доступны в таблице ниже.'"
+    ></canvas>
+  </div>
+</div>
+<details class="region-chart__data">
+  <summary>
+    Данные по регионам <span>{{ sortedItems().length }}</span>
+  </summary>
+  <table>
+    <caption>
+      {{
+        label()
+      }}
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Регион</th>
+        <th scope="col">{{ unit() }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (region of sortedItems(); track $index) {
+        <tr>
+          <th scope="row">{{ region.name }}</th>
+          <td>{{ region.count }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</details>

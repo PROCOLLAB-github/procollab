@@ -59,7 +59,7 @@
               }
             </div>
             <ol class="widget__steps" aria-label="Этапы проекта">
-              @for (step of steps(participant.stage); track step.label) {
+              @for (step of steps(participant.stage, project !== null); track step.label) {
                 <li
                   [class.widget__step--current]="step.current"
                   [class.widget__step--complete]="step.completed"
@@ -75,7 +75,6 @@
           }
           @case ("organizer") {
             @let metrics = data.organizer;
-            @let ratio = withoutProject(metrics);
             <dl class="widget__metrics widget__metrics--organizer">
               <div>
                 <dt>Участники</dt>
@@ -103,15 +102,11 @@
               <div>
                 <dt>Без проектов</dt>
                 <dd
-                  class="widget__without"
                   tabindex="0"
-                  [matTooltip]="ratio.description"
-                  [attr.aria-label]="ratio.description + ', ' + ratio.percentage"
+                  [matTooltip]="metrics.participantsWithoutProject + ' участников без проекта'"
+                  [attr.aria-label]="metrics.participantsWithoutProject + ' участников без проекта'"
                 >
                   <span>{{ count(metrics.participantsWithoutProject) }}</span>
-                  <small [attr.data-tone]="ratio.tone"
-                    ><i aria-hidden="true"></i>{{ ratio.percentage }}</small
-                  >
                 </dd>
               </div>
             </dl>
@@ -261,7 +256,7 @@
               }
             </div>
             <ol class="widget__steps" aria-label="Этапы проекта">
-              @for (step of steps(participant.stage); track step.label) {
+              @for (step of steps(participant.stage, project !== null); track step.label) {
                 <li
                   [class.widget__step--current]="step.current"
                   [class.widget__step--complete]="step.completed"
@@ -277,7 +272,6 @@
           }
           @case ("organizer") {
             @let metrics = data.organizer;
-            @let ratio = withoutProject(metrics);
             <dl class="widget__metrics widget__metrics--organizer">
               <div>
                 <dt>Участники</dt>
@@ -305,15 +299,11 @@
               <div>
                 <dt>Без проектов</dt>
                 <dd
-                  class="widget__without"
                   tabindex="0"
-                  [matTooltip]="ratio.description"
-                  [attr.aria-label]="ratio.description + ', ' + ratio.percentage"
+                  [matTooltip]="metrics.participantsWithoutProject + ' участников без проекта'"
+                  [attr.aria-label]="metrics.participantsWithoutProject + ' участников без проекта'"
                 >
                   <span>{{ count(metrics.participantsWithoutProject) }}</span>
-                  <small [attr.data-tone]="ratio.tone"
-                    ><i aria-hidden="true"></i>{{ ratio.percentage }}</small
-                  >
                 </dd>
               </div>
             </dl>

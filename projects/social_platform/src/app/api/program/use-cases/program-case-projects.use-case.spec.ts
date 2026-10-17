@@ -87,7 +87,22 @@ describe("Case analytics: проверка контракта перед list/ex
       limit: 1,
       offset: 0,
     });
-    expect(repository.exportCaseProjects).toHaveBeenCalledExactlyOnceWith(12, selection);
+    expect(repository.exportCaseProjects).toHaveBeenCalledExactlyOnceWith(12, selection, {});
+  });
+  it("preflight and export use identical filters without the current pagination", async () => {
+    const filters = { search: "Проект", submission: "submitted", presentation: "missing" } as const;
+    await firstValueFrom(download.execute(12, selectedCase, filters));
+    expect(repository.getCaseProjects).toHaveBeenCalledExactlyOnceWith(12, {
+      selection: selectedCase,
+      ...filters,
+      limit: 1,
+      offset: 0,
+    });
+    expect(repository.exportCaseProjects).toHaveBeenCalledExactlyOnceWith(
+      12,
+      selectedCase,
+      filters,
+    );
   });
   it("ошибка самого XLSX остаётся контролируемой", async () => {
     repository.exportCaseProjects.mockReturnValue(

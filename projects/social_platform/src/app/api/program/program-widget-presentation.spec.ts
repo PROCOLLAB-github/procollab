@@ -126,16 +126,28 @@ describe("Program widget presentation", () => {
     );
     expect(result.text).toBe("Свободное оценивание. Срок оценивания истёк");
   });
-  it.each(["none", "not_submitted", "not_applicable"] as const)(
-    "keeps inactive stages for %s",
-    stage =>
-      expect(participantSteps(stage).every(step => !step.current && !step.completed)).toBe(true),
+  it.each([
+    ["none", false, [false, false, false], "Создан"],
+    ["not_submitted", true, [true, false, false], "Отправлен"],
+    ["submitted", true, [true, true, false], "Проверен"],
+    ["review", true, [true, true, false], "Проверен"],
+    ["evaluated", true, [true, true, true], null],
+    ["not_applicable", false, [false, false, false], "Создан"],
+    ["not_applicable", true, [true, false, false], null],
+  ] as const)(
+    "shows completed milestones and the next step for %s (project: %s)",
+    (stage, hasProject, completed, current) => {
+      const steps = participantSteps(stage, hasProject);
+      expect(steps.map(step => step.label)).toEqual(["Создан", "Отправлен", "Проверен"]);
+      expect(steps.map(step => step.completed)).toEqual(completed);
+      expect(steps.filter(step => step.current).map(step => step.label)).toEqual(
+        current ? [current] : [],
+      );
+      expect(steps.some(step => step.current && step.completed)).toBe(false);
+    },
   );
-  it("distinguishes current and completed stages", () => {
-    expect(participantSteps("submitted").map(s => s.completed)).toEqual([false, false, false]);
-    expect(participantSteps("review").map(s => s.completed)).toEqual([true, false, false]);
-    expect(participantSteps("evaluated").map(s => s.completed)).toEqual([true, true, true]);
-    for (const stage of ["submitted", "review", "evaluated"] as const)
-      expect(participantSteps(stage).filter(s => s.current && s.completed)).toHaveLength(0);
-  });
+  it.each(["not_submitted", "submitted", "review", "evaluated"] as const)(
+    "never fabricates completed milestones without a project, even with stale stage %s",
+    stage => expect(participantSteps(stage, false).every(step => !step.completed)).toBe(true),
+  );
 });
