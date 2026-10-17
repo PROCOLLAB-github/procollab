@@ -157,9 +157,24 @@ export class ProgramManagementComponent implements OnInit {
     { key: "tag", label: "Тег" },
   ];
   readonly images = [
-    { key: "coverImageAddress", label: "Обложка" },
-    { key: "imageAddress", label: "Логотип программы" },
-    { key: "advertisementImageAddress", label: "Баннер регистрации" },
+    {
+      key: "coverImageAddress",
+      label: "Обложка (шапка)",
+      dimensions: "Рекомендуемый размер: 1800 × 320 px (примерно 5,6:1).",
+      hint: "Размещайте важные детали вверху по центру: на узком экране края обрезаются, а снизу расположен логотип.",
+    },
+    {
+      key: "imageAddress",
+      label: "Логотип программы",
+      dimensions: "Рекомендуемый размер: 512 × 512 px (1:1).",
+      hint: "Изображение показывается в круге. Расположите знак по центру с отступами от краёв.",
+    },
+    {
+      key: "advertisementImageAddress",
+      label: "Баннер регистрации",
+      dimensions: "Рекомендуемая ширина: 1800 px. Высота — по содержимому.",
+      hint: "Показывается будущим участникам на странице программы. Изображение отображается целиком с сохранением пропорций.",
+    },
   ];
   readonly dateFields = [
     { key: "datetimeStarted", label: "Начало программы" },
