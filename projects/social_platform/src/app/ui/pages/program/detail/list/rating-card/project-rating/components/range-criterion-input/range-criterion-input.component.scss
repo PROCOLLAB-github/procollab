@@ -1,70 +1,18 @@
 /** @format */
-
-@use "styles/typography";
-@use "styles/responsive";
+@use "styles/ui-foundation";
 
 :host {
   display: block;
+  min-width: 0;
 }
 
-.field {
-  text-wrap: nowrap;
+.field__input {
+  @include ui-foundation.control;
 
-  span {
-    color: var(--black);
-  }
-
-  &__input {
-    width: 15px;
-    height: 15px;
-    color: transparent;
-    text-align: center;
-    text-shadow: 0 0 0 var(--black);
-    background-color: var(--white);
-    border: 0.5px solid var(--gray);
-    border-radius: var(--rounded-sm);
-    outline: none;
-    transition: all 0.2s;
-
-    &--error {
-      border-color: var(--red);
-    }
-
-    &--disabled {
-      pointer-events: none;
-    }
-
-    &:focus {
-      border-color: var(--accent);
-
-      @media screen and (max-width: 999px) {
-        box-shadow: var(--ui-focus-ring);
-      }
-
-      @media screen and (min-width: 1000px) {
-        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
-      }
-    }
-  }
+  width: 100%;
+  min-height: 44px;
 }
 
-input {
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    appearance: none;
-  }
-
-  &[type="number"] {
-    appearance: textfield;
-  }
-}
-
-@media screen and (max-width: 999px) {
-  @include responsive.apply-mobile {
-    .field__input {
-      width: 44px;
-      height: 44px;
-      font-size: var(--ui-font-h3);
-    }
-  }
+.field__input--error {
+  border-color: var(--red-dark);
 }

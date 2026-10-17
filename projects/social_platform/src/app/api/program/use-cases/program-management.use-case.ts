@@ -1,6 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
+import { ManagementCriteriaWrite } from "@domain/program/program-criteria.model";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
 import { ManagementProjectFormWrite } from "@domain/program/program-project-form.model";
 import {
@@ -13,6 +14,12 @@ import {
 @Injectable()
 export class ProgramManagementUseCase {
   private readonly repository = inject(ProgramManagementRepositoryPort);
+  criteria(id: number) {
+    return this.repository.criteria(id);
+  }
+  saveCriteria(id: number, body: ManagementCriteriaWrite) {
+    return this.repository.saveCriteria(id, body);
+  }
   projectForm(id: number) {
     return this.repository.projectForm(id);
   }

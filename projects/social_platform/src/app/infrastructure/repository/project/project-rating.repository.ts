@@ -27,8 +27,14 @@ export class ProjectRatingRepository implements ProjectRatingRepositoryPort {
     return this.projectRatingAdapter.postFilters(programId, filters, params);
   }
 
-  rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
-    return this.projectRatingAdapter.rate(projectId, scores);
+  rate(
+    projectId: number,
+    scores: ProjectRatingCriterionOutput[],
+    criteriaRevision?: string,
+  ): Observable<void> {
+    return criteriaRevision === undefined
+      ? this.projectRatingAdapter.rate(projectId, scores)
+      : this.projectRatingAdapter.rate(projectId, scores, criteriaRevision);
   }
 
   /*

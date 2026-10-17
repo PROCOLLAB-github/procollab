@@ -4,19 +4,18 @@
   <input
     appField
     type="number"
+    placeholder="Введите баллы"
     [value]="value"
-    [min]="0"
+    [attr.aria-label]="label()"
+    [min]="min()"
     [max]="max()"
-    [step]="1"
+    [step]="step()"
     [disabled]="disabled"
     (input)="onInput($event)"
     (keydown)="onKeydown($event)"
     (blur)="onBlur()"
     (paste)="onPaste($event)"
-    (focus)="moveCursorToEnd($event)"
     class="field__input text-body-10"
     [class.field__input--error]="error()"
   />
-  <span class="text-body-10">&nbsp;/</span>
-  <span class="text-body-10">{{ max() }}</span>
 </div>

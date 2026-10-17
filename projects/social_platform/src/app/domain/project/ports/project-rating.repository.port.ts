@@ -17,7 +17,11 @@ export abstract class ProjectRatingRepositoryPort {
     params?: HttpParams,
   ): Observable<ApiPagination<ProjectRate>>;
 
-  abstract rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void>;
+  abstract rate(
+    projectId: number,
+    scores: ProjectRatingCriterionOutput[],
+    criteriaRevision?: string,
+  ): Observable<void>;
 
   abstract formValuesToDTO(
     criteria: ProjectRatingCriterion[],

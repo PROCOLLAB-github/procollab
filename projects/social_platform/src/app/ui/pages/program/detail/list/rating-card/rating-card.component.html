@@ -82,6 +82,27 @@
             {{ error }}
           </div>
         }
+        @if (ratingError()) {
+          <div role="alert" class="text-body-12">
+            {{ ratingError() }}
+            @if (criteriaChanged()) {
+              <app-button
+                appearance="outline"
+                [disabled]="refreshingCriteria()"
+                (click)="refreshCriteria()"
+                >{{ refreshingCriteria() ? "Обновляем…" : "Обновить критерии" }}</app-button
+              >
+            }
+          </div>
+        }
+        @if (retainedAnswers().length) {
+          <details>
+            <summary>Ответы до обновления критериев</summary>
+            @for (answer of retainedAnswers(); track $index) {
+              <p class="text-body-12">{{ answer.name }}: {{ answer.value }}</p>
+            }
+          </details>
+        }
       </div>
 
       @if (showRatingForm() || showRatedStatus() || showConfirmedState()) {

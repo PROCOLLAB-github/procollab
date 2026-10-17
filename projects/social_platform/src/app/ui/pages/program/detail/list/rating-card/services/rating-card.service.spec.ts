@@ -1,8 +1,10 @@
 /** @format */
 
 import { signal } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 import { RateProjectUseCase } from "@api/program/use-cases/rate-project.use-case";
+import { GetProjectRatingsUseCase } from "@api/program/use-cases/get-project-ratings.use-case";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
@@ -18,6 +20,7 @@ describe("RatingCardService evaluation modes", () => {
   const past = "2026-09-01T00:00:00Z";
   const future = "2026-09-30T00:00:00Z";
   const execute = vi.fn<RateProjectUseCase["execute"]>();
+  const refresh = vi.fn<GetProjectRatingsUseCase["execute"]>();
   let service: RatingCardService;
   let programUI: ProgramDetailMainUIInfoService;
 
@@ -56,6 +59,7 @@ describe("RatingCardService evaluation modes", () => {
     TestBed.configureTestingModule({
       providers: [
         RatingCardService,
+        { provide: GetProjectRatingsUseCase, useValue: { execute: refresh } },
         { provide: RateProjectUseCase, useValue: { execute } },
         ProgramDetailMainUIInfoService,
         { provide: ProfileInfoService, useValue: { profile: signal(user) } },
@@ -130,6 +134,60 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.rateButtonText()).toBe("проект оценён");
   });
 
+  it("rejects stale form, retains zero/No and removed answers, and refreshes revision before retry", () => {
+    const criterion = {
+      id: 1,
+      name: "Баллы",
+      description: "",
+      type: "int" as const,
+      minValue: 0,
+      maxValue: 10,
+      value: "",
+      expertId: 0,
+    };
+    const old = {
+      ...project(),
+      criteriaRevision: "old",
+      criterias: [
+        criterion,
+        { ...criterion, id: 2, name: "Да/нет", type: "bool" as const },
+        { ...criterion, id: 3, name: "Удалённый", type: "str" as const },
+      ],
+    };
+    service.initProject(old);
+    service.form().setValue({ 1: 0, 2: false, 3: "Сохраните этот ответ" });
+    execute.mockReturnValueOnce(
+      of(fail({ kind: "rate_project_error", cause: new HttpErrorResponse({ status: 409 }) })),
+    );
+    service.confirmRateProject();
+    expect(execute).toHaveBeenCalledWith(
+      12,
+      old.criterias,
+      { 1: 0, 2: false, 3: "Сохраните этот ответ" },
+      "old",
+    );
+    expect(service.criteriaChanged()).toBe(true);
+    expect(service.projectConfirmed()).toBe(false);
+    refresh.mockReturnValueOnce(
+      of(
+        ok({
+          count: 1,
+          next: "",
+          previous: "",
+          results: [{ ...old, criteriaRevision: "new", criterias: old.criterias.slice(0, 2) }],
+        }),
+      ),
+    );
+    service.refreshCriteria();
+    expect(service.criteriaChanged()).toBe(false);
+    expect(service.project()?.criteriaRevision).toBe("new");
+    expect(service.form().getRawValue()).toEqual({ 1: 0, 2: false });
+    expect(service.retainedAnswers()).toContainEqual({
+      name: "Удалённый",
+      value: "Сохраните этот ответ",
+    });
+  });
+
   it("preserves rating-limit restrictions independently of the evaluation deadline", () => {
     service.initProject({ ...project(), ratedCount: 1 });
     expect(service.rateButtonText()).toBe("лимит оценок достигнут");
@@ -137,6 +195,14 @@ describe("RatingCardService evaluation modes", () => {
     loadProgram(past);
     expect(service.rateButtonText()).toBe("оценивание завершено");
     expect(service.canOpenModal()).toBe(false);
+  });
+
+  it("does not submit an empty configured criterion set", () => {
+    service.initProject({ ...project(), criteriaRevision: "empty" });
+    expect(service.rateButtonText()).toBe("критерии не настроены");
+    expect(service.isButtonDisabled()).toBe(true);
+    service.confirmRateProject();
+    expect(execute).not.toHaveBeenCalled();
   });
 
   it.each([false, true])(

@@ -78,6 +78,11 @@ export class RatingCardComponent implements AfterViewInit {
   protected readonly ratedCount = this.ratingCardService.ratedCount;
   protected readonly isProjectCriterias = this.ratingCardService.isProjectCriterias;
   protected readonly form = this.ratingCardService.form;
+  protected readonly ratingError = this.ratingCardService.ratingError;
+  protected readonly criteriaChanged = this.ratingCardService.criteriaChanged;
+  protected readonly refreshingCriteria = this.ratingCardService.refreshingCriteria;
+  protected readonly retainedAnswers = this.ratingCardService.retainedAnswers;
+  protected readonly refreshCriteria = () => this.ratingCardService.refreshCriteria();
   protected readonly profile = this.ratingCardService.profile;
   protected readonly evaluationDateExpired = this.ratingCardService.evaluationDateExpired;
   protected readonly isRatingFormDisabled = this.ratingCardService.isRatingFormDisabled;

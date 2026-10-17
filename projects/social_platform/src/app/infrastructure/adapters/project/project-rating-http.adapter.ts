@@ -30,7 +30,14 @@ export class ProjectRatingHttpAdapter {
     return this.apiService.post(url, { filters });
   }
 
-  rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
-    return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}`, scores);
+  rate(
+    projectId: number,
+    scores: ProjectRatingCriterionOutput[],
+    criteriaRevision?: string,
+  ): Observable<void> {
+    return this.apiService.post(
+      `${this.RATE_PROJECT_URL}/rate/${projectId}`,
+      criteriaRevision === undefined ? scores : { expectedRevision: criteriaRevision, scores },
+    );
   }
 }

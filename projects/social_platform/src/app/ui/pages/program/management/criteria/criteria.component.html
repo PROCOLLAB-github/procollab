@@ -1,0 +1,289 @@
+<!-- @format -->
+<div class="criteria">
+  @if (loading()) {
+    <section class="criteria__card" aria-busy="true" aria-live="polite">
+      Загружаем критерии…
+    </section>
+  } @else {
+    @if (error(); as message) {
+      <div appAlert="error">
+        {{ message }}
+        <button
+          type="button"
+          appButton="text"
+          [disabled]="saving()"
+          (click)="conflict() || !snapshot() ? reload() : save()"
+        >
+          {{ conflict() || !snapshot() ? "Обновить данные" : "Повторить сохранение" }}
+        </button>
+      </div>
+    }
+    @if (saved()) {
+      <p appAlert="success" role="status">Критерии сохранены.</p>
+    }
+    @if (snapshot()) {
+      <header class="criteria__heading">
+        <div>
+          <h2>Критерии оценки</h2>
+          <p>Один набор для всех кейсов программы.</p>
+        </div>
+        <button type="button" appButton="secondary" (click)="openPreview()">
+          Предпросмотр формы
+        </button>
+      </header>
+      @if (locked()) {
+        <div class="criteria__note" role="status">
+          <strong>Критерии зафиксированы</strong>
+          <p>
+            В программе уже сохранена первая оценка. Добавление, удаление и изменение критериев
+            недоступны.
+          </p>
+        </div>
+      }
+      <section class="criteria__card" aria-labelledby="criteria-heading">
+        <h3 id="criteria-heading">Критерии программы</h3>
+        <p>Настройте форму до первой сохранённой оценки.</p>
+        <button
+          class="criteria__add"
+          type="button"
+          appButton="secondary"
+          [disabled]="locked() || saving()"
+          (click)="edit()"
+        >
+          Добавить критерий
+        </button>
+        @for (criterion of criteria(); track criterion.id) {
+          <article class="criteria__row">
+            <div>
+              <h4>{{ criterion.name }}</h4>
+              <p>{{ summary(criterion) }}</p>
+              @if (criterion.description) {
+                <p>{{ criterion.description }}</p>
+              }
+            </div>
+            @if (!locked()) {
+              <div class="criteria__actions">
+                <button
+                  type="button"
+                  appButton="secondary"
+                  [disabled]="saving() || criterion.type === 'float'"
+                  (click)="edit(criterion)"
+                >
+                  Изменить</button
+                ><button
+                  type="button"
+                  appButton="secondary"
+                  class="criteria__quiet"
+                  [disabled]="saving()"
+                  (click)="deleting.set(criterion)"
+                >
+                  Удалить
+                </button>
+              </div>
+            }
+          </article>
+        } @empty {
+          <p class="criteria__empty">
+            Критериев пока нет. Добавьте критерий, чтобы настроить форму эксперта.
+          </p>
+        }
+        @if (!locked()) {
+          <p class="criteria__notice">
+            После первой сохранённой оценки весь набор критериев будет зафиксирован.
+          </p>
+        }
+      </section>
+      @if (!locked()) {
+        <footer class="criteria__footer">
+          <p aria-live="polite">
+            {{ dirty() ? "Есть несохранённые изменения" : "Нет несохранённых изменений" }}
+          </p>
+          <div class="criteria__actions">
+            <button
+              type="button"
+              appButton="primary"
+              [disabled]="!dirty() || saving() || !!conflict()"
+              (click)="save()"
+            >
+              {{ saving() ? "Сохраняем…" : "Сохранить изменения" }}</button
+            ><button
+              type="button"
+              appButton="secondary"
+              class="criteria__quiet"
+              [disabled]="!dirty() || saving()"
+              (click)="cancel()"
+            >
+              Отменить изменения
+            </button>
+          </div>
+        </footer>
+      }
+    }
+  }
+</div>
+
+<app-modal
+  bodyClass="criteria-modal"
+  [open]="editing() !== null"
+  (openChange)="!$event && closeEditor()"
+  labelledBy="criterion-editor-title"
+>
+  <form class="criteria__dialog" [formGroup]="editor" (ngSubmit)="apply()">
+    <header class="criteria__heading">
+      <h2 id="criterion-editor-title">
+        {{ editing() === "new" ? "Добавить критерий" : "Изменить критерий" }}
+      </h2>
+      <button type="button" appButton="secondary" (click)="closeEditor()">Закрыть</button>
+    </header>
+    @if (editorError()) {
+      <p appAlert="error" role="alert">{{ editorError() }}</p>
+    }
+    <label for="criterion-name"
+      >Название критерия *<input
+        appField
+        id="criterion-name"
+        formControlName="name"
+        maxlength="50"
+        aria-required="true"
+    /></label>
+    <label for="criterion-type"
+      >Тип ответа<select appField id="criterion-type" formControlName="type">
+        <option value="int">Целые баллы</option>
+        <option value="bool">Да / нет</option>
+        <option value="str">Текстовый комментарий</option>
+      </select></label
+    >
+    <label for="criterion-description"
+      >Описание для эксперта<textarea
+        appField
+        id="criterion-description"
+        formControlName="description"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
+    </label>
+    @if (editorType() === "int") {
+      <div class="criteria__range">
+        <label for="criterion-min"
+          >Минимум *<input
+            appField
+            type="number"
+            step="1"
+            id="criterion-min"
+            formControlName="minValue"
+            aria-required="true" /></label
+        ><label for="criterion-max"
+          >Максимум *<input
+            appField
+            type="number"
+            step="1"
+            id="criterion-max"
+            formControlName="maxValue"
+            aria-required="true"
+        /></label>
+      </div>
+    }
+    <footer>
+      <p>
+        После {{ editing() === "new" ? "добавления" : "применения" }} сохраните изменения на
+        странице критериев.
+      </p>
+      <div class="criteria__actions">
+        <button type="submit" appButton="primary">
+          {{ editing() === "new" ? "Добавить критерий" : "Применить изменения" }}</button
+        ><button
+          type="button"
+          appButton="secondary"
+          class="criteria__quiet"
+          (click)="closeEditor()"
+        >
+          Отмена
+        </button>
+      </div>
+    </footer>
+  </form>
+</app-modal>
+<app-modal
+  bodyClass="criteria-modal"
+  [open]="previewOpen()"
+  (openChange)="previewOpen.set($event)"
+  labelledBy="criteria-preview-title"
+>
+  <div class="criteria__dialog">
+    <header class="criteria__heading">
+      <h2 id="criteria-preview-title">Предпросмотр формы эксперта</h2>
+      <button type="button" appButton="secondary" (click)="previewOpen.set(false)">Закрыть</button>
+    </header>
+    <p>Так эксперт увидит критерии. Ответы в предпросмотре не сохраняются и не фиксируют набор.</p>
+    <app-project-rating [criteria]="previewCriteria()" [formControl]="previewControl" />
+    <footer>
+      <p>
+        Целые баллы проверяются по заданной шкале. Ноль и «Нет» — допустимые ответы. Комментарий —
+        до 50 символов.
+      </p>
+      <button
+        type="button"
+        appButton="secondary"
+        class="criteria__quiet"
+        (click)="previewOpen.set(false)"
+      >
+        Закрыть предпросмотр
+      </button>
+    </footer>
+  </div>
+</app-modal>
+<app-modal
+  bodyClass="criteria-modal"
+  [open]="deleting() !== null"
+  (openChange)="!$event && deleting.set(null)"
+  labelledBy="criterion-delete-title"
+>
+  <div class="criteria__dialog">
+    <h2 id="criterion-delete-title">Удалить критерий?</h2>
+    <p>«{{ deleting()?.name }}» будет удалён после сохранения изменений.</p>
+    <div class="criteria__actions">
+      <button type="button" appButton="primary" (click)="remove()">Удалить критерий</button
+      ><button
+        type="button"
+        appButton="secondary"
+        class="criteria__quiet"
+        (click)="deleting.set(null)"
+      >
+        Отмена
+      </button>
+    </div>
+  </div>
+</app-modal>
+<app-modal
+  bodyClass="criteria-modal"
+  [open]="conflictOpen()"
+  (openChange)="conflictOpen.set($event)"
+  labelledBy="criteria-conflict-title"
+>
+  <div class="criteria__dialog">
+    <h2 id="criteria-conflict-title">Появилась первая оценка</h2>
+    <p>
+      Пока вы редактировали критерии, эксперт сохранил оценку. Набор зафиксирован, ваши изменения не
+      применены.
+    </p>
+    <div class="criteria__note">
+      <strong>Несохранённый набор</strong>
+      @for (c of criteria(); track c.id) {
+        <p>{{ c.name }} · {{ summary(c) }}</p>
+      }
+    </div>
+    <p>При переходе к действующим критериям этот черновик будет закрыт.</p>
+    <div class="criteria__actions">
+      <button type="button" appButton="primary" (click)="reload()">
+        Показать действующие критерии</button
+      ><button
+        type="button"
+        appButton="secondary"
+        class="criteria__quiet"
+        (click)="conflictOpen.set(false)"
+      >
+        Закрыть
+      </button>
+    </div>
+  </div>
+</app-modal>
