@@ -46,6 +46,7 @@ export interface ManagementParticipant {
   email: string | null;
   city: string | null;
   registeredAt: string;
+  lastActivity?: string | null;
 }
 export type ManagementEvaluationStatus =
   | "not_submitted"

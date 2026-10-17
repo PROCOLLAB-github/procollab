@@ -161,15 +161,23 @@
   }
 
   &__participants th:nth-child(1) {
-    width: 29%;
+    width: 23%;
   }
 
   &__participants th:nth-child(2) {
-    width: 32%;
+    width: 27%;
   }
 
   &__participants th:nth-child(3) {
-    width: 19%;
+    width: 12%;
+  }
+
+  &__participants th:nth-child(4) {
+    width: 17%;
+  }
+
+  &__participants th:nth-child(5) {
+    width: 21%;
   }
 
   &__row-selected {

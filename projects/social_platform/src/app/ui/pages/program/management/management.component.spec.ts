@@ -125,7 +125,14 @@ describe("Списки управления программой в DOM", () => 
       program: signal(program),
       participants: signal({
         count: 1,
-        results: [{ id: 1, name: "Анна", email: "anna@example.com" }],
+        results: [
+          {
+            id: 1,
+            name: "Анна",
+            email: "anna@example.com",
+            lastActivity: null as string | null | undefined,
+          },
+        ],
       }),
       projects: signal<ManagementProjectsPage | null>({
         count: 1,
@@ -180,6 +187,31 @@ describe("Списки управления программой в DOM", () => 
     });
     return event as DragEvent;
   }
+
+  it("показывает последнюю активность по Москве, а для null и старого API — прочерк", async () => {
+    const { harness, state, element } = await setup();
+    const participant = state.participants().results[0];
+    state.participants.set({
+      count: 3,
+      results: [
+        { ...participant, lastActivity: "2026-10-16T22:30:00Z" },
+        { ...participant, id: 2, lastActivity: null },
+        { ...participant, id: 3, lastActivity: undefined },
+      ],
+    });
+    harness.detectChanges();
+    const headings = element().querySelectorAll(".management__participants th");
+    expect(headings).toHaveLength(5);
+    expect(headings[4].textContent).toContain("Дата последней активности");
+    const cells = element().querySelectorAll('td[data-label="Последняя активность"]');
+    expect(Array.from(cells, cell => cell.textContent?.trim())).toEqual([
+      "17.10.2026 01:30",
+      "—",
+      "—",
+    ]);
+    expect(cells[0].querySelector("time")?.getAttribute("datetime")).toBe("2026-10-16T22:30:00Z");
+    expect(cells[1].querySelector("time")).toBeNull();
+  });
 
   async function materialDialog() {
     const context = await setup("settings", "?tab=materials");
