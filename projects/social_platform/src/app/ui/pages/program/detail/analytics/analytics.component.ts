@@ -368,13 +368,6 @@ export class ProgramAnalyticsComponent implements OnInit {
         value: overview.attention.projectsAwaitingEvaluation,
         tooltip: this.awaitingEvaluationTooltip(overview.evaluationStatus.mode),
       },
-      {
-        key: "delayed-experts",
-        label: "Эксперты задерживают оценивание",
-        value: overview.attention.delayedExperts.total,
-        tooltip:
-          "Появляется за 5 суток до окончания оценивания, если у эксперта есть незавершённая оценка сданной работы. После дедлайна остаётся до завершения оценок. Без даты окончания оценивания сигнал не появляется.",
-      },
     ];
   });
 
