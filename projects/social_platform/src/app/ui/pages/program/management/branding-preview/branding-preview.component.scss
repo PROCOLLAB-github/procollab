@@ -1,0 +1,119 @@
+/** @format */
+
+@use "styles/ui-foundation";
+@use "styles/program-branding";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.branding-preview {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  background: var(--light-gray);
+  border-radius: 16px;
+
+  &__heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  h3,
+  p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  &__devices {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__hint {
+    color: var(--dark-grey);
+  }
+
+  &__viewport {
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  &__stage {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 16px;
+  }
+
+  &__canvas {
+    box-sizing: border-box;
+    padding-bottom: calc(var(--logo-size) / 2 - 5px);
+    transform-origin: top left;
+  }
+
+  &__cover {
+    @include program-branding.desktop-cover;
+
+    position: relative;
+  }
+
+  &__cover-image {
+    @include program-branding.cover-image;
+
+    border-radius: inherit;
+  }
+
+  &__logo {
+    @include program-branding.desktop-logo;
+
+    position: absolute;
+    box-sizing: border-box;
+    width: var(--logo-size);
+    height: var(--logo-size);
+    object-fit: cover;
+    object-position: center;
+    background: var(--white);
+    border: 0.5px solid var(--dark-grey);
+    border-radius: 50%;
+  }
+
+  &__canvas--mobile {
+    padding-bottom: 32px;
+
+    .branding-preview__cover {
+      @include program-branding.mobile-cover;
+    }
+
+    .branding-preview__logo {
+      @include program-branding.mobile-logo;
+    }
+  }
+
+  &__error {
+    padding: 12px;
+    color: var(--black);
+    background: var(--red-light);
+    border-radius: 8px;
+  }
+
+  @media (max-width: 599px) {
+    padding: 16px;
+  }
+}

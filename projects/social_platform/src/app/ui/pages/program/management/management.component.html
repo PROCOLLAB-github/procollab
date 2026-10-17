@@ -451,6 +451,13 @@
                 }
               </div>
             </div>
+            @if (image.key === "imageAddress") {
+              <app-program-branding-preview
+                [cover]="href(basicForm.controls.coverImageAddress.value)"
+                [logo]="href(basicForm.controls.imageAddress.value)"
+                [busy]="uploading() === 'coverImageAddress' || uploading() === 'imageAddress'"
+              />
+            }
           }
           <label for="registration-link"
             >Страница регистрации<input

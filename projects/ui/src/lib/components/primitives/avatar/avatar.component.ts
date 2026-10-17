@@ -2,6 +2,9 @@
 
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
+export const AVATAR_PLACEHOLDER_URL =
+  "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
+
 /**
  * Компонент для отображения аватара пользователя.
  * Поддерживает различные размеры, индикатор онлайн статуса и прогресс-бар.
@@ -56,5 +59,5 @@ export class AvatarComponent {
   onlineBadgeOffset = input(0);
 
   /** URL placeholder изображения по умолчанию */
-  placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
+  placeholderUrl = AVATAR_PLACEHOLDER_URL;
 }

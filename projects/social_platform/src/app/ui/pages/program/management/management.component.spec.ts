@@ -188,6 +188,39 @@ describe("Списки управления программой в DOM", () => 
     return event as DragEvent;
   }
 
+  it("предпросмотр использует несохранённую загрузку; переключение не сохраняет и не меняет dirty", async () => {
+    const { component, harness, element, state, uploaded } = await setup("settings", "?tab=basic");
+    const save = vi.spyOn(component, "save");
+    const preview = () => element().querySelector("app-program-branding-preview")!;
+    const draftCover = () =>
+      preview().querySelector<HTMLImageElement>(".branding-preview__cover-image")!;
+    preview().querySelectorAll<HTMLButtonElement>("button")[1].click();
+    harness.detectChanges();
+    expect(component.basicForm.pristine).toBe(true);
+    expect(save).not.toHaveBeenCalled();
+    const input = element().querySelector<HTMLInputElement>(".management__image input[type=file]")!;
+    Object.defineProperty(input, "files", {
+      value: [new File(["image"], "cover.png", { type: "image/png" })],
+    });
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    harness.detectChanges();
+    expect(preview().textContent).toContain("Загружаем изображение");
+    uploaded.next({ url: "https://example.com/unsaved-cover.png" });
+    uploaded.complete();
+    harness.detectChanges();
+    expect(draftCover().src).toBe("https://example.com/unsaved-cover.png");
+    expect(component.basicForm.dirty).toBe(true);
+    expect(state.program().coverImageAddress).not.toBe("https://example.com/unsaved-cover.png");
+    expect(save).not.toHaveBeenCalled();
+    expect(preview().textContent).toContain("экрана 360 px");
+    component.resetForms();
+    harness.detectChanges();
+    expect(draftCover().getAttribute("src")).toContain("/cover.png");
+    expect(component.basicForm.pristine).toBe(true);
+    expect(element().textContent).toContain("Высоту можно выбрать любую");
+    expect(element().textContent).not.toContain("Высота — по содержимому");
+  });
+
   it("показывает последнюю активность по Москве, а для null и старого API — прочерк", async () => {
     const { harness, state, element } = await setup();
     const participant = state.participants().results[0];
