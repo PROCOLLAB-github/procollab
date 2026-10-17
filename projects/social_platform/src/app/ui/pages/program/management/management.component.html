@@ -1,0 +1,661 @@
+<!-- @format -->
+
+<main class="management">
+  <a class="management__back" [routerLink]="paths.program.detail(state.context?.programId ?? '')"
+    >На страницу программы</a
+  >
+  <header class="management__heading">
+    <h1>Управление программой</h1>
+    @if (state.program(); as program) {
+      <p>{{ program.name }}</p>
+    }
+  </header>
+  @if (state.program(); as program) {
+    <nav class="management__tabs" aria-label="Разделы управления программой">
+      @for (tab of tabs; track tab.id) {
+        <a
+          [routerLink]="paths.program.management(program.id, tab.id)"
+          [attr.aria-current]="
+            section() === tab.id || (section() === 'evaluation' && tab.id === 'projects')
+              ? 'page'
+              : null
+          "
+          >{{ tab.label }}</a
+        >
+      }
+    </nav>
+  }
+  @if (state.error()) {
+    <section class="management__card" role="alert">
+      <h2>{{ requestError() }}</h2>
+      <button type="button" appButton="secondary" (click)="state.retry()">Повторить</button>
+    </section>
+  } @else if (state.pending()) {
+    <section class="management__card" aria-busy="true" aria-live="polite">
+      Загружаем данные программы…
+    </section>
+  } @else if (state.program(); as program) {
+    @if (section() === "participants" || section() === "projects") {
+      <section class="management__card">
+        <h2>{{ section() === "participants" ? "Участники" : "Проекты" }}</h2>
+        <p class="management__muted">
+          {{
+            section() === "participants"
+              ? "Зарегистрированные участники этой программы."
+              : "Проекты, связанные с этой программой."
+          }}
+        </p>
+        <form class="management__search" (ngSubmit)="submitSearch()">
+          <label class="management__sr" for="management-search">{{
+            section() === "participants" ? "Поиск по имени или почте" : "Поиск по названию проекта"
+          }}</label>
+          <input
+            id="management-search"
+            type="search"
+            appField
+            [formControl]="search"
+            maxlength="200"
+            [placeholder]="
+              section() === 'participants'
+                ? 'Поиск по имени или почте'
+                : 'Поиск по названию проекта'
+            "
+          />
+        </form>
+        @if (section() === "projects") {
+          <div class="management__filters">
+            <label
+              >Кейс<select [value]="currentCase()" (change)="changeCase($any($event.target).value)">
+                <option value="all">Все кейсы</option>
+                <option value="without_case">Без выбранного кейса</option>
+                @for (option of state.projects()?.caseOptions ?? []; track option) {
+                  <option [value]="'case:' + option">{{ option }}</option>
+                }
+              </select></label
+            >
+            @if (program.isCompetitive) {
+              <label
+                >Сдача решения<select
+                  [value]="state.context?.query?.submission ?? 'all'"
+                  (change)="changeQuery({ submission: $any($event.target).value, offset: 0 })"
+                >
+                  <option value="all">Все проекты</option>
+                  <option value="submitted">Сдано</option>
+                  <option value="not_submitted">Не сдано</option>
+                </select></label
+              >
+            }
+          </div>
+          @if (state.selected(); as selected) {
+            <section class="management__selection" aria-label="Действия выбранного проекта">
+              <div class="management__selection-name">
+                <span>Выбран проект</span><strong>{{ selected.name }}</strong>
+              </div>
+              <button type="button" appButton="secondary" (click)="openTeam($event)">
+                Посмотреть команду
+              </button>
+              @if (selected.submitted && program.isCompetitive) {
+                <a
+                  class="management__primary-link"
+                  [routerLink]="evaluationPath(selected.id)"
+                  [queryParams]="returnQuery()"
+                  >Перейти к оценке</a
+                >
+              } @else {
+                <div>
+                  <button type="button" appButton="primary" disabled>Перейти к оценке</button>
+                  <p class="management__muted">
+                    {{
+                      program.isCompetitive
+                        ? "Сначала нужно сдать решение."
+                        : "Программа не предусматривает оценивание."
+                    }}
+                  </p>
+                </div>
+              }
+              <button
+                type="button"
+                appButton="icon"
+                aria-label="Снять выбор проекта"
+                (click)="state.clearSelection()"
+              >
+                <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+              </button>
+            </section>
+          } @else if (count()) {
+            <p class="management__muted">
+              Выберите один проект, чтобы посмотреть команду или перейти к оценке.
+            </p>
+          }
+        }
+        @if (!count()) {
+          <div class="management__empty" role="status">
+            <h3>
+              {{
+                state.context?.query?.search ||
+                state.context?.query?.caseScope !== "all" ||
+                state.context?.query?.submission !== "all"
+                  ? "Ничего не найдено"
+                  : section() === "participants"
+                    ? "В программе пока нет участников"
+                    : "В программе пока нет проектов"
+              }}
+            </h3>
+            <p>Измените запрос или дождитесь появления новых данных.</p>
+            @if (
+              state.context?.query?.search ||
+              state.context?.query?.caseScope !== "all" ||
+              state.context?.query?.submission !== "all"
+            ) {
+              <button
+                type="button"
+                appButton="secondary"
+                (click)="
+                  changeQuery({
+                    search: null,
+                    case_scope: null,
+                    case_name: null,
+                    submission: null,
+                    offset: 0,
+                  })
+                "
+              >
+                Сбросить поиск и фильтры
+              </button>
+            }
+          </div>
+        } @else if (section() === "participants") {
+          <table appTable class="management__table management__participants">
+            <caption class="management__sr">
+              Участники программы
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Участник</th>
+                <th scope="col">Почта</th>
+                <th scope="col">Город</th>
+                <th scope="col">В программе с</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (person of state.participants()?.results ?? []; track person.id) {
+                <tr>
+                  <td class="management__name" data-label="Участник">{{ person.name }}</td>
+                  <td data-label="Почта">{{ person.email || "Не указана" }}</td>
+                  <td data-label="Город">{{ person.city || "Не указан" }}</td>
+                  <td data-label="В программе с">
+                    {{ person.registeredAt | date: "dd.MM.yyyy" : "+0300" }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <table appTable class="management__table management__projects">
+            <caption class="management__sr">
+              Проекты программы. Можно выбрать один проект.
+            </caption>
+            <colgroup>
+              <col class="management__col-select" />
+              <col style="width: 21.4%" />
+              <col style="width: 16%" />
+              <col style="width: 12.1%" />
+              <col style="width: 13%" />
+              <col style="width: 18%" />
+              <col />
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col"><span class="management__sr">Выбор проекта</span></th>
+                <th scope="col">Проект</th>
+                <th scope="col">Руководитель</th>
+                <th scope="col">Сдача решения</th>
+                <th scope="col">Оценивание</th>
+                <th scope="col">Кейс</th>
+                <th scope="col">Презентация</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (project of state.projects()?.results ?? []; track project.id) {
+                <tr
+                  [class.management__row-selected]="state.selected()?.id === project.id"
+                  (click)="selectFromRow($event, project)"
+                >
+                  <td class="management__pick">
+                    <label
+                      ><input
+                        appChoice
+                        type="radio"
+                        name="management-project"
+                        [value]="project.id"
+                        [checked]="state.selected()?.id === project.id"
+                        [attr.aria-label]="'Выбрать проект «' + project.name + '»'"
+                        (change)="select(project)"
+                    /></label>
+                  </td>
+                  <td class="management__name" data-label="Проект">
+                    <a [routerLink]="paths.projects.detail(project.projectId)">{{
+                      project.name
+                    }}</a>
+                  </td>
+                  <td data-label="Руководитель">{{ project.leader.name }}</td>
+                  <td data-label="Сдача решения">
+                    {{
+                      program.isCompetitive
+                        ? project.submitted
+                          ? "Сдано"
+                          : "Не сдано"
+                        : "Не применяется"
+                    }}
+                  </td>
+                  <td data-label="Оценивание">{{ evaluationLabel(project) }}</td>
+                  <td data-label="Кейс">{{ project.caseName || "Не выбран" }}</td>
+                  <td data-label="Презентация">
+                    @if (href(project.presentationUrl); as link) {
+                      <a
+                        [href]="link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="'Открыть презентацию проекта «' + project.name + '»'"
+                        >Открыть</a
+                      >
+                    } @else {
+                      <span class="management__muted">Не добавлена</span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (count()) {
+          <app-pagination
+            [previousDisabled]="offset() === 0"
+            [nextDisabled]="rangeEnd() >= count()"
+            (previous)="page(-1)"
+            (next)="page(1)"
+            >{{ offset() + 1 }}–{{ rangeEnd() }} из {{ count() }}</app-pagination
+          >
+        }
+      </section>
+    } @else if (section() === "analytics") {
+      <app-program-analytics />
+    } @else if (section() === "evaluation") {
+      <section class="management__card">
+        <a
+          [routerLink]="paths.program.management(program.id, 'projects')"
+          [queryParams]="returnQuery()"
+          >К выбранному проекту</a
+        >
+        @if (state.evaluation(); as evaluation) {
+          <h2>Оценка проекта</h2>
+          <h3>{{ evaluation.name }}</h3>
+          @if (evaluation.canRate) {
+            <a
+              class="management__primary-link"
+              [routerLink]="paths.program.projectsRating(program.id)"
+              [queryParams]="{ project_id: evaluation.projectId }"
+              >Выставить или изменить мою оценку</a
+            >
+          }
+          @if (!evaluation.experts.length) {
+            <p role="status">
+              {{ evaluation.submitted ? "Оценок пока нет." : "Команда ещё не сдала решение." }}
+            </p>
+          }
+          @for (expert of evaluation.experts; track expert.id) {
+            <details class="management__expert" open>
+              <summary>
+                {{ expert.name }} ·
+                {{
+                  expert.status === "completed"
+                    ? "Оценено"
+                    : expert.status === "in_progress"
+                      ? "В работе"
+                      : "Не оценено"
+                }}
+              </summary>
+              <table appTable>
+                <caption class="management__sr">
+                  Оценки эксперта
+                  {{
+                    expert.name
+                  }}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Критерий</th>
+                    <th scope="col">Значение</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (criterion of expert.criteria; track criterion.id) {
+                    <tr>
+                      <td>{{ criterion.name }}</td>
+                      <td>{{ criterion.isScored ? criterion.value : "Не оценено" }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </details>
+          }
+        }
+      </section>
+    } @else if (section() === "settings") {
+      <nav class="management__settings-tabs" aria-label="Разделы настроек">
+        @for (tab of settingsTabs; track tab.id) {
+          <a
+            [routerLink]="[]"
+            [queryParams]="{ tab: tab.id }"
+            [attr.aria-current]="settingsTab() === tab.id ? 'page' : null"
+            >{{ tab.label }}</a
+          >
+        }
+      </nav>
+      @if (formError()) {
+        <div appAlert="error">
+          {{ formError() }}
+          <button type="button" appButton="text" (click)="reload()">Обновить данные</button>
+        </div>
+      }
+      @if (saved()) {
+        <p appAlert="success">Изменения сохранены.</p>
+      }
+      @if (settingsTab() === "basic") {
+        <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
+          <h2>Основная информация</h2>
+          @for (field of basicFields; track field.key) {
+            <label [for]="'program-' + field.key"
+              >{{ field.label }}{{ field.required ? " *" : ""
+              }}<input
+                appField
+                [id]="'program-' + field.key"
+                [formControlName]="field.key"
+                [attr.aria-required]="field.required || null"
+            /></label>
+          }
+          <label for="program-description"
+            >Описание<textarea
+              id="program-description"
+              appField
+              formControlName="description"
+              rows="7"
+            ></textarea>
+          </label>
+          <h3>Изображения</h3>
+          <p class="management__muted">Обложка, логотип и баннер регистрации.</p>
+          @for (image of images; track image.key) {
+            <div class="management__image">
+              <strong>{{ image.label }}</strong>
+              @if (href(basicForm.get(image.key)?.value ?? null); as src) {
+                <img [src]="src" [alt]="image.label" />
+              }
+              <div class="management__inline">
+                <input
+                  #imageInput
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  (change)="upload($event, image.key)"
+                /><button
+                  type="button"
+                  appButton="secondary"
+                  [disabled]="!!uploading() || saving()"
+                  (click)="imageInput.click()"
+                >
+                  {{ uploading() === image.key ? "Загружаем…" : "Загрузить изображение" }}
+                </button>
+                @if (basicForm.get(image.key)?.value) {
+                  <button
+                    type="button"
+                    appButton="text"
+                    [disabled]="!!uploading() || saving()"
+                    (click)="
+                      basicForm.get(image.key)?.setValue('');
+                      basicForm.get(image.key)?.markAsDirty()
+                    "
+                  >
+                    Убрать
+                  </button>
+                }
+              </div>
+            </div>
+          }
+          <label for="registration-link"
+            >Страница регистрации<input
+              appField
+              type="url"
+              id="registration-link"
+              formControlName="registrationLink" /></label
+          ><label for="presentation-link"
+            >Презентация или положение<input
+              appField
+              type="url"
+              id="presentation-link"
+              formControlName="presentationAddress"
+          /></label>
+          <div class="management__inline">
+            <button
+              appButton="primary"
+              [appButtonLoading]="saving()"
+              [disabled]="basicForm.pristine || !!uploading()"
+            >
+              Сохранить изменения</button
+            ><button
+              type="button"
+              appButton="secondary"
+              [disabled]="saving() || !!uploading()"
+              (click)="reload()"
+            >
+              Отменить
+            </button>
+          </div>
+        </form>
+      } @else if (settingsTab() === "dates") {
+        <form [formGroup]="datesForm" (ngSubmit)="save()" class="management__card management__form">
+          <h2>Календарь программы</h2>
+          <p class="management__muted">Даты и время указаны по Москве (UTC+3).</p>
+          @for (field of dateFields; track field.key) {
+            <label [for]="field.key"
+              >{{ field.label
+              }}<input
+                appField
+                type="datetime-local"
+                [id]="field.key"
+                [formControlName]="field.key"
+            /></label>
+          }
+          <p class="management__muted">
+            Если отдельный срок сдачи не задан, действует срок окончания регистрации.
+          </p>
+          <p class="management__muted">
+            Перенос завершённого срока на будущую дату снова откроет приём. Перед сохранением
+            появится подтверждение.
+          </p>
+          <div class="management__inline">
+            <button
+              appButton="primary"
+              [appButtonLoading]="saving()"
+              [disabled]="datesForm.pristine"
+            >
+              Сохранить изменения</button
+            ><button type="button" appButton="secondary" [disabled]="saving()" (click)="reload()">
+              Отменить
+            </button>
+          </div>
+        </form>
+      } @else {
+        <section class="management__card">
+          <h2>Материалы программы</h2>
+          <p class="management__muted">Документы и полезные ссылки для участников.</p>
+          <button type="button" appButton="primary" (click)="editMaterial('new')">
+            Добавить материал
+          </button>
+          @for (material of program.materials; track material.id) {
+            <article class="management__material">
+              <h3>
+                @if (href(material.url); as link) {
+                  <a [href]="link" target="_blank" rel="noopener noreferrer">{{
+                    material.title
+                  }}</a>
+                } @else {
+                  {{ material.title }}
+                }
+              </h3>
+              <p class="management__muted">
+                {{
+                  material.file
+                    ? "Файл · " +
+                      material.file.name +
+                      (material.file.extension ? "." + material.file.extension : "")
+                    : material.url
+                }}
+              </p>
+              <div class="management__inline">
+                <button
+                  type="button"
+                  appButton="secondary"
+                  [disabled]="saving()"
+                  (click)="editMaterial(material)"
+                >
+                  Изменить</button
+                ><button
+                  type="button"
+                  appButton="secondary"
+                  [disabled]="saving()"
+                  (click)="deleteMaterial(material)"
+                >
+                  Удалить
+                </button>
+              </div>
+            </article>
+          } @empty {
+            <p class="management__empty">
+              В программе пока нет материалов. Добавьте файл или ссылку.
+            </p>
+          }
+        </section>
+      }
+    }
+  }
+</main>
+
+@if (state.teamOpen()) {
+  <aside
+    class="management__team"
+    role="region"
+    aria-labelledby="management-team-heading"
+    [cdkTrapFocus]="mobile()"
+    [cdkTrapFocusAutoCapture]="mobile()"
+    (keydown.escape)="closeTeam(); $event.stopPropagation()"
+  >
+    <div class="management__team-heading">
+      <h2 id="management-team-heading" tabindex="-1" cdkFocusInitial>Команда проекта</h2>
+      <button
+        type="button"
+        appButton="icon"
+        aria-label="Закрыть состав команды"
+        (click)="closeTeam()"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </div>
+    @if (mobile()) {
+      <button type="button" appButton="text" (click)="closeTeam()">К выбранному проекту</button>
+    }
+    <h3>{{ state.selected()?.name }}</h3>
+    <p class="management__muted">{{ state.program()?.name }}</p>
+    @if (state.teamPending()) {
+      <p aria-live="polite" aria-busy="true">Загружаем состав команды…</p>
+    } @else if (state.teamError()) {
+      <div role="alert">
+        <p>{{ errorMessage(state.teamError()) }}</p>
+        <button type="button" appButton="secondary" (click)="state.openTeam()">Повторить</button>
+      </div>
+    } @else if (state.team(); as team) {
+      <p>Участников: {{ team.members.length }}</p>
+      @for (member of team.members; track member.id) {
+        <div class="management__team-member">
+          <p>{{ member.name }}</p>
+          <p class="management__muted">{{ member.role }}</p>
+        </div>
+      }
+    }
+  </aside>
+}
+
+<app-modal
+  [open]="modalOpen()"
+  labelledBy="management-dialog-title"
+  (openChange)="!$event ? dismissModal() : null"
+>
+  <div class="management__dialog">
+    @if (confirmation(); as confirm) {
+      <h2 id="management-dialog-title">{{ confirm.title }}</h2>
+      <p>{{ confirm.text }}</p>
+      <div class="management__inline">
+        <button
+          type="button"
+          [appButton]="confirm.safeCancel ? 'primary' : 'secondary'"
+          (click)="resolveConfirmation(false)"
+        >
+          {{ confirm.safeCancel ? "Остаться" : "Отмена" }}</button
+        ><button
+          type="button"
+          [appButton]="confirm.safeCancel ? 'secondary' : 'primary'"
+          (click)="resolveConfirmation(true)"
+        >
+          {{ confirm.label }}
+        </button>
+      </div>
+    } @else if (editingMaterial()) {
+      <form [formGroup]="materialForm" (ngSubmit)="saveMaterial()" class="management__form">
+        <h2 id="management-dialog-title">
+          {{ editingMaterial() === "new" ? "Добавить материал" : "Изменить материал" }}
+        </h2>
+        <label for="material-title"
+          >Название *<input appField id="material-title" formControlName="title" maxlength="255"
+        /></label>
+        <fieldset class="management__inline">
+          <legend>Источник материала</legend>
+          <label><input type="radio" appChoice formControlName="mode" value="link" /> Ссылка</label
+          ><label><input type="radio" appChoice formControlName="mode" value="file" /> Файл</label>
+        </fieldset>
+        @if (materialForm.controls.mode.value === "link") {
+          <label for="material-url"
+            >Ссылка *<input type="url" appField id="material-url" formControlName="url"
+          /></label>
+        } @else {
+          <div>
+            <input #materialFile type="file" hidden (change)="upload($event, 'material')" /><button
+              type="button"
+              appButton="secondary"
+              [disabled]="saving() || !!uploading()"
+              (click)="materialFile.click()"
+            >
+              {{ uploading() === "material" ? "Загружаем файл…" : "Выбрать файл" }}
+            </button>
+            @if (materialForm.controls.file.value) {
+              <p class="management__muted">Файл загружен.</p>
+            }
+          </div>
+        }
+        @if (formError()) {
+          <p appAlert="error">{{ formError() }}</p>
+        }
+        <div class="management__inline">
+          <button appButton="primary" [appButtonLoading]="saving()" [disabled]="!!uploading()">
+            Сохранить материал</button
+          ><button
+            type="button"
+            appButton="secondary"
+            [disabled]="saving() || !!uploading()"
+            (click)="closeMaterial()"
+          >
+            Отмена
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</app-modal>

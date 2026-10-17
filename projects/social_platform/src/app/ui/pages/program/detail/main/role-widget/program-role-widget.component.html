@@ -160,7 +160,7 @@
     <footer class="widget__footer">
       @switch (data.role) {
         @case ("organizer") {
-          <a [routerLink]="routes.program.analytics(data.programId)">Открыть →</a>
+          <a [routerLink]="routes.program.management(data.programId, 'analytics')">Открыть →</a>
         }
         @case ("expert") {
           <a [routerLink]="routes.program.projectsRating(data.programId)">Открыть →</a>

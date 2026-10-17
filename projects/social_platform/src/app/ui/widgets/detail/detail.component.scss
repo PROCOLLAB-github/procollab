@@ -3,6 +3,52 @@
 @use "styles/responsive";
 @use "styles/typography";
 
+.info__actions.info__actions--manager {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 207px minmax(0, 1fr);
+  gap: 0;
+
+  .info__primary-action {
+    display: grid;
+    grid-column: 1;
+    justify-content: end;
+    width: 100%;
+  }
+
+  > a {
+    grid-column: 3;
+    width: 100%;
+  }
+
+  .info__primary-action > a,
+  > a,
+  app-button {
+    display: grid;
+  }
+
+  .info__divider {
+    display: none;
+  }
+
+  app-button {
+    width: 100%;
+    min-height: 40px;
+  }
+
+  @media (max-width: 999px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+
+    .info__primary-action {
+      justify-content: stretch;
+    }
+
+    > a {
+      grid-column: 2;
+    }
+  }
+}
+
 $detail-bar-height: 63px;
 $detail-bar-mb: 12px;
 

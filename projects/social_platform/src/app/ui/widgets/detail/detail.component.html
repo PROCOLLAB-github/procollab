@@ -78,7 +78,10 @@
               "
             />
           }
-          <div class="info__actions">
+          <div
+            class="info__actions"
+            [class.info__actions--manager]="listType() === 'program' && isUserManager()"
+          >
             <ng-container
               *ngTemplateOutlet="
                 listType() === 'program'
@@ -171,8 +174,14 @@
                       <i appIcon icon="plus" appSquare="10"></i>
                     </app-button>
                   }
-                  @if ((isUserManager() || isUserExpert()) && isUserMember()) {
-                    <a [routerLink]="AppRoutes.program.projectsRating(info().id)">
+                  @if (isUserManager() || (isUserExpert() && isUserMember())) {
+                    <a
+                      [routerLink]="
+                        isUserManager() && !isUserExpert()
+                          ? AppRoutes.program.management(info().id, 'projects')
+                          : AppRoutes.program.projectsRating(info().id)
+                      "
+                    >
                       <app-button
                         [appearance]="
                           isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'
@@ -187,13 +196,13 @@
                 </div>
 
                 @if (isUserManager()) {
-                  <a [routerLink]="AppRoutes.program.analytics(info().id)">
+                  <a [routerLink]="AppRoutes.program.management(info().id)">
                     <app-button
                       [appearance]="isAnalyticsPage() ? 'inline' : 'outline'"
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       customTypographyClass="text-body-12"
                     >
-                      аналитика
+                      управление программой
                     </app-button>
                   </a>
                 } @else {
@@ -238,7 +247,7 @@
                     </app-button>
                   }
                 }
-                @if (isUserManager() || (isUserExpert() && appWidth >= 1000)) {
+                @if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
                   <a [routerLink]="AppRoutes.program.projects(info().id)">
                     <app-button
                       [appearance]="isProjectsPage() ? 'inline' : 'outline'"
@@ -262,7 +271,7 @@
                     </app-button>
                   </a>
                 }
-                @if (isUserManager() || (isUserExpert() && appWidth >= 1000)) {
+                @if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
                   <a [routerLink]="AppRoutes.program.members(info().id)" class="info__members">
                     <app-button
                       [appearance]="isMembersPage() ? 'inline' : 'outline'"
@@ -274,7 +283,7 @@
                     </app-button>
                   </a>
                 }
-                @if (appWidth < 1000) {
+                @if (appWidth < 1000 && !isUserManager()) {
                   <app-button
                     appearance="outline"
                     size="big"

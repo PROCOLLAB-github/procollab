@@ -9,9 +9,24 @@ import { ProgramProjectsResolver } from "@ui/pages/program/detail/list/projects.
 import { ProgramMembersResolver } from "@ui/pages/program/detail/list/members.resolver";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/analytics.component";
+import { ProgramManagementComponent } from "@ui/pages/program/management/management.component";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
+  { path: "management", pathMatch: "full", redirectTo: "management/participants" },
+  {
+    path: "management/projects/:linkId/evaluation",
+    component: ProgramManagementComponent,
+    data: { managementSection: "evaluation" },
+    canDeactivate: [(component: ProgramManagementComponent) => component.canLeave()],
+    runGuardsAndResolvers: "always",
+  },
+  {
+    path: "management/:section",
+    component: ProgramManagementComponent,
+    canDeactivate: [(component: ProgramManagementComponent) => component.canLeave()],
+    runGuardsAndResolvers: "always",
+  },
   {
     path: "",
     component: DeatilComponent,

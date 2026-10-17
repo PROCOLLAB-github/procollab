@@ -13,12 +13,14 @@ import {
   success,
 } from "@domain/shared/async-state";
 import { Observable, finalize, shareReplay, of, tap } from "rxjs";
-import { readCache, writeCache } from "@utils/cache";
+import { clearCacheKey, readCache, writeCache } from "@utils/cache";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
 import { Result, ok } from "@domain/shared/result.type";
 import { ApiPagination } from "@domain/other/api-pagination.model";
+import { EventBus } from "@domain/shared/event-bus";
+import { ProgramUpdated } from "@domain/program/program-updated.event";
 
 const PROGRAM_CACHE_KEY = "programs";
 const CACHE_VERSION = 1;
@@ -29,6 +31,15 @@ const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
   providedIn: "root",
 })
 export class ProgramShellInfoService {
+  constructor() {
+    inject(EventBus)
+      .on<ProgramUpdated>("ProgramUpdated")
+      .subscribe(() => {
+        this.invalidatePrograms();
+        clearCacheKey(PROGRAM_CACHE_KEY, CACHE_VERSION);
+        this.ensureProgramsLoaded().subscribe();
+      });
+  }
   private readonly participatingProgramUseCase = inject(ParticipatingProgramUseCase);
 
   private readonly programs$ = signal<AsyncState<Program[], unknown>>(initial());
@@ -49,6 +60,7 @@ export class ProgramShellInfoService {
 
   private allProgramsInflight: Observable<Result<ApiPagination<Program>, unknown>> | null = null;
   private filteredInflight: Observable<Result<ApiPagination<Program>, unknown>> | null = null;
+  private cacheGeneration = 0;
 
   ensureProgramsLoaded(filter?: HttpParams): Observable<Result<ApiPagination<Program>, unknown>> {
     const isFiltered = !!filter && filter.keys().length > 0;
@@ -94,6 +106,7 @@ export class ProgramShellInfoService {
   }
 
   invalidatePrograms(): void {
+    this.cacheGeneration++;
     this.allProgramsInflight = null;
     this.filteredInflight = null;
     this.programs$.set(initial());
@@ -107,23 +120,28 @@ export class ProgramShellInfoService {
     this.programs$.set(loading(prev));
 
     const source$ = this.participatingProgramUseCase.execute();
+    const generation = this.cacheGeneration;
 
     const request$ = source$.pipe(
       tap(result => {
-        if (!result.ok) return;
+        if (!result.ok || generation !== this.cacheGeneration) return;
         this.programs$.set(success(result.value.results));
         try {
           writeCache(PROGRAM_CACHE_KEY, CACHE_VERSION, result.value.results);
         } catch {}
       }),
-      finalize(() => (this.allProgramsInflight = null)),
+      finalize(() => {
+        if (generation === this.cacheGeneration) this.allProgramsInflight = null;
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     this.allProgramsInflight = request$;
 
     request$.subscribe({
-      error: error => this.programs$.set(failure(error, prev)),
+      error: error => {
+        if (generation === this.cacheGeneration) this.programs$.set(failure(error, prev));
+      },
     });
 
     return request$;
