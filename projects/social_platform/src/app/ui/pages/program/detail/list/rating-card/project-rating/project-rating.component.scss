@@ -1,5 +1,6 @@
 /** @format */
 @use "styles/ui-foundation";
+@use "styles/responsive";
 
 :host {
   display: block;
@@ -71,4 +72,100 @@ p {
   min-height: 162px;
   resize: vertical;
   border-radius: 15px;
+}
+
+.rating--compact {
+  gap: 8px;
+
+  .rating__criterion {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 6px 8px;
+    align-items: center;
+  }
+
+  h4,
+  summary {
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--grey-for-text);
+    overflow-wrap: anywhere;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .rating__details p {
+    margin-top: 6px;
+  }
+
+  .rating__criterion:not(.rating__criterion--text) {
+    h4,
+    .rating__details {
+      grid-row: 1;
+      grid-column: 2;
+    }
+  }
+
+  app-range-criterion-input,
+  .rating__boolean {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: start;
+  }
+
+  .rating__boolean {
+    gap: 4px;
+  }
+
+  .rating__boolean .ui-button {
+    width: 36px;
+    min-width: 36px;
+    min-height: 32px;
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  .rating__criterion--text {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  textarea.ui-field {
+    min-height: 66px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .rating__counter,
+  .rating__error {
+    grid-column: 1 / -1;
+    font-size: 10px;
+  }
+
+  @include responsive.apply-mobile {
+    .rating__criterion:not(.rating__criterion--text) {
+      grid-template-columns: 92px minmax(0, 1fr);
+    }
+
+    h4,
+    summary {
+      font-size: 12px;
+    }
+
+    .rating__boolean .ui-button {
+      width: 44px;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    summary {
+      padding-block: 6px;
+    }
+  }
 }

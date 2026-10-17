@@ -5,6 +5,48 @@ import { ProjectRatingComponent } from "./project-rating.component";
 import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 
 describe("Shared expert form lifecycle", () => {
+  it("keeps answers and descriptions when switching between compact cards and full preview", async () => {
+    await TestBed.configureTestingModule({
+      imports: [ProjectRatingComponent],
+      providers: [provideZonelessChangeDetection()],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(ProjectRatingComponent);
+    const criterion: ProjectRatingCriterion = {
+      id: 1,
+      name: "Обоснованность решения",
+      description: "Проверьте расчёты команды.",
+      type: "int",
+      minValue: 0,
+      maxValue: 10,
+      value: 0,
+      expertId: 0,
+    };
+    fixture.componentRef.setInput("criteria", [
+      criterion,
+      { ...criterion, id: 2, name: "Соответствует кейсу", type: "bool", value: "false" },
+      { ...criterion, id: 3, name: "Комментарий", type: "str", value: "Хорошее решение" },
+    ]);
+    await fixture.whenStable();
+    const root: HTMLElement = fixture.nativeElement;
+    expect(root.querySelector(".rating--compact")).not.toBeNull();
+    expect(root.querySelector("summary")?.textContent).toContain(criterion.name);
+    expect(root.querySelector("details")?.textContent).toContain(criterion.description);
+    expect(root.querySelector("details")?.open).toBe(false);
+    expect(root.querySelector(".field__scale")?.textContent).toContain("/ 10");
+    expect(root.querySelector("textarea")?.rows).toBe(2);
+    const answers = fixture.componentInstance.form.getRawValue();
+    expect(answers).toEqual({ 1: 0, 2: false, 3: "Хорошее решение" });
+
+    fixture.componentRef.setInput("layout", "full");
+    await fixture.whenStable();
+    expect(root.querySelector(".rating--compact")).toBeNull();
+    expect(root.querySelector("details")).toBeNull();
+    expect(root.textContent).toContain(criterion.description);
+    expect(root.textContent).toContain("Целые баллы");
+    expect(root.querySelector("textarea")?.rows).toBe(6);
+    expect(fixture.componentInstance.form.getRawValue()).toEqual(answers);
+  });
+
   it("publishes zero and default No after replacing criteria, validates the new scale", async () => {
     await TestBed.configureTestingModule({
       imports: [ProjectRatingComponent],

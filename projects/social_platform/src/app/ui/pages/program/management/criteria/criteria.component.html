@@ -215,7 +215,11 @@
       <button type="button" appButton="secondary" (click)="previewOpen.set(false)">Закрыть</button>
     </header>
     <p>Так эксперт увидит критерии. Ответы в предпросмотре не сохраняются и не фиксируют набор.</p>
-    <app-project-rating [criteria]="previewCriteria()" [formControl]="previewControl" />
+    <app-project-rating
+      layout="full"
+      [criteria]="previewCriteria()"
+      [formControl]="previewControl"
+    />
     <footer>
       <p>
         Целые баллы проверяются по заданной шкале. Ноль и «Нет» — допустимые ответы. Комментарий —

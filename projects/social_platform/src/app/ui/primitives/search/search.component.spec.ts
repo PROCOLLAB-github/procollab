@@ -26,6 +26,20 @@ describe("SearchComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("closes search without cancelling native controls elsewhere on the page", async () => {
+    await fixture.whenStable();
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    document.body.append(checkbox);
+    try {
+      checkbox.click();
+      expect(onSwitchSearchSpy).toHaveBeenCalledWith(false);
+      expect(checkbox.checked).toBe(true);
+    } finally {
+      checkbox.remove();
+    }
+  });
+
   it("should not call onSwitchSearch when clicked and openable is false", () => {
     fixture.componentRef.setInput("openable", false);
     const searchDiv = fixture.nativeElement.querySelector(".search__other");

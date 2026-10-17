@@ -1,11 +1,19 @@
 <!-- @format -->
-<div class="rating" [formGroup]="form">
+<div class="rating" [class.rating--compact]="layout() === 'compact'" [formGroup]="form">
   @for (criterion of criteria; track criterion.id) {
-    <section class="rating__criterion">
-      <h4>{{ criterion.name }}</h4>
+    <section class="rating__criterion" [class.rating__criterion--text]="criterion.type === 'str'">
+      @if (layout() === "compact" && criterion.description) {
+        <details class="rating__details">
+          <summary>{{ criterion.name }}</summary>
+          <p class="rating__description">{{ criterion.description }}</p>
+        </details>
+      } @else {
+        <h4>{{ criterion.name }}</h4>
+      }
       @if (criterion.type === "int" || criterion.type === "float") {
         <app-range-criterion-input
           [label]="criterion.name"
+          [compact]="layout() === 'compact'"
           [min]="criterion.minValue"
           [max]="criterion.maxValue"
           [step]="criterion.type === 'int' ? 1 : 'any'"
@@ -15,14 +23,16 @@
             !!form.get(criterion.id.toString())?.touched
           "
         />
-        <p class="rating__hint">
-          {{ criterion.description }}
-          {{ criterion.type === "int" ? "Целые баллы" : "Дробные баллы" }} ·
-          {{ criterion.minValue === null ? "без минимума" : "от " + criterion.minValue
-          }}{{ criterion.maxValue === null ? ", без максимума" : " до " + criterion.maxValue }}
-        </p>
+        @if (layout() === "full") {
+          <p class="rating__hint">
+            {{ criterion.description }}
+            {{ criterion.type === "int" ? "Целые баллы" : "Дробные баллы" }} ·
+            {{ criterion.minValue === null ? "без минимума" : "от " + criterion.minValue
+            }}{{ criterion.maxValue === null ? ", без максимума" : " до " + criterion.maxValue }}
+          </p>
+        }
       } @else if (criterion.type === "bool") {
-        @if (criterion.description) {
+        @if (layout() === "full" && criterion.description) {
           <p class="rating__description">{{ criterion.description }}</p>
         }
         <div class="rating__boolean" role="group" [attr.aria-label]="criterion.name">
@@ -49,9 +59,11 @@
             Нет
           </button>
         </div>
-        <p class="rating__hint">«Нет» — заполненный ответ.</p>
+        @if (layout() === "full") {
+          <p class="rating__hint">«Нет» — заполненный ответ.</p>
+        }
       } @else {
-        @if (criterion.description) {
+        @if (layout() === "full" && criterion.description) {
           <p class="rating__description">{{ criterion.description }}</p>
         }
         <textarea
@@ -59,7 +71,7 @@
           [attr.aria-label]="criterion.name"
           [formControlName]="criterion.id"
           maxlength="50"
-          rows="6"
+          [rows]="layout() === 'compact' ? 2 : 6"
           placeholder="Впечатления и рекомендации эксперта"
         ></textarea>
         <p class="rating__hint rating__counter">

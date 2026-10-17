@@ -87,6 +87,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   private controlDisabled = false;
 
   readonly currentUserId = input<number>();
+  readonly layout = input<"compact" | "full">("compact");
 
   /** Сигнал для хранения критериев оценки */
   _criteria = signal<ProjectRatingCriterion[]>([]);

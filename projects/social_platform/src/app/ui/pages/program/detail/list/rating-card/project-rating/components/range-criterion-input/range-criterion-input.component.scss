@@ -1,5 +1,6 @@
 /** @format */
 @use "styles/ui-foundation";
+@use "styles/responsive";
 
 :host {
   display: block;
@@ -15,4 +16,39 @@
 
 .field__input--error {
   border-color: var(--red-dark);
+}
+
+.field--compact {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  .field__input {
+    width: 36px;
+    min-height: 32px;
+    padding: 4px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: var(--rounded-sm);
+    appearance: textfield;
+  }
+
+  .field__input::-webkit-inner-spin-button,
+  .field__input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+  }
+
+  .field__scale {
+    font-size: 10px;
+    color: var(--grey-for-text);
+    white-space: nowrap;
+  }
+
+  @include responsive.apply-mobile {
+    .field__input {
+      width: 44px;
+      min-height: 44px;
+    }
+  }
 }

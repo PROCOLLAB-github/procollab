@@ -1,12 +1,16 @@
 <!-- @format -->
 
-<div class="field" [class.field--error]="error()">
+<div class="field" [class.field--compact]="compact()" [class.field--error]="error()">
   <input
     appField
     type="number"
-    placeholder="Введите баллы"
+    [placeholder]="compact() ? '—' : 'Введите баллы'"
     [value]="value"
     [attr.aria-label]="label()"
+    [title]="
+      (min() === null ? 'Без минимума' : 'От ' + min()) +
+      (max() === null ? ', без максимума' : ' до ' + max())
+    "
     [min]="min()"
     [max]="max()"
     [step]="step()"
@@ -18,4 +22,13 @@
     class="field__input text-body-10"
     [class.field__input--error]="error()"
   />
+  @if (compact()) {
+    <span class="field__scale" aria-hidden="true">
+      @if (max() !== null) {
+        {{ min() !== null && min() !== 0 ? min() + "–" : "/ " }}{{ max() }}
+      } @else if (min() !== null) {
+        ≥ {{ min() }}
+      }
+    </span>
+  }
 </div>
