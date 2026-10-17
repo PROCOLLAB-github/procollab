@@ -124,10 +124,7 @@
       <div class="analytics-priority__stack">
         <article class="analytics-card program-deadlines" data-testid="program-deadlines">
           <div class="analytics__heading-row">
-            <h2 class="analytics-card__title program-deadlines__title">
-              <i appIcon icon="calendar" appSquare="20" aria-hidden="true"></i>
-              Сроки программы
-            </h2>
+            <h2 class="analytics-card__title">Сроки программы</h2>
             <app-tooltip
               text="Даты из настроек программы, по времени вашего устройства. Ближайший незавершённый срок выделен. Если отдельный срок сдачи решений не задан, действует конец регистрации."
               [isVisible]="isTooltipVisible('program-deadlines')"
@@ -183,56 +180,34 @@
             <ul class="attention__list">
               @for (item of attention(); track item.key) {
                 <li [class.attention__row--disabled]="item.value === 0">
-                  @if (item.key === "delayed-experts") {
-                    <button
-                      appButton="secondary"
-                      #delayedTrigger
-                      type="button"
-                      class="attention__action"
-                      [disabled]="item.value === 0"
-                      (click)="drilldown.openDelayed(delayedTrigger)"
-                    >
-                      <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
-                      <span class="text-body-10">{{ item.label }}</span
-                      ><strong>{{ item.value }}</strong>
-                      <i
-                        class="attention__arrow"
-                        appIcon
-                        icon="arrowright"
-                        appSquare="20"
-                        aria-hidden="true"
-                      ></i>
-                    </button>
-                  } @else {
-                    <button
-                      appButton="primary"
-                      #attentionTrigger
-                      type="button"
-                      class="attention__action"
-                      [disabled]="item.value === 0"
-                      (click)="
-                        drilldown.openAttention(
-                          item.key === 'without-visit'
-                            ? 'participants-without-visit'
-                            : item.key === 'without-team'
-                              ? 'participants-without-team'
-                              : 'projects-awaiting-evaluation',
-                          attentionTrigger
-                        )
-                      "
-                    >
-                      <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
-                      <span class="text-body-10">{{ item.label }}</span
-                      ><strong>{{ item.value }}</strong>
-                      <i
-                        class="attention__arrow"
-                        appIcon
-                        icon="arrowright"
-                        appSquare="20"
-                        aria-hidden="true"
-                      ></i>
-                    </button>
-                  }
+                  <button
+                    appButton="primary"
+                    #attentionTrigger
+                    type="button"
+                    class="attention__action"
+                    [disabled]="item.value === 0"
+                    (click)="
+                      drilldown.openAttention(
+                        item.key === 'without-visit'
+                          ? 'participants-without-visit'
+                          : item.key === 'without-team'
+                            ? 'participants-without-team'
+                            : 'projects-awaiting-evaluation',
+                        attentionTrigger
+                      )
+                    "
+                  >
+                    <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
+                    <span class="text-body-10">{{ item.label }}</span
+                    ><strong>{{ item.value }}</strong>
+                    <i
+                      class="attention__arrow"
+                      appIcon
+                      icon="arrowright"
+                      appSquare="20"
+                      aria-hidden="true"
+                    ></i>
+                  </button>
                   <app-tooltip
                     [text]="item.tooltip"
                     role="button"
