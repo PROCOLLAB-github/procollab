@@ -276,17 +276,6 @@
   flex: 1 1 auto;
   min-height: 0;
 
-  &__title {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-
-    i {
-      flex-shrink: 0;
-      color: var(--accent);
-    }
-  }
-
   &__list {
     display: grid;
     flex: 1 1 auto;

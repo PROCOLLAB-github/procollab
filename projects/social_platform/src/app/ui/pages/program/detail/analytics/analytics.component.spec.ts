@@ -566,7 +566,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(buttons[2].disabled).toBe(false);
   });
 
-  it("delayed count использует overview и открывает список с конкретного trigger", () => {
+  it("does not duplicate awaiting work with a delayed experts attention row", () => {
     const base = overview();
     data.set({
       ...base,
@@ -579,18 +579,11 @@ describe("ProgramAnalyticsComponent", () => {
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
-      .componentInstance as AnalyticsDrilldownComponent;
-    const open = vi.spyOn(drilldown, "openDelayed").mockImplementation(() => {});
-    const trigger = Array.from(
-      fixture.nativeElement.querySelectorAll(".attention__action") as NodeListOf<HTMLButtonElement>,
-    ).find(button => button.textContent?.includes("Эксперты задерживают"))!;
-    expect(trigger.textContent).toContain("Эксперты задерживают оценивание");
-    expect(trigger.textContent).toContain("1");
-    trigger.click();
-    expect(open).toHaveBeenCalledExactlyOnceWith(trigger);
-    expect(drilldown.delayedExperts().items).toEqual([delayedExpert()]);
-    expect(fixture.nativeElement.querySelector(".attention--empty")).toBeNull();
+    const attention = fixture.nativeElement.querySelector('[data-testid="attention-block"]');
+    expect(attention.textContent).not.toContain("Эксперты задерживают оценивание");
+    expect(attention.querySelector(".attention__empty")?.textContent).toContain(
+      "Ничего не требует внимания",
+    );
   });
 
   it.each([
@@ -694,7 +687,6 @@ describe("ProgramAnalyticsComponent", () => {
     expect(buttons.map(button => button.querySelector("span")?.textContent)).toEqual([
       "Участники без команды",
       "Работы ожидают оценивания",
-      "Эксперты задерживают оценивание",
     ]);
     expect(fixture.nativeElement.textContent).not.toContain("Проекты не сдали решение");
     data.set({
@@ -911,7 +903,7 @@ describe("ProgramAnalyticsComponent", () => {
       ".attention__action > span",
       ".evaluation__limit .text-body-10",
     ];
-    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([0, 3, 3, 1]);
+    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([0, 3, 2, 1]);
     for (const selector of selectors) {
       for (const label of root.querySelectorAll(selector))
         expect(label.classList.contains("text-body-10")).toBe(true);
@@ -1012,8 +1004,8 @@ describe("ProgramAnalyticsComponent", () => {
     expect(attention?.textContent).toContain("3");
     expect(attention?.textContent).toContain("Работы ожидают оценивания");
     expect(attention?.textContent).not.toContain("97");
-    expect(attention?.querySelectorAll(".attention__list li").length).toBe(3);
-    expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(3);
+    expect(attention?.querySelectorAll(".attention__list li").length).toBe(2);
+    expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(2);
   });
 
   it("keeps drilldown arrows separate from wrapping labels and preserves zero-state disabling", () => {
