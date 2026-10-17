@@ -27,8 +27,27 @@
     </div>
   </div>
   <p class="branding-preview__hint">
-    Так будут выглядеть выбранные изображения. Изменения появятся на странице после сохранения.
+    Выберите изображение, переместите его в кадре и настройте масштаб. Изменения появятся на
+    странице после сохранения.
   </p>
+  <div class="branding-preview__devices" role="group" aria-label="Изображение для настройки">
+    <button
+      type="button"
+      [appButton]="target() === 'cover' ? 'primary' : 'secondary'"
+      [attr.aria-pressed]="target() === 'cover'"
+      (click)="target.set('cover')"
+    >
+      Обложка
+    </button>
+    <button
+      type="button"
+      [appButton]="target() === 'logo' ? 'primary' : 'secondary'"
+      [attr.aria-pressed]="target() === 'logo'"
+      (click)="target.set('logo')"
+    >
+      Логотип
+    </button>
+  </div>
   <div #viewport class="branding-preview__viewport">
     <div
       class="branding-preview__stage"
@@ -45,24 +64,133 @@
         [style.--logo-size]="logoSize() + 'px'"
       >
         <div class="branding-preview__cover">
-          <img
-            class="branding-preview__cover-image"
-            [src]="coverUrl()"
-            alt="Обложка программы в предпросмотре"
-            (error)="coverFailed.set(true)"
-            (load)="coverFailed.set(false)"
-          />
-          <img
-            class="branding-preview__logo"
-            [src]="logoUrl()"
-            alt="Логотип программы в предпросмотре"
-            (error)="logoFailed.set(true)"
-            (load)="logoFailed.set(false)"
-          />
+          <div
+            class="branding-preview__cover-frame"
+            [class.branding-preview__frame--active]="target() === 'cover' && available('cover')"
+            [class.branding-preview__frame--editable]="available('cover')"
+            role="group"
+            aria-label="Переместить обложку в кадре"
+            aria-describedby="branding-framing-help"
+            [attr.tabindex]="available('cover') ? 0 : -1"
+            [attr.aria-disabled]="!available('cover')"
+            (keydown)="onFrameKey($event, 'cover')"
+            (pointerdown)="startDrag($event, 'cover')"
+            (pointermove)="moveDrag($event)"
+            (pointerup)="stopDrag()"
+            (pointercancel)="stopDrag()"
+            (lostpointercapture)="stopDrag()"
+          >
+            <img
+              class="branding-preview__cover-image"
+              [src]="coverUrl()"
+              [appImageFraming]="frames()[coverKey()]"
+              alt="Обложка программы в предпросмотре"
+              draggable="false"
+              (error)="coverFailed.set(true)"
+              (load)="coverFailed.set(false)"
+            />
+          </div>
+          <div
+            class="branding-preview__logo-frame"
+            [class.branding-preview__frame--active]="target() === 'logo' && available('logo')"
+            [class.branding-preview__frame--editable]="available('logo')"
+            role="group"
+            aria-label="Переместить логотип в кадре"
+            aria-describedby="branding-framing-help"
+            [attr.tabindex]="available('logo') ? 0 : -1"
+            [attr.aria-disabled]="!available('logo')"
+            (keydown)="onFrameKey($event, 'logo')"
+            (pointerdown)="startDrag($event, 'logo')"
+            (pointermove)="moveDrag($event)"
+            (pointerup)="stopDrag()"
+            (pointercancel)="stopDrag()"
+            (lostpointercapture)="stopDrag()"
+          >
+            <img
+              class="branding-preview__logo"
+              [src]="logoUrl()"
+              [appImageFraming]="frames().logo"
+              alt="Логотип программы в предпросмотре"
+              draggable="false"
+              (error)="logoFailed.set(true)"
+              (load)="logoFailed.set(false)"
+            />
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="branding-preview__controls">
+    <label class="branding-preview__zoom" for="branding-zoom"
+      >Масштаб
+      <input
+        id="branding-zoom"
+        type="range"
+        min="1"
+        max="3"
+        step="0.01"
+        [value]="activeFrame().zoom"
+        [attr.aria-valuetext]="zoomPercent() + '%'"
+        [disabled]="!editable()"
+        (input)="setZoom($event)"
+      />
+      <output for="branding-zoom">{{ zoomPercent() }}%</output>
+    </label>
+    <div class="branding-preview__move" role="group" aria-label="Точный сдвиг изображения">
+      <button
+        type="button"
+        appButton="secondary"
+        aria-label="Сдвинуть изображение влево"
+        title="Влево"
+        [disabled]="!editable()"
+        (click)="move(2, 0)"
+      >
+        ←
+      </button>
+      <button
+        type="button"
+        appButton="secondary"
+        aria-label="Сдвинуть изображение вправо"
+        title="Вправо"
+        [disabled]="!editable()"
+        (click)="move(-2, 0)"
+      >
+        →
+      </button>
+      <button
+        type="button"
+        appButton="secondary"
+        aria-label="Сдвинуть изображение вверх"
+        title="Вверх"
+        [disabled]="!editable()"
+        (click)="move(0, 2)"
+      >
+        ↑
+      </button>
+      <button
+        type="button"
+        appButton="secondary"
+        aria-label="Сдвинуть изображение вниз"
+        title="Вниз"
+        [disabled]="!editable()"
+        (click)="move(0, -2)"
+      >
+        ↓
+      </button>
+    </div>
+    <button type="button" appButton="text" [disabled]="!editable()" (click)="resetFrame()">
+      Сбросить кадр
+    </button>
+  </div>
+  <p id="branding-framing-help" class="branding-preview__hint">
+    Двигайте изображение мышью или пальцем. Когда кадр в фокусе, используйте стрелки клавиатуры;
+    Shift — для большего сдвига.
+  </p>
+  @if (device() === "mobile" && !mobileCover()) {
+    <p class="branding-preview__hint">
+      Сейчас используется основная обложка. Можно загрузить отдельную обложку для телефона выше.
+    </p>
+  }
   <p class="branding-preview__hint">
     {{ device() === "desktop" ? "Пример для экрана 1440 px" : "Пример для экрана 360 px" }}. Края
     обложки за пределами шапки обрезаются, логотип отображается в круге.

@@ -3,7 +3,11 @@
 <div class="program">
   <div class="program__top">
     <div class="program__info">
-      <app-avatar [size]="30" [url]="program().imageAddress"></app-avatar>
+      <app-avatar
+        [size]="30"
+        [url]="program().imageAddress"
+        [imageFraming]="program().imageFraming?.logo ?? null"
+      ></app-avatar>
       <p class="text-body-10">до {{ program().datetimeRegistrationEnds | date: "dd.MM.yy" }}</p>
     </div>
 

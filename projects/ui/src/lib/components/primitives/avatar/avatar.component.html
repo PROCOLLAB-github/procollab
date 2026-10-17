@@ -2,6 +2,7 @@
 
 <div
   class="avatar"
+  [class.avatar--framed]="!!imageFraming()"
   [class.avatar--border]="hasBorder()"
   [style.width]="size() + 'px'"
   [style.height]="size() + 'px'"
@@ -16,13 +17,30 @@
       ></div>
     }
 
-    <img
-      [src]="url() || placeholderUrl"
-      [style.width]="size() + 'px'"
-      [style.height]="size() + 'px'"
-      [style.border-color]="'var(--' + borderColor() + ')'"
-      alt="avatar"
-    />
+    @if (imageFraming()) {
+      <div
+        class="avatar__crop"
+        [class.avatar__crop--border]="hasBorder()"
+        [style.width.px]="size()"
+        [style.height.px]="size()"
+        [style.border-color]="'var(--' + borderColor() + ')'"
+      >
+        <img
+          class="avatar__framed-image"
+          [src]="url() || placeholderUrl"
+          [appImageFraming]="imageFraming()"
+          alt="avatar"
+        />
+      </div>
+    } @else {
+      <img
+        [src]="url() || placeholderUrl"
+        [style.width]="size() + 'px'"
+        [style.height]="size() + 'px'"
+        [style.border-color]="'var(--' + borderColor() + ')'"
+        alt="avatar"
+      />
+    }
 
     @if (isOnline()) {
       <div

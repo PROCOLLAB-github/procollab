@@ -5,12 +5,18 @@
     @if (info()) {
       <div class="info detail__section detail__info">
         <div class="info__cover" [class.info__cover--program]="listType() === 'program'">
-          <img
-            class="info__cover"
-            [class.info__cover--program]="listType() === 'program'"
-            [src]="info().coverImageAddress || defaultCover"
-            alt="cover"
-          />
+          @if (listType() === "program") {
+            <div class="info__cover-frame">
+              <img
+                class="info__program-cover-image"
+                [src]="programCover"
+                [appImageFraming]="programCoverFraming"
+                alt="Обложка программы"
+              />
+            </div>
+          } @else {
+            <img class="info__cover" [src]="info().coverImageAddress || defaultCover" alt="cover" />
+          }
 
           <div
             class="info__avatar"
@@ -20,6 +26,9 @@
           >
             @if (chatStateService.userOnlineStatusCache | async; as cache) {
               <app-avatar
+                [imageFraming]="
+                  listType() === 'program' ? (info().imageFraming?.logo ?? null) : null
+                "
                 [url]="listType() === 'profile' ? info().avatar : info().imageAddress"
                 [hasBorder]="true"
                 [borderColor]="listType() === 'project' ? 'white' : 'dark-grey'"

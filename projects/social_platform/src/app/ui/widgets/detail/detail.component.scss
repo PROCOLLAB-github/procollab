@@ -147,6 +147,13 @@ $detail-bar-mb: 12px;
     position: relative;
   }
 
+  &__cover-frame {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
   &__avatar {
     position: absolute;
     bottom: -10px;

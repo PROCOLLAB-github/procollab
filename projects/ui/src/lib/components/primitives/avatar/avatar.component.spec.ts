@@ -13,6 +13,26 @@ describe("AvatarComponent", () => {
     }).compileComponents();
   });
 
+  it("framing is opt-in and keeps circle border, online badge and progress outside the clipped image", () => {
+    fixture = TestBed.createComponent(AvatarComponent);
+    fixture.componentRef.setInput("url", "https://example.com/logo.png");
+    fixture.componentRef.setInput("imageFraming", { x: 10, y: 70, zoom: 2 });
+    fixture.componentRef.setInput("hasBorder", true);
+    fixture.componentRef.setInput("isOnline", true);
+    fixture.componentRef.setInput("progress", 80);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    const crop = element.querySelector(".avatar__crop")!;
+    expect((crop.querySelector("img") as HTMLImageElement).style.transform).toBe("scale(2)");
+    expect(element.querySelector(".avatar__online")).toBeTruthy();
+    expect(element.querySelector(".avatar__progress")).toBeTruthy();
+    expect(crop.querySelector(".avatar__online, .avatar__progress")).toBeNull();
+    fixture.componentRef.setInput("imageFraming", null);
+    fixture.detectChanges();
+    expect(element.querySelector(".avatar__crop")).toBeNull();
+    expect((element.querySelector("img") as HTMLImageElement).style.transform).toBe("");
+  });
+
   it("should create", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;

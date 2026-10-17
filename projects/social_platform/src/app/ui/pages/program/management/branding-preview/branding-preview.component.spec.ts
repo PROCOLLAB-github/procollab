@@ -31,7 +31,9 @@ describe("Предпросмотр оформления программы", () 
 
   it("режим экрана доступен кнопками и сохраняется при изменении изображений", () => {
     const { fixture, element } = setup();
-    const buttons = element.querySelectorAll<HTMLButtonElement>("button");
+    const buttons = element.querySelectorAll<HTMLButtonElement>(
+      '[aria-label="Экран предпросмотра"] button',
+    );
     buttons[1].click();
     fixture.detectChanges();
     expect(buttons[0].getAttribute("aria-pressed")).toBe("false");
@@ -45,6 +47,93 @@ describe("Предпросмотр оформления программы", () 
     buttons[0].click();
     fixture.detectChanges();
     expect(element.textContent).toContain("экрана 1440 px");
+  });
+
+  it("отдельный mobile source и frame не меняют desktop; общий logo редактируется независимо", () => {
+    const { fixture, element, cover, logo } = setup();
+    fixture.componentInstance.device.set("desktop");
+    fixture.componentRef.setInput("cover", "https://example.com/desktop.png");
+    fixture.componentRef.setInput("mobileCover", "https://example.com/mobile.png");
+    fixture.componentRef.setInput("logo", "https://example.com/logo.png");
+    fixture.componentInstance.framingChange.subscribe(value =>
+      fixture.componentRef.setInput("framing", value),
+    );
+    fixture.detectChanges();
+    const slider = element.querySelector<HTMLInputElement>('input[type="range"]')!;
+    slider.value = "1.8";
+    slider.dispatchEvent(new Event("input", { bubbles: true }));
+    fixture.detectChanges();
+    expect(cover().style.transform).toBe("scale(1.8)");
+    fixture.componentInstance.device.set("mobile");
+    fixture.detectChanges();
+    expect(cover().src).toBe("https://example.com/mobile.png");
+    expect(slider.value).toBe("1");
+    element.querySelector<HTMLElement>(".branding-preview__cover-frame")!.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "ArrowLeft",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    fixture.detectChanges();
+    expect(cover().style.objectPosition).toBe("60% 50%");
+    fixture.componentInstance.target.set("logo");
+    fixture.componentInstance.move(-10, 20);
+    fixture.detectChanges();
+    expect(logo().style.objectPosition).toBe("40% 70%");
+    expect(fixture.componentInstance.frames().cover.zoom).toBe(1.8);
+    fixture.componentRef.setInput("mobileCover", null);
+    fixture.detectChanges();
+    expect(cover().src).toBe("https://example.com/desktop.png");
+    expect(cover().style.objectPosition).toBe("60% 50%");
+  });
+
+  it("drag учитывает zoom, ограничивает края, busy блокирует правки; reset не меняет остальные кадры", () => {
+    const { fixture, element, cover } = setup();
+    const component = fixture.componentInstance;
+    component.device.set("desktop");
+    fixture.componentRef.setInput("cover", "https://example.com/cover.png");
+    fixture.componentRef.setInput("framing", { cover: { x: 50, y: 50, zoom: 2 } });
+    const changed = vi.fn(value => fixture.componentRef.setInput("framing", value));
+    component.framingChange.subscribe(changed);
+    fixture.detectChanges();
+    const frame = element.querySelector<HTMLElement>(".branding-preview__cover-frame")!;
+    Object.defineProperties(frame, { clientWidth: { value: 400 }, clientHeight: { value: 100 } });
+    Object.defineProperties(cover(), {
+      naturalWidth: { value: 1000 },
+      naturalHeight: { value: 500 },
+    });
+    function pointer(type: string, x: number, y: number) {
+      const event = new MouseEvent(type, {
+        clientX: x,
+        clientY: y,
+        button: 0,
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(event, "pointerId", { value: 1 });
+      frame.dispatchEvent(event);
+      fixture.detectChanges();
+    }
+    pointer("pointerdown", 100, 50);
+    pointer("pointermove", 150, 80);
+    expect(component.frames().cover).toEqual({ x: 37.5, y: 40, zoom: 2 });
+    pointer("pointermove", 9999, -9999);
+    expect(component.frames().cover).toEqual({ x: 0, y: 100, zoom: 2 });
+    pointer("pointerup", 9999, -9999);
+    fixture.componentRef.setInput("busy", true);
+    fixture.detectChanges();
+    changed.mockClear();
+    component.move(2, 2);
+    component.resetFrame();
+    expect(changed).not.toHaveBeenCalled();
+    fixture.componentRef.setInput("busy", false);
+    fixture.detectChanges();
+    component.resetFrame();
+    fixture.detectChanges();
+    expect(component.frames().cover).toEqual({ x: 50, y: 50, zoom: 1 });
+    expect(component.frames().mobileCover).toEqual({ x: 50, y: 50, zoom: 1 });
   });
 
   it("показывает busy и ошибку изображения, не изменяя URL; замена очищает ошибку", () => {

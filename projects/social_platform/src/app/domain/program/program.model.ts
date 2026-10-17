@@ -1,5 +1,7 @@
 /** @format */
 
+import { ProgramImageFraming } from "./program-image-framing.model";
+
 export interface ProgramCurrentApplication {
   projectId: number;
   programLinkId: number;
@@ -11,6 +13,8 @@ export class Program {
   id!: number;
   imageAddress!: string;
   coverImageAddress!: string;
+  mobileCoverImageAddress?: string | null;
+  imageFraming?: ProgramImageFraming;
   presentationAddress!: string;
   advertisementImageAddress!: string;
   name!: string;
