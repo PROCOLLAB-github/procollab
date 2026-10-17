@@ -29,6 +29,7 @@ import {
   PaginationComponent,
   AlertDirective,
   IconComponent,
+  AvatarComponent,
 } from "@uilib";
 import { FileService } from "@corelib";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
@@ -66,6 +67,7 @@ import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-
     PaginationComponent,
     AlertDirective,
     IconComponent,
+    AvatarComponent,
     ModalComponent,
     ProgramAnalyticsComponent,
   ],
@@ -94,6 +96,9 @@ export class ProgramManagementComponent implements OnInit {
   readonly section = signal<ManagementSection>("participants");
   readonly settingsTab = signal<SettingsSection>("basic");
   readonly search = this.fb.control("");
+  readonly caseFilter = this.fb.control("all");
+  readonly submissionFilter = this.fb.control("all");
+  private searchNavigation: { value: string } | null = null;
   readonly saving = signal(false);
   readonly uploading = signal<string | null>(null);
   readonly formError = signal<string | null>(null);
@@ -219,12 +224,30 @@ export class ProgramManagementComponent implements OnInit {
         const tab = q.get("tab");
         this.settingsTab.set(tab === "dates" || tab === "materials" ? tab : "basic");
         this.section.set(section);
-        this.search.setValue(q.get("search") ?? "", { emitEvent: false });
         this.formError.set(null);
         this.saved.set(false);
         const offset = Number(q.get("offset") ?? 0),
           id = Number(this.route.parent?.snapshot.paramMap.get("programId"));
         if (!Number.isSafeInteger(id) || id < 1) return;
+        const routeSearch = q.get("search") ?? "";
+        const previous = this.state.context;
+        const sameList = previous?.programId === id && previous.section === section;
+        if (
+          !sameList ||
+          (routeSearch !== previous.query.search && routeSearch !== this.searchNavigation?.value)
+        ) {
+          this.search.setValue(routeSearch, { emitEvent: false });
+        }
+        const caseScope = q.get("case_scope");
+        this.caseFilter.setValue(
+          caseScope === "selected"
+            ? `case:${q.get("case_name") ?? ""}`
+            : caseScope === "without_case"
+              ? "without_case"
+              : "all",
+          { emitEvent: false },
+        );
+        this.submissionFilter.setValue(q.get("submission") ?? "all", { emitEvent: false });
         this.state.load({
           programId: id,
           section,
@@ -251,32 +274,34 @@ export class ProgramManagementComponent implements OnInit {
         });
       });
   }
-  changeQuery(patch: Record<string, string | number | null>): void {
-    void this.router.navigate([], {
+  changeQuery(patch: Record<string, string | number | null>): Promise<boolean> {
+    return this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { ...patch, selected: null },
       queryParamsHandling: "merge",
     });
   }
   submitSearch(): void {
-    this.changeQuery({ search: this.search.value.trim() || null, offset: 0 });
+    const navigation = { value: this.search.value.trim() };
+    this.searchNavigation = navigation;
+    void this.changeQuery({ search: navigation.value || null, offset: 0 }).finally(() => {
+      if (this.searchNavigation === navigation) this.searchNavigation = null;
+    });
   }
   page(delta: number): void {
-    this.changeQuery({ offset: Math.max(0, this.offset() + delta * 25) });
+    void this.changeQuery({ offset: Math.max(0, this.offset() + delta * 25) });
   }
   changeCase(value: string): void {
-    this.changeQuery({
+    void this.changeQuery({
       case_scope: value === "all" || value === "without_case" ? value : "selected",
       case_name: value.startsWith("case:") ? value.slice(5) : null,
       offset: 0,
     });
   }
-  currentCase(): string {
-    const q = this.state.context?.query;
-    return q?.caseScope === "selected" ? `case:${q.caseName}` : (q?.caseScope ?? "all");
-  }
   select(project: ManagementProject): void {
-    this.state.select(project);
+    if (this.state.pending()) return;
+    if (this.state.selected()?.id === project.id) this.state.clearSelection();
+    else this.state.select(project);
   }
   selectFromRow(event: MouseEvent, project: ManagementProject): void {
     if (!(event.target as HTMLElement).closest("a,button,input,label")) this.select(project);

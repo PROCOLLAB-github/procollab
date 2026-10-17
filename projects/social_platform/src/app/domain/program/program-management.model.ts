@@ -79,7 +79,13 @@ export interface ManagementTeam {
   projectId: number;
   programLinkId: number;
   name: string;
-  members: { id: number; name: string; role: string }[];
+  members: {
+    id: number;
+    name: string;
+    role: string;
+    email?: string | null;
+    avatar?: string | null;
+  }[];
 }
 export interface ManagementEvaluation {
   projectId: number;

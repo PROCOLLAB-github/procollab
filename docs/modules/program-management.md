@@ -27,6 +27,16 @@ Backend проверяет manager именно этой программы ли
 
 Native adapters Button/Field/Choice/Table, существующие Modal/Icon/Pagination/Alert и Mont сохраняют PROCOLLAB DS. Foundation подключена локально также на desktop; глобальные компоненты не менялись.
 
+## Исправления после dev-приёмки · 17.10.2026
+
+Поиск остаётся в DOM при обновлении списка; завершение навигации предыдущего запроса не заменяет более новый ввод. Кейс и сдача привязаны через Reactive Forms, включая отложенное появление вариантов. Повторный клик по выбранному кружку или строке и клавиша пробела снимают выбор; ссылки сохраняют свои переходы. Подсказка недоступной оценки находится под общим рядом действий.
+
+Кнопки организатора занимают доступную ширину колонок, текст остаётся в одну строку. На 360px более длинной подписи управления выделено больше места. В составе команды используются существующий AvatarComponent и полная почта из приватного API; старый ответ без этих полей поддерживается. В материалах заголовок/описание и действие разнесены, empty/list состояния имеют отдельные отступы.
+
+Проверки: **2122 Vitest / 416 файлов PASS**, dev build, ESLint/Stylelint и 18 API tests на PostgreSQL. Chrome + реальный локальный Django/PostgreSQL: медленный посимвольный поиск в обоих списках с сохранением DOM/focus, кейс после reload и совместно со сдачей, toggle мышью/клавиатурой, геометрия действий, почты/загруженные аватары, материалы CRUD и desktop1440/mobile390/360. Снимки: [кнопки](../qa/program-management-v1/feedback-20261017/entry-desktop.png), [панель действий](../qa/program-management-v1/feedback-20261017/selection-desktop.png), [команда](../qa/program-management-v1/feedback-20261017/team-desktop.png), [материалы](../qa/program-management-v1/feedback-20261017/materials-desktop.png).
+
+Backend dependency: [API #780](https://github.com/PROCOLLAB-github/api/pull/780), additive `members[].email/avatar`; существующие права сохранены, миграций нет. Live авторизованная сессия организатора и реальный Selectel transport не проверялись.
+
 ## Verification · 17.10.2026
 
 52 теста Vitest в семи файлах: management facade, компонент, HTTP contract, утилиты дат/статусов, ProgramRepository, ProgramShellInfoService и существующий FileService. Проверены отмена устаревших запросов и сброс приватных данных при 403, выбор, dirty confirmation, версия записи, загрузка multipart через FileService и кеш после сохранения.

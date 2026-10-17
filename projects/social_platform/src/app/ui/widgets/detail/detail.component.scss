@@ -11,7 +11,7 @@
   .info__primary-action {
     display: grid;
     grid-column: 1;
-    justify-content: end;
+    justify-content: stretch;
     width: 100%;
   }
 
@@ -24,6 +24,8 @@
   > a,
   app-button {
     display: grid;
+    width: 100%;
+    min-width: 0;
   }
 
   .info__divider {
@@ -32,7 +34,20 @@
 
   app-button {
     width: 100%;
-    min-height: 40px;
+    min-height: 44px;
+  }
+
+  ::ng-deep app-button > button {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    min-height: 44px;
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+
+  ::ng-deep .button__content {
+    white-space: nowrap;
   }
 
   @media (max-width: 999px) {
@@ -46,6 +61,16 @@
     > a {
       grid-column: 2;
     }
+
+    ::ng-deep app-button > button {
+      padding-right: 8px;
+      padding-left: 8px;
+    }
+  }
+
+  @media (max-width: 399px) {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 8px;
   }
 }
 

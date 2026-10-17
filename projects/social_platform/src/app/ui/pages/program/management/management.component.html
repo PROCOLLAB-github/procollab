@@ -30,13 +30,13 @@
       <h2>{{ requestError() }}</h2>
       <button type="button" appButton="secondary" (click)="state.retry()">Повторить</button>
     </section>
-  } @else if (state.pending()) {
+  } @else if (state.pending() && !state.program()) {
     <section class="management__card" aria-busy="true" aria-live="polite">
       Загружаем данные программы…
     </section>
   } @else if (state.program(); as program) {
     @if (section() === "participants" || section() === "projects") {
-      <section class="management__card">
+      <section class="management__card" [attr.aria-busy]="state.pending()">
         <h2>{{ section() === "participants" ? "Участники" : "Проекты" }}</h2>
         <p class="management__muted">
           {{
@@ -65,7 +65,10 @@
         @if (section() === "projects") {
           <div class="management__filters">
             <label
-              >Кейс<select [value]="currentCase()" (change)="changeCase($any($event.target).value)">
+              >Кейс<select
+                [formControl]="caseFilter"
+                (change)="changeCase($any($event.target).value)"
+              >
                 <option value="all">Все кейсы</option>
                 <option value="without_case">Без выбранного кейса</option>
                 @for (option of state.projects()?.caseOptions ?? []; track option) {
@@ -76,7 +79,7 @@
             @if (program.isCompetitive) {
               <label
                 >Сдача решения<select
-                  [value]="state.context?.query?.submission ?? 'all'"
+                  [formControl]="submissionFilter"
                   (change)="changeQuery({ submission: $any($event.target).value, offset: 0 })"
                 >
                   <option value="all">Все проекты</option>
@@ -102,25 +105,33 @@
                   >Перейти к оценке</a
                 >
               } @else {
-                <div>
-                  <button type="button" appButton="primary" disabled>Перейти к оценке</button>
-                  <p class="management__muted">
-                    {{
-                      program.isCompetitive
-                        ? "Сначала нужно сдать решение."
-                        : "Программа не предусматривает оценивание."
-                    }}
-                  </p>
-                </div>
+                <button
+                  type="button"
+                  appButton="primary"
+                  disabled
+                  aria-describedby="evaluation-unavailable"
+                >
+                  Перейти к оценке
+                </button>
               }
               <button
                 type="button"
                 appButton="icon"
+                class="management__clear-selection"
                 aria-label="Снять выбор проекта"
                 (click)="state.clearSelection()"
               >
                 <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
               </button>
+              @if (!selected.submitted || !program.isCompetitive) {
+                <p id="evaluation-unavailable" class="management__muted management__selection-hint">
+                  {{
+                    program.isCompetitive
+                      ? "Сначала нужно сдать решение."
+                      : "Программа не предусматривает оценивание."
+                  }}
+                </p>
+              }
             </section>
           } @else if (count()) {
             <p class="management__muted">
@@ -128,7 +139,9 @@
             </p>
           }
         }
-        @if (!count()) {
+        @if (state.pending()) {
+          <p class="management__list-loading" role="status">Обновляем список…</p>
+        } @else if (!count()) {
           <div class="management__empty" role="status">
             <h3>
               {{
@@ -230,7 +243,9 @@
                         [value]="project.id"
                         [checked]="state.selected()?.id === project.id"
                         [attr.aria-label]="'Выбрать проект «' + project.name + '»'"
-                        (change)="select(project)"
+                        (click)="select(project)"
+                        (keydown.space)="$event.preventDefault(); select(project)"
+                        (keydown.enter)="$event.preventDefault(); select(project)"
                     /></label>
                   </td>
                   <td class="management__name" data-label="Проект">
@@ -486,11 +501,15 @@
         </form>
       } @else {
         <section class="management__card">
-          <h2>Материалы программы</h2>
-          <p class="management__muted">Документы и полезные ссылки для участников.</p>
-          <button type="button" appButton="primary" (click)="editMaterial('new')">
-            Добавить материал
-          </button>
+          <header class="management__materials-heading">
+            <div>
+              <h2>Материалы программы</h2>
+              <p class="management__muted">Документы и полезные ссылки для участников.</p>
+            </div>
+            <button type="button" appButton="primary" (click)="editMaterial('new')">
+              Добавить материал
+            </button>
+          </header>
           @for (material of program.materials; track material.id) {
             <article class="management__material">
               <h3>
@@ -530,9 +549,12 @@
               </div>
             </article>
           } @empty {
-            <p class="management__empty">
-              В программе пока нет материалов. Добавьте файл или ссылку.
-            </p>
+            <div class="management__materials-empty">
+              <h3>В программе пока нет материалов</h3>
+              <p class="management__muted">
+                Добавьте файл или ссылку, чтобы участники могли открыть их со страницы программы.
+              </p>
+            </div>
           }
         </section>
       }
@@ -576,8 +598,12 @@
       <p>Участников: {{ team.members.length }}</p>
       @for (member of team.members; track member.id) {
         <div class="management__team-member">
-          <p>{{ member.name }}</p>
-          <p class="management__muted">{{ member.role }}</p>
+          <app-avatar [url]="href(member.avatar ?? null) ?? undefined" [size]="44" />
+          <div class="management__team-person">
+            <p class="management__team-name">{{ member.name }}</p>
+            <p class="management__muted">{{ member.role }}</p>
+            <p class="management__team-email">{{ member.email || "Почта не указана" }}</p>
+          </div>
         </div>
       }
     }
