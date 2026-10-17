@@ -1,11 +1,15 @@
 <!-- @format -->
 <div class="rating" [class.rating--compact]="layout() === 'compact'" [formGroup]="form">
   @for (criterion of criteria; track criterion.id) {
+    @let description =
+      criterion.type === "str" && criterion.description === "Доп. поле для впечатлений о проекте"
+        ? ""
+        : criterion.description;
     <section class="rating__criterion" [class.rating__criterion--text]="criterion.type === 'str'">
-      @if (layout() === "compact" && criterion.description) {
+      @if (layout() === "compact" && description) {
         <details class="rating__details">
           <summary>{{ criterion.name }}</summary>
-          <p class="rating__description">{{ criterion.description }}</p>
+          <p class="rating__description">{{ description }}</p>
         </details>
       } @else {
         <h4>{{ criterion.name }}</h4>
@@ -25,15 +29,15 @@
         />
         @if (layout() === "full") {
           <p class="rating__hint">
-            {{ criterion.description }}
+            {{ description }}
             {{ criterion.type === "int" ? "Целые баллы" : "Дробные баллы" }} ·
             {{ criterion.minValue === null ? "без минимума" : "от " + criterion.minValue
             }}{{ criterion.maxValue === null ? ", без максимума" : " до " + criterion.maxValue }}
           </p>
         }
       } @else if (criterion.type === "bool") {
-        @if (layout() === "full" && criterion.description) {
-          <p class="rating__description">{{ criterion.description }}</p>
+        @if (layout() === "full" && description) {
+          <p class="rating__description">{{ description }}</p>
         }
         <div class="rating__boolean" role="group" [attr.aria-label]="criterion.name">
           <button
@@ -63,8 +67,8 @@
           <p class="rating__hint">«Нет» — заполненный ответ.</p>
         }
       } @else {
-        @if (layout() === "full" && criterion.description) {
-          <p class="rating__description">{{ criterion.description }}</p>
+        @if (layout() === "full" && description) {
+          <p class="rating__description">{{ description }}</p>
         }
         <textarea
           appField
