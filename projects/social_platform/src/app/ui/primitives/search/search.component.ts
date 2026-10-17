@@ -145,10 +145,7 @@ export class SearchComponent implements ControlValueAccessor {
   }
 
   /** Обработчик клика вне поля - сворачивает поиск */
-  onClickOutside(event: Event) {
-    event.stopPropagation();
-    event.preventDefault();
-
+  onClickOutside(_: Event) {
     this.onSwitchSearch(false);
   }
 }

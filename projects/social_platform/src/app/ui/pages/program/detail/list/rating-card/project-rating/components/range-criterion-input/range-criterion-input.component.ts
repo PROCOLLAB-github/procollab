@@ -35,6 +35,7 @@ export class RangeCriterionInputComponent implements ControlValueAccessor {
   readonly step = input<number | "any">(1);
   readonly label = input<string>("Оценка");
   readonly error = input<boolean>(false);
+  readonly compact = input(false);
 
   value!: number | null;
 
