@@ -412,6 +412,10 @@
           @for (image of images; track image.key) {
             <div class="management__image">
               <strong>{{ image.label }}</strong>
+              <div [id]="'program-image-hint-' + image.key">
+                <p>{{ image.dimensions }}</p>
+                <p class="management__muted">{{ image.hint }}</p>
+              </div>
               @if (href(basicForm.get(image.key)?.value ?? null); as src) {
                 <img [src]="src" [alt]="image.label" />
               }
@@ -421,10 +425,12 @@
                   type="file"
                   accept="image/*"
                   hidden
+                  [attr.aria-describedby]="'program-image-hint-' + image.key"
                   (change)="upload($event, image.key)"
                 /><button
                   type="button"
                   appButton="secondary"
+                  [attr.aria-describedby]="'program-image-hint-' + image.key"
                   [disabled]="!!uploading() || saving()"
                   (click)="imageInput.click()"
                 >
