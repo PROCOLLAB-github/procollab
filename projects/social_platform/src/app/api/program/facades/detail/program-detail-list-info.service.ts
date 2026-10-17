@@ -416,6 +416,11 @@ export class ProgramDetailListInfoService {
         return;
       }
 
+      if (this.listType() === "rating" && key === "project_id") {
+        extraParams["project_id"] = value;
+        return;
+      }
+
       if (this.listType() === "rating" && key === "is_rated_by_expert") {
         extraParams["is_rated_by_expert"] = value;
         return;

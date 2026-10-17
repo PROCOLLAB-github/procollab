@@ -161,7 +161,7 @@ describe("ProgramRoleWidgetComponent", () => {
       [...f.nativeElement.querySelectorAll("dd")].map((el: HTMLElement) => el.textContent?.trim()),
     ).toEqual(["248", "61", "54", "19"]);
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
-      "/office/program/12/analytics",
+      "/office/program/12/management/analytics",
     );
   });
   it("shows only two expert counters and the real evaluation route", () => {
