@@ -8,15 +8,15 @@
 }
 
 // Native adapters share the existing foundation on desktop as well as mobile.
-:host .ui-button {
+.ui-button {
   @include ui-foundation.button;
 }
 
-:host .ui-field {
+.ui-field {
   @include ui-foundation.control;
 }
 
-:host .ui-choice {
+.ui-choice {
   @include ui-foundation.choice;
 }
 
@@ -456,7 +456,16 @@
   }
 
   p {
+    margin: 0;
+    line-height: 1.5;
     overflow-wrap: anywhere;
+  }
+
+  .ui-alert--error {
+    padding: 12px;
+    color: var(--red-dark);
+    background: var(--red-light);
+    border-radius: 8px;
   }
 
   fieldset {
@@ -473,6 +482,29 @@
       align-items: center;
       min-height: 44px;
     }
+  }
+}
+
+.management__dropzone {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  padding: 24px 20px;
+  text-align: center;
+  background: var(--ui-surface-subtle);
+  border: 1px dashed var(--ui-border);
+  border-radius: var(--ui-radius-card);
+
+  &--active {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .management__dropzone-title {
+    margin-bottom: 4px;
+    font-weight: 600;
   }
 }
 
@@ -610,6 +642,14 @@
   .management__team {
     width: 100%;
     border: 0;
+  }
+
+  .management__dialog-actions {
+    display: grid;
+
+    > button {
+      width: 100%;
+    }
   }
 }
 

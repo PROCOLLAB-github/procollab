@@ -104,6 +104,9 @@ export class ProgramManagementComponent implements OnInit {
   readonly formError = signal<string | null>(null);
   readonly saved = signal(false);
   readonly editingMaterial = signal<ManagementMaterial | "new" | null>(null);
+  readonly materialDragActive = signal(false);
+  readonly materialFileName = signal("");
+  private materialDragDepth = 0;
   readonly confirmation = signal<{
     title: string;
     text: string;
@@ -416,7 +419,16 @@ export class ProgramManagementComponent implements OnInit {
   upload(event: Event, target: string): void {
     const input = event.target as HTMLInputElement,
       file = input.files?.[0];
+    input.value = "";
     if (!file) return;
+    this.uploadFile(file, target);
+  }
+  private uploadFile(file: File, target: string): void {
+    if (this.saving() || this.uploading()) return;
+    if (target === "material") {
+      this.materialForm.controls.mode.setValue("file");
+      this.materialForm.controls.mode.markAsDirty();
+    }
     if (target !== "material" && !file.type.startsWith("image/")) {
       this.formError.set("Выберите изображение.");
       return;
@@ -428,7 +440,6 @@ export class ProgramManagementComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.uploading.set(null);
-          input.value = "";
         }),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -438,11 +449,51 @@ export class ProgramManagementComponent implements OnInit {
             target === "material" ? this.materialForm.controls.file : this.basicForm.get(target);
           control?.setValue(url);
           control?.markAsDirty();
+          if (target === "material") this.materialFileName.set(file.name);
         },
-        error: (error: HttpErrorResponse) => this.formError.set(this.errorMessage(error)),
+        error: (error: HttpErrorResponse) =>
+          this.formError.set(
+            error.status === 413
+              ? "Файл слишком большой. Выберите файл меньшего размера."
+              : this.errorMessage(error),
+          ),
       });
   }
+  onMaterialDragEnter(event: DragEvent): void {
+    if (!event.dataTransfer?.types.includes("Files")) return;
+    event.preventDefault();
+    this.materialDragDepth++;
+    if (!this.saving() && !this.uploading()) this.materialDragActive.set(true);
+  }
+  onMaterialDragOver(event: DragEvent): void {
+    if (!event.dataTransfer?.types.includes("Files")) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = this.saving() || this.uploading() ? "none" : "copy";
+  }
+  onMaterialDragLeave(): void {
+    this.materialDragDepth = Math.max(0, this.materialDragDepth - 1);
+    if (!this.materialDragDepth) this.materialDragActive.set(false);
+  }
+  onMaterialDrop(event: DragEvent): void {
+    const files = event.dataTransfer?.files;
+    this.resetMaterialDrag();
+    if (!event.dataTransfer?.types.includes("Files")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!this.editingMaterial() || this.saving() || this.uploading()) return;
+    if (files?.length !== 1) {
+      this.formError.set("Добавляйте по одному файлу в каждый материал.");
+      return;
+    }
+    this.uploadFile(files[0], "material");
+  }
+  private resetMaterialDrag(): void {
+    this.materialDragDepth = 0;
+    this.materialDragActive.set(false);
+  }
   editMaterial(material: ManagementMaterial | "new"): void {
+    this.resetMaterialDrag();
+    this.materialFileName.set(material === "new" ? "" : (material.file?.name ?? ""));
     this.editingMaterial.set(material);
     this.formError.set(null);
     this.materialForm.reset(
@@ -458,6 +509,7 @@ export class ProgramManagementComponent implements OnInit {
   }
   async closeMaterial(): Promise<void> {
     if (this.saving() || this.uploading()) return;
+    this.resetMaterialDrag();
     if (
       this.materialForm.dirty &&
       !(await this.confirm(
