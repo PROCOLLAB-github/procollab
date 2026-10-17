@@ -201,7 +201,8 @@
     position: sticky;
     top: 0;
     z-index: 2;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto 44px;
     gap: 12px;
     align-items: center;
     padding: 12px;
@@ -225,6 +226,21 @@
     span {
       color: var(--grey-for-text);
     }
+  }
+
+  &__clear-selection {
+    grid-row: 1;
+    grid-column: 4;
+  }
+
+  p.management__selection-hint {
+    grid-column: 2 / 4;
+    margin: 0;
+  }
+
+  &__list-loading {
+    padding: 28px 0;
+    color: var(--grey-for-text);
   }
 
   &__primary-link {
@@ -306,6 +322,22 @@
     }
   }
 
+  &__materials-heading {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+
+    > button {
+      flex-shrink: 0;
+    }
+  }
+
+  &__materials-empty {
+    max-width: 480px;
+    padding: 32px 0 12px;
+  }
+
   &__material {
     display: grid;
     gap: 8px;
@@ -381,8 +413,34 @@
 }
 
 .management__team-member {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
   padding: 16px 0;
   border-top: 1px solid var(--medium-grey-for-outline);
+
+  app-avatar {
+    flex-shrink: 0;
+  }
+}
+
+.management__team-person {
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  p {
+    margin: 0 0 4px;
+  }
+
+  .management__team-name {
+    font-weight: 600;
+  }
+
+  .management__team-email {
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
 }
 
 .management__dialog {
@@ -510,8 +568,7 @@
       grid-template-columns: minmax(0, 1fr) 44px;
 
       > button:not([aria-label]),
-      > a,
-      > div:has(button) {
+      > a {
         grid-column: 1 / -1;
         width: 100%;
       }
@@ -525,6 +582,20 @@
     &__selection-name {
       grid-row: 1;
       grid-column: 1;
+    }
+
+    p.management__selection-hint {
+      grid-column: 1 / -1;
+    }
+
+    &__materials-heading {
+      display: grid;
+      gap: 20px;
+      justify-content: start;
+
+      > button {
+        justify-self: start;
+      }
     }
 
     &__inline > button {
