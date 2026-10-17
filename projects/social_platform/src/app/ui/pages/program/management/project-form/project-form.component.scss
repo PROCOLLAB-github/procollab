@@ -1,0 +1,274 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
+
+.project-form {
+  display: grid;
+  gap: 20px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--black);
+}
+
+.project-form h2,
+.project-form__dialog h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.project-form h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.project-form h4 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.project-form p,
+.project-form__dialog p {
+  margin: 6px 0 0;
+  color: var(--grey-for-text);
+  overflow-wrap: anywhere;
+}
+
+.project-form__heading,
+.project-form__section-heading,
+.project-form__row,
+.project-form__footer,
+.project-form__dialog-heading {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project-form__heading {
+  align-items: flex-start;
+}
+
+.project-form__heading > div,
+.project-form__row > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-form__heading > button {
+  flex-shrink: 0;
+}
+
+.project-form__card {
+  padding: 24px;
+  background: var(--light-white);
+  border-radius: 15px;
+}
+
+.project-form__section-heading {
+  margin-bottom: 20px;
+}
+
+.project-form__section-heading .ui-button {
+  min-height: 0;
+  padding: 0;
+  font: inherit;
+}
+
+.project-form__row {
+  padding: 12px 0;
+  border-top: 1px solid var(--medium-grey-for-outline);
+}
+
+.project-form__row:last-of-type {
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+}
+
+.project-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.project-form__row > .project-form__actions {
+  flex-shrink: 0;
+}
+
+.project-form__notice {
+  margin-top: 16px !important;
+}
+
+.project-form__empty {
+  padding: 12px 0 24px;
+}
+
+.project-form__case-editor {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  margin: 12px 0 20px;
+  background: var(--light-gray);
+  border-radius: 12px;
+}
+
+.project-form__footer {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.project-form__dialog {
+  display: grid;
+  gap: 20px;
+  width: 600px;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--black);
+}
+
+.project-form__dialog > label {
+  display: grid;
+  gap: 8px;
+}
+
+.project-form__dialog .project-form__checkbox {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.project-form__dialog textarea {
+  resize: vertical;
+}
+
+.project-form__dialog-heading {
+  align-items: flex-start;
+}
+
+.project-form__dialog-heading button {
+  flex-shrink: 0;
+}
+
+.project-form__note {
+  padding: 16px;
+  background: var(--light-gray);
+  border-radius: 12px;
+}
+
+.project-form__options {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.project-form__options legend {
+  margin-bottom: 12px;
+}
+
+.project-form__option {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.project-form__option .ui-field {
+  flex: 1;
+}
+
+.project-form__option button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.project-form__options > .ui-button {
+  justify-self: start;
+}
+
+.project-form__dialog footer {
+  display: grid;
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--medium-grey-for-outline);
+}
+
+.project-form .project-form__error {
+  color: var(--red-dark);
+}
+
+.project-form .ui-alert--error,
+.project-form__dialog .ui-alert--error {
+  padding: 16px;
+  color: var(--red-dark);
+  background: var(--red-light);
+  border-radius: 12px;
+}
+
+.project-form .ui-alert--success,
+.project-form__dialog .ui-alert--success {
+  padding: 16px;
+  color: var(--green-dark);
+  background: var(--green-light);
+  border-radius: 12px;
+}
+
+@media (max-width: 650px) {
+  .project-form__heading,
+  .project-form__row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .project-form__card {
+    padding: 16px;
+  }
+
+  .project-form__case-editor {
+    padding: 12px;
+  }
+
+  .project-form__footer > .project-form__actions {
+    width: 100%;
+  }
+
+  .project-form__footer .ui-button {
+    width: 100%;
+  }
+
+  .project-form__dialog {
+    width: 100%;
+  }
+
+  .project-form__dialog footer .project-form__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

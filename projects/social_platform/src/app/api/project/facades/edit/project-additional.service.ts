@@ -1,7 +1,8 @@
 /** @format */
 
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { programFieldControl } from "@utils/program-field-controls";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { defer, map, Observable, of, Subject, Subscription, switchMap, takeUntil, tap } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
@@ -67,6 +68,8 @@ export class ProjectAdditionalService {
   readonly loadFailed = computed(() => this.fieldsState().status === "failure");
   readonly saveError = signal<string | null>(null);
   readonly caseError = signal<string | null>(null);
+  readonly submissionAttempt = signal(0);
+  readonly uploading = signal(false);
   readonly isSend$ = signal<AsyncState<void>>(initial());
   readonly errorAssignProjectToProgramModalMessage = signal<{ non_field_errors: string[] } | null>(
     null,
@@ -102,6 +105,8 @@ export class ProjectAdditionalService {
     this.clearForm();
     this.saveError.set(null);
     this.caseError.set(null);
+    this.submissionAttempt.set(0);
+    this.uploading.set(false);
     this.isSend$.set(initial());
     this.fieldsState.set(initial());
     if (this.context) this.loadFields();
@@ -169,23 +174,12 @@ export class ProjectAdditionalService {
     for (const field of snapshot.fields) {
       const isCase = field.name === PROGRAM_CASE_FIELD_NAME;
       let value = edits && field.name in edits ? edits[field.name] : field.value;
-      if (field.fieldType === "checkbox" || field.fieldType === "radio") {
-        value =
-          value === true || (typeof value === "string" && value.trim().toLowerCase() === "true");
-      } else value ??= "";
+      value ??= "";
       if (isCase && !snapshot.submitted && value !== "" && !field.options.includes(String(value))) {
         value = "";
         this.caseError.set("Выбранный кейс больше недоступен. Выберите актуальный кейс.");
       }
-      const validators = field.isRequired || isCase ? [Validators.required] : [];
-      if (isCase)
-        validators.push(control => {
-          if (typeof control.value !== "string" || !control.value.trim()) return { required: true };
-          return field.options.includes(control.value) ? null : { caseUnavailable: true };
-        });
-      if (field.fieldType === "text") validators.push(Validators.maxLength(500));
-      if (field.fieldType === "textarea") validators.push(Validators.maxLength(300));
-      const control = new FormControl(value, validators);
+      const control = programFieldControl(field, value);
       this.additionalForm.addControl(field.name, control, { emitEvent: false });
       if (isCase)
         control.valueChanges
@@ -217,13 +211,16 @@ export class ProjectAdditionalService {
     return this.additionalForm.invalid;
   }
 
-  /** Empty case is omitted from partial draft PUT; generic serialization stays unchanged. */
+  /** Explicit empty case clears its saved draft choice; omitted fields remain partial. */
   private valuesForSave(): ProjectNewAdditionalProgramFields[] {
     return this.partnerProgramFields().flatMap(field => {
       const value = this.additionalForm.get(field.name)?.value;
-      if (field.name === PROGRAM_CASE_FIELD_NAME && (value == null || String(value).trim() === ""))
-        return [];
-      return [ProjectNewAdditionalProgramFields.fromField(field, String(value))];
+      return [
+        ProjectNewAdditionalProgramFields.fromField(
+          field,
+          value == null ? "" : String(value).trim() === "" ? "" : String(value),
+        ),
+      ];
     });
   }
 
@@ -244,7 +241,15 @@ export class ProjectAdditionalService {
         this.isSend$.set(failure(blocked));
         return of(fail(error));
       }
+      if (submit) this.submissionAttempt.update(n => n + 1);
+      if (this.uploading()) {
+        this.saveError.set("Дождитесь загрузки файла перед сохранением.");
+        return of(fail<ProgramLinkFieldsError>({ kind: "context" }));
+      }
       if (submit && this.validateRequiredFields()) {
+        this.saveError.set(
+          "Заполните отмеченные поля перед сдачей решения. Черновик можно сохранить незаполненным.",
+        );
         return of(
           fail<ProgramLinkFieldsError>({
             kind: this.additionalForm.get(PROGRAM_CASE_FIELD_NAME)?.invalid
@@ -280,8 +285,9 @@ export class ProjectAdditionalService {
               const control = this.additionalForm.get(PROGRAM_CASE_FIELD_NAME);
               control?.setErrors({ ...(control.errors ?? {}), caseBackend: true });
               control?.markAsTouched();
-              if (result.error.kind === "case_unavailable") this.loadFields(true);
+              if (result.error.kind === "case_unavailable" || !control) this.loadFields(true);
             }
+            if (result.error.kind === "required_fields") this.loadFields(true);
             if (
               result.error.kind === "submission_closed" ||
               result.error.kind === "already_submitted" ||

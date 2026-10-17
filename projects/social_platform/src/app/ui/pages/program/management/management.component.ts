@@ -13,6 +13,7 @@ import {
   inject,
   signal,
   untracked,
+  viewChild,
 } from "@angular/core";
 import { DatePipe, DOCUMENT } from "@angular/common";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
@@ -49,6 +50,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.component";
 import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
+import { ManagementProjectFormComponent } from "./project-form/project-form.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -74,6 +76,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ModalComponent,
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,
+    ManagementProjectFormComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -107,6 +110,18 @@ export class ProgramManagementComponent implements OnInit {
   readonly uploading = signal<string | null>(null);
   readonly formError = signal<string | null>(null);
   readonly saved = signal(false);
+  readonly projectForm = viewChild(ManagementProjectFormComponent);
+  readonly projectFormStatus = signal({ dirty: false, busy: false });
+  readonly confirmProjectFormDiscard = () =>
+    this.confirm(
+      "Есть несохранённые изменения",
+      "При выходе изменения будут потеряны.",
+      "Выйти без сохранения",
+      true,
+    );
+  projectFormSaved(updatedAt: string): void {
+    this.state.program.update(program => (program ? { ...program, updatedAt } : program));
+  }
   readonly editingMaterial = signal<ManagementMaterial | "new" | null>(null);
   readonly materialDragActive = signal(false);
   readonly materialFileName = signal("");
@@ -130,6 +145,7 @@ export class ProgramManagementComponent implements OnInit {
     { id: "basic", label: "Основное" },
     { id: "dates", label: "Сроки" },
     { id: "materials", label: "Материалы" },
+    { id: "project-form", label: "Кейсы и поля" },
   ];
   readonly basicForm = this.fb.group({
     name: ["", [Validators.required, Validators.pattern(/\S/)]],
@@ -222,7 +238,7 @@ export class ProgramManagementComponent implements OnInit {
     this.mobile.set(window.innerWidth < 1000);
   }
   @HostListener("window:beforeunload", ["$event"]) onBeforeUnload(event: BeforeUnloadEvent): void {
-    if (this.dirty() || this.saving() || this.uploading()) {
+    if (this.dirty() || this.saving() || this.uploading() || this.projectFormStatus().busy) {
       event.preventDefault();
       event.returnValue = "";
     }
@@ -252,7 +268,9 @@ export class ProgramManagementComponent implements OnInit {
           : "participants";
         const q = this.route.snapshot.queryParamMap;
         const tab = q.get("tab");
-        this.settingsTab.set(tab === "dates" || tab === "materials" ? tab : "basic");
+        this.settingsTab.set(
+          tab === "dates" || tab === "materials" || tab === "project-form" ? tab : "basic",
+        );
         this.section.set(section);
         this.formError.set(null);
         this.saved.set(false);
@@ -357,10 +375,15 @@ export class ProgramManagementComponent implements OnInit {
     };
   }
   dirty(): boolean {
-    return this.basicForm.dirty || this.datesForm.dirty || this.materialForm.dirty;
+    return (
+      this.basicForm.dirty ||
+      this.datesForm.dirty ||
+      this.materialForm.dirty ||
+      this.projectFormStatus().dirty
+    );
   }
   async canLeave(): Promise<boolean> {
-    if (this.saving() || this.uploading()) return false;
+    if (this.saving() || this.uploading() || this.projectFormStatus().busy) return false;
     if (!this.dirty()) return true;
     const yes = await this.confirm(
       "Есть несохранённые изменения",
@@ -373,6 +396,8 @@ export class ProgramManagementComponent implements OnInit {
       this.datesForm.markAsPristine();
       this.materialForm.markAsPristine();
       this.editingMaterial.set(null);
+      this.projectForm()?.discard();
+      this.projectFormStatus.set({ dirty: false, busy: false });
     }
     return yes;
   }
@@ -406,7 +431,14 @@ export class ProgramManagementComponent implements OnInit {
   save(confirmReopen = false): void {
     const p = this.state.program(),
       section = this.settingsTab();
-    if (!p || section === "materials" || this.saving() || this.uploading()) return;
+    if (
+      !p ||
+      section === "materials" ||
+      section === "project-form" ||
+      this.saving() ||
+      this.uploading()
+    )
+      return;
     const form = section === "basic" ? this.basicForm : this.datesForm;
     if (form.invalid) {
       form.markAllAsTouched();

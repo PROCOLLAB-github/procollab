@@ -202,7 +202,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
       repo.updateProgramLinkFields.mock.calls[0][1].some(
         (value: { fieldId: number }) => value.fieldId === 5,
       ),
-    ).toBe(false);
+    ).toBe(true);
     expect(update.execute).toHaveBeenCalledOnce();
     expect(update.execute).toHaveBeenCalledWith({ id: 55, data: { name: "Project", draft: true } });
     expect(service.projectForm.get("partnerProgramId")?.value).toBe(99);

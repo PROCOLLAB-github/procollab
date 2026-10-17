@@ -461,6 +461,8 @@ export class ProjectsEditInfoService {
     const vacancyInvalid = this.projectVacancyUIService.applyValidateForm();
     if (projectValid && additionalValid && !vacancyInvalid) return true;
 
+    if (!additionalValid) this.projectAdditionalService.submissionAttempt.update(n => n + 1);
+
     this.projectForm.markAllAsTouched();
     if (!isDraft) this.additionalForm.markAllAsTouched();
     this.projSubmitInitiated.set(!isDraft);
@@ -559,6 +561,10 @@ export class ProjectsEditInfoService {
   }
 
   private additionalContextReady(): boolean {
+    if (this.projectAdditionalService.uploading()) {
+      this.snackBarService.error("Дождитесь загрузки файла перед сохранением.");
+      return false;
+    }
     if (!this.projectAdditionalService.hasProgramLink() || this.activeProgramLinkId()) return true;
     this.projectStepService.setStepFromRoute("additional");
     this.projFormIsSubmitting$.set(failure("additional_fields_unavailable"));

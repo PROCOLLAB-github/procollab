@@ -386,7 +386,15 @@
       @if (saved()) {
         <p appAlert="success">Изменения сохранены.</p>
       }
-      @if (settingsTab() === "basic") {
+      @if (settingsTab() === "project-form") {
+        <app-management-project-form
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="projectFormStatus.set($event)"
+          (savedAt)="projectFormSaved($event)"
+          (materials)="changeQuery({ tab: 'materials' })"
+        />
+      } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
           <h2>Основная информация</h2>
           @for (field of basicFields; track field.key) {
