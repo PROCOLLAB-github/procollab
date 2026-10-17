@@ -188,6 +188,7 @@
                 <th scope="col">Почта</th>
                 <th scope="col">Город</th>
                 <th scope="col">В программе с</th>
+                <th scope="col" title="Время по Москве">Дата последней активности</th>
               </tr>
             </thead>
             <tbody>
@@ -198,6 +199,15 @@
                   <td data-label="Город">{{ person.city || "Не указан" }}</td>
                   <td data-label="В программе с">
                     {{ person.registeredAt | date: "dd.MM.yyyy" : "+0300" }}
+                  </td>
+                  <td data-label="Последняя активность">
+                    @if (person.lastActivity) {
+                      <time [attr.datetime]="person.lastActivity" title="Время по Москве">{{
+                        person.lastActivity | date: "dd.MM.yyyy HH:mm" : "+0300"
+                      }}</time>
+                    } @else {
+                      —
+                    }
                   </td>
                 </tr>
               }
