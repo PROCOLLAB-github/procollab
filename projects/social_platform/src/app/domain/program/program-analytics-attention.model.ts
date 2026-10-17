@@ -15,7 +15,7 @@ export type ProgramAnalyticsAttentionPage<T> = Omit<ApiPagination<T>, "next" | "
   previous: string | null;
 };
 
-/** Уникальный участник без команды в этой программе, не признак «ищет команду».
+/** Уникальный участник списка внимания программы, не признак «ищет команду».
  * registeredAt — регистрация в программе, city сохраняет legacy-значения backend.
  */
 export interface ProgramAnalyticsAttentionParticipant {

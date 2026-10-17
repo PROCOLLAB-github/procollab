@@ -76,7 +76,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     modal = fixture.debugElement.query(By.directive(ModalComponent)).componentInstance;
     state = fixture.debugElement.injector.get(ProgramAnalyticsDrilldownService);
     trigger = document.createElement("button");
-    trigger.textContent = "Назначений";
+    trigger.textContent = "Назначений всего";
     document.body.append(trigger);
     trigger.focus();
   });
@@ -277,7 +277,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await attached;
     await fixture.whenStable();
     const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
-    expect(dialog().textContent).toContain("Критическая задержка");
+    expect(dialog().textContent).toContain("Дедлайн оценивания прошёл");
     expect(dialog().textContent).toContain("Выполнено 3 из 8");
     expect(dialog().textContent).toContain("2 д 4 ч");
     button("Посмотреть назначения").click();
@@ -364,11 +364,33 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     fixture.componentInstance.openDelayed(trigger);
     await attached;
     await fixture.whenStable();
-    expect(dialog().textContent).toContain("Требует внимания");
-    expect(dialog().textContent).not.toContain("Критическая задержка");
+    expect(dialog().textContent).toContain("До дедлайна ≤ 5 дней");
+    expect(dialog().textContent).not.toContain("Дедлайн оценивания прошёл");
     button("Посмотреть назначения").click();
     await fixture.whenStable();
     expect(dialog().textContent).toContain("У эксперта нет ожидающих назначений");
+  });
+
+  it("сигнал по дедлайну отображается и при неизвестном времени ожидания", async () => {
+    fixture.componentRef.setInput("delayedExperts", {
+      total: 1,
+      items: [
+        delayedExpert({
+          severity: "warning",
+          overdue24H: 0,
+          overdue48H: 0,
+          oldestWaitingSince: null,
+          oldestWaitingSeconds: null,
+        }),
+      ],
+    });
+    const attached = firstValueFrom(modal.overlayRef!.attachments());
+    fixture.componentInstance.openDelayed(trigger);
+    await attached;
+    await fixture.whenStable();
+    expect(dialog().textContent).toContain("До дедлайна ≤ 5 дней");
+    expect(dialog().textContent).toContain("Самое долгое ожидание: Нет данных");
+    expect(dialog().textContent).toContain("Не завершено: 5");
   });
 
   it("не выполняет запросы для отсутствующей программы и не обрабатывает Escape без attachment", async () => {

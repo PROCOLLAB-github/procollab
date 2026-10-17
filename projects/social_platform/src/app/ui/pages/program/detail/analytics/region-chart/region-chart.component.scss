@@ -1,0 +1,81 @@
+/** @format */
+
+:host {
+  display: block;
+  min-width: 0;
+  margin-top: 12px;
+}
+
+.region-chart {
+  &__note {
+    margin-bottom: 8px;
+    font-size: 11px;
+    line-height: 18px;
+    color: var(--grey-for-text);
+  }
+
+  &__scroll {
+    max-height: 420px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    &:focus-visible {
+      border-radius: 4px;
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &__plot {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__data {
+    margin-top: 12px;
+    border-top: 1px solid var(--medium-grey-for-outline);
+
+    summary {
+      padding: 12px 0 0;
+      font-size: 12px;
+      color: var(--accent-dark);
+      cursor: pointer;
+
+      span {
+        margin-left: 6px;
+        color: var(--grey-for-text);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+    }
+
+    table {
+      width: 100%;
+      margin-top: 12px;
+      font-size: 12px;
+      border-collapse: collapse;
+    }
+
+    caption {
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 10px 0;
+      text-align: left;
+      overflow-wrap: anywhere;
+      border-bottom: 1px solid var(--medium-grey-for-outline);
+    }
+
+    td,
+    th:last-child {
+      padding-left: 12px;
+      text-align: right;
+    }
+  }
+}

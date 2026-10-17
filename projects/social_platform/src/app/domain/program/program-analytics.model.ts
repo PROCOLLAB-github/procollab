@@ -13,6 +13,8 @@ export interface ProgramAnalyticsOverview {
   participantFunnel: {
     registrations: number;
     uniqueParticipants: number;
+    /** Recorded platform activity or login; absent during a staggered API rollout. */
+    visitedParticipants?: number;
     withTeam: number;
     projectCreators: number;
     submittedProjectCreators: number;
@@ -39,6 +41,8 @@ export interface ProgramAnalyticsOverview {
     };
   };
   attention: {
+    /** Registered users with neither recorded activity nor login; optional during rollout. */
+    participantsWithoutVisit?: number;
     participantsWithoutTeam: number;
     projectsAwaitingEvaluation: number;
     /** Несданные связи: требование сдачи применимо только к конкурсной программе. */
@@ -156,8 +160,8 @@ export interface ProgramAnalyticsAssignmentScoreDetail extends ProgramAnalyticsA
   scores: ProgramAnalyticsAssignmentCriterion[];
 }
 
-/** Severity и порядок authoritative: warning — >=2 ожиданий 24ч, critical — >=1 48ч.
- * Заглавная H соответствует преобразованию overdue_24h/overdue_48h interceptor-ом.
+/** Backend включает эксперта за 5 суток до дедлайна: warning до него, critical после.
+ * overdue24H/overdue48H сохранены для совместимости и не определяют сигнал.
  */
 export interface ProgramAnalyticsDelayedExpert extends ProgramAnalyticsAssignmentExpert {
   assignmentsTotal: number;
@@ -165,8 +169,8 @@ export interface ProgramAnalyticsDelayedExpert extends ProgramAnalyticsAssignmen
   pending: number;
   overdue24H: number;
   overdue48H: number;
-  oldestWaitingSince: string;
-  oldestWaitingSeconds: number;
+  oldestWaitingSince: string | null;
+  oldestWaitingSeconds: number | null;
   severity: "warning" | "critical";
 }
 

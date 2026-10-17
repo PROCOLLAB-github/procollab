@@ -68,9 +68,9 @@ describe("ProgramRoleWidgetComponent", () => {
       expect(link.getAttribute("href")).toBe("/office/projects/5?programLinkId=34");
     expect(links[0].textContent).toContain(participant.participant.participantProject!.name);
     expect(f.nativeElement.querySelector('[aria-current="step"]').textContent).toContain(
-      "Проверка",
+      "Проверен",
     );
-    expect(f.nativeElement.querySelectorAll(".widget__step--complete")).toHaveLength(1);
+    expect(f.nativeElement.querySelectorAll(".widget__step--complete")).toHaveLength(2);
   });
   it("does not create or submit automatically and uses existing explicit action", () => {
     const f = render({
@@ -89,6 +89,39 @@ describe("ProgramRoleWidgetComponent", () => {
     expect(f.nativeElement.querySelectorAll(".widget__step--complete")).toHaveLength(3);
     expect(f.nativeElement.querySelector('[aria-current="step"]')).toBeNull();
   });
+  it.each([
+    ["not_submitted", true, 1, "Отправлен"],
+    ["submitted", true, 2, "Проверен"],
+    ["none", false, 0, "Создан"],
+    ["not_applicable", true, 1, null],
+    ["not_applicable", false, 0, "Создан"],
+  ] as const)(
+    "shows participant milestones for %s (project: %s)",
+    (stage, hasProject, completed, current) => {
+      const f = render({
+        ...participant,
+        isCompetitive: stage !== "not_applicable",
+        participant: {
+          ...participant.participant,
+          participantProject: hasProject ? participant.participant.participantProject : null,
+          stage,
+        },
+      });
+      const list = f.nativeElement.querySelector(
+        '[aria-label="Этапы проекта"]',
+      ) as HTMLOListElement;
+      expect(
+        [...list.querySelectorAll("li > span:last-child")].map(el => el.textContent?.trim()),
+      ).toEqual(["Создан", "Отправлен", "Проверен"]);
+      expect(list.querySelectorAll(".widget__step--complete")).toHaveLength(completed);
+      expect(list.querySelector('[aria-current="step"]')?.textContent ?? null).toEqual(
+        current ? expect.stringContaining(current) : null,
+      );
+      expect(list.textContent).not.toMatch(/Проверка|Оценён/);
+      if (stage === "not_applicable")
+        expect(f.nativeElement.textContent).toContain("Сдача не предусмотрена");
+    },
+  );
   it("has no broken action when submission is closed", () => {
     const f = render({
       ...participant,
@@ -110,7 +143,7 @@ describe("ProgramRoleWidgetComponent", () => {
     expect(f.nativeElement.textContent).toContain("Не отправлен");
     expect(f.nativeElement.querySelectorAll("a")).toHaveLength(2);
   });
-  it("shows four organizer counters and one inline percentage", () => {
+  it("shows four organizer counts without a standalone percentage", () => {
     const f = render({
       role: "organizer",
       programId: 12,
@@ -123,7 +156,10 @@ describe("ProgramRoleWidgetComponent", () => {
       },
     });
     expect(f.nativeElement.querySelectorAll("dd")).toHaveLength(4);
-    expect(f.nativeElement.textContent).toContain("7,7%");
+    expect(f.nativeElement.textContent).not.toContain("%");
+    expect(
+      [...f.nativeElement.querySelectorAll("dd")].map((el: HTMLElement) => el.textContent?.trim()),
+    ).toEqual(["248", "61", "54", "19"]);
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
       "/office/program/12/analytics",
     );

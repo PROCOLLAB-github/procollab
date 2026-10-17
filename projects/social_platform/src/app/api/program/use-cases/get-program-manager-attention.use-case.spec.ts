@@ -12,6 +12,7 @@ import {
   notSubmittedPage,
 } from "@domain/program/program-analytics-attention.fixture";
 import { GetProgramManagerParticipantsWithoutTeamUseCase } from "./get-program-manager-participants-without-team.use-case";
+import { GetProgramManagerParticipantsWithoutVisitUseCase } from "./get-program-manager-participants-without-visit.use-case";
 import { GetProgramManagerProjectsAwaitingEvaluationUseCase } from "./get-program-manager-projects-awaiting-evaluation.use-case";
 import { GetProgramManagerProjectsNotSubmittedUseCase } from "./get-program-manager-projects-not-submitted.use-case";
 
@@ -28,6 +29,12 @@ describe("Attention: adapter → repository → use cases", () => {
   });
 
   for (const [method, endpoint, useCase, page] of [
+    [
+      "getManagerParticipantsWithoutVisit",
+      "participants-without-visit",
+      GetProgramManagerParticipantsWithoutVisitUseCase,
+      participantsPage(),
+    ],
     [
       "getManagerProjectsNotSubmitted",
       "projects-not-submitted",
@@ -50,6 +57,7 @@ describe("Attention: adapter → repository → use cases", () => {
     const injectUseCase = () =>
       TestBed.inject<
         | GetProgramManagerParticipantsWithoutTeamUseCase
+        | GetProgramManagerParticipantsWithoutVisitUseCase
         | GetProgramManagerProjectsAwaitingEvaluationUseCase
         | GetProgramManagerProjectsNotSubmittedUseCase
       >(useCase);
@@ -69,7 +77,6 @@ describe("Attention: adapter → repository → use cases", () => {
       expect(api.get).toHaveBeenCalledTimes(2);
       const [url, params] = api.get.mock.lastCall! as [string, HttpParams];
       expect(url).toBe(`/programs/12/project-analytics/${endpoint}/`);
-      expect(url).not.toContain("manager-overview");
       expect(params.get("search")).toBe("Анна");
       expect(params.get("limit")).toBe("25");
       expect(params.get("offset")).toBe("25");
