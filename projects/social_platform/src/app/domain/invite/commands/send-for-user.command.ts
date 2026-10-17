@@ -5,4 +5,5 @@ export interface SendForUserCommand {
   projectId: number;
   role: string;
   specialization?: string;
+  programLinkId?: number;
 }

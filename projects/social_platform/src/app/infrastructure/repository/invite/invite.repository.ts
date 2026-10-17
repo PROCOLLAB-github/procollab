@@ -56,15 +56,24 @@ export class InviteRepository implements InviteRepositoryPort {
     projectId: number,
     role: string,
     specialization?: string,
+    programLinkId?: number,
   ): Observable<Invite> {
-    return this.inviteAdapter.sendForUser(userId, projectId, role, specialization).pipe(
-      map(raw => {
-        const invite = plainToInstance(Invite, raw);
-        if (raw.sender) invite.sender = userFromRaw(raw.sender);
-        if (raw.user) invite.user = userFromRaw(raw.user);
-        return invite;
-      }),
-    );
+    return this.inviteAdapter
+      .sendForUser(
+        userId,
+        projectId,
+        role,
+        specialization,
+        ...[programLinkId].filter((id): id is number => id !== undefined),
+      )
+      .pipe(
+        map(raw => {
+          const invite = plainToInstance(Invite, raw);
+          if (raw.sender) invite.sender = userFromRaw(raw.sender);
+          if (raw.user) invite.user = userFromRaw(raw.user);
+          return invite;
+        }),
+      );
   }
 
   revokeInvite(invitationId: number): Observable<void> {

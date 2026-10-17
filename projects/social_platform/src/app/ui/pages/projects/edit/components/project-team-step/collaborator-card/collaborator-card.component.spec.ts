@@ -53,7 +53,7 @@ describe("CollaboratorCardComponent", () => {
     execute.mockReturnValue(request);
     component.onDeleteCollaborator(1);
     component.onDeleteCollaborator(1);
-    expect(execute).toHaveBeenCalledExactlyOnceWith(5, 1);
+    expect(execute).toHaveBeenCalledExactlyOnceWith(5, 1, undefined);
     request.next({ ok: false, error: { kind: "remove_project_collaborator_error" } });
     request.complete();
     fixture.detectChanges();
@@ -66,5 +66,16 @@ describe("CollaboratorCardComponent", () => {
     component.onDeleteCollaborator(1);
     expect(removed).toHaveBeenCalledExactlyOnceWith(1);
     confirm.mockRestore();
+  });
+  it("не отправляет удаление замороженной команды или лидера", () => {
+    const execute = vi.mocked(TestBed.inject(RemoveProjectCollaboratorUseCase).execute);
+    fixture.componentRef.setInput("frozen", true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("button").disabled).toBe(true);
+    component.onDeleteCollaborator(1);
+    fixture.componentRef.setInput("frozen", false);
+    fixture.componentRef.setInput("isLeader", true);
+    component.onDeleteCollaborator(1);
+    expect(execute).not.toHaveBeenCalled();
   });
 });

@@ -5,7 +5,11 @@ import { Invite } from "./invite.model";
 
 /** Только programId из загруженного Project: programLinkId обозначает другую сущность. */
 export function inviteProgramId(project: Project | null): number | null {
-  const id = project?.partnerProgram?.programId;
+  const policy = project?.teamPolicy;
+  if (policy?.requiresProgramContext) return null;
+  const id = policy
+    ? policy.programLinks.find(link => link.id === policy.programLinkId)?.programId
+    : project?.partnerProgram?.programId;
   return typeof id === "number" && Number.isSafeInteger(id) && id > 0 ? id : null;
 }
 

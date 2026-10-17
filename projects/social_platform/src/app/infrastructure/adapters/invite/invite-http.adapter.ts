@@ -17,12 +17,14 @@ export class InviteHttpAdapter {
     projectId: number,
     role: string,
     specialization?: string,
+    programLinkId?: number,
   ): Observable<Invite> {
     return this.apiService.post(`${this.INVITES_URL}/`, {
       user: userId,
       project: projectId,
       role,
       specialization,
+      ...(programLinkId !== undefined ? { programLinkId } : {}),
     });
   }
 

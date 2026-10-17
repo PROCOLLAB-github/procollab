@@ -10,18 +10,22 @@ export class ProjectCollaboratorsHttpAdapter {
   private readonly PROJECTS_URL = "/projects";
   private readonly apiService = inject(ApiService);
 
-  deleteCollaborator(projectId: number, userId: number): Observable<void> {
-    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/collaborators?id=${userId}/`);
-  }
-
-  patchSwitchLeader(projectId: number, userId: number): Observable<void> {
-    return this.apiService.patch(
-      `${this.PROJECTS_URL}/${projectId}/collaborators/${userId}/switch-leader/`,
-      {},
+  deleteCollaborator(projectId: number, userId: number, programLinkId?: number): Observable<void> {
+    return this.apiService.delete(
+      `${this.PROJECTS_URL}/${projectId}/collaborators/?id=${userId}${programLinkId !== undefined ? `&program_link_id=${programLinkId}` : ""}`,
     );
   }
 
-  deleteLeave(projectId: number): Observable<void> {
-    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/collaborators/leave/`);
+  patchSwitchLeader(projectId: number, userId: number, programLinkId?: number): Observable<void> {
+    return this.apiService.patch(
+      `${this.PROJECTS_URL}/${projectId}/collaborators/${userId}/switch-leader/`,
+      programLinkId !== undefined ? { programLinkId } : {},
+    );
+  }
+
+  deleteLeave(projectId: number, programLinkId?: number): Observable<void> {
+    return this.apiService.delete(
+      `${this.PROJECTS_URL}/${projectId}/collaborators/leave/${programLinkId !== undefined ? `?program_link_id=${programLinkId}` : ""}`,
+    );
   }
 }

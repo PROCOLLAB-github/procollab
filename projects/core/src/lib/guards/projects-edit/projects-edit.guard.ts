@@ -1,5 +1,6 @@
 /** @format */
 
+import { isTeamFrozen } from "@domain/project/team-policy";
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree } from "@angular/router";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
@@ -23,7 +24,7 @@ export const ProjectEditRequiredGuard: CanActivateFn = (
 
   return projectRepository.getOne(projectId).pipe(
     map(project => {
-      if (project.partnerProgram?.isSubmitted) {
+      if (isTeamFrozen(project)) {
         return router.createUrlTree([`/office/projects/${projectId}`]);
       }
       return true;

@@ -28,6 +28,7 @@ import { ProjectInviteRoleInputComponent } from "@ui/widgets/project-invite/proj
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteCardComponent {
+  readonly frozen = input(false);
   readonly invite = input.required<Invite>();
   readonly remove = output<number>();
   readonly edit = output<{ inviteId: number; role: string; specialization: string }>();
@@ -48,6 +49,7 @@ export class InviteCardComponent {
         }).format(date);
   });
   openEdit(event: Event): void {
+    if (this.frozen()) return;
     this.trigger = event.currentTarget as HTMLElement;
     this.role.reset(this.invite().role ?? "");
     this.isEditInviteModal.set(true);
@@ -61,6 +63,7 @@ export class InviteCardComponent {
     this.remove.emit(this.invite().id);
   }
   onEdit(): void {
+    if (this.frozen()) return;
     this.role.setValue(normalizeInviteText(this.role.value));
     this.role.markAsTouched();
     if (this.role.invalid) return;

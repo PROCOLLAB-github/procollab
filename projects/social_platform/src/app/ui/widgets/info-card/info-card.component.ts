@@ -76,6 +76,7 @@ export class InfoCardComponent {
   readonly appereance = input<"my" | "subs" | "base" | "empty">("base");
   readonly section = input<"projects" | "subscriptions" | "other">("projects");
   readonly canDelete = input<boolean | null>(false);
+  readonly teamFrozen = input(false);
   @Input() isSubscribed?: boolean | null = false;
   readonly profileId = input<number>();
   readonly leaderId = input<number>();
@@ -148,6 +149,7 @@ export class InfoCardComponent {
   inviteErrorModal = false;
 
   removeCollaboratorFromProject(userId: number): void {
+    if (this.teamFrozen()) return;
     this.onRemoveCollaborator.emit(userId);
   }
 

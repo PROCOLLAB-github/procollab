@@ -19,10 +19,19 @@ export class SendForUserUseCase {
     projectId,
     role,
     specialization,
+    programLinkId,
   }: SendForUserCommand): Observable<Result<Invite, InviteSendError>> {
-    return this.inviteRepositoryPort.sendForUser(userId, projectId, role, specialization).pipe(
-      map(invite => ok<Invite>(invite)),
-      catchError(error => of(fail(mapInviteSendError(error)))),
-    );
+    return this.inviteRepositoryPort
+      .sendForUser(
+        userId,
+        projectId,
+        role,
+        specialization,
+        ...[programLinkId].filter((id): id is number => id !== undefined),
+      )
+      .pipe(
+        map(invite => ok<Invite>(invite)),
+        catchError(error => of(fail(mapInviteSendError(error)))),
+      );
   }
 }

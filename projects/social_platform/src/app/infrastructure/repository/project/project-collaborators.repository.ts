@@ -10,15 +10,26 @@ import { ProjectCollaboratorsHttpAdapter } from "../../adapters/project/project-
 export class ProjectCollaboratorsRepository implements ProjectCollaboratorsRepositoryPort {
   private readonly projectCollaboratorsAdapter = inject(ProjectCollaboratorsHttpAdapter);
 
-  deleteCollaborator(projectId: number, userId: number): Observable<void> {
-    return this.projectCollaboratorsAdapter.deleteCollaborator(projectId, userId);
+  deleteCollaborator(projectId: number, userId: number, programLinkId?: number): Observable<void> {
+    return this.projectCollaboratorsAdapter.deleteCollaborator(
+      projectId,
+      userId,
+      ...[programLinkId].filter((id): id is number => id !== undefined),
+    );
   }
 
-  patchSwitchLeader(projectId: number, userId: number): Observable<void> {
-    return this.projectCollaboratorsAdapter.patchSwitchLeader(projectId, userId);
+  patchSwitchLeader(projectId: number, userId: number, programLinkId?: number): Observable<void> {
+    return this.projectCollaboratorsAdapter.patchSwitchLeader(
+      projectId,
+      userId,
+      ...[programLinkId].filter((id): id is number => id !== undefined),
+    );
   }
 
-  deleteLeave(projectId: number): Observable<void> {
-    return this.projectCollaboratorsAdapter.deleteLeave(projectId);
+  deleteLeave(projectId: number, programLinkId?: number): Observable<void> {
+    return this.projectCollaboratorsAdapter.deleteLeave(
+      projectId,
+      ...[programLinkId].filter((id): id is number => id !== undefined),
+    );
   }
 }

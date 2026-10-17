@@ -16,13 +16,20 @@ export class RemoveProjectCollaboratorUseCase {
   execute(
     projectId: number,
     userId: number,
+    programLinkId?: number,
   ): Observable<Result<number, { kind: "remove_project_collaborator_error"; cause?: unknown }>> {
-    return this.projectCollaboratorsRepositoryPort.deleteCollaborator(projectId, userId).pipe(
-      tap(() => this.eventBus.emit(removeProjectCollaborator(projectId, userId))),
-      map(() => ok<number>(userId)),
-      catchError(error =>
-        of(fail({ kind: "remove_project_collaborator_error" as const, cause: error })),
-      ),
-    );
+    return this.projectCollaboratorsRepositoryPort
+      .deleteCollaborator(
+        projectId,
+        userId,
+        ...[programLinkId].filter((id): id is number => id !== undefined),
+      )
+      .pipe(
+        tap(() => this.eventBus.emit(removeProjectCollaborator(projectId, userId))),
+        map(() => ok<number>(userId)),
+        catchError(error =>
+          of(fail({ kind: "remove_project_collaborator_error" as const, cause: error })),
+        ),
+      );
   }
 }

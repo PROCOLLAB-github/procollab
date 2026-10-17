@@ -40,6 +40,18 @@ describe("InviteHttpAdapter", () => {
 
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/invites/5/");
   });
+  it("передаёт реальный programLinkId в POST, casing преобразует interceptor", () => {
+    setup();
+    api.post.mockReturnValue(of({} as Invite));
+    adapter.sendForUser(7, 42, "dev", undefined, 901).subscribe();
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/invites/", {
+      user: 7,
+      project: 42,
+      role: "dev",
+      specialization: undefined,
+      programLinkId: 901,
+    });
+  });
 
   it("acceptInvite идёт в POST /invites/:id/accept/", () => {
     setup();

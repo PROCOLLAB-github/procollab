@@ -6,6 +6,7 @@
       @for (collaborator of collaborators(); track $index) {
         <app-info-card
           [leaderId]="leaderId()"
+          [teamFrozen]="project() ? isTeamFrozen(project()!) : false"
           [loggedUserId]="loggedUserId()"
           [info]="collaborator"
           type="members"

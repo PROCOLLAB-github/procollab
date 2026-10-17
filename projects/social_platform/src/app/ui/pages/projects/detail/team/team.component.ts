@@ -14,6 +14,7 @@ import { ProjectsDetailService } from "@api/project/facades/detail/projects-deta
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ExpandService } from "@api/expand/expand.service";
+import { isTeamFrozen } from "@domain/project/team-policy";
 
 /**
  * Компонент страницы команды в деательной информации о проекте
@@ -36,6 +37,8 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
   protected readonly projectId = this.projectsDetailUIInfoService.projectId;
   protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
   protected readonly leaderId = this.projectsDetailUIInfoService.leaderId;
+  protected readonly project = this.projectsDetailUIInfoService.project;
+  protected readonly isTeamFrozen = isTeamFrozen;
 
   ngOnInit(): void {
     this.projectsDetailService.initializationTeam();

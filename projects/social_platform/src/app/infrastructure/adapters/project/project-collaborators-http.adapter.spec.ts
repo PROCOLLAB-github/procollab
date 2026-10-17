@@ -23,7 +23,7 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
 
     adapter.deleteCollaborator(42, 7).subscribe();
 
-    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/collaborators?id=7/");
+    expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/collaborators/?id=7");
   });
 
   it("patchSwitchLeader идёт в PATCH /projects/:pid/collaborators/:uid/switch-leader/", () => {
@@ -45,5 +45,20 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
     adapter.deleteLeave(42).subscribe();
 
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/collaborators/leave/");
+  });
+  it("передаёт link ID в query удаления/выхода и body смены лидера", () => {
+    setup();
+    api.delete.mockReturnValue(of(undefined));
+    api.patch.mockReturnValue(of(undefined));
+    adapter.deleteCollaborator(42, 7, 901).subscribe();
+    adapter.deleteLeave(42, 901).subscribe();
+    adapter.patchSwitchLeader(42, 7, 901).subscribe();
+    expect(api.delete).toHaveBeenCalledWith("/projects/42/collaborators/?id=7&program_link_id=901");
+    expect(api.delete).toHaveBeenCalledWith(
+      "/projects/42/collaborators/leave/?program_link_id=901",
+    );
+    expect(api.patch).toHaveBeenCalledWith("/projects/42/collaborators/7/switch-leader/", {
+      programLinkId: 901,
+    });
   });
 });

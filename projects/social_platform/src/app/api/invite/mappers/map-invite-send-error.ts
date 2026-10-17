@@ -3,6 +3,8 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { InviteSendError } from "@domain/invite/invite-send-error";
 
+import { teamOperationErrorMessage } from "@api/project/team-operation-error";
+
 const messages: Record<InviteSendError["kind"], string> = {
   user_not_found: "Пользователь не найден. Выберите другого участника.",
   already_leader: "Вы уже являетесь руководителем этого проекта.",
@@ -33,6 +35,8 @@ function mapped(kind: InviteSendError["kind"]): InviteSendError {
 
 /** Recognizes only expected user validation errors; all other bodies stay private. */
 export function mapInviteSendError(error: unknown): InviteSendError {
+  const teamMessage = teamOperationErrorMessage(error);
+  if (teamMessage) return { kind: "validation", message: teamMessage };
   if (!(error instanceof HttpErrorResponse)) return mapped("unknown");
   if (error.status === 0) return mapped("network");
   if (error.status === 401) return mapped("unauthorized");
