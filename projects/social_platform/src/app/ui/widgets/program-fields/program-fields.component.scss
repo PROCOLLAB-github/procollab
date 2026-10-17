@@ -1,0 +1,80 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
+
+.program-fields {
+  display: grid;
+  gap: 24px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.program-fields__field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.program-fields label {
+  font-weight: 600;
+}
+
+.program-fields textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.program-fields p {
+  margin: 0;
+}
+
+.program-fields__hint {
+  color: var(--grey-for-text);
+}
+
+.program-fields__error {
+  color: var(--red-dark);
+}
+
+.program-fields .ui-alert--error {
+  padding: 16px;
+  color: var(--red-dark);
+  background: var(--red-light);
+  border-radius: 12px;
+}
+
+.program-fields__file {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  overflow-wrap: anywhere;
+}
+
+.program-fields a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+[aria-invalid="true"].ui-field {
+  border-color: var(--ui-danger);
+}

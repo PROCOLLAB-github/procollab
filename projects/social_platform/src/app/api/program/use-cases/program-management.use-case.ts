@@ -2,6 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
+import { ManagementProjectFormWrite } from "@domain/program/program-project-form.model";
 import {
   ManagementMaterial,
   ManagementMaterialWrite,
@@ -12,6 +13,12 @@ import {
 @Injectable()
 export class ProgramManagementUseCase {
   private readonly repository = inject(ProgramManagementRepositoryPort);
+  projectForm(id: number) {
+    return this.repository.projectForm(id);
+  }
+  saveProjectForm(id: number, body: ManagementProjectFormWrite) {
+    return this.repository.saveProjectForm(id, body);
+  }
   get(id: number) {
     return this.repository.get(id);
   }

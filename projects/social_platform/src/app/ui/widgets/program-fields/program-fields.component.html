@@ -1,0 +1,119 @@
+<!-- @format -->
+<div class="program-fields" [formGroup]="form()">
+  @if (uploadError()) {
+    <p appAlert="error">{{ uploadError() }}</p>
+  }
+  @for (field of fields(); track field.name) {
+    @if (form().get(field.name); as control) {
+      <div class="program-fields__field">
+        <label [for]="'answer-' + field.name"
+          >{{ field.label }}{{ field.isRequired || field.name === "case" ? " *" : "" }}</label
+        >
+        @switch (field.fieldType) {
+          @case ("text") {
+            <input
+              appField
+              [id]="'answer-' + field.name"
+              [formControlName]="field.name"
+              maxlength="500"
+              [attr.aria-invalid]="error(field) ? 'true' : null"
+              [attr.aria-describedby]="'hint-' + field.name"
+            />
+          }
+          @case ("textarea") {
+            <textarea
+              appField
+              [id]="'answer-' + field.name"
+              [formControlName]="field.name"
+              rows="4"
+              maxlength="300"
+              [attr.aria-invalid]="error(field) ? 'true' : null"
+              [attr.aria-describedby]="'hint-' + field.name"
+            ></textarea>
+          }
+          @case ("checkbox") {
+            <input
+              appChoice
+              type="checkbox"
+              [id]="'answer-' + field.name"
+              [formControlName]="field.name"
+              [attr.aria-invalid]="error(field) ? 'true' : null"
+              [attr.aria-describedby]="'hint-' + field.name"
+            />
+          }
+          @case ("file") {
+            <div class="program-fields__file">
+              @if (control.value) {
+                @if (!preview() && href(control.value); as url) {
+                  <a [href]="url" target="_blank" rel="noopener noreferrer">{{
+                    fileNames()[field.name] || "Открыть файл"
+                  }}</a>
+                } @else {
+                  <span>{{ fileNames()[field.name] || "Файл выбран" }}</span>
+                }
+                <button
+                  type="button"
+                  appButton="text"
+                  [disabled]="control.disabled || !!uploading()"
+                  (click)="clearFile(field)"
+                >
+                  Убрать файл
+                </button>
+              }
+              <input
+                #fileInput
+                hidden
+                type="file"
+                [disabled]="control.disabled || !!uploading()"
+                (change)="chooseFile($event, field)"
+              />
+              <button
+                type="button"
+                appButton="secondary"
+                [id]="'answer-' + field.name"
+                [disabled]="control.disabled || !!uploading()"
+                [appButtonLoading]="uploading() === field.name"
+                [attr.aria-invalid]="error(field) ? 'true' : null"
+                [attr.aria-describedby]="'hint-' + field.name"
+                (click)="fileInput.click()"
+              >
+                {{ control.value ? "Заменить файл" : "Выбрать файл" }}
+              </button>
+            </div>
+          }
+          @default {
+            @if (control.disabled && control.value && !field.options.includes(control.value)) {
+              <p data-testid="saved-field-value">{{ control.value }}</p>
+            } @else {
+              <select
+                appField
+                [id]="'answer-' + field.name"
+                [formControlName]="field.name"
+                [attr.aria-invalid]="error(field) ? 'true' : null"
+                [attr.aria-describedby]="'hint-' + field.name"
+              >
+                <option value="">
+                  {{ field.name === "case" ? "Выберите кейс" : "Выберите вариант" }}
+                </option>
+                @for (option of field.options; track option) {
+                  <option [value]="option">{{ option }}</option>
+                }
+              </select>
+            }
+          }
+        }
+        <div [id]="'hint-' + field.name" class="program-fields__hint">
+          @if (field.helpText) {
+            <p>{{ field.helpText }}</p>
+          }
+          @if (field.isRequired || field.name === "case") {
+            <p>Обязательно перед сдачей решения. В черновике можно оставить пустым.</p>
+          }
+          @if (error(field); as message) {
+            <p class="program-fields__error" role="alert">{{ message }}</p>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

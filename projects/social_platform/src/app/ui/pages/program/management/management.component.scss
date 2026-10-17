@@ -274,6 +274,11 @@
     display: flex;
     margin-bottom: 20px;
 
+    @media (max-width: 650px) {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     a {
       display: grid;
       flex: 1;

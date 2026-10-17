@@ -3,6 +3,10 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
+import {
+  ManagementProjectForm,
+  ManagementProjectFormWrite,
+} from "@domain/program/program-project-form.model";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
 import {
   ManagementEvaluation,
@@ -20,6 +24,12 @@ import {
 @Injectable()
 export class ProgramManagementHttpAdapter implements ProgramManagementRepositoryPort {
   private readonly api = inject(ApiService);
+  projectForm(id: number) {
+    return this.api.get<ManagementProjectForm>(`${this.root(id)}/project-form/`);
+  }
+  saveProjectForm(id: number, body: ManagementProjectFormWrite) {
+    return this.api.put<ManagementProjectForm>(`${this.root(id)}/project-form/`, body);
+  }
   private root(id: number): string {
     return `/programs/${id}/management`;
   }

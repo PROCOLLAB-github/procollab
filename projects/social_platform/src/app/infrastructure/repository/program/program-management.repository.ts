@@ -2,6 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { tap } from "rxjs";
+import { ManagementProjectFormWrite } from "@domain/program/program-project-form.model";
 import { EventBus } from "@domain/shared/event-bus";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
 import { ProgramManagementHttpAdapter } from "@infrastructure/adapters/program/program-management-http.adapter";
@@ -17,6 +18,12 @@ import {
 export class ProgramManagementRepository implements ProgramManagementRepositoryPort {
   private readonly adapter = inject(ProgramManagementHttpAdapter);
   private readonly events = inject(EventBus);
+  projectForm(id: number) {
+    return this.adapter.projectForm(id);
+  }
+  saveProjectForm(id: number, body: ManagementProjectFormWrite) {
+    return this.adapter.saveProjectForm(id, body).pipe(tap(() => this.changed(id)));
+  }
   get(id: number) {
     return this.adapter.get(id);
   }

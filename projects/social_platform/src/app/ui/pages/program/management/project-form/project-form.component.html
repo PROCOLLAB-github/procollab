@@ -1,0 +1,370 @@
+<!-- @format -->
+<div class="project-form">
+  @if (loading()) {
+    <section class="project-form__card" aria-busy="true" aria-live="polite">
+      Загружаем кейсы и поля…
+    </section>
+  } @else {
+    @if (error(); as message) {
+      <div appAlert="error">
+        {{ message }}
+        <button
+          type="button"
+          appButton="text"
+          [disabled]="saving()"
+          (click)="conflict() || !snapshot() ? reload() : save()"
+        >
+          {{ conflict() || !snapshot() ? "Обновить данные" : "Повторить сохранение" }}
+        </button>
+      </div>
+    }
+    @if (saved()) {
+      <p appAlert="success">Кейсы и поля сохранены.</p>
+    }
+    @if (snapshot()) {
+      <header class="project-form__heading">
+        <div>
+          <h2>Кейсы и поля проекта</h2>
+          <p>Настройте выбор кейса и общую форму для всех проектов программы.</p>
+        </div>
+        <button type="button" appButton="secondary" (click)="openPreview()">
+          Предпросмотр формы
+        </button>
+      </header>
+      <section class="project-form__card" aria-labelledby="cases-heading">
+        <div class="project-form__section-heading">
+          <div>
+            <h3 id="cases-heading">Кейсы программы</h3>
+            <p>
+              У кейса только название. Задания и описание разместите в
+              <button type="button" appButton="text" (click)="materials.emit()">
+                материалах программы</button
+              >.
+            </p>
+          </div>
+        </div>
+        @for (item of cases(); track $index; let i = $index) {
+          @if (caseIndex() !== i) {
+            <article class="project-form__row">
+              <div>
+                <h4>{{ item.name }}</h4>
+                <p>Проектов: {{ item.projectsCount }}</p>
+              </div>
+              <div class="project-form__actions">
+                <button
+                  type="button"
+                  appButton="text"
+                  [disabled]="!!item.projectsCount || saving()"
+                  (click)="editCase(i)"
+                >
+                  Изменить</button
+                ><button
+                  type="button"
+                  appButton="text"
+                  [disabled]="!!item.projectsCount || saving()"
+                  (click)="deleteCase(i)"
+                >
+                  Удалить
+                </button>
+              </div>
+            </article>
+          }
+        } @empty {
+          <p class="project-form__empty">
+            Кейсов пока нет. Добавьте названия, если командам нужно выбрать кейс.
+          </p>
+        }
+        @if (caseIndex() !== null) {
+          <form class="project-form__case-editor" (submit)="$event.preventDefault(); saveCase()">
+            <label for="case-name">Название кейса *</label>
+            <input
+              appField
+              id="case-name"
+              [formControl]="caseName"
+              maxlength="1000"
+              [attr.aria-invalid]="caseError() ? 'true' : null"
+              aria-describedby="case-error"
+            />
+            @if (caseError()) {
+              <p id="case-error" class="project-form__error" role="alert">{{ caseError() }}</p>
+            }
+            <div class="project-form__actions">
+              <button appButton="primary">
+                {{ caseIndex() === -1 ? "Добавить кейс" : "Применить" }}</button
+              ><button type="button" appButton="secondary" (click)="caseIndex.set(null)">
+                Отмена
+              </button>
+            </div>
+          </form>
+        } @else {
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="saving() || cases().length >= 200"
+            (click)="editCase()"
+          >
+            Добавить кейс
+          </button>
+        }
+        <p class="project-form__notice">
+          Если кейс уже выбран командой, его нельзя переименовать или удалить.
+        </p>
+      </section>
+      <section class="project-form__card" aria-labelledby="fields-heading">
+        <div class="project-form__section-heading">
+          <div>
+            <h3 id="fields-heading">Поля проекта</h3>
+            <p>
+              Одна форма для всех кейсов. Название проекта и другие стандартные поля остаются без
+              изменений.
+            </p>
+          </div>
+        </div>
+        @for (field of fields(); track field.name) {
+          <article class="project-form__row">
+            <div>
+              <h4>{{ field.label }}</h4>
+              <p>
+                {{ typeLabels[field.fieldType] }} ·
+                {{ field.isRequired ? "обязательно для сдачи" : "необязательно" }}
+              </p>
+              @if (field.helpText) {
+                <p>{{ field.helpText }}</p>
+              }
+            </div>
+            <div class="project-form__actions">
+              <button
+                type="button"
+                appButton="text"
+                [disabled]="saving()"
+                (click)="editField(field)"
+              >
+                Изменить</button
+              ><button
+                type="button"
+                appButton="text"
+                [disabled]="!!field.answersCount || saving()"
+                (click)="deleteField(field)"
+              >
+                Удалить
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <p class="project-form__empty">
+            Дополнительных полей пока нет. Добавьте то, что командам нужно указать перед сдачей.
+          </p>
+        }
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="saving() || fields().length >= 100"
+          (click)="editField('new')"
+        >
+          Добавить поле
+        </button>
+        <p class="project-form__notice">
+          Обязательные поля проверяются перед сдачей решения. Черновик можно сохранить
+          незаполненным.
+        </p>
+        @if (snapshot()?.hasProjects) {
+          <p class="project-form__notice">
+            Новые обязательные поля заполняют только ещё не сдавшие решение команды. Уже сданные
+            проекты не меняются.
+          </p>
+        }
+        <p class="project-form__notice">
+          Поле с ответами нельзя удалить или изменить его тип. Использованные варианты ответа также
+          сохраняются.
+        </p>
+      </section>
+      <footer class="project-form__footer">
+        <p aria-live="polite">
+          {{
+            dirty()
+              ? "Есть несохранённые изменения"
+              : "Изменения применятся после сохранения настроек."
+          }}
+        </p>
+        <div class="project-form__actions">
+          <button
+            type="button"
+            appButton="primary"
+            [appButtonLoading]="saving()"
+            [disabled]="!dirty() || conflict() || caseIndex() !== null"
+            (click)="save()"
+          >
+            Сохранить изменения</button
+          ><button
+            type="button"
+            appButton="secondary"
+            [disabled]="!dirty() || saving()"
+            (click)="cancel()"
+          >
+            Отменить
+          </button>
+        </div>
+      </footer>
+    }
+  }
+</div>
+
+<app-modal [open]="!!editing()" (openChange)="closeEditor()" labelledBy="field-editor-title">
+  <form class="project-form__dialog" [formGroup]="editor" (ngSubmit)="saveField()">
+    <header class="project-form__dialog-heading">
+      <h2 id="field-editor-title">
+        {{ editing() === "new" ? "Добавить поле" : "Настройка поля" }}
+      </h2>
+      <button
+        type="button"
+        appButton="icon"
+        aria-label="Закрыть настройку поля"
+        (click)="closeEditor()"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </header>
+    <p>Поле появится в общей форме всех проектов программы.</p>
+    <label for="field-label"
+      >Название поля *<input
+        appField
+        id="field-label"
+        formControlName="label"
+        maxlength="256"
+        [attr.aria-invalid]="
+          editor.controls.label.touched && editor.controls.label.invalid ? 'true' : null
+        "
+    /></label>
+    <label for="field-type"
+      >Тип поля<select appField id="field-type" formControlName="fieldType">
+        @for (type of snapshot()?.supportedTypes; track type) {
+          <option [value]="type">{{ typeLabels[type] }}</option>
+        }
+        @if (
+          editor.controls.fieldType.value === "radio" ||
+          editor.controls.fieldType.value === "checkbox"
+        ) {
+          <option [value]="editor.controls.fieldType.value">
+            {{ typeLabels[editor.controls.fieldType.value] }}
+          </option>
+        }
+      </select></label
+    >
+    @if (editor.controls.fieldType.disabled) {
+      <p>Тип существующего поля с ответами или специального поля изменить нельзя.</p>
+    }
+    <label for="field-help"
+      >Подсказка для команды<textarea
+        appField
+        id="field-help"
+        formControlName="helpText"
+        maxlength="4000"
+        rows="3"
+        placeholder="Объясните, что нужно указать"
+      ></textarea>
+    </label>
+    <label class="project-form__checkbox"
+      ><input appChoice type="checkbox" formControlName="isRequired" />Обязательно перед сдачей
+      решения</label
+    >
+    <div class="project-form__note">
+      Команда сможет создать и сохранить черновик без ответа. Поле нужно заполнить перед сдачей
+      решения.
+    </div>
+    @if (snapshot()?.hasProjects) {
+      <p>Изменения требований действуют только для ещё не сданных проектов.</p>
+    }
+    @if (choiceEditor) {
+      <fieldset class="project-form__options">
+        <legend>Варианты ответа *</legend>
+        <div formArrayName="options">
+          @for (option of editor.controls.options.controls; track option; let i = $index) {
+            <div class="project-form__option">
+              <input
+                appField
+                [formControlName]="i"
+                [attr.aria-label]="'Вариант ответа ' + (i + 1)"
+                maxlength="1000"
+              /><button
+                type="button"
+                appButton="text"
+                [disabled]="editing() !== 'new' && editor.controls.fieldType.value === 'radio'"
+                [attr.aria-label]="'Убрать вариант ' + (i + 1)"
+                (click)="removeOption(i)"
+              >
+                Убрать
+              </button>
+            </div>
+          }
+        </div>
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="
+            editor.controls.options.length >= 200 || editor.controls.fieldType.value === 'radio'
+          "
+          (click)="addOption()"
+        >
+          Добавить вариант
+        </button>
+      </fieldset>
+      <p>Использованные командами варианты нельзя удалить или переименовать.</p>
+    }
+    @if (editorError()) {
+      <p appAlert="error">{{ editorError() }}</p>
+    }
+    <footer>
+      <p>После добавления поля сохраните настройки страницы.</p>
+      <div class="project-form__actions">
+        <button appButton="primary">
+          {{ editing() === "new" ? "Добавить поле" : "Применить" }}</button
+        ><button type="button" appButton="secondary" (click)="closeEditor()">Отмена</button>
+      </div>
+    </footer>
+  </form>
+</app-modal>
+
+<app-modal
+  [open]="previewOpen()"
+  (openChange)="previewOpen.set(false)"
+  labelledBy="project-form-preview-title"
+>
+  <div class="project-form__dialog">
+    <header class="project-form__dialog-heading">
+      <h2 id="project-form-preview-title">Предпросмотр формы команды</h2>
+      <button
+        type="button"
+        appButton="icon"
+        aria-label="Закрыть предпросмотр"
+        (click)="previewOpen.set(false)"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </header>
+    <div class="project-form__note">
+      Так будут выглядеть дополнительные поля проекта. Это предпросмотр: ответы и файлы не
+      отправляются. Здесь показаны и ещё не сохранённые настройки.
+    </div>
+    @if (previewMessage(); as message) {
+      <p [appAlert]="previewInvalid() ? 'error' : 'success'">{{ message }}</p>
+    }
+    @if (previewFields().length) {
+      <app-program-fields
+        [fields]="previewFields()"
+        [form]="previewForm"
+        [preview]="true"
+        [submissionAttempt]="previewAttempt()"
+      />
+    } @else {
+      <p>Дополнительных полей и кейсов пока нет.</p>
+    }
+    <footer>
+      <div class="project-form__actions">
+        <button type="button" appButton="secondary" (click)="previewDraft()">
+          Сохранить черновик</button
+        ><button type="button" appButton="primary" (click)="previewSubmit()">Сдать решение</button>
+      </div>
+      <p>Пустой черновик можно сохранить. Обязательные поля проверяются перед сдачей.</p>
+    </footer>
+  </div>
+</app-modal>

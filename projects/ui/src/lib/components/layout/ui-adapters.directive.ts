@@ -11,7 +11,10 @@ export class CardDirective {
   readonly interactive = input(false);
 }
 
-@Directive({ selector: "input[appField],textarea[appField]", host: { class: "ui-field" } })
+@Directive({
+  selector: "input[appField],textarea[appField],select[appField]",
+  host: { class: "ui-field" },
+})
 export class FieldDirective {}
 
 @Directive({ selector: "input[appChoice]", host: { class: "ui-choice" } })

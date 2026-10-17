@@ -92,12 +92,13 @@ describe("ProjectAdditionalService canonical fields", () => {
   );
 
   it.each([null, undefined, "", "   "])(
-    "draft omits empty case %j without suppressing generic values",
+    "draft explicitly clears empty case %j without suppressing generic values",
     async value => {
       service.setContext(55, 700);
       caseControl().setValue(value);
       expect((await firstValueFrom(service.save(700, false))).ok).toBe(true);
       expect(repo.updateProgramLinkFields).toHaveBeenCalledExactlyOnceWith(700, [
+        { fieldId: 5, valueText: "" },
         { fieldId: 6, valueText: "Y" },
         { fieldId: 7, valueText: "" },
         { fieldId: 8, valueText: "false" },
@@ -325,16 +326,17 @@ describe("ProjectAdditionalService canonical fields", () => {
     },
   );
 
-  it("draft PUT does not require canSubmit and still omits empty case", async () => {
+  it("draft PUT does not require canSubmit and can clear case", async () => {
     repo.getProgramLinkFields.mockReturnValue(
       of(programLinkFields({ submissionOpen: false, canSubmit: false })),
     );
     service.setContext(55, 700);
     expect((await firstValueFrom(service.save(700, false))).ok).toBe(true);
     expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
-    expect(repo.updateProgramLinkFields.mock.calls[0][1]).not.toContainEqual(
-      expect.objectContaining({ fieldId: 5 }),
-    );
+    expect(repo.updateProgramLinkFields.mock.calls[0][1]).toContainEqual({
+      fieldId: 5,
+      valueText: "",
+    });
     expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
   });
 
@@ -514,5 +516,36 @@ describe("ProjectAdditionalService canonical fields", () => {
     expect(service.activeProgramLinkId()).toBe(900);
     expect(service.isCompetitive()).toBe(false);
     expect(service.saveError()).toBeNull();
+  });
+  it("refreshes newly required definitions after submit without losing local answers", async () => {
+    service.setContext(55, 700);
+    caseControl().setValue("B");
+    service.getAdditionalForm().get("note")?.setValue("local answer");
+    const changed = programLinkFields();
+    changed.fields.push({
+      ...changed.fields[2],
+      id: 91,
+      name: "new_required",
+      isRequired: true,
+      value: null,
+    });
+    repo.getProgramLinkFields.mockReturnValue(of(changed));
+    programRepo.submitCompettetiveProject.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: {
+              code: "required_program_fields",
+              detail: "Не заполнены обязательные поля программы.",
+            },
+          }),
+      ),
+    );
+    expect((await firstValueFrom(service.save(700, true))).ok).toBe(false);
+    expect(service.getAdditionalForm().get("new_required")?.hasError("required")).toBe(true);
+    expect(service.getAdditionalForm().get("note")?.value).toBe("local answer");
+    expect(caseControl().value).toBe("B");
+    expect(service.submitted()).toBe(false);
   });
 });

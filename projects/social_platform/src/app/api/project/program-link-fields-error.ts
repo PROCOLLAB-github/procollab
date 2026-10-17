@@ -10,6 +10,8 @@ export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsErro
     if (cause.status === 0) return { kind: "network", cause };
     if (cause.status >= 500) return { kind: "server", cause };
     if (cause.status === 400) {
+      if (cause.error?.code === "required_program_fields")
+        return { kind: "required_fields", cause };
       if (cause.error?.detail === "Срок подачи проектов в программу завершён.") {
         return { kind: "submission_closed", cause };
       }
@@ -38,6 +40,8 @@ export function programLinkFieldsErrorMessage(error: ProgramLinkFieldsError): st
   const teamMessage = teamOperationErrorMessage(error.cause);
   if (teamMessage) return teamMessage;
   switch (error.kind) {
+    case "required_fields":
+      return "Заполните обязательные поля программы перед сдачей. Настройки формы обновлены, ваши ответы сохранены.";
     case "submission_closed":
       return "Срок подачи проектов в программу завершён.";
     case "already_submitted":
