@@ -11,6 +11,8 @@ export interface ExpertRow {
   assigned: number | null;
   completed: number | null;
   remaining: number | null;
+  allCases?: boolean;
+  caseNames?: (string | null)[];
 }
 export interface ExpertWorkspace {
   revision: string;
@@ -22,6 +24,37 @@ export interface ExpertWorkspace {
   missingAssignments: number;
   readyProjects: number;
   experts: ExpertRow[];
+  cases?: string[];
+  projects?: DistributionProject[];
+}
+export interface DistributionProject {
+  id: number;
+  name: string;
+  caseName: string | null;
+  leaderId: number;
+  teamUserIds: number[];
+  experts: {
+    expertId: number;
+    name: string;
+    email: string;
+    completed: boolean;
+    protected: boolean;
+  }[];
+}
+export interface ExpertCaseScopeWrite {
+  revision: string;
+  allCases: boolean;
+  caseNames: (string | null)[];
+}
+export interface ProjectExpertsWrite {
+  revision: string;
+  projectIds: number[];
+  expertIds: number[];
+  mode: "add" | "replace";
+}
+export interface CaseExpertPool {
+  caseName: string | null;
+  expertIds: number[];
 }
 export interface AssignmentProject {
   id: number;
@@ -32,6 +65,7 @@ export interface AssignmentProject {
   protected: boolean;
   completed: boolean;
   ownTeam: boolean;
+  eligible?: boolean;
 }
 export interface AssignmentOptions {
   revision: string;
@@ -40,12 +74,25 @@ export interface AssignmentOptions {
 export interface AllocationQuery {
   expertIds: number[];
   projectIds?: number[];
+  casePools?: CaseExpertPool[];
+  revision?: string;
 }
 export interface AllocationPlan {
   revision: string;
   planToken: string;
-  assignments: { projectId: number; projectName: string; expertId: number; expertName: string }[];
-  shortages: { projectId: number; projectName: string; missing: number }[];
+  assignments: {
+    projectId: number;
+    projectName: string;
+    expertId: number;
+    expertName: string;
+    caseName?: string | null;
+  }[];
+  shortages: {
+    projectId: number;
+    projectName: string;
+    missing: number;
+    caseName?: string | null;
+  }[];
   unavailableProjects?: UnavailableEvaluationProject[];
   load: { expertId: number; name: string; before: number; after: number }[];
 }

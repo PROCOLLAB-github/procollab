@@ -11,10 +11,18 @@ import {
   InvitationAccepted,
   ExpertRegistration,
   ExpertRegistered,
+  ExpertCaseScopeWrite,
+  ProjectExpertsWrite,
 } from "@domain/program/evaluation-workspace.model";
 export abstract class EvaluationRepositoryPort {
   abstract programs(): Observable<EvaluationPrograms>;
   abstract workspace(id: number): Observable<ExpertWorkspace>;
+  abstract saveCaseScope(
+    id: number,
+    expertId: number,
+    data: ExpertCaseScopeWrite,
+  ): Observable<ExpertWorkspace>;
+  abstract saveProjectExperts(id: number, data: ProjectExpertsWrite): Observable<ExpertWorkspace>;
   abstract invite(id: number, email: string): Observable<unknown>;
   abstract invitationAction(
     id: number,

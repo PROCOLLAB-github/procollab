@@ -5,57 +5,18 @@ import { of, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import { ManagementExpertsComponent } from "./experts.component";
-import { ExpertWorkspace, AssignmentOptions } from "@domain/program/evaluation-workspace.model";
+import { ExpertWorkspace, DistributionProject } from "@domain/program/evaluation-workspace.model";
 
 describe("Управление экспертами", () => {
-  it("объясняет исключённый черновик в составе и пустом плане распределения", async () => {
+  it("отделяет состав от распределения и показывает одну строку правила", () => {
     const { fixture, component } = setup();
-    const unavailableProjects = [
-      { projectId: 99, projectName: "Проект-черновик", reason: "draft" as const },
-    ];
-    component.snapshot.update(state => ({ ...state!, unavailableProjects }));
+    expect(fixture.nativeElement.querySelector(".experts__quota")).toBeNull();
+    component.switchTab("distribution");
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".experts__quota").textContent).toContain(
-      "Среди сданных проектов есть черновики",
+      "Оценок для каждого проекта: 2",
     );
-    component.open("auto");
-    fixture.detectChanges();
-    await new Promise(resolve => setTimeout(resolve, 0));
-    fixture.detectChanges();
-    let dialog = document.querySelector(".experts__dialog")!;
-    expect(dialog.textContent).toContain("Проект-черновик — черновик");
-    component.plan.set({
-      revision: "v1",
-      planToken: "signed",
-      assignments: [],
-      shortages: [],
-      load: [],
-      unavailableProjects,
-    });
-    fixture.detectChanges();
-    dialog = document.querySelector(".experts__dialog")!;
-    expect(dialog.textContent).toContain("Для всех доступных к оценке проектов");
-    expect(dialog.textContent).toContain("Автору нужно опубликовать проект");
-    expect((dialog.querySelector("button[appButton=primary]") as HTMLButtonElement).disabled).toBe(
-      true,
-    );
-  });
-  it("различает нехватку состава экспертов и полученные оценки", () => {
-    const { fixture, component } = setup();
-    component.snapshot.update(state => ({
-      ...state!,
-      requiredEvaluators: 1,
-      submittedProjects: 2,
-      projectsMissingExperts: 1,
-      missingAssignments: 1,
-      readyProjects: 0,
-    }));
-    fixture.detectChanges();
-    const summary = fixture.nativeElement.querySelector(".experts__quota").textContent;
-    expect(summary).toContain("Оценок для каждого проекта: 1");
-    expect(summary).toContain("для 1 из 2 проектов");
-    expect(summary).toContain("Полностью оценено: 0");
-    expect(summary).not.toContain("назначений");
+    expect(fixture.nativeElement.textContent).toContain("Проекты на оценку");
   });
   it("обновляет отправку письма без сброса поиска и прекращает проверку после sent", async () => {
     vi.useFakeTimers();
@@ -135,7 +96,14 @@ describe("Управление экспертами", () => {
       of({ revision: "v1", planToken: "signed", assignments: [], shortages: [], load: [] }),
     );
     component.previewAllocation();
-    expect(api.allocation).toHaveBeenCalledWith(42, { expertIds: [1] });
+    expect(api.allocation).toHaveBeenCalledWith(42, {
+      expertIds: [1],
+      revision: "v1",
+      casePools: [
+        { caseName: "Сбер", expertIds: [1] },
+        { caseName: "Т-Банк", expertIds: [1] },
+      ],
+    });
     expect(api.applyAllocation).not.toHaveBeenCalled();
     expect(component.label(snapshot.experts[1])).toBe("Приглашён");
     expect(component.deliveryLabel({ ...snapshot.experts[1], deliveryStatus: "failed" })).toBe(
@@ -186,46 +154,37 @@ describe("Управление экспертами", () => {
       },
     ],
   };
-  const options: AssignmentOptions = {
-    revision: "v1",
-    projects: [
-      {
-        id: 10,
-        name: "С оценкой",
-        caseName: "Первый",
-        submitted: true,
-        assigned: true,
-        protected: true,
-        completed: true,
-        ownTeam: false,
-      },
-      {
-        id: 11,
-        name: "Новый проект",
-        caseName: "Второй",
-        submitted: true,
-        assigned: false,
-        protected: false,
-        completed: false,
-        ownTeam: false,
-      },
-      {
-        id: 12,
-        name: "Своя команда",
-        caseName: null,
-        submitted: true,
-        assigned: false,
-        protected: false,
-        completed: false,
-        ownTeam: true,
-      },
-    ],
-  };
+  const projects: DistributionProject[] = [
+    {
+      id: 10,
+      name: "Город",
+      caseName: "Сбер",
+      leaderId: 90,
+      teamUserIds: [],
+      experts: [
+        {
+          expertId: 1,
+          name: "Мария",
+          email: "maria@example.com",
+          completed: false,
+          protected: true,
+        },
+      ],
+    },
+    { id: 11, name: "Маршрут", caseName: "Сбер", leaderId: 91, teamUserIds: [], experts: [] },
+    { id: 12, name: "Финплан", caseName: "Т-Банк", leaderId: 92, teamUserIds: [], experts: [] },
+  ];
   function setup() {
     const api = {
-      workspace: vi.fn(() => of(structuredClone(snapshot))),
-      assignments: vi.fn(() => of(options)),
-      saveAssignments: vi.fn(() => of(options)),
+      workspace: vi.fn(() =>
+        of({
+          ...structuredClone(snapshot),
+          cases: ["Сбер", "Т-Банк"],
+          projects: structuredClone(projects),
+        }),
+      ),
+      saveCaseScope: vi.fn(() => of(structuredClone(snapshot))),
+      saveProjectExperts: vi.fn(() => of(structuredClone(snapshot))),
       invite: vi.fn(() => of({})),
       allocation: vi.fn(),
       applyAllocation: vi.fn(),
@@ -265,31 +224,6 @@ describe("Управление экспертами", () => {
     fixture.detectChanges();
     expect(component.selected()).toBeNull();
   });
-  it("сохранённые оценки и собственная команда защищены, разрешённый проект назначается", () => {
-    const { component, api } = setup();
-    component.select(snapshot.experts[0]);
-    component.openAssignments();
-    component.toggleProject(options.projects[0]);
-    component.toggleProject(options.projects[2]);
-    expect([...component.chosenProjects()]).toEqual([10]);
-    component.toggleProject(options.projects[1]);
-    component.saveAssignments();
-    expect(api.saveAssignments).toHaveBeenCalledWith(42, 1, "v1", [10, 11]);
-  });
-  it("409 оставляет выбор и открытый редактор, фильтр кейса сохраняет значение", () => {
-    const { component, api } = setup();
-    component.select(snapshot.experts[0]);
-    component.openAssignments();
-    component.caseFilter.setValue("case:Второй");
-    expect(component.visibleProjects().map(p => p.id)).toEqual([11]);
-    component.toggleProject(options.projects[1]);
-    api.saveAssignments.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
-    component.saveAssignments();
-    expect(component.modal()).toBe("manual");
-    expect(component.chosenProjects().has(11)).toBe(true);
-    expect(component.caseFilter.value).toBe("case:Второй");
-    expect(component.dialogError()).toBeTruthy();
-  });
   it("pending исключён из распределения, план с нехваткой нельзя применить", () => {
     const { component, api } = setup();
     component.open("auto");
@@ -319,5 +253,111 @@ describe("Управление экспертами", () => {
     expect(component.quotaPreview()).toBeNull();
     component.quota.setValue(0);
     expect(component.quota.invalid).toBe(true);
+  });
+  it("выбор проектов одного кейса повторным нажатием снимается, другой кейс не добавляется", () => {
+    const { fixture, component } = setup();
+    component.switchTab("distribution");
+    fixture.detectChanges();
+    component.toggleDistributionProject(projects[0]);
+    component.toggleDistributionProject(projects[1]);
+    expect(component.selectedProjects().size).toBe(2);
+    component.toggleDistributionProject(projects[2]);
+    expect(component.selectedProjects().size).toBe(2);
+    component.toggleDistributionProject(projects[0]);
+    expect([...component.selectedProjects()]).toEqual([11]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".experts__floating")).toBeTruthy();
+    component.selectedProjects.set(new Set());
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".experts__floating")).toBeNull();
+  });
+  it("поиск проекта и фильтр кейса сохраняются при обновлении данных", () => {
+    const { fixture, component } = setup();
+    component.switchTab("distribution");
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector("input[type=search]") as HTMLInputElement;
+    input.focus();
+    input.value = "Мар";
+    input.dispatchEvent(new Event("input"));
+    component.distributionCase.setValue(JSON.stringify("Сбер"));
+    fixture.detectChanges();
+    component.load();
+    fixture.detectChanges();
+    expect(component.filteredDistribution().map(p => p.id)).toEqual([11]);
+    expect(input.value).toBe("Мар");
+    expect(document.activeElement).toBe(input);
+    expect(component.distributionCase.value).toBe(JSON.stringify("Сбер"));
+  });
+  it("массовое назначение добавляет, одиночное заменяет и не снимает сохранённую оценку", () => {
+    const { component, api } = setup();
+    component.toggleDistributionProject(projects[0]);
+    component.toggleDistributionProject(projects[1]);
+    component.openProject();
+    component.toggleCandidate(snapshot.experts[0]);
+    component.saveProjectExperts();
+    expect(api.saveProjectExperts).toHaveBeenCalledWith(42, {
+      revision: "v1",
+      projectIds: [10, 11],
+      expertIds: [1],
+      mode: "add",
+    });
+    component.snapshot.set({ ...structuredClone(snapshot), projects: structuredClone(projects) });
+    component.openProject(projects[0]);
+    component.toggleCandidate(snapshot.experts[0]);
+    expect([...component.chosenExperts()]).toEqual([1]);
+    expect(component.candidateReason(snapshot.experts[0])).toContain("сохранена");
+  });
+  it("универсальный эксперт доступен в обоих кейсах, ограниченный — только в своём", () => {
+    const { component } = setup();
+    const restricted = { ...snapshot.experts[0], id: 3, allCases: false, caseNames: ["Сбер"] };
+    component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, restricted] }));
+    component.open("auto");
+    expect(component.poolExperts("Сбер").map(e => e.id)).toEqual([1, 3]);
+    expect(component.poolExperts("Т-Банк").map(e => e.id)).toEqual([1]);
+    component.openPool("Т-Банк");
+    component.toggleCandidate(restricted);
+    expect(component.chosenExperts().has(3)).toBe(false);
+  });
+  it("предпросмотр отправляет отдельные составы кейсов, повторяющегося эксперта один раз", () => {
+    const { component, api } = setup();
+    component.open("auto");
+    api.allocation.mockReturnValue(
+      of({ revision: "v1", planToken: "token", assignments: [], shortages: [], load: [] }),
+    );
+    component.previewAllocation();
+    expect(api.allocation).toHaveBeenCalledWith(42, {
+      expertIds: [1],
+      revision: "v1",
+      casePools: [
+        { caseName: "Сбер", expertIds: [1] },
+        { caseName: "Т-Банк", expertIds: [1] },
+      ],
+    });
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("409 сохраняет выбранных экспертов и открытый редактор", () => {
+    const { component, api } = setup();
+    component.openProject(projects[1]);
+    component.toggleCandidate(snapshot.experts[0]);
+    api.saveProjectExperts.mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status: 409 })),
+    );
+    component.saveProjectExperts();
+    expect(component.modal()).toBe("project");
+    expect([...component.chosenExperts()]).toEqual([1]);
+    expect(component.dialogError()).toBeTruthy();
+  });
+  it("сохраняет несколько кейсов с ревизией программы", () => {
+    const { component, api } = setup();
+    component.openScope(snapshot.experts[0]);
+    component.toggleScope("Т-Банк");
+    expect(component.scopeAll()).toBe(false);
+    expect([...component.scopeCases()]).toEqual(["Сбер"]);
+    component.saveScope();
+    expect(api.saveCaseScope).toHaveBeenCalledWith(42, 1, {
+      revision: "v1",
+      allCases: false,
+      caseNames: ["Сбер"],
+    });
   });
 });

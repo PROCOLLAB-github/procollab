@@ -13,6 +13,8 @@ import {
   InvitationAccepted,
   ExpertRegistration,
   ExpertRegistered,
+  ExpertCaseScopeWrite,
+  ProjectExpertsWrite,
 } from "@domain/program/evaluation-workspace.model";
 import { EvaluationRepositoryPort } from "@domain/program/ports/evaluation.repository.port";
 @Injectable({ providedIn: "root" })
@@ -26,6 +28,16 @@ export class EvaluationHttpAdapter implements EvaluationRepositoryPort {
   }
   workspace(id: number): Observable<ExpertWorkspace> {
     return this.api.get(`${this.root(id)}/experts/`);
+  }
+  saveCaseScope(
+    id: number,
+    expertId: number,
+    data: ExpertCaseScopeWrite,
+  ): Observable<ExpertWorkspace> {
+    return this.api.put(`${this.root(id)}/experts/${expertId}/cases/`, data);
+  }
+  saveProjectExperts(id: number, data: ProjectExpertsWrite): Observable<ExpertWorkspace> {
+    return this.api.post(`${this.root(id)}/project-experts/`, data);
   }
   invite(id: number, email: string): Observable<unknown> {
     return this.api.post(`${this.root(id)}/experts/`, { email });
