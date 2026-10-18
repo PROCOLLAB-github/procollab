@@ -534,11 +534,14 @@
     }
 
     &__tabs {
-      gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px 12px;
 
       a {
         position: relative;
         flex: 1;
+        grid-column: span 2;
         min-width: 0;
         min-height: 32px;
         margin-block: 6px;
@@ -548,6 +551,10 @@
           position: absolute;
           inset: -6px 0;
           content: "";
+        }
+
+        &:nth-last-child(-n + 2) {
+          grid-column: span 3;
         }
       }
     }
