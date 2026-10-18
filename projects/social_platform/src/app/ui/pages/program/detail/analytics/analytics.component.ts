@@ -288,7 +288,9 @@ export class ProgramAnalyticsComponent implements OnInit {
           "evaluation-partial",
           "Частично оценено",
           status.projects.partiallyEvaluated,
-          "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
+          status.requiredEvaluators != null
+            ? "Есть полная оценка хотя бы одного эксперта, но нужное число оценок ещё не получено."
+            : "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
         ),
       );
     }
@@ -298,9 +300,11 @@ export class ProgramAnalyticsComponent implements OnInit {
         "evaluation-evaluated",
         "Оценено",
         status.projects.evaluated,
-        status.mode === "open"
-          ? "Проекты, получившие хотя бы одну оценку эксперта."
-          : "Проекты, по которым выполнены все назначения экспертов.",
+        status.requiredEvaluators != null
+          ? "Проекты, получившие нужное число полных оценок от разных экспертов."
+          : status.mode === "open"
+            ? "Проекты, получившие хотя бы одну оценку эксперта."
+            : "Проекты, по которым выполнены все назначения экспертов.",
       ),
     );
     return metrics;
@@ -477,6 +481,8 @@ export class ProgramAnalyticsComponent implements OnInit {
   }
 
   private awaitingEvaluationTooltip(mode: "open" | "distributed"): string {
+    if (this.data()?.evaluationStatus.requiredEvaluators != null)
+      return "Сданные проекты, которые ещё не получили нужное число полных оценок от разных экспертов.";
     return mode === "open"
       ? "Сданные проекты, которые ещё не получили ни одной оценки эксперта."
       : "Сданные проекты без выполненных назначений или с выполненной только частью назначений.";

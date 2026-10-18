@@ -246,9 +246,11 @@
           </div>
           <app-tooltip
             [text]="
-              overview.evaluationStatus.mode === 'open'
-                ? 'Проект считается оценённым после первой оценки эксперта.'
-                : 'Статус проекта определяется выполнением назначений экспертов.'
+              overview.evaluationStatus.requiredEvaluators != null
+                ? 'Статус зависит от числа полных оценок. Нужное число задаётся в разделе «Эксперты».'
+                : overview.evaluationStatus.mode === 'open'
+                  ? 'Проект считается оценённым после первой оценки эксперта.'
+                  : 'Статус проекта определяется выполнением назначений экспертов.'
             "
             [isVisible]="isTooltipVisible('evaluation-status')"
             [useOverlay]="true"
@@ -264,14 +266,28 @@
             categoryLabel="Показатель"
             definitionsLabel="Данные и определения показателей"
           />
-          @if (overview.evaluationStatus.maxEvaluationsPerProject !== null) {
+          @if (
+            overview.evaluationStatus.requiredEvaluators != null ||
+            overview.evaluationStatus.maxEvaluationsPerProject != null
+          ) {
             <div class="evaluation__limit" data-testid="evaluation-limit">
               <span>
-                <span class="text-body-10">Максимум экспертов на проект:</span>
-                <strong>{{ overview.evaluationStatus.maxEvaluationsPerProject }}</strong>
+                <span class="text-body-10">{{
+                  overview.evaluationStatus.requiredEvaluators != null
+                    ? "Оценок для каждого проекта:"
+                    : "Максимум экспертов на проект:"
+                }}</span>
+                <strong>{{
+                  overview.evaluationStatus.requiredEvaluators ??
+                    overview.evaluationStatus.maxEvaluationsPerProject
+                }}</strong>
               </span>
               <app-tooltip
-                text="Максимальное количество экспертов, которые могут оценить один проект."
+                [text]="
+                  overview.evaluationStatus.requiredEvaluators != null
+                    ? 'Проект полностью оценён, когда это число разных экспертов сохранили оценки по всем критериям. Настраивается в разделе «Эксперты».'
+                    : 'Максимальное количество экспертов, которые могут оценить один проект.'
+                "
                 [isVisible]="isTooltipVisible('evaluation-limit')"
                 [useOverlay]="true"
                 (click)="toggleTooltip('evaluation-limit')"

@@ -8,6 +8,108 @@ import { ManagementExpertsComponent } from "./experts.component";
 import { ExpertWorkspace, AssignmentOptions } from "@domain/program/evaluation-workspace.model";
 
 describe("Управление экспертами", () => {
+  it("различает нехватку состава экспертов и полученные оценки", () => {
+    const { fixture, component } = setup();
+    component.snapshot.update(state => ({
+      ...state!,
+      requiredEvaluators: 1,
+      submittedProjects: 2,
+      projectsMissingExperts: 1,
+      missingAssignments: 1,
+      readyProjects: 0,
+    }));
+    fixture.detectChanges();
+    const summary = fixture.nativeElement.querySelector(".experts__quota").textContent;
+    expect(summary).toContain("Оценок для каждого проекта: 1");
+    expect(summary).toContain("для 1 из 2 проектов");
+    expect(summary).toContain("Полностью оценено: 0");
+    expect(summary).not.toContain("назначений");
+  });
+  it("обновляет отправку письма без сброса поиска и прекращает проверку после sent", async () => {
+    vi.useFakeTimers();
+    try {
+      const { fixture, component, api } = setup();
+      const queued = structuredClone(snapshot);
+      queued.experts[1].deliveryStatus = "queued";
+      api.workspace.mockReturnValue(of(queued));
+      component.load();
+      fixture.detectChanges();
+      const search = fixture.nativeElement.querySelector("input[type=search]") as HTMLInputElement;
+      search.focus();
+      search.value = "pending";
+      search.dispatchEvent(new Event("input"));
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Письмо в очереди");
+      api.workspace.mockReturnValue(of(structuredClone(snapshot)));
+      await vi.advanceTimersByTimeAsync(3000);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Письмо отправлено · ждём принятия");
+      expect(search.value).toBe("pending");
+      expect(document.activeElement).toBe(search);
+      const calls = api.workspace.mock.calls.length;
+      await vi.advanceTimersByTimeAsync(10000);
+      expect(api.workspace).toHaveBeenCalledTimes(calls);
+      fixture.destroy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it("отменяет фоновую проверку письма при уходе со страницы", async () => {
+    vi.useFakeTimers();
+    try {
+      const { fixture, component, api } = setup();
+      const queued = structuredClone(snapshot);
+      queued.experts[1].deliveryStatus = "queued";
+      api.workspace.mockReturnValue(of(queued));
+      component.load();
+      fixture.detectChanges();
+      fixture.destroy();
+      const calls = api.workspace.mock.calls.length;
+      await vi.advanceTimersByTimeAsync(15000);
+      expect(api.workspace).toHaveBeenCalledTimes(calls);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it("останавливает долгую проверку и убирает предупреждение после получения статуса", async () => {
+    vi.useFakeTimers();
+    try {
+      const { fixture, component, api } = setup();
+      const queued = structuredClone(snapshot);
+      queued.experts[1].deliveryStatus = "queued";
+      api.workspace.mockReturnValue(of(queued));
+      component.load();
+      fixture.detectChanges();
+      await vi.advanceTimersByTimeAsync(123000);
+      fixture.detectChanges();
+      expect(component.deliveryRefreshPaused()).toBe(true);
+      const calls = api.workspace.mock.calls.length;
+      await vi.advanceTimersByTimeAsync(15000);
+      expect(api.workspace).toHaveBeenCalledTimes(calls);
+      api.workspace.mockReturnValue(of(structuredClone(snapshot)));
+      component.load();
+      fixture.detectChanges();
+      expect(component.deliveryRefreshPaused()).toBe(false);
+      fixture.destroy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it("предлагает только принявших приглашение и не применяет план при предпросмотре", () => {
+    const { fixture, component, api } = setup();
+    component.open("auto");
+    fixture.detectChanges();
+    api.allocation.mockReturnValue(
+      of({ revision: "v1", planToken: "signed", assignments: [], shortages: [], load: [] }),
+    );
+    component.previewAllocation();
+    expect(api.allocation).toHaveBeenCalledWith(42, { expertIds: [1] });
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+    expect(component.label(snapshot.experts[1])).toBe("Приглашён");
+    expect(component.deliveryLabel({ ...snapshot.experts[1], deliveryStatus: "failed" })).toBe(
+      "Не удалось отправить письмо",
+    );
+  });
   it("отправляет приглашение через native submit и предотвращает перезагрузку", async () => {
     const { fixture, component, api } = setup();
     component.open("invite");

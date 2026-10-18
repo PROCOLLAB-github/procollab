@@ -165,6 +165,25 @@
   color: var(--grey-for-text);
 }
 
+.experts__table .experts__delivery {
+  margin-top: 4px;
+  font-size: 10px;
+}
+
+.experts__scope {
+  padding: 16px;
+  background: var(--light-gray);
+  border-radius: 12px;
+}
+
+.experts__quota p {
+  margin-top: 6px;
+}
+
+.experts__quota > button {
+  flex-shrink: 0;
+}
+
 .experts__selection {
   padding: 16px;
   margin: 16px 0;

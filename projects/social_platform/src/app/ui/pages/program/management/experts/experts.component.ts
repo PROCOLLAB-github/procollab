@@ -13,7 +13,18 @@ import {
 } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { Observable, finalize } from "rxjs";
+import {
+  Observable,
+  catchError,
+  exhaustMap,
+  filter,
+  finalize,
+  of,
+  take,
+  timeout,
+  timer,
+} from "rxjs";
+import { PluralizePipe } from "@corelib";
 import {
   AlertDirective,
   AvatarComponent,
@@ -44,6 +55,7 @@ import { presentationHref } from "@utils/program-case-analytics";
     ChoiceDirective,
     FieldDirective,
     ModalComponent,
+    PluralizePipe,
   ],
   templateUrl: "./experts.component.html",
   styleUrl: "./experts.component.scss",
@@ -62,6 +74,7 @@ export class ManagementExpertsComponent {
   readonly error = signal<string | null>(null);
   readonly dialogError = signal<string | null>(null);
   readonly message = signal<string | null>(null);
+  readonly deliveryRefreshPaused = signal(false);
   readonly selected = signal<ExpertRow | null>(null);
   readonly modal = signal<"invite" | "manual" | "assignments" | "auto" | "quota" | "revoke" | null>(
     null,
@@ -95,6 +108,9 @@ export class ManagementExpertsComponent {
   readonly href = presentationHref;
   readonly joined = computed(
     () => this.snapshot()?.experts.filter(e => e.status === "joined") ?? [],
+  );
+  private readonly hasQueuedInvitations = computed(() =>
+    this.snapshot()?.experts.some(e => e.status === "pending" && e.deliveryStatus === "queued"),
   );
   readonly filtered = computed(() =>
     (this.snapshot()?.experts ?? []).filter(
@@ -137,7 +153,7 @@ export class ManagementExpertsComponent {
     this.modal() === "invite"
       ? "Пригласить эксперта"
       : this.modal() === "quota"
-        ? "Число оценщиков на проект"
+        ? "Сколько оценок нужно каждому проекту"
         : this.modal() === "manual"
           ? "Назначить проекты"
           : this.modal() === "assignments"
@@ -159,6 +175,35 @@ export class ManagementExpertsComponent {
         this.selected.set(null);
         this.load(id);
       });
+    });
+    effect(onCleanup => {
+      const id = this.programId();
+      this.deliveryRefreshPaused.set(false);
+      if (!this.hasQueuedInvitations() || this.busy()) return;
+      const subscription = timer(3000, 5000)
+        .pipe(
+          take(24),
+          filter(() => !this.busy()),
+          exhaustMap(() =>
+            this.api.workspace(id).pipe(
+              timeout(10000),
+              catchError(() => of(null)),
+            ),
+          ),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe({
+          next: data => {
+            if (!data || this.programId() !== id || this.busy()) return;
+            // Обновляем данные без пересоздания формы, сброса поиска и открытого редактора.
+            this.snapshot.set(data);
+            this.selected.update(row =>
+              row ? (data.experts.find(e => e.id === row.id) ?? null) : null,
+            );
+          },
+          complete: () => this.deliveryRefreshPaused.set(!!this.hasQueuedInvitations()),
+        });
+      onCleanup(() => subscription.unsubscribe());
     });
     effect(() => this.statusChange.emit({ dirty: this.dirty(), busy: this.busy() }));
     this.search.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
@@ -223,11 +268,14 @@ export class ManagementExpertsComponent {
     if (row.status === "joined") return "В программе";
     if (row.status === "expired") return "Истекло";
     if (row.status === "revoked") return "Отозвано";
-    return row.deliveryStatus === "failed"
-      ? "Не доставлено"
-      : row.deliveryStatus === "queued"
-        ? "Отправляется"
-        : "Приглашён";
+    return "Приглашён";
+  }
+  deliveryLabel(row: ExpertRow): string {
+    if (row.status !== "pending") return "";
+    if (row.deliveryStatus === "failed") return "Не удалось отправить письмо";
+    if (row.deliveryStatus === "queued") return "Письмо в очереди";
+    if (row.deliveryStatus === "sent") return "Письмо отправлено · ждём принятия";
+    return "Статус отправки неизвестен";
   }
   initials(row: ExpertRow): string {
     return (row.name || row.email)
@@ -266,7 +314,7 @@ export class ManagementExpertsComponent {
     }
     this.request(this.api.invite(this.programId(), this.email.value.trim()), () => {
       this.modal.set(null);
-      this.message.set("Приглашение передано на отправку. Статус доставки появится в списке.");
+      this.message.set("Приглашение создано. Статус отправки письма обновится автоматически.");
       this.load();
     });
   }

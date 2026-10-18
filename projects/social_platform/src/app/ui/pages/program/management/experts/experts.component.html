@@ -30,16 +30,40 @@
   @if (snapshot(); as state) {
     <section class="experts__card experts__quota">
       <div>
-        <strong>На каждый проект: {{ state.requiredEvaluators }} оценщика</strong>
+        <strong>Оценок для каждого проекта: {{ state.requiredEvaluators }}</strong>
+        <p>Каждую оценку выставляет отдельный эксперт.</p>
         <p>
-          {{ state.submittedProjects }} сданных проектов · не хватает
-          {{ state.missingAssignments }} назначений
+          Сдано проектов: {{ state.submittedProjects }} · Полностью оценено:
+          {{ state.readyProjects }}
         </p>
+        @if (state.missingAssignments) {
+          <p>
+            Ещё нужно выбрать экспертов{{
+              state.projectsMissingExperts === undefined
+                ? " для проектов."
+                : " для " +
+                  state.projectsMissingExperts +
+                  " из " +
+                  state.submittedProjects +
+                  " проектов."
+            }}
+            Можно распределить автоматически или назначить вручную.
+          </p>
+        } @else if (state.submittedProjects) {
+          <p>Для всех сданных проектов выбран нужный состав экспертов.</p>
+        }
       </div>
       <button type="button" appButton="secondary" (click)="open('quota')">Изменить</button>
     </section>
   }
   <section class="experts__card" [attr.aria-busy]="loading()">
+    @if (deliveryRefreshPaused()) {
+      <p appAlert="warning">
+        Отправка письма занимает больше времени. Можно проверить статус снова или отправить
+        приглашение повторно.
+        <button type="button" appButton="text" (click)="load()">Обновить статус</button>
+      </p>
+    }
     <div class="experts__filters">
       <label
         >Поиск по имени или email<input
@@ -137,7 +161,14 @@
                 </div>
               </td>
               <td class="experts__email">{{ expert.email }}</td>
-              <td>{{ label(expert) }}</td>
+              <td>
+                {{ label(expert) }}
+                @if (expert.status === "pending") {
+                  <p class="experts__delivery">
+                    {{ deliveryLabel(expert) }}
+                  </p>
+                }
+              </td>
               <td data-label="Назначено">{{ expert.assigned ?? "—" }}</td>
               <td data-label="Оценено">{{ expert.completed ?? "—" }}</td>
               <td data-label="Осталось">{{ expert.remaining ?? "—" }}</td>
@@ -233,9 +264,12 @@
         </footer>
       }
       @case ("quota") {
-        <p>Проект готов, когда получено нужное число полных оценок от разных экспертов.</p>
+        <p>
+          Проект считается полностью оценённым, когда нужное число разных экспертов сохранили свои
+          оценки по всем критериям.
+        </p>
         <label
-          >Требуется оценщиков<input
+          >Экспертов для оценки каждого проекта<input
             type="number"
             min="1"
             max="1000"
@@ -250,15 +284,22 @@
           <div class="experts__selection">
             <div>
               <strong
-                >После пересчёта готово {{ preview.readyAfter }} проектов вместо
-                {{ preview.readyBefore }}</strong
+                >Полностью оценённых проектов после изменения: {{ preview.readyAfter }}.</strong
               >
-              <p>Не хватает {{ preview.missingAssignments }} назначений.</p>
+              <p>Сейчас полностью оценено: {{ preview.readyBefore }}.</p>
+              @if (preview.projectsMissingExperts !== undefined) {
+                <p>
+                  Проекты, для которых ещё нужно выбрать экспертов:
+                  {{ preview.projectsMissingExperts }}.
+                </p>
+              }
             </div>
           </div>
           <p>
-            Выставленные оценки сохранятся. Избыточные назначения ({{ preview.surplusAssignments }})
-            можно снять вручную, если оценок ещё нет.
+            Сохранённые оценки и выбранные эксперты останутся.
+            @if (preview.surplusAssignments) {
+              Лишних экспертов можно снять с проектов вручную, если они ещё не сохраняли оценки.
+            }
           </p>
           <button type="button" appButton="primary" (click)="saveQuota()" [disabled]="busy()">
             Сохранить и пересчитать
@@ -282,8 +323,8 @@
             </p>
           } @else {
             <p>
-              Добавим {{ preview.assignments.length }} назначений. Текущие назначения и сохранённые
-              оценки остаются.
+              Проверьте, кто будет оценивать проекты. Изменения применятся после подтверждения. Уже
+              выбранные эксперты и сохранённые оценки останутся.
             </p>
           }
           <h3>Нагрузка экспертов</h3>
@@ -291,11 +332,11 @@
             @for (expert of preview.load; track expert.expertId) {
               <div class="experts__load">
                 <strong>{{ expert.name }}</strong
-                ><span>Осталось: {{ expert.before }} → {{ expert.after }}</span>
+                ><span>Проектов осталось оценить: {{ expert.before }} → {{ expert.after }}</span>
               </div>
             }
           </div>
-          <h3>Назначения по проектам</h3>
+          <h3>Кто будет оценивать проекты</h3>
           <div class="experts__scroll">
             @for (assignment of preview.assignments; track $index) {
               <div class="experts__load">
@@ -304,7 +345,15 @@
               </div>
             }
             @for (shortage of preview.shortages; track shortage.projectId) {
-              <p>{{ shortage.projectName }} — не хватает {{ shortage.missing }} экспертов</p>
+              <p>
+                {{ shortage.projectName }} — нужно выбрать ещё {{ shortage.missing }}
+                {{ shortage.missing | pluralize: ["эксперта", "экспертов", "экспертов"] }}
+              </p>
+            }
+            @if (!preview.assignments.length && !preview.shortages.length) {
+              <p>
+                Для всех проектов уже выбран нужный состав экспертов. Добавлять никого не нужно.
+              </p>
             }
           </div>
           <footer class="experts__actions">
@@ -314,7 +363,7 @@
               (click)="applyAllocation()"
               [disabled]="busy() || !!preview.shortages.length || !preview.assignments.length"
             >
-              Применить {{ preview.assignments.length }} назначений</button
+              Подтвердить распределение</button
             ><button
               type="button"
               appButton="secondary"
@@ -325,19 +374,27 @@
             </button>
           </footer>
         } @else {
-          <p>
-            Система дополнит назначения до {{ snapshot()?.requiredEvaluators }} оценщиков на каждый
-            проект.
-          </p>
-          <label
-            >Проекты для распределения<select appField>
-              <option>Все сданные · {{ snapshot()?.submittedProjects }} проектов</option>
-            </select></label
-          >
-          <h3>Эксперты программы</h3>
-          <p>Выбрано {{ chosenExperts().size }} · приглашённые не участвуют</p>
+          <p>Выберите экспертов — система предложит, кто оценит каждый сданный проект.</p>
+          <div class="experts__scope">
+            <strong
+              >Экспертов на проект: {{ snapshot()?.requiredEvaluators }} · Сданных проектов:
+              {{ snapshot()?.submittedProjects }}</strong
+            >
+            @if (snapshot()?.projectsMissingExperts !== undefined) {
+              @if (snapshot()?.projectsMissingExperts) {
+                <p>
+                  Нужно подобрать экспертов для {{ snapshot()?.projectsMissingExperts }} из
+                  {{ snapshot()?.submittedProjects }} проектов.
+                </p>
+              } @else {
+                <p>Для всех сданных проектов уже выбран нужный состав экспертов.</p>
+              }
+            }
+          </div>
+          <h3>1. Выберите экспертов</h3>
+          <p>Выбрано: {{ chosenExperts().size }}. Приглашённые появятся здесь после принятия.</p>
           <div class="experts__scroll">
-            @for (expert of snapshot()?.experts; track expert.id) {
+            @for (expert of joined(); track expert.id) {
               <label class="experts__choice"
                 ><input
                   type="checkbox"
@@ -348,26 +405,26 @@
                 /><span
                   ><strong>{{ expert.name || expert.email }}</strong
                   ><span>{{ expert.email }}</span
-                  ><span>{{
-                    expert.status === "joined"
-                      ? "Осталось оценить: " + expert.remaining
-                      : "Приглашение ещё не принято"
-                  }}</span></span
+                  ><span>Проектов осталось оценить: {{ expert.remaining }}</span></span
                 ></label
               >
+            } @empty {
+              <p>Пока никто не принял приглашение. Пригласите экспертов и дождитесь принятия.</p>
             }
           </div>
           <p>
-            Учитываем оставшуюся нагрузку и текущие назначения. Проекты собственной команды
-            недоступны.
+            Учитываем нагрузку и сохраняем текущие назначения. Эксперт не получает проект своей
+            команды.
           </p>
+          <h3>2. Проверьте результат</h3>
+          <p>Сначала покажем план. Назначим проекты после вашего подтверждения.</p>
           <button
             type="button"
             appButton="primary"
             (click)="previewAllocation()"
             [disabled]="busy() || !chosenExperts().size || !snapshot()?.submittedProjects"
           >
-            Посмотреть распределение
+            Подобрать экспертов
           </button>
         }
       }

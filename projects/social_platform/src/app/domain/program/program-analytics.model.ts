@@ -28,6 +28,7 @@ export interface ProgramAnalyticsOverview {
   evaluationStatus: {
     mode: ProgramEvaluationMode;
     maxEvaluationsPerProject: number | null;
+    requiredEvaluators?: number | null;
     assignments: {
       total: number;
       pending: number;
