@@ -5,6 +5,7 @@ import { TestBed } from "@angular/core/testing";
 import { FormGroup } from "@angular/forms";
 import { provideRouter, RouterLink } from "@angular/router";
 import { By } from "@angular/platform-browser";
+import { DesktopLayoutService } from "@uilib";
 import { of } from "rxjs";
 import { ProjectFormService } from "@api/project/project-form.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
@@ -148,7 +149,8 @@ describe("Detail cleanup actions", () => {
     expect(copyLink).toHaveBeenCalledExactlyOnceWith(id);
   });
 
-  it("keeps profile and project titles in the header without moving profile actions", () => {
+  it("keeps profile actions in place and reserves project title space on desktop", () => {
+    TestBed.overrideProvider(DesktopLayoutService, { useValue: { desktop: signal(true) } });
     type.set("profile");
     info.set({
       id: 7,
@@ -174,7 +176,10 @@ describe("Detail cleanup actions", () => {
     expect(profileFixture.nativeElement.querySelector(".info__profile-heading")).toBeNull();
     expect(
       profileFixture.nativeElement.querySelector(".info__avatar .info__title--project"),
-    ).not.toBeNull();
+    ).toBeNull();
+    expect(
+      profileFixture.nativeElement.querySelector(".info__body > .info__project-title")?.textContent,
+    ).toContain("Проект");
   });
 
   it("does not wait for the current profile before offering application creation", () => {
