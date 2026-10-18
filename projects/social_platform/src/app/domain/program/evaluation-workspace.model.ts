@@ -17,6 +17,7 @@ export interface ExpertWorkspace {
   requiredEvaluators: number;
   managedEvaluation: boolean;
   submittedProjects: number;
+  projectsMissingExperts?: number;
   missingAssignments: number;
   readyProjects: number;
   experts: ExpertRow[];
@@ -49,6 +50,8 @@ export interface AllocationPlan {
 export interface QuotaPreview {
   revision: string;
   requiredEvaluators: number;
+  submittedProjects?: number;
+  projectsMissingExperts?: number;
   readyBefore: number;
   readyAfter: number;
   missingAssignments: number;

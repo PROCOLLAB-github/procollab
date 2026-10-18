@@ -857,6 +857,19 @@ describe("ProgramAnalyticsComponent", () => {
     ).toHaveLength(2);
   });
 
+  it("показывает обязательное число оценок вместо прежнего максимума в управляемом режиме", () => {
+    const model = overview();
+    model.evaluationStatus.requiredEvaluators = 1;
+    model.evaluationStatus.maxEvaluationsPerProject = 3;
+    data.set(model);
+    const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
+    fixture.detectChanges();
+    const limit = fixture.nativeElement.querySelector('[data-testid="evaluation-limit"]');
+    expect(limit.textContent).toContain("Оценок для каждого проекта:");
+    expect(limit.querySelector("strong").textContent.trim()).toBe("1");
+    expect(limit.textContent).not.toContain("Максимум");
+  });
+
   it("не выдаёт отсутствие новой метрики посещения за ноль", () => {
     const model = overview();
     delete model.participantFunnel.visitedParticipants;
