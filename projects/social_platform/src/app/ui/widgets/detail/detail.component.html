@@ -21,6 +21,7 @@
           <div
             class="info__avatar"
             (click)="redirectDetailInfo()"
+            [class.info__avatar--project]="listType() === 'project'"
             [class.info__avatar--program]="listType() === 'program'"
             [style.width.px]="avatarSize"
           >
@@ -39,7 +40,7 @@
                 [size]="avatarSize"
                 [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
               ></app-avatar>
-              @if (appWidth >= 1000 && (listType() === "project" || listType() === "profile")) {
+              @if (appWidth >= 1000 && listType() === "profile") {
                 <h1
                   class="info__title text-body-12"
                   [style.width]="
@@ -62,7 +63,7 @@
           </div>
         </div>
 
-        <div class="info__body">
+        <div class="info__body" [class.info__body--project]="listType() === 'project'">
           @if (appWidth < 1000) {
             <app-page-header
               class="info__page-header"
@@ -85,6 +86,10 @@
               "
             ></ng-container>
           </div>
+
+          @if (appWidth >= 1000 && listType() === "project") {
+            <h1 class="info__project-title text-body-12">{{ info().name }}</h1>
+          }
 
           <ng-template #programTpl>
             @if (userType() !== undefined) {

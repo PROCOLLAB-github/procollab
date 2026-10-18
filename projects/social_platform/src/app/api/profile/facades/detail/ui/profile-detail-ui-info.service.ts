@@ -16,12 +16,24 @@ export class ProfileDetailUIInfoService {
     const user = this.user();
     if (!user) return undefined;
 
+    // A missing field means an incomplete profile, not an empty one.
+    const { personal, relations } = user;
     return !(
-      user.firstName &&
-      user.lastName &&
-      user.email &&
-      user.personal.avatar &&
-      user.personal.birthday
+      personal.aboutMe?.trim() ||
+      personal.avatar ||
+      personal.birthday ||
+      personal.city?.trim() ||
+      personal.region?.trim() ||
+      personal.speciality?.trim() ||
+      personal.v2Speciality?.name ||
+      personal.links?.length ||
+      relations.skills?.length ||
+      relations.achievements?.length ||
+      relations.education?.length ||
+      relations.workExperience?.length ||
+      relations.userLanguages?.length ||
+      relations.projects?.length ||
+      relations.programs?.length
     );
   });
   readonly isProfileFill = signal<boolean>(false);
