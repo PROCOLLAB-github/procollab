@@ -1,6 +1,6 @@
 /** @format */
 
-import { signal } from "@angular/core";
+import { signal, WritableSignal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { FileService, ValidationService } from "@corelib";
@@ -8,6 +8,7 @@ import { NewsInfoService } from "@api/news/news-info.service";
 import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { User } from "@domain/auth/user.model";
+import { FeedNews } from "@domain/news/project-news.model";
 import { ProfileMidSideComponent } from "./profile-mid-side.component";
 
 describe("ProfileMidSideComponent", () => {
@@ -104,6 +105,31 @@ describe("ProfileMidSideComponent", () => {
     expect(card).not.toBeNull();
     expect(card.querySelector(".about__title")?.textContent).toContain("обо мне");
     expect(card.textContent).toContain("Создаю образовательные проекты");
+  });
+
+  it.each(["projects", "programs"])(
+    "shows the news form instead of onboarding when the profile has %s but no avatar",
+    field => {
+      const user = createUser(7, false);
+      Object.assign(user.relations, { [field]: [{ id: 1 }] });
+      ui.applyInitProfile({ data: { user } }, 7);
+      fixture.componentRef.setInput("user", user);
+      renderProfile();
+
+      expect(
+        fixture.nativeElement.querySelector('[data-testid="empty-profile-state"]'),
+      ).toBeFalsy();
+      expect(fixture.nativeElement.querySelector("app-news-form")).toBeTruthy();
+    },
+  );
+
+  it("does not treat a profile with published news as empty", () => {
+    const news = TestBed.inject(NewsInfoService).news as WritableSignal<FeedNews[]>;
+    news.set([FeedNews.default()]);
+    expect(fixture.componentInstance["isProfileEmpty"]()).toBe(false);
+    news.set([]);
+    expect(fixture.componentInstance["isProfileEmpty"]()).toBe(true);
+    renderProfile();
   });
 
   it("does not leak empty state across foreign and own profile navigation", () => {
