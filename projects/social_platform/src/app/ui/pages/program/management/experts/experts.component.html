@@ -717,13 +717,21 @@
           {{ snapshot()?.requiredEvaluators }}
         </p>
         @if (targets().length > 1) {
-          <p>Существующие эксперты у проектов сохранятся.</p>
+          <p>
+            Существующие эксперты сохранятся. Если мест не хватает, измените состав проекта
+            отдельно.
+          </p>
+        } @else {
+          <p>Для замены сначала снимите эксперта без оценки. Оценившие эксперты закреплены.</p>
+          @if ((targets()[0]?.experts?.length ?? 0) > (snapshot()?.requiredEvaluators ?? 1)) {
+            <p>Лишние назначения сохранены. Можно снять только экспертов без оценки.</p>
+          }
         }
         <ng-container [ngTemplateOutlet]="expertChooser" />
         <p>
           Выбрано {{ chosenExperts().size }}
-          {{ chosenExperts().size | pluralize: ["эксперт", "эксперта", "экспертов"] }} · Требуется
-          {{ snapshot()?.requiredEvaluators }}
+          {{ chosenExperts().size | pluralize: ["эксперт", "эксперта", "экспертов"] }} · Лимит на
+          проект: {{ snapshot()?.requiredEvaluators }}
         </p>
         <footer class="experts__actions">
           <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
@@ -732,7 +740,7 @@
             type="button"
             appButton="primary"
             (click)="saveProjectExperts()"
-            [disabled]="busy() || !projectDirty()"
+            [disabled]="busy() || !projectDirty() || projectLimitExceeded()"
           >
             {{
               targets().length > 1

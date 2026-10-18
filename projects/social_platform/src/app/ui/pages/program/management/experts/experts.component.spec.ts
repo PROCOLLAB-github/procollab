@@ -347,6 +347,128 @@ describe("Управление экспертами", () => {
     expect([...component.chosenExperts()]).toEqual([1]);
     expect(component.dialogError()).toBeTruthy();
   });
+  it("при заполненном лимите фиксирует оценившего и блокирует ещё одного эксперта", () => {
+    const { fixture, component, api } = setup();
+    const extra = { ...snapshot.experts[0], id: 3, name: "Анна" };
+    component.snapshot.update(s => ({
+      ...s!,
+      requiredEvaluators: 1,
+      experts: [...s!.experts, extra],
+    }));
+    component.openProject(projects[0]);
+    fixture.detectChanges();
+    component.toggleCandidate(snapshot.experts[0]);
+    component.toggleCandidate(extra);
+    expect([...component.chosenExperts()]).toEqual([1]);
+    expect(component.candidateReason(extra)).toContain("лимит");
+    expect(component.candidateReason(snapshot.experts[0])).toContain("сохранена");
+    component.chosenExperts.set(new Set([1, 3]));
+    component.saveProjectExperts();
+    expect(api.saveProjectExperts).not.toHaveBeenCalled();
+    expect(component.projectLimitExceeded()).toBe(true);
+  });
+  it("заменяет неоценившего в заполненном составе, сохраняя оценившего", () => {
+    const { component, api } = setup();
+    const waiting = { ...snapshot.experts[0], id: 3, name: "Борис" };
+    const replacement = { ...snapshot.experts[0], id: 4, name: "Анна" };
+    const project = structuredClone(projects[0]);
+    project.experts.push({
+      ...project.experts[0],
+      expertId: 3,
+      protected: false,
+      completed: false,
+    });
+    component.snapshot.update(s => ({
+      ...s!,
+      experts: [...s!.experts, waiting, replacement],
+      projects: [project],
+    }));
+    component.openProject(project);
+    component.toggleCandidate(replacement);
+    expect([...component.chosenExperts()]).toEqual([1, 3]);
+    component.toggleCandidate(waiting);
+    component.toggleCandidate(replacement);
+    component.saveProjectExperts();
+    expect(api.saveProjectExperts).toHaveBeenCalledWith(42, {
+      revision: "v1",
+      projectIds: [10],
+      expertIds: [1, 4],
+      mode: "replace",
+    });
+  });
+  it("при массовом выборе учитывает оставшиеся места каждого проекта", () => {
+    const { component, api } = setup();
+    const extra = { ...snapshot.experts[0], id: 3 };
+    component.snapshot.update(s => ({
+      ...s!,
+      requiredEvaluators: 1,
+      experts: [...s!.experts, extra],
+    }));
+    component.toggleDistributionProject(projects[0]);
+    component.toggleDistributionProject(projects[1]);
+    component.openProject();
+    component.toggleCandidate(extra);
+    expect(component.chosenExperts().size).toBe(0);
+    expect(component.candidateReason(extra)).toContain("нет свободных мест");
+    component.toggleCandidate(snapshot.experts[0]);
+    component.saveProjectExperts();
+    expect(api.saveProjectExperts).toHaveBeenCalledWith(42, {
+      revision: "v1",
+      projectIds: [10, 11],
+      expertIds: [1],
+      mode: "add",
+    });
+  });
+  it("при уменьшенном лимите сохраняет старый состав и разрешает снять неоценившего", async () => {
+    const { fixture, component, api } = setup();
+    const waiting = { ...snapshot.experts[0], id: 3 };
+    const extra = { ...snapshot.experts[0], id: 4 };
+    const project = structuredClone(projects[0]);
+    project.experts.push({ ...project.experts[0], expertId: 3, protected: false });
+    component.snapshot.update(s => ({
+      ...s!,
+      requiredEvaluators: 1,
+      experts: [...s!.experts, waiting, extra],
+      projects: [project],
+    }));
+    component.openProject(project);
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    expect(document.querySelector(".experts__dialog")?.textContent).toContain(
+      "Лишние назначения сохранены",
+    );
+    expect(component.projectLimitExceeded()).toBe(false);
+    component.toggleCandidate(extra);
+    expect([...component.chosenExperts()]).toEqual([1, 3]);
+    component.toggleCandidate(waiting);
+    component.toggleCandidate(waiting);
+    expect([...component.chosenExperts()]).toEqual([1, 3]);
+    component.toggleCandidate(waiting);
+    component.saveProjectExperts();
+    expect(api.saveProjectExperts).toHaveBeenCalledWith(42, {
+      revision: "v1",
+      projectIds: [10],
+      expertIds: [1],
+      mode: "replace",
+    });
+  });
+  it("лимит назначений не ограничивает пул экспертов для автоматического распределения", () => {
+    const { component } = setup();
+    const extra = { ...snapshot.experts[0], id: 3 };
+    component.snapshot.update(s => ({
+      ...s!,
+      requiredEvaluators: 1,
+      experts: [...s!.experts, extra],
+    }));
+    component.open("auto");
+    component.openPool("Сбер");
+    expect(component.chosenExperts().size).toBe(2);
+    expect(component.candidateReason(extra)).toBeNull();
+    component.toggleCandidate(extra);
+    component.toggleCandidate(extra);
+    expect(component.chosenExperts().size).toBe(2);
+  });
   it("сохраняет несколько кейсов с ревизией программы", () => {
     const { component, api } = setup();
     component.openScope(snapshot.experts[0]);

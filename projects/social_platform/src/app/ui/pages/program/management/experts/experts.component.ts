@@ -199,6 +199,7 @@ export class ManagementExpertsComponent {
       JSON.stringify([...this.chosenExperts()].sort((a, b) => a - b)) !==
         JSON.stringify([...this.initialExperts()].sort((a, b) => a - b)),
   );
+  readonly projectLimitExceeded = computed(() => this.exceedsAssignmentLimit(this.chosenExperts()));
   readonly scopeDirty = computed(
     () =>
       this.modal() === "scope" &&
@@ -582,6 +583,15 @@ export class ManagementExpertsComponent {
     this.dialogError.set(null);
     this.modal.set("project");
   }
+  private exceedsAssignmentLimit(chosen: Set<number>): boolean {
+    const targets = this.targets();
+    const limit = this.snapshot()?.requiredEvaluators ?? 1;
+    return targets.some(project => {
+      const existing = new Set(project.experts.map(e => e.expertId));
+      const result = targets.length === 1 ? chosen : new Set([...existing, ...chosen]);
+      return result.size > limit && [...result].some(id => !existing.has(id));
+    });
+  }
   candidateReason(expert: ExpertRow): string | null {
     if (expert.status !== "joined") return "Приглашение ещё не принято";
     const id = Number(expert.id);
@@ -597,6 +607,13 @@ export class ManagementExpertsComponent {
         additions.some(p => p.leaderId === expert.userId || p.teamUserIds.includes(expert.userId!))
       )
         return "Проект собственной команды";
+      if (
+        !this.chosenExperts().has(id) &&
+        this.exceedsAssignmentLimit(new Set([...this.chosenExperts(), id]))
+      )
+        return targets.length === 1
+          ? "Достигнут лимит экспертов"
+          : "У одного из проектов нет свободных мест";
     } else if (this.modal() === "pool" && !this.eligibleFor(expert, this.poolCase()))
       return "Эксперт другого кейса";
     return null;
@@ -606,7 +623,7 @@ export class ManagementExpertsComponent {
   }
   saveProjectExperts(): void {
     const state = this.snapshot();
-    if (!state) return;
+    if (!state || !this.projectDirty() || this.projectLimitExceeded()) return;
     this.request(
       this.api.saveProjectExperts(this.programId(), {
         revision: state.revision,
