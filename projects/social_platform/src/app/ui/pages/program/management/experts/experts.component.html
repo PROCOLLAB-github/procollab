@@ -245,9 +245,13 @@
         </div>
         <p>
           {{ filteredDistribution().length }}
-          {{ filteredDistribution().length | pluralize: ["проект", "проекта", "проектов"] }} ·
-          Экспертов нужно добавить в {{ filteredMissing() }}
-          {{ filteredMissing() | pluralize: ["проект", "проекта", "проектов"] }}
+          {{ filteredDistribution().length | pluralize: ["проект", "проекта", "проектов"] }}
+          @if (filteredMissing()) {
+            · Экспертов нужно добавить в {{ filteredMissing() }}
+            {{ filteredMissing() | pluralize: ["проект", "проекта", "проектов"] }}
+          } @else if (filteredDistribution().length) {
+            · Эксперты назначены
+          }
         </p>
         @if (manualMode()) {
           <p class="experts__manual-hint">
