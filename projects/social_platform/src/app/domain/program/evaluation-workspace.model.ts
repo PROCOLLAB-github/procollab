@@ -18,6 +18,7 @@ export interface ExpertWorkspace {
   managedEvaluation: boolean;
   submittedProjects: number;
   projectsMissingExperts?: number;
+  unavailableProjects?: UnavailableEvaluationProject[];
   missingAssignments: number;
   readyProjects: number;
   experts: ExpertRow[];
@@ -45,7 +46,13 @@ export interface AllocationPlan {
   planToken: string;
   assignments: { projectId: number; projectName: string; expertId: number; expertName: string }[];
   shortages: { projectId: number; projectName: string; missing: number }[];
+  unavailableProjects?: UnavailableEvaluationProject[];
   load: { expertId: number; name: string; before: number; after: number }[];
+}
+export interface UnavailableEvaluationProject {
+  projectId: number;
+  projectName: string;
+  reason: "draft";
 }
 export interface QuotaPreview {
   revision: string;
