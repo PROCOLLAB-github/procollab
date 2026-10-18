@@ -72,7 +72,7 @@ export class RatingCardService {
 
   readonly isLimitReached = computed(() => {
     const p = this.project();
-    return !!p && p.ratedCount >= p.maxRates;
+    return !!p && !p.managedEvaluation && p.ratedCount >= p.maxRates;
   });
 
   readonly canEdit = computed(() => !this.evaluationDateExpired());

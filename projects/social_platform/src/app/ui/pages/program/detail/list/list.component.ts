@@ -25,6 +25,7 @@ import { IconComponent, FormLayoutDirective } from "@uilib";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { tagsFilter } from "@core/consts/filters/tags-filter.const";
 import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramDetailListInfoService } from "@api/program/facades/detail/program-detail-list-info.service";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { SwipeService } from "@api/swipe/swipe.service";
@@ -82,6 +83,8 @@ export class ProgramListComponent implements OnInit, AfterViewInit {
   protected readonly searchForm = this.programDetailListUIInfoService.searchForm;
 
   protected readonly listType = this.programDetailListUIInfoService.listType;
+  private readonly programUI = inject(ProgramDetailMainUIInfoService, { optional: true });
+  protected readonly canEvaluate = computed(() => this.programUI?.program()?.isUserExpert === true);
   protected readonly searchedList = this.programDetailListUIInfoService.searchedList;
   protected readonly profileProjSubsIds = this.programDetailListUIInfoService.profileProjSubsIds;
 

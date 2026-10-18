@@ -38,6 +38,8 @@ export class AvatarComponent {
   readonly imageFraming = input<ImageFraming | null>(null);
   /** URL изображения аватара */
   url = input.required<string | undefined>();
+  /** Optional initials used by the expert workspace; existing placeholders stay unchanged. */
+  readonly fallbackLabel = input<string>();
 
   /** Размер аватара в пикселях */
   size = input(50);

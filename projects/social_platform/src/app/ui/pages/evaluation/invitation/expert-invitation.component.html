@@ -1,0 +1,232 @@
+<!-- @format -->
+
+<main class="expert-invitation">
+  <a routerLink="/auth/login" aria-label="PROCOLLAB — вход"
+    ><img
+      class="expert-invitation__logo"
+      src="/assets/images/shared/logo.svg"
+      alt="PROCOLLAB"
+      width="120"
+      height="23"
+  /></a>
+  <section class="expert-invitation__card" [attr.aria-busy]="loading() || busy()">
+    @if (loading()) {
+      <p role="status">Загружаем приглашение…</p>
+    }
+    @if (error()) {
+      <p appAlert="error" role="alert">{{ error() }}</p>
+    }
+    @if (invitation(); as invite) {
+      <header>
+        <p class="expert-invitation__eyebrow">Приглашение эксперта</p>
+        <h1>{{ invite.program.name }}</h1>
+      </header>
+      @if (mode() === "joined") {
+        <h2>Вы присоединились к программе</h2>
+        <p>Теперь вы эксперт программы. Организатор сможет назначить вам проекты на оценку.</p>
+        <a appButton="primary" [routerLink]="paths.program.projectsRating(invite.program.id)"
+          >Перейти к проектам</a
+        ><a appButton="secondary" routerLink="/office/evaluation">Мои программы</a>
+      } @else if (
+        invite.status === "accepted" &&
+        mode() !== "login" &&
+        mode() !== "reset" &&
+        mode() !== "sent"
+      ) {
+        <h2>Приглашение уже принято</h2>
+        <p>Войдите с почтой {{ invite.email }}, чтобы открыть свои программы.</p>
+        @if (invite.matchesAccount) {
+          <a appButton="primary" [routerLink]="paths.program.projectsRating(invite.program.id)"
+            >Перейти к проектам</a
+          >
+        } @else {
+          <button type="button" appButton="primary" (click)="switchAccount()">
+            Войти с почтой приглашения
+          </button>
+        }
+      } @else if (hasSession() && !invite.matchesAccount) {
+        <h2>Приглашение для другой почты</h2>
+        <p>
+          Эта ссылка предназначена для {{ invite.email }}. Чтобы принять приглашение, войдите в
+          соответствующий аккаунт.
+        </p>
+        <button appButton="primary" type="button" (click)="switchAccount()">
+          Войти в другой аккаунт
+        </button>
+      } @else if (hasSession() && invite.matchesAccount) {
+        <h2>Стать экспертом программы</h2>
+        <p>Приглашение для {{ invite.email }}. Ваш аккаунт и другие роли сохранятся.</p>
+        <button type="button" appButton="primary" [disabled]="busy()" (click)="accept()">
+          Принять приглашение</button
+        ><a appButton="secondary" routerLink="/office/evaluation">Вернуться к программам</a>
+      } @else {
+        @switch (mode()) {
+          @case ("register") {
+            <h2>Создание аккаунта эксперта</h2>
+            <label
+              >Email из приглашения<input
+                appField
+                type="email"
+                [value]="invite.email"
+                readonly
+                autocomplete="email"
+            /></label>
+            <form [formGroup]="registration" (ngSubmit)="register()" novalidate>
+              <div class="expert-invitation__names">
+                <label
+                  >Имя *<input
+                    appField
+                    formControlName="firstName"
+                    autocomplete="given-name"
+                    maxlength="255"
+                    [attr.aria-invalid]="
+                      registration.controls.firstName.touched &&
+                      registration.controls.firstName.invalid
+                    " /></label
+                ><label
+                  >Фамилия *<input
+                    appField
+                    formControlName="lastName"
+                    autocomplete="family-name"
+                    maxlength="255"
+                    [attr.aria-invalid]="
+                      registration.controls.lastName.touched &&
+                      registration.controls.lastName.invalid
+                    "
+                /></label>
+              </div>
+              <label
+                >Пароль *<input
+                  appField
+                  [type]="showPassword() ? 'text' : 'password'"
+                  formControlName="password"
+                  aria-label="Пароль *"
+                  autocomplete="new-password"
+                  minlength="8"
+                  maxlength="128"
+                  [attr.aria-invalid]="
+                    registration.controls.password.touched && registration.controls.password.invalid
+                  "
+                /><small>Не менее 8 символов.</small></label
+              ><label
+                >Повторите пароль *<input
+                  appField
+                  [type]="showPassword() ? 'text' : 'password'"
+                  formControlName="repeatPassword"
+                  autocomplete="new-password"
+              /></label>
+              <button
+                type="button"
+                appButton="text"
+                (click)="showPassword.set(!showPassword())"
+                [attr.aria-pressed]="showPassword()"
+              >
+                {{ showPassword() ? "Скрыть пароль" : "Показать пароль" }}
+              </button>
+              <label class="expert-invitation__choice"
+                ><input type="checkbox" appChoice formControlName="acceptPolicy" /><span
+                  >Я прочитал соглашение и даю согласие на обработку персональных данных.</span
+                ></label
+              ><label class="expert-invitation__choice"
+                ><input type="checkbox" appChoice formControlName="acceptAge" /><span
+                  >Подтверждаю, что мне больше 14 лет.</span
+                ></label
+              ><a
+                class="expert-invitation__link"
+                href="/assets/downloads/auth/shared/privacy_policy_2022.docx"
+                target="_blank"
+                rel="noopener"
+                >Соглашение и политика обработки данных</a
+              >
+              <button type="submit" appButton="primary" [disabled]="busy()">
+                Создать аккаунт и присоединиться
+              </button>
+            </form>
+            <small>Компания, должность и фото — позже в профиле.</small
+            ><button
+              type="button"
+              appButton="text"
+              (click)="changeMode('login')"
+              [disabled]="busy()"
+            >
+              Уже есть аккаунт? Войти
+            </button>
+          }
+          @case ("login") {
+            <h2>Вход для принятия приглашения</h2>
+            <p>Войдите с почтой из приглашения. Затем вы сможете присоединиться к программе.</p>
+            <form (submit)="$event.preventDefault(); signIn()" novalidate>
+              <label
+                >Email из приглашения<input
+                  appField
+                  [value]="invite.email"
+                  readonly
+                  type="email"
+                  autocomplete="username" /></label
+              ><label
+                >Пароль<input
+                  appField
+                  type="password"
+                  [formControl]="password"
+                  autocomplete="current-password"
+                  required /></label
+              ><button
+                type="button"
+                appButton="text"
+                (click)="changeMode('reset')"
+                [disabled]="busy()"
+              >
+                Забыли пароль?</button
+              ><button type="submit" appButton="primary" [disabled]="busy()">Войти</button>
+            </form>
+          }
+          @case ("reset") {
+            <h2>Восстановление пароля</h2>
+            <p>
+              Отправим письмо для восстановления на {{ invite.email }}. После смены пароля вы
+              вернётесь к приглашению.
+            </p>
+            <button type="button" appButton="primary" (click)="resetPassword()" [disabled]="busy()">
+              Отправить письмо</button
+            ><button type="button" appButton="text" (click)="changeMode('login')">
+              Назад ко входу
+            </button>
+          }
+          @case ("sent") {
+            <h2>Проверьте почту</h2>
+            <p>
+              Если аккаунт с почтой {{ invite.email }} существует, письмо для восстановления пароля
+              отправлено.
+            </p>
+            <p>Перейдите по ссылке в письме. После смены пароля войдите и примите приглашение.</p>
+            <button type="button" appButton="secondary" (click)="changeMode('login')">
+              Вернуться ко входу
+            </button>
+          }
+          @default {
+            <h2>Вас пригласили стать экспертом</h2>
+            <p>
+              Приглашение для {{ invite.email }}. После принятия организатор сможет назначить вам
+              проекты на оценку.
+            </p>
+            @if (invite.accountExists) {
+              <button type="button" appButton="primary" (click)="changeMode('login')">
+                Войти и принять приглашение
+              </button>
+            } @else {
+              <button type="button" appButton="primary" (click)="changeMode('register')">
+                Создать аккаунт эксперта</button
+              ><button type="button" appButton="secondary" (click)="changeMode('login')">
+                У меня уже есть аккаунт
+              </button>
+            }
+          }
+        }
+      }
+    } @else if (!loading()) {
+      <h1>Приглашение недоступно</h1>
+      <button type="button" appButton="secondary" (click)="load()">Повторить</button
+      ><a routerLink="/auth/login">Войти на платформу</a>
+    }
+  </section>
+</main>

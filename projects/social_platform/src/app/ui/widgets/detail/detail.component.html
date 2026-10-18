@@ -140,7 +140,12 @@
                 </app-modal>
               } @else {
                 <div class="info__primary-action">
-                  @if (!isUserMember() && !isUserManager()) {
+                  @if (
+                    !isUserMember() &&
+                    !isUserManager() &&
+                    !isUserExpert() &&
+                    !info().pendingExpertInvitationId
+                  ) {
                     @if (getProgramRegistrationLink(info()); as registrationLink) {
                       <a
                         (click)="checkPrograRegistrationEnded($event, info())"
@@ -156,7 +161,12 @@
                       </a>
                     }
                   }
-                  @if (isUserMember() && !isUserManager() && !isUserExpert()) {
+                  @if (
+                    isUserMember() &&
+                    !isUserManager() &&
+                    !isUserExpert() &&
+                    !info().pendingExpertInvitationId
+                  ) {
                     <app-button
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       [disabled]="
@@ -172,14 +182,20 @@
                       <i appIcon icon="plus" appSquare="10"></i>
                     </app-button>
                   }
-                  @if (isUserManager() || (isUserExpert() && isUserMember())) {
+                  @if (info().pendingExpertInvitationId && !isUserExpert()) {
                     <a
-                      [routerLink]="
-                        isUserManager() && !isUserExpert()
-                          ? AppRoutes.program.management(info().id, 'projects')
-                          : AppRoutes.program.projectsRating(info().id)
-                      "
+                      routerLink="/office/evaluation"
+                      [queryParams]="{ invitation: info().pendingExpertInvitationId }"
+                      ><app-button
+                        appearance="outline"
+                        [size]="appWidth >= 1000 ? 'medium' : 'big'"
+                        customTypographyClass="text-body-12"
+                        >Принять приглашение</app-button
+                      ></a
                     >
+                  }
+                  @if (isUserExpert()) {
+                    <a [routerLink]="AppRoutes.program.projectsRating(info().id)">
                       <app-button
                         [appearance]="
                           isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'

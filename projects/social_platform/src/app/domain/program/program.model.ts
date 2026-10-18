@@ -36,6 +36,7 @@ export class Program {
   isUserLiked!: boolean;
   isUserManager!: boolean;
   isUserExpert?: boolean;
+  pendingExpertInvitationId?: number | null;
   isUserMember!: boolean;
   currentApplication!: ProgramCurrentApplication | null;
   welcomeAcknowledgedAt!: string | null;

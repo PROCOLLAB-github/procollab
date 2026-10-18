@@ -17,6 +17,13 @@ export const OFFICE_ROUTES: Routes = [
     component: OfficeComponent,
     children: [
       {
+        path: "evaluation",
+        loadComponent: () =>
+          import("../../pages/evaluation/programs/evaluation-programs.component").then(
+            c => c.EvaluationProgramsComponent,
+          ),
+      },
+      {
         path: "",
         pathMatch: "full",
         redirectTo: "program",

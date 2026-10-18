@@ -5,6 +5,7 @@ import { ProgramImageFraming } from "./program-image-framing.model";
 export type ManagementSection =
   | "participants"
   | "projects"
+  | "experts"
   | "analytics"
   | "settings"
   | "evaluation";

@@ -16,6 +16,13 @@ import { AuthRequiredGuard } from "@core/lib/guards/auth/auth-required.guard";
 
 export const APP_ROUTES: Routes = [
   {
+    path: "expert-invitation/:token",
+    loadComponent: () =>
+      import("./ui/pages/evaluation/invitation/expert-invitation.component").then(
+        c => c.ExpertInvitationComponent,
+      ),
+  },
+  {
     path: "",
     component: AppComponent,
   },

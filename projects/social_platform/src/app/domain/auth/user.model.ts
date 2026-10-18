@@ -65,6 +65,7 @@ export class UserSubscription {
 }
 
 export class UserRelations {
+  hasEvaluationAccess?: boolean;
   education!: Education[];
   userLanguages!: UserLanguages[];
   workExperience!: WorkExperience[];

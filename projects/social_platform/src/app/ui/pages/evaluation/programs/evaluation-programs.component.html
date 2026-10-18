@@ -1,0 +1,124 @@
+<!-- @format -->
+
+<main class="evaluation-programs">
+  <p class="evaluation-programs__section">Оценивание</p>
+  <h1>Мои программы</h1>
+  <p class="evaluation-programs__intro">
+    Ваши программы для оценки проектов и приглашения эксперта.
+  </p>
+  <label class="evaluation-programs__search"
+    >Поиск по названию программы<input
+      appField
+      type="search"
+      [formControl]="search"
+      maxlength="200"
+      placeholder="Найти программу"
+  /></label>
+  @if (accepted()) {
+    <p appAlert="success" role="status">
+      Приглашение принято. Организатор сможет назначить вам проекты.
+    </p>
+  }
+  @if (state.failed()) {
+    <div class="evaluation-programs__card" role="alert">
+      <h2>Не удалось загрузить программы</h2>
+      <button type="button" appButton="secondary" (click)="state.reload()">Повторить</button>
+    </div>
+  } @else if (state.pending() && !state.programs().length) {
+    <p role="status" aria-busy="true">Загружаем программы…</p>
+  } @else {
+    <p class="evaluation-programs__count">
+      Программ: {{ joinedCount() }} · приглашений: {{ pendingCount() }}
+    </p>
+    @for (program of filtered(); track program.id) {
+      <article class="evaluation-programs__card">
+        <header class="evaluation-programs__heading">
+          <a class="evaluation-programs__identity" [routerLink]="paths.program.detail(program.id)"
+            ><app-avatar
+              [url]="href(program.imageAddress) ?? undefined"
+              [size]="40"
+              [imageFraming]="program.imageFraming?.logo ?? null"
+              [fallbackLabel]="initials(program.name)"
+            /><span
+              ><h2>{{ program.name }}</h2>
+              <span [class.evaluation-programs__expert]="program.status === 'joined'">{{
+                program.status === "joined" ? "Эксперт программы" : "Приглашение эксперта"
+              }}</span></span
+            ></a
+          >
+          @if (program.status === "joined") {
+            <a appButton="secondary" [routerLink]="paths.program.projectsRating(program.id)"
+              >К проектам</a
+            >
+          } @else {
+            <button type="button" appButton="primary" (click)="open(program)">
+              Принять приглашение
+            </button>
+          }
+        </header>
+        @if (program.status === "joined") {
+          <dl class="evaluation-programs__stats">
+            <div>
+              <dt>Назначено</dt>
+              <dd>{{ program.assigned }}</dd>
+            </div>
+            <div>
+              <dt>Оценено</dt>
+              <dd>{{ program.completed }}</dd>
+            </div>
+            <div>
+              <dt>Осталось</dt>
+              <dd>{{ program.remaining }}</dd>
+            </div>
+          </dl>
+          <p class="evaluation-programs__deadline">
+            {{
+              program.datetimeEvaluationEnds
+                ? "Срок оценки: до " + (program.datetimeEvaluationEnds | date: "d MMMM, HH:mm")
+                : "Срок оценки не задан"
+            }}
+          </p>
+        } @else {
+          <p class="evaluation-programs__invitation">
+            Приглашение для {{ program.email }}. Проекты станут доступны после принятия.
+          </p>
+        }
+      </article>
+    } @empty {
+      <section class="evaluation-programs__card">
+        <h2>{{ query() ? "Программы не найдены" : "У вас пока нет программ для оценивания" }}</h2>
+        <p>
+          {{
+            query()
+              ? "Попробуйте изменить поисковый запрос."
+              : "Когда организатор пригласит вас экспертом, программа появится здесь."
+          }}
+        </p>
+      </section>
+    }
+  }
+</main>
+<app-modal
+  [open]="selected() !== null"
+  (openChange)="close()"
+  labelledBy="evaluation-accept-title"
+  bodyClass="modal__body--no-flex evaluation-accept-modal"
+  ><div class="evaluation-programs__dialog">
+    <h2 id="evaluation-accept-title">Принять приглашение эксперта</h2>
+    <strong>{{ selected()?.name }}</strong>
+    <p>
+      Вы присоединитесь к программе как эксперт с почтой {{ selected()?.email }}. Ваши другие роли
+      сохранятся.
+    </p>
+    @if (error()) {
+      <p appAlert="error" role="alert">{{ error() }}</p>
+    }
+    <div class="evaluation-programs__actions">
+      <button type="button" appButton="primary" (click)="accept()" [disabled]="busy()">
+        Принять приглашение</button
+      ><button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
+        Отмена
+      </button>
+    </div>
+  </div></app-modal
+>

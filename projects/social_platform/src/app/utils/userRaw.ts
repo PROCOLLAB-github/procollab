@@ -31,6 +31,7 @@ export function userFromRaw(raw: UserInput): User {
   };
 
   user.relations = {
+    hasEvaluationAccess: raw.relations?.hasEvaluationAccess ?? raw.hasEvaluationAccess ?? false,
     education: raw.relations?.education ?? raw.education ?? [],
     userLanguages: raw.relations?.userLanguages ?? raw.userLanguages ?? [],
     workExperience: raw.relations?.workExperience ?? raw.workExperience ?? [],

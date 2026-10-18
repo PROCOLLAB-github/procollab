@@ -15,6 +15,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { provideRouter, withRouterConfig } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
+import { EVALUATION_PROVIDERS } from "./infrastructure/di/program/evaluation.providers";
 import {
   API_URL,
   BearerTokenInterceptor,
@@ -95,6 +96,7 @@ export const APP_CONFIG: ApplicationConfig = {
     ),
     provideAnimations(),
     ...AUTH_PROVIDERS,
+    ...EVALUATION_PROVIDERS,
     ...FEED_PROVIDERS,
     ...INDUSTRY_PROVIDERS,
     ...INVITE_PROVIDERS,

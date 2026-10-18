@@ -1,0 +1,129 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
+
+.expert-invitation {
+  display: flex;
+  flex-direction: column;
+  gap: 92px;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 32px 20px 48px;
+  color: var(--black);
+}
+
+.expert-invitation__logo {
+  display: block;
+  object-fit: contain;
+}
+
+.expert-invitation__card {
+  display: grid;
+  gap: 16px;
+  width: min(600px, 100%);
+  min-width: 0;
+  padding: 32px;
+  font-size: 14px;
+  background: var(--light-white);
+  border-radius: 15px;
+}
+
+.expert-invitation h1,
+.expert-invitation h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+  overflow-wrap: anywhere;
+}
+
+.expert-invitation p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.expert-invitation__eyebrow {
+  margin-bottom: 6px !important;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.expert-invitation form,
+.expert-invitation label {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.expert-invitation label {
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.expert-invitation__names {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.expert-invitation .expert-invitation__choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 400;
+}
+
+.expert-invitation__choice input {
+  flex-shrink: 0;
+}
+
+.expert-invitation small,
+.expert-invitation__choice {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--grey-for-text);
+}
+
+.expert-invitation__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+@media (max-width: 650px) {
+  .expert-invitation {
+    gap: 40px;
+    padding-top: 24px;
+  }
+
+  .expert-invitation__card {
+    padding: 20px;
+  }
+
+  .expert-invitation__names {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -17,7 +17,16 @@
       ></div>
     }
 
-    @if (imageFraming()) {
+    @if (!url() && fallbackLabel()) {
+      <span
+        class="avatar__initials"
+        [style.width.px]="size()"
+        [style.height.px]="size()"
+        [style.font-size.px]="size() * 0.32"
+        aria-hidden="true"
+        >{{ fallbackLabel() }}</span
+      >
+    } @else if (imageFraming()) {
       <div
         class="avatar__crop"
         [class.avatar__crop--border]="hasBorder()"

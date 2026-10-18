@@ -35,6 +35,13 @@
       Загружаем данные программы…
     </section>
   } @else if (state.program(); as program) {
+    @if (section() === "experts") {
+      <app-management-experts
+        [programId]="program.id"
+        [confirmDiscard]="confirmProjectFormDiscard"
+        (statusChange)="expertsStatus.set($event)"
+      />
+    }
     @if (section() === "participants" || section() === "projects") {
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <h2>{{ section() === "participants" ? "Участники" : "Проекты" }}</h2>

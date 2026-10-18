@@ -197,6 +197,13 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.canOpenModal()).toBe(false);
   });
 
+  it("allows an assigned evaluator to submit after the managed minimum is reached", () => {
+    service.initProject({ ...project(), ratedCount: 2, managedEvaluation: true });
+    expect(service.canRate()).toBe(true);
+    expect(service.isButtonDisabled()).toBe(false);
+    expect(service.rateButtonText()).toBe("оценить проект");
+  });
+
   it("does not submit an empty configured criterion set", () => {
     service.initProject({ ...project(), criteriaRevision: "empty" });
     expect(service.rateButtonText()).toBe("критерии не настроены");

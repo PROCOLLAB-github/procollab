@@ -108,6 +108,30 @@
             <app-rating-card [project]="listItem"></app-rating-card>
           }
         </li>
+      } @empty {
+        @if (listType() === "rating") {
+          <li class="page__empty" role="status">
+            <h2>
+              {{
+                !canEvaluate()
+                  ? "У вас нет доступа к оцениванию этой программы"
+                  : searchForm.get("search")?.value
+                    ? "Проекты не найдены"
+                    : "Проекты пока не назначены"
+              }}
+            </h2>
+            <p>
+              {{
+                !canEvaluate()
+                  ? "Этот раздел доступен экспертам программы."
+                  : searchForm.get("search")?.value
+                    ? "Попробуйте изменить поиск или фильтры."
+                    : "Когда организатор назначит вам проекты, они появятся здесь."
+              }}
+            </p>
+            <a routerLink="/office/evaluation">Мои программы</a>
+          </li>
+        }
       }
     </ul>
   </div>
