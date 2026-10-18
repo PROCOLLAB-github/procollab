@@ -50,7 +50,17 @@
             Можно распределить автоматически или назначить вручную.
           </p>
         } @else if (state.submittedProjects) {
-          <p>Для всех сданных проектов выбран нужный состав экспертов.</p>
+          <p>Для всех доступных к оценке проектов выбран нужный состав экспертов.</p>
+        }
+        @if (state.unavailableProjects?.length) {
+          <p>
+            Среди сданных проектов есть черновики. Они станут доступны экспертам после публикации
+            автором:
+            @for (project of state.unavailableProjects; track project.projectId) {
+              <strong>{{ project.projectName }}</strong
+              >{{ $last ? "." : ", " }}
+            }
+          </p>
         }
       </div>
       <button type="button" appButton="secondary" (click)="open('quota')">Изменить</button>
@@ -316,6 +326,20 @@
         }
       }
       @case ("auto") {
+        @if ((plan()?.unavailableProjects ?? snapshot()?.unavailableProjects)?.length) {
+          <div appAlert="warning">
+            <strong>Эти проекты пока недоступны экспертам:</strong>
+            @for (
+              project of plan()?.unavailableProjects ?? snapshot()?.unavailableProjects;
+              track project.projectId
+            ) {
+              <p>{{ project.projectName }} — черновик. Автору нужно опубликовать проект.</p>
+            }
+            <p>
+              Распределим остальные сданные проекты. Уже выбранные эксперты и оценки сохранятся.
+            </p>
+          </div>
+        }
         @if (plan(); as preview) {
           @if (preview.shortages.length) {
             <p appAlert="warning">
@@ -352,7 +376,8 @@
             }
             @if (!preview.assignments.length && !preview.shortages.length) {
               <p>
-                Для всех проектов уже выбран нужный состав экспертов. Добавлять никого не нужно.
+                Для всех доступных к оценке проектов уже выбран нужный состав экспертов. Добавлять
+                никого не нужно.
               </p>
             }
           </div>
@@ -387,7 +412,7 @@
                   {{ snapshot()?.submittedProjects }} проектов.
                 </p>
               } @else {
-                <p>Для всех сданных проектов уже выбран нужный состав экспертов.</p>
+                <p>Для всех доступных к оценке проектов уже выбран нужный состав экспертов.</p>
               }
             }
           </div>

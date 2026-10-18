@@ -8,6 +8,38 @@ import { ManagementExpertsComponent } from "./experts.component";
 import { ExpertWorkspace, AssignmentOptions } from "@domain/program/evaluation-workspace.model";
 
 describe("Управление экспертами", () => {
+  it("объясняет исключённый черновик в составе и пустом плане распределения", async () => {
+    const { fixture, component } = setup();
+    const unavailableProjects = [
+      { projectId: 99, projectName: "Проект-черновик", reason: "draft" as const },
+    ];
+    component.snapshot.update(state => ({ ...state!, unavailableProjects }));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".experts__quota").textContent).toContain(
+      "Среди сданных проектов есть черновики",
+    );
+    component.open("auto");
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    let dialog = document.querySelector(".experts__dialog")!;
+    expect(dialog.textContent).toContain("Проект-черновик — черновик");
+    component.plan.set({
+      revision: "v1",
+      planToken: "signed",
+      assignments: [],
+      shortages: [],
+      load: [],
+      unavailableProjects,
+    });
+    fixture.detectChanges();
+    dialog = document.querySelector(".experts__dialog")!;
+    expect(dialog.textContent).toContain("Для всех доступных к оценке проектов");
+    expect(dialog.textContent).toContain("Автору нужно опубликовать проект");
+    expect((dialog.querySelector("button[appButton=primary]") as HTMLButtonElement).disabled).toBe(
+      true,
+    );
+  });
   it("различает нехватку состава экспертов и полученные оценки", () => {
     const { fixture, component } = setup();
     component.snapshot.update(state => ({
