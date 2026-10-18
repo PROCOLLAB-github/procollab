@@ -42,7 +42,10 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.getAll(5, params).subscribe();
 
-    expect(api.get).toHaveBeenCalledExactlyOnceWith("/rate-project/5", params);
+    expect(api.get).toHaveBeenCalledExactlyOnceWith("/rate-project/5", expect.any(HttpParams));
+    const sent = api.get.mock.calls[0][1] as HttpParams;
+    expect(sent.get("limit")).toBe("10");
+    expect(sent.get("assigned_only")).toBe("1");
   });
 
   it("postFilters идёт в POST /rate-project/:programId c query и body", () => {
@@ -52,18 +55,20 @@ describe("ProjectRatingHttpAdapter", () => {
 
     adapter.postFilters(5, { status: ["open"] }, params).subscribe();
 
-    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5?limit=10", {
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5?limit=10&assigned_only=1", {
       filters: { status: ["open"] },
     });
   });
 
-  it("postFilters без params не добавляет query", () => {
+  it("postFilters без params всё равно ограничен своими назначениями", () => {
     setup();
     api.post.mockReturnValue(of(pagination()));
 
     adapter.postFilters(5, {}).subscribe();
 
-    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5", { filters: {} });
+    expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5?assigned_only=1", {
+      filters: {},
+    });
   });
 
   it("rate идёт в POST /rate-project/rate/:projectId c массивом оценок", () => {

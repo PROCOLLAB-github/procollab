@@ -52,6 +52,7 @@ import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.compone
 import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
+import { ManagementExpertsComponent } from "./experts/experts.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -79,6 +80,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ProgramBrandingPreviewComponent,
     ManagementProjectFormComponent,
     ManagementCriteriaComponent,
+    ManagementExpertsComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -116,6 +118,8 @@ export class ProgramManagementComponent implements OnInit {
   readonly projectFormStatus = signal({ dirty: false, busy: false });
   readonly criteriaForm = viewChild(ManagementCriteriaComponent);
   readonly criteriaStatus = signal({ dirty: false, busy: false });
+  readonly expertsStatus = signal({ dirty: false, busy: false });
+  readonly expertsForm = viewChild(ManagementExpertsComponent);
   readonly confirmProjectFormDiscard = () =>
     this.confirm(
       "Есть несохранённые изменения",
@@ -142,6 +146,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly tabs = [
     { id: "participants", label: "Участники" },
     { id: "projects", label: "Проекты" },
+    { id: "experts", label: "Эксперты" },
     { id: "analytics", label: "Аналитика" },
     { id: "settings", label: "Настройки" },
   ];
@@ -248,7 +253,8 @@ export class ProgramManagementComponent implements OnInit {
       this.saving() ||
       this.uploading() ||
       this.projectFormStatus().busy ||
-      this.criteriaStatus().busy
+      this.criteriaStatus().busy ||
+      this.expertsStatus().busy
     ) {
       event.preventDefault();
       event.returnValue = "";
@@ -271,6 +277,7 @@ export class ProgramManagementComponent implements OnInit {
         const section = [
           "participants",
           "projects",
+          "experts",
           "analytics",
           "settings",
           "evaluation",
@@ -393,7 +400,8 @@ export class ProgramManagementComponent implements OnInit {
       this.datesForm.dirty ||
       this.materialForm.dirty ||
       this.projectFormStatus().dirty ||
-      this.criteriaStatus().dirty
+      this.criteriaStatus().dirty ||
+      this.expertsStatus().dirty
     );
   }
   async canLeave(): Promise<boolean> {
@@ -401,7 +409,8 @@ export class ProgramManagementComponent implements OnInit {
       this.saving() ||
       this.uploading() ||
       this.projectFormStatus().busy ||
-      this.criteriaStatus().busy
+      this.criteriaStatus().busy ||
+      this.expertsStatus().busy
     )
       return false;
     if (!this.dirty()) return true;
@@ -420,6 +429,8 @@ export class ProgramManagementComponent implements OnInit {
       this.projectFormStatus.set({ dirty: false, busy: false });
       this.criteriaForm()?.discard();
       this.criteriaStatus.set({ dirty: false, busy: false });
+      this.expertsForm()?.discard();
+      this.expertsStatus.set({ dirty: false, busy: false });
     }
     return yes;
   }

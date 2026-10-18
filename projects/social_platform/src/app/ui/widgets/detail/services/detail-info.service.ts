@@ -89,6 +89,7 @@ export class DetailInfoService {
   });
 
   readonly isUserExpert = computed(() => {
+    if (this.listType() === "program") return this.info()?.isUserExpert === true;
     const type = this.userType();
     return type !== undefined && type === 3;
   });

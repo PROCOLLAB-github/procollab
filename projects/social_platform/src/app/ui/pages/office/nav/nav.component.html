@@ -123,6 +123,16 @@
                 программы
               </li>
             </a>
+            @if (authRepository.profile()?.relations?.hasEvaluationAccess) {
+              <a
+                class="nav__link"
+                routerLink="/office/evaluation"
+                routerLinkActive="nav__link--active"
+                ><li class="text-body-14 nav__item">
+                  <i appIcon icon="check" appSquare="24" class="nav-bar__icon"></i>оценивание
+                </li></a
+              >
+            }
             <a class="nav__link" routerLink="courses" routerLinkActive="nav__link--active">
               <li class="text-body-14 nav__item">
                 <i

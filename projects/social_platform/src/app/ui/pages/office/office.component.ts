@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  signal,
+  inject,
+  computed,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/primitives";
@@ -58,7 +65,14 @@ export class OfficeComponent implements OnInit {
 
   protected readonly programs = this.programShellInfoService.actualPrograms;
 
-  protected readonly navItems = this.officeUIInfoService.navItems;
+  protected readonly navItems = computed(() => {
+    const items = [...this.officeUIInfoService.navItems()];
+    if (this.profile()?.relations.hasEvaluationAccess) {
+      const index = items.findIndex(item => item.link === "program");
+      items.splice(index + 1, 0, { name: "оценивание", icon: "check", link: "evaluation" });
+    }
+    return items;
+  });
   protected readonly AppRoutes = AppRoutes;
 
   protected currentYear = signal(new Date().getFullYear());

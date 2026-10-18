@@ -3,6 +3,14 @@
 .avatar {
   position: relative;
 
+  &__initials {
+    display: grid;
+    place-items: center;
+    color: var(--black);
+    background: var(--accent-light);
+    border-radius: 50%;
+  }
+
   @media screen and (max-width: 999px) {
     &__progress {
       position: absolute;

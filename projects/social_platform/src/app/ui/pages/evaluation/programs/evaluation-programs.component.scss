@@ -1,0 +1,175 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+.evaluation-programs {
+  display: grid;
+  gap: 20px;
+  max-width: 863px;
+  margin: 24px auto 48px;
+  font-size: 12px;
+  color: var(--black);
+}
+
+.evaluation-programs h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+}
+
+.evaluation-programs h2,
+.evaluation-programs__dialog h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.evaluation-programs p,
+.evaluation-programs__dialog p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.evaluation-programs__section,
+.evaluation-programs__expert {
+  color: var(--accent);
+}
+
+.evaluation-programs__intro,
+.evaluation-programs__invitation {
+  font-size: 14px;
+  color: var(--grey-for-text);
+}
+
+.evaluation-programs__search {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.evaluation-programs__card {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 24px;
+  background: var(--light-white);
+  border-radius: 15px;
+}
+
+.evaluation-programs__heading {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.evaluation-programs__heading > .ui-button {
+  min-width: 200px;
+}
+
+.evaluation-programs__identity {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.evaluation-programs__identity app-avatar {
+  flex-shrink: 0;
+}
+
+.evaluation-programs__identity > span {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.evaluation-programs__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+}
+
+.evaluation-programs__stats div {
+  display: grid;
+  gap: 6px;
+}
+
+.evaluation-programs__stats dt,
+.evaluation-programs__count,
+.evaluation-programs__deadline {
+  color: var(--grey-for-text);
+}
+
+.evaluation-programs__stats dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.evaluation-programs__dialog {
+  display: grid;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.evaluation-programs__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+::ng-deep .modal .modal__body.evaluation-accept-modal {
+  width: 600px;
+  max-width: calc(100vw - 40px);
+}
+
+@media (max-width: 999px) {
+  .evaluation-programs {
+    margin: 24px 20px 40px;
+  }
+}
+
+@media (max-width: 700px) {
+  .evaluation-programs {
+    margin-top: 20px;
+  }
+
+  .evaluation-programs__card {
+    padding: 20px;
+  }
+
+  .evaluation-programs__heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .evaluation-programs__stats {
+    gap: 8px;
+  }
+
+  .evaluation-programs__actions {
+    flex-direction: column;
+  }
+}

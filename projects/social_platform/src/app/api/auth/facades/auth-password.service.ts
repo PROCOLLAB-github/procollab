@@ -87,6 +87,13 @@ export class AuthPasswordService {
       .pipe(
         tap(result => {
           if (result.ok) {
+            const invitation = this.route.snapshot.queryParamMap.get("expert_invitation");
+            if (invitation && /^[A-Za-z0-9_-]{20,100}$/.test(invitation)) {
+              void this.router.navigate(["/expert-invitation", invitation], {
+                queryParams: { mode: "login" },
+              });
+              return;
+            }
             this.router
               .navigateByUrl(AppRoutes.auth.login())
               .then(() => this.logger.debug("SetPasswordComponent"));

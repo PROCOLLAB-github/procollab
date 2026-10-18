@@ -70,11 +70,16 @@ export class OfficeInfoService {
       )
       .subscribe(profile => {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
-        if (!profile!.doesCompleted()) {
+        const expertRoute =
+          this.router.url.startsWith("/office/evaluation") ||
+          /^\/office\/program\/\d+\/projects-rating(?:[/?]|$)/.test(this.router.url);
+        const expertEntry = expertRoute && profile!.relations.hasEvaluationAccess === true;
+        if (!profile!.doesCompleted() && !expertEntry) {
           this.router
             .navigateByUrl(AppRoutes.onboarding.root())
             .then(() => this.logger.debug("Route changed from OfficeComponent"));
         } else if (
+          !expertEntry &&
           profile!.relations.verificationDate === null &&
           profile!.relations.verificationNoticeAcknowledgedAt === null
         ) {

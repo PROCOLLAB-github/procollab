@@ -1,0 +1,457 @@
+<!-- @format -->
+
+<div class="experts">
+  <header class="experts__heading">
+    <div>
+      <h2>Эксперты</h2>
+      <p>Приглашайте экспертов и распределяйте проекты на оценку.</p>
+    </div>
+    <div class="experts__actions">
+      <button type="button" appButton="primary" (click)="open('invite')" [disabled]="busy()">
+        Пригласить эксперта</button
+      ><button
+        type="button"
+        appButton="secondary"
+        (click)="open('auto')"
+        [disabled]="busy() || !snapshot()"
+      >
+        Распределить проекты
+      </button>
+    </div>
+  </header>
+  @if (message()) {
+    <p appAlert="success" role="status">{{ message() }}</p>
+  }
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }} <button type="button" appButton="text" (click)="load()">Повторить</button>
+    </div>
+  }
+  @if (snapshot(); as state) {
+    <section class="experts__card experts__quota">
+      <div>
+        <strong>На каждый проект: {{ state.requiredEvaluators }} оценщика</strong>
+        <p>
+          {{ state.submittedProjects }} сданных проектов · не хватает
+          {{ state.missingAssignments }} назначений
+        </p>
+      </div>
+      <button type="button" appButton="secondary" (click)="open('quota')">Изменить</button>
+    </section>
+  }
+  <section class="experts__card" [attr.aria-busy]="loading()">
+    <div class="experts__filters">
+      <label
+        >Поиск по имени или email<input
+          type="search"
+          appField
+          [formControl]="search"
+          placeholder="Поиск эксперта"
+          maxlength="200" /></label
+      ><label
+        >Статус<select appField aria-label="Статус" [formControl]="status">
+          <option value="all">Все статусы</option>
+          <option value="joined">В программе</option>
+          <option value="pending">Приглашён</option>
+          <option value="expired">Истекло</option>
+          <option value="revoked">Отозвано</option>
+        </select></label
+      >
+    </div>
+    @if (selected(); as expert) {
+      <div class="experts__selection">
+        <div>
+          <p>Выбран эксперт</p>
+          <strong>{{ expert.name || expert.email }}</strong>
+        </div>
+        <div class="experts__actions">
+          @if (expert.status === "joined") {
+            <button type="button" appButton="secondary" (click)="openAssignments(true)">
+              Посмотреть назначения</button
+            ><button type="button" appButton="primary" (click)="openAssignments()">
+              Назначить проекты
+            </button>
+          } @else {
+            <button
+              type="button"
+              appButton="secondary"
+              [disabled]="busy()"
+              (click)="invitationAction('resend')"
+            >
+              Отправить повторно
+            </button>
+            @if (expert.status !== "revoked") {
+              <button type="button" appButton="secondary" (click)="open('revoke')">
+                Отозвать приглашение
+              </button>
+            }
+          }
+          <button
+            type="button"
+            appButton="text"
+            aria-label="Снять выбор эксперта"
+            (click)="selected.set(null)"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+    }
+    @if (loading() && !snapshot()) {
+      <p role="status">Загружаем экспертов…</p>
+    } @else {
+      <table class="experts__table">
+        <thead>
+          <tr>
+            <th>Эксперт</th>
+            <th>Email</th>
+            <th>Статус</th>
+            <th>Назначено</th>
+            <th>Оценено</th>
+            <th>Осталось</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (expert of visible(); track expert.id) {
+            <tr
+              [class.experts__row--selected]="selected()?.id === expert.id"
+              tabindex="0"
+              (click)="select(expert)"
+              (keydown.enter)="select(expert)"
+              (keydown.space)="$event.preventDefault(); select(expert)"
+            >
+              <td>
+                <div class="experts__person">
+                  <input
+                    type="checkbox"
+                    appChoice
+                    [checked]="selected()?.id === expert.id"
+                    [attr.aria-label]="'Выбрать эксперта ' + (expert.name || expert.email)"
+                    (click)="$event.stopPropagation(); select(expert)"
+                    (keydown)="$event.stopPropagation()"
+                  /><app-avatar
+                    [url]="href(expert.avatar ?? null) ?? undefined"
+                    [size]="32"
+                    [fallbackLabel]="initials(expert)"
+                  /><span>{{ expert.name || "Имя пока не указано" }}</span>
+                </div>
+              </td>
+              <td class="experts__email">{{ expert.email }}</td>
+              <td>{{ label(expert) }}</td>
+              <td data-label="Назначено">{{ expert.assigned ?? "—" }}</td>
+              <td data-label="Оценено">{{ expert.completed ?? "—" }}</td>
+              <td data-label="Осталось">{{ expert.remaining ?? "—" }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">
+                {{
+                  search.value || status.value !== "all"
+                    ? "Эксперты не найдены. Измените поиск или статус."
+                    : "Экспертов пока нет. Пригласите первого эксперта по email."
+                }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <footer class="experts__pagination">
+        <button
+          type="button"
+          appButton="text"
+          [disabled]="page() === 0"
+          (click)="page.set(page() - 1); selected.set(null)"
+        >
+          Назад</button
+        ><span
+          >{{ filtered().length ? page() * pageSize + 1 : 0 }}–{{
+            page() * pageSize + visible().length
+          }}
+          из {{ filtered().length }}</span
+        ><button
+          type="button"
+          appButton="text"
+          [disabled]="(page() + 1) * pageSize >= filtered().length"
+          (click)="page.set(page() + 1); selected.set(null)"
+        >
+          Далее
+        </button>
+      </footer>
+    }
+  </section>
+</div>
+<app-modal
+  [open]="modal() !== null"
+  (openChange)="close()"
+  labelledBy="experts-dialog-title"
+  bodyClass="modal__body--no-flex experts-modal"
+>
+  <div class="experts__dialog" [attr.aria-busy]="busy()">
+    <header class="experts__heading">
+      <h2 id="experts-dialog-title">{{ dialogTitle() }}</h2>
+      <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
+        Закрыть
+      </button>
+    </header>
+    @if (dialogError()) {
+      <p appAlert="error" role="alert">{{ dialogError() }}</p>
+    }
+    @switch (modal()) {
+      @case ("invite") {
+        <p>Приглашение даёт право оценивать проекты этой программы.</p>
+        <form (submit)="$event.preventDefault(); sendInvite()" novalidate>
+          <label
+            >Email эксперта<input
+              appField
+              type="email"
+              autocomplete="email"
+              [formControl]="email"
+              [attr.aria-invalid]="email.touched && email.invalid"
+              required
+          /></label>
+          <p>Если аккаунта ещё нет, эксперт сможет зарегистрироваться по ссылке из письма.</p>
+          <footer class="experts__actions">
+            <button appButton="primary" type="submit" [disabled]="busy()">
+              Отправить приглашение</button
+            ><button appButton="secondary" type="button" (click)="close()" [disabled]="busy()">
+              Отмена
+            </button>
+          </footer>
+        </form>
+      }
+      @case ("revoke") {
+        <p>Отозвать приглашение для {{ selected()?.email }}? Эта ссылка перестанет действовать.</p>
+        <footer class="experts__actions">
+          <button
+            type="button"
+            appButton="primary"
+            [disabled]="busy()"
+            (click)="invitationAction('revoke')"
+          >
+            Отозвать приглашение</button
+          ><button type="button" appButton="secondary" (click)="close()">Отмена</button>
+        </footer>
+      }
+      @case ("quota") {
+        <p>Проект готов, когда получено нужное число полных оценок от разных экспертов.</p>
+        <label
+          >Требуется оценщиков<input
+            type="number"
+            min="1"
+            max="1000"
+            step="1"
+            appField
+            [formControl]="quota"
+        /></label>
+        <p>
+          Сейчас: {{ snapshot()?.requiredEvaluators }}. Изменение применяется ко всей программе.
+        </p>
+        @if (quotaPreview(); as preview) {
+          <div class="experts__selection">
+            <div>
+              <strong
+                >После пересчёта готово {{ preview.readyAfter }} проектов вместо
+                {{ preview.readyBefore }}</strong
+              >
+              <p>Не хватает {{ preview.missingAssignments }} назначений.</p>
+            </div>
+          </div>
+          <p>
+            Выставленные оценки сохранятся. Избыточные назначения ({{ preview.surplusAssignments }})
+            можно снять вручную, если оценок ещё нет.
+          </p>
+          <button type="button" appButton="primary" (click)="saveQuota()" [disabled]="busy()">
+            Сохранить и пересчитать
+          </button>
+        } @else {
+          <button
+            type="button"
+            appButton="primary"
+            (click)="previewQuota()"
+            [disabled]="busy() || quota.invalid"
+          >
+            Посмотреть изменения
+          </button>
+        }
+      }
+      @case ("auto") {
+        @if (plan(); as preview) {
+          @if (preview.shortages.length) {
+            <p appAlert="warning">
+              Не хватает подходящих экспертов. Измените состав распределения или пригласите новых.
+            </p>
+          } @else {
+            <p>
+              Добавим {{ preview.assignments.length }} назначений. Текущие назначения и сохранённые
+              оценки остаются.
+            </p>
+          }
+          <h3>Нагрузка экспертов</h3>
+          <div class="experts__scroll">
+            @for (expert of preview.load; track expert.expertId) {
+              <div class="experts__load">
+                <strong>{{ expert.name }}</strong
+                ><span>Осталось: {{ expert.before }} → {{ expert.after }}</span>
+              </div>
+            }
+          </div>
+          <h3>Назначения по проектам</h3>
+          <div class="experts__scroll">
+            @for (assignment of preview.assignments; track $index) {
+              <div class="experts__load">
+                <strong>{{ assignment.projectName }}</strong
+                ><span>{{ assignment.expertName }}</span>
+              </div>
+            }
+            @for (shortage of preview.shortages; track shortage.projectId) {
+              <p>{{ shortage.projectName }} — не хватает {{ shortage.missing }} экспертов</p>
+            }
+          </div>
+          <footer class="experts__actions">
+            <button
+              type="button"
+              appButton="primary"
+              (click)="applyAllocation()"
+              [disabled]="busy() || !!preview.shortages.length || !preview.assignments.length"
+            >
+              Применить {{ preview.assignments.length }} назначений</button
+            ><button
+              type="button"
+              appButton="secondary"
+              (click)="plan.set(null); dialogError.set(null)"
+              [disabled]="busy()"
+            >
+              Изменить параметры
+            </button>
+          </footer>
+        } @else {
+          <p>
+            Система дополнит назначения до {{ snapshot()?.requiredEvaluators }} оценщиков на каждый
+            проект.
+          </p>
+          <label
+            >Проекты для распределения<select appField>
+              <option>Все сданные · {{ snapshot()?.submittedProjects }} проектов</option>
+            </select></label
+          >
+          <h3>Эксперты программы</h3>
+          <p>Выбрано {{ chosenExperts().size }} · приглашённые не участвуют</p>
+          <div class="experts__scroll">
+            @for (expert of snapshot()?.experts; track expert.id) {
+              <label class="experts__choice"
+                ><input
+                  type="checkbox"
+                  appChoice
+                  [checked]="chosenExperts().has(+expert.id)"
+                  [disabled]="expert.status !== 'joined' || busy()"
+                  (change)="toggleExpert(expert.id)"
+                /><span
+                  ><strong>{{ expert.name || expert.email }}</strong
+                  ><span>{{ expert.email }}</span
+                  ><span>{{
+                    expert.status === "joined"
+                      ? "Осталось оценить: " + expert.remaining
+                      : "Приглашение ещё не принято"
+                  }}</span></span
+                ></label
+              >
+            }
+          </div>
+          <p>
+            Учитываем оставшуюся нагрузку и текущие назначения. Проекты собственной команды
+            недоступны.
+          </p>
+          <button
+            type="button"
+            appButton="primary"
+            (click)="previewAllocation()"
+            [disabled]="busy() || !chosenExperts().size || !snapshot()?.submittedProjects"
+          >
+            Посмотреть распределение
+          </button>
+        }
+      }
+      @default {
+        <p>{{ selected()?.name }} · {{ selected()?.email }}</p>
+        <div class="experts__filters">
+          <label
+            >Поиск по проекту<input
+              type="search"
+              appField
+              [formControl]="projectSearch"
+              placeholder="Название проекта" /></label
+          ><label
+            >Кейс<select appField aria-label="Кейс" [formControl]="caseFilter">
+              <option value="all">Все кейсы</option>
+              <option value="none">Без выбранного кейса</option>
+              @for (name of cases(); track name) {
+                <option [value]="'case:' + name">{{ name }}</option>
+              }
+            </select></label
+          >
+        </div>
+        @if (busy() && !options()) {
+          <p role="status">Загружаем проекты…</p>
+        }
+        <div class="experts__scroll experts__scroll--projects">
+          @for (project of visibleProjects(); track project.id) {
+            <label class="experts__choice"
+              ><input
+                type="checkbox"
+                appChoice
+                [checked]="chosenProjects().has(project.id)"
+                [disabled]="
+                  modal() === 'assignments' ||
+                  busy() ||
+                  project.protected ||
+                  (!project.assigned && (project.ownTeam || !project.submitted))
+                "
+                (change)="toggleProject(project)"
+              /><span
+                ><strong>{{ project.name }}</strong
+                ><span
+                  >{{ project.caseName || "Без выбранного кейса" }} ·
+                  {{ project.submitted ? "Сдано" : "Не сдано" }}</span
+                ><span>{{
+                  project.protected
+                    ? "Оценка сохранена. Назначение нельзя снять."
+                    : project.ownTeam
+                      ? "Проект собственной команды недоступен."
+                      : project.completed
+                        ? "Оценено"
+                        : project.assigned
+                          ? "Назначено"
+                          : "Новое назначение"
+                }}</span></span
+              ></label
+            >
+          } @empty {
+            @if (options()) {
+              <p>Проекты не найдены.</p>
+            }
+          }
+        </div>
+        <p>Назначения с сохранённой оценкой защищены. Проекты собственной команды недоступны.</p>
+        <footer class="experts__actions">
+          @if (modal() === "manual") {
+            <button
+              type="button"
+              appButton="primary"
+              (click)="saveAssignments()"
+              [disabled]="busy() || !manualDirty()"
+            >
+              Сохранить назначения
+            </button>
+          } @else {
+            <button type="button" appButton="primary" (click)="modal.set('manual')">
+              Назначить ещё проекты
+            </button>
+          }
+          <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
+            Отмена
+          </button>
+        </footer>
+      }
+    }
+  </div>
+</app-modal>

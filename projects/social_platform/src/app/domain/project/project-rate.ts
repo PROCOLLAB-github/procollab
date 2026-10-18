@@ -5,6 +5,7 @@ import { ProjectRatingCriterion } from "./project-rating-criterion"; // Assuming
 
 /** Интерфейс проекта для оценки */
 export interface ProjectRate {
+  managedEvaluation?: boolean;
   criteriaRevision?: string;
   id: number;
   name: string;

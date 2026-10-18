@@ -1,0 +1,189 @@
+/** @format */
+
+import { TestBed } from "@angular/core/testing";
+import { of, throwError } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
+import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
+import { ManagementExpertsComponent } from "./experts.component";
+import { ExpertWorkspace, AssignmentOptions } from "@domain/program/evaluation-workspace.model";
+
+describe("Управление экспертами", () => {
+  it("отправляет приглашение через native submit и предотвращает перезагрузку", async () => {
+    const { fixture, component, api } = setup();
+    component.open("invite");
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    component.email.setValue("expert@example.com");
+    const form = document.querySelector(".experts__dialog form") as HTMLFormElement;
+    expect(form).toBeTruthy();
+    const event = new Event("submit", { bubbles: true, cancelable: true });
+    form.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(api.invite).toHaveBeenCalledWith(42, "expert@example.com");
+  });
+  const snapshot: ExpertWorkspace = {
+    revision: "v1",
+    requiredEvaluators: 2,
+    managedEvaluation: true,
+    submittedProjects: 3,
+    missingAssignments: 3,
+    readyProjects: 0,
+    experts: [
+      {
+        id: 1,
+        name: "Мария Иванова",
+        email: "maria@example.com",
+        status: "joined",
+        assigned: 1,
+        completed: 0,
+        remaining: 1,
+      },
+      {
+        id: "invite-2",
+        invitationId: 2,
+        name: null,
+        email: "pending@example.com",
+        status: "pending",
+        deliveryStatus: "sent",
+        assigned: null,
+        completed: null,
+        remaining: null,
+      },
+    ],
+  };
+  const options: AssignmentOptions = {
+    revision: "v1",
+    projects: [
+      {
+        id: 10,
+        name: "С оценкой",
+        caseName: "Первый",
+        submitted: true,
+        assigned: true,
+        protected: true,
+        completed: true,
+        ownTeam: false,
+      },
+      {
+        id: 11,
+        name: "Новый проект",
+        caseName: "Второй",
+        submitted: true,
+        assigned: false,
+        protected: false,
+        completed: false,
+        ownTeam: false,
+      },
+      {
+        id: 12,
+        name: "Своя команда",
+        caseName: null,
+        submitted: true,
+        assigned: false,
+        protected: false,
+        completed: false,
+        ownTeam: true,
+      },
+    ],
+  };
+  function setup() {
+    const api = {
+      workspace: vi.fn(() => of(structuredClone(snapshot))),
+      assignments: vi.fn(() => of(options)),
+      saveAssignments: vi.fn(() => of(options)),
+      invite: vi.fn(() => of({})),
+      allocation: vi.fn(),
+      applyAllocation: vi.fn(),
+      quota: vi.fn(),
+      saveQuota: vi.fn(),
+    };
+    TestBed.configureTestingModule({
+      imports: [ManagementExpertsComponent],
+      providers: [{ provide: EvaluationUseCase, useValue: api }],
+    });
+    const fixture = TestBed.createComponent(ManagementExpertsComponent);
+    fixture.componentRef.setInput("programId", 42);
+    fixture.componentRef.setInput("confirmDiscard", () => Promise.resolve(false));
+    fixture.detectChanges();
+    return { fixture, component: fixture.componentInstance, api };
+  }
+  it("поиск сохраняет значение и фокус при обновлении состава", () => {
+    const { fixture, component } = setup();
+    const search = fixture.nativeElement.querySelector("input[type=search]") as HTMLInputElement;
+    search.focus();
+    search.value = "Мария";
+    search.dispatchEvent(new Event("input"));
+    fixture.detectChanges();
+    component.load();
+    fixture.detectChanges();
+    expect(component.filtered().length).toBe(1);
+    expect(search.value).toBe("Мария");
+    expect(document.activeElement).toBe(search);
+  });
+  it("повторный выбор строки снимает выделение", () => {
+    const { fixture, component } = setup();
+    const row = fixture.nativeElement.querySelector("tbody tr");
+    row.click();
+    fixture.detectChanges();
+    expect(component.selected()?.id).toBe(1);
+    row.click();
+    fixture.detectChanges();
+    expect(component.selected()).toBeNull();
+  });
+  it("сохранённые оценки и собственная команда защищены, разрешённый проект назначается", () => {
+    const { component, api } = setup();
+    component.select(snapshot.experts[0]);
+    component.openAssignments();
+    component.toggleProject(options.projects[0]);
+    component.toggleProject(options.projects[2]);
+    expect([...component.chosenProjects()]).toEqual([10]);
+    component.toggleProject(options.projects[1]);
+    component.saveAssignments();
+    expect(api.saveAssignments).toHaveBeenCalledWith(42, 1, "v1", [10, 11]);
+  });
+  it("409 оставляет выбор и открытый редактор, фильтр кейса сохраняет значение", () => {
+    const { component, api } = setup();
+    component.select(snapshot.experts[0]);
+    component.openAssignments();
+    component.caseFilter.setValue("case:Второй");
+    expect(component.visibleProjects().map(p => p.id)).toEqual([11]);
+    component.toggleProject(options.projects[1]);
+    api.saveAssignments.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
+    component.saveAssignments();
+    expect(component.modal()).toBe("manual");
+    expect(component.chosenProjects().has(11)).toBe(true);
+    expect(component.caseFilter.value).toBe("case:Второй");
+    expect(component.dialogError()).toBeTruthy();
+  });
+  it("pending исключён из распределения, план с нехваткой нельзя применить", () => {
+    const { component, api } = setup();
+    component.open("auto");
+    expect([...component.chosenExperts()]).toEqual([1]);
+    component.plan.set({
+      revision: "v1",
+      planToken: "signed",
+      assignments: [],
+      shortages: [{ projectId: 10, projectName: "P", missing: 1 }],
+      load: [],
+    });
+    component.applyAllocation();
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("новый ввод N сбрасывает старый предпросмотр и запрещает 0", () => {
+    const { component } = setup();
+    component.open("quota");
+    component.quotaPreview.set({
+      revision: "v1",
+      requiredEvaluators: 2,
+      readyBefore: 0,
+      readyAfter: 0,
+      missingAssignments: 0,
+      surplusAssignments: 0,
+    });
+    component.quota.setValue(3);
+    expect(component.quotaPreview()).toBeNull();
+    component.quota.setValue(0);
+    expect(component.quota.invalid).toBe(true);
+  });
+});
