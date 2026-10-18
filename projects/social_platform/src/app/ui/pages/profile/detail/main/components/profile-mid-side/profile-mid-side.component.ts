@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   input,
@@ -54,10 +55,12 @@ export class ProfileMidSideComponent {
   private readonly newsInfoService = inject(NewsInfoService);
 
   protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
-  protected readonly isProfileEmpty = this.profileDetailUIInfoService.isProfileEmpty;
 
   protected readonly directions = this.profileDetailUIInfoService.directions;
   protected readonly news = this.newsInfoService.news;
+  protected readonly isProfileEmpty = computed(
+    () => this.profileDetailUIInfoService.isProfileEmpty() && this.news().length === 0,
+  );
 
   protected readonly newsPending = signal(false);
 

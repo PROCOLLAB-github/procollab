@@ -145,6 +145,20 @@ $detail-bar-mb: 12px;
 
   &__body {
     position: relative;
+
+    &--project .info__actions {
+      @include responsive.apply-desktop {
+        padding-bottom: 14px;
+      }
+    }
+  }
+
+  &__project-title {
+    max-width: 300px;
+    margin: 0 auto 16px;
+    color: var(--black);
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   &__cover-frame {
@@ -164,6 +178,12 @@ $detail-bar-mb: 12px;
     background-color: var(--white);
     border-radius: 50%;
     transform: translate(-50%, 60%);
+
+    &--project {
+      @include responsive.apply-desktop {
+        bottom: 0;
+      }
+    }
 
     &--program {
       bottom: -60px;
