@@ -79,7 +79,7 @@
       flex: 0 1 157px;
       align-items: center;
       justify-content: center;
-      min-height: 28px;
+      min-height: 32px;
       border: 1px solid var(--accent);
       border-radius: 30px;
     }
@@ -534,13 +534,28 @@
     }
 
     &__tabs {
-      gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px 12px;
 
       a {
+        position: relative;
         flex: 1;
+        grid-column: span 2;
         min-width: 0;
-        min-height: 44px;
+        min-height: 32px;
+        margin-block: 6px;
         font-size: 12px;
+
+        &::after {
+          position: absolute;
+          inset: -6px 0;
+          content: "";
+        }
+
+        &:nth-last-child(-n + 2) {
+          grid-column: span 3;
+        }
       }
     }
 

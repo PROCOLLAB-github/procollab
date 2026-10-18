@@ -18,6 +18,8 @@ export class EvaluationUseCase {
   }
   readonly programs = this.repository.programs.bind(this.repository);
   readonly workspace = this.repository.workspace.bind(this.repository);
+  readonly saveCaseScope = this.repository.saveCaseScope.bind(this.repository);
+  readonly saveProjectExperts = this.repository.saveProjectExperts.bind(this.repository);
   readonly invite = this.repository.invite.bind(this.repository);
   readonly invitationAction = this.repository.invitationAction.bind(this.repository);
   readonly assignments = this.repository.assignments.bind(this.repository);
