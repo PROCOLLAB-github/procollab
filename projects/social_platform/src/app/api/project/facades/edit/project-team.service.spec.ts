@@ -87,7 +87,7 @@ describe("Отправка приглашения из команды", () => {
       400,
       {
         user: [
-          "Нельзя пригласить пользователя: проект относится к программе, а пользователь не является её участником.",
+          "Нельзя пригласить пользователя: проект относится к программе, а пользователь не является ее участником.",
         ],
       },
       "not_program_participant",
@@ -142,12 +142,12 @@ describe("Отправка приглашения из команды", () => {
     service.editInvitation({ inviteId: 10, role: "Дизайнер", specialization: "Legacy" });
     expect(ui.invites()).toEqual([invite]);
     expect(snackbar.error).toHaveBeenCalledWith(
-      "Не удалось изменить роль в приглашении. Попробуйте ещё раз.",
+      "Не удалось изменить роль в приглашении. Попробуйте еще раз.",
     );
     service.removeInvitation(10);
     expect(ui.invites()).toEqual([invite]);
     expect(snackbar.error).toHaveBeenCalledWith(
-      "Не удалось отозвать приглашение. Попробуйте ещё раз.",
+      "Не удалось отозвать приглашение. Попробуйте еще раз.",
     );
   });
   it("не отправляет invite для frozen snapshot", () => {

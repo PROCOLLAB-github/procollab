@@ -142,7 +142,7 @@ export class VacancyDetailInfoService {
             }),
             catchError(() => {
               this.snackbarService.error(
-                "CV сформировано, но не удалось прикрепить файл. Попробуйте ещё раз.",
+                "CV сформировано, но не удалось прикрепить файл. Попробуйте еще раз.",
               );
               return EMPTY;
             }),
@@ -196,7 +196,7 @@ export class VacancyDetailInfoService {
       .subscribe(result => {
         if (!result.ok) {
           this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
-          this.snackbarService.error("Не удалось принять кандидата. Попробуйте ещё раз");
+          this.snackbarService.error("Не удалось принять кандидата. Попробуйте еще раз");
           return;
         }
 
@@ -218,12 +218,12 @@ export class VacancyDetailInfoService {
       .subscribe(result => {
         if (!result.ok) {
           this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
-          this.snackbarService.error("Не удалось отклонить отклик. Попробуйте ещё раз");
+          this.snackbarService.error("Не удалось отклонить отклик. Попробуйте еще раз");
           return;
         }
 
         this.vacancyDetailUIInfoService.applyResponseProcessing(responseId, false);
-        this.snackbarService.success("Отклик отклонён");
+        this.snackbarService.success("Отклик отклонен");
         this.vacancyDetailUIInfoService.applyResponseDecision(responseId, false);
         this.loadVacancyResponses();
       });

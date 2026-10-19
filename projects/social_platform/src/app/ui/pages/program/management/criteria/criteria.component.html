@@ -39,7 +39,7 @@
       }
       <section class="criteria__card" aria-labelledby="criteria-heading">
         <h3 id="criteria-heading">Критерии программы</h3>
-        <p>Настройте форму до первой сохранённой оценки.</p>
+        <p>Настройте форму до первой сохраненной оценки.</p>
         <button
           class="criteria__add"
           type="button"
@@ -86,14 +86,14 @@
         }
         @if (!locked()) {
           <p appAlert="warning">
-            После первой сохранённой оценки весь набор критериев будет зафиксирован.
+            После первой сохраненной оценки весь набор критериев будет зафиксирован.
           </p>
         }
       </section>
       @if (!locked()) {
         <footer class="criteria__footer">
           <p aria-live="polite">
-            {{ dirty() ? "Есть несохранённые изменения" : "Нет несохранённых изменений" }}
+            {{ dirty() ? "Есть несохраненные изменения" : "Нет несохраненных изменений" }}
           </p>
           <div class="criteria__actions">
             <button
@@ -241,7 +241,7 @@
 >
   <div class="criteria__dialog">
     <h2 id="criterion-delete-title">Удалить критерий?</h2>
-    <p>«{{ deleting()?.name }}» будет удалён после сохранения изменений.</p>
+    <p>«{{ deleting()?.name }}» будет удален после сохранения изменений.</p>
     <div class="criteria__actions">
       <button type="button" appButton="primary" (click)="remove()">Удалить критерий</button
       ><button
@@ -268,7 +268,7 @@
       применены.
     </p>
     <div class="criteria__note">
-      <strong>Несохранённый набор</strong>
+      <strong>Несохраненный набор</strong>
       @for (c of criteria(); track c.id) {
         <p>{{ c.name }} · {{ summary(c) }}</p>
       }

@@ -173,7 +173,7 @@ describe("Окно приглашения из редактора команды
     request.error(new HttpErrorResponse({ status: 500, error: "private details" }));
     await fixture.whenStable();
     expect(dialog().querySelector('[role="alert"]')?.textContent).toContain(
-      "Попробуйте ещё раз позже",
+      "Попробуйте еще раз позже",
     );
     expect(ui.selectedRecipient()?.id).toBe(13);
     expect(ui.role?.value).toBe("Дизайнер");

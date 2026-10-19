@@ -112,7 +112,7 @@ describe("Результаты программы", () => {
     expect(component.exporting()).toBe(false);
     expect(component.modal()).toBe("export");
   });
-  it("показывает сохранённые оценки только после раскрытия проекта", () => {
+  it("показывает сохраненные оценки только после раскрытия проекта", () => {
     const { fixture, component } = setup();
     component.toggle(1);
     fixture.detectChanges();

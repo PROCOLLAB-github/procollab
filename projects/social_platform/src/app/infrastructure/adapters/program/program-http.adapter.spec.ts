@@ -93,7 +93,7 @@ describe("ProgramHttpAdapter", () => {
     expect(file.has("limit") || file.has("offset")).toBe(false);
     for (const key of file.keys()) expect(file.get(key)).toBe(list.get(key));
   });
-  it("getAll идёт в GET /programs/ c limit/offset и дополнительными фильтрами", () => {
+  it("getAll идет в GET /programs/ c limit/offset и дополнительными фильтрами", () => {
     setup();
     api.get.mockReturnValue(of(pagination<Program>()));
 
@@ -107,7 +107,7 @@ describe("ProgramHttpAdapter", () => {
     expect(params?.get("status")).toBe("open");
   });
 
-  it("getOne идёт в GET /programs/:id/", () => {
+  it("getOne идет в GET /programs/:id/", () => {
     setup();
     api.get.mockReturnValue(of({} as Program));
 
@@ -136,7 +136,7 @@ describe("ProgramHttpAdapter", () => {
     );
   });
 
-  it("getManagerOverview идёт в manager overview программы", () => {
+  it("getManagerOverview идет в manager overview программы", () => {
     setup();
     api.get.mockReturnValue(of({} as ProgramAnalyticsOverview));
 
@@ -145,7 +145,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/manager-overview/");
   });
 
-  it("create идёт в POST /programs/ с телом", () => {
+  it("create идет в POST /programs/ с телом", () => {
     setup();
     api.post.mockReturnValue(of({} as Program));
     const body = {} as ProgramCreate;
@@ -155,7 +155,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/", body);
   });
 
-  it("getDataSchema идёт в GET /programs/:id/schema/", () => {
+  it("getDataSchema идет в GET /programs/:id/schema/", () => {
     setup();
     api.get.mockReturnValue(of({ dataSchema: {} as ProgramDataSchema }));
 
@@ -164,7 +164,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/schema/");
   });
 
-  it("register идёт в POST /programs/:id/register/ c additionalData", () => {
+  it("register идет в POST /programs/:id/register/ c additionalData", () => {
     setup();
     api.post.mockReturnValue(of({} as ProgramDataSchema));
 
@@ -182,7 +182,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/acknowledge-welcome/", {});
   });
 
-  it("getAllProjects идёт в GET /programs/:id/projects", () => {
+  it("getAllProjects идет в GET /programs/:id/projects", () => {
     setup();
     api.get.mockReturnValue(of(pagination<Project>()));
     const params = new HttpParams().set("q", "x");
@@ -192,7 +192,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/projects/", params);
   });
 
-  it("getAllMembers идёт в GET /auth/public-users/ c partner_program", () => {
+  it("getAllMembers идет в GET /auth/public-users/ c partner_program", () => {
     setup();
     api.get.mockReturnValue(of(pagination<unknown>()));
 
@@ -205,7 +205,7 @@ describe("ProgramHttpAdapter", () => {
     expect(params?.get("offset")).toBe("20");
   });
 
-  it("getProgramFilters идёт в GET /programs/:id/filters/", () => {
+  it("getProgramFilters идет в GET /programs/:id/filters/", () => {
     setup();
     api.get.mockReturnValue(of([] as PartnerProgramFields[]));
 
@@ -214,7 +214,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/filters/");
   });
 
-  it("getProgramProjectAdditionalFields идёт в GET /programs/:id/projects/apply/", () => {
+  it("getProgramProjectAdditionalFields идет в GET /programs/:id/projects/apply/", () => {
     setup();
     api.get.mockReturnValue(of({} as ProjectAdditionalFields));
 
@@ -223,7 +223,7 @@ describe("ProgramHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/programs/5/projects/apply/");
   });
 
-  it("applyProjectToProgram идёт в POST /programs/:id/projects/apply/ c трансформированным телом", () => {
+  it("applyProjectToProgram идет в POST /programs/:id/projects/apply/ c трансформированным телом", () => {
     setup();
     api.post.mockReturnValue(of({ projectId: 1, programLinkId: 2 }));
     const dto = { project: { id: 42 } as Project, programFieldValues: [] };
@@ -236,7 +236,7 @@ describe("ProgramHttpAdapter", () => {
     });
   });
 
-  it("createProgramFilters идёт в POST /programs/:id/projects/filter/ с query и body", () => {
+  it("createProgramFilters идет в POST /programs/:id/projects/filter/ с query и body", () => {
     setup();
     api.post.mockReturnValue(of(pagination<Project>()));
     const params = new HttpParams().set("limit", "10");
@@ -248,7 +248,7 @@ describe("ProgramHttpAdapter", () => {
     });
   });
 
-  it("submitCompettetiveProject идёт в POST /programs/partner-program-projects/:id/submit/", () => {
+  it("submitCompettetiveProject идет в POST /programs/partner-program-projects/:id/submit/", () => {
     setup();
     api.post.mockReturnValue(of({} as Project));
 

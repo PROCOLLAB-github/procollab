@@ -264,14 +264,14 @@ export class ProgramAnalyticsComponent implements OnInit {
         "solutions-evaluated",
         "Оценено",
         funnel.evaluated,
-        "Сданные проекты, признанные оценёнными по режиму программы.",
+        "Сданные проекты, признанные оцененными по режиму программы.",
       ),
     ];
   });
 
   protected readonly evaluationModeLabel = computed(() =>
     this.data()?.evaluationStatus.mode === "distributed"
-      ? "Распределённое оценивание"
+      ? "Распределенное оценивание"
       : "Открытое оценивание",
   );
 
@@ -284,10 +284,10 @@ export class ProgramAnalyticsComponent implements OnInit {
         : [
             {
               key: "without-visit",
-              label: "Участники ещё не заходили на платформу",
+              label: "Участники еще не заходили на платформу",
               value: overview.attention.participantsWithoutVisit,
               tooltip:
-                "Зарегистрированные участники программы, у которых ещё не зафиксированы ни вход, ни активность на платформе. Участник исчезает из списка после первого зафиксированного посещения.",
+                "Зарегистрированные участники программы, у которых еще не зафиксированы ни вход, ни активность на платформе. Участник исчезает из списка после первого зафиксированного посещения.",
             },
           ];
     return [
@@ -415,9 +415,9 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   private awaitingEvaluationTooltip(mode: "open" | "distributed"): string {
     if (this.data()?.evaluationStatus.requiredEvaluators != null)
-      return "Сданные проекты, которые ещё не получили нужное число полных оценок от разных экспертов.";
+      return "Сданные проекты, которые еще не получили нужное число полных оценок от разных экспертов.";
     return mode === "open"
-      ? "Сданные проекты, которые ещё не получили ни одной оценки эксперта."
+      ? "Сданные проекты, которые еще не получили ни одной оценки эксперта."
       : "Сданные проекты без выполненных назначений или с выполненной только частью назначений.";
   }
 }

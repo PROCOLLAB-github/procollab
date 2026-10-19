@@ -126,7 +126,7 @@
                 [formControl]="activityFilter"
                 (change)="changeParticipantFilter('activity', $any($event.target).value)"
               >
-                <option value="all">За всё время</option>
+                <option value="all">За все время</option>
                 <option value="period">За период</option>
                 <option value="never">Не было активности</option>
               </select></label
@@ -225,7 +225,7 @@
                   appButton="primary"
                   disabled
                   [attr.title]="
-                    program.isCompetitive ? 'Решение ещё не сдано' : 'В программе нет оценивания'
+                    program.isCompetitive ? 'Решение еще не сдано' : 'В программе нет оценивания'
                   "
                 >
                   Перейти к оценке
@@ -429,7 +429,7 @@
           }
           @if (!evaluation.experts.length) {
             <p role="status">
-              {{ evaluation.submitted ? "Оценок пока нет." : "Команда ещё не сдала решение." }}
+              {{ evaluation.submitted ? "Оценок пока нет." : "Команда еще не сдала решение." }}
             </p>
           }
           @for (expert of evaluation.experts; track expert.id) {
@@ -634,7 +634,7 @@
             Если отдельный срок сдачи не задан, действует срок окончания регистрации.
           </p>
           <p appAlert="warning">
-            Перенос завершённого срока на будущую дату снова откроет приём. Перед сохранением
+            Перенос завершенного срока на будущую дату снова откроет прием. Перед сохранением
             появится подтверждение.
           </p>
           <div class="management__inline">

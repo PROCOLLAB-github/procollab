@@ -54,7 +54,7 @@ export class CollaboratorCardComponent {
           if (!result.ok) {
             this.error.set(
               teamOperationErrorMessage(result.error.cause) ??
-                "Не удалось исключить участника. Попробуйте ещё раз.",
+                "Не удалось исключить участника. Попробуйте еще раз.",
             );
             return;
           }

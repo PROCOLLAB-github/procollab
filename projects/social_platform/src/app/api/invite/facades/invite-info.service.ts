@@ -94,7 +94,7 @@ export class InviteInfoService {
         if (!result.ok) {
           this.snackbar.error(
             teamOperationErrorMessage(result.error.cause) ??
-              "Не удалось обработать приглашение. Обновите список и попробуйте ещё раз.",
+              "Не удалось обработать приглашение. Обновите список и попробуйте еще раз.",
           );
           this.refresh();
         }
@@ -110,7 +110,7 @@ export class InviteInfoService {
         if (!result.ok) {
           this.snackbar.error(
             teamOperationErrorMessage(result.error.cause) ??
-              "Не удалось обработать приглашение. Обновите список и попробуйте ещё раз.",
+              "Не удалось обработать приглашение. Обновите список и попробуйте еще раз.",
           );
           this.refresh();
         }

@@ -179,10 +179,10 @@ describe("ProjectAdditionalService canonical fields", () => {
       expect(caseControl().value).toBe("A");
       expect(service.saveError()).toBe(
         status === 0
-          ? "Не удалось сохранить данные. Проверьте подключение и попробуйте ещё раз."
+          ? "Не удалось сохранить данные. Проверьте подключение и попробуйте еще раз."
           : status === 500
-            ? "Не удалось сохранить дополнительные сведения. Попробуйте ещё раз позже."
-            : "Не удалось сохранить дополнительные сведения. Попробуйте ещё раз.",
+            ? "Не удалось сохранить дополнительные сведения. Попробуйте еще раз позже."
+            : "Не удалось сохранить дополнительные сведения. Попробуйте еще раз.",
       );
       expect(service.saveError()).not.toContain("raw");
       expect(service.isSend$().status).toBe("failure");
@@ -374,7 +374,7 @@ describe("ProjectAdditionalService canonical fields", () => {
       ok: false,
       error: { kind: "submission_closed" },
     });
-    expect(service.saveError()).toBe("Срок подачи проектов в программу завершён.");
+    expect(service.saveError()).toBe("Срок подачи проектов в программу завершен.");
     expect(service.isSend$().status).toBe("failure");
     expect(service.submitted()).toBe(false);
     expect(caseControl().value).toBe("A");

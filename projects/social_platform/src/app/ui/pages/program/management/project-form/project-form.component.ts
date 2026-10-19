@@ -364,7 +364,7 @@ export class ManagementProjectFormComponent {
     this.previewForm.markAsUntouched();
     this.previewInvalid.set(false);
     this.previewMessage.set(
-      "Черновик сохранён в предпросмотре. Обязательные поля можно заполнить перед сдачей.",
+      "Черновик сохранен в предпросмотре. Обязательные поля можно заполнить перед сдачей.",
     );
   }
   previewSubmit(): void {
@@ -373,7 +373,7 @@ export class ManagementProjectFormComponent {
     this.previewInvalid.set(this.previewForm.invalid);
     this.previewMessage.set(
       this.previewForm.invalid
-        ? "Заполните отмеченные поля перед сдачей. Черновик и введённые значения сохранены в предпросмотре."
+        ? "Заполните отмеченные поля перед сдачей. Черновик и введенные значения сохранены в предпросмотре."
         : "Все поля заполнены. Форма готова к сдаче. Это предпросмотр — решение не отправлено.",
     );
   }
@@ -381,7 +381,7 @@ export class ManagementProjectFormComponent {
     if (error.status === 403) return "У вас нет доступа к настройкам этой программы.";
     if (error.status === 401) return "Войдите в аккаунт, чтобы продолжить.";
     if (error.status === 409)
-      return "Настройки уже изменены. Обновите данные и внесите изменения ещё раз.";
+      return "Настройки уже изменены. Обновите данные и внесите изменения еще раз.";
     if (error.status === 400) {
       const detail = error.error?.fields ?? error.error?.cases ?? error.error?.detail;
       return (

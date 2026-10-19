@@ -18,7 +18,7 @@ describe("Server team policy", () => {
   it("учитывает frozen snapshot даже если legacy first link draft", () => {
     expect(isTeamFrozen(project)).toBe(true);
   });
-  it("не выбирает первую связь и не путает её с programId", () => {
+  it("не выбирает первую связь и не путает ее с programId", () => {
     expect(teamProgramLinkId(project)).toBeUndefined();
     expect(teamProgramLinkId(project, 9)).toBeUndefined();
     expect(teamProgramLinkId(project, 902)).toBe(902);

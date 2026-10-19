@@ -115,7 +115,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       case "participants-without-team":
         return "Участники без команды";
       case "participants-without-visit":
-        return "Участники ещё не заходили на платформу";
+        return "Участники еще не заходили на платформу";
       case "projects-awaiting-evaluation":
         return "Работы ожидают оценивания";
       case "projects-not-submitted":
@@ -138,7 +138,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
     () =>
       ({
         all: "Назначений экспертов пока нет",
-        completed: "Завершённых оценок пока нет",
+        completed: "Завершенных оценок пока нет",
         pending: "Все назначения выполнены",
       })[this.state.scope()],
   );

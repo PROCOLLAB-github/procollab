@@ -99,7 +99,7 @@ export class ProgramFieldsComponent {
           control.setValue(result.url);
           control.markAsDirty();
         },
-        error: () => this.uploadError.set("Не удалось загрузить файл. Выберите его ещё раз."),
+        error: () => this.uploadError.set("Не удалось загрузить файл. Выберите его еще раз."),
       });
   }
   clearFile(field: PartnerProgramFields): void {

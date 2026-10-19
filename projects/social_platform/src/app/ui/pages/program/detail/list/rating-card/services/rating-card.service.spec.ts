@@ -83,7 +83,7 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.showRatingForm()).toBe(true);
     service.confirmRateProject();
     expect(service.projectConfirmed()).toBe(true);
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.showRatingForm()).toBe(false);
     expect(service.showEditButton()).toBe(true);
     expect(service.isRatingFormDisabled()).toBe(true);
@@ -94,7 +94,7 @@ describe("RatingCardService evaluation modes", () => {
     const response = new Subject<ReturnType<typeof ok<void>>>();
     execute.mockReturnValue(response);
     service.initProject(project(true));
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.showEditButton()).toBe(true);
     expect(service.isRatingFormDisabled()).toBe(true);
     service.redoRating();
@@ -112,7 +112,7 @@ describe("RatingCardService evaluation modes", () => {
     response.next(ok(undefined));
     response.complete();
     expect(service.submitLoading()).toBe(false);
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.buttonColor()).toBe("green");
     expect(service.showRatingForm()).toBe(false);
     expect(service.showEditButton()).toBe(true);
@@ -131,7 +131,7 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.submitLoading()).toBe(false);
     expect(service.form().getRawValue()).toEqual({ score: 5 });
     service.confirmRateProject();
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
   });
 
   it("rejects stale form, retains zero/No and removed answers, and refreshes revision before retry", () => {
@@ -220,7 +220,7 @@ describe("RatingCardService evaluation modes", () => {
       expect(programUI.registerDateExpired()).toBe(false);
       expect(service.evaluationDateExpired()).toBe(true);
       expect(service.rateButtonText()).toBe("оценивание завершено");
-      expect(service.buttonTooltip()).toBe("Срок оценивания завершён");
+      expect(service.buttonTooltip()).toBe("Срок оценивания завершен");
       expect(service.showConfirmedState()).toBe(true);
       expect(service.showRatingForm()).toBe(false);
       expect(service.showEditButton()).toBe(false);

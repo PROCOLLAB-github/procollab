@@ -17,7 +17,7 @@ describe("SubscriptionHttpAdapter", () => {
     adapter = TestBed.inject(SubscriptionHttpAdapter);
   }
 
-  it("getSubscribers идёт в GET /projects/:id/subscribers/", () => {
+  it("getSubscribers идет в GET /projects/:id/subscribers/", () => {
     setup();
     api.get.mockReturnValue(of([]));
 
@@ -26,7 +26,7 @@ describe("SubscriptionHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/subscribers/");
   });
 
-  it("addSubscription идёт в POST /projects/:id/subscribe/", () => {
+  it("addSubscription идет в POST /projects/:id/subscribe/", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -35,7 +35,7 @@ describe("SubscriptionHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/subscribe/", {});
   });
 
-  it("getSubscriptions идёт в GET /auth/users/:uid/subscribed_projects/", () => {
+  it("getSubscriptions идет в GET /auth/users/:uid/subscribed_projects/", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
@@ -47,7 +47,7 @@ describe("SubscriptionHttpAdapter", () => {
     );
   });
 
-  it("deleteSubscription идёт в POST /projects/:id/unsubscribe/", () => {
+  it("deleteSubscription идет в POST /projects/:id/unsubscribe/", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 

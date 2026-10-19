@@ -143,7 +143,7 @@ export class ProjectsDetailService {
           if (!result.ok) {
             this.snackbar.error(
               teamOperationErrorMessage(result.error.cause) ??
-                "Не удалось изменить команду. Попробуйте ещё раз.",
+                "Не удалось изменить команду. Попробуйте еще раз.",
             );
             return;
           }
@@ -237,7 +237,7 @@ export class ProjectsDetailService {
         if (!result.ok) {
           this.snackbar.error(
             teamOperationErrorMessage(result.error.cause) ??
-              "Не удалось изменить команду. Попробуйте ещё раз.",
+              "Не удалось изменить команду. Попробуйте еще раз.",
           );
           return;
         }
@@ -255,7 +255,7 @@ export class ProjectsDetailService {
         if (!result.ok) {
           this.snackbar.error(
             teamOperationErrorMessage(result.error.cause) ??
-              "Не удалось изменить команду. Попробуйте ещё раз.",
+              "Не удалось изменить команду. Попробуйте еще раз.",
           );
           return;
         }

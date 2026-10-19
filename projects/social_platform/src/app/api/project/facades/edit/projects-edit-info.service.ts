@@ -309,7 +309,7 @@ export class ProjectsEditInfoService {
           this.submitMode.set(null);
           this.projFormIsSubmitting$.set(failure("ошибка при сохранении данных"));
           this.snackBarService.error("ошибка при сохранении данных");
-          if (err.error["error"].includes("Срок подачи проектов в программу завершён.")) {
+          if (err.error["error"].includes("Срок подачи проектов в программу завершен.")) {
             this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
           }
         },
@@ -554,7 +554,7 @@ export class ProjectsEditInfoService {
     if (
       error instanceof HttpErrorResponse &&
       Array.isArray(error.error?.error) &&
-      error.error.error.includes("Срок подачи проектов в программу завершён.")
+      error.error.error.includes("Срок подачи проектов в программу завершен.")
     ) {
       this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
     }

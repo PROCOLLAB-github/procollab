@@ -36,7 +36,7 @@ describe("Управление экспертами", () => {
       api.workspace.mockReturnValue(of(structuredClone(snapshot)));
       await vi.advanceTimersByTimeAsync(3000);
       fixture.detectChanges();
-      expect(fixture.nativeElement.textContent).toContain("Письмо отправлено · ждём принятия");
+      expect(fixture.nativeElement.textContent).toContain("Письмо отправлено · ждем принятия");
       expect(search.value).toBe("pending");
       expect(document.activeElement).toBe(search);
       const calls = api.workspace.mock.calls.length;
@@ -112,7 +112,7 @@ describe("Управление экспертами", () => {
       ],
     });
     expect(api.applyAllocation).not.toHaveBeenCalled();
-    expect(component.label(snapshot.experts[1])).toBe("Приглашён");
+    expect(component.label(snapshot.experts[1])).toBe("Приглашен");
     expect(component.deliveryLabel({ ...snapshot.experts[1], deliveryStatus: "failed" })).toBe(
       "Не удалось отправить письмо",
     );
@@ -372,7 +372,7 @@ describe("Управление экспертами", () => {
     expect([...component.chosenExperts()]).toEqual([1]);
     expect(component.dialogError()).toBeTruthy();
   });
-  it("при заполненном лимите фиксирует оценившего и блокирует ещё одного эксперта", () => {
+  it("при заполненном лимите фиксирует оценившего и блокирует еще одного эксперта", () => {
     const { fixture, component, api } = setup();
     const extra = { ...snapshot.experts[0], id: 3, name: "Анна" };
     component.snapshot.update(s => ({

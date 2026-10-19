@@ -32,7 +32,7 @@ function calendarDay(date: Date): number {
 }
 
 function deadlineStatus(date: Date, now: Date): string {
-  if (date.getTime() < now.getTime()) return "Срок завершён";
+  if (date.getTime() < now.getTime()) return "Срок завершен";
   const days = calendarDay(date) - calendarDay(now);
   if (days === 0) return "Сегодня";
   if (days === 1) return "Завтра";
@@ -52,15 +52,15 @@ export function programDeadlines(
     {
       key: "registration" as const,
       label: "Регистрация",
-      activeLabel: "Идёт регистрация",
+      activeLabel: "Идет регистрация",
       datetime: dates.datetimeRegistrationEnds,
       applicable: true,
       usesRegistrationDeadline: false,
     },
     {
       key: "submission" as const,
-      label: "Приём решений",
-      activeLabel: "Идёт приём решений",
+      label: "Прием решений",
+      activeLabel: "Идет прием решений",
       // Matches PartnerProgram.get_project_submission_deadline() on the API.
       datetime: explicitSubmission || dates.datetimeRegistrationEnds,
       applicable: submissionApplicable,
@@ -69,7 +69,7 @@ export function programDeadlines(
     {
       key: "evaluation" as const,
       label: "Оценивание",
-      activeLabel: "Идёт оценивание",
+      activeLabel: "Идет оценивание",
       datetime: dates.datetimeEvaluationEnds,
       applicable: true,
       usesRegistrationDeadline: false,

@@ -103,7 +103,7 @@ describe("Organizer cases and common fields", () => {
     expect(component.previewForm.get("case")?.hasError("required")).toBe(true);
     component.previewDraft();
     expect(component.previewInvalid()).toBe(false);
-    expect(component.previewMessage()).toContain("Черновик сохранён");
+    expect(component.previewMessage()).toContain("Черновик сохранен");
     expect(api.saveProjectForm).not.toHaveBeenCalled();
     component.previewForm.get("case")?.setValue("Кейс А");
     component.previewSubmit();

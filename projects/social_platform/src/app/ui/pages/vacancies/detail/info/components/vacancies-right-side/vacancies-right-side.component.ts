@@ -37,7 +37,7 @@ export class VacanciesRightSideComponent {
       case "accepted":
         return "Отклик принят";
       case "rejected":
-        return "Отклик отклонён";
+        return "Отклик отклонен";
       default:
         return "Отклик отправлен";
     }

@@ -17,7 +17,7 @@ describe("FeedHttpAdapter", () => {
     adapter = TestBed.inject(FeedHttpAdapter);
   }
 
-  it("fetchFeed идёт в GET /feed/ c limit/offset/type", () => {
+  it("fetchFeed идет в GET /feed/ c limit/offset/type", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 

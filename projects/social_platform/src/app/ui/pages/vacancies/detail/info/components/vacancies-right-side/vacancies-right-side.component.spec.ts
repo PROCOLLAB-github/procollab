@@ -81,7 +81,7 @@ describe("VacanciesRightSideComponent", () => {
   it.each([
     ["pending", "На рассмотрении", "pending"],
     ["accepted", "Отклик принят", "success"],
-    ["rejected", "Отклик отклонён", "declined"],
+    ["rejected", "Отклик отклонен", "declined"],
     [null, "Отклик отправлен", "pending"],
   ] as const)("показывает disabled applicant state %s", (responseStatus, label, color) => {
     const emitted = vi.fn();
