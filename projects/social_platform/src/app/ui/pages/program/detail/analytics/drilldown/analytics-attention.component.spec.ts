@@ -197,6 +197,15 @@ describe("Attention views: real overlay", () => {
   });
 
   it("distributed: одна работа на строку, причины, прогресс, nullable leader/date", async () => {
+    const rawProject = attentionProject({
+      programProjectId: 72,
+      project: { id: 56, name: "Ёлка" },
+      leader: { userId: 124, fullName: "Алёна Петрова", avatar: null },
+      status: "awaiting_evaluation",
+      reason: "no_completed_evaluations",
+      reasonLabel: "Нет завершённых оценок",
+      assignmentsCompleted: 0,
+    });
     projects.execute.mockReturnValue(
       of(
         ok(
@@ -213,13 +222,7 @@ describe("Attention views: real overlay", () => {
                 assignmentsTotal: 0,
                 assignmentsCompleted: 0,
               }),
-              attentionProject({
-                programProjectId: 72,
-                status: "awaiting_evaluation",
-                reason: "no_completed_evaluations",
-                reasonLabel: "Нет завершенных оценок",
-                assignmentsCompleted: 0,
-              }),
+              rawProject,
             ],
           }),
         ),
@@ -235,9 +238,15 @@ describe("Attention views: real overlay", () => {
       "Дата сдачи неизвестна",
       "Нет назначений",
       "Нет завершенных оценок",
+      "Ёлка",
+      "Алёна Петрова",
     ])
       expect(dialog().textContent).toContain(text);
     expect(dialog().querySelectorAll("tbody tr")).toHaveLength(3);
+    expect(dialog().querySelector('[data-reason="no_completed_evaluations"]')?.textContent).toBe(
+      "Нет завершенных оценок",
+    );
+    expect(rawProject.reasonLabel).toBe("Нет завершённых оценок");
     expect(dialog().querySelector('[data-reason="no_assignments"]')).not.toBeNull();
     expect(dialog().querySelector("a")?.getAttribute("href")).toBe("/office/projects/55");
     expect(dialog().textContent).not.toContain("Еще не сданы");

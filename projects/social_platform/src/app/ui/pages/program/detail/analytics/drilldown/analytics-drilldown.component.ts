@@ -104,6 +104,8 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   protected readonly waiting = formatAssignmentWaiting;
   protected readonly criterionValue = assignmentCriterionValue;
   protected readonly requestError = analyticsRequestError;
+  protected readonly attentionReasonLabel = (label: string): string =>
+    label.replaceAll("ё", "е").replaceAll("Ё", "Е");
   protected readonly title = computed(() => {
     switch (this.state.view()) {
       case "case": {
