@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   HostListener,
   Injector,
   OnInit,
@@ -117,6 +118,8 @@ export class ProgramManagementComponent implements OnInit {
   readonly formError = signal<string | null>(null);
   readonly saved = signal(false);
   readonly projectForm = viewChild(ManagementProjectFormComponent);
+  private readonly managementLayout = viewChild<ElementRef<HTMLElement>>("managementLayout");
+  readonly floatingPosition = signal<{ center: number; width: number } | null>(null);
   readonly projectFormStatus = signal({ dirty: false, busy: false });
   readonly criteriaForm = viewChild(ManagementCriteriaComponent);
   readonly criteriaStatus = signal({ dirty: false, busy: false });
@@ -239,6 +242,27 @@ export class ProgramManagementComponent implements OnInit {
   readonly requestError = computed(() => this.errorMessage(this.state.error()));
 
   constructor() {
+    afterNextRender(() => {
+      const layout = this.managementLayout()?.nativeElement;
+      if (!layout) return;
+      const update = () => {
+        const rect = layout.getBoundingClientRect();
+        if (rect.width > 0) {
+          this.floatingPosition.set({
+            center: rect.left + rect.width / 2,
+            width: Math.min(704, rect.width, window.innerWidth - 32),
+          });
+        }
+      };
+      const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
+      observer?.observe(layout);
+      window.addEventListener("resize", update);
+      update();
+      this.destroyRef.onDestroy(() => {
+        observer?.disconnect();
+        window.removeEventListener("resize", update);
+      });
+    });
     effect(() => {
       const program = this.state.program();
       if (program) untracked(() => this.resetForms());
@@ -378,6 +402,19 @@ export class ProgramManagementComponent implements OnInit {
   selectFromRow(event: MouseEvent, project: ManagementProject): void {
     if (!(event.target as HTMLElement).closest("a,button,input,label")) this.select(project);
   }
+  clearProjectSelection(): void {
+    const selectedId = this.state.selected()?.id;
+    this.state.clearSelection();
+    afterNextRender(
+      () =>
+        this.managementLayout()
+          ?.nativeElement.querySelector<HTMLInputElement>(
+            `input[name="management-project"][value="${selectedId}"]`,
+          )
+          ?.focus({ preventScroll: true }),
+      { injector: this.injector },
+    );
+  }
   openTeam(event: Event): void {
     this.teamTrigger = event.currentTarget as HTMLElement;
     this.state.openTeam();
@@ -387,7 +424,9 @@ export class ProgramManagementComponent implements OnInit {
   }
   closeTeam(): void {
     this.state.closeTeam();
-    this.teamTrigger?.focus();
+    afterNextRender(() => this.teamTrigger?.focus({ preventScroll: true }), {
+      injector: this.injector,
+    });
   }
   evaluationPath(linkId: number): string {
     return `${AppRoutes.program.management(this.state.program()!.id, "projects")}/${linkId}/evaluation`;
