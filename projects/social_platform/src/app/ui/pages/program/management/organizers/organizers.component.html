@@ -199,7 +199,9 @@
         </button>
       </div>
       @if (row.status === "joined" && !row.canRemove) {
-        <p class="organizers__last">Сначала пригласите коллегу и дождитесь принятия.</p>
+        <p class="organizers__last" appAlert="warning">
+          Сначала пригласите коллегу и дождитесь принятия.
+        </p>
       }
     </section>
   }

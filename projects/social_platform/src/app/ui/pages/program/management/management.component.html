@@ -26,7 +26,7 @@
     </nav>
   }
   @if (state.error()) {
-    <section class="management__card" role="alert">
+    <section class="management__card" appAlert="error">
       <h2>{{ requestError() }}</h2>
       <button type="button" appButton="secondary" (click)="state.retry()">Повторить</button>
     </section>
@@ -633,7 +633,7 @@
           <p class="management__muted">
             Если отдельный срок сдачи не задан, действует срок окончания регистрации.
           </p>
-          <p class="management__muted">
+          <p appAlert="warning">
             Перенос завершённого срока на будущую дату снова откроет приём. Перед сохранением
             появится подтверждение.
           </p>
@@ -818,12 +818,12 @@
           <div aria-live="polite" role="status">
             @if (uploading() === "material") {
               <p class="management__dropzone-title">Загружаем файл…</p>
-              <p class="management__muted">Дождитесь окончания загрузки.</p>
+              <p appAlert="warning">Дождитесь окончания загрузки.</p>
             } @else if (
               materialForm.controls.mode.value === "file" && materialForm.controls.file.value
             ) {
               <p class="management__dropzone-title">{{ materialFileName() || "Файл загружен" }}</p>
-              <p class="management__muted">Можно сохранить материал или заменить файл.</p>
+              <p appAlert="success">Можно сохранить материал или заменить файл.</p>
             } @else {
               <p class="management__dropzone-title">Перетащите файл сюда</p>
               <p class="management__muted">
