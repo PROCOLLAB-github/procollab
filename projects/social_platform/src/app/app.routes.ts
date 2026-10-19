@@ -16,6 +16,27 @@ import { AuthRequiredGuard } from "@core/lib/guards/auth/auth-required.guard";
 
 export const APP_ROUTES: Routes = [
   {
+    path: "organizer-password-reset",
+    loadComponent: () => import("./ui/pages/auth/auth.component").then(c => c.AuthComponent),
+    children: [
+      {
+        path: "",
+        loadComponent: () =>
+          import("./ui/pages/auth/set-password/set-password.component").then(
+            c => c.SetPasswordComponent,
+          ),
+      },
+    ],
+  },
+  {
+    path: "organizer-invitation/:token",
+    data: { invitationRole: "organizer" },
+    loadComponent: () =>
+      import("./ui/pages/evaluation/invitation/expert-invitation.component").then(
+        c => c.ExpertInvitationComponent,
+      ),
+  },
+  {
     path: "expert-password-reset",
     loadComponent: () => import("./ui/pages/auth/auth.component").then(c => c.AuthComponent),
     children: [

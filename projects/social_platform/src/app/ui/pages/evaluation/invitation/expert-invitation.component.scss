@@ -1,6 +1,11 @@
 /** @format */
 
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+.expert-invitation--organizer .ui-button.ui-button {
+  @include program-management-controls.compact-action;
+}
 
 :host {
   display: block;

@@ -16,6 +16,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@a
 import { provideRouter, withRouterConfig } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
 import { EVALUATION_PROVIDERS } from "./infrastructure/di/program/evaluation.providers";
+import { PROGRAM_ORGANIZERS_PROVIDERS } from "./infrastructure/di/program/program-organizers.providers";
 import {
   API_URL,
   BearerTokenInterceptor,
@@ -97,6 +98,7 @@ export const APP_CONFIG: ApplicationConfig = {
     provideAnimations(),
     ...AUTH_PROVIDERS,
     ...EVALUATION_PROVIDERS,
+    ...PROGRAM_ORGANIZERS_PROVIDERS,
     ...FEED_PROVIDERS,
     ...INDUSTRY_PROVIDERS,
     ...INVITE_PROVIDERS,

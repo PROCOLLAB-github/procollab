@@ -8,6 +8,7 @@ import { finalize } from "rxjs";
 import { AlertDirective, ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
 import { TokenService } from "@corelib";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
+import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
 import { LoginUseCase } from "@api/auth/use-cases/login.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ExpertInvitation } from "@domain/program/evaluation-workspace.model";
@@ -31,12 +32,17 @@ import { loggedOut } from "@domain/auth/events/logged-out.event";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertInvitationComponent {
-  private readonly api = inject(EvaluationUseCase);
+  private readonly expertApi = inject(EvaluationUseCase);
   private readonly login = inject(LoginUseCase);
   private readonly events = inject(EventBus);
   private readonly tokens = inject(TokenService);
   private readonly profile = inject(ProfileInfoService);
   private readonly route = inject(ActivatedRoute);
+  readonly isOrganizer = this.route.snapshot.data?.["invitationRole"] === "organizer";
+  private readonly organizerApi = this.isOrganizer ? inject(ProgramOrganizersUseCase) : null;
+  private get api() {
+    return this.organizerApi ?? this.expertApi;
+  }
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly meta = inject(Meta);
@@ -57,6 +63,7 @@ export class ExpertInvitationComponent {
     acceptPolicy: [false, Validators.requiredTrue],
     acceptAge: [false, Validators.requiredTrue],
   });
+  readonly organizerBirthday = this.fb.control("", Validators.required);
   private token = "";
   private sequence = 0;
   constructor() {
@@ -138,8 +145,10 @@ export class ExpertInvitationComponent {
   register(): void {
     if (this.busy()) return;
     this.registration.markAllAsTouched();
-    const data = this.registration.getRawValue();
-    if (this.registration.invalid) {
+    const base = this.registration.getRawValue();
+    const data = this.isOrganizer ? { ...base, birthday: this.organizerBirthday.value } : base;
+    if (this.isOrganizer) this.organizerBirthday.markAsTouched();
+    if (this.registration.invalid || (this.isOrganizer && this.organizerBirthday.invalid)) {
       this.error.set("Заполните обязательные поля и подтвердите согласия.");
       return;
     }
@@ -159,6 +168,7 @@ export class ExpertInvitationComponent {
         next: result => {
           this.tokens.memTokens(result);
           this.registration.reset();
+          this.organizerBirthday.reset();
           this.hasSession.set(true);
           this.profile.invalidateProfile();
           this.profile.ensureProfileLoaded();
@@ -201,5 +211,10 @@ export class ExpertInvitationComponent {
         next: () => this.mode.set("sent"),
         error: e => this.error.set(evaluationError(e)),
       });
+  }
+  destination(programId: number): string {
+    return this.isOrganizer
+      ? this.paths.program.management(programId, "settings")
+      : this.paths.program.projectsRating(programId);
   }
 }
