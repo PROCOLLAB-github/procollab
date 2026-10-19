@@ -38,6 +38,7 @@ import { FileService } from "@corelib";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
 import {
   ManagementMaterial,
+  ManagementParticipant,
   ManagementProject,
   ManagementSection,
   ManagementSettingsWrite,
@@ -57,6 +58,7 @@ import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
 import { ManagementResultsComponent } from "./results/results.component";
 import { ManagementOrganizersComponent } from "./organizers/organizers.component";
+import { ManagementRegistrationComponent } from "./registration/registration.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -87,6 +89,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ManagementExpertsComponent,
     ManagementResultsComponent,
     ManagementOrganizersComponent,
+    ManagementRegistrationComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -123,6 +126,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly exportingParticipants = signal(false);
   readonly participantExportError = signal(false);
   readonly participantExportSuccess = signal(false);
+  readonly participantAnswers = signal<ManagementParticipant | null>(null);
   readonly hasListFilters = computed(() => {
     const q = this.state.context?.query;
     // Depend on the list signals: context is updated before the request resolves.
@@ -151,6 +155,8 @@ export class ProgramManagementComponent implements OnInit {
   readonly expertsForm = viewChild(ManagementExpertsComponent);
   readonly organizersForm = viewChild(ManagementOrganizersComponent);
   readonly organizersStatus = signal({ dirty: false, busy: false });
+  readonly registrationForm = viewChild(ManagementRegistrationComponent);
+  readonly registrationStatus = signal({ dirty: false, busy: false });
   organizerAccessRemoved(): void {
     const id = this.state.program()?.id;
     this.organizersStatus.set({ dirty: false, busy: false });
@@ -195,6 +201,7 @@ export class ProgramManagementComponent implements OnInit {
     { id: "project-form", label: "Кейсы и поля" },
     { id: "criteria", label: "Оценивание" },
     { id: "organizers", label: "Организаторы" },
+    { id: "registration", label: "Регистрация" },
   ];
   readonly basicForm = this.fb.group({
     name: ["", [Validators.required, Validators.pattern(/\S/)]],
@@ -206,7 +213,6 @@ export class ProgramManagementComponent implements OnInit {
     mobileCoverImageAddress: [""],
     imageFraming: this.fb.control<ProgramImageFraming>(programImageFraming()),
     advertisementImageAddress: [""],
-    registrationLink: [""],
     presentationAddress: [""],
   });
   readonly datesForm = this.fb.group({
@@ -315,7 +321,8 @@ export class ProgramManagementComponent implements OnInit {
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||
       this.expertsStatus().busy ||
-      this.organizersStatus().busy
+      this.organizersStatus().busy ||
+      this.registrationStatus().busy
     ) {
       event.preventDefault();
       event.returnValue = "";
@@ -353,7 +360,8 @@ export class ProgramManagementComponent implements OnInit {
             tab === "materials" ||
             tab === "project-form" ||
             tab === "criteria" ||
-            tab === "organizers"
+            tab === "organizers" ||
+            tab === "registration"
             ? tab
             : "basic",
         );
@@ -582,7 +590,8 @@ export class ProgramManagementComponent implements OnInit {
       this.projectFormStatus().dirty ||
       this.criteriaStatus().dirty ||
       this.expertsStatus().dirty ||
-      this.organizersStatus().dirty
+      this.organizersStatus().dirty ||
+      this.registrationStatus().dirty
     );
   }
   async canLeave(): Promise<boolean> {
@@ -592,7 +601,8 @@ export class ProgramManagementComponent implements OnInit {
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||
       this.expertsStatus().busy ||
-      this.organizersStatus().busy
+      this.organizersStatus().busy ||
+      this.registrationStatus().busy
     )
       return false;
     if (!this.dirty()) return true;
@@ -615,6 +625,8 @@ export class ProgramManagementComponent implements OnInit {
       this.expertsStatus.set({ dirty: false, busy: false });
       this.organizersForm()?.discard();
       this.organizersStatus.set({ dirty: false, busy: false });
+      this.registrationForm()?.discard();
+      this.registrationStatus.set({ dirty: false, busy: false });
     }
     return yes;
   }
@@ -634,7 +646,6 @@ export class ProgramManagementComponent implements OnInit {
       mobileCoverImageAddress: p.mobileCoverImageAddress ?? "",
       imageFraming: programImageFraming(p.imageFraming),
       advertisementImageAddress: p.advertisementImageAddress ?? "",
-      registrationLink: p.registrationLink ?? "",
       presentationAddress: p.presentationAddress ?? "",
     });
     this.datesForm.reset({
@@ -654,6 +665,7 @@ export class ProgramManagementComponent implements OnInit {
       section === "project-form" ||
       section === "criteria" ||
       section === "organizers" ||
+      section === "registration" ||
       this.saving() ||
       this.uploading()
     )

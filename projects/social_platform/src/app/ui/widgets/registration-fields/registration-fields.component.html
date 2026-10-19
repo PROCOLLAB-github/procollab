@@ -1,0 +1,112 @@
+<!-- @format -->
+
+@for (field of fields(); track field.id) {
+  <div class="answer">
+    <label [for]="prefix() + field.id">{{ field.label }}{{ field.required ? " *" : "" }}</label>
+    @if (field.source === "universities") {
+      <app-university-select
+        [inputId]="prefix() + field.id"
+        [allowOther]="field.allowOther"
+        [prefixOther]="true"
+        [formControl]="field.type === 'multiselect' ? picker(field) : control(field)"
+      />
+      @if (field.type === "multiselect") {
+        @for (value of $any(control(field).value); track value) {
+          <label class="answer__choice"
+            ><input appChoice type="checkbox" checked (change)="toggle(field, value, false)" />{{
+              value
+            }}</label
+          >
+        }
+      }
+    } @else if (field.type === "select") {
+      <select
+        appField
+        [id]="prefix() + field.id"
+        [disabled]="control(field).disabled"
+        [value]="other(field) !== null ? '__other__' : control(field).value"
+        (change)="select(field, $any($event.target).value)"
+      >
+        <option value="">Выберите вариант</option>
+        @for (option of choices(field); track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+        @if (field.allowOther) {
+          <option value="__other__">Другое</option>
+        }
+      </select>
+    } @else if (field.type === "multiselect") {
+      <details class="answer__multiple">
+        <summary>Выбрать варианты</summary>
+        @for (option of choices(field); track option) {
+          <label class="answer__choice"
+            ><input
+              appChoice
+              type="checkbox"
+              [disabled]="control(field).disabled"
+              [checked]="selected(field, option)"
+              (change)="toggle(field, option, $any($event.target).checked)"
+            />{{ option }}</label
+          >
+        }
+        @if (field.allowOther) {
+          <label class="answer__choice"
+            ><input
+              appChoice
+              type="checkbox"
+              [disabled]="control(field).disabled"
+              [checked]="other(field) !== null"
+              (change)="
+                $any($event.target).checked
+                  ? setOther(field, '')
+                  : toggle(field, 'Другое: ' + other(field), false)
+              "
+            />Другое</label
+          >
+        }
+      </details>
+    } @else if (field.type === "textarea") {
+      <textarea
+        appField
+        [id]="prefix() + field.id"
+        [formControl]="control(field)"
+        rows="3"
+        maxlength="10000"
+      ></textarea>
+    } @else if (field.type === "number") {
+      <input
+        appField
+        type="number"
+        step="any"
+        [id]="prefix() + field.id"
+        [formControl]="control(field)"
+      />
+    } @else {
+      <input
+        appField
+        [id]="prefix() + field.id"
+        [formControl]="control(field)"
+        [type]="field.type"
+        maxlength="1000"
+      />
+    }
+    @if (other(field) !== null && field.source !== "universities") {
+      <label
+        >Укажите свой ответ<input
+          appField
+          [disabled]="control(field).disabled"
+          [value]="other(field)"
+          (input)="setOther(field, $any($event.target).value)"
+          maxlength="492"
+      /></label>
+    }
+    @if (field.helpText) {
+      <small>{{ field.helpText }}</small>
+    }
+    @if (errors()[field.id] || (control(field).touched && control(field).invalid)) {
+      <p class="answer__error" role="alert">
+        {{ errors()[field.id] || "Заполните обязательное поле." }}
+      </p>
+    }
+  </div>
+}

@@ -16,6 +16,26 @@ import { AuthRequiredGuard } from "@core/lib/guards/auth/auth-required.guard";
 
 export const APP_ROUTES: Routes = [
   {
+    path: "program-registration/:id",
+    loadComponent: () =>
+      import("./ui/pages/program/registration/public-registration.component").then(
+        c => c.PublicRegistrationComponent,
+      ),
+  },
+  {
+    path: "program-password-reset",
+    loadComponent: () => import("./ui/pages/auth/auth.component").then(c => c.AuthComponent),
+    children: [
+      {
+        path: "",
+        loadComponent: () =>
+          import("./ui/pages/auth/set-password/set-password.component").then(
+            c => c.SetPasswordComponent,
+          ),
+      },
+    ],
+  },
+  {
     path: "organizer-password-reset",
     loadComponent: () => import("./ui/pages/auth/auth.component").then(c => c.AuthComponent),
     children: [

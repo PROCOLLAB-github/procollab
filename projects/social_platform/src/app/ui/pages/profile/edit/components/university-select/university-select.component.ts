@@ -35,6 +35,8 @@ import { catchError, map, of, Subject, switchMap, timer } from "rxjs";
 })
 export class UniversitySelectComponent implements ControlValueAccessor {
   readonly error = input(false);
+  readonly allowOther = input(true);
+  readonly prefixOther = input(false);
   readonly inputId = input("organizationName");
   readonly inputElement = viewChild<ElementRef<HTMLInputElement>>("nameInput");
   readonly text = signal("");
@@ -80,8 +82,9 @@ export class UniversitySelectComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string | null): void {
-    this.text.set(value ?? "");
-    this.custom.set(false);
+    const custom = this.prefixOther() && !!value?.startsWith("Другое: ");
+    this.text.set(custom ? value!.slice(8) : (value ?? ""));
+    this.custom.set(custom);
     this.close();
   }
 
@@ -101,7 +104,7 @@ export class UniversitySelectComponent implements ControlValueAccessor {
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.text.set(value);
-    this.onChange(this.custom() ? value.trim() : "");
+    this.onChange(this.custom() ? (this.prefixOther() ? "Другое: " : "") + value.trim() : "");
     if (!this.custom()) this.search(value, 200);
   }
 
@@ -141,8 +144,9 @@ export class UniversitySelectComponent implements ControlValueAccessor {
   }
 
   selectOther(): void {
+    if (!this.allowOther()) return;
     this.custom.set(true);
-    this.onChange(this.text().trim());
+    this.onChange((this.prefixOther() ? "Другое: " : "") + this.text().trim());
     this.onTouched();
     this.close();
     this.inputElement()?.nativeElement.focus();
@@ -168,7 +172,8 @@ export class UniversitySelectComponent implements ControlValueAccessor {
       if (this.custom()) return;
       event.preventDefault();
       if (!this.open()) this.onFocus();
-      const count = this.universities().length + 1; // Includes Other.
+      const count = this.universities().length + (this.allowOther() ? 1 : 0);
+      if (!count) return;
       this.activeIndex.update(index => {
         if (index < 0) return event.key === "ArrowDown" ? 0 : count - 1;
         return (index + (event.key === "ArrowDown" ? 1 : -1) + count) % count;

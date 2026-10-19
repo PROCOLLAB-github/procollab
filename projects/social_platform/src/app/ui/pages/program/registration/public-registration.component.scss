@@ -1,0 +1,200 @@
+/** @format */
+
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+:host {
+  display: block;
+  min-height: 100dvh;
+  color: var(--black);
+  background: var(--white);
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 41px;
+  font-size: 14px;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+
+  flex-shrink: 0;
+}
+
+.ui-alert {
+  @include program-management-controls.status-notice;
+}
+
+.enrollment {
+  display: grid;
+  gap: 20px;
+  max-width: 600px;
+  padding: 40px 0;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.enrollment__logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 28px;
+}
+
+.enrollment__program {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  background: var(--accent-light);
+  border-radius: 15px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+h2,
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+h2 {
+  color: var(--accent);
+}
+
+.enrollment__program span,
+small,
+p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+small {
+  color: var(--grey-for-text);
+}
+
+.enrollment__card {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  padding: 24px;
+  background: var(--light-white);
+  border-radius: 15px;
+}
+
+.enrollment__form {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.enrollment__form > button {
+  justify-self: start;
+}
+
+.enrollment__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.enrollment__password {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.enrollment__password input {
+  padding-right: 52px;
+}
+
+.enrollment__password .ui-button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  transform: translateY(-50%);
+}
+
+.enrollment__choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+hr {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--medium-grey-for-outline);
+}
+
+a {
+  color: var(--accent);
+}
+
+@media (max-width: 700px) {
+  .enrollment {
+    gap: 20px;
+    padding: 24px 20px;
+  }
+
+  .enrollment__logo {
+    width: 100px;
+    margin-bottom: 8px;
+  }
+
+  .enrollment__card {
+    padding: 20px;
+  }
+
+  .enrollment__columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .enrollment__password .ui-button::after {
+    inset: -6px;
+  }
+
+  .enrollment__form > button {
+    justify-self: stretch;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+

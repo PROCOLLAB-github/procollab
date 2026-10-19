@@ -131,6 +131,7 @@ export class DetailProgramInfoService {
    * Возвращает подтверждённую внешнюю ссылку регистрации, включая legacy-сценарий MIR.
    */
   getRegistrationLink(program: Program): string | null {
+    if (program.registrationManaged) return program.registrationLink;
     const normalizedName = program.name.replace(/\s+/g, " ").trim();
     if (normalizedName.includes(DetailProgramInfoService.MIR_PROGRAM_NAME)) {
       return DetailProgramInfoService.MIR_REGISTRATION_LINK;

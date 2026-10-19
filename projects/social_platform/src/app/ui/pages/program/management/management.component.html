@@ -291,7 +291,20 @@
               ) {
                 <tr>
                   <td data-label="№">{{ offset() + index + 1 }}</td>
-                  <td class="management__name" data-label="Участник">{{ person.name }}</td>
+                  <td class="management__name" data-label="Участник">
+                    @if (person.registrationAnswers?.length) {
+                      <button
+                        appButton="text"
+                        type="button"
+                        (click)="participantAnswers.set(person)"
+                        [attr.aria-label]="'Открыть анкету: ' + person.name"
+                      >
+                        {{ person.name }}
+                      </button>
+                    } @else {
+                      {{ person.name }}
+                    }
+                  </td>
                   <td data-label="Почта">{{ person.email || "Не указана" }}</td>
                   <td data-label="Регион">{{ person.region || "—" }}</td>
                   <td data-label="В программе с">
@@ -512,6 +525,12 @@
           (statusChange)="organizersStatus.set($event)"
           (accessRemoved)="organizerAccessRemoved()"
         />
+      } @else if (settingsTab() === "registration") {
+        <app-management-registration
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="registrationStatus.set($event)"
+        />
       } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
           <h2>Основная информация</h2>
@@ -586,13 +605,7 @@
               />
             }
           }
-          <label for="registration-link"
-            >Страница регистрации<input
-              appField
-              type="url"
-              id="registration-link"
-              formControlName="registrationLink" /></label
-          ><label for="presentation-link"
+          <label for="presentation-link"
             >Презентация или положение<input
               appField
               type="url"
@@ -711,6 +724,25 @@
     }
   }
 </main>
+<app-modal
+  [open]="!!participantAnswers()"
+  labelledBy="participant-answers-heading"
+  (openChange)="!$event && participantAnswers.set(null)"
+>
+  <section class="management__form management__participant-answers">
+    <h2 id="participant-answers-heading">Анкета участника</h2>
+    <p>{{ participantAnswers()?.name }}</p>
+    @for (answer of participantAnswers()?.registrationAnswers ?? []; track $index) {
+      <div>
+        <strong>{{ answer.label }}</strong>
+        <p>{{ answer.value ?? "—" }}</p>
+      </div>
+    }
+    <button appButton="secondary" type="button" (click)="participantAnswers.set(null)">
+      Закрыть
+    </button>
+  </section>
+</app-modal>
 
 @if (state.teamOpen()) {
   <aside

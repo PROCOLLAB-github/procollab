@@ -24,6 +24,7 @@ export class Program {
   year!: number;
   links!: string[];
   registrationLink!: string | null;
+  registrationManaged?: boolean;
   materials!: { title: string; url: string }[];
   shortDescription!: string;
   datetimeRegistrationEnds!: string;

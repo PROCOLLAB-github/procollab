@@ -3,6 +3,12 @@
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
+.management__participant-answers {
+  width: 100%;
+  max-height: 70dvh;
+  overflow: auto;
+}
+
 :host {
   display: block;
   min-width: 0;
