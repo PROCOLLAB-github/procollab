@@ -86,6 +86,7 @@ export interface ManagementPage<T> {
   previous: string | null;
 }
 export interface ManagementProjectsPage extends ManagementPage<ManagementProject> {
+  totalCount?: number;
   caseOptions: string[];
   isCompetitive: boolean;
 }

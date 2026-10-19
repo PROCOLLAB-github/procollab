@@ -135,10 +135,9 @@
     select {
       width: 100%;
       min-height: 41px;
-      padding: 8px 14px;
       font: inherit;
       color: inherit;
-      background: transparent;
+      background-color: transparent;
       border: 1px solid var(--medium-grey-for-outline);
       border-radius: 30px;
     }
@@ -781,3 +780,7 @@
     scroll-behavior: auto;
   }
 }
+
+.management__col-number { width: 36px; }
+
+.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }

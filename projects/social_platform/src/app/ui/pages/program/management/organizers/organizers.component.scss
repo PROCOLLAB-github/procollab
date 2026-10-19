@@ -338,3 +338,6 @@
     margin-right: 0;
   }
 }
+
+.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
+.organizers__badge { @include program-management-controls.status-badge; }

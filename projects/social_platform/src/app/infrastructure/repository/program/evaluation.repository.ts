@@ -8,6 +8,7 @@ export class EvaluationRepository implements EvaluationRepositoryPort {
   readonly programs = this.adapter.programs.bind(this.adapter);
   readonly workspace = this.adapter.workspace.bind(this.adapter);
   readonly saveCaseScope = this.adapter.saveCaseScope.bind(this.adapter);
+  readonly saveInvitationCaseScope = this.adapter.saveInvitationCaseScope.bind(this.adapter);
   readonly saveProjectExperts = this.adapter.saveProjectExperts.bind(this.adapter);
   readonly invite = this.adapter.invite.bind(this.adapter);
   readonly invitationAction = this.adapter.invitationAction.bind(this.adapter);

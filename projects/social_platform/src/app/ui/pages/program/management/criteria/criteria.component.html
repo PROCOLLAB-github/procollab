@@ -32,12 +32,9 @@
         </button>
       </header>
       @if (locked()) {
-        <div class="criteria__note" role="status">
+        <div appAlert="warning">
           <strong>Критерии зафиксированы</strong>
-          <p>
-            В программе уже сохранена первая оценка. Добавление, удаление и изменение критериев
-            недоступны.
-          </p>
+          <p>Первая оценка уже сохранена. Добавлять, удалять и менять критерии больше нельзя.</p>
         </div>
       }
       <section class="criteria__card" aria-labelledby="criteria-heading">
@@ -88,7 +85,7 @@
           </p>
         }
         @if (!locked()) {
-          <p class="criteria__notice">
+          <p appAlert="warning">
             После первой сохранённой оценки весь набор критериев будет зафиксирован.
           </p>
         }
@@ -266,7 +263,7 @@
 >
   <div class="criteria__dialog">
     <h2 id="criteria-conflict-title">Появилась первая оценка</h2>
-    <p>
+    <p appAlert="warning">
       Пока вы редактировали критерии, эксперт сохранил оценку. Набор зафиксирован, ваши изменения не
       применены.
     </p>
