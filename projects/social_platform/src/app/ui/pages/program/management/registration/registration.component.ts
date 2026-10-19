@@ -162,6 +162,10 @@ export class ManagementRegistrationComponent {
     this.trigger = (event?.currentTarget as HTMLElement) ?? null;
     this.dialogError.set(null);
     this.dialog.set(dialog);
+    requestAnimationFrame(() => {
+      if (this.dialog())
+        document.querySelector<HTMLElement>('.registration-modal [aria-label="Закрыть"]')?.focus();
+    });
   }
   async close() {
     if (this.busy()) return;
@@ -308,7 +312,7 @@ export class ManagementRegistrationComponent {
       .subscribe({
         next: result => {
           this.importResult.set(result);
-          this.dialog.set("importPreview");
+          this.open("importPreview");
         },
         error: e => this.dialogError.set(evaluationError(e)),
       });
@@ -316,7 +320,7 @@ export class ManagementRegistrationComponent {
   applyImport() {
     this.editor.controls.options.setValue(this.importResult()?.options.join("\n") ?? "");
     this.editor.markAsDirty();
-    this.dialog.set("field");
+    this.open("field");
   }
   requestConnection() {
     this.connection.markAllAsTouched();

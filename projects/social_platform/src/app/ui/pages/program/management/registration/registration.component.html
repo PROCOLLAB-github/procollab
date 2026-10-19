@@ -235,7 +235,10 @@
         <i appIcon icon="cross" appSquare="24"></i>
       </button>
     </header>
-    <div class="registration__scroll">
+    <div class="registration__scroll" [attr.aria-busy]="busy()">
+      @if (busy() && dialog() === "import") {
+        <p role="status">Проверяем файл…</p>
+      }
       @if (dialogError()) {
         <p appAlert="error" role="alert">{{ dialogError() }}</p>
       }
