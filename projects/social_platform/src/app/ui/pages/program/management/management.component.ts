@@ -22,6 +22,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
 import { debounceTime, distinctUntilChanged, filter, finalize, startWith } from "rxjs";
+import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
 import {
   ButtonDirective,
@@ -114,6 +115,27 @@ export class ProgramManagementComponent implements OnInit {
   readonly search = this.fb.control("");
   readonly caseFilter = this.fb.control("all");
   readonly submissionFilter = this.fb.control("all");
+  readonly regionFilter = this.fb.control("all");
+  readonly activityFilter = this.fb.control("all");
+  readonly activityFrom = this.fb.control("");
+  readonly activityTo = this.fb.control("");
+  readonly participantFilterError = signal<string | null>(null);
+  readonly exportingParticipants = signal(false);
+  readonly participantExportError = signal(false);
+  readonly participantExportSuccess = signal(false);
+  readonly hasListFilters = computed(() => {
+    const q = this.state.context?.query;
+    // Depend on the list signals: context is updated before the request resolves.
+    this.state.participants();
+    this.state.projects();
+    return (
+      !!q &&
+      (!!q.search ||
+        (this.section() === "participants"
+          ? (q.regionScope ?? "all") !== "all" || (q.activity ?? "all") !== "all"
+          : q.caseScope !== "all" || q.submission !== "all"))
+    );
+  });
   private searchNavigation: { value: string } | null = null;
   readonly saving = signal(false);
   readonly uploading = signal<string | null>(null);
@@ -360,6 +382,19 @@ export class ProgramManagementComponent implements OnInit {
           { emitEvent: false },
         );
         this.submissionFilter.setValue(q.get("submission") ?? "all", { emitEvent: false });
+        this.regionFilter.setValue(
+          q.get("region_scope") === "selected"
+            ? `region:${q.get("region") ?? ""}`
+            : q.get("region_scope") === "without_region"
+              ? "without_region"
+              : "all",
+          { emitEvent: false },
+        );
+        this.activityFilter.setValue(q.get("activity") ?? "all", { emitEvent: false });
+        this.activityFrom.setValue(q.get("activity_from") ?? "", { emitEvent: false });
+        this.activityTo.setValue(q.get("activity_to") ?? "", { emitEvent: false });
+        this.participantFilterError.set(null);
+        this.participantExportSuccess.set(false);
         this.state.load({
           programId: id,
           section,
@@ -382,6 +417,21 @@ export class ProgramManagementComponent implements OnInit {
                   ? "without_case"
                   : "all",
             caseName: q.get("case_name") ?? undefined,
+            regionScope:
+              q.get("region_scope") === "selected"
+                ? "selected"
+                : q.get("region_scope") === "without_region"
+                  ? "without_region"
+                  : "all",
+            region: q.get("region") ?? undefined,
+            activity:
+              q.get("activity") === "period"
+                ? "period"
+                : q.get("activity") === "never"
+                  ? "never"
+                  : "all",
+            activityFrom: q.get("activity_from") ?? undefined,
+            activityTo: q.get("activity_to") ?? undefined,
           },
         });
       });
@@ -402,6 +452,77 @@ export class ProgramManagementComponent implements OnInit {
   }
   page(delta: number): void {
     void this.changeQuery({ offset: Math.max(0, this.offset() + delta * 25) });
+  }
+  changeParticipantFilter(field: "region" | "activity" | "from" | "to", value: string): void {
+    const control = {
+      region: this.regionFilter,
+      activity: this.activityFilter,
+      from: this.activityFrom,
+      to: this.activityTo,
+    }[field];
+    control.setValue(value, { emitEvent: false });
+    this.applyParticipantFilters();
+  }
+  applyParticipantFilters(): void {
+    const mode = this.activityFilter.value,
+      from = this.activityFrom.value,
+      to = this.activityTo.value;
+    if (mode === "period" && ((!from && !to) || (from && to && from > to))) {
+      this.participantFilterError.set(
+        !from && !to
+          ? "Укажите начало или конец периода."
+          : "Конец периода должен быть не раньше начала.",
+      );
+      return;
+    }
+    this.participantFilterError.set(null);
+    const region = this.regionFilter.value;
+    void this.changeQuery({
+      region_scope: region.startsWith("region:")
+        ? "selected"
+        : region === "without_region"
+          ? "without_region"
+          : null,
+      region: region.startsWith("region:") ? region.slice(7) : null,
+      activity: mode === "all" ? null : mode,
+      activity_from: mode === "period" ? from || null : null,
+      activity_to: mode === "period" ? to || null : null,
+      offset: 0,
+    });
+  }
+  resetListFilters(): void {
+    void this.changeQuery({
+      search: null,
+      case_scope: null,
+      case_name: null,
+      submission: null,
+      region_scope: null,
+      region: null,
+      activity: null,
+      activity_from: null,
+      activity_to: null,
+      offset: 0,
+    });
+  }
+  exportParticipants(): void {
+    const ctx = this.state.context;
+    if (!ctx || this.exportingParticipants() || this.participantFilterError()) return;
+    this.exportingParticipants.set(true);
+    this.participantExportError.set(false);
+    this.participantExportSuccess.set(false);
+    this.state.api
+      .exportParticipants(ctx.programId, { ...ctx.query, search: this.search.value.trim() })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.exportingParticipants.set(false)),
+      )
+      .subscribe({
+        next: file => {
+          saveAs(file, `program-${ctx.programId}-participants.xlsx`);
+          this.participantExportSuccess.set(true);
+        },
+        error: () => this.participantExportError.set(true),
+      });
   }
   changeCase(value: string): void {
     void this.changeQuery({

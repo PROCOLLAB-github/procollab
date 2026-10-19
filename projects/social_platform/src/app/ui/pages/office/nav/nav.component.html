@@ -162,6 +162,7 @@
       } @else {
         <div>
           <h3 class="text-bold-body-16 notifications__title">уведомления</h3>
+          <app-notification-list />
           <ul class="notifications__invites">
             @for (invite of invites(); track invite.id) {
               <li class="notifications__invite">

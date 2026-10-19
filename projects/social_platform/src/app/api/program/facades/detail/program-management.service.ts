@@ -7,8 +7,7 @@ import { Subject, catchError, forkJoin, map, of, switchMap, takeUntil, tap } fro
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import {
   ManagementEvaluation,
-  ManagementPage,
-  ManagementParticipant,
+  ManagementParticipantsPage,
   ManagementProject,
   ManagementProjectsPage,
   ManagementQuery,
@@ -27,7 +26,7 @@ export interface ManagementContext {
   selectedId?: number;
 }
 interface Content {
-  participants?: ManagementPage<ManagementParticipant>;
+  participants?: ManagementParticipantsPage;
   projects?: ManagementProjectsPage;
   evaluation?: ManagementEvaluation;
 }
@@ -40,7 +39,7 @@ export class ProgramManagementService {
   private readonly requests = new Subject<ManagementContext>();
   private readonly cancelTeam = new Subject<void>();
   readonly program = signal<ProgramManagement | null>(null);
-  readonly participants = signal<ManagementPage<ManagementParticipant> | null>(null);
+  readonly participants = signal<ManagementParticipantsPage | null>(null);
   readonly projects = signal<ManagementProjectsPage | null>(null);
   readonly evaluation = signal<ManagementEvaluation | null>(null);
   readonly pending = signal(false);

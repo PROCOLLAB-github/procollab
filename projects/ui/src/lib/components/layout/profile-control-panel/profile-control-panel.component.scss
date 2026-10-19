@@ -46,7 +46,10 @@
     top: 100%;
     right: 0%;
     z-index: 20;
+    width: min(380px, calc(100vw - 32px));
+    max-height: min(600px, calc(100dvh - 100px));
     margin-top: 10px;
+    overflow-y: auto;
   }
 
   &__bell {

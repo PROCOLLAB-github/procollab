@@ -44,13 +44,15 @@
                 @if (profile() !== undefined && invites() !== undefined) {
                   <app-profile-control-panel
                     [invites]="invites()"
-                    [hasNotifications]="false"
+                    [hasNotifications]="!!(notificationService.hasNotifications | async)"
+                    [hasNotificationItems]="!!(notificationService.notifications | async)?.length"
                     [hasUnreads]="chatUnreadState.hasUnreads()"
                     [user]="profile()"
                     (acceptInvite)="onAcceptInvite($event)"
                     (rejectInvite)="onRejectInvite($event)"
                     (logout)="onLogout()"
-                  ></app-profile-control-panel>
+                    ><app-notification-list notifications
+                  /></app-profile-control-panel>
                 }
               </div>
               <router-outlet></router-outlet>

@@ -8,8 +8,7 @@ import {
   ManagementEvaluation,
   ManagementMaterial,
   ManagementMaterialWrite,
-  ManagementPage,
-  ManagementParticipant,
+  ManagementParticipantsPage,
   ManagementProjectsPage,
   ManagementQuery,
   ManagementSettingsWrite,
@@ -34,7 +33,8 @@ export abstract class ProgramManagementRepositoryPort {
   abstract participants(
     programId: number,
     query: ManagementQuery,
-  ): Observable<ManagementPage<ManagementParticipant>>;
+  ): Observable<ManagementParticipantsPage>;
+  abstract exportParticipants(programId: number, query: ManagementQuery): Observable<Blob>;
   abstract projects(programId: number, query: ManagementQuery): Observable<ManagementProjectsPage>;
   abstract team(programId: number, linkId: number): Observable<ManagementTeam>;
   abstract evaluation(programId: number, linkId: number): Observable<ManagementEvaluation>;

@@ -7,6 +7,7 @@ import { of } from "rxjs";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { NotificationService } from "@ui/services/notification/notification.service";
 
 describe("HeaderComponent", () => {
   let component: HeaderComponent;
@@ -19,7 +20,10 @@ describe("HeaderComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule, HeaderComponent],
-      providers: [{ provide: AuthInfoService, useValue: authInfoSpy }],
+      providers: [
+        { provide: AuthInfoService, useValue: authInfoSpy },
+        { provide: NotificationService, useValue: { hasNotifications: of(0) } },
+      ],
     }).compileComponents();
   });
 

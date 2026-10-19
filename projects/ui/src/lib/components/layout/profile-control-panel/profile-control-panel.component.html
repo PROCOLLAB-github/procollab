@@ -2,41 +2,29 @@
 
 <div class="control-panel">
   <div class="control-panel__actions">
-    @if (desktopLayout()) {
-      <div class="control-panel__action" (click)="showNotifications = true">
-        <div (clickOutside)="onClickOutside()" class="control-panel__bell">
-          @if (hasNotifications() || hasInvites) {
-            <div class="attention"></div>
-          }
-          <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
-          @if (invites().length) {
-            <div class="control-panel__bell--hasInvites"></div>
-          }
-        </div>
+    <button
+      appButton="icon"
+      type="button"
+      aria-label="Уведомления"
+      [attr.aria-expanded]="showNotifications"
+      class="control-panel__action"
+      (click)="showNotifications = !showNotifications"
+      (clickOutside)="onClickOutside()"
+    >
+      <div class="control-panel__bell">
+        @if (hasNotifications() || hasInvites) {
+          <div class="attention"></div>
+        }
+        <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
+        @if (invites().length) {
+          <div class="control-panel__bell--hasInvites"></div>
+        }
       </div>
-    } @else {
-      <button
-        appButton="icon"
-        type="button"
-        aria-label="Уведомления"
-        [attr.aria-expanded]="showNotifications"
-        class="control-panel__action"
-        (click)="showNotifications = true"
-        (clickOutside)="onClickOutside()"
-      >
-        <div class="control-panel__bell">
-          @if (hasNotifications() || hasInvites) {
-            <div class="attention"></div>
-          }
-          <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
-          @if (invites().length) {
-            <div class="control-panel__bell--hasInvites"></div>
-          }
-        </div>
-      </button>
-    }
+    </button>
     @if (showNotifications) {
       <div class="control-panel__notifications notifications">
+        <h3 class="text-bold-body-16">Уведомления</h3>
+        <ng-content select="[notifications]"></ng-content>
         <ul class="notifications__invites">
           @for (invite of invites(); track invite.id) {
             <li class="notifications__invite">
@@ -46,7 +34,8 @@
                 (reject)="rejectInvite.emit($event)"
               ></app-invite-manage-card>
             </li>
-          } @empty {
+          }
+          @if (!invites().length && !hasNotificationItems()) {
             <app-empty-manage-card></app-empty-manage-card>
           }
         </ul>

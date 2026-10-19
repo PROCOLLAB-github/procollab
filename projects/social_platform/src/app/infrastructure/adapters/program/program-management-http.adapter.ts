@@ -17,8 +17,7 @@ import {
   ManagementEvaluation,
   ManagementMaterial,
   ManagementMaterialWrite,
-  ManagementPage,
-  ManagementParticipant,
+  ManagementParticipantsPage,
   ManagementProjectsPage,
   ManagementQuery,
   ManagementSettingsWrite,
@@ -60,10 +59,24 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
     return this.api.get<ProgramManagement>(`${this.root(id)}/`);
   }
   participants(id: number, q: ManagementQuery) {
-    return this.api.get<ManagementPage<ManagementParticipant>>(
+    return this.api.get<ManagementParticipantsPage>(
       `${this.root(id)}/participants/`,
-      this.params(q),
+      this.participantParams(q),
     );
+  }
+  exportParticipants(id: number, q: ManagementQuery) {
+    return this.api.getFile(`${this.root(id)}/participants/export/`, this.participantParams(q));
+  }
+  private participantParams(q: ManagementQuery): HttpParams {
+    let params = this.params(q)
+      .set("region_scope", q.regionScope ?? "all")
+      .set("activity", q.activity ?? "all");
+    if (q.regionScope === "selected" && q.region) params = params.set("region", q.region);
+    if (q.activity === "period") {
+      if (q.activityFrom) params = params.set("activity_from", q.activityFrom);
+      if (q.activityTo) params = params.set("activity_to", q.activityTo);
+    }
+    return params;
   }
   projects(id: number, q: ManagementQuery) {
     let params = this.params(q).set("submission", q.submission).set("case_scope", q.caseScope);

@@ -3,6 +3,7 @@
 import {
   Component,
   OnInit,
+  DestroyRef,
   signal,
   inject,
   computed,
@@ -24,6 +25,9 @@ import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { AsyncPipe } from "@angular/common";
+import { NotificationService } from "@ui/services/notification/notification.service";
+import { NotificationListComponent } from "@ui/widgets/notification-list/notification-list.component";
 
 /** Корневой компонент рабочего пространства с навигацией и управлением состоянием. */
 @Component({
@@ -41,11 +45,15 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
     RouterLink,
     ProfileControlPanelComponent,
     ProgramSidebarCardComponent,
+    AsyncPipe,
+    NotificationListComponent,
   ],
   providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit {
+  readonly notificationService = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly officeInfoService = inject(OfficeInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly authRegisterService = inject(AuthRegisterService);
@@ -78,6 +86,8 @@ export class OfficeComponent implements OnInit {
   protected currentYear = signal(new Date().getFullYear());
 
   ngOnInit(): void {
+    this.notificationService.start();
+    this.destroyRef.onDestroy(() => this.notificationService.stop());
     this.officeInfoService.initializationOffice();
     this.programShellInfoService.ensureProgramsLoaded();
   }
