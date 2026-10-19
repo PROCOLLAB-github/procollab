@@ -164,7 +164,7 @@ describe("RatingCardComponent", () => {
 
   it("allows editing an existing rating until the evaluation deadline, then returns to readonly on success", async () => {
     render(true);
-    expect(cta().textContent).toContain("проект оценён");
+    expect(cta().textContent).toContain("проект оценен");
     expectReadonly(true);
     const edit = fixture.nativeElement.querySelector(
       ".card__rated--icon button",
@@ -185,7 +185,7 @@ describe("RatingCardComponent", () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(execute).toHaveBeenCalledOnce();
     expect(execute.mock.calls[0][2]).toEqual({ 1: 4, 2: true, 3: "Note" });
-    expect(cta().textContent).toContain("проект оценён");
+    expect(cta().textContent).toContain("проект оценен");
     expectReadonly(true);
   });
 
@@ -198,7 +198,7 @@ describe("RatingCardComponent", () => {
       expect(cta().disabled).toBe(true);
       expect(
         fixture.nativeElement.querySelector(".card__rated app-button").getAttribute("title"),
-      ).toBe("Срок оценивания завершён");
+      ).toBe("Срок оценивания завершен");
       expect(fixture.nativeElement.querySelector(".card__rated--icon")).toBeNull();
       expectReadonly(true);
       cta().click();

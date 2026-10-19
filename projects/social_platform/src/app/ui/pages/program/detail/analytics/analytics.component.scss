@@ -231,6 +231,15 @@
   @include responsive.apply-desktop {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  &--priority {
+    @include responsive.apply-desktop {
+      > .attention,
+      > .program-deadlines {
+        align-self: stretch;
+      }
+    }
+  }
 }
 
 .analytics-card {

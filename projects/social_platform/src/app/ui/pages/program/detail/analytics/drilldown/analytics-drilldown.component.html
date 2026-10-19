@@ -47,18 +47,18 @@
           }
           @if (state.view() === "projects-awaiting-evaluation") {
             <p class="analytics-drilldown__secondary">
-              Сданные работы, оценивание которых ещё не завершено.
+              Сданные работы, оценивание которых еще не завершено.
             </p>
           }
           @if (state.view() === "projects-not-submitted") {
             <p class="analytics-drilldown__secondary">
-              Проекты программы, которые ещё не отправили решение.
+              Проекты программы, которые еще не отправили решение.
             </p>
             @if (state.notSubmittedPage(); as page) {
               @if (page.applicable) {
                 <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
                   @if (page.submissionDeadline) {
-                    {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершён" }}
+                    {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершен" }}
                     {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
                   } @else {
                     Срок сдачи не указан
@@ -113,7 +113,7 @@
               {{
                 cases.page()?.count === 0
                   ? "Нет проектов для выгрузки"
-                  : "Все найденные проекты с учётом поиска и фильтров"
+                  : "Все найденные проекты с учетом поиска и фильтров"
               }}
             </p>
             @if (cases.exportError(); as error) {
@@ -498,7 +498,7 @@
                       <td data-label="В программе с">{{ item.linkedAt | date: "dd.MM.yyyy" }}</td>
                       <td data-label="Статус">
                         <span class="analytics-drilldown__badge">{{
-                          page.submissionOpen ? "Не сдано" : "Срок сдачи завершён"
+                          page.submissionOpen ? "Не сдано" : "Срок сдачи завершен"
                         }}</span>
                       </td>
                       <td data-label="Действие">
@@ -595,7 +595,7 @@
                     [class.analytics-drilldown__badge--pending]="expert.severity === 'warning'"
                     >{{
                       expert.severity === "critical"
-                        ? "Дедлайн оценивания прошёл"
+                        ? "Дедлайн оценивания прошел"
                         : "До дедлайна ≤ 5 дней"
                     }}</span
                   >
@@ -651,7 +651,7 @@
               />
             }
             @if (state.notReadyBacklog().length) {
-              <h3 class="analytics-drilldown__section">Ещё не сданы</h3>
+              <h3 class="analytics-drilldown__section">Еще не сданы</h3>
               <ng-container
                 *ngTemplateOutlet="assignmentTable; context: { $implicit: state.notReadyBacklog() }"
               />

@@ -24,7 +24,7 @@ describe("CookieConsentComponent", () => {
     return fixture.componentInstance;
   }
 
-  it("показывает баннер, если решение ещё не сохранено", () => {
+  it("показывает баннер, если решение еще не сохранено", () => {
     expect(createComponent().visible).toBe(true);
   });
 

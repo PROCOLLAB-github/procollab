@@ -17,7 +17,7 @@ describe("SpecializationsHttpAdapter", () => {
     adapter = TestBed.inject(SpecializationsHttpAdapter);
   }
 
-  it("getSpecializationsNested идёт в GET /auth/users/specializations/nested", () => {
+  it("getSpecializationsNested идет в GET /auth/users/specializations/nested", () => {
     setup();
     api.get.mockReturnValue(of([]));
 
@@ -26,7 +26,7 @@ describe("SpecializationsHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/specializations/nested/");
   });
 
-  it("getSpecializationsInline идёт в /inline c limit/offset/name__icontains", () => {
+  it("getSpecializationsInline идет в /inline c limit/offset/name__icontains", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 

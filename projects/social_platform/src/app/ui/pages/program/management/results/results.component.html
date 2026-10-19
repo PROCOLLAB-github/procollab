@@ -5,7 +5,7 @@
     <div class="results__actions">
       <button type="button" appButton="secondary" (click)="openModal('formula')">
         <span class="results__desktop-label">Как считается балл</span
-        ><span class="results__mobile-label">Расчёт балла</span>
+        ><span class="results__mobile-label">Расчет балла</span>
       </button>
       <button
         type="button"
@@ -42,7 +42,7 @@
     </div>
     <div class="results__toolbar">
       <p class="results__muted" aria-live="polite">
-        В рейтинге: {{ readyCount() }} · Ещё оцениваются: {{ pendingCount() }}
+        В рейтинге: {{ readyCount() }} · Еще оцениваются: {{ pendingCount() }}
       </p>
       <button
         type="button"
@@ -102,7 +102,7 @@
           />
         }
         @if (pending(group.projects).length) {
-          <h3 class="results__pending">Ещё оцениваются · {{ pending(group.projects).length }}</h3>
+          <h3 class="results__pending">Еще оцениваются · {{ pending(group.projects).length }}</h3>
           @for (project of pending(group.projects); track project.id) {
             <ng-container
               [ngTemplateOutlet]="projectRow"
@@ -292,7 +292,7 @@
     </header>
     @if (modal() === "formula") {
       <p>
-        Складываем баллы по числовым критериям у каждого эксперта, затем берём среднее полных
+        Складываем баллы по числовым критериям у каждого эксперта, затем берем среднее полных
         оценок. Вес экспертов одинаковый.
       </p>
       @if (sampleFormula()) {
@@ -358,7 +358,7 @@
         </p>
       }
       @if (exportError()) {
-        <p appAlert="error" role="alert">Не удалось подготовить файл. Попробуйте ещё раз.</p>
+        <p appAlert="error" role="alert">Не удалось подготовить файл. Попробуйте еще раз.</p>
       }
       <button
         type="button"

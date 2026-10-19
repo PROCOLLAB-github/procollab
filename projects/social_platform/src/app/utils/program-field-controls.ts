@@ -28,7 +28,7 @@ export function programFieldControl(field: PartnerProgramFields, value: unknown 
 
 export const PROGRAM_FIELD_TYPE_LABELS: Record<PartnerProgramFields["fieldType"], string> = {
   text: "Короткий текст",
-  textarea: "Развёрнутый текст",
+  textarea: "Развернутый текст",
   select: "Выбор из списка",
   file: "Файл",
   checkbox: "Флажок",

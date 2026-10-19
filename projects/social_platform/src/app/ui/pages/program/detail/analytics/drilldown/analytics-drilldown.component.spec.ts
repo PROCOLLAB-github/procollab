@@ -277,13 +277,13 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await attached;
     await fixture.whenStable();
     const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
-    expect(dialog().textContent).toContain("Дедлайн оценивания прошёл");
+    expect(dialog().textContent).toContain("Дедлайн оценивания прошел");
     expect(dialog().textContent).toContain("Выполнено 3 из 8");
     expect(dialog().textContent).toContain("2 д 4 ч");
     button("Посмотреть назначения").click();
     await fixture.whenStable();
     expect(dialog().querySelector('[data-assignment-id="3"]')).toBeNull();
-    expect(dialog().textContent).toContain("Ещё не сданы");
+    expect(dialog().textContent).toContain("Еще не сданы");
     expect(dialog().querySelector(".analytics-drilldown__table--assignments")).toBeNull();
     expect(dialog().closest(".analytics-drilldown-body--assignments")).toBeNull();
     expect(dialog().querySelector('[data-label="Прогресс"]')).toBeNull();
@@ -323,7 +323,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
 
   it.each([
     ["all", "Назначений экспертов пока нет"],
-    ["completed", "Завершённых оценок пока нет"],
+    ["completed", "Завершенных оценок пока нет"],
     ["pending", "Все назначения выполнены"],
   ] as const)("scope %s имеет понятный empty state", async (scope, message) => {
     assignments.execute.mockReturnValue(of(ok([])));
@@ -332,7 +332,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     expect(dialog().querySelector("table")).toBeNull();
   });
 
-  it("loading и score error сохраняют dialog; Escape из detail закрывает всё", async () => {
+  it("loading и score error сохраняют dialog; Escape из detail закрывает все", async () => {
     const response = new Subject<ReturnType<typeof ok<ReturnType<typeof assignment>[]>>>();
     assignments.execute.mockReturnValue(response);
     await open();
@@ -365,7 +365,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await attached;
     await fixture.whenStable();
     expect(dialog().textContent).toContain("До дедлайна ≤ 5 дней");
-    expect(dialog().textContent).not.toContain("Дедлайн оценивания прошёл");
+    expect(dialog().textContent).not.toContain("Дедлайн оценивания прошел");
     button("Посмотреть назначения").click();
     await fixture.whenStable();
     expect(dialog().textContent).toContain("У эксперта нет ожидающих назначений");

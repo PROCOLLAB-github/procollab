@@ -45,7 +45,7 @@
           >Статус<select appField aria-label="Статус" [formControl]="status">
             <option value="all">Все статусы</option>
             <option value="joined">В программе</option>
-            <option value="pending">Приглашён</option>
+            <option value="pending">Приглашен</option>
             <option value="expired">Истекло</option>
             <option value="revoked">Отозвано</option>
           </select></label
@@ -452,7 +452,7 @@
               [attr.aria-invalid]="email.touched && email.invalid"
               required
           /></label>
-          <p>Если аккаунта ещё нет, эксперт сможет зарегистрироваться по ссылке из письма.</p>
+          <p>Если аккаунта еще нет, эксперт сможет зарегистрироваться по ссылке из письма.</p>
           <fieldset class="experts__case-picker">
             <legend>Какие кейсы будет оценивать эксперт</legend>
             <ng-container [ngTemplateOutlet]="caseScopeChooser" />
@@ -526,7 +526,7 @@
         </section>
         <section class="experts__method">
           <h3>Автоматически</h3>
-          <p>Выбрать экспертов для каждого кейса и распределить проекты с учётом общей нагрузки.</p>
+          <p>Выбрать экспертов для каждого кейса и распределить проекты с учетом общей нагрузки.</p>
           <button type="button" appButton="primary" (click)="open('auto')">
             Настроить распределение
           </button>
@@ -546,7 +546,7 @@
         @if (quotaPreview(); as preview) {
           <div [appAlert]="preview.projectsMissingExperts ? 'warning' : 'success'">
             <strong
-              >Полностью оценённых проектов: {{ preview.readyBefore }} →
+              >Полностью оцененных проектов: {{ preview.readyBefore }} →
               {{ preview.readyAfter }}</strong
             >
             <p>
@@ -555,7 +555,7 @@
                 preview.projectsMissingExperts ?? 0 | pluralize: ["проект", "проекта", "проектов"]
               }}.
             </p>
-            <p>Сохранённые оценки и текущие назначения останутся.</p>
+            <p>Сохраненные оценки и текущие назначения останутся.</p>
           </div>
         }
         <footer class="experts__actions">
@@ -600,7 +600,7 @@
             }
             @for (shortage of preview.shortages; track shortage.projectId) {
               <p appAlert="warning">
-                {{ shortage.projectName }} · {{ caseLabel(shortage.caseName ?? null) }} — нужно ещё
+                {{ shortage.projectName }} · {{ caseLabel(shortage.caseName ?? null) }} — нужно еще
                 {{ shortage.missing }}
                 {{ shortage.missing | pluralize: ["эксперт", "эксперта", "экспертов"] }}
               </p>
@@ -612,7 +612,7 @@
             }
           </div>
           <h3>Нагрузка по всем кейсам</h3>
-          <p>Проекты, которые ещё нужно оценить</p>
+          <p>Проекты, которые еще нужно оценить</p>
           <div class="experts__scroll">
             <table class="experts__load-table">
               <thead>

@@ -89,7 +89,7 @@ export class ProjectTeamService {
           if (!result.ok) {
             this.snackbar.error(
               teamOperationErrorMessage(result.error.cause) ??
-                "Не удалось изменить роль в приглашении. Попробуйте ещё раз.",
+                "Не удалось изменить роль в приглашении. Попробуйте еще раз.",
             );
             return;
           }
@@ -107,7 +107,7 @@ export class ProjectTeamService {
         if (!result.ok) {
           this.snackbar.error(
             teamOperationErrorMessage(result.error.cause) ??
-              "Не удалось отозвать приглашение. Попробуйте ещё раз.",
+              "Не удалось отозвать приглашение. Попробуйте еще раз.",
           );
           return;
         }

@@ -422,13 +422,13 @@ export class ManagementExpertsComponent {
     if (row.status === "joined") return "В программе";
     if (row.status === "expired") return "Истекло";
     if (row.status === "revoked") return "Отозвано";
-    return "Приглашён";
+    return "Приглашен";
   }
   deliveryLabel(row: ExpertRow): string {
     if (row.status !== "pending") return "";
     if (row.deliveryStatus === "failed") return "Не удалось отправить письмо";
     if (row.deliveryStatus === "queued") return "Письмо в очереди";
-    if (row.deliveryStatus === "sent") return "Письмо отправлено · ждём принятия";
+    if (row.deliveryStatus === "sent") return "Письмо отправлено · ждем принятия";
     return "Статус отправки неизвестен";
   }
   initials(row: ExpertRow): string {
@@ -634,7 +634,7 @@ export class ManagementExpertsComponent {
     });
   }
   candidateReason(expert: ExpertRow): string | null {
-    if (expert.status !== "joined") return "Приглашение ещё не принято";
+    if (expert.status !== "joined") return "Приглашение еще не принято";
     const id = Number(expert.id);
     if (this.modal() === "project") {
       const targets = this.targets();

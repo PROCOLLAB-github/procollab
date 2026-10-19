@@ -78,7 +78,7 @@ export class DetailProjectInfoService {
           if (message) this.snackbar.error(message);
           else
             this.snackbar.error(
-              "Не удалось выйти из команды. Обновите страницу и попробуйте ещё раз.",
+              "Не удалось выйти из команды. Обновите страницу и попробуйте еще раз.",
             );
           return;
         }

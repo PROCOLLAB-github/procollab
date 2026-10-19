@@ -154,7 +154,7 @@ export class UploadFileComponent implements ControlValueAccessor {
               "Файл превышает допустимый размер. Уменьшите или измените размер файла и попробуйте снова.",
             );
           } else {
-            this.snackbarService.error("Ошибка загрузки файла. Попробуйте ещё раз.");
+            this.snackbarService.error("Ошибка загрузки файла. Попробуйте еще раз.");
           }
         },
       });
@@ -184,7 +184,7 @@ export class UploadFileComponent implements ControlValueAccessor {
             return;
           }
           this.loading = false;
-          this.snackbarService.error("Не удалось удалить файл. Попробуйте ещё раз.");
+          this.snackbarService.error("Не удалось удалить файл. Попробуйте еще раз.");
           this.cdr.markForCheck();
         },
       });

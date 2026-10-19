@@ -59,7 +59,7 @@ describe("ResponseCardComponent", () => {
   it.each([
     [null, "На рассмотрении", "pending"],
     [true, "Принят", "success"],
-    [false, "Отклонён", "declined"],
+    [false, "Отклонен", "declined"],
   ] as const)("отображает понятный статус для isApproved=%s", (isApproved, label, className) => {
     fixture.componentRef.setInput("response", createResponse(isApproved));
     fixture.detectChanges();

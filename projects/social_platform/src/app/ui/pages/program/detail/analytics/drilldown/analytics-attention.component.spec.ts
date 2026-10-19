@@ -137,7 +137,7 @@ describe("Attention views: real overlay", () => {
   it("visit opens the participant list with server search and pagination", async () => {
     visit.execute.mockReturnValue(of(ok(participantsPage({ count: 30 }))));
     await open("participants-without-visit");
-    expect(dialog().textContent).toContain("Участники ещё не заходили на платформу");
+    expect(dialog().textContent).toContain("Участники еще не заходили на платформу");
     expect(dialog().textContent).toContain("Анна Петрова");
     expect(dialog().querySelector("input")?.placeholder).toBe("Поиск по имени");
     expect(dialog().querySelector("a")?.getAttribute("href")).toBe("/office/profile/123");
@@ -217,7 +217,7 @@ describe("Attention views: real overlay", () => {
                 programProjectId: 72,
                 status: "awaiting_evaluation",
                 reason: "no_completed_evaluations",
-                reasonLabel: "Нет завершённых оценок",
+                reasonLabel: "Нет завершенных оценок",
                 assignmentsCompleted: 0,
               }),
             ],
@@ -234,13 +234,13 @@ describe("Attention views: real overlay", () => {
       "Не указан",
       "Дата сдачи неизвестна",
       "Нет назначений",
-      "Нет завершённых оценок",
+      "Нет завершенных оценок",
     ])
       expect(dialog().textContent).toContain(text);
     expect(dialog().querySelectorAll("tbody tr")).toHaveLength(3);
     expect(dialog().querySelector('[data-reason="no_assignments"]')).not.toBeNull();
     expect(dialog().querySelector("a")?.getAttribute("href")).toBe("/office/projects/55");
-    expect(dialog().textContent).not.toContain("Ещё не сданы");
+    expect(dialog().textContent).not.toContain("Еще не сданы");
   });
 
   it.each([true, false, null])(
@@ -272,12 +272,12 @@ describe("Attention views: real overlay", () => {
           ? "Срок сдачи не указан"
           : openState
             ? "Сдача открыта до"
-            : "Срок сдачи завершён",
+            : "Срок сдачи завершен",
       );
       if (openState !== null) expect(metadata).toMatch(/10\.09\.2026, 23:59/);
       for (const text of [
         "Проекты не сдали решение",
-        "Проекты программы, которые ещё не отправили решение.",
+        "Проекты программы, которые еще не отправили решение.",
         "Проект А",
         "Анна Петрова",
         "Не указан",
@@ -286,7 +286,7 @@ describe("Attention views: real overlay", () => {
       ])
         expect(dialog().textContent).toContain(text);
       expect(dialog().querySelector('[data-label="Статус"]')?.textContent).toContain(
-        openState === true ? "Не сдано" : "Срок сдачи завершён",
+        openState === true ? "Не сдано" : "Срок сдачи завершен",
       );
       expect(
         Array.from(dialog().querySelectorAll("tbody tr:first-child td"), cell =>

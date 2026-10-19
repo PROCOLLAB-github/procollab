@@ -16,7 +16,7 @@ function collectMessages(value: unknown): string[] {
 
 export function getSendVacancyResponseError(error: unknown): string {
   if (getStatus(error) !== 400) {
-    return "Не удалось отправить отклик. Попробуйте ещё раз";
+    return "Не удалось отправить отклик. Попробуйте еще раз";
   }
 
   const body = typeof error === "object" && error !== null && "error" in error ? error.error : null;
@@ -32,7 +32,7 @@ export function getSendVacancyResponseError(error: unknown): string {
     return "На эту вакансию больше нельзя откликнуться";
   }
 
-  return "Не удалось отправить отклик. Попробуйте ещё раз";
+  return "Не удалось отправить отклик. Попробуйте еще раз";
 }
 
 export function getVacancyResponsesLoadError(error: unknown): VacancyResponsesLoadError {

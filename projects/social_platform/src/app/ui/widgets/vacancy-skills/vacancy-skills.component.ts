@@ -33,7 +33,7 @@ interface VacancySkill {
               [attr.aria-expanded]="expanded()"
               (click)="expanded.set(!expanded())"
             >
-              {{ expanded() ? "Свернуть" : "Ещё +" + (skills().length - limit()) }}
+              {{ expanded() ? "Свернуть" : "Еще +" + (skills().length - limit()) }}
             </button>
           </li>
         }

@@ -17,7 +17,7 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
     adapter = TestBed.inject(ProjectCollaboratorsHttpAdapter);
   }
 
-  it("deleteCollaborator идёт в DELETE /projects/:pid/collaborators?id=:uid", () => {
+  it("deleteCollaborator идет в DELETE /projects/:pid/collaborators?id=:uid", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 
@@ -26,7 +26,7 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/collaborators/?id=7");
   });
 
-  it("patchSwitchLeader идёт в PATCH /projects/:pid/collaborators/:uid/switch-leader/", () => {
+  it("patchSwitchLeader идет в PATCH /projects/:pid/collaborators/:uid/switch-leader/", () => {
     setup();
     api.patch.mockReturnValue(of(undefined));
 
@@ -38,7 +38,7 @@ describe("ProjectCollaboratorsHttpAdapter", () => {
     );
   });
 
-  it("deleteLeave идёт в DELETE /projects/:pid/collaborators/leave", () => {
+  it("deleteLeave идет в DELETE /projects/:pid/collaborators/leave", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 

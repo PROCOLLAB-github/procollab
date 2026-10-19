@@ -77,7 +77,7 @@ describe("ProfileNewsRepository", () => {
       });
     }));
 
-  it("readNews отмечает только ещё непрочитанные новости", () =>
+  it("readNews отмечает только еще непрочитанные новости", () =>
     new Promise<void>(done => {
       setup();
       storage.getItem.mockReturnValue([1]);

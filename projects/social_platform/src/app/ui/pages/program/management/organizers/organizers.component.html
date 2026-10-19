@@ -42,14 +42,14 @@
         >Статус<select appField [formControl]="status">
           <option value="all">Все статусы</option>
           <option value="joined">Организаторы</option>
-          <option value="pending">Приглашённые</option>
+          <option value="pending">Приглашенные</option>
           <option value="expired">Ссылка истекла</option>
         </select></label
       >
     </div>
     @if (deliveryRefreshPaused()) {
       <p appAlert="warning">
-        Письмо ещё ожидает отправки.
+        Письмо еще ожидает отправки.
         <button type="button" appButton="text" (click)="load()">Обновить статус</button>
       </p>
     }
@@ -247,12 +247,12 @@
         @if (email.touched && email.invalid) {
           <p appAlert="error">Введите корректный email.</p>
         }
-        <p>Если аккаунта ещё нет, предложим зарегистрироваться.</p>
+        <p>Если аккаунта еще нет, предложим зарегистрироваться.</p>
         <footer class="organizers__actions">
           <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">
             Отмена</button
           ><button type="submit" appButton="primary" [disabled]="busy()">
-            {{ busy() ? "Создаём приглашение…" : "Отправить приглашение" }}
+            {{ busy() ? "Создаем приглашение…" : "Отправить приглашение" }}
           </button>
         </footer>
       </form>
@@ -267,7 +267,7 @@
             ? "Ссылка из письма перестанет действовать. При необходимости можно отправить новое приглашение."
             : row.isSelf
               ? "Вы потеряете доступ к управлению программой. Вернуть его сможет другой организатор."
-              : "Доступ к управлению программой закроется сразу. Ранее внесённые изменения сохранятся."
+              : "Доступ к управлению программой закроется сразу. Ранее внесенные изменения сохранятся."
         }}
       </p>
       @if (modal() === "remove" && !row.canRemove) {

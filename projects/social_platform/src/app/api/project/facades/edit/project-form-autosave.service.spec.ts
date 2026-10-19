@@ -85,7 +85,7 @@ describe("ProjectFormAutosaveService", () => {
     expect(JSON.parse(localStorage.getItem(QUEUE_KEY)!)).toEqual([
       { projectId: 31, field: "presentationAddress", value: "" },
     ]);
-    expect(errorFeedback).toHaveBeenCalledWith(expect.stringContaining("ещё не сохранена"));
+    expect(errorFeedback).toHaveBeenCalledWith(expect.stringContaining("еще не сохранена"));
     projectId.set(32);
     control.setValue("https://example.test/project-32", { emitEvent: false });
     control.setValue("");

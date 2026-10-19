@@ -17,7 +17,7 @@ describe("SkillsHttpAdapter", () => {
     adapter = TestBed.inject(SkillsHttpAdapter);
   }
 
-  it("getSkillsNested идёт в GET /core/skills/nested", () => {
+  it("getSkillsNested идет в GET /core/skills/nested", () => {
     setup();
     api.get.mockReturnValue(of([]));
 
@@ -26,7 +26,7 @@ describe("SkillsHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/core/skills/nested/");
   });
 
-  it("getSkillsInline идёт в GET /core/skills/inline c limit/offset/name__icontains", () => {
+  it("getSkillsInline идет в GET /core/skills/inline c limit/offset/name__icontains", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 

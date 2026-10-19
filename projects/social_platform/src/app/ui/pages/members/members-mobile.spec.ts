@@ -100,7 +100,7 @@ describe("Мобильное представление участников", (
     return primitive;
   }
 
-  it("держит статистику перед мобильным списком, под desktop-фильтрами и не перезагружает её при поиске", async () => {
+  it("держит статистику перед мобильным списком, под desktop-фильтрами и не перезагружает ее при поиске", async () => {
     const f = await page();
     const ui = f.debugElement.injector.get(MembersUIInfoService);
     const card = f.nativeElement.querySelector("app-member-statistics-card") as HTMLElement;

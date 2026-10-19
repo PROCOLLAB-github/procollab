@@ -17,7 +17,7 @@ describe("MemberHttpAdapter", () => {
     adapter = TestBed.inject(MemberHttpAdapter);
   }
 
-  it("getMembers идёт в /auth/public-users/ c user_type=1 и limit/offset", () => {
+  it("getMembers идет в /auth/public-users/ c user_type=1 и limit/offset", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 

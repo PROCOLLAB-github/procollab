@@ -18,7 +18,7 @@ describe("ProfileNewsHttpAdapter", () => {
     adapter = TestBed.inject(ProfileNewsHttpAdapter);
   }
 
-  it("fetchNews идёт в GET /auth/users/:id/news/ c limit=10", () => {
+  it("fetchNews идет в GET /auth/users/:id/news/ c limit=10", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
@@ -29,7 +29,7 @@ describe("ProfileNewsHttpAdapter", () => {
     expect(params?.get("limit")).toBe("10");
   });
 
-  it("fetchNewsDetail идёт в GET /auth/users/:uid/news/:nid", () => {
+  it("fetchNewsDetail идет в GET /auth/users/:uid/news/:nid", () => {
     setup();
     api.get.mockReturnValue(of({} as ProfileNews));
 
@@ -38,7 +38,7 @@ describe("ProfileNewsHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/7/news/9/");
   });
 
-  it("addNews идёт в POST /auth/users/:id/news/ с body", () => {
+  it("addNews идет в POST /auth/users/:id/news/ с body", () => {
     setup();
     api.post.mockReturnValue(of({} as ProfileNews));
     const obj = { text: "t", files: ["f"] };
@@ -48,7 +48,7 @@ describe("ProfileNewsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/auth/users/7/news/", obj);
   });
 
-  it("setNewsViewed идёт в POST /auth/users/:uid/news/:nid/set_viewed/", () => {
+  it("setNewsViewed идет в POST /auth/users/:uid/news/:nid/set_viewed/", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -57,7 +57,7 @@ describe("ProfileNewsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/auth/users/7/news/9/set_viewed/", {});
   });
 
-  it("deleteNews идёт в DELETE /auth/users/:uid/news/:nid/", () => {
+  it("deleteNews идет в DELETE /auth/users/:uid/news/:nid/", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 
@@ -66,7 +66,7 @@ describe("ProfileNewsHttpAdapter", () => {
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/auth/users/7/news/9/");
   });
 
-  it("toggleLike идёт в POST /auth/users/:uid/news/:nid/set_liked/ c is_liked", () => {
+  it("toggleLike идет в POST /auth/users/:uid/news/:nid/set_liked/ c is_liked", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -77,7 +77,7 @@ describe("ProfileNewsHttpAdapter", () => {
     });
   });
 
-  it("editNews идёт в PATCH /auth/users/:uid/news/:nid/ c частичными данными", () => {
+  it("editNews идет в PATCH /auth/users/:uid/news/:nid/ c частичными данными", () => {
     setup();
     api.patch.mockReturnValue(of({} as ProfileNews));
     const patch = { text: "new" };

@@ -22,7 +22,7 @@ export function evaluationError(error: unknown): string {
     if (error.status === 409) return "Данные изменились. Обновите список и повторите действие.";
     if (error.status === 400) return "Проверьте заполненные поля и повторите действие.";
   }
-  return "Не удалось выполнить действие. Попробуйте ещё раз.";
+  return "Не удалось выполнить действие. Попробуйте еще раз.";
 }
 export function expertInvitationReturn(value: string | null | undefined): string | null {
   return value && /^\/expert-invitation\/[A-Za-z0-9_-]{20,100}$/.test(value) ? value : null;

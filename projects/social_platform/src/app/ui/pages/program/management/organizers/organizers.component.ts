@@ -277,13 +277,13 @@ export class ManagementOrganizersComponent {
     this.selectedId.set(null);
   }
   label(row: OrganizerRow): string {
-    if (row.status === "joined") return row.active === false ? "Аккаунт отключён" : "Организатор";
+    if (row.status === "joined") return row.active === false ? "Аккаунт отключен" : "Организатор";
     if (row.status === "expired") return "Ссылка истекла";
     return row.deliveryStatus === "failed"
       ? "Не отправлено"
       : row.deliveryStatus === "queued"
         ? "Ожидает отправки"
-        : "Приглашён";
+        : "Приглашен";
   }
   open(mode: "invite" | "remove" | "revoke", event?: Event): void {
     if (this.busy()) return;

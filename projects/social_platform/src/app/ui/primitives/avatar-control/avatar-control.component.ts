@@ -305,7 +305,7 @@ export class AvatarControlComponent implements ControlValueAccessor {
 
   loadImageFailed() {
     this.loggerService.error("Не удалось загрузить изображение");
-    this.showCropperModalErrorMessage = "Не удалось загрузить изображение. Попробуйте ещё раз!";
+    this.showCropperModalErrorMessage = "Не удалось загрузить изображение. Попробуйте еще раз!";
     this.cdr.markForCheck();
   }
 

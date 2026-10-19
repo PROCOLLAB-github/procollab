@@ -54,8 +54,8 @@ describe("Program widget presentation", () => {
     [23 * 3600000, "yellow", "23 ч"],
     [59 * 60000, "yellow", "59 мин"],
     [1, "yellow", "1 мин"],
-    [0, "red", "Срок оценивания истёк"],
-    [-1, "red", "Срок оценивания истёк"],
+    [0, "red", "Срок оценивания истек"],
+    [-1, "red", "Срок оценивания истек"],
   ])("handles deadline distance %i", (delta, tone, text) => {
     const result = expertWidgetPresentation(
       { ...expert, evaluationEnds: new Date(now + Number(delta)).toISOString() },
@@ -124,7 +124,7 @@ describe("Program widget presentation", () => {
       false,
       now,
     );
-    expect(result.text).toBe("Свободное оценивание. Срок оценивания истёк");
+    expect(result.text).toBe("Свободное оценивание. Срок оценивания истек");
   });
   it.each([
     ["none", false, [false, false, false], "Создан"],

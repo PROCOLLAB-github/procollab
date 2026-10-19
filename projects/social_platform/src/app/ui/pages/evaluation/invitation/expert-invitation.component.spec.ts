@@ -149,7 +149,7 @@ describe("Путь приглашённого эксперта", () => {
     expect(tokens.memTokens).toHaveBeenCalledOnce();
     expect(component.mode()).toBe("joined");
   });
-  it("успешный вход ещё не принимает приглашение", () => {
+  it("успешный вход еще не принимает приглашение", () => {
     const { component, api, login, tokens } = setup();
     component.password.setValue("existing-password");
     component.signIn();
@@ -161,7 +161,7 @@ describe("Путь приглашённого эксперта", () => {
     expect(api.accept).not.toHaveBeenCalled();
     expect(component.mode()).toBe("intro");
   });
-  it("ошибка регистрации сохраняет введённые данные", () => {
+  it("ошибка регистрации сохраняет введенные данные", () => {
     const { component, api } = setup();
     api.register.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
     component.registration.setValue({

@@ -96,7 +96,7 @@ export function expertWidgetPresentation(
   }
   if (!Number.isFinite(deadline)) return status("Срок не установлен", "neutral");
   const remaining = deadline - now;
-  if (remaining <= 0) return status("Срок оценивания истёк", "red", tooltip);
+  if (remaining <= 0) return status("Срок оценивания истек", "red", tooltip);
   const duration =
     remaining < 3600000
       ? durationText(Math.ceil(remaining / 60000), ["минута", "минуты", "минут"])

@@ -521,7 +521,7 @@ describe("ProgramAnalyticsComponent", () => {
       expect(row.textContent).toContain("Сегодня");
       vi.advanceTimersByTime(60_000);
       fixture.detectChanges();
-      expect(row.textContent).toContain("Срок завершён");
+      expect(row.textContent).toContain("Срок завершен");
       fixture.destroy();
       vi.runOnlyPendingTimers();
       expect(vi.getTimerCount()).toBe(0);
@@ -625,7 +625,7 @@ describe("ProgramAnalyticsComponent", () => {
     const open = vi.spyOn(drilldown, "openAttention").mockImplementation(() => {});
     const trigger = Array.from(
       fixture.nativeElement.querySelectorAll(".attention__action") as NodeListOf<HTMLButtonElement>,
-    ).find(button => button.textContent?.includes("Участники ещё не заходили на платформу"))!;
+    ).find(button => button.textContent?.includes("Участники еще не заходили на платформу"))!;
     expect(trigger.querySelector("strong")?.textContent).toBe("7");
     expect(trigger.disabled).toBe(false);
     trigger.click();
@@ -645,7 +645,7 @@ describe("ProgramAnalyticsComponent", () => {
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelector('[data-testid="attention-block"]').textContent,
-    ).not.toContain("Участники ещё не заходили на платформу");
+    ).not.toContain("Участники еще не заходили на платформу");
   });
 
   it("participants without a visit alone prevent the all-clear attention state", () => {
@@ -943,7 +943,7 @@ describe("ProgramAnalyticsComponent", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const card = fixture.nativeElement.querySelector('[data-testid="evaluation-statuses"]');
-    expect(card.textContent).toContain("Распределённое оценивание");
+    expect(card.textContent).toContain("Распределенное оценивание");
     expect(card.textContent).toContain("Готово 5 из 8");
     expect(card.textContent).not.toMatch(/Частично оценено|Почему 0|совместимы/);
     expect(card.querySelector("canvas")).toBeNull();

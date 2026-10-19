@@ -19,7 +19,7 @@ describe("ProjectGoalsHttpAdapter", () => {
     adapter = TestBed.inject(ProjectGoalsHttpAdapter);
   }
 
-  it("getGoals идёт в GET /projects/:id/goals/", () => {
+  it("getGoals идет в GET /projects/:id/goals/", () => {
     setup();
     api.get.mockReturnValue(of([] as Goal[]));
 
@@ -28,7 +28,7 @@ describe("ProjectGoalsHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/");
   });
 
-  it("addGoals идёт в POST /projects/:id/goals/ c массивом", () => {
+  it("addGoals идет в POST /projects/:id/goals/ c массивом", () => {
     setup();
     api.post.mockReturnValue(of([] as Goal[]));
     const data = [] as GoalFormData[];
@@ -38,7 +38,7 @@ describe("ProjectGoalsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/", data);
   });
 
-  it("editGoal идёт в PUT /projects/:pid/goals/:gid c params", () => {
+  it("editGoal идет в PUT /projects/:pid/goals/:gid c params", () => {
     setup();
     api.put.mockReturnValue(of({} as Goal));
     const params = {} as GoalFormData;
@@ -48,7 +48,7 @@ describe("ProjectGoalsHttpAdapter", () => {
     expect(api.put).toHaveBeenCalledExactlyOnceWith("/projects/42/goals/9/", params);
   });
 
-  it("deleteGoals идёт в DELETE /projects/:pid/goals/:gid", () => {
+  it("deleteGoals идет в DELETE /projects/:pid/goals/:gid", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 

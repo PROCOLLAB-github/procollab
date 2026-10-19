@@ -53,7 +53,7 @@ describe("Сохранение настроек организатора", () =>
     component.resetForms();
     return { component, state, save };
   }
-  it("отмена ухода сохраняет введённые значения и dirty", async () => {
+  it("отмена ухода сохраняет введенные значения и dirty", async () => {
     const { component } = setup();
     component.basicForm.controls.name.setValue("Новое имя");
     component.basicForm.controls.name.markAsDirty();

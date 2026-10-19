@@ -26,7 +26,7 @@ export class ResponseCardComponent {
   readonly status = computed(() => {
     const isApproved = this.response().isApproved;
     if (isApproved === true) return { label: "Принят", tone: "success" as const };
-    if (isApproved === false) return { label: "Отклонён", tone: "declined" as const };
+    if (isApproved === false) return { label: "Отклонен", tone: "declined" as const };
     return { label: "На рассмотрении", tone: "pending" as const };
   });
   protected readonly AppRoutes = AppRoutes;

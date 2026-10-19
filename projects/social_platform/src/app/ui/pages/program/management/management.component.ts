@@ -159,7 +159,7 @@ export class ProgramManagementComponent implements OnInit {
   }
   readonly confirmProjectFormDiscard = () =>
     this.confirm(
-      "Есть несохранённые изменения",
+      "Есть несохраненные изменения",
       "При выходе изменения будут потеряны.",
       "Выйти без сохранения",
       true,
@@ -244,7 +244,7 @@ export class ProgramManagementComponent implements OnInit {
       key: "imageAddress",
       label: "Логотип программы",
       dimensions: "Рекомендуемый размер: 512 × 512 px (1:1).",
-      hint: "Изображение показывается в круге. Расположите знак по центру с отступами от краёв.",
+      hint: "Изображение показывается в круге. Расположите знак по центру с отступами от краев.",
     },
     {
       key: "advertisementImageAddress",
@@ -256,7 +256,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly dateFields = [
     { key: "datetimeStarted", label: "Начало программы" },
     { key: "datetimeRegistrationEnds", label: "Окончание регистрации" },
-    { key: "datetimeProjectSubmissionEnds", label: "Окончание приёма решений" },
+    { key: "datetimeProjectSubmissionEnds", label: "Окончание приема решений" },
     { key: "datetimeEvaluationEnds", label: "Окончание оценивания" },
     { key: "datetimeFinished", label: "Окончание программы" },
   ];
@@ -597,7 +597,7 @@ export class ProgramManagementComponent implements OnInit {
       return false;
     if (!this.dirty()) return true;
     const yes = await this.confirm(
-      "Есть несохранённые изменения",
+      "Есть несохраненные изменения",
       "При выходе изменения будут потеряны.",
       "Выйти без сохранения",
       true,
@@ -689,7 +689,7 @@ export class ProgramManagementComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           if (error.error?.code === "reopen_confirmation_required")
             void this.confirm(
-              "Снова открыть приём?",
+              "Снова открыть прием?",
               error.error.detail,
               "Подтвердить и сохранить",
             ).then(yes => {
@@ -939,7 +939,7 @@ export class ProgramManagementComponent implements OnInit {
     if (error?.status === 409)
       return error.error?.detail ?? "Данные изменились. Обновите страницу перед сохранением.";
     if (error?.status === 400)
-      return "Проверьте введённые значения и ссылки. Изменения сохранены в форме.";
+      return "Проверьте введенные значения и ссылки. Изменения сохранены в форме.";
     return "Не удалось выполнить запрос. Проверьте соединение и повторите попытку.";
   }
 }

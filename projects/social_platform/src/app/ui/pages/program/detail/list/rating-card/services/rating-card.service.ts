@@ -94,7 +94,7 @@ export class RatingCardService {
     if (this.evaluationDateExpired()) return "оценивание завершено";
     if (this.project()?.criteriaRevision && !this.project()?.criterias.length)
       return "критерии не настроены";
-    if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценён";
+    if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценен";
     if (this.isLimitReached() && !this.userRatedThisProject()) return "лимит оценок достигнут";
     if (this.userRatedThisProject()) return "подтвердить изменения";
     return "оценить проект";
@@ -131,7 +131,7 @@ export class RatingCardService {
   );
 
   readonly buttonTooltip = computed(() => {
-    if (this.evaluationDateExpired()) return "Срок оценивания завершён";
+    if (this.evaluationDateExpired()) return "Срок оценивания завершен";
     if (this.isLimitReached() && !this.userRatedThisProject())
       return "Достигнут максимальный лимит оценок";
     if (this.userRatedThisProject()) return "Нажмите для переоценки";
@@ -172,7 +172,7 @@ export class RatingCardService {
           this.criteriaChanged.set(stale);
           this.ratingError.set(
             stale
-              ? "Критерии изменились. Обновите форму: введённые ответы сохранятся для сравнения."
+              ? "Критерии изменились. Обновите форму: введенные ответы сохранятся для сравнения."
               : "Не удалось сохранить оценку. Проверьте ответы и повторите попытку.",
           );
           this.showConfirmRateModal.set(false);
@@ -228,7 +228,7 @@ export class RatingCardService {
         if (this.project()?.id !== project.id || this.program()?.id !== programId) return;
         const fresh = result.ok ? result.value.results.find(p => p.id === project.id) : null;
         if (!fresh) {
-          this.ratingError.set("Не удалось обновить критерии. Введённые ответы сохранены в форме.");
+          this.ratingError.set("Не удалось обновить критерии. Введенные ответы сохранены в форме.");
           return;
         }
         const values: Record<string, unknown> = {};
