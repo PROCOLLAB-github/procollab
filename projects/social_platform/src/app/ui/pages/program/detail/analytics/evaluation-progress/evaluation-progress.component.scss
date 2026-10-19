@@ -1,5 +1,12 @@
 /** @format */
 
+@use "styles/program-management-controls";
+
+.evaluation-progress__open.ui-button,
+.evaluation-progress__retry.ui-button {
+  @include program-management-controls.compact-action;
+}
+
 :host {
   display: block;
   min-width: 0;
