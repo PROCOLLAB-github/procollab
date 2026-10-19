@@ -1,0 +1,376 @@
+<!-- @format -->
+<section class="results" [attr.aria-busy]="loading()">
+  <header class="results__heading">
+    <h2>Рейтинг проектов</h2>
+    <div class="results__actions">
+      <button type="button" appButton="secondary" (click)="openModal('formula')">
+        <span class="results__desktop-label">Как считается балл</span
+        ><span class="results__mobile-label">Расчёт балла</span>
+      </button>
+      <button
+        type="button"
+        appButton="secondary"
+        (click)="openModal('export')"
+        [disabled]="!snapshot() || !snapshot()?.groups?.length"
+      >
+        Выгрузить в Excel
+      </button>
+    </div>
+  </header>
+  @if (snapshot(); as data) {
+    <p class="results__muted">
+      Предварительные результаты · Оценок на проект: {{ data.requiredEvaluators }}
+    </p>
+    <div class="results__filters">
+      <label
+        >Поиск по названию<input
+          appField
+          type="search"
+          [formControl]="search"
+          placeholder="Найти проект"
+          maxlength="200"
+      /></label>
+      <label
+        >Кейс<select appField [formControl]="caseFilter">
+          <option value="all">Все кейсы</option>
+          @for (name of data.caseOptions; track name) {
+            <option [value]="caseKey(name)">{{ name }}</option>
+          }
+          <option value="null">Без кейса</option>
+        </select></label
+      >
+    </div>
+    <div class="results__toolbar">
+      <p class="results__muted" aria-live="polite">
+        В рейтинге: {{ readyCount() }} · Ещё оцениваются: {{ pendingCount() }}
+      </p>
+      <button
+        type="button"
+        appButton="secondary"
+        (click)="order.set(order() === 'desc' ? 'asc' : 'desc')"
+        [attr.aria-label]="
+          order() === 'desc'
+            ? 'Балл по убыванию. Сортировать по возрастанию'
+            : 'Балл по возрастанию. Сортировать по убыванию'
+        "
+      >
+        Балл: {{ order() === "desc" ? "по убыванию ↓" : "по возрастанию ↑" }}
+      </button>
+    </div>
+    @if (!data.hasNumericCriteria) {
+      <p appAlert="info">
+        Нет балльных критериев. Ответы экспертов доступны ниже; итоговый балл и места не
+        рассчитываются.
+      </p>
+    }
+    @if (exportSuccess()) {
+      <p class="results__sr" role="status">Выгрузка Excel скачана.</p>
+    }
+    @if (!data.groups.length) {
+      <div class="results__empty">
+        <h3>Сданных проектов пока нет</h3>
+        <p>Рейтинг появится после сдачи решений и оценивания.</p>
+      </div>
+    } @else if (!groups().length) {
+      <div class="results__empty">
+        <h3>Ничего не найдено</h3>
+        <p>Измените запрос или выберите другой кейс.</p>
+        <button
+          appButton="secondary"
+          type="button"
+          (click)="search.setValue(''); caseFilter.setValue('all')"
+        >
+          Сбросить поиск
+        </button>
+      </div>
+    }
+    @for (group of groups(); track group.caseName) {
+      <section class="results__group" [attr.aria-label]="group.caseName ?? 'Без кейса'">
+        @if (caseFilter.value === "all") {
+          <h3>{{ group.caseName ?? "Без кейса" }}</h3>
+        }
+        <div class="results__columns" aria-hidden="true">
+          <span>Место</span><span>Проект</span><span>Кейс</span><span>Оценки</span
+          ><span class="results__number"
+            >Итог{{ data.maximum === null ? "" : " из " + data.maximum }}</span
+          ><span></span>
+        </div>
+        @for (project of ready(group.projects); track project.id) {
+          <ng-container
+            [ngTemplateOutlet]="projectRow"
+            [ngTemplateOutletContext]="{ $implicit: project }"
+          />
+        }
+        @if (pending(group.projects).length) {
+          <h3 class="results__pending">Ещё оцениваются · {{ pending(group.projects).length }}</h3>
+          @for (project of pending(group.projects); track project.id) {
+            <ng-container
+              [ngTemplateOutlet]="projectRow"
+              [ngTemplateOutletContext]="{ $implicit: project }"
+            />
+          }
+        }
+      </section>
+    }
+    @if (groups().length) {
+      <p class="results__muted">
+        Равный балл — общее место: 1, 2, 2, 4. Места присваиваются внутри кейса и не меняются при
+        сортировке.
+      </p>
+    }
+  }
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      Не удалось загрузить результаты.
+      <button type="button" appButton="text" (click)="load()">Повторить</button>
+    </div>
+  } @else if (loading() && !snapshot()) {
+    <p role="status">Загружаем результаты…</p>
+  }
+</section>
+
+<ng-template #projectRow let-project>
+  <button
+    class="results__row"
+    type="button"
+    [class.results__row--selected]="expanded().has(project.id)"
+    [attr.aria-expanded]="expanded().has(project.id)"
+    [attr.aria-controls]="'result-' + project.id"
+    (click)="toggle(project.id)"
+  >
+    <span class="results__place">{{ project.place ?? "—" }}</span
+    ><strong class="results__name">{{ project.name }}</strong
+    ><span class="results__case results__muted">{{ project.caseName ?? "Без кейса" }}</span
+    ><span class="results__count">{{ project.completed }} из {{ project.required }}</span
+    ><span class="results__score"
+      ><span class="results__mobile-label">{{ project.ready ? "Итог" : "Предварительно" }}</span
+      ><strong>{{ format(project.score) }}</strong></span
+    ><img
+      src="assets/images/results-arrow-down.svg"
+      width="16"
+      height="16"
+      alt=""
+      class="results__arrow"
+      [class.results__arrow--open]="expanded().has(project.id)"
+      aria-hidden="true"
+    />
+  </button>
+  @if (expanded().has(project.id)) {
+    <section
+      class="results__detail"
+      [id]="'result-' + project.id"
+      [attr.aria-label]="'Оценки проекта ' + project.name"
+    >
+      <div class="results__detail-heading">
+        <strong>Оценки экспертов</strong
+        ><strong
+          >{{ project.ready ? "Среднее" : "Предварительно" }}: {{ format(project.score) }}</strong
+        >
+      </div>
+      @if (!project.ready) {
+        <p class="results__muted">
+          Получено {{ project.completed }} из {{ project.required }} полных оценок. Место появится
+          после завершения оценивания.
+        </p>
+      }
+      @if (!project.experts.length) {
+        <p class="results__muted">Оценок пока нет.</p>
+      } @else {
+        <div class="results__matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>Критерий</th>
+                @for (expert of project.experts; track expert.userId) {
+                  <th>
+                    <app-avatar
+                      [url]="href(expert.avatar) ?? undefined"
+                      [size]="32"
+                      [fallbackLabel]="initials(expert)"
+                    /><span>{{ expert.name }}</span
+                    ><small>{{ expert.complete ? "Оценено" : "Ожидается оценка" }}</small>
+                  </th>
+                }
+                <th>Среднее</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (criterion of matrixCriteria(); track criterion.id) {
+                <tr>
+                  <th>
+                    {{ criterion.name
+                    }}{{ criterion.maxValue === null ? "" : " · до " + criterion.maxValue }}
+                  </th>
+                  @for (expert of project.experts; track expert.userId) {
+                    <td>{{ value(expert, criterion) }}</td>
+                  }
+                  <td>{{ format(project.averages[criterion.id]) }}</td>
+                </tr>
+              }
+              <tr>
+                <th>Сумма баллов</th>
+                @for (expert of project.experts; track expert.userId) {
+                  <td>
+                    <strong>{{ format(expert.total) }}</strong>
+                  </td>
+                }
+                <td>
+                  <strong>{{ format(project.score) }}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          @for (criterion of comments(); track criterion.id) {
+            <div class="results__comments">
+              <strong>{{ criterion.name }}</strong>
+              @for (expert of project.experts; track expert.userId) {
+                <p>
+                  <span>{{ expert.name }}:</span> {{ value(expert, criterion) }}
+                </p>
+              }
+            </div>
+          }
+        </div>
+        <div class="results__expert-list">
+          @for (expert of project.experts; track expert.userId) {
+            <button
+              class="results__expert"
+              type="button"
+              [attr.aria-expanded]="expandedExperts().has(project.id + ':' + expert.userId)"
+              (click)="toggleExpert(project.id + ':' + expert.userId)"
+            >
+              <app-avatar
+                [url]="href(expert.avatar) ?? undefined"
+                [size]="32"
+                [fallbackLabel]="initials(expert)"
+              /><span
+                ><strong>{{ expert.name }}</strong
+                ><small>{{ expert.complete ? "Оценено" : "Ожидается оценка" }}</small></span
+              ><strong>{{ format(expert.total) }}</strong
+              ><img
+                src="assets/images/results-arrow-down.svg"
+                width="16"
+                height="16"
+                alt=""
+                aria-hidden="true"
+              />
+            </button>
+            @if (expandedExperts().has(project.id + ":" + expert.userId)) {
+              <dl class="results__expert-values">
+                @for (criterion of snapshot()?.criteria ?? []; track criterion.id) {
+                  <div>
+                    <dt>{{ criterion.name }}</dt>
+                    <dd>{{ value(expert, criterion) }}</dd>
+                  </div>
+                }
+              </dl>
+            }
+          }
+        </div>
+      }
+    </section>
+  }
+</ng-template>
+
+<app-modal
+  [open]="modal() !== null"
+  (openChange)="modal.set(null)"
+  labelledBy="results-dialog-title"
+  bodyClass="modal__body--no-flex results-modal"
+>
+  <div class="results__dialog">
+    <header class="results__heading">
+      <h2 id="results-dialog-title">
+        {{ modal() === "formula" ? "Как считается балл" : "Выгрузить в Excel" }}
+      </h2>
+      <button
+        type="button"
+        appButton="secondary"
+        (click)="modal.set(null)"
+        aria-label="Закрыть окно"
+      >
+        Закрыть
+      </button>
+    </header>
+    @if (modal() === "formula") {
+      <p>
+        Складываем баллы по числовым критериям у каждого эксперта, затем берём среднее полных
+        оценок. Вес экспертов одинаковый.
+      </p>
+      @if (sampleFormula()) {
+        <div class="results__sheet-info">
+          <strong>{{ sample()?.name }}</strong>
+          <p>{{ sampleFormula() }}</p>
+        </div>
+      }
+      <p>
+        «Да/нет» и комментарии в сумму не входят. Нулевые баллы учитываются. Итог округляется один
+        раз до двух знаков.
+      </p>
+      <p>
+        Для места нужно полных оценок: {{ snapshot()?.requiredEvaluators ?? "—" }}. Места
+        присваиваются внутри каждого кейса. Равные итоги дают одинаковое место.
+      </p>
+      <p class="results__muted">
+        Если исторически получено больше оценок, учитываются все полные оценки.
+      </p>
+    } @else {
+      <fieldset class="results__scope">
+        <legend class="results__sr">Какие результаты выгрузить</legend>
+        <label
+          ><input
+            appChoice
+            type="radio"
+            name="export-scope"
+            [checked]="exportScope() === 'current'"
+            (change)="exportScope.set('current')"
+            [disabled]="exporting()"
+          />Текущая выборка</label
+        ><label
+          ><input
+            appChoice
+            type="radio"
+            name="export-scope"
+            [checked]="exportScope() === 'all'"
+            (change)="exportScope.set('all')"
+            [disabled]="exporting()"
+          />Вся программа</label
+        >
+      </fieldset>
+      <p class="results__muted">
+        {{
+          exportScope() === "current"
+            ? "Учитываются выбранный кейс и поиск, все найденные проекты."
+            : "Все проекты программы из всех кейсов."
+        }}
+      </p>
+      <div class="results__sheet-info">
+        <strong>В файле два листа</strong><strong>Рейтинг</strong>
+        <p>Место, проект, кейс, средние баллы по критериям и итог.</p>
+        <strong>Оценки экспертов</strong>
+        <p>Баллы каждого эксперта, сумма, ответы «Да/нет» и комментарии.</p>
+      </div>
+      <strong>Итог — с формулой в Excel</strong>
+      <p class="results__muted">
+        Неполные результаты — предварительные, без места. Пустая оценка не равна нулю.
+      </p>
+      @if (exportScope() === "current" && !projectCount()) {
+        <p appAlert="info">
+          В текущей выборке нет проектов. Измените поиск или выберите всю программу.
+        </p>
+      }
+      @if (exportError()) {
+        <p appAlert="error" role="alert">Не удалось подготовить файл. Попробуйте ещё раз.</p>
+      }
+      <button
+        type="button"
+        appButton="primary"
+        class="results__download"
+        [disabled]="exporting() || (exportScope() === 'current' && !projectCount())"
+        (click)="download()"
+      >
+        {{ exporting() ? "Готовим файл…" : exportError() ? "Повторить выгрузку" : "Скачать .xlsx" }}
+      </button>
+    }
+  </div>
+</app-modal>

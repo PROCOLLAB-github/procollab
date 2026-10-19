@@ -552,10 +552,6 @@
           inset: -6px 0;
           content: "";
         }
-
-        &:nth-last-child(-n + 2) {
-          grid-column: span 3;
-        }
       }
     }
 
