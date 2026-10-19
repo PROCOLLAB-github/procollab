@@ -51,6 +51,10 @@
   padding-bottom: 88px;
 }
 
+.experts--people {
+  padding-bottom: 128px;
+}
+
 .experts h2,
 .experts h3,
 .experts__dialog h2,
@@ -299,10 +303,18 @@
   min-width: 180px;
 }
 
-.experts__expert-actions {
-  padding: 12px;
-  background: var(--light-gray);
-  border-radius: 8px;
+.experts__expert-actions > strong {
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  display: -webkit-box;
+  align-self: center;
+  overflow: hidden;
+  line-height: 18px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.experts__expert-actions .experts__actions > button:not([aria-label]) {
+  white-space: nowrap;
 }
 
 .experts__pagination {
@@ -318,7 +330,7 @@
   position: fixed;
   bottom: 24px;
   left: 50%;
-  z-index: 900;
+  z-index: 20;
   box-sizing: border-box;
   display: flex;
   gap: 12px;
@@ -326,7 +338,10 @@
   justify-content: space-between;
   width: min(704px, calc(100vw - 40px));
   max-width: calc(100vw - 40px);
+  max-height: calc(100dvh - 48px);
   padding: 12px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   font-size: 12px;
   background: var(--accent-light);
   border-radius: 8px;
@@ -490,6 +505,10 @@
     padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px));
   }
 
+  .experts--people {
+    padding-bottom: calc(220px + env(safe-area-inset-bottom, 0px));
+  }
+
   .experts__heading,
   .experts__quota,
   .experts__expert-actions {
@@ -591,6 +610,30 @@
   .experts__floating .ui-button--primary {
     flex: 1;
     min-width: 0;
+  }
+
+  .experts__expert-actions.experts__floating {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 32px;
+  }
+
+  .experts__expert-actions .experts__actions {
+    display: contents;
+  }
+
+  .experts__expert-actions .experts__actions > button {
+    margin-block: 6px;
+  }
+
+  .experts__expert-actions .experts__actions > button:not([aria-label]) {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .experts__expert-actions .ui-button--icon {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: start;
   }
 
   .experts__load {
