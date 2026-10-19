@@ -57,6 +57,13 @@
                   <span> · По фильтрам: {{ count() }}</span>
                 }
               </p>
+            } @else {
+              <p class="management__participant-count" aria-live="polite">
+                Всего проектов: <strong>{{ state.projects()?.totalCount ?? count() }}</strong>
+                @if (hasListFilters()) {
+                  <span> · По фильтрам: {{ count() }}</span>
+                }
+              </p>
             }
           </div>
           @if (section() === "participants") {
@@ -100,6 +107,8 @@
           <div class="management__filters management__participant-filters">
             <label
               >Регион<select
+                appField
+                aria-label="Регион"
                 [formControl]="regionFilter"
                 (change)="changeParticipantFilter('region', $any($event.target).value)"
               >
@@ -112,6 +121,8 @@
             >
             <label
               >Последняя активность<select
+                appField
+                aria-label="Последняя активность"
                 [formControl]="activityFilter"
                 (change)="changeParticipantFilter('activity', $any($event.target).value)"
               >
@@ -151,15 +162,15 @@
             <p appAlert="error" role="alert">Не удалось выгрузить участников. Повторите попытку.</p>
           }
           @if (participantExportSuccess()) {
-            <p role="status" class="management__muted">
-              Excel с участниками по текущим фильтрам готов.
-            </p>
+            <p appAlert="success">Excel с участниками по текущим фильтрам готов.</p>
           }
         }
         @if (section() === "projects") {
           <div class="management__filters">
             <label
               >Кейс<select
+                appField
+                aria-label="Кейс"
                 [formControl]="caseFilter"
                 (change)="changeCase($any($event.target).value)"
               >
@@ -173,6 +184,8 @@
             @if (program.isCompetitive) {
               <label
                 >Сдача решения<select
+                  appField
+                  aria-label="Сдача решения"
                   [formControl]="submissionFilter"
                   (change)="changeQuery({ submission: $any($event.target).value, offset: 0 })"
                 >
@@ -211,7 +224,9 @@
                   type="button"
                   appButton="primary"
                   disabled
-                  aria-describedby="evaluation-unavailable"
+                  [attr.title]="
+                    program.isCompetitive ? 'Решение ещё не сдано' : 'В программе нет оценивания'
+                  "
                 >
                   Перейти к оценке
                 </button>
@@ -225,15 +240,6 @@
               >
                 <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
               </button>
-              @if (!selected.submitted || !program.isCompetitive) {
-                <p id="evaluation-unavailable" class="management__muted management__selection-hint">
-                  {{
-                    program.isCompetitive
-                      ? "Сначала нужно сдать решение."
-                      : "Программа не предусматривает оценивание."
-                  }}
-                </p>
-              }
             </section>
           }
           @if (count()) {
@@ -311,16 +317,18 @@
             </caption>
             <colgroup>
               <col class="management__col-select" />
-              <col style="width: 21.4%" />
-              <col style="width: 16%" />
-              <col style="width: 12.1%" />
-              <col style="width: 13%" />
+              <col class="management__col-number" />
+              <col style="width: 20%" />
+              <col style="width: 15%" />
+              <col style="width: 11%" />
+              <col style="width: 12%" />
               <col style="width: 18%" />
-              <col />
+              <col style="width: 14%" />
             </colgroup>
             <thead>
               <tr>
                 <th scope="col"><span class="management__sr">Выбор проекта</span></th>
+                <th scope="col">№</th>
                 <th scope="col">Проект</th>
                 <th scope="col">Руководитель</th>
                 <th scope="col">Сдача решения</th>
@@ -330,7 +338,11 @@
               </tr>
             </thead>
             <tbody>
-              @for (project of state.projects()?.results ?? []; track project.id) {
+              @for (
+                project of state.projects()?.results ?? [];
+                track project.id;
+                let index = $index
+              ) {
                 <tr
                   [class.management__row-selected]="state.selected()?.id === project.id"
                   (click)="selectFromRow($event, project)"
@@ -349,6 +361,7 @@
                         (keydown.enter)="$event.preventDefault(); select(project)"
                     /></label>
                   </td>
+                  <td data-label="№">{{ offset() + index + 1 }}</td>
                   <td class="management__name" data-label="Проект">
                     <a [routerLink]="paths.projects.detail(project.projectId)">{{
                       project.name
@@ -727,7 +740,7 @@
     @if (state.teamPending()) {
       <p aria-live="polite" aria-busy="true">Загружаем состав команды…</p>
     } @else if (state.teamError()) {
-      <div role="alert">
+      <div appAlert="error">
         <p>{{ errorMessage(state.teamError()) }}</p>
         <button type="button" appButton="secondary" (click)="state.openTeam()">Повторить</button>
       </div>
@@ -755,7 +768,7 @@
   <div class="management__dialog">
     @if (confirmation(); as confirm) {
       <h2 id="management-dialog-title">{{ confirm.title }}</h2>
-      <p>{{ confirm.text }}</p>
+      <p appAlert="warning">{{ confirm.text }}</p>
       <div class="management__inline">
         <button
           type="button"

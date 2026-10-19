@@ -112,12 +112,6 @@
         }
       </section>
     }
-    @if (groups().length) {
-      <p class="results__muted">
-        Равный балл — общее место: 1, 2, 2, 4. Места присваиваются внутри кейса и не меняются при
-        сортировке.
-      </p>
-    }
   }
   @if (error()) {
     <div appAlert="error" role="alert">
@@ -168,7 +162,7 @@
         >
       </div>
       @if (!project.ready) {
-        <p class="results__muted">
+        <p appAlert="warning">
           Получено {{ project.completed }} из {{ project.required }} полных оценок. Место появится
           после завершения оценивания.
         </p>
@@ -188,7 +182,11 @@
                       [size]="32"
                       [fallbackLabel]="initials(expert)"
                     /><span>{{ expert.name }}</span
-                    ><small>{{ expert.complete ? "Оценено" : "Ожидается оценка" }}</small>
+                    ><small
+                      class="results__badge"
+                      [class.results__badge--ready]="expert.complete"
+                      >{{ expert.complete ? "Оценено" : "Ожидается оценка" }}</small
+                    >
                   </th>
                 }
                 <th>Среднее</th>

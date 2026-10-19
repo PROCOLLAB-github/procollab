@@ -275,3 +275,5 @@
     align-items: stretch;
   }
 }
+
+.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }

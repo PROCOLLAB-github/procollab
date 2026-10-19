@@ -39,8 +39,19 @@ export class EvaluationHttpAdapter implements EvaluationRepositoryPort {
   saveProjectExperts(id: number, data: ProjectExpertsWrite): Observable<ExpertWorkspace> {
     return this.api.post(`${this.root(id)}/project-experts/`, data);
   }
-  invite(id: number, email: string): Observable<unknown> {
-    return this.api.post(`${this.root(id)}/experts/`, { email });
+  invite(
+    id: number,
+    email: string,
+    scope?: Omit<ExpertCaseScopeWrite, "revision">,
+  ): Observable<unknown> {
+    return this.api.post(`${this.root(id)}/experts/`, { email, ...scope });
+  }
+  saveInvitationCaseScope(
+    id: number,
+    invitationId: number,
+    data: ExpertCaseScopeWrite,
+  ): Observable<ExpertWorkspace> {
+    return this.api.post(`${this.root(id)}/expert-invitations/${invitationId}/cases/`, data);
   }
   invitationAction(
     id: number,

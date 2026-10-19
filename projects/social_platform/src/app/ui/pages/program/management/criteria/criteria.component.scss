@@ -198,3 +198,5 @@ p {
     padding: 20px;
   }
 }
+
+.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }

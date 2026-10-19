@@ -92,6 +92,13 @@ describe("Управление экспертами", () => {
     const { fixture, component, api } = setup();
     component.open("auto");
     fixture.detectChanges();
+    expect(component.canPreviewAllocation()).toBe(false);
+    component.openPool("Сбер");
+    component.toggleCandidate(snapshot.experts[0]);
+    component.savePool();
+    component.openPool("Т-Банк");
+    component.toggleCandidate(snapshot.experts[0]);
+    component.savePool();
     api.allocation.mockReturnValue(
       of({ revision: "v1", planToken: "signed", assignments: [], shortages: [], load: [] }),
     );
@@ -117,12 +124,16 @@ describe("Управление экспертами", () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     fixture.detectChanges();
     component.email.setValue("expert@example.com");
+    component.toggleScope("Сбер");
     const form = document.querySelector(".experts__dialog form") as HTMLFormElement;
     expect(form).toBeTruthy();
     const event = new Event("submit", { bubbles: true, cancelable: true });
     form.dispatchEvent(event);
     expect(event.defaultPrevented).toBe(true);
-    expect(api.invite).toHaveBeenCalledWith(42, "expert@example.com");
+    expect(api.invite).toHaveBeenCalledWith(42, "expert@example.com", {
+      allCases: false,
+      caseNames: ["Сбер"],
+    });
   });
   const snapshot: ExpertWorkspace = {
     revision: "v1",
@@ -184,6 +195,7 @@ describe("Управление экспертами", () => {
         }),
       ),
       saveCaseScope: vi.fn(() => of(structuredClone(snapshot))),
+      saveInvitationCaseScope: vi.fn(() => of(structuredClone(snapshot))),
       saveProjectExperts: vi.fn(() => of(structuredClone(snapshot))),
       invite: vi.fn(() => of({})),
       allocation: vi.fn(),
@@ -227,7 +239,7 @@ describe("Управление экспертами", () => {
   it("pending исключён из распределения, план с нехваткой нельзя применить", () => {
     const { component, api } = setup();
     component.open("auto");
-    expect([...component.chosenExperts()]).toEqual([1]);
+    expect(component.poolExperts("Сбер")).toEqual([]);
     component.plan.set({
       revision: "v1",
       planToken: "signed",
@@ -312,15 +324,28 @@ describe("Управление экспертами", () => {
     const restricted = { ...snapshot.experts[0], id: 3, allCases: false, caseNames: ["Сбер"] };
     component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, restricted] }));
     component.open("auto");
+    expect(component.poolExperts("Сбер")).toEqual([]);
+    component.openPool("Сбер");
+    component.toggleCandidate(snapshot.experts[0]);
+    component.toggleCandidate(restricted);
+    component.savePool();
     expect(component.poolExperts("Сбер").map(e => e.id)).toEqual([1, 3]);
-    expect(component.poolExperts("Т-Банк").map(e => e.id)).toEqual([1]);
     component.openPool("Т-Банк");
+    component.toggleCandidate(snapshot.experts[0]);
     component.toggleCandidate(restricted);
     expect(component.chosenExperts().has(3)).toBe(false);
+    component.savePool();
+    expect(component.poolExperts("Т-Банк").map(e => e.id)).toEqual([1]);
   });
   it("предпросмотр отправляет отдельные составы кейсов, повторяющегося эксперта один раз", () => {
     const { component, api } = setup();
     component.open("auto");
+    component.openPool("Сбер");
+    component.toggleCandidate(snapshot.experts[0]);
+    component.savePool();
+    component.openPool("Т-Банк");
+    component.toggleCandidate(snapshot.experts[0]);
+    component.savePool();
     api.allocation.mockReturnValue(
       of({ revision: "v1", planToken: "token", assignments: [], shortages: [], load: [] }),
     );
@@ -463,9 +488,9 @@ describe("Управление экспертами", () => {
     }));
     component.open("auto");
     component.openPool("Сбер");
-    expect(component.chosenExperts().size).toBe(2);
+    expect(component.chosenExperts().size).toBe(0);
     expect(component.candidateReason(extra)).toBeNull();
-    component.toggleCandidate(extra);
+    component.toggleCandidate(snapshot.experts[0]);
     component.toggleCandidate(extra);
     expect(component.chosenExperts().size).toBe(2);
   });
@@ -481,5 +506,22 @@ describe("Управление экспертами", () => {
       allCases: false,
       caseNames: ["Сбер"],
     });
+  });
+  it("не приглашает эксперта без выбора кейса и позволяет исправить выбор до принятия", () => {
+    const { component, api } = setup();
+    component.open("invite");
+    component.email.setValue("expert@example.com");
+    component.sendInvite();
+    expect(api.invite).not.toHaveBeenCalled();
+    expect(component.dialogError()).toContain("кейс");
+    component.openScope(snapshot.experts[1]);
+    component.toggleScope("Т-Банк");
+    component.saveScope();
+    expect(api.saveInvitationCaseScope).toHaveBeenCalledWith(42, 2, {
+      revision: "v1",
+      allCases: false,
+      caseNames: ["Сбер"],
+    });
+    expect(api.saveCaseScope).not.toHaveBeenCalled();
   });
 });

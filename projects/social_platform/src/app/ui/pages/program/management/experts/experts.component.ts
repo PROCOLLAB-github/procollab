@@ -16,7 +16,7 @@ import {
 } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NgTemplateOutlet } from "@angular/common";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import {
   Observable,
   catchError,
@@ -98,6 +98,7 @@ export class ManagementExpertsComponent {
     Validators.email,
     Validators.maxLength(254),
   ]);
+  private readonly inviteEmail = toSignal(this.email.valueChanges, { initialValue: "" });
   readonly quota = this.fb.control(1, [
     Validators.required,
     Validators.min(1),
@@ -126,7 +127,6 @@ export class ManagementExpertsComponent {
   readonly scopeCases = signal(new Set<string | null>());
   readonly casePools = signal<CaseExpertPool[]>([]);
   readonly poolCase = signal<string | null>(null);
-  readonly manualMode = signal(false);
   readonly emptySelection = new Set<number>();
   readonly allProjects = computed(() => this.snapshot()?.projects ?? []);
   readonly caseNames = computed(() => this.snapshot()?.cases ?? []);
@@ -184,9 +184,22 @@ export class ManagementExpertsComponent {
     const names: (string | null)[] = [...this.caseNames()];
     if (this.allProjects().some(p => p.caseName === null)) names.push(null);
     return names
-      .map(name => ({ name, count: this.allProjects().filter(p => p.caseName === name).length }))
+      .map(name => ({
+        name,
+        count: this.allProjects().filter(p => p.caseName === name).length,
+        missing: this.allProjects().filter(
+          p => p.caseName === name && p.experts.length < (this.snapshot()?.requiredEvaluators ?? 1),
+        ).length,
+      }))
       .filter(g => g.count);
   });
+  readonly canPreviewAllocation = computed(
+    () =>
+      this.autoGroups().some(g => g.missing) &&
+      this.autoGroups()
+        .filter(g => g.missing)
+        .every(g => this.poolExperts(g.name).length),
+  );
   readonly candidateExperts = computed(() =>
     (this.snapshot()?.experts ?? []).filter(
       e =>
@@ -230,7 +243,12 @@ export class ManagementExpertsComponent {
   readonly visible = computed(() =>
     this.filtered().slice(this.page() * this.pageSize, (this.page() + 1) * this.pageSize),
   );
-  readonly dirty = computed(() => this.projectDirty() || this.scopeDirty());
+  readonly dirty = computed(
+    () =>
+      this.projectDirty() ||
+      this.scopeDirty() ||
+      (this.modal() === "invite" && (!!this.inviteEmail().trim() || !!this.scopeCases().size)),
+  );
   readonly dialogTitle = computed(() => {
     switch (this.modal()) {
       case "invite":
@@ -427,16 +445,17 @@ export class ManagementExpertsComponent {
     this.modal.set(kind);
     this.plan.set(null);
     this.quotaPreview.set(null);
-    if (kind === "invite") this.email.reset("");
+    if (kind === "invite") {
+      this.email.reset("");
+      this.scopeAll.set(!this.caseNames().length && !this.hasProjectsWithoutCase());
+      this.scopeCases.set(new Set());
+    }
     if (kind === "quota") this.quota.setValue(this.snapshot()?.requiredEvaluators ?? 1);
     if (kind === "auto") {
-      this.chosenExperts.set(new Set(this.joined().map(e => Number(e.id))));
       this.casePools.set(
         this.autoGroups().map(g => ({
           caseName: g.name,
-          expertIds: this.joined()
-            .filter(e => this.eligibleFor(e, g.name))
-            .map(e => Number(e.id)),
+          expertIds: [],
         })),
       );
     }
@@ -456,11 +475,21 @@ export class ManagementExpertsComponent {
       this.dialogError.set("Введите корректный email эксперта.");
       return;
     }
-    this.request(this.api.invite(this.programId(), this.email.value.trim()), () => {
-      this.modal.set(null);
-      this.message.set("Приглашение создано. Статус отправки письма обновится автоматически.");
-      this.load();
-    });
+    if (!this.scopeAll() && !this.scopeCases().size) {
+      this.dialogError.set("Выберите хотя бы один кейс или все кейсы.");
+      return;
+    }
+    this.request(
+      this.api.invite(this.programId(), this.email.value.trim(), {
+        allCases: this.scopeAll(),
+        caseNames: this.scopeAll() ? [] : [...this.scopeCases()],
+      }),
+      () => {
+        this.modal.set(null);
+        this.message.set("Приглашение создано. Статус отправки письма обновится автоматически.");
+        this.load();
+      },
+    );
   }
   invitationAction(action: "resend" | "revoke"): void {
     const id = this.selected()?.invitationId;
@@ -482,6 +511,7 @@ export class ManagementExpertsComponent {
     this.chosenExperts.set(values);
   }
   previewAllocation(): void {
+    if (!this.canPreviewAllocation()) return;
     const pools = this.casePools();
     this.request(
       this.api.allocation(
@@ -540,7 +570,6 @@ export class ManagementExpertsComponent {
     return JSON.stringify(name);
   }
   scopeLabel(expert: ExpertRow): string {
-    if (expert.status !== "joined") return "После принятия";
     return (expert.allCases ?? true)
       ? "Все кейсы"
       : expert.caseNames?.length
@@ -578,11 +607,6 @@ export class ManagementExpertsComponent {
     const remove = compatible.every(p => ids.has(p.id));
     for (const p of compatible) remove ? ids.delete(p.id) : ids.add(p.id);
     this.selectedProjects.set(ids);
-  }
-  startManual(): void {
-    this.modal.set(null);
-    this.switchTab("distribution");
-    this.manualMode.set(true);
   }
   openProject(project?: DistributionProject): void {
     const ids = project ? [project.id] : [...this.selectedProjects()];
@@ -678,12 +702,15 @@ export class ManagementExpertsComponent {
     const state = this.snapshot(),
       expert = this.selected();
     if (!state || !expert) return;
+    const data = {
+      revision: state.revision,
+      allCases: this.scopeAll(),
+      caseNames: this.scopeAll() ? [] : [...this.scopeCases()],
+    };
     this.request(
-      this.api.saveCaseScope(this.programId(), Number(expert.id), {
-        revision: state.revision,
-        allCases: this.scopeAll(),
-        caseNames: this.scopeAll() ? [] : [...this.scopeCases()],
-      }),
+      expert.status === "joined"
+        ? this.api.saveCaseScope(this.programId(), Number(expert.id), data)
+        : this.api.saveInvitationCaseScope(this.programId(), expert.invitationId!, data),
       data => {
         this.snapshot.set(data);
         this.selected.set(data.experts.find(e => e.id === expert.id) ?? null);

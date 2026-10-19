@@ -1,5 +1,37 @@
 /** @format */
 
+@mixin status-notice {
+  box-sizing: border-box;
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--black);
+  background: var(--accent-light);
+  border-radius: 10px;
+
+  &.ui-alert--success { background: var(--green-light); }
+  &.ui-alert--warning { background: color-mix(in srgb, var(--gold) 28%, var(--light-white)); }
+  &.ui-alert--error { background: var(--red-light); }
+
+  p,
+  strong,
+  summary { color: inherit; }
+  p { margin: 4px 0 0; }
+}
+
+@mixin status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--black);
+  background: color-mix(in srgb, var(--gold) 28%, var(--light-white));
+  border-radius: 6px;
+  &--ready { background: var(--green-light); }
+  &--error { background: var(--red-light); }
+}
+
 // Opt-in sizing for program management; fields and unrelated product buttons keep their sizing.
 @mixin compact-action {
   position: relative;

@@ -29,7 +29,6 @@
         ><span class="organizers__mobile-label">Пригласить</span>
       </button>
     </header>
-    <p class="organizers__description">Все организаторы имеют одинаковые права в этой программе.</p>
     <div class="organizers__filters">
       <label
         >Поиск по имени или почте<input
@@ -101,7 +100,16 @@
               </div>
             </td>
             <td class="organizers__email">{{ row.email }}</td>
-            <td>{{ label(row) }}</td>
+            <td>
+              <span
+                class="organizers__badge"
+                [class.organizers__badge--ready]="row.status === 'joined' && row.active !== false"
+                [class.organizers__badge--error]="
+                  row.deliveryStatus === 'failed' || row.active === false
+                "
+                >{{ label(row) }}</span
+              >
+            </td>
           </tr>
         } @empty {
           <tr>

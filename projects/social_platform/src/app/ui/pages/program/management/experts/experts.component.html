@@ -83,6 +83,9 @@
                 Кейсы эксперта
               </button>
             } @else {
+              <button type="button" appButton="secondary" (click)="openScope(expert)">
+                Кейсы эксперта
+              </button>
               <button
                 type="button"
                 appButton="secondary"
@@ -144,21 +147,22 @@
                 </div>
               </td>
               <td data-label="Кейсы">
-                @if (expert.status === "joined") {
-                  <button
-                    type="button"
-                    appButton="text"
-                    (click)="$event.stopPropagation(); openScope(expert)"
-                    (keydown)="$event.stopPropagation()"
-                  >
-                    {{ scopeLabel(expert) }}
-                  </button>
-                } @else {
-                  <span class="experts__muted">После принятия</span>
-                }
+                <button
+                  type="button"
+                  appButton="text"
+                  (click)="$event.stopPropagation(); openScope(expert)"
+                  (keydown)="$event.stopPropagation()"
+                >
+                  {{ scopeLabel(expert) }}
+                </button>
               </td>
               <td data-label="Статус">
-                {{ label(expert) }}
+                <span
+                  class="experts__badge"
+                  [class.experts__badge--ready]="expert.status === 'joined'"
+                  [class.experts__badge--error]="expert.deliveryStatus === 'failed'"
+                  >{{ label(expert) }}</span
+                >
                 @if (expert.status === "pending") {
                   <p class="experts__delivery">{{ deliveryLabel(expert) }}</p>
                 }
@@ -252,7 +256,8 @@
             </select></label
           >
         </div>
-        <p>
+        <p [appAlert]="filteredMissing() ? 'warning' : 'success'">
+          Всего проектов на оценку: {{ allProjects().length }}. Показано
           {{ filteredDistribution().length }}
           {{ filteredDistribution().length | pluralize: ["проект", "проекта", "проектов"] }}
           @if (filteredMissing()) {
@@ -262,14 +267,8 @@
             · Эксперты назначены
           }
         </p>
-        @if (manualMode()) {
-          <p class="experts__manual-hint">
-            Выберите проекты одного кейса и нажмите «Назначить экспертов».
-            <button type="button" appButton="text" (click)="manualMode.set(false)">Понятно</button>
-          </p>
-        }
         @if (state.unavailableProjects?.length) {
-          <details class="experts__unavailable">
+          <details class="experts__unavailable" appAlert="warning">
             <summary>Сданные черновики: {{ state.unavailableProjects!.length }}</summary>
             <p>Они станут доступны экспертам после публикации автором.</p>
             @for (project of state.unavailableProjects; track project.projectId) {
@@ -321,7 +320,11 @@
                   @for (expert of project.experts; track expert.expertId) {
                     <div class="experts__assignment">
                       {{ expert.name }} ·
-                      <span>{{ expert.completed ? "Оценено" : "Ожидается оценка" }}</span>
+                      <span
+                        class="experts__badge"
+                        [class.experts__badge--ready]="expert.completed"
+                        >{{ expert.completed ? "Оценено" : "Ожидается оценка" }}</span
+                      >
                     </div>
                   } @empty {
                     Эксперты не назначены
@@ -450,6 +453,11 @@
               required
           /></label>
           <p>Если аккаунта ещё нет, эксперт сможет зарегистрироваться по ссылке из письма.</p>
+          <fieldset class="experts__case-picker">
+            <legend>Какие кейсы будет оценивать эксперт</legend>
+            <ng-container [ngTemplateOutlet]="caseScopeChooser" />
+          </fieldset>
+          <p>Можно выбрать несколько кейсов. Изменить выбор можно позже в списке экспертов.</p>
           <footer class="experts__actions">
             <button appButton="secondary" type="button" (click)="close()" [disabled]="busy()">
               Отмена</button
@@ -487,39 +495,7 @@
           </div>
         }
         <p>Можно выбрать несколько кейсов. Текущие назначения сохранятся.</p>
-        <div class="experts__scroll">
-          <label class="experts__choice"
-            ><input
-              type="checkbox"
-              appChoice
-              [checked]="scopeAll()"
-              (change)="scopeAll.set(!scopeAll())"
-              [disabled]="busy()"
-            />Все кейсы</label
-          >
-          @for (name of caseNames(); track name) {
-            <label class="experts__choice"
-              ><input
-                type="checkbox"
-                appChoice
-                [checked]="scopeAll() || scopeCases().has(name)"
-                (change)="toggleScope(name)"
-                [disabled]="busy()"
-              />{{ name }}</label
-            >
-          }
-          @if (hasProjectsWithoutCase()) {
-            <label class="experts__choice"
-              ><input
-                type="checkbox"
-                appChoice
-                [checked]="scopeAll() || scopeCases().has(null)"
-                (change)="toggleScope(null)"
-                [disabled]="busy()"
-              />Без выбранного кейса</label
-            >
-          }
-        </div>
+        <ng-container [ngTemplateOutlet]="caseScopeChooser" />
         <footer class="experts__actions">
           <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
             Отмена</button
@@ -535,11 +511,18 @@
       }
       @case ("method") {
         <section class="experts__method">
-          <h3>Вручную</h3>
-          <p>Назначить экспертов одному или нескольким проектам.</p>
-          <button type="button" appButton="secondary" (click)="startManual()">
-            Выбрать проекты
-          </button>
+          <div class="experts__manual-heading">
+            <h3>Вручную</h3>
+            <details class="experts__help">
+              <summary aria-label="Как назначить экспертов вручную">?</summary>
+              <p>
+                Закройте это окно, выберите проекты одного кейса в таблице и нажмите «Назначить
+                экспертов». Для одного проекта нажмите «Назначить экспертов» или «Изменить
+                экспертов» в его строке.
+              </p>
+            </details>
+          </div>
+          <p>Назначайте экспертов в таблице проектов.</p>
         </section>
         <section class="experts__method">
           <h3>Автоматически</h3>
@@ -561,7 +544,7 @@
         /></label>
         <p>Каждую оценку выставляет отдельный эксперт. Изменение применяется ко всей программе.</p>
         @if (quotaPreview(); as preview) {
-          <div class="experts__scope">
+          <div [appAlert]="preview.projectsMissingExperts ? 'warning' : 'success'">
             <strong
               >Полностью оценённых проектов: {{ preview.readyBefore }} →
               {{ preview.readyAfter }}</strong
@@ -597,9 +580,16 @@
       }
       @case ("auto") {
         @if (plan(); as preview) {
+          <strong>Шаг 2 из 2. Проверьте назначения</strong>
           @if (preview.shortages.length) {
             <p appAlert="warning">
-              Не хватает подходящих экспертов. Измените составы кейсов или пригласите новых.
+              Распределение пока нельзя применить. Вернитесь назад и выберите больше экспертов для
+              указанных кейсов или пригласите новых.
+            </p>
+          } @else if (preview.assignments.length) {
+            <p appAlert="success">
+              Распределение готово: новых назначений — {{ preview.assignments.length }}. Проверьте
+              список и подтвердите.
             </p>
           }
           <h3>Новые назначения</h3>
@@ -612,14 +602,16 @@
               </div>
             }
             @for (shortage of preview.shortages; track shortage.projectId) {
-              <p>
+              <p appAlert="warning">
                 {{ shortage.projectName }} · {{ caseLabel(shortage.caseName ?? null) }} — нужно ещё
                 {{ shortage.missing }}
                 {{ shortage.missing | pluralize: ["эксперт", "эксперта", "экспертов"] }}
               </p>
             }
             @if (!preview.assignments.length && !preview.shortages.length) {
-              <p>Для всех доступных к оценке проектов уже выбран нужный состав экспертов.</p>
+              <p appAlert="success">
+                Для всех доступных к оценке проектов уже выбран нужный состав экспертов.
+              </p>
             }
           </div>
           <h3>Нагрузка по всем кейсам</h3>
@@ -665,7 +657,12 @@
             </button>
           </footer>
         } @else {
-          <strong>Оценок для каждого проекта: {{ snapshot()?.requiredEvaluators }}</strong>
+          <strong>Шаг 1 из 2. Выберите экспертов для кейсов</strong>
+          <p>
+            Система добавит экспертов проектам, где их не хватает: по
+            {{ snapshot()?.requiredEvaluators }} на проект. Сначала вы проверите результат, затем
+            подтвердите назначения.
+          </p>
           <div class="experts__scroll experts__scroll--pools">
             @for (group of autoGroups(); track group.name) {
               <section class="experts__scope">
@@ -677,19 +674,38 @@
                   <button
                     type="button"
                     appButton="secondary"
-                    [disabled]="busy()"
+                    [disabled]="busy() || !group.missing"
                     (click)="openPool(group.name)"
                   >
-                    Выбрать экспертов
+                    {{
+                      poolExperts(group.name).length ? "Изменить экспертов" : "Выбрать экспертов"
+                    }}
                   </button>
                 </header>
-                <p>{{ poolNames(group.name) }}</p>
-                <p>
-                  Выбрано {{ poolExperts(group.name).length }}
-                  {{
-                    poolExperts(group.name).length | pluralize: ["эксперт", "эксперта", "экспертов"]
-                  }}
-                </p>
+                @if (!group.missing) {
+                  <p appAlert="success">Нужный состав экспертов уже назначен.</p>
+                } @else {
+                  <p>
+                    Нужно дополнить состав для {{ group.missing }}
+                    {{ group.missing | pluralize: ["проекта", "проектов", "проектов"] }}.
+                  </p>
+                  @if (poolExperts(group.name).length) {
+                    <p>{{ poolNames(group.name) }}</p>
+                  }
+                  <p [appAlert]="poolExperts(group.name).length ? 'info' : 'warning'">
+                    {{
+                      poolExperts(group.name).length
+                        ? "Выбрано " + poolExperts(group.name).length
+                        : "Выберите экспертов кнопкой выше"
+                    }}
+                    @if (poolExperts(group.name).length) {
+                      {{
+                        poolExperts(group.name).length
+                          | pluralize: ["эксперт", "эксперта", "экспертов"]
+                      }}
+                    }
+                  </p>
+                }
               </section>
             } @empty {
               <p>Сданных опубликованных проектов пока нет.</p>
@@ -702,14 +718,14 @@
               type="button"
               appButton="primary"
               (click)="previewAllocation()"
-              [disabled]="busy() || !autoGroups().length"
+              [disabled]="busy() || !canPreviewAllocation()"
             >
-              Посмотреть распределение
+              Проверить распределение
             </button>
           </footer>
         }
         @if ((plan()?.unavailableProjects ?? snapshot()?.unavailableProjects)?.length) {
-          <details class="experts__unavailable">
+          <details class="experts__unavailable" appAlert="warning">
             <summary>Некоторые проекты пока недоступны экспертам</summary>
             @for (
               project of plan()?.unavailableProjects ?? snapshot()?.unavailableProjects;
@@ -732,9 +748,13 @@
             отдельно.
           </p>
         } @else {
-          <p>Для замены сначала снимите эксперта без оценки. Оценившие эксперты закреплены.</p>
+          <p appAlert="warning">
+            Для замены сначала снимите эксперта без оценки. Оценившие эксперты закреплены.
+          </p>
           @if ((targets()[0]?.experts?.length ?? 0) > (snapshot()?.requiredEvaluators ?? 1)) {
-            <p>Лишние назначения сохранены. Можно снять только экспертов без оценки.</p>
+            <p appAlert="warning">
+              Лишние назначения сохранены. Можно снять только экспертов без оценки.
+            </p>
           }
         }
         <ng-container [ngTemplateOutlet]="expertChooser" />
@@ -761,20 +781,61 @@
         </footer>
       }
       @case ("pool") {
+        <p>
+          Выбранные эксперты смогут получить проекты этого кейса. Универсального эксперта можно
+          выбрать и для других кейсов.
+        </p>
         <ng-container [ngTemplateOutlet]="expertChooser" />
         <p>
           Выбрано {{ chosenExperts().size }}
-          {{ chosenExperts().size | pluralize: ["эксперт", "эксперта", "экспертов"] }} · Нужно
-          минимум {{ snapshot()?.requiredEvaluators }}
+          {{ chosenExperts().size | pluralize: ["эксперт", "эксперта", "экспертов"] }}. На следующем
+          шаге проверим, хватит ли их каждому проекту.
         </p>
         <footer class="experts__actions">
           <button type="button" appButton="secondary" (click)="modal.set('auto')">Назад</button
-          ><button type="button" appButton="primary" (click)="savePool()">Сохранить состав</button>
+          ><button type="button" appButton="primary" (click)="savePool()">
+            Использовать выбранных
+          </button>
         </footer>
       }
     }
   </div>
 </app-modal>
+<ng-template #caseScopeChooser>
+  <div class="experts__scroll experts__scroll--cases">
+    <label class="experts__choice"
+      ><input
+        type="checkbox"
+        appChoice
+        [checked]="scopeAll()"
+        (change)="scopeAll.set(!scopeAll())"
+        [disabled]="busy()"
+      />Все кейсы</label
+    >
+    @for (name of caseNames(); track name) {
+      <label class="experts__choice"
+        ><input
+          type="checkbox"
+          appChoice
+          [checked]="scopeAll() || scopeCases().has(name)"
+          (change)="toggleScope(name)"
+          [disabled]="busy()"
+        />{{ name }}</label
+      >
+    }
+    @if (hasProjectsWithoutCase()) {
+      <label class="experts__choice"
+        ><input
+          type="checkbox"
+          appChoice
+          [checked]="scopeAll() || scopeCases().has(null)"
+          (change)="toggleScope(null)"
+          [disabled]="busy()"
+        />Без выбранного кейса</label
+      >
+    }
+  </div>
+</ng-template>
 <ng-template #expertChooser>
   <label
     >Поиск по имени или почте<input

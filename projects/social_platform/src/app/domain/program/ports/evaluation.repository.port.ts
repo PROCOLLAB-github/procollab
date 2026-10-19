@@ -23,7 +23,16 @@ export abstract class EvaluationRepositoryPort {
     data: ExpertCaseScopeWrite,
   ): Observable<ExpertWorkspace>;
   abstract saveProjectExperts(id: number, data: ProjectExpertsWrite): Observable<ExpertWorkspace>;
-  abstract invite(id: number, email: string): Observable<unknown>;
+  abstract invite(
+    id: number,
+    email: string,
+    scope?: Omit<ExpertCaseScopeWrite, "revision">,
+  ): Observable<unknown>;
+  abstract saveInvitationCaseScope(
+    id: number,
+    invitationId: number,
+    data: ExpertCaseScopeWrite,
+  ): Observable<ExpertWorkspace>;
   abstract invitationAction(
     id: number,
     invitationId: number,

@@ -1,3 +1,5 @@
+@use "styles/program-management-controls";
+
 /** @format */
 @use "styles/ui-foundation";
 
@@ -503,3 +505,6 @@ th small {
     transition: none;
   }
 }
+
+.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
+.results__badge { @include program-management-controls.status-badge; }

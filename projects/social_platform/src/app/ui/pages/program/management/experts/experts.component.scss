@@ -1,3 +1,5 @@
+@use "styles/program-management-controls";
+
 /** @format */
 @use "styles/ui-foundation";
 
@@ -72,6 +74,85 @@
   line-height: 1.5;
   color: var(--grey-for-text);
 }
+
+.experts__case-picker {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+
+  legend {
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+}
+
+.experts__manual-heading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.experts__help {
+  position: relative;
+
+  summary {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+    list-style: none;
+    cursor: pointer;
+    border: 1px solid var(--accent-light);
+    border-radius: 50%;
+    &::-webkit-details-marker { display: none; }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &[open] p {
+    position: absolute;
+    z-index: 2;
+    width: min(320px, 65vw);
+    padding: 12px;
+    margin-top: 8px;
+    color: var(--black);
+    background: var(--light-white);
+    border: 1px solid var(--accent-light);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px #00000014;
+  }
+
+  @media (max-width: 999px) {
+    summary {
+      width: 44px;
+      height: 44px;
+    }
+
+    &[open] p {
+      left: -80px;
+      width: min(320px, 72vw);
+    }
+  }
+}
+
+.experts__badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--black);
+  background: color-mix(in srgb, var(--gold) 28%, var(--light-white));
+  border-radius: 6px;
+  &--ready { background: var(--green-light); }
+  &--error { background: var(--red-light); }
+}
+
+.experts__scroll--cases { max-height: 240px; }
 
 .experts__tabs {
   display: flex;
@@ -682,3 +763,5 @@
     padding: 20px;
   }
 }
+
+.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
