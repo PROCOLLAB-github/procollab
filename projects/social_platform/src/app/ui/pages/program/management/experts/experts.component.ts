@@ -5,6 +5,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Injector,
   computed,
   effect,
   inject,
@@ -73,7 +74,9 @@ export class ManagementExpertsComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
   readonly floatingCenter = signal<number | null>(null);
+  readonly floatingWidth = signal<number | null>(null);
   readonly snapshot = signal<ExpertWorkspace | null>(null);
   readonly loading = signal(false);
   readonly busy = signal(false);
@@ -259,7 +262,10 @@ export class ManagementExpertsComponent {
     afterNextRender(() => {
       const update = () => {
         const rect = this.element.nativeElement.getBoundingClientRect();
-        this.floatingCenter.set(rect.left + rect.width / 2);
+        if (rect.width > 0) {
+          this.floatingCenter.set(rect.left + rect.width / 2);
+          this.floatingWidth.set(Math.min(704, rect.width, window.innerWidth - 32));
+        }
       };
       const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
       observer?.observe(this.element.nativeElement);
@@ -382,6 +388,17 @@ export class ManagementExpertsComponent {
   }
   select(row: ExpertRow): void {
     this.selected.set(this.selected()?.id === row.id ? null : row);
+  }
+  clearExpertSelection(): void {
+    const id = this.selected()?.id;
+    this.selected.set(null);
+    afterNextRender(
+      () =>
+        Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>("tr[data-expert-id]"))
+          .find(row => row.dataset["expertId"] === String(id))
+          ?.focus({ preventScroll: true }),
+      { injector: this.injector },
+    );
   }
   label(row: ExpertRow): string {
     if (row.status === "joined") return "В программе";

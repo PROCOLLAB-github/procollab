@@ -1,5 +1,5 @@
 <!-- @format -->
-<div class="experts">
+<div class="experts" [class.experts--people]="tab() === 'experts'">
   <nav class="experts__tabs" aria-label="Управление экспертами">
     <button
       type="button"
@@ -58,8 +58,16 @@
         </p>
       }
       @if (selected(); as expert) {
-        <div class="experts__expert-actions">
-          <strong>{{ expert.name || expert.email }}</strong>
+        <section
+          class="experts__floating experts__expert-actions"
+          [style.left.px]="floatingCenter()"
+          [style.width.px]="floatingWidth()"
+          aria-label="Действия выбранного эксперта"
+          (keydown.escape)="clearExpertSelection(); $event.stopPropagation()"
+        >
+          <strong [title]="expert.name || expert.email" aria-live="polite">{{
+            expert.name || expert.email
+          }}</strong>
           <div class="experts__actions">
             @if (expert.status === "joined") {
               <button
@@ -91,14 +99,14 @@
             }
             <button
               type="button"
-              appButton="text"
+              appButton="icon"
               aria-label="Снять выбор эксперта"
-              (click)="selected.set(null)"
+              (click)="clearExpertSelection()"
             >
               ×
             </button>
           </div>
-        </div>
+        </section>
       }
       @if (loading() && !snapshot()) {
         <p role="status">Загружаем экспертов…</p>
@@ -116,6 +124,7 @@
         <tbody>
           @for (expert of visible(); track expert.id) {
             <tr
+              [attr.data-expert-id]="expert.id"
               [class.experts__row--selected]="selected()?.id === expert.id"
               tabindex="0"
               (click)="select(expert)"
@@ -377,6 +386,7 @@
   <div
     class="experts__floating"
     [style.left.px]="floatingCenter()"
+    [style.width.px]="floatingWidth()"
     role="region"
     aria-label="Действия с выбранными проектами"
   >
