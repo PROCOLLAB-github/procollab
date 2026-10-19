@@ -27,6 +27,10 @@
   font-size: 12px;
   color: var(--black);
 
+  &--projects {
+    padding-bottom: 128px;
+  }
+
   h1,
   h2 {
     margin: 0;
@@ -206,21 +210,40 @@
   }
 
   &__selection {
-    position: sticky;
-    top: 0;
-    z-index: 2;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    z-index: 20;
+    box-sizing: border-box;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto 44px;
+    grid-template-columns: minmax(0, 1fr) auto auto 32px;
     gap: 12px;
     align-items: center;
+    width: min(704px, calc(100vw - 40px));
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 48px);
     padding: 12px;
-    margin: 20px 0;
-    background: var(--light-gray);
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--accent-light);
     border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    transform: translateX(-50%);
 
     > button,
     > a {
       flex-shrink: 0;
+      min-height: 32px;
+      padding: 5px 16px;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
+    &--obscured {
+      pointer-events: none;
+      visibility: hidden;
     }
   }
 
@@ -234,11 +257,20 @@
     span {
       color: var(--grey-for-text);
     }
+
+    strong {
+      /* stylelint-disable-next-line value-no-vendor-prefix */
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
   }
 
   &__clear-selection {
     grid-row: 1;
     grid-column: 4;
+    padding: 5px !important;
   }
 
   p.management__selection-hint {
@@ -397,7 +429,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 30;
+  z-index: 110;
   width: min(420px, 100vw);
   height: 100dvh;
   padding: 24px;
@@ -529,6 +561,10 @@
   .management {
     margin: 24px 20px 40px;
 
+    &--projects {
+      padding-bottom: 220px;
+    }
+
     &__back {
       min-height: 24px;
     }
@@ -624,24 +660,48 @@
     }
 
     &__selection {
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 44px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
 
       > button:not([aria-label]),
       > a {
-        grid-column: 1 / -1;
         width: 100%;
+        padding-inline: 8px;
       }
 
       > button[aria-label] {
         grid-row: 1;
         grid-column: 2;
+        align-self: start;
+        justify-self: end;
+        width: 32px;
+      }
+
+      > button,
+      > a {
+        position: relative;
+        margin-block: 6px;
+
+        &::after {
+          position: absolute;
+          inset: -6px 0;
+          content: "";
+        }
+      }
+
+      @media (max-width: 359px) {
+        > button:not([aria-label]),
+        > a {
+          grid-column: 1 / -1;
+        }
       }
     }
 
     &__selection-name {
       grid-row: 1;
-      grid-column: 1;
+      grid-column: 1 / -1;
+      padding-right: 44px;
     }
 
     p.management__selection-hint {

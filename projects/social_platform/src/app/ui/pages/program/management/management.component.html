@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<main class="management">
+<main #managementLayout class="management" [class.management--projects]="section() === 'projects'">
   <a class="management__back" [routerLink]="paths.program.detail(state.context?.programId ?? '')"
     >На страницу программы</a
   >
@@ -100,9 +100,17 @@
             }
           </div>
           @if (state.selected(); as selected) {
-            <section class="management__selection" aria-label="Действия выбранного проекта">
+            <section
+              class="management__selection"
+              [class.management__selection--obscured]="state.teamOpen() || modalOpen()"
+              [style.left.px]="floatingPosition()?.center"
+              [style.width.px]="floatingPosition()?.width"
+              aria-label="Действия выбранного проекта"
+              (keydown.escape)="clearProjectSelection(); $event.stopPropagation()"
+            >
               <div class="management__selection-name">
-                <span>Выбран проект</span><strong>{{ selected.name }}</strong>
+                <span>Выбран проект</span
+                ><strong [title]="selected.name" aria-live="polite">{{ selected.name }}</strong>
               </div>
               <button type="button" appButton="secondary" (click)="openTeam($event)">
                 Посмотреть команду
@@ -129,7 +137,7 @@
                 appButton="icon"
                 class="management__clear-selection"
                 aria-label="Снять выбор проекта"
-                (click)="state.clearSelection()"
+                (click)="clearProjectSelection()"
               >
                 <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
               </button>
@@ -143,7 +151,8 @@
                 </p>
               }
             </section>
-          } @else if (count()) {
+          }
+          @if (count()) {
             <p class="management__muted">
               Выберите один проект, чтобы посмотреть команду или перейти к оценке.
             </p>
