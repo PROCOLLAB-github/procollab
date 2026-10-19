@@ -35,15 +35,18 @@
 
   app-button {
     width: 100%;
-    min-height: 44px;
+    height: 32px;
+    min-height: 32px;
   }
 
   ::ng-deep app-button > button {
     width: 100%;
     min-width: 0;
     max-width: none;
-    min-height: 44px;
-    padding: 10px 16px;
+    height: 32px;
+    min-height: 32px;
+    padding: 5px 16px;
+    line-height: 20px;
     white-space: nowrap;
   }
 
@@ -57,6 +60,12 @@
 
     .info__primary-action {
       justify-content: stretch;
+    }
+
+    .info__primary-action > a,
+    > a {
+      align-items: center;
+      min-height: 44px;
     }
 
     > a {
