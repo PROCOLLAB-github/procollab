@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<main class="expert-invitation">
+<main class="expert-invitation" [class.expert-invitation--organizer]="isOrganizer">
   <a routerLink="/auth/login" aria-label="PROCOLLAB — вход"
     ><img
       class="expert-invitation__logo"
@@ -18,15 +18,33 @@
     }
     @if (invitation(); as invite) {
       <header>
-        <p class="expert-invitation__eyebrow">Приглашение эксперта</p>
+        <p class="expert-invitation__eyebrow">
+          {{ isOrganizer ? "Приглашение организатора" : "Приглашение эксперта" }}
+        </p>
         <h1>{{ invite.program.name }}</h1>
       </header>
       @if (mode() === "joined") {
         <h2>Вы присоединились к программе</h2>
-        <p>Теперь вы эксперт программы. Организатор сможет назначить вам проекты на оценку.</p>
-        <a appButton="primary" [routerLink]="paths.program.projectsRating(invite.program.id)"
-          >Перейти к проектам</a
-        ><a appButton="secondary" routerLink="/office/evaluation">Мои программы</a>
+        <p>
+          {{
+            isOrganizer
+              ? "Теперь вы можете управлять этой программой и приглашать коллег."
+              : "Теперь вы эксперт программы. Организатор сможет назначить вам проекты на оценку."
+          }}
+        </p>
+        <a
+          appButton="primary"
+          [routerLink]="destination(invite.program.id)"
+          [queryParams]="isOrganizer ? { tab: 'organizers' } : null"
+          >{{ isOrganizer ? "Открыть управление" : "Перейти к проектам" }}</a
+        >
+        @if (isOrganizer) {
+          <a appButton="secondary" [routerLink]="paths.program.detail(invite.program.id)"
+            >На страницу программы</a
+          >
+        } @else {
+          <a appButton="secondary" routerLink="/office/evaluation">Мои программы</a>
+        }
       } @else if (
         invite.status === "accepted" &&
         mode() !== "login" &&
@@ -34,10 +52,16 @@
         mode() !== "sent"
       ) {
         <h2>Приглашение уже принято</h2>
-        <p>Войдите с почтой {{ invite.email }}, чтобы открыть свои программы.</p>
+        <p>
+          Войдите с почтой {{ invite.email }}, чтобы
+          {{ isOrganizer ? "открыть управление программой." : "открыть свои программы." }}
+        </p>
         @if (invite.matchesAccount) {
-          <a appButton="primary" [routerLink]="paths.program.projectsRating(invite.program.id)"
-            >Перейти к проектам</a
+          <a
+            appButton="primary"
+            [routerLink]="destination(invite.program.id)"
+            [queryParams]="isOrganizer ? { tab: 'organizers' } : null"
+            >{{ isOrganizer ? "Открыть управление" : "Перейти к проектам" }}</a
           >
         } @else {
           <button type="button" appButton="primary" (click)="switchAccount()">
@@ -54,15 +78,23 @@
           Войти в другой аккаунт
         </button>
       } @else if (hasSession() && invite.matchesAccount) {
-        <h2>Стать экспертом программы</h2>
+        <h2>{{ isOrganizer ? "Стать организатором программы" : "Стать экспертом программы" }}</h2>
         <p>Приглашение для {{ invite.email }}. Ваш аккаунт и другие роли сохранятся.</p>
         <button type="button" appButton="primary" [disabled]="busy()" (click)="accept()">
           Принять приглашение</button
-        ><a appButton="secondary" routerLink="/office/evaluation">Вернуться к программам</a>
+        ><a
+          appButton="secondary"
+          [routerLink]="
+            isOrganizer ? paths.program.detail(invite.program.id) : '/office/evaluation'
+          "
+          >{{ isOrganizer ? "На страницу программы" : "Вернуться к программам" }}</a
+        >
       } @else {
         @switch (mode()) {
           @case ("register") {
-            <h2>Создание аккаунта эксперта</h2>
+            <h2>
+              {{ isOrganizer ? "Создание аккаунта организатора" : "Создание аккаунта эксперта" }}
+            </h2>
             <label
               >Email из приглашения<input
                 appField
@@ -95,6 +127,16 @@
                     "
                 /></label>
               </div>
+              @if (isOrganizer) {
+                <label
+                  >Дата рождения *<input
+                    appField
+                    type="date"
+                    [formControl]="organizerBirthday"
+                    autocomplete="bday"
+                    required
+                /></label>
+              }
               <label
                 >Пароль *<input
                   appField
@@ -204,10 +246,20 @@
             </button>
           }
           @default {
-            <h2>Вас пригласили стать экспертом</h2>
+            <h2>
+              {{
+                isOrganizer
+                  ? "Вас пригласили стать организатором"
+                  : "Вас пригласили стать экспертом"
+              }}
+            </h2>
             <p>
-              Приглашение для {{ invite.email }}. После принятия организатор сможет назначить вам
-              проекты на оценку.
+              Приглашение для {{ invite.email }}.
+              {{
+                isOrganizer
+                  ? "После принятия вы сможете управлять этой программой и приглашать коллег."
+                  : "После принятия организатор сможет назначить вам проекты на оценку."
+              }}
             </p>
             @if (invite.accountExists) {
               <button type="button" appButton="primary" (click)="changeMode('login')">
@@ -215,7 +267,9 @@
               </button>
             } @else {
               <button type="button" appButton="primary" (click)="changeMode('register')">
-                Создать аккаунт эксперта</button
+                {{
+                  isOrganizer ? "Создать аккаунт организатора" : "Создать аккаунт эксперта"
+                }}</button
               ><button type="button" appButton="secondary" (click)="changeMode('login')">
                 У меня уже есть аккаунт
               </button>

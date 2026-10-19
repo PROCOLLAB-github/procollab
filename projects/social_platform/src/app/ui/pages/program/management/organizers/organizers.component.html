@@ -1,0 +1,280 @@
+<!-- @format -->
+<div class="organizers">
+  @if (message()) {
+    <p appAlert="success" role="status">{{ message() }}</p>
+  }
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }} <button type="button" appButton="text" (click)="load()">Обновить список</button>
+    </div>
+  }
+  <section class="organizers__card" [attr.aria-busy]="loading()">
+    <header class="organizers__heading">
+      <div>
+        <h2 tabindex="-1">Организаторы</h2>
+        <p>
+          {{ snapshot()?.organizerCount ?? "—" }} {{ organizerCountLabel() }}
+          @if (snapshot()?.invitationCount) {
+            · <span class="organizers__count">Приглашений: {{ snapshot()!.invitationCount }}</span>
+          }
+        </p>
+      </div>
+      <button
+        type="button"
+        appButton="primary"
+        [disabled]="busy() || !snapshot()"
+        (click)="open('invite', $event)"
+      >
+        <span class="organizers__desktop-label">Пригласить организатора</span
+        ><span class="organizers__mobile-label">Пригласить</span>
+      </button>
+    </header>
+    <p class="organizers__description">Все организаторы имеют одинаковые права в этой программе.</p>
+    <div class="organizers__filters">
+      <label
+        >Поиск по имени или почте<input
+          type="search"
+          appField
+          [formControl]="search"
+          placeholder="Найти организатора"
+          maxlength="200"
+      /></label>
+      <label
+        >Статус<select appField [formControl]="status">
+          <option value="all">Все статусы</option>
+          <option value="joined">Организаторы</option>
+          <option value="pending">Приглашённые</option>
+          <option value="expired">Ссылка истекла</option>
+        </select></label
+      >
+    </div>
+    @if (deliveryRefreshPaused()) {
+      <p appAlert="warning">
+        Письмо ещё ожидает отправки.
+        <button type="button" appButton="text" (click)="load()">Обновить статус</button>
+      </p>
+    }
+    @if (loading() && !snapshot()) {
+      <p role="status">Загружаем организаторов…</p>
+    }
+    <table class="organizers__table">
+      <thead>
+        <tr>
+          <th>Организатор</th>
+          <th>Email</th>
+          <th>Статус</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of visible(); track row.id) {
+          <tr
+            [attr.data-organizer-id]="row.id"
+            [class.organizers__row--selected]="selectedId() === row.id"
+            tabindex="0"
+            (click)="select(row)"
+            (keydown.enter)="select(row)"
+            (keydown.space)="$event.preventDefault(); select(row)"
+          >
+            <td>
+              <div class="organizers__person">
+                <input
+                  type="radio"
+                  appChoice
+                  name="organizer"
+                  [checked]="selectedId() === row.id"
+                  [attr.aria-label]="
+                    (selectedId() === row.id ? 'Снять выбор: ' : 'Выбрать: ') +
+                    (row.name || row.email)
+                  "
+                  (click)="$event.stopPropagation(); select(row)"
+                  (keydown)="$event.stopPropagation()"
+                /><app-avatar
+                  [url]="href(row.avatar) ?? undefined"
+                  [size]="32"
+                  [fallbackLabel]="initials(row)"
+                /><span
+                  >{{ row.name || "—" }}
+                  @if (row.isSelf) {
+                    <span class="organizers__muted"> · вы</span>
+                  }
+                </span>
+              </div>
+            </td>
+            <td class="organizers__email">{{ row.email }}</td>
+            <td>{{ label(row) }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3">
+              {{
+                loading()
+                  ? "Загружаем список…"
+                  : "Организаторы не найдены. Измените поиск или статус."
+              }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <footer class="organizers__pagination">
+      <span>Показано {{ visible().length }} из {{ filtered().length }}</span>
+      @if (filtered().length > pageSize) {
+        <div>
+          <button
+            type="button"
+            appButton="text"
+            [disabled]="page() === 0"
+            (click)="page.set(page() - 1); clearSelection()"
+          >
+            Назад</button
+          ><button
+            type="button"
+            appButton="text"
+            [disabled]="(page() + 1) * pageSize >= filtered().length"
+            (click)="page.set(page() + 1); clearSelection()"
+          >
+            Далее
+          </button>
+        </div>
+      }
+    </footer>
+  </section>
+  @if (selected(); as row) {
+    <section
+      class="organizers__floating"
+      aria-label="Действия выбранного организатора"
+      [style.left.px]="floatingCenter()"
+      [style.width.px]="floatingWidth()"
+      (keydown.escape)="clearSelection(); $event.stopPropagation()"
+    >
+      <strong aria-live="polite"
+        >{{ row.name || row.email }}
+        @if (row.isSelf) {
+          · вы
+        }
+      </strong>
+      <div class="organizers__actions">
+        @if (row.status === "joined") {
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="!row.canRemove || busy()"
+            (click)="open('remove', $event)"
+          >
+            {{ row.isSelf ? "Выйти из организаторов" : "Убрать доступ" }}
+          </button>
+        } @else {
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy()"
+            (click)="invitationAction('resend')"
+          >
+            Отправить повторно</button
+          ><button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy()"
+            (click)="open('revoke', $event)"
+          >
+            Отозвать
+          </button>
+        }
+        <button
+          type="button"
+          appButton="icon"
+          aria-label="Снять выбор организатора"
+          [disabled]="busy()"
+          (click)="clearSelection()"
+        >
+          ×
+        </button>
+      </div>
+      @if (row.status === "joined" && !row.canRemove) {
+        <p class="organizers__last">Сначала пригласите коллегу и дождитесь принятия.</p>
+      }
+    </section>
+  }
+</div>
+<app-modal
+  [open]="!!modal()"
+  (openChange)="!$event && close()"
+  size="small"
+  labelledBy="organizer-dialog-title"
+  [bodyClass]="'organizers-modal'"
+>
+  <section class="organizers__dialog">
+    <header class="organizers__heading">
+      <h2 id="organizer-dialog-title">{{ dialogTitle() }}</h2>
+      <button
+        type="button"
+        appButton="icon"
+        aria-label="Закрыть окно"
+        [disabled]="busy()"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+    @if (dialogError()) {
+      <p appAlert="error" role="alert">{{ dialogError() }}</p>
+    }
+    @if (modal() === "invite") {
+      <p>
+        После принятия приглашения человек сможет управлять этой программой и приглашать коллег.
+      </p>
+      <form (submit)="$event.preventDefault(); invite()" novalidate>
+        <label
+          >Email<input
+            type="email"
+            appField
+            [formControl]="email"
+            placeholder="colleague@company.ru"
+            autocomplete="email"
+            maxlength="254"
+            [attr.aria-invalid]="email.touched && email.invalid"
+        /></label>
+        @if (email.touched && email.invalid) {
+          <p appAlert="error">Введите корректный email.</p>
+        }
+        <p>Если аккаунта ещё нет, предложим зарегистрироваться.</p>
+        <footer class="organizers__actions">
+          <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">
+            Отмена</button
+          ><button type="submit" appButton="primary" [disabled]="busy()">
+            {{ busy() ? "Создаём приглашение…" : "Отправить приглашение" }}
+          </button>
+        </footer>
+      </form>
+    } @else if (selected(); as row) {
+      <div>
+        <strong>{{ row.name || row.email }}</strong>
+        <p>{{ row.email }}</p>
+      </div>
+      <p>
+        {{
+          modal() === "revoke"
+            ? "Ссылка из письма перестанет действовать. При необходимости можно отправить новое приглашение."
+            : row.isSelf
+              ? "Вы потеряете доступ к управлению программой. Вернуть его сможет другой организатор."
+              : "Доступ к управлению программой закроется сразу. Ранее внесённые изменения сохранятся."
+        }}
+      </p>
+      @if (modal() === "remove" && !row.canRemove) {
+        <p appAlert="warning">Сначала пригласите коллегу и дождитесь принятия.</p>
+      }
+      <footer class="organizers__actions">
+        <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">
+          Отмена</button
+        ><button
+          type="button"
+          appButton="danger"
+          [disabled]="busy() || (modal() === 'remove' && !row.canRemove)"
+          (click)="modal() === 'revoke' ? invitationAction('revoke') : remove()"
+        >
+          {{ modal() === "revoke" ? "Отозвать" : row.isSelf ? "Выйти" : "Убрать доступ" }}
+        </button>
+      </footer>
+    }
+  </section>
+</app-modal>

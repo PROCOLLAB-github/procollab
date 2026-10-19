@@ -10,7 +10,13 @@ export type ManagementSection =
   | "analytics"
   | "settings"
   | "evaluation";
-export type SettingsSection = "basic" | "dates" | "materials" | "project-form" | "criteria";
+export type SettingsSection =
+  | "basic"
+  | "dates"
+  | "materials"
+  | "project-form"
+  | "criteria"
+  | "organizers";
 export interface ManagementMaterial {
   id: number;
   title: string;

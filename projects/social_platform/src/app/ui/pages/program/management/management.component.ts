@@ -55,6 +55,7 @@ import { ManagementProjectFormComponent } from "./project-form/project-form.comp
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
 import { ManagementResultsComponent } from "./results/results.component";
+import { ManagementOrganizersComponent } from "./organizers/organizers.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -84,6 +85,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
     ManagementResultsComponent,
+    ManagementOrganizersComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -125,6 +127,14 @@ export class ProgramManagementComponent implements OnInit {
   readonly criteriaStatus = signal({ dirty: false, busy: false });
   readonly expertsStatus = signal({ dirty: false, busy: false });
   readonly expertsForm = viewChild(ManagementExpertsComponent);
+  readonly organizersForm = viewChild(ManagementOrganizersComponent);
+  readonly organizersStatus = signal({ dirty: false, busy: false });
+  organizerAccessRemoved(): void {
+    const id = this.state.program()?.id;
+    this.organizersStatus.set({ dirty: false, busy: false });
+    this.state.program.set(null);
+    void this.router.navigateByUrl(id ? AppRoutes.program.detail(id) : "/office/program");
+  }
   readonly confirmProjectFormDiscard = () =>
     this.confirm(
       "Есть несохранённые изменения",
@@ -162,6 +172,7 @@ export class ProgramManagementComponent implements OnInit {
     { id: "materials", label: "Материалы" },
     { id: "project-form", label: "Кейсы и поля" },
     { id: "criteria", label: "Оценивание" },
+    { id: "organizers", label: "Организаторы" },
   ];
   readonly basicForm = this.fb.group({
     name: ["", [Validators.required, Validators.pattern(/\S/)]],
@@ -281,7 +292,8 @@ export class ProgramManagementComponent implements OnInit {
       this.uploading() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||
-      this.expertsStatus().busy
+      this.expertsStatus().busy ||
+      this.organizersStatus().busy
     ) {
       event.preventDefault();
       event.returnValue = "";
@@ -315,7 +327,11 @@ export class ProgramManagementComponent implements OnInit {
         const q = this.route.snapshot.queryParamMap;
         const tab = q.get("tab");
         this.settingsTab.set(
-          tab === "dates" || tab === "materials" || tab === "project-form" || tab === "criteria"
+          tab === "dates" ||
+            tab === "materials" ||
+            tab === "project-form" ||
+            tab === "criteria" ||
+            tab === "organizers"
             ? tab
             : "basic",
         );
@@ -444,7 +460,8 @@ export class ProgramManagementComponent implements OnInit {
       this.materialForm.dirty ||
       this.projectFormStatus().dirty ||
       this.criteriaStatus().dirty ||
-      this.expertsStatus().dirty
+      this.expertsStatus().dirty ||
+      this.organizersStatus().dirty
     );
   }
   async canLeave(): Promise<boolean> {
@@ -453,7 +470,8 @@ export class ProgramManagementComponent implements OnInit {
       this.uploading() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||
-      this.expertsStatus().busy
+      this.expertsStatus().busy ||
+      this.organizersStatus().busy
     )
       return false;
     if (!this.dirty()) return true;
@@ -474,6 +492,8 @@ export class ProgramManagementComponent implements OnInit {
       this.criteriaStatus.set({ dirty: false, busy: false });
       this.expertsForm()?.discard();
       this.expertsStatus.set({ dirty: false, busy: false });
+      this.organizersForm()?.discard();
+      this.organizersStatus.set({ dirty: false, busy: false });
     }
     return yes;
   }
@@ -512,6 +532,7 @@ export class ProgramManagementComponent implements OnInit {
       section === "materials" ||
       section === "project-form" ||
       section === "criteria" ||
+      section === "organizers" ||
       this.saving() ||
       this.uploading()
     )

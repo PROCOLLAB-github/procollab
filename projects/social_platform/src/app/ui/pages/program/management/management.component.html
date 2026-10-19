@@ -420,6 +420,13 @@
           (statusChange)="criteriaStatus.set($event)"
           (savedAt)="projectFormSaved($event)"
         />
+      } @else if (settingsTab() === "organizers") {
+        <app-management-organizers
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="organizersStatus.set($event)"
+          (accessRemoved)="organizerAccessRemoved()"
+        />
       } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
           <h2>Основная информация</h2>
