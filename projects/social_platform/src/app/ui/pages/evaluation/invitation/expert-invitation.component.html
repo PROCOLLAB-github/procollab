@@ -157,12 +157,11 @@
                     [attr.aria-pressed]="showPassword()"
                     (click)="showPassword.set(!showPassword())"
                   >
-                    <i
-                      appIcon
-                      [icon]="showPassword() ? 'eye' : 'eye-off'"
-                      appSquare="20"
-                      aria-hidden="true"
-                    ></i></button></span
+                    @if (showPassword()) {
+                      <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
+                    } @else {
+                      <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
+                    }</button></span
                 ><small>Не менее 8 символов.</small></label
               ><label
                 >Повторите пароль *<span class="expert-invitation__password"
@@ -179,12 +178,11 @@
                     [attr.aria-pressed]="showRepeatPassword()"
                     (click)="showRepeatPassword.set(!showRepeatPassword())"
                   >
-                    <i
-                      appIcon
-                      [icon]="showRepeatPassword() ? 'eye' : 'eye-off'"
-                      appSquare="20"
-                      aria-hidden="true"
-                    ></i></button></span
+                    @if (showRepeatPassword()) {
+                      <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
+                    } @else {
+                      <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
+                    }</button></span
               ></label>
               <label class="expert-invitation__choice"
                 ><input type="checkbox" appChoice formControlName="acceptPolicy" /><span
@@ -240,12 +238,11 @@
                     [attr.aria-pressed]="showLoginPassword()"
                     (click)="showLoginPassword.set(!showLoginPassword())"
                   >
-                    <i
-                      appIcon
-                      [icon]="showLoginPassword() ? 'eye' : 'eye-off'"
-                      appSquare="20"
-                      aria-hidden="true"
-                    ></i></button></span></label
+                    @if (showLoginPassword()) {
+                      <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
+                    } @else {
+                      <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
+                    }</button></span></label
               ><button
                 type="button"
                 appButton="text"
