@@ -509,10 +509,17 @@
 
 .experts__choice span span {
   color: var(--grey-for-text);
+
+  &.experts__reason {
+    padding: 3px 8px;
+    color: var(--black);
+    background: color-mix(in srgb, var(--gold) 28%, var(--light-white));
+    border-radius: 6px;
+  }
 }
 
 .experts__choice--disabled {
-  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .experts__load {

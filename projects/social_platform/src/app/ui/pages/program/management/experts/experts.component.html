@@ -583,16 +583,13 @@
           <strong>Шаг 2 из 2. Проверьте назначения</strong>
           @if (preview.shortages.length) {
             <p appAlert="warning">
-              Распределение пока нельзя применить. Вернитесь назад и выберите больше экспертов для
+              Не хватает подходящих экспертов. Вернитесь назад и выберите больше экспертов для
               указанных кейсов или пригласите новых.
             </p>
           } @else if (preview.assignments.length) {
-            <p appAlert="success">
-              Распределение готово: новых назначений — {{ preview.assignments.length }}. Проверьте
-              список и подтвердите.
-            </p>
+            <p appAlert="success">Распределение готово. Проверьте список ниже и подтвердите.</p>
           }
-          <h3>Новые назначения</h3>
+          <h3>Проекты и выбранные эксперты</h3>
           <div class="experts__scroll">
             @for (assignment of preview.assignments; track $index) {
               <div class="experts__load">
@@ -861,7 +858,7 @@
         /><span
           ><strong>{{ expert.name || expert.email }}</strong
           ><span>{{ expert.email }}</span
-          ><span>{{
+          ><span [class.experts__reason]="!!candidateReason(expert)">{{
             candidateReason(expert) ||
               scopeLabel(expert) + " · Ожидают оценки: " + (expert.remaining ?? 0)
           }}</span></span
