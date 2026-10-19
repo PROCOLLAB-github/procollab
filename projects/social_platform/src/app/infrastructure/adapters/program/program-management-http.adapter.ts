@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
+import { ProgramResults, ResultsQuery } from "@domain/program/program-results.model";
 import {
   ManagementCriteria,
   ManagementCriteriaWrite,
@@ -28,6 +29,18 @@ import {
 @Injectable()
 export class ProgramManagementHttpAdapter implements ProgramManagementRepositoryPort {
   private readonly api = inject(ApiService);
+  results(id: number) {
+    return this.api.get<ProgramResults>(`${this.root(id)}/results/`);
+  }
+  exportResults(id: number, query: ResultsQuery) {
+    let params = new HttpParams()
+      .set("search", query.search)
+      .set("case_scope", query.caseScope)
+      .set("order", query.order)
+      .set("scope", query.scope);
+    if (query.caseName) params = params.set("case_name", query.caseName);
+    return this.api.getFile(`${this.root(id)}/results/export/`, params);
+  }
   criteria(id: number) {
     return this.api.get<ManagementCriteria>(`${this.root(id)}/criteria/`);
   }

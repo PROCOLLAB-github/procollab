@@ -6,6 +6,7 @@ export type ManagementSection =
   | "participants"
   | "projects"
   | "experts"
+  | "results"
   | "analytics"
   | "settings"
   | "evaluation";

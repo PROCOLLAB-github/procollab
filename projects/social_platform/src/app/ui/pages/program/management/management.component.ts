@@ -53,6 +53,7 @@ import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-pre
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
+import { ManagementResultsComponent } from "./results/results.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -81,6 +82,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ManagementProjectFormComponent,
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
+    ManagementResultsComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -147,6 +149,7 @@ export class ProgramManagementComponent implements OnInit {
     { id: "participants", label: "Участники" },
     { id: "projects", label: "Проекты" },
     { id: "experts", label: "Эксперты" },
+    { id: "results", label: "Результаты" },
     { id: "analytics", label: "Аналитика" },
     { id: "settings", label: "Настройки" },
   ];
@@ -278,6 +281,7 @@ export class ProgramManagementComponent implements OnInit {
           "participants",
           "projects",
           "experts",
+          "results",
           "analytics",
           "settings",
           "evaluation",
