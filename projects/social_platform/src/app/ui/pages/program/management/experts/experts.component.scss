@@ -80,16 +80,31 @@
 }
 
 .experts__tabs button {
+  position: relative;
   flex: 1;
   min-width: 0;
-  min-height: 44px;
-  padding: 8px;
+  min-height: 32px;
+  padding: 5px 8px;
   font: inherit;
+  line-height: 20px;
   color: var(--black);
+  white-space: nowrap;
   cursor: pointer;
   background: transparent;
   border: 0;
   border-bottom: 1px solid transparent;
+}
+
+@media (max-width: 999px) {
+  .experts__tabs button {
+    margin-block: 6px;
+
+    &::after {
+      position: absolute;
+      inset: -6px 0;
+      content: "";
+    }
+  }
 }
 
 .experts__tabs button[aria-current] {
@@ -480,6 +495,14 @@
 }
 
 @media (max-width: 700px) {
+  .experts__tabs button:first-child {
+    flex: 0.7;
+  }
+
+  .experts__tabs button:last-child {
+    flex: 1.3;
+  }
+
   .ui-button.ui-button {
     min-height: 32px;
     padding: 5px 16px;

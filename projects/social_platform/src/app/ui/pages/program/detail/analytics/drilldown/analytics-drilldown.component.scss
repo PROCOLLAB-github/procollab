@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/responsive";
+@use "styles/program-management-controls";
 
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
   box-sizing: border-box;
@@ -268,9 +269,9 @@
   }
 
   &__close {
-    flex: 0 0 36px;
-    width: 36px;
-    height: 36px;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
     font-size: 26px !important;
     color: var(--dark-grey);
     background: transparent;
@@ -644,4 +645,15 @@
       }
     }
   }
+}
+
+.analytics-drilldown .ui-button.ui-button {
+  @include program-management-controls.compact-action;
+}
+
+.analytics-drilldown app-button > button.button.button {
+  @include program-management-controls.compact-action;
+
+  min-width: 0;
+  max-height: none;
 }

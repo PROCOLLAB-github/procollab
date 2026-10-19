@@ -10,15 +10,10 @@
   padding-top: 50px;
   padding-right: 50px;
   overflow-x: hidden;
-
-  @media screen and (max-width: 999px) {
-    pointer-events: none;
-  }
+  pointer-events: none;
 
   &__item {
-    @media screen and (max-width: 999px) {
-      pointer-events: auto;
-    }
+    pointer-events: auto;
 
     &:not(:last-child) {
       margin-bottom: 10px;

@@ -1,6 +1,18 @@
 /** @format */
 
 @use "styles/responsive";
+@use "styles/program-management-controls";
+
+.analytics .ui-button.ui-button:not(.attention__action, .evaluation__assignment-action) {
+  @include program-management-controls.compact-action;
+}
+
+.analytics ::ng-deep app-button > button.button.button {
+  @include program-management-controls.compact-action;
+
+  min-width: 0;
+  max-height: none;
+}
 
 .analytics {
   display: flex;

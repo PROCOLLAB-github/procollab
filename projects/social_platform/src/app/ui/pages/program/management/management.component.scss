@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
 
 :host {
   display: block;
@@ -8,8 +9,9 @@
 }
 
 // Native adapters share the existing foundation on desktop as well as mobile.
-.ui-button {
+.ui-button.ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .ui-field {
@@ -287,8 +289,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    padding: 10px 18px;
+
+    @include program-management-controls.compact-action;
+
+    min-width: 0;
     color: var(--white) !important;
     text-align: center;
     background: var(--accent);
@@ -316,10 +320,11 @@
     }
 
     a {
+      position: relative;
       display: grid;
       flex: 1;
       align-items: center;
-      min-height: 44px;
+      min-height: 32px;
       color: var(--black);
       text-align: center;
       border-bottom: 1px solid transparent;
@@ -719,7 +724,7 @@
     }
 
     &__inline > button {
-      min-height: 44px;
+      min-height: 32px;
     }
 
     &__form input:not([type="radio"]) {
@@ -738,6 +743,22 @@
     > button {
       width: 100%;
     }
+  }
+}
+
+.management ::ng-deep app-pagination .ui-button.ui-button {
+  @include program-management-controls.compact-action;
+}
+
+@media (max-width: 999px) {
+  .management__settings-tabs a {
+    margin-block: 6px;
+  }
+
+  .management__settings-tabs a::after {
+    position: absolute;
+    inset: -6px 0;
+    content: "";
   }
 }
 

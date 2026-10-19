@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
 @use "styles/program-branding";
 
 :host {
@@ -8,8 +9,9 @@
   min-width: 0;
 }
 
-.ui-button {
+.ui-button.ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .branding-preview {
@@ -153,12 +155,19 @@
 
   &__move {
     display: flex;
-    gap: 8px;
+    gap: 12px;
 
     button {
-      min-width: 44px;
-      padding: 8px;
+      width: 32px;
+      min-width: 32px;
+      padding: 5px;
       font-size: 18px;
+
+      @media (max-width: 999px) {
+        &::after {
+          inset: -6px;
+        }
+      }
     }
   }
 
