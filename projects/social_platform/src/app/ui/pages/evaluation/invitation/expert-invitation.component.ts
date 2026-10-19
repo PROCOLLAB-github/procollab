@@ -5,7 +5,13 @@ import { Meta } from "@angular/platform-browser";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
-import { AlertDirective, ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
+import {
+  AlertDirective,
+  ButtonDirective,
+  ChoiceDirective,
+  FieldDirective,
+  IconComponent,
+} from "@uilib";
 import { TokenService } from "@corelib";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
@@ -26,6 +32,7 @@ import { loggedOut } from "@domain/auth/events/logged-out.event";
     ButtonDirective,
     ChoiceDirective,
     FieldDirective,
+    IconComponent,
   ],
   templateUrl: "./expert-invitation.component.html",
   styleUrl: "./expert-invitation.component.scss",
@@ -54,6 +61,8 @@ export class ExpertInvitationComponent {
   readonly hasSession = signal(!!this.tokens.getTokens());
   readonly mode = signal<"intro" | "register" | "login" | "reset" | "sent" | "joined">("intro");
   readonly showPassword = signal(false);
+  readonly showRepeatPassword = signal(false);
+  readonly showLoginPassword = signal(false);
   readonly password = this.fb.control("", Validators.required);
   readonly registration = this.fb.group({
     firstName: ["", [Validators.required, Validators.pattern(/\S/), Validators.maxLength(255)]],

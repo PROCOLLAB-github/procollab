@@ -37,6 +37,7 @@ import { InviteInfoService } from "@api/invite/facades/invite-info.service";
 import { A11yModule } from "@angular/cdk/a11y";
 import { Overlay } from "@angular/cdk/overlay";
 import { desktop } from "@utils/responsive";
+import { NotificationListComponent } from "@ui/widgets/notification-list/notification-list.component";
 
 /**
  * Компонент навигационного меню
@@ -82,6 +83,7 @@ import { desktop } from "@utils/responsive";
     ProfileInfoComponent,
     AsyncPipe,
     A11yModule,
+    NotificationListComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -138,33 +138,52 @@
                 /></label>
               }
               <label
-                >Пароль *<input
-                  appField
-                  [type]="showPassword() ? 'text' : 'password'"
-                  formControlName="password"
-                  aria-label="Пароль *"
-                  autocomplete="new-password"
-                  minlength="8"
-                  maxlength="128"
-                  [attr.aria-invalid]="
-                    registration.controls.password.touched && registration.controls.password.invalid
-                  "
-                /><small>Не менее 8 символов.</small></label
+                >Пароль *<span class="expert-invitation__password"
+                  ><input
+                    appField
+                    [type]="showPassword() ? 'text' : 'password'"
+                    formControlName="password"
+                    aria-label="Пароль *"
+                    autocomplete="new-password"
+                    minlength="8"
+                    maxlength="128"
+                    [attr.aria-invalid]="
+                      registration.controls.password.touched &&
+                      registration.controls.password.invalid
+                    " /><button
+                    type="button"
+                    class="expert-invitation__eye"
+                    [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                    [attr.aria-pressed]="showPassword()"
+                    (click)="showPassword.set(!showPassword())"
+                  >
+                    @if (showPassword()) {
+                      <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
+                    } @else {
+                      <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
+                    }</button></span
+                ><small>Не менее 8 символов.</small></label
               ><label
-                >Повторите пароль *<input
-                  appField
-                  [type]="showPassword() ? 'text' : 'password'"
-                  formControlName="repeatPassword"
-                  autocomplete="new-password"
-              /></label>
-              <button
-                type="button"
-                appButton="text"
-                (click)="showPassword.set(!showPassword())"
-                [attr.aria-pressed]="showPassword()"
-              >
-                {{ showPassword() ? "Скрыть пароль" : "Показать пароль" }}
-              </button>
+                >Повторите пароль *<span class="expert-invitation__password"
+                  ><input
+                    appField
+                    [type]="showRepeatPassword() ? 'text' : 'password'"
+                    formControlName="repeatPassword"
+                    autocomplete="new-password" /><button
+                    type="button"
+                    class="expert-invitation__eye"
+                    [attr.aria-label]="
+                      showRepeatPassword() ? 'Скрыть повтор пароля' : 'Показать повтор пароля'
+                    "
+                    [attr.aria-pressed]="showRepeatPassword()"
+                    (click)="showRepeatPassword.set(!showRepeatPassword())"
+                  >
+                    @if (showRepeatPassword()) {
+                      <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
+                    } @else {
+                      <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
+                    }</button></span
+              ></label>
               <label class="expert-invitation__choice"
                 ><input type="checkbox" appChoice formControlName="acceptPolicy" /><span
                   >Я прочитал соглашение и даю согласие на обработку персональных данных.</span
@@ -206,12 +225,24 @@
                   type="email"
                   autocomplete="username" /></label
               ><label
-                >Пароль<input
-                  appField
-                  type="password"
-                  [formControl]="password"
-                  autocomplete="current-password"
-                  required /></label
+                >Пароль<span class="expert-invitation__password"
+                  ><input
+                    appField
+                    [type]="showLoginPassword() ? 'text' : 'password'"
+                    [formControl]="password"
+                    autocomplete="current-password"
+                    required /><button
+                    type="button"
+                    class="expert-invitation__eye"
+                    [attr.aria-label]="showLoginPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                    [attr.aria-pressed]="showLoginPassword()"
+                    (click)="showLoginPassword.set(!showLoginPassword())"
+                  >
+                    @if (showLoginPassword()) {
+                      <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
+                    } @else {
+                      <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
+                    }</button></span></label
               ><button
                 type="button"
                 appButton="text"

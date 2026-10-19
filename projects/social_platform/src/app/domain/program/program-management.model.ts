@@ -57,6 +57,7 @@ export interface ManagementParticipant {
   name: string;
   email: string | null;
   city: string | null;
+  region?: string | null;
   registeredAt: string;
   lastActivity?: string | null;
 }
@@ -87,6 +88,10 @@ export interface ManagementPage<T> {
 export interface ManagementProjectsPage extends ManagementPage<ManagementProject> {
   caseOptions: string[];
   isCompetitive: boolean;
+}
+export interface ManagementParticipantsPage extends ManagementPage<ManagementParticipant> {
+  totalCount?: number;
+  regionOptions?: string[];
 }
 export interface ManagementTeam {
   projectId: number;
@@ -120,6 +125,11 @@ export interface ManagementQuery {
   submission: "all" | "submitted" | "not_submitted";
   caseScope: "all" | "selected" | "without_case";
   caseName?: string;
+  regionScope?: "all" | "selected" | "without_region";
+  region?: string;
+  activity?: "all" | "period" | "never";
+  activityFrom?: string;
+  activityTo?: string;
 }
 export interface ManagementSettingsWrite {
   expectedUpdatedAt: string;

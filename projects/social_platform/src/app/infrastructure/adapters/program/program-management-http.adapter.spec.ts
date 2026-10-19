@@ -47,6 +47,30 @@ describe("Контракт HTTP панели организатора", () => {
     expect(request.request.params.get("offset")).toBe("25");
     request.flush({ count: 0, results: [], case_options: ["Экология"], is_competitive: true });
   });
+  it("выгрузка участников передаёт те же фильтры региона и периода, что и список", () => {
+    const query = {
+      search: "Анна",
+      offset: 25,
+      limit: 25,
+      submission: "all" as const,
+      caseScope: "all" as const,
+      regionScope: "selected" as const,
+      region: "Москва",
+      activity: "period" as const,
+      activityFrom: "2026-10-01",
+      activityTo: "2026-10-19",
+    };
+    adapter.participants(4, query).subscribe(page => expect(page.totalCount).toBe(100));
+    const list = http.expectOne(r => r.url.endsWith("/participants/"));
+    list.flush({ count: 30, total_count: 100, region_options: ["Москва"], results: [] });
+    adapter.exportParticipants(4, query).subscribe();
+    const file = http.expectOne(r => r.url.endsWith("/participants/export/"));
+    expect(file.request.params.toString()).toBe(list.request.params.toString());
+    expect(file.request.params.get("activity_from")).toBe("2026-10-01");
+    expect(file.request.params.get("region")).toBe("Москва");
+    expect(file.request.responseType).toBe("blob");
+    file.flush(new Blob(["xlsx"]));
+  });
   it("версия PATCH не теряет точность при преобразовании JSON", () => {
     const version = "2026-10-17T12:34:56.123456Z";
     adapter

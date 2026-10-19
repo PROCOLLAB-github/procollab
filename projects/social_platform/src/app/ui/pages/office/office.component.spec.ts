@@ -14,12 +14,27 @@ import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
 import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { NotificationService } from "@ui/services/notification/notification.service";
 
 describe("OfficeComponent", () => {
   let component: OfficeComponent;
   let fixture: ComponentFixture<OfficeComponent>;
 
   beforeEach(async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: NotificationService,
+          useValue: {
+            start: vi.fn(),
+            stop: vi.fn(),
+            hasNotifications: of(0),
+            notifications: of([]),
+            failed: signal(false),
+          },
+        },
+      ],
+    });
     const authPortSpy = {
       login: of({} as any),
       logout: of(undefined),

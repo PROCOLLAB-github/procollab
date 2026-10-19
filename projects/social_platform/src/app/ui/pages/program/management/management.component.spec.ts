@@ -307,8 +307,8 @@ describe("Списки управления программой в DOM", () => 
     });
     harness.detectChanges();
     const headings = element().querySelectorAll(".management__participants th");
-    expect(headings).toHaveLength(5);
-    expect(headings[4].textContent).toContain("Дата последней активности");
+    expect(headings).toHaveLength(6);
+    expect(headings[5].textContent).toContain("Дата последней активности");
     const cells = element().querySelectorAll('td[data-label="Последняя активность"]');
     expect(Array.from(cells, cell => cell.textContent?.trim())).toEqual([
       "17.10.2026 01:30",
@@ -317,6 +317,36 @@ describe("Списки управления программой в DOM", () => 
     ]);
     expect(cells[0].querySelector("time")?.getAttribute("datetime")).toBe("2026-10-16T22:30:00Z");
     expect(cells[1].querySelector("time")).toBeNull();
+  });
+
+  it("восстанавливает фильтры участников из URL и продолжает нумерацию со второй страницы", async () => {
+    const { component, state, element } = await setup(
+      "participants",
+      "?region_scope=selected&region=Москва&activity=period&activity_from=2026-10-01&activity_to=2026-10-19&offset=25",
+    );
+    expect(component.regionFilter.value).toBe("region:Москва");
+    expect(component.activityFrom.value).toBe("2026-10-01");
+    expect(state.context?.query.region).toBe("Москва");
+    expect(state.context?.query.activityTo).toBe("2026-10-19");
+    expect(element().querySelector('td[data-label="№"]')?.textContent?.trim()).toBe("26");
+    expect(element().textContent).toContain("Всего участников:");
+    component.activityFrom.setValue("2026-10-20");
+    component.applyParticipantFilters();
+    expect(component.participantFilterError()).toContain("не раньше");
+  });
+
+  it("изменение региона в настоящем select передаёт новое значение в URL и запрос списка", async () => {
+    const { harness, state, element } = await setup();
+    state.participants.set(Object.assign({}, state.participants(), { regionOptions: ["Москва"] }));
+    harness.detectChanges();
+    const select = element().querySelector<HTMLSelectElement>(
+      ".management__participant-filters select",
+    )!;
+    select.value = "region:Москва";
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+    await vi.waitFor(() => expect(state.context?.query.region).toBe("Москва"));
+    expect(state.context?.query.regionScope).toBe("selected");
+    expect(select.value).toBe("region:Москва");
   });
 
   async function materialDialog() {

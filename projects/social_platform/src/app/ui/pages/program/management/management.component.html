@@ -47,7 +47,31 @@
     }
     @if (section() === "participants" || section() === "projects") {
       <section class="management__card" [attr.aria-busy]="state.pending()">
-        <h2>{{ section() === "participants" ? "Участники" : "Проекты" }}</h2>
+        <div class="management__list-heading">
+          <div>
+            <h2>{{ section() === "participants" ? "Участники" : "Проекты" }}</h2>
+            @if (section() === "participants") {
+              <p class="management__participant-count" aria-live="polite">
+                Всего участников: <strong>{{ state.participants()?.totalCount ?? count() }}</strong>
+                @if (hasListFilters()) {
+                  <span> · По фильтрам: {{ count() }}</span>
+                }
+              </p>
+            }
+          </div>
+          @if (section() === "participants") {
+            <button
+              appButton="secondary"
+              type="button"
+              [disabled]="
+                state.pending() || exportingParticipants() || !!participantFilterError() || !count()
+              "
+              (click)="exportParticipants()"
+            >
+              {{ exportingParticipants() ? "Выгружаем…" : "Выгрузить в Excel" }}
+            </button>
+          }
+        </div>
         <p class="management__muted">
           {{
             section() === "participants"
@@ -72,6 +96,66 @@
             "
           />
         </form>
+        @if (section() === "participants") {
+          <div class="management__filters management__participant-filters">
+            <label
+              >Регион<select
+                [formControl]="regionFilter"
+                (change)="changeParticipantFilter('region', $any($event.target).value)"
+              >
+                <option value="all">Все регионы</option>
+                <option value="without_region">Регион не указан</option>
+                @for (region of state.participants()?.regionOptions ?? []; track region) {
+                  <option [value]="'region:' + region">{{ region }}</option>
+                }
+              </select></label
+            >
+            <label
+              >Последняя активность<select
+                [formControl]="activityFilter"
+                (change)="changeParticipantFilter('activity', $any($event.target).value)"
+              >
+                <option value="all">За всё время</option>
+                <option value="period">За период</option>
+                <option value="never">Не было активности</option>
+              </select></label
+            >
+            @if (activityFilter.value === "period") {
+              <label
+                >С (МСК)<input
+                  appField
+                  type="date"
+                  [formControl]="activityFrom"
+                  [attr.max]="activityTo.value || null"
+                  (change)="changeParticipantFilter('from', $any($event.target).value)"
+              /></label>
+              <label
+                >По (МСК)<input
+                  appField
+                  type="date"
+                  [formControl]="activityTo"
+                  [attr.min]="activityFrom.value || null"
+                  (change)="changeParticipantFilter('to', $any($event.target).value)"
+              /></label>
+            }
+          </div>
+          @if (participantFilterError()) {
+            <p appAlert="error" role="alert">{{ participantFilterError() }}</p>
+          }
+          @if (hasListFilters()) {
+            <button type="button" appButton="text" (click)="resetListFilters()">
+              Сбросить фильтры
+            </button>
+          }
+          @if (participantExportError()) {
+            <p appAlert="error" role="alert">Не удалось выгрузить участников. Повторите попытку.</p>
+          }
+          @if (participantExportSuccess()) {
+            <p role="status" class="management__muted">
+              Excel с участниками по текущим фильтрам готов.
+            </p>
+          }
+        }
         @if (section() === "projects") {
           <div class="management__filters">
             <label
@@ -164,9 +248,7 @@
           <div class="management__empty" role="status">
             <h3>
               {{
-                state.context?.query?.search ||
-                state.context?.query?.caseScope !== "all" ||
-                state.context?.query?.submission !== "all"
+                hasListFilters()
                   ? "Ничего не найдено"
                   : section() === "participants"
                     ? "В программе пока нет участников"
@@ -174,24 +256,8 @@
               }}
             </h3>
             <p>Измените запрос или дождитесь появления новых данных.</p>
-            @if (
-              state.context?.query?.search ||
-              state.context?.query?.caseScope !== "all" ||
-              state.context?.query?.submission !== "all"
-            ) {
-              <button
-                type="button"
-                appButton="secondary"
-                (click)="
-                  changeQuery({
-                    search: null,
-                    case_scope: null,
-                    case_name: null,
-                    submission: null,
-                    offset: 0,
-                  })
-                "
-              >
+            @if (hasListFilters()) {
+              <button type="button" appButton="secondary" (click)="resetListFilters()">
                 Сбросить поиск и фильтры
               </button>
             }
@@ -203,19 +269,25 @@
             </caption>
             <thead>
               <tr>
+                <th scope="col">№</th>
                 <th scope="col">Участник</th>
                 <th scope="col">Почта</th>
-                <th scope="col">Город</th>
+                <th scope="col">Регион</th>
                 <th scope="col">В программе с</th>
                 <th scope="col" title="Время по Москве">Дата последней активности</th>
               </tr>
             </thead>
             <tbody>
-              @for (person of state.participants()?.results ?? []; track person.id) {
+              @for (
+                person of state.participants()?.results ?? [];
+                track person.id;
+                let index = $index
+              ) {
                 <tr>
+                  <td data-label="№">{{ offset() + index + 1 }}</td>
                   <td class="management__name" data-label="Участник">{{ person.name }}</td>
                   <td data-label="Почта">{{ person.email || "Не указана" }}</td>
-                  <td data-label="Город">{{ person.city || "Не указан" }}</td>
+                  <td data-label="Регион">{{ person.region || "—" }}</td>
                   <td data-label="В программе с">
                     {{ person.registeredAt | date: "dd.MM.yyyy" : "+0300" }}
                   </td>

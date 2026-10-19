@@ -11,6 +11,34 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ExpertInvitationComponent } from "./expert-invitation.component";
 
 describe("Путь приглашённого эксперта", () => {
+  it("глазики независимо показывают пароль и повтор без отправки формы и потери значений", () => {
+    const { fixture, component, api } = setup();
+    component.changeMode("register");
+    component.registration.patchValue({
+      password: "SafeValue123!",
+      repeatPassword: "SafeValue123!",
+    });
+    fixture.detectChanges();
+    const first = fixture.nativeElement.querySelector(
+      '[formControlName="password"]',
+    ) as HTMLInputElement;
+    const repeat = fixture.nativeElement.querySelector(
+      '[formControlName="repeatPassword"]',
+    ) as HTMLInputElement;
+    const toggle = fixture.nativeElement.querySelector(
+      'button[aria-label="Показать пароль"]',
+    ) as HTMLButtonElement;
+    toggle.click();
+    fixture.detectChanges();
+    expect(first.type).toBe("text");
+    expect(repeat.type).toBe("password");
+    expect(toggle.getAttribute("aria-pressed")).toBe("true");
+    toggle.click();
+    fixture.detectChanges();
+    expect(first.type).toBe("password");
+    expect(first.value).toBe("SafeValue123!");
+    expect(api.register).not.toHaveBeenCalled();
+  });
   it("не передаёт ссылку приглашения в Referer и восстанавливает политику после ухода", () => {
     const { fixture } = setup();
     expect(document.querySelector('meta[name="referrer"]')?.getAttribute("content")).toBe(
