@@ -32,7 +32,7 @@ import {
   AnalyticsFunnelChartComponent,
   AnalyticsFunnelStage,
 } from "./funnel-chart/funnel-chart.component";
-import { ProgramAnalyticsAssignmentScope } from "@domain/program/program-analytics.model";
+import { AnalyticsEvaluationProgressComponent } from "./evaluation-progress/evaluation-progress.component";
 
 interface AnalyticsMetric {
   key: string;
@@ -40,7 +40,6 @@ interface AnalyticsMetric {
   value: number;
   tooltip: string;
   icon?: string;
-  scope?: ProgramAnalyticsAssignmentScope;
 }
 
 interface RegionExportState {
@@ -73,6 +72,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
     AnalyticsRegionChartComponent,
     AnalyticsActivityChartComponent,
     AnalyticsFunnelChartComponent,
+    AnalyticsEvaluationProgressComponent,
   ],
   providers: [ProgramAnalyticsInfoService, ExportFileInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -266,73 +266,6 @@ export class ProgramAnalyticsComponent implements OnInit {
         funnel.evaluated,
         "Сданные проекты, признанные оценёнными по режиму программы.",
       ),
-    ];
-  });
-
-  protected readonly evaluationStatuses = computed<AnalyticsMetric[]>(() => {
-    const status = this.data()?.evaluationStatus;
-    if (!status) return [];
-
-    const metrics = [
-      this.metric(
-        "evaluation-submitted",
-        "Сдано",
-        status.projects.submitted,
-        "Все проекты с отправленным решением.",
-      ),
-    ];
-
-    if (status.mode === "distributed") {
-      metrics.push(
-        this.metric(
-          "evaluation-partial",
-          "Частично оценено",
-          status.projects.partiallyEvaluated,
-          status.requiredEvaluators != null
-            ? "Есть полная оценка хотя бы одного эксперта, но нужное число оценок ещё не получено."
-            : "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
-        ),
-      );
-    }
-
-    metrics.push(
-      this.metric(
-        "evaluation-evaluated",
-        "Оценено",
-        status.projects.evaluated,
-        status.requiredEvaluators != null
-          ? "Проекты, получившие нужное число полных оценок от разных экспертов."
-          : status.mode === "open"
-            ? "Проекты, получившие хотя бы одну оценку эксперта."
-            : "Проекты, по которым выполнены все назначения экспертов.",
-      ),
-    );
-    return metrics;
-  });
-
-  protected readonly evaluationChartItems = computed<AnalyticsFunnelStage[]>(() =>
-    this.evaluationStatuses().map<AnalyticsFunnelStage>(item => ({
-      ...item,
-      axisLabel: item.key === "evaluation-partial" ? ["Частично", "оценено"] : [item.label],
-      tone:
-        item.key === "evaluation-submitted"
-          ? "muted"
-          : item.key === "evaluation-evaluated"
-            ? "success"
-            : "accent",
-    })),
-  );
-
-  protected readonly assignmentStatuses = computed<AnalyticsMetric[]>(() => {
-    const assignments = this.data()?.evaluationStatus.assignments;
-    if (!assignments) return [];
-    return [
-      { ...this.metric("assignments-total", "Назначений всего", assignments.total), scope: "all" },
-      {
-        ...this.metric("assignments-evaluated", "Выполнено", assignments.evaluated),
-        scope: "completed",
-      },
-      { ...this.metric("assignments-pending", "Ожидает", assignments.pending), scope: "pending" },
     ];
   });
 
