@@ -1,14 +1,16 @@
 /** @format */
 
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
 
 :host {
   display: block;
   min-width: 0;
 }
 
-.ui-button {
+.ui-button.ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .ui-field {
@@ -93,7 +95,7 @@
 }
 
 .project-form__section-heading .ui-button {
-  min-height: 0;
+  min-height: 32px;
   padding: 0;
   font: inherit;
 }
@@ -196,6 +198,7 @@
 .project-form__option {
   display: flex;
   gap: 12px;
+  align-items: center;
   margin-bottom: 12px;
 }
 

@@ -1,13 +1,15 @@
 /** @format */
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
 
 :host {
   display: block;
   min-width: 0;
 }
 
-.ui-button {
+.ui-button.ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .ui-field {
@@ -28,6 +30,10 @@
 
 .criteria__dialog {
   width: 100%;
+}
+
+.criteria__dialog ::ng-deep app-project-rating .ui-button.ui-button {
+  @include program-management-controls.compact-action;
 }
 
 h2,
