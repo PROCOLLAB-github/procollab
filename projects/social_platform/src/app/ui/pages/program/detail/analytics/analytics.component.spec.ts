@@ -446,11 +446,11 @@ describe("ProgramAnalyticsComponent", () => {
       "summary-projects",
       "summary-submitted-projects",
       "summary-participants-per-project",
-      "program-deadlines",
       "attention-block",
-      "evaluation-statuses",
+      "program-deadlines",
       "participant-funnel",
       "solution-funnel",
+      "evaluation-statuses",
       "cases-card",
       "activity-dynamics",
       "project-regions",
@@ -463,7 +463,7 @@ describe("ProgramAnalyticsComponent", () => {
       vi.useRealTimers();
     });
 
-    it("shows actual dates and the effective submission fallback above attention", () => {
+    it("shows actual dates and the effective submission fallback beside attention", () => {
       analytics.scheduleDates.set({
         datetimeRegistrationEnds: "2026-10-17T18:00:00+03:00",
         datetimeProjectSubmissionEnds: null,
@@ -478,7 +478,7 @@ describe("ProgramAnalyticsComponent", () => {
         "По сроку регистрации",
       );
       expect(card.textContent).not.toContain("Конец оценивания");
-      expect(card.nextElementSibling?.getAttribute("data-testid")).toBe("attention-block");
+      expect(card.previousElementSibling?.getAttribute("data-testid")).toBe("attention-block");
     });
 
     it("does not show a submission deadline in a noncompetitive program", () => {
@@ -529,18 +529,16 @@ describe("ProgramAnalyticsComponent", () => {
   });
 
   it.each([
-    [0, "all"],
-    [1, "completed"],
-    [2, "pending"],
+    ["[data-testid=open-all-assignments]", "all"],
+    [".evaluation__assignment-action:nth-child(1)", "completed"],
+    [".evaluation__assignment-action:nth-child(2)", "pending"],
   ] as const)("метрика %s открывает scope %s с конкретной кнопки", (index, scope) => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const drilldown = fixture.debugElement.query(By.directive(AnalyticsDrilldownComponent))
       .componentInstance as AnalyticsDrilldownComponent;
     const open = vi.spyOn(drilldown, "openAssignments").mockImplementation(() => {});
-    const trigger = fixture.nativeElement.querySelectorAll(".evaluation__assignment-action")[
-      index
-    ] as HTMLButtonElement;
+    const trigger = fixture.nativeElement.querySelector(index) as HTMLButtonElement;
     trigger.click();
     expect(open).toHaveBeenCalledExactlyOnceWith(scope, trigger);
   });
@@ -560,10 +558,12 @@ describe("ProgramAnalyticsComponent", () => {
     const buttons = fixture.nativeElement.querySelectorAll(
       ".evaluation__assignment-action",
     ) as NodeListOf<HTMLButtonElement>;
-    expect(buttons).toHaveLength(3);
-    expect(buttons[0].disabled).toBe(false);
-    expect(buttons[1].disabled).toBe(true);
-    expect(buttons[2].disabled).toBe(false);
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0].disabled).toBe(true);
+    expect(buttons[1].disabled).toBe(false);
+    expect(fixture.nativeElement.querySelector("[data-testid=open-all-assignments]").disabled).toBe(
+      false,
+    );
   });
 
   it("does not duplicate awaiting work with a delayed experts attention row", () => {
@@ -857,17 +857,19 @@ describe("ProgramAnalyticsComponent", () => {
     ).toHaveLength(2);
   });
 
-  it("показывает обязательное число оценок вместо прежнего максимума в управляемом режиме", () => {
+  it("считает прогресс по фактическим назначениям независимо от числа оценок на проект", () => {
     const model = overview();
     model.evaluationStatus.requiredEvaluators = 1;
     model.evaluationStatus.maxEvaluationsPerProject = 3;
     data.set(model);
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    const limit = fixture.nativeElement.querySelector('[data-testid="evaluation-limit"]');
-    expect(limit.textContent).toContain("Оценок для каждого проекта:");
-    expect(limit.querySelector("strong").textContent.trim()).toBe("1");
-    expect(limit.textContent).not.toContain("Максимум");
+    const card = fixture.nativeElement.querySelector('[data-testid="evaluation-statuses"]');
+    expect(card.querySelector('[data-testid="evaluation-percentage"]').textContent).toContain(
+      "62%",
+    );
+    expect(card.textContent).toContain("Готово 5 из 8");
+    expect(card.querySelector('[data-testid="evaluation-limit"]')).toBeNull();
   });
 
   it("не выдаёт отсутствие новой метрики посещения за ноль", () => {
@@ -902,97 +904,52 @@ describe("ProgramAnalyticsComponent", () => {
     expect(card?.textContent).toContain("Пока нет данных по участникам");
   });
 
-  it("uses text-body-10 for metric labels without changing heading or number classes", () => {
-    const model = overview();
-    model.evaluationStatus.mode = "distributed";
-    model.attention.projectsNotSubmitted = { applicable: true, total: 2 };
-    data.set(model);
+  it("keeps metric labels and numbers in separate typography roles", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
-    const selectors = [
-      ".status-list--projects li > span",
-      ".evaluation__assignment-action > span",
-      ".attention__action > span",
-      ".evaluation__limit .text-body-10",
-    ];
-    expect(selectors.map(selector => root.querySelectorAll(selector).length)).toEqual([0, 3, 2, 1]);
-    for (const selector of selectors) {
+    for (const selector of [".evaluation__assignment-action > span", ".attention__action > span"]) {
+      expect(root.querySelectorAll(selector)).toHaveLength(2);
       for (const label of root.querySelectorAll(selector))
         expect(label.classList.contains("text-body-10")).toBe(true);
     }
     expect(
       root.querySelectorAll(
-        ".status-list strong.text-body-10, .attention strong.text-body-10, h2.text-body-10:not(.summary-card__label), h3.text-body-10",
+        ".evaluation__assignment-action strong.text-body-10, .attention strong.text-body-10",
       ),
     ).toHaveLength(0);
-    expect(root.querySelector(".evaluation__limit strong")?.textContent).toBe("3");
   });
 
-  it("в open mode показывает статусы проектов без partial и трактует max как лимит", () => {
+  it("shows assignment progress without duplicating project statuses in open mode", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    const evaluation = (fixture.nativeElement as HTMLElement).querySelector(
-      '[data-testid="evaluation-statuses"]',
-    );
-
-    expect(evaluation?.textContent).toContain("Открытое оценивание");
-    expect(evaluation?.querySelector(".analytics-card__title")?.textContent).toContain(
-      "Статус оценивания",
-    );
-    expect(evaluation?.textContent).not.toContain("Ожидают оценивания");
-    expect(evaluation?.textContent).not.toContain("Частично оценено");
-    expect(evaluation?.textContent).toContain("Максимум экспертов на проект");
-    expect(evaluation?.textContent).not.toContain("требуется 3");
-    expect(evaluation?.querySelector("app-analytics-funnel-chart canvas")).not.toBeNull();
-    expect(
-      [...evaluation!.querySelectorAll("app-analytics-funnel-chart tbody td")].map(el =>
-        el.textContent?.trim(),
-      ),
-    ).toEqual(["6", "4"]);
+    const card = fixture.nativeElement.querySelector('[data-testid="evaluation-statuses"]');
+    expect(card.textContent).toContain("Открытое оценивание");
+    expect(card.querySelector("h2").textContent).toBe("Ход оценивания");
+    expect(card.querySelector("[role=progressbar]").getAttribute("aria-valuenow")).toBe("62.5");
+    expect(card.querySelector("app-analytics-funnel-chart")).toBeNull();
+    expect(card.textContent).not.toMatch(/Частично оценено|Максимум экспертов|Назначений всего/);
+    expect(card.querySelectorAll('[data-testid="assignment-statuses"] button')).toHaveLength(2);
     expect(fixture.nativeElement.querySelector(".attention").textContent).toContain(
       "Работы ожидают оценивания",
     );
-    expect(evaluation?.querySelectorAll('[data-testid="assignment-statuses"] button')).toHaveLength(
-      3,
-    );
   });
 
-  it("в distributed mode показывает partial и отдельную статистику назначений", () => {
-    const base = overview();
-    data.set({
-      ...base,
-      evaluationStatus: {
-        ...base.evaluationStatus,
-        mode: "distributed",
-        projects: {
-          submitted: 6,
-          awaitingEvaluation: 2,
-          partiallyEvaluated: 1,
-          evaluated: 3,
-        },
-      },
-    });
+  it("keeps project completion in the project funnel and assignment completion in evaluation", () => {
+    const model = overview();
+    model.evaluationStatus.mode = "distributed";
+    model.evaluationStatus.projects.partiallyEvaluated = 1;
+    data.set(model);
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    const evaluation = (fixture.nativeElement as HTMLElement).querySelector(
-      '[data-testid="evaluation-statuses"]',
-    );
-
-    expect(evaluation?.textContent).toContain("Распределённое оценивание");
-    expect(evaluation?.textContent).toContain("Частично оценено");
-    expect(evaluation?.querySelector("app-analytics-funnel-chart table")?.textContent).toContain(
-      "Хотя бы один назначенный эксперт полностью оценил проект",
-    );
+    const card = fixture.nativeElement.querySelector('[data-testid="evaluation-statuses"]');
+    expect(card.textContent).toContain("Распределённое оценивание");
+    expect(card.textContent).toContain("Готово 5 из 8");
+    expect(card.textContent).not.toMatch(/Частично оценено|Почему 0|совместимы/);
+    expect(card.querySelector("canvas")).toBeNull();
     expect(
-      [...evaluation!.querySelectorAll("app-analytics-funnel-chart tbody td")].map(el =>
-        el.textContent?.trim(),
-      ),
-    ).toEqual(["6", "1", "3"]);
-    expect(evaluation?.textContent).not.toContain("Ожидают оценивания");
-    expect(evaluation?.querySelector('[data-testid="assignment-statuses"]')?.textContent).toContain(
-      "Назначений всего",
-    );
+      fixture.nativeElement.querySelector('[data-testid="solution-funnel"] canvas'),
+    ).not.toBeNull();
   });
 
   it("использует attention backend напрямую, без frontend approximation", () => {
@@ -1214,7 +1171,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("У участников пока не указаны регионы");
     expect(fixture.nativeElement.textContent).toContain("Пока нет данных по участникам");
     expect(fixture.nativeElement.textContent).toContain("Нет решений для отображения");
-    expect(fixture.nativeElement.textContent).toContain("Пока нет сданных работ для оценивания");
+    expect(fixture.nativeElement.textContent).toContain("Нет назначений экспертов");
     expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
     const emptyStates = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll(".analytics-empty-state"),

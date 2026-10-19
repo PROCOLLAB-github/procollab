@@ -121,212 +121,119 @@
     </section>
 
     <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-      <div class="analytics-priority__stack">
-        <article class="analytics-card program-deadlines" data-testid="program-deadlines">
-          <div class="analytics__heading-row">
-            <h2 class="analytics-card__title">Сроки программы</h2>
-            <app-tooltip
-              text="Даты из настроек программы, по времени вашего устройства. Ближайший незавершённый срок выделен. Если отдельный срок сдачи решений не задан, действует конец регистрации."
-              [isVisible]="isTooltipVisible('program-deadlines')"
-              [useOverlay]="true"
-              (click)="toggleTooltip('program-deadlines')"
-              (show)="showTooltip('program-deadlines')"
-              (hide)="hideTooltip('program-deadlines')"
-            ></app-tooltip>
-          </div>
-          @if (deadlines().length) {
-            <ul class="program-deadlines__list">
-              @for (deadline of deadlines(); track deadline.key) {
-                <li
-                  class="program-deadlines__row"
-                  [class.program-deadlines__row--nearest]="deadline.nearest"
-                  [class.program-deadlines__row--ended]="deadline.ended"
-                  [attr.data-deadline]="deadline.key"
-                >
-                  <div class="program-deadlines__content">
-                    <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
-                    <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
-                      {{ deadline.dateLabel }}
-                    </time>
-                    @if (deadline.usesRegistrationDeadline) {
-                      <span class="program-deadlines__hint">По сроку регистрации</span>
-                    }
-                  </div>
-                  <span class="program-deadlines__status">{{ deadline.status }}</span>
-                </li>
-              }
-            </ul>
-          } @else {
-            <p class="analytics-empty-state text-body-10">Сроки программы пока не заданы</p>
-          }
-        </article>
-        <article
-          class="attention"
-          [class.attention--empty]="!hasValues(attention())"
-          data-testid="attention-block"
-        >
-          <div class="analytics__heading-row">
-            <h2 class="text-body-12">Требует внимания</h2>
-            <app-tooltip
-              text="Показатели, которые могут потребовать действия организатора."
-              [isVisible]="isTooltipVisible('attention')"
-              [useOverlay]="true"
-              (click)="toggleTooltip('attention')"
-              (show)="showTooltip('attention')"
-              (hide)="hideTooltip('attention')"
-            ></app-tooltip>
-          </div>
-          @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
-            <ul class="attention__list">
-              @for (item of attention(); track item.key) {
-                <li [class.attention__row--disabled]="item.value === 0">
-                  <button
-                    appButton="primary"
-                    #attentionTrigger
-                    type="button"
-                    class="attention__action"
-                    [disabled]="item.value === 0"
-                    (click)="
-                      drilldown.openAttention(
-                        item.key === 'without-visit'
-                          ? 'participants-without-visit'
-                          : item.key === 'without-team'
-                            ? 'participants-without-team'
-                            : 'projects-awaiting-evaluation',
-                        attentionTrigger
-                      )
-                    "
-                  >
-                    <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
-                    <span class="text-body-10">{{ item.label }}</span
-                    ><strong>{{ item.value }}</strong>
-                    <i
-                      class="attention__arrow"
-                      appIcon
-                      icon="arrowright"
-                      appSquare="20"
-                      aria-hidden="true"
-                    ></i>
-                  </button>
-                  <app-tooltip
-                    [text]="item.tooltip"
-                    role="button"
-                    tabindex="0"
-                    [attr.aria-label]="item.tooltip"
-                    [attr.aria-expanded]="isTooltipVisible(item.key)"
-                    [isVisible]="isTooltipVisible(item.key)"
-                    [useOverlay]="true"
-                    position="left"
-                    (click)="toggleTooltip(item.key)"
-                    (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
-                    (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
-                    (keydown.escape)="closeTooltip(item.key)"
-                    (focus)="showTooltip(item.key)"
-                    (blur)="closeTooltip(item.key)"
-                    (show)="showTooltip(item.key)"
-                    (hide)="hideTooltip(item.key)"
-                  ></app-tooltip>
-                </li>
-              }
-            </ul>
-          }
-          @if (!hasValues(attention())) {
-            <p class="analytics-empty-state attention__empty text-body-10">
-              Ничего не требует внимания
-            </p>
-          }
-        </article>
-      </div>
-
-      <article class="analytics-card evaluation" data-testid="evaluation-statuses">
+      <article
+        class="attention"
+        [class.attention--empty]="!hasValues(attention())"
+        data-testid="attention-block"
+      >
         <div class="analytics__heading-row">
-          <div>
-            <h2 class="analytics-card__title">Статус оценивания</h2>
-            <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
-          </div>
+          <h2 class="text-body-12">Требует внимания</h2>
           <app-tooltip
-            [text]="
-              overview.evaluationStatus.requiredEvaluators != null
-                ? 'Статус зависит от числа полных оценок. Нужное число задаётся в разделе «Эксперты».'
-                : overview.evaluationStatus.mode === 'open'
-                  ? 'Проект считается оценённым после первой оценки эксперта.'
-                  : 'Статус проекта определяется выполнением назначений экспертов.'
-            "
-            [isVisible]="isTooltipVisible('evaluation-status')"
+            text="Показатели, которые могут потребовать действия организатора."
+            [isVisible]="isTooltipVisible('attention')"
             [useOverlay]="true"
-            (click)="toggleTooltip('evaluation-status')"
-            (show)="showTooltip('evaluation-status')"
-            (hide)="hideTooltip('evaluation-status')"
+            (click)="toggleTooltip('attention')"
+            (show)="showTooltip('attention')"
+            (hide)="hideTooltip('attention')"
           ></app-tooltip>
         </div>
-        @if (overview.evaluationStatus.projects.submitted > 0) {
-          <app-analytics-funnel-chart
-            [items]="evaluationChartItems()"
-            label="Статус оценивания проектов"
-            categoryLabel="Показатель"
-            definitionsLabel="Данные и определения показателей"
-          />
-          @if (
-            overview.evaluationStatus.requiredEvaluators != null ||
-            overview.evaluationStatus.maxEvaluationsPerProject != null
-          ) {
-            <div class="evaluation__limit" data-testid="evaluation-limit">
-              <span>
-                <span class="text-body-10">{{
-                  overview.evaluationStatus.requiredEvaluators != null
-                    ? "Оценок для каждого проекта:"
-                    : "Максимум экспертов на проект:"
-                }}</span>
-                <strong>{{
-                  overview.evaluationStatus.requiredEvaluators ??
-                    overview.evaluationStatus.maxEvaluationsPerProject
-                }}</strong>
-              </span>
-              <app-tooltip
-                [text]="
-                  overview.evaluationStatus.requiredEvaluators != null
-                    ? 'Проект полностью оценён, когда это число разных экспертов сохранили оценки по всем критериям. Настраивается в разделе «Эксперты».'
-                    : 'Максимальное количество экспертов, которые могут оценить один проект.'
-                "
-                [isVisible]="isTooltipVisible('evaluation-limit')"
-                [useOverlay]="true"
-                (click)="toggleTooltip('evaluation-limit')"
-                (show)="showTooltip('evaluation-limit')"
-                (hide)="hideTooltip('evaluation-limit')"
-              ></app-tooltip>
-            </div>
-          }
-        } @else {
-          <p class="analytics-empty-state text-body-10">Пока нет сданных работ для оценивания</p>
-        }
-        <div class="evaluation__assignments" data-testid="assignment-statuses">
-          <h3 class="analytics-card__section-label">Назначения экспертов</h3>
-          <ul class="status-list status-list--compact">
-            @for (item of assignmentStatuses(); track item.key) {
-              <li>
+        @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
+          <ul class="attention__list">
+            @for (item of attention(); track item.key) {
+              <li [class.attention__row--disabled]="item.value === 0">
                 <button
-                  appButton="secondary"
-                  #assignmentTrigger
+                  appButton="primary"
+                  #attentionTrigger
                   type="button"
-                  class="evaluation__assignment-action"
+                  class="attention__action"
                   [disabled]="item.value === 0"
-                  [attr.aria-label]="item.label + ': ' + item.value"
-                  (click)="drilldown.openAssignments(item.scope!, assignmentTrigger)"
+                  (click)="
+                    drilldown.openAttention(
+                      item.key === 'without-visit'
+                        ? 'participants-without-visit'
+                        : item.key === 'without-team'
+                          ? 'participants-without-team'
+                          : 'projects-awaiting-evaluation',
+                      attentionTrigger
+                    )
+                  "
                 >
-                  <span class="evaluation__assignment-label text-body-10">{{ item.label }}</span>
+                  <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
+                  <span class="text-body-10">{{ item.label }}</span
+                  ><strong>{{ item.value }}</strong>
                   <i
-                    class="evaluation__assignment-arrow"
+                    class="attention__arrow"
                     appIcon
                     icon="arrowright"
                     appSquare="20"
                     aria-hidden="true"
                   ></i>
-                  <strong>{{ item.value }}</strong>
                 </button>
+                <app-tooltip
+                  [text]="item.tooltip"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-label]="item.tooltip"
+                  [attr.aria-expanded]="isTooltipVisible(item.key)"
+                  [isVisible]="isTooltipVisible(item.key)"
+                  [useOverlay]="true"
+                  position="left"
+                  (click)="toggleTooltip(item.key)"
+                  (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
+                  (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
+                  (keydown.escape)="closeTooltip(item.key)"
+                  (focus)="showTooltip(item.key)"
+                  (blur)="closeTooltip(item.key)"
+                  (show)="showTooltip(item.key)"
+                  (hide)="hideTooltip(item.key)"
+                ></app-tooltip>
               </li>
             }
           </ul>
+        }
+        @if (!hasValues(attention())) {
+          <p class="analytics-empty-state attention__empty text-body-10">
+            Ничего не требует внимания
+          </p>
+        }
+      </article>
+      <article class="analytics-card program-deadlines" data-testid="program-deadlines">
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Сроки программы</h2>
+          <app-tooltip
+            text="Текущий этап выделен. Даты из настроек программы, по времени вашего устройства. Если отдельный срок приёма решений не задан, действует срок регистрации."
+            [isVisible]="isTooltipVisible('program-deadlines')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('program-deadlines')"
+            (show)="showTooltip('program-deadlines')"
+            (hide)="hideTooltip('program-deadlines')"
+          ></app-tooltip>
         </div>
+        @if (deadlines().length) {
+          <ul class="program-deadlines__list">
+            @for (deadline of deadlines(); track deadline.key) {
+              <li
+                class="program-deadlines__row"
+                [class.program-deadlines__row--active]="deadline.active"
+                [class.program-deadlines__row--ended]="deadline.ended"
+                [attr.data-deadline]="deadline.key"
+              >
+                <div class="program-deadlines__content">
+                  <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
+                  <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
+                    {{ deadline.dateLabel }}
+                  </time>
+                  @if (deadline.usesRegistrationDeadline) {
+                    <span class="program-deadlines__hint">По сроку регистрации</span>
+                  }
+                </div>
+                <span class="program-deadlines__status">{{ deadline.status }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="analytics-empty-state text-body-10">Сроки программы пока не заданы</p>
+        }
       </article>
     </section>
 
@@ -375,6 +282,30 @@
         } @else {
           <p class="analytics-empty-state text-body-10">Нет решений для отображения</p>
         }
+      </article>
+    </section>
+
+    <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
+      <article class="analytics-card evaluation" data-testid="evaluation-statuses">
+        <div class="analytics__heading-row">
+          <div>
+            <h2 class="analytics-card__title">Ход оценивания</h2>
+            <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
+          </div>
+          <app-tooltip
+            text="Доля выполненных назначений экспертов. Назначение выполнено, когда эксперт заполнил все критерии сданного проекта."
+            [isVisible]="isTooltipVisible('evaluation-status')"
+            [useOverlay]="true"
+            (click)="toggleTooltip('evaluation-status')"
+            (show)="showTooltip('evaluation-status')"
+            (hide)="hideTooltip('evaluation-status')"
+          ></app-tooltip>
+        </div>
+        <app-analytics-evaluation-progress
+          [programId]="programId()"
+          [status]="overview.evaluationStatus"
+          (openAssignments)="drilldown.openAssignments($event.scope, $event.trigger)"
+        />
       </article>
     </section>
 

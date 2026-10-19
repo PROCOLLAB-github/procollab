@@ -12,7 +12,7 @@ describe("programDeadlines", () => {
     datetimeEvaluationEnds: at(24),
   };
 
-  it("keeps stage order and highlights the earliest remaining deadline, even out of stage order", () => {
+  it("highlights the current stage in workflow order even when later deadlines are out of order", () => {
     const rows = programDeadlines({ ...dates, datetimeEvaluationEnds: at(16) }, true, now);
     expect(rows.map(row => row.key)).toEqual(["registration", "submission", "evaluation"]);
     expect(rows.map(row => row.status)).toEqual([
@@ -20,7 +20,8 @@ describe("programDeadlines", () => {
       "Осталось 3 дня",
       "Осталось 2 дня",
     ]);
-    expect(rows.filter(row => row.nearest).map(row => row.key)).toEqual(["evaluation"]);
+    expect(rows.filter(row => row.active).map(row => row.key)).toEqual(["submission"]);
+    expect(rows.map(row => row.label)).toEqual(["Регистрация", "Идёт приём решений", "Оценивание"]);
     expect(rows[0].ended).toBe(true);
     expect(rows[1].datetime).toBe(at(17));
     expect(rows[1].dateLabel).toContain("17.10.2026");
@@ -36,7 +37,7 @@ describe("programDeadlines", () => {
     const row = programDeadlines({ datetimeRegistrationEnds: datetime }, false, now)[0];
     expect(row.status).toBe(status);
     expect(row.ended).toBe(ended);
-    expect(row.nearest).toBe(!ended);
+    expect(row.active).toBe(!ended);
   });
 
   it.each([
@@ -65,16 +66,18 @@ describe("programDeadlines", () => {
     },
   );
 
-  it("highlights both stages when they share the same effective next deadline", () => {
+  it("highlights only registration when submission uses the same deadline", () => {
     const rows = programDeadlines({ datetimeRegistrationEnds: at(15) }, true, now);
-    expect(rows.map(row => row.nearest)).toEqual([true, true]);
+    expect(rows.map(row => row.active)).toEqual([true, false]);
+    expect(rows.map(row => row.label)).toEqual(["Идёт регистрация", "Приём решений"]);
     expect(rows.map(row => row.key)).toEqual(["registration", "submission"]);
   });
 
   it("hides the submission stage when submission is not applicable", () => {
     const rows = programDeadlines(dates, false, now);
     expect(rows.map(row => row.key)).toEqual(["registration", "evaluation"]);
-    expect(rows[1].nearest).toBe(true);
+    expect(rows[1].active).toBe(true);
+    expect(rows[1].label).toBe("Идёт оценивание");
   });
 
   it("skips missing and invalid dates without inventing an evaluation or replacing an invalid explicit date", () => {
@@ -89,6 +92,26 @@ describe("programDeadlines", () => {
 
   it("does not highlight any deadline when all are past", () => {
     const rows = programDeadlines(dates, true, new Date(2026, 10, 1));
-    expect(rows.every(row => row.ended && !row.nearest)).toBe(true);
+    expect(rows.every(row => row.ended && !row.active)).toBe(true);
+    expect(rows.map(row => row.label)).toEqual(["Регистрация", "Приём решений", "Оценивание"]);
+  });
+
+  it("advances the active stage and uses the present tense as deadlines pass", () => {
+    const dates = {
+      datetimeRegistrationEnds: at(15),
+      datetimeProjectSubmissionEnds: at(17),
+      datetimeEvaluationEnds: at(24),
+    };
+    for (const [day, key, label] of [
+      [14, "registration", "Идёт регистрация"],
+      [16, "submission", "Идёт приём решений"],
+      [18, "evaluation", "Идёт оценивание"],
+    ] as const) {
+      const rows = programDeadlines(dates, true, new Date(2026, 9, day, 12));
+      const active = rows.filter(row => row.active);
+      expect(active).toHaveLength(1);
+      expect(active[0].key).toBe(key);
+      expect(active[0].label).toBe(label);
+    }
   });
 });
