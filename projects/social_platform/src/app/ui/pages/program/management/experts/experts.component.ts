@@ -37,7 +37,13 @@ import {
   FieldDirective,
 } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import {
+  RowAction,
+  RowActionEvent,
+  RowActionsComponent,
+} from "@ui/primitives/row-actions/row-actions.component";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
+import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import {
   AllocationPlan,
   ExpertRow,
@@ -59,6 +65,7 @@ import { presentationHref } from "@utils/program-case-analytics";
     ChoiceDirective,
     FieldDirective,
     ModalComponent,
+    RowActionsComponent,
     PluralizePipe,
     NgTemplateOutlet,
   ],
@@ -71,6 +78,7 @@ export class ManagementExpertsComponent {
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly api = inject(EvaluationUseCase);
+  private readonly incomingAssignment = inject(ProgramProjectAssignmentSelection);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -85,6 +93,21 @@ export class ManagementExpertsComponent {
   readonly message = signal<string | null>(null);
   readonly deliveryRefreshPaused = signal(false);
   readonly selected = signal<ExpertRow | null>(null);
+  readonly selectedExpertIds = signal(new Set<number | string>());
+  readonly selectedExpertRows = computed(() =>
+    this.filtered().filter(e => this.selectedExpertIds().has(e.id)),
+  );
+  readonly allExpertsSelected = computed(
+    () =>
+      !!this.filtered().length && this.filtered().every(e => this.selectedExpertIds().has(e.id)),
+  );
+  readonly canBulkInvite = computed(
+    () =>
+      !!this.selectedExpertRows().length &&
+      this.selectedExpertRows().every(e => e.status !== "joined" && !!e.invitationId),
+  );
+  readonly bulkScope = signal(false);
+  readonly bulkRevoke = signal(false);
   readonly modal = signal<
     "invite" | "auto" | "quota" | "revoke" | "method" | "project" | "scope" | "pool" | null
   >(null);
@@ -165,8 +188,11 @@ export class ManagementExpertsComponent {
   );
   readonly allVisibleSelected = computed(
     () =>
-      !!this.distributionPage().length &&
-      this.distributionPage().every(p => this.selectedProjects().has(p.id)),
+      !!this.filteredDistribution().length &&
+      this.filteredDistribution().every(p => this.selectedProjects().has(p.id)),
+  );
+  readonly mixedProjectCases = computed(
+    () => new Set(this.selection().map(p => p.caseName)).size > 1,
   );
   readonly hasProjectsWithoutCase = computed(() =>
     this.allProjects().some(p => p.caseName === null),
@@ -219,11 +245,13 @@ export class ManagementExpertsComponent {
   readonly scopeDirty = computed(
     () =>
       this.modal() === "scope" &&
-      !!this.selected() &&
-      (this.scopeAll() !== (this.selected()!.allCases ?? true) ||
-        (!this.scopeAll() &&
-          JSON.stringify([...this.scopeCases()].sort()) !==
-            JSON.stringify([...(this.selected()!.caseNames ?? [])].sort()))),
+      (this.bulkScope()
+        ? this.scopeAll() || !!this.scopeCases().size
+        : !!this.selected() &&
+          (this.scopeAll() !== (this.selected()!.allCases ?? true) ||
+            (!this.scopeAll() &&
+              JSON.stringify([...this.scopeCases()].sort()) !==
+                JSON.stringify([...(this.selected()!.caseNames ?? [])].sort())))),
   );
   readonly joined = computed(
     () => this.snapshot()?.experts.filter(e => e.status === "joined") ?? [],
@@ -256,7 +284,7 @@ export class ManagementExpertsComponent {
       case "method":
         return "Распределить проекты";
       case "scope":
-        return "Кейсы эксперта";
+        return this.bulkScope() ? "Кейсы выбранных экспертов" : "Кейсы эксперта";
       case "pool":
         return "Эксперты для кейса «" + this.caseLabel(this.poolCase()) + "»";
       case "project":
@@ -299,6 +327,7 @@ export class ManagementExpertsComponent {
       untracked(() => {
         this.snapshot.set(null);
         this.selected.set(null);
+        this.selectedExpertIds.set(new Set());
         this.selectedProjects.set(new Set());
         this.tab.set("experts");
         this.load(id);
@@ -338,16 +367,19 @@ export class ManagementExpertsComponent {
       this.query.set(v);
       this.page.set(0);
       this.selected.set(null);
+      this.selectedExpertIds.set(new Set());
     });
     this.status.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
       this.statusValue.set(v);
       this.page.set(0);
       this.selected.set(null);
+      this.selectedExpertIds.set(new Set());
     });
     this.quota.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.quotaPreview.set(null));
     this.distributionSearch.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
       this.distributionQuery.set(v);
       this.projectPage.set(0);
+      this.selectedProjects.set(new Set());
     });
     this.distributionCase.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
       this.distributionCaseValue.set(v);
@@ -357,6 +389,7 @@ export class ManagementExpertsComponent {
     this.distributionStatus.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
       this.distributionStatusValue.set(v);
       this.projectPage.set(0);
+      this.selectedProjects.set(new Set());
     });
     this.expertSearch.valueChanges
       .pipe(takeUntilDestroyed())
@@ -378,6 +411,25 @@ export class ManagementExpertsComponent {
           this.selectedProjects.update(
             ids => new Set([...ids].filter(id => data.projects?.some(p => p.id === id))),
           );
+          this.selectedExpertIds.update(
+            ids => new Set([...ids].filter(id => data.experts.some(e => e.id === id))),
+          );
+          const incoming = this.incomingAssignment.take(id);
+          if (incoming?.length) {
+            const targets = (data.projects ?? []).filter(p => incoming.includes(p.id));
+            this.tab.set("distribution");
+            if (
+              targets.length !== incoming.length ||
+              new Set(targets.map(p => p.caseName)).size > 1
+            )
+              this.error.set(
+                "Выбранные проекты изменились. Выберите сданные проекты одного кейса заново.",
+              );
+            else {
+              this.selectedProjects.set(new Set(incoming));
+              this.openProject();
+            }
+          }
         },
         error: e => {
           if (seq !== this.loadSequence) return;
@@ -406,6 +458,95 @@ export class ManagementExpertsComponent {
   }
   select(row: ExpertRow): void {
     this.selected.set(this.selected()?.id === row.id ? null : row);
+  }
+  rowActions(row: ExpertRow): RowAction[] {
+    const actions: RowAction[] = [{ id: "scope", label: "Кейсы эксперта" }];
+    if (row.status === "joined")
+      actions.unshift({ id: "assignments", label: "Посмотреть назначения" });
+    else {
+      actions.push({ id: "resend", label: "Отправить повторно" });
+      if (row.status !== "revoked")
+        actions.push({ id: "revoke", label: "Отозвать приглашение", destructive: true });
+    }
+    return actions;
+  }
+  rowAction(row: ExpertRow, event: RowActionEvent): void {
+    if (this.busy()) return;
+    this.selected.set(row);
+    if (event.id === "scope") this.openScope(row);
+    else if (event.id === "resend") this.invitationAction("resend");
+    else if (event.id === "revoke") this.open("revoke");
+    else if (event.id === "assignments") {
+      this.switchTab("distribution");
+      this.distributionStatus.setValue("expert:" + row.id);
+    }
+  }
+  toggleSelectedExpert(row: ExpertRow): void {
+    if (this.busy()) return;
+    const ids = new Set(this.selectedExpertIds());
+    ids.has(row.id) ? ids.delete(row.id) : ids.add(row.id);
+    this.selectedExpertIds.set(ids);
+  }
+  selectAllExperts(): void {
+    if (this.busy()) return;
+    this.selectedExpertIds.set(
+      this.allExpertsSelected() ? new Set() : new Set(this.filtered().map(e => e.id)),
+    );
+  }
+  openBulkScope(): void {
+    if (!this.selectedExpertRows().length || this.busy()) return;
+    this.bulkScope.set(true);
+    this.selected.set(null);
+    this.scopeAll.set(false);
+    this.scopeCases.set(new Set());
+    this.dialogError.set(null);
+    this.modal.set("scope");
+  }
+  openBulkRevoke(): void {
+    if (!this.canBulkInvite() || this.busy()) return;
+    this.open("revoke");
+    this.bulkRevoke.set(true);
+  }
+  bulkExperts(action: "cases" | "resend" | "revoke"): void {
+    const state = this.snapshot(),
+      rows = this.selectedExpertRows();
+    if (!state || !rows.length || (action !== "cases" && !this.canBulkInvite())) return;
+    if (action === "cases" && !this.scopeAll() && !this.scopeCases().size) {
+      this.dialogError.set("Выберите хотя бы один кейс или все кейсы.");
+      return;
+    }
+    this.request(
+      this.api.bulkExperts(this.programId(), {
+        action,
+        revision: state.revision,
+        expertIds: rows.filter(e => e.status === "joined").map(e => Number(e.id)),
+        invitationIds: rows.filter(e => e.status !== "joined").map(e => e.invitationId!),
+        allCases: this.scopeAll(),
+        caseNames: this.scopeAll() ? [] : [...this.scopeCases()],
+      }),
+      result => {
+        this.snapshot.set(result);
+        this.modal.set(null);
+        this.selectedExpertIds.set(new Set());
+        this.bulkScope.set(false);
+        this.bulkRevoke.set(false);
+        this.message.set(
+          action === "cases"
+            ? "Кейсы выбранных экспертов сохранены."
+            : action === "resend"
+              ? "Выбранные приглашения переданы на отправку."
+              : "Выбранные приглашения отозваны.",
+        );
+      },
+    );
+  }
+  distributionActions(project: DistributionProject): RowAction[] {
+    return [
+      {
+        id: "assign",
+        label: project.experts.length ? "Изменить экспертов" : "Назначить экспертов",
+      },
+    ];
   }
   clearExpertSelection(): void {
     const id = this.selected()?.id;
@@ -440,6 +581,7 @@ export class ManagementExpertsComponent {
       .toUpperCase();
   }
   open(kind: "invite" | "auto" | "quota" | "revoke" | "method"): void {
+    this.bulkRevoke.set(false);
     this.dialogError.set(null);
     this.message.set(null);
     this.modal.set(kind);
@@ -492,6 +634,10 @@ export class ManagementExpertsComponent {
     );
   }
   invitationAction(action: "resend" | "revoke"): void {
+    if (this.bulkRevoke() && action === "revoke") {
+      this.bulkExperts("revoke");
+      return;
+    }
     const id = this.selected()?.invitationId;
     if (!id) return;
     this.request(this.api.invitationAction(this.programId(), id, action), () => {
@@ -590,25 +736,21 @@ export class ManagementExpertsComponent {
     const ids = new Set(this.selectedProjects());
     if (ids.has(project.id)) ids.delete(project.id);
     else {
-      if (this.selection().length && this.selection()[0].caseName !== project.caseName) {
-        return;
-      }
       ids.add(project.id);
     }
     this.selectedProjects.set(ids);
   }
   selectVisibleProjects(): void {
-    const projects = this.distributionPage();
-    const name = this.selection().length
-      ? this.selection()[0].caseName
-      : (projects[0]?.caseName ?? null);
-    const compatible = projects.filter(p => p.caseName === name);
-    const ids = new Set(this.selectedProjects());
-    const remove = compatible.every(p => ids.has(p.id));
-    for (const p of compatible) remove ? ids.delete(p.id) : ids.add(p.id);
-    this.selectedProjects.set(ids);
+    if (!this.busy())
+      this.selectedProjects.set(
+        this.allVisibleSelected() ? new Set() : new Set(this.filteredDistribution().map(p => p.id)),
+      );
   }
   openProject(project?: DistributionProject): void {
+    if (!project && this.mixedProjectCases()) {
+      this.error.set("Для ручного назначения выберите проекты одного кейса.");
+      return;
+    }
     const ids = project ? [project.id] : [...this.selectedProjects()];
     if (!ids.length) return;
     this.assignmentTargets.set(ids);
@@ -681,6 +823,7 @@ export class ManagementExpertsComponent {
     );
   }
   openScope(expert: ExpertRow): void {
+    this.bulkScope.set(false);
     this.selected.set(expert);
     this.scopeAll.set(expert.allCases ?? true);
     this.scopeCases.set(new Set(expert.caseNames ?? []));
@@ -699,6 +842,10 @@ export class ManagementExpertsComponent {
     this.scopeAll.set(false);
   }
   saveScope(): void {
+    if (this.bulkScope()) {
+      this.bulkExperts("cases");
+      return;
+    }
     const state = this.snapshot(),
       expert = this.selected();
     if (!state || !expert) return;

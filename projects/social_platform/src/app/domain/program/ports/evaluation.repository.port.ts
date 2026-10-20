@@ -13,10 +13,12 @@ import {
   ExpertRegistered,
   ExpertCaseScopeWrite,
   ProjectExpertsWrite,
+  ExpertsBulkWrite,
 } from "@domain/program/evaluation-workspace.model";
 export abstract class EvaluationRepositoryPort {
   abstract programs(): Observable<EvaluationPrograms>;
   abstract workspace(id: number): Observable<ExpertWorkspace>;
+  abstract bulkExperts(id: number, data: ExpertsBulkWrite): Observable<ExpertWorkspace>;
   abstract saveCaseScope(
     id: number,
     expertId: number,

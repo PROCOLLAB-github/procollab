@@ -47,6 +47,18 @@ export class ProgramManagementRepository implements ProgramManagementRepositoryP
   exportParticipants(id: number, q: ManagementQuery) {
     return this.adapter.exportParticipants(id, q);
   }
+  selection(id: number, kind: "participants" | "projects", q: ManagementQuery) {
+    return this.adapter.selection(id, kind, q);
+  }
+  exportSelectedParticipants(id: number, ids: number[]) {
+    return this.adapter.exportSelectedParticipants(id, ids);
+  }
+  previewParticipantRemoval(id: number, ids: number[]) {
+    return this.adapter.previewParticipantRemoval(id, ids);
+  }
+  removeParticipants(id: number, ids: number[], previewToken: string) {
+    return this.adapter.removeParticipants(id, ids, previewToken).pipe(tap(() => this.changed(id)));
+  }
   projects(id: number, q: ManagementQuery) {
     return this.adapter.projects(id, q);
   }

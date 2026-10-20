@@ -17,6 +17,7 @@ import {
   ProgramManagement,
 } from "@domain/program/program-management.model";
 import { ProgramManagementComponent } from "./management.component";
+import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 
 const program = {
   id: 1,
@@ -158,6 +159,8 @@ describe("Списки управления программой в DOM", () => 
         results: [
           {
             id: 1,
+            userId: 51,
+            registeredAt: "2026-10-01T12:00:00Z",
             name: "Анна",
             email: "anna@example.com",
             lastActivity: null as string | null | undefined,
@@ -181,7 +184,16 @@ describe("Списки управления программой в DOM", () => 
       teamError: signal(null),
       team: signal(null),
       context: null as ManagementContext | null,
-      api: {},
+      api: {
+        selection: vi.fn(() => of({ ids: Array.from({ length: 41 }, (_, i) => i + 1) })),
+        previewParticipantRemoval: vi.fn(() =>
+          of({ previewToken: "proof", participantCount: 1, applications: [], assignmentsCount: 0 }),
+        ),
+        removeParticipants: vi.fn(() => of({ removed: 1 })),
+      },
+      retry: vi.fn(),
+      openTeam: vi.fn(() => state.teamOpen.set(true)),
+      closeTeam: vi.fn(() => state.teamOpen.set(false)),
       load: vi.fn((ctx: ManagementContext) => {
         state.context = ctx;
       }),
@@ -307,8 +319,9 @@ describe("Списки управления программой в DOM", () => 
     });
     harness.detectChanges();
     const headings = element().querySelectorAll(".management__participants th");
-    expect(headings).toHaveLength(6);
-    expect(headings[5].textContent).toContain("Дата последней активности");
+    expect(headings).toHaveLength(8);
+    expect(headings[6].textContent).toContain("Дата последней активности");
+    expect(headings[5].textContent).toContain("Дата регистрации");
     const cells = element().querySelectorAll('td[data-label="Последняя активность"]');
     expect(Array.from(cells, cell => cell.textContent?.trim())).toEqual([
       "17.10.2026 01:30",
@@ -494,39 +507,85 @@ describe("Списки управления программой в DOM", () => 
     expect(component.caseFilter.value).toBe("case:Кейс №1");
   });
 
-  it("повторный клик по кружку или строке снимает выбор, ссылка не меняет выбор", async () => {
-    const { harness, state, element } = await setup("projects");
-    const radio = () => element().querySelector<HTMLInputElement>('input[type="radio"]')!;
-    radio().click();
+  it("чекбокс выбирает несколько строк, меню проекта работает без одиночной плашки", async () => {
+    const { harness, component, state, element } = await setup("projects");
+    const checkbox = () =>
+      element().querySelector<HTMLInputElement>('tbody input[type="checkbox"]')!;
+    checkbox().click();
     harness.detectChanges();
+    expect([...component.selectedRows()]).toEqual([11]);
+    checkbox().click();
+    harness.detectChanges();
+    expect(component.selectedRows().size).toBe(0);
+    const menu = element().querySelector<HTMLButtonElement>("app-row-actions button")!;
+    const row = element().querySelector("tbody tr");
+    menu.click();
+    harness.detectChanges();
+    expect(element().querySelector(".management__selection")).toBeNull();
+    expect(element().querySelector("tbody tr")).toBe(row);
+    const team = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]')).find(
+      n => n.textContent?.trim() === "Посмотреть команду",
+    )!;
+    team.click();
+    harness.detectChanges();
+    expect(state.openTeam).toHaveBeenCalledOnce();
     expect(state.selected()?.id).toBe(11);
-    radio().click();
+  });
+  it("имя участника ведет в его профиль, а анкета остается отдельной командой", async () => {
+    const { component, element } = await setup();
+    const link = element().querySelector<HTMLAnchorElement>('td[data-label="Участник"] a')!;
+    expect(link.getAttribute("href")).toBe("/office/profile/51");
+    expect(component.state.context?.query.limit).toBe(20);
+  });
+  it("выбор всех охватывает другие страницы, сохраняется при пагинации и очищается при смене фильтра", async () => {
+    const { component, state, harness } = await setup();
+    state.participants.update(p => ({ ...p, count: 41 }));
     harness.detectChanges();
-    expect(state.selected()).toBeNull();
-    expect(radio().checked).toBe(false);
-    radio().dispatchEvent(
-      new KeyboardEvent("keydown", { key: " ", bubbles: true, cancelable: true }),
+    component.selectAllRows();
+    expect(component.selectedRows().size).toBe(41);
+    expect(state.api.selection).toHaveBeenCalledWith(
+      1,
+      "participants",
+      expect.objectContaining({ limit: 20 }),
     );
-    harness.detectChanges();
-    expect(state.selected()?.id).toBe(11);
-    radio().dispatchEvent(
-      new KeyboardEvent("keydown", { key: " ", bubbles: true, cancelable: true }),
-    );
-    harness.detectChanges();
-    expect(state.selected()).toBeNull();
-    const rowCell = () =>
-      element().querySelector<HTMLElement>("tbody td[data-label=Руководитель]")!;
-    rowCell().click();
-    harness.detectChanges();
-    expect(state.selected()?.id).toBe(11);
-    rowCell().click();
-    harness.detectChanges();
-    expect(state.selected()).toBeNull();
-    radio().click();
-    harness.detectChanges();
-    vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
-    element().querySelector<HTMLAnchorElement>("tbody a")!.click();
-    harness.detectChanges();
-    expect(state.selected()?.id).toBe(11);
+    component.page(1);
+    await vi.waitFor(() => expect(state.context?.query.offset).toBe(20));
+    expect(component.selectedRows().size).toBe(41);
+    await component.changeQuery({ search: "другой" });
+    expect(component.selectedRows().size).toBe(0);
+  });
+  it("фильтр оценивания восстанавливается из URL и передается в серверный запрос", async () => {
+    const { component, state } = await setup("projects", "?evaluation=evaluated");
+    expect(component.evaluationFilter.value).toBe("evaluated");
+    expect(state.context?.query.evaluation).toBe("evaluated");
+  });
+  it("поздний ответ выбора всех после смены фильтра не восстанавливает старый выбор", async () => {
+    const { component, state } = await setup();
+    const delayed = new Subject<{ ids: number[] }>();
+    state.api.selection.mockReturnValue(delayed);
+    component.selectAllRows();
+    await component.changeQuery({ search: "новая выборка" });
+    delayed.next({ ids: [1, 2, 3] });
+    delayed.complete();
+    expect(component.selectedRows().size).toBe(0);
+    expect(component.selectingRows()).toBe(false);
+  });
+  it("передает редактору назначений глобальный ID проекта вместо ID заявки", async () => {
+    const { component, project } = await setup("projects");
+    component.toggleRow({ ...project, submitted: true });
+    component.assignSelectedProjects();
+    expect(TestBed.inject(ProgramProjectAssignmentSelection).take(1)).toEqual([91]);
+    expect(TestBed.inject(ProgramProjectAssignmentSelection).take(1)).toBeNull();
+  });
+  it("удаление запрашивает предварительный просмотр и отправляет его подписанное подтверждение", async () => {
+    const { component, state } = await setup();
+    component.selectedRows.set(new Set([1]));
+    component.previewParticipantRemoval([1]);
+    expect(state.api.removeParticipants).not.toHaveBeenCalled();
+    expect(component.participantRemoval()?.preview.previewToken).toBe("proof");
+    component.removeParticipants();
+    expect(state.api.removeParticipants).toHaveBeenCalledWith(1, [1], "proof");
+    expect(component.selectedRows().size).toBe(0);
+    expect(state.retry).toHaveBeenCalledOnce();
   });
 });

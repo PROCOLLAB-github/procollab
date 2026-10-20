@@ -14,6 +14,8 @@ import {
   ManagementSettingsWrite,
   ManagementTeam,
   ProgramManagement,
+  ManagementSelection,
+  ParticipantRemovalPreview,
 } from "../program-management.model";
 
 export abstract class ProgramManagementRepositoryPort {
@@ -35,6 +37,21 @@ export abstract class ProgramManagementRepositoryPort {
     query: ManagementQuery,
   ): Observable<ManagementParticipantsPage>;
   abstract exportParticipants(programId: number, query: ManagementQuery): Observable<Blob>;
+  abstract selection(
+    programId: number,
+    kind: "participants" | "projects",
+    query: ManagementQuery,
+  ): Observable<ManagementSelection>;
+  abstract exportSelectedParticipants(programId: number, ids: number[]): Observable<Blob>;
+  abstract previewParticipantRemoval(
+    programId: number,
+    ids: number[],
+  ): Observable<ParticipantRemovalPreview>;
+  abstract removeParticipants(
+    programId: number,
+    ids: number[],
+    previewToken: string,
+  ): Observable<{ removed: number }>;
   abstract projects(programId: number, query: ManagementQuery): Observable<ManagementProjectsPage>;
   abstract team(programId: number, linkId: number): Observable<ManagementTeam>;
   abstract evaluation(programId: number, linkId: number): Observable<ManagementEvaluation>;

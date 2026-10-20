@@ -15,6 +15,7 @@ import {
   ExpertRegistered,
   ExpertCaseScopeWrite,
   ProjectExpertsWrite,
+  ExpertsBulkWrite,
 } from "@domain/program/evaluation-workspace.model";
 import { EvaluationRepositoryPort } from "@domain/program/ports/evaluation.repository.port";
 @Injectable({ providedIn: "root" })
@@ -28,6 +29,9 @@ export class EvaluationHttpAdapter implements EvaluationRepositoryPort {
   }
   workspace(id: number): Observable<ExpertWorkspace> {
     return this.api.get(`${this.root(id)}/experts/`);
+  }
+  bulkExperts(id: number, data: ExpertsBulkWrite): Observable<ExpertWorkspace> {
+    return this.api.post(`${this.root(id)}/experts/bulk/`, data);
   }
   saveCaseScope(
     id: number,

@@ -43,14 +43,22 @@ import {
   ManagementSection,
   ManagementSettingsWrite,
   SettingsSection,
+  ManagementSelectionProject,
+  ParticipantRemovalPreview,
 } from "@domain/program/program-management.model";
 import { ProgramManagementHttpAdapter } from "@infrastructure/adapters/program/program-management-http.adapter";
 import { ProgramManagementRepository } from "@infrastructure/repository/program/program-management.repository";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ProgramManagementService } from "@api/program/facades/detail/program-management.service";
+import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import {
+  RowAction,
+  RowActionEvent,
+  RowActionsComponent,
+} from "@ui/primitives/row-actions/row-actions.component";
 import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.component";
 import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
@@ -82,6 +90,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     IconComponent,
     AvatarComponent,
     ModalComponent,
+    RowActionsComponent,
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,
     ManagementProjectFormComponent,
@@ -103,6 +112,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
 })
 export class ProgramManagementComponent implements OnInit {
   readonly state = inject(ProgramManagementService);
+  private readonly assignmentSelection = inject(ProgramProjectAssignmentSelection);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder).nonNullable;
@@ -118,6 +128,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly search = this.fb.control("");
   readonly caseFilter = this.fb.control("all");
   readonly submissionFilter = this.fb.control("all");
+  readonly evaluationFilter = this.fb.control("all");
   readonly regionFilter = this.fb.control("all");
   readonly activityFilter = this.fb.control("all");
   readonly activityFrom = this.fb.control("");
@@ -127,6 +138,32 @@ export class ProgramManagementComponent implements OnInit {
   readonly participantExportError = signal(false);
   readonly participantExportSuccess = signal(false);
   readonly participantAnswers = signal<ManagementParticipant | null>(null);
+  readonly selectedRows = signal(new Set<number>());
+  readonly selectedRowIds = computed(() => [...this.selectedRows()]);
+  readonly selectedProjects = signal(new Map<number, ManagementSelectionProject>());
+  readonly selectingRows = signal(false);
+  readonly participantRemoval = signal<{
+    ids: number[];
+    preview: ParticipantRemovalPreview;
+  } | null>(null);
+  readonly removingParticipants = signal(false);
+  readonly tableError = signal<string | null>(null);
+  readonly tableMessage = signal<string | null>(null);
+  private selectionKey = "";
+  private selectionSequence = 0;
+  readonly allRowsSelected = computed(
+    () => this.count() > 0 && this.selectedRows().size === this.count(),
+  );
+  readonly assignmentReason = computed(() => {
+    if (!this.state.program()?.isCompetitive) return "В программе нет оценивания.";
+    const projects = [...this.selectedProjects().values()];
+    if (projects.length !== this.selectedRows().size) return "Обновите выбор проектов.";
+    if (projects.some(p => !p.submitted || p.draft))
+      return "Выберите сданные и опубликованные проекты.";
+    if (new Set(projects.map(p => p.caseName)).size > 1)
+      return "Для ручного назначения выберите проекты одного кейса.";
+    return null;
+  });
   readonly hasListFilters = computed(() => {
     const q = this.state.context?.query;
     // Depend on the list signals: context is updated before the request resolves.
@@ -137,7 +174,7 @@ export class ProgramManagementComponent implements OnInit {
       (!!q.search ||
         (this.section() === "participants"
           ? (q.regionScope ?? "all") !== "all" || (q.activity ?? "all") !== "all"
-          : q.caseScope !== "all" || q.submission !== "all"))
+          : q.caseScope !== "all" || q.submission !== "all" || (q.evaluation ?? "all") !== "all"))
     );
   });
   private searchNavigation: { value: string } | null = null;
@@ -276,7 +313,8 @@ export class ProgramManagementComponent implements OnInit {
       ? (this.state.context?.query.offset ?? 0)
       : 0,
   );
-  readonly rangeEnd = computed(() => Math.min(this.offset() + 25, this.count()));
+  readonly pageSize = 20;
+  readonly rangeEnd = computed(() => Math.min(this.offset() + this.pageSize, this.count()));
   readonly modalOpen = computed(() => !!this.confirmation() || !!this.editingMaterial());
   readonly requestError = computed(() => this.errorMessage(this.state.error()));
 
@@ -366,6 +404,21 @@ export class ProgramManagementComponent implements OnInit {
             : "basic",
         );
         this.section.set(section);
+        const selectionKey = JSON.stringify([
+          section,
+          this.route.parent?.snapshot.paramMap.get("programId"),
+          q.keys
+            .filter(key => key !== "offset" && key !== "selected")
+            .sort()
+            .map(key => [key, q.getAll(key)]),
+        ]);
+        if (selectionKey !== this.selectionKey) {
+          this.clearRows();
+          this.participantRemoval.set(null);
+          this.tableError.set(null);
+          this.tableMessage.set(null);
+          this.selectionKey = selectionKey;
+        }
         this.formError.set(null);
         this.saved.set(false);
         const offset = Number(q.get("offset") ?? 0),
@@ -390,6 +443,7 @@ export class ProgramManagementComponent implements OnInit {
           { emitEvent: false },
         );
         this.submissionFilter.setValue(q.get("submission") ?? "all", { emitEvent: false });
+        this.evaluationFilter.setValue(q.get("evaluation") ?? "all", { emitEvent: false });
         this.regionFilter.setValue(
           q.get("region_scope") === "selected"
             ? `region:${q.get("region") ?? ""}`
@@ -411,7 +465,13 @@ export class ProgramManagementComponent implements OnInit {
           query: {
             search: (q.get("search") ?? "").slice(0, 200),
             offset: Number.isSafeInteger(offset) && offset >= 0 ? offset : 0,
-            limit: 25,
+            limit: this.pageSize,
+            evaluation:
+              q.get("evaluation") === "evaluated"
+                ? "evaluated"
+                : q.get("evaluation") === "not_evaluated"
+                  ? "not_evaluated"
+                  : "all",
             submission:
               q.get("submission") === "submitted"
                 ? "submitted"
@@ -459,7 +519,7 @@ export class ProgramManagementComponent implements OnInit {
     });
   }
   page(delta: number): void {
-    void this.changeQuery({ offset: Math.max(0, this.offset() + delta * 25) });
+    void this.changeQuery({ offset: Math.max(0, this.offset() + delta * this.pageSize) });
   }
   changeParticipantFilter(field: "region" | "activity" | "from" | "to", value: string): void {
     const control = {
@@ -504,6 +564,7 @@ export class ProgramManagementComponent implements OnInit {
       case_scope: null,
       case_name: null,
       submission: null,
+      evaluation: null,
       region_scope: null,
       region: null,
       activity: null,
@@ -544,6 +605,149 @@ export class ProgramManagementComponent implements OnInit {
     if (this.state.selected()?.id === project.id) this.state.clearSelection();
     else this.state.select(project);
   }
+  clearRows(): void {
+    ++this.selectionSequence;
+    this.selectingRows.set(false);
+    this.selectedRows.set(new Set());
+    this.selectedProjects.set(new Map());
+  }
+  toggleRow(row: ManagementParticipant | ManagementProject): void {
+    if (this.state.pending() || this.selectingRows() || this.removingParticipants()) return;
+    const ids = new Set(this.selectedRows()),
+      projects = new Map(this.selectedProjects());
+    if (ids.has(row.id)) {
+      ids.delete(row.id);
+      projects.delete(row.id);
+    } else {
+      ids.add(row.id);
+      if ("projectId" in row)
+        projects.set(row.id, {
+          id: row.id,
+          projectId: row.projectId,
+          submitted: row.submitted,
+          caseName: row.caseName,
+          draft: !!row.draft,
+        });
+    }
+    this.selectedRows.set(ids);
+    this.selectedProjects.set(projects);
+  }
+  selectAllRows(): void {
+    const ctx = this.state.context,
+      kind = this.section();
+    if (
+      !ctx ||
+      (kind !== "participants" && kind !== "projects") ||
+      this.selectingRows() ||
+      this.state.pending()
+    )
+      return;
+    if (this.allRowsSelected()) {
+      this.clearRows();
+      return;
+    }
+    const key = this.selectionKey,
+      seq = ++this.selectionSequence;
+    this.selectingRows.set(true);
+    this.tableError.set(null);
+    this.state.api
+      .selection(ctx.programId, kind, ctx.query)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          if (seq === this.selectionSequence) this.selectingRows.set(false);
+        }),
+      )
+      .subscribe({
+        next: result => {
+          if (key !== this.selectionKey || seq !== this.selectionSequence) return;
+          this.selectedRows.set(new Set(result.ids));
+          this.selectedProjects.set(new Map((result.projects ?? []).map(p => [p.id, p])));
+        },
+        error: () => {
+          if (seq === this.selectionSequence)
+            this.tableError.set("Не удалось выбрать все записи. Повторите попытку.");
+        },
+      });
+  }
+  assignSelectedProjects(): void {
+    if (!this.selectedRows().size || this.assignmentReason()) return;
+    const id = this.state.program()!.id;
+    this.assignmentSelection.set(
+      id,
+      [...this.selectedProjects().values()].map(p => p.projectId),
+    );
+    void this.router.navigateByUrl(this.paths.program.management(id, "experts"));
+  }
+  exportSelectedParticipants(): void {
+    const ctx = this.state.context;
+    if (!ctx || !this.selectedRows().size || this.exportingParticipants()) return;
+    this.exportingParticipants.set(true);
+    this.tableError.set(null);
+    this.state.api
+      .exportSelectedParticipants(ctx.programId, [...this.selectedRows()])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.exportingParticipants.set(false)),
+      )
+      .subscribe({
+        next: file => saveAs(file, `program-${ctx.programId}-participants.xlsx`),
+        error: () =>
+          this.tableError.set(
+            "Не удалось выгрузить выбранных участников. Обновите список и повторите попытку.",
+          ),
+      });
+  }
+  previewParticipantRemoval(ids: number[]): void {
+    const ctx = this.state.context;
+    if (!ctx || !ids.length || this.removingParticipants()) return;
+    const key = this.selectionKey;
+    this.removingParticipants.set(true);
+    this.tableError.set(null);
+    this.state.api
+      .previewParticipantRemoval(ctx.programId, ids)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.removingParticipants.set(false)),
+      )
+      .subscribe({
+        next: preview => {
+          if (key === this.selectionKey) this.participantRemoval.set({ ids, preview });
+        },
+        error: e => {
+          if (key === this.selectionKey) this.tableError.set(this.errorMessage(e));
+        },
+      });
+  }
+  removeParticipants(): void {
+    const removal = this.participantRemoval(),
+      ctx = this.state.context;
+    if (!removal || !ctx || this.removingParticipants()) return;
+    this.removingParticipants.set(true);
+    this.tableError.set(null);
+    this.state.api
+      .removeParticipants(ctx.programId, removal.ids, removal.preview.previewToken)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.removingParticipants.set(false)),
+      )
+      .subscribe({
+        next: result => {
+          this.participantRemoval.set(null);
+          this.clearRows();
+          this.tableMessage.set(`Удалено участников из программы: ${result.removed}.`);
+          const lastOffset =
+            Math.max(0, Math.ceil((this.count() - result.removed) / this.pageSize) - 1) *
+            this.pageSize;
+          if (this.offset() > lastOffset) void this.changeQuery({ offset: lastOffset });
+          else this.state.retry();
+        },
+        error: e => {
+          this.participantRemoval.set(null);
+          this.tableError.set(this.errorMessage(e));
+        },
+      });
+  }
   selectFromRow(event: MouseEvent, project: ManagementProject): void {
     if (!(event.target as HTMLElement).closest("a,button,input,label")) this.select(project);
   }
@@ -560,8 +764,63 @@ export class ProgramManagementComponent implements OnInit {
       { injector: this.injector },
     );
   }
-  openTeam(event: Event): void {
-    this.teamTrigger = event.currentTarget as HTMLElement;
+  projectActions(project: ManagementProject): RowAction[] {
+    const competitive = this.state.program()?.isCompetitive;
+    const actions: RowAction[] = [
+      { id: "team", label: "Посмотреть команду" },
+      {
+        id: "evaluation",
+        label: "Перейти к оценке",
+        routerLink: this.evaluationPath(project.id),
+        queryParams: { ...this.returnQuery(), selected: project.id },
+        disabled: !competitive || !project.submitted,
+        reason: !competitive
+          ? "В программе нет оценивания"
+          : !project.submitted
+            ? "Решение еще не сдано"
+            : undefined,
+      },
+    ];
+    const presentation = this.href(project.presentationUrl);
+    if (presentation)
+      actions.push({ id: "presentation", label: "Открыть презентацию", href: presentation });
+    return actions;
+  }
+  projectAction(project: ManagementProject, event: RowActionEvent): void {
+    if (event.id === "team") {
+      this.state.select(project);
+      this.openTeam(event.trigger);
+    }
+  }
+  materialActions(): RowAction[] {
+    return [
+      { id: "edit", label: "Изменить" },
+      { id: "delete", label: "Удалить", destructive: true },
+    ];
+  }
+  materialAction(material: ManagementMaterial, event: RowActionEvent): void {
+    if (event.id === "edit") this.editMaterial(material);
+    else if (event.id === "delete") void this.deleteMaterial(material);
+  }
+  participantActions(person: ManagementParticipant): RowAction[] {
+    const actions: RowAction[] = [
+      {
+        id: "profile",
+        label: "Открыть профиль",
+        routerLink: this.paths.profile.detail(person.userId),
+      },
+    ];
+    if (person.registrationAnswers?.length)
+      actions.push({ id: "answers", label: "Посмотреть анкету" });
+    actions.push({ id: "remove", label: "Удалить из программы", destructive: true });
+    return actions;
+  }
+  participantAction(person: ManagementParticipant, event: RowActionEvent): void {
+    if (event.id === "answers") this.participantAnswers.set(person);
+    else if (event.id === "remove") this.previewParticipantRemoval([person.id]);
+  }
+  openTeam(event: Event | HTMLElement): void {
+    this.teamTrigger = event instanceof HTMLElement ? event : (event.currentTarget as HTMLElement);
     this.state.openTeam();
     afterNextRender(() => this.document.getElementById("management-team-heading")?.focus(), {
       injector: this.injector,
@@ -597,6 +856,7 @@ export class ProgramManagementComponent implements OnInit {
   async canLeave(): Promise<boolean> {
     if (
       this.saving() ||
+      this.removingParticipants() ||
       this.uploading() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||

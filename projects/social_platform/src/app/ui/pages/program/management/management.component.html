@@ -1,6 +1,11 @@
 <!-- @format -->
 
-<main #managementLayout class="management" [class.management--projects]="section() === 'projects'">
+<main
+  #managementLayout
+  class="management"
+  [class.management--projects]="section() === 'projects'"
+  [class.management--lists]="section() === 'participants' || section() === 'projects'"
+>
   <a class="management__back" [routerLink]="paths.program.detail(state.context?.programId ?? '')"
     >На страницу программы</a
   >
@@ -194,59 +199,20 @@
                   <option value="not_submitted">Не сдано</option>
                 </select></label
               >
+              <label
+                >Оценивание<select
+                  appField
+                  aria-label="Оценивание"
+                  [formControl]="evaluationFilter"
+                  (change)="changeQuery({ evaluation: $any($event.target).value, offset: 0 })"
+                >
+                  <option value="all">Все проекты</option>
+                  <option value="evaluated">Оцененные проекты</option>
+                  <option value="not_evaluated">Неоцененные проекты</option>
+                </select></label
+              >
             }
           </div>
-          @if (state.selected(); as selected) {
-            <section
-              class="management__selection"
-              [class.management__selection--obscured]="state.teamOpen() || modalOpen()"
-              [style.left.px]="floatingPosition()?.center"
-              [style.width.px]="floatingPosition()?.width"
-              aria-label="Действия выбранного проекта"
-              (keydown.escape)="clearProjectSelection(); $event.stopPropagation()"
-            >
-              <div class="management__selection-name">
-                <span>Выбран проект</span
-                ><strong [title]="selected.name" aria-live="polite">{{ selected.name }}</strong>
-              </div>
-              <button type="button" appButton="secondary" (click)="openTeam($event)">
-                Посмотреть команду
-              </button>
-              @if (selected.submitted && program.isCompetitive) {
-                <a
-                  class="management__primary-link"
-                  [routerLink]="evaluationPath(selected.id)"
-                  [queryParams]="returnQuery()"
-                  >Перейти к оценке</a
-                >
-              } @else {
-                <button
-                  type="button"
-                  appButton="primary"
-                  disabled
-                  [attr.title]="
-                    program.isCompetitive ? 'Решение еще не сдано' : 'В программе нет оценивания'
-                  "
-                >
-                  Перейти к оценке
-                </button>
-              }
-              <button
-                type="button"
-                appButton="icon"
-                class="management__clear-selection"
-                aria-label="Снять выбор проекта"
-                (click)="clearProjectSelection()"
-              >
-                <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-              </button>
-            </section>
-          }
-          @if (count()) {
-            <p class="management__muted">
-              Выберите один проект, чтобы посмотреть команду или перейти к оценке.
-            </p>
-          }
         }
         @if (state.pending()) {
           <p class="management__list-loading" role="status">Обновляем список…</p>
@@ -269,18 +235,46 @@
             }
           </div>
         } @else if (section() === "participants") {
+          <div class="management__selection-tools">
+            <button
+              type="button"
+              appButton="text"
+              [disabled]="selectingRows() || removingParticipants()"
+              (click)="selectAllRows()"
+            >
+              {{
+                selectingRows()
+                  ? "Выбираем…"
+                  : allRowsSelected()
+                    ? "Снять весь выбор"
+                    : "Выбрать все по фильтрам"
+              }}
+            </button>
+          </div>
           <table appTable class="management__table management__participants">
             <caption class="management__sr">
               Участники программы
             </caption>
             <thead>
               <tr>
+                <th scope="col" class="management__col-select">
+                  <input
+                    type="checkbox"
+                    appChoice
+                    aria-label="Выбрать всех участников по фильтрам"
+                    [checked]="allRowsSelected()"
+                    [indeterminate]="!!selectedRows().size && !allRowsSelected()"
+                    [disabled]="selectingRows() || removingParticipants()"
+                    (change)="selectAllRows()"
+                  />
+                </th>
                 <th scope="col">№</th>
                 <th scope="col">Участник</th>
                 <th scope="col">Почта</th>
                 <th scope="col">Регион</th>
-                <th scope="col">В программе с</th>
+                <th scope="col">Дата регистрации</th>
                 <th scope="col" title="Время по Москве">Дата последней активности</th>
+                <th scope="col"><span class="management__sr">Действия</span></th>
               </tr>
             </thead>
             <tbody>
@@ -289,25 +283,25 @@
                 track person.id;
                 let index = $index
               ) {
-                <tr>
+                <tr [class.management__row-selected]="selectedRows().has(person.id)">
+                  <td class="management__pick">
+                    <label
+                      ><input
+                        type="checkbox"
+                        appChoice
+                        [checked]="selectedRows().has(person.id)"
+                        [disabled]="selectingRows() || removingParticipants()"
+                        [attr.aria-label]="'Выбрать участника: ' + person.name"
+                        (change)="toggleRow(person)"
+                    /></label>
+                  </td>
                   <td data-label="№">{{ offset() + index + 1 }}</td>
                   <td class="management__name" data-label="Участник">
-                    @if (person.registrationAnswers?.length) {
-                      <button
-                        appButton="text"
-                        type="button"
-                        (click)="participantAnswers.set(person)"
-                        [attr.aria-label]="'Открыть анкету: ' + person.name"
-                      >
-                        {{ person.name }}
-                      </button>
-                    } @else {
-                      {{ person.name }}
-                    }
+                    <a [routerLink]="paths.profile.detail(person.userId)">{{ person.name }}</a>
                   </td>
                   <td data-label="Почта">{{ person.email || "Не указана" }}</td>
                   <td data-label="Регион">{{ person.region || "—" }}</td>
-                  <td data-label="В программе с">
+                  <td data-label="Дата регистрации">
                     {{ person.registeredAt | date: "dd.MM.yyyy" : "+0300" }}
                   </td>
                   <td data-label="Последняя активность">
@@ -319,14 +313,38 @@
                       —
                     }
                   </td>
+                  <td class="management__row-actions">
+                    <app-row-actions
+                      [label]="'Действия участника: ' + person.name"
+                      [actions]="participantActions(person)"
+                      [disabled]="state.pending()"
+                      (action)="participantAction(person, $event)"
+                    />
+                  </td>
                 </tr>
               }
             </tbody>
           </table>
         } @else {
+          <div class="management__selection-tools">
+            <button
+              type="button"
+              appButton="text"
+              [disabled]="selectingRows()"
+              (click)="selectAllRows()"
+            >
+              {{
+                selectingRows()
+                  ? "Выбираем…"
+                  : allRowsSelected()
+                    ? "Снять весь выбор"
+                    : "Выбрать все по фильтрам"
+              }}
+            </button>
+          </div>
           <table appTable class="management__table management__projects">
             <caption class="management__sr">
-              Проекты программы. Можно выбрать один проект.
+              Проекты программы.
             </caption>
             <colgroup>
               <col class="management__col-select" />
@@ -337,10 +355,21 @@
               <col style="width: 12%" />
               <col style="width: 18%" />
               <col style="width: 14%" />
+              <col class="management__col-actions" />
             </colgroup>
             <thead>
               <tr>
-                <th scope="col"><span class="management__sr">Выбор проекта</span></th>
+                <th scope="col">
+                  <input
+                    type="checkbox"
+                    appChoice
+                    aria-label="Выбрать все проекты по фильтрам"
+                    [checked]="allRowsSelected()"
+                    [indeterminate]="!!selectedRows().size && !allRowsSelected()"
+                    [disabled]="selectingRows()"
+                    (change)="selectAllRows()"
+                  />
+                </th>
                 <th scope="col">№</th>
                 <th scope="col">Проект</th>
                 <th scope="col">Руководитель</th>
@@ -348,6 +377,7 @@
                 <th scope="col">Оценивание</th>
                 <th scope="col">Кейс</th>
                 <th scope="col">Презентация</th>
+                <th scope="col"><span class="management__sr">Действия</span></th>
               </tr>
             </thead>
             <tbody>
@@ -356,22 +386,16 @@
                 track project.id;
                 let index = $index
               ) {
-                <tr
-                  [class.management__row-selected]="state.selected()?.id === project.id"
-                  (click)="selectFromRow($event, project)"
-                >
+                <tr [class.management__row-selected]="selectedRows().has(project.id)">
                   <td class="management__pick">
                     <label
                       ><input
+                        type="checkbox"
                         appChoice
-                        type="radio"
-                        name="management-project"
-                        [value]="project.id"
-                        [checked]="state.selected()?.id === project.id"
-                        [attr.aria-label]="'Выбрать проект «' + project.name + '»'"
-                        (click)="select(project)"
-                        (keydown.space)="$event.preventDefault(); select(project)"
-                        (keydown.enter)="$event.preventDefault(); select(project)"
+                        [checked]="selectedRows().has(project.id)"
+                        [disabled]="selectingRows()"
+                        [attr.aria-label]="'Выбрать проект: ' + project.name"
+                        (change)="toggleRow(project)"
                     /></label>
                   </td>
                   <td data-label="№">{{ offset() + index + 1 }}</td>
@@ -405,6 +429,14 @@
                       <span class="management__muted">Не добавлена</span>
                     }
                   </td>
+                  <td class="management__row-actions">
+                    <app-row-actions
+                      [label]="'Действия проекта: ' + project.name"
+                      [actions]="projectActions(project)"
+                      [disabled]="state.pending()"
+                      (action)="projectAction(project, $event)"
+                    />
+                  </td>
                 </tr>
               }
             </tbody>
@@ -418,6 +450,70 @@
             (next)="page(1)"
             >{{ offset() + 1 }}–{{ rangeEnd() }} из {{ count() }}</app-pagination
           >
+        }
+        @if (tableError()) {
+          <p appAlert="error" role="alert">{{ tableError() }}</p>
+        }
+        @if (tableMessage()) {
+          <p appAlert="success" role="status">{{ tableMessage() }}</p>
+        }
+        @if (selectedRows().size) {
+          <section
+            class="management__selection management__bulk"
+            [class.management__selection--obscured]="
+              state.teamOpen() || modalOpen() || !!participantRemoval() || !!participantAnswers()
+            "
+            [style.left.px]="floatingPosition()?.center"
+            [style.width.px]="floatingPosition()?.width"
+            aria-label="Массовые действия"
+            (keydown.escape)="clearRows(); $event.stopPropagation()"
+          >
+            <strong aria-live="polite"
+              >Выбрано {{ section() === "participants" ? "участников" : "проектов" }}:
+              {{ selectedRows().size }}</strong
+            >
+            @if (section() === "participants") {
+              <button
+                appButton="secondary"
+                type="button"
+                [disabled]="exportingParticipants() || removingParticipants()"
+                (click)="exportSelectedParticipants()"
+              >
+                Выгрузить выбранных
+              </button>
+              <button
+                appButton="secondary"
+                type="button"
+                [disabled]="removingParticipants()"
+                (click)="previewParticipantRemoval(selectedRowIds())"
+              >
+                Удалить из программы
+              </button>
+            } @else {
+              <button
+                appButton="primary"
+                type="button"
+                [disabled]="!!assignmentReason()"
+                [attr.title]="assignmentReason()"
+                (click)="assignSelectedProjects()"
+              >
+                Назначить экспертов
+              </button>
+              @if (assignmentReason()) {
+                <span class="management__bulk-hint">{{ assignmentReason() }}</span>
+              }
+            }
+            <button
+              appButton="icon"
+              type="button"
+              class="management__clear-selection"
+              aria-label="Снять весь выбор"
+              [disabled]="removingParticipants()"
+              (click)="clearRows()"
+            >
+              <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+            </button>
+          </section>
         }
       </section>
     } @else if (section() === "analytics") {
@@ -693,23 +789,13 @@
                     : material.url
                 }}
               </p>
-              <div class="management__inline">
-                <button
-                  type="button"
-                  appButton="secondary"
-                  [disabled]="saving()"
-                  (click)="editMaterial(material)"
-                >
-                  Изменить</button
-                ><button
-                  type="button"
-                  appButton="secondary"
-                  [disabled]="saving()"
-                  (click)="deleteMaterial(material)"
-                >
-                  Удалить
-                </button>
-              </div>
+              <app-row-actions
+                class="management__material-actions"
+                [label]="'Действия материала: ' + material.title"
+                [actions]="materialActions()"
+                [disabled]="saving()"
+                (action)="materialAction(material, $event)"
+              />
             </article>
           } @empty {
             <div class="management__materials-empty">
@@ -724,6 +810,51 @@
     }
   }
 </main>
+<app-modal
+  [open]="!!participantRemoval()"
+  labelledBy="participant-removal-title"
+  (openChange)="!$event && !removingParticipants() && participantRemoval.set(null)"
+>
+  @if (participantRemoval(); as removal) {
+    <section class="management__dialog">
+      <h2 id="participant-removal-title">Удалить участников из программы?</h2>
+      <p>Участников: {{ removal.preview.participantCount }}. Аккаунты на платформе сохранятся.</p>
+      <p>Участники останутся в командах проектов на платформе.</p>
+      @if (removal.preview.applications.length) {
+        <div appAlert="warning">
+          <strong>Среди выбранных есть руководители проектов</strong>
+          <p>
+            Из этой программы будут удалены их заявки: {{ removal.preview.applications.length }}.
+            Эти заявки перестанут участвовать в оценивании и рейтинге. Сами проекты на платформе
+            сохранятся.
+          </p>
+        </div>
+        <ul class="management__removal-projects">
+          @for (application of removal.preview.applications; track application.id) {
+            <li>{{ application.name }}</li>
+          }
+        </ul>
+      }
+      <div class="management__inline">
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="removingParticipants()"
+          (click)="participantRemoval.set(null)"
+        >
+          Отмена</button
+        ><button
+          type="button"
+          appButton="primary"
+          [disabled]="removingParticipants()"
+          (click)="removeParticipants()"
+        >
+          {{ removingParticipants() ? "Удаляем…" : "Удалить из программы" }}
+        </button>
+      </div>
+    </section>
+  }
+</app-modal>
 <app-modal
   [open]="!!participantAnswers()"
   labelledBy="participant-answers-heading"

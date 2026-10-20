@@ -75,6 +75,7 @@ export interface ManagementProject {
   name: string;
   leader: { id: number; name: string };
   submitted: boolean;
+  draft?: boolean;
   evaluationStatus: ManagementEvaluationStatus;
   assignmentsTotal: number | null;
   assignmentsCompleted: number | null;
@@ -126,6 +127,7 @@ export interface ManagementQuery {
   offset: number;
   limit: number;
   submission: "all" | "submitted" | "not_submitted";
+  evaluation?: "all" | "evaluated" | "not_evaluated";
   caseScope: "all" | "selected" | "without_case";
   caseName?: string;
   regionScope?: "all" | "selected" | "without_region";
@@ -133,6 +135,23 @@ export interface ManagementQuery {
   activity?: "all" | "period" | "never";
   activityFrom?: string;
   activityTo?: string;
+}
+export interface ManagementSelectionProject {
+  id: number;
+  projectId: number;
+  submitted: boolean;
+  caseName: string | null;
+  draft: boolean;
+}
+export interface ManagementSelection {
+  ids: number[];
+  projects?: ManagementSelectionProject[];
+}
+export interface ParticipantRemovalPreview {
+  previewToken: string;
+  participantCount: number;
+  applications: { id: number; projectId: number; name: string; submitted: boolean }[];
+  assignmentsCount: number;
 }
 export interface ManagementSettingsWrite {
   expectedUpdatedAt: string;

@@ -46,6 +46,11 @@ export interface ExpertCaseScopeWrite {
   allCases: boolean;
   caseNames: (string | null)[];
 }
+export interface ExpertsBulkWrite extends ExpertCaseScopeWrite {
+  action: "cases" | "resend" | "revoke";
+  expertIds: number[];
+  invitationIds: number[];
+}
 export interface ProjectExpertsWrite {
   revision: string;
   projectIds: number[];

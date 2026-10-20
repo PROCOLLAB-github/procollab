@@ -62,32 +62,15 @@
           <th>Организатор</th>
           <th>Email</th>
           <th>Статус</th>
+          <th><span class="organizers__sr">Действия</span></th>
         </tr>
       </thead>
       <tbody>
         @for (row of visible(); track row.id) {
-          <tr
-            [attr.data-organizer-id]="row.id"
-            [class.organizers__row--selected]="selectedId() === row.id"
-            tabindex="0"
-            (click)="select(row)"
-            (keydown.enter)="select(row)"
-            (keydown.space)="$event.preventDefault(); select(row)"
-          >
+          <tr [attr.data-organizer-id]="row.id">
             <td>
               <div class="organizers__person">
-                <input
-                  type="radio"
-                  appChoice
-                  name="organizer"
-                  [checked]="selectedId() === row.id"
-                  [attr.aria-label]="
-                    (selectedId() === row.id ? 'Снять выбор: ' : 'Выбрать: ') +
-                    (row.name || row.email)
-                  "
-                  (click)="$event.stopPropagation(); select(row)"
-                  (keydown)="$event.stopPropagation()"
-                /><app-avatar
+                <app-avatar
                   [url]="href(row.avatar) ?? undefined"
                   [size]="32"
                   [fallbackLabel]="initials(row)"
@@ -110,10 +93,18 @@
                 >{{ label(row) }}</span
               >
             </td>
+            <td class="organizers__row-actions">
+              <app-row-actions
+                [label]="'Действия организатора: ' + (row.name || row.email)"
+                [actions]="rowActions(row)"
+                [disabled]="busy()"
+                (action)="rowAction(row, $event)"
+              />
+            </td>
           </tr>
         } @empty {
           <tr>
-            <td colspan="3">
+            <td colspan="4">
               {{
                 loading()
                   ? "Загружаем список…"
@@ -147,64 +138,6 @@
       }
     </footer>
   </section>
-  @if (selected(); as row) {
-    <section
-      class="organizers__floating"
-      aria-label="Действия выбранного организатора"
-      [style.left.px]="floatingCenter()"
-      [style.width.px]="floatingWidth()"
-      (keydown.escape)="clearSelection(); $event.stopPropagation()"
-    >
-      <strong aria-live="polite"
-        >{{ row.name || row.email }}
-        @if (row.isSelf) {
-          · вы
-        }
-      </strong>
-      <div class="organizers__actions">
-        @if (row.status === "joined") {
-          <button
-            type="button"
-            appButton="secondary"
-            [disabled]="!row.canRemove || busy()"
-            (click)="open('remove', $event)"
-          >
-            {{ row.isSelf ? "Выйти из организаторов" : "Убрать доступ" }}
-          </button>
-        } @else {
-          <button
-            type="button"
-            appButton="secondary"
-            [disabled]="busy()"
-            (click)="invitationAction('resend')"
-          >
-            Отправить повторно</button
-          ><button
-            type="button"
-            appButton="secondary"
-            [disabled]="busy()"
-            (click)="open('revoke', $event)"
-          >
-            Отозвать
-          </button>
-        }
-        <button
-          type="button"
-          appButton="icon"
-          aria-label="Снять выбор организатора"
-          [disabled]="busy()"
-          (click)="clearSelection()"
-        >
-          ×
-        </button>
-      </div>
-      @if (row.status === "joined" && !row.canRemove) {
-        <p class="organizers__last" appAlert="warning">
-          Сначала пригласите коллегу и дождитесь принятия.
-        </p>
-      }
-    </section>
-  }
 </div>
 <app-modal
   [open]="!!modal()"

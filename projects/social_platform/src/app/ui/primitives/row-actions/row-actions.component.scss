@@ -1,0 +1,84 @@
+/** @format */
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.row-actions {
+  &__trigger {
+    width: 36px;
+    min-width: 36px;
+    min-height: 32px;
+    padding: 6px;
+    color: var(--accent);
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    @media (pointer: coarse) {
+      width: 44px;
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+
+  &__menu {
+    display: grid;
+    width: 250px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 32px);
+    padding: 6px;
+    overflow-y: auto;
+    background: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 36px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 12px;
+    line-height: 20px;
+    color: var(--black);
+    text-align: left;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--accent-light);
+      outline: 0;
+    }
+
+    &[aria-disabled="true"] {
+      color: var(--grey-for-text);
+      cursor: default;
+      background: transparent;
+    }
+
+    &--destructive {
+      color: var(--red);
+    }
+
+    @media (pointer: coarse) {
+      min-height: 44px;
+    }
+  }
+
+  &__reason {
+    display: block;
+    font-size: 11px;
+    line-height: 16px;
+  }
+}

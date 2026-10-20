@@ -194,6 +194,7 @@ describe("Управление экспертами", () => {
           projects: structuredClone(projects),
         }),
       ),
+      bulkExperts: vi.fn(() => of(structuredClone(snapshot))),
       saveCaseScope: vi.fn(() => of(structuredClone(snapshot))),
       saveInvitationCaseScope: vi.fn(() => of(structuredClone(snapshot))),
       saveProjectExperts: vi.fn(() => of(structuredClone(snapshot))),
@@ -226,16 +227,37 @@ describe("Управление экспертами", () => {
     expect(search.value).toBe("Мария");
     expect(document.activeElement).toBe(search);
   });
-  it("повторный выбор строки снимает выделение", () => {
+  it("чекбокс выбирает эксперта для массового действия, меню доступно без выбора", () => {
     const { fixture, component } = setup();
-    const row = fixture.nativeElement.querySelector("tbody tr");
-    row.click();
+    const checkbox = fixture.nativeElement.querySelector(
+      "tbody input[type=checkbox]",
+    ) as HTMLInputElement;
+    checkbox.click();
     fixture.detectChanges();
-    expect(component.selected()?.id).toBe(1);
-    row.click();
+    expect(component.selectedExpertIds().has(1)).toBe(true);
+    checkbox.click();
     fixture.detectChanges();
-    expect(component.selected()).toBeNull();
+    expect(component.selectedExpertIds().size).toBe(0);
+    (fixture.nativeElement.querySelector("app-row-actions button") as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".experts__floating")).toBeNull();
+    expect(document.querySelector("[role=menu]")?.textContent).toContain("Посмотреть назначения");
   });
+  it("Выбрать всех работает по всему фильтру, а массовый отзыв запрещен для принявших приглашение", () => {
+    const { component, api } = setup();
+    component.selectAllExperts();
+    expect(component.selectedExpertIds().size).toBe(2);
+    component.bulkExperts("revoke");
+    expect(api.bulkExperts).not.toHaveBeenCalled();
+    component.status.setValue("pending");
+    component.selectAllExperts();
+    component.bulkExperts("resend");
+    expect(api.bulkExperts).toHaveBeenCalledWith(
+      42,
+      expect.objectContaining({ action: "resend", invitationIds: [2], expertIds: [] }),
+    );
+  });
+
   it("pending исключён из распределения, план с нехваткой нельзя применить", () => {
     const { component, api } = setup();
     component.open("auto");
@@ -266,23 +288,26 @@ describe("Управление экспертами", () => {
     component.quota.setValue(0);
     expect(component.quota.invalid).toBe(true);
   });
-  it("выбор проектов одного кейса повторным нажатием снимается, другой кейс не добавляется", () => {
+  it("можно выбрать разные кейсы, но ручное назначение требует одного кейса", () => {
     const { fixture, component } = setup();
     component.switchTab("distribution");
-    fixture.detectChanges();
-    component.toggleDistributionProject(projects[0]);
-    component.toggleDistributionProject(projects[1]);
-    expect(component.selectedProjects().size).toBe(2);
+    component.selectVisibleProjects();
+    expect(component.selectedProjects().size).toBe(3);
+    expect(component.mixedProjectCases()).toBe(true);
+    component.openProject();
+    expect(component.modal()).toBeNull();
     component.toggleDistributionProject(projects[2]);
     expect(component.selectedProjects().size).toBe(2);
-    component.toggleDistributionProject(projects[0]);
-    expect([...component.selectedProjects()]).toEqual([11]);
+    component.openProject();
+    expect(component.modal()).toBe("project");
+    component.modal.set(null);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".experts__floating")).toBeTruthy();
     component.selectedProjects.set(new Set());
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".experts__floating")).toBeNull();
   });
+
   it("поиск проекта и фильтр кейса сохраняются при обновлении данных", () => {
     const { fixture, component } = setup();
     component.switchTab("distribution");

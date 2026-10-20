@@ -57,83 +57,59 @@
           <button type="button" appButton="text" (click)="load()">Обновить статус</button>
         </p>
       }
-      @if (selected(); as expert) {
-        <section
-          class="experts__floating experts__expert-actions"
-          [style.left.px]="floatingCenter()"
-          [style.width.px]="floatingWidth()"
-          aria-label="Действия выбранного эксперта"
-          (keydown.escape)="clearExpertSelection(); $event.stopPropagation()"
-        >
-          <strong [title]="expert.name || expert.email" aria-live="polite">{{
-            expert.name || expert.email
-          }}</strong>
-          <div class="experts__actions">
-            @if (expert.status === "joined") {
-              <button
-                type="button"
-                appButton="secondary"
-                (click)="
-                  switchTab('distribution'); distributionStatus.setValue('expert:' + expert.id)
-                "
-              >
-                Посмотреть назначения
-              </button>
-              <button type="button" appButton="secondary" (click)="openScope(expert)">
-                Кейсы эксперта
-              </button>
-            } @else {
-              <button type="button" appButton="secondary" (click)="openScope(expert)">
-                Кейсы эксперта
-              </button>
-              <button
-                type="button"
-                appButton="secondary"
-                [disabled]="busy()"
-                (click)="invitationAction('resend')"
-              >
-                Отправить повторно
-              </button>
-              @if (expert.status !== "revoked") {
-                <button type="button" appButton="secondary" (click)="open('revoke')">
-                  Отозвать приглашение
-                </button>
-              }
-            }
-            <button
-              type="button"
-              appButton="icon"
-              aria-label="Снять выбор эксперта"
-              (click)="clearExpertSelection()"
-            >
-              ×
-            </button>
-          </div>
-        </section>
-      }
       @if (loading() && !snapshot()) {
         <p role="status">Загружаем экспертов…</p>
       }
+      <div class="experts__select-all">
+        <button
+          type="button"
+          appButton="text"
+          [disabled]="busy() || loading()"
+          (click)="selectAllExperts()"
+        >
+          {{ allExpertsSelected() ? "Снять весь выбор" : "Выбрать всех по фильтрам" }}
+        </button>
+      </div>
       <table class="experts__table experts__table--people">
         <thead>
           <tr>
+            <th class="experts__pick">
+              <input
+                type="checkbox"
+                appChoice
+                aria-label="Выбрать всех экспертов по фильтрам"
+                [checked]="allExpertsSelected()"
+                [indeterminate]="!!selectedExpertIds().size && !allExpertsSelected()"
+                [disabled]="busy() || loading()"
+                (change)="selectAllExperts()"
+              />
+            </th>
             <th>Эксперт</th>
             <th>Кейсы</th>
             <th>Статус</th>
             <th>Назначено</th>
             <th>Оценено</th>
+            <th><span class="experts__sr">Действия</span></th>
           </tr>
         </thead>
         <tbody>
           @for (expert of visible(); track expert.id) {
             <tr
               [attr.data-expert-id]="expert.id"
-              [class.experts__row--selected]="selected()?.id === expert.id"
-              tabindex="0"
-              (click)="select(expert)"
-              (keydown.enter)="select(expert)"
-              (keydown.space)="$event.preventDefault(); select(expert)"
+              [class.experts__row--selected]="selectedExpertIds().has(expert.id)"
             >
+              <td class="experts__pick">
+                <label class="experts__pick-target">
+                  <input
+                    type="checkbox"
+                    appChoice
+                    [attr.aria-label]="'Выбрать эксперта: ' + (expert.name || expert.email)"
+                    [checked]="selectedExpertIds().has(expert.id)"
+                    [disabled]="busy()"
+                    (change)="toggleSelectedExpert(expert)"
+                  />
+                </label>
+              </td>
               <td>
                 <div class="experts__person">
                   <app-avatar
@@ -169,10 +145,18 @@
               </td>
               <td data-label="Назначено">{{ expert.assigned ?? "—" }}</td>
               <td data-label="Оценено">{{ expert.completed ?? "—" }}</td>
+              <td class="experts__row-actions">
+                <app-row-actions
+                  [label]="'Действия эксперта: ' + (expert.name || expert.email)"
+                  [actions]="rowActions(expert)"
+                  [disabled]="busy()"
+                  (action)="rowAction(expert, $event)"
+                />
+              </td>
             </tr>
           } @empty {
             <tr>
-              <td colspan="5">
+              <td colspan="7">
                 {{
                   search.value || status.value !== "all"
                     ? "Эксперты не найдены. Измените поиск или статус."
@@ -276,6 +260,16 @@
             }
           </details>
         }
+        <div class="experts__select-all">
+          <button
+            type="button"
+            appButton="text"
+            [disabled]="busy() || loading()"
+            (click)="selectVisibleProjects()"
+          >
+            {{ allVisibleSelected() ? "Снять весь выбор" : "Выбрать все проекты по фильтрам" }}
+          </button>
+        </div>
         <table class="experts__table experts__table--projects">
           <thead>
             <tr>
@@ -283,7 +277,7 @@
                 <input
                   type="checkbox"
                   appChoice
-                  aria-label="Выбрать проекты одного кейса на странице"
+                  aria-label="Выбрать все проекты по фильтрам"
                   [checked]="allVisibleSelected()"
                   [indeterminate]="!!selection().length && !allVisibleSelected()"
                   (change)="selectVisibleProjects()"
@@ -300,17 +294,16 @@
             @for (project of distributionPage(); track project.id) {
               <tr [class.experts__row--selected]="selectedProjects().has(project.id)">
                 <td>
-                  <input
-                    type="checkbox"
-                    appChoice
-                    [checked]="selectedProjects().has(project.id)"
-                    [attr.aria-label]="'Выбрать проект «' + project.name + '»'"
-                    [disabled]="
-                      busy() ||
-                      (!!selection().length && selection()[0].caseName !== project.caseName)
-                    "
-                    (change)="toggleDistributionProject(project)"
-                  />
+                  <label class="experts__pick-target">
+                    <input
+                      type="checkbox"
+                      appChoice
+                      [checked]="selectedProjects().has(project.id)"
+                      [attr.aria-label]="'Выбрать проект «' + project.name + '»'"
+                      [disabled]="busy()"
+                      (change)="toggleDistributionProject(project)"
+                    />
+                  </label>
                 </td>
                 <td>
                   <strong>{{ project.name }}</strong>
@@ -334,14 +327,12 @@
                   {{ completed(project) }} из {{ state.requiredEvaluators }}
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    appButton="secondary"
+                  <app-row-actions
+                    [label]="'Действия проекта: ' + project.name"
+                    [actions]="distributionActions(project)"
                     [disabled]="busy()"
-                    (click)="openProject(project)"
-                  >
-                    {{ project.experts.length ? "Изменить экспертов" : "Назначить экспертов" }}
-                  </button>
+                    (action)="openProject(project)"
+                  />
                 </td>
               </tr>
             } @empty {
@@ -385,7 +376,49 @@
     }
   }
 </div>
-@if (tab() === "distribution" && selection().length) {
+@if (tab() === "experts" && selectedExpertRows().length && !modal()) {
+  <section
+    class="experts__floating experts__bulk"
+    [style.left.px]="floatingCenter()"
+    [style.width.px]="floatingWidth()"
+    aria-label="Массовые действия с экспертами"
+  >
+    <strong aria-live="polite">Выбрано экспертов: {{ selectedExpertRows().length }}</strong>
+    <div class="experts__actions">
+      <button type="button" appButton="secondary" [disabled]="busy()" (click)="openBulkScope()">
+        Изменить кейсы
+      </button>
+      <button
+        type="button"
+        appButton="secondary"
+        [disabled]="busy() || !canBulkInvite()"
+        title="Повторная отправка доступна для приглашений"
+        (click)="bulkExperts('resend')"
+      >
+        Отправить повторно
+      </button>
+      <button
+        type="button"
+        appButton="secondary"
+        [disabled]="busy() || !canBulkInvite()"
+        title="Отозвать можно только приглашения"
+        (click)="openBulkRevoke()"
+      >
+        Отозвать приглашения
+      </button>
+      <button
+        type="button"
+        appButton="icon"
+        aria-label="Снять выбор экспертов"
+        [disabled]="busy()"
+        (click)="selectedExpertIds.set(emptySelection)"
+      >
+        ×
+      </button>
+    </div>
+  </section>
+}
+@if (tab() === "distribution" && selection().length && !modal()) {
   <div
     class="experts__floating"
     [style.left.px]="floatingCenter()"
@@ -396,10 +429,15 @@
     <strong aria-live="polite"
       >Выбрано {{ selection().length }}
       {{ selection().length | pluralize: ["проект", "проекта", "проектов"] }} ·
-      {{ caseLabel(selection()[0].caseName) }}</strong
+      {{ mixedProjectCases() ? "Разные кейсы" : caseLabel(selection()[0].caseName) }}</strong
     >
     <div class="experts__actions">
-      <button type="button" appButton="primary" [disabled]="busy()" (click)="openProject()">
+      <button
+        type="button"
+        appButton="primary"
+        [disabled]="busy() || mixedProjectCases()"
+        (click)="openProject()"
+      >
         Назначить экспертов</button
       ><button
         type="button"
@@ -411,6 +449,9 @@
         ×
       </button>
     </div>
+    @if (mixedProjectCases()) {
+      <span>Для ручного назначения выберите проекты одного кейса.</span>
+    }
   </div>
 }
 <app-modal
@@ -468,7 +509,14 @@
         </form>
       }
       @case ("revoke") {
-        <p>Отозвать приглашение для {{ selected()?.email }}? Эта ссылка перестанет действовать.</p>
+        <p>
+          {{
+            bulkRevoke()
+              ? "Отозвать выбранные приглашения: " + selectedExpertRows().length + "?"
+              : "Отозвать приглашение для " + selected()?.email + "?"
+          }}
+          Ссылки в отозванных приглашениях перестанут действовать.
+        </p>
         <footer class="experts__actions">
           <button type="button" appButton="secondary" (click)="close()">Отмена</button
           ><button
@@ -517,8 +565,8 @@
               <summary aria-label="Как назначить экспертов вручную">?</summary>
               <p>
                 Закройте это окно, выберите проекты одного кейса в таблице и нажмите «Назначить
-                экспертов». Для одного проекта нажмите «Назначить экспертов» или «Изменить
-                экспертов» в его строке.
+                экспертов». Для одного проекта откройте меню с тремя точками в его строке и выберите
+                назначение экспертов.
               </p>
             </details>
           </div>
