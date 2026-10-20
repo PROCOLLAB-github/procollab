@@ -37,7 +37,7 @@ export class NotificationService {
   private readonly unread = new BehaviorSubject(0);
   readonly hasNotifications = this.unread.asObservable();
   readonly failed = signal(false);
-  readonly reading = signal<number | null>(null);
+  readonly reading = signal<string | null>(null);
 
   constructor() {
     this.events
@@ -70,7 +70,7 @@ export class NotificationService {
 
   private load() {
     if (!this.tokens.getTokens()) return of({ results: [], unreadCount: 0 });
-    return this.api.get<NotificationPage>("/evaluation/notifications/").pipe(
+    return this.api.get<NotificationPage>("/core/notifications/").pipe(
       map(page => {
         this.failed.set(false);
         return page;
@@ -86,7 +86,10 @@ export class NotificationService {
     if (notice.readAt || this.reading() !== null) return;
     this.reading.set(notice.id);
     this.api
-      .post<{ id: number; readAt: string }>(`/evaluation/notifications/${notice.id}/read/`, {})
+      .post<{ id: string; readAt: string; unreadCount: number }>(
+        `/core/notifications/${notice.id}/read/`,
+        {},
+      )
       .pipe(
         takeUntil(this.cancel),
         takeUntilDestroyed(this.destroyRef),
@@ -99,7 +102,7 @@ export class NotificationService {
               row.id === data.id ? { ...row, readAt: data.readAt } : row,
             ),
           );
-          this.unread.next(Math.max(0, this.unread.value - 1));
+          this.unread.next(data.unreadCount);
         },
         error: () => this.failed.set(true),
       });
