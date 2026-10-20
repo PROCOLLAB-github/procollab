@@ -104,7 +104,7 @@ export class ManagementRegistrationComponent {
   });
   readonly fieldTypes = [
     { id: "text", label: "Короткий текст" },
-    { id: "textarea", label: "Развёрнутый ответ" },
+    { id: "textarea", label: "Развернутый ответ" },
     { id: "number", label: "Число" },
     { id: "date", label: "Дата" },
     { id: "select", label: "Один вариант из списка" },
@@ -254,7 +254,7 @@ export class ManagementRegistrationComponent {
           this.message.set(
             publish
               ? "Форма опубликована. Ссылку можно отправлять участникам."
-              : "Черновик сохранён.",
+              : "Черновик сохранен.",
           );
         },
         error: e => this.error.set(evaluationError(e)),
@@ -346,7 +346,9 @@ export class ManagementRegistrationComponent {
         next: data => {
           this.snapshot.set(data);
           this.dialog.set(null);
-          this.message.set("Запрос передан администратору. Мы свяжемся с вами в ближайшее время.");
+          this.message.set(
+            "Запрос сохранен в очереди администратора. Мы свяжемся с вами в ближайшее время.",
+          );
         },
         error: e => this.dialogError.set(evaluationError(e)),
       });

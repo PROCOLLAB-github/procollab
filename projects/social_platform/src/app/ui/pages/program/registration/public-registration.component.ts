@@ -274,7 +274,7 @@ export class PublicRegistrationComponent {
           if (e?.error?.code === "form_changed") {
             this.load();
             this.notice.set(
-              "Анкета обновлена. Сохранённые ответы перенесены; проверьте поля перед отправкой.",
+              "Анкета обновлена. Сохраненные ответы перенесены; проверьте поля перед отправкой.",
             );
           }
           if (e?.error?.code === "account_exists") {
@@ -300,7 +300,7 @@ export class PublicRegistrationComponent {
         next: result => {
           if (!result.ok) {
             this.error.set(
-              "Не удалось войти. Проверьте почту и пароль. Если почта ещё не подтверждена, перейдите по ссылке из письма.",
+              "Не удалось войти. Проверьте почту и пароль. Если почта еще не подтверждена, перейдите по ссылке из письма.",
             );
             return;
           }
@@ -311,7 +311,7 @@ export class PublicRegistrationComponent {
           this.mode.set("form");
           this.load();
         },
-        error: () => this.error.set("Не удалось войти. Попробуйте ещё раз."),
+        error: () => this.error.set("Не удалось войти. Попробуйте еще раз."),
       });
   }
   confirm() {
@@ -404,7 +404,7 @@ export class PublicRegistrationComponent {
       .subscribe({
         next: () =>
           this.notice.set(
-            "Если аккаунт существует, на почту отправлено письмо. После смены пароля вы вернётесь к этой программе.",
+            "Если аккаунт существует, на почту отправлено письмо. После смены пароля вы вернетесь к этой программе.",
           ),
         error: e => this.error.set(evaluationError(e)),
       });

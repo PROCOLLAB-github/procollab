@@ -12,7 +12,10 @@ export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsErro
     if (cause.status === 400) {
       if (cause.error?.code === "required_program_fields")
         return { kind: "required_fields", cause };
-      if (cause.error?.detail === "Срок подачи проектов в программу завершён.") {
+      if (
+        typeof cause.error?.detail === "string" &&
+        cause.error.detail.replace(/\u0451/g, "е") === "Срок подачи проектов в программу завершен."
+      ) {
         return { kind: "submission_closed", cause };
       }
       if (
