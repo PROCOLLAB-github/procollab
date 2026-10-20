@@ -2,70 +2,43 @@
 
 <main class="analytics" aria-labelledby="program-analytics-title">
   <header class="analytics__header">
-    <div>
-      <p class="analytics__eyebrow text-body-10">Управление программой</p>
+    <div class="analytics__title-row">
       <h1 id="program-analytics-title" class="analytics__title text-heading-3">Аналитика</h1>
-      <p class="analytics__subtitle text-body-10">
-        Сводка пути участников от регистрации до экспертной оценки.
-      </p>
+      @if (data()) {
+        <button
+          appButton="icon"
+          type="button"
+          class="regions__export analytics__export-trigger"
+          [cdkMenuTriggerFor]="analyticsExports"
+          [disabled]="loadingExports()"
+          [attr.aria-busy]="loadingExports()"
+          aria-label="Выгрузить данные программы"
+          title="Выгрузить данные программы"
+        >
+          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+        </button>
+        <ng-template #analyticsExports>
+          <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
+            <button cdkMenuItem type="button" (click)="downloadProgram()">Вся программа</button>
+            <button cdkMenuItem type="button" (click)="downloadProjects()">Все проекты</button>
+            <button cdkMenuItem type="button" (click)="downloadSubmittedProjects()">
+              Сданные проекты
+            </button>
+            <button cdkMenuItem type="button" (click)="downloadRates()">Оценки проектов</button>
+          </div>
+        </ng-template>
+      }
     </div>
-
-    @if (data()) {
-      <section class="exports" aria-labelledby="analytics-exports-title">
-        <div class="analytics__heading-row">
-          <h2 id="analytics-exports-title" class="text-body-12">Выгрузки</h2>
-          <app-tooltip
-            data-testid="exports-tooltip"
-            text="Скачайте проекты программы или выставленные проектные оценки."
-            [isVisible]="isTooltipVisible('exports')"
-            [useOverlay]="true"
-            position="left"
-            (click)="toggleTooltip('exports')"
-            (show)="showTooltip('exports')"
-            (hide)="hideTooltip('exports')"
-          ></app-tooltip>
-        </div>
-        <div class="exports__actions">
-          <app-button
-            appearance="outline"
-            size="big"
-            [loader]="loadingExports()"
-            [disabled]="loadingExports()"
-            customTypographyClass="text-body-10"
-            (click)="downloadProjects()"
-          >
-            Все проекты
-          </app-button>
-          <app-button
-            appearance="outline"
-            size="big"
-            [loader]="loadingExports()"
-            [disabled]="loadingExports()"
-            customTypographyClass="text-body-10"
-            (click)="downloadSubmittedProjects()"
-          >
-            Сданные проекты
-          </app-button>
-          <app-button
-            appearance="outline"
-            size="big"
-            [loader]="loadingExports()"
-            [disabled]="loadingExports()"
-            customTypographyClass="text-body-10"
-            (click)="downloadRates()"
-          >
-            Оценки проектов
-          </app-button>
-        </div>
-        @if (exportFailed()) {
-          <app-state
-            class="exports__error text-body-10"
-            [compact]="true"
-            kind="error"
-            title="Не удалось подготовить выгрузку. Повторите попытку."
-          />
-        }
-      </section>
+    @if (loadingExports()) {
+      <p class="text-body-10" role="status">Подготавливаем Excel…</p>
+    }
+    @if (exportFailed()) {
+      <app-state
+        class="exports__error text-body-10"
+        [compact]="true"
+        kind="error"
+        title="Не удалось подготовить выгрузку. Повторите попытку."
+      />
     }
   </header>
 

@@ -88,6 +88,22 @@ describe("Attention bulk actions", () => {
     expect(actions.send).toHaveBeenCalledTimes(1);
   });
 
+  it("header selection switches between mixed, all found and cleared states", () => {
+    expect(state.allFoundSelected()).toBe(false);
+    expect(state.someFoundSelected()).toBe(false);
+    state.toggleSelection(123);
+    expect(state.someFoundSelected()).toBe(true);
+    state.toggleAllFound();
+    expect(state.allFoundSelected()).toBe(true);
+    expect(state.someFoundSelected()).toBe(false);
+    state.toggleSelection(123);
+    expect(state.someFoundSelected()).toBe(true);
+    state.toggleAllFound();
+    expect(state.allFoundSelected()).toBe(true);
+    state.toggleAllFound();
+    expect(state.selectedCount()).toBe(0);
+  });
+
   it("does not claim emails were queued when every recipient became unavailable", () => {
     state.toggleSelection(123);
     state.previewReminder();

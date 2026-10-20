@@ -13,7 +13,7 @@ import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
-import { ButtonComponent, LoaderComponent } from "@ui/primitives";
+import { ButtonComponent, IconComponent, LoaderComponent } from "@ui/primitives";
 import { caseErrorMessage, presentationHref } from "@utils/program-case-analytics";
 import {
   AfterViewInit,
@@ -72,6 +72,7 @@ import {
     DatePipe,
     RouterLink,
     ButtonComponent,
+    IconComponent,
     LoaderComponent,
   ],
   providers: [ProgramAnalyticsDrilldownService, ProgramCaseProjectsService],
@@ -99,7 +100,6 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   @ViewChild(CdkTrapFocus) private trap!: CdkTrapFocus;
   @ViewChild("closeButton") private closeButton!: ElementRef<HTMLButtonElement>;
   @ViewChild("heading") private heading!: ElementRef<HTMLHeadingElement>;
-  @ViewChild("reminderHeading") private reminderHeading?: ElementRef<HTMLHeadingElement>;
 
   protected readonly statusLabel = (status: ProgramAnalyticsAssignmentStatus): string =>
     assignmentStatusLabels[status];
@@ -109,6 +109,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   protected readonly attentionReasonLabel = (label: string): string =>
     label.replace(/ё/g, "е").replace(/Ё/g, "Е");
   protected readonly title = computed(() => {
+    if (this.state.preview()) return "Отправить напоминание";
     switch (this.state.view()) {
       case "case": {
         const selection = this.cases.selection();
@@ -184,7 +185,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       const preview = !!this.state.preview();
       if (this.attached() && this.state.open() && preview !== this.focusedPreview) {
         this.focusedPreview = preview;
-        (preview ? this.reminderHeading : this.heading)?.nativeElement.focus();
+        this.heading.nativeElement.focus();
       }
       if (this.attached() && this.state.open() && view !== this.focusedView) {
         this.focusedView = view;

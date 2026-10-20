@@ -714,6 +714,42 @@
   }
 }
 
+.attention-check__label {
+  display: none;
+}
+
+@media (max-width: 999px) {
+  .analytics-drilldown__table:has(th.attention-check-cell) {
+    thead {
+      display: block;
+    }
+
+    thead tr {
+      padding: 0;
+      border: 0;
+    }
+
+    thead th:not(.attention-check-cell) {
+      display: none;
+    }
+
+    th.attention-check-cell {
+      width: auto;
+    }
+
+    thead .attention-check {
+      display: flex;
+      gap: 12px;
+      width: auto;
+      font-size: 12px;
+    }
+
+    .attention-check__label {
+      display: inline;
+    }
+  }
+}
+
 .analytics-drilldown__table tr.attention-selected-row {
   background: color-mix(in srgb, var(--accent-light) 35%, var(--light-white));
 }
@@ -791,6 +827,73 @@
     background: var(--light-gray);
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 10px;
+  }
+}
+
+.attention-reminder__recipient-count {
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+.attention-reminder__email {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  background: var(--light-white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 10px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+
+  small {
+    color: var(--grey-for-text);
+  }
+}
+
+.attention-reminder__email-button {
+  justify-self: start;
+  padding: 12px 18px;
+  color: var(--light-white);
+  background: var(--accent);
+  border-radius: 8px;
+}
+
+.attention-list-tools {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .analytics-drilldown__count {
+    margin: 0;
+  }
+}
+
+.analytics-drilldown .ui-button.ui-button.attention-list-tools__export {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+}
+
+@media (min-width: 1000px) {
+  .analytics-drilldown__table--assignments th {
+    &:first-child { width: 24%; }
+    &:nth-child(2) { width: 27%; }
+    &:nth-child(3) { width: 18%; }
+    &:nth-child(4) { width: 19%; }
+    &:last-child { width: 12%; }
   }
 }
 
