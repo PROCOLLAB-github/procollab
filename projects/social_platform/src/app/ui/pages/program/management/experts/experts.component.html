@@ -60,29 +60,34 @@
       @if (loading() && !snapshot()) {
         <p role="status">Загружаем экспертов…</p>
       }
-      <div class="experts__select-all">
-        <button
-          type="button"
-          appButton="text"
-          [disabled]="busy() || loading()"
-          (click)="selectAllExperts()"
-        >
-          {{ allExpertsSelected() ? "Снять весь выбор" : "Выбрать всех по фильтрам" }}
-        </button>
+      <div class="experts__mobile-tools">
+        <label class="experts__pick-target">
+          <input
+            type="checkbox"
+            appChoice
+            aria-label="Выбрать всех экспертов по фильтрам"
+            [checked]="allExpertsSelected()"
+            [indeterminate]="!!selectedExpertIds().size && !allExpertsSelected()"
+            [disabled]="busy() || loading()"
+            (change)="selectAllExperts()"
+          />
+          Все эксперты
+        </label>
       </div>
       <table class="experts__table experts__table--people">
         <thead>
           <tr>
             <th class="experts__pick">
-              <input
-                type="checkbox"
-                appChoice
-                aria-label="Выбрать всех экспертов по фильтрам"
-                [checked]="allExpertsSelected()"
-                [indeterminate]="!!selectedExpertIds().size && !allExpertsSelected()"
-                [disabled]="busy() || loading()"
-                (change)="selectAllExperts()"
-              />
+              <label class="experts__pick-target"
+                ><input
+                  type="checkbox"
+                  appChoice
+                  aria-label="Выбрать всех экспертов по фильтрам"
+                  [checked]="allExpertsSelected()"
+                  [indeterminate]="!!selectedExpertIds().size && !allExpertsSelected()"
+                  [disabled]="busy() || loading()"
+                  (change)="selectAllExperts()"
+              /></label>
             </th>
             <th>Эксперт</th>
             <th>Кейсы</th>
@@ -260,28 +265,33 @@
             }
           </details>
         }
-        <div class="experts__select-all">
-          <button
-            type="button"
-            appButton="text"
-            [disabled]="busy() || loading()"
-            (click)="selectVisibleProjects()"
-          >
-            {{ allVisibleSelected() ? "Снять весь выбор" : "Выбрать все проекты по фильтрам" }}
-          </button>
+        <div class="experts__mobile-tools">
+          <label class="experts__pick-target">
+            <input
+              type="checkbox"
+              appChoice
+              aria-label="Выбрать все проекты по фильтрам"
+              [checked]="allVisibleSelected()"
+              [indeterminate]="!!selection().length && !allVisibleSelected()"
+              [disabled]="busy() || loading()"
+              (change)="selectVisibleProjects()"
+            />
+            Все проекты
+          </label>
         </div>
         <table class="experts__table experts__table--projects">
           <thead>
             <tr>
               <th>
-                <input
-                  type="checkbox"
-                  appChoice
-                  aria-label="Выбрать все проекты по фильтрам"
-                  [checked]="allVisibleSelected()"
-                  [indeterminate]="!!selection().length && !allVisibleSelected()"
-                  (change)="selectVisibleProjects()"
-                />
+                <label class="experts__pick-target"
+                  ><input
+                    type="checkbox"
+                    appChoice
+                    aria-label="Выбрать все проекты по фильтрам"
+                    [checked]="allVisibleSelected()"
+                    [indeterminate]="!!selection().length && !allVisibleSelected()"
+                    (change)="selectVisibleProjects()"
+                /></label>
               </th>
               <th>Проект</th>
               <th>Кейс</th>

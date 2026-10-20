@@ -1,7 +1,7 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-import { signal } from "@angular/core";
+import { Component, signal } from "@angular/core";
 import { ActivatedRoute, Router, provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -18,6 +18,9 @@ import {
 } from "@domain/program/program-management.model";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
+
+@Component({ template: "<h1>Профиль участника</h1>" })
+class ProfileNavigationTarget {}
 
 const program = {
   id: 1,
@@ -196,6 +199,8 @@ describe("Списки управления программой в DOM", () => 
       closeTeam: vi.fn(() => state.teamOpen.set(false)),
       load: vi.fn((ctx: ManagementContext) => {
         state.context = ctx;
+        state.participants.update(page => ({ ...page }));
+        state.projects.update(page => (page ? { ...page } : page));
       }),
       select: vi.fn((row: ManagementProject) => state.selected.set(row)),
       clearSelection: vi.fn(() => state.selected.set(null)),
@@ -203,6 +208,7 @@ describe("Списки управления программой в DOM", () => 
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
+          { path: "office/profile/:userId", component: ProfileNavigationTarget },
           {
             path: "office/program/:programId",
             children: [{ path: "management/:section", component: ProgramManagementComponent }],
@@ -536,6 +542,36 @@ describe("Списки управления программой в DOM", () => 
     const link = element().querySelector<HTMLAnchorElement>('td[data-label="Участник"] a')!;
     expect(link.getAttribute("href")).toBe("/office/profile/51");
     expect(component.state.context?.query.limit).toBe(20);
+    link.click();
+    await vi.waitFor(() => expect(TestBed.inject(Router).url).toBe("/office/profile/51"));
+  });
+  it("скрывает название программы при открытии команды и восстанавливает после закрытия", async () => {
+    const { state, harness, element } = await setup("projects");
+    expect(element().querySelector(".management__heading p")?.textContent).toContain(program.name);
+    state.teamOpen.set(true);
+    harness.detectChanges();
+    expect(element().querySelector(".management__heading p")).toBeNull();
+    state.teamOpen.set(false);
+    harness.detectChanges();
+    expect(element().querySelector(".management__heading p")?.textContent).toContain(program.name);
+  });
+  it("фильтры наличия активности и сортировка сохраняются в URL и запросах всех страниц", async () => {
+    const { component, state, element } = await setup("participants", "?activity=never&offset=20");
+    expect(component.activityFilter.value).toBe("inactive");
+    expect(state.context?.query.activity).toBe("inactive");
+    component.changeParticipantFilter("activity", "active");
+    await vi.waitFor(() => expect(state.context?.query.activity).toBe("active"));
+    component.sortByActivity();
+    await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_desc"));
+    expect(state.context?.query.offset).toBe(0);
+    expect(element().querySelector("th[aria-sort]")?.getAttribute("aria-sort")).toBe("descending");
+    component.page(1);
+    await vi.waitFor(() => expect(state.context?.query.offset).toBe(20));
+    expect(state.context?.query.order).toBe("activity_desc");
+    component.sortByActivity();
+    await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_asc"));
+    expect(state.context?.query.activity).toBe("active");
+    expect(element().querySelector("th[aria-sort]")?.getAttribute("aria-sort")).toBe("ascending");
   });
   it("выбор всех охватывает другие страницы, сохраняется при пагинации и очищается при смене фильтра", async () => {
     const { component, state, harness } = await setup();

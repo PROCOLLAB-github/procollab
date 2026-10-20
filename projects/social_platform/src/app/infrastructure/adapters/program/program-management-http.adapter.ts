@@ -93,7 +93,8 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
   private participantParams(q: ManagementQuery): HttpParams {
     let params = this.params(q)
       .set("region_scope", q.regionScope ?? "all")
-      .set("activity", q.activity ?? "all");
+      .set("activity", q.activity ?? "all")
+      .set("order", q.order ?? "registration");
     if (q.regionScope === "selected" && q.region) params = params.set("region", q.region);
     if (q.activity === "period") {
       if (q.activityFrom) params = params.set("activity_from", q.activityFrom);

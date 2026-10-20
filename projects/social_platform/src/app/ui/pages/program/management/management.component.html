@@ -11,8 +11,8 @@
   >
   <header class="management__heading">
     <h1>Управление программой</h1>
-    @if (state.program(); as program) {
-      <p>{{ program.name }}</p>
+    @if (state.program() && !state.teamOpen()) {
+      <p>{{ state.program()?.name }}</p>
     }
   </header>
   @if (state.program(); as program) {
@@ -73,24 +73,24 @@
           </div>
           @if (section() === "participants") {
             <button
-              appButton="secondary"
+              appButton="icon"
+              class="management__export"
               type="button"
+              aria-label="Выгрузить участников в Excel"
+              title="Выгрузить участников в Excel"
+              [appButtonLoading]="exportingParticipants()"
               [disabled]="
                 state.pending() || exportingParticipants() || !!participantFilterError() || !count()
               "
               (click)="exportParticipants()"
             >
-              {{ exportingParticipants() ? "Выгружаем…" : "Выгрузить в Excel" }}
+              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
             </button>
           }
         </div>
-        <p class="management__muted">
-          {{
-            section() === "participants"
-              ? "Зарегистрированные участники этой программы."
-              : "Проекты, связанные с этой программой."
-          }}
-        </p>
+        @if (section() === "projects") {
+          <p class="management__muted">Проекты, связанные с этой программой.</p>
+        }
         <form class="management__search" (ngSubmit)="submitSearch()">
           <label class="management__sr" for="management-search">{{
             section() === "participants" ? "Поиск по имени или почте" : "Поиск по названию проекта"
@@ -132,8 +132,9 @@
                 (change)="changeParticipantFilter('activity', $any($event.target).value)"
               >
                 <option value="all">За все время</option>
-                <option value="period">За период</option>
-                <option value="never">Не было активности</option>
+                <option value="period">Выбрать период</option>
+                <option value="active">Только активные</option>
+                <option value="inactive">Неактивные</option>
               </select></label
             >
             @if (activityFilter.value === "period") {
@@ -235,20 +236,28 @@
             }
           </div>
         } @else if (section() === "participants") {
-          <div class="management__selection-tools">
+          <div class="management__mobile-tools">
+            <label class="management__pick-all">
+              <input
+                type="checkbox"
+                appChoice
+                aria-label="Выбрать всех участников по фильтрам"
+                [checked]="allRowsSelected()"
+                [indeterminate]="!!selectedRows().size && !allRowsSelected()"
+                [disabled]="selectingRows() || removingParticipants()"
+                (change)="selectAllRows()"
+              />
+              Все участники
+            </label>
             <button
               type="button"
               appButton="text"
-              [disabled]="selectingRows() || removingParticipants()"
-              (click)="selectAllRows()"
+              class="management__mobile-sort"
+              (click)="sortByActivity()"
+              [attr.aria-label]="activitySortLabel()"
             >
-              {{
-                selectingRows()
-                  ? "Выбираем…"
-                  : allRowsSelected()
-                    ? "Снять весь выбор"
-                    : "Выбрать все по фильтрам"
-              }}
+              {{ activitySortLabel() }}
+              <span aria-hidden="true">{{ activityOrder() === "activity_asc" ? "↑" : "↓" }}</span>
             </button>
           </div>
           <table appTable class="management__table management__participants">
@@ -258,22 +267,50 @@
             <thead>
               <tr>
                 <th scope="col" class="management__col-select">
-                  <input
-                    type="checkbox"
-                    appChoice
-                    aria-label="Выбрать всех участников по фильтрам"
-                    [checked]="allRowsSelected()"
-                    [indeterminate]="!!selectedRows().size && !allRowsSelected()"
-                    [disabled]="selectingRows() || removingParticipants()"
-                    (change)="selectAllRows()"
-                  />
+                  <label class="management__pick-all"
+                    ><input
+                      type="checkbox"
+                      appChoice
+                      aria-label="Выбрать всех участников по фильтрам"
+                      [checked]="allRowsSelected()"
+                      [indeterminate]="!!selectedRows().size && !allRowsSelected()"
+                      [disabled]="selectingRows() || removingParticipants()"
+                      (change)="selectAllRows()"
+                  /></label>
                 </th>
                 <th scope="col">№</th>
                 <th scope="col">Участник</th>
                 <th scope="col">Почта</th>
                 <th scope="col">Регион</th>
                 <th scope="col">Дата регистрации</th>
-                <th scope="col" title="Время по Москве">Дата последней активности</th>
+                <th
+                  scope="col"
+                  title="Время по Москве"
+                  [attr.aria-sort]="
+                    activityOrder() === 'activity_desc'
+                      ? 'descending'
+                      : activityOrder() === 'activity_asc'
+                        ? 'ascending'
+                        : 'none'
+                  "
+                >
+                  <button
+                    type="button"
+                    class="management__sort"
+                    (click)="sortByActivity()"
+                    [attr.aria-label]="activitySortLabel()"
+                    [title]="activitySortLabel()"
+                  >
+                    Дата последней активности
+                    <span aria-hidden="true">{{
+                      activityOrder() === "activity_asc"
+                        ? "↑"
+                        : activityOrder() === "activity_desc"
+                          ? "↓"
+                          : "↕"
+                    }}</span>
+                  </button>
+                </th>
                 <th scope="col"><span class="management__sr">Действия</span></th>
               </tr>
             </thead>
@@ -297,7 +334,12 @@
                   </td>
                   <td data-label="№">{{ offset() + index + 1 }}</td>
                   <td class="management__name" data-label="Участник">
-                    <a [routerLink]="paths.profile.detail(person.userId)">{{ person.name }}</a>
+                    <a
+                      class="management__profile-link"
+                      [routerLink]="paths.profile.detail(person.userId)"
+                      [attr.title]="'Открыть профиль: ' + person.name"
+                      >{{ person.name }}</a
+                    >
                   </td>
                   <td data-label="Почта">{{ person.email || "Не указана" }}</td>
                   <td data-label="Регион">{{ person.region || "—" }}</td>
@@ -326,21 +368,19 @@
             </tbody>
           </table>
         } @else {
-          <div class="management__selection-tools">
-            <button
-              type="button"
-              appButton="text"
-              [disabled]="selectingRows()"
-              (click)="selectAllRows()"
-            >
-              {{
-                selectingRows()
-                  ? "Выбираем…"
-                  : allRowsSelected()
-                    ? "Снять весь выбор"
-                    : "Выбрать все по фильтрам"
-              }}
-            </button>
+          <div class="management__mobile-tools">
+            <label class="management__pick-all">
+              <input
+                type="checkbox"
+                appChoice
+                aria-label="Выбрать все проекты по фильтрам"
+                [checked]="allRowsSelected()"
+                [indeterminate]="!!selectedRows().size && !allRowsSelected()"
+                [disabled]="selectingRows()"
+                (change)="selectAllRows()"
+              />
+              Все проекты
+            </label>
           </div>
           <table appTable class="management__table management__projects">
             <caption class="management__sr">
@@ -360,15 +400,16 @@
             <thead>
               <tr>
                 <th scope="col">
-                  <input
-                    type="checkbox"
-                    appChoice
-                    aria-label="Выбрать все проекты по фильтрам"
-                    [checked]="allRowsSelected()"
-                    [indeterminate]="!!selectedRows().size && !allRowsSelected()"
-                    [disabled]="selectingRows()"
-                    (change)="selectAllRows()"
-                  />
+                  <label class="management__pick-all"
+                    ><input
+                      type="checkbox"
+                      appChoice
+                      aria-label="Выбрать все проекты по фильтрам"
+                      [checked]="allRowsSelected()"
+                      [indeterminate]="!!selectedRows().size && !allRowsSelected()"
+                      [disabled]="selectingRows()"
+                      (change)="selectAllRows()"
+                  /></label>
                 </th>
                 <th scope="col">№</th>
                 <th scope="col">Проект</th>
@@ -460,6 +501,7 @@
         @if (selectedRows().size) {
           <section
             class="management__selection management__bulk"
+            [class.management__bulk--participants]="section() === 'participants'"
             [class.management__selection--obscured]="
               state.teamOpen() || modalOpen() || !!participantRemoval() || !!participantAnswers()
             "
@@ -474,15 +516,20 @@
             >
             @if (section() === "participants") {
               <button
-                appButton="secondary"
+                appButton="icon"
+                class="management__export management__bulk-export"
                 type="button"
+                aria-label="Выгрузить выбранных участников в Excel"
+                title="Выгрузить выбранных участников в Excel"
+                [appButtonLoading]="exportingParticipants()"
                 [disabled]="exportingParticipants() || removingParticipants()"
                 (click)="exportSelectedParticipants()"
               >
-                Выгрузить выбранных
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
               </button>
               <button
                 appButton="secondary"
+                class="management__remove"
                 type="button"
                 [disabled]="removingParticipants()"
                 (click)="previewParticipantRemoval(selectedRowIds())"
