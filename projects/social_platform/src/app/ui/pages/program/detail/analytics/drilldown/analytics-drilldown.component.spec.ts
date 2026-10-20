@@ -104,7 +104,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     expect(assignments.execute).toHaveBeenCalledWith(12, scope);
     expect(dialog().closest(".analytics-drilldown-body--assignments")).not.toBeNull();
     expect(dialog().querySelectorAll(".analytics-drilldown__table--assignments")).toHaveLength(1);
-    expect(dialog().querySelectorAll('th[scope="col"]')).toHaveLength(4);
+    expect(dialog().querySelectorAll('th[scope="col"]')).toHaveLength(5);
   });
 
   it.each([
@@ -129,11 +129,11 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     ["pending", "in_progress", 187200, "В процессе", "2 д 4 ч"],
     ["completed", "completed", null, "Выполнено", "—"],
   ] as const)(
-    "%s / %s: четыре колонки без прогресса сохраняют статус, ожидание и действие",
+    "%s / %s: отдельная колонка оценки сохраняет статус и ожидание",
     async (scope, status, waitingSeconds, statusText, waitingText) => {
       assignments.execute.mockReturnValue(of(ok([assignment({ status, waitingSeconds })])));
       await open(scope);
-      const labels = ["Эксперт", "Проект", "Статус", "Ожидание"];
+      const labels = ["Эксперт", "Проект", "Статус", "Оценка", "Ожидание"];
       expect(
         Array.from(dialog().querySelectorAll("thead th"), cell => cell.textContent?.trim()),
       ).toEqual(labels);
@@ -146,6 +146,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
       expect(row.querySelector('[data-label="Эксперт"]')?.textContent).toContain("Иван Иванов");
       expect(row.querySelector('[data-label="Проект"]')?.textContent).toContain("Проект А");
       expect(row.querySelector('[data-label="Статус"]')?.textContent).toContain(statusText);
+      expect(row.querySelector('[data-label="Статус"] button')).toBeNull();
       expect(row.querySelector('[data-label="Ожидание"]')?.textContent?.trim()).toBe(waitingText);
       expect(!!row.querySelector('button[aria-label^="Посмотреть оценку"]')).toBe(
         status === "completed",
@@ -155,7 +156,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
         statusText,
       );
       if (status === "completed") {
-        expect(statusCell.querySelector("button")?.getAttribute("aria-label")).toBe(
+        expect(row.querySelector('[data-label="Оценка"] button')?.getAttribute("aria-label")).toBe(
           "Посмотреть оценку: Проект А, Иван Иванов",
         );
       }

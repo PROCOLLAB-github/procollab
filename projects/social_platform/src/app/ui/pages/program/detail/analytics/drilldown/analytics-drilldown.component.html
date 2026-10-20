@@ -291,42 +291,22 @@
         @if (state.preview(); as preview) {
           <section
             class="attention-reminder"
-            aria-labelledby="attention-reminder-heading"
+            [attr.aria-labelledby]="'analytics-dialog-' + state.view()"
             aria-live="polite"
           >
-            <h3 #reminderHeading id="attention-reminder-heading" tabindex="-1">
-              Проверить напоминание
-            </h3>
-            <dl class="attention-reminder__summary">
-              <div>
-                <dt>Выбрано строк</dt>
-                <dd>{{ preview.selectedCount }}</dd>
-              </div>
-              <div>
-                <dt>Получателей</dt>
-                <dd>{{ preview.recipientCount }}</dd>
-              </div>
-            </dl>
-            <p class="attention-reminder__channels">Уведомление на платформе + письмо на почту</p>
-            @if (preview.recipients.length) {
-              <details
-                class="attention-reminder__recipient-details"
-                [open]="preview.recipients.length <= 3"
-              >
-                <summary>Получатели ({{ preview.recipientCount }})</summary>
-                <ul class="attention-reminder__recipients" aria-label="Получатели">
-                  @for (recipient of preview.recipients; track recipient.userId) {
-                    <li>{{ recipient.fullName }}</li>
-                  }
-                </ul>
-                @if (preview.recipientCount > preview.recipients.length) {
-                  <p>И еще {{ preview.recipientCount - preview.recipients.length }} получателей</p>
-                }
-              </details>
-            }
+            <p class="attention-reminder__recipient-count">
+              Получателей: <strong>{{ preview.recipientCount }}</strong>
+            </p>
             @if (preview.previewText) {
-              <h4>Пример персонального сообщения</h4>
+              <h4>Пример уведомления</h4>
               <p class="attention-reminder__message">{{ preview.previewText }}</p>
+              <h4>Пример письма на почту</h4>
+              <div class="attention-reminder__email">
+                <strong>Напоминание по программе</strong>
+                <p>{{ preview.previewText }}</p>
+                <span class="attention-reminder__email-button">Открыть на платформе</span>
+                <small>PROCOLLAB</small>
+              </div>
             }
             @if (preview.withoutAssignmentsCount) {
               <p role="status">
@@ -378,35 +358,6 @@
               </button>
             </div>
           </form>
-          @if (
-            state.supportsActions() &&
-            state.attentionPage() &&
-            !state.attentionPending() &&
-            !state.attentionError()
-          ) {
-            <div class="attention-selection" aria-label="Выбор строк">
-              <button
-                appButton="secondary"
-                type="button"
-                class="analytics-drilldown__action"
-                (click)="state.selectAllFound()"
-                [disabled]="!state.attentionCount() || !!state.actionPending()"
-              >
-                Выбрать все найденные ({{ state.attentionCount() }})
-              </button>
-              @if (state.selectedCount()) {
-                <button
-                  appButton="secondary"
-                  type="button"
-                  class="analytics-drilldown__action"
-                  (click)="state.clearSelection()"
-                  [disabled]="!!state.actionPending()"
-                >
-                  Снять выбор
-                </button>
-              }
-            </div>
-          }
           @if (state.attentionPending()) {
             <app-state
               class="analytics-drilldown__empty"
@@ -427,18 +378,56 @@
               </button>
             </div>
           } @else if (state.attentionPage()) {
-            <p class="analytics-drilldown__count" role="status">
-              Найдено: {{ state.attentionCount() }}
-            </p>
+            <div class="attention-list-tools">
+              <p class="analytics-drilldown__count" role="status">
+                Найдено: {{ state.attentionCount() }}
+              </p>
+              @if (state.supportsActions()) {
+                <button
+                  appButton="icon"
+                  type="button"
+                  class="attention-list-tools__export"
+                  (click)="state.exportAttention()"
+                  [disabled]="!!state.actionPending() || !state.attentionCount()"
+                  [attr.aria-busy]="state.actionPending() === 'export'"
+                  [attr.aria-label]="
+                    state.selectedCount()
+                      ? 'Выгрузить выбранные записи в Excel'
+                      : 'Выгрузить найденные записи в Excel'
+                  "
+                  [attr.title]="
+                    state.selectedCount() ? 'Выгрузить выбранные' : 'Выгрузить найденные'
+                  "
+                >
+                  <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                </button>
+              }
+            </div>
             @if (!state.attentionPage()?.results?.length) {
               <p class="analytics-drilldown__empty">{{ attentionEmptyMessage() }}</p>
             } @else {
               @if (state.participantsPage(); as page) {
-                <table appTable class="analytics-drilldown__table">
+                <table
+                  appTable
+                  class="analytics-drilldown__table analytics-drilldown__table--selectable"
+                >
                   <thead>
                     <tr>
                       <th scope="col" class="attention-check-cell">
-                        <span class="attention-sr-only">Выбрать участника</span>
+                        <label class="attention-check"
+                          ><input
+                            type="checkbox"
+                            aria-label="Выбрать все строки таблицы"
+                            [checked]="state.allFoundSelected()"
+                            [indeterminate]="state.someFoundSelected()"
+                            [disabled]="
+                              !!state.actionPending() ||
+                              state.attentionPending() ||
+                              !state.attentionCount()
+                            "
+                            (change)="state.toggleAllFound()"
+                          /><span class="attention-check__label">Все строки</span></label
+                        >
                       </th>
                       <th scope="col">Участник</th>
                       <th scope="col">Город</th>
@@ -498,7 +487,20 @@
                   <thead>
                     <tr>
                       <th scope="col" class="attention-check-cell">
-                        <span class="attention-sr-only">Выбрать работу</span>
+                        <label class="attention-check"
+                          ><input
+                            type="checkbox"
+                            aria-label="Выбрать все строки таблицы"
+                            [checked]="state.allFoundSelected()"
+                            [indeterminate]="state.someFoundSelected()"
+                            [disabled]="
+                              !!state.actionPending() ||
+                              state.attentionPending() ||
+                              !state.attentionCount()
+                            "
+                            (change)="state.toggleAllFound()"
+                          /><span class="attention-check__label">Все строки</span></label
+                        >
                       </th>
                       <th scope="col">Проект</th>
                       <th scope="col">Руководитель</th>
@@ -641,9 +643,11 @@
             @if (state.actionSuccess()) {
               <p class="attention-actions__success" role="status">{{ state.actionSuccess() }}</p>
             }
-            <span class="attention-actions__count" role="status"
-              >Выбрано: {{ state.selectedCount() }}</span
-            >
+            @if (!state.preview()) {
+              <span class="attention-actions__count" role="status"
+                >Выбрано: {{ state.selectedCount() }}</span
+              >
+            }
             <div class="attention-actions__buttons">
               @if (state.preview(); as preview) {
                 <button
@@ -653,16 +657,7 @@
                   (click)="state.backToAttentionList()"
                   [disabled]="!!state.actionPending()"
                 >
-                  Назад к списку
-                </button>
-                <button
-                  appButton="secondary"
-                  type="button"
-                  class="analytics-drilldown__action"
-                  (click)="state.exportAttention()"
-                  [disabled]="!!state.actionPending()"
-                >
-                  {{ state.actionPending() === "export" ? "Готовим файл…" : "Выгрузить" }}
+                  Назад
                 </button>
                 <button
                   appButton="primary"
@@ -671,33 +666,9 @@
                   (click)="state.sendReminder()"
                   [disabled]="!preview.token || !!state.actionPending()"
                 >
-                  {{
-                    state.actionPending() === "send"
-                      ? "Создаем напоминания…"
-                      : "Отправить (" + preview.recipientCount + ")"
-                  }}
+                  {{ state.actionPending() === "send" ? "Создаем напоминания…" : "Отправить" }}
                 </button>
               } @else {
-                <button
-                  appButton="secondary"
-                  type="button"
-                  class="analytics-drilldown__action"
-                  (click)="state.exportAttention()"
-                  [disabled]="
-                    !!state.actionPending() ||
-                    state.attentionPending() ||
-                    !!state.attentionError() ||
-                    !state.attentionCount()
-                  "
-                >
-                  {{
-                    state.actionPending() === "export"
-                      ? "Готовим файл…"
-                      : state.selectedCount()
-                        ? "Выгрузить выбранные"
-                        : "Выгрузить найденные"
-                  }}
-                </button>
                 <button
                   appButton="primary"
                   type="button"
@@ -871,6 +842,7 @@
         <th scope="col">Эксперт</th>
         <th scope="col">Проект</th>
         <th scope="col">Статус</th>
+        <th scope="col">Оценка</th>
         <th scope="col">Ожидание</th>
       </tr>
     </thead>
@@ -891,20 +863,22 @@
                 [class]="'analytics-drilldown__badge analytics-drilldown__badge--' + item.status"
                 >{{ statusLabel(item.status) }}</span
               >
-              @if (item.status === "completed") {
-                <button
-                  appButton="secondary"
-                  type="button"
-                  class="analytics-drilldown__action"
-                  (click)="state.loadAssignmentScores(item.assignmentId)"
-                  [attr.aria-label]="
-                    'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
-                  "
-                >
-                  Посмотреть оценку
-                </button>
-              }
             </span>
+          </td>
+          <td data-label="Оценка">
+            @if (item.status === "completed") {
+              <button
+                appButton="secondary"
+                type="button"
+                class="analytics-drilldown__action"
+                (click)="state.loadAssignmentScores(item.assignmentId)"
+                [attr.aria-label]="
+                  'Посмотреть оценку: ' + item.project.name + ', ' + item.expert.fullName
+                "
+              >
+                Посмотреть оценку
+              </button>
+            }
           </td>
           <td data-label="Ожидание">{{ waiting(item.waitingSeconds, item.status) }}</td>
         </tr>

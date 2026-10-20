@@ -516,12 +516,21 @@ describe("Attention views: real overlay", () => {
     expect(state.selectedCount()).toBe(1);
     button("Отправить напоминание").click();
     await fixture.whenStable();
-    expect(dialog().textContent).toContain("Уведомление на платформе + письмо на почту");
+    expect(dialog().textContent).toContain("Получателей: 1");
+    expect(dialog().textContent).toContain("Пример уведомления");
+    expect(dialog().textContent).toContain("Пример письма на почту");
+    expect(dialog().textContent).toContain("Открыть на платформе");
+    expect(dialog().textContent).not.toContain("Выбрано:");
+    expect(dialog().querySelector(".attention-list-tools__export")).toBeNull();
+    expect(
+      Array.from(dialog().querySelectorAll("footer button"), item => item.textContent?.trim()),
+    ).toEqual(["Назад", "Отправить"]);
     expect(dialog().textContent).toContain("Анна, здравствуйте!");
     expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
-    expect(document.activeElement?.id).toBe("attention-reminder-heading");
+    expect(document.activeElement).toBe(dialog().querySelector("h2"));
+    expect(dialog().querySelector("h2")?.textContent).toBe("Отправить напоминание");
     expect(actions.send).not.toHaveBeenCalled();
-    button("Назад к списку").click();
+    button("Назад").click();
     await fixture.whenStable();
     expect(dialog().querySelector<HTMLInputElement>('input[type="checkbox"]')!.checked).toBe(true);
     expect(document.activeElement?.tagName).toBe("H2");
@@ -530,14 +539,17 @@ describe("Attention views: real overlay", () => {
   it("select all found selects beyond the visible page, send requires confirmation", async () => {
     participants.execute.mockReturnValue(of(ok(participantsPage({ count: 75 }))));
     await open();
-    button("Выбрать все найденные (75)").click();
+    const header = dialog().querySelector<HTMLInputElement>('thead input[type="checkbox"]')!;
+    expect(header.getAttribute("aria-label")).toBe("Выбрать все строки таблицы");
+    expect(dialog().textContent).not.toContain("Выбрать все найденные");
+    header.click();
     await fixture.whenStable();
     expect(state.selectedCount()).toBe(75);
     button("Отправить напоминание").click();
     await fixture.whenStable();
     expect(actions.preview.mock.lastCall[2].selection.mode).toBe("all");
     expect(actions.send).not.toHaveBeenCalled();
-    button("Отправить (1)").click();
+    button("Отправить").click();
     await fixture.whenStable();
     expect(actions.send).toHaveBeenCalledExactlyOnceWith(
       12,

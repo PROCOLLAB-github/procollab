@@ -13,6 +13,10 @@ export class ExportFileService {
 
   private readonly apiService = inject(ApiService);
 
+  exportProgram(programId: number) {
+    return this.apiService.getFile(`/programs/${programId}/manager-overview/export/`);
+  }
+
   exportProgramRates(programId: number) {
     return this.apiService.getFile(
       `${this.EXPORT_PROGRAM_FILE_URL}${programId}${this.EXPORT_PROGRAM_RATES_URL}`,

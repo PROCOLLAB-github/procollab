@@ -72,6 +72,16 @@ export class ProgramAnalyticsDrilldownService {
       : selection.ids.length;
   });
 
+  readonly allFoundSelected = computed(
+    () => this.selectedCount() > 0 && this.selectedCount() === this.attentionCount(),
+  );
+  readonly someFoundSelected = computed(() => this.selectedCount() > 0 && !this.allFoundSelected());
+
+  toggleAllFound(): void {
+    if (this.allFoundSelected()) this.clearSelection();
+    else this.selectAllFound();
+  }
+
   isSelected(id: number): boolean {
     const selection = this.selection();
     return selection.mode === "all"

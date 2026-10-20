@@ -21,6 +21,22 @@ export class ExportFileInfoService {
 
   readonly loadingExports$ = signal<AsyncState<void>>(initial());
 
+  downloadProgram(): void {
+    const program = this.program();
+    if (!program || this.loadingExports$().status === "loading") return;
+    this.loadingExports$.set(loading());
+    this.exportFileService
+      .exportProgram(program.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: blob => {
+          saveFile(blob, "program", program.name);
+          this.loadingExports$.set(success(undefined));
+        },
+        error: () => this.loadingExports$.set(failure("program_export_failed")),
+      });
+  }
+
   downloadProjects(): void {
     this.loadingExports$.set(loading());
 

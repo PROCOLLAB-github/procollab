@@ -32,7 +32,7 @@ function calendarDay(date: Date): number {
 }
 
 function deadlineStatus(date: Date, now: Date): string {
-  if (date.getTime() < now.getTime()) return "Срок завершен";
+  if (date.getTime() < now.getTime()) return "Этап завершен";
   const days = calendarDay(date) - calendarDay(now);
   if (days === 0) return "Сегодня";
   if (days === 1) return "Завтра";
