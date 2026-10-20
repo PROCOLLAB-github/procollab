@@ -1,0 +1,68 @@
+<!-- @format -->
+<button
+  #trigger
+  type="button"
+  appButton="icon"
+  class="row-actions__trigger"
+  [attr.aria-label]="label()"
+  [disabled]="disabled()"
+  [cdkMenuTriggerFor]="menu"
+  [cdkMenuPosition]="positions"
+  (click)="$event.stopPropagation()"
+>
+  <i appIcon icon="dots" appSquare="16" aria-hidden="true"></i>
+</button>
+<ng-template #menu>
+  <div cdkMenu class="row-actions__menu" [attr.aria-label]="label()">
+    @for (item of actions(); track item.id) {
+      @if (item.routerLink) {
+        <a
+          cdkMenuItem
+          class="row-actions__item"
+          [routerLink]="item.disabled ? null : item.routerLink"
+          [queryParams]="item.queryParams"
+          [cdkMenuItemDisabled]="!!item.disabled"
+          [attr.aria-label]="item.label"
+          [attr.title]="item.reason || null"
+          (cdkMenuItemTriggered)="choose(item)"
+          ><span>{{ item.label }}</span>
+          @if (item.disabled && item.reason) {
+            <small class="row-actions__reason">{{ item.reason }}</small>
+          }
+        </a>
+      } @else if (item.href) {
+        <a
+          cdkMenuItem
+          class="row-actions__item"
+          [attr.href]="item.disabled ? null : item.href"
+          target="_blank"
+          rel="noopener noreferrer"
+          [cdkMenuItemDisabled]="!!item.disabled"
+          [attr.aria-label]="item.label"
+          [attr.title]="item.reason || null"
+          (cdkMenuItemTriggered)="choose(item)"
+          ><span>{{ item.label }}</span>
+          @if (item.disabled && item.reason) {
+            <small class="row-actions__reason">{{ item.reason }}</small>
+          }
+        </a>
+      } @else {
+        <button
+          cdkMenuItem
+          type="button"
+          class="row-actions__item"
+          [class.row-actions__item--destructive]="item.destructive"
+          [cdkMenuItemDisabled]="!!item.disabled"
+          [attr.aria-label]="item.label"
+          [attr.title]="item.reason || null"
+          (cdkMenuItemTriggered)="choose(item)"
+        >
+          <span>{{ item.label }}</span>
+          @if (item.disabled && item.reason) {
+            <small class="row-actions__reason">{{ item.reason }}</small>
+          }
+        </button>
+      }
+    }
+  </div>
+</ng-template>

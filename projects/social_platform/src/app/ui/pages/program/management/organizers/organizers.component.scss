@@ -35,7 +35,7 @@
 }
 
 .organizers {
-  padding-bottom: 160px;
+  padding-bottom: 0;
 }
 
 .organizers__card {
@@ -339,5 +339,46 @@
   }
 }
 
-.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
-.organizers__badge { @include program-management-controls.status-badge; }
+.ui-alert.ui-alert.ui-alert {
+  @include program-management-controls.status-notice;
+}
+
+.organizers__badge {
+  @include program-management-controls.status-badge;
+}
+
+// Row actions and bulk selection.
+.organizers__table th:last-child {
+  width: 44px;
+}
+
+.organizers__row-actions {
+  padding: 4px !important;
+  text-align: right;
+}
+
+.organizers__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 999px) {
+  .organizers__table tr {
+    position: relative;
+  }
+
+  .organizers__table td:first-child {
+    padding-right: 44px;
+  }
+
+  .organizers__table td.organizers__row-actions {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 44px;
+  }
+}

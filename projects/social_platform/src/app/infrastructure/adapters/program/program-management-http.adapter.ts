@@ -23,6 +23,8 @@ import {
   ManagementSettingsWrite,
   ManagementTeam,
   ProgramManagement,
+  ManagementSelection,
+  ParticipantRemovalPreview,
 } from "@domain/program/program-management.model";
 
 @Injectable()
@@ -67,6 +69,27 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
   exportParticipants(id: number, q: ManagementQuery) {
     return this.api.getFile(`${this.root(id)}/participants/export/`, this.participantParams(q));
   }
+  selection(id: number, kind: "participants" | "projects", q: ManagementQuery) {
+    return this.api.get<ManagementSelection>(
+      `${this.root(id)}/${kind}/selection/`,
+      kind === "participants" ? this.participantParams(q) : this.projectParams(q),
+    );
+  }
+  exportSelectedParticipants(id: number, ids: number[]) {
+    return this.api.postFile(`${this.root(id)}/participants/export/`, { ids });
+  }
+  previewParticipantRemoval(id: number, ids: number[]) {
+    return this.api.post<ParticipantRemovalPreview>(
+      `${this.root(id)}/participants/remove-preview/`,
+      { ids },
+    );
+  }
+  removeParticipants(id: number, ids: number[], previewToken: string) {
+    return this.api.post<{ removed: number }>(`${this.root(id)}/participants/remove/`, {
+      ids,
+      previewToken,
+    });
+  }
   private participantParams(q: ManagementQuery): HttpParams {
     let params = this.params(q)
       .set("region_scope", q.regionScope ?? "all")
@@ -79,9 +102,18 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
     return params;
   }
   projects(id: number, q: ManagementQuery) {
-    let params = this.params(q).set("submission", q.submission).set("case_scope", q.caseScope);
+    return this.api.get<ManagementProjectsPage>(
+      `${this.root(id)}/projects/`,
+      this.projectParams(q),
+    );
+  }
+  private projectParams(q: ManagementQuery): HttpParams {
+    let params = this.params(q)
+      .set("submission", q.submission)
+      .set("case_scope", q.caseScope)
+      .set("evaluation", q.evaluation ?? "all");
     if (q.caseScope === "selected" && q.caseName) params = params.set("case_name", q.caseName);
-    return this.api.get<ManagementProjectsPage>(`${this.root(id)}/projects/`, params);
+    return params;
   }
   team(id: number, linkId: number) {
     return this.api.get<ManagementTeam>(`${this.root(id)}/projects/${linkId}/team/`);

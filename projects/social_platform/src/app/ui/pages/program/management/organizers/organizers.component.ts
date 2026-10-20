@@ -32,6 +32,11 @@ import {
   ProgramOrganizers,
 } from "@domain/program/program-organizers.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import {
+  RowAction,
+  RowActionEvent,
+  RowActionsComponent,
+} from "@ui/primitives/row-actions/row-actions.component";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 
@@ -45,6 +50,7 @@ import { presentationHref } from "@utils/program-case-analytics";
     ChoiceDirective,
     FieldDirective,
     ModalComponent,
+    RowActionsComponent,
   ],
   templateUrl: "./organizers.component.html",
   styleUrl: "./organizers.component.scss",
@@ -76,7 +82,7 @@ export class ManagementOrganizersComponent {
   private readonly query = signal("");
   private readonly statusValue = signal("all");
   readonly page = signal(0);
-  readonly pageSize = 25;
+  readonly pageSize = 20;
   readonly selectedId = signal<string | null>(null);
   readonly selected = computed(
     () => this.snapshot()?.organizers.find(r => r.id === this.selectedId()) ?? null,
@@ -285,9 +291,36 @@ export class ManagementOrganizersComponent {
         ? "Ожидает отправки"
         : "Приглашен";
   }
-  open(mode: "invite" | "remove" | "revoke", event?: Event): void {
+  rowActions(row: OrganizerRow): RowAction[] {
+    return row.status === "joined"
+      ? [
+          {
+            id: "remove",
+            label: row.isSelf ? "Выйти из организаторов" : "Убрать доступ",
+            destructive: true,
+            disabled: !row.canRemove,
+            reason: !row.canRemove ? "Сначала пригласите коллегу и дождитесь принятия." : undefined,
+          },
+        ]
+      : [
+          { id: "resend", label: "Отправить повторно" },
+          { id: "revoke", label: "Отозвать приглашение", destructive: true },
+        ];
+  }
+  rowAction(row: OrganizerRow, event: RowActionEvent): void {
     if (this.busy()) return;
-    this.trigger = (event?.currentTarget as HTMLElement) ?? (document.activeElement as HTMLElement);
+    this.selectedId.set(row.id);
+    this.trigger = event.trigger;
+    if (event.id === "resend") this.invitationAction("resend");
+    else if (event.id === "remove" && row.canRemove) this.open("remove", event.trigger);
+    else if (event.id === "revoke") this.open("revoke", event.trigger);
+  }
+  open(mode: "invite" | "remove" | "revoke", event?: Event | HTMLElement): void {
+    if (this.busy()) return;
+    this.trigger =
+      event instanceof HTMLElement
+        ? event
+        : ((event?.currentTarget as HTMLElement) ?? (document.activeElement as HTMLElement));
     this.dialogError.set(null);
     this.email.reset("");
     this.dirty.set(false);

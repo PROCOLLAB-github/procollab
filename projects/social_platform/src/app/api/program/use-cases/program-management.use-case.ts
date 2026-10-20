@@ -42,6 +42,18 @@ export class ProgramManagementUseCase {
   exportParticipants(id: number, q: ManagementQuery) {
     return this.repository.exportParticipants(id, q);
   }
+  selection(id: number, kind: "participants" | "projects", q: ManagementQuery) {
+    return this.repository.selection(id, kind, q);
+  }
+  exportSelectedParticipants(id: number, ids: number[]) {
+    return this.repository.exportSelectedParticipants(id, ids);
+  }
+  previewParticipantRemoval(id: number, ids: number[]) {
+    return this.repository.previewParticipantRemoval(id, ids);
+  }
+  removeParticipants(id: number, ids: number[], previewToken: string) {
+    return this.repository.removeParticipants(id, ids, previewToken);
+  }
   projects(id: number, q: ManagementQuery) {
     return this.repository.projects(id, q);
   }

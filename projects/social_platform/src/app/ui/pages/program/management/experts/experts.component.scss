@@ -1,3 +1,5 @@
+/** @format */
+
 @use "styles/program-management-controls";
 
 /** @format */
@@ -106,7 +108,10 @@
     cursor: pointer;
     border: 1px solid var(--accent-light);
     border-radius: 50%;
-    &::-webkit-details-marker { display: none; }
+
+    &::-webkit-details-marker {
+      display: none;
+    }
 
     &:focus-visible {
       outline: 2px solid var(--accent);
@@ -148,11 +153,19 @@
   color: var(--black);
   background: color-mix(in srgb, var(--gold) 28%, var(--light-white));
   border-radius: 6px;
-  &--ready { background: var(--green-light); }
-  &--error { background: var(--red-light); }
+
+  &--ready {
+    background: var(--green-light);
+  }
+
+  &--error {
+    background: var(--red-light);
+  }
 }
 
-.experts__scroll--cases { max-height: 240px; }
+.experts__scroll--cases {
+  max-height: 240px;
+}
 
 .experts__tabs {
   display: flex;
@@ -326,7 +339,7 @@
 }
 
 .experts__table--projects th:nth-child(6) {
-  width: 156px;
+  width: 44px;
 }
 
 .experts__table--projects td {
@@ -771,4 +784,114 @@
   }
 }
 
-.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
+.ui-alert.ui-alert.ui-alert {
+  @include program-management-controls.status-notice;
+}
+
+// Row actions and bulk selection.
+.experts__table--people thead th:nth-child(1) {
+  width: 36px;
+}
+
+.experts__table--people thead th:nth-child(2) {
+  width: 31%;
+}
+
+.experts__table--people thead th:nth-child(3) {
+  width: 22%;
+}
+
+.experts__table--people thead th:nth-child(4) {
+  width: 20%;
+}
+
+.experts__table--people thead th:nth-child(5),
+.experts__table--people thead th:nth-child(6) {
+  width: 10%;
+}
+
+.experts__table--people thead th:nth-child(7) {
+  width: 44px;
+}
+
+.experts__row-actions {
+  padding: 4px !important;
+  text-align: right;
+}
+
+.experts__pick {
+  padding-inline: 4px !important;
+}
+
+.experts .experts__pick-target {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  @media (pointer: coarse) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+.experts__select-all {
+  min-height: 32px;
+}
+
+.experts__bulk {
+  flex-wrap: wrap;
+}
+
+.experts__bulk .experts__actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 999px) {
+  .experts__table--people tr {
+    position: relative;
+  }
+
+  .experts__table--people td:nth-child(2) {
+    grid-column: 1 / -1;
+    padding-inline: 48px;
+  }
+
+  .experts__table--people td:nth-child(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  .experts__table--people td.experts__pick {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 44px;
+  }
+
+  .experts__table td.experts__row-actions,
+  .experts__table--projects td:last-child {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 44px;
+  }
+
+  .experts__table--projects td:nth-child(2) {
+    padding-right: 44px;
+  }
+
+  .experts__table td.experts__row-actions::before,
+  .experts__pick::before,
+  .experts__table--projects td:last-child::before {
+    display: none;
+  }
+
+  .experts__bulk {
+    display: grid;
+    gap: 12px;
+  }
+
+  .experts__bulk .experts__actions {
+    display: flex;
+  }
+}

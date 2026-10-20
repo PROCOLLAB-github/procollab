@@ -64,21 +64,25 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Организаторы программы", () => {
-  it("переключает выбор повторным нажатием и не запрашивает список при выборе", () => {
+  it("меню своей строки открывается без плашки и без повторного запроса списка", () => {
     const { fixture, component, api } = setup();
     const calls = api.list.mock.calls.length;
     const row = fixture.nativeElement.querySelector(
       'tr[data-organizer-id="member:2"]',
     ) as HTMLElement;
-    row.click();
+    (row.querySelector("app-row-actions button") as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".organizers__floating")).toBeNull();
+    const remove = Array.from(document.querySelectorAll<HTMLButtonElement>("[role=menuitem]")).find(
+      n => n.textContent?.trim() === "Убрать доступ",
+    )!;
+    remove.click();
     fixture.detectChanges();
     expect(component.selected()?.userId).toBe(2);
-    expect(fixture.nativeElement.querySelector(".organizers__floating")).not.toBeNull();
-    row.click();
-    fixture.detectChanges();
-    expect(component.selected()).toBeNull();
+    expect(component.modal()).toBe("remove");
     expect(api.list).toHaveBeenCalledTimes(calls);
   });
+
   it("оставляет ввод и фокус поиска при обновлении данных", () => {
     const { fixture, component } = setup();
     const search = fixture.nativeElement.querySelector("input[type=search]") as HTMLInputElement;

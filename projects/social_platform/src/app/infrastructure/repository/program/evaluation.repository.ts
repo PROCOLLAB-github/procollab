@@ -2,11 +2,15 @@
 import { inject, Injectable } from "@angular/core";
 import { EvaluationHttpAdapter } from "../../adapters/program/evaluation-http.adapter";
 import { EvaluationRepositoryPort } from "@domain/program/ports/evaluation.repository.port";
+import { ExpertsBulkWrite } from "@domain/program/evaluation-workspace.model";
 @Injectable({ providedIn: "root" })
 export class EvaluationRepository implements EvaluationRepositoryPort {
   private readonly adapter = inject(EvaluationHttpAdapter);
   readonly programs = this.adapter.programs.bind(this.adapter);
   readonly workspace = this.adapter.workspace.bind(this.adapter);
+  bulkExperts(id: number, data: ExpertsBulkWrite) {
+    return this.adapter.bulkExperts(id, data);
+  }
   readonly saveCaseScope = this.adapter.saveCaseScope.bind(this.adapter);
   readonly saveInvitationCaseScope = this.adapter.saveInvitationCaseScope.bind(this.adapter);
   readonly saveProjectExperts = this.adapter.saveProjectExperts.bind(this.adapter);

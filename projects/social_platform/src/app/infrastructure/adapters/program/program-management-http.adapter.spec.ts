@@ -34,8 +34,9 @@ describe("Контракт HTTP панели организатора", () => {
     adapter
       .projects(4, {
         search: "Город",
-        offset: 25,
-        limit: 25,
+        offset: 20,
+        limit: 20,
+        evaluation: "not_evaluated",
         submission: "submitted",
         caseScope: "selected",
         caseName: "Экология",
@@ -44,7 +45,8 @@ describe("Контракт HTTP панели организатора", () => {
     const request = http.expectOne(r => r.url.endsWith("/programs/4/management/projects/"));
     expect(request.request.params.get("case_scope")).toBe("selected");
     expect(request.request.params.get("case_name")).toBe("Экология");
-    expect(request.request.params.get("offset")).toBe("25");
+    expect(request.request.params.get("offset")).toBe("20");
+    expect(request.request.params.get("evaluation")).toBe("not_evaluated");
     request.flush({ count: 0, results: [], case_options: ["Экология"], is_competitive: true });
   });
   it("выгрузка участников передаёт те же фильтры региона и периода, что и список", () => {
@@ -88,6 +90,43 @@ describe("Контракт HTTP панели организатора", () => {
       confirm_reopen: true,
     });
     request.flush({ updated_at: version });
+  });
+  it("выбор всех проектов использует те же фильтры и сохраняет оба вида ID", () => {
+    adapter
+      .selection(4, "projects", {
+        search: "Город",
+        offset: 20,
+        limit: 20,
+        submission: "submitted",
+        caseScope: "selected",
+        caseName: "Экология",
+        evaluation: "not_evaluated",
+      })
+      .subscribe(result => expect(result.projects?.[0].projectId).toBe(91));
+    const request = http.expectOne(r => r.url.endsWith("/projects/selection/"));
+    expect(request.request.params.get("evaluation")).toBe("not_evaluated");
+    expect(request.request.params.get("case_name")).toBe("Экология");
+    request.flush({ ids: [11], projects: [{ id: 11, project_id: 91 }] });
+  });
+  it("выбранная выгрузка использует POST Blob, удаление передает подписанное подтверждение без retry", () => {
+    adapter.exportSelectedParticipants(4, [1, 21]).subscribe();
+    const file = http.expectOne(r => r.url.endsWith("/participants/export/"));
+    expect(file.request.method).toBe("POST");
+    expect(file.request.body).toEqual({ ids: [1, 21] });
+    expect(file.request.responseType).toBe("blob");
+    file.flush(new Blob(["xlsx"]));
+    adapter
+      .previewParticipantRemoval(4, [1, 21])
+      .subscribe(result => expect(result.previewToken).toBe("proof"));
+    const preview = http.expectOne(r => r.url.endsWith("/remove-preview/"));
+    preview.flush({ preview_token: "proof", participant_count: 2, applications: [] });
+    const failed = vi.fn();
+    adapter.removeParticipants(4, [1, 21], "proof").subscribe({ error: failed });
+    const removal = http.expectOne(r => r.url.endsWith("/participants/remove/"));
+    expect(removal.request.body).toEqual({ ids: [1, 21], preview_token: "proof" });
+    removal.flush({ detail: "Изменено" }, { status: 409, statusText: "Conflict" });
+    expect(failed).toHaveBeenCalledOnce();
+    http.expectNone(r => r.url.endsWith("/participants/remove/"));
   });
   it("удаление материала передаёт версию в query и не вызывает удаление UserFile", () => {
     adapter

@@ -35,7 +35,7 @@
   font-size: 12px;
   color: var(--black);
 
-  &--projects {
+  &--lists {
     padding-bottom: 128px;
   }
 
@@ -192,12 +192,56 @@
     }
   }
 
-  &__participants th:nth-child(1) { width: 5%; }
-  &__participants th:nth-child(2) { width: 22%; }
-  &__participants th:nth-child(3) { width: 25%; }
-  &__participants th:nth-child(4) { width: 17%; }
-  &__participants th:nth-child(5) { width: 14%; }
-  &__participants th:nth-child(6) { width: 17%; }
+  &__participants th:nth-child(1) {
+    width: 36px;
+  }
+
+  &__participants th:nth-child(2) {
+    width: 32px;
+  }
+
+  &__participants th:nth-child(3) {
+    width: 19%;
+  }
+
+  &__participants th:nth-child(4) {
+    width: 23%;
+  }
+
+  &__participants th:nth-child(5) {
+    width: 14%;
+  }
+
+  &__participants th:nth-child(6) {
+    width: 14%;
+  }
+
+  &__participants th:nth-child(8),
+  &__col-actions {
+    width: 44px;
+  }
+
+  &__row-actions {
+    padding: 4px !important;
+    text-align: right !important;
+  }
+
+  &__selection-tools {
+    min-height: 32px;
+    margin-top: 12px;
+  }
+
+  &__bulk-hint {
+    grid-column: 1 / -1;
+    color: var(--black);
+  }
+
+  &__removal-projects {
+    max-height: 25dvh;
+    padding-left: 20px;
+    margin: 0;
+    overflow: auto;
+  }
 
   &__row-selected {
     background: var(--light-gray);
@@ -407,10 +451,22 @@
 
   &__material {
     display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
     gap: 8px;
     padding: 20px 0;
     margin-top: 20px;
     border-top: 1px solid var(--medium-grey-for-outline);
+
+    h3,
+    p {
+      grid-column: 1;
+    }
+
+    .management__material-actions {
+      grid-row: 1 / span 2;
+      grid-column: 2;
+      align-self: center;
+    }
   }
 
   &__expert {
@@ -579,7 +635,7 @@
   .management {
     margin: 24px 20px 40px;
 
-    &--projects {
+    &--lists {
       padding-bottom: 220px;
     }
 
@@ -787,6 +843,62 @@
   }
 }
 
-.management__col-number { width: 36px; }
+.management__col-number {
+  width: 36px;
+}
 
-.ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
+.ui-alert.ui-alert.ui-alert {
+  @include program-management-controls.status-notice;
+}
+
+// Row actions and bulk selection.
+.management__bulk {
+  grid-template-columns: minmax(0, 1fr) auto auto 32px;
+}
+
+.management__table td.management__row-actions {
+  width: 44px;
+}
+
+.management__selection-tools .ui-button {
+  min-height: 32px;
+}
+
+@media (max-width: 999px) {
+  .management__table tr {
+    padding-top: 56px;
+  }
+
+  .management__table td.management__pick {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    display: block;
+    width: 44px;
+  }
+
+  .management__table td.management__row-actions {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    display: flex;
+    justify-content: end;
+  }
+
+  .management__table td.management__pick::before,
+  .management__table td.management__row-actions::before {
+    display: none;
+  }
+
+  .management__bulk {
+    grid-template-columns: minmax(0, 1fr) 32px;
+  }
+
+  .management__bulk > button:not(.management__clear-selection) {
+    grid-column: 1 / -1;
+  }
+
+  .management__bulk .management__clear-selection {
+    grid-column: 2;
+  }
+}
