@@ -113,9 +113,9 @@
           </div>
         } @else if (data.externalStatus === "requested") {
           <div appAlert="warning">
-            <strong>Ожидаем подключения</strong>
+            <strong>Запрос передан администратору</strong>
             <p>
-              Запрос доступен администратору платформы. После подключения можно будет опубликовать
+              Мы свяжемся с вами в ближайшее время. После подключения можно будет опубликовать
               внешний способ регистрации.
             </p>
           </div>
@@ -317,18 +317,29 @@
       } @else if (dialog() === "connection") {
         <form [formGroup]="connection" class="registration__form">
           <label
-            >Ссылка на форму *<input
+            >Ссылка на сайт мероприятия *<input
               appField
               type="url"
               formControlName="url"
+              maxlength="200"
               placeholder="https://" /></label
           ><label
-            >Комментарий<textarea appField formControlName="comment" rows="3"></textarea>
+            >Комментарий (необязательно)<textarea
+              appField
+              formControlName="comment"
+              maxlength="2000"
+              rows="3"
+            ></textarea>
           </label>
-          <p>
-            Администратор проверит интеграцию. Одна ссылка на сайт не создаёт участников на
-            платформе.
-          </p>
+          <label
+            >Контакт (необязательно)<input
+              appField
+              type="text"
+              formControlName="contact"
+              maxlength="500"
+              placeholder="Email, телефон или Telegram"
+          /></label>
+          <p>Запрос поступит администратору платформы. Мы свяжемся с вами в ближайшее время.</p>
         </form>
       } @else if (dialog() === "preview") {
         <div class="registration__actions">

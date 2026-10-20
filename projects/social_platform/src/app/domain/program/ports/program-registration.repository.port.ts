@@ -16,7 +16,12 @@ export abstract class ProgramRegistrationRepositoryPort {
     publish: boolean,
   ): Observable<RegistrationSettings>;
   abstract importOptions(id: number, file: File): Observable<RegistrationImport>;
-  abstract connect(id: number, url: string, comment: string): Observable<RegistrationSettings>;
+  abstract connect(
+    id: number,
+    url: string,
+    comment: string,
+    contact: string,
+  ): Observable<RegistrationSettings>;
   abstract publicForm(id: number): Observable<RegistrationPublic>;
   abstract submit(id: number, data: object, signup: boolean): Observable<RegistrationResult>;
   abstract tokenAction(

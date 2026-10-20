@@ -27,6 +27,8 @@ const snapshot: RegistrationSettings = {
   externalStatus: "not_connected",
   externalUrl: "",
   connectionComment: "",
+  connectionWebsiteUrl: "",
+  connectionContact: "",
   answeredFieldIds: [],
   link: null,
 };
@@ -77,6 +79,24 @@ describe("Редактор анкеты регистрации", () => {
     component.preview();
     expect(component.previewGroup.disabled).toBe(true);
     expect(api.save).not.toHaveBeenCalled();
+  });
+  it("запрос принимает сайт без необязательных деталей и передаёт контакт отдельно", () => {
+    const { component, api } = setup();
+    component.setMode("external");
+    component.open("connection");
+    component.connection.controls.url.setValue("https://event.example.test");
+    expect(component.connection.valid).toBe(true);
+    component.connection.controls.contact.setValue("@event_organizer");
+    api.connect.mockReturnValue(of({ ...snapshot, externalStatus: "requested" }));
+    component.requestConnection();
+    expect(api.connect).toHaveBeenCalledWith(
+      42,
+      "https://event.example.test",
+      "",
+      "@event_organizer",
+    );
+    expect(component.message()).toContain("Мы свяжемся с вами в ближайшее время");
+    expect(component.dialog()).toBeNull();
   });
   it("ошибка импорта сохраняет старые варианты", () => {
     const { component, api } = setup();
