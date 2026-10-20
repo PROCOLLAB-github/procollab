@@ -1,5 +1,13 @@
 /** @format */
 
+import {
+  ProgramAttentionCategory,
+  ProgramAttentionActionQuery,
+  ProgramAttentionPreview,
+  ProgramAttentionSendResult,
+} from "@domain/program/program-attention-actions.model";
+/** @format */
+
 import { HttpParams } from "@angular/common/http";
 import {
   ProgramCaseQuery,
@@ -42,6 +50,28 @@ import {
 /** Репозиторий программ: `EntityCache<Program>` для `getOne`, остальное — passthrough. */
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
+  previewAttentionReminder(
+    programId: number,
+    category: ProgramAttentionCategory,
+    query: ProgramAttentionActionQuery,
+  ): Observable<ProgramAttentionPreview> {
+    return this.programAdapter.previewAttentionReminder(programId, category, query);
+  }
+  sendAttentionReminder(
+    programId: number,
+    category: ProgramAttentionCategory,
+    token: string,
+  ): Observable<ProgramAttentionSendResult> {
+    return this.programAdapter.sendAttentionReminder(programId, category, token);
+  }
+  exportAttention(
+    programId: number,
+    category: ProgramAttentionCategory,
+    query: ProgramAttentionActionQuery,
+  ): Observable<Blob> {
+    return this.programAdapter.exportAttention(programId, category, query);
+  }
+
   getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown> {
     return this.programAdapter.getCaseProjects(programId, query);
   }

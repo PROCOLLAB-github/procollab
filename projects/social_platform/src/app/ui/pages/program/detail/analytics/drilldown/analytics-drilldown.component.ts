@@ -90,6 +90,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private trigger: HTMLElement | null = null;
   private focusedView = this.state.view();
+  private focusedPreview = false;
   private previousProgramId: number | null = null;
   protected readonly attached = signal(false);
 
@@ -98,6 +99,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   @ViewChild(CdkTrapFocus) private trap!: CdkTrapFocus;
   @ViewChild("closeButton") private closeButton!: ElementRef<HTMLButtonElement>;
   @ViewChild("heading") private heading!: ElementRef<HTMLHeadingElement>;
+  @ViewChild("reminderHeading") private reminderHeading?: ElementRef<HTMLHeadingElement>;
 
   protected readonly statusLabel = (status: ProgramAnalyticsAssignmentStatus): string =>
     assignmentStatusLabels[status];
@@ -179,6 +181,11 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
     // Angular render lifecycle, не ожидание DOM: один постоянный heading меняет текст/id.
     afterRenderEffect(() => {
       const view = this.state.view();
+      const preview = !!this.state.preview();
+      if (this.attached() && this.state.open() && preview !== this.focusedPreview) {
+        this.focusedPreview = preview;
+        (preview ? this.reminderHeading : this.heading)?.nativeElement.focus();
+      }
       if (this.attached() && this.state.open() && view !== this.focusedView) {
         this.focusedView = view;
         this.heading.nativeElement.focus();
@@ -203,6 +210,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
         }
         this.attached.set(true);
         this.focusedView = this.state.view();
+        this.focusedPreview = !!this.state.preview();
         // Portal уже в DOM. AutoCapture выключен, чтобы CDK не восстанавливал disconnected focus.
         this.trap.focusTrap.attachAnchors();
         this.trap.enabled = true;

@@ -140,7 +140,10 @@
         @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
           <ul class="attention__list">
             @for (item of attention(); track item.key) {
-              <li [class.attention__row--disabled]="item.value === 0">
+              <li
+                [class.attention__row--disabled]="item.value === 0"
+                [attr.data-attention-kind]="item.key"
+              >
                 <button
                   appButton="primary"
                   #attentionTrigger
@@ -158,16 +161,22 @@
                     )
                   "
                 >
-                  <i appIcon icon="accent-error" appSquare="20" aria-hidden="true"></i>
+                  <span class="attention__icon"
+                    ><i
+                      appIcon
+                      [icon]="
+                        item.key === 'without-visit'
+                          ? 'person'
+                          : item.key === 'without-team'
+                            ? 'analytics-team'
+                            : 'pen'
+                      "
+                      appSquare="20"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
                   <span class="text-body-10">{{ item.label }}</span
                   ><strong>{{ item.value }}</strong>
-                  <i
-                    class="attention__arrow"
-                    appIcon
-                    icon="arrowright"
-                    appSquare="20"
-                    aria-hidden="true"
-                  ></i>
                 </button>
                 <app-tooltip
                   [text]="item.tooltip"

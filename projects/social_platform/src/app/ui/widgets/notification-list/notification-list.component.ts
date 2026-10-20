@@ -2,6 +2,7 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { AsyncPipe, DatePipe } from "@angular/common";
 import { RouterLink } from "@angular/router";
+import { Notification } from "@domain/other/notification.model";
 import { NotificationService } from "@ui/services/notification/notification.service";
 
 @Component({
@@ -24,6 +25,10 @@ import { NotificationService } from "@ui/services/notification/notification.serv
               (click)="service.read(notice)"
               >{{ notice.text }}</a
             >
+          } @else if (notice.kind === "program_attention") {
+            <a [routerLink]="reminderRoute(notice)" (click)="service.read(notice)">{{
+              notice.text
+            }}</a>
           } @else {
             <a
               [routerLink]="['/office/program', notice.programId, 'management', 'experts']"
@@ -109,4 +114,10 @@ import { NotificationService } from "@ui/services/notification/notification.serv
 })
 export class NotificationListComponent {
   readonly service = inject(NotificationService);
+  protected reminderRoute(notice: Notification): (string | number)[] {
+    const route: (string | number)[] = ["/office/program", notice.programId];
+    if (notice.category === "projects-awaiting-evaluation") route.push("projects-rating");
+    else if (notice.category === "participants-without-team") route.push("members");
+    return route;
+  }
 }

@@ -1,6 +1,7 @@
 /** @format */
 
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+import { ProgramAttentionActionsUseCase } from "@api/program/use-cases/program-attention-actions.use-case";
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
@@ -40,6 +41,7 @@ describe("Attention views: real overlay", () => {
   const visit = { execute: vi.fn() };
   const projects = { execute: vi.fn() };
   const notSubmitted = { execute: vi.fn() };
+  const actions = { preview: vi.fn(), send: vi.fn(), export: vi.fn() };
   const dialog = () => document.querySelector<HTMLElement>('[role="dialog"]')!;
   const button = (text: string) =>
     Array.from(dialog().querySelectorAll<HTMLButtonElement>("button")).find(
@@ -47,6 +49,22 @@ describe("Attention views: real overlay", () => {
     )!;
 
   beforeEach(async () => {
+    actions.preview.mockReset().mockReturnValue(
+      of(
+        ok({
+          token: "preview",
+          selectedCount: 1,
+          recipientCount: 1,
+          withoutAssignmentsCount: 0,
+          unavailableCount: 0,
+          previewText: "Анна, здравствуйте!",
+          expiresIn: 900,
+          recipients: [{ userId: 123, fullName: "Анна Петрова" }],
+        }),
+      ),
+    );
+    actions.send.mockReset().mockReturnValue(of(ok({ createdCount: 1, skippedCount: 0 })));
+    actions.export.mockReset();
     participants.execute.mockReset().mockReturnValue(of(ok(participantsPage())));
     visit.execute.mockReset().mockReturnValue(of(ok(participantsPage())));
     projects.execute.mockReset().mockReturnValue(of(ok(projectsPage())));
@@ -54,6 +72,7 @@ describe("Attention views: real overlay", () => {
     await TestBed.configureTestingModule({
       imports: [AnalyticsDrilldownComponent],
       providers: [
+        { provide: ProgramAttentionActionsUseCase, useValue: actions },
         {
           provide: ProgramRepositoryPort,
           useValue: { getCaseProjects: () => of({}), exportCaseProjects: vi.fn() },
@@ -286,7 +305,6 @@ describe("Attention views: real overlay", () => {
       if (openState !== null) expect(metadata).toMatch(/10\.09\.2026, 23:59/);
       for (const text of [
         "Проекты не сдали решение",
-        "Проекты программы, которые еще не отправили решение.",
         "Проект А",
         "Анна Петрова",
         "Не указан",
@@ -487,6 +505,46 @@ describe("Attention views: real overlay", () => {
       expect(document.activeElement).toBe(trigger);
       expect(state.attentionPage()).toBeNull();
     }
+  });
+
+  it("checkbox selection opens an inline reviewed reminder and returns keyboard focus", async () => {
+    await open();
+    expect(dialog().textContent).not.toContain("Зарегистрированные участники, которые");
+    expect(button("Отправить напоминание").disabled).toBe(true);
+    dialog().querySelector<HTMLInputElement>('input[type="checkbox"]')!.click();
+    await fixture.whenStable();
+    expect(state.selectedCount()).toBe(1);
+    button("Отправить напоминание").click();
+    await fixture.whenStable();
+    expect(dialog().textContent).toContain("Уведомление на платформе + письмо на почту");
+    expect(dialog().textContent).toContain("Анна, здравствуйте!");
+    expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
+    expect(document.activeElement?.id).toBe("attention-reminder-heading");
+    expect(actions.send).not.toHaveBeenCalled();
+    button("Назад к списку").click();
+    await fixture.whenStable();
+    expect(dialog().querySelector<HTMLInputElement>('input[type="checkbox"]')!.checked).toBe(true);
+    expect(document.activeElement?.tagName).toBe("H2");
+  });
+
+  it("select all found selects beyond the visible page, send requires confirmation", async () => {
+    participants.execute.mockReturnValue(of(ok(participantsPage({ count: 75 }))));
+    await open();
+    button("Выбрать все найденные (75)").click();
+    await fixture.whenStable();
+    expect(state.selectedCount()).toBe(75);
+    button("Отправить напоминание").click();
+    await fixture.whenStable();
+    expect(actions.preview.mock.lastCall[2].selection.mode).toBe("all");
+    expect(actions.send).not.toHaveBeenCalled();
+    button("Отправить (1)").click();
+    await fixture.whenStable();
+    expect(actions.send).toHaveBeenCalledExactlyOnceWith(
+      12,
+      "participants-without-team",
+      "preview",
+    );
+    expect(dialog().textContent).toContain("Напоминания созданы: 1");
   });
 
   it.each([

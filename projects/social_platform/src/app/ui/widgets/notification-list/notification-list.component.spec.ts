@@ -3,13 +3,45 @@
 import { TestBed } from "@angular/core/testing";
 import { signal } from "@angular/core";
 import { By } from "@angular/platform-browser";
-import { provideRouter } from "@angular/router";
+import { provideRouter, Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { Notification } from "@domain/other/notification.model";
 import { NotificationService } from "@ui/services/notification/notification.service";
 import { NotificationListComponent } from "./notification-list.component";
 
 describe("NotificationListComponent", () => {
+  it.each([
+    ["participants-without-visit", "/office/program/2"],
+    ["participants-without-team", "/office/program/2/members"],
+    ["projects-awaiting-evaluation", "/office/program/2/projects-rating"],
+  ] as const)("reminder %s opens recipient action and marks it read", async (category, url) => {
+    const notice: Notification = {
+      id: "program_attention:1",
+      kind: "program_attention",
+      category,
+      text: "Напоминание",
+      readAt: null,
+      programId: 2,
+      createdAt: "2026-10-21T12:00:00Z",
+    };
+    const service = {
+      notifications: new BehaviorSubject([notice]),
+      failed: signal(false),
+      reading: signal(null),
+      read: vi.fn(),
+    };
+    await TestBed.configureTestingModule({
+      imports: [NotificationListComponent],
+      providers: [provideRouter([]), { provide: NotificationService, useValue: service }],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(NotificationListComponent);
+    fixture.detectChanges();
+    const link = fixture.debugElement.query(By.css("a"));
+    expect(link.nativeElement.getAttribute("href")).toBe(url);
+    vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+    link.triggerEventHandler("click", new MouseEvent("click", { button: 0 }));
+    expect(service.read).toHaveBeenCalledWith(notice);
+  });
   it("открывает административный запрос отдельно и сохраняет переход к экспертам", async () => {
     const notices: Notification[] = [
       {
