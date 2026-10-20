@@ -823,7 +823,7 @@
   padding-inline: 4px !important;
 }
 
-.experts__pick-target {
+.experts .experts__pick-target {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -854,7 +854,7 @@
 
   .experts__table--people td:nth-child(2) {
     grid-column: 1 / -1;
-    padding-inline: 40px;
+    padding-inline: 48px;
   }
 
   .experts__table--people td:nth-child(n + 3) {
@@ -863,9 +863,9 @@
 
   .experts__table--people td.experts__pick {
     position: absolute;
-    top: 16px;
+    top: 8px;
     left: 0;
-    width: 32px;
+    width: 44px;
   }
 
   .experts__table td.experts__row-actions,
