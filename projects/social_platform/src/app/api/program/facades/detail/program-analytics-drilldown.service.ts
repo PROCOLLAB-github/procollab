@@ -2,6 +2,13 @@
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Subject, takeUntil } from "rxjs";
+import { saveAs } from "file-saver";
+import { ProgramAttentionActionsUseCase } from "@api/program/use-cases/program-attention-actions.use-case";
+import {
+  ProgramAttentionCategory,
+  ProgramAttentionSelection,
+  ProgramAttentionPreview,
+} from "@domain/program/program-attention-actions.model";
 import { ProgramCaseProjectsService } from "./program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
@@ -43,6 +50,168 @@ export type AnalyticsDrilldownView =
 /** Живёт вместе с одной analytics-модалкой, не сохраняет manager-данные между открытиями. */
 @Injectable()
 export class ProgramAnalyticsDrilldownService {
+  private readonly actions = inject(ProgramAttentionActionsUseCase);
+  private readonly cancelActions = new Subject<void>();
+  readonly selection = signal<ProgramAttentionSelection>({
+    mode: "selected",
+    ids: [],
+    excludedIds: [],
+  });
+  private readonly allSelectionCount = signal(0);
+  readonly preview = signal<ProgramAttentionPreview | null>(null);
+  readonly actionPending = signal<"preview" | "send" | "export" | null>(null);
+  readonly actionError = signal("");
+  readonly actionSuccess = signal("");
+  readonly supportsActions = computed(
+    () => this.isAttentionView() && this.view() !== "projects-not-submitted",
+  );
+  readonly selectedCount = computed(() => {
+    const selection = this.selection();
+    return selection.mode === "all"
+      ? Math.max(0, this.allSelectionCount() - selection.excludedIds.length)
+      : selection.ids.length;
+  });
+
+  isSelected(id: number): boolean {
+    const selection = this.selection();
+    return selection.mode === "all"
+      ? !selection.excludedIds.includes(id)
+      : selection.ids.includes(id);
+  }
+
+  toggleSelection(id: number): void {
+    if (this.actionPending()) return;
+    this.preview.set(null);
+    this.actionError.set("");
+    this.actionSuccess.set("");
+    const current = this.selection();
+    const field = current.mode === "all" ? "excludedIds" : "ids";
+    const ids = current[field];
+    this.selection.set({
+      ...current,
+      [field]: ids.includes(id) ? ids.filter(value => value !== id) : [...ids, id],
+    });
+  }
+
+  selectAllFound(): void {
+    if (this.actionPending() || this.attentionPending() || !this.attentionCount()) return;
+    this.allSelectionCount.set(this.attentionCount());
+    this.selection.set({ mode: "all", ids: [], excludedIds: [] });
+    this.preview.set(null);
+    this.actionError.set("");
+    this.actionSuccess.set("");
+  }
+
+  clearSelection(): void {
+    if (this.actionPending()) return;
+    this.resetActions();
+  }
+
+  backToAttentionList(): void {
+    if (this.actionPending()) return;
+    this.preview.set(null);
+    this.actionError.set("");
+  }
+
+  previewReminder(): void {
+    const category = this.actionCategory();
+    if (
+      this.programId === null ||
+      !category ||
+      !this.selectedCount() ||
+      this.actionPending() ||
+      this.attentionPending() ||
+      this.attentionError()
+    )
+      return;
+    this.actionPending.set("preview");
+    this.actionError.set("");
+    this.actionSuccess.set("");
+    this.actions
+      .preview(this.programId, category, {
+        search: this.appliedSearch(),
+        selection: this.selection(),
+      })
+      .pipe(takeUntil(this.cancelActions), takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        this.actionPending.set(null);
+        if (result.ok) this.preview.set(result.value);
+        else this.setActionError(result.error.kind);
+      });
+  }
+
+  sendReminder(): void {
+    const category = this.actionCategory();
+    const token = this.preview()?.token;
+    if (this.programId === null || !category || !token || this.actionPending()) return;
+    this.actionPending.set("send");
+    this.actionError.set("");
+    this.actions
+      .send(this.programId, category, token)
+      .pipe(takeUntil(this.cancelActions), takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        this.actionPending.set(null);
+        if (result.ok) {
+          this.resetActions();
+          this.actionSuccess.set(
+            `Напоминания созданы: ${result.value.createdCount}. Письма отправляются.${result.value.skippedCount ? ` Пропущено после повторной проверки: ${result.value.skippedCount}.` : ""}`,
+          );
+        } else this.setActionError(result.error.kind);
+      });
+  }
+
+  exportAttention(): void {
+    const category = this.actionCategory();
+    if (
+      this.programId === null ||
+      !category ||
+      this.actionPending() ||
+      this.attentionPending() ||
+      this.attentionError() ||
+      !this.attentionCount()
+    )
+      return;
+    this.actionPending.set("export");
+    this.actionError.set("");
+    this.actions
+      .export(this.programId, category, {
+        search: this.appliedSearch(),
+        selection: this.selectedCount()
+          ? this.selection()
+          : { mode: "all", ids: [], excludedIds: [] },
+      })
+      .pipe(takeUntil(this.cancelActions), takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        this.actionPending.set(null);
+        if (result.ok) saveAs(result.value, `Требует внимания-${category}-${this.programId}.xlsx`);
+        else this.setActionError(result.error.kind);
+      });
+  }
+
+  private actionCategory(): ProgramAttentionCategory | null {
+    return this.open() && this.supportsActions() ? (this.view() as ProgramAttentionCategory) : null;
+  }
+
+  private setActionError(kind: string): void {
+    this.actionError.set(
+      kind === "forbidden" || kind === "unauthorized"
+        ? "Нет доступа к действию. Обновите страницу и проверьте права."
+        : kind === "validation"
+          ? "Выбор или предпросмотр устарел либо превышает 10 000 строк. Уточните поиск и проверьте получателей еще раз."
+          : "Не удалось выполнить действие. Попробуйте еще раз.",
+    );
+    if (kind === "validation") this.preview.set(null);
+  }
+
+  private resetActions(): void {
+    this.cancelActions.next();
+    this.selection.set({ mode: "selected", ids: [], excludedIds: [] });
+    this.allSelectionCount.set(0);
+    this.preview.set(null);
+    this.actionPending.set(null);
+    this.actionError.set("");
+    this.actionSuccess.set("");
+  }
   readonly cases = inject(ProgramCaseProjectsService);
 
   openCase(
@@ -140,6 +309,8 @@ export class ProgramAnalyticsDrilldownService {
   /** Query остаётся черновиком до Enter; сервер получает trimmed search с первой страницы. */
   applyAttentionSearch(): void {
     if (!this.open() || !this.isAttentionView()) return;
+    if (this.actionPending()) return;
+    this.resetActions();
     this.appliedSearch.set(this.searchDraft().trim());
     this.attentionOffset.set(0);
     this.loadAttention();
@@ -299,6 +470,7 @@ export class ProgramAnalyticsDrilldownService {
 
   /** Закрытие и смена программы уничтожают весь локальный контекст и активные запросы. */
   close(): void {
+    this.resetActions();
     this.cases.reset();
     this.cancelAssignments.next();
     this.cancelScores.next();

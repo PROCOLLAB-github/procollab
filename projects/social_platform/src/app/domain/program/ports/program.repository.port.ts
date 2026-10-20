@@ -1,5 +1,13 @@
 /** @format */
 
+import {
+  ProgramAttentionCategory,
+  ProgramAttentionActionQuery,
+  ProgramAttentionPreview,
+  ProgramAttentionSendResult,
+} from "@domain/program/program-attention-actions.model";
+/** @format */
+
 import { HttpParams } from "@angular/common/http";
 import {
   ProgramCaseQuery,
@@ -33,6 +41,22 @@ import {
 
 /** Порт репозитория программ: список/детали/создание/регистрация, проекты/участники/фильтры. */
 export abstract class ProgramRepositoryPort {
+  abstract previewAttentionReminder(
+    programId: number,
+    category: ProgramAttentionCategory,
+    query: ProgramAttentionActionQuery,
+  ): Observable<ProgramAttentionPreview>;
+  abstract sendAttentionReminder(
+    programId: number,
+    category: ProgramAttentionCategory,
+    token: string,
+  ): Observable<ProgramAttentionSendResult>;
+  abstract exportAttention(
+    programId: number,
+    category: ProgramAttentionCategory,
+    query: ProgramAttentionActionQuery,
+  ): Observable<Blob>;
+
   abstract getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown>;
   abstract exportCaseProjects(
     programId: number,

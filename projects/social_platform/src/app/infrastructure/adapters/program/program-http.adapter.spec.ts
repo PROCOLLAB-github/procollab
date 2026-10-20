@@ -17,7 +17,7 @@ describe("ProgramHttpAdapter", () => {
   let api: any;
 
   function setup(): void {
-    api = { get: vi.fn(), post: vi.fn(), getFile: vi.fn() };
+    api = { get: vi.fn(), post: vi.fn(), getFile: vi.fn(), postFile: vi.fn() };
     TestBed.configureTestingModule({
       providers: [ProgramHttpAdapter, { provide: ApiService, useValue: api }],
     });
@@ -29,6 +29,31 @@ describe("ProgramHttpAdapter", () => {
     results: [],
     next: "",
     previous: "",
+  });
+
+  it("attention preview keeps full selection, export posts a Blob query, send uses reviewed token", () => {
+    setup();
+    api.post.mockReturnValue(of({}));
+    api.postFile.mockReturnValue(of(new Blob()));
+    const query = {
+      search: "Анна",
+      selection: { mode: "all" as const, ids: [], excludedIds: [7] },
+    };
+    adapter.previewAttentionReminder(12, "participants-without-team", query).subscribe();
+    expect(api.post).toHaveBeenLastCalledWith(
+      "/programs/12/manager-overview/attention/participants-without-team/reminder-preview/",
+      query,
+    );
+    adapter.exportAttention(12, "participants-without-team", query).subscribe();
+    expect(api.postFile).toHaveBeenCalledExactlyOnceWith(
+      "/programs/12/manager-overview/attention/participants-without-team/export/",
+      query,
+    );
+    adapter.sendAttentionReminder(12, "participants-without-team", "reviewed-token").subscribe();
+    expect(api.post).toHaveBeenLastCalledWith(
+      "/programs/12/manager-overview/attention/participants-without-team/reminders/",
+      { token: "reviewed-token" },
+    );
   });
 
   it("case list передаёт exact option, opt-in, поиск и страницу", () => {

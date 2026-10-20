@@ -593,7 +593,7 @@
 
   &__action {
     display: grid;
-    grid-template-columns: 20px minmax(0, 1fr) auto 20px;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
     gap: 8px;
     align-items: center;
     min-width: 0;
@@ -612,10 +612,6 @@
 
     &:disabled {
       cursor: default;
-    }
-
-    &:disabled .attention__arrow {
-      visibility: hidden;
     }
 
     span {
@@ -779,5 +775,67 @@
       background: transparent;
       border-color: transparent;
     }
+  }
+}
+
+.attention__list li[data-attention-kind] {
+  --attention-tone: var(--accent);
+  --attention-fill: var(--accent-light);
+
+  min-height: 64px;
+  background: color-mix(in srgb, var(--attention-fill) 48%, var(--light-white));
+  border-color: color-mix(in srgb, var(--attention-tone) 28%, var(--medium-grey-for-outline));
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--attention-tone) 10%, transparent);
+  transition: background 150ms ease, box-shadow 150ms ease;
+
+  &[data-attention-kind="without-visit"] {
+    --attention-tone: var(--gold-dark);
+    --attention-fill: var(--gold-light);
+  }
+
+  &[data-attention-kind="awaiting-evaluation"] {
+    --attention-tone: var(--green-dark);
+    --attention-fill: var(--green-light);
+  }
+
+  &:not(.attention__row--disabled):hover {
+    background: var(--attention-fill);
+    border-color: var(--attention-tone);
+    box-shadow: 0 3px 8px color-mix(in srgb, var(--attention-tone) 12%, transparent);
+  }
+
+  .attention__icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    background: var(--attention-fill);
+    border-radius: 8px;
+  }
+
+  .attention__icon i,
+  strong {
+    color: var(--attention-tone);
+  }
+
+  .attention__action span.text-body-10 {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  strong {
+    min-width: 26px;
+    padding: 3px 6px;
+    font-size: 14px;
+    text-align: center;
+    background: var(--attention-fill);
+    border-radius: 6px;
+  }
+
+  &.attention__row--disabled {
+    --attention-tone: var(--grey-for-text);
+    --attention-fill: var(--light-gray);
+
+    box-shadow: none;
   }
 }

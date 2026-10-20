@@ -684,7 +684,7 @@ describe("ProgramAnalyticsComponent", () => {
     const buttons = Array.from(
       fixture.nativeElement.querySelectorAll(".attention__action"),
     ) as HTMLButtonElement[];
-    expect(buttons.map(button => button.querySelector("span")?.textContent)).toEqual([
+    expect(buttons.map(button => button.querySelector("span.text-body-10")?.textContent)).toEqual([
       "Участники без команды",
       "Работы ожидают оценивания",
     ]);
@@ -908,7 +908,10 @@ describe("ProgramAnalyticsComponent", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
-    for (const selector of [".evaluation__assignment-action > span", ".attention__action > span"]) {
+    for (const selector of [
+      ".evaluation__assignment-action > span",
+      ".attention__action > span.text-body-10",
+    ]) {
       expect(root.querySelectorAll(selector)).toHaveLength(2);
       for (const label of root.querySelectorAll(selector))
         expect(label.classList.contains("text-body-10")).toBe(true);
@@ -978,7 +981,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(attention?.querySelectorAll(".attention__list li strong").length).toBe(2);
   });
 
-  it("keeps drilldown arrows separate from wrapping labels and preserves zero-state disabling", () => {
+  it("keeps assignment arrows and removes attention arrows while preserving zero-state disabling", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
@@ -989,9 +992,12 @@ describe("ProgramAnalyticsComponent", () => {
       const arrow = button.querySelector<HTMLElement>(
         ".evaluation__assignment-arrow, .attention__arrow",
       )!;
-      expect(arrow.parentElement).toBe(button);
-      expect(arrow.getAttribute("aria-hidden")).toBe("true");
-      expect(arrow.querySelector("use")?.getAttribute("xlink:href")).toContain("arrowright");
+      if (button.classList.contains("attention__action")) expect(arrow).toBeNull();
+      else {
+        expect(arrow.parentElement).toBe(button);
+        expect(arrow.getAttribute("aria-hidden")).toBe("true");
+        expect(arrow.querySelector("use")?.getAttribute("xlink:href")).toContain("arrowright");
+      }
       const count = Number(button.querySelector("strong")!.textContent);
       expect(button.disabled).toBe(count === 0);
     }
