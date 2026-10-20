@@ -88,6 +88,16 @@ describe("Attention bulk actions", () => {
     expect(actions.send).toHaveBeenCalledTimes(1);
   });
 
+  it("does not claim emails were queued when every recipient became unavailable", () => {
+    state.toggleSelection(123);
+    state.previewReminder();
+    actions.send.mockReturnValue(of(ok({ createdCount: 0, skippedCount: 1 })));
+    state.sendReminder();
+    expect(state.actionSuccess()).toContain("Нет доступных получателей");
+    expect(state.actionSuccess()).toContain("Пропущено после повторной проверки: 1");
+    expect(state.actionSuccess()).not.toContain("Письма");
+  });
+
   it("disables duplicate submissions and keeps selection stable while sending", () => {
     const pending = new Subject<any>();
     actions.send.mockReturnValue(pending);

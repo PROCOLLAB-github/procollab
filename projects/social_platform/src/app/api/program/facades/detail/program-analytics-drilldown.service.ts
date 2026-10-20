@@ -153,8 +153,11 @@ export class ProgramAnalyticsDrilldownService {
         this.actionPending.set(null);
         if (result.ok) {
           this.resetActions();
+          const message = result.value.createdCount
+            ? `Напоминания созданы: ${result.value.createdCount}. Письма поставлены в очередь.`
+            : "Нет доступных получателей для напоминания.";
           this.actionSuccess.set(
-            `Напоминания созданы: ${result.value.createdCount}. Письма отправляются.${result.value.skippedCount ? ` Пропущено после повторной проверки: ${result.value.skippedCount}.` : ""}`,
+            `${message}${result.value.skippedCount ? ` Пропущено после повторной проверки: ${result.value.skippedCount}.` : ""}`,
           );
         } else this.setActionError(result.error.kind);
       });
