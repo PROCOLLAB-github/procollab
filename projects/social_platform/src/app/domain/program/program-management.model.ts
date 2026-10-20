@@ -132,7 +132,8 @@ export interface ManagementQuery {
   caseName?: string;
   regionScope?: "all" | "selected" | "without_region";
   region?: string;
-  activity?: "all" | "period" | "never";
+  activity?: "all" | "period" | "active" | "inactive" | "never";
+  order?: "registration" | "activity_asc" | "activity_desc";
   activityFrom?: string;
   activityTo?: string;
 }

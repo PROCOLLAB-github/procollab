@@ -59,6 +59,7 @@ describe("Контракт HTTP панели организатора", () => {
       regionScope: "selected" as const,
       region: "Москва",
       activity: "period" as const,
+      order: "activity_desc" as const,
       activityFrom: "2026-10-01",
       activityTo: "2026-10-19",
     };
@@ -70,8 +71,29 @@ describe("Контракт HTTP панели организатора", () => {
     expect(file.request.params.toString()).toBe(list.request.params.toString());
     expect(file.request.params.get("activity_from")).toBe("2026-10-01");
     expect(file.request.params.get("region")).toBe("Москва");
+    expect(file.request.params.get("order")).toBe("activity_desc");
     expect(file.request.responseType).toBe("blob");
     file.flush(new Blob(["xlsx"]));
+  });
+  it("одни параметры наличия активности и сортировки передаются списку и выбору всех", () => {
+    const query = {
+      search: "",
+      offset: 20,
+      limit: 20,
+      submission: "all" as const,
+      caseScope: "all" as const,
+      activity: "inactive" as const,
+      order: "activity_asc" as const,
+    };
+    adapter.participants(4, query).subscribe();
+    const list = http.expectOne(r => r.url.endsWith("/participants/"));
+    list.flush({ count: 0, results: [] });
+    adapter.selection(4, "participants", query).subscribe();
+    const selection = http.expectOne(r => r.url.endsWith("/participants/selection/"));
+    expect(selection.request.params.toString()).toBe(list.request.params.toString());
+    expect(selection.request.params.get("activity")).toBe("inactive");
+    expect(selection.request.params.get("order")).toBe("activity_asc");
+    selection.flush({ ids: [] });
   });
   it("версия PATCH не теряет точность при преобразовании JSON", () => {
     const version = "2026-10-17T12:34:56.123456Z";

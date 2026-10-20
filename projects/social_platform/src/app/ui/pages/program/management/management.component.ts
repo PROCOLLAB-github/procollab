@@ -133,6 +133,16 @@ export class ProgramManagementComponent implements OnInit {
   readonly activityFilter = this.fb.control("all");
   readonly activityFrom = this.fb.control("");
   readonly activityTo = this.fb.control("");
+  readonly activityOrder = signal<"registration" | "activity_asc" | "activity_desc">(
+    "registration",
+  );
+  readonly activitySortLabel = computed(() =>
+    this.activityOrder() === "activity_desc"
+      ? "Сначала недавняя активность"
+      : this.activityOrder() === "activity_asc"
+        ? "Сначала давняя активность"
+        : "Сортировать по последней активности",
+  );
   readonly participantFilterError = signal<string | null>(null);
   readonly exportingParticipants = signal(false);
   readonly participantExportError = signal(false);
@@ -452,7 +462,18 @@ export class ProgramManagementComponent implements OnInit {
               : "all",
           { emitEvent: false },
         );
-        this.activityFilter.setValue(q.get("activity") ?? "all", { emitEvent: false });
+        const activity = q.get("activity");
+        const activityMode =
+          activity === "never"
+            ? "inactive"
+            : activity === "period" || activity === "active" || activity === "inactive"
+              ? activity
+              : "all";
+        const order = q.get("order");
+        this.activityOrder.set(
+          order === "activity_asc" || order === "activity_desc" ? order : "registration",
+        );
+        this.activityFilter.setValue(activityMode, { emitEvent: false });
         this.activityFrom.setValue(q.get("activity_from") ?? "", { emitEvent: false });
         this.activityTo.setValue(q.get("activity_to") ?? "", { emitEvent: false });
         this.participantFilterError.set(null);
@@ -492,12 +513,8 @@ export class ProgramManagementComponent implements OnInit {
                   ? "without_region"
                   : "all",
             region: q.get("region") ?? undefined,
-            activity:
-              q.get("activity") === "period"
-                ? "period"
-                : q.get("activity") === "never"
-                  ? "never"
-                  : "all",
+            activity: activityMode,
+            order: this.activityOrder(),
             activityFrom: q.get("activity_from") ?? undefined,
             activityTo: q.get("activity_to") ?? undefined,
           },
@@ -520,6 +537,12 @@ export class ProgramManagementComponent implements OnInit {
   }
   page(delta: number): void {
     void this.changeQuery({ offset: Math.max(0, this.offset() + delta * this.pageSize) });
+  }
+  sortByActivity(): void {
+    void this.changeQuery({
+      order: this.activityOrder() === "activity_desc" ? "activity_asc" : "activity_desc",
+      offset: 0,
+    });
   }
   changeParticipantFilter(field: "region" | "activity" | "from" | "to", value: string): void {
     const control = {

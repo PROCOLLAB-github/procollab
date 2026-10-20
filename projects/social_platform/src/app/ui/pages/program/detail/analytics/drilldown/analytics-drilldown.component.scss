@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/responsive";
+@use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
 .modal__body.analytics-drilldown-body.analytics-drilldown-body--case {
@@ -288,7 +289,7 @@
   }
 
   &__action:hover {
-    text-decoration: underline;
+    color: var(--accent-dark);
   }
 
   &__action:disabled {
@@ -311,16 +312,11 @@
     align-items: center;
 
     input {
-      box-sizing: border-box;
+      @include ui-foundation.control;
+
       flex: 1 1 220px;
       width: 100%;
-      min-width: 0;
-      padding: 10px 12px;
-      font: inherit;
-      color: var(--black);
-      background: var(--white);
-      border: 1px solid var(--medium-grey-for-outline);
-      border-radius: 8px;
+      font-size: 12px;
     }
   }
 

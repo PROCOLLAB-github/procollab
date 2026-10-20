@@ -835,8 +835,8 @@
   }
 }
 
-.experts__select-all {
-  min-height: 32px;
+.experts__mobile-tools {
+  display: none;
 }
 
 .experts__bulk {
@@ -848,6 +848,17 @@
 }
 
 @media (max-width: 999px) {
+  .experts__mobile-tools {
+    display: block;
+  }
+
+  .experts .experts__mobile-tools .experts__pick-target {
+    display: flex;
+    gap: 8px;
+    justify-content: start;
+    min-height: 44px;
+  }
+
   .experts__table--people tr {
     position: relative;
   }
