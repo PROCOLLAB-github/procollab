@@ -14,11 +14,23 @@ import { NotificationService } from "@ui/services/notification/notification.serv
     <ul aria-label="Уведомления программ">
       @for (notice of service.notifications | async; track notice.id) {
         <li [class.unread]="!notice.readAt">
-          <a
-            [routerLink]="['/office/program', notice.programId, 'management/experts']"
-            (click)="service.read(notice)"
-            >{{ notice.text }}</a
-          >
+          @if (notice.kind === "registration_connection") {
+            <a
+              [href]="
+                '/admin/partner_programs/programregistration/' + notice.registrationId + '/change/'
+              "
+              target="_blank"
+              rel="noopener noreferrer"
+              (click)="service.read(notice)"
+              >{{ notice.text }}</a
+            >
+          } @else {
+            <a
+              [routerLink]="['/office/program', notice.programId, 'management', 'experts']"
+              (click)="service.read(notice)"
+              >{{ notice.text }}</a
+            >
+          }
           <div>
             <time [attr.datetime]="notice.createdAt"
               >{{ notice.createdAt | date: "dd.MM.yyyy HH:mm" : "+0300" }} МСК</time

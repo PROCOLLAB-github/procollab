@@ -347,7 +347,7 @@ export class ManagementRegistrationComponent {
           this.snapshot.set(data);
           this.dialog.set(null);
           this.message.set(
-            "Запрос сохранен в очереди администратора. Мы свяжемся с вами в ближайшее время.",
+            "Запрос отправлен администратору. Мы свяжемся с вами в ближайшее время.",
           );
         },
         error: e => this.dialogError.set(evaluationError(e)),
