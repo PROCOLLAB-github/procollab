@@ -1,0 +1,406 @@
+<!-- @format -->
+
+<div class="registration">
+  @if (loading()) {
+    <section class="registration__card" aria-busy="true">Загружаем настройки регистрации…</section>
+  }
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }}
+      <button appButton="text" type="button" [disabled]="busy()" (click)="reload()">
+        Обновить данные
+      </button>
+    </div>
+  }
+  @if (message()) {
+    <p appAlert="success" aria-live="polite">{{ message() }}</p>
+  }
+  @if (snapshot(); as data) {
+    <section class="registration__card">
+      <h2>Способ регистрации</h2>
+      <label class="registration__choice"
+        ><input
+          appChoice
+          type="radio"
+          name="registration-mode"
+          [checked]="draft().mode === 'native'"
+          [disabled]="busy()"
+          (change)="setMode('native')"
+        />Через PROCOLLAB</label
+      >
+      <p>Анкета, аккаунт и участие в одном месте.</p>
+      <label class="registration__choice"
+        ><input
+          appChoice
+          type="radio"
+          name="registration-mode"
+          [checked]="draft().mode === 'external'"
+          [disabled]="busy()"
+          (change)="setMode('external')"
+        />Через внешний сайт</label
+      >
+      <p>Подключение формы выполняет администратор.</p>
+    </section>
+    @if (draft().mode === "native") {
+      <section class="registration__card">
+        <h2>Аккаунт PROCOLLAB</h2>
+        <div>Имя, фамилия, email, дата рождения, пароль и согласия.</div>
+        <p>
+          Эти поля обязательны для нового пользователя. У вошедшего участника повторно их не
+          запрашиваем.
+        </p>
+      </section>
+      <section class="registration__card">
+        <header>
+          <h2>Анкета участника</h2>
+          <button
+            appButton="secondary"
+            type="button"
+            [disabled]="busy()"
+            (click)="edit(null, $event)"
+          >
+            Добавить поле
+          </button>
+        </header>
+        @for (field of draft().fields; track field.id) {
+          <article class="registration__row">
+            <div>
+              <h3>{{ field.label }}</h3>
+              <p>
+                {{ typeLabel(field)
+                }}{{
+                  field.source === "universities"
+                    ? " · справочник вузов"
+                    : field.source === "regions"
+                      ? " · справочник регионов"
+                      : ""
+                }}
+              </p>
+            </div>
+            <small>{{ field.required ? "Обязательное" : "Необязательное" }}</small>
+            <div class="registration__actions">
+              <button
+                appButton="secondary"
+                type="button"
+                [disabled]="busy()"
+                (click)="edit(field, $event)"
+              >
+                Изменить</button
+              ><button
+                appButton="text"
+                type="button"
+                class="registration__delete"
+                [attr.aria-label]="'Удалить поле «' + field.label + '»'"
+                [disabled]="busy()"
+                (click)="remove(field, $event)"
+              >
+                <i appIcon icon="cross" appSquare="24"></i>
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <p>Добавьте поля, которые нужны для участия в вашей программе.</p>
+        }
+        <p>Порядок полей можно изменить в редакторе.</p>
+      </section>
+    } @else {
+      <section class="registration__card">
+        <h2>Внешняя форма регистрации</h2>
+        @if (data.externalStatus === "connected") {
+          <div appAlert="success">
+            <strong>Форма подключена</strong>
+            <p>{{ data.externalUrl }}</p>
+          </div>
+        } @else if (data.externalStatus === "requested") {
+          <div appAlert="warning">
+            <strong>Ожидаем подключения</strong>
+            <p>
+              Запрос доступен администратору платформы. После подключения можно будет опубликовать
+              внешний способ регистрации.
+            </p>
+          </div>
+        } @else {
+          <div appAlert="warning">
+            <strong>Форма ещё не подключена</strong>
+            <p>
+              Чтобы ответы с сайта создавали участников на платформе, требуется настройка
+              интеграции.
+            </p>
+          </div>
+        }
+        <p>
+          На лендинге можно разместить ссылку на встроенную форму PROCOLLAB — подключение для этого
+          не требуется.
+        </p>
+        @if (data.externalStatus === "not_connected") {
+          <button
+            appButton="secondary"
+            type="button"
+            [disabled]="busy()"
+            (click)="open('connection', $event)"
+          >
+            Запросить подключение
+          </button>
+        }
+      </section>
+    }
+    <section class="registration__card">
+      <h2>Страница регистрации</h2>
+      @if (!data.published) {
+        <div appAlert="warning">
+          <strong>Форма ещё не опубликована</strong>
+          <p>Настройте анкету и проверьте её в предпросмотре.</p>
+        </div>
+      } @else if (unpublishedChanges()) {
+        <div appAlert="warning">
+          <strong>Есть неопубликованные изменения</strong>
+          <p>Участникам доступна предыдущая версия формы.</p>
+        </div>
+      } @else {
+        <div appAlert="success">
+          <strong>Форма опубликована</strong>
+          <p>Ссылка ведёт на действующую страницу регистрации.</p>
+        </div>
+      }
+      @if (data.link) {
+        <div class="registration__link">
+          <input appField aria-label="Ссылка на регистрацию" readonly [value]="data.link" /><button
+            appButton="secondary"
+            type="button"
+            (click)="copy()"
+          >
+            Скопировать ссылку
+          </button>
+        </div>
+      } @else {
+        <p>Ссылка появится после публикации формы.</p>
+      }
+      <div class="registration__actions">
+        <button
+          appButton="secondary"
+          type="button"
+          [disabled]="busy() || !dirty()"
+          (click)="save()"
+        >
+          Сохранить черновик
+        </button>
+        @if (draft().mode === "native") {
+          <button appButton="secondary" type="button" [disabled]="busy()" (click)="preview($event)">
+            Предпросмотр
+          </button>
+        }
+        <button
+          appButton="primary"
+          type="button"
+          [disabled]="busy()"
+          [appButtonLoading]="busy()"
+          (click)="save(true)"
+        >
+          Опубликовать форму
+        </button>
+      </div>
+    </section>
+  }
+</div>
+<app-modal
+  bodyClass="registration-modal"
+  [open]="!!dialog()"
+  [labelledBy]="'registration-dialog-heading'"
+  (openChange)="!$event && close()"
+>
+  <section class="registration__dialog">
+    <header>
+      <h2 id="registration-dialog-heading">
+        {{
+          dialog() === "field"
+            ? "Поле анкеты"
+            : dialog() === "preview"
+              ? "Предпросмотр анкеты"
+              : dialog() === "connection"
+                ? "Подключение внешней формы"
+                : dialog() === "archive"
+                  ? "Архивировать поле?"
+                  : dialog() === "importPreview"
+                    ? "Проверка списка"
+                    : "Загрузить список"
+        }}
+      </h2>
+      <button
+        appButton="text"
+        type="button"
+        aria-label="Закрыть"
+        [disabled]="busy()"
+        (click)="close()"
+      >
+        <i appIcon icon="cross" appSquare="24"></i>
+      </button>
+    </header>
+    <div class="registration__scroll" [attr.aria-busy]="busy()">
+      @if (busy() && dialog() === "import") {
+        <p role="status">Проверяем файл…</p>
+      }
+      @if (dialogError()) {
+        <p appAlert="error" role="alert">{{ dialogError() }}</p>
+      }
+      @if (dialog() === "field") {
+        <form [formGroup]="editor" class="registration__form" (ngSubmit)="saveField()">
+          <div class="registration__columns">
+            <label>Название *<input appField formControlName="label" maxlength="255" /></label
+            ><label
+              >Тип поля<select appField aria-label="Тип поля" formControlName="type">
+                @for (type of fieldTypes; track type.id) {
+                  <option [value]="type.id">{{ type.label }}</option>
+                }
+              </select></label
+            >
+          </div>
+          <label
+            >Подсказка участнику<input
+              appField
+              formControlName="helpText"
+              maxlength="1000" /></label
+          ><label class="registration__choice"
+            ><input appChoice type="checkbox" formControlName="required" />Обязательное поле</label
+          >
+          @if (isList()) {
+            <h3>Варианты ответа</h3>
+            <label
+              >Источник списка<select
+                appField
+                aria-label="Источник списка"
+                formControlName="source"
+              >
+                <option value="own">Свой список программы</option>
+                <option value="universities">Справочник вузов PROCOLLAB</option>
+                <option value="regions">Справочник регионов</option>
+              </select></label
+            >
+            @if (editor.controls.source.value === "own") {
+              <label
+                >По одному варианту на строке<textarea
+                  appField
+                  formControlName="options"
+                  rows="6"
+                ></textarea>
+              </label>
+              <div class="registration__actions">
+                <button appButton="secondary" type="button" (click)="open('import')">
+                  Загрузить XLSX/CSV</button
+                ><button appButton="text" type="button" (click)="pastePreview()">
+                  Проверить список
+                </button>
+              </div>
+            } @else {
+              <div appAlert="info">
+                Участник сможет выбрать значение из общего справочника платформы.
+              </div>
+            }
+            <label class="registration__choice"
+              ><input appChoice type="checkbox" formControlName="allowOther" />Разрешить вариант
+              «Другое»</label
+            >
+          }
+          <label
+            >Позиция в анкете<input
+              appField
+              type="number"
+              formControlName="position"
+              min="1"
+              [max]="draft().fields.length + 1"
+          /></label>
+        </form>
+      } @else if (dialog() === "archive") {
+        <p appAlert="warning">
+          На поле «{{ editing()?.label }}» уже есть ответы. Оно исчезнет из новой версии анкеты, а
+          сохранённые ответы останутся в карточках участников и выгрузке.
+        </p>
+      } @else if (dialog() === "connection") {
+        <form [formGroup]="connection" class="registration__form">
+          <label
+            >Ссылка на форму *<input
+              appField
+              type="url"
+              formControlName="url"
+              placeholder="https://" /></label
+          ><label
+            >Комментарий<textarea appField formControlName="comment" rows="3"></textarea>
+          </label>
+          <p>
+            Администратор проверит интеграцию. Одна ссылка на сайт не создаёт участников на
+            платформе.
+          </p>
+        </form>
+      } @else if (dialog() === "preview") {
+        <div class="registration__actions">
+          <button appButton="secondary" type="button" (click)="previewMobile.set(false)">
+            Компьютер</button
+          ><button appButton="secondary" type="button" (click)="previewMobile.set(true)">
+            Телефон
+          </button>
+        </div>
+        <div class="registration__preview" [class.registration__preview--mobile]="previewMobile()">
+          <h3>Анкета участника</h3>
+          <app-registration-fields
+            prefix="preview"
+            [fields]="draft().fields"
+            [group]="previewGroup"
+          /><button appButton="primary" type="button" disabled>Зарегистрироваться</button>
+        </div>
+        <p>Это предпросмотр. Аккаунт и участие не создаются.</p>
+      } @else if (dialog() === "importPreview") {
+        @if (importResult(); as result) {
+          <div appAlert="success">
+            Вариантов: {{ result.options.length }} · повторов: {{ result.duplicates }} · пустых
+            строк: {{ result.blanks }}
+          </div>
+          <ul class="registration__options">
+            @for (option of result.options; track option) {
+              <li>{{ option }}</li>
+            }
+          </ul>
+          <p>После применения список заменит варианты в редакторе этого поля.</p>
+        }
+      } @else if (dialog() === "import") {
+        <p>Один столбец без заголовка. XLSX или CSV в UTF-8, до 2 МБ.</p>
+        <label
+          >Выберите файл<input
+            type="file"
+            accept=".xlsx,.csv"
+            [disabled]="busy()"
+            (change)="upload($event)"
+        /></label>
+      }
+    </div>
+    <footer class="registration__actions">
+      @if (dialog() === "field") {
+        <button appButton="secondary" type="button" (click)="close()">Отмена</button
+        ><button appButton="primary" type="button" (click)="saveField()">Сохранить поле</button>
+      } @else if (dialog() === "archive") {
+        <button appButton="secondary" type="button" (click)="close()">Отмена</button
+        ><button appButton="danger" type="button" (click)="removeNow()">Архивировать</button>
+      } @else if (dialog() === "connection") {
+        <button appButton="secondary" type="button" [disabled]="busy()" (click)="close()">
+          Отмена</button
+        ><button
+          appButton="primary"
+          type="button"
+          [disabled]="busy()"
+          (click)="requestConnection()"
+        >
+          Отправить запрос
+        </button>
+      } @else if (dialog() === "importPreview") {
+        <button appButton="secondary" type="button" (click)="open('field')">Назад к полю</button
+        ><button appButton="primary" type="button" (click)="applyImport()">
+          Использовать список
+        </button>
+      } @else if (dialog() === "import") {
+        <button appButton="secondary" type="button" [disabled]="busy()" (click)="open('field')">
+          Назад к полю
+        </button>
+      } @else {
+        <button appButton="secondary" type="button" (click)="close()">Закрыть</button>
+      }
+    </footer>
+  </section>
+</app-modal>

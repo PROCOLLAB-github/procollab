@@ -1,0 +1,242 @@
+<!-- @format -->
+
+<main class="enrollment">
+  <a routerLink="/" aria-label="PROCOLLAB — главная"
+    ><img class="enrollment__logo" src="/assets/images/shared/logo.svg" alt="PROCOLLAB"
+  /></a>
+  @if (loading()) {
+    <p aria-busy="true" aria-live="polite">Загружаем программу…</p>
+  }
+  @if (program(); as data) {
+    <header class="enrollment__program">
+      <h2>{{ data.name }}</h2>
+      <span>Регистрация в программе</span>
+    </header>
+    <h1>
+      {{
+        mode() === "login"
+          ? "Вход в PROCOLLAB"
+          : mode() === "reset"
+            ? "Восстановление пароля"
+            : mode() === "sent" || mode() === "confirm" || mode() === "expired"
+              ? "Подтверждение почты"
+              : "Регистрация участника"
+      }}
+    </h1>
+  }
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }}
+      @if (!program()) {
+        <button appButton="secondary" type="button" (click)="load()">Повторить</button>
+      }
+    </div>
+  }
+  @if (notice()) {
+    <p appAlert="warning" aria-live="polite">{{ notice() }}</p>
+  }
+  @if (program(); as data) {
+    <section class="enrollment__card">
+      @if (mode() === "confirm") {
+        <p>Анкета сохранена. Подтвердите почту, чтобы перейти к программе.</p>
+        <button appButton="primary" type="button" [disabled]="busy()" (click)="confirm()">
+          Подтвердить почту и продолжить
+        </button>
+      } @else if (mode() === "sent" || mode() === "expired") {
+        <p [appAlert]="mode() === 'sent' ? 'success' : 'warning'">
+          {{ mode() === "sent" ? "Письмо подтверждения отправлено" : "Не удалось подтвердить почту"
+          }}{{ pendingEmail() ? ": " + pendingEmail() : "" }}.
+        </p>
+        <p>Ответы анкеты сохранены. После подтверждения почты откроется программа.</p>
+        @if (hasReceipt() || confirmToken()) {
+          <button appButton="secondary" type="button" [disabled]="busy()" (click)="resend()">
+            Отправить письмо ещё раз
+          </button>
+        }
+        <button appButton="text" type="button" (click)="changeMode('login')">
+          Уже подтвердили почту? Войти
+        </button>
+      } @else if (mode() === "login" || mode() === "reset") {
+        <form
+          [formGroup]="credentials"
+          (ngSubmit)="mode() === 'login' ? signIn() : resetPassword()"
+          class="enrollment__form"
+        >
+          <p>
+            После входа вернёмся к программе{{
+              program()?.name ? " «" + program()?.name + "»" : ""
+            }}.
+          </p>
+          <label
+            >Email<input appField formControlName="email" type="email" autocomplete="username"
+          /></label>
+          @if (mode() === "login") {
+            <label
+              >Пароль<span class="enrollment__password"
+                ><input
+                  appField
+                  formControlName="password"
+                  aria-label="Пароль"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  autocomplete="current-password" /><button
+                  appButton="text"
+                  type="button"
+                  [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                  [attr.aria-pressed]="showPassword()"
+                  (click)="showPassword.set(!showPassword())"
+                >
+                  <i
+                    appIcon
+                    [icon]="showPassword() ? 'eye-off' : 'eye'"
+                    appSquare="20"
+                    appViewBox="0 0 24 24"
+                  ></i></button></span></label
+            ><button appButton="text" type="button" (click)="changeMode('reset')">
+              Не помню пароль
+            </button>
+          }
+          <button appButton="primary" type="submit" [disabled]="busy()">
+            {{ mode() === "login" ? "Войти и продолжить" : "Отправить письмо" }}
+          </button>
+          <button
+            appButton="text"
+            type="button"
+            (click)="changeMode(mode() === 'reset' ? 'login' : 'form')"
+          >
+            {{ mode() === "reset" ? "Вернуться ко входу" : "Создать аккаунт" }}
+          </button>
+        </form>
+      } @else if (data.enrolled) {
+        <p appAlert="success">Вы уже зарегистрированы в этой программе.</p>
+        <button appButton="primary" type="button" (click)="openProgram()">Открыть программу</button>
+      } @else if (data.closed) {
+        <p appAlert="warning">Регистрация завершена.</p>
+        <p>Уже участвуете? Войдите в свой аккаунт, чтобы открыть программу.</p>
+        @if (!authenticated()) {
+          <button appButton="primary" type="button" (click)="changeMode('login')">Войти</button>
+        }
+      } @else {
+        <form class="enrollment__form" [formGroup]="answers" (ngSubmit)="submit()">
+          @if (!authenticated()) {
+            <button appButton="text" type="button" (click)="changeMode('login')">
+              Уже есть аккаунт? Войти
+            </button>
+            <div [formGroup]="account" class="enrollment__form">
+              <h3>Аккаунт PROCOLLAB</h3>
+              <div class="enrollment__columns">
+                <label
+                  >Имя *<input
+                    appField
+                    formControlName="firstName"
+                    autocomplete="given-name"
+                    maxlength="255" /></label
+                ><label
+                  >Фамилия *<input
+                    appField
+                    formControlName="lastName"
+                    autocomplete="family-name"
+                    maxlength="255"
+                /></label>
+              </div>
+              <label
+                >Email *<input
+                  appField
+                  formControlName="email"
+                  type="email"
+                  autocomplete="email"
+                  maxlength="254"
+              /></label>
+              <label
+                >Дата рождения *<input
+                  appField
+                  formControlName="birthday"
+                  type="date"
+                  autocomplete="bday"
+              /></label>
+              <label
+                >Пароль *<span class="enrollment__password"
+                  ><input
+                    appField
+                    formControlName="password"
+                    aria-label="Пароль"
+                    [type]="showPassword() ? 'text' : 'password'"
+                    autocomplete="new-password"
+                    minlength="8"
+                    maxlength="128" /><button
+                    appButton="text"
+                    type="button"
+                    [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
+                    [attr.aria-pressed]="showPassword()"
+                    (click)="showPassword.set(!showPassword())"
+                  >
+                    <i
+                      appIcon
+                      [icon]="showPassword() ? 'eye-off' : 'eye'"
+                      appSquare="20"
+                      appViewBox="0 0 24 24"
+                    ></i></button></span
+                ><small>Не менее 8 символов</small></label
+              >
+              <label
+                >Повторите пароль *<span class="enrollment__password"
+                  ><input
+                    appField
+                    formControlName="repeatPassword"
+                    aria-label="Повторите пароль"
+                    [type]="showRepeat() ? 'text' : 'password'"
+                    autocomplete="new-password"
+                    maxlength="128" /><button
+                    appButton="text"
+                    type="button"
+                    [attr.aria-label]="
+                      showRepeat() ? 'Скрыть повтор пароля' : 'Показать повтор пароля'
+                    "
+                    [attr.aria-pressed]="showRepeat()"
+                    (click)="showRepeat.set(!showRepeat())"
+                  >
+                    <i
+                      appIcon
+                      [icon]="showRepeat() ? 'eye-off' : 'eye'"
+                      appSquare="20"
+                      appViewBox="0 0 24 24"
+                    ></i></button></span
+              ></label>
+            </div>
+            <hr />
+          }
+          <h3>Анкета участника</h3>
+          <app-registration-fields
+            [fields]="data.fields"
+            [group]="answers"
+            [errors]="answerErrors()"
+          />
+          @if (!authenticated()) {
+            <div [formGroup]="account">
+              <label class="enrollment__choice"
+                ><input appChoice type="checkbox" formControlName="acceptPolicy" />Принимаю
+                пользовательское соглашение и политику обработки персональных данных</label
+              ><label class="enrollment__choice"
+                ><input appChoice type="checkbox" formControlName="acceptAge" />Подтверждаю, что мне
+                больше 14 лет</label
+              >
+            </div>
+            <p>
+              <a
+                href="/assets/downloads/auth/shared/privacy_policy_2022.docx"
+                target="_blank"
+                rel="noopener"
+                >Соглашение и политика обработки данных</a
+              >
+            </p>
+          }
+          <button appButton="primary" type="submit" [appButtonLoading]="busy()" [disabled]="busy()">
+            {{ authenticated() ? "Зарегистрироваться в программе" : "Зарегистрироваться" }}
+          </button>
+          @if (!authenticated()) {
+            <small>Отправим письмо подтверждения. Затем откроется программа.</small>
+          }
+        </form>
+      }
+    </section>
+  }
+</main>

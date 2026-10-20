@@ -16,7 +16,8 @@ export type SettingsSection =
   | "materials"
   | "project-form"
   | "criteria"
-  | "organizers";
+  | "organizers"
+  | "registration";
 export interface ManagementMaterial {
   id: number;
   title: string;
@@ -60,6 +61,7 @@ export interface ManagementParticipant {
   region?: string | null;
   registeredAt: string;
   lastActivity?: string | null;
+  registrationAnswers?: { label: string; value: string | string[] | number | null }[];
 }
 export type ManagementEvaluationStatus =
   | "not_submitted"

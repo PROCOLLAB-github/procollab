@@ -87,6 +87,14 @@ export class AuthPasswordService {
       .pipe(
         tap(result => {
           if (result.ok) {
+            const registrationProgram =
+              this.route.snapshot.queryParamMap.get("registration_program");
+            if (registrationProgram && /^[1-9]\d{0,9}$/.test(registrationProgram)) {
+              void this.router.navigate(["/program-registration", registrationProgram], {
+                queryParams: { mode: "login" },
+              });
+              return;
+            }
             const organizerInvitation =
               this.route.snapshot.queryParamMap.get("organizer_invitation");
             if (organizerInvitation && /^[A-Za-z0-9_-]{20,100}$/.test(organizerInvitation)) {

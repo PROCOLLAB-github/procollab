@@ -53,9 +53,15 @@
         @if (loading()) {
           Поиск вузов…
         } @else if (failed()) {
-          Не удалось загрузить список. Попробуйте снова или выберите «Другое».
+          Не удалось загрузить список. Попробуйте снова{{
+            allowOther() ? " или выберите «Другое»." : "."
+          }}
         } @else if (!universities().length) {
-          Совпадений нет. Выберите «Другое», чтобы указать название.
+          {{
+            allowOther()
+              ? "Совпадений нет. Выберите «Другое», чтобы указать название."
+              : "Совпадений нет. Попробуйте другое название или сокращение."
+          }}
         }
       </div>
       <div [id]="inputId() + '-list'" role="listbox" aria-label="Учебные учреждения">
@@ -75,17 +81,19 @@
             }
           </div>
         }
-        <div
-          [id]="inputId() + '-option-' + universities().length"
-          role="option"
-          class="university__option university__option--other"
-          [class.university__option--active]="activeIndex() === universities().length"
-          aria-selected="false"
-          (mousedown)="$event.preventDefault()"
-          (click)="selectOther()"
-        >
-          Другое
-        </div>
+        @if (allowOther()) {
+          <div
+            [id]="inputId() + '-option-' + universities().length"
+            role="option"
+            class="university__option university__option--other"
+            [class.university__option--active]="activeIndex() === universities().length"
+            aria-selected="false"
+            (mousedown)="$event.preventDefault()"
+            (click)="selectOther()"
+          >
+            Другое
+          </div>
+        }
       </div>
       @if (universities().length < total()) {
         <button
