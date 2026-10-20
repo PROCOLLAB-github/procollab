@@ -30,11 +30,6 @@
     background: var(--light-white);
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 15px;
-
-    @include responsive.apply-desktop {
-      flex-direction: row;
-      align-items: flex-start;
-    }
   }
 
   &__eyebrow {
