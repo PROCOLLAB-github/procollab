@@ -50,7 +50,7 @@
         <p>Ответы анкеты сохранены. После подтверждения почты откроется программа.</p>
         @if (hasReceipt() || confirmToken()) {
           <button appButton="secondary" type="button" [disabled]="busy()" (click)="resend()">
-            Отправить письмо ещё раз
+            Отправить письмо еще раз
           </button>
         }
         <button appButton="text" type="button" (click)="changeMode('login')">
@@ -63,7 +63,7 @@
           class="enrollment__form"
         >
           <p>
-            После входа вернёмся к программе{{
+            После входа вернемся к программе{{
               program()?.name ? " «" + program()?.name + "»" : ""
             }}.
           </p>
