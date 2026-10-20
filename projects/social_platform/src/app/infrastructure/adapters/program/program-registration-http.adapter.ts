@@ -32,10 +32,10 @@ export class ProgramRegistrationHttpAdapter implements ProgramRegistrationReposi
       data,
     );
   }
-  connect(id: number, url: string, comment: string) {
+  connect(id: number, url: string, comment: string, contact: string) {
     return this.api.post<RegistrationSettings>(
       `${this.root(id)}/management/registration/connection/`,
-      { url, comment },
+      { url, comment, contact },
     );
   }
   publicForm(id: number) {

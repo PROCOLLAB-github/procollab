@@ -98,8 +98,9 @@ export class ManagementRegistrationComponent {
     position: [1, Validators.min(1)],
   });
   readonly connection = this.fb.group({
-    url: ["", [Validators.required, Validators.pattern(/^https?:\/\//)]],
+    url: ["", [Validators.required, Validators.pattern(/^https?:\/\//), Validators.maxLength(200)]],
     comment: ["", Validators.maxLength(2000)],
+    contact: ["", Validators.maxLength(500)],
   });
   readonly fieldTypes = [
     { id: "text", label: "Короткий текст" },
@@ -159,6 +160,13 @@ export class ManagementRegistrationComponent {
     return this.fieldTypes.find(t => t.id === field.type)?.label ?? field.type;
   }
   open(dialog: NonNullable<ReturnType<typeof this.dialog>>, event?: Event) {
+    if (dialog === "connection") {
+      this.connection.reset({
+        url: this.snapshot()?.connectionWebsiteUrl ?? "",
+        comment: this.snapshot()?.connectionComment ?? "",
+        contact: this.snapshot()?.connectionContact ?? "",
+      });
+    }
     this.trigger = (event?.currentTarget as HTMLElement) ?? null;
     this.dialogError.set(null);
     this.dialog.set(dialog);
@@ -329,7 +337,7 @@ export class ManagementRegistrationComponent {
     this.dialogError.set(null);
     const value = this.connection.getRawValue();
     this.api
-      .connect(this.programId(), value.url, value.comment)
+      .connect(this.programId(), value.url, value.comment, value.contact)
       .pipe(
         finalize(() => this.busy.set(false)),
         takeUntilDestroyed(this.destroy),
@@ -338,7 +346,7 @@ export class ManagementRegistrationComponent {
         next: data => {
           this.snapshot.set(data);
           this.dialog.set(null);
-          this.message.set("Запрос сохранён. Подключение формы выполнит администратор платформы.");
+          this.message.set("Запрос передан администратору. Мы свяжемся с вами в ближайшее время.");
         },
         error: e => this.dialogError.set(evaluationError(e)),
       });

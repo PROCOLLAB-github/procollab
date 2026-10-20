@@ -24,6 +24,8 @@ export interface RegistrationSettings {
   externalStatus: "not_connected" | "requested" | "connected";
   externalUrl: string;
   connectionComment: string;
+  connectionWebsiteUrl: string;
+  connectionContact: string;
   answeredFieldIds: string[];
 }
 export interface RegistrationPublic {
