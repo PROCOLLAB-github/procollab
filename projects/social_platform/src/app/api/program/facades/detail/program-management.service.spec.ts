@@ -111,6 +111,18 @@ describe("ProgramManagementService", () => {
     expect(service.selected()).toBeNull();
     expect(service.error()?.status).toBe(403);
   });
+  it("Повторить восстанавливает список после временной ошибки сервера", () => {
+    const { service, api } = setup();
+    api.get.mockReturnValueOnce(throwError(() => new HttpErrorResponse({ status: 500 })));
+    service.load(context());
+    expect(service.error()?.status).toBe(500);
+    expect(service.pending()).toBe(false);
+    service.retry();
+    expect(service.error()).toBeNull();
+    expect(service.program()?.id).toBe(1);
+    expect(service.projects()?.results).toEqual([first, second]);
+    expect(service.pending()).toBe(false);
+  });
   it("восстанавливает выбор после возврата из оценок", () => {
     const { service } = setup();
     service.load({ ...context(), selectedId: second.id });

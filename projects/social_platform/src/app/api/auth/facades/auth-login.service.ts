@@ -12,6 +12,7 @@ import { LoginResult, LoginError } from "@domain/auth/results/login.result";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { authReturnUrl } from "@core/lib/models/auth/auth-return-url";
 
 /** Фасад входа: форма логина, `LoginUseCase`, состояние отправки и редирект. */
 @Injectable()
@@ -53,7 +54,8 @@ export class AuthLoginService {
             this.profileInfoService.ensureProfileLoaded();
 
             const url =
-              redirectType === "program" ? AppRoutes.program.root() : AppRoutes.office.root();
+              authReturnUrl(this.route.snapshot.queryParams["returnUrl"]) ??
+              (redirectType === "program" ? AppRoutes.program.root() : AppRoutes.office.root());
             this.router
               .navigateByUrl(url)
               .then(() => this.logger.debug("Route changed from LoginComponent"));

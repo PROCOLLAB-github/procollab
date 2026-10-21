@@ -33,7 +33,11 @@
   @if (state.error()) {
     <section class="management__card" appAlert="error">
       <h2>{{ requestError() }}</h2>
-      <button type="button" appButton="secondary" (click)="state.retry()">Повторить</button>
+      @if (state.error()?.status === 401) {
+        <button type="button" appButton="secondary" (click)="signIn()">Войти</button>
+      } @else {
+        <button type="button" appButton="secondary" (click)="state.retry()">Повторить</button>
+      }
     </section>
   } @else if (state.pending() && !state.program()) {
     <section class="management__card" aria-busy="true" aria-live="polite">
