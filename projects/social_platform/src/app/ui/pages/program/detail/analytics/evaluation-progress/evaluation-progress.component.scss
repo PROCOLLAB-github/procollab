@@ -134,6 +134,7 @@
 
     // Preserve the former three-row viewport: 3 * 40px + 2 * 4px.
     max-height: 128px;
+    padding-inline-end: 12px;
     margin-top: 8px;
     overflow-x: hidden;
     overflow-y: auto;

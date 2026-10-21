@@ -29,12 +29,18 @@ import { ButtonDirective } from "../button/button.directive";
     .pagination {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--ui-space-sm);
+      gap: var(--ui-space-sm, 8px) var(--ui-space-md, 16px);
       align-items: center;
       justify-content: flex-end;
-      margin-top: var(--ui-space-md);
-      font-size: var(--ui-font-small);
-      color: var(--ui-text-muted);
+      margin-top: var(--ui-space-md, 16px);
+      font-size: var(--ui-font-small, 12px);
+      color: var(--ui-text-muted, var(--grey-for-text));
+    }
+
+    .pagination button,
+    .pagination span {
+      flex-shrink: 0;
+      white-space: nowrap;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
