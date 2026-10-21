@@ -10,10 +10,17 @@ import {
   ManagementMaterialWrite,
   ManagementQuery,
   ManagementSettingsWrite,
+  ManagementProjectActionWrite,
 } from "@domain/program/program-management.model";
 
 @Injectable()
 export class ProgramManagementUseCase {
+  previewProjectAction(id: number, body: ManagementProjectActionWrite) {
+    return this.repository.previewProjectAction(id, body);
+  }
+  applyProjectAction(id: number, body: ManagementProjectActionWrite & { previewToken: string }) {
+    return this.repository.applyProjectAction(id, body);
+  }
   private readonly repository = inject(ProgramManagementRepositoryPort);
   results(id: number) {
     return this.repository.results(id);

@@ -21,6 +21,7 @@ import {
 } from "@domain/program/program-management.model";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
+import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 
 @Component({ template: "<h1>Профиль участника</h1>" })
 class ProfileNavigationTarget {}
@@ -193,6 +194,18 @@ describe("Списки управления программой в DOM", () => 
       team: signal<ManagementTeam | null>(null),
       context: null as ManagementContext | null,
       api: {
+        previewProjectAction: vi.fn(() =>
+          of({
+            items: [],
+            readyCount: 1,
+            alreadySubmittedCount: 0,
+            scoreCount: 0,
+            removedAssignmentsCount: 0,
+            canApply: true,
+            previewToken: "proof",
+          }),
+        ),
+        applyProjectAction: vi.fn(() => of({ changedCount: 1, alreadySubmittedCount: 0 })),
         exportProjects: vi.fn<() => Observable<Blob>>(() => new Subject<Blob>()),
         selection: vi.fn(() => of({ ids: Array.from({ length: 41 }, (_, i) => i + 1) })),
         previewParticipantRemoval: vi.fn<() => Observable<ParticipantRemovalPreview>>(() =>
@@ -231,7 +244,12 @@ describe("Списки управления программой в DOM", () => 
         { provide: FileService, useValue: { uploadFile } },
       ],
     }).overrideComponent(ProgramManagementComponent, {
-      set: { providers: [{ provide: ProgramManagementService, useValue: state }] },
+      set: {
+        providers: [
+          { provide: ProgramManagementService, useValue: state },
+          { provide: ProgramManagementUseCase, useValue: state.api },
+        ],
+      },
     });
     const harness = await RouterTestingHarness.create();
     const component = await harness.navigateByUrl(
@@ -242,6 +260,31 @@ describe("Списки управления программой в DOM", () => 
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
 
+  it("действия строки используют ID связи, а массовая сдача включает другие страницы", async () => {
+    const { component, project } = await setup("projects");
+    expect(component.projectActions(project).map(a => a.id)).toEqual(
+      expect.arrayContaining(["change_case", "detach", "submit"]),
+    );
+    component.openProjectAction("change_case", [project.id], project.name);
+    expect(component.projectActionRequest()?.ids).toEqual([project.id]);
+    component.selectedRows.set(new Set(Array.from({ length: 41 }, (_, i) => i + 1)));
+    component.openProjectAction("submit");
+    expect(component.projectActionRequest()?.ids).toHaveLength(41);
+  });
+  it("после открепления обновляет список и очищает выбор", async () => {
+    const { component, state } = await setup("projects");
+    component.selectedRows.set(new Set([1]));
+    component.projectActionCompleted({
+      programId: 1,
+      action: "detach",
+      changedCount: 1,
+      alreadySubmittedCount: 0,
+    });
+    expect(component.selectedRows().size).toBe(0);
+    expect(component.projectActionRequest()).toBeNull();
+    expect(state.retry).toHaveBeenCalledOnce();
+    expect(component.tableMessage()).toBe("Проект откреплен от программы.");
+  });
   it("при401 показывает рабочую ссылку Войти с возвратом в текущую программу", async () => {
     const { state, harness, element } = await setup(
       "participants",

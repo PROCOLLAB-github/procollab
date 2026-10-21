@@ -1,0 +1,119 @@
+<!-- @format -->
+
+<app-modal
+  [open]="!!request()"
+  size="small"
+  labelledBy="project-action-title"
+  (openChange)="!$event && close()"
+>
+  @if (request(); as action) {
+    <section class="project-action" [attr.aria-busy]="loading() || applying()">
+      <header>
+        <h2 id="project-action-title">{{ title() }}</h2>
+        <button
+          appButton="icon"
+          type="button"
+          aria-label="Закрыть действие"
+          [disabled]="applying()"
+          (click)="close()"
+        >
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+        </button>
+      </header>
+      <p class="project-action__name">
+        {{ action.projectName || "Выбрано проектов: " + action.ids.length }}
+      </p>
+      @if (action.action === "change_case") {
+        <label
+          >Новый кейс<select
+            appField
+            [formControl]="caseControl"
+            aria-label="Новый кейс"
+            [attr.disabled]="applying() ? '' : null"
+          >
+            <option value="" disabled>Выберите кейс</option>
+            @for (name of caseOptions(); track name) {
+              <option [value]="name">{{ name }}</option>
+            }
+          </select></label
+        >
+        <p>
+          Сохраненные оценки перейдут в рейтинг нового кейса. Оценки и назначения оценивших
+          экспертов сохранятся.
+        </p>
+      } @else if (action.action === "detach") {
+        <p appAlert="warning">
+          Заявка исчезнет из этой программы и ее рейтинга. Назначения экспертов этой программы будут
+          сняты. Сам проект, его команда и аккаунты участников сохранятся.
+        </p>
+      } @else {
+        <p>
+          Сдадим текущую заявку с сохраненными материалами, в том числе после срока сдачи. Перед
+          сдачей проверим обязательные поля и состав команды.
+        </p>
+      }
+      @if (loading()) {
+        <p role="status">Проверяем проекты…</p>
+      }
+      @if (preview(); as checked) {
+        @if (checked.scoreCount && action.action !== "submit") {
+          <p appAlert="warning">
+            У проекта есть сохраненные оценки. Результаты рейтинга изменятся.
+          </p>
+        }
+        @if (action.action === "change_case" && checked.removedAssignmentsCount) {
+          <p appAlert="warning">
+            Будет снято назначений экспертов без оценки: {{ checked.removedAssignmentsCount }}. Их
+            доступ ограничен другим кейсом.
+          </p>
+        }
+        @if (action.action === "submit") {
+          <p [appAlert]="checked.canApply ? 'success' : 'warning'">
+            Готовы к сдаче: {{ checked.readyCount }}. Уже сданы:
+            {{ checked.alreadySubmittedCount }}.
+          </p>
+          @if (blocked().length) {
+            <p>Сдача не выполнена. Исправьте перечисленные заявки или исключите их из выбора.</p>
+          }
+        }
+        @if (blocked().length) {
+          <ul class="project-action__errors">
+            @for (item of blocked().slice(0, 100); track item.id) {
+              <li>
+                <strong>{{ item.name }}</strong>
+                <ul>
+                  @for (error of item.errors; track $index) {
+                    <li>{{ error }}</li>
+                  }
+                </ul>
+              </li>
+            }
+          </ul>
+          @if (blocked().length > 100) {
+            <p>Показаны первые 100 заявок с ошибками из {{ blocked().length }}.</p>
+          }
+        }
+      }
+      @if (error()) {
+        <p appAlert="error" role="alert">{{ error() }}</p>
+        <button type="button" appButton="secondary" (click)="loadPreview()">
+          Проверить повторно
+        </button>
+      }
+      <footer>
+        <button type="button" appButton="secondary" [disabled]="applying()" (click)="close()">
+          Отмена
+        </button>
+        <button
+          type="button"
+          appButton="primary"
+          [class.project-action__danger]="action.action === 'detach'"
+          [disabled]="!preview()?.canApply || loading() || applying()"
+          (click)="confirm()"
+        >
+          {{ applying() ? "Выполняем…" : confirmLabel() }}
+        </button>
+      </footer>
+    </section>
+  }
+</app-modal>

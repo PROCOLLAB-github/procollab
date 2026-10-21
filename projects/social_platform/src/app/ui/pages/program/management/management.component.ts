@@ -48,6 +48,7 @@ import {
   SettingsSection,
   ManagementSelectionProject,
   ParticipantRemovalPreview,
+  ManagementProjectAction,
 } from "@domain/program/program-management.model";
 import { ProgramManagementHttpAdapter } from "@infrastructure/adapters/program/program-management-http.adapter";
 import { ProgramManagementRepository } from "@infrastructure/repository/program/program-management.repository";
@@ -64,6 +65,11 @@ import {
 } from "@ui/primitives/row-actions/row-actions.component";
 import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.component";
 import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
+import {
+  ManagementProjectActionsComponent,
+  ProjectActionRequest,
+  ProjectActionDone,
+} from "./project-actions/project-actions.component";
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
@@ -98,6 +104,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     RowActionsComponent,
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,
+    ManagementProjectActionsComponent,
     ManagementProjectFormComponent,
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
@@ -180,6 +187,9 @@ export class ProgramManagementComponent implements OnInit {
   readonly selectedRows = signal(new Set<number>());
   readonly selectedRowIds = computed(() => [...this.selectedRows()]);
   readonly selectedProjects = signal(new Map<number, ManagementSelectionProject>());
+  readonly projectActionRequest = signal<ProjectActionRequest | null>(null);
+  readonly projectActionBusy = signal(false);
+  private projectActionTrigger: HTMLElement | null = null;
   readonly selectingRows = signal(false);
   readonly participantRemoval = signal<{
     ids: number[];
@@ -396,6 +406,7 @@ export class ProgramManagementComponent implements OnInit {
       this.dirty() ||
       this.saving() ||
       this.uploading() ||
+      this.projectActionBusy() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||
       this.expertsStatus().busy ||
@@ -454,6 +465,7 @@ export class ProgramManagementComponent implements OnInit {
         ]);
         if (selectionKey !== this.selectionKey) {
           this.clearRows();
+          this.projectActionRequest.set(null);
           this.participantRemoval.set(null);
           this.tableError.set(null);
           this.tableMessage.set(null);
@@ -924,13 +936,88 @@ export class ProgramManagementComponent implements OnInit {
     const presentation = this.href(project.presentationUrl);
     if (presentation)
       actions.push({ id: "presentation", label: "Открыть презентацию", href: presentation });
+    actions.push(
+      {
+        id: "change_case",
+        label: "Сменить кейс",
+        disabled: !this.state.projects()?.caseOptions.length,
+        reason: "В программе не настроены кейсы",
+      },
+      {
+        id: "submit",
+        label: "Сдать решение",
+        disabled: !competitive || project.submitted,
+        reason: project.submitted ? "Решение уже сдано" : "В программе нет сдачи решений",
+      },
+      { id: "detach", label: "Открепить от программы", destructive: true },
+    );
     return actions;
   }
   projectAction(project: ManagementProject, event: RowActionEvent): void {
     if (event.id === "team") {
       this.state.select(project);
       this.openTeam(event.trigger);
+    } else if (["change_case", "detach", "submit"].includes(event.id)) {
+      this.openProjectAction(
+        event.id as ManagementProjectAction,
+        [project.id],
+        project.name,
+        event.trigger,
+      );
     }
+  }
+  openProjectAction(
+    action: ManagementProjectAction,
+    ids = this.selectedRowIds(),
+    projectName?: string,
+    trigger?: HTMLElement,
+  ): void {
+    const context = this.state.context;
+    if (!context || !ids.length || this.projectActionBusy()) return;
+    this.projectActionTrigger =
+      trigger ??
+      (this.managementLayout()?.nativeElement.ownerDocument.activeElement as HTMLElement | null);
+    this.projectActionRequest.set({
+      programId: context.programId,
+      action,
+      ids: [...ids],
+      projectName,
+    });
+  }
+  projectActionCompleted(result: ProjectActionDone): void {
+    if (this.state.context?.programId !== result.programId || this.section() !== "projects") return;
+    this.projectActionRequest.set(null);
+    this.clearRows();
+    this.tableMessage.set(
+      result.action === "change_case"
+        ? "Кейс проекта изменен."
+        : result.action === "detach"
+          ? "Проект откреплен от программы."
+          : `Сдано решений: ${result.changedCount}.`,
+    );
+    const lastOffset =
+      Math.max(
+        0,
+        Math.ceil(
+          (this.count() - (result.action === "detach" ? result.changedCount : 0)) / this.pageSize,
+        ) - 1,
+      ) * this.pageSize;
+    if (this.offset() > lastOffset) void this.changeQuery({ offset: lastOffset });
+    else this.state.retry();
+  }
+  closeProjectAction(): void {
+    if (this.projectActionBusy()) return;
+    const trigger = this.projectActionTrigger;
+    this.projectActionTrigger = null;
+    this.projectActionRequest.set(null);
+    afterNextRender(
+      () => {
+        setTimeout(() => {
+          if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+        });
+      },
+      { injector: this.injector },
+    );
   }
   materialActions(): RowAction[] {
     return [
@@ -997,6 +1084,7 @@ export class ProgramManagementComponent implements OnInit {
     if (
       this.saving() ||
       this.removingParticipants() ||
+      this.projectActionBusy() ||
       this.uploading() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||

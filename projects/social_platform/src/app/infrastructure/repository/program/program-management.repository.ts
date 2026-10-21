@@ -13,11 +13,18 @@ import {
   ManagementMaterialWrite,
   ManagementQuery,
   ManagementSettingsWrite,
+  ManagementProjectActionWrite,
 } from "@domain/program/program-management.model";
 
 /** Приватные manager-данные не попадают в общий EntityCache программы. */
 @Injectable()
 export class ProgramManagementRepository implements ProgramManagementRepositoryPort {
+  previewProjectAction(id: number, body: ManagementProjectActionWrite) {
+    return this.adapter.previewProjectAction(id, body);
+  }
+  applyProjectAction(id: number, body: ManagementProjectActionWrite & { previewToken: string }) {
+    return this.adapter.applyProjectAction(id, body).pipe(tap(() => this.changed(id)));
+  }
   private readonly adapter = inject(ProgramManagementHttpAdapter);
   results(id: number) {
     return this.adapter.results(id);
