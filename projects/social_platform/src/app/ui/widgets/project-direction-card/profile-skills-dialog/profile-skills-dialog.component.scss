@@ -4,6 +4,23 @@
 
 // Portal находится вне host: переопределение ограничено оболочкой окна навыков.
 ::ng-deep .modal .modal__body.profile-skills-modal {
+  // Production подключает общие UI Kit токены только ниже 1000px.
+  // Локальный контракт окна сохраняет ту же шкалу на desktop.
+  --ui-accent: var(--accent);
+  --ui-text: var(--black);
+  --ui-border-subtle: var(--medium-grey-for-outline);
+  --ui-radius-control: var(--rounded-xxl);
+  --ui-radius-dialog: var(--rounded-xl);
+  --ui-control-height: 44px;
+  --ui-space-xs: 4px;
+  --ui-space-sm: 8px;
+  --ui-space-md: 16px;
+  --ui-font-h2: 18px;
+  --ui-font-h3: 16px;
+  --ui-font-small: 12px;
+  --ui-font-caption: 12px;
+  --ui-disabled-opacity: 0.5;
+
   box-sizing: border-box;
   display: block;
   width: min(520px, 90vw);
@@ -57,7 +74,9 @@
     background: var(--accent-light);
   }
 
-  button.profile-skills__close {
+  button.profile-skills__close.ui-button {
+    @include ui-foundation.button;
+
     flex: 0 0 44px;
     width: 44px;
     height: 44px;
