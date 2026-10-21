@@ -15,6 +15,7 @@ import {
   ManagementProject,
   ManagementProjectsPage,
   ProgramManagement,
+  ParticipantRemovalPreview,
 } from "@domain/program/program-management.model";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
@@ -189,8 +190,15 @@ describe("Списки управления программой в DOM", () => 
       context: null as ManagementContext | null,
       api: {
         selection: vi.fn(() => of({ ids: Array.from({ length: 41 }, (_, i) => i + 1) })),
-        previewParticipantRemoval: vi.fn(() =>
-          of({ previewToken: "proof", participantCount: 1, applications: [], assignmentsCount: 0 }),
+        previewParticipantRemoval: vi.fn<() => Observable<ParticipantRemovalPreview>>(() =>
+          of({
+            confirmationVersion: 2,
+            previewToken: "proof",
+            participantCount: 1,
+            applications: [],
+            assignmentsCount: 0,
+            teamChanges: [],
+          }),
         ),
         removeParticipants: vi.fn(() => of({ removed: 1 })),
       },
@@ -623,5 +631,44 @@ describe("Списки управления программой в DOM", () => 
     expect(state.api.removeParticipants).toHaveBeenCalledWith(1, [1], "proof");
     expect(component.selectedRows().size).toBe(0);
     expect(state.retry).toHaveBeenCalledOnce();
+  });
+  it("подтверждение показывает команду заявки и сохраняемый исходный проект отдельно", async () => {
+    const { component, state, harness, element } = await setup();
+    state.api.previewParticipantRemoval.mockReturnValue(
+      of({
+        confirmationVersion: 2,
+        previewToken: "proof",
+        participantCount: 1,
+        applications: [],
+        assignmentsCount: 0,
+        teamChanges: [
+          {
+            id: 11,
+            projectId: 91,
+            name: "Заявка команды",
+            submitted: true,
+            members: [{ id: 51, name: "Анна" }],
+            invitationsCount: 1,
+          },
+        ],
+      }),
+    );
+    component.previewParticipantRemoval([1]);
+    harness.detectChanges();
+    await vi.waitFor(() => {
+      harness.detectChanges();
+      expect(
+        document.querySelector('[role="dialog"][aria-labelledby="participant-removal-title"]'),
+      ).toBeTruthy();
+    });
+    const dialog = document.querySelector(
+      '[role="dialog"][aria-labelledby="participant-removal-title"]',
+    )!;
+    expect(dialog.textContent).toContain("Команды исходных проектов на платформе сохранятся");
+    expect(dialog.textContent).toContain("Заявка команды");
+    expect(dialog.textContent).toContain("Анна");
+    expect(dialog.textContent).toContain("Сохраненные оценки не изменятся");
+    expect(state.api.removeParticipants).not.toHaveBeenCalled();
+    expect(element().querySelector(".management__participants")).toBeTruthy();
   });
 });

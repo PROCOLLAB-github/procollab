@@ -88,6 +88,7 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
     return this.api.post<{ removed: number }>(`${this.root(id)}/participants/remove/`, {
       ids,
       previewToken,
+      confirmationVersion: 2,
     });
   }
   private participantParams(q: ManagementQuery): HttpParams {

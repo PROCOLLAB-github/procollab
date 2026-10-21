@@ -149,10 +149,19 @@ export interface ManagementSelection {
   projects?: ManagementSelectionProject[];
 }
 export interface ParticipantRemovalPreview {
+  confirmationVersion: 2;
   previewToken: string;
   participantCount: number;
   applications: { id: number; projectId: number; name: string; submitted: boolean }[];
   assignmentsCount: number;
+  teamChanges: {
+    id: number;
+    projectId: number;
+    name: string;
+    submitted: boolean;
+    members: { id: number; name: string }[];
+    invitationsCount: number;
+  }[];
 }
 export interface ManagementSettingsWrite {
   expectedUpdatedAt: string;
