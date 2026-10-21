@@ -16,7 +16,7 @@ describe("programDeadlines", () => {
     const rows = programDeadlines({ ...dates, datetimeEvaluationEnds: at(16) }, true, now);
     expect(rows.map(row => row.key)).toEqual(["registration", "submission", "evaluation"]);
     expect(rows.map(row => row.status)).toEqual([
-      "Срок завершён",
+      "Этап завершен",
       "Осталось 3 дня",
       "Осталось 2 дня",
     ]);
@@ -28,7 +28,7 @@ describe("programDeadlines", () => {
   });
 
   it.each([
-    [at(14, 11, 59), "Срок завершён", true],
+    [at(14, 11, 59), "Этап завершен", true],
     [at(14, 12), "Сегодня", false],
     [at(14, 23, 59), "Сегодня", false],
     [at(15, 0), "Завтра", false],
@@ -61,7 +61,7 @@ describe("programDeadlines", () => {
       );
       expect(rows[1].datetime).toBe(rows[0].datetime);
       expect(rows[1].usesRegistrationDeadline).toBe(true);
-      expect(rows[1].status).toBe("Срок завершён");
+      expect(rows[1].status).toBe("Этап завершен");
     },
   );
 

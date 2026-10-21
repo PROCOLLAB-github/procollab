@@ -1,5 +1,8 @@
 /** @format */
 
+import { CdkMenuModule } from "@angular/cdk/menu";
+/** @format */
+
 import { ButtonDirective, StateComponent } from "@uilib";
 /** @format */
 
@@ -63,6 +66,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
   templateUrl: "./analytics.component.html",
   styleUrl: "./analytics.component.scss",
   imports: [
+    CdkMenuModule,
     StateComponent,
     ButtonDirective,
     ButtonComponent,
@@ -458,6 +462,10 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   protected hasValues(metrics: readonly { value: number | null }[]): boolean {
     return metrics.some(item => (item.value ?? 0) > 0);
+  }
+
+  protected downloadProgram(): void {
+    this.exports.downloadProgram();
   }
 
   protected downloadProjects(): void {

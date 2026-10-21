@@ -645,3 +645,13 @@
     }
   }
 }
+
+@media (min-width: 1000px) {
+  .analytics-drilldown__table--assignments th {
+    &:first-child { width: 24%; }
+    &:nth-child(2) { width: 27%; }
+    &:nth-child(3) { width: 18%; }
+    &:nth-child(4) { width: 19%; }
+    &:last-child { width: 12%; }
+  }
+}

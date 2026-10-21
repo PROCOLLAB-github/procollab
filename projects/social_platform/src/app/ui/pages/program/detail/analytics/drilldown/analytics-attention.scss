@@ -1,0 +1,233 @@
+/** @format */
+
+.modal__body.analytics-drilldown-body.analytics-drilldown-body--attention {
+  box-sizing: border-box;
+  width: min(1100px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.analytics-drilldown__table th.attention-check-cell,
+.analytics-drilldown__table td.attention-check-cell {
+  width: 44px;
+  padding: 0;
+
+  &::before {
+    display: none;
+  }
+}
+
+.attention-check {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: inherit;
+    accent-color: var(--accent);
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+.attention-check__label {
+  display: none;
+}
+
+@media (max-width: 999px) {
+  .analytics-drilldown__table:has(th.attention-check-cell) {
+    thead {
+      display: block;
+    }
+
+    thead tr {
+      padding: 0;
+      border: 0;
+    }
+
+    thead th:not(.attention-check-cell) {
+      display: none;
+    }
+
+    th.attention-check-cell {
+      width: auto;
+    }
+
+    thead .attention-check {
+      display: flex;
+      gap: 12px;
+      width: auto;
+      font-size: 12px;
+    }
+
+    .attention-check__label {
+      display: inline;
+    }
+  }
+}
+
+.analytics-drilldown__table tr.attention-selected-row {
+  background: color-mix(in srgb, var(--accent-light) 35%, var(--light-white));
+}
+
+.attention-reminder {
+  margin: 20px 0;
+
+  h3 {
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  h4 {
+    margin: 24px 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &__message {
+    padding: 16px;
+    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-line;
+    background: var(--light-gray);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 10px;
+  }
+}
+
+.attention-reminder__recipient-count {
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+.attention-reminder__email {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  background: var(--light-white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 10px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+
+  small {
+    color: var(--grey-for-text);
+  }
+}
+
+.attention-reminder__email-button {
+  justify-self: start;
+  padding: 12px 18px;
+  color: var(--light-white);
+  background: var(--accent);
+  border-radius: 8px;
+}
+
+.attention-list-tools {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .analytics-drilldown__count {
+    margin: 0;
+  }
+}
+
+.analytics-drilldown .ui-button.ui-button.attention-list-tools__export {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+}
+
+.attention-actions {
+  position: sticky;
+  bottom: -20px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 20px;
+  margin-top: 16px;
+  background: var(--light-white);
+  border-top: 1px solid var(--medium-grey-for-outline);
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__count {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  &__error,
+  &__success {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 12px;
+  }
+
+  &__error {
+    color: var(--red-dark);
+  }
+
+  &__success {
+    color: var(--green-dark);
+  }
+
+  .ui-button.ui-button.attention-actions__send {
+    min-height: 40px;
+    padding: 9px 16px;
+    color: var(--light-white);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+
+    &:disabled {
+      color: var(--grey-for-text);
+      background: var(--light-gray);
+      border-color: var(--medium-grey-for-outline);
+    }
+  }
+}
+
+@media (max-width: 599px) {
+  .attention-actions__buttons {
+    flex-basis: 100%;
+    width: 100%;
+
+    .ui-button.ui-button {
+      flex: 1 1 100%;
+      min-height: 44px;
+    }
+  }
+}
