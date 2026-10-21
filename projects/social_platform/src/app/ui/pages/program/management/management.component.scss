@@ -1009,11 +1009,14 @@
 
   .management__toolbar-actions {
     display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-columns: 104px minmax(0, 1fr);
     gap: 8px;
   }
 
-  .management__toolbar-slot .ui-button { width: 100%; }
+  .management__toolbar-slot .ui-button {
+    width: 100%;
+    padding-inline: 8px;
+  }
 }
 
 .management__table td.management__row-actions {
