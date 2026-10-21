@@ -1,3 +1,5 @@
+/** @format */
+
 .direction-card {
   position: relative;
   display: flex;
@@ -16,6 +18,15 @@
 
   &:hover {
     box-shadow: 1px 3px 5px var(--medium-grey-for-outline);
+  }
+
+  &--skills {
+    font: inherit;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
   }
 
   &__icon {
@@ -229,21 +240,6 @@
 
     &--partner {
       color: var(--green-dark);
-    }
-  }
-}
-
-.skills {
-  &__info {
-    padding: 20px;
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
-  }
-
-  &__category {
-    app-tag {
-      display: inline-flex;
-      width: 70px;
     }
   }
 }
