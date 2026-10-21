@@ -111,6 +111,26 @@ describe("Контракт HTTP панели организатора", () => {
     file.flush(new Blob(["xlsx"]));
   });
 
+  it("выгрузка проектов передает ровно те же фильтры, что список", () => {
+    const query = {
+      search: "Проект",
+      offset: 20,
+      limit: 20,
+      submission: "submitted" as const,
+      evaluation: "not_evaluated" as const,
+      caseScope: "selected" as const,
+      caseName: "Кейс",
+    };
+    adapter.projects(4, query).subscribe();
+    const list = http.expectOne(r => r.url.endsWith("/projects/"));
+    list.flush({ count: 25, results: [], case_options: ["Кейс"] });
+    adapter.exportProjects(4, query).subscribe();
+    const file = http.expectOne(r => r.url.endsWith("/projects/export/"));
+    expect(file.request.params.toString()).toBe(list.request.params.toString());
+    expect(file.request.responseType).toBe("blob");
+    file.flush(new Blob(["xlsx"]));
+  });
+
   it("версия PATCH не теряет точность при преобразовании JSON", () => {
     const version = "2026-10-17T12:34:56.123456Z";
     adapter

@@ -66,6 +66,9 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
       this.participantParams(q),
     );
   }
+  exportProjects(id: number, q: ManagementQuery) {
+    return this.api.getFile(`${this.root(id)}/projects/export/`, this.projectParams(q));
+  }
   exportParticipants(id: number, q: ManagementQuery) {
     return this.api.getFile(`${this.root(id)}/participants/export/`, this.participantParams(q));
   }

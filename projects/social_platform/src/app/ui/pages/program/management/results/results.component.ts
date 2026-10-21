@@ -15,22 +15,11 @@ import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { Subject, finalize, switchMap, catchError, of, tap, takeUntil } from "rxjs";
 import { saveAs } from "file-saver";
-import {
-  AlertDirective,
-  AvatarComponent,
-  ButtonDirective,
-  ChoiceDirective,
-  FieldDirective,
-} from "@uilib";
+import { AlertDirective, ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
-import {
-  ProgramResults,
-  ResultExpert,
-  ResultProject,
-  ResultsQuery,
-} from "@domain/program/program-results.model";
-import { ManagementCriterion } from "@domain/program/program-criteria.model";
+import { ProgramResults, ResultProject, ResultsQuery } from "@domain/program/program-results.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { ResultProjectScoresComponent } from "./result-project-scores.component";
 import { presentationHref } from "@utils/program-case-analytics";
 
 @Component({
@@ -39,11 +28,11 @@ import { presentationHref } from "@utils/program-case-analytics";
     ReactiveFormsModule,
     NgTemplateOutlet,
     AlertDirective,
-    AvatarComponent,
     ButtonDirective,
     ChoiceDirective,
     FieldDirective,
     ModalComponent,
+    ResultProjectScoresComponent,
   ],
   templateUrl: "./results.component.html",
   styleUrl: "./results.component.scss",
@@ -79,10 +68,6 @@ export class ManagementResultsComponent {
   readonly numericCriteria = computed(
     () => this.snapshot()?.criteria.filter(c => c.type === "int" || c.type === "float") ?? [],
   );
-  readonly matrixCriteria = computed(
-    () => this.snapshot()?.criteria.filter(c => c.type !== "str") ?? [],
-  );
-  readonly comments = computed(() => this.snapshot()?.criteria.filter(c => c.type === "str") ?? []);
   readonly groups = computed(() => {
     const key = this.caseValue(),
       query = this.searchValue().trim().toLocaleLowerCase("ru");
@@ -178,36 +163,11 @@ export class ManagementResultsComponent {
       return next;
     });
   }
-  toggleExpert(key: string): void {
-    this.expandedExperts.update(ids => {
-      const next = new Set(ids);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-  }
   ready(projects: ResultProject[]): ResultProject[] {
     return projects.filter(p => p.ready);
   }
   pending(projects: ResultProject[]): ResultProject[] {
     return projects.filter(p => !p.ready);
-  }
-  initials(expert: ResultExpert): string {
-    return expert.name
-      .split(/\s+/)
-      .slice(0, 2)
-      .map(v => v[0])
-      .join("");
-  }
-  value(expert: ResultExpert, criterion: ManagementCriterion): string {
-    const value = expert.values.find(v => v.criterionId === criterion.id)?.value;
-    return value === "True" && criterion.type === "bool"
-      ? "Да"
-      : value === "False" && criterion.type === "bool"
-        ? "Нет"
-        : value == null || value === ""
-          ? "—"
-          : value;
   }
   openModal(kind: "formula" | "export"): void {
     this.exportError.set(false);

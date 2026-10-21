@@ -39,6 +39,9 @@ export class ProgramManagementUseCase {
   participants(id: number, q: ManagementQuery) {
     return this.repository.participants(id, q);
   }
+  exportProjects(id: number, q: ManagementQuery) {
+    return this.repository.exportProjects(id, q);
+  }
   exportParticipants(id: number, q: ManagementQuery) {
     return this.repository.exportParticipants(id, q);
   }

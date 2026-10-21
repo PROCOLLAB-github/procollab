@@ -16,6 +16,8 @@ import {
   ManagementProjectsPage,
   ProgramManagement,
   ParticipantRemovalPreview,
+  ManagementTeam,
+  ManagementEvaluation,
 } from "@domain/program/program-management.model";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
@@ -184,13 +186,14 @@ describe("Списки управления программой в DOM", () => 
       selected: signal<ManagementProject | null>(null),
       pending: signal(false),
       error: signal<HttpErrorResponse | null>(null),
-      evaluation: signal(null),
+      evaluation: signal<ManagementEvaluation | null>(null),
       teamOpen: signal(false),
       teamPending: signal(false),
       teamError: signal(null),
-      team: signal(null),
+      team: signal<ManagementTeam | null>(null),
       context: null as ManagementContext | null,
       api: {
+        exportProjects: vi.fn<() => Observable<Blob>>(() => new Subject<Blob>()),
         selection: vi.fn(() => of({ ids: Array.from({ length: 41 }, (_, i) => i + 1) })),
         previewParticipantRemoval: vi.fn<() => Observable<ParticipantRemovalPreview>>(() =>
           of({
@@ -627,7 +630,13 @@ describe("Списки управления программой в DOM", () => 
       isCompetitive: true,
     });
     harness.detectChanges();
-    expect(element().querySelector("select")!.value).toBe("case:Кейс №1");
+    component.openProjectFilters();
+    harness.detectChanges();
+    await vi.waitFor(() =>
+      expect(document.querySelector<HTMLSelectElement>('[aria-label="Кейс"]')?.value).toBe(
+        "case:Кейс №1",
+      ),
+    );
     expect(component.caseFilter.value).toBe("case:Кейс №1");
   });
 
@@ -710,6 +719,129 @@ describe("Списки управления программой в DOM", () => 
     await component.changeQuery({ search: "другой" });
     expect(component.selectedRows().size).toBe(0);
   });
+  it("фильтры проектов применяются вместе, отмена сохраняет запрос и экспорт использует его", async () => {
+    const { component, state, harness, element } = await setup(
+      "projects",
+      "?search=Проект&offset=20",
+    );
+    expect(element().querySelector("select")).toBeNull();
+    expect(element().textContent).not.toContain("Проекты, связанные с этой программой");
+    component.openProjectFilters();
+    component.caseFilter.setValue("case:Кейс №1");
+    component.submissionFilter.setValue("submitted");
+    component.evaluationFilter.setValue("not_evaluated");
+    expect(state.context?.query.caseScope).toBe("all");
+    component.closeProjectFilters();
+    component.openProjectFilters();
+    expect(component.caseFilter.value).toBe("all");
+    component.caseFilter.setValue("case:Кейс №1");
+    component.submissionFilter.setValue("submitted");
+    component.evaluationFilter.setValue("not_evaluated");
+    component.applyProjectFilters();
+    await vi.waitFor(() => expect(state.context?.query.caseName).toBe("Кейс №1"));
+    expect(state.context?.query).toMatchObject({
+      search: "Проект",
+      offset: 0,
+      submission: "submitted",
+      evaluation: "not_evaluated",
+    });
+    expect(component.projectFilterCount()).toBe(3);
+    harness.detectChanges();
+    element().querySelector<HTMLButtonElement>('[aria-label="Выгрузить проекты в Excel"]')!.click();
+    expect(state.api.exportProjects).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({
+        caseName: "Кейс №1",
+        submission: "submitted",
+        evaluation: "not_evaluated",
+      }),
+    );
+    component.openProjectFilters();
+    component.resetProjectFilterDraft();
+    expect(state.context?.query.caseName).toBe("Кейс №1");
+    component.applyProjectFilters();
+    await vi.waitFor(() => expect(state.context?.query.caseScope).toBe("all"));
+    expect(component.projectFilterCount()).toBe(0);
+  });
+
+  it("ошибка выгрузки проектов понятна и позволяет повторить запрос", async () => {
+    const { component, state, harness, element } = await setup("projects");
+    state.api.exportProjects.mockReturnValueOnce(throwError(() => new Error("network")));
+    component.exportProjects();
+    harness.detectChanges();
+    expect(element().querySelector('[role="alert"]')?.textContent).toContain(
+      "Не удалось выгрузить проекты",
+    );
+    const button = element().querySelector<HTMLButtonElement>(
+      '[aria-label="Выгрузить проекты в Excel"]',
+    )!;
+    expect(button.disabled).toBe(false);
+    button.click();
+    expect(state.api.exportProjects).toHaveBeenCalledTimes(2);
+  });
+
+  it("неконкурсная программа показывает только фильтр кейса и сбрасывает неприменимые значения", async () => {
+    const { component, state, harness } = await setup(
+      "projects",
+      "?submission=submitted&evaluation=evaluated",
+    );
+    state.program.set({ ...program, isCompetitive: false });
+    component.openProjectFilters();
+    harness.detectChanges();
+    await vi.waitFor(() =>
+      expect(document.querySelectorAll(".management__filter-dialog select")).toHaveLength(1),
+    );
+    component.applyProjectFilters();
+    await vi.waitFor(() =>
+      expect(state.context?.query).toMatchObject({ submission: "all", evaluation: "all" }),
+    );
+    expect(component.projectFilterCount()).toBe(0);
+  });
+
+  it("сданный черновик виден и объяснен отдельно от отсутствия решения", async () => {
+    const { component, state, harness, element } = await setup("projects");
+    const row = state.projects()!.results[0];
+    component.toggleRow(row);
+    expect(component.assignmentReason()).toContain("без сданного решения");
+    component.clearRows();
+    const draft = { ...row, submitted: true, draft: true };
+    state.projects.update(p => ({ ...p!, results: [draft] }));
+    component.toggleRow(draft);
+    harness.detectChanges();
+    expect(element().querySelector("tbody .management__draft-badge")?.textContent).toContain(
+      "Черновик заявки",
+    );
+    expect(element().querySelector(".management__bulk-summary")?.textContent).toContain(
+      "Команде нужно завершить оформление заявки",
+    );
+    const action = [...element().querySelectorAll<HTMLButtonElement>("button")].find(
+      n => n.textContent?.trim() === "Назначить экспертов",
+    )!;
+    expect(action.disabled).toBe(true);
+    expect(action.getAttribute("aria-describedby")).toBe("project-assignment-reason");
+    expect(action.getAttribute("title")).toBeNull();
+  });
+
+  it("в команде нет названия программы и каждое имя ведет в профиль", async () => {
+    const { state, harness, element } = await setup("projects");
+    state.team.set({
+      projectId: 91,
+      programLinkId: 11,
+      name: "Проект",
+      members: [
+        { id: 51, name: "Участник", role: "Лидер" },
+        { id: 52, name: "Второй", role: "Разработчик" },
+      ],
+    });
+    state.teamOpen.set(true);
+    harness.detectChanges();
+    const drawer = element().querySelector(".management__team")!;
+    expect(drawer.textContent).not.toContain(program.name);
+    expect(
+      [...drawer.querySelectorAll<HTMLAnchorElement>("a")].map(n => n.getAttribute("href")),
+    ).toEqual(["/office/profile/51", "/office/profile/52"]);
+  });
+
   it("фильтр оценивания восстанавливается из URL и передается в серверный запрос", async () => {
     const { component, state } = await setup("projects", "?evaluation=evaluated");
     expect(component.evaluationFilter.value).toBe("evaluated");

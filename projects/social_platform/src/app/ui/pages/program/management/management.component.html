@@ -90,14 +90,25 @@
             >
               <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
             </button>
+          } @else {
+            <button
+              appButton="icon"
+              class="management__export"
+              type="button"
+              aria-label="Выгрузить проекты в Excel"
+              title="Выгрузить проекты в Excel"
+              [appButtonLoading]="exportingProjects()"
+              [disabled]="state.pending() || exportingProjects() || !count()"
+              (click)="exportProjects()"
+            >
+              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+            </button>
           }
         </div>
-        @if (section() === "projects") {
-          <p class="management__muted">Проекты, связанные с этой программой.</p>
-        }
         <div
           class="management__toolbar"
           [class.management__toolbar--participants]="section() === 'participants'"
+          [class.management__toolbar--projects]="section() === 'projects'"
         >
           <form class="management__search" (ngSubmit)="submitSearch()">
             <label class="management__sr" for="management-search">{{
@@ -153,6 +164,23 @@
                 </button>
               </div>
             </div>
+          } @else {
+            <div class="management__toolbar-actions management__toolbar-actions--projects">
+              <div class="management__toolbar-slot">
+                <button
+                  type="button"
+                  appButton="secondary"
+                  class="management__filter-trigger"
+                  aria-haspopup="dialog"
+                  [attr.aria-expanded]="projectFiltersOpen()"
+                  (click)="openProjectFilters()"
+                >
+                  <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры{{
+                    projectFilterCount() ? " · " + projectFilterCount() : ""
+                  }}
+                </button>
+              </div>
+            </div>
           }
         </div>
         <ng-template #activitySortMenu>
@@ -197,48 +225,12 @@
           }
         }
         @if (section() === "projects") {
-          <div class="management__filters">
-            <label
-              >Кейс<select
-                appField
-                aria-label="Кейс"
-                [formControl]="caseFilter"
-                (change)="changeCase($any($event.target).value)"
-              >
-                <option value="all">Все кейсы</option>
-                <option value="without_case">Без выбранного кейса</option>
-                @for (option of state.projects()?.caseOptions ?? []; track option) {
-                  <option [value]="'case:' + option">{{ option }}</option>
-                }
-              </select></label
-            >
-            @if (program.isCompetitive) {
-              <label
-                >Сдача решения<select
-                  appField
-                  aria-label="Сдача решения"
-                  [formControl]="submissionFilter"
-                  (change)="changeQuery({ submission: $any($event.target).value, offset: 0 })"
-                >
-                  <option value="all">Все проекты</option>
-                  <option value="submitted">Сдано</option>
-                  <option value="not_submitted">Не сдано</option>
-                </select></label
-              >
-              <label
-                >Оценивание<select
-                  appField
-                  aria-label="Оценивание"
-                  [formControl]="evaluationFilter"
-                  (change)="changeQuery({ evaluation: $any($event.target).value, offset: 0 })"
-                >
-                  <option value="all">Все проекты</option>
-                  <option value="evaluated">Оцененные проекты</option>
-                  <option value="not_evaluated">Неоцененные проекты</option>
-                </select></label
-              >
-            }
-          </div>
+          @if (projectExportError()) {
+            <p appAlert="error" role="alert">Не удалось выгрузить проекты. Повторите попытку.</p>
+          }
+          @if (projectExportSuccess()) {
+            <p appAlert="success">Excel с проектами по текущим фильтрам готов.</p>
+          }
         }
         @if (state.pending()) {
           <p class="management__list-loading" role="status">Обновляем список…</p>
@@ -444,6 +436,9 @@
                     <a [routerLink]="paths.projects.detail(project.projectId)">{{
                       project.name
                     }}</a>
+                    @if (project.draft) {
+                      <small class="management__draft-badge">Черновик заявки</small>
+                    }
                   </td>
                   <td data-label="Руководитель">{{ project.leader.name }}</td>
                   <td data-label="Сдача решения">
@@ -502,18 +497,31 @@
           <section
             class="management__selection management__bulk"
             [class.management__bulk--participants]="section() === 'participants'"
+            [class.management__bulk--projects]="section() === 'projects'"
             [class.management__selection--obscured]="
-              state.teamOpen() || modalOpen() || !!participantRemoval() || !!participantAnswers()
+              state.teamOpen() ||
+              modalOpen() ||
+              projectFiltersOpen() ||
+              participantFiltersOpen() ||
+              !!participantRemoval() ||
+              !!participantAnswers()
             "
             [style.left.px]="floatingPosition()?.center"
             [style.width.px]="floatingPosition()?.width"
             aria-label="Массовые действия"
             (keydown.escape)="clearRows(); $event.stopPropagation()"
           >
-            <strong aria-live="polite"
-              >Выбрано {{ section() === "participants" ? "участников" : "проектов" }}:
-              {{ selectedRows().size }}</strong
-            >
+            <div class="management__bulk-summary">
+              <strong aria-live="polite"
+                >Выбрано {{ section() === "participants" ? "участников" : "проектов" }}:
+                {{ selectedRows().size }}</strong
+              >
+              @if (section() === "projects" && assignmentReason()) {
+                <p id="project-assignment-reason" class="management__bulk-hint">
+                  {{ assignmentReason() }}
+                </p>
+              }
+            </div>
             @if (section() === "participants") {
               <button
                 appButton="icon"
@@ -541,14 +549,11 @@
                 appButton="primary"
                 type="button"
                 [disabled]="!!assignmentReason()"
-                [attr.title]="assignmentReason()"
+                [attr.aria-describedby]="assignmentReason() ? 'project-assignment-reason' : null"
                 (click)="assignSelectedProjects()"
               >
                 Назначить экспертов
               </button>
-              @if (assignmentReason()) {
-                <span class="management__bulk-hint">{{ assignmentReason() }}</span>
-              }
             }
             <button
               appButton="icon"
@@ -566,7 +571,7 @@
     } @else if (section() === "analytics") {
       <app-program-analytics />
     } @else if (section() === "evaluation") {
-      <section class="management__card">
+      <section class="management__card management__evaluation">
         <a
           [routerLink]="paths.program.management(program.id, 'projects')"
           [queryParams]="returnQuery()"
@@ -575,54 +580,14 @@
         @if (state.evaluation(); as evaluation) {
           <h2>Оценка проекта</h2>
           <h3>{{ evaluation.name }}</h3>
-          @if (evaluation.canRate) {
-            <a
-              class="management__primary-link"
-              [routerLink]="paths.program.projectsRating(program.id)"
-              [queryParams]="{ project_id: evaluation.projectId }"
-              >Выставить или изменить мою оценку</a
-            >
+          @if (!evaluation.submitted) {
+            <p appAlert="warning">Команда еще не сдала решение.</p>
           }
-          @if (!evaluation.experts.length) {
-            <p role="status">
-              {{ evaluation.submitted ? "Оценок пока нет." : "Команда еще не сдала решение." }}
-            </p>
-          }
-          @for (expert of evaluation.experts; track expert.id) {
-            <details class="management__expert" open>
-              <summary>
-                {{ expert.name }} ·
-                {{
-                  expert.status === "completed"
-                    ? "Оценено"
-                    : expert.status === "in_progress"
-                      ? "В работе"
-                      : "Не оценено"
-                }}
-              </summary>
-              <table appTable>
-                <caption class="management__sr">
-                  Оценки эксперта
-                  {{
-                    expert.name
-                  }}
-                </caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Критерий</th>
-                    <th scope="col">Значение</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (criterion of expert.criteria; track criterion.id) {
-                    <tr>
-                      <td>{{ criterion.name }}</td>
-                      <td>{{ criterion.isScored ? criterion.value : "Не оценено" }}</td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </details>
+          @if (evaluation.result; as result) {
+            <app-result-project-scores [project]="result" [criteria]="evaluation.criteria ?? []" />
+          } @else {
+            <p appAlert="warning">Не удалось загрузить данные оценок.</p>
+            <button type="button" appButton="secondary" (click)="state.retry()">Повторить</button>
           }
         }
       </section>
@@ -858,6 +823,62 @@
   }
 </main>
 <app-modal
+  [open]="projectFiltersOpen()"
+  labelledBy="project-filters-title"
+  size="small"
+  (openChange)="!$event && closeProjectFilters()"
+>
+  @if (projectFiltersOpen()) {
+    <form
+      class="management__filter-dialog"
+      [formGroup]="projectFiltersForm"
+      (ngSubmit)="applyProjectFilters()"
+    >
+      <header class="management__filter-heading">
+        <h2 id="project-filters-title">Фильтры проектов</h2>
+        <button
+          type="button"
+          appButton="icon"
+          aria-label="Закрыть фильтры"
+          (click)="closeProjectFilters()"
+        >
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+        </button>
+      </header>
+      <label
+        >Кейс<select appField aria-label="Кейс" formControlName="case">
+          <option value="all">Все кейсы</option>
+          <option value="without_case">Без выбранного кейса</option>
+          @for (option of state.projects()?.caseOptions ?? []; track option) {
+            <option [value]="'case:' + option">{{ option }}</option>
+          }
+        </select></label
+      >
+      @if (state.program()?.isCompetitive) {
+        <label
+          >Сдача решения<select appField aria-label="Сдача решения" formControlName="submission">
+            <option value="all">Все проекты</option>
+            <option value="submitted">Сдано</option>
+            <option value="not_submitted">Не сдано</option>
+          </select></label
+        >
+        <label
+          >Оценивание<select appField aria-label="Оценивание" formControlName="evaluation">
+            <option value="all">Все проекты</option>
+            <option value="evaluated">Оцененные проекты</option>
+            <option value="not_evaluated">Неоцененные проекты</option>
+          </select></label
+        >
+      }
+      <footer class="management__filter-actions">
+        <button type="button" appButton="text" (click)="resetProjectFilterDraft()">Сбросить</button
+        ><button type="submit" appButton="primary">Применить</button>
+      </footer>
+    </form>
+  }
+</app-modal>
+
+<app-modal
   [open]="participantFiltersOpen()"
   labelledBy="participant-filters-title"
   size="small"
@@ -1061,7 +1082,6 @@
       <button type="button" appButton="text" (click)="closeTeam()">К выбранному проекту</button>
     }
     <h3>{{ state.selected()?.name }}</h3>
-    <p class="management__muted">{{ state.program()?.name }}</p>
     @if (state.teamPending()) {
       <p aria-live="polite" aria-busy="true">Загружаем состав команды…</p>
     } @else if (state.teamError()) {
@@ -1075,7 +1095,11 @@
         <div class="management__team-member">
           <app-avatar [url]="href(member.avatar ?? null) ?? undefined" [size]="44" />
           <div class="management__team-person">
-            <p class="management__team-name">{{ member.name }}</p>
+            <p class="management__team-name">
+              <a class="management__profile-link" [routerLink]="paths.profile.detail(member.id)">{{
+                member.name
+              }}</a>
+            </p>
             <p class="management__muted">{{ member.role }}</p>
             <p class="management__team-email">{{ member.email || "Почта не указана" }}</p>
           </div>

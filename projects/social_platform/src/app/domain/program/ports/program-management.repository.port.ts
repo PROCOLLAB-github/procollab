@@ -36,6 +36,7 @@ export abstract class ProgramManagementRepositoryPort {
     programId: number,
     query: ManagementQuery,
   ): Observable<ManagementParticipantsPage>;
+  abstract exportProjects(programId: number, query: ManagementQuery): Observable<Blob>;
   abstract exportParticipants(programId: number, query: ManagementQuery): Observable<Blob>;
   abstract selection(
     programId: number,
