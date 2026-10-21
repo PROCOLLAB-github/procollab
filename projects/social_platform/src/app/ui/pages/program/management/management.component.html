@@ -504,6 +504,7 @@
               projectFiltersOpen() ||
               participantFiltersOpen() ||
               !!participantRemoval() ||
+              !!projectActionRequest() ||
               !!participantAnswers()
             "
             [style.left.px]="floatingPosition()?.center"
@@ -518,7 +519,7 @@
               >
               @if (section() === "projects" && assignmentReason()) {
                 <p id="project-assignment-reason" class="management__bulk-hint">
-                  {{ assignmentReason() }}
+                  Назначение экспертов: {{ assignmentReason() }}
                 </p>
               }
             </div>
@@ -545,15 +546,25 @@
                 Удалить из программы
               </button>
             } @else {
-              <button
-                appButton="primary"
-                type="button"
-                [disabled]="!!assignmentReason()"
-                [attr.aria-describedby]="assignmentReason() ? 'project-assignment-reason' : null"
-                (click)="assignSelectedProjects()"
-              >
-                Назначить экспертов
-              </button>
+              <div class="management__bulk-actions">
+                <button
+                  appButton="secondary"
+                  type="button"
+                  [disabled]="!state.program()?.isCompetitive"
+                  (click)="openProjectAction('submit')"
+                >
+                  Сдать решения
+                </button>
+                <button
+                  appButton="primary"
+                  type="button"
+                  [disabled]="!!assignmentReason()"
+                  [attr.aria-describedby]="assignmentReason() ? 'project-assignment-reason' : null"
+                  (click)="assignSelectedProjects()"
+                >
+                  Назначить экспертов
+                </button>
+              </div>
             }
             <button
               appButton="icon"
@@ -1038,6 +1049,13 @@
     </section>
   }
 </app-modal>
+<app-management-project-actions
+  [request]="projectActionRequest()"
+  [caseOptions]="state.projects()?.caseOptions ?? []"
+  (closed)="closeProjectAction()"
+  (busyChange)="projectActionBusy.set($event)"
+  (completed)="projectActionCompleted($event)"
+/>
 <app-modal
   [open]="!!participantAnswers()"
   labelledBy="participant-answers-heading"

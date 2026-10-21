@@ -1,0 +1,85 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.ui-alert { @include program-management-controls.status-notice; }
+
+.project-action {
+  display: grid;
+  gap: 20px;
+  width: 432px;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--black);
+
+  header,
+  footer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  p { margin: 0; }
+
+  label {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  footer { justify-content: flex-end; }
+}
+
+.project-action__name { overflow-wrap: anywhere; }
+
+.project-action__errors {
+  display: grid;
+  gap: 12px;
+  max-height: 25dvh;
+  padding: 12px 12px 12px 28px;
+  margin: 0;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  background: var(--red-light);
+  border-radius: 8px;
+}
+
+.project-action__errors ul { padding-left: 16px; }
+
+.ui-button.project-action__danger {
+  color: var(--black);
+  background: var(--red-light);
+  border-color: var(--red-light);
+}
+
+@media (max-width: 599px) {
+  .project-action footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-action footer .ui-button { padding-inline: 8px; }
+}

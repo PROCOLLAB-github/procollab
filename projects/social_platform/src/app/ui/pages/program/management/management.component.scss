@@ -1180,6 +1180,12 @@
   align-items: center;
 }
 
+.management__bulk-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .management__bulk--projects > button.management__clear-selection {
   grid-column: 3;
   align-self: center;
@@ -1203,6 +1209,14 @@
 .management__evaluation > h3 { margin: 0; }
 
 @media (max-width: 999px) {
+  .management--lists:has(.management__projects) { padding-bottom: 260px; }
+
+  .management__bulk-actions {
+    display: grid;
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
   .management__bulk--projects { grid-template-columns: minmax(0, 1fr) 32px; }
 
   .management__bulk--projects > .management__bulk-summary {

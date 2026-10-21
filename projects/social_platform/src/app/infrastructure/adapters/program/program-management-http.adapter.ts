@@ -24,11 +24,26 @@ import {
   ManagementTeam,
   ProgramManagement,
   ManagementSelection,
+  ManagementProjectActionWrite,
+  ManagementProjectActionPreview,
+  ManagementProjectActionResult,
   ParticipantRemovalPreview,
 } from "@domain/program/program-management.model";
 
 @Injectable()
 export class ProgramManagementHttpAdapter implements ProgramManagementRepositoryPort {
+  previewProjectAction(id: number, body: ManagementProjectActionWrite) {
+    return this.api.post<ManagementProjectActionPreview>(
+      `${this.root(id)}/projects/actions/preview/`,
+      body,
+    );
+  }
+  applyProjectAction(id: number, body: ManagementProjectActionWrite & { previewToken: string }) {
+    return this.api.post<ManagementProjectActionResult>(
+      `${this.root(id)}/projects/actions/apply/`,
+      body,
+    );
+  }
   private readonly api = inject(ApiService);
   results(id: number) {
     return this.api.get<ProgramResults>(`${this.root(id)}/results/`);

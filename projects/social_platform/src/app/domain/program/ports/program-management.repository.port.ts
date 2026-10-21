@@ -16,9 +16,20 @@ import {
   ProgramManagement,
   ManagementSelection,
   ParticipantRemovalPreview,
+  ManagementProjectActionWrite,
+  ManagementProjectActionPreview,
+  ManagementProjectActionResult,
 } from "../program-management.model";
 
 export abstract class ProgramManagementRepositoryPort {
+  abstract previewProjectAction(
+    id: number,
+    body: ManagementProjectActionWrite,
+  ): Observable<ManagementProjectActionPreview>;
+  abstract applyProjectAction(
+    id: number,
+    body: ManagementProjectActionWrite & { previewToken: string },
+  ): Observable<ManagementProjectActionResult>;
   abstract results(programId: number): Observable<ProgramResults>;
   abstract exportResults(programId: number, query: ResultsQuery): Observable<Blob>;
   abstract criteria(programId: number): Observable<ManagementCriteria>;

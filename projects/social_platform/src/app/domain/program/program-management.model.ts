@@ -152,6 +152,25 @@ export interface ManagementSelection {
   ids: number[];
   projects?: ManagementSelectionProject[];
 }
+export type ManagementProjectAction = "change_case" | "detach" | "submit";
+export interface ManagementProjectActionWrite {
+  action: ManagementProjectAction;
+  ids: number[];
+  caseName?: string;
+}
+export interface ManagementProjectActionPreview {
+  items: { id: number; name: string; errors: string[] }[];
+  readyCount: number;
+  alreadySubmittedCount: number;
+  scoreCount: number;
+  removedAssignmentsCount: number;
+  canApply: boolean;
+  previewToken: string | null;
+}
+export interface ManagementProjectActionResult {
+  changedCount: number;
+  alreadySubmittedCount: number;
+}
 export interface ParticipantRemovalPreview {
   confirmationVersion: 2;
   previewToken: string;

@@ -11,6 +11,34 @@ import { API_URL } from "@core/lib/providers";
 
 describe("Контракт HTTP панели организатора", () => {
   let adapter: ProgramManagementHttpAdapter, http: HttpTestingController;
+  it("действия проекта передают ID связей, целевой кейс и подписанный token", () => {
+    adapter
+      .previewProjectAction(4, { action: "change_case", ids: [17], caseName: "Город" })
+      .subscribe(value => expect(value.previewToken).toBe("proof"));
+    const preview = http.expectOne(r =>
+      r.url.endsWith("/programs/4/management/projects/actions/preview/"),
+    );
+    expect(preview.request.body).toEqual({ action: "change_case", ids: [17], case_name: "Город" });
+    preview.flush({ preview_token: "proof", can_apply: true, ready_count: 1, items: [] });
+    adapter
+      .applyProjectAction(4, {
+        action: "change_case",
+        ids: [17],
+        caseName: "Город",
+        previewToken: "proof",
+      })
+      .subscribe(value => expect(value.changedCount).toBe(1));
+    const apply = http.expectOne(r =>
+      r.url.endsWith("/programs/4/management/projects/actions/apply/"),
+    );
+    expect(apply.request.body).toEqual({
+      action: "change_case",
+      ids: [17],
+      case_name: "Город",
+      preview_token: "proof",
+    });
+    apply.flush({ changed_count: 1, already_submitted_count: 0 });
+  });
   beforeEach(() => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
