@@ -1,0 +1,55 @@
+<!-- @format -->
+
+<app-modal
+  [open]="open()"
+  labelledBy="profile-skills-title"
+  bodyClass="profile-skills-modal"
+  (openChange)="openChange.emit($event)"
+>
+  <section class="profile-skills">
+    <header class="profile-skills__header">
+      <div class="profile-skills__heading">
+        <h2 id="profile-skills-title" class="profile-skills__title" tabindex="-1" cdkFocusInitial>
+          Навыки
+        </h2>
+        <span class="profile-skills__count" aria-label="Количество навыков">{{
+          skills().length
+        }}</span>
+      </div>
+      <button
+        appButton="icon"
+        type="button"
+        class="profile-skills__close"
+        aria-label="Закрыть навыки"
+        (click)="openChange.emit(false)"
+      >
+        <i appIcon icon="cross" appSquare="20" appViewBox="0 0 24 24" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <ul class="profile-skills__list" aria-label="Список навыков" tabindex="0">
+      @for (skill of skills(); track $index) {
+        @let isSoft = skill.category?.name?.includes("Soft skills");
+        <li class="profile-skills__item">
+          <p class="profile-skills__name">{{ skill.name }}</p>
+          <div class="profile-skills__tags">
+            <app-tag
+              class="profile-skills__tag"
+              [class.profile-skills__tag--soft]="isSoft"
+              [color]="isSoft ? 'soft' : 'accent'"
+              appearance="outline"
+              >{{ isSoft ? "soft" : "hard" }}</app-tag
+            >
+            <app-tag
+              class="profile-skills__tag"
+              [class.profile-skills__tag--soft]="isSoft"
+              [color]="isSoft ? 'soft' : 'accent'"
+              appearance="outline"
+              >{{ skill.category?.name }}</app-tag
+            >
+          </div>
+        </li>
+      }
+    </ul>
+  </section>
+</app-modal>

@@ -1,11 +1,32 @@
 <!-- @format -->
 
-<div class="direction-card" (click)="isShowModal = true">
-  <i appIcon [icon]="icon()" appSquare="11" class="direction-card__icon"></i>
-  <p class="text-body-10 direction-card__text">{{ direction() }}</p>
-</div>
+@let isProfileSkills =
+  listType === "profile" && profileInfoType() === "skills" && type() !== "string";
 
-<app-modal [open]="isShowModal" (openChange)="isShowModal = !isShowModal">
+@if (isProfileSkills) {
+  <button
+    type="button"
+    class="direction-card direction-card--skills"
+    aria-haspopup="dialog"
+    [attr.aria-expanded]="isShowModal"
+    (click)="isShowModal = true"
+  >
+    <i appIcon [icon]="icon()" appSquare="11" class="direction-card__icon" aria-hidden="true"></i>
+    <span class="text-body-10 direction-card__text">{{ direction() }}</span>
+  </button>
+  <app-profile-skills-dialog
+    [open]="isShowModal"
+    [skills]="profileSkills()"
+    (openChange)="isShowModal = $event"
+  ></app-profile-skills-dialog>
+} @else {
+  <div class="direction-card" (click)="isShowModal = true">
+    <i appIcon [icon]="icon()" appSquare="11" class="direction-card__icon"></i>
+    <p class="text-body-10 direction-card__text">{{ direction() }}</p>
+  </div>
+}
+
+<app-modal [open]="!isProfileSkills && isShowModal" (openChange)="isShowModal = !isShowModal">
   <div class="cancel">
     <div class="cancel__top">
       <p class="cancel__title text-body-12">{{ direction() }}</p>
@@ -16,37 +37,7 @@
       <p class="text-body-10 cancel__text">{{ about() }}</p>
     } @else {
       @if (listType === "profile") {
-        @if (profileInfoType() === "skills") {
-          <div class="cancel__skills">
-            <ul class="cancel__skills--block">
-              @for (aboutItem of about(); track $index) {
-                <li class="skills__info">
-                  <p class="text-body-12">{{ aboutItem?.name }}</p>
-                  <div class="skills__category">
-                    <app-tag
-                      class="text-body-10"
-                      color="soft"
-                      appearance="outline"
-                      class="skills__category--text"
-                      >{{
-                        aboutItem?.category?.name?.includes("Soft skills") ? "soft" : "hard"
-                      }}</app-tag
-                    >
-                    <app-tag
-                      class="text-body-10"
-                      [color]="
-                        aboutItem?.category?.name?.includes('Soft skills') ? 'soft' : 'accent'
-                      "
-                      appearance="outline"
-                      class="skills__category--text"
-                      >{{ aboutItem?.category?.name }}</app-tag
-                    >
-                  </div>
-                </li>
-              }
-            </ul>
-          </div>
-        } @else {
+        @if (profileInfoType() !== "skills") {
           <ul class="cancel__achievements">
             @if (!isOpenInfo) {
               @for (yearItem of years; track yearItem.id) {

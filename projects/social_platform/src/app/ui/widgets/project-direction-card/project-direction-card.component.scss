@@ -20,6 +20,15 @@
     box-shadow: 1px 3px 5px var(--medium-grey-for-outline);
   }
 
+  &--skills {
+    font: inherit;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+  }
+
   &__icon {
     position: absolute;
     top: -24px;
@@ -235,67 +244,11 @@
   }
 }
 
-.skills {
-  &__info {
-    padding: 20px;
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
-  }
-
-  &__category {
-    app-tag {
-      display: inline-flex;
-      width: 70px;
-    }
-  }
-}
-
 @media screen and (max-width: 999px) {
   .cancel {
     width: 100%;
     height: auto;
     min-height: 160px;
-  }
-
-  .cancel__skills,
-  .cancel__skills--block {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .cancel__skills--block {
-    display: grid;
-    gap: 12px;
-  }
-
-  .skills__info {
-    min-width: 0;
-    padding: 12px;
-    overflow-wrap: anywhere;
-  }
-
-  .skills__category {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-
-    app-tag {
-      flex: 0 1 auto;
-      width: auto;
-      min-width: 0;
-      max-width: 100%;
-    }
-
-    ::ng-deep .tag {
-      width: auto;
-      max-width: 100%;
-      padding: 4px 10px;
-
-      p {
-        margin: 0;
-      }
-    }
   }
 
   :host {
