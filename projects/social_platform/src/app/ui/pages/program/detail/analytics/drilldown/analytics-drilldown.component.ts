@@ -13,7 +13,7 @@ import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
-import { ButtonComponent, IconComponent, LoaderComponent } from "@ui/primitives";
+import { IconComponent, LoaderComponent } from "@ui/primitives";
 import { caseErrorMessage, presentationHref } from "@utils/program-case-analytics";
 import {
   AfterViewInit,
@@ -71,7 +71,6 @@ import {
     NgTemplateOutlet,
     DatePipe,
     RouterLink,
-    ButtonComponent,
     IconComponent,
     LoaderComponent,
   ],

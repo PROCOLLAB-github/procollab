@@ -27,6 +27,9 @@ describe("Case drilldown в существующем Overlay", () => {
   const button = (text: string) =>
     [...dialog().querySelectorAll("button")].find(el => el.textContent?.trim() === text)!;
 
+  const exportButton = () =>
+    dialog().querySelector<HTMLButtonElement>('[aria-label="Выгрузить найденные проекты"]')!;
+
   beforeEach(async () => {
     repo.getCaseProjects.mockReset().mockReturnValue(of(casePage()));
     repo.exportCaseProjects.mockReset();
@@ -58,9 +61,12 @@ describe("Case drilldown в существующем Overlay", () => {
   it("selected: четыре колонки, реальные поля, null presentation и только один modal", async () => {
     await open();
     expect(dialog().querySelector("h2")?.textContent).toBe("Кейс: Цифровая трансформация");
+    expect(dialog().querySelector(".analytics-case__metrics")).toBeNull();
+    expect(dialog().textContent).not.toContain("Все найденные проекты с учетом поиска и фильтров");
+    expect(exportButton().querySelector('[icon="download"]')).not.toBeNull();
     expect(
-      [...dialog().querySelectorAll(".analytics-case__metrics dt")].map(el => el.textContent),
-    ).toEqual(["Проекты", "Участники", "Сдано"]);
+      exportButton().parentElement?.querySelector(".analytics-drilldown__count"),
+    ).not.toBeNull();
     expect([...dialog().querySelectorAll("th")].map(el => el.textContent)).toEqual([
       "Проект",
       "Лидер / команда",
@@ -104,6 +110,10 @@ describe("Case drilldown в существующем Overlay", () => {
       offset: 0,
     });
     expect(dialog().textContent).toMatch(/Найдено: 2\s+из 2/);
+    const download = vi.spyOn(state.cases, "download").mockImplementation(() => {});
+    expect(exportButton().disabled).toBe(false);
+    exportButton().click();
+    expect(download).toHaveBeenCalledExactlyOnceWith();
     button("Сбросить фильтры").click();
     await fixture.whenStable();
     expect(repo.getCaseProjects.mock.lastCall?.[1]).toMatchObject({
@@ -139,7 +149,7 @@ describe("Case drilldown в существующем Overlay", () => {
     await open({ scope: "without_case" });
     expect(dialog().querySelector("h2")?.textContent).toBe("Без выбранного кейса");
     expect(dialog().textContent).toContain("больше недоступен");
-    expect(button("Выгрузить найденные").disabled).toBe(false);
+    expect(exportButton().disabled).toBe(false);
     expect(repo.getCaseProjects.mock.lastCall?.[1].selection).toEqual({ scope: "without_case" });
   });
   it("zero case и поиск без результатов запрещают export", async () => {
@@ -154,7 +164,7 @@ describe("Case drilldown в существующем Overlay", () => {
     );
     await open();
     expect(dialog().textContent).toContain("В этом кейсе пока нет проектов");
-    expect(button("Выгрузить найденные").disabled).toBe(true);
+    expect(exportButton().disabled).toBe(true);
     const input = dialog().querySelector("input")!;
     input.value = "  нет совпадений  ";
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -163,18 +173,18 @@ describe("Case drilldown в существующем Overlay", () => {
     await fixture.whenStable();
     expect(repo.getCaseProjects.mock.lastCall?.[1].search).toBe("нет совпадений");
     expect(dialog().textContent).toContain("По запросу ничего не найдено");
-    expect(button("Выгрузить найденные").disabled).toBe(true);
+    expect(exportButton().disabled).toBe(true);
     button("Сбросить фильтры").click();
     await fixture.whenStable();
     expect(input.value).toBe("");
   });
-  it("loading сохраняет metrics и закрытие отменяет request, late response не открывает modal", async () => {
+  it("loading сохраняет закрытие и отмену request, late response не открывает modal", async () => {
     const pending = new Subject();
     repo.getCaseProjects.mockReturnValue(pending);
     await open();
     expect(dialog().textContent).toContain("Загружаем список");
-    expect(dialog().querySelector("dl")?.textContent).toContain("Проекты2");
-    expect(button("Выгрузить найденные").disabled).toBe(true);
+    expect(dialog().querySelector(".analytics-case__metrics")).toBeNull();
+    expect(exportButton().disabled).toBe(true);
     const detached = firstValueFrom(modal.overlayRef!.detachments());
     dialog()
       .querySelector<HTMLButtonElement>('[aria-label="Закрыть детализацию аналитики"]')!
@@ -199,7 +209,7 @@ describe("Case drilldown в существующем Overlay", () => {
     );
     await open();
     expect(dialog().querySelector('[role="alert"]')?.textContent).toContain(message);
-    expect(button("Выгрузить найденные").disabled).toBe(true);
+    expect(exportButton().disabled).toBe(true);
     if (status === 500) {
       repo.getCaseProjects.mockReturnValue(of(casePage()));
       button("Повторить загрузку").click();
@@ -211,13 +221,13 @@ describe("Case drilldown в существующем Overlay", () => {
     repo.getCaseProjects.mockReturnValue(of({ count: 2, results: [{ id: 73 }] }));
     await open();
     expect(dialog().textContent).toContain("пока недоступна на сервере");
-    button("Выгрузить найденные").click();
+    exportButton().click();
     expect(repo.exportCaseProjects).not.toHaveBeenCalled();
   });
   it("noncompetitive: сдача не требуется, evaluation не добавляется", async () => {
     repo.getCaseProjects.mockReturnValue(of(casePage({ submissionApplicable: false })));
     await open();
-    expect(dialog().querySelector("dl")?.textContent).not.toContain("Сдано");
+    expect(dialog().querySelector(".analytics-case__metrics")).toBeNull();
     expect(dialog().querySelector('[data-label="Сдача решения"]')?.textContent).toContain(
       "Не требуется",
     );
