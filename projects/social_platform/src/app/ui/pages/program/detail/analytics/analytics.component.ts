@@ -35,7 +35,7 @@ import {
   AnalyticsFunnelChartComponent,
   AnalyticsFunnelStage,
 } from "./funnel-chart/funnel-chart.component";
-import { ProgramAnalyticsAssignmentScope } from "@domain/program/program-analytics.model";
+import { AnalyticsEvaluationProgressComponent } from "./evaluation-progress/evaluation-progress.component";
 
 interface AnalyticsMetric {
   key: string;
@@ -43,7 +43,6 @@ interface AnalyticsMetric {
   value: number;
   tooltip: string;
   icon?: string;
-  scope?: ProgramAnalyticsAssignmentScope;
 }
 
 interface RegionExportState {
@@ -77,6 +76,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
     AnalyticsRegionChartComponent,
     AnalyticsActivityChartComponent,
     AnalyticsFunnelChartComponent,
+    AnalyticsEvaluationProgressComponent,
   ],
   providers: [ProgramAnalyticsInfoService, ExportFileInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -268,77 +268,14 @@ export class ProgramAnalyticsComponent implements OnInit {
         "solutions-evaluated",
         "Оценено",
         funnel.evaluated,
-        "Сданные проекты, признанные оценёнными по режиму программы.",
+        "Сданные проекты, признанные оцененными по режиму программы.",
       ),
-    ];
-  });
-
-  protected readonly evaluationStatuses = computed<AnalyticsMetric[]>(() => {
-    const status = this.data()?.evaluationStatus;
-    if (!status) return [];
-
-    const metrics = [
-      this.metric(
-        "evaluation-submitted",
-        "Сдано",
-        status.projects.submitted,
-        "Все проекты с отправленным решением.",
-      ),
-    ];
-
-    if (status.mode === "distributed") {
-      metrics.push(
-        this.metric(
-          "evaluation-partial",
-          "Частично оценено",
-          status.projects.partiallyEvaluated,
-          "Хотя бы один назначенный эксперт полностью оценил проект, но не все назначенные эксперты завершили оценивание.",
-        ),
-      );
-    }
-
-    metrics.push(
-      this.metric(
-        "evaluation-evaluated",
-        "Оценено",
-        status.projects.evaluated,
-        status.mode === "open"
-          ? "Проекты, получившие хотя бы одну оценку эксперта."
-          : "Проекты, по которым выполнены все назначения экспертов.",
-      ),
-    );
-    return metrics;
-  });
-
-  protected readonly evaluationChartItems = computed<AnalyticsFunnelStage[]>(() =>
-    this.evaluationStatuses().map<AnalyticsFunnelStage>(item => ({
-      ...item,
-      axisLabel: item.key === "evaluation-partial" ? ["Частично", "оценено"] : [item.label],
-      tone:
-        item.key === "evaluation-submitted"
-          ? "muted"
-          : item.key === "evaluation-evaluated"
-            ? "success"
-            : "accent",
-    })),
-  );
-
-  protected readonly assignmentStatuses = computed<AnalyticsMetric[]>(() => {
-    const assignments = this.data()?.evaluationStatus.assignments;
-    if (!assignments) return [];
-    return [
-      { ...this.metric("assignments-total", "Назначений всего", assignments.total), scope: "all" },
-      {
-        ...this.metric("assignments-evaluated", "Выполнено", assignments.evaluated),
-        scope: "completed",
-      },
-      { ...this.metric("assignments-pending", "Ожидает", assignments.pending), scope: "pending" },
     ];
   });
 
   protected readonly evaluationModeLabel = computed(() =>
     this.data()?.evaluationStatus.mode === "distributed"
-      ? "Распределённое оценивание"
+      ? "Распределенное оценивание"
       : "Открытое оценивание",
   );
 
@@ -351,10 +288,10 @@ export class ProgramAnalyticsComponent implements OnInit {
         : [
             {
               key: "without-visit",
-              label: "Участники ещё не заходили на платформу",
+              label: "Участники еще не заходили на платформу",
               value: overview.attention.participantsWithoutVisit,
               tooltip:
-                "Зарегистрированные участники программы, у которых ещё не зафиксированы ни вход, ни активность на платформе. Участник исчезает из списка после первого зафиксированного посещения.",
+                "Зарегистрированные участники программы, у которых еще не зафиксированы ни вход, ни активность на платформе. Участник исчезает из списка после первого зафиксированного посещения.",
             },
           ];
     return [
@@ -486,7 +423,7 @@ export class ProgramAnalyticsComponent implements OnInit {
 
   private awaitingEvaluationTooltip(mode: "open" | "distributed"): string {
     return mode === "open"
-      ? "Сданные проекты, которые ещё не получили ни одной оценки эксперта."
+      ? "Сданные проекты, которые еще не получили ни одной оценки эксперта."
       : "Сданные проекты без выполненных назначений или с выполненной только частью назначений.";
   }
 }

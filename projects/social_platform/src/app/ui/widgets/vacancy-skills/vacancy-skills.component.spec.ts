@@ -13,7 +13,7 @@ describe("VacancySkillsComponent", () => {
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
     expect(element.querySelectorAll("app-tag")).toHaveLength(3);
-    expect(element.textContent).toContain("Ещё +8");
+    expect(element.textContent).toContain("Еще +8");
     element.querySelector("button")!.click();
     fixture.detectChanges();
     expect(element.querySelectorAll("app-tag")).toHaveLength(11);

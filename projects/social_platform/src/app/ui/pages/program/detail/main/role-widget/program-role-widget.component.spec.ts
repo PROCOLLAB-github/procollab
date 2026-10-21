@@ -213,7 +213,7 @@ describe("ProgramRoleWidgetComponent", () => {
       expect(f.nativeElement.textContent).toContain("1 мин");
       vi.advanceTimersByTime(1000);
       f.detectChanges();
-      expect(f.nativeElement.textContent).toContain("Срок оценивания истёк");
+      expect(f.nativeElement.textContent).toContain("Срок оценивания истек");
       const lastTick = f.componentInstance.now();
       f.destroy();
       vi.advanceTimersByTime(1000);

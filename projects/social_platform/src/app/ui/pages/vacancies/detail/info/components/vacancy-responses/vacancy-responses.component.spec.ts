@@ -74,7 +74,7 @@ describe("VacancyResponsesComponent", () => {
 
   it.each([
     [true, "Принят"],
-    [false, "Отклонён"],
+    [false, "Отклонен"],
   ] as const)("показывает обработанный статус %s без действий", (status, label) => {
     const element = render([response(status)]);
 

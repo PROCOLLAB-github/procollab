@@ -147,7 +147,7 @@ describe("EntityCache", () => {
       expect(latest).toBe("fresh");
     });
 
-    it("не запускает повторный re-fetch если предыдущий ещё летит", () => {
+    it("не запускает повторный re-fetch если предыдущий еще летит", () => {
       swrCache.getOrFetch(1, () => of("initial"));
 
       vi.setSystemTime(new Date(Date.now() + 6000));

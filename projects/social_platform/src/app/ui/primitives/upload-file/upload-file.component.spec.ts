@@ -118,7 +118,7 @@ describe("UploadFileComponent", () => {
     expect(component.onChange).not.toHaveBeenCalled();
     expect(component.loading).toBe(false);
     expect(snackbar.error).toHaveBeenCalledExactlyOnceWith(
-      "Не удалось удалить файл. Попробуйте ещё раз.",
+      "Не удалось удалить файл. Попробуйте еще раз.",
     );
   });
 

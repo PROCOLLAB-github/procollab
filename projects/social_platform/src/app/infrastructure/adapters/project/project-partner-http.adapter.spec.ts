@@ -18,7 +18,7 @@ describe("ProjectPartnerHttpAdapter", () => {
     adapter = TestBed.inject(ProjectPartnerHttpAdapter);
   }
 
-  it("addPartner идёт в POST /projects/:id/companies/ c params", () => {
+  it("addPartner идет в POST /projects/:id/companies/ c params", () => {
     setup();
     api.post.mockReturnValue(of({} as Partner));
     const params = {} as PartnerDto;
@@ -28,7 +28,7 @@ describe("ProjectPartnerHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/", params);
   });
 
-  it("getPartners идёт в GET /projects/:id/companies/list/", () => {
+  it("getPartners идет в GET /projects/:id/companies/list/", () => {
     setup();
     api.get.mockReturnValue(of([] as Partner[]));
 
@@ -37,7 +37,7 @@ describe("ProjectPartnerHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/list/");
   });
 
-  it("editParter идёт в PATCH /projects/:pid/companies/:cid/ c partial", () => {
+  it("editParter идет в PATCH /projects/:pid/companies/:cid/ c partial", () => {
     setup();
     api.patch.mockReturnValue(of([] as Partner[]));
     const params = {} as Pick<PartnerDto, "contribution" | "decisionMaker">;
@@ -47,7 +47,7 @@ describe("ProjectPartnerHttpAdapter", () => {
     expect(api.patch).toHaveBeenCalledExactlyOnceWith("/projects/42/companies/7/", params);
   });
 
-  it("deletePartner идёт в DELETE /projects/:pid/companies/:cid/", () => {
+  it("deletePartner идет в DELETE /projects/:pid/companies/:cid/", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 

@@ -18,7 +18,7 @@ describe("InviteHttpAdapter", () => {
     adapter = TestBed.inject(InviteHttpAdapter);
   }
 
-  it("sendForUser идёт в POST /invites/ с полями user/project/role/specialization", () => {
+  it("sendForUser идет в POST /invites/ с полями user/project/role/specialization", () => {
     setup();
     api.post.mockReturnValue(of({} as Invite));
 
@@ -32,7 +32,7 @@ describe("InviteHttpAdapter", () => {
     });
   });
 
-  it("revokeInvite идёт в DELETE /invites/:id", () => {
+  it("revokeInvite идет в DELETE /invites/:id", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 
@@ -41,7 +41,7 @@ describe("InviteHttpAdapter", () => {
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/invites/5/");
   });
 
-  it("acceptInvite идёт в POST /invites/:id/accept/", () => {
+  it("acceptInvite идет в POST /invites/:id/accept/", () => {
     setup();
     api.post.mockReturnValue(of({} as Invite));
 
@@ -50,7 +50,7 @@ describe("InviteHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/invites/5/accept/", {});
   });
 
-  it("rejectInvite идёт в POST /invites/:id/decline/", () => {
+  it("rejectInvite идет в POST /invites/:id/decline/", () => {
     setup();
     api.post.mockReturnValue(of({} as Invite));
 
@@ -59,7 +59,7 @@ describe("InviteHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/invites/5/decline/", {});
   });
 
-  it("updateInvite идёт в PATCH /invites/:id с role/specialization", () => {
+  it("updateInvite идет в PATCH /invites/:id с role/specialization", () => {
     setup();
     api.patch.mockReturnValue(of({} as Invite));
 
@@ -71,7 +71,7 @@ describe("InviteHttpAdapter", () => {
     });
   });
 
-  it("getMy идёт в GET /invites/", () => {
+  it("getMy идет в GET /invites/", () => {
     setup();
     api.get.mockReturnValue(of([]));
 
@@ -80,7 +80,7 @@ describe("InviteHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/invites/");
   });
 
-  it("getByProject идёт в GET /invites/ c project", () => {
+  it("getByProject идет в GET /invites/ c project", () => {
     setup();
     api.get.mockReturnValue(of([]));
 

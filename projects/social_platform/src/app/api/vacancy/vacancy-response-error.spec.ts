@@ -26,7 +26,7 @@ describe("vacancy response errors", () => {
 
   it("не показывает сырой текст неизвестной или server error", () => {
     expect(getSendVacancyResponseError({ status: 500, error: "error" })).toBe(
-      "Не удалось отправить отклик. Попробуйте ещё раз",
+      "Не удалось отправить отклик. Попробуйте еще раз",
     );
   });
 

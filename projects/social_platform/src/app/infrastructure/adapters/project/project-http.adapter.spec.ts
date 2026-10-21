@@ -19,7 +19,7 @@ describe("ProjectHttpAdapter", () => {
     adapter = TestBed.inject(ProjectHttpAdapter);
   }
 
-  it("fetchAll идёт в GET /projects/ c переданными params", () => {
+  it("fetchAll идет в GET /projects/ c переданными params", () => {
     setup();
     api.get.mockReturnValue(of({} as ProjectListDto));
     const params = new HttpParams().set("limit", "10");
@@ -29,7 +29,7 @@ describe("ProjectHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/", params);
   });
 
-  it("fetchOne идёт в GET /projects/:id/", () => {
+  it("fetchOne идет в GET /projects/:id/", () => {
     setup();
     api.get.mockReturnValue(of({} as ProjectDto));
 
@@ -38,7 +38,7 @@ describe("ProjectHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/");
   });
 
-  it("fetchCount идёт в GET /projects/count/", () => {
+  it("fetchCount идет в GET /projects/count/", () => {
     setup();
     api.get.mockReturnValue(of({} as ProjectCountDto));
 
@@ -47,7 +47,7 @@ describe("ProjectHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/count/");
   });
 
-  it("postCreate идёт в POST /projects/ с пустым телом", () => {
+  it("postCreate идет в POST /projects/ с пустым телом", () => {
     setup();
     api.post.mockReturnValue(of({} as ProjectDto));
 
@@ -56,7 +56,7 @@ describe("ProjectHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/", {});
   });
 
-  it("putUpdate идёт в PUT /projects/:id/ c данными", () => {
+  it("putUpdate идет в PUT /projects/:id/ c данными", () => {
     setup();
     api.put.mockReturnValue(of({} as ProjectDto));
     const data: Partial<ProjectDto> = { name: "n" } as Partial<ProjectDto>;
@@ -66,7 +66,7 @@ describe("ProjectHttpAdapter", () => {
     expect(api.put).toHaveBeenCalledExactlyOnceWith("/projects/42/", data);
   });
 
-  it("deleteOne идёт в DELETE /projects/:id/", () => {
+  it("deleteOne идет в DELETE /projects/:id/", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 
@@ -75,7 +75,7 @@ describe("ProjectHttpAdapter", () => {
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/");
   });
 
-  it("fetchMy идёт в GET /auth/users/projects/ c params", () => {
+  it("fetchMy идет в GET /auth/users/projects/ c params", () => {
     setup();
     api.get.mockReturnValue(of({} as ProjectListDto));
     const params = new HttpParams().set("limit", "5");

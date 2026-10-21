@@ -264,7 +264,7 @@ describe("VacancyDetailInfoService", () => {
 
     expect(ui.sendForm.controls.accompanyingFile.value).toBe("");
     expect(snackbar.error).toHaveBeenCalledExactlyOnceWith(
-      "CV сформировано, но не удалось прикрепить файл. Попробуйте ещё раз.",
+      "CV сформировано, но не удалось прикрепить файл. Попробуйте еще раз.",
     );
     expect(ui.procollabCvLoading()).toBe(false);
   });
@@ -315,6 +315,6 @@ describe("VacancyDetailInfoService", () => {
     expect(getResponsesUseCase.execute).toHaveBeenCalledTimes(2);
     expect(rejectUseCase.execute).toHaveBeenCalledExactlyOnceWith(1);
     expect(ui.responses()).toEqual([declined]);
-    expect(snackbar.success).toHaveBeenCalledWith("Отклик отклонён");
+    expect(snackbar.success).toHaveBeenCalledWith("Отклик отклонен");
   });
 });

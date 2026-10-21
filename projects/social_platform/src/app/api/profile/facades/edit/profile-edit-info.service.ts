@@ -229,7 +229,7 @@ export class ProfileEditInfoService {
 
         this.profileInfoService.applyProfileUpdated(result.value);
         this.profileFormSubmitting$.set(success(undefined));
-        this.snackbarService.success("Профиль сохранён");
+        this.snackbarService.success("Профиль сохранен");
         this.navigationService.profileRedirect(result.value.id);
       });
   }

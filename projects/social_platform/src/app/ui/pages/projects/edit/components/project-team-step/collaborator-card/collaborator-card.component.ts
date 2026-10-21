@@ -55,7 +55,7 @@ export class CollaboratorCardComponent {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            this.error.set("Не удалось исключить участника. Попробуйте ещё раз.");
+            this.error.set("Не удалось исключить участника. Попробуйте еще раз.");
             return;
           }
           this.collaboratorRemoved.emit(result.value);

@@ -66,7 +66,7 @@ export class ProjectFormAutosaveService {
                 if (!result.ok && result.error.kind === "network") {
                   this.enqueue(patch);
                   this.snackbar.error(
-                    "Очистка ссылки на файл ещё не сохранена. Повторим при восстановлении сети.",
+                    "Очистка ссылки на файл еще не сохранена. Повторим при восстановлении сети.",
                   );
                 } else if (!result.ok) {
                   this.snackbar.error(

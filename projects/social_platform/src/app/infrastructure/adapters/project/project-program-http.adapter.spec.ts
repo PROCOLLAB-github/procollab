@@ -19,7 +19,7 @@ describe("ProjectProgramHttpAdapter", () => {
     adapter = TestBed.inject(ProjectProgramHttpAdapter);
   }
 
-  it("assignProjectToProgram идёт в POST /projects/assign-to-program/ c projectId/partnerProgramId", () => {
+  it("assignProjectToProgram идет в POST /projects/assign-to-program/ c projectId/partnerProgramId", () => {
     setup();
     api.post.mockReturnValue(of({} as ProjectAssign));
 
