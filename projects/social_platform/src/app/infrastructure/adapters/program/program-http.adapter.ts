@@ -1,5 +1,13 @@
 /** @format */
 
+import {
+  ProgramAttentionCategory,
+  ProgramAttentionActionQuery,
+  ProgramAttentionPreview,
+  ProgramAttentionSendResult,
+} from "@domain/program/program-attention-actions.model";
+/** @format */
+
 import { inject, Injectable } from "@angular/core";
 import { ProgramRoleWidget } from "@domain/program/program-role-widget.model";
 import { ApiService } from "@corelib";
@@ -36,6 +44,37 @@ import {
 /** HTTP-адаптер программ: `/programs`, `/auth/public-users` (детали, проекты, участники, фильтры, регистрация). */
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {
+  previewAttentionReminder(
+    programId: number,
+    category: ProgramAttentionCategory,
+    query: ProgramAttentionActionQuery,
+  ): Observable<ProgramAttentionPreview> {
+    return this.apiService.post(
+      `/programs/${programId}/project-analytics/attention/${category}/reminder-preview/`,
+      query,
+    );
+  }
+  sendAttentionReminder(
+    programId: number,
+    category: ProgramAttentionCategory,
+    token: string,
+  ): Observable<ProgramAttentionSendResult> {
+    return this.apiService.post(
+      `/programs/${programId}/project-analytics/attention/${category}/reminders/`,
+      { token },
+    );
+  }
+  exportAttention(
+    programId: number,
+    category: ProgramAttentionCategory,
+    query: ProgramAttentionActionQuery,
+  ): Observable<Blob> {
+    return this.apiService.postFile(
+      `/programs/${programId}/project-analytics/attention/${category}/export/`,
+      query,
+    );
+  }
+
   getCaseProjects(programId: number, query: ProgramCaseQuery): Observable<unknown> {
     const params = this.caseParams(query.selection, query)
       .set("limit", query.limit ?? 25)

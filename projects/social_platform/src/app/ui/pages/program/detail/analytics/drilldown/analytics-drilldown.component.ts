@@ -13,7 +13,7 @@ import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
-import { ButtonComponent, LoaderComponent } from "@ui/primitives";
+import { ButtonComponent, IconComponent, LoaderComponent } from "@ui/primitives";
 import { caseErrorMessage, presentationHref } from "@utils/program-case-analytics";
 import {
   AfterViewInit,
@@ -57,7 +57,7 @@ import {
 @Component({
   selector: "app-analytics-drilldown",
   templateUrl: "./analytics-drilldown.component.html",
-  styleUrl: "./analytics-drilldown.component.scss",
+  styleUrls: ["./analytics-drilldown.component.scss", "./analytics-attention.scss"],
   imports: [
     StateComponent,
     PaginationComponent,
@@ -72,6 +72,7 @@ import {
     DatePipe,
     RouterLink,
     ButtonComponent,
+    IconComponent,
     LoaderComponent,
   ],
   providers: [ProgramAnalyticsDrilldownService, ProgramCaseProjectsService],
@@ -90,6 +91,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private trigger: HTMLElement | null = null;
   private focusedView = this.state.view();
+  private focusedPreview = false;
   private previousProgramId: number | null = null;
   protected readonly attached = signal(false);
 
@@ -104,7 +106,10 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   protected readonly waiting = formatAssignmentWaiting;
   protected readonly criterionValue = assignmentCriterionValue;
   protected readonly requestError = analyticsRequestError;
+  protected readonly attentionReasonLabel = (label: string): string =>
+    label.replace(/ё/g, "е").replace(/Ё/g, "Е");
   protected readonly title = computed(() => {
+    if (this.state.preview()) return "Отправить напоминание";
     switch (this.state.view()) {
       case "case": {
         const selection = this.cases.selection();
@@ -115,7 +120,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       case "participants-without-team":
         return "Участники без команды";
       case "participants-without-visit":
-        return "Участники ещё не заходили на платформу";
+        return "Участники еще не заходили на платформу";
       case "projects-awaiting-evaluation":
         return "Работы ожидают оценивания";
       case "projects-not-submitted":
@@ -138,7 +143,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
     () =>
       ({
         all: "Назначений экспертов пока нет",
-        completed: "Завершённых оценок пока нет",
+        completed: "Завершенных оценок пока нет",
         pending: "Все назначения выполнены",
       })[this.state.scope()],
   );
@@ -177,6 +182,11 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
     // Angular render lifecycle, не ожидание DOM: один постоянный heading меняет текст/id.
     afterRenderEffect(() => {
       const view = this.state.view();
+      const preview = !!this.state.preview();
+      if (this.attached() && this.state.open() && preview !== this.focusedPreview) {
+        this.focusedPreview = preview;
+        this.heading.nativeElement.focus();
+      }
       if (this.attached() && this.state.open() && view !== this.focusedView) {
         this.focusedView = view;
         this.heading.nativeElement.focus();
@@ -201,6 +211,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
         }
         this.attached.set(true);
         this.focusedView = this.state.view();
+        this.focusedPreview = !!this.state.preview();
         // Portal уже в DOM. AutoCapture выключен, чтобы CDK не восстанавливал disconnected focus.
         this.trap.focusTrap.attachAnchors();
         this.trap.enabled = true;

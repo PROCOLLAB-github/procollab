@@ -135,6 +135,7 @@ describe("ProgramAnalyticsComponent", () => {
   };
   const exports = {
     loadingExports$: signal(initial()),
+    downloadProgram: vi.fn(),
     downloadProjects: vi.fn(),
     downloadSubmittedProjects: vi.fn(),
     downloadRates: vi.fn(),
@@ -157,6 +158,7 @@ describe("ProgramAnalyticsComponent", () => {
     analytics.initialize.mockClear();
     analytics.retry.mockClear();
     exports.downloadProjects.mockClear();
+    exports.downloadProgram.mockClear();
     exports.downloadSubmittedProjects.mockClear();
     exports.downloadRates.mockClear();
 
@@ -401,7 +403,7 @@ describe("ProgramAnalyticsComponent", () => {
     const root = fixture.nativeElement as HTMLElement;
 
     expect(analytics.initialize).toHaveBeenCalledOnce();
-    expect(root.textContent).toContain(
+    expect(root.textContent).not.toContain(
       "Сводка пути участников от регистрации до экспертной оценки.",
     );
     expect(root.textContent?.toLowerCase()).not.toContain("обезличенная");
@@ -521,7 +523,7 @@ describe("ProgramAnalyticsComponent", () => {
       expect(row.textContent).toContain("Сегодня");
       vi.advanceTimersByTime(60_000);
       fixture.detectChanges();
-      expect(row.textContent).toContain("Срок завершён");
+      expect(row.textContent).toContain("Этап завершен");
       fixture.destroy();
       vi.runOnlyPendingTimers();
       expect(vi.getTimerCount()).toBe(0);
@@ -1101,7 +1103,7 @@ describe("ProgramAnalyticsComponent", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const buttons = fixture.nativeElement.querySelectorAll(
-      ".regions__export",
+      ".regions__export:not(.analytics__export-trigger)",
     ) as NodeListOf<HTMLButtonElement>;
     expect(buttons).toHaveLength(2);
     expect(exportRegions).not.toHaveBeenCalled();
@@ -1133,7 +1135,9 @@ describe("ProgramAnalyticsComponent", () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
-    const buttons = root.querySelectorAll<HTMLButtonElement>(".regions__export");
+    const buttons = root.querySelectorAll<HTMLButtonElement>(
+      ".regions__export:not(.analytics__export-trigger)",
+    );
     expect(buttons[0].disabled).toBe(true);
     expect(buttons[0].title).toBe("Нет данных для выгрузки");
     buttons[0].click();
@@ -1238,30 +1242,40 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("Повторить");
   });
 
-  it("сохраняет существующие действия выгрузки", () => {
+  it("открывает четыре выгрузки одним меню и возвращает фокус после Escape", async () => {
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    const buttons = Array.from(
-      (fixture.nativeElement as HTMLElement).querySelectorAll(".exports__actions app-button"),
-    );
-
-    expect(buttons.length).toBe(3);
-    expect(
-      buttons.every(button => button.querySelector("button")?.classList.contains("button--big")),
-    ).toBe(true);
-
-    buttons
-      .find(button => button.textContent?.includes("Все проекты"))
-      ?.dispatchEvent(new Event("click"));
-    buttons
-      .find(button => button.textContent?.includes("Сданные проекты"))
-      ?.dispatchEvent(new Event("click"));
-    buttons
-      .find(button => button.textContent?.includes("Оценки проектов"))
-      ?.dispatchEvent(new Event("click"));
-
+    const trigger = fixture.nativeElement.querySelector(
+      ".analytics__export-trigger",
+    ) as HTMLButtonElement;
+    expect(trigger.getAttribute("aria-label")).toBe("Выгрузить данные программы");
+    expect(fixture.nativeElement.textContent).not.toContain("Управление программой");
+    expect(document.querySelector('[role="menu"]')).toBeNull();
+    for (const label of ["Вся программа", "Все проекты", "Сданные проекты", "Оценки проектов"]) {
+      trigger.click();
+      await fixture.whenStable();
+      const items = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'));
+      expect(items.map(item => item.textContent?.trim())).toEqual([
+        "Вся программа",
+        "Все проекты",
+        "Сданные проекты",
+        "Оценки проектов",
+      ]);
+      items.find(item => item.textContent?.trim() === label)!.click();
+      await fixture.whenStable();
+      expect(document.querySelector('[role="menu"]')).toBeNull();
+    }
+    expect(exports.downloadProgram).toHaveBeenCalledOnce();
     expect(exports.downloadProjects).toHaveBeenCalledOnce();
     expect(exports.downloadSubmittedProjects).toHaveBeenCalledOnce();
     expect(exports.downloadRates).toHaveBeenCalledOnce();
+    trigger.click();
+    await fixture.whenStable();
+    document
+      .querySelector('[role="menuitem"]')!
+      .dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", keyCode: 27, bubbles: true }));
+    await fixture.whenStable();
+    expect(document.querySelector('[role="menu"]')).toBeNull();
+    expect(document.activeElement).toBe(trigger);
   });
 });
