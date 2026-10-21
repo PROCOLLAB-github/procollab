@@ -1,4 +1,6 @@
 /** @format */
+import { ManagementCriterion } from "./program-criteria.model";
+import { ResultProject } from "./program-results.model";
 
 import { ProgramImageFraming } from "./program-image-framing.model";
 
@@ -110,6 +112,8 @@ export interface ManagementTeam {
   }[];
 }
 export interface ManagementEvaluation {
+  criteria?: ManagementCriterion[];
+  result?: ResultProject | null;
   projectId: number;
   programLinkId: number;
   name: string;

@@ -44,6 +44,9 @@ export class ProgramManagementRepository implements ProgramManagementRepositoryP
   participants(id: number, q: ManagementQuery) {
     return this.adapter.participants(id, q);
   }
+  exportProjects(id: number, q: ManagementQuery) {
+    return this.adapter.exportProjects(id, q);
+  }
   exportParticipants(id: number, q: ManagementQuery) {
     return this.adapter.exportParticipants(id, q);
   }

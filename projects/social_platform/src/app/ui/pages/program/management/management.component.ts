@@ -67,6 +67,7 @@ import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-pre
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
+import { ResultProjectScoresComponent } from "./results/result-project-scores.component";
 import { ManagementResultsComponent } from "./results/results.component";
 import { ManagementOrganizersComponent } from "./organizers/organizers.component";
 import { ManagementRegistrationComponent } from "./registration/registration.component";
@@ -101,6 +102,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
     ManagementResultsComponent,
+    ResultProjectScoresComponent,
     ManagementOrganizersComponent,
     ManagementRegistrationComponent,
   ],
@@ -150,6 +152,16 @@ export class ProgramManagementComponent implements OnInit {
   readonly activitySortLabel = computed(() =>
     this.activityOrder() === "activity_desc" ? "Сначала активные" : "Сначала неактивные",
   );
+  readonly projectFiltersOpen = signal(false);
+  readonly projectFilterCount = signal(0);
+  readonly projectFiltersForm = this.fb.group({
+    case: this.caseFilter,
+    submission: this.submissionFilter,
+    evaluation: this.evaluationFilter,
+  });
+  readonly exportingProjects = signal(false);
+  readonly projectExportError = signal(false);
+  readonly projectExportSuccess = signal(false);
   readonly participantFiltersOpen = signal(false);
   readonly participantFilterCount = signal(0);
   readonly activitySortOptions = [
@@ -185,8 +197,9 @@ export class ProgramManagementComponent implements OnInit {
     if (!this.state.program()?.isCompetitive) return "В программе нет оценивания.";
     const projects = [...this.selectedProjects().values()];
     if (projects.length !== this.selectedRows().size) return "Обновите выбор проектов.";
-    if (projects.some(p => !p.submitted || p.draft))
-      return "Выберите сданные и опубликованные проекты.";
+    if (projects.some(p => !p.submitted)) return "В выборе есть проекты без сданного решения.";
+    if (projects.some(p => p.draft))
+      return "В выборе есть черновики заявок. Команде нужно завершить оформление заявки.";
     if (new Set(projects.map(p => p.caseName)).size > 1)
       return "Для ручного назначения выберите проекты одного кейса.";
     return null;
@@ -497,6 +510,14 @@ export class ProgramManagementComponent implements OnInit {
         this.closeParticipantFilters();
         this.participantFilterError.set(null);
         this.participantExportSuccess.set(false);
+        this.projectExportSuccess.set(false);
+        this.projectExportError.set(false);
+        this.projectFilterCount.set(
+          Number(this.caseFilter.value !== "all") +
+            Number(this.submissionFilter.value !== "all") +
+            Number(this.evaluationFilter.value !== "all"),
+        );
+        this.closeProjectFilters();
         this.state.load({
           programId: id,
           section,
@@ -562,6 +583,66 @@ export class ProgramManagementComponent implements OnInit {
       order,
       offset: 0,
     });
+  }
+  openProjectFilters(): void {
+    const q = this.state.context?.query;
+    this.caseFilter.setValue(
+      q?.caseScope === "selected"
+        ? `case:${q.caseName ?? ""}`
+        : q?.caseScope === "without_case"
+          ? "without_case"
+          : "all",
+    );
+    this.submissionFilter.setValue(q?.submission ?? "all");
+    this.evaluationFilter.setValue(q?.evaluation ?? "all");
+    this.projectFiltersOpen.set(true);
+  }
+  closeProjectFilters(): void {
+    this.projectFiltersOpen.set(false);
+  }
+  resetProjectFilterDraft(): void {
+    this.caseFilter.setValue("all");
+    this.submissionFilter.setValue("all");
+    this.evaluationFilter.setValue("all");
+  }
+  applyProjectFilters(): void {
+    const key = this.caseFilter.value;
+    void this.changeQuery({
+      case_scope: key.startsWith("case:")
+        ? "selected"
+        : key === "without_case"
+          ? "without_case"
+          : null,
+      case_name: key.startsWith("case:") ? key.slice(5) : null,
+      submission: this.state.program()?.isCompetitive ? this.submissionFilter.value : null,
+      evaluation: this.state.program()?.isCompetitive ? this.evaluationFilter.value : null,
+      offset: 0,
+    });
+    this.closeProjectFilters();
+  }
+  exportProjects(): void {
+    const ctx = this.state.context;
+    if (!ctx || this.exportingProjects() || !this.count()) return;
+    this.exportingProjects.set(true);
+    this.projectExportError.set(false);
+    this.projectExportSuccess.set(false);
+    this.state.api
+      .exportProjects(ctx.programId, { ...ctx.query, search: this.search.value.trim() })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.exportingProjects.set(false)),
+      )
+      .subscribe({
+        next: file => {
+          saveAs(file, `program-${ctx.programId}-projects.xlsx`);
+          if (this.state.context?.programId === ctx.programId && this.section() === "projects")
+            this.projectExportSuccess.set(true);
+        },
+        error: () => {
+          if (this.state.context?.programId === ctx.programId && this.section() === "projects")
+            this.projectExportError.set(true);
+        },
+      });
   }
   openParticipantFilters(): void {
     const q = this.state.context?.query;

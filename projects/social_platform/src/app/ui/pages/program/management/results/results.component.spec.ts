@@ -61,6 +61,50 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Результаты программы", () => {
+  it("сохраняет раскрытие эксперта при закрытии и повторном открытии проекта", () => {
+    const { fixture, component } = setup();
+    component.snapshot.update(data => ({
+      ...data!,
+      groups: data!.groups.map((group, index) =>
+        index
+          ? group
+          : {
+              ...group,
+              projects: group.projects.map((row, i) =>
+                i
+                  ? row
+                  : {
+                      ...row,
+                      experts: [
+                        {
+                          userId: 1,
+                          name: "Эксперт",
+                          email: "expert@example.test",
+                          avatar: null,
+                          complete: true,
+                          total: 24,
+                          values: [],
+                        },
+                      ],
+                    },
+              ),
+            },
+      ),
+    }));
+    component.toggle(1);
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector(".results__expert").click();
+    fixture.detectChanges();
+    component.toggle(1);
+    fixture.detectChanges();
+    component.toggle(1);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector(".results__expert").getAttribute("aria-expanded"),
+    ).toBe("true");
+    expect(fixture.nativeElement.querySelector(".results__expert-values")).not.toBeNull();
+  });
+
   it("переставляет баллы, сохраняя места и отделяя предварительный балл", () => {
     const { component } = setup();
     component.order.set("asc");
