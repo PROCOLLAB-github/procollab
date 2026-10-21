@@ -49,3 +49,12 @@ Browser использует fixtures и не выполняет мутации 
 Полный backend suite подтвержден [PostgreSQL CI](https://github.com/PROCOLLAB-github/api/actions/runs/39598299814)
 на финальном runtime SHA c92d997: 1296 tests, OK; отдельные 39 locking/response tests — OK;
 миграции применены к пустой PostgreSQL 15. Порядок внедрения: API + миграция → Angular → ручная dev acceptance.
+
+Дополнительный локальный полный прогон с --keepdb завершился `1296 tests, 1 error` в неизмененном
+`users.tests.test_university_import`: в сохраненной базе после предыдущих TransactionTestCase не осталось
+справочника, который этот тест ожидает от data migration. Отдельный повтор этого теста на новой изолированной
+PostgreSQL прошел (`1 test, OK`); полный CI на чистой базе прошел (`1296 tests, OK`).
+Локальный полный прогон не объявляется успешным. Оба остальных API CI checks (Tests и Lint) — success.
+
+Итог review: требования AC1–AC8 подтверждены в указанном контуре; открытых BLOCKER/MAJOR нет.
+Оба PR направлены в dev и готовы к merge в указанном порядке; merge/deploy выполняет пользователь.
