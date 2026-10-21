@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   Injector,
@@ -64,6 +65,7 @@ import { isFailure } from "@domain/shared/async-state";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyStepComponent {
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
   private readonly skillSearch = viewChild(AutoCompleteInputComponent);
   private readonly vacancySubmitButton = viewChild<unknown, ElementRef<HTMLElement>>(
@@ -112,6 +114,38 @@ export class ProjectVacancyStepComponent {
   protected readonly vacancySubmitFailed = computed(() =>
     isFailure(this.projectVacancyUIService.vacancyIsSubmitting()),
   );
+  protected readonly vacancyActions = this.projectVacancyInfoService;
+  protected readonly visibleVacancies = this.projectVacancyInfoService.visibleVacancies;
+
+  constructor() {
+    effect(() => {
+      if (!this.vacancyActions.actionSuccess()) return;
+      afterNextRender(
+        () => {
+          this.element.nativeElement
+            .querySelector<HTMLButtonElement>('[role="tab"][aria-selected="true"]')
+            ?.focus();
+        },
+        { injector: this.injector },
+      );
+    });
+  }
+
+  onVacancyTabKey(event: KeyboardEvent): void {
+    const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const tab =
+      event.key === "Home"
+        ? "active"
+        : event.key === "End"
+          ? "archived"
+          : this.vacancyActions.activeTab() === "active"
+            ? "archived"
+            : "active";
+    this.vacancyActions.activeTab.set(tab);
+    this.element.nativeElement.querySelector<HTMLButtonElement>(`#vacancy-tab-${tab}`)?.focus();
+  }
 
   protected readonly inlineSkills = this.searchesService.inlineSkills;
   protected readonly projectId = this.projectsEditInfoService.profileId;

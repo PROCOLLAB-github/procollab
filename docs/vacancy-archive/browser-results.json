@@ -1,0 +1,6 @@
+{
+  "checks": 60,
+  "errors": [],
+  "widths": [1440, 768, 390, 320],
+  "scope": "local Angular browser fixtures; no live API mutations"
+}

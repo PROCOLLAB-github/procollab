@@ -19,6 +19,10 @@ export class Vacancy {
   specialization?: string;
   datetimeCreated!: string;
   datetimeUpdated!: string;
+  datetimeClosed?: string | null;
+  /** Ожидающие решения отклики; полная история приходит отдельным полем. */
+  responseCount?: number;
+  totalResponseCount?: number;
   hasResponded = false;
   canRespond = false;
   canManageResponses = false;

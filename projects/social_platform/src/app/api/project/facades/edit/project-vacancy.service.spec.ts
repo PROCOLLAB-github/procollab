@@ -22,6 +22,7 @@ describe("ProjectVacancyService", () => {
   let uiService: ProjectVacancyUIService;
   let postVacancy: ReturnType<typeof vi.fn>;
   let updateVacancy: ReturnType<typeof vi.fn>;
+  let deleteVacancy: ReturnType<typeof vi.fn>;
   let editIndex: WritableSignal<number | null>;
 
   const skill = {
@@ -34,6 +35,7 @@ describe("ProjectVacancyService", () => {
   beforeEach(() => {
     postVacancy = vi.fn(() => of(ok(Object.assign(new Vacancy(), { id: 10 }))));
     updateVacancy = vi.fn(() => of(ok(Object.assign(new Vacancy(), { id: 10 }))));
+    deleteVacancy = vi.fn(() => of(ok(undefined)));
     editIndex = signal<number | null>(null);
 
     TestBed.configureTestingModule({
@@ -56,7 +58,7 @@ describe("ProjectVacancyService", () => {
         },
         { provide: PostVacancyUseCase, useValue: { execute: postVacancy } },
         { provide: UpdateVacancyUseCase, useValue: { execute: updateVacancy } },
-        { provide: DeleteVacancyUseCase, useValue: { execute: vi.fn() } },
+        { provide: DeleteVacancyUseCase, useValue: { execute: deleteVacancy } },
       ],
     });
 
@@ -75,6 +77,124 @@ describe("ProjectVacancyService", () => {
       salary: "50000",
     });
   }
+
+  function seedActionVacancy(isActive = true, totalResponseCount = 0): Vacancy {
+    const vacancy = Object.assign(new Vacancy(), {
+      id: 11,
+      role: "Тестировщик платформы",
+      isActive,
+      totalResponseCount,
+    });
+    uiService.applySetVacancies([vacancy]);
+    return vacancy;
+  }
+
+  it("фильтрует списки и меняет статус только после ответа, защищая двойное подтверждение", () => {
+    const vacancy = seedActionVacancy(true, 3);
+    const request = new Subject<any>();
+    updateVacancy.mockReturnValue(request);
+    uiService.vacancyForm.patchValue({ role: "Несохраненный текст" });
+    service.changeVacancyStatus(11);
+    service.confirmAction();
+    service.confirmAction();
+    service.closeAction();
+    expect(updateVacancy).toHaveBeenCalledTimes(1);
+    expect(updateVacancy).toHaveBeenCalledWith(11, { isActive: false });
+    expect(service.activeVacancies()).toHaveLength(1);
+    expect(service.archivedVacancies()).toHaveLength(0);
+    expect(service.action()).not.toBeNull();
+    request.next(ok({ ...vacancy, isActive: false }));
+    request.complete();
+    expect(service.activeVacancies()).toHaveLength(0);
+    expect(service.archivedVacancies()).toHaveLength(1);
+    expect(service.action()).toBeNull();
+    expect(service.actionBusy()).toBe(false);
+    expect(uiService.vacancyForm.value.role).toBe("Несохраненный текст");
+    service.activeTab.set("archived");
+    expect(service.visibleVacancies()).toHaveLength(1);
+  });
+
+  it("предлагает архив вместо удаления с обработанными откликами", () => {
+    seedActionVacancy(true, 2);
+    service.removeVacancy(11);
+    expect(service.action()?.kind).toBe("blocked-delete");
+    service.confirmAction();
+    expect(deleteVacancy).not.toHaveBeenCalled();
+    expect(updateVacancy).toHaveBeenCalledWith(11, { isActive: false });
+  });
+
+  it("закрывает объяснение удаления архивной вакансии без запроса", () => {
+    seedActionVacancy(false, 2);
+    service.removeVacancy(11);
+    expect(service.actionLabel()).toBe("Понятно");
+    service.confirmAction();
+    expect(deleteVacancy).not.toHaveBeenCalled();
+    expect(updateVacancy).not.toHaveBeenCalled();
+    expect(service.action()).toBeNull();
+  });
+
+  it("показывает отказ сервера при отклике, появившемся после открытия модалки", () => {
+    seedActionVacancy();
+    deleteVacancy.mockReturnValue(
+      of(fail({ cause: { status: 400, error: { code: ["vacancy_has_responses"] } } })),
+    );
+    service.removeVacancy(11);
+    service.confirmAction();
+    expect(service.action()?.kind).toBe("blocked-delete");
+    expect(uiService.vacancies()).toHaveLength(1);
+    expect(service.actionSuccess()).toBe("");
+    expect(service.actionBusy()).toBe(false);
+  });
+
+  it.each(["result", "network"])(
+    "сохраняет карточку и позволяет повторить удаление после %s",
+    kind => {
+      seedActionVacancy();
+      deleteVacancy.mockReturnValue(
+        kind === "result"
+          ? of(fail({ cause: { status: 500 } }))
+          : throwError(() => new Error("network")),
+      );
+      service.removeVacancy(11);
+      expect(deleteVacancy).not.toHaveBeenCalled();
+      service.confirmAction();
+      expect(service.actionError()).toContain("повторите");
+      expect(service.action()).not.toBeNull();
+      expect(uiService.vacancies()).toHaveLength(1);
+      deleteVacancy.mockReturnValue(of(ok(undefined)));
+      service.confirmAction();
+      expect(uiService.vacancies()).toHaveLength(0);
+      expect(service.actionSuccess()).toBe("Вакансия удалена");
+    },
+  );
+
+  it.each(["Сначала опубликуйте проект", ["Сначала опубликуйте проект"]])(
+    "возобновляет набор и показывает объяснение непубличного проекта: %s",
+    detail => {
+      const vacancy = seedActionVacancy(false, 5);
+      updateVacancy.mockReturnValue(
+        of(fail({ cause: { status: 400, error: { is_active: detail } } })),
+      );
+      service.changeVacancyStatus(11);
+      service.confirmAction();
+      expect(service.actionError()).toBe("Сначала опубликуйте проект");
+      expect(service.archivedVacancies()).toHaveLength(1);
+      updateVacancy.mockReturnValue(of(ok({ ...vacancy, isActive: true })));
+      service.confirmAction();
+      expect(updateVacancy).toHaveBeenLastCalledWith(11, { isActive: true });
+      expect(service.activeVacancies()).toHaveLength(1);
+    },
+  );
+
+  it("сохраняет идентичность редактируемой карточки при удалении соседней", () => {
+    const first = seedActionVacancy();
+    uiService.applySetVacancies([first, Object.assign(new Vacancy(), { id: 12, isActive: true })]);
+    editIndex.set(1);
+    service.removeVacancy(11);
+    service.confirmAction();
+    expect(editIndex()).toBe(0);
+    expect(uiService.vacancies()[0].id).toBe(12);
+  });
 
   it("добавляет вакансию и открывает подтверждение только после успешного ответа", () => {
     const request = new Subject<any>();

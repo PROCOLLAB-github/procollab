@@ -5,7 +5,7 @@
     <header class="vacancy__header">
       <h3 class="vacancy__role">{{ item.role }}</h3>
       <app-vacancy-status
-        [label]="item.isActive ? 'Активна' : 'Закрыта'"
+        [label]="item.isActive ? 'Активна' : manageLifecycle() ? 'В архиве' : 'Закрыта'"
         [tone]="item.isActive ? 'success' : 'neutral'"
       ></app-vacancy-status>
     </header>
@@ -13,10 +13,33 @@
       <p class="vacancy__specialization">Ищем: {{ item.specialization }}</p>
     }
     <app-vacancy-skills [skills]="item.requiredSkills || []" [limit]="3"></app-vacancy-skills>
+    @if (manageLifecycle()) {
+      <a class="vacancy__responses" [routerLink]="AppRoutes.office.vacancy(item.id)">
+        {{
+          item.totalResponseCount === undefined
+            ? "Вакансия и отклики"
+            : "Отклики · " + item.totalResponseCount
+        }}
+        <span class="visually-hidden"> — {{ item.role }}</span>
+      </a>
+      @if (!item.isActive && item.datetimeClosed) {
+        <p class="vacancy__date">В архиве с {{ item.datetimeClosed | date: "dd.MM.yyyy" }}</p>
+      }
+    }
     <div class="vacancy__actions">
       <app-button size="big" appearance="outline" [disabled]="disabled()" (click)="onEdit($event)">
         <i appIcon icon="edit-pen" appSquare="12" aria-hidden="true"></i>Редактировать
       </app-button>
+      @if (manageLifecycle()) {
+        <app-button
+          size="big"
+          appearance="outline"
+          [disabled]="disabled()"
+          (click)="onChangeStatus($event)"
+        >
+          {{ item.isActive ? "В архив" : "Вернуть в активные" }}
+        </app-button>
+      }
       <app-button
         size="big"
         appearance="outline"

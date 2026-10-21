@@ -53,6 +53,28 @@
     @include vacancy-ui.actions;
   }
 
+  &__responses {
+    align-self: flex-start;
+    font-size: var(--ui-font-small);
+
+    @include vacancy-ui.link;
+  }
+
+  &__date {
+    font-size: 12px;
+    line-height: 18px;
+
+    @include vacancy-ui.secondary;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
   @media (max-width: 520px) {
     &__header,
     &__actions {

@@ -5,6 +5,7 @@ import { VacancyCardComponent } from "./vacancy-card.component";
 import { provideNgxMask } from "ngx-mask";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { of } from "rxjs";
+import { provideRouter } from "@angular/router";
 
 describe("VacancyCardComponent", () => {
   let component: VacancyCardComponent;
@@ -14,6 +15,7 @@ describe("VacancyCardComponent", () => {
     await TestBed.configureTestingModule({
       imports: [VacancyCardComponent],
       providers: [
+        provideRouter([]),
         provideNgxMask(),
         {
           provide: AuthRepositoryPort,
@@ -42,6 +44,27 @@ describe("VacancyCardComponent", () => {
       isActive,
     };
   }
+
+  it("показывает архив, историю и действие возврата в управляемой карточке", () => {
+    fixture.componentRef.setInput("manageLifecycle", true);
+    fixture.componentRef.setInput("vacancy", { ...createVacancy(false), totalResponseCount: 4 });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("В архиве");
+    expect(fixture.nativeElement.textContent).toContain("Вернуть в активные");
+    expect(fixture.nativeElement.querySelector(".vacancy__responses").textContent).toContain("4");
+    const changed = vi.fn();
+    component.changeStatus.subscribe(changed);
+    fixture.nativeElement.querySelectorAll(".vacancy__actions button")[1].click();
+    expect(changed).toHaveBeenCalledWith(1);
+  });
+
+  it("не подменяет неизвестное число откликов нулем", () => {
+    fixture.componentRef.setInput("manageLifecycle", true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".vacancy__responses").textContent).toContain(
+      "Вакансия и отклики",
+    );
+  });
 
   it("should create", () => {
     expect(component).toBeTruthy();

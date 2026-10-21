@@ -1,234 +1,406 @@
 <!-- @format -->
 
-<div class="project__inner" [class.project__inner--list]="!showInputFields()">
-  <div class="vacancy project__left">
-    @if (showInputFields()) {
-      <form appFormLayout [formGroup]="vacancyForm">
-        @if (role; as role) {
-          <fieldset class="vacancy__role">
-            <label class="field-label">название вакансии</label>
-            <app-input
-              size="big"
-              id="vacancy_role"
-              formControlName="role"
-              [error]="(role | controlError) && vacancySubmitInitiated()"
-              placeholder="напишите роль, которую вы хотите закрыть в вашем проекте"
-            ></app-input>
-            @if ((role | controlError: "required") && vacancySubmitInitiated()) {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-            }
-          </fieldset>
-        }
-        @if (description) {
-          <fieldset class="vacancy__description">
-            <label class="field-label">описание вакансии</label>
-            <app-textarea
-              size="big"
-              id="vacancy_description"
-              [haveHint]="true"
-              [tooltipText]="'Расскажите, кого вы ищете для своего проекта? Опишите подробно, чтобы привлечь именно тех людей, которые вам нужны'"
-              [tooltipPosition]="'right'"
-              [tooltipWidth]="350"
-              formControlName="description"
-              [error]="(description | controlError) && vacancySubmitInitiated()"
-              placeholder="опишите вакансию"
-              [maxLength]="3500"
-            ></app-textarea>
-            @if ((description | controlError: "required") && vacancySubmitInitiated()) {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-            }
-          </fieldset>
-        }
-
-        <div class="vacancy__work">
-          <div class="vacancy__info">
-            @if (requiredExperience; as requiredExperience) {
-              <fieldset>
-                <label class="field-label">опыт</label>
-                <app-select
-                  size="big"
-                  id="requiredExperience"
-                  formControlName="requiredExperience"
-                  placeholder="опыт"
-                  [error]="(requiredExperience | controlError) && vacancySubmitInitiated()"
-                  [selectedId]="selectedRequiredExperienceId()"
-                  [options]="experienceList"
-                ></app-select>
-                @if (requiredExperience | controlError: "required") {
-                  <div class="text-body-10 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                }
-              </fieldset>
-            }
-            @if (workFormat; as workFormat) {
-              <fieldset>
-                <label class="field-label">формат</label>
-                <app-select
-                  size="big"
-                  id="workFormat"
-                  formControlName="workFormat"
-                  [error]="(workFormat | controlError) && vacancySubmitInitiated()"
-                  placeholder="формат"
-                  [selectedId]="selectedWorkFormatId()"
-                  [options]="formatList"
-                ></app-select>
-                @if (workFormat | controlError: "required") {
-                  <div class="text-body-10 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                }
-              </fieldset>
-            }
-          </div>
-
-          @if (isCityVisible()) {
-            @if (city; as city) {
-              <fieldset class="vacancy__city">
-                <label class="field-label" for="city">город</label>
-                <app-input
-                  size="big"
-                  id="city"
-                  formControlName="city"
-                  [error]="(city | controlError) && vacancySubmitInitiated()"
-                  placeholder="укажите город"
-                ></app-input>
-                @if ((city | controlError: "required") && vacancySubmitInitiated()) {
-                  <div class="text-body-10 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                }
-              </fieldset>
-            }
-          }
-
-          <div class="vacancy__additional">
-            @if (salary; as salary) {
-              <fieldset>
-                <label class="field-label">заработная плата</label>
-                <app-input
-                  size="big"
-                  id="salary"
-                  formControlName="salary"
-                  [error]="(salary | controlError) && vacancySubmitInitiated()"
-                  placeholder="заработная плата"
-                ></app-input>
-                @if ((salary | controlError: "required") && vacancySubmitInitiated()) {
-                  <div class="text-body-10 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                }
-              </fieldset>
-            }
-            @if (workSchedule; as workSchedule) {
-              <fieldset>
-                <label class="field-label">график</label>
-                <app-select
-                  size="big"
-                  id="workSchedule"
-                  formControlName="workSchedule"
-                  [error]="(workSchedule | controlError) && vacancySubmitInitiated()"
-                  placeholder="график"
-                  [selectedId]="selectedWorkScheduleId()"
-                  [options]="scheludeList"
-                ></app-select>
-                @if (workSchedule | controlError: "required") {
-                  <div class="text-body-10 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                }
-              </fieldset>
-            }
-          </div>
-        </div>
-
-        <fieldset class="vacancy__search">
-          <label class="field-label">навыки необходимые для кандидата</label>
-          <div class="vacancies">
-            <app-autocomplete-input
-              class="vacancies__input"
-              placeholder="введите навык"
-              searchIcon="box"
-              (openSkillsFunc)="onToggleSkillsGroupsModal()"
-              [suggestions]="inlineSkills()"
-              fieldToDisplay="name"
-              [forceSelect]="true"
-              [clearInputOnSelect]="true"
-              (searchStart)="onSearchSkill($event)"
-              (queryChanged)="cancelSkillSearch()"
-              (optionSelected)="onAddSkill($event)"
-            >
-            </app-autocomplete-input>
-          </div>
-        </fieldset>
-
-        @if (skills; as skills) {
-          <fieldset class="skills-basket">
-            <app-skills-basket
-              formControlName="skills"
-              [error]="skills | controlError"
-            ></app-skills-basket>
-            @if (skills | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-            }
-          </fieldset>
-        }
-      </form>
-    }
+<header class="vacancy-heading">
+  <div>
+    <h2>Вакансии проекта</h2>
+    <p>Управляйте набором в команду и сохраняйте историю откликов.</p>
+  </div>
+  @if (!showInputFields()) {
     <app-button
+      #vacancySubmitButton
       size="big"
       appearance="outline"
-      customTypographyClass="text-body-12"
-      class="vacancy__submit"
-      #vacancySubmitButton
-      [loader]="vacancyIsSubmitting()"
-      [disabled]="vacancyIsSubmitting()"
-      (click)="showInputFields() ? submitVacancy() : createVacancyBlock()"
+      [disabled]="vacancyActions.actionBusy()"
+      (click)="createVacancyBlock()"
     >
-      <span>{{
-        isEditing()
-          ? "Сохранить изменения"
-          : showInputFields()
-            ? "Добавить вакансию"
-            : "Создать вакансию"
-      }}</span>
-      <i appIcon icon="plus" appSquare="10"></i>
+      Создать вакансию <i appIcon icon="plus" appSquare="10" aria-hidden="true"></i>
     </app-button>
-    @if (vacancySubmitFailed()) {
+  }
+</header>
+<div
+  class="vacancy-tabs"
+  role="tablist"
+  aria-label="Статус вакансий"
+  (keydown)="onVacancyTabKey($event)"
+>
+  <button
+    id="vacancy-tab-active"
+    class="vacancy-tabs__item"
+    type="button"
+    role="tab"
+    aria-controls="vacancy-panel-active"
+    [attr.aria-selected]="vacancyActions.activeTab() === 'active'"
+    [attr.tabindex]="vacancyActions.activeTab() === 'active' ? 0 : -1"
+    (click)="vacancyActions.activeTab.set('active')"
+  >
+    Активные · {{ vacancyActions.activeVacancies().length }}
+  </button>
+  <button
+    id="vacancy-tab-archived"
+    class="vacancy-tabs__item"
+    type="button"
+    role="tab"
+    aria-controls="vacancy-panel-archived"
+    [attr.aria-selected]="vacancyActions.activeTab() === 'archived'"
+    [attr.tabindex]="vacancyActions.activeTab() === 'archived' ? 0 : -1"
+    (click)="vacancyActions.activeTab.set('archived')"
+  >
+    Архивные · {{ vacancyActions.archivedVacancies().length }}
+  </button>
+</div>
+<p class="vacancy-list-hint">
+  {{
+    vacancyActions.activeTab() === "active"
+      ? "Активные вакансии принимают отклики в опубликованном публичном проекте."
+      : "Набор закрыт. Здесь хранятся вакансии и история откликов."
+  }}
+</p>
+@if (vacancyActions.actionSuccess()) {
+  <p class="vacancy-notice" role="status" aria-live="polite">
+    {{ vacancyActions.actionSuccess() }}
+  </p>
+}
+<section
+  hidden
+  role="tabpanel"
+  [id]="vacancyActions.activeTab() === 'active' ? 'vacancy-panel-archived' : 'vacancy-panel-active'"
+  [attr.aria-labelledby]="
+    vacancyActions.activeTab() === 'active' ? 'vacancy-tab-archived' : 'vacancy-tab-active'
+  "
+></section>
+<section
+  role="tabpanel"
+  [id]="'vacancy-panel-' + vacancyActions.activeTab()"
+  [attr.aria-labelledby]="'vacancy-tab-' + vacancyActions.activeTab()"
+  tabindex="0"
+>
+  <div class="project__inner" [class.project__inner--list]="!showInputFields()">
+    <div class="vacancy project__left">
+      @if (showInputFields()) {
+        <form appFormLayout [formGroup]="vacancyForm">
+          @if (role; as role) {
+            <fieldset class="vacancy__role">
+              <label class="field-label">название вакансии</label>
+              <app-input
+                size="big"
+                id="vacancy_role"
+                formControlName="role"
+                [error]="(role | controlError) && vacancySubmitInitiated()"
+                placeholder="напишите роль, которую вы хотите закрыть в вашем проекте"
+              ></app-input>
+              @if ((role | controlError: "required") && vacancySubmitInitiated()) {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+            </fieldset>
+          }
+          @if (description) {
+            <fieldset class="vacancy__description">
+              <label class="field-label">описание вакансии</label>
+              <app-textarea
+                size="big"
+                id="vacancy_description"
+                [haveHint]="true"
+                [tooltipText]="'Расскажите, кого вы ищете для своего проекта? Опишите подробно, чтобы привлечь именно тех людей, которые вам нужны'"
+                [tooltipPosition]="'right'"
+                [tooltipWidth]="350"
+                formControlName="description"
+                [error]="(description | controlError) && vacancySubmitInitiated()"
+                placeholder="опишите вакансию"
+                [maxLength]="3500"
+              ></app-textarea>
+              @if ((description | controlError: "required") && vacancySubmitInitiated()) {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+            </fieldset>
+          }
+
+          <div class="vacancy__work">
+            <div class="vacancy__info">
+              @if (requiredExperience; as requiredExperience) {
+                <fieldset>
+                  <label class="field-label">опыт</label>
+                  <app-select
+                    size="big"
+                    id="requiredExperience"
+                    formControlName="requiredExperience"
+                    placeholder="опыт"
+                    [error]="(requiredExperience | controlError) && vacancySubmitInitiated()"
+                    [selectedId]="selectedRequiredExperienceId()"
+                    [options]="experienceList"
+                  ></app-select>
+                  @if (requiredExperience | controlError: "required") {
+                    <div class="text-body-10 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  }
+                </fieldset>
+              }
+              @if (workFormat; as workFormat) {
+                <fieldset>
+                  <label class="field-label">формат</label>
+                  <app-select
+                    size="big"
+                    id="workFormat"
+                    formControlName="workFormat"
+                    [error]="(workFormat | controlError) && vacancySubmitInitiated()"
+                    placeholder="формат"
+                    [selectedId]="selectedWorkFormatId()"
+                    [options]="formatList"
+                  ></app-select>
+                  @if (workFormat | controlError: "required") {
+                    <div class="text-body-10 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  }
+                </fieldset>
+              }
+            </div>
+
+            @if (isCityVisible()) {
+              @if (city; as city) {
+                <fieldset class="vacancy__city">
+                  <label class="field-label" for="city">город</label>
+                  <app-input
+                    size="big"
+                    id="city"
+                    formControlName="city"
+                    [error]="(city | controlError) && vacancySubmitInitiated()"
+                    placeholder="укажите город"
+                  ></app-input>
+                  @if ((city | controlError: "required") && vacancySubmitInitiated()) {
+                    <div class="text-body-10 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  }
+                </fieldset>
+              }
+            }
+
+            <div class="vacancy__additional">
+              @if (salary; as salary) {
+                <fieldset>
+                  <label class="field-label">заработная плата</label>
+                  <app-input
+                    size="big"
+                    id="salary"
+                    formControlName="salary"
+                    [error]="(salary | controlError) && vacancySubmitInitiated()"
+                    placeholder="заработная плата"
+                  ></app-input>
+                  @if ((salary | controlError: "required") && vacancySubmitInitiated()) {
+                    <div class="text-body-10 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  }
+                </fieldset>
+              }
+              @if (workSchedule; as workSchedule) {
+                <fieldset>
+                  <label class="field-label">график</label>
+                  <app-select
+                    size="big"
+                    id="workSchedule"
+                    formControlName="workSchedule"
+                    [error]="(workSchedule | controlError) && vacancySubmitInitiated()"
+                    placeholder="график"
+                    [selectedId]="selectedWorkScheduleId()"
+                    [options]="scheludeList"
+                  ></app-select>
+                  @if (workSchedule | controlError: "required") {
+                    <div class="text-body-10 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  }
+                </fieldset>
+              }
+            </div>
+          </div>
+
+          <fieldset class="vacancy__search">
+            <label class="field-label">навыки необходимые для кандидата</label>
+            <div class="vacancies">
+              <app-autocomplete-input
+                class="vacancies__input"
+                placeholder="введите навык"
+                searchIcon="box"
+                (openSkillsFunc)="onToggleSkillsGroupsModal()"
+                [suggestions]="inlineSkills()"
+                fieldToDisplay="name"
+                [forceSelect]="true"
+                [clearInputOnSelect]="true"
+                (searchStart)="onSearchSkill($event)"
+                (queryChanged)="cancelSkillSearch()"
+                (optionSelected)="onAddSkill($event)"
+              >
+              </app-autocomplete-input>
+            </div>
+          </fieldset>
+
+          @if (skills; as skills) {
+            <fieldset class="skills-basket">
+              <app-skills-basket
+                formControlName="skills"
+                [error]="skills | controlError"
+              ></app-skills-basket>
+              @if (skills | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+              }
+            </fieldset>
+          }
+        </form>
+      }
+      <app-button
+        size="big"
+        appearance="outline"
+        customTypographyClass="text-body-12"
+        class="vacancy__submit"
+        #vacancySubmitButton
+        [loader]="vacancyIsSubmitting()"
+        [disabled]="vacancyIsSubmitting() || vacancyActions.actionBusy()"
+        (click)="showInputFields() ? submitVacancy() : createVacancyBlock()"
+      >
+        <span>{{
+          isEditing()
+            ? "Сохранить изменения"
+            : showInputFields()
+              ? "Добавить вакансию"
+              : "Создать вакансию"
+        }}</span>
+        <i appIcon icon="plus" appSquare="10"></i>
+      </app-button>
+      @if (vacancySubmitFailed()) {
+        <app-state
+          class="vacancy__error"
+          [compact]="true"
+          kind="error"
+          title="Не удалось сохранить вакансию. Попробуйте еще раз."
+        />
+      }
+    </div>
+
+    <div class="project__right">
+      <ul class="vacancy__list">
+        @for (vacancy of visibleVacancies(); track vacancy.id) {
+          <li class="vacancy__item">
+            <app-vacancy-card
+              [vacancy]="vacancy"
+              [disabled]="vacancyIsSubmitting() || vacancyActions.actionBusy()"
+              [manageLifecycle]="true"
+              (changeStatus)="vacancyActions.changeVacancyStatus($event)"
+              (edit)="editVacancy(vacancies().indexOf(vacancy))"
+              (remove)="removeVacancy($event)"
+            ></app-vacancy-card>
+          </li>
+        }
+      </ul>
+    </div>
+
+    @if (!visibleVacancies().length) {
       <app-state
-        class="vacancy__error"
-        [compact]="true"
-        kind="error"
-        title="Не удалось сохранить вакансию. Попробуйте еще раз."
-      />
+        class="vacancy-empty"
+        kind="empty"
+        [title]="
+          vacancyActions.activeTab() === 'active' ? 'Нет активных вакансий' : 'В архиве пока пусто'
+        "
+      >
+        {{
+          vacancyActions.activeTab() === "active"
+            ? "Создайте вакансию или верните существующую из архива."
+            : "Вакансии и история откликов появятся здесь после переноса в архив."
+        }}
+      </app-state>
     }
   </div>
+</section>
 
-  <div class="project__right">
-    <ul class="vacancy__list">
-      @for (vacancy of vacancies(); track vacancy.id) {
-        <li class="vacancy__item">
-          <app-vacancy-card
-            [vacancy]="vacancy"
-            [disabled]="vacancyIsSubmitting()"
-            (edit)="editVacancy(vacancies().indexOf(vacancy))"
-            (remove)="removeVacancy($event)"
-          ></app-vacancy-card>
-        </li>
+@if (vacancyActions.action(); as action) {
+  <app-modal
+    [open]="true"
+    labelledBy="vacancy-action-title"
+    describedBy="vacancy-action-description"
+    bodyClass="vacancy-action-modal"
+    (openChange)="vacancyActions.closeAction()"
+  >
+    <section class="vacancy-action" [attr.aria-busy]="vacancyActions.actionBusy()">
+      <button
+        appButton="icon"
+        type="button"
+        class="vacancy-action__close"
+        aria-label="Закрыть диалог"
+        [disabled]="vacancyActions.actionBusy()"
+        (click)="vacancyActions.closeAction()"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+      <h2 id="vacancy-action-title" tabindex="-1">{{ vacancyActions.actionTitle() }}</h2>
+      <div id="vacancy-action-description">
+        <p class="vacancy-action__name">{{ action.vacancy.role }}</p>
+        @switch (action.kind) {
+          @case ("restore") {
+            <p>
+              Вакансия снова будет принимать новые отклики. Возобновить набор можно только в
+              опубликованном публичном проекте.
+            </p>
+            <p>История и прежние решения сохранятся. Отклоненные отклики не вернутся в ожидание.</p>
+          }
+          @case ("delete") {
+            <p>
+              Вакансия будет удалена без возможности восстановления. Если хотите временно завершить
+              набор, перенесите ее в архив.
+            </p>
+            <p>Удалить вакансию можно только при отсутствии откликов.</p>
+          }
+          @default {
+            @if (action.kind === "blocked-delete") {
+              <p>
+                На вакансию уже есть отклики. Чтобы сохранить историю кандидатов, удаление
+                недоступно, даже после переноса в архив.
+              </p>
+            }
+            @if (action.vacancy.isActive) {
+              <p>
+                Вы закроете набор. Вакансия перестанет принимать новые отклики. История сохранится,
+                вернуться к набору можно позже.
+              </p>
+              <p class="vacancy-action__warning">
+                Ожидающие решения отклики будут отклонены. Кандидаты получат уведомления по
+                электронной почте.
+              </p>
+            }
+          }
+        }
+      </div>
+      @if (vacancyActions.actionError(); as error) {
+        <p class="vacancy-action__error" role="alert">{{ error }}</p>
       }
-    </ul>
-  </div>
-
-  @if (!vacancies().length) {
-    <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
-  }
-</div>
+      <div class="vacancy-action__buttons">
+        <app-button
+          size="big"
+          appearance="outline"
+          [disabled]="vacancyActions.actionBusy()"
+          (click)="vacancyActions.closeAction()"
+          >Отмена</app-button
+        >
+        <app-button
+          size="big"
+          [color]="action.kind === 'delete' ? 'red' : 'primary'"
+          [loader]="vacancyActions.actionBusy()"
+          [disabled]="vacancyActions.actionBusy()"
+          (click)="vacancyActions.confirmAction()"
+          >{{
+            vacancyActions.actionBusy() ? "Выполняем…" : vacancyActions.actionLabel()
+          }}</app-button
+        >
+      </div>
+    </section>
+  </app-modal>
+}
 
 @if (createdVacancyId(); as vacancyId) {
   <app-vacancy-created-dialog
