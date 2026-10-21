@@ -154,7 +154,19 @@ export class ProjectVacancyUIService {
   }
 
   applyRemoveVacancy(vacancyId: number): void {
+    const editIndex = this.projectFormService.editIndex();
+    const editedId = editIndex === null ? null : this.vacancies()[editIndex]?.id;
     this.vacancies.update(list => list.filter(v => v.id !== vacancyId));
+    if (editedId === vacancyId) this.applyResetVacancyForm();
+    else if (editedId !== null && editedId !== undefined) {
+      const nextIndex = this.vacancies().findIndex(v => v.id === editedId);
+      this.projectFormService.editIndex.set(nextIndex >= 0 ? nextIndex : null);
+    }
+  }
+
+  applyLifecycleVacancy(vacancy: Vacancy): void {
+    // Изменение статуса соседней карточки не сбрасывает несохраненную форму.
+    this.vacancies.update(list => list.map(item => (item.id === vacancy.id ? vacancy : item)));
   }
 
   applySubmitVacancy(vacancy: Vacancy): void {

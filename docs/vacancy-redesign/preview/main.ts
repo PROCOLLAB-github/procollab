@@ -46,6 +46,7 @@ import { ok, fail } from "@domain/shared/result.type";
 import { success } from "@domain/shared/async-state";
 
 const params = new URLSearchParams(location.search);
+const archiveMode = params.has("archive");
 const stress = params.has("stress");
 const skills = [
   "TypeScript",
@@ -78,6 +79,7 @@ const vacancy = (id: number, overrides: Partial<Vacancy> = {}) =>
     id,
     role: "Frontend-разработчик Angular",
     isActive: true,
+    ...(archiveMode ? { totalResponseCount: id === 10 ? 5 : id === 12 ? 8 : 0 } : {}),
     project,
     requiredSkills: skills,
     description:
@@ -159,6 +161,9 @@ let responses = [response(1, null), response(2, true), response(3, false)];
 let request = new Subject<any>();
 let calls = 0;
 let lastCreatePayload: any;
+let actionRequest = new Subject<any>();
+let actionCalls = 0;
+let lastAction: { id: number; payload?: Partial<Vacancy> } | null = null;
 const previewEditProvider = {
   provide: ProjectsEditInfoService,
   useFactory: () => {
@@ -342,8 +347,14 @@ TestBed.configureTestingModule({
     {
       provide: UpdateVacancyUseCase,
       useValue: {
-        execute: (id: number, payload: any) =>
-          of(
+        execute: (id: number, payload: any) => {
+          if (archiveMode && "isActive" in payload) {
+            actionCalls++;
+            lastAction = { id, payload };
+            actionRequest = new Subject<any>();
+            return actionRequest;
+          }
+          return of(
             ok(
               vacancy(id, {
                 ...payload,
@@ -352,10 +363,22 @@ TestBed.configureTestingModule({
                 ),
               }),
             ),
-          ),
+          );
+        },
       },
     },
-    { provide: DeleteVacancyUseCase, useValue: { execute: () => of(ok(undefined)) } },
+    {
+      provide: DeleteVacancyUseCase,
+      useValue: {
+        execute: (id: number) => {
+          if (!archiveMode) return of(ok(undefined));
+          actionCalls++;
+          lastAction = { id };
+          actionRequest = new Subject<any>();
+          return actionRequest;
+        },
+      },
+    },
     { provide: GetVacanciesUseCase, useValue: { execute: () => of(ok(vacancies)) } },
     { provide: SendVacancyResponseUseCase, useValue: { execute: () => of(ok(undefined)) } },
     { provide: GetVacancyResponsesUseCase, useValue: { execute: () => of(ok(responses)) } },
@@ -416,6 +439,30 @@ TestBed.compileComponents().then(async () => {
     list,
     detail,
     projectUi,
+    lifecycle: {
+      get calls() {
+        return actionCalls;
+      },
+      succeed() {
+        const source = projectUi.vacancies().find(v => v.id === lastAction?.id);
+        actionRequest.next(
+          ok(
+            lastAction?.payload
+              ? {
+                  ...source,
+                  ...lastAction.payload,
+                  datetimeClosed: lastAction.payload.isActive ? null : "2026-10-21T12:00:00Z",
+                }
+              : undefined,
+          ),
+        );
+        actionRequest.complete();
+      },
+      fail(status = 500, code?: string) {
+        actionRequest.next(fail({ cause: { status, error: code ? { code: [code] } : {} } }));
+        actionRequest.complete();
+      },
+    },
     rootSearch: TestBed.inject(SearchesService),
     fill() {
       TestBed.inject(ToggleFieldsInfoService).showFields();

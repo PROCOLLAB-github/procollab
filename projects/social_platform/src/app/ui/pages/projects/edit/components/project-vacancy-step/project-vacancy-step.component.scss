@@ -4,6 +4,176 @@
 @use "styles/typography";
 @use "styles/components/vacancy-ui";
 
+.vacancy-heading {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  app-button {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 749px) {
+    flex-direction: column;
+
+    app-button {
+      width: 100%;
+    }
+  }
+
+  h2 {
+    margin-bottom: 8px;
+    font-size: var(--ui-font-h2);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  p {
+    font-size: var(--ui-font-small);
+    color: var(--grey-for-text);
+  }
+}
+
+.vacancy-tabs {
+  display: flex;
+  gap: 8px;
+  width: min(380px, 100%);
+  margin: 12px 0 20px;
+
+  &__item {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 27px;
+    padding: 0 12px;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--grey-for-text);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 14px;
+
+    @include vacancy-ui.focus;
+
+    &[aria-selected="true"] {
+      color: var(--accent-dark);
+      background: var(--white);
+      border-color: var(--accent);
+    }
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+
+    // Поверхность 27 px как в UI Kit; зона касания расширена до 44 px.
+    @media (pointer: coarse) {
+      &::before {
+        position: absolute;
+        inset: -9px 0;
+        content: "";
+      }
+    }
+  }
+}
+
+.vacancy-list-hint,
+.vacancy-notice {
+  margin-bottom: 20px;
+  font-size: var(--ui-font-small);
+  line-height: 1.5;
+  color: var(--grey-for-text);
+}
+
+.vacancy-notice {
+  padding: 12px 16px;
+  color: var(--black);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+}
+
+.vacancy-empty {
+  grid-column: 1 / -1;
+  margin-top: 24px;
+}
+
+::ng-deep .modal .modal__body.vacancy-action-modal {
+  width: min(560px, calc(100vw - 32px));
+}
+
+.vacancy-action {
+  position: relative;
+  max-height: calc(100dvh - 96px);
+  overflow-y: auto;
+  font-size: var(--ui-font-body);
+  line-height: 1.5;
+  color: var(--black);
+  overflow-wrap: anywhere;
+
+  h2 {
+    padding-right: 40px;
+    margin-bottom: 20px;
+    font-size: var(--ui-font-h2);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  p + p {
+    margin-top: 16px;
+  }
+
+  &__name {
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+
+    @include vacancy-ui.focus;
+  }
+
+  &__warning,
+  &__error {
+    padding: 12px;
+    margin-top: 16px;
+    background: var(--accent-light);
+    border-radius: 8px;
+  }
+
+  &__error {
+    border: 1px solid var(--red);
+  }
+
+  &__buttons {
+    @include vacancy-ui.actions;
+
+    justify-content: flex-end;
+    margin-top: 24px;
+
+    @media (max-width: 520px) {
+      flex-direction: column;
+
+      app-button {
+        flex-basis: auto;
+      }
+    }
+  }
+}
+
 .project {
   position: relative;
 
@@ -29,6 +199,7 @@
     display: block;
 
     .project__left {
+      display: none;
       max-width: 280px;
     }
 
