@@ -95,6 +95,22 @@ describe("Контракт HTTP панели организатора", () => {
     expect(selection.request.params.get("order")).toBe("activity_asc");
     selection.flush({ ids: [] });
   });
+  it("список, выбор всех и Excel по умолчанию используют недавнюю активность", () => {
+    const query = { search: "", offset: 0, limit: 20 };
+    adapter.participants(4, query).subscribe();
+    const list = http.expectOne(r => r.url.endsWith("/participants/"));
+    expect(list.request.params.get("order")).toBe("activity_desc");
+    list.flush({ count: 0, results: [] });
+    adapter.selection(4, "participants", query).subscribe();
+    const selection = http.expectOne(r => r.url.endsWith("/participants/selection/"));
+    expect(selection.request.params.get("order")).toBe("activity_desc");
+    selection.flush({ ids: [] });
+    adapter.exportParticipants(4, query).subscribe();
+    const file = http.expectOne(r => r.url.endsWith("/participants/export/"));
+    expect(file.request.params.get("order")).toBe("activity_desc");
+    file.flush(new Blob(["xlsx"]));
+  });
+
   it("версия PATCH не теряет точность при преобразовании JSON", () => {
     const version = "2026-10-17T12:34:56.123456Z";
     adapter

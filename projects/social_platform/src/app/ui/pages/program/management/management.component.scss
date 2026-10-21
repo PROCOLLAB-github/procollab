@@ -880,13 +880,17 @@
   min-height: 44px;
 
   .management__filter-trigger { width: 120px; }
-  .management__sort-trigger { width: 176px; }
+  .management__sort-trigger { width: 200px; }
 
   .ui-button {
     gap: 8px;
     padding-inline: 12px;
     white-space: nowrap;
   }
+}
+
+.management__sort-trigger[aria-expanded="true"] .management__sort-chevron {
+  transform: rotate(180deg);
 }
 
 .management__sort-menu {
@@ -932,6 +936,11 @@
     justify-content: center;
     width: 16px;
     height: 16px;
+  }
+
+  .management__sort-check {
+    margin-inline-start: auto;
+    color: var(--accent);
   }
 
   &:hover,
@@ -1000,11 +1009,14 @@
 
   .management__toolbar-actions {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 104px minmax(0, 1fr);
     gap: 8px;
   }
 
-  .management__toolbar-slot .ui-button { width: 100%; }
+  .management__toolbar-slot .ui-button {
+    width: 100%;
+    padding-inline: 8px;
+  }
 }
 
 .management__table td.management__row-actions {

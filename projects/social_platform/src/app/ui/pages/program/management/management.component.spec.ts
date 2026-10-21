@@ -454,7 +454,10 @@ describe("Списки управления программой в DOM", () => 
 
   it("меню сортировки содержит два явных направления и не меняет порядок до выбора", async () => {
     const { component, harness, state, element } = await setup();
-    expect(state.context?.query.order).toBe("registration");
+    expect(state.context?.query.order).toBe("activity_desc");
+    expect(element().querySelector(".management__sort-trigger")?.textContent?.trim()).toBe(
+      "Сначала активные",
+    );
     element().querySelector<HTMLButtonElement>(".management__sort-trigger")!.click();
     harness.detectChanges();
     await vi.waitFor(() =>
@@ -462,13 +465,25 @@ describe("Списки управления программой в DOM", () => 
     );
     const options = [...document.querySelectorAll<HTMLButtonElement>("[role=menuitemradio]")];
     expect(options.map(n => n.textContent?.trim())).toEqual([
-      "Сначала недавно активные",
-      "Сначала давно активные",
+      "Сначала активные",
+      "Сначала неактивные",
     ]);
-    expect(options.map(n => n.getAttribute("aria-checked"))).toEqual(["false", "false"]);
+    expect(options.map(n => n.getAttribute("aria-checked"))).toEqual(["true", "false"]);
+    expect(options[0].querySelector(".management__sort-check")).toBeTruthy();
+    expect(options[1].querySelector(".management__sort-check")).toBeNull();
     options[1].click();
     await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_asc"));
-    expect(component.activitySortLabel()).toBe("Сначала давно активные");
+    expect(component.activitySortLabel()).toBe("Сначала неактивные");
+    harness.detectChanges();
+    expect(element().querySelector(".management__sort-trigger")?.textContent?.trim()).toBe(
+      "Сначала неактивные",
+    );
+  });
+
+  it("старая ссылка с порядком регистрации открывает новый порядок по умолчанию", async () => {
+    const { component, state } = await setup("participants", "?order=registration");
+    expect(state.context?.query.order).toBe("activity_desc");
+    expect(component.activitySortLabel()).toBe("Сначала активные");
   });
 
   async function materialDialog() {
