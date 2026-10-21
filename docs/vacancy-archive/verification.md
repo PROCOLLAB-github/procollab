@@ -46,4 +46,6 @@ Browser использует fixtures и не выполняет мутации 
 включая черновики, сохраняются в архиве, поскольку причина закрытия ранее не фиксировалась.
 
 Не проверены deployed dev, реальная доставка email и полный frontend suite. Эти проверки не объявляются пройденными.
-Полный backend suite запускает CI PR. Порядок внедрения: API + миграция → Angular → ручная dev acceptance.
+Полный backend suite подтвержден [PostgreSQL CI](https://github.com/PROCOLLAB-github/api/actions/runs/39598299814)
+на финальном runtime SHA c92d997: 1296 tests, OK; отдельные 39 locking/response tests — OK;
+миграции применены к пустой PostgreSQL 15. Порядок внедрения: API + миграция → Angular → ручная dev acceptance.
