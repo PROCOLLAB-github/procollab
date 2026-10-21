@@ -18,7 +18,7 @@ describe("ProjectNewsHttpAdapter", () => {
     adapter = TestBed.inject(ProjectNewsHttpAdapter);
   }
 
-  it("fetchNews идёт в GET /projects/:id/news/ c limit=100", () => {
+  it("fetchNews идет в GET /projects/:id/news/ c limit=100", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
@@ -29,7 +29,7 @@ describe("ProjectNewsHttpAdapter", () => {
     expect(params?.get("limit")).toBe("100");
   });
 
-  it("fetchNewsDetail идёт в GET /projects/:pid/news/:nid", () => {
+  it("fetchNewsDetail идет в GET /projects/:pid/news/:nid", () => {
     setup();
     api.get.mockReturnValue(of({} as FeedNews));
 
@@ -38,7 +38,7 @@ describe("ProjectNewsHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/");
   });
 
-  it("addNews идёт в POST /projects/:id/news/ с body", () => {
+  it("addNews идет в POST /projects/:id/news/ с body", () => {
     setup();
     api.post.mockReturnValue(of({} as FeedNews));
     const body = { text: "t", files: ["f"] };
@@ -48,7 +48,7 @@ describe("ProjectNewsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/news/", body);
   });
 
-  it("setNewsViewed идёт в POST /projects/:pid/news/:nid/set_viewed/", () => {
+  it("setNewsViewed идет в POST /projects/:pid/news/:nid/set_viewed/", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -57,7 +57,7 @@ describe("ProjectNewsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/set_viewed/", {});
   });
 
-  it("deleteNews идёт в DELETE /projects/:pid/news/:nid/", () => {
+  it("deleteNews идет в DELETE /projects/:pid/news/:nid/", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 
@@ -66,7 +66,7 @@ describe("ProjectNewsHttpAdapter", () => {
     expect(api.delete).toHaveBeenCalledExactlyOnceWith("/projects/42/news/9/");
   });
 
-  it("toggleLike идёт в POST /projects/:pid/news/:nid/set_liked/ c is_liked", () => {
+  it("toggleLike идет в POST /projects/:pid/news/:nid/set_liked/ c is_liked", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -77,7 +77,7 @@ describe("ProjectNewsHttpAdapter", () => {
     });
   });
 
-  it("editNews идёт в PATCH /projects/:pid/news/:nid/ c частичными данными", () => {
+  it("editNews идет в PATCH /projects/:pid/news/:nid/ c частичными данными", () => {
     setup();
     api.patch.mockReturnValue(of({} as FeedNews));
     const patch = { text: "new" };

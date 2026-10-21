@@ -55,10 +55,10 @@ describe("Окно выбора проекта", () => {
     fixture.componentRef.setInput("selectedProjectId", 12);
     await fixture.whenStable();
     expect(send.disabled).toBe(false);
-    fixture.componentRef.setInput("error", { kind: "already_invited", message: "Уже приглашён" });
+    fixture.componentRef.setInput("error", { kind: "already_invited", message: "Уже приглашен" });
     await fixture.whenStable();
     expect(list.querySelector('[role="alert"]')).toBeNull();
-    expect(dialog.querySelector('[role="alert"]')?.textContent).toContain("Уже приглашён");
+    expect(dialog.querySelector('[role="alert"]')?.textContent).toContain("Уже приглашен");
     fixture.componentRef.setInput("loading", true);
     await fixture.whenStable();
     expect(send.disabled).toBe(true);

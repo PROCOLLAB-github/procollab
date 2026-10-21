@@ -27,7 +27,7 @@ describe("ProjectRatingHttpAdapter", () => {
     previous: string;
   } = () => ({ count: 0, results: [], next: "", previous: "" });
 
-  it("getAll идёт в GET /rate-project/:programId c params", () => {
+  it("getAll идет в GET /rate-project/:programId c params", () => {
     setup();
     api.get.mockReturnValue(of(pagination()));
     const params = new HttpParams().set("limit", "10");
@@ -37,7 +37,7 @@ describe("ProjectRatingHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/rate-project/5", params);
   });
 
-  it("postFilters идёт в POST /rate-project/:programId c query и body", () => {
+  it("postFilters идет в POST /rate-project/:programId c query и body", () => {
     setup();
     api.post.mockReturnValue(of(pagination()));
     const params = new HttpParams().set("limit", "10");
@@ -58,7 +58,7 @@ describe("ProjectRatingHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/rate-project/5", { filters: {} });
   });
 
-  it("rate идёт в POST /rate-project/rate/:projectId c массивом оценок", () => {
+  it("rate идет в POST /rate-project/rate/:projectId c массивом оценок", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
     const scores = [] as ProjectRatingCriterionOutput[];

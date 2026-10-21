@@ -17,7 +17,7 @@ describe("ChatHttpAdapter", () => {
     adapter = TestBed.inject(ChatHttpAdapter);
   }
 
-  it("loadMessages идёт в GET /chats/projects/:id/messages/ c offset/limit", () => {
+  it("loadMessages идет в GET /chats/projects/:id/messages/ c offset/limit", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
@@ -40,7 +40,7 @@ describe("ChatHttpAdapter", () => {
     expect(params?.has("limit")).toBe(false);
   });
 
-  it("loadProjectFiles идёт в GET /chats/projects/:id/files", () => {
+  it("loadProjectFiles идет в GET /chats/projects/:id/files", () => {
     setup();
     api.get.mockReturnValue(of([]));
 
@@ -49,7 +49,7 @@ describe("ChatHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/chats/projects/42/files/");
   });
 
-  it("hasUnreads идёт в GET /chats/has-unreads/", () => {
+  it("hasUnreads идет в GET /chats/has-unreads/", () => {
     setup();
     api.get.mockReturnValue(of({ hasUnreads: true }));
 

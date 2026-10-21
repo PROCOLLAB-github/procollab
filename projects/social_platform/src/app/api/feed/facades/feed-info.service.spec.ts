@@ -91,7 +91,7 @@ describe("FeedInfoService", () => {
     expect(ui.feedPage()).toBe(12);
   });
 
-  it("обрабатывает лайк новости при совпадении её id с id проекта", () => {
+  it("обрабатывает лайк новости при совпадении ее id с id проекта", () => {
     const { ui, toggle, service } = setup([]);
     const news = {
       typeModel: "news",

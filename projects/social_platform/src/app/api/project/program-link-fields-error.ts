@@ -35,7 +35,7 @@ export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsErro
 export function programLinkFieldsErrorMessage(error: ProgramLinkFieldsError): string {
   switch (error.kind) {
     case "submission_closed":
-      return "Срок подачи проектов в программу завершён.";
+      return "Срок подачи проектов в программу завершен.";
     case "already_submitted":
       return "Проект уже был сдан на проверку.";
     case "not_competitive":
@@ -45,10 +45,10 @@ export function programLinkFieldsErrorMessage(error: ProgramLinkFieldsError): st
     case "case_unavailable":
       return "Выбранный кейс больше недоступен. Выберите актуальный кейс.";
     case "network":
-      return "Не удалось сохранить данные. Проверьте подключение и попробуйте ещё раз.";
+      return "Не удалось сохранить данные. Проверьте подключение и попробуйте еще раз.";
     case "server":
-      return "Не удалось сохранить дополнительные сведения. Попробуйте ещё раз позже.";
+      return "Не удалось сохранить дополнительные сведения. Попробуйте еще раз позже.";
     default:
-      return "Не удалось сохранить дополнительные сведения. Попробуйте ещё раз.";
+      return "Не удалось сохранить дополнительные сведения. Попробуйте еще раз.";
   }
 }

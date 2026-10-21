@@ -60,7 +60,7 @@ describe("OpenVacancyComponent", () => {
       ),
     ).toEqual(["QA", "Postman", "API"]);
     const toggle = element.querySelector<HTMLButtonElement>(".skills__toggle")!;
-    expect(toggle.textContent?.trim()).toBe("Ещё +3");
+    expect(toggle.textContent?.trim()).toBe("Еще +3");
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
     toggle.click();
     fixture.detectChanges();

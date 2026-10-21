@@ -58,7 +58,7 @@ describe("CourseDetailUIInfoService.applyCourseData", () => {
     service = TestBed.inject(CourseDetailUIInfoService);
   });
 
-  it("не поднимает флаги, если нет завершённых модулей", () => {
+  it("не поднимает флаги, если нет завершенных модулей", () => {
     const structure = buildStructure(1, [
       buildModule(1, "in_progress"),
       buildModule(2, "not_started"),
@@ -83,7 +83,7 @@ describe("CourseDetailUIInfoService.applyCourseData", () => {
     expect(storage.isSeen(1, 1)).toBe(true);
   });
 
-  it("поднимает isCourseCompleted, если все модули завершены и один ещё не просмотрен", () => {
+  it("поднимает isCourseCompleted, если все модули завершены и один еще не просмотрен", () => {
     const structure = buildStructure(1, [buildModule(1, "completed"), buildModule(2, "completed")]);
 
     service.applyCourseData(structure);

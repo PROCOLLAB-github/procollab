@@ -26,7 +26,7 @@ describe("AuthHttpAdapter", () => {
     adapter = TestBed.inject(AuthHttpAdapter);
   }
 
-  it("login идёт в POST /api/token/ с email/password", () => {
+  it("login идет в POST /api/token/ с email/password", () => {
     setup();
     api.post.mockReturnValue(of({} as LoginResponse));
 
@@ -38,7 +38,7 @@ describe("AuthHttpAdapter", () => {
     });
   });
 
-  it("logout идёт в POST /auth/logout/ с refreshToken из TokenService", () => {
+  it("logout идет в POST /auth/logout/ с refreshToken из TokenService", () => {
     setup();
     tokens.getTokens.mockReturnValue({ access: "a", refresh: "r" });
     api.post.mockReturnValue(of(undefined));
@@ -48,7 +48,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/auth/logout/", { refreshToken: "r" });
   });
 
-  it("register идёт в POST /auth/users/", () => {
+  it("register идет в POST /auth/users/", () => {
     setup();
     api.post.mockReturnValue(of({} as RegisterResponse));
     const data = { email: "e", password: "p" } as unknown as Parameters<typeof adapter.register>[0];
@@ -58,7 +58,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/auth/users/", data);
   });
 
-  it("downloadCV идёт в getFile /auth/users/download_cv/", () => {
+  it("downloadCV идет в getFile /auth/users/download_cv/", () => {
     setup();
     api.getFile.mockReturnValue(of(new Blob()));
 
@@ -67,7 +67,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.getFile).toHaveBeenCalledExactlyOnceWith("/auth/users/download_cv/");
   });
 
-  it("getProfile идёт в GET /auth/users/current/", () => {
+  it("getProfile идет в GET /auth/users/current/", () => {
     setup();
     api.get.mockReturnValue(of({} as User));
 
@@ -100,7 +100,7 @@ describe("AuthHttpAdapter", () => {
     );
   });
 
-  it("getUserRoles идёт в GET /auth/users/types/", () => {
+  it("getUserRoles идет в GET /auth/users/types/", () => {
     setup();
     api.get.mockReturnValue(of([[1, "r"]] as [[number, string]]));
 
@@ -109,7 +109,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/types/");
   });
 
-  it("getLeaderProjects идёт в GET /auth/users/projects/leader/", () => {
+  it("getLeaderProjects идет в GET /auth/users/projects/leader/", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
@@ -118,7 +118,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/projects/leader/");
   });
 
-  it("getChangeableRoles идёт в GET /auth/users/roles/", () => {
+  it("getChangeableRoles идет в GET /auth/users/roles/", () => {
     setup();
     api.get.mockReturnValue(of([[1, "r"]] as [[number, string]]));
 
@@ -127,7 +127,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/roles/");
   });
 
-  it("getUser идёт в GET /auth/users/:id/", () => {
+  it("getUser идет в GET /auth/users/:id/", () => {
     setup();
     api.get.mockReturnValue(of({} as User));
 
@@ -136,7 +136,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/auth/users/7/");
   });
 
-  it("saveAvatar идёт в PATCH /auth/users/:pid с avatar", () => {
+  it("saveAvatar идет в PATCH /auth/users/:pid с avatar", () => {
     setup();
     api.patch.mockReturnValue(of({} as User));
 
@@ -175,7 +175,7 @@ describe("AuthHttpAdapter", () => {
     },
   );
 
-  it("setOnboardingStage идёт в PUT /auth/users/:pid/set_onboarding_stage/", () => {
+  it("setOnboardingStage идет в PUT /auth/users/:pid/set_onboarding_stage/", () => {
     setup();
     api.put.mockReturnValue(of({} as User));
 
@@ -186,7 +186,7 @@ describe("AuthHttpAdapter", () => {
     });
   });
 
-  it("resetPassword идёт в POST /auth/reset_password/ c email", () => {
+  it("resetPassword идет в POST /auth/reset_password/ c email", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -195,7 +195,7 @@ describe("AuthHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/auth/reset_password/", { email: "u@e.com" });
   });
 
-  it("setPassword идёт в POST /auth/reset_password/confirm/ c password/token", () => {
+  it("setPassword идет в POST /auth/reset_password/confirm/ c password/token", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -207,7 +207,7 @@ describe("AuthHttpAdapter", () => {
     });
   });
 
-  it("resendEmail идёт в POST /auth/resend_email/ c email", () => {
+  it("resendEmail идет в POST /auth/resend_email/ c email", () => {
     setup();
     api.post.mockReturnValue(of({} as User));
 

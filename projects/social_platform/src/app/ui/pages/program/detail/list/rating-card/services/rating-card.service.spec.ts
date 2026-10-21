@@ -81,7 +81,7 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.showRatingForm()).toBe(true);
     service.confirmRateProject();
     expect(service.projectConfirmed()).toBe(true);
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.showRatingForm()).toBe(false);
     expect(service.showEditButton()).toBe(true);
     expect(service.isRatingFormDisabled()).toBe(true);
@@ -93,7 +93,7 @@ describe("RatingCardService evaluation modes", () => {
     service.initProject({ ...project(true), ratedExperts: [99], ratedCount: 1, maxRates: 1 });
 
     expect(service.isRatedByCurrentUser()).toBe(true);
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.showEditButton()).toBe(true);
     expect(service.isButtonDisabled()).toBe(false);
   });
@@ -102,7 +102,7 @@ describe("RatingCardService evaluation modes", () => {
     const response = new Subject<ReturnType<typeof ok<void>>>();
     execute.mockReturnValue(response);
     service.initProject(project(true));
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.showEditButton()).toBe(true);
     expect(service.isRatingFormDisabled()).toBe(true);
     service.redoRating();
@@ -120,7 +120,7 @@ describe("RatingCardService evaluation modes", () => {
     response.next(ok(undefined));
     response.complete();
     expect(service.submitLoading()).toBe(false);
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
     expect(service.buttonColor()).toBe("green");
     expect(service.showRatingForm()).toBe(false);
     expect(service.showEditButton()).toBe(true);
@@ -139,7 +139,7 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.submitLoading()).toBe(false);
     expect(service.form().getRawValue()).toEqual({ score: 5 });
     service.confirmRateProject();
-    expect(service.rateButtonText()).toBe("проект оценён");
+    expect(service.rateButtonText()).toBe("проект оценен");
   });
 
   it("turns a backend deadline 409 into a closed readonly state without exposing the response", () => {
@@ -168,7 +168,7 @@ describe("RatingCardService evaluation modes", () => {
     expect(service.evaluationClosed()).toBe(true);
     expect(service.showConfirmRateModal()).toBe(false);
     expect(service.rateButtonText()).toBe("оценивание завершено");
-    expect(service.buttonTooltip()).toBe("Срок оценивания завершён");
+    expect(service.buttonTooltip()).toBe("Срок оценивания завершен");
     expect(service.isRatingFormDisabled()).toBe(true);
     expect(service.showEditButton()).toBe(false);
     expect(service.isButtonDisabled()).toBe(true);
@@ -216,7 +216,7 @@ describe("RatingCardService evaluation modes", () => {
       expect(programUI.registerDateExpired()).toBe(false);
       expect(service.evaluationDateExpired()).toBe(true);
       expect(service.rateButtonText()).toBe("оценивание завершено");
-      expect(service.buttonTooltip()).toBe("Срок оценивания завершён");
+      expect(service.buttonTooltip()).toBe("Срок оценивания завершен");
       expect(service.showConfirmedState()).toBe(true);
       expect(service.showRatingForm()).toBe(false);
       expect(service.showEditButton()).toBe(false);

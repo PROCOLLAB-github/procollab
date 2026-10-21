@@ -17,7 +17,7 @@ describe("IndustryHttpAdapter", () => {
     adapter = TestBed.inject(IndustryHttpAdapter);
   }
 
-  it("fetchAll идёт в GET /industries/", () => {
+  it("fetchAll идет в GET /industries/", () => {
     setup();
     api.get.mockReturnValue(of([]));
 

@@ -13,7 +13,7 @@ export interface ProgramDeadline {
   dateLabel: string;
   status: string;
   ended: boolean;
-  nearest: boolean;
+  active: boolean;
   usesRegistrationDeadline: boolean;
 }
 
@@ -51,14 +51,16 @@ export function programDeadlines(
   const stages = [
     {
       key: "registration" as const,
-      label: "Конец регистрации",
+      label: "Регистрация",
+      activeLabel: "Идет регистрация",
       datetime: dates.datetimeRegistrationEnds,
       applicable: true,
       usesRegistrationDeadline: false,
     },
     {
       key: "submission" as const,
-      label: "Сдача решений",
+      label: "Прием решений",
+      activeLabel: "Идет прием решений",
       // Matches PartnerProgram.get_project_submission_deadline() on the API.
       datetime: explicitSubmission || dates.datetimeRegistrationEnds,
       applicable: submissionApplicable,
@@ -66,7 +68,8 @@ export function programDeadlines(
     },
     {
       key: "evaluation" as const,
-      label: "Конец оценивания",
+      label: "Оценивание",
+      activeLabel: "Идет оценивание",
       datetime: dates.datetimeEvaluationEnds,
       applicable: true,
       usesRegistrationDeadline: false,
@@ -78,20 +81,16 @@ export function programDeadlines(
     if (!Number.isFinite(date.getTime())) return [];
     return [{ ...stage, date }];
   });
-  const nearest = Math.min(
-    ...valid
-      .filter(stage => stage.date.getTime() >= now.getTime())
-      .map(stage => stage.date.getTime()),
-  );
+  const active = valid.find(stage => stage.date.getTime() >= now.getTime());
 
   return valid.map(stage => ({
     key: stage.key,
-    label: stage.label,
+    label: stage === active ? stage.activeLabel : stage.label,
     datetime: stage.date.toISOString(),
     dateLabel: dateFormat.format(stage.date),
     status: deadlineStatus(stage.date, now),
     ended: stage.date.getTime() < now.getTime(),
-    nearest: stage.date.getTime() === nearest,
+    active: stage === active,
     usesRegistrationDeadline: stage.usesRegistrationDeadline,
   }));
 }

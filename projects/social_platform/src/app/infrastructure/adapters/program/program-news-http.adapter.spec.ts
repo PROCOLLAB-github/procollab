@@ -18,7 +18,7 @@ describe("ProgramNewsHttpAdapter", () => {
     adapter = TestBed.inject(ProgramNewsHttpAdapter);
   }
 
-  it("fetchNews идёт в GET /programs/:id/news/ c limit/offset", () => {
+  it("fetchNews идет в GET /programs/:id/news/ c limit/offset", () => {
     setup();
     api.get.mockReturnValue(of({ count: 0, results: [], next: "", previous: "" }));
 
@@ -30,7 +30,7 @@ describe("ProgramNewsHttpAdapter", () => {
     expect(params?.get("offset")).toBe("20");
   });
 
-  it("setNewsViewed идёт в POST /programs/:pid/news/:nid/set_viewed/", () => {
+  it("setNewsViewed идет в POST /programs/:pid/news/:nid/set_viewed/", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -39,7 +39,7 @@ describe("ProgramNewsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/news/9/set_viewed/", {});
   });
 
-  it("toggleLike идёт в POST /programs/:pid/news/:nid/set_liked/ c is_liked", () => {
+  it("toggleLike идет в POST /programs/:pid/news/:nid/set_liked/ c is_liked", () => {
     setup();
     api.post.mockReturnValue(of(undefined));
 
@@ -50,7 +50,7 @@ describe("ProgramNewsHttpAdapter", () => {
     });
   });
 
-  it("addNews идёт в POST /programs/:id/news/ с body", () => {
+  it("addNews идет в POST /programs/:id/news/ с body", () => {
     setup();
     api.post.mockReturnValue(of({} as FeedNews));
     const body = { text: "t", files: ["f"] };
@@ -60,7 +60,7 @@ describe("ProgramNewsHttpAdapter", () => {
     expect(api.post).toHaveBeenCalledExactlyOnceWith("/programs/5/news/", body);
   });
 
-  it("editNews идёт в PATCH /programs/:pid/news/:nid c частичными данными", () => {
+  it("editNews идет в PATCH /programs/:pid/news/:nid c частичными данными", () => {
     setup();
     api.patch.mockReturnValue(of({} as FeedNews));
     const patch = { text: "new" };
@@ -70,7 +70,7 @@ describe("ProgramNewsHttpAdapter", () => {
     expect(api.patch).toHaveBeenCalledExactlyOnceWith("/programs/5/news/9/", patch);
   });
 
-  it("deleteNews идёт в DELETE /programs/:pid/news/:nid", () => {
+  it("deleteNews идет в DELETE /programs/:pid/news/:nid", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 

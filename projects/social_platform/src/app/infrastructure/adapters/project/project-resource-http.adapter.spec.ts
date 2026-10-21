@@ -18,7 +18,7 @@ describe("ProjectResourceHttpAdapter", () => {
     adapter = TestBed.inject(ProjectResourceHttpAdapter);
   }
 
-  it("addResource идёт в POST /projects/:id/resources/ c projectId в body", () => {
+  it("addResource идет в POST /projects/:id/resources/ c projectId в body", () => {
     setup();
     api.post.mockReturnValue(of({} as Resource));
     const params = { name: "n" } as unknown as Omit<ResourceDto, "projectId">;
@@ -31,7 +31,7 @@ describe("ProjectResourceHttpAdapter", () => {
     });
   });
 
-  it("getResources идёт в GET /projects/:id/resources/", () => {
+  it("getResources идет в GET /projects/:id/resources/", () => {
     setup();
     api.get.mockReturnValue(of([] as Resource[]));
 
@@ -40,7 +40,7 @@ describe("ProjectResourceHttpAdapter", () => {
     expect(api.get).toHaveBeenCalledExactlyOnceWith("/projects/42/resources/");
   });
 
-  it("editResource идёт в PATCH /projects/:pid/resources/:rid/ c projectId в body", () => {
+  it("editResource идет в PATCH /projects/:pid/resources/:rid/ c projectId в body", () => {
     setup();
     api.patch.mockReturnValue(of({} as Resource));
     const params = { name: "n" } as unknown as Omit<ResourceDto, "projectId">;
@@ -53,7 +53,7 @@ describe("ProjectResourceHttpAdapter", () => {
     });
   });
 
-  it("deleteResource идёт в DELETE /projects/:pid/resources/:rid/", () => {
+  it("deleteResource идет в DELETE /projects/:pid/resources/:rid/", () => {
     setup();
     api.delete.mockReturnValue(of(undefined));
 

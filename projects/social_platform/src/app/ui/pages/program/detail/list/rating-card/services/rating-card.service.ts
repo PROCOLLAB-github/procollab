@@ -70,7 +70,7 @@ export class RatingCardService {
 
   readonly rateButtonText = computed(() => {
     if (this.evaluationClosed()) return "оценивание завершено";
-    if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценён";
+    if (this.projectConfirmed() && this.userRatedThisProject()) return "проект оценен";
     if (this.isLimitReached() && !this.userRatedThisProject()) return "лимит оценок достигнут";
     if (this.userRatedThisProject()) return "подтвердить изменения";
     return "оценить проект";
@@ -107,7 +107,7 @@ export class RatingCardService {
   );
 
   readonly buttonTooltip = computed(() => {
-    if (this.evaluationClosed()) return "Срок оценивания завершён";
+    if (this.evaluationClosed()) return "Срок оценивания завершен";
     if (this.isLimitReached() && !this.userRatedThisProject())
       return "Достигнут максимальный лимит оценок";
     if (this.userRatedThisProject()) return "Нажмите для переоценки";
