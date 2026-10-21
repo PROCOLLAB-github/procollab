@@ -21,6 +21,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/rout
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
+import { authLoginUrl } from "@core/lib/models/auth/auth-return-url";
 import { debounceTime, distinctUntilChanged, filter, finalize, startWith } from "rxjs";
 import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
@@ -124,6 +125,9 @@ export class ProgramManagementComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
   readonly paths = AppRoutes;
+  signIn(): void {
+    void this.router.navigateByUrl(authLoginUrl(this.router.url));
+  }
   readonly href = presentationHref;
   readonly evaluationLabel = evaluationLabel;
   readonly section = signal<ManagementSection>("participants");

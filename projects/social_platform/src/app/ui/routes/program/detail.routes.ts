@@ -10,6 +10,7 @@ import { ProgramMembersResolver } from "@ui/pages/program/detail/list/members.re
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/analytics.component";
 import { ProgramManagementComponent } from "@ui/pages/program/management/management.component";
+import { canLeaveManagement } from "./management-leave.guard";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
@@ -18,13 +19,13 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
     path: "management/projects/:linkId/evaluation",
     component: ProgramManagementComponent,
     data: { managementSection: "evaluation" },
-    canDeactivate: [(component: ProgramManagementComponent) => component.canLeave()],
+    canDeactivate: [canLeaveManagement],
     runGuardsAndResolvers: "always",
   },
   {
     path: "management/:section",
     component: ProgramManagementComponent,
-    canDeactivate: [(component: ProgramManagementComponent) => component.canLeave()],
+    canDeactivate: [canLeaveManagement],
     runGuardsAndResolvers: "always",
   },
   {

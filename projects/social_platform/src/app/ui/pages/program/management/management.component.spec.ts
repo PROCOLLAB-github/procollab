@@ -22,6 +22,8 @@ import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/p
 
 @Component({ template: "<h1>Профиль участника</h1>" })
 class ProfileNavigationTarget {}
+@Component({ template: "<h1>Вход</h1>" })
+class LoginNavigationTarget {}
 
 const program = {
   id: 1,
@@ -181,7 +183,7 @@ describe("Списки управления программой в DOM", () => 
       }),
       selected: signal<ManagementProject | null>(null),
       pending: signal(false),
-      error: signal(null),
+      error: signal<HttpErrorResponse | null>(null),
       evaluation: signal(null),
       teamOpen: signal(false),
       teamPending: signal(false),
@@ -216,6 +218,7 @@ describe("Списки управления программой в DOM", () => 
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
+          { path: "auth/login", component: LoginNavigationTarget },
           { path: "office/profile/:userId", component: ProfileNavigationTarget },
           {
             path: "office/program/:programId",
@@ -235,6 +238,33 @@ describe("Списки управления программой в DOM", () => 
     const element = () => harness.routeNativeElement!;
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
+
+  it("при401 показывает рабочую ссылку Войти с возвратом в текущую программу", async () => {
+    const { state, harness, element } = await setup(
+      "participants",
+      "?activity=active&order=activity_desc",
+    );
+    state.error.set(new HttpErrorResponse({ status: 401 }));
+    state.program.set(null as unknown as ProgramManagement);
+    harness.detectChanges();
+    const link = element().querySelector<HTMLButtonElement>("button.ui-button")!;
+    expect(link.textContent?.trim()).toBe("Войти");
+    expect(element().textContent).not.toContain("Повторить");
+    link.click();
+    await vi.waitFor(() => expect(harness.routeNativeElement?.textContent).toContain("Вход"));
+    const router = TestBed.inject(Router);
+    expect(router.parseUrl(router.url).queryParams["returnUrl"]).toBe(
+      "/office/program/1/management/participants?activity=active&order=activity_desc",
+    );
+    expect(state.retry).not.toHaveBeenCalled();
+  });
+  it("ошибку сервера можно повторить обычной кнопкой", async () => {
+    const { state, harness, element } = await setup();
+    state.error.set(new HttpErrorResponse({ status: 500 }));
+    harness.detectChanges();
+    element().querySelector<HTMLButtonElement>("button.ui-button")!.click();
+    expect(state.retry).toHaveBeenCalledOnce();
+  });
 
   function drag(type: string, files: File[] = [], types = ["Files"]): DragEvent {
     const event = new Event(type, { bubbles: true, cancelable: true });
