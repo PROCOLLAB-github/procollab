@@ -13,7 +13,8 @@
       [disabled]="vacancyActions.actionBusy()"
       (click)="createVacancyBlock()"
     >
-      Создать вакансию <i appIcon icon="plus" appSquare="10" aria-hidden="true"></i>
+      <span>Создать вакансию</span>
+      <i appIcon icon="plus" appSquare="10" aria-hidden="true"></i>
     </app-button>
   }
 </header>
@@ -309,11 +310,9 @@
           vacancyActions.activeTab() === 'active' ? 'Нет активных вакансий' : 'В архиве пока пусто'
         "
       >
-        {{
-          vacancyActions.activeTab() === "active"
-            ? "Создайте вакансию или верните существующую из архива."
-            : "Вакансии и история откликов появятся здесь после переноса в архив."
-        }}
+        @if (vacancyActions.activeTab() === "archived") {
+          Вакансии и история откликов появятся здесь после переноса в архив.
+        }
       </app-state>
     }
   </div>
