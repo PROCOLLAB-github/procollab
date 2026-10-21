@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   inject,
   input,
   OnDestroy,
@@ -13,7 +14,8 @@ import {
 } from "@angular/core";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { IconComponent } from "@uilib";
-import { TagComponent } from "@ui/primitives/tag/tag.component";
+import { ProfileSkillsDialogComponent } from "./profile-skills-dialog/profile-skills-dialog.component";
+import { Skill } from "@domain/skills/skill.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { Achievement } from "@domain/auth/user.model";
@@ -35,7 +37,7 @@ import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
     CommonModule,
     IconComponent,
     ModalComponent,
-    TagComponent,
+    ProfileSkillsDialogComponent,
     FileItemComponent,
     AvatarComponent,
     DayjsPipe,
@@ -53,6 +55,11 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
 
   readonly profileInfoType = input<"skills" | "achievements" | undefined>();
   readonly projectInfoType = input<"goals" | "partners" | undefined>();
+
+  protected readonly profileSkills = computed(() => {
+    const about = this.about();
+    return Array.isArray(about) ? (about as Skill[]) : [];
+  });
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
