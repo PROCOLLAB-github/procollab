@@ -362,18 +362,83 @@ describe("Списки управления программой в DOM", () => 
     expect(component.participantFilterError()).toContain("не раньше");
   });
 
-  it("изменение региона в настоящем select передаёт новое значение в URL и запрос списка", async () => {
-    const { harness, state, element } = await setup();
+  it("фильтры редактируются в диалоге и применяются вместе, сохраняя поиск и сортировку", async () => {
+    const { component, harness, state, element } = await setup(
+      "participants",
+      "?search=Анна&order=activity_asc&offset=20",
+    );
     state.participants.set(Object.assign({}, state.participants(), { regionOptions: ["Москва"] }));
+    component.openParticipantFilters();
     harness.detectChanges();
-    const select = element().querySelector<HTMLSelectElement>(
+    await vi.waitFor(() =>
+      expect(document.querySelector(".management__filter-dialog")).toBeTruthy(),
+    );
+    const select = document.querySelector<HTMLSelectElement>(
       ".management__participant-filters select",
     )!;
     select.value = "region:Москва";
     select.dispatchEvent(new Event("change", { bubbles: true }));
+    component.activityFilter.setValue("active");
+    harness.detectChanges();
+    expect(state.context?.query.regionScope).toBe("all");
+    expect(state.context?.query.activity).toBe("all");
+    const submit = new Event("submit", { bubbles: true, cancelable: true });
+    document.querySelector<HTMLFormElement>(".management__filter-dialog")!.dispatchEvent(submit);
+    expect(submit.defaultPrevented).toBe(true);
     await vi.waitFor(() => expect(state.context?.query.region).toBe("Москва"));
-    expect(state.context?.query.regionScope).toBe("selected");
-    expect(select.value).toBe("region:Москва");
+    expect(state.context?.query.activity).toBe("active");
+    expect(state.context?.query.search).toBe("Анна");
+    expect(state.context?.query.order).toBe("activity_asc");
+    expect(state.context?.query.offset).toBe(0);
+    expect(component.participantFilterCount()).toBe(2);
+    expect(component.participantFiltersOpen()).toBe(false);
+    expect(element().querySelector("th button")).toBeNull();
+  });
+
+  it("закрытие отменяет черновик, сброс применяется отдельно и не теряет сортировку", async () => {
+    const { component, state } = await setup(
+      "participants",
+      "?region_scope=without_region&activity=inactive&order=activity_desc&search=Анна",
+    );
+    component.openParticipantFilters();
+    component.regionFilter.setValue("region:Москва");
+    component.activityFilter.setValue("period");
+    component.applyParticipantFilters();
+    expect(component.participantFilterError()).toContain("Укажите");
+    expect(component.participantFiltersOpen()).toBe(true);
+    component.closeParticipantFilters();
+    component.openParticipantFilters();
+    expect(component.regionFilter.value).toBe("without_region");
+    expect(component.activityFilter.value).toBe("inactive");
+    expect(component.participantFilterError()).toBeNull();
+    component.resetParticipantFilterDraft();
+    expect(state.context?.query.regionScope).toBe("without_region");
+    expect(component.participantFilterCount()).toBe(2);
+    component.applyParticipantFilters();
+    await vi.waitFor(() => expect(state.context?.query.activity).toBe("all"));
+    expect(state.context?.query.regionScope).toBe("all");
+    expect(state.context?.query.order).toBe("activity_desc");
+    expect(state.context?.query.search).toBe("Анна");
+    expect(component.participantFilterCount()).toBe(0);
+  });
+
+  it("меню сортировки содержит два явных направления и не меняет порядок до выбора", async () => {
+    const { component, harness, state, element } = await setup();
+    expect(state.context?.query.order).toBe("registration");
+    element().querySelector<HTMLButtonElement>(".management__sort-trigger")!.click();
+    harness.detectChanges();
+    await vi.waitFor(() =>
+      expect(document.querySelectorAll("[role=menuitemradio]").length).toBe(2),
+    );
+    const options = [...document.querySelectorAll<HTMLButtonElement>("[role=menuitemradio]")];
+    expect(options.map(n => n.textContent?.trim())).toEqual([
+      "Сначала недавно активные",
+      "Сначала давно активные",
+    ]);
+    expect(options.map(n => n.getAttribute("aria-checked"))).toEqual(["false", "false"]);
+    options[1].click();
+    await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_asc"));
+    expect(component.activitySortLabel()).toBe("Сначала давно активные");
   });
 
   async function materialDialog() {
@@ -567,16 +632,18 @@ describe("Списки управления программой в DOM", () => 
     const { component, state, element } = await setup("participants", "?activity=never&offset=20");
     expect(component.activityFilter.value).toBe("inactive");
     expect(state.context?.query.activity).toBe("inactive");
-    component.changeParticipantFilter("activity", "active");
+    component.openParticipantFilters();
+    component.activityFilter.setValue("active");
+    component.applyParticipantFilters();
     await vi.waitFor(() => expect(state.context?.query.activity).toBe("active"));
-    component.sortByActivity();
+    component.sortByActivity("activity_desc");
     await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_desc"));
     expect(state.context?.query.offset).toBe(0);
     expect(element().querySelector("th[aria-sort]")?.getAttribute("aria-sort")).toBe("descending");
     component.page(1);
     await vi.waitFor(() => expect(state.context?.query.offset).toBe(20));
     expect(state.context?.query.order).toBe("activity_desc");
-    component.sortByActivity();
+    component.sortByActivity("activity_asc");
     await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_asc"));
     expect(state.context?.query.activity).toBe("active");
     expect(element().querySelector("th[aria-sort]")?.getAttribute("aria-sort")).toBe("ascending");
