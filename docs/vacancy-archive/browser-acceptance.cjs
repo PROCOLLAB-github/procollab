@@ -29,8 +29,11 @@ fs.mkdirSync(output, { recursive: true });
   const confirm = () => page.getByRole("dialog");
   const calls = () => page.evaluate(() => window.__vacancyPreview.lifecycle.calls);
   const succeed = () => page.evaluate(() => window.__vacancyPreview.lifecycle.succeed());
-  const fail = (status, code) =>
-    page.evaluate(([s, c]) => window.__vacancyPreview.lifecycle.fail(s, c), [status, code]);
+  const fail = (status, code, detail) =>
+    page.evaluate(
+      ([s, c, d]) => window.__vacancyPreview.lifecycle.fail(s, c, d),
+      [status, code, detail],
+    );
   for (const width of [1440, 768, 390, 320]) {
     await open(width, width === 320);
     const geometry = await page.getByRole("tab").evaluateAll(nodes =>
@@ -142,6 +145,18 @@ fs.mkdirSync(output, { recursive: true });
       .innerText()
       .then(t => t.includes("Отклоненные отклики не вернутся")),
     "restore preserves past decisions",
+  );
+  await confirm().getByRole("button", { name: "Вернуть в активные", exact: true }).click();
+  const unpublished = "Возобновить набор можно только в опубликованном публичном проекте.";
+  await fail(400, undefined, unpublished);
+  await confirm().getByRole("alert").waitFor();
+  check(
+    (await confirm().getByRole("alert").innerText()) === unpublished,
+    "server reason is visible",
+  );
+  check(
+    (await page.getByRole("tab", { name: "Архивные · 3" }).count()) === 1,
+    "denial keeps archive",
   );
   await confirm().getByRole("button", { name: "Вернуть в активные", exact: true }).click();
   await succeed();

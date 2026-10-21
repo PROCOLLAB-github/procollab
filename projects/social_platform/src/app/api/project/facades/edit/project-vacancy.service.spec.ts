@@ -168,20 +168,23 @@ describe("ProjectVacancyService", () => {
     },
   );
 
-  it("возобновляет набор и показывает объяснение непубличного проекта", () => {
-    const vacancy = seedActionVacancy(false, 5);
-    updateVacancy.mockReturnValue(
-      of(fail({ cause: { status: 400, error: { is_active: ["Сначала опубликуйте проект"] } } })),
-    );
-    service.changeVacancyStatus(11);
-    service.confirmAction();
-    expect(service.actionError()).toBe("Сначала опубликуйте проект");
-    expect(service.archivedVacancies()).toHaveLength(1);
-    updateVacancy.mockReturnValue(of(ok({ ...vacancy, isActive: true })));
-    service.confirmAction();
-    expect(updateVacancy).toHaveBeenLastCalledWith(11, { isActive: true });
-    expect(service.activeVacancies()).toHaveLength(1);
-  });
+  it.each(["Сначала опубликуйте проект", ["Сначала опубликуйте проект"]])(
+    "возобновляет набор и показывает объяснение непубличного проекта: %s",
+    detail => {
+      const vacancy = seedActionVacancy(false, 5);
+      updateVacancy.mockReturnValue(
+        of(fail({ cause: { status: 400, error: { is_active: detail } } })),
+      );
+      service.changeVacancyStatus(11);
+      service.confirmAction();
+      expect(service.actionError()).toBe("Сначала опубликуйте проект");
+      expect(service.archivedVacancies()).toHaveLength(1);
+      updateVacancy.mockReturnValue(of(ok({ ...vacancy, isActive: true })));
+      service.confirmAction();
+      expect(updateVacancy).toHaveBeenLastCalledWith(11, { isActive: true });
+      expect(service.activeVacancies()).toHaveLength(1);
+    },
+  );
 
   it("сохраняет идентичность редактируемой карточки при удалении соседней", () => {
     const first = seedActionVacancy();

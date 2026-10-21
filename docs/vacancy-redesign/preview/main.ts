@@ -458,8 +458,15 @@ TestBed.compileComponents().then(async () => {
         );
         actionRequest.complete();
       },
-      fail(status = 500, code?: string) {
-        actionRequest.next(fail({ cause: { status, error: code ? { code: [code] } : {} } }));
+      fail(status = 500, code?: string, isActiveError?: string) {
+        actionRequest.next(
+          fail({
+            cause: {
+              status,
+              error: isActiveError ? { is_active: isActiveError } : code ? { code: [code] } : {},
+            },
+          }),
+        );
         actionRequest.complete();
       },
     },
