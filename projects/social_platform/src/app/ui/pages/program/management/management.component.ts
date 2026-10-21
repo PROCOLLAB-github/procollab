@@ -985,7 +985,8 @@ export class ProgramManagementComponent implements OnInit {
     });
   }
   projectActionCompleted(result: ProjectActionDone): void {
-    if (this.state.context?.programId !== result.programId || this.section() !== "projects") return;
+    const context = this.state.context;
+    if (!context || context.programId !== result.programId || this.section() !== "projects") return;
     this.projectActionRequest.set(null);
     this.clearRows();
     this.tableMessage.set(
@@ -995,13 +996,12 @@ export class ProgramManagementComponent implements OnInit {
           ? "Проект откреплен от программы."
           : `Сдано решений: ${result.changedCount}.`,
     );
-    const lastOffset =
-      Math.max(
-        0,
-        Math.ceil(
-          (this.count() - (result.action === "detach" ? result.changedCount : 0)) / this.pageSize,
-        ) - 1,
-      ) * this.pageSize;
+    const leavesSelection =
+      result.action === "detach" ||
+      (result.action === "change_case" && context.query.caseScope !== "all") ||
+      (result.action === "submit" && context.query.submission === "not_submitted");
+    const remaining = this.count() - (leavesSelection ? result.changedCount : 0);
+    const lastOffset = Math.max(0, Math.ceil(remaining / this.pageSize) - 1) * this.pageSize;
     if (this.offset() > lastOffset) void this.changeQuery({ offset: lastOffset });
     else this.state.retry();
   }

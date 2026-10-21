@@ -285,6 +285,47 @@ describe("Списки управления программой в DOM", () => 
     expect(state.retry).toHaveBeenCalledOnce();
     expect(component.tableMessage()).toBe("Проект откреплен от программы.");
   });
+  it.each([
+    "?case_scope=selected&case_name=" + encodeURIComponent("Кейс №1") + "&offset=40",
+    "?case_scope=without_case&offset=40",
+  ])("после смены кейса последней строки возвращается на предыдущую страницу: %s", async query => {
+    const { component, state } = await setup("projects", query);
+    state.projects.update(page => page && { ...page, count: 41 });
+    component.projectActionCompleted({
+      programId: 1,
+      action: "change_case",
+      changedCount: 1,
+      alreadySubmittedCount: 0,
+    });
+    await vi.waitFor(() => expect(state.context?.query.offset).toBe(20));
+    expect(state.context?.query.caseScope).toBe(
+      query.includes("without_case") ? "without_case" : "selected",
+    );
+  });
+  it("после массовой сдачи исключает новые решения из фильтра несданных и исправляет страницу", async () => {
+    const { component, state } = await setup("projects", "?submission=not_submitted&offset=40");
+    state.projects.update(page => page && { ...page, count: 41 });
+    component.projectActionCompleted({
+      programId: 1,
+      action: "submit",
+      changedCount: 21,
+      alreadySubmittedCount: 0,
+    });
+    await vi.waitFor(() => expect(state.context?.query.offset).toBe(0));
+    expect(state.context?.query.submission).toBe("not_submitted");
+  });
+  it("без фильтра кейса смена кейса сохраняет текущую страницу", async () => {
+    const { component, state } = await setup("projects", "?offset=40");
+    state.projects.update(page => page && { ...page, count: 41 });
+    component.projectActionCompleted({
+      programId: 1,
+      action: "change_case",
+      changedCount: 1,
+      alreadySubmittedCount: 0,
+    });
+    expect(state.context?.query.offset).toBe(40);
+    expect(state.retry).toHaveBeenCalledOnce();
+  });
   it("при401 показывает рабочую ссылку Войти с возвратом в текущую программу", async () => {
     const { state, harness, element } = await setup(
       "participants",
