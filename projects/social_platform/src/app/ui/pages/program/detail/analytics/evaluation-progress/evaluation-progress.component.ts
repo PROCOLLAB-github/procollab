@@ -84,14 +84,12 @@ export class AnalyticsEvaluationProgressComponent {
       row.completed += Number(assignment.status === "completed");
       groups.set(row.id, row);
     }
-    return [...groups.values()]
-      .sort(
-        (a, b) =>
-          b.total - b.completed - (a.total - a.completed) ||
-          a.name.localeCompare(b.name, "ru") ||
-          a.id - b.id,
-      )
-      .slice(0, 3);
+    return [...groups.values()].sort(
+      (a, b) =>
+        b.total - b.completed - (a.total - a.completed) ||
+        a.name.localeCompare(b.name, "ru") ||
+        a.id - b.id,
+    );
   });
 
   constructor() {

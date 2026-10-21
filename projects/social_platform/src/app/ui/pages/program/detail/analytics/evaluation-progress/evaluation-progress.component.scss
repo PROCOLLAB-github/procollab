@@ -131,7 +131,19 @@
   &__list {
     display: grid;
     gap: 4px;
+
+    // Preserve the former three-row viewport: 3 * 40px + 2 * 4px.
+    max-height: 128px;
     margin-top: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
+  }
+
+  &__list:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 
   &__list li {
