@@ -1,0 +1,145 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+// Portal находится вне host: переопределение ограничено оболочкой окна навыков.
+::ng-deep .modal .modal__body.profile-skills-modal {
+  box-sizing: border-box;
+  display: block;
+  width: min(520px, 90vw);
+  max-width: calc(100vw - 24px);
+  max-height: calc(var(--visual-viewport-height, 100dvh) - 40px);
+  padding: 24px;
+  overflow: hidden;
+  background: var(--white);
+  border-radius: var(--ui-radius-dialog);
+}
+
+.profile-skills {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-height: calc(var(--visual-viewport-height, 100dvh) - 88px);
+  color: var(--ui-text);
+
+  &__header {
+    display: flex;
+    flex-shrink: 0;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--accent-light);
+  }
+
+  &__heading {
+    display: flex;
+    gap: var(--ui-space-sm);
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--ui-font-h2);
+    font-weight: 700;
+    line-height: 27px;
+    overflow-wrap: anywhere;
+  }
+
+  &__count {
+    @include ui-foundation.badge;
+
+    flex-shrink: 0;
+    min-height: 24px;
+    padding: var(--ui-space-xs) var(--ui-space-sm);
+    line-height: 16px;
+    background: var(--accent-light);
+  }
+
+  button.profile-skills__close {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--ui-text);
+    border-radius: var(--rounded-lg);
+  }
+
+  &__list {
+    min-height: 0;
+    max-height: 360px;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    list-style: none;
+    scrollbar-width: thin;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: -2px;
+    }
+
+    @media (max-width: 749px) {
+      max-height: 340px;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-sm);
+    min-width: 0;
+    padding: var(--ui-space-md) 0;
+    border-bottom: 0.5px solid var(--ui-border-subtle);
+  }
+
+  &__name {
+    margin: 0;
+    font-size: var(--ui-font-h3);
+    line-height: 24px;
+    overflow-wrap: anywhere;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  &__tag {
+    display: inline-block;
+    min-width: 0;
+    max-width: 100%;
+
+    // Legacy Tag задает 6px и фиксированную ширину: адаптер действует только в этом окне.
+    ::ng-deep .tag.tag--outline {
+      @include ui-foundation.badge;
+
+      width: auto;
+      min-height: 24px;
+      padding: var(--ui-space-xs) var(--ui-space-sm);
+      line-height: 16px;
+      color: var(--ui-text);
+      white-space: normal;
+      background: var(--accent-light);
+      border: 0.5px solid var(--purple);
+
+      p {
+        min-width: 0;
+        margin: 0;
+        font-size: inherit;
+        line-height: inherit;
+        color: inherit;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    &--soft ::ng-deep .tag.tag--outline {
+      background: var(--gold-light);
+      border-color: var(--gold);
+    }
+  }
+}
