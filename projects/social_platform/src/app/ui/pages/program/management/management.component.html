@@ -91,79 +91,96 @@
         @if (section() === "projects") {
           <p class="management__muted">Проекты, связанные с этой программой.</p>
         }
-        <form class="management__search" (ngSubmit)="submitSearch()">
-          <label class="management__sr" for="management-search">{{
-            section() === "participants" ? "Поиск по имени или почте" : "Поиск по названию проекта"
-          }}</label>
-          <input
-            id="management-search"
-            type="search"
-            appField
-            [formControl]="search"
-            maxlength="200"
-            [placeholder]="
-              section() === 'participants'
-                ? 'Поиск по имени или почте'
-                : 'Поиск по названию проекта'
-            "
-          />
-        </form>
-        @if (section() === "participants") {
-          <div class="management__filters management__participant-filters">
-            <label
-              >Регион<select
-                appField
-                aria-label="Регион"
-                [formControl]="regionFilter"
-                (change)="changeParticipantFilter('region', $any($event.target).value)"
+        <div
+          class="management__toolbar"
+          [class.management__toolbar--participants]="section() === 'participants'"
+        >
+          <form class="management__search" (ngSubmit)="submitSearch()">
+            <label class="management__sr" for="management-search">{{
+              section() === "participants"
+                ? "Поиск по имени или почте"
+                : "Поиск по названию проекта"
+            }}</label>
+            <input
+              id="management-search"
+              type="search"
+              appField
+              [formControl]="search"
+              maxlength="200"
+              [placeholder]="
+                section() === 'participants'
+                  ? 'Поиск по имени или почте'
+                  : 'Поиск по названию проекта'
+              "
+            />
+          </form>
+          @if (section() === "participants") {
+            <div class="management__toolbar-actions">
+              <div class="management__toolbar-slot">
+                <button
+                  type="button"
+                  appButton="secondary"
+                  class="management__filter-trigger"
+                  aria-haspopup="dialog"
+                  [attr.aria-expanded]="participantFiltersOpen()"
+                  (click)="openParticipantFilters()"
+                >
+                  <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>
+                  Фильтры{{ participantFilterCount() ? " · " + participantFilterCount() : "" }}
+                </button>
+              </div>
+              <div class="management__toolbar-slot">
+                <button
+                  type="button"
+                  appButton="secondary"
+                  class="management__sort-trigger"
+                  [title]="activitySortLabel()"
+                  [cdkMenuTriggerFor]="activitySortMenu"
+                  [cdkMenuPosition]="activitySortPositions"
+                >
+                  Сортировать по
+                  @if (activityOrder() !== "registration") {
+                    <i
+                      appIcon
+                      [icon]="
+                        activityOrder() === 'activity_desc'
+                          ? 'sort-activity-desc'
+                          : 'sort-activity-asc'
+                      "
+                      appSquare="16"
+                      aria-hidden="true"
+                    ></i>
+                  }
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+        <ng-template #activitySortMenu>
+          <div
+            cdkMenu
+            class="management__sort-menu"
+            aria-label="Сортировка участников"
+            aria-labelledby="activity-sort-title"
+          >
+            <p id="activity-sort-title" class="management__sort-title">
+              По дате последней активности
+            </p>
+            @for (option of activitySortOptions; track option.value) {
+              <button
+                type="button"
+                cdkMenuItemRadio
+                class="management__sort-option"
+                [cdkMenuItemChecked]="activityOrder() === option.value"
+                (cdkMenuItemTriggered)="sortByActivity(option.value)"
               >
-                <option value="all">Все регионы</option>
-                <option value="without_region">Регион не указан</option>
-                @for (region of state.participants()?.regionOptions ?? []; track region) {
-                  <option [value]="'region:' + region">{{ region }}</option>
-                }
-              </select></label
-            >
-            <label
-              >Последняя активность<select
-                appField
-                aria-label="Последняя активность"
-                [formControl]="activityFilter"
-                (change)="changeParticipantFilter('activity', $any($event.target).value)"
-              >
-                <option value="all">За все время</option>
-                <option value="period">Выбрать период</option>
-                <option value="active">Только активные</option>
-                <option value="inactive">Неактивные</option>
-              </select></label
-            >
-            @if (activityFilter.value === "period") {
-              <label
-                >С (МСК)<input
-                  appField
-                  type="date"
-                  [formControl]="activityFrom"
-                  [attr.max]="activityTo.value || null"
-                  (change)="changeParticipantFilter('from', $any($event.target).value)"
-              /></label>
-              <label
-                >По (МСК)<input
-                  appField
-                  type="date"
-                  [formControl]="activityTo"
-                  [attr.min]="activityFrom.value || null"
-                  (change)="changeParticipantFilter('to', $any($event.target).value)"
-              /></label>
+                <i appIcon [icon]="option.icon" appSquare="16" aria-hidden="true"></i>
+                <span>{{ option.label }}</span>
+              </button>
             }
           </div>
-          @if (participantFilterError()) {
-            <p appAlert="error" role="alert">{{ participantFilterError() }}</p>
-          }
-          @if (hasListFilters()) {
-            <button type="button" appButton="text" (click)="resetListFilters()">
-              Сбросить фильтры
-            </button>
-          }
+        </ng-template>
+        @if (section() === "participants") {
           @if (participantExportError()) {
             <p appAlert="error" role="alert">Не удалось выгрузить участников. Повторите попытку.</p>
           }
@@ -249,16 +266,6 @@
               />
               Все участники
             </label>
-            <button
-              type="button"
-              appButton="text"
-              class="management__mobile-sort"
-              (click)="sortByActivity()"
-              [attr.aria-label]="activitySortLabel()"
-            >
-              {{ activitySortLabel() }}
-              <span aria-hidden="true">{{ activityOrder() === "activity_asc" ? "↑" : "↓" }}</span>
-            </button>
           </div>
           <table appTable class="management__table management__participants">
             <caption class="management__sr">
@@ -294,22 +301,7 @@
                         : 'none'
                   "
                 >
-                  <button
-                    type="button"
-                    class="management__sort"
-                    (click)="sortByActivity()"
-                    [attr.aria-label]="activitySortLabel()"
-                    [title]="activitySortLabel()"
-                  >
-                    Дата последней активности
-                    <span aria-hidden="true">{{
-                      activityOrder() === "activity_asc"
-                        ? "↑"
-                        : activityOrder() === "activity_desc"
-                          ? "↓"
-                          : "↕"
-                    }}</span>
-                  </button>
+                  Дата последней активности
                 </th>
                 <th scope="col"><span class="management__sr">Действия</span></th>
               </tr>
@@ -857,6 +849,92 @@
     }
   }
 </main>
+<app-modal
+  [open]="participantFiltersOpen()"
+  labelledBy="participant-filters-title"
+  size="small"
+  (openChange)="!$event && closeParticipantFilters()"
+>
+  @if (participantFiltersOpen()) {
+    <form
+      class="management__filter-dialog"
+      [formGroup]="participantFiltersForm"
+      (ngSubmit)="applyParticipantFilters()"
+    >
+      <header class="management__filter-heading">
+        <h2 id="participant-filters-title">Фильтры участников</h2>
+        <button
+          type="button"
+          appButton="icon"
+          aria-label="Закрыть фильтры"
+          (click)="closeParticipantFilters()"
+        >
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+        </button>
+      </header>
+      <div class="management__filters management__participant-filters">
+        <label
+          >Регионы участников<select
+            appField
+            aria-label="Регионы участников"
+            [formControl]="regionFilter"
+          >
+            <option value="all">Все регионы</option>
+            <option value="without_region">Регион не указан</option>
+            @if (
+              regionFilter.value.startsWith("region:") &&
+              !(state.participants()?.regionOptions ?? []).includes(regionFilter.value.slice(7))
+            ) {
+              <option [value]="regionFilter.value">{{ regionFilter.value.slice(7) }}</option>
+            }
+            @for (region of state.participants()?.regionOptions ?? []; track region) {
+              <option [value]="'region:' + region">{{ region }}</option>
+            }
+          </select></label
+        >
+        <label
+          >Последняя активность<select
+            appField
+            aria-label="Последняя активность"
+            [formControl]="activityFilter"
+          >
+            <option value="all">За все время</option>
+            <option value="period">Выбрать период</option>
+            <option value="active">Только активные</option>
+            <option value="inactive">Неактивные</option>
+          </select></label
+        >
+        @if (activityFilter.value === "period") {
+          <div class="management__filter-period">
+            <label
+              >С (МСК)<input
+                appField
+                type="date"
+                [formControl]="activityFrom"
+                [attr.max]="activityTo.value || null"
+            /></label>
+            <label
+              >По (МСК)<input
+                appField
+                type="date"
+                [formControl]="activityTo"
+                [attr.min]="activityFrom.value || null"
+            /></label>
+          </div>
+        }
+      </div>
+      @if (participantFilterError()) {
+        <p appAlert="error" role="alert">{{ participantFilterError() }}</p>
+      }
+      <footer class="management__filter-actions">
+        <button type="button" appButton="secondary" (click)="resetParticipantFilterDraft()">
+          Сбросить
+        </button>
+        <button type="submit" appButton="primary">Применить</button>
+      </footer>
+    </form>
+  }
+</app-modal>
 <app-modal
   [open]="!!participantRemoval()"
   labelledBy="participant-removal-title"

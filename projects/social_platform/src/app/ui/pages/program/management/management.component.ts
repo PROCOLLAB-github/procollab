@@ -24,6 +24,8 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { debounceTime, distinctUntilChanged, filter, finalize, startWith } from "rxjs";
 import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
+import { CdkMenuModule } from "@angular/cdk/menu";
+import { ConnectedPosition } from "@angular/cdk/overlay";
 import {
   ButtonDirective,
   FieldDirective,
@@ -81,6 +83,7 @@ import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-im
     ReactiveFormsModule,
     DatePipe,
     A11yModule,
+    CdkMenuModule,
     ButtonDirective,
     FieldDirective,
     TableDirective,
@@ -133,16 +136,32 @@ export class ProgramManagementComponent implements OnInit {
   readonly activityFilter = this.fb.control("all");
   readonly activityFrom = this.fb.control("");
   readonly activityTo = this.fb.control("");
+  readonly participantFiltersForm = this.fb.group({
+    region: this.regionFilter,
+    activity: this.activityFilter,
+    from: this.activityFrom,
+    to: this.activityTo,
+  });
   readonly activityOrder = signal<"registration" | "activity_asc" | "activity_desc">(
     "registration",
   );
   readonly activitySortLabel = computed(() =>
     this.activityOrder() === "activity_desc"
-      ? "Сначала недавняя активность"
+      ? "Сначала недавно активные"
       : this.activityOrder() === "activity_asc"
-        ? "Сначала давняя активность"
+        ? "Сначала давно активные"
         : "Сортировать по последней активности",
   );
+  readonly participantFiltersOpen = signal(false);
+  readonly participantFilterCount = signal(0);
+  readonly activitySortOptions = [
+    { value: "activity_desc", label: "Сначала недавно активные", icon: "sort-activity-desc" },
+    { value: "activity_asc", label: "Сначала давно активные", icon: "sort-activity-asc" },
+  ] as const;
+  readonly activitySortPositions: ConnectedPosition[] = [
+    { originX: "end", originY: "bottom", overlayX: "end", overlayY: "top", offsetY: 4 },
+    { originX: "end", originY: "top", overlayX: "end", overlayY: "bottom", offsetY: -4 },
+  ];
   readonly participantFilterError = signal<string | null>(null);
   readonly exportingParticipants = signal(false);
   readonly participantExportError = signal(false);
@@ -476,6 +495,10 @@ export class ProgramManagementComponent implements OnInit {
         this.activityFilter.setValue(activityMode, { emitEvent: false });
         this.activityFrom.setValue(q.get("activity_from") ?? "", { emitEvent: false });
         this.activityTo.setValue(q.get("activity_to") ?? "", { emitEvent: false });
+        this.participantFilterCount.set(
+          Number(this.regionFilter.value !== "all") + Number(activityMode !== "all"),
+        );
+        this.closeParticipantFilters();
         this.participantFilterError.set(null);
         this.participantExportSuccess.set(false);
         this.state.load({
@@ -538,21 +561,37 @@ export class ProgramManagementComponent implements OnInit {
   page(delta: number): void {
     void this.changeQuery({ offset: Math.max(0, this.offset() + delta * this.pageSize) });
   }
-  sortByActivity(): void {
+  sortByActivity(order: "activity_asc" | "activity_desc"): void {
     void this.changeQuery({
-      order: this.activityOrder() === "activity_desc" ? "activity_asc" : "activity_desc",
+      order,
       offset: 0,
     });
   }
-  changeParticipantFilter(field: "region" | "activity" | "from" | "to", value: string): void {
-    const control = {
-      region: this.regionFilter,
-      activity: this.activityFilter,
-      from: this.activityFrom,
-      to: this.activityTo,
-    }[field];
-    control.setValue(value, { emitEvent: false });
-    this.applyParticipantFilters();
+  openParticipantFilters(): void {
+    const q = this.state.context?.query;
+    this.regionFilter.setValue(
+      q?.regionScope === "selected"
+        ? `region:${q.region ?? ""}`
+        : q?.regionScope === "without_region"
+          ? "without_region"
+          : "all",
+    );
+    this.activityFilter.setValue(q?.activity === "never" ? "inactive" : (q?.activity ?? "all"));
+    this.activityFrom.setValue(q?.activityFrom ?? "");
+    this.activityTo.setValue(q?.activityTo ?? "");
+    this.participantFilterError.set(null);
+    this.participantFiltersOpen.set(true);
+  }
+  closeParticipantFilters(): void {
+    this.participantFiltersOpen.set(false);
+    this.participantFilterError.set(null);
+  }
+  resetParticipantFilterDraft(): void {
+    this.regionFilter.setValue("all");
+    this.activityFilter.setValue("all");
+    this.activityFrom.setValue("");
+    this.activityTo.setValue("");
+    this.participantFilterError.set(null);
   }
   applyParticipantFilters(): void {
     const mode = this.activityFilter.value,
@@ -580,6 +619,7 @@ export class ProgramManagementComponent implements OnInit {
       activity_to: mode === "period" ? to || null : null,
       offset: 0,
     });
+    this.closeParticipantFilters();
   }
   resetListFilters(): void {
     void this.changeQuery({
