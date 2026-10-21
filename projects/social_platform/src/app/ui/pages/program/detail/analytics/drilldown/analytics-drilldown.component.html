@@ -70,44 +70,6 @@
 
       @if (state.view() === "case") {
         <div class="analytics-case" data-testid="case-drilldown">
-          @if (cases.metrics(); as metrics) {
-            <dl class="analytics-case__metrics">
-              <div>
-                <dt>Проекты</dt>
-                <dd>{{ metrics.projectsTotal }}</dd>
-              </div>
-              <div>
-                <dt>Участники</dt>
-                <dd>{{ metrics.participantsTotal }}</dd>
-              </div>
-              @if (cases.submissionApplicable()) {
-                <div>
-                  <dt>Сдано</dt>
-                  <dd>{{ metrics.submitted }}</dd>
-                </div>
-              }
-            </dl>
-          }
-          <div class="analytics-case__export">
-            <app-button
-              appearance="outline"
-              size="big"
-              [disabled]="!cases.canExport()"
-              [loader]="cases.exportPending()"
-              (click)="cases.download()"
-              >Выгрузить найденные</app-button
-            >
-            <p class="analytics-drilldown__secondary">
-              {{
-                cases.page()?.count === 0
-                  ? "Нет проектов для выгрузки"
-                  : "Все найденные проекты с учетом поиска и фильтров"
-              }}
-            </p>
-            @if (cases.exportError(); as error) {
-              <app-state [compact]="true" kind="error" title="{{ caseErrorMessage(error) }}" />
-            }
-          </div>
           <form
             appFormLayout
             class="analytics-drilldown__search"
@@ -173,6 +135,40 @@
               </select>
             </label>
           </div>
+          <div class="analytics-case__tools">
+            @if (cases.page(); as page) {
+              <p class="analytics-drilldown__count" aria-live="polite">
+                Найдено: {{ page.count }}
+                @if (cases.metrics(); as metrics) {
+                  из {{ metrics.projectsTotal }}
+                }
+              </p>
+            }
+            <button
+              appButton="icon"
+              type="button"
+              class="analytics-case__export"
+              aria-label="Выгрузить найденные проекты"
+              title="Выгрузить найденные проекты"
+              [disabled]="!cases.canExport()"
+              [attr.aria-busy]="cases.exportPending()"
+              (click)="cases.download()"
+            >
+              @if (cases.exportPending()) {
+                <app-loader color="var(--accent)" />
+              } @else {
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+              }
+            </button>
+          </div>
+          @if (cases.exportError(); as error) {
+            <app-state
+              class="analytics-case__export-error"
+              [compact]="true"
+              kind="error"
+              title="{{ caseErrorMessage(error) }}"
+            />
+          }
           <div [attr.aria-busy]="cases.pending()" aria-live="polite">
             @if (cases.pending()) {
               <p class="analytics-case__loading" role="status">
@@ -194,12 +190,6 @@
                 </button>
               }
             } @else if (cases.page(); as page) {
-              <p class="analytics-drilldown__count">
-                Найдено: {{ page.count }}
-                @if (cases.metrics(); as metrics) {
-                  из {{ metrics.projectsTotal }}
-                }
-              </p>
               @if (!page.results.length) {
                 <div class="analytics-drilldown__empty">
                   <strong>{{
