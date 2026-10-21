@@ -165,9 +165,7 @@ export class ProgramAnalyticsComponent implements OnInit {
     if (!overview) return [];
     const projectCount = overview.summary.projects.total;
     const averageParticipantsPerProject =
-      projectCount > 0
-        ? Math.round((overview.summary.participants.total / projectCount) * 10) / 10
-        : 0;
+      projectCount > 0 ? Math.round(overview.summary.participants.total / projectCount) : 0;
 
     return [
       {

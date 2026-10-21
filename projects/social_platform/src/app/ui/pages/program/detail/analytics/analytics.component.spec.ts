@@ -421,7 +421,7 @@ describe("ProgramAnalyticsComponent", () => {
     expect(root.textContent).not.toContain("Участников на проект");
     expect(
       root.querySelector('[data-testid="summary-participants-per-project"]')?.textContent,
-    ).toContain("2.6");
+    ).toContain("3");
     expect(root.querySelector('[data-testid="summary-team"]')).toBeNull();
     expect(root.querySelector('[data-testid="summary-regions"]')).toBeNull();
     expect(root.querySelector('[data-testid="project-regions"]')?.textContent).toContain("Москва");
@@ -775,7 +775,7 @@ describe("ProgramAnalyticsComponent", () => {
       (fixture.nativeElement as HTMLElement)
         .querySelector('[data-testid="summary-participants-per-project"] .summary-card__value')
         ?.textContent?.trim();
-    expect(participantsPerProjectValue()).toBe("3.5");
+    expect(participantsPerProjectValue()).toBe("4");
 
     data.set({
       ...base,
