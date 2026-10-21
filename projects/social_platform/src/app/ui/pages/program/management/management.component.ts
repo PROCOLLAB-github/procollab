@@ -146,21 +146,15 @@ export class ProgramManagementComponent implements OnInit {
     from: this.activityFrom,
     to: this.activityTo,
   });
-  readonly activityOrder = signal<"registration" | "activity_asc" | "activity_desc">(
-    "registration",
-  );
+  readonly activityOrder = signal<"activity_asc" | "activity_desc">("activity_desc");
   readonly activitySortLabel = computed(() =>
-    this.activityOrder() === "activity_desc"
-      ? "Сначала недавно активные"
-      : this.activityOrder() === "activity_asc"
-        ? "Сначала давно активные"
-        : "Сортировать по последней активности",
+    this.activityOrder() === "activity_desc" ? "Сначала активные" : "Сначала неактивные",
   );
   readonly participantFiltersOpen = signal(false);
   readonly participantFilterCount = signal(0);
   readonly activitySortOptions = [
-    { value: "activity_desc", label: "Сначала недавно активные", icon: "sort-activity-desc" },
-    { value: "activity_asc", label: "Сначала давно активные", icon: "sort-activity-asc" },
+    { value: "activity_desc", label: "Сначала активные", icon: "sort-activity-desc" },
+    { value: "activity_asc", label: "Сначала неактивные", icon: "sort-activity-asc" },
   ] as const;
   readonly activitySortPositions: ConnectedPosition[] = [
     { originX: "end", originY: "bottom", overlayX: "end", overlayY: "top", offsetY: 4 },
@@ -493,9 +487,7 @@ export class ProgramManagementComponent implements OnInit {
               ? activity
               : "all";
         const order = q.get("order");
-        this.activityOrder.set(
-          order === "activity_asc" || order === "activity_desc" ? order : "registration",
-        );
+        this.activityOrder.set(order === "activity_asc" ? "activity_asc" : "activity_desc");
         this.activityFilter.setValue(activityMode, { emitEvent: false });
         this.activityFrom.setValue(q.get("activity_from") ?? "", { emitEvent: false });
         this.activityTo.setValue(q.get("activity_to") ?? "", { emitEvent: false });

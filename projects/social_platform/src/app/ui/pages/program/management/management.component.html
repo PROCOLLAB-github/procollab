@@ -142,19 +142,14 @@
                   [cdkMenuTriggerFor]="activitySortMenu"
                   [cdkMenuPosition]="activitySortPositions"
                 >
-                  Сортировать по
-                  @if (activityOrder() !== "registration") {
-                    <i
-                      appIcon
-                      [icon]="
-                        activityOrder() === 'activity_desc'
-                          ? 'sort-activity-desc'
-                          : 'sort-activity-asc'
-                      "
-                      appSquare="16"
-                      aria-hidden="true"
-                    ></i>
-                  }
+                  {{ activitySortLabel() }}
+                  <i
+                    appIcon
+                    icon="chevron-down"
+                    class="management__sort-chevron"
+                    appSquare="16"
+                    aria-hidden="true"
+                  ></i>
                 </button>
               </div>
             </div>
@@ -180,6 +175,15 @@
               >
                 <i appIcon [icon]="option.icon" appSquare="16" aria-hidden="true"></i>
                 <span>{{ option.label }}</span>
+                @if (activityOrder() === option.value) {
+                  <i
+                    appIcon
+                    icon="check"
+                    class="management__sort-check"
+                    appSquare="12"
+                    aria-hidden="true"
+                  ></i>
+                }
               </button>
             }
           </div>
