@@ -96,7 +96,7 @@
           </button>
         </div>
       } @else {
-        <ul class="evaluation-progress__list">
+        <ul class="evaluation-progress__list" tabindex="0" aria-label="Прогресс всех экспертов">
           @for (expert of experts(); track expert.id) {
             <li [attr.data-expert-id]="expert.id">
               <span>{{ expert.name }}</span

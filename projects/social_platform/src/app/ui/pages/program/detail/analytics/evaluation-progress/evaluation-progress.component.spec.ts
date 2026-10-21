@@ -52,7 +52,7 @@ describe("AnalyticsEvaluationProgressComponent", () => {
     expect(requests.execute).toHaveBeenCalledExactlyOnceWith(12, "all");
   });
 
-  it("groups by expert and prioritizes unfinished assignments including not-ready work", () => {
+  it("keeps all grouped experts and prioritizes unfinished assignments including not-ready work", () => {
     const row = (id: number, state: ProgramAnalyticsAssignment["status"], number: number) =>
       assignment({
         assignmentId: number,
@@ -75,9 +75,13 @@ describe("AnalyticsEvaluationProgressComponent", () => {
     const rows = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll("[data-expert-id]"),
     );
-    expect(rows.map(row => row.getAttribute("data-expert-id"))).toEqual(["1", "3", "4"]);
+    expect(rows.map(row => row.getAttribute("data-expert-id"))).toEqual(["1", "3", "4", "2"]);
     expect(rows[0].querySelector("strong")?.textContent).toBe("1 из 3");
     expect(rows[1].querySelector("strong")?.textContent).toBe("0 из 1");
+    expect(rows[3].querySelector("strong")?.textContent).toBe("1 из 1");
+    const list = fixture.nativeElement.querySelector(".evaluation-progress__list");
+    expect(list.getAttribute("tabindex")).toBe("0");
+    expect(list.getAttribute("aria-label")).toBe("Прогресс всех экспертов");
   });
 
   it.each(["open", "distributed"] as const)(
