@@ -866,7 +866,36 @@
     <section class="management__dialog">
       <h2 id="participant-removal-title">Удалить участников из программы?</h2>
       <p>Участников: {{ removal.preview.participantCount }}. Аккаунты на платформе сохранятся.</p>
-      <p>Участники останутся в командах проектов на платформе.</p>
+      <p>
+        Участники будут удалены из команд проектов-заявок этой программы. Команды исходных проектов
+        на платформе сохранятся.
+      </p>
+      @if (removal.preview.teamChanges.length) {
+        <div>
+          <h3>Изменятся команды заявок</h3>
+          <ul class="management__removal-projects">
+            @for (change of removal.preview.teamChanges; track change.id) {
+              <li>
+                <strong>{{ change.name }}</strong>
+                @if (change.members.length) {
+                  <p>
+                    Удаляем из команды:
+                    @for (member of change.members; track member.id; let last = $last) {
+                      {{ member.name }}{{ last ? "" : ", " }}
+                    }
+                  </p>
+                }
+                @if (change.invitationsCount) {
+                  <p>Приглашений в заявку к отзыву: {{ change.invitationsCount }}.</p>
+                }
+                @if (change.submitted) {
+                  <p>Заявка уже сдана. Сохраненные оценки не изменятся.</p>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      }
       @if (removal.preview.applications.length) {
         <div appAlert="warning">
           <strong>Среди выбранных есть руководители проектов</strong>

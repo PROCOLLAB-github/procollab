@@ -141,11 +141,22 @@ describe("Контракт HTTP панели организатора", () => {
       .previewParticipantRemoval(4, [1, 21])
       .subscribe(result => expect(result.previewToken).toBe("proof"));
     const preview = http.expectOne(r => r.url.endsWith("/remove-preview/"));
-    preview.flush({ preview_token: "proof", participant_count: 2, applications: [] });
+    preview.flush({
+      confirmation_version: 2,
+      preview_token: "proof",
+      participant_count: 2,
+      applications: [],
+      team_changes: [],
+      assignments_count: 0,
+    });
     const failed = vi.fn();
     adapter.removeParticipants(4, [1, 21], "proof").subscribe({ error: failed });
     const removal = http.expectOne(r => r.url.endsWith("/participants/remove/"));
-    expect(removal.request.body).toEqual({ ids: [1, 21], preview_token: "proof" });
+    expect(removal.request.body).toEqual({
+      ids: [1, 21],
+      preview_token: "proof",
+      confirmation_version: 2,
+    });
     removal.flush({ detail: "Изменено" }, { status: 409, statusText: "Conflict" });
     expect(failed).toHaveBeenCalledOnce();
     http.expectNone(r => r.url.endsWith("/participants/remove/"));
