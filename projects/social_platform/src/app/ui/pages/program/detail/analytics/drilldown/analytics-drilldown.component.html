@@ -642,6 +642,7 @@
             }
             @if (state.actionSuccess()) {
               <app-transient-notice
+                class="attention-actions__success"
                 [source]="state.actionSuccess"
                 (dismissed)="state.actionSuccess.set('')"
                 >{{ state.actionSuccess() }}</app-transient-notice
