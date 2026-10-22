@@ -13,7 +13,9 @@
     </div>
   }
   @if (message()) {
-    <p appAlert="success" aria-live="polite">{{ message() }}</p>
+    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
+      message()
+    }}</app-transient-notice>
   }
   @if (snapshot(); as data) {
     <section class="registration__card">

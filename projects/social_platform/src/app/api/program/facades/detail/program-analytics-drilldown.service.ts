@@ -61,7 +61,7 @@ export class ProgramAnalyticsDrilldownService {
   readonly preview = signal<ProgramAttentionPreview | null>(null);
   readonly actionPending = signal<"preview" | "send" | "export" | null>(null);
   readonly actionError = signal("");
-  readonly actionSuccess = signal("");
+  readonly actionSuccess = signal("", { equal: () => false });
   readonly supportsActions = computed(
     () => this.isAttentionView() && this.view() !== "projects-not-submitted",
   );

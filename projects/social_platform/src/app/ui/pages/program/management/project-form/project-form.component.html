@@ -19,7 +19,9 @@
       </div>
     }
     @if (saved()) {
-      <p appAlert="success">Кейсы и поля сохранены.</p>
+      <app-transient-notice [source]="saved" (dismissed)="saved.set(false)"
+        >Кейсы и поля сохранены.</app-transient-notice
+      >
     }
     @if (snapshot()) {
       <header class="project-form__heading">

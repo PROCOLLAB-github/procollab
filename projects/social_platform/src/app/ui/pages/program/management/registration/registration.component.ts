@@ -36,9 +36,12 @@ import {
   RegistrationFieldsComponent,
 } from "@ui/widgets/registration-fields/registration-fields.component";
 import { evaluationError } from "@utils/evaluation-workspace";
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-management-registration",
   imports: [
+    TransientNoticeComponent,
     ReactiveFormsModule,
     ButtonDirective,
     FieldDirective,
@@ -69,7 +72,7 @@ export class ManagementRegistrationComponent {
   readonly busy = signal(false);
   readonly editorDirty = signal(false);
   readonly error = signal<string | null>(null);
-  readonly message = signal<string | null>(null);
+  readonly message = signal<string | null>(null, { equal: () => false });
   readonly dirty = computed(
     () => JSON.stringify(this.draft()) !== JSON.stringify(this.snapshot()?.draft ?? this.draft()),
   );

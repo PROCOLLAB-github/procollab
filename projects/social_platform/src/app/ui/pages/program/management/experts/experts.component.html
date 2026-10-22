@@ -17,7 +17,9 @@
     </button>
   </nav>
   @if (message()) {
-    <p appAlert="success" role="status">{{ message() }}</p>
+    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
+      message()
+    }}</app-transient-notice>
   }
   @if (error()) {
     <div appAlert="error" role="alert">

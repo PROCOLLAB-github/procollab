@@ -40,9 +40,12 @@ import {
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-management-organizers",
   imports: [
+    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     AvatarComponent,
@@ -70,7 +73,7 @@ export class ManagementOrganizersComponent {
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
   readonly dialogError = signal<string | null>(null);
-  readonly message = signal<string | null>(null);
+  readonly message = signal<string | null>(null, { equal: () => false });
   readonly modal = signal<"invite" | "remove" | "revoke" | null>(null);
   readonly search = this.fb.control("");
   readonly status = this.fb.control("all");

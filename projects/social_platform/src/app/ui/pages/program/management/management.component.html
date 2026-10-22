@@ -221,7 +221,11 @@
             <p appAlert="error" role="alert">Не удалось выгрузить участников. Повторите попытку.</p>
           }
           @if (participantExportSuccess()) {
-            <p appAlert="success">Excel с участниками по текущим фильтрам готов.</p>
+            <app-transient-notice
+              [source]="participantExportSuccess"
+              (dismissed)="participantExportSuccess.set(false)"
+              >Excel с участниками по текущим фильтрам готов.</app-transient-notice
+            >
           }
         }
         @if (section() === "projects") {
@@ -229,7 +233,11 @@
             <p appAlert="error" role="alert">Не удалось выгрузить проекты. Повторите попытку.</p>
           }
           @if (projectExportSuccess()) {
-            <p appAlert="success">Excel с проектами по текущим фильтрам готов.</p>
+            <app-transient-notice
+              [source]="projectExportSuccess"
+              (dismissed)="projectExportSuccess.set(false)"
+              >Excel с проектами по текущим фильтрам готов.</app-transient-notice
+            >
           }
         }
         @if (state.pending()) {
@@ -491,7 +499,9 @@
           <p appAlert="error" role="alert">{{ tableError() }}</p>
         }
         @if (tableMessage()) {
-          <p appAlert="success" role="status">{{ tableMessage() }}</p>
+          <app-transient-notice [source]="tableMessage" (dismissed)="tableMessage.set(null)">{{
+            tableMessage()
+          }}</app-transient-notice>
         }
         @if (selectedRows().size) {
           <section
@@ -620,7 +630,9 @@
         </div>
       }
       @if (saved()) {
-        <p appAlert="success">Изменения сохранены.</p>
+        <app-transient-notice [source]="saved" (dismissed)="saved.set(false)"
+          >Изменения сохранены.</app-transient-notice
+        >
       }
       @if (settingsTab() === "project-form") {
         <app-management-project-form
