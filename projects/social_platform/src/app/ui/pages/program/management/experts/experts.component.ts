@@ -16,6 +16,7 @@ import {
 } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NgTemplateOutlet } from "@angular/common";
+import { RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import {
   Observable,
@@ -35,7 +36,10 @@ import {
   ButtonDirective,
   ChoiceDirective,
   FieldDirective,
+  IconComponent,
 } from "@uilib";
+import { AppRoutes } from "@api/paths/app-routes";
+import { exportExperts } from "@utils/export-experts";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import {
   RowAction,
@@ -71,6 +75,8 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     RowActionsComponent,
     PluralizePipe,
     NgTemplateOutlet,
+    RouterLink,
+    IconComponent,
   ],
   templateUrl: "./experts.component.html",
   styleUrl: "./experts.component.scss",
@@ -136,6 +142,18 @@ export class ManagementExpertsComponent {
   readonly page = signal(0);
   readonly pageSize = 20;
   readonly href = presentationHref;
+  readonly paths = AppRoutes;
+  readonly filtersOpen = signal<"experts" | "distribution" | null>(null);
+  readonly filterDraft = this.fb.group({ status: "all", case: "all", expert: "all" });
+  readonly filterCount = computed(() =>
+    this.tab() === "experts"
+      ? Number(this.statusValue() !== "all")
+      : Number(this.distributionCaseValue() !== "all") +
+        Number(this.distributionStatusValue() !== "all"),
+  );
+  readonly exporting = signal(false);
+  readonly exportError = signal(false);
+  readonly exportSuccess = signal(false, { equal: () => false });
   readonly tab = signal<"experts" | "distribution">("experts");
   readonly distributionSearch = this.fb.control("");
   readonly distributionCase = this.fb.control("all");
@@ -333,6 +351,9 @@ export class ManagementExpertsComponent {
         this.selectedExpertIds.set(new Set());
         this.selectedProjects.set(new Set());
         this.tab.set("experts");
+        this.filtersOpen.set(null);
+        this.exportSuccess.set(false);
+        this.exportError.set(false);
         this.load(id);
       });
     });
@@ -462,19 +483,89 @@ export class ManagementExpertsComponent {
   select(row: ExpertRow): void {
     this.selected.set(this.selected()?.id === row.id ? null : row);
   }
+  openFilters(): void {
+    if (this.busy() || this.loading() || this.modal()) return;
+    this.filterDraft.setValue({
+      status: this.status.value,
+      case: this.distributionCase.value,
+      expert: this.distributionStatus.value,
+    });
+    this.filtersOpen.set(this.tab());
+  }
+  resetFilterDraft(): void {
+    this.filterDraft.setValue({ status: "all", case: "all", expert: "all" });
+  }
+  applyFilters(): void {
+    const draft = this.filterDraft.getRawValue();
+    if (this.filtersOpen() === "experts") {
+      if (draft.status !== this.status.value) this.status.setValue(draft.status);
+    } else if (this.filtersOpen() === "distribution") {
+      if (draft.case !== this.distributionCase.value) this.distributionCase.setValue(draft.case);
+      if (draft.expert !== this.distributionStatus.value)
+        this.distributionStatus.setValue(draft.expert);
+    }
+    this.filtersOpen.set(null);
+  }
+  async downloadExperts(): Promise<void> {
+    const rows = this.filtered();
+    if (this.exporting() || this.busy() || this.loading() || !this.snapshot() || !rows.length)
+      return;
+    const programId = this.programId();
+    this.exporting.set(true);
+    this.exportError.set(false);
+    this.exportSuccess.set(false);
+    try {
+      await exportExperts(
+        programId,
+        rows.map(row => ({
+          name: row.name ?? "",
+          email: row.email,
+          cases: this.scopeLabel(row),
+          status: this.label(row),
+          delivery: this.deliveryLabel(row),
+          assigned: row.assigned,
+          completed: row.completed,
+          remaining: row.remaining,
+        })),
+      );
+      if (!this.destroyRef.destroyed && this.programId() === programId)
+        this.exportSuccess.set(true);
+    } catch {
+      if (!this.destroyRef.destroyed && this.programId() === programId) this.exportError.set(true);
+    } finally {
+      if (!this.destroyRef.destroyed) this.exporting.set(false);
+    }
+  }
+  expertRowClick(event: MouseEvent, row: ExpertRow): void {
+    const target = event.target;
+    if (
+      event.defaultPrevented ||
+      !(target instanceof Element) ||
+      target.closest("a,button,input,label,select,textarea,app-row-actions,.experts__row-actions")
+    )
+      return;
+    if (this.element.nativeElement.ownerDocument.defaultView?.getSelection()?.toString()) return;
+    this.toggleSelectedExpert(row);
+  }
   rowActions(row: ExpertRow): RowAction[] {
-    const actions: RowAction[] = [{ id: "scope", label: "Кейсы эксперта" }];
+    const actions: RowAction[] = [{ id: "scope", label: "Изменить кейсы" }];
+    if (row.userId)
+      actions.unshift({
+        id: "profile",
+        label: "Открыть профиль",
+        routerLink: this.paths.profile.detail(row.userId),
+      });
     if (row.status === "joined")
       actions.unshift({ id: "assignments", label: "Посмотреть назначения" });
     else {
-      actions.push({ id: "resend", label: "Отправить повторно" });
+      actions.push({ id: "resend", label: "Отправить приглашение повторно" });
       if (row.status !== "revoked")
         actions.push({ id: "revoke", label: "Отозвать приглашение", destructive: true });
     }
     return actions;
   }
   rowAction(row: ExpertRow, event: RowActionEvent): void {
-    if (this.busy()) return;
+    if (this.busy() || event.id === "profile") return;
     this.selected.set(row);
     if (event.id === "scope") this.openScope(row);
     else if (event.id === "resend") this.invitationAction("resend");
@@ -563,10 +654,19 @@ export class ManagementExpertsComponent {
     );
   }
   label(row: ExpertRow): string {
-    if (row.status === "joined") return "В программе";
-    if (row.status === "expired") return "Истекло";
-    if (row.status === "revoked") return "Отозвано";
-    return "Приглашен";
+    if (row.status === "joined") return "Доступ предоставлен";
+    if (row.status === "expired") return "Приглашение истекло";
+    if (row.status === "revoked") return "Приглашение отозвано";
+    return "Ожидает принятия";
+  }
+  statusDescription(row: ExpertRow): string {
+    return row.status === "joined"
+      ? "Эксперт добавлен в программу. Проекты для оценки назначаются отдельно."
+      : row.status === "pending"
+        ? "Эксперт еще не принял приглашение. Статус отправки письма указан ниже."
+        : row.status === "expired"
+          ? "Срок приглашения истек. Его можно отправить повторно через меню действий."
+          : "Приглашение отозвано организатором.";
   }
   deliveryLabel(row: ExpertRow): string {
     if (row.status !== "pending") return "";
