@@ -27,9 +27,12 @@ import { AlertDirective, ButtonDirective, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProjectRatingComponent } from "../../detail/list/rating-card/project-rating/project-rating.component";
 
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-management-criteria",
   imports: [
+    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     ButtonDirective,
@@ -56,7 +59,7 @@ export class ManagementCriteriaComponent {
   readonly error = signal<string | null>(null);
   readonly conflict = signal<"criteria_locked" | "stale_criteria" | null>(null);
   readonly conflictOpen = signal(false);
-  readonly saved = signal(false);
+  readonly saved = signal(false, { equal: () => false });
   readonly editing = signal<ManagementCriterion | "new" | null>(null);
   readonly editorDirty = signal(false);
   readonly editorError = signal<string | null>(null);

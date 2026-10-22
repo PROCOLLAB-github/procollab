@@ -19,7 +19,9 @@
       </div>
     }
     @if (saved()) {
-      <p appAlert="success" role="status">Критерии сохранены.</p>
+      <app-transient-notice [source]="saved" (dismissed)="saved.set(false)"
+        >Критерии сохранены.</app-transient-notice
+      >
     }
     @if (snapshot()) {
       <header class="criteria__heading">

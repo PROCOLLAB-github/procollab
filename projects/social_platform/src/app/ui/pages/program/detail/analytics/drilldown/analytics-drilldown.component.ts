@@ -54,11 +54,14 @@ import {
 } from "@utils/program-analytics-assignment";
 
 /** Локальная доступность поверх public OverlayRef; shared modal API не расширяется. */
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-analytics-drilldown",
   templateUrl: "./analytics-drilldown.component.html",
   styleUrl: "./analytics-drilldown.component.scss",
   imports: [
+    TransientNoticeComponent,
     StateComponent,
     PaginationComponent,
     ButtonDirective,

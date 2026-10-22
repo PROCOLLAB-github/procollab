@@ -82,11 +82,14 @@ import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
 import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-image-framing.model";
 
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-program-management",
   templateUrl: "./management.component.html",
   styleUrl: "./management.component.scss",
   imports: [
+    TransientNoticeComponent,
     RouterLink,
     ReactiveFormsModule,
     DatePipe,
@@ -168,7 +171,7 @@ export class ProgramManagementComponent implements OnInit {
   });
   readonly exportingProjects = signal(false);
   readonly projectExportError = signal(false);
-  readonly projectExportSuccess = signal(false);
+  readonly projectExportSuccess = signal(false, { equal: () => false });
   readonly participantFiltersOpen = signal(false);
   readonly participantFilterCount = signal(0);
   readonly activitySortOptions = [
@@ -182,7 +185,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly participantFilterError = signal<string | null>(null);
   readonly exportingParticipants = signal(false);
   readonly participantExportError = signal(false);
-  readonly participantExportSuccess = signal(false);
+  readonly participantExportSuccess = signal(false, { equal: () => false });
   readonly participantAnswers = signal<ManagementParticipant | null>(null);
   readonly selectedRows = signal(new Set<number>());
   readonly selectedRowIds = computed(() => [...this.selectedRows()]);
@@ -197,7 +200,7 @@ export class ProgramManagementComponent implements OnInit {
   } | null>(null);
   readonly removingParticipants = signal(false);
   readonly tableError = signal<string | null>(null);
-  readonly tableMessage = signal<string | null>(null);
+  readonly tableMessage = signal<string | null>(null, { equal: () => false });
   private selectionKey = "";
   private selectionSequence = 0;
   readonly allRowsSelected = computed(
@@ -231,7 +234,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly saving = signal(false);
   readonly uploading = signal<string | null>(null);
   readonly formError = signal<string | null>(null);
-  readonly saved = signal(false);
+  readonly saved = signal(false, { equal: () => false });
   readonly projectForm = viewChild(ManagementProjectFormComponent);
   private readonly managementLayout = viewChild<ElementRef<HTMLElement>>("managementLayout");
   readonly floatingPosition = signal<{ center: number; width: number } | null>(null);

@@ -55,9 +55,12 @@ import {
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-management-experts",
   imports: [
+    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     AvatarComponent,
@@ -90,7 +93,7 @@ export class ManagementExpertsComponent {
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
   readonly dialogError = signal<string | null>(null);
-  readonly message = signal<string | null>(null);
+  readonly message = signal<string | null>(null, { equal: () => false });
   readonly deliveryRefreshPaused = signal(false);
   readonly selected = signal<ExpertRow | null>(null);
   readonly selectedExpertIds = signal(new Set<number | string>());

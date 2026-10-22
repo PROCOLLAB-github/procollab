@@ -64,7 +64,9 @@
       </p>
     }
     @if (exportSuccess()) {
-      <p class="results__sr" role="status">Выгрузка Excel скачана.</p>
+      <app-transient-notice [source]="exportSuccess" (dismissed)="exportSuccess.set(false)"
+        >Выгрузка Excel скачана.</app-transient-notice
+      >
     }
     @if (!data.groups.length) {
       <div class="results__empty">

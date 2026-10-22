@@ -1,0 +1,49 @@
+/** @format */
+
+@use "styles/program-management-controls";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.notice {
+  @include program-management-controls.status-notice;
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-block: 0;
+  padding-right: 4px;
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    padding-block: 12px;
+    overflow-wrap: anywhere;
+  }
+
+  &__close {
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+
+    &:hover {
+      text-decoration: none;
+      background: rgb(0 0 0 / 4%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -4px;
+    }
+  }
+}

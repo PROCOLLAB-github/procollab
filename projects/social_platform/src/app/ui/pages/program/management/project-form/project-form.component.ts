@@ -42,11 +42,14 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramFieldsComponent } from "@ui/widgets/program-fields/program-fields.component";
 import { PROGRAM_FIELD_TYPE_LABELS, programFieldControl } from "@utils/program-field-controls";
 
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-management-project-form",
   templateUrl: "./project-form.component.html",
   styleUrl: "./project-form.component.scss",
   imports: [
+    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     ButtonDirective,
@@ -74,7 +77,7 @@ export class ManagementProjectFormComponent {
   readonly saving = signal(false);
   readonly error = signal<string | null>(null);
   readonly conflict = signal(false);
-  readonly saved = signal(false);
+  readonly saved = signal(false, { equal: () => false });
   readonly caseIndex = signal<number | null>(null); // -1 is new
   readonly caseName = this.fb.control("", [
     Validators.required,

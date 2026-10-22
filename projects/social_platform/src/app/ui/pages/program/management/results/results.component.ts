@@ -22,9 +22,12 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ResultProjectScoresComponent } from "./result-project-scores.component";
 import { presentationHref } from "@utils/program-case-analytics";
 
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+
 @Component({
   selector: "app-management-results",
   imports: [
+    TransientNoticeComponent,
     ReactiveFormsModule,
     NgTemplateOutlet,
     AlertDirective,
@@ -58,7 +61,7 @@ export class ManagementResultsComponent {
   readonly exportScope = signal<"current" | "all">("current");
   readonly exporting = signal(false);
   readonly exportError = signal(false);
-  readonly exportSuccess = signal(false);
+  readonly exportSuccess = signal(false, { equal: () => false });
   readonly href = presentationHref;
   readonly caseKey = (name: string): string => JSON.stringify(name);
   readonly format = (value: number | null | undefined): string =>
