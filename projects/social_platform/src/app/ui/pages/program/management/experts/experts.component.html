@@ -421,9 +421,21 @@
     [style.width.px]="floatingWidth()"
     aria-label="Массовые действия с экспертами"
   >
-    <strong aria-live="polite">Выбрано экспертов: {{ selectedExpertRows().length }}</strong>
-    <div class="experts__actions">
-      <button type="button" appButton="secondary" [disabled]="busy()" (click)="openBulkScope()">
+    <header class="experts__bulk-heading">
+      <strong aria-live="polite">Выбрано экспертов: {{ selectedExpertRows().length }}</strong>
+      <button
+        type="button"
+        appButton="icon"
+        class="experts__bulk-clear"
+        aria-label="Снять выбор экспертов"
+        [disabled]="busy()"
+        (click)="selectedExpertIds.set(emptySelection)"
+      >
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+      </button>
+    </header>
+    <div class="experts__bulk-actions">
+      <button type="button" appButton="primary" [disabled]="busy()" (click)="openBulkScope()">
         Изменить кейсы
       </button>
       <button
@@ -437,21 +449,13 @@
       </button>
       <button
         type="button"
-        appButton="secondary"
+        appButton="danger"
+        class="experts__bulk-revoke"
         [disabled]="busy() || !canBulkInvite()"
         title="Отозвать можно только приглашения"
         (click)="openBulkRevoke()"
       >
         Отозвать приглашения
-      </button>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Снять выбор экспертов"
-        [disabled]="busy()"
-        (click)="selectedExpertIds.set(emptySelection)"
-      >
-        ×
       </button>
     </div>
   </section>
@@ -991,9 +995,6 @@
           <option value="revoked">Приглашение отозвано</option>
         </select></label
       >
-      <p>
-        Доступ предоставлен — эксперт добавлен в программу. Проекты для оценки назначаются отдельно.
-      </p>
     } @else {
       <label
         >Кейс<select appField aria-label="Кейс" formControlName="case">
