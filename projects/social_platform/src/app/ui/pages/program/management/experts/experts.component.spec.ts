@@ -96,11 +96,13 @@ describe("Управление экспертами", () => {
     const { fixture, component, api } = setup();
     component.open("auto");
     fixture.detectChanges();
-    expect(component.canPreviewAllocation()).toBe(false);
+    expect(component.canPreviewAllocation()).toBe(true);
     component.openPool("Сбер");
+    component.chosenExperts.set(new Set());
     component.toggleCandidate(snapshot.experts[0]);
     component.savePool();
     component.openPool("Т-Банк");
+    component.chosenExperts.set(new Set());
     component.toggleCandidate(snapshot.experts[0]);
     component.savePool();
     api.allocation.mockReturnValue(
@@ -108,6 +110,7 @@ describe("Управление экспертами", () => {
     );
     component.previewAllocation();
     expect(api.allocation).toHaveBeenCalledWith(42, {
+      seed: 0,
       expertIds: [1],
       revision: "v1",
       casePools: [
@@ -138,6 +141,115 @@ describe("Управление экспертами", () => {
       allCases: false,
       caseNames: ["Сбер"],
     });
+  });
+  it("показывает внимание только при нехватке и включает фильтр по всем проблемным проектам", () => {
+    const { component } = setup();
+    expect(component.attentionProjects().length).toBe(3);
+    component.showAttentionProjects();
+    expect(component.distributionStatus.value).toBe("missing");
+    expect(component.attentionActive()).toBe(true);
+    component.showAttentionProjects();
+    expect(component.distributionStatus.value).toBe("all");
+    component.snapshot.update(s => ({
+      ...s!,
+      projects: s!.projects!.map(p => ({
+        ...p,
+        experts: [projects[0].experts[0], { ...projects[0].experts[0], expertId: 8 }],
+      })),
+    }));
+    expect(component.attentionProjects()).toEqual([]);
+    expect(component.pendingAutoGroups()).toEqual([]);
+  });
+  it("в предпросмотре показывает существующих экспертов вместе с добавляемыми", async () => {
+    const { component, fixture } = setup();
+    component.plan.set({
+      revision: "v1",
+      planToken: "signed",
+      assignments: [
+        { projectId: 10, projectName: "Тест", expertId: 3, expertName: "Новый эксперт" },
+      ],
+      shortages: [],
+      load: [],
+    });
+    component.modal.set("auto");
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const card = document.querySelector(".experts__allocation-project")!;
+    expect(card.textContent).toContain("2 из 2");
+    expect(card.textContent).toContain("Уже назначен");
+    expect(card.textContent).toContain("Новый эксперт");
+    expect(card.textContent).toContain("Добавится");
+  });
+  it("другой вариант меняет seed и не применяет план", () => {
+    const { component, api } = setup();
+    component.open("auto");
+    const plan = { revision: "v1", planToken: "signed", assignments: [], shortages: [], load: [] };
+    component.plan.set(plan);
+    component.allocationOverrides.set(new Map([[10, [3]]]));
+    api.allocation.mockReturnValue(of(plan));
+    component.rerollAllocation();
+    expect(api.allocation.mock.calls[0][1].seed).toBe(1);
+    expect(api.allocation.mock.calls[0][1].assignmentOverrides).toBeUndefined();
+    expect(component.allocationOverrides().size).toBe(0);
+    expect(component.allocationHint()).toContain("тот же вариант");
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("редактор меняет только новые назначения и получает новый подписанный предпросмотр", () => {
+    const { component, api } = setup();
+    const extra = [3, 4].map(id => ({
+      ...snapshot.experts[0],
+      id,
+      userId: 100 + id,
+      name: `Эксперт ${id}`,
+    }));
+    component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, ...extra] }));
+    component.open("auto");
+    const plan = {
+      revision: "v1",
+      planToken: "old",
+      assignments: [{ projectId: 10, projectName: "Тест", expertId: 3, expertName: "Эксперт 3" }],
+      shortages: [],
+      load: [],
+    };
+    component.plan.set(plan);
+    component.editAllocationProject(10);
+    expect(component.candidateReason(snapshot.experts[0])).toContain("Уже назначен");
+    component.toggleCandidate(extra[0]);
+    component.toggleCandidate(extra[1]);
+    api.allocation.mockReturnValue(
+      of({ ...plan, planToken: "new", assignments: [{ ...plan.assignments[0], expertId: 4 }] }),
+    );
+    component.saveAllocationProject();
+    expect(api.allocation.mock.calls[0][1].assignmentOverrides).toEqual([
+      { projectId: 10, expertIds: [4] },
+    ]);
+    expect(component.plan()?.planToken).toBe("new");
+    expect(component.modal()).toBe("auto");
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("ошибка пересчета сохраняет старый план и выбор в редакторе", () => {
+    const { component, api } = setup();
+    component.snapshot.update(s => ({
+      ...s!,
+      experts: [...s!.experts, { ...snapshot.experts[0], id: 3, userId: 103 }],
+    }));
+    component.open("auto");
+    const plan = {
+      revision: "v1",
+      planToken: "old",
+      assignments: [{ projectId: 10, projectName: "Тест", expertId: 3, expertName: "Эксперт 3" }],
+      shortages: [],
+      load: [],
+    };
+    component.plan.set(plan);
+    component.editAllocationProject(10);
+    api.allocation.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
+    component.saveAllocationProject();
+    expect(component.plan()?.planToken).toBe("old");
+    expect(component.modal()).toBe("allocation-project");
+    expect(component.chosenExperts().has(3)).toBe(true);
+    expect(component.allocationOverrides().size).toBe(0);
   });
   const snapshot: ExpertWorkspace = {
     revision: "v1",
@@ -266,7 +378,7 @@ describe("Управление экспертами", () => {
   it("pending исключён из распределения, план с нехваткой нельзя применить", () => {
     const { component, api } = setup();
     component.open("auto");
-    expect(component.poolExperts("Сбер")).toEqual([]);
+    expect(component.poolExperts("Сбер").map(e => e.id)).toEqual([1]);
     component.plan.set({
       revision: "v1",
       planToken: "signed",
@@ -354,13 +466,15 @@ describe("Управление экспертами", () => {
     const restricted = { ...snapshot.experts[0], id: 3, allCases: false, caseNames: ["Сбер"] };
     component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, restricted] }));
     component.open("auto");
-    expect(component.poolExperts("Сбер")).toEqual([]);
+    expect(component.poolExperts("Сбер").map(e => e.id)).toEqual([1, 3]);
     component.openPool("Сбер");
+    component.chosenExperts.set(new Set());
     component.toggleCandidate(snapshot.experts[0]);
     component.toggleCandidate(restricted);
     component.savePool();
     expect(component.poolExperts("Сбер").map(e => e.id)).toEqual([1, 3]);
     component.openPool("Т-Банк");
+    component.chosenExperts.set(new Set());
     component.toggleCandidate(snapshot.experts[0]);
     component.toggleCandidate(restricted);
     expect(component.chosenExperts().has(3)).toBe(false);
@@ -371,9 +485,11 @@ describe("Управление экспертами", () => {
     const { component, api } = setup();
     component.open("auto");
     component.openPool("Сбер");
+    component.chosenExperts.set(new Set());
     component.toggleCandidate(snapshot.experts[0]);
     component.savePool();
     component.openPool("Т-Банк");
+    component.chosenExperts.set(new Set());
     component.toggleCandidate(snapshot.experts[0]);
     component.savePool();
     api.allocation.mockReturnValue(
@@ -381,6 +497,7 @@ describe("Управление экспертами", () => {
     );
     component.previewAllocation();
     expect(api.allocation).toHaveBeenCalledWith(42, {
+      seed: 0,
       expertIds: [1],
       revision: "v1",
       casePools: [
@@ -518,6 +635,7 @@ describe("Управление экспертами", () => {
     }));
     component.open("auto");
     component.openPool("Сбер");
+    component.chosenExperts.set(new Set());
     expect(component.chosenExperts().size).toBe(0);
     expect(component.candidateReason(extra)).toBeNull();
     component.toggleCandidate(snapshot.experts[0]);

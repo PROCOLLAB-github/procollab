@@ -118,9 +118,39 @@ export class ManagementExpertsComponent {
   readonly bulkScope = signal(false);
   readonly bulkRevoke = signal(false);
   readonly modal = signal<
-    "invite" | "auto" | "quota" | "revoke" | "method" | "project" | "scope" | "pool" | null
+    | "invite"
+    | "auto"
+    | "quota"
+    | "revoke"
+    | "method"
+    | "project"
+    | "scope"
+    | "pool"
+    | "allocation-project"
+    | null
   >(null);
   readonly plan = signal<AllocationPlan | null>(null);
+  readonly allocationSeed = signal(0);
+  readonly allocationOverrides = signal(new Map<number, number[]>());
+  readonly allocationHint = signal<string | null>(null);
+  readonly allocationProjectId = signal<number | null>(null);
+  readonly allocationProject = computed(() =>
+    this.allProjects().find(p => p.id === this.allocationProjectId()),
+  );
+  readonly allocationProjects = computed(() => {
+    const plan = this.plan();
+    return this.allProjects()
+      .filter(
+        p =>
+          plan?.assignments.some(a => a.projectId === p.id) ||
+          plan?.shortages.some(s => s.projectId === p.id),
+      )
+      .map(project => ({
+        ...project,
+        additions: plan!.assignments.filter(a => a.projectId === project.id),
+        missing: plan!.shortages.find(s => s.projectId === project.id)?.missing ?? 0,
+      }));
+  });
   readonly quotaPreview = signal<QuotaPreview | null>(null);
   readonly chosenExperts = signal(new Set<number>());
   readonly search = this.fb.control("");
@@ -204,6 +234,10 @@ export class ManagementExpertsComponent {
       (this.projectPage() + 1) * this.pageSize,
     ),
   );
+  readonly attentionProjects = computed(() =>
+    this.allProjects().filter(p => p.experts.length < (this.snapshot()?.requiredEvaluators ?? 1)),
+  );
+  readonly attentionActive = computed(() => this.distributionStatusValue() === "missing");
   readonly selection = computed(() =>
     this.allProjects().filter(p => this.selectedProjects().has(p.id)),
   );
@@ -247,6 +281,7 @@ export class ManagementExpertsComponent {
         .filter(g => g.missing)
         .every(g => this.poolExperts(g.name).length),
   );
+  readonly pendingAutoGroups = computed(() => this.autoGroups().filter(g => g.missing));
   readonly candidateExperts = computed(() =>
     (this.snapshot()?.experts ?? []).filter(
       e =>
@@ -308,6 +343,8 @@ export class ManagementExpertsComponent {
         return this.bulkScope() ? "Кейсы выбранных экспертов" : "Кейсы эксперта";
       case "pool":
         return "Эксперты для кейса «" + this.caseLabel(this.poolCase()) + "»";
+      case "allocation-project":
+        return "Эксперты проекта";
       case "project":
         return this.targets().length > 1
           ? "Назначить экспертов нескольким проектам"
@@ -697,16 +734,26 @@ export class ManagementExpertsComponent {
     }
     if (kind === "quota") this.quota.setValue(this.snapshot()?.requiredEvaluators ?? 1);
     if (kind === "auto") {
+      this.allocationOverrides.set(new Map());
+      this.allocationSeed.set(0);
+      this.allocationHint.set(null);
       this.casePools.set(
         this.autoGroups().map(g => ({
           caseName: g.name,
-          expertIds: [],
+          expertIds: this.joined()
+            .filter(e => this.eligibleFor(e, g.name))
+            .map(e => Number(e.id)),
         })),
       );
     }
   }
   async close(): Promise<void> {
     if (this.busy()) return;
+    if (this.modal() === "allocation-project") {
+      this.modal.set("auto");
+      this.dialogError.set(null);
+      return;
+    }
     if (this.dirty() && !(await this.confirmDiscard()())) return;
     this.modal.set(null);
     this.dialogError.set(null);
@@ -761,7 +808,23 @@ export class ManagementExpertsComponent {
   }
   previewAllocation(): void {
     if (!this.canPreviewAllocation()) return;
+    this.calculateAllocation(this.allocationOverrides(), this.allocationSeed());
+  }
+  rerollAllocation(): void {
+    if (this.busy() || !this.canPreviewAllocation()) return;
+    this.calculateAllocation(new Map(), (this.allocationSeed() + 1) % 2147483648, true);
+  }
+  private calculateAllocation(
+    overrides: Map<number, number[]>,
+    seed: number,
+    reroll = false,
+  ): void {
     const pools = this.casePools();
+    const before = JSON.stringify(
+      this.plan()
+        ?.assignments.map(a => `${a.projectId}:${a.expertId}`)
+        .sort(),
+    );
     this.request(
       this.api.allocation(
         this.programId(),
@@ -770,11 +833,63 @@ export class ManagementExpertsComponent {
               expertIds: [...new Set(pools.flatMap(p => p.expertIds))],
               casePools: pools,
               revision: this.snapshot()!.revision,
+              seed,
+              ...(overrides.size
+                ? {
+                    assignmentOverrides: [...overrides].map(([projectId, expertIds]) => ({
+                      projectId,
+                      expertIds,
+                    })),
+                  }
+                : {}),
             }
           : { expertIds: [...this.chosenExperts()] },
       ),
-      plan => this.plan.set(plan),
+      plan => {
+        this.allocationOverrides.set(overrides);
+        this.allocationSeed.set(seed);
+        this.allocationHint.set(
+          reroll &&
+            before ===
+              JSON.stringify(plan.assignments.map(a => `${a.projectId}:${a.expertId}`).sort())
+            ? "Получился тот же вариант. Можно изменить состав у проекта или выбрать других экспертов для кейса."
+            : null,
+        );
+        this.plan.set(plan);
+        this.modal.set("auto");
+      },
     );
+  }
+  editAllocationProject(id: number): void {
+    if (this.busy()) return;
+    const project = this.allProjects().find(p => p.id === id);
+    if (!project || !this.plan()) return;
+    this.allocationProjectId.set(id);
+    this.chosenExperts.set(
+      new Set([
+        ...project.experts.map(e => e.expertId),
+        ...this.plan()!
+          .assignments.filter(a => a.projectId === id)
+          .map(a => a.expertId),
+      ]),
+    );
+    this.expertSearch.reset("");
+    this.dialogError.set(null);
+    this.modal.set("allocation-project");
+  }
+  saveAllocationProject(): void {
+    const project = this.allocationProject();
+    if (!project || this.busy()) return;
+    const limit = this.snapshot()?.requiredEvaluators ?? 1;
+    if (this.chosenExperts().size !== limit) return;
+    const overrides = new Map(
+      this.allocationProjects().map(p => [p.id, p.additions.map(e => e.expertId)]),
+    );
+    overrides.set(
+      project.id,
+      [...this.chosenExperts()].filter(id => !project.experts.some(e => e.expertId === id)),
+    );
+    this.calculateAllocation(overrides, this.allocationSeed());
   }
   applyAllocation(): void {
     const plan = this.plan();
@@ -817,6 +932,12 @@ export class ManagementExpertsComponent {
   }
   distributionCaseKey(name: string | null): string {
     return JSON.stringify(name);
+  }
+  showAttentionProjects(): void {
+    const active = this.attentionActive();
+    this.distributionSearch.reset("");
+    this.distributionCase.setValue("all");
+    this.distributionStatus.setValue(active ? "all" : "missing");
   }
   scopeLabel(expert: ExpertRow): string {
     return (expert.allCases ?? true)
@@ -881,6 +1002,23 @@ export class ManagementExpertsComponent {
   candidateReason(expert: ExpertRow): string | null {
     if (expert.status !== "joined") return "Приглашение еще не принято";
     const id = Number(expert.id);
+    if (this.modal() === "allocation-project") {
+      const project = this.allocationProject();
+      if (!project) return "Проект не найден";
+      if (project.experts.some(e => e.expertId === id)) return "Уже назначен — останется в составе";
+      if (!this.poolExperts(project.caseName).some(e => Number(e.id) === id))
+        return "Не выбран для этого кейса";
+      if (
+        expert.userId &&
+        (project.leaderId === expert.userId || project.teamUserIds.includes(expert.userId))
+      )
+        return "Проект собственной команды";
+      if (
+        !this.chosenExperts().has(id) &&
+        this.chosenExperts().size >= (this.snapshot()?.requiredEvaluators ?? 1)
+      )
+        return "Сначала снимите другого эксперта";
+    }
     if (this.modal() === "project") {
       const targets = this.targets();
       if (targets.length === 1 && targets[0].experts.some(e => e.expertId === id && e.protected))
@@ -997,6 +1135,8 @@ export class ManagementExpertsComponent {
       ),
     );
     this.plan.set(null);
+    this.allocationOverrides.set(new Map());
+    this.allocationHint.set(null);
     this.modal.set("auto");
   }
 }
