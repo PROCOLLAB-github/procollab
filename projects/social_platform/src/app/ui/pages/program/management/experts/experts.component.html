@@ -28,31 +28,64 @@
   }
   @if (tab() === "experts") {
     <section class="experts__card" [attr.aria-busy]="loading()">
-      <header class="experts__heading">
+      <header class="experts__heading experts__people-heading">
         <h2>Эксперты программы</h2>
-        <button type="button" appButton="primary" (click)="open('invite')" [disabled]="busy()">
-          Пригласить эксперта
-        </button>
+        <div class="experts__heading-actions">
+          <button
+            class="experts__invite"
+            type="button"
+            appButton="primary"
+            (click)="open('invite')"
+            [disabled]="busy()"
+          >
+            Пригласить эксперта
+          </button>
+          <button
+            class="experts__export"
+            type="button"
+            appButton="icon"
+            aria-label="Выгрузить экспертов в Excel"
+            title="Выгрузить экспертов в Excel"
+            [appButtonLoading]="exporting()"
+            [disabled]="loading() || busy() || exporting() || !filtered().length"
+            (click)="downloadExperts()"
+          >
+            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+          </button>
+        </div>
       </header>
-      <div class="experts__filters">
-        <label
-          >Поиск по имени или почте<input
+      <div class="experts__toolbar">
+        <label class="experts__search"
+          ><span class="experts__sr">Поиск по имени или почте</span
+          ><input
             type="search"
             appField
             [formControl]="search"
-            placeholder="Найти эксперта"
+            placeholder="Поиск по имени или почте"
             maxlength="200"
         /></label>
-        <label
-          >Статус<select appField aria-label="Статус" [formControl]="status">
-            <option value="all">Все статусы</option>
-            <option value="joined">В программе</option>
-            <option value="pending">Приглашен</option>
-            <option value="expired">Истекло</option>
-            <option value="revoked">Отозвано</option>
-          </select></label
+        <button
+          class="experts__filter-trigger"
+          type="button"
+          appButton="secondary"
+          aria-haspopup="dialog"
+          [attr.aria-expanded]="filtersOpen() === 'experts'"
+          [disabled]="loading() || busy()"
+          (click)="openFilters()"
         >
+          <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры{{
+            filterCount() ? " · " + filterCount() : ""
+          }}
+        </button>
       </div>
+      @if (exportError()) {
+        <p appAlert="error" role="alert">Не удалось выгрузить экспертов. Повторите попытку.</p>
+      }
+      @if (exportSuccess()) {
+        <app-transient-notice [source]="exportSuccess" (dismissed)="exportSuccess.set(false)"
+          >Excel с экспертами по текущим фильтрам готов.</app-transient-notice
+        >
+      }
       @if (deliveryRefreshPaused()) {
         <p appAlert="warning">
           Отправка занимает больше времени.
@@ -96,13 +129,14 @@
             <th>Статус</th>
             <th>Назначено</th>
             <th>Оценено</th>
-            <th><span class="experts__sr">Действия</span></th>
+            <th>Действия</th>
           </tr>
         </thead>
         <tbody>
           @for (expert of visible(); track expert.id) {
             <tr
               [attr.data-expert-id]="expert.id"
+              (click)="expertRowClick($event, expert)"
               [class.experts__row--selected]="selectedExpertIds().has(expert.id)"
             >
               <td class="experts__pick">
@@ -123,25 +157,25 @@
                     [url]="href(expert.avatar ?? null) ?? undefined"
                     [size]="32"
                     [fallbackLabel]="initials(expert)"
-                  /><span class="experts__identity"
-                    ><strong>{{ expert.name || "Имя пока не указано" }}</strong
-                    ><span class="experts__email">{{ expert.email }}</span></span
+                  /><span class="experts__identity">
+                    @if (expert.userId) {
+                      <a
+                        class="experts__profile"
+                        [routerLink]="paths.profile.detail(expert.userId)"
+                        >{{ expert.name || expert.email }}</a
+                      >
+                    } @else {
+                      <strong>{{ expert.name || "Имя пока не указано" }}</strong>
+                    }
+                    <span class="experts__email">{{ expert.email }}</span></span
                   >
                 </div>
               </td>
-              <td data-label="Кейсы">
-                <button
-                  type="button"
-                  appButton="text"
-                  (click)="$event.stopPropagation(); openScope(expert)"
-                  (keydown)="$event.stopPropagation()"
-                >
-                  {{ scopeLabel(expert) }}
-                </button>
-              </td>
+              <td data-label="Кейсы">{{ scopeLabel(expert) }}</td>
               <td data-label="Статус">
                 <span
                   class="experts__badge"
+                  [title]="statusDescription(expert)"
                   [class.experts__badge--ready]="expert.status === 'joined'"
                   [class.experts__badge--error]="expert.deliveryStatus === 'failed'"
                   >{{ label(expert) }}</span
@@ -215,37 +249,29 @@
             Распределить проекты
           </button>
         </header>
-        <div class="experts__filters experts__filters--projects">
-          <label
-            >Поиск по названию<input
+        <div class="experts__toolbar">
+          <label class="experts__search"
+            ><span class="experts__sr">Поиск по названию</span
+            ><input
               type="search"
               appField
               [formControl]="distributionSearch"
-              placeholder="Найти проект"
+              placeholder="Поиск по названию проекта"
               maxlength="200"
           /></label>
-          <label
-            >Кейс<select appField aria-label="Кейс" [formControl]="distributionCase">
-              <option value="all">Все кейсы</option>
-              @for (name of caseNames(); track name) {
-                <option [value]="distributionCaseKey(name)">{{ name }}</option>
-              }
-              <option [value]="distributionCaseKey(null)">Без выбранного кейса</option>
-            </select></label
+          <button
+            class="experts__filter-trigger"
+            type="button"
+            appButton="secondary"
+            aria-haspopup="dialog"
+            [attr.aria-expanded]="filtersOpen() === 'distribution'"
+            [disabled]="loading() || busy()"
+            (click)="openFilters()"
           >
-          <label
-            >Эксперты<select appField aria-label="Эксперты" [formControl]="distributionStatus">
-              <option value="all">Все проекты</option>
-              <option value="unassigned">Без экспертов</option>
-              <option value="missing">Не хватает экспертов</option>
-              <option value="completed">Полностью оценены</option>
-              <optgroup label="Назначены эксперту">
-                @for (expert of joined(); track expert.id) {
-                  <option [value]="'expert:' + expert.id">{{ expert.name || expert.email }}</option>
-                }
-              </optgroup>
-            </select></label
-          >
+            <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры{{
+              filterCount() ? " · " + filterCount() : ""
+            }}
+          </button>
         </div>
         <p [appAlert]="filteredMissing() ? 'warning' : 'success'">
           Всего проектов на оценку: {{ allProjects().length }}. Показано
@@ -388,7 +414,7 @@
     }
   }
 </div>
-@if (tab() === "experts" && selectedExpertRows().length && !modal()) {
+@if (tab() === "experts" && selectedExpertRows().length && !modal() && !filtersOpen()) {
   <section
     class="experts__floating experts__bulk"
     [style.left.px]="floatingCenter()"
@@ -430,7 +456,7 @@
     </div>
   </section>
 }
-@if (tab() === "distribution" && selection().length && !modal()) {
+@if (tab() === "distribution" && selection().length && !modal() && !filtersOpen()) {
   <div
     class="experts__floating"
     [style.left.px]="floatingCenter()"
@@ -929,3 +955,72 @@
     }
   </div>
 </ng-template>
+
+<app-modal
+  [open]="filtersOpen() !== null"
+  (openChange)="filtersOpen.set(null)"
+  labelledBy="experts-filter-title"
+  size="small"
+  bodyClass="modal__body--no-flex"
+>
+  <form
+    class="experts__dialog experts__filter-dialog"
+    [formGroup]="filterDraft"
+    (ngSubmit)="applyFilters()"
+  >
+    <header class="experts__filter-heading">
+      <h2 id="experts-filter-title">
+        {{ filtersOpen() === "experts" ? "Фильтры экспертов" : "Фильтры распределения" }}
+      </h2>
+      <button
+        type="button"
+        appButton="icon"
+        aria-label="Закрыть фильтры"
+        (click)="filtersOpen.set(null)"
+      >
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+      </button>
+    </header>
+    @if (filtersOpen() === "experts") {
+      <label
+        >Статус<select appField aria-label="Статус" formControlName="status">
+          <option value="all">Все статусы</option>
+          <option value="joined">Доступ предоставлен</option>
+          <option value="pending">Ожидает принятия</option>
+          <option value="expired">Приглашение истекло</option>
+          <option value="revoked">Приглашение отозвано</option>
+        </select></label
+      >
+      <p>
+        Доступ предоставлен — эксперт добавлен в программу. Проекты для оценки назначаются отдельно.
+      </p>
+    } @else {
+      <label
+        >Кейс<select appField aria-label="Кейс" formControlName="case">
+          <option value="all">Все кейсы</option>
+          @for (name of caseNames(); track name) {
+            <option [value]="distributionCaseKey(name)">{{ name }}</option>
+          }
+          <option [value]="distributionCaseKey(null)">Без выбранного кейса</option>
+        </select></label
+      >
+      <label
+        >Эксперты<select appField aria-label="Эксперты" formControlName="expert">
+          <option value="all">Все проекты</option>
+          <option value="unassigned">Без экспертов</option>
+          <option value="missing">Не хватает экспертов</option>
+          <option value="completed">Полностью оценены</option>
+          <optgroup label="Назначены эксперту">
+            @for (expert of joined(); track expert.id) {
+              <option [value]="'expert:' + expert.id">{{ expert.name || expert.email }}</option>
+            }
+          </optgroup>
+        </select></label
+      >
+    }
+    <footer class="experts__filter-actions">
+      <button type="button" appButton="text" (click)="resetFilterDraft()">Сбросить</button
+      ><button type="submit" appButton="primary">Применить</button>
+    </footer>
+  </form>
+</app-modal>

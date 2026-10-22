@@ -2,6 +2,10 @@
 
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
+import { provideRouter } from "@angular/router";
+import { exportExperts } from "@utils/export-experts";
+
+vi.mock("@utils/export-experts", () => ({ exportExperts: vi.fn().mockResolvedValue(undefined) }));
 import { HttpErrorResponse } from "@angular/common/http";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import { ManagementExpertsComponent } from "./experts.component";
@@ -112,7 +116,7 @@ describe("Управление экспертами", () => {
       ],
     });
     expect(api.applyAllocation).not.toHaveBeenCalled();
-    expect(component.label(snapshot.experts[1])).toBe("Приглашен");
+    expect(component.label(snapshot.experts[1])).toBe("Ожидает принятия");
     expect(component.deliveryLabel({ ...snapshot.experts[1], deliveryStatus: "failed" })).toBe(
       "Не удалось отправить письмо",
     );
@@ -145,6 +149,7 @@ describe("Управление экспертами", () => {
     experts: [
       {
         id: 1,
+        userId: 101,
         name: "Мария Иванова",
         email: "maria@example.com",
         status: "joined",
@@ -206,7 +211,7 @@ describe("Управление экспертами", () => {
     };
     TestBed.configureTestingModule({
       imports: [ManagementExpertsComponent],
-      providers: [{ provide: EvaluationUseCase, useValue: api }],
+      providers: [provideRouter([]), { provide: EvaluationUseCase, useValue: api }],
     });
     const fixture = TestBed.createComponent(ManagementExpertsComponent);
     fixture.componentRef.setInput("programId", 42);
@@ -548,5 +553,149 @@ describe("Управление экспертами", () => {
       caseNames: ["Сбер"],
     });
     expect(api.saveCaseScope).not.toHaveBeenCalled();
+  });
+  it("свободная часть строки переключает checkbox, а checkbox не переключает дважды", () => {
+    const { fixture, component } = setup();
+    const row = fixture.nativeElement.querySelector(
+      'tr[data-expert-id="1"]',
+    ) as HTMLTableRowElement;
+    row
+      .querySelector('[data-label="Кейсы"]')!
+      .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    fixture.detectChanges();
+    expect(component.selectedExpertIds().has(1)).toBe(true);
+    expect((row.querySelector("input") as HTMLInputElement).checked).toBe(true);
+    row.querySelector(".experts__email")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    fixture.detectChanges();
+    expect(component.selectedExpertIds().size).toBe(0);
+    (row.querySelector("input") as HTMLInputElement).click();
+    fixture.detectChanges();
+    expect(component.selectedExpertIds().has(1)).toBe(true);
+    expect(component.modal()).toBeNull();
+  });
+  it("профиль использует userId, а ссылка и индивидуальное меню не меняют массовый выбор", () => {
+    const { fixture, component } = setup();
+    const row = fixture.nativeElement.querySelector(
+      'tr[data-expert-id="1"]',
+    ) as HTMLTableRowElement;
+    const link = row.querySelector("a")!;
+    row
+      .querySelector(".experts__row-actions")!
+      .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    expect(component.selectedExpertIds().size).toBe(0);
+    expect(link.getAttribute("href")).toBe("/office/profile/101");
+    component.expertRowClick(
+      { target: link, defaultPrevented: false } as unknown as MouseEvent,
+      snapshot.experts[0],
+    );
+    expect(component.selectedExpertIds().size).toBe(0);
+    expect(fixture.nativeElement.querySelector('tr[data-expert-id="invite-2"] a')).toBeNull();
+    component.toggleSelectedExpert(snapshot.experts[0]);
+    (row.querySelector("app-row-actions button") as HTMLButtonElement).click();
+    fixture.detectChanges();
+    const menu = document.querySelector('[role="menu"]')!;
+    expect(menu.textContent).toContain("Открыть профиль");
+    expect(menu.textContent).toContain("Изменить кейсы");
+    expect(row.querySelector('[data-label="Кейсы"] button')).toBeNull();
+    (
+      Array.from(menu.querySelectorAll("button")).find(n =>
+        n.textContent?.includes("Изменить кейсы"),
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    expect(component.modal()).toBe("scope");
+    expect([...component.selectedExpertIds()]).toEqual([1]);
+  });
+  it("фильтр применяется явно, отмена и применение без изменений сохраняют поиск и выбор", async () => {
+    const { fixture, component } = setup();
+    component.search.setValue("");
+    component.toggleSelectedExpert(snapshot.experts[0]);
+    component.openFilters();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    expect(document.querySelector("#experts-filter-title")?.textContent).toContain(
+      "Фильтры экспертов",
+    );
+    component.filterDraft.controls.status.setValue("pending");
+    expect(component.filtered()).toHaveLength(2);
+    component.filtersOpen.set(null);
+    expect(component.status.value).toBe("all");
+    component.openFilters();
+    component.applyFilters();
+    expect(component.selectedExpertIds().size).toBe(1);
+    component.openFilters();
+    component.filterDraft.controls.status.setValue("pending");
+    component.applyFilters();
+    expect(component.filtered()).toHaveLength(1);
+    expect(component.filterCount()).toBe(1);
+    expect(component.selectedExpertIds().size).toBe(0);
+    component.search.setValue("pending");
+    component.openFilters();
+    component.resetFilterDraft();
+    expect(component.status.value).toBe("pending");
+    component.applyFilters();
+    expect(component.status.value).toBe("all");
+    expect(component.search.value).toBe("pending");
+  });
+  it("объединяет существующие фильтры распределения, сохраняя поиск", () => {
+    const { component } = setup();
+    component.switchTab("distribution");
+    component.distributionSearch.setValue("Проект");
+    component.openFilters();
+    component.filterDraft.patchValue({ case: JSON.stringify("Сбер"), expert: "missing" });
+    expect(component.distributionCase.value).toBe("all");
+    component.applyFilters();
+    expect(component.distributionCase.value).toBe(JSON.stringify("Сбер"));
+    expect(component.distributionStatus.value).toBe("missing");
+    expect(component.filterCount()).toBe(2);
+    expect(component.distributionSearch.value).toBe("Проект");
+  });
+  it("статус доступа не выдает членство за принятие приглашения или готовые оценки", () => {
+    const { component } = setup();
+    expect(component.label(snapshot.experts[0])).toBe("Доступ предоставлен");
+    expect(component.statusDescription(snapshot.experts[0])).toContain(
+      "Проекты для оценки назначаются отдельно",
+    );
+    expect(component.label(snapshot.experts[1])).toBe("Ожидает принятия");
+    expect(component.label({ ...snapshot.experts[1], status: "expired" })).toBe(
+      "Приглашение истекло",
+    );
+    expect(component.label({ ...snapshot.experts[1], status: "revoked" })).toBe(
+      "Приглашение отозвано",
+    );
+  });
+  it("выгружает всю текущую выборку, включая другие страницы, и показывает повторяемую ошибку", async () => {
+    const { fixture, component } = setup();
+    vi.mocked(exportExperts).mockClear().mockResolvedValue(undefined);
+    component.snapshot.update(s => ({
+      ...s!,
+      experts: Array.from({ length: 25 }, (_, i) => ({
+        ...snapshot.experts[0],
+        id: i + 1,
+        name: "Эксперт " + (i + 1),
+      })),
+    }));
+    component.search.setValue("Эксперт");
+    component.page.set(1);
+    fixture.detectChanges();
+    expect(component.visible()).toHaveLength(5);
+    await component.downloadExperts();
+    expect(exportExperts).toHaveBeenCalledWith(
+      42,
+      expect.arrayContaining([
+        expect.objectContaining({ name: "Эксперт 1" }),
+        expect.objectContaining({ name: "Эксперт 25" }),
+      ]),
+    );
+    expect(vi.mocked(exportExperts).mock.calls[0][1]).toHaveLength(25);
+    expect(component.exportSuccess()).toBe(true);
+    vi.mocked(exportExperts).mockRejectedValueOnce(new Error("failed"));
+    await component.downloadExperts();
+    expect(component.exportError()).toBe(true);
+    expect(component.exporting()).toBe(false);
+    vi.mocked(exportExperts).mockResolvedValueOnce(undefined);
+    await component.downloadExperts();
+    expect(component.exportError()).toBe(false);
   });
 });

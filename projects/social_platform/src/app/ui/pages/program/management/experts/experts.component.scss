@@ -595,7 +595,7 @@
   overflow-y: auto;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 999px) {
   .experts__tabs button:first-child {
     flex: 0.7;
   }
@@ -794,11 +794,11 @@
 }
 
 .experts__table--people thead th:nth-child(2) {
-  width: 31%;
+  width: 30%;
 }
 
 .experts__table--people thead th:nth-child(3) {
-  width: 22%;
+  width: 18%;
 }
 
 .experts__table--people thead th:nth-child(4) {
@@ -807,11 +807,11 @@
 
 .experts__table--people thead th:nth-child(5),
 .experts__table--people thead th:nth-child(6) {
-  width: 10%;
+  width: 9%;
 }
 
 .experts__table--people thead th:nth-child(7) {
-  width: 44px;
+  width: 64px;
 }
 
 .experts__row-actions {
@@ -905,4 +905,85 @@
   .experts__bulk .experts__actions {
     display: flex;
   }
+}
+
+// Панель действий повторяет оформление списков участников и проектов.
+.experts__heading-actions,
+.experts__toolbar,
+.experts__filter-heading,
+.experts__filter-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.experts__search {
+  flex: 1;
+}
+
+.experts__filter-trigger.ui-button {
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.experts__export.ui-button.ui-button {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 5px;
+  color: var(--accent);
+  background: var(--light-white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
+}
+
+.experts__profile {
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.experts__table--people tr[data-expert-id] { cursor: pointer; }
+
+.experts__filter-dialog {
+  width: 432px;
+  max-width: 100%;
+}
+
+.experts__filter-heading,
+.experts__filter-actions { justify-content: space-between; }
+
+@media (max-width: 999px) {
+  .experts__people-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .experts__heading-actions { display: contents; }
+
+  .experts__invite {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .experts__export {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 599px) {
+  .experts__toolbar { flex-wrap: wrap; }
+  .experts__search { flex-basis: 100%; }
 }
