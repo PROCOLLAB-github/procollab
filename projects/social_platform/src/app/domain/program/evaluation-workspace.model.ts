@@ -81,6 +81,8 @@ export interface AllocationQuery {
   projectIds?: number[];
   casePools?: CaseExpertPool[];
   revision?: string;
+  seed?: number;
+  assignmentOverrides?: { projectId: number; expertIds: number[] }[];
 }
 export interface AllocationPlan {
   revision: string;
