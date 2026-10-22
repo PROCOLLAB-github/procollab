@@ -840,11 +840,82 @@
 }
 
 .experts__bulk {
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  background: var(--light-white);
+  border: 1px solid var(--medium-grey-for-outline);
 }
 
-.experts__bulk .experts__actions {
-  flex-wrap: wrap;
+.experts__bulk-heading {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.experts__bulk-heading strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.experts__bulk-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.experts__bulk .experts__bulk-actions .ui-button {
+  min-width: 0;
+  padding-inline: 12px;
+}
+
+.experts__bulk .ui-button--secondary {
+  background: var(--accent-light);
+  border-color: var(--accent-light);
+
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
+    background: color-mix(in srgb, var(--accent) 22%, var(--light-white));
+    border-color: var(--accent);
+  }
+}
+
+.experts__bulk .experts__bulk-revoke {
+  color: var(--black);
+  background: var(--red-light);
+  border-color: var(--red-light);
+
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
+    background: color-mix(in srgb, var(--red) 20%, var(--light-white));
+    border-color: var(--red);
+  }
+}
+
+.experts__bulk .experts__bulk-clear {
+  flex-shrink: 0;
+  width: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  color: var(--grey-for-text);
+  background: var(--light-gray);
+  border-color: var(--light-gray);
+
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
+    color: var(--black);
+    background: var(--medium-grey-for-outline);
+    border-color: var(--medium-grey-for-outline);
+  }
+}
+
+.experts__bulk .ui-button:disabled {
+  color: var(--grey-for-text);
+  background: var(--medium-grey-for-outline);
+  border-color: var(--medium-grey-for-outline);
+  opacity: 1;
 }
 
 @media (max-width: 999px) {
@@ -896,14 +967,15 @@
   .experts__table--projects td:last-child::before {
     display: none;
   }
+}
 
-  .experts__bulk {
-    display: grid;
-    gap: 12px;
+@media (max-width: 599px) {
+  .experts--people {
+    padding-bottom: 224px;
   }
 
-  .experts__bulk .experts__actions {
-    display: flex;
+  .experts__bulk-actions {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
