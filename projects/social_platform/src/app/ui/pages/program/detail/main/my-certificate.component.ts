@@ -28,7 +28,7 @@ import { ProgramCertificatesHttpAdapter } from "@infrastructure/adapters/program
           <h3>Ваш сертификат готов</h3>
           <p>Спасибо за участие в программе!</p>
         </div>
-        <a appButton="primary" [href]="url()" rel="noreferrer">Скачать PDF</a>
+        <a class="ui-button ui-button--primary" [href]="url()" rel="noreferrer">Скачать PDF</a>
       </section>
     } @else if (error()) {
       <section class="my-certificate">
