@@ -18,7 +18,7 @@ describe("Управление экспертами", () => {
     component.switchTab("distribution");
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".experts__quota").textContent).toContain(
-      "Оценок для каждого проекта: 2",
+      "Количество экспертов на каждый проект: 2",
     );
     expect(fixture.nativeElement.textContent).toContain("Проекты на оценку");
   });
