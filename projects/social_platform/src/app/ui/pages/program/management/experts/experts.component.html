@@ -262,7 +262,7 @@
                 {{
                   attentionProjects().length | pluralize: ["проект", "проекта", "проектов"]
                 }}</strong
-              ><span>Не хватает экспертов</span></span
+              ><span>Не все эксперты назначены</span></span
             >
             <span>{{ attentionActive() ? "Все проекты" : "Показать" }}</span>
           </button>
@@ -687,7 +687,7 @@
             </button>
           </div>
           @if (preview.shortages.length) {
-            <p appAlert="warning">Не хватает экспертов для полного состава проектов.</p>
+            <p appAlert="warning">Не удалось назначить всех экспертов.</p>
           }
           <div class="experts__scroll experts__scroll--allocation">
             @for (project of allocationProjects(); track project.id) {
@@ -730,7 +730,7 @@
                 </ul>
                 @if (project.missing) {
                   <p class="experts__allocation-shortage">
-                    Не хватает экспертов: {{ project.missing }}
+                    Осталось назначить: {{ project.missing }}
                   </p>
                 }
               </section>
@@ -805,7 +805,7 @@
                 <div>
                   <h3>{{ caseLabel(group.name) }}</h3>
                   <p>
-                    Не хватает экспертов в {{ group.missing }}
+                    Не все эксперты назначены в {{ group.missing }}
                     {{ group.missing | pluralize: ["проекте", "проектах", "проектах"] }}
                   </p>
                 </div>
@@ -1065,8 +1065,8 @@
       <label
         >Эксперты<select appField aria-label="Эксперты" formControlName="expert">
           <option value="all">Все проекты</option>
-          <option value="unassigned">Без экспертов</option>
-          <option value="missing">Не хватает экспертов</option>
+          <option value="unassigned">Эксперты не назначены</option>
+          <option value="missing">Не все эксперты назначены</option>
           <option value="completed">Полностью оценены</option>
           <optgroup label="Назначены эксперту">
             @for (expert of joined(); track expert.id) {
