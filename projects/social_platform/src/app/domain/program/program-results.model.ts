@@ -18,6 +18,7 @@ export interface ResultProject {
   completed: number;
   required: number;
   ready: boolean;
+  evaluationComplete?: boolean;
   score: number | null;
   place: number | null;
   averages: Record<string, number>;
@@ -44,4 +45,5 @@ export interface ResultsQuery {
   caseName?: string;
   order: "asc" | "desc";
   scope: "current" | "all";
+  status?: "all" | "complete" | "pending";
 }

@@ -54,6 +54,7 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
       .set("case_scope", query.caseScope)
       .set("order", query.order)
       .set("scope", query.scope);
+    params = params.set("status", query.status ?? "all");
     if (query.caseName) params = params.set("case_name", query.caseName);
     return this.api.getFile(`${this.root(id)}/results/export/`, params);
   }

@@ -1,17 +1,8 @@
 <!-- @format -->
-
 <div class="results__detail-heading">
   <strong>Оценки экспертов</strong
-  ><strong
-    >{{ project().ready ? "Среднее" : "Предварительно" }}: {{ format(project().score) }}</strong
-  >
+  ><a [routerLink]="paths.projects.detail(project().projectId)">Открыть проект</a>
 </div>
-@if (!project().ready) {
-  <p appAlert="warning">
-    Получено {{ project().completed }} из {{ project().required }} полных оценок. Место появится
-    после завершения оценивания.
-  </p>
-}
 @if (!project().experts.length) {
   <p class="results__muted">Оценок пока нет.</p>
 } @else {
@@ -26,13 +17,15 @@
                 [url]="href(expert.avatar) ?? undefined"
                 [size]="32"
                 [fallbackLabel]="initials(expert)"
-              /><span>{{ expert.name }}</span
+              /><a [routerLink]="paths.profile.detail(expert.userId)">{{ expert.name }}</a
               ><small class="results__badge" [class.results__badge--ready]="expert.complete">{{
                 expert.complete ? "Оценено" : "Ожидается оценка"
               }}</small>
             </th>
           }
-          <th>Среднее</th>
+          @if (hasNumeric()) {
+            <th>Среднее</th>
+          }
         </tr>
       </thead>
       <tbody>
@@ -45,28 +38,33 @@
             @for (expert of project().experts; track expert.userId) {
               <td>{{ value(expert, criterion) }}</td>
             }
-            <td>{{ format(project().averages[criterion.id]) }}</td>
+            @if (hasNumeric()) {
+              <td>{{ format(project().averages[criterion.id]) }}</td>
+            }
           </tr>
         }
-        <tr>
-          <th>Сумма баллов</th>
-          @for (expert of project().experts; track expert.userId) {
+        @if (hasNumeric()) {
+          <tr>
+            <th>Сумма баллов</th>
+            @for (expert of project().experts; track expert.userId) {
+              <td>
+                <strong>{{ format(expert.total) }}</strong>
+              </td>
+            }
             <td>
-              <strong>{{ format(expert.total) }}</strong>
+              <strong>{{ format(project().score) }}</strong>
             </td>
-          }
-          <td>
-            <strong>{{ format(project().score) }}</strong>
-          </td>
-        </tr>
+          </tr>
+        }
       </tbody>
     </table>
     @for (criterion of comments(); track criterion.id) {
       <div class="results__comments">
         <strong>{{ criterion.name }}</strong>
-        @for (expert of project().experts; track expert.userId) {
+        @for (expert of commentExperts(criterion); track expert.userId) {
           <p>
-            <span>{{ expert.name }}:</span> {{ value(expert, criterion) }}
+            <a [routerLink]="paths.profile.detail(expert.userId)">{{ expert.name }}:</a>
+            {{ value(expert, criterion) }}
           </p>
         }
       </div>
@@ -74,35 +72,43 @@
   </div>
   <div class="results__expert-list">
     @for (expert of project().experts; track expert.userId) {
-      <button
-        class="results__expert"
-        type="button"
-        [attr.aria-expanded]="expandedExperts().has(project().id + ':' + expert.userId)"
-        (click)="toggleExpert(project().id + ':' + expert.userId)"
-      >
+      <article class="results__expert" [class.results__expert--unscored]="!hasNumeric()">
         <app-avatar
           [url]="href(expert.avatar) ?? undefined"
           [size]="32"
           [fallbackLabel]="initials(expert)"
         /><span
-          ><strong>{{ expert.name }}</strong
+          ><a [routerLink]="paths.profile.detail(expert.userId)">{{ expert.name }}</a
           ><small>{{ expert.complete ? "Оценено" : "Ожидается оценка" }}</small></span
-        ><strong>{{ format(expert.total) }}</strong
-        ><img
-          src="assets/images/results-arrow-down.svg"
-          width="16"
-          height="16"
-          alt=""
-          aria-hidden="true"
-        />
-      </button>
+        >
+        @if (hasNumeric()) {
+          <strong>{{ format(expert.total) }}</strong>
+        }
+        <button
+          type="button"
+          class="results__expert-toggle"
+          [attr.aria-label]="'Оценки эксперта ' + expert.name"
+          [attr.aria-expanded]="expandedExperts().has(project().id + ':' + expert.userId)"
+          (click)="toggleExpert(project().id + ':' + expert.userId)"
+        >
+          <i
+            appIcon
+            icon="chevron-down"
+            appSquare="16"
+            [class.results__arrow--open]="expandedExperts().has(project().id + ':' + expert.userId)"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </article>
       @if (expandedExperts().has(project().id + ":" + expert.userId)) {
         <dl class="results__expert-values">
           @for (criterion of criteria(); track criterion.id) {
-            <div>
-              <dt>{{ criterion.name }}</dt>
-              <dd>{{ value(expert, criterion) }}</dd>
-            </div>
+            @if (criterion.type !== "str" || value(expert, criterion) !== "—") {
+              <div>
+                <dt>{{ criterion.name }}</dt>
+                <dd>{{ value(expert, criterion) }}</dd>
+              </div>
+            }
           }
         </dl>
       }
