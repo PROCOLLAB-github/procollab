@@ -367,7 +367,7 @@ export class ManagementExpertsComponent {
         if (this.allocationSettings()) return "Эксперты по кейсам";
         return this.plan()
           ? this.plan()!.shortages.length
-            ? "Не хватает экспертов"
+            ? "Не все эксперты назначены"
             : "Предпросмотр распределения"
           : "Автоматическое распределение";
     }
