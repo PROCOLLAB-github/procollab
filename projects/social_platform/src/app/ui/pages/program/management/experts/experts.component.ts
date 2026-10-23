@@ -132,7 +132,7 @@ export class ManagementExpertsComponent {
   readonly plan = signal<AllocationPlan | null>(null);
   readonly allocationSeed = signal(0);
   readonly allocationOverrides = signal(new Map<number, number[]>());
-  readonly allocationHint = signal<string | null>(null);
+  readonly allocationSettings = signal(false);
   readonly allocationProjectId = signal<number | null>(null);
   readonly allocationProject = computed(() =>
     this.allProjects().find(p => p.id === this.allocationProjectId()),
@@ -201,6 +201,9 @@ export class ManagementExpertsComponent {
   readonly scopeCases = signal(new Set<string | null>());
   readonly casePools = signal<CaseExpertPool[]>([]);
   readonly poolCase = signal<string | null>(null);
+  readonly poolCandidates = computed(() =>
+    this.joined().filter(e => this.eligibleFor(e, this.poolCase())),
+  );
   readonly emptySelection = new Set<number>();
   readonly allProjects = computed(() => this.snapshot()?.projects ?? []);
   readonly caseNames = computed(() => this.snapshot()?.cases ?? []);
@@ -285,10 +288,11 @@ export class ManagementExpertsComponent {
   readonly candidateExperts = computed(() =>
     (this.snapshot()?.experts ?? []).filter(
       e =>
-        !this.expertQuery().trim() ||
-        `${e.name ?? ""} ${e.email}`
-          .toLocaleLowerCase("ru")
-          .includes(this.expertQuery().trim().toLocaleLowerCase("ru")),
+        (this.modal() !== "pool" || this.eligibleFor(e, this.poolCase())) &&
+        (!this.expertQuery().trim() ||
+          `${e.name ?? ""} ${e.email}`
+            .toLocaleLowerCase("ru")
+            .includes(this.expertQuery().trim().toLocaleLowerCase("ru"))),
     ),
   );
   readonly projectDirty = computed(
@@ -354,6 +358,7 @@ export class ManagementExpertsComponent {
       case "revoke":
         return "Отозвать приглашение";
       default:
+        if (this.allocationSettings()) return "Эксперты по кейсам";
         return this.plan()
           ? this.plan()!.shortages.length
             ? "Не хватает экспертов"
@@ -736,7 +741,7 @@ export class ManagementExpertsComponent {
     if (kind === "auto") {
       this.allocationOverrides.set(new Map());
       this.allocationSeed.set(0);
-      this.allocationHint.set(null);
+      this.allocationSettings.set(true);
       this.casePools.set(
         this.autoGroups().map(g => ({
           caseName: g.name,
@@ -810,8 +815,23 @@ export class ManagementExpertsComponent {
     if (!this.canPreviewAllocation()) return;
     this.calculateAllocation(this.allocationOverrides(), this.allocationSeed());
   }
+  startAutomaticAllocation(): void {
+    if (this.busy()) return;
+    this.open("auto");
+    this.allocationSettings.set(false);
+    if (this.pendingAutoGroups().length) this.calculateAllocation(new Map(), 0);
+  }
+  configureAllocation(): void {
+    if (this.busy()) return;
+    this.plan.set(null);
+    this.dialogError.set(null);
+    this.allocationSettings.set(true);
+  }
+  selectAllPool(): void {
+    if (!this.busy()) this.chosenExperts.set(new Set(this.poolCandidates().map(e => Number(e.id))));
+  }
   rerollAllocation(): void {
-    if (this.busy() || !this.canPreviewAllocation()) return;
+    if (this.busy() || !this.plan()?.canReroll) return;
     this.calculateAllocation(new Map(), (this.allocationSeed() + 1) % 2147483648, true);
   }
   private calculateAllocation(
@@ -820,11 +840,6 @@ export class ManagementExpertsComponent {
     reroll = false,
   ): void {
     const pools = this.casePools();
-    const before = JSON.stringify(
-      this.plan()
-        ?.assignments.map(a => `${a.projectId}:${a.expertId}`)
-        .sort(),
-    );
     this.request(
       this.api.allocation(
         this.programId(),
@@ -834,6 +849,7 @@ export class ManagementExpertsComponent {
               casePools: pools,
               revision: this.snapshot()!.revision,
               seed,
+              ...(reroll ? { previousPlanToken: this.plan()!.planToken } : {}),
               ...(overrides.size
                 ? {
                     assignmentOverrides: [...overrides].map(([projectId, expertIds]) => ({
@@ -848,13 +864,7 @@ export class ManagementExpertsComponent {
       plan => {
         this.allocationOverrides.set(overrides);
         this.allocationSeed.set(seed);
-        this.allocationHint.set(
-          reroll &&
-            before ===
-              JSON.stringify(plan.assignments.map(a => `${a.projectId}:${a.expertId}`).sort())
-            ? "Получился тот же вариант. Можно изменить состав у проекта или выбрать других экспертов для кейса."
-            : null,
-        );
+        this.allocationSettings.set(false);
         this.plan.set(plan);
         this.modal.set("auto");
       },
@@ -1136,7 +1146,7 @@ export class ManagementExpertsComponent {
     );
     this.plan.set(null);
     this.allocationOverrides.set(new Map());
-    this.allocationHint.set(null);
+    this.allocationSettings.set(true);
     this.modal.set("auto");
   }
 }
