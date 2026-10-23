@@ -614,9 +614,9 @@
         </section>
         <section class="experts__method">
           <h3>Автоматически</h3>
-          <p>Выбрать экспертов для каждого кейса и распределить проекты с учетом общей нагрузки.</p>
-          <button type="button" appButton="primary" (click)="open('auto')">
-            Настроить распределение
+          <p>Все кейсы и все доступные эксперты, с учетом нагрузки.</p>
+          <button type="button" appButton="primary" (click)="startAutomaticAllocation()">
+            Распределить автоматически
           </button>
         </section>
       }
@@ -668,25 +668,39 @@
       }
       @case ("auto") {
         @if (plan(); as preview) {
-          <p>Шаг 2 из 2 · Проверьте составы</p>
-          <strong
-            >По {{ snapshot()?.requiredEvaluators }}
-            {{
-              snapshot()?.requiredEvaluators ?? 1 | pluralize: ["эксперту", "эксперта", "экспертов"]
-            }}
-            на проект</strong
-          >
+          <div class="experts__allocation-options">
+            <strong
+              >По {{ snapshot()?.requiredEvaluators }}
+              {{
+                snapshot()?.requiredEvaluators ?? 1
+                  | pluralize: ["эксперту", "эксперта", "экспертов"]
+              }}
+              на проект</strong
+            >
+            <button
+              type="button"
+              appButton="text"
+              [disabled]="busy()"
+              (click)="configureAllocation()"
+            >
+              Настроить экспертов
+            </button>
+          </div>
           @if (preview.shortages.length) {
-            <p appAlert="warning">
-              Не хватает экспертов. Измените состав у проектов или вернитесь к выбору экспертов для
-              кейсов.
-            </p>
+            <p appAlert="warning">Не хватает экспертов для полного состава проектов.</p>
           }
           <div class="experts__scroll experts__scroll--allocation">
             @for (project of allocationProjects(); track project.id) {
               <section class="experts__allocation-project">
                 <header class="experts__allocation-heading">
-                  <h3>{{ project.name }}</h3>
+                  <div>
+                    <h3>{{ project.name }}</h3>
+                    @if (pendingAutoGroups().length > 1) {
+                      <span class="experts__allocation-case-name">{{
+                        caseLabel(project.caseName)
+                      }}</span>
+                    }
+                  </div>
                   <span
                     >{{ project.experts.length + project.additions.length }} из
                     {{ snapshot()?.requiredEvaluators }}</span
@@ -715,7 +729,9 @@
                   }
                 </ul>
                 @if (project.missing) {
-                  <p class="experts__allocation-shortage">Не хватает: {{ project.missing }}</p>
+                  <p class="experts__allocation-shortage">
+                    Не хватает экспертов: {{ project.missing }}
+                  </p>
                 }
               </section>
             } @empty {
@@ -723,48 +739,49 @@
             }
           </div>
           <details class="experts__allocation-load">
-            <summary>Нагрузка экспертов</summary>
-            <div class="experts__scroll">
-              <table class="experts__load-table">
-                <thead>
-                  <tr>
-                    <th>Эксперт</th>
-                    <th>Сейчас</th>
-                    <th>После распределения</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (expert of preview.load; track expert.expertId) {
-                    <tr>
-                      <td>{{ expert.name }}</td>
-                      <td>{{ expert.before }}</td>
-                      <td>{{ expert.after }}</td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
+            <summary>Нагрузка после распределения</summary>
+            <div class="experts__scroll experts__workloads">
+              @for (expert of preview.load; track expert.expertId) {
+                <article
+                  class="experts__workload"
+                  [attr.aria-label]="'Нагрузка эксперта ' + expert.name"
+                >
+                  <header>
+                    <strong>{{ expert.name }}</strong>
+                    @if ((expert.assignedAfter ?? 0) > (expert.assignedBefore ?? 0)) {
+                      <span class="experts__workload-added"
+                        >+{{ (expert.assignedAfter ?? 0) - (expert.assignedBefore ?? 0) }}</span
+                      >
+                    }
+                  </header>
+                  <dl>
+                    <div>
+                      <dt>Назначено проектов</dt>
+                      <dd>{{ expert.assignedAfter ?? "—" }}</dd>
+                    </div>
+                    <div>
+                      <dt>Осталось оценить</dt>
+                      <dd>{{ expert.after }}</dd>
+                    </div>
+                  </dl>
+                </article>
+              }
             </div>
           </details>
-          @if (allocationHint()) {
-            <p role="status">{{ allocationHint() }}</p>
-          }
           <footer class="experts__actions experts__allocation-actions">
-            <button
-              type="button"
-              appButton="secondary"
-              [disabled]="busy()"
-              (click)="plan.set(null); allocationHint.set(null); dialogError.set(null)"
-            >
-              Назад
+            <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">
+              К проектам
             </button>
-            <button
-              type="button"
-              appButton="secondary"
-              [disabled]="busy() || !canPreviewAllocation()"
-              (click)="rerollAllocation()"
-            >
-              Другой вариант
-            </button>
+            @if (preview.canReroll) {
+              <button
+                type="button"
+                appButton="secondary"
+                [disabled]="busy() || !canPreviewAllocation()"
+                (click)="rerollAllocation()"
+              >
+                Другой вариант
+              </button>
+            }
             <button
               type="button"
               appButton="primary"
@@ -774,8 +791,7 @@
               Подтвердить
             </button>
           </footer>
-        } @else {
-          <p>Шаг 1 из 2 · Эксперты для кейсов</p>
+        } @else if (allocationSettings()) {
           <strong
             >По {{ snapshot()?.requiredEvaluators }}
             {{
@@ -789,8 +805,8 @@
                 <div>
                   <h3>{{ caseLabel(group.name) }}</h3>
                   <p>
-                    Нужно дополнить {{ group.missing }}
-                    {{ group.missing | pluralize: ["проект", "проекта", "проектов"] }}
+                    Не хватает экспертов в {{ group.missing }}
+                    {{ group.missing | pluralize: ["проекте", "проектах", "проектах"] }}
                   </p>
                 </div>
                 <button
@@ -802,7 +818,7 @@
                   Эксперты · {{ poolExperts(group.name).length }}
                 </button>
                 @if (!poolExperts(group.name).length) {
-                  <p class="experts__allocation-shortage">Выберите экспертов для этого кейса</p>
+                  <p class="experts__allocation-shortage">Доступные эксперты не выбраны</p>
                 }
               </section>
             } @empty {
@@ -821,6 +837,21 @@
                 Посмотреть результат
               </button>
             }
+          </footer>
+        } @else if (busy()) {
+          <p role="status">Готовим предпросмотр…</p>
+        } @else if (!pendingAutoGroups().length) {
+          <p>Все проекты уже распределены.</p>
+          <footer class="experts__actions">
+            <button type="button" appButton="secondary" (click)="close()">К проектам</button>
+          </footer>
+        } @else {
+          <footer class="experts__actions">
+            <button type="button" appButton="secondary" (click)="configureAllocation()">
+              Настроить экспертов</button
+            ><button type="button" appButton="primary" (click)="startAutomaticAllocation()">
+              Повторить
+            </button>
           </footer>
         }
       }
@@ -890,21 +921,18 @@
         </footer>
       }
       @case ("pool") {
-        <p>
-          Выбранные эксперты смогут получить проекты этого кейса. Универсального эксперта можно
-          выбрать и для других кейсов.
-        </p>
+        <div class="experts__pool-tools">
+          <strong aria-live="polite">Выбрано: {{ chosenExperts().size }}</strong>
+          @if (chosenExperts().size < poolCandidates().length) {
+            <button type="button" appButton="text" [disabled]="busy()" (click)="selectAllPool()">
+              Выбрать всех
+            </button>
+          }
+        </div>
         <ng-container [ngTemplateOutlet]="expertChooser" />
-        <p>
-          Выбрано {{ chosenExperts().size }}
-          {{ chosenExperts().size | pluralize: ["эксперт", "эксперта", "экспертов"] }}. На следующем
-          шаге проверим, хватит ли их каждому проекту.
-        </p>
         <footer class="experts__actions">
-          <button type="button" appButton="secondary" (click)="modal.set('auto')">Назад</button
-          ><button type="button" appButton="primary" (click)="savePool()">
-            Использовать выбранных
-          </button>
+          <button type="button" appButton="secondary" (click)="modal.set('auto')">Назад</button>
+          <button type="button" appButton="primary" (click)="savePool()">Применить</button>
         </footer>
       }
     }
@@ -972,7 +1000,7 @@
           ><span>{{ expert.email }}</span
           ><span [class.experts__reason]="!!candidateReason(expert)">{{
             candidateReason(expert) ||
-              scopeLabel(expert) + " · Ожидают оценки: " + (expert.remaining ?? 0)
+              scopeLabel(expert) + " · Осталось оценить: " + (expert.remaining ?? 0)
           }}</span></span
         ></label
       >

@@ -181,10 +181,17 @@ describe("Управление экспертами", () => {
     expect(card.textContent).toContain("Новый эксперт");
     expect(card.textContent).toContain("Добавится");
   });
-  it("другой вариант меняет seed и не применяет план", () => {
+  it("другой вариант передает предыдущий подписанный план и не применяет назначения", () => {
     const { component, api } = setup();
     component.open("auto");
-    const plan = { revision: "v1", planToken: "signed", assignments: [], shortages: [], load: [] };
+    const plan = {
+      revision: "v1",
+      planToken: "signed",
+      canReroll: true,
+      assignments: [],
+      shortages: [],
+      load: [],
+    };
     component.plan.set(plan);
     component.allocationOverrides.set(new Map([[10, [3]]]));
     api.allocation.mockReturnValue(of(plan));
@@ -192,8 +199,91 @@ describe("Управление экспертами", () => {
     expect(api.allocation.mock.calls[0][1].seed).toBe(1);
     expect(api.allocation.mock.calls[0][1].assignmentOverrides).toBeUndefined();
     expect(component.allocationOverrides().size).toBe(0);
-    expect(component.allocationHint()).toContain("тот же вариант");
+    expect(api.allocation.mock.calls[0][1].previousPlanToken).toBe("signed");
     expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("не запрашивает другой вариант, когда сервер не предлагает альтернативу", () => {
+    const { component, api } = setup();
+    component.open("auto");
+    component.plan.set({
+      revision: "v1",
+      planToken: "signed",
+      canReroll: false,
+      assignments: [],
+      shortages: [],
+      load: [],
+    });
+    component.rerollAllocation();
+    expect(api.allocation).not.toHaveBeenCalled();
+  });
+  it("обычный запуск сразу считает все кейсы со всеми подходящими экспертами", () => {
+    const { component, api } = setup();
+    const restricted = { ...snapshot.experts[0], id: 3, allCases: false, caseNames: ["Сбер"] };
+    component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, restricted] }));
+    api.allocation.mockReturnValue(
+      of({
+        revision: "v1",
+        planToken: "signed",
+        canReroll: true,
+        assignments: [],
+        shortages: [],
+        load: [],
+      }),
+    );
+    component.startAutomaticAllocation();
+    expect(api.allocation).toHaveBeenCalledWith(42, {
+      expertIds: [1, 3],
+      casePools: [
+        { caseName: "Сбер", expertIds: [1, 3] },
+        { caseName: "Т-Банк", expertIds: [1] },
+      ],
+      revision: "v1",
+      seed: 0,
+    });
+    expect(component.allocationSettings()).toBe(false);
+    expect(component.plan()?.planToken).toBe("signed");
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("выбор пула показывает только доступных экспертов кейса и восстанавливает всех", () => {
+    const { component } = setup();
+    component.open("auto");
+    component.openPool("Сбер");
+    expect(
+      component
+        .candidateExperts()
+        .every(e => e.status === "joined" && component.eligibleFor(e, "Сбер")),
+    ).toBe(true);
+    component.chosenExperts.set(new Set());
+    component.selectAllPool();
+    expect([...component.chosenExperts()]).toEqual([1]);
+  });
+  it("у назначенного эксперта с завершенной оценкой нагрузка имеет подписи и отдельные числа", async () => {
+    const { component, fixture } = setup();
+    component.plan.set({
+      revision: "v1",
+      planToken: "signed",
+      canReroll: false,
+      assignments: [],
+      shortages: [],
+      load: [
+        {
+          expertId: 1,
+          name: "Мария Иванова",
+          assignedBefore: 1,
+          assignedAfter: 1,
+          before: 0,
+          after: 0,
+        },
+      ],
+    });
+    component.modal.set("auto");
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const row = document.querySelector(".experts__workload")!;
+    expect(row.textContent).toContain("Назначено проектов1");
+    expect(row.textContent).toContain("Осталось оценить0");
+    expect(document.body.textContent).not.toContain("Получился тот же вариант");
   });
   it("редактор меняет только новые назначения и получает новый подписанный предпросмотр", () => {
     const { component, api } = setup();

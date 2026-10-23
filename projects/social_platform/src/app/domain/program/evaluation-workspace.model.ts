@@ -82,9 +82,11 @@ export interface AllocationQuery {
   casePools?: CaseExpertPool[];
   revision?: string;
   seed?: number;
+  previousPlanToken?: string;
   assignmentOverrides?: { projectId: number; expertIds: number[] }[];
 }
 export interface AllocationPlan {
+  canReroll?: boolean;
   revision: string;
   planToken: string;
   assignments: {
@@ -101,7 +103,14 @@ export interface AllocationPlan {
     caseName?: string | null;
   }[];
   unavailableProjects?: UnavailableEvaluationProject[];
-  load: { expertId: number; name: string; before: number; after: number }[];
+  load: {
+    expertId: number;
+    name: string;
+    before: number;
+    after: number;
+    assignedBefore?: number;
+    assignedAfter?: number;
+  }[];
 }
 export interface UnavailableEvaluationProject {
   projectId: number;
