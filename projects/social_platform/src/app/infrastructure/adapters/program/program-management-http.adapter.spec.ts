@@ -11,6 +11,35 @@ import { API_URL } from "@core/lib/providers";
 
 describe("Контракт HTTP панели организатора", () => {
   let adapter: ProgramManagementHttpAdapter, http: HttpTestingController;
+  it("результаты получают независимую готовность, а экспорт передает текущий статус", () => {
+    adapter
+      .results(4)
+      .subscribe(data => expect(data.groups[0].projects[0].evaluationComplete).toBe(true));
+    const response = http.expectOne(r => r.url.endsWith("/results/"));
+    response.flush({
+      groups: [
+        {
+          case_name: "Кейс",
+          projects: [{ evaluation_complete: true, ready: false, score: null, place: null }],
+        },
+      ],
+    });
+    adapter
+      .exportResults(4, {
+        search: "Город",
+        caseScope: "selected",
+        caseName: "Кейс",
+        status: "pending",
+        order: "desc",
+        scope: "current",
+      })
+      .subscribe();
+    const file = http.expectOne(r => r.url.endsWith("/results/export/"));
+    expect(file.request.params.get("status")).toBe("pending");
+    expect(file.request.params.get("case_name")).toBe("Кейс");
+    expect(file.request.responseType).toBe("blob");
+    file.flush(new Blob(["xlsx"]));
+  });
   it("действия проекта передают ID связей, целевой кейс и подписанный token", () => {
     adapter
       .previewProjectAction(4, { action: "change_case", ids: [17], caseName: "Город" })

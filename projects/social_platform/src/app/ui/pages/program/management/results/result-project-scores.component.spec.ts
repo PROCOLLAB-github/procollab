@@ -1,5 +1,6 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
 import { ResultProjectScoresComponent } from "./result-project-scores.component";
 import { ManagementCriterion } from "@domain/program/program-criteria.model";
 import { ResultProject } from "@domain/program/program-results.model";
@@ -54,6 +55,7 @@ describe("Общие оценки проекта", () => {
         },
       ],
     };
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
     const fixture = TestBed.createComponent(ResultProjectScoresComponent);
     fixture.componentRef.setInput("project", project);
     fixture.componentRef.setInput("criteria", criteria);
@@ -66,16 +68,74 @@ describe("Общие оценки проекта", () => {
       "Текст\nкомментария",
     );
     expect(element.querySelectorAll(".results__badge--ready")).toHaveLength(1);
-    const expert = element.querySelectorAll<HTMLButtonElement>(".results__expert")[1];
+    const expert = element.querySelectorAll<HTMLButtonElement>(".results__expert-toggle")[1];
     expect(expert.getAttribute("aria-expanded")).toBe("false");
     expert.click();
     fixture.detectChanges();
     expect(expert.getAttribute("aria-expanded")).toBe("true");
     expect(
       [...element.querySelectorAll(".results__expert-values dd")].map(n => n.textContent?.trim()),
-    ).toEqual(["—", "—", "—"]);
+    ).toEqual(["—", "—"]);
+    expect(element.querySelector(".results__detail-heading a")?.getAttribute("href")).toBe(
+      "/office/projects/91",
+    );
+    expect(element.querySelector(".results__matrix a")?.getAttribute("href")).toBe(
+      "/office/profile/1",
+    );
+    expect(element.querySelector(".results__comments")?.textContent).not.toContain(
+      "Второй Эксперт",
+    );
     expert.click();
     fixture.detectChanges();
     expect(element.querySelector(".results__expert-values")).toBeNull();
+  });
+  it("без числовых критериев сохраняет Нет и профили, не показывает пустые комментарии или обещание места", () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+    const fixture = TestBed.createComponent(ResultProjectScoresComponent);
+    fixture.componentRef.setInput("criteria", [
+      { id: 1, name: "Условия", type: "bool", minValue: null, maxValue: null, description: null },
+      {
+        id: 2,
+        name: "Комментарий",
+        type: "str",
+        minValue: null,
+        maxValue: null,
+        description: null,
+      },
+    ]);
+    fixture.componentRef.setInput("project", {
+      id: 11,
+      projectId: 91,
+      name: "Проект",
+      caseName: null,
+      completed: 1,
+      required: 1,
+      evaluationComplete: true,
+      ready: false,
+      score: null,
+      place: null,
+      averages: {},
+      experts: [
+        {
+          userId: 1,
+          name: "Эксперт",
+          email: "e@example.test",
+          avatar: null,
+          complete: true,
+          total: null,
+          values: [
+            { criterionId: 1, value: "False" },
+            { criterionId: 2, value: "" },
+          ],
+        },
+      ],
+    });
+    fixture.detectChanges();
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain("Нет");
+    expect(text).not.toContain("Сумма баллов");
+    expect(text).not.toContain("Среднее");
+    expect(text).not.toContain("Место появится");
+    expect(fixture.nativeElement.querySelector(".results__comments")).toBeNull();
   });
 });
