@@ -360,7 +360,7 @@ export class ManagementExpertsComponent {
           ? "Назначить экспертов нескольким проектам"
           : "Назначить экспертов";
       case "quota":
-        return "Сколько оценок нужно каждому проекту";
+        return "Сколько экспертов нужно каждому проекту";
       case "revoke":
         return "Отозвать приглашение";
       default:
