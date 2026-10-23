@@ -10,6 +10,7 @@ export type ManagementSection =
   | "experts"
   | "results"
   | "analytics"
+  | "certificates"
   | "settings"
   | "evaluation";
 export type SettingsSection =

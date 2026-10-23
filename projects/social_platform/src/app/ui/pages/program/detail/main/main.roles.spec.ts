@@ -7,6 +7,8 @@ import { By } from "@angular/platform-browser";
 import { BehaviorSubject, of } from "rxjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ProgramDetailMainComponent } from "./main.component";
+import { MyCertificateComponent } from "./my-certificate.component";
+import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
 import { ProgramRoleWidgetComponent } from "./role-widget/program-role-widget.component";
 import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
 import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
@@ -50,6 +52,7 @@ describe("Program page: program-scoped news and role visibility", () => {
   const added = { ...news, id: 2, text: "Созданная организатором новость" };
   const fetch = vi.fn(),
     add = vi.fn();
+  const mine = vi.fn();
   let data: BehaviorSubject<{ data: Program }>;
 
   beforeEach(async () => {
@@ -57,6 +60,7 @@ describe("Program page: program-scoped news and role visibility", () => {
     data = new BehaviorSubject({ data: Program.default() });
     fetch.mockReset().mockReturnValue(of(ok({ count: 1, results: [news] })));
     add.mockReset().mockReturnValue(of(ok(added)));
+    mine.mockReset().mockReturnValue(of([]));
     vi.spyOn(ProgramDetailMainService.prototype, "initScroll").mockImplementation(() => {});
     await TestBed.configureTestingModule({
       imports: [ProgramDetailMainComponent],
@@ -92,6 +96,9 @@ describe("Program page: program-scoped news and role visibility", () => {
         ].map(provide => ({ provide, useValue: {} })),
       ],
     })
+      .overrideComponent(MyCertificateComponent, {
+        set: { providers: [{ provide: ProgramCertificatesUseCase, useValue: { mine } }] },
+      })
       .overrideComponent(ProgramDetailMainComponent, {
         remove: {
           imports: [NewsFormComponent, NewsCardComponent, ProgramRoleWidgetComponent],
@@ -153,6 +160,7 @@ describe("Program page: program-scoped news and role visibility", () => {
     expect(fetch).toHaveBeenCalledOnce();
     expect(f.nativeElement.textContent).toContain(news.text);
     expect(f.nativeElement.querySelector("app-news-form")).toBeNull();
+    expect(mine).toHaveBeenCalledExactlyOnceWith(12);
   });
   it("shows expert widget without requesting or revealing member/manager news", () => {
     const f = render({ isUserExpert: true });
@@ -161,6 +169,7 @@ describe("Program page: program-scoped news and role visibility", () => {
     expect(f.nativeElement.querySelector("app-program-role-widget")).toBeTruthy();
     expect(f.nativeElement.querySelector("app-news-card,app-news-form")).toBeNull();
     expect(fetch).not.toHaveBeenCalled();
+    expect(mine).not.toHaveBeenCalled();
   });
   it("preserves advertisement and no internal content for an unrelated user", () => {
     const f = render({});

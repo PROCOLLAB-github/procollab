@@ -24,6 +24,9 @@
           </div>
 
           <div class="program__content">
+            @if (program()!.isUserMember) {
+              <app-my-certificate [programId]="program()!.id" />
+            }
             <div class="about program__about">
               <div class="about__head">
                 <h3 class="text-body-12 about__title">о программе</h3>

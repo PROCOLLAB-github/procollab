@@ -44,6 +44,14 @@
       Загружаем данные программы…
     </section>
   } @else if (state.program(); as program) {
+    @if (section() === "certificates") {
+      <app-management-certificates
+        [programId]="program.id"
+        [programName]="program.name"
+        [confirmDiscard]="confirmProjectFormDiscard"
+        (statusChange)="certificatesStatus.set($event)"
+      />
+    }
     @if (section() === "results") {
       <app-management-results [programId]="program.id" />
     }

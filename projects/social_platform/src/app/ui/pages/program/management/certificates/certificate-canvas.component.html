@@ -1,0 +1,60 @@
+<!-- @format -->
+<div
+  class="canvas"
+  aria-label="Редактор сертификата. Перемещайте элементы мышью или стрелками клавиатуры."
+  (pointermove)="move($event)"
+  (pointerup)="end()"
+  (pointercancel)="end()"
+  (lostpointercapture)="end()"
+>
+  @if (background()) {
+    <img class="canvas__background" [src]="background()" alt="Фон сертификата" draggable="false" />
+  }
+  <div class="canvas__guide" aria-hidden="true"></div>
+  @for (key of keys; track key) {
+    @if (visible(key)) {
+      <div
+        class="canvas__element"
+        role="group"
+        tabindex="0"
+        [attr.aria-label]="labels[key] + ': переместить стрелками'"
+        [class.canvas__element--selected]="selected() === key"
+        [class.canvas__element--bold]="key === 'name' || key === 'title'"
+        [style.left.%]="draft().layout[key].x"
+        [style.top.%]="draft().layout[key].y"
+        [style.width.%]="draft().layout[key].width"
+        [style.height.%]="draft().layout[key].height"
+        [style.font-size]="font(key)"
+        (focus)="selected.set(key)"
+        (keydown)="keydown($event, key)"
+        (pointerdown)="start($event, key)"
+      >
+        @if (key === "signature") {
+          <img [src]="signature()" alt="Подпись" draggable="false" />
+        } @else {
+          <span>{{ text(key) }}</span>
+        }
+        @if (selected() === key) {
+          <span class="canvas__label">{{ labels[key] }}</span>
+          <button
+            type="button"
+            class="canvas__resize"
+            [attr.aria-label]="'Изменить размер: ' + labels[key]"
+            (pointerdown)="start($event, key, true)"
+          ></button>
+        }
+      </div>
+    }
+  }
+</div>
+<div class="canvas__tools">
+  <span>Выбрано: {{ labels[selected()] }}</span>
+  <button type="button" (click)="center()">По центру</button>
+  <button type="button" aria-label="Уменьшить выбранный элемент" (click)="resizeSelected(-0.1)">
+    −
+  </button>
+  <button type="button" aria-label="Увеличить выбранный элемент" (click)="resizeSelected(0.1)">
+    +
+  </button>
+  <span>Перетащите элемент · потяните за угол для размера</span>
+</div>

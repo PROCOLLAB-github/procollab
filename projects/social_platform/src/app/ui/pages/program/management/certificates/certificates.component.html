@@ -1,0 +1,568 @@
+<!-- @format -->
+<header class="certificates__heading">
+  <h2>Сертификаты</h2>
+  <p>Выдача и доставка сертификатов участникам программы.</p>
+</header>
+<nav class="certificates__steps" aria-label="Настройка сертификатов">
+  @for (label of steps; track label; let index = $index) {
+    <button
+      type="button"
+      [attr.aria-current]="step() === index + 1 ? 'step' : null"
+      (click)="setStep(index + 1)"
+    >
+      {{ label }}
+    </button>
+  }
+</nav>
+@if (error()) {
+  <div class="certificates__notice" appAlert="error" role="alert">
+    {{ error() }}
+    <button type="button" appButton="secondary" [disabled]="busy()" (click)="reload()">
+      Обновить
+    </button>
+  </div>
+}
+@if (message()) {
+  <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
+    message()
+  }}</app-transient-notice>
+}
+@if (loading()) {
+  <section class="certificates__card" aria-busy="true">Загружаем настройки сертификатов…</section>
+} @else if (draft(); as d) {
+  @if (step() === 1) {
+    <fieldset
+      class="certificates__card certificates__template"
+      [disabled]="busy()"
+      [attr.aria-busy]="busy()"
+    >
+      <div class="certificates__settings">
+        <h3>Шаблон сертификата</h3>
+        <p class="certificates__muted">А4 · альбомный · 297 × 210 мм</p>
+        <div class="certificates__upload">
+          <h4>Фон сертификата</h4>
+          <p>{{ assets().background?.name || "Загрузите свой фон" }}</p>
+          <p class="certificates__muted">PNG или JPG до 10 МБ</p>
+          <input
+            #backgroundFile
+            type="file"
+            accept="image/png,image/jpeg"
+            hidden
+            (change)="upload($event, 'background')"
+          />
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy()"
+            (click)="backgroundFile.click()"
+          >
+            {{ assets().background ? "Заменить фон" : "Загрузить фон" }}
+          </button>
+          @if (assets().background) {
+            <button
+              type="button"
+              class="certificates__text-button"
+              [disabled]="busy()"
+              (click)="remove('background')"
+            >
+              Убрать фон
+            </button>
+          }
+        </div>
+        <label class="certificates__check"
+          ><input
+            type="checkbox"
+            appChoice
+            [ngModel]="d.showText"
+            (ngModelChange)="patch({ showText: $event })"
+          />Добавить заголовок и подзаголовок</label
+        >
+        <p class="certificates__muted">Выключите, если текст уже есть на фоне.</p>
+        <label class="certificates__field"
+          >Имя директора<input
+            appField
+            maxlength="250"
+            [ngModel]="d.director"
+            (ngModelChange)="patch({ director: $event })"
+            placeholder="Фамилия, имя, отчество"
+        /></label>
+        <label class="certificates__field"
+          >Должность<input
+            appField
+            maxlength="250"
+            [ngModel]="d.position"
+            (ngModelChange)="patch({ position: $event })"
+            placeholder="Например, директор программы"
+        /></label>
+        <div class="certificates__upload">
+          <h4>Подпись</h4>
+          <p>{{ assets().signature?.name || "PNG с прозрачным фоном до 10 МБ" }}</p>
+          <input
+            #signatureFile
+            type="file"
+            accept="image/png"
+            hidden
+            (change)="upload($event, 'signature')"
+          />
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy()"
+            (click)="signatureFile.click()"
+          >
+            {{ assets().signature ? "Заменить подпись" : "Загрузить подпись" }}
+          </button>
+          @if (assets().signature) {
+            <button
+              type="button"
+              class="certificates__text-button"
+              [disabled]="busy()"
+              (click)="remove('signature')"
+            >
+              Убрать подпись
+            </button>
+          }
+        </div>
+      </div>
+      <div class="certificates__preview">
+        <div class="certificates__row">
+          <h3>Предпросмотр</h3>
+          <button type="button" class="certificates__text-button" (click)="editorOpen.set(true)">
+            Развернуть редактор
+          </button>
+        </div>
+        <div class="certificates__paper">
+          <app-certificate-canvas
+            [draft]="d"
+            [programName]="programName()"
+            [background]="backgroundUrl()"
+            [signature]="signatureUrl()"
+            [signatureRatio]="signatureRatio()"
+            [longName]="longName()"
+            (layoutChange)="patch({ layout: $event })"
+          />
+        </div>
+        <label class="certificates__check"
+          ><input
+            type="checkbox"
+            appChoice
+            [ngModel]="longName()"
+            (ngModelChange)="longName.set($event)"
+          />Проверить длинное имя</label
+        >
+        <p class="certificates__muted">
+          Имя, программа, дата и номер подставляются автоматически. Пропорции подписи сохраняются
+          при изменении размера.
+        </p>
+        <div class="certificates__actions">
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy() || dirty()"
+            (click)="preview()"
+          >
+            Скачать пробный PDF</button
+          ><button type="button" class="certificates__text-button" (click)="resetLayout()">
+            Вернуть сохраненное размещение
+          </button>
+        </div>
+        @if (dirty()) {
+          <p class="certificates__muted">Сохраните изменения, чтобы проверить их в PDF.</p>
+        }
+      </div>
+    </fieldset>
+  }
+  @if (step() === 2) {
+    <fieldset class="certificates__card certificates__automation" [disabled]="busy()">
+      <h3>Кому выдавать сертификаты</h3>
+      <div class="certificates__audience">
+        <label
+          [class.certificates__option--selected]="d.audience === 'all'"
+          class="certificates__option"
+          ><input
+            type="radio"
+            appChoice
+            name="audience"
+            value="all"
+            [ngModel]="d.audience"
+            (ngModelChange)="patch({ audience: $event })"
+          /><span
+            ><strong>Всем зарегистрированным</strong
+            ><small>Все участники программы · {{ snapshot()?.eligibleCounts?.all }}</small></span
+          ></label
+        >
+        <label
+          [class.certificates__option--selected]="d.audience === 'submitted'"
+          class="certificates__option"
+          ><input
+            type="radio"
+            appChoice
+            name="audience"
+            value="submitted"
+            [ngModel]="d.audience"
+            (ngModelChange)="patch({ audience: $event })"
+          /><span
+            ><strong>Только сдавшим решение</strong
+            ><small
+              >Участники команд со сданным решением ·
+              {{ snapshot()?.eligibleCounts?.submitted }}</small
+            ></span
+          ></label
+        >
+      </div>
+      <p class="certificates__muted">
+        Состав участников проверяется в момент запуска. Один участник получает один сертификат.
+      </p>
+      <h3>Когда выдать</h3>
+      <label class="certificates__check"
+        ><input
+          type="radio"
+          appChoice
+          name="timing"
+          value="manual"
+          [ngModel]="d.timing"
+          (ngModelChange)="patch({ timing: $event })"
+        />Вручную — после нажатия «Запустить выдачу»</label
+      >
+      <label class="certificates__check"
+        ><input
+          type="radio"
+          appChoice
+          name="timing"
+          value="scheduled"
+          [ngModel]="d.timing"
+          (ngModelChange)="patch({ timing: $event })"
+        />Автоматически после окончания программы</label
+      >
+      @if (d.timing === "scheduled") {
+        <label class="certificates__field certificates__date"
+          >Дата и время запуска (МСК)<input
+            appField
+            type="datetime-local"
+            [ngModel]="scheduleInput()"
+            (ngModelChange)="schedule($event)"
+          /><small>Не ранее даты окончания программы.</small></label
+        >
+      }
+      <div class="certificates__divider"></div>
+      <label class="certificates__check"
+        ><input
+          type="checkbox"
+          appChoice
+          [ngModel]="d.sendEmail"
+          (ngModelChange)="patch({ sendEmail: $event })"
+        /><strong>Отправлять сертификат на почту участника</strong></label
+      >
+      <p class="certificates__muted">
+        В письме будет персональная ссылка на PDF. Сертификат также доступен на странице программы.
+      </p>
+      @if (d.sendEmail) {
+        <label class="certificates__field"
+          >Тема письма<input
+            appField
+            maxlength="200"
+            [ngModel]="d.subject"
+            (ngModelChange)="patch({ subject: $event })"
+        /></label>
+        <label class="certificates__field"
+          >Текст письма<textarea
+            appField
+            rows="5"
+            maxlength="5000"
+            [ngModel]="d.message"
+            (ngModelChange)="patch({ message: $event })"
+          ></textarea>
+        </label>
+        <p class="certificates__muted">Подстановки: {{ placeholders }}</p>
+        <button type="button" appButton="secondary" [disabled]="busy() || dirty()" (click)="test()">
+          Отправить пробное письмо себе
+        </button>
+      }
+      <div class="certificates__launch">
+        <div>
+          <strong>Подходят под условие: {{ recipients() }}</strong>
+          <p class="certificates__muted">
+            Ранее выданные сертификаты и отправленные письма не дублируются.
+          </p>
+        </div>
+        <button
+          type="button"
+          appButton="primary"
+          [disabled]="busy() || dirty() || !recipients() || snapshot()?.batch?.active"
+          (click)="confirmOpen.set(true)"
+        >
+          Запустить выдачу
+        </button>
+      </div>
+      @if (snapshot()?.batch?.active) {
+        <p class="certificates__muted">
+          Выдача уже работает. Управление очередью — на шаге «Отправки».
+        </p>
+      }
+    </fieldset>
+  }
+  @if (step() === 3) {
+    <section class="certificates__card">
+      <div class="certificates__metrics" aria-live="polite">
+        <div>
+          <strong>{{ journal()?.summary?.ready ?? 0 }}</strong
+          ><span>PDF готовы</span>
+        </div>
+        <div>
+          <strong>{{ journal()?.summary?.sent ?? 0 }}</strong
+          ><span>Отправлено</span>
+        </div>
+        <div>
+          <strong>{{ journal()?.summary?.failed ?? 0 }}</strong
+          ><span>Ошибки</span>
+        </div>
+      </div>
+      @if (snapshot()?.batch; as batch) {
+        <div class="certificates__queue">
+          <p>
+            {{ batch.active ? "Автовыдача работает" : "Выдача приостановлена" }} · запуск
+            {{ batch.issueAt | date: "dd.MM.yyyy, HH:mm" : "+0300" }} (МСК)
+          </p>
+          <button type="button" appButton="secondary" [disabled]="busy()" (click)="queue()">
+            {{ batch.active ? "Приостановить" : "Возобновить" }}
+          </button>
+        </div>
+      }
+      <label class="certificates__search"
+        ><span class="sr-only">Поиск по имени или почте</span
+        ><input
+          appField
+          type="search"
+          placeholder="Поиск по имени или почте"
+          [ngModel]="search()"
+          (ngModelChange)="searchChanged($event)"
+      /></label>
+      <div class="certificates__filters" role="group" aria-label="Статус отправки">
+        <button type="button" [attr.aria-pressed]="filter() === 'all'" (click)="setFilter('all')">
+          Все · {{ journal()?.summary?.total ?? 0 }}
+        </button>
+        <button type="button" [attr.aria-pressed]="filter() === 'sent'" (click)="setFilter('sent')">
+          Отправлено · {{ journal()?.summary?.sent ?? 0 }}
+        </button>
+        <button
+          type="button"
+          [attr.aria-pressed]="filter() === 'failed'"
+          (click)="setFilter('failed')"
+        >
+          Ошибки · {{ journal()?.summary?.failed ?? 0 }}
+        </button>
+      </div>
+      @if (journalError()) {
+        <p appAlert="error" role="alert">
+          {{ journalError() }}
+          <button type="button" appButton="secondary" (click)="loadJournal()">Повторить</button>
+        </p>
+      }
+      <div class="certificates__table" [attr.aria-busy]="journalLoading()">
+        <table>
+          <thead>
+            <tr>
+              <th>Участник</th>
+              <th>Отправка</th>
+              <th>Сертификат</th>
+              <th>Действие</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of journal()?.results; track row.id) {
+              <tr>
+                <td>
+                  <strong>{{ row.name }}</strong
+                  ><small>{{ row.email }}</small>
+                </td>
+                <td>
+                  <span [class.certificates__error]="row.status === 'failed'">{{
+                    labels[row.status]
+                  }}</span
+                  ><small>{{
+                    row.error || (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300")
+                  }}</small>
+                </td>
+                <td>{{ row.pdfReady ? "PDF готов" : "Готовится" }}</td>
+                <td>
+                  @if (row.status === "failed") {
+                    <button
+                      type="button"
+                      appButton="secondary"
+                      [disabled]="busy() || !snapshot()?.batch?.active"
+                      (click)="retry(row.id)"
+                    >
+                      Повторить
+                    </button>
+                  }
+                  @if (row.pdfReady) {
+                    <button
+                      type="button"
+                      appButton="secondary"
+                      [disabled]="busy()"
+                      (click)="pdf(row.id)"
+                    >
+                      Скачать PDF
+                    </button>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="certificates__empty">
+                  {{
+                    journalLoading()
+                      ? "Загружаем отправки…"
+                      : filter() === "failed"
+                        ? "Ошибок отправки не найдено."
+                        : search()
+                          ? "Никого не нашли. Измените запрос."
+                          : "Отправок пока нет. Настройте шаблон и запустите выдачу."
+                  }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="certificates__footer">
+        <div class="certificates__pages">
+          <span
+            >{{ journal()?.count ? offset() + 1 : 0 }}–{{
+              offset() + (journal()?.results?.length ?? 0)
+            }}
+            из {{ journal()?.count ?? 0 }}</span
+          ><button
+            type="button"
+            aria-label="Предыдущая страница"
+            [disabled]="offset() === 0 || journalLoading()"
+            (click)="page(-1)"
+          >
+            ←</button
+          ><button
+            type="button"
+            aria-label="Следующая страница"
+            [disabled]="offset() + 20 >= (journal()?.count ?? 0) || journalLoading()"
+            (click)="page(1)"
+          >
+            →
+          </button>
+        </div>
+        <div class="certificates__actions">
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy() || !journal()?.summary?.ready"
+            (click)="archive()"
+          >
+            Скачать PDF по фильтру</button
+          ><button
+            type="button"
+            appButton="primary"
+            [disabled]="busy() || !journal()?.summary?.failed || !snapshot()?.batch?.active"
+            (click)="retry()"
+          >
+            Повторить ошибки ({{ journal()?.summary?.failed ?? 0 }})
+          </button>
+        </div>
+      </div>
+      <p class="certificates__muted certificates__footnote">
+        Повтор использует готовый PDF. «Отправлено» означает, что письмо принято почтовым сервисом.
+      </p>
+    </section>
+  }
+  @if (step() !== 3) {
+    <footer class="certificates__save">
+      <span
+        >{{ dirty() ? "Есть несохраненные изменения" : "Все изменения сохранены" }}
+        @if (snapshot()?.batch) {
+          <small>Изменения применятся к следующей выдаче.</small>
+        }
+      </span>
+      <div class="certificates__actions">
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="busy() || !dirty()"
+          (click)="discard()"
+        >
+          Отменить</button
+        ><button type="button" appButton="primary" [disabled]="busy() || !dirty()" (click)="save()">
+          {{ busy() ? "Сохраняем…" : "Сохранить" }}
+        </button>
+        @if (step() === 1) {
+          <button type="button" appButton="secondary" (click)="setStep(2)">К автовыдаче →</button>
+        }
+      </div>
+    </footer>
+  }
+  <app-modal
+    [open]="editorOpen()"
+    (openChange)="editorOpen.set($event)"
+    size="large"
+    labelledBy="certificate-editor-heading"
+  >
+    <div class="certificates__editor">
+      <div class="certificates__row">
+        <div>
+          <h2 id="certificate-editor-heading">Размещение элементов</h2>
+          <p>Перетащите элемент. Потяните за угол, чтобы изменить размер.</p>
+        </div>
+        <button type="button" appButton="secondary" (click)="editorOpen.set(false)">Готово</button>
+      </div>
+      <app-certificate-canvas
+        [draft]="d"
+        [programName]="programName()"
+        [background]="backgroundUrl()"
+        [signature]="signatureUrl()"
+        [signatureRatio]="signatureRatio()"
+        [longName]="longName()"
+        (layoutChange)="patch({ layout: $event })"
+      />
+    </div>
+  </app-modal>
+  <app-modal
+    [open]="confirmOpen()"
+    (openChange)="confirmOpen.set($event)"
+    size="small"
+    labelledBy="certificate-confirm-heading"
+  >
+    <div class="certificates__confirmation">
+      <h2 id="certificate-confirm-heading">Запустить выдачу сертификатов?</h2>
+      <p>
+        {{
+          d.audience === "all"
+            ? "Всем зарегистрированным участникам"
+            : "Только участникам, сдавшим решение"
+        }}
+        · сейчас подходят {{ recipients() }}.
+      </p>
+      <p>
+        {{
+          d.sendEmail
+            ? "После создания PDF участники получат письмо со ссылкой на сертификат."
+            : "PDF будут доступны участникам на странице программы, без отправки письма."
+        }}
+      </p>
+      <p>
+        {{
+          d.timing === "manual"
+            ? "Запуск сразу после подтверждения."
+            : "Запуск по указанной дате после окончания программы."
+        }}
+      </p>
+      <div class="certificates__actions">
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="busy()"
+          (click)="confirmOpen.set(false)"
+        >
+          Отмена</button
+        ><button type="button" appButton="primary" [disabled]="busy()" (click)="activate()">
+          Подтвердить запуск
+        </button>
+      </div>
+    </div>
+  </app-modal>
+}

@@ -31,6 +31,7 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
+import { MyCertificateComponent } from "./my-certificate.component";
 
 /** Страница основной вкладки программы с описанием, ссылками и новостями. */
 @Component({
@@ -51,6 +52,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
     RouterModule,
     NewsCardComponent,
     ProgramLinksComponent,
+    MyCertificateComponent,
   ],
   providers: [ProgramDetailMainService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
