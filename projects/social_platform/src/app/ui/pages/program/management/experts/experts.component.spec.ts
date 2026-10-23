@@ -257,6 +257,70 @@ describe("Управление экспертами", () => {
     component.selectAllPool();
     expect([...component.chosenExperts()]).toEqual([1]);
   });
+  it("Назад из настроек восстанавливает прежний предпросмотр и его параметры без запроса", async () => {
+    const { component, fixture, api } = setup();
+    component.open("auto");
+    const plan = {
+      revision: "v1",
+      planToken: "previous",
+      canReroll: true,
+      assignments: [],
+      shortages: [],
+      load: [],
+    };
+    const pools = component.casePools();
+    const overrides = new Map([[10, [3]]]);
+    component.plan.set(plan);
+    component.allocationSeed.set(7);
+    component.allocationOverrides.set(overrides);
+    component.configureAllocation();
+    component.openPool("Сбер");
+    component.chosenExperts.set(new Set());
+    component.savePool();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const dialog = document.querySelector(".experts__dialog")!;
+    const back = [...dialog.querySelectorAll("button")].find(
+      b => b.textContent?.trim() === "Назад",
+    )!;
+    expect(back).toBeTruthy();
+    expect(dialog.textContent).not.toContain("К проектам");
+    component.busy.set(true);
+    fixture.detectChanges();
+    expect(back.disabled).toBe(true);
+    component.backFromAllocationSettings();
+    expect(component.plan()).toBeNull();
+    component.busy.set(false);
+    fixture.detectChanges();
+    back.click();
+    expect(component.modal()).toBe("auto");
+    expect(component.allocationSettings()).toBe(false);
+    expect(component.plan()).toEqual(plan);
+    expect(component.casePools()).toEqual(pools);
+    expect(component.allocationOverrides()).toEqual(overrides);
+    expect(component.allocationSeed()).toBe(7);
+    expect(api.allocation).not.toHaveBeenCalled();
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
+  it("после пересчета Назад возвращает к новому плану, а новый запуск не хранит старый", () => {
+    const { component, api } = setup();
+    const plan = { revision: "v1", planToken: "new", assignments: [], shortages: [], load: [] };
+    component.open("auto");
+    component.plan.set({ ...plan, planToken: "old" });
+    component.configureAllocation();
+    api.allocation.mockReturnValue(of(plan));
+    component.previewAllocation();
+    component.configureAllocation();
+    component.backFromAllocationSettings();
+    expect(component.plan()).toEqual(plan);
+    component.configureAllocation();
+    component.open("auto");
+    component.backFromAllocationSettings();
+    expect(component.plan()).toBeNull();
+    expect(component.modal()).toBe("method");
+    expect(api.applyAllocation).not.toHaveBeenCalled();
+  });
   it("у назначенного эксперта с завершенной оценкой нагрузка имеет подписи и отдельные числа", async () => {
     const { component, fixture } = setup();
     component.plan.set({

@@ -133,6 +133,12 @@ export class ManagementExpertsComponent {
   readonly allocationSeed = signal(0);
   readonly allocationOverrides = signal(new Map<number, number[]>());
   readonly allocationSettings = signal(false);
+  private allocationBeforeSettings: {
+    plan: AllocationPlan;
+    pools: CaseExpertPool[];
+    overrides: Map<number, number[]>;
+    seed: number;
+  } | null = null;
   readonly allocationProjectId = signal<number | null>(null);
   readonly allocationProject = computed(() =>
     this.allProjects().find(p => p.id === this.allocationProjectId()),
@@ -726,6 +732,7 @@ export class ManagementExpertsComponent {
       .toUpperCase();
   }
   open(kind: "invite" | "auto" | "quota" | "revoke" | "method"): void {
+    this.allocationBeforeSettings = null;
     this.bulkRevoke.set(false);
     this.dialogError.set(null);
     this.message.set(null);
@@ -823,9 +830,34 @@ export class ManagementExpertsComponent {
   }
   configureAllocation(): void {
     if (this.busy()) return;
+    const plan = this.plan();
+    this.allocationBeforeSettings = plan
+      ? {
+          plan,
+          pools: this.casePools(),
+          overrides: this.allocationOverrides(),
+          seed: this.allocationSeed(),
+        }
+      : null;
     this.plan.set(null);
     this.dialogError.set(null);
     this.allocationSettings.set(true);
+  }
+  backFromAllocationSettings(): void {
+    if (this.busy()) return;
+    const previous = this.allocationBeforeSettings;
+    this.allocationBeforeSettings = null;
+    this.dialogError.set(null);
+    this.allocationSettings.set(false);
+    if (previous) {
+      this.casePools.set(previous.pools);
+      this.allocationOverrides.set(previous.overrides);
+      this.allocationSeed.set(previous.seed);
+      this.plan.set(previous.plan);
+      this.modal.set("auto");
+    } else {
+      this.modal.set("method");
+    }
   }
   selectAllPool(): void {
     if (!this.busy()) this.chosenExperts.set(new Set(this.poolCandidates().map(e => Number(e.id))));
@@ -862,6 +894,7 @@ export class ManagementExpertsComponent {
           : { expertIds: [...this.chosenExperts()] },
       ),
       plan => {
+        this.allocationBeforeSettings = null;
         this.allocationOverrides.set(overrides);
         this.allocationSeed.set(seed);
         this.allocationSettings.set(false);
