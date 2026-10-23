@@ -1,0 +1,134 @@
+/** @format */
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 297 / 210;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 16px #0000000d;
+  container-type: inline-size;
+
+  &__background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  &__element {
+    position: absolute;
+    line-height: 1.3;
+    color: var(--black);
+    text-align: center;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    outline: 1px solid transparent;
+
+    span:not(.canvas__label) {
+      display: block;
+      height: 100%;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &--selected {
+      outline-color: var(--accent);
+    }
+
+    &--bold {
+      font-weight: 600;
+    }
+  }
+
+  &__element--selected {
+    z-index: 2;
+  }
+
+  &__label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    padding: 2px 5px;
+    font-size: 10px;
+    line-height: 16px;
+    color: white;
+    white-space: nowrap;
+    pointer-events: none;
+    background: var(--accent);
+    border-radius: 4px;
+  }
+
+  &__resize {
+    position: absolute;
+    right: -7px;
+    bottom: -7px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    touch-action: none;
+    cursor: nwse-resize;
+    background: white;
+    border: 2px solid var(--accent);
+  }
+
+  &__guide {
+    position: absolute;
+    left: 50%;
+    height: 100%;
+    pointer-events: none;
+    border-left: 1px dashed var(--accent-light);
+    opacity: 0;
+  }
+
+  &:focus-within &__guide {
+    opacity: 0.6;
+  }
+
+  &__tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    margin-top: 14px;
+    font-size: 10px;
+    color: var(--grey-for-text);
+
+    button {
+      padding: 8px;
+      font: inherit;
+      color: var(--accent);
+      cursor: pointer;
+      background: none;
+      border: 0;
+    }
+  }
+}
+
+@media (width <= 600px) {
+  .canvas__resize {
+    right: -10px;
+    bottom: -10px;
+    width: 22px;
+    height: 22px;
+  }
+}

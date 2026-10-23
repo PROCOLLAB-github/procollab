@@ -77,6 +77,7 @@ import { ResultProjectScoresComponent } from "./results/result-project-scores.co
 import { ManagementResultsComponent } from "./results/results.component";
 import { ManagementOrganizersComponent } from "./organizers/organizers.component";
 import { ManagementRegistrationComponent } from "./registration/registration.component";
+import { ManagementCertificatesComponent } from "./certificates/certificates.component";
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
@@ -115,6 +116,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     ResultProjectScoresComponent,
     ManagementOrganizersComponent,
     ManagementRegistrationComponent,
+    ManagementCertificatesComponent,
   ],
   providers: [
     ProgramManagementService,
@@ -232,6 +234,8 @@ export class ProgramManagementComponent implements OnInit {
   });
   private searchNavigation: { value: string } | null = null;
   readonly saving = signal(false);
+  readonly certificatesForm = viewChild(ManagementCertificatesComponent);
+  readonly certificatesStatus = signal({ dirty: false, busy: false });
   readonly uploading = signal<string | null>(null);
   readonly formError = signal<string | null>(null);
   readonly saved = signal(false, { equal: () => false });
@@ -283,6 +287,7 @@ export class ProgramManagementComponent implements OnInit {
     { id: "results", label: "Результаты" },
     { id: "analytics", label: "Аналитика" },
     { id: "settings", label: "Настройки" },
+    { id: "certificates", label: "Сертификаты" },
   ];
   readonly settingsTabs = [
     { id: "basic", label: "Основное" },
@@ -414,7 +419,8 @@ export class ProgramManagementComponent implements OnInit {
       this.criteriaStatus().busy ||
       this.expertsStatus().busy ||
       this.organizersStatus().busy ||
-      this.registrationStatus().busy
+      this.registrationStatus().busy ||
+      this.certificatesStatus().busy
     ) {
       event.preventDefault();
       event.returnValue = "";
@@ -440,6 +446,7 @@ export class ProgramManagementComponent implements OnInit {
           "experts",
           "results",
           "analytics",
+          "certificates",
           "settings",
           "evaluation",
         ].includes(raw)
@@ -1080,7 +1087,8 @@ export class ProgramManagementComponent implements OnInit {
       this.criteriaStatus().dirty ||
       this.expertsStatus().dirty ||
       this.organizersStatus().dirty ||
-      this.registrationStatus().dirty
+      this.registrationStatus().dirty ||
+      this.certificatesStatus().dirty
     );
   }
   async canLeave(): Promise<boolean> {
@@ -1093,7 +1101,8 @@ export class ProgramManagementComponent implements OnInit {
       this.criteriaStatus().busy ||
       this.expertsStatus().busy ||
       this.organizersStatus().busy ||
-      this.registrationStatus().busy
+      this.registrationStatus().busy ||
+      this.certificatesStatus().busy
     )
       return false;
     if (!this.dirty()) return true;
@@ -1118,6 +1127,8 @@ export class ProgramManagementComponent implements OnInit {
       this.organizersStatus.set({ dirty: false, busy: false });
       this.registrationForm()?.discard();
       this.registrationStatus.set({ dirty: false, busy: false });
+      this.certificatesForm()?.discard();
+      this.certificatesStatus.set({ dirty: false, busy: false });
     }
     return yes;
   }
