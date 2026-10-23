@@ -826,7 +826,14 @@
             }
           </div>
           <footer class="experts__actions">
-            <button type="button" appButton="secondary" (click)="close()">К проектам</button>
+            <button
+              type="button"
+              appButton="secondary"
+              [disabled]="busy()"
+              (click)="backFromAllocationSettings()"
+            >
+              Назад
+            </button>
             @if (pendingAutoGroups().length) {
               <button
                 type="button"
