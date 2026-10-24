@@ -84,7 +84,7 @@ h2 {
   height: 32px;
   color: var(--accent);
   cursor: pointer;
-  background: white;
+  background: var(--ui-surface);
   border: 1px solid var(--ui-border);
   border-radius: 10px;
 }
@@ -149,7 +149,7 @@ h2 {
 }
 
 .rating-list__status--done {
-  color: #38694d;
+  color: var(--green-dark);
 }
 
 .rating-list__empty,

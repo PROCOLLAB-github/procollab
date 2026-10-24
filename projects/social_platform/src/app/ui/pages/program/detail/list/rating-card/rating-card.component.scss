@@ -79,7 +79,7 @@ h3 {
 .scoring__status {
   padding: 5px 8px;
   font-size: 12px;
-  background: #e3f1ea;
+  background: var(--green-light);
   border-radius: 5px;
 }
 
@@ -88,14 +88,14 @@ h3 {
   padding: 12px;
   font-size: 12px;
   line-height: 1.5;
-  background: #faead0;
+  background: var(--gold-light);
   border-radius: 10px;
 }
 
 .scoring__error {
   display: grid;
   gap: 12px;
-  background: #f7e4e8;
+  background: var(--red-light);
 }
 
 .scoring__answers {
