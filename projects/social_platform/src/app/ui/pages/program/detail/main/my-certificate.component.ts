@@ -10,13 +10,18 @@ import {
   untracked,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ButtonDirective, IconComponent } from "@uilib";
+import { IconComponent } from "@uilib";
 import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
 import { ProgramCertificatesHttpAdapter } from "@infrastructure/adapters/program/program-certificates-http.adapter";
 @Component({
   selector: "app-my-certificate",
-  imports: [ButtonDirective, IconComponent],
+  imports: [IconComponent],
+  host: { class: "my-certificate-widget" },
+  // Нативная ссылка использует тот же stylesheet, что и канонический app-button.
+  styleUrls: [
+    "../../../../../../../../ui/src/lib/components/primitives/button/button.component.scss",
+  ],
   providers: [
     ProgramCertificatesUseCase,
     { provide: ProgramCertificatesRepositoryPort, useClass: ProgramCertificatesHttpAdapter },
@@ -33,26 +38,33 @@ import { ProgramCertificatesHttpAdapter } from "@infrastructure/adapters/program
         <div class="my-certificate__body">
           @if (url()) {
             <p class="my-certificate__text text-body-10">Спасибо за участие в программе!</p>
-            <a class="ui-button ui-button--secondary" [href]="url()" rel="noreferrer"
-              >Скачать PDF</a
-            >
+            <span class="my-certificate__action">
+              <a
+                class="button button--medium button--primary button--outline text-body-12"
+                [href]="url()"
+                rel="noreferrer"
+                ><span class="button__content">Скачать PDF</span></a
+              >
+            </span>
           } @else {
             <p class="my-certificate__text text-body-10">Не удалось проверить сертификат.</p>
-            <button type="button" appButton="secondary" (click)="load()">Повторить</button>
+            <span class="my-certificate__action">
+              <button
+                type="button"
+                class="button button--medium button--primary button--outline text-body-12"
+                (click)="load()"
+              >
+                <span class="button__content">Повторить</span>
+              </button>
+            </span>
           }
         </div>
       </section>
     }
   `,
   styles: `
-    @use "styles/ui-foundation";
-    @use "styles/program-management-controls";
-    :host {
+    :host(.my-certificate-widget) {
       display: block;
-    }
-    .ui-button.ui-button {
-      @include ui-foundation.button;
-      @include program-management-controls.compact-action;
     }
     .my-certificate {
       padding: 24px;
@@ -90,15 +102,18 @@ import { ProgramCertificatesHttpAdapter } from "@infrastructure/adapters/program
         justify-content: space-between;
       }
 
-      &__text {
+      & &__text {
         flex: 1 1 160px;
         min-width: 0;
         margin: 0;
         color: var(--black);
       }
 
-      .ui-button {
+      &__action {
+        display: inline-block;
         flex-shrink: 0;
+        min-width: 0;
+        max-width: 100%;
       }
     }
   `,
