@@ -17,6 +17,10 @@ import {
   SolutionUpdateInvitation,
   SolutionInvitationCreated,
   SolutionInvitationActionResult,
+  SolutionForm,
+  SolutionFormWrite,
+  SolutionFormManagement,
+  SolutionTemplates,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -31,6 +35,23 @@ export class SolutionHttpAdapter {
   private path(programId: number): string {
     if (!validSolutionId(programId)) throw new RangeError("Invalid program ID");
     return `/programs/${programId}/solutions/`;
+  }
+
+  private formPath(programId: number, management = false): string {
+    if (!validSolutionId(programId)) throw new RangeError("Invalid program ID");
+    return `/programs/${programId}/${management ? "management/" : ""}solution-form/`;
+  }
+  form(programId: number) {
+    return this.api.get<SolutionForm>(this.formPath(programId));
+  }
+  managedForm(programId: number) {
+    return this.api.get<SolutionFormManagement>(this.formPath(programId, true));
+  }
+  saveManagedForm(programId: number, command: SolutionFormWrite) {
+    return this.api.put<SolutionFormManagement>(this.formPath(programId, true), command);
+  }
+  templates() {
+    return this.api.get<SolutionTemplates>("/solution-form-templates/");
   }
 
   context(programId: number) {

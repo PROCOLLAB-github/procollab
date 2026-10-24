@@ -1,0 +1,135 @@
+<!-- @format -->
+
+<section class="solution-fields" [formGroup]="group()">
+  @for (field of fields(); track field.id) {
+    <fieldset [disabled]="busy()" [attr.aria-describedby]="'field-' + field.id + '-help'">
+      <label [for]="'solution-field-' + field.id"
+        >{{ field.label }}{{ field.required ? " *" : "" }}</label
+      >
+      @if (readonly()) {
+        @if (fileLink(field); as link) {
+          <a [href]="link" target="_blank" rel="noopener noreferrer">Открыть файл</a>
+        } @else {
+          <p class="answer">{{ labelValue(field) }}</p>
+        }
+      } @else {
+        @switch (field.type) {
+          @case ("textarea") {
+            <textarea
+              appField
+              [id]="'solution-field-' + field.id"
+              [formControlName]="'' + field.id"
+              rows="5"
+              [attr.maxlength]="field.validation.maxLength"
+            ></textarea>
+          }
+          @case ("select") {
+            <select appField [id]="'solution-field-' + field.id" [formControlName]="'' + field.id">
+              <option [ngValue]="null">Выберите вариант</option>
+              @for (option of field.options; track option) {
+                <option [ngValue]="option">{{ option }}</option>
+              }
+            </select>
+          }
+          @case ("radio") {
+            <select appField [id]="'solution-field-' + field.id" [formControlName]="'' + field.id">
+              <option [ngValue]="null">Выберите вариант</option>
+              @for (option of field.options; track option) {
+                <option [ngValue]="option">{{ option }}</option>
+              }
+            </select>
+          }
+          @case ("checkbox") {
+            <div class="boolean-answer">
+              <input
+                appChoice
+                type="checkbox"
+                [id]="'solution-field-' + field.id"
+                [formControlName]="'' + field.id"
+                [indeterminate]="!hasAnswer(value(field))"
+              /><span>{{ labelValue(field) }}</span
+              ><button
+                appButton="text"
+                type="button"
+                (click)="control(field)?.setValue(null); control(field)?.markAsDirty()"
+              >
+                Очистить ответ
+              </button>
+            </div>
+          }
+          @case ("file") {
+            @if (fileLink(field); as link) {
+              <a [href]="link" target="_blank" rel="noopener noreferrer">Открыть файл</a
+              ><button appButton="text" type="button" (click)="clearFile.emit(field.id)">
+                Убрать файл
+              </button>
+            }
+            <input
+              #fileInput
+              [id]="'solution-field-' + field.id"
+              type="file"
+              hidden
+              [accept]="accept(field)"
+              [disabled]="preview()"
+              (change)="fileChanged(field, $event)"
+            />
+            <div class="file-upload">
+              <button
+                appButton="secondary"
+                type="button"
+                [disabled]="preview() || busy()"
+                (click)="fileInput.click()"
+              >
+                <i
+                  appIcon
+                  icon="upload"
+                  appSquare="20"
+                  appViewBox="0 0 60 60"
+                  aria-hidden="true"
+                ></i
+                >{{ fileLink(field) ? "Заменить файл" : "Выбрать файл" }}
+              </button>
+              <span class="help"
+                >{{ field.validation.allowedExtensions.join(", ").toUpperCase() || "Один файл" }},
+                до {{ (field.validation.maxFileSizeBytes ?? 104857600) / 1048576 }} МиБ</span
+              >
+            </div>
+            @if (preview()) {
+              <small>Загрузка файла доступна в заявке участника.</small>
+            }
+          }
+          @case ("number") {
+            <input
+              appField
+              type="number"
+              [id]="'solution-field-' + field.id"
+              [formControlName]="'' + field.id"
+              [attr.min]="field.validation.minimum"
+              [attr.max]="field.validation.maximum"
+              step="any"
+            />
+          }
+          @default {
+            <input
+              appField
+              [type]="field.type === 'url' ? 'url' : 'text'"
+              [id]="'solution-field-' + field.id"
+              [formControlName]="'' + field.id"
+              [attr.maxlength]="field.validation.maxLength"
+            />
+          }
+        }
+      }
+      <p class="help" [id]="'field-' + field.id + '-help'">{{ field.helpText }}</p>
+      @if (errors()[field.id]) {
+        <p class="error" role="alert">{{ errors()[field.id] }}</p>
+      } @else if (!readonly() && attempted() && field.required && !hasAnswer(value(field))) {
+        <p class="error" role="alert">Заполните обязательное поле.</p>
+      } @else if (
+        !readonly() && control(field)?.invalid && (attempted() || control(field)?.touched)
+      ) {
+        <p class="error" role="alert">Проверьте значение и ограничения поля.</p>
+      }
+    </fieldset>
+  }
+</section>

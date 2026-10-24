@@ -71,6 +71,7 @@ import {
   ProjectActionDone,
 } from "./project-actions/project-actions.component";
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
+import { ManagementSolutionFormComponent } from "./solution-form/solution-form.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
 import { ResultProjectScoresComponent } from "./results/result-project-scores.component";
@@ -110,6 +111,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     ProgramBrandingPreviewComponent,
     ManagementProjectActionsComponent,
     ManagementProjectFormComponent,
+    ManagementSolutionFormComponent,
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
     ManagementResultsComponent,
@@ -240,6 +242,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly formError = signal<string | null>(null);
   readonly saved = signal(false, { equal: () => false });
   readonly projectForm = viewChild(ManagementProjectFormComponent);
+  readonly solutionForm = viewChild(ManagementSolutionFormComponent);
   private readonly managementLayout = viewChild<ElementRef<HTMLElement>>("managementLayout");
   readonly floatingPosition = signal<{ center: number; width: number } | null>(null);
   readonly projectFormStatus = signal({ dirty: false, busy: false });
@@ -1118,6 +1121,7 @@ export class ProgramManagementComponent implements OnInit {
       this.materialForm.markAsPristine();
       this.editingMaterial.set(null);
       this.projectForm()?.discard();
+      this.solutionForm()?.discard();
       this.projectFormStatus.set({ dirty: false, busy: false });
       this.criteriaForm()?.discard();
       this.criteriaStatus.set({ dirty: false, busy: false });

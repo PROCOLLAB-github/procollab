@@ -49,6 +49,7 @@ export interface ManagementDates {
   datetimeFinished: string;
 }
 export interface ProgramManagement extends ManagementBasic, ManagementDates {
+  solutionStorageMode?: "legacy_project" | "solution";
   id: number;
   updatedAt: string;
   isCompetitive: boolean;

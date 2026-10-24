@@ -64,18 +64,16 @@ describe("Входящие приглашения решений", () => {
 
   it("user change cancels old reads and cannot show another user's invitation", async () => {
     const old = new Subject<ReturnType<typeof ok<typeof page>>>();
-    get.execute
-      .mockReturnValueOnce(old)
-      .mockReturnValue(
-        of(
-          ok({
-            count: 1,
-            next: null,
-            previous: null,
-            results: [{ ...invitation, id: 702, recipient: { ...invitation.recipient, id: 21 } }],
-          }),
-        ),
-      );
+    get.execute.mockReturnValueOnce(old).mockReturnValue(
+      of(
+        ok({
+          count: 1,
+          next: null,
+          previous: null,
+          results: [{ ...invitation, id: 702, recipient: { ...invitation.recipient, id: 21 } }],
+        }),
+      ),
+    );
     inbox.bindUser(invitation.recipient.id);
     await vi.advanceTimersByTimeAsync(0);
     inbox.bindUser(21);

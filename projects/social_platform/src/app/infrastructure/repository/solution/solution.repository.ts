@@ -12,12 +12,25 @@ import {
   SolutionCaptainCommand,
   SolutionCreateInvitation,
   SolutionUpdateInvitation,
+  SolutionFormWrite,
 } from "@domain/solution/solution-contract.model";
 import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapter";
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
   private readonly http = inject(SolutionHttpAdapter);
+  form(programId: number) {
+    return this.http.form(programId);
+  }
+  managedForm(programId: number) {
+    return this.http.managedForm(programId);
+  }
+  saveManagedForm(programId: number, command: SolutionFormWrite) {
+    return this.http.saveManagedForm(programId, command);
+  }
+  templates() {
+    return this.http.templates();
+  }
   context(programId: number) {
     return this.http.context(programId);
   }

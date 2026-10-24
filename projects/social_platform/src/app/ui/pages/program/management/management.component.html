@@ -643,13 +643,21 @@
         >
       }
       @if (settingsTab() === "project-form") {
-        <app-management-project-form
-          [programId]="program.id"
-          [confirmDiscard]="confirmProjectFormDiscard"
-          (statusChange)="projectFormStatus.set($event)"
-          (savedAt)="projectFormSaved($event)"
-          (materials)="changeQuery({ tab: 'materials' })"
-        />
+        @if (program.solutionStorageMode === "solution") {
+          <app-management-solution-form
+            [programId]="program.id"
+            [confirmDiscard]="confirmProjectFormDiscard"
+            (statusChange)="projectFormStatus.set($event)"
+          />
+        } @else {
+          <app-management-project-form
+            [programId]="program.id"
+            [confirmDiscard]="confirmProjectFormDiscard"
+            (statusChange)="projectFormStatus.set($event)"
+            (savedAt)="projectFormSaved($event)"
+            (materials)="changeQuery({ tab: 'materials' })"
+          />
+        }
       } @else if (settingsTab() === "criteria") {
         <app-management-criteria
           [programId]="program.id"

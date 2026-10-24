@@ -15,9 +15,20 @@ import {
   SolutionUpdateInvitation,
   SolutionInvitationCreated,
   SolutionInvitationActionResult,
+  SolutionForm,
+  SolutionFormWrite,
+  SolutionFormManagement,
+  SolutionTemplates,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract form(programId: number): Observable<SolutionForm>;
+  abstract managedForm(programId: number): Observable<SolutionFormManagement>;
+  abstract saveManagedForm(
+    programId: number,
+    command: SolutionFormWrite,
+  ): Observable<SolutionFormManagement>;
+  abstract templates(): Observable<SolutionTemplates>;
   abstract context(programId: number): Observable<SolutionContext>;
   abstract create(programId: number, command: CreateSolutionCommand): Observable<ProgramSolution>;
   abstract get(programId: number, solutionId: number): Observable<ProgramSolution>;

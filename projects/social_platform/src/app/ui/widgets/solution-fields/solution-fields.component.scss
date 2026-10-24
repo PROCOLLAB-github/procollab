@@ -1,0 +1,94 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.solution-fields {
+  display: grid;
+  gap: 24px;
+}
+
+fieldset {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+label {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
+}
+
+textarea.ui-field {
+  min-height: 120px;
+  resize: vertical;
+  border-radius: 12px;
+}
+
+.file-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+.boolean-answer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.answer {
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.help,
+small {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--grey-for-text);
+}
+
+.error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--error, var(--ui-error-text));
+}
+
+a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+input[type="file"] {
+  width: 100%;
+  min-height: 44px;
+  font: inherit;
+}
