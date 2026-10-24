@@ -88,12 +88,16 @@ describe("RatingCardComponent", () => {
   }
 
   const cta = () =>
-    fixture.nativeElement.querySelector(".card__rated app-button button") as HTMLButtonElement;
+    fixture.nativeElement.querySelector(".scoring__actions button") as HTMLButtonElement;
   const criteria = () =>
     fixture.debugElement.query(By.directive(ProjectRatingComponent))
       .componentInstance as ProjectRatingComponent;
 
   function expectReadonly(disabled: boolean): void {
+    if (disabled) {
+      expect(fixture.nativeElement.querySelector("app-project-rating")).toBeNull();
+      return;
+    }
     expect(criteria().disabled).toBe(disabled);
     for (const control of Object.values(criteria().form.controls))
       expect(control.disabled).toBe(disabled);
@@ -153,26 +157,44 @@ describe("RatingCardComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("validates all required answers before opening confirmation, focuses the first invalid field", async () => {
+    render();
+    criteria().form.get("1")!.setValue(null);
+    criteria().form.get("2")!.setValue(null);
+    cta().click();
+    fixture.detectChanges();
+    await Promise.resolve();
+    expect(component.state.showConfirmRateModal()).toBe(false);
+    expect(criteria().form.get("1")!.touched).toBe(true);
+    expect(fixture.nativeElement.textContent).toContain("Выберите «Да» или «Нет»");
+    expect(execute).not.toHaveBeenCalled();
+    criteria().form.get("1")!.setValue(0);
+    criteria().chooseBoolean(2, false);
+    expect(component.hasUnsavedChanges()).toBe(true);
+    cta().click();
+    expect(component.state.showConfirmRateModal()).toBe(true);
+  });
+
   it("keeps unrated CTA active and criteria editable when registration is past but evaluation is future", () => {
     render();
     expect(TestBed.inject(ProgramDetailMainUIInfoService).registerDateExpired()).toBe(true);
     expect(cta()).not.toBeNull();
-    expect(cta().textContent).toContain("оценить проект");
+    expect(cta().textContent).toContain("Сохранить оценку");
     expect(cta().disabled).toBe(false);
     expectReadonly(false);
   });
 
   it("allows editing an existing rating until the evaluation deadline, then returns to readonly on success", async () => {
     render(true);
-    expect(cta().textContent).toContain("проект оценен");
+    expect(fixture.nativeElement.textContent).toContain("Оценка сохранена");
     expectReadonly(true);
     const edit = fixture.nativeElement.querySelector(
-      ".card__rated--icon button",
+      ".scoring__form > button",
     ) as HTMLButtonElement;
     expect(edit.disabled).toBe(false);
     edit.click();
     fixture.detectChanges();
-    expect(cta().textContent).toContain("подтвердить изменения");
+    expect(cta().textContent).toContain("Сохранить оценку");
     expect(cta().disabled).toBe(false);
     expectReadonly(false);
     criteria().form.get("1")!.setValue(4);
@@ -180,28 +202,23 @@ describe("RatingCardComponent", () => {
     fixture.detectChanges();
     await new Promise(resolve => setTimeout(resolve, 0));
     fixture.detectChanges();
-    document.querySelector<HTMLButtonElement>(".cancel__button button")!.click();
+    document.querySelector<HTMLButtonElement>(".scoring-dialog footer button:last-child")!.click();
     fixture.detectChanges();
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(execute).toHaveBeenCalledOnce();
     expect(execute.mock.calls[0][2]).toEqual({ 1: 4, 2: true, 3: "Note" });
-    expect(cta().textContent).toContain("проект оценен");
+    expect(fixture.nativeElement.textContent).toContain("Оценка сохранена");
     expectReadonly(true);
   });
 
   it.each([false, true])(
-    "keeps expired CTA visible and all criteria readonly (rated=%s)",
+    "shows the expired state without a save or edit action (rated=%s)",
     rated => {
       render(rated, past, future);
-      expect(cta()).not.toBeNull();
-      expect(cta().textContent).toContain("оценивание завершено");
-      expect(cta().disabled).toBe(true);
-      expect(
-        fixture.nativeElement.querySelector(".card__rated app-button").getAttribute("title"),
-      ).toBe("Срок оценивания завершен");
-      expect(fixture.nativeElement.querySelector(".card__rated--icon")).toBeNull();
+      expect(cta()).toBeNull();
+      expect(fixture.nativeElement.textContent).toContain("Срок оценивания завершен");
+      expect(fixture.nativeElement.querySelector(".scoring__form > button")).toBeNull();
       expectReadonly(true);
-      cta().click();
       fixture.detectChanges();
       expect(execute).not.toHaveBeenCalled();
     },
@@ -210,7 +227,7 @@ describe("RatingCardComponent", () => {
   it.each(["", "invalid"])("keeps CTA and criteria available for %s deadline", evaluation => {
     render(false, evaluation);
     expect(cta().disabled).toBe(false);
-    expect(cta().textContent).toContain("оценить проект");
+    expect(cta().textContent).toContain("Сохранить оценку");
     expectReadonly(false);
   });
 
@@ -219,11 +236,12 @@ describe("RatingCardComponent", () => {
     const ui = TestBed.inject(ProgramDetailMainUIInfoService);
     ui.applyFormatingProgramData({ ...ui.program()!, datetimeEvaluationEnds: past });
     fixture.detectChanges();
-    expect(cta().textContent).toContain("оценивание завершено");
+    expect(cta()).toBeNull();
+    expect(fixture.nativeElement.textContent).toContain("Срок оценивания завершен");
     expectReadonly(true);
     ui.applyFormatingProgramData({ ...ui.program()!, datetimeEvaluationEnds: future });
     fixture.detectChanges();
-    expect(cta().textContent).toContain("оценить проект");
+    expect(cta().textContent).toContain("Сохранить оценку");
     expect(cta().disabled).toBe(false);
     expectReadonly(false);
   });

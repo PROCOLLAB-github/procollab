@@ -1,184 +1,153 @@
 <!-- @format -->
-
-@if (project) {
-  <div class="card">
-    <div class="card__wrapper">
-      <div class="card__inner">
-        <div class="card__info">
-          <app-avatar
-            class="card__avatar"
-            [url]="project.imageAddress"
-            [hasBorder]="true"
-            [size]="(desktopMode$ | async) ? 50 : 38"
-          ></app-avatar>
-
-          <div class="card__naming">
-            <a [routerLink]="AppRoutes.projects.detail(project.id)">
-              <p class="text-body-12 card__naming--text">
-                {{ (desktopMode$ | async) ? (project.name | truncate: 15) : project.name }}
-              </p>
-            </a>
-
-            @if (industryRepositoryGetOne(project.industry); as industry) {
-              <app-tag class="card__industry" color="complete">
-                {{ industry.name }}
-              </app-tag>
-            }
-          </div>
-        </div>
-
-        @if (project.presentationAddress) {
-          <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
-            <app-button
-              size="medium"
-              appearance="outline"
-              customTypographyClass="text-body-12"
-              (click)="openPresentation(project.presentationAddress)"
-            >
-              <span>презентация</span>
-              <i appIcon icon="arrow-down" appSquare="8"></i>
-            </app-button>
-          </a>
+@if (state.project(); as p) {
+  <div class="scoring">
+    <aside class="scoring__materials">
+      <h2>Материалы проекта</h2>
+      <a
+        appButton="secondary"
+        [routerLink]="AppRoutes.projects.detail(p.id)"
+        target="_blank"
+        rel="noopener"
+        >Открыть проект <span aria-hidden="true">↗</span></a
+      >
+      @if (presentationHref(p.presentationAddress); as href) {
+        <a appButton="secondary" [href]="href" target="_blank" rel="noopener"
+          >Презентация <i appIcon icon="download" appSquare="14"></i
+        ></a>
+      } @else {
+        <p class="scoring__muted">Презентация не добавлена</p>
+      }
+      <h3>О проекте</h3>
+      <p class="scoring__description">{{ p.description || "Описание не добавлено" }}</p>
+    </aside>
+    <section class="scoring__form" aria-label="Форма оценки">
+      <div class="scoring__heading">
+        <h2>Моя оценка</h2>
+        @if (state.projectConfirmed()) {
+          <span class="scoring__status">Оценка сохранена</span>
         }
       </div>
-
-      <div class="about">
-        <div class="about__top">
-          <p class="text-body-12 about__title">о проекте</p>
-          <i icon="folder" appIcon appSquare="12"></i>
-        </div>
-        @if (project.description) {
-          <div class="text-body-10 about__text">
-            <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
-            @if (descriptionExpandable()) {
-              <div class="about__read-full text-body-10" (click)="onExpandDescription(descEl)">
-                {{ readFullDescription() ? "скрыть" : "подробнее" }}
-              </div>
-            }
-          </div>
+      @if (state.evaluationDateExpired()) {
+        <p class="scoring__notice">
+          {{
+            state.projectConfirmed()
+              ? "Срок оценивания завершен. Оценка доступна для просмотра."
+              : "Срок оценивания завершен. Отправить оценку уже нельзя."
+          }}
+        </p>
+      } @else if (state.isLimitReached() && !state.userRatedThisProject()) {
+        <p class="scoring__notice">Достигнут лимит оценок этого проекта.</p>
+      }
+      @if (!p.criterias.length) {
+        <p class="scoring__muted">Организатор еще не настроил критерии оценки.</p>
+      } @else if (state.projectConfirmed()) {
+        <dl class="scoring__answers">
+          @for (c of orderedCriteria(); track c.id) {
+            <div [class.scoring__answer--text]="c.type === 'str'">
+              <dt>{{ c.name }}</dt>
+              <dd>{{ answer(c) }}</dd>
+            </div>
+          }
+        </dl>
+        @if (state.showEditButton()) {
+          <button type="button" appButton="secondary" (click)="redoRating()">
+            Изменить оценку
+          </button>
         }
-      </div>
-
-      <div class="card__experts">
-        <p class="text-body-12">{{ ratedCount() }} / {{ project.maxRates }}</p>
-        <i appIcon icon="person" appSquare="10"></i>
-      </div>
-    </div>
-
-    <div class="card__lower">
-      <div class="card__wrapper" [style.overflow-y]="isProjectCriterias() > 6 ? 'auto' : 'none'">
-        <div class="card__lower--info">
-          <p class="text-body-12">оценка проекта</p>
-          <i appIcon icon="medal" appWidth="8" appHeight="12"></i>
-        </div>
+      } @else if (!state.evaluationDateExpired()) {
         <app-project-rating
-          [criteria]="project.criterias"
-          [formControl]="form()"
-          [currentUserId]="profile()!.id"
-          [disabled]="isRatingFormDisabled()"
-        ></app-project-rating>
-        @if (form() | controlError: "required"; as error) {
-          <div class="text-body-10 error">
-            {{ error }}
-          </div>
-        }
-        @if (ratingError()) {
-          <div role="alert" class="text-body-12">
-            {{ ratingError() }}
-            @if (criteriaChanged()) {
-              <app-button
-                appearance="outline"
-                [disabled]="refreshingCriteria()"
-                (click)="refreshCriteria()"
-                >{{ refreshingCriteria() ? "Обновляем…" : "Обновить критерии" }}</app-button
+          layout="full"
+          [criteria]="p.criterias"
+          [formControl]="state.form()"
+          [disabled]="state.submitLoading() || state.isButtonDisabled()"
+        />
+        @if (state.ratingError(); as error) {
+          <div class="scoring__error" role="alert">
+            <p>{{ error }}</p>
+            @if (state.criteriaChanged()) {
+              <button
+                type="button"
+                appButton="secondary"
+                [disabled]="state.refreshingCriteria()"
+                (click)="state.refreshCriteria()"
               >
+                {{ state.refreshingCriteria() ? "Обновляем…" : "Обновить критерии" }}
+              </button>
             }
           </div>
         }
-        @if (retainedAnswers().length) {
-          <details>
-            <summary>Ответы до обновления критериев</summary>
-            @for (answer of retainedAnswers(); track $index) {
-              <p class="text-body-12">{{ answer.name }}: {{ answer.value }}</p>
+        @if (state.retainedAnswers().length) {
+          <details class="scoring__previous">
+            <summary>Предыдущие ответы</summary>
+            @for (answer of state.retainedAnswers(); track $index) {
+              <p>{{ answer.name }}: {{ answer.value }}</p>
             }
           </details>
         }
-      </div>
-
-      @if (showRatingForm() || showRatedStatus() || showConfirmedState()) {
-        <div class="card__rated">
-          <app-button
-            style="flex-grow: 1"
-            customTypographyClass="text-body-12"
-            size="big"
-            [loader]="submitLoading() || confirmLoading()"
-            [disabled]="isButtonDisabled()"
-            [style.opacity]="buttonOpacity()"
-            [color]="buttonColor()"
-            [title]="buttonTooltip()"
+        <div class="scoring__actions">
+          <button
+            type="button"
+            appButton="primary"
+            [disabled]="
+              state.isButtonDisabled() || state.submitLoading() || state.criteriaChanged()
+            "
             (click)="handleRateButtonClick()"
           >
-            {{ rateButtonText() }}
-          </app-button>
-
-          @if (showEditButton()) {
-            <app-button
-              appearance="outline"
-              size="small"
-              type="icon"
-              class="card__rated--icon"
-              (click)="redoRating()"
-            >
-              <i appIcon icon="edit-pen" appSquare="10"></i>
-            </app-button>
-          }
+            Сохранить оценку
+          </button>
         </div>
       }
-
-      <app-modal [open]="showConfirmRateModal()" (openChange)="toggleConfirmRateModal()">
-        <div class="cancel">
-          <div class="cancel__top">
-            <p class="cancel__title text-body-14">подтвердите оценку</p>
-
-            <div class="cancel__project">
-              <app-avatar [size]="50" [url]="project.imageAddress"></app-avatar>
-              <p class="text-body-12">{{ project.name }}</p>
-            </div>
-          </div>
-
-          <div class="cancel__criterias">
-            @if (showConfirmRateModal()) {
-              <app-project-rating
-                [criteria]="project.criterias"
-                [formControl]="form()"
-                [disabled]="true"
-              ></app-project-rating>
-            }
-          </div>
-
-          <div class="cancel__buttons">
-            <app-button
-              size="big"
-              class="cancel__button"
-              customTypographyClass="text-body-12"
-              [disabled]="evaluationDateExpired()"
-              (click)="confirmRateProject()"
-            >
-              подтверждаю
-            </app-button>
-
-            <app-button
-              size="big"
-              class="cancel__button"
-              appearance="outline"
-              customTypographyClass="text-body-12"
-              (click)="closeConfirmRateModal()"
-            >
-              изменить оценку
-            </app-button>
-          </div>
-        </div>
-      </app-modal>
-    </div>
+    </section>
   </div>
+
+  <app-modal
+    [open]="state.showConfirmRateModal()"
+    (openChange)="closeConfirmRateModal()"
+    labelledBy="score-confirm-title"
+    bodyClass="modal__body--no-flex"
+  >
+    <div class="scoring-dialog" [attr.aria-busy]="state.submitLoading()">
+      <header>
+        <h2 id="score-confirm-title">Проверьте оценку</h2>
+        <button
+          type="button"
+          class="scoring-dialog__close"
+          aria-label="Закрыть"
+          [disabled]="state.submitLoading()"
+          (click)="closeConfirmRateModal()"
+        >
+          ×
+        </button>
+      </header>
+      <div class="scoring-dialog__body">
+        <h3>{{ p.name }}</h3>
+        <dl class="scoring__answers">
+          @for (c of orderedCriteria(); track c.id) {
+            <div [class.scoring__answer--text]="c.type === 'str'">
+              <dt>{{ c.name }}</dt>
+              <dd>{{ answer(c) }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+      <footer>
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="state.submitLoading()"
+          (click)="closeConfirmRateModal()"
+        >
+          Вернуться к форме
+        </button>
+        <button
+          type="button"
+          appButton="primary"
+          [disabled]="state.submitLoading()"
+          (click)="confirmRateProject()"
+        >
+          {{ state.submitLoading() ? "Сохраняем…" : "Подтвердить оценку" }}
+        </button>
+      </footer>
+    </div>
+  </app-modal>
 }

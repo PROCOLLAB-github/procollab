@@ -30,6 +30,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
+import { EvaluationNavigationService } from "@api/program/evaluation-navigation.service";
 
 type CabinetTab = "pending" | "completed" | "invitations";
 const positive = (value: string | null) => {
@@ -55,6 +56,7 @@ const positive = (value: string | null) => {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EvaluationProgramsComponent {
+  readonly navigation = inject(EvaluationNavigationService);
   private readonly api = inject(EvaluationUseCase);
   private readonly profile = inject(ProfileInfoService);
   private readonly auth = inject(AuthInfoService);
@@ -167,7 +169,10 @@ export class EvaluationProgramsComponent {
           if (!data.projects || !Array.isArray(data.projects.results)) {
             this.snapshot.set(null);
             this.failed.set("Кабинет временно недоступен. Попробуйте обновить страницу.");
-          } else this.snapshot.set({ accountId, data });
+          } else {
+            this.snapshot.set({ accountId, data });
+            this.navigation.restore(this.router.url);
+          }
           this.loading.set(false);
         },
         error: e => {

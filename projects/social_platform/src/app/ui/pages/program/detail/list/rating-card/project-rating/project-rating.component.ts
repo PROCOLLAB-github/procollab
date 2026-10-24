@@ -5,6 +5,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   forwardRef,
+  ElementRef,
+  inject,
   input,
   Input,
   OnDestroy,
@@ -58,8 +60,9 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   @Input({ required: true })
   set criteria(val: ProjectRatingCriterion[]) {
     if (!val) return;
-    this._criteria.set(val);
-    this.createFormControls(val);
+    const ordered = [...val.filter(c => c.type !== "str"), ...val.filter(c => c.type === "str")];
+    this._criteria.set(ordered);
+    this.createFormControls(ordered);
     this.trackFormValueChange();
     queueMicrotask(() => {
       this.onChange(this.form.getRawValue());
@@ -75,7 +78,9 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   set disabled(value: boolean) {
     this._disabled = value;
     if (this.form) {
-      this.disabled ? this.form.disable() : this.form.enable();
+      this.disabled
+        ? this.form.disable({ emitEvent: false })
+        : this.form.enable({ emitEvent: false });
     }
   }
 
@@ -85,6 +90,27 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
 
   private _disabled = false;
   private controlDisabled = false;
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  chooseBoolean(id: number, value: boolean): void {
+    const control = this.form.get(String(id));
+    control?.markAsDirty();
+    control?.markAsTouched();
+    control?.setValue(value);
+  }
+
+  validateAndFocus(): boolean {
+    this.form.markAllAsTouched();
+    if (this.form.valid) return true;
+    const invalid = this.criteria.find(c => this.form.get(String(c.id))?.invalid);
+    queueMicrotask(() => {
+      const section = this.element.nativeElement.querySelector(`[data-criterion="${invalid?.id}"]`);
+      const target = section?.querySelector<HTMLElement>("input, textarea, button");
+      target?.focus();
+      target?.scrollIntoView?.({ block: "center", behavior: "smooth" });
+    });
+    return false;
+  }
 
   readonly currentUserId = input<number>();
   readonly layout = input<"compact" | "full">("compact");
@@ -141,7 +167,10 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
 
   setDisabledState(disabled: boolean): void {
     this.controlDisabled = disabled;
-    if (this.form) this.disabled ? this.form.disable() : this.form.enable();
+    if (this.form)
+      this.disabled
+        ? this.form.disable({ emitEvent: false })
+        : this.form.enable({ emitEvent: false });
   }
 
   ngOnDestroy(): void {
@@ -161,7 +190,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     if (this.pendingValue) this.form.patchValue(this.pendingValue, { emitEvent: false });
 
     if (this.disabled) {
-      this.form.disable();
+      this.form.disable({ emitEvent: false });
     }
     this.validatorChanged();
   }
