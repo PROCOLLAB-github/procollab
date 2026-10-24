@@ -42,6 +42,11 @@ export const AppRoutes = {
   },
 
   program: {
+    solutionCreate: (programId: number | string) => `/office/program/${programId}/solutions/new`,
+    solution: (programId: number | string, solutionId: number | string) =>
+      `/office/program/${programId}/solutions/${solutionId}`,
+    solutionEdit: (programId: number | string, solutionId: number | string) =>
+      `/office/program/${programId}/solutions/${solutionId}/edit`,
     management: (programId: number | string, section: string = "participants") =>
       `/office/program/${programId}/management/${section}`,
     root: () => "/office/program",

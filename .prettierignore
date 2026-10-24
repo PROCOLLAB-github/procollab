@@ -3,3 +3,6 @@
 /covarage/
 /build/
 *.scss
+
+# Frozen C00 source documents are copied byte-for-byte from the backend contract package.
+/docs/contracts/program-solutions-v1/*.json

@@ -17,6 +17,20 @@ import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 import { PartnerProgramInfo, Project } from "@domain/project/project.model";
 import { programLinkFields } from "@domain/project/program-link-fields.fixture";
 import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
+import { GetSolutionContextUseCase } from "@api/solution/use-cases/solution.use-cases";
+import { SolutionContext } from "@domain/solution/solution-contract.model";
+
+const legacyContext: SolutionContext = {
+  programId: 12,
+  storageMode: "legacy_project",
+  isRegistered: true,
+  isCompetitive: true,
+  submissionOpen: true,
+  submissionDeadline: null,
+  canCreate: false,
+  blockedReason: "legacy_mode",
+  currentApplication: null,
+};
 
 type ApplyResult = Result<
   ApplyToProgramResponse,
@@ -42,6 +56,10 @@ describe("DetailProgramInfoService", () => {
         { provide: ProjectFormService, useValue: { getForm: () => new FormGroup({}) } },
         ProgramDetailMainUIInfoService,
         { provide: ApplyProjectToProgramUseCase, useValue: { execute: vi.fn() } },
+        {
+          provide: GetSolutionContextUseCase,
+          useValue: { execute: vi.fn(() => of(ok(legacyContext))) },
+        },
         { provide: GetMyProjectsUseCase, useValue: { execute: vi.fn() } },
         { provide: GetProjectUseCase, useValue: { execute: vi.fn() } },
         {
@@ -59,6 +77,60 @@ describe("DetailProgramInfoService", () => {
   function program(overrides: Partial<Program> = {}): Program {
     return Object.assign(Program.default(), overrides);
   }
+
+  it("uses the explicit solution mode without creating a Project", () => {
+    vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
+      of(ok({ ...legacyContext, storageMode: "solution", canCreate: true, blockedReason: null })),
+    );
+    service.addNewProject(12);
+    expect(router.navigate).toHaveBeenCalledWith(["/office/program/12/solutions/new"]);
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+    expect(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).not.toHaveBeenCalled();
+  });
+
+  it("opens an existing solution with its own program ID and never creates again", () => {
+    vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
+      of(
+        ok({
+          ...legacyContext,
+          storageMode: "solution",
+          currentApplication: { kind: "solution", programId: 12, solutionId: 88, name: "Решение" },
+        }),
+      ),
+    );
+    service.addNewProject(12);
+    expect(router.navigate).toHaveBeenCalledWith(["/office/program/12/solutions/88"], {
+      queryParams: {},
+    });
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+  });
+
+  it("context failure does not silently fall back to legacy creation", () => {
+    vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
+      of(fail({ code: "network", detail: "Нет сети", errors: [], meta: {} })),
+    );
+    service.addNewProject(12);
+    expect(service.applicationPending()).toBe(false);
+    expect(service.isAssignProjectToProgramModalOpen()).toBe(true);
+    expect(service.assignProjectToProgramModalMessage()).toBe("Нет сети");
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it("ignores stale program context and guards double clicks", () => {
+    const response = new Subject<Result<SolutionContext, never>>();
+    const getContext = vi
+      .mocked(TestBed.inject(GetSolutionContextUseCase).execute)
+      .mockReturnValue(response);
+    service.addNewProject(12);
+    service.addNewProject(12);
+    expect(getContext).toHaveBeenCalledTimes(1);
+    programUI.program.set(program({ id: 99 }));
+    response.next(ok({ ...legacyContext, storageMode: "solution", canCreate: true }));
+    response.complete();
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+  });
 
   it("omits only system case from apply, preserves generic defaults and navigates with exact link", () => {
     const fields = programLinkFields().fields;

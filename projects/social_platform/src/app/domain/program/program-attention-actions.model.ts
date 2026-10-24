@@ -1,8 +1,6 @@
 /** @format */
 export type ProgramAttentionCategory =
-  | "participants-without-visit"
-  | "participants-without-team"
-  | "projects-awaiting-evaluation";
+  "participants-without-visit" | "participants-without-team" | "projects-awaiting-evaluation";
 
 export interface ProgramAttentionSelection {
   mode: "selected" | "all";

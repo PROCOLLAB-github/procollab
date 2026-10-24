@@ -5,8 +5,7 @@ import { Invite } from "@domain/invite/invite.model";
 
 /** Ошибки операций с инвайтами */
 export type InviteError =
-  | { kind: "unknown"; cause?: unknown }
-  | { kind: "get_invites_error"; cause?: unknown };
+  { kind: "unknown"; cause?: unknown } | { kind: "get_invites_error"; cause?: unknown };
 
 /** Результат операций, которые не возвращают данные (accept, reject, revoke). */
 export type InviteResult = Result<void, InviteError>;

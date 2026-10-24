@@ -126,9 +126,7 @@ type RegisterError =
 
 // results/password.result.ts
 type PasswordError =
-  | { kind: "server_error" }
-  | { kind: "invalid_token" }
-  | { kind: "unknown"; cause?: unknown };
+  { kind: "server_error" } | { kind: "invalid_token" } | { kind: "unknown"; cause?: unknown };
 ```
 
 ---

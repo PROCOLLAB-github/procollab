@@ -1,0 +1,74 @@
+<!-- @format -->
+
+<main class="solution" aria-labelledby="solution-title">
+  <a [routerLink]="routes.program.detail(programId())">← К программе</a>
+  @if (loading()) {
+    <h1 id="solution-title">Заявка</h1>
+    <p role="status">Загружаем заявку…</p>
+  } @else if (error(); as problem) {
+    <h1 id="solution-title">
+      {{ problem.code === "not_found" ? "Заявка не найдена" : "Не удалось открыть заявку" }}
+    </h1>
+    <p role="alert">{{ problem.detail }}</p>
+    <button appButton="secondary" type="button" (click)="reload()">Повторить</button>
+  } @else if (solution(); as item) {
+    <header>
+      <div>
+        <h1 id="solution-title">{{ item.name }}</h1>
+        <p class="muted">
+          {{ item.submission.status === "submitted" ? "Решение сдано" : "Черновик заявки" }}
+        </p>
+      </div>
+      @if (item.submission.submittedAt) {
+        <p>Сдано {{ item.submission.submittedAt | date: "dd.MM.yyyy, HH:mm" }}</p>
+      }
+    </header>
+    <nav aria-label="Разделы заявки">
+      <a [routerLink]="[]" [queryParams]="{}" [attr.aria-current]="!teamTab() ? 'page' : null"
+        >Решение</a
+      >
+      <a
+        [routerLink]="[]"
+        [queryParams]="{ tab: 'team' }"
+        [attr.aria-current]="teamTab() ? 'page' : null"
+        >Команда</a
+      >
+    </nav>
+    @if (teamTab()) {
+      <section aria-labelledby="team-title">
+        <h2 id="team-title">Команда заявки</h2>
+        <p class="muted">Участники команды · {{ item.team.acceptedCount }}</p>
+        <ul class="members">
+          @for (member of item.team.members; track member.user.id) {
+            <li>
+              <span class="name"
+                >{{ member.user.firstName }} {{ member.user.lastName
+                }}<small class="muted">{{
+                  member.isCaptain ? "Капитан" : "Участник команды"
+                }}</small></span
+              >
+              <span>{{ member.role || "Роль не указана" }}</span>
+              <span class="muted">В команде</span>
+            </li>
+          } @empty {
+            <li>В команде пока нет участников.</li>
+          }
+        </ul>
+      </section>
+    } @else {
+      <section aria-labelledby="data-title">
+        <h2 id="data-title">Данные решения</h2>
+        <dl>
+          @for (field of item.form.fields; track field.id) {
+            <div>
+              <dt>{{ field.label }}{{ field.required ? " *" : "" }}</dt>
+              <dd>{{ answer(field.id) }}</dd>
+            </div>
+          } @empty {
+            <p class="muted">Организатор еще не настроил поля решения.</p>
+          }
+        </dl>
+      </section>
+    }
+  }
+</main>
