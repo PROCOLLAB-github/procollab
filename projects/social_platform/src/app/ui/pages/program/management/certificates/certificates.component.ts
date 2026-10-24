@@ -11,7 +11,7 @@ import {
   signal,
   untracked,
 } from "@angular/core";
-import { DatePipe } from "@angular/common";
+import { DatePipe, NgTemplateOutlet } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Observable, Subject, debounceTime, firstValueFrom, interval } from "rxjs";
@@ -28,16 +28,31 @@ import {
   CertificateFilter,
   CertificateJournal,
   CertificateSettings,
+  CertificateElement,
+  CERTIFICATE_ELEMENTS,
+  CERTIFICATE_LABELS,
 } from "@domain/program/program-certificates.model";
+import {
+  hiddenCertificateElements,
+  normalizeCertificateDraft,
+  resizeCertificateBox,
+} from "@utils/certificate-layout";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { CertificateCanvasComponent } from "./certificate-canvas.component";
+
+interface CertificateEditState {
+  draft: CertificateDraft;
+  assets: CertificateSettings["assets"];
+  selected: CertificateElement;
+}
 
 @Component({
   selector: "app-management-certificates",
   imports: [
     FormsModule,
     DatePipe,
+    NgTemplateOutlet,
     ButtonDirective,
     FieldDirective,
     ChoiceDirective,
@@ -57,6 +72,7 @@ import { CertificateCanvasComponent } from "./certificate-canvas.component";
 export class ManagementCertificatesComponent {
   readonly programId = input.required<number>();
   readonly programName = input.required<string>();
+  readonly finishedAt = input<string | null>(null);
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly api = inject(ProgramCertificatesUseCase);
@@ -74,6 +90,37 @@ export class ManagementCertificatesComponent {
   readonly editorOpen = signal(false);
   readonly confirmOpen = signal(false);
   readonly longName = signal(false);
+  readonly selected = signal<CertificateElement>("name");
+  readonly editorPreview = signal(false);
+  readonly keys = CERTIFICATE_ELEMENTS;
+  readonly elementLabels = CERTIFICATE_LABELS;
+  readonly undoStack = signal<CertificateEditState[]>([]);
+  readonly redoStack = signal<CertificateEditState[]>([]);
+  readonly visibleElements = computed(() =>
+    this.keys.filter(
+      key => !this.hiddenElements().includes(key as Exclude<CertificateElement, "name">),
+    ),
+  );
+  readonly hiddenElements = computed(() =>
+    this.draft() ? hiddenCertificateElements(this.draft()!) : [],
+  );
+  readonly scheduleProblem = computed(() => {
+    const draft = this.draft();
+    if (draft?.timing !== "scheduled") return null;
+    const when = draft.scheduledAt ? Date.parse(draft.scheduledAt) : NaN;
+    if (!Number.isFinite(when) || when <= this.currentTime())
+      return "Укажите будущую дату и время выдачи.";
+    if (this.finishedAt() && when < Date.parse(this.finishedAt()!))
+      return "Дата выдачи не может быть раньше окончания программы.";
+    return null;
+  });
+  readonly launchProblem = computed(() =>
+    !this.recipients()
+      ? "По выбранному условию нет участников. Измените аудиторию."
+      : this.scheduleProblem(),
+  );
+  private readonly currentTime = signal(Date.now());
+  private confirmationRevision: number | null = null;
   readonly journal = signal<CertificateJournal | null>(null);
   readonly journalLoading = signal(false);
   readonly journalError = signal<string | null>(null);
@@ -122,6 +169,7 @@ export class ManagementCertificatesComponent {
     interval(15000)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe(() => {
+        this.currentTime.set(Date.now());
         if (
           this.step() === 3 &&
           !this.journalLoading() &&
@@ -136,8 +184,12 @@ export class ManagementCertificatesComponent {
     return firstValueFrom(request.pipe(takeUntilDestroyed(this.destroy)));
   }
   private accept(settings: CertificateSettings): void {
-    this.snapshot.set(settings);
-    this.draft.set(structuredClone(settings.draft));
+    const draft = normalizeCertificateDraft(settings.draft);
+    this.snapshot.set({ ...settings, draft });
+    this.draft.set(structuredClone(draft));
+    this.undoStack.set([]);
+    this.redoStack.set([]);
+    if (!this.visibleElements().includes(this.selected())) this.selected.set("name");
     this.assets.set(settings.assets);
     void this.loadAssets();
   }
@@ -183,7 +235,65 @@ export class ManagementCertificatesComponent {
       this.objectUrls.delete(url);
     }
   }
-  patch(values: Partial<CertificateDraft>): void {
+  remember(): void {
+    if (!this.draft()) return;
+    this.undoStack.update(history => [...history.slice(-49), this.editState()]);
+    this.redoStack.set([]);
+  }
+  private editState(): CertificateEditState {
+    return structuredClone({
+      draft: this.draft()!,
+      assets: this.assets(),
+      selected: this.selected(),
+    });
+  }
+  private restoreEditState(state: CertificateEditState): void {
+    const assetsChanged = JSON.stringify(state.assets) !== JSON.stringify(this.assets());
+    this.draft.set(structuredClone(state.draft));
+    this.assets.set(state.assets);
+    this.selected.set(state.selected);
+    if (assetsChanged) void this.loadAssets();
+  }
+  undo(): void {
+    const history = this.undoStack();
+    if (!history.length || this.busy()) return;
+    this.redoStack.update(items => [...items, this.editState()]);
+    this.undoStack.set(history.slice(0, -1));
+    this.restoreEditState(history[history.length - 1]);
+  }
+  redo(): void {
+    const history = this.redoStack();
+    if (!history.length || this.busy()) return;
+    this.undoStack.update(items => [...items, this.editState()]);
+    this.redoStack.set(history.slice(0, -1));
+    this.restoreEditState(history[history.length - 1]);
+  }
+  editorKeydown(event: KeyboardEvent): void {
+    if ((event.target as HTMLElement).matches("input,textarea,[contenteditable='true']")) return;
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
+      event.preventDefault();
+      event.shiftKey ? this.redo() : this.undo();
+    }
+  }
+  hideElement(key: CertificateElement): void {
+    if (key === "name") return;
+    this.patch({ hiddenElements: [...new Set([...this.hiddenElements(), key])] });
+    this.selected.set("name");
+  }
+  addElement(key: Exclude<CertificateElement, "name">): void {
+    this.patch({ hiddenElements: this.hiddenElements().filter(value => value !== key) });
+    this.selected.set(key);
+  }
+  onlyName(): void {
+    this.patch({
+      hiddenElements: this.keys.filter(
+        (key): key is Exclude<CertificateElement, "name"> => key !== "name",
+      ),
+    });
+    this.selected.set("name");
+  }
+  patch(values: Partial<CertificateDraft>, remember = true): void {
+    if (remember) this.remember();
     this.draft.update(d => (d ? { ...d, ...values } : d));
   }
   schedule(value: string): void {
@@ -194,6 +304,9 @@ export class ManagementCertificatesComponent {
     if (!snapshot) return;
     this.draft.set(structuredClone(snapshot.draft));
     this.assets.set(snapshot.assets);
+    this.undoStack.set([]);
+    this.redoStack.set([]);
+    if (!this.visibleElements().includes(this.selected())) this.selected.set("name");
     void this.loadAssets();
   }
   private async run<T>(request: () => Observable<T>, accept: (value: T) => void): Promise<void> {
@@ -208,14 +321,24 @@ export class ManagementCertificatesComponent {
       this.busy.set(false);
     }
   }
-  save(): Promise<void> {
-    return this.run(
-      () => this.api.save(this.programId(), this.snapshot()!.revision, this.draft()!),
-      data => {
-        this.accept(data);
-        this.message.set("Настройки сертификата сохранены.");
-      },
-    );
+  async save(): Promise<boolean> {
+    if (this.busy() || this.loading()) return false;
+    if (!this.dirty()) return true;
+    const id = this.programId();
+    this.busy.set(true);
+    this.error.set(null);
+    try {
+      const data = await this.observe(this.api.save(id, this.snapshot()!.revision, this.draft()!));
+      if (id !== this.programId()) return false;
+      this.accept(data);
+      this.message.set("Настройки сертификата сохранены.");
+      return true;
+    } catch (error) {
+      if (id === this.programId()) this.error.set(evaluationError(error));
+      return false;
+    } finally {
+      this.busy.set(false);
+    }
   }
   async upload(event: Event, kind: "background" | "signature"): Promise<void> {
     const input = event.target as HTMLInputElement,
@@ -232,43 +355,60 @@ export class ManagementCertificatesComponent {
     );
   }
   private setAsset(kind: "background" | "signature", asset: CertificateAsset): void {
+    this.remember();
     this.assets.update(assets => ({ ...assets, [kind]: asset }));
-    this.patch(kind === "background" ? { backgroundId: asset.id } : { signatureId: asset.id });
+    this.patch(
+      kind === "background" ? { backgroundId: asset.id } : { signatureId: asset.id },
+      false,
+    );
     if (kind === "signature") {
       const draft = this.draft()!;
       const box = draft.layout.signature;
       const ratio = asset.width / asset.height;
-      const height = Math.min((box.width * (297 / 210)) / ratio, 100 - box.y);
-      this.patch({
-        layout: {
-          ...draft.layout,
-          signature: { ...box, height, width: (height * ratio) / (297 / 210) },
+      const width = Math.min(box.width, (box.height * ratio) / (297 / 210));
+      this.patch(
+        {
+          layout: {
+            ...draft.layout,
+            signature: resizeCertificateBox({ ...box, width }, 0, 0, ratio),
+          },
         },
-      });
+        false,
+      );
     }
     void this.loadAssets();
   }
   remove(kind: "background" | "signature"): void {
+    this.remember();
     this.assets.update(assets => ({ ...assets, [kind]: null }));
-    this.patch(kind === "background" ? { backgroundId: null } : { signatureId: null });
+    this.patch(kind === "background" ? { backgroundId: null } : { signatureId: null }, false);
     void this.loadAssets();
   }
   resetLayout(): void {
     if (this.snapshot()) this.patch({ layout: structuredClone(this.snapshot()!.draft.layout) });
   }
-  preview(): Promise<void> {
+  async preview(): Promise<void> {
+    const id = this.programId();
+    if (!(await this.save()) || id !== this.programId()) return;
     return this.run(
       () => this.api.preview(this.programId(), this.snapshot()!.revision),
       blob => saveAs(blob, "certificate-preview.pdf"),
     );
   }
-  test(): Promise<void> {
+  async test(): Promise<void> {
+    const id = this.programId();
+    if (!(await this.save()) || id !== this.programId()) return;
     return this.run(
       () => this.api.test(this.programId(), this.snapshot()!.revision),
       data => this.message.set(data.detail),
     );
   }
   activate(): Promise<void> {
+    if (this.dirty() || this.confirmationRevision !== this.snapshot()?.revision) {
+      this.confirmOpen.set(false);
+      this.error.set("Настройки изменились. Проверьте параметры запуска еще раз.");
+      return Promise.resolve();
+    }
     return this.run(
       () => this.api.activate(this.programId(), this.snapshot()!.revision),
       data => {
@@ -280,16 +420,35 @@ export class ManagementCertificatesComponent {
       },
     );
   }
+  async prepareLaunch(): Promise<void> {
+    if (this.busy() || this.loading()) return;
+    this.error.set("");
+    if (this.snapshot()?.batch?.active) {
+      this.setStep(3);
+      return;
+    }
+    this.currentTime.set(Date.now());
+    if (this.launchProblem()) return;
+    const id = this.programId();
+    if (!(await this.save()) || id !== this.programId() || this.launchProblem()) return;
+    if (this.snapshot()?.batch?.active) {
+      this.setStep(3);
+      return;
+    }
+    this.confirmationRevision = this.snapshot()!.revision;
+    this.confirmOpen.set(true);
+  }
   queue(): Promise<void> {
     return this.run(
       () => this.api.queue(this.programId(), this.snapshot()?.batch?.active ? "pause" : "resume"),
       data => {
-        this.snapshot.set(data);
+        this.snapshot.set({ ...data, draft: normalizeCertificateDraft(data.draft) });
         void this.loadJournal();
       },
     );
   }
   setStep(step: number): void {
+    if (step !== 1) this.editorOpen.set(false);
     this.step.set(step);
     if (step === 3) void this.loadJournal();
   }

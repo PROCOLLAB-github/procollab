@@ -48,6 +48,7 @@
       <app-management-certificates
         [programId]="program.id"
         [programName]="program.name"
+        [finishedAt]="program.datetimeFinished"
         [confirmDiscard]="confirmProjectFormDiscard"
         (statusChange)="certificatesStatus.set($event)"
       />

@@ -1,6 +1,6 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
-import { of, Subject } from "rxjs";
+import { of, Subject, throwError } from "rxjs";
 import { describe, expect, it, vi } from "vitest";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
 import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
@@ -41,20 +41,21 @@ function settings(): CertificateSettings {
     batch: null,
   };
 }
-async function setup() {
-  const data = settings();
+async function setup(data = settings()) {
   const repository = {
     settings: vi.fn(() => of(data)),
-    save: vi.fn(() => of({ ...data, revision: 2 })),
+    save: vi.fn((_id: number, revision: number, draft: CertificateDraft) =>
+      of({ ...data, revision: revision + 1, draft }),
+    ),
     journal: vi.fn(() =>
       of({ count: 0, results: [], summary: { total: 0, ready: 0, sent: 0, failed: 0 } }),
     ),
     retry: vi.fn(() => of({ count: 1 })),
-    preview: vi.fn(),
-    test: vi.fn(),
+    preview: vi.fn(() => of(new Blob(["%PDF"]))),
+    test: vi.fn(() => of({ detail: "Письмо поставлено в очередь" })),
     asset: vi.fn(),
     upload: vi.fn(),
-    activate: vi.fn(),
+    activate: vi.fn(() => of({ ...data, revision: 2 })),
     queue: vi.fn(),
     pdf: vi.fn(),
     archive: vi.fn(),
@@ -79,6 +80,171 @@ async function setup() {
   return { fixture, component: fixture.componentInstance, repository };
 }
 describe("Program certificates", () => {
+  it("allows only the name to remain, restores removed elements and preserves geometry", async () => {
+    const { fixture, component } = await setup();
+    const layout = structuredClone(component.draft()!.layout);
+    component.onlyName();
+    fixture.detectChanges();
+    expect(component.visibleElements()).toEqual(["name"]);
+    expect(fixture.nativeElement.querySelector('[aria-label="Удалить: Имя участника"]')).toBeNull();
+    component.hideElement("name");
+    expect(component.visibleElements()).toEqual(["name"]);
+    component.addElement("date");
+    expect(component.visibleElements()).toContain("date");
+    expect(component.draft()!.layout).toEqual(layout);
+    component.undo();
+    expect(component.visibleElements()).toEqual(["name"]);
+    component.redo();
+    expect(component.visibleElements()).toContain("date");
+    fixture.destroy();
+  });
+  it("normalizes legacy paired headings without changing saved placement or making the form dirty", async () => {
+    const data = settings();
+    data.draft.showText = false;
+    const { fixture, component } = await setup(data);
+    expect(component.hiddenElements()).toEqual(["title", "subtitle"]);
+    expect(component.draft()!.layout).toEqual(data.draft.layout);
+    expect(component.dirty()).toBe(false);
+    component.addElement("title");
+    expect(component.hiddenElements()).toEqual(["subtitle"]);
+    fixture.destroy();
+  });
+  it("fits an uploaded signature inside its existing area and undoes both file and layout", async () => {
+    const { fixture, component, repository } = await setup();
+    const initial = structuredClone(component.draft()!.layout.signature);
+    repository.upload.mockReturnValue(
+      of({ id: 11, name: "signature.png", width: 600, height: 200 }),
+    );
+    repository.asset.mockReturnValue(of(new Blob(["image"])));
+    const input = document.createElement("input");
+    Object.defineProperty(input, "files", { value: [new File(["image"], "signature.png")] });
+    await component.upload({ target: input } as unknown as Event, "signature");
+    const box = component.draft()!.layout.signature;
+    expect(box.width).toBeLessThanOrEqual(initial.width);
+    expect(box.height).toBeLessThanOrEqual(initial.height);
+    expect((box.width * (297 / 210)) / box.height).toBeCloseTo(3);
+    expect(component.draft()!.signatureId).toBe(11);
+    component.undo();
+    expect(component.draft()!.layout.signature).toEqual(initial);
+    expect(component.assets().signature).toBeNull();
+    expect(component.draft()!.signatureId).toBeNull();
+    fixture.destroy();
+  });
+  it("saves changes before opening a separate launch confirmation and never activates early", async () => {
+    const { fixture, component, repository } = await setup();
+    component.patch({ sendEmail: false });
+    await component.prepareLaunch();
+    expect(repository.save).toHaveBeenCalledWith(
+      9,
+      1,
+      expect.objectContaining({ sendEmail: false }),
+    );
+    expect(component.dirty()).toBe(false);
+    expect(component.confirmOpen()).toBe(true);
+    expect(repository.activate).not.toHaveBeenCalled();
+    await component.activate();
+    expect(repository.activate).toHaveBeenCalledWith(9, 2);
+    fixture.destroy();
+  });
+  it.each([400, 409, 500, 0])(
+    "keeps the draft and blocks dependent actions if saving fails (%s)",
+    async status => {
+      const { fixture, component, repository } = await setup();
+      repository.save.mockReturnValue(
+        throwError(() => ({
+          status,
+          error: { detail: "Настройки изменены другим организатором." },
+        })),
+      );
+      component.patch({ director: "Несохраненное имя" });
+      await component.prepareLaunch();
+      expect(component.confirmOpen()).toBe(false);
+      expect(component.draft()!.director).toBe("Несохраненное имя");
+      expect(component.dirty()).toBe(true);
+      expect(component.error()).toBeTruthy();
+      expect(repository.activate).not.toHaveBeenCalled();
+      expect(component.busy()).toBe(false);
+      await component.preview();
+      await component.test();
+      expect(repository.preview).not.toHaveBeenCalled();
+      expect(repository.test).not.toHaveBeenCalled();
+      fixture.destroy();
+    },
+  );
+  it("shows an activation failure inside the open confirmation and allows retry", async () => {
+    const { fixture, component, repository } = await setup();
+    await component.prepareLaunch();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    repository.activate.mockReturnValueOnce(
+      throwError(() => ({ status: 500, error: { detail: "Не удалось запустить выдачу." } })),
+    );
+    await component.activate();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(component.confirmOpen()).toBe(true);
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(
+        document.querySelector('.certificates__confirmation [role="alert"]')?.textContent,
+      ).toContain("Попробуйте еще раз");
+    });
+    await component.activate();
+    expect(component.confirmOpen()).toBe(false);
+    expect(component.step()).toBe(3);
+    fixture.destroy();
+  });
+  it("shows a next action for an active batch without changing its template", async () => {
+    const data = settings();
+    data.batch = { id: 1, active: true, issueAt: new Date().toISOString(), initializedAt: null };
+    const { fixture, component, repository } = await setup(data);
+    await component.prepareLaunch();
+    expect(component.step()).toBe(3);
+    expect(repository.save).not.toHaveBeenCalled();
+    expect(repository.activate).not.toHaveBeenCalled();
+    fixture.destroy();
+  });
+  it("keeps legacy visibility clean on queue changes and preserves any unsaved edits", async () => {
+    const data = settings();
+    data.draft.showText = false;
+    const { fixture, component, repository } = await setup(data);
+    repository.queue.mockReturnValue(of(data));
+    await component.queue();
+    expect(component.dirty()).toBe(false);
+    component.patch({ director: "Несохраненный директор" });
+    await component.queue();
+    expect(component.draft()!.director).toBe("Несохраненный директор");
+    expect(component.dirty()).toBe(true);
+    fixture.destroy();
+  });
+  it("explains zero recipients and an issue date before program completion", async () => {
+    const data = settings();
+    data.eligibleCounts = { all: 0, submitted: 0 };
+    const { fixture, component, repository } = await setup(data);
+    expect(component.launchProblem()).toContain("нет участников");
+    await component.prepareLaunch();
+    expect(repository.activate).not.toHaveBeenCalled();
+    component.snapshot.update(v => ({ ...v!, eligibleCounts: { all: 5, submitted: 2 } }));
+    fixture.componentRef.setInput("finishedAt", new Date(Date.now() + 86400000 * 3).toISOString());
+    component.patch({
+      timing: "scheduled",
+      scheduledAt: new Date(Date.now() + 86400000).toISOString(),
+    });
+    expect(component.launchProblem()).toContain("раньше окончания");
+    component.setStep(2);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector("#certificate-schedule-error")?.textContent,
+    ).toContain("раньше окончания");
+    expect(
+      fixture.nativeElement
+        .querySelector('input[type="datetime-local"]')
+        ?.getAttribute("aria-invalid"),
+    ).toBe("true");
+    await component.prepareLaunch();
+    expect(repository.save).not.toHaveBeenCalled();
+    fixture.destroy();
+  });
   it("loads a real program and shows no invented participants or email prerequisite", async () => {
     const { fixture, component, repository } = await setup();
     expect(repository.settings).toHaveBeenCalledWith(9);
