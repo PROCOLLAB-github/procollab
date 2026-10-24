@@ -2,16 +2,16 @@
 <main class="cabinet">
   <header class="cabinet__title">
     <h1>Кабинет эксперта</h1>
-    <p>Все проекты, назначенные вам для оценки</p>
+    <p>Все работы, назначенные вам для оценки</p>
   </header>
-  <nav class="cabinet__tabs" aria-label="Проекты эксперта">
+  <nav class="cabinet__tabs" aria-label="Работы эксперта">
     <button
       type="button"
       [appButton]="tab() === 'pending' ? 'primary' : 'secondary'"
       [attr.aria-current]="tab() === 'pending' ? 'page' : null"
       (click)="setTab('pending')"
     >
-      Осталось оценить · {{ data()?.projects?.pending ?? "—" }}
+      Осталось оценить · {{ data()?.applications?.pending ?? "—" }}
     </button>
     <button
       type="button"
@@ -19,7 +19,7 @@
       [attr.aria-current]="tab() === 'completed' ? 'page' : null"
       (click)="setTab('completed')"
     >
-      Оцененные · {{ data()?.projects?.completed ?? "—" }}
+      Оцененные · {{ data()?.applications?.completed ?? "—" }}
     </button>
     <button
       class="cabinet__invitations cabinet__invitations--desktop"
@@ -44,7 +44,7 @@
         Поиск
       </button>
       <label class="cabinet__search" [class.cabinet__search--expanded]="searchExpanded()"
-        ><span class="cabinet__sr-only">Поиск по названию проекта</span
+        ><span class="cabinet__sr-only">Поиск по названию работы</span
         ><input
           #searchInput
           id="cabinet-search"
@@ -52,7 +52,7 @@
           type="search"
           [formControl]="search"
           maxlength="200"
-          placeholder="Поиск по названию проекта"
+          placeholder="Поиск по названию работы"
       /></label>
       <select class="cabinet__program" appField [formControl]="program" aria-label="Программа">
         <option value="">Все программы</option>
@@ -89,7 +89,7 @@
       }
     </section>
   } @else if (loading()) {
-    <p class="cabinet__loading" role="status" aria-busy="true">Загружаем проекты…</p>
+    <p class="cabinet__loading" role="status" aria-busy="true">Загружаем работы…</p>
   } @else if (tab() === "invitations") {
     @for (p of invitations(); track p.invitationId) {
       <article class="cabinet__invitation">
@@ -130,24 +130,27 @@
             }}</span>
           </div>
         </header>
-        @for (project of group.projects; track project.assignmentId) {
+        @for (
+          row of group.applications;
+          track row.application.kind + ":" + row.application.programId + ":" + row.assignmentId
+        ) {
           <article class="cabinet__project">
             <div class="cabinet__project-info">
-              <h3>{{ project.name }}</h3>
-              @if (project.caseName) {
-                <p>{{ project.caseName }}</p>
+              <h3>{{ row.application.name }}</h3>
+              @if (row.caseName) {
+                <p>{{ row.caseName }}</p>
               }
-              @if (!project.canRate && !project.isCompleted) {
-                <p class="cabinet__blocked">{{ project.blockedReason }}</p>
+              @if (!row.canRate && !row.isCompleted) {
+                <p class="cabinet__blocked">{{ row.blockedReason }}</p>
               }
             </div>
-            @if (project.canRate || project.isCompleted) {
+            @if (row.canRate || row.isCompleted) {
               <a
                 appButton="secondary"
-                [routerLink]="[paths.program.projectsRating(project.programId), project.projectId]"
+                [routerLink]="evaluationPath(row.application)"
                 [queryParams]="{ returnUrl: router.url }"
                 (click)="navigation.remember(router.url)"
-                >{{ project.isCompleted ? "Посмотреть" : "Оценить" }}</a
+                >{{ row.isCompleted ? "Посмотреть" : "Оценить" }}</a
               >
             } @else {
               <button type="button" appButton="secondary" disabled>Оценить</button>
@@ -158,34 +161,34 @@
     } @empty {
       <section class="cabinet__empty">
         @if (filtered()) {
-          <h2>Проекты не найдены</h2>
+          <h2>Работы не найдены</h2>
           <p>Попробуйте изменить поисковый запрос или программу.</p>
           <button type="button" appButton="secondary" (click)="resetFilters()">
             Сбросить фильтры
           </button>
         } @else if (query().offset > 0) {
-          <h2>На этой странице нет проектов</h2>
+          <h2>На этой странице нет работ</h2>
           <button type="button" appButton="secondary" (click)="navigate({ page: null })">
             На первую страницу
           </button>
         } @else if (allCompleted() && tab() === "pending") {
-          <h2>Все проекты оценены</h2>
+          <h2>Все работы оценены</h2>
           <p>Спасибо за вашу работу!</p>
           <button type="button" appButton="secondary" (click)="setTab('completed')">
             Посмотреть оценки
           </button>
         } @else if (tab() === "completed") {
-          <h2>Пока нет оцененных проектов</h2>
-          <p>После отправки оценки проект появится здесь.</p>
+          <h2>Пока нет оцененных работ</h2>
+          <p>После отправки оценки работа появится здесь.</p>
         } @else if (!data()?.hasAccess) {
           <h2>Пока нет программ для оценки</h2>
           <p>Когда организатор пригласит вас экспертом, приглашение появится здесь.</p>
-        } @else if (data()?.projects?.unavailable) {
-          <h2>Пока нет доступных проектов</h2>
+        } @else if (data()?.applications?.unavailable) {
+          <h2>Пока нет доступных работ</h2>
           <p>Некоторые назначения недоступны. Уточните у организатора программы.</p>
         } @else {
-          <h2>Пока нет назначенных проектов</h2>
-          <p>Когда организатор назначит вам проекты, они появятся здесь.</p>
+          <h2>Пока нет назначенных работ</h2>
+          <p>Когда организатор назначит вам работы, они появятся здесь.</p>
           @if (invitations().length) {
             <button type="button" appButton="secondary" (click)="setTab('invitations')">
               Посмотреть приглашения
@@ -194,8 +197,8 @@
         }
       </section>
     }
-    @if ((data()?.projects?.count ?? 0) > 20 || query().offset > 0) {
-      <nav class="cabinet__pagination" aria-label="Страницы проектов">
+    @if ((data()?.applications?.count ?? 0) > 20 || query().offset > 0) {
+      <nav class="cabinet__pagination" aria-label="Страницы работ">
         <button
           type="button"
           appButton="secondary"
@@ -203,11 +206,11 @@
           (click)="page(-1)"
         >
           Назад</button
-        ><span>{{ rangeStart() }}–{{ rangeEnd() }} из {{ data()?.projects?.count }}</span
+        ><span>{{ rangeStart() }}–{{ rangeEnd() }} из {{ data()?.applications?.count }}</span
         ><button
           type="button"
           appButton="secondary"
-          [disabled]="rangeEnd() >= (data()?.projects?.count ?? 0)"
+          [disabled]="rangeEnd() >= (data()?.applications?.count ?? 0)"
           (click)="page(1)"
         >
           Далее
