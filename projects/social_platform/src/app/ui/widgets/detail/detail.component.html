@@ -170,12 +170,16 @@
                     <app-button
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       [disabled]="
-                        !!submissionProjectDateExpired ||
-                        isProjectAssigned() ||
+                        (info().solutionStorageMode !== 'solution' &&
+                          (!!submissionProjectDateExpired || isProjectAssigned())) ||
                         applicationPending()
                       "
                       [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
-                      (click)="isProjectAssigned() ? null : addNewProject(info().id)"
+                      (click)="
+                        info().solutionStorageMode === 'solution' || !isProjectAssigned()
+                          ? addNewProject(info().id)
+                          : null
+                      "
                       customTypographyClass="text-body-12 bar__add-project"
                     >
                       <span>{{ applicationLabel() }}</span>
@@ -349,11 +353,15 @@
                           class="cancel__cross"
                         ></i>
                         <p class="cancel__title text-body-14">
-                          произошла ошибка при редактировании!
+                          {{
+                            info().solutionStorageMode === "solution"
+                              ? "не удалось открыть решение"
+                              : "произошла ошибка при редактировании!"
+                          }}
                         </p>
                       </div>
                       <p class="text-body-12 cancel__text">
-                        {{ assignProjectToProgramModalMessage() }}.
+                        {{ assignProjectToProgramModalMessage() }}
                       </p>
                     </div>
                   </app-modal>

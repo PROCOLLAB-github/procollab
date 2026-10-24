@@ -105,6 +105,54 @@ describe("DetailProgramInfoService", () => {
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
   });
 
+  it("opens the owned solution after the deadline without trusting a stale legacy reference", () => {
+    programUI.program.set(
+      program({
+        id: 12,
+        isUserMember: true,
+        solutionStorageMode: "solution",
+        datetimeProjectSubmissionEnds: "2000-01-01T00:00:00Z",
+        currentApplication: { projectId: 55, programLinkId: 700, submitted: true },
+      }),
+    );
+    vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
+      of(
+        ok({
+          ...legacyContext,
+          storageMode: "solution",
+          submissionOpen: false,
+          canCreate: false,
+          currentApplication: { kind: "solution", programId: 12, solutionId: 88, name: "Решение" },
+        }),
+      ),
+    );
+    expect(service.applicationLabel()).toBe("мое решение");
+    service.addNewProject(12);
+    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/program/12/solutions/88"], {
+      queryParams: {},
+    });
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+  });
+
+  it("does not create a solution when the closed context has no owned application", () => {
+    programUI.program.set(program({ id: 12, isUserMember: true, solutionStorageMode: "solution" }));
+    vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
+      of(
+        ok({
+          ...legacyContext,
+          storageMode: "solution",
+          submissionOpen: false,
+          canCreate: false,
+          blockedReason: "submission_closed",
+        }),
+      ),
+    );
+    service.addNewProject(12);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+    expect(service.isAssignProjectToProgramModalOpen()).toBe(true);
+  });
+
   it("context failure does not silently fall back to legacy creation", () => {
     vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
       of(fail({ code: "network", detail: "Нет сети", errors: [], meta: {} })),
