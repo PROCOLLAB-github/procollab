@@ -14,11 +14,15 @@ import {
   SolutionUpdateInvitation,
   SolutionFormWrite,
   UpdateSolutionCommand,
+  SubmitSolutionCommand,
 } from "@domain/solution/solution-contract.model";
 import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapter";
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  submit(programId: number, solutionId: number, command: SubmitSolutionCommand) {
+    return this.http.submit(programId, solutionId, command);
+  }
   private readonly http = inject(SolutionHttpAdapter);
   update(programId: number, solutionId: number, command: UpdateSolutionCommand) {
     return this.http.update(programId, solutionId, command);

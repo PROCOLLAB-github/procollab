@@ -21,9 +21,15 @@ import {
   SolutionTemplates,
   UpdateSolutionCommand,
   SolutionUploadResponse,
+  SubmitSolutionCommand,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract submit(
+    programId: number,
+    solutionId: number,
+    command: SubmitSolutionCommand,
+  ): Observable<ProgramSolution>;
   abstract update(
     programId: number,
     solutionId: number,

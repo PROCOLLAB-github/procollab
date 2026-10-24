@@ -1,6 +1,6 @@
 <!-- @format -->
 <section aria-labelledby="team-title" [attr.aria-busy]="busy()">
-  @if (busy()) {
+  @if (updating()) {
     <p role="status">Обновляем команду…</p>
   }
   <header class="team-header">

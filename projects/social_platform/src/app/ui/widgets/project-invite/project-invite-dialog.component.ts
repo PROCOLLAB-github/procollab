@@ -42,6 +42,7 @@ export class ProjectInviteDialogComponent implements AfterViewInit {
   readonly description = input.required<string>();
   readonly trigger = input<HTMLElement | null>(null);
   readonly compact = input(false);
+  readonly closeLabel = input("Закрыть приглашение");
   readonly closed = output<void>();
   protected readonly open = signal(true);
   protected readonly attached = signal(false);

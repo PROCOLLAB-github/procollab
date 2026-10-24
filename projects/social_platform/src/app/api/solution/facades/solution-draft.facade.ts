@@ -8,6 +8,7 @@ import {
   ProgramSolution,
   SolutionApiError,
   UpdateSolutionCommand,
+  SolutionIssue,
 } from "@domain/solution/solution-contract.model";
 import { fail } from "@domain/shared/result.type";
 import { hasSolutionAnswer } from "@domain/solution/solution-values";
@@ -15,6 +16,7 @@ import { solutionFieldsGroup, SolutionControlValue } from "@utils/solution-field
 import {
   UpdateSolutionUseCase,
   UploadSolutionFileUseCase,
+  SubmitSolutionUseCase,
 } from "../use-cases/solution-draft.use-cases";
 
 export type LocalSolutionAnswer = { fieldId: number; label: string; value: SolutionControlValue };
@@ -24,6 +26,7 @@ const equal = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b
 export class SolutionDraftFacade {
   private readonly update = inject(UpdateSolutionUseCase);
   private readonly files = inject(UploadSolutionFileUseCase);
+  private readonly submission = inject(SubmitSolutionUseCase);
   private readonly destroyRef = inject(DestroyRef);
   private readonly contextChanged = new Subject<void>();
   private readonly controlsChanged = new Subject<void>();
@@ -36,8 +39,9 @@ export class SolutionDraftFacade {
     validators: [Validators.required, Validators.maxLength(256)],
   });
   readonly saving = signal(false);
+  readonly submitting = signal(false);
   readonly uploading = signal<number | null>(null);
-  readonly busy = computed(() => this.saving() || this.uploading() !== null);
+  readonly busy = computed(() => this.saving() || this.submitting() || this.uploading() !== null);
   readonly attempted = signal(false);
   readonly fieldErrors = signal<Record<number, string>>({});
   readonly nameError = signal("");
@@ -159,7 +163,9 @@ export class SolutionDraftFacade {
       this.fieldErrors.set({});
       this.nameError.set("");
       this.attempted.set(false);
-      this.notice.set("Черновик сохранен.");
+      this.notice.set(
+        incoming.submission.status === "submitted" ? "Решение сдано." : "Черновик сохранен.",
+      );
     }
     this.tick.update(value => value + 1);
     return true;
@@ -192,6 +198,36 @@ export class SolutionDraftFacade {
       else if (issue.path === "name") this.nameError.set(issue.detail);
     }
     this.fieldErrors.set(fields);
+  }
+  showIssues(issues: SolutionIssue[]) {
+    this.attempted.set(true);
+    this.report({
+      code: "required_program_fields",
+      detail: "Проверьте решение и состав команды перед сдачей.",
+      errors: issues,
+      meta: {},
+    });
+  }
+  submit(checkpoint: ProgramSolution) {
+    if (this.busy() || this.key !== checkpoint.programId + ":" + checkpoint.id || !this.canEdit())
+      return of(fail(this.localError("permission_denied", "Сдача сейчас недоступна.")));
+    this.submitting.set(true);
+    this.error.set(null);
+    this.notice.set("");
+    return this.submission
+      .execute(checkpoint.programId, checkpoint.id, {
+        expectedVersion: checkpoint.version,
+        expectedFormRevision: checkpoint.form.revision,
+      })
+      .pipe(
+        takeUntil(this.contextChanged),
+        takeUntilDestroyed(this.destroyRef),
+        tap(result => {
+          if (result.ok) this.hydrate(result.value, true);
+          else this.report(result.error);
+        }),
+        finalize(() => this.submitting.set(false)),
+      );
   }
   save() {
     const source = this.source();

@@ -23,6 +23,7 @@ import {
   SolutionTemplates,
   UpdateSolutionCommand,
   SolutionUploadResponse,
+  SubmitSolutionCommand,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -32,6 +33,12 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  submit(programId: number, solutionId: number, command: SubmitSolutionCommand) {
+    return this.api.post<ProgramSolution>(
+      `${this.solutionPath(programId, solutionId)}submit/`,
+      command,
+    );
+  }
   private readonly api = inject(ApiService);
   update(programId: number, solutionId: number, command: UpdateSolutionCommand) {
     return this.api.patch<ProgramSolution>(this.solutionPath(programId, solutionId), command);

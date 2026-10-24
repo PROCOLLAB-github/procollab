@@ -14,6 +14,7 @@ import { ProgramSolution } from "@domain/solution/solution-contract.model";
 import {
   UpdateSolutionUseCase,
   UploadSolutionFileUseCase,
+  SubmitSolutionUseCase,
 } from "./use-cases/solution-draft.use-cases";
 
 describe("C00 draft and original upload wire", () => {
@@ -30,6 +31,22 @@ describe("C00 draft and original upload wire", () => {
     }),
   );
   afterEach(() => TestBed.inject(HttpTestingController).verify());
+  it("submits only the saved expected versions through the exact solution-scoped route", async () => {
+    const command = { expectedVersion: 9, expectedFormRevision: "a".repeat(64) };
+    const result = firstValueFrom(TestBed.inject(SubmitSolutionUseCase).execute(12, 301, command));
+    const request = TestBed.inject(HttpTestingController).expectOne(
+      "https://local.test/programs/12/solutions/301/submit/",
+    );
+    expect(request.request.method).toBe("POST");
+    expect(request.request.body).toEqual({
+      expected_version: 9,
+      expected_form_revision: command.expectedFormRevision,
+    });
+    const expected = solutionContractScenarios.find(s => s.name === "submit_success")!
+      .response as ProgramSolution;
+    request.flush(snakecaseKeys(expected, { deep: true }));
+    expect(await result).toEqual({ ok: true, value: expected });
+  });
   it("PATCH uses both expected versions and preserves null, zero, false and exact option strings", async () => {
     const command = {
       expectedVersion: 2,

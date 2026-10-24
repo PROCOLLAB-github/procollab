@@ -120,6 +120,28 @@ nav a:focus-visible {
   align-items: center;
 }
 
+.submission-confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.submission-issues {
+  padding-left: 20px;
+}
+
+.submission-issues .ui-button {
+  height: auto;
+  padding: 4px 0;
+  text-align: left;
+  white-space: normal;
+}
+
+h2:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 .ui-button {
   @include ui-foundation.button;
 }

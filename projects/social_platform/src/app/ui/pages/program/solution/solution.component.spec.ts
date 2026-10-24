@@ -16,7 +16,10 @@ import { ProgramSolution, SolutionContext } from "@domain/solution/solution-cont
 import { solutionContractScenarios } from "@domain/solution/solution-contract.fixture";
 import { fail, ok } from "@domain/shared/result.type";
 import { ProgramSolutionComponent } from "./solution.component";
-import { UpdateSolutionUseCase } from "@api/solution/use-cases/solution-draft.use-cases";
+import {
+  UpdateSolutionUseCase,
+  SubmitSolutionUseCase,
+} from "@api/solution/use-cases/solution-draft.use-cases";
 import { canLeaveSolution } from "@ui/routes/program/solution-leave.guard";
 
 const solution = solutionContractScenarios.find(s => s.name === "created_solo")!
@@ -38,11 +41,13 @@ describe("Solution route foundation", () => {
   const create = { execute: vi.fn() };
   const getContext = { execute: vi.fn() };
   const update = { execute: vi.fn() };
+  const submit = { execute: vi.fn() };
   beforeEach(() => {
     get.execute.mockReset().mockReturnValue(of(ok(solution)));
     create.execute.mockReset().mockReturnValue(of(ok(solution)));
     getContext.execute.mockReset().mockReturnValue(of(ok(context)));
     update.execute.mockReset();
+    submit.execute.mockReset();
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -67,6 +72,7 @@ describe("Solution route foundation", () => {
         { provide: CreateSolutionUseCase, useValue: create },
         { provide: GetSolutionContextUseCase, useValue: getContext },
         { provide: UpdateSolutionUseCase, useValue: update },
+        { provide: SubmitSolutionUseCase, useValue: submit },
         { provide: ProfileInfoService, useValue: { profile: signal({ id: 7 }) } },
         {
           provide: SolutionRepositoryPort,
@@ -229,5 +235,156 @@ describe("Solution route foundation", () => {
     expect(component.draft.name.value).toBe(solution.name);
     expect(component.draft.dirty()).toBe(false);
     confirmation.mockRestore();
+  });
+
+  it("saves first, opens the team issue tab and does not confirm or submit an incomplete team", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    update.execute.mockReturnValue(of(ok({ ...solution, version: 2 })));
+    component.prepareSubmission({
+      currentTarget: document.createElement("button"),
+    } as unknown as Event);
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(TestBed.inject(Router).url).toContain("tab=team");
+    expect(component.confirmation()).toBeNull();
+    expect(submit.execute).not.toHaveBeenCalled();
+    expect(component.submissionIssues()[0].path).toBe("team");
+    expect(component.draft.dirty()).toBe(false);
+  });
+
+  it("requires confirmation after PATCH, posts its fresh versions exactly once and rereads the submitted state", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88?tab=team",
+      ProgramSolutionComponent,
+    );
+    const saved = { ...solution, version: 9, readiness: { isReady: true, issues: [] } };
+    update.execute.mockReturnValue(of(ok(saved)));
+    component.prepareSubmission({
+      currentTarget: document.createElement("button"),
+    } as unknown as Event);
+    expect(component.confirmation()).toEqual(saved);
+    expect(submit.execute).not.toHaveBeenCalled();
+    const submitted: ProgramSolution = {
+      ...saved,
+      version: 10,
+      submission: { ...saved.submission, status: "submitted", submittedAt: "2026-10-24T12:00:00Z" },
+      permissions: {
+        ...saved.permissions,
+        canEdit: false,
+        canSubmit: false,
+        canManageTeam: false,
+        canInvite: false,
+      },
+      form: { ...saved.form, isSnapshot: true },
+    };
+    submit.execute.mockReturnValue(of(ok(submitted)));
+    get.execute.mockReturnValue(of(ok(submitted)));
+    component.confirmSubmission();
+    harness.detectChanges();
+    expect(submit.execute).toHaveBeenCalledWith(12, 301, {
+      expectedVersion: 9,
+      expectedFormRevision: saved.form.revision,
+    });
+    expect(get.execute).toHaveBeenCalledTimes(2);
+    expect(component.solution()?.submission.status).toBe("submitted");
+    expect(component.draft.canEdit()).toBe(false);
+    expect(component.confirmation()).toBeNull();
+  });
+
+  it("canceling confirmation retains the saved draft and sends no submit", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    update.execute.mockReturnValue(
+      of(ok({ ...solution, version: 2, readiness: { isReady: true, issues: [] } })),
+    );
+    component.prepareSubmission({ currentTarget: null } as unknown as Event);
+    component.confirmation.set(null);
+    expect(component.solution()?.version).toBe(2);
+    expect(component.draft.dirty()).toBe(false);
+    expect(submit.execute).not.toHaveBeenCalled();
+  });
+
+  it("resolves an interrupted POST with GET and never automatically submits again", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    const saved = { ...solution, version: 2, readiness: { isReady: true, issues: [] } };
+    update.execute.mockReturnValue(of(ok(saved)));
+    component.prepareSubmission({ currentTarget: null } as unknown as Event);
+    submit.execute.mockReturnValue(
+      of(fail({ code: "network", detail: "Соединение прервано", errors: [], meta: {} })),
+    );
+    get.execute.mockReturnValue(
+      of(
+        ok({
+          ...saved,
+          version: 3,
+          submission: {
+            ...saved.submission,
+            status: "submitted",
+            submittedAt: "2026-10-24T12:00:00Z",
+          },
+          permissions: { ...saved.permissions, canEdit: false, canSubmit: false },
+        }),
+      ),
+    );
+    component.confirmSubmission();
+    expect(submit.execute).toHaveBeenCalledTimes(1);
+    expect(component.solution()?.submission.status).toBe("submitted");
+    expect(component.draft.canEdit()).toBe(false);
+  });
+
+  it("a closed deadline after PATCH keeps the saved draft and does not open confirmation", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    update.execute.mockReturnValue(
+      of(
+        ok({
+          ...solution,
+          version: 2,
+          permissions: { ...solution.permissions, canSubmit: false },
+          submission: { ...solution.submission, submissionOpen: false },
+        }),
+      ),
+    );
+    component.prepareSubmission({ currentTarget: null } as unknown as Event);
+    expect(component.confirmation()).toBeNull();
+    expect(component.draft.dirty()).toBe(false);
+    expect(component.draft.error()?.code).toBe("submission_closed");
+    expect(submit.execute).not.toHaveBeenCalled();
+  });
+  it("a noncompetitive program offers draft saving without a submit action", async () => {
+    get.execute.mockReturnValue(
+      of(
+        ok({
+          ...solution,
+          submission: { ...solution.submission, required: false },
+          readiness: null,
+          permissions: { ...solution.permissions, canSubmit: false },
+        }),
+      ),
+    );
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl("/office/program/12/solutions/88", ProgramSolutionComponent);
+    expect(harness.routeNativeElement?.textContent).toContain("Программа не требует сдачи");
+    expect(
+      [...harness.routeNativeElement!.querySelectorAll("button")].some(
+        button => button.textContent?.trim() === "Сдать решение",
+      ),
+    ).toBe(false);
+    expect(harness.routeNativeElement?.textContent).toContain("Сохранить черновик");
   });
 });

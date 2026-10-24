@@ -1,6 +1,16 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from "@angular/core";
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  inject,
+  Injector,
+  signal,
+} from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -12,13 +22,18 @@ import {
 } from "@api/solution/use-cases/solution.use-cases";
 import { solutionApplicationRoute } from "@api/solution/solution-navigation";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ProgramSolution, SolutionApiError } from "@domain/solution/solution-contract.model";
+import {
+  ProgramSolution,
+  SolutionApiError,
+  SolutionIssue,
+} from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
 import { ButtonDirective, FieldDirective } from "@uilib";
 import { DatePipe } from "@angular/common";
 import { SolutionTeamComponent } from "./solution-team.component";
 import { SolutionDraftFacade } from "@api/solution/facades/solution-draft.facade";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
+import { ProjectInviteDialogComponent } from "@ui/widgets/project-invite/project-invite-dialog.component";
 
 @Component({
   selector: "app-program-solution",
@@ -31,6 +46,7 @@ import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fi
     DatePipe,
     SolutionTeamComponent,
     SolutionFieldsComponent,
+    ProjectInviteDialogComponent,
   ],
   providers: [SolutionDraftFacade],
   templateUrl: "./solution.component.html",
@@ -43,6 +59,8 @@ export class ProgramSolutionComponent {
   private readonly context = inject(GetSolutionContextUseCase);
   private readonly create = inject(CreateSolutionUseCase);
   private readonly get = inject(GetSolutionUseCase);
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
   readonly draft = inject(SolutionDraftFacade);
   readonly solution = signal<ProgramSolution | null>(null);
   readonly loading = signal(true);
@@ -52,61 +70,191 @@ export class ProgramSolutionComponent {
   readonly refreshingTeam = signal(false);
   readonly teamRefreshError = signal("");
   readonly routes = AppRoutes;
+  readonly submissionAttempted = signal(false);
+  readonly submissionIssues = signal<SolutionIssue[]>([]);
+  readonly confirmation = signal<ProgramSolution | null>(null);
+  readonly commandBusy = computed(() => this.draft.busy() || this.confirmation() !== null);
+  submissionTrigger: HTMLElement | null = null;
   private readonly retry = new Subject<void>();
   private readonly teamRefresh = new Subject<{ programId: number; solutionId: number } | null>();
   private reconcileDraft = false;
 
   canLeave(): boolean {
     return (
-      !(this.draft.dirty() || this.draft.busy()) ||
+      !(this.draft.dirty() || this.commandBusy()) ||
       confirm("В заявке есть несохраненные изменения. Покинуть страницу?")
     );
   }
 
   @HostListener("window:beforeunload", ["$event"])
   onBeforeUnload(event: BeforeUnloadEvent): void {
-    if (this.draft.dirty() || this.draft.busy()) {
+    if (this.draft.dirty() || this.commandBusy()) {
       event.preventDefault();
       event.returnValue = "";
     }
   }
 
   saveDraft(): void {
-    if (this.refreshingTeam() || this.teamRefreshError()) return;
+    if (this.commandBusy() || this.refreshingTeam() || this.teamRefreshError()) return;
     this.draft.save().subscribe(result => {
       if (result.ok) this.solution.set(result.value);
-      else {
-        void this.router.navigate([], { relativeTo: this.route, queryParams: {} });
+      else this.handleCommandError(result.error);
+    });
+  }
+
+  prepareSubmission(event: Event): void {
+    if (
+      this.commandBusy() ||
+      this.refreshingTeam() ||
+      this.teamRefreshError() ||
+      !this.solution()?.permissions.canSubmit
+    )
+      return;
+    this.submissionTrigger = event.currentTarget as HTMLElement;
+    this.submissionAttempted.set(true);
+    this.submissionIssues.set([]);
+    this.draft.save().subscribe(result => {
+      if (!result.ok) {
+        this.handleCommandError(result.error);
+        return;
+      }
+      const saved = result.value;
+      this.solution.set(saved);
+      if (!saved.permissions.canSubmit) {
+        this.draft.error.set({
+          code: "submission_closed",
+          detail: "Сдача сейчас недоступна. Черновик сохранен.",
+          errors: [],
+          meta: {},
+        });
+        return;
+      }
+      const issues = saved.readiness?.issues ?? [];
+      if (issues.length) {
+        this.submissionIssues.set(issues);
+        this.draft.showIssues(issues);
+        void this.focusIssue(issues[0]);
+      } else this.confirmation.set(saved);
+    });
+  }
+
+  confirmSubmission(): void {
+    const checkpoint = this.confirmation();
+    if (!checkpoint || this.draft.busy()) return;
+    this.draft.submit(checkpoint).subscribe(result => {
+      this.confirmation.set(null);
+      if (result.ok) {
+        this.solution.set(result.value);
+        this.submissionIssues.set([]);
+        this.submissionAttempted.set(false);
+        this.refreshTeam();
+      } else {
+        this.handleCommandError(result.error);
+        // A network interruption has an unknown outcome: GET determines the actual state.
         if (
           [
-            "version_conflict",
-            "form_revision_conflict",
-            "not_solution_captain",
-            "team_frozen",
-            "solution_mode_unavailable",
+            "network",
+            "server_error",
+            "unknown",
+            "already_submitted",
+            "submission_closed",
+            "not_competitive",
           ].includes(result.error.code)
-        ) {
-          this.reconcileDraft = true;
+        )
           this.refreshTeam();
-        } else if (
-          [
-            "not_found",
-            "forbidden",
-            "permission_denied",
-            "unauthorized",
-            "authentication_required",
-          ].includes(result.error.code)
-        ) {
-          this.draft.clear();
-          this.solution.set(null);
-          this.showError(result.error);
-        }
       }
     });
   }
 
+  private handleCommandError(error: SolutionApiError): void {
+    this.submissionIssues.set(error.errors);
+    if (error.errors.length) void this.focusIssue(error.errors[0]);
+    else if (this.draft.name.invalid)
+      void this.focusIssue({
+        path: "name",
+        code: "invalid",
+        detail: "Проверьте название",
+        fieldId: null,
+      });
+    else {
+      const field = this.solution()?.form.fields.find(
+        field => this.draft.group().get(String(field.id))?.invalid,
+      );
+      if (field)
+        void this.focusIssue({
+          path: "answers",
+          code: "invalid",
+          detail: "Проверьте значение",
+          fieldId: field.id,
+        });
+    }
+    if (
+      [
+        "version_conflict",
+        "form_revision_conflict",
+        "not_solution_captain",
+        "team_frozen",
+        "solution_mode_unavailable",
+      ].includes(error.code)
+    ) {
+      this.reconcileDraft = true;
+      this.refreshTeam();
+    } else if (
+      [
+        "not_found",
+        "forbidden",
+        "permission_denied",
+        "unauthorized",
+        "authentication_required",
+      ].includes(error.code)
+    ) {
+      this.draft.clear();
+      this.solution.set(null);
+      this.showError(error);
+    }
+  }
+
+  async focusIssue(issue: SolutionIssue): Promise<void> {
+    const key = this.solution()?.programId + ":" + this.solution()?.id;
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: issue.path.startsWith("team") ? { tab: "team" } : {},
+    });
+    afterNextRender(
+      () => {
+        if (this.solution()?.programId + ":" + this.solution()?.id !== key) return;
+        const selector = issue.path.startsWith("team")
+          ? "#team-title"
+          : issue.fieldId !== null
+            ? `#solution-field-${issue.fieldId}`
+            : issue.path === "name"
+              ? "#solution-name"
+              : "#data-title";
+        let target = this.element.nativeElement.querySelector<HTMLElement>(selector);
+        if (target?.matches('input[type="file"]'))
+          target = target.closest("fieldset")?.querySelector<HTMLElement>("button") ?? null;
+        if (target) {
+          if (!target.matches("input,select,textarea,button,a")) target.tabIndex = -1;
+          target.focus();
+          target.scrollIntoView?.({ block: "center", behavior: "smooth" });
+        }
+      },
+      { injector: this.injector },
+    );
+  }
+
+  issueLabel(issue: SolutionIssue): string {
+    const label =
+      issue.fieldId === null
+        ? issue.path.startsWith("team")
+          ? "Команда"
+          : "Заявка"
+        : this.solution()?.form.fields.find(field => field.id === issue.fieldId)?.label;
+    return label ? label + ": " + issue.detail : issue.detail;
+  }
+
   discardDraft(): void {
-    if (!this.draft.busy() && confirm("Отменить несохраненные изменения решения?"))
+    if (!this.commandBusy() && confirm("Отменить несохраненные изменения решения?"))
       this.draft.discard();
   }
 
@@ -179,6 +327,9 @@ export class ProgramSolutionComponent {
           this.refreshingTeam.set(false);
           this.teamRefreshError.set("");
           this.reconcileDraft = false;
+          this.confirmation.set(null);
+          this.submissionIssues.set([]);
+          this.submissionAttempted.set(false);
           this.draft.clear();
           this.solution.set(null);
           this.error.set(null);

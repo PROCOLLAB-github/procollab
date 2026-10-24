@@ -58,6 +58,7 @@ import { SolutionMemberInviteModalComponent } from "@ui/widgets/project-invite/s
 export class SolutionTeamComponent {
   readonly solution = input.required<ProgramSolution>();
   readonly refreshing = input(false);
+  readonly blocked = input(false);
   readonly changed = output<void>();
   readonly left = output<void>();
   readonly currentUser = inject(ProfileInfoService).profile;
@@ -66,7 +67,8 @@ export class SolutionTeamComponent {
   readonly listError = signal("");
   readonly error = signal("");
   private readonly pendingCommand = signal(false);
-  readonly busy = computed(() => this.pendingCommand() || this.refreshing());
+  readonly updating = computed(() => this.pendingCommand() || this.refreshing());
+  readonly busy = computed(() => this.updating() || this.blocked());
   readonly inviting = signal(false);
   readonly editing = signal<SolutionInvitation | null>(null);
   readonly role = new FormControl("", { nonNullable: true, validators: [inviteRoleValidator] });

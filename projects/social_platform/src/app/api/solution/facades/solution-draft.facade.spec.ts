@@ -7,6 +7,7 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import {
   UpdateSolutionUseCase,
   UploadSolutionFileUseCase,
+  SubmitSolutionUseCase,
 } from "../use-cases/solution-draft.use-cases";
 import { SolutionDraftFacade } from "./solution-draft.facade";
 const original = solutionContractScenarios.find(s => s.name === "created_solo")!
@@ -21,16 +22,19 @@ const conflict: SolutionApiError = {
 
 describe("Solution draft editing", () => {
   const update = { execute: vi.fn() },
-    files = { execute: vi.fn() };
+    files = { execute: vi.fn() },
+    submission = { execute: vi.fn() };
   let draft: SolutionDraftFacade;
   beforeEach(() => {
     update.execute.mockReset();
     files.execute.mockReset();
+    submission.execute.mockReset();
     TestBed.configureTestingModule({
       providers: [
         SolutionDraftFacade,
         { provide: UpdateSolutionUseCase, useValue: update },
         { provide: UploadSolutionFileUseCase, useValue: files },
+        { provide: SubmitSolutionUseCase, useValue: submission },
       ],
     });
     draft = TestBed.inject(SolutionDraftFacade);
@@ -152,5 +156,18 @@ describe("Solution draft editing", () => {
     await firstValueFrom(draft.save());
     expect(update.execute.mock.lastCall?.[2].answers).toEqual([{ fieldId: 1003, value: null }]);
     expect(files.execute).toHaveBeenCalledTimes(1);
+  });
+  it("submits the explicitly confirmed checkpoint and never silently substitutes a newer version", async () => {
+    const confirmed = source();
+    confirmed.version = 2;
+    draft.hydrate({ ...source(), version: 3 });
+    submission.execute.mockReturnValue(of(fail(conflict)));
+    await firstValueFrom(draft.submit(confirmed));
+    expect(submission.execute).toHaveBeenCalledWith(12, 301, {
+      expectedVersion: 2,
+      expectedFormRevision: confirmed.form.revision,
+    });
+    expect(draft.source()?.version).toBe(3);
+    expect(draft.busy()).toBe(false);
   });
 });
