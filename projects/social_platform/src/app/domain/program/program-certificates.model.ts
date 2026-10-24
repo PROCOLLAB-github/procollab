@@ -9,6 +9,28 @@ export type CertificateElement =
   | "director"
   | "position"
   | "signature";
+export const CERTIFICATE_ELEMENTS: CertificateElement[] = [
+  "name",
+  "title",
+  "subtitle",
+  "program",
+  "date",
+  "number",
+  "director",
+  "position",
+  "signature",
+];
+export const CERTIFICATE_LABELS: Record<CertificateElement, string> = {
+  name: "Имя участника",
+  title: "Заголовок",
+  subtitle: "Подзаголовок",
+  program: "Название программы",
+  date: "Дата выдачи",
+  number: "Номер сертификата",
+  director: "Имя директора",
+  position: "Должность",
+  signature: "Подпись",
+};
 export interface CertificateBox {
   x: number;
   y: number;
@@ -28,6 +50,7 @@ export interface CertificateDraft {
   director: string;
   position: string;
   showText: boolean;
+  hiddenElements?: Exclude<CertificateElement, "name">[];
   audience: "all" | "submitted";
   timing: "manual" | "scheduled";
   scheduledAt: string | null;
