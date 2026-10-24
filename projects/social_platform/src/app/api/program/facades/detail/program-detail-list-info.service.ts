@@ -408,6 +408,8 @@ export class ProgramDetailListInfoService {
     const extraParams: Record<string, any> = {};
 
     Object.keys(q).forEach(key => {
+      // Navigation context is not a program application field.
+      if (this.listType() === "rating" && key === "returnUrl") return;
       const value = q[key];
       if (value === undefined || value === "" || value === null) return;
 

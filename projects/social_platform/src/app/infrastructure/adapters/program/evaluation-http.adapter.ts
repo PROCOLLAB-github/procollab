@@ -4,6 +4,8 @@ import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import {
   EvaluationPrograms,
+  ExpertCabinet,
+  ExpertCabinetQuery,
   ExpertWorkspace,
   AssignmentOptions,
   AllocationQuery,
@@ -26,6 +28,17 @@ export class EvaluationHttpAdapter implements EvaluationRepositoryPort {
   }
   programs(): Observable<EvaluationPrograms> {
     return this.api.get("/evaluation/programs/");
+  }
+  cabinet(query: ExpertCabinetQuery): Observable<ExpertCabinet> {
+    const params = new URLSearchParams({
+      include: "projects",
+      status: query.status,
+      limit: String(query.limit),
+      offset: String(query.offset),
+    });
+    if (query.q) params.set("q", query.q);
+    if (query.programId) params.set("program_id", String(query.programId));
+    return this.api.get(`/evaluation/programs/?${params}`);
   }
   workspace(id: number): Observable<ExpertWorkspace> {
     return this.api.get(`${this.root(id)}/experts/`);

@@ -14,7 +14,8 @@ import {
   ViewChild,
 } from "@angular/core";
 import { isLoading } from "@domain/shared/async-state";
-import { RouterModule } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
 import { ProgramProjectsFilterComponent } from "./program-projects-filter/program-projects-filter.component";
@@ -65,6 +66,17 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramListComponent implements OnInit, AfterViewInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly routeQuery = toSignal(this.route.queryParamMap, {
+    initialValue: this.route.snapshot.queryParamMap,
+  });
+  protected readonly cabinetReturnUrl = computed(() => {
+    const value = this.routeQuery().get("returnUrl");
+    return value && /^\/office\/evaluation(?:\?|$)/.test(value)
+      ? this.router.parseUrl(value)
+      : null;
+  });
   readonly listRoot = viewChild<ElementRef<HTMLUListElement> | undefined>("listRoot");
   readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
 

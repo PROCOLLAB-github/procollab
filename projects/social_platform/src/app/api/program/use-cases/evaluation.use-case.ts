@@ -3,7 +3,11 @@ import { inject, Injectable } from "@angular/core";
 import { EvaluationRepositoryPort } from "@domain/program/ports/evaluation.repository.port";
 import { EventBus } from "@domain/shared/event-bus";
 import { ProgramUpdated } from "@domain/program/program-updated.event";
-import { ExpertRegistration, ExpertsBulkWrite } from "@domain/program/evaluation-workspace.model";
+import {
+  ExpertCabinetQuery,
+  ExpertRegistration,
+  ExpertsBulkWrite,
+} from "@domain/program/evaluation-workspace.model";
 import { tap } from "rxjs";
 @Injectable({ providedIn: "root" })
 export class EvaluationUseCase {
@@ -17,6 +21,9 @@ export class EvaluationUseCase {
     });
   }
   readonly programs = this.repository.programs.bind(this.repository);
+  cabinet(query: ExpertCabinetQuery) {
+    return this.repository.cabinet(query);
+  }
   readonly workspace = this.repository.workspace.bind(this.repository);
   bulkExperts(id: number, data: ExpertsBulkWrite) {
     return this.repository.bulkExperts(id, data);

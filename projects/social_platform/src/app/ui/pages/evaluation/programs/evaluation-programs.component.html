@@ -1,100 +1,217 @@
 <!-- @format -->
-
-<main class="evaluation-programs">
-  <p class="evaluation-programs__section">Оценивание</p>
-  <h1>Мои программы</h1>
-  <p class="evaluation-programs__intro">
-    Ваши программы для оценки проектов и приглашения эксперта.
-  </p>
-  <label class="evaluation-programs__search"
-    >Поиск по названию программы<input
-      appField
-      type="search"
-      [formControl]="search"
-      maxlength="200"
-      placeholder="Найти программу"
-  /></label>
-  @if (accepted()) {
-    <p appAlert="success" role="status">
-      Приглашение принято. Организатор сможет назначить вам проекты.
-    </p>
-  }
-  @if (state.failed()) {
-    <div class="evaluation-programs__card" role="alert">
-      <h2>Не удалось загрузить программы</h2>
-      <button type="button" appButton="secondary" (click)="state.reload()">Повторить</button>
-    </div>
-  } @else if (state.pending() && !state.programs().length) {
-    <p role="status" aria-busy="true">Загружаем программы…</p>
-  } @else {
-    <p class="evaluation-programs__count">
-      Программ: {{ joinedCount() }} · приглашений: {{ pendingCount() }}
-    </p>
-    @for (program of filtered(); track program.id) {
-      <article class="evaluation-programs__card">
-        <header class="evaluation-programs__heading">
-          <a class="evaluation-programs__identity" [routerLink]="paths.program.detail(program.id)"
-            ><app-avatar
-              [url]="href(program.imageAddress) ?? undefined"
-              [size]="40"
-              [imageFraming]="program.imageFraming?.logo ?? null"
-              [fallbackLabel]="initials(program.name)"
-            /><span
-              ><h2>{{ program.name }}</h2>
-              <span [class.evaluation-programs__expert]="program.status === 'joined'">{{
-                program.status === "joined" ? "Эксперт программы" : "Приглашение эксперта"
-              }}</span></span
-            ></a
-          >
-          @if (program.status === "joined") {
-            <a appButton="secondary" [routerLink]="paths.program.projectsRating(program.id)"
-              >К проектам</a
-            >
-          } @else {
-            <button type="button" appButton="primary" (click)="open(program)">
-              Принять приглашение
-            </button>
-          }
-        </header>
-        @if (program.status === "joined") {
-          <dl class="evaluation-programs__stats">
-            <div>
-              <dt>Назначено</dt>
-              <dd>{{ program.assigned }}</dd>
-            </div>
-            <div>
-              <dt>Оценено</dt>
-              <dd>{{ program.completed }}</dd>
-            </div>
-            <div>
-              <dt>Осталось</dt>
-              <dd>{{ program.remaining }}</dd>
-            </div>
-          </dl>
-          <p class="evaluation-programs__deadline">
-            {{
-              program.datetimeEvaluationEnds
-                ? "Срок оценки: до " + (program.datetimeEvaluationEnds | date: "d MMMM, HH:mm")
-                : "Срок оценки не задан"
-            }}
-          </p>
-        } @else {
-          <p class="evaluation-programs__invitation">
-            Приглашение для {{ program.email }}. Проекты станут доступны после принятия.
-          </p>
+<main class="cabinet">
+  <header class="cabinet__title">
+    <h1>Кабинет эксперта</h1>
+    <p>Все проекты, назначенные вам для оценки</p>
+  </header>
+  <nav class="cabinet__tabs" aria-label="Проекты эксперта">
+    <button
+      type="button"
+      [appButton]="tab() === 'pending' ? 'primary' : 'secondary'"
+      [attr.aria-current]="tab() === 'pending' ? 'page' : null"
+      (click)="setTab('pending')"
+    >
+      Осталось оценить · {{ data()?.projects?.pending ?? "—" }}
+    </button>
+    <button
+      type="button"
+      [appButton]="tab() === 'completed' ? 'primary' : 'secondary'"
+      [attr.aria-current]="tab() === 'completed' ? 'page' : null"
+      (click)="setTab('completed')"
+    >
+      Оцененные · {{ data()?.projects?.completed ?? "—" }}
+    </button>
+    <button
+      class="cabinet__invitations cabinet__invitations--desktop"
+      type="button"
+      appButton="secondary"
+      [attr.aria-current]="tab() === 'invitations' ? 'page' : null"
+      (click)="setTab('invitations')"
+    >
+      Приглашения · {{ invitations().length }}
+    </button>
+  </nav>
+  <div class="cabinet__toolbar">
+    @if (tab() !== "invitations") {
+      <button
+        class="cabinet__search-toggle"
+        type="button"
+        appButton="secondary"
+        [attr.aria-expanded]="searchExpanded()"
+        aria-controls="cabinet-search"
+        (click)="searchExpanded.set(!searchExpanded())"
+      >
+        Поиск
+      </button>
+      <label class="cabinet__search" [class.cabinet__search--expanded]="searchExpanded()"
+        ><span class="cabinet__sr-only">Поиск по названию проекта</span
+        ><input
+          #searchInput
+          id="cabinet-search"
+          appField
+          type="search"
+          [formControl]="search"
+          maxlength="200"
+          placeholder="Поиск по названию проекта"
+      /></label>
+      <select class="cabinet__program" appField [formControl]="program" aria-label="Программа">
+        <option value="">Все программы</option>
+        @for (p of programs(); track p.id) {
+          <option [value]="p.id">{{ p.name }}</option>
         }
+      </select>
+    }
+    <button
+      class="cabinet__invitations cabinet__invitations--mobile"
+      type="button"
+      appButton="secondary"
+      [attr.aria-current]="tab() === 'invitations' ? 'page' : null"
+      (click)="setTab('invitations')"
+    >
+      Приглашения · {{ invitations().length }}
+    </button>
+  </div>
+  @if (accepted()) {
+    <app-transient-notice [source]="accepted" (dismissed)="accepted.set(false)"
+      >Приглашение принято</app-transient-notice
+    >
+  }
+  @if (failed()) {
+    <section class="cabinet__empty" role="alert">
+      <h2>Не удалось загрузить кабинет</h2>
+      <p>{{ failed() }}</p>
+      @if (unauthorized()) {
+        <a appButton="secondary" routerLink="/auth/login" [queryParams]="{ returnUrl: router.url }"
+          >Войти в аккаунт</a
+        >
+      } @else {
+        <button type="button" appButton="secondary" (click)="reload()">Повторить</button>
+      }
+    </section>
+  } @else if (loading()) {
+    <p class="cabinet__loading" role="status" aria-busy="true">Загружаем проекты…</p>
+  } @else if (tab() === "invitations") {
+    @for (p of invitations(); track p.invitationId) {
+      <article class="cabinet__invitation">
+        <div class="cabinet__identity">
+          <app-avatar
+            [url]="href(p.imageAddress) ?? undefined"
+            [size]="40"
+            [imageFraming]="p.imageFraming?.logo ?? null"
+            [fallbackLabel]="initials(p.name)"
+          />
+          <div>
+            <h2>{{ p.name }}</h2>
+            <p>Приглашение для {{ p.email }}</p>
+          </div>
+        </div>
+        <button type="button" appButton="secondary" (click)="open(p)">Принять приглашение</button>
       </article>
     } @empty {
-      <section class="evaluation-programs__card">
-        <h2>{{ query() ? "Программы не найдены" : "У вас пока нет программ для оценивания" }}</h2>
-        <p>
-          {{
-            query()
-              ? "Попробуйте изменить поисковый запрос."
-              : "Когда организатор пригласит вас экспертом, программа появится здесь."
-          }}
-        </p>
+      <section class="cabinet__empty">
+        <h2>Нет новых приглашений</h2>
+        <p>Приглашения от организаторов появятся здесь.</p>
       </section>
+    }
+  } @else {
+    @for (group of groups(); track group.program.id) {
+      <section class="cabinet__group" [attr.aria-label]="group.program.name">
+        <header class="cabinet__group-heading">
+          <a [routerLink]="paths.program.detail(group.program.id)">{{ group.program.name }}</a>
+          <div class="cabinet__meta">
+            <span
+              >{{ tab() === "completed" ? "Оценено" : "Осталось" }}
+              {{ tab() === "completed" ? group.program.completed : group.program.remaining }} из
+              {{ group.program.assigned }}</span
+            ><span class="cabinet__deadline">{{
+              group.program.datetimeEvaluationEnds
+                ? "До " + (group.program.datetimeEvaluationEnds | date: "d MMMM, HH:mm")
+                : "Без срока"
+            }}</span>
+          </div>
+        </header>
+        @for (project of group.projects; track project.assignmentId) {
+          <article class="cabinet__project">
+            <div class="cabinet__project-info">
+              <h3>{{ project.name }}</h3>
+              @if (project.caseName) {
+                <p>{{ project.caseName }}</p>
+              }
+              @if (!project.canRate && !project.isCompleted) {
+                <p class="cabinet__blocked">{{ project.blockedReason }}</p>
+              }
+            </div>
+            @if (project.canRate || project.isCompleted) {
+              <a
+                appButton="secondary"
+                [routerLink]="paths.program.projectsRating(project.programId)"
+                [queryParams]="{ project_id: project.projectId, returnUrl: router.url }"
+                >{{ project.isCompleted ? "Посмотреть" : "Оценить" }}</a
+              >
+            } @else {
+              <button type="button" appButton="secondary" disabled>Оценить</button>
+            }
+          </article>
+        }
+      </section>
+    } @empty {
+      <section class="cabinet__empty">
+        @if (filtered()) {
+          <h2>Проекты не найдены</h2>
+          <p>Попробуйте изменить поисковый запрос или программу.</p>
+          <button type="button" appButton="secondary" (click)="resetFilters()">
+            Сбросить фильтры
+          </button>
+        } @else if (query().offset > 0) {
+          <h2>На этой странице нет проектов</h2>
+          <button type="button" appButton="secondary" (click)="navigate({ page: null })">
+            На первую страницу
+          </button>
+        } @else if (allCompleted() && tab() === "pending") {
+          <h2>Все проекты оценены</h2>
+          <p>Спасибо за вашу работу!</p>
+          <button type="button" appButton="secondary" (click)="setTab('completed')">
+            Посмотреть оценки
+          </button>
+        } @else if (tab() === "completed") {
+          <h2>Пока нет оцененных проектов</h2>
+          <p>После отправки оценки проект появится здесь.</p>
+        } @else if (!data()?.hasAccess) {
+          <h2>Пока нет программ для оценки</h2>
+          <p>Когда организатор пригласит вас экспертом, приглашение появится здесь.</p>
+        } @else if (data()?.projects?.unavailable) {
+          <h2>Пока нет доступных проектов</h2>
+          <p>Некоторые назначения недоступны. Уточните у организатора программы.</p>
+        } @else {
+          <h2>Пока нет назначенных проектов</h2>
+          <p>Когда организатор назначит вам проекты, они появятся здесь.</p>
+          @if (invitations().length) {
+            <button type="button" appButton="secondary" (click)="setTab('invitations')">
+              Посмотреть приглашения
+            </button>
+          }
+        }
+      </section>
+    }
+    @if ((data()?.projects?.count ?? 0) > 20 || query().offset > 0) {
+      <nav class="cabinet__pagination" aria-label="Страницы проектов">
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="query().offset === 0"
+          (click)="page(-1)"
+        >
+          Назад</button
+        ><span>{{ rangeStart() }}–{{ rangeEnd() }} из {{ data()?.projects?.count }}</span
+        ><button
+          type="button"
+          appButton="secondary"
+          [disabled]="rangeEnd() >= (data()?.projects?.count ?? 0)"
+          (click)="page(1)"
+        >
+          Далее
+        </button>
+      </nav>
     }
   }
 </main>
@@ -103,21 +220,18 @@
   (openChange)="close()"
   labelledBy="evaluation-accept-title"
   bodyClass="modal__body--no-flex evaluation-accept-modal"
-  ><div class="evaluation-programs__dialog">
-    <h2 id="evaluation-accept-title">Принять приглашение эксперта</h2>
+  ><div class="cabinet__dialog">
+    <h2 id="evaluation-accept-title">Принять приглашение эксперта?</h2>
     <strong>{{ selected()?.name }}</strong>
-    <p>
-      Вы присоединитесь к программе как эксперт с почтой {{ selected()?.email }}. Ваши другие роли
-      сохранятся.
-    </p>
+    <p>Вы присоединитесь к программе как эксперт с почтой {{ selected()?.email }}.</p>
     @if (error()) {
       <p appAlert="error" role="alert">{{ error() }}</p>
     }
-    <div class="evaluation-programs__actions">
-      <button type="button" appButton="primary" (click)="accept()" [disabled]="busy()">
-        Принять приглашение</button
-      ><button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
-        Отмена
+    <div class="cabinet__actions">
+      <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
+        Отмена</button
+      ><button type="button" appButton="primary" (click)="accept()" [disabled]="busy()">
+        {{ busy() ? "Принимаем…" : "Принять приглашение" }}
       </button>
     </div>
   </div></app-modal
