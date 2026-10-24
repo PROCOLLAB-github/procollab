@@ -128,7 +128,8 @@ export class DetailProgramInfoService {
           if (this.programDetailMainUIInfoService.program()?.id !== programId) return;
           if (!result.ok) {
             const error = result.error.cause as
-              { status?: number; error?: { detail?: string } } | undefined;
+              | { status?: number; error?: { detail?: string } }
+              | undefined;
             if (error?.status === 400) {
               this.isAssignProjectToProgramModalOpen.set(true);
               this.assignProjectToProgramModalMessage.set(error.error?.detail ?? null);
