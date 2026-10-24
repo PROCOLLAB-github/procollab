@@ -20,6 +20,7 @@ import {
   participantSteps,
 } from "@api/program/program-widget-presentation";
 import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/detail-program-info.service";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 /** Компактный виджет только страницы программы. Габариты соответствуют исходному SoonCard. */
 @Component({
@@ -32,6 +33,7 @@ import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/de
 })
 export class ProgramRoleWidgetComponent {
   readonly service = inject(ProgramRoleWidgetService);
+  readonly program = inject(ProgramDetailMainUIInfoService).program;
   private readonly applicationAction = inject(DetailProgramInfoService);
   readonly applicationPending = this.applicationAction.applicationPending;
   readonly state = this.service.state;

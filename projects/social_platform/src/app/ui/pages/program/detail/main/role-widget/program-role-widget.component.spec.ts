@@ -9,9 +9,12 @@ import { ProgramRoleWidgetService } from "@api/program/facades/detail/program-ro
 import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/detail-program-info.service";
 import { AsyncState, failure, loading, success } from "@domain/shared/async-state";
 import { ProgramRoleWidget, ProgramWidgetError } from "@domain/program/program-role-widget.model";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { Program } from "@domain/program/program.model";
 
 describe("ProgramRoleWidgetComponent", () => {
   const state = signal<AsyncState<ProgramRoleWidget, ProgramWidgetError>>(loading());
+  const program = signal<Program>({ ...Program.default(), id: 12 });
   const retry = vi.fn(),
     create = vi.fn();
   const participant: ProgramRoleWidget = {
@@ -30,10 +33,12 @@ describe("ProgramRoleWidgetComponent", () => {
     retry.mockClear();
     create.mockClear();
     state.set(loading());
+    program.set({ ...Program.default(), id: 12 });
     TestBed.configureTestingModule({
       imports: [ProgramRoleWidgetComponent],
       providers: [
         provideRouter([]),
+        { provide: ProgramDetailMainUIInfoService, useValue: { program } },
         {
           provide: DetailProgramInfoService,
           useValue: { addNewProject: create, applicationPending: signal(false) },
@@ -178,6 +183,23 @@ describe("ProgramRoleWidgetComponent", () => {
     });
     expect(f.nativeElement.querySelectorAll("dd")).toHaveLength(2);
     expect(f.nativeElement.textContent).toContain("Нет назначенных проектов");
+    expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
+      "/office/program/12/projects-rating",
+    );
+  });
+  it("opens solution evaluation only for the explicit solution program format", () => {
+    program.update(value => ({ ...value, solutionStorageMode: "solution" }));
+    const f = render({
+      role: "expert",
+      programId: 12,
+      isCompetitive: true,
+      expert: { mode: "distributed", assigned: 1, remaining: 1, evaluationEnds: null },
+    });
+    expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
+      "/office/program/12/solutions-rating",
+    );
+    program.update(value => ({ ...value, solutionStorageMode: "legacy_project" }));
+    f.detectChanges();
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
       "/office/program/12/projects-rating",
     );

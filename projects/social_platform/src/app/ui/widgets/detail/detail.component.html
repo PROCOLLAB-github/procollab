@@ -195,7 +195,9 @@
                     >
                   }
                   @if (isUserExpert()) {
-                    <a [routerLink]="AppRoutes.program.projectsRating(info().id)">
+                    <a
+                      [routerLink]="AppRoutes.program.rating(info().id, info().solutionStorageMode)"
+                    >
                       <app-button
                         [appearance]="
                           isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'
@@ -203,7 +205,11 @@
                         [size]="appWidth >= 1000 ? 'medium' : 'big'"
                         customTypographyClass="text-body-12"
                       >
-                        оценка проектов
+                        {{
+                          info().solutionStorageMode === "solution"
+                            ? "оценка решений"
+                            : "оценка проектов"
+                        }}
                       </app-button>
                     </a>
                   }
