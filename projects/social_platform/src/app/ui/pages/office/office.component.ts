@@ -77,7 +77,7 @@ export class OfficeComponent implements OnInit {
     const items = [...this.officeUIInfoService.navItems()];
     if (this.profile()?.relations.hasEvaluationAccess) {
       const index = items.findIndex(item => item.link === "program");
-      items.splice(index + 1, 0, { name: "оценивание", icon: "check", link: "evaluation" });
+      items.splice(index + 1, 0, { name: "кабинет эксперта", icon: "check", link: "evaluation" });
     }
     return items;
   });

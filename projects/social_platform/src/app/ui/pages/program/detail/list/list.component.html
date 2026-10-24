@@ -1,5 +1,9 @@
 <!-- @format -->
 
+@if (cabinetReturnUrl()) {
+  <a class="text-body-12" [routerLink]="cabinetReturnUrl()">В кабинет эксперта</a>
+}
+
 <div
   class="page"
   #listRoot

@@ -144,6 +144,34 @@ export interface EvaluationPrograms {
   results: EvaluationProgram[];
   hasAccess: boolean;
 }
+export interface ExpertCabinetQuery {
+  status: "pending" | "completed";
+  q?: string;
+  programId?: number;
+  limit: number;
+  offset: number;
+}
+export interface ExpertCabinetProject {
+  assignmentId: number;
+  projectId: number;
+  programId: number;
+  name: string;
+  caseName: string | null;
+  isCompleted: boolean;
+  canRate: boolean;
+  blockedReason: string | null;
+}
+export interface ExpertCabinet extends EvaluationPrograms {
+  projects: {
+    count: number;
+    limit: number;
+    offset: number;
+    pending: number;
+    completed: number;
+    unavailable: number;
+    results: ExpertCabinetProject[];
+  };
+}
 export interface ExpertInvitation {
   id: number;
   email: string;

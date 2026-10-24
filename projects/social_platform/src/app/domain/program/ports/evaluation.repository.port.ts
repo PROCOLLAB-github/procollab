@@ -2,6 +2,8 @@
 import { Observable } from "rxjs";
 import {
   EvaluationPrograms,
+  ExpertCabinet,
+  ExpertCabinetQuery,
   ExpertWorkspace,
   AssignmentOptions,
   AllocationQuery,
@@ -17,6 +19,7 @@ import {
 } from "@domain/program/evaluation-workspace.model";
 export abstract class EvaluationRepositoryPort {
   abstract programs(): Observable<EvaluationPrograms>;
+  abstract cabinet(query: ExpertCabinetQuery): Observable<ExpertCabinet>;
   abstract workspace(id: number): Observable<ExpertWorkspace>;
   abstract bulkExperts(id: number, data: ExpertsBulkWrite): Observable<ExpertWorkspace>;
   abstract saveCaseScope(
