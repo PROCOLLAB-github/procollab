@@ -13,12 +13,14 @@
     />
     <span>px</span>
   </label>
-  <button type="button" appButton="text" [disabled]="preview()" (click)="center()">
-    По центру
-  </button>
-  <button type="button" appButton="text" [disabled]="preview()" (click)="center(true)">
-    По середине
-  </button>
+  <div class="canvas__alignment" role="group" aria-label="Выравнивание элемента">
+    <button type="button" appButton="text" [disabled]="preview()" (click)="center()">
+      По центру
+    </button>
+    <button type="button" appButton="text" [disabled]="preview()" (click)="center(true)">
+      По середине
+    </button>
+  </div>
   @if (selected() !== "name") {
     <button
       type="button"

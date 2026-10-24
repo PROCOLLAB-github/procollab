@@ -41,10 +41,11 @@
           <button
             type="button"
             appButton="text"
+            aria-label="Отменить действие"
             [disabled]="busy() || !undoStack().length"
             (click)="undo()"
           >
-            Отменить действие
+            Отменить
           </button>
           <button
             type="button"
@@ -62,8 +63,13 @@
           >
             {{ editorPreview() ? "К редактированию" : "Предпросмотр" }}
           </button>
-          <button type="button" appButton="text" (click)="editorOpen.set(true)">
-            Развернуть редактор
+          <button
+            type="button"
+            appButton="text"
+            aria-label="Развернуть редактор"
+            (click)="editorOpen.set(true)"
+          >
+            Развернуть
           </button>
         </div>
       </header>
@@ -99,10 +105,14 @@
         />
         <div class="certificates__pdf-actions">
           <button type="button" appButton="secondary" [disabled]="busy()" (click)="preview()">
-            {{ dirty() ? "Сохранить и скачать пробный PDF" : "Скачать пробный PDF" }}
+            Скачать пробный PDF
           </button>
           <p class="certificates__muted">
-            Длинное имя подстраивается под область текста. Подпись сохраняет пропорции.
+            {{
+              dirty()
+                ? "Перед скачиванием сохраним изменения шаблона."
+                : "Проверьте расположение элементов в готовом PDF."
+            }}
           </p>
         </div>
       </div>
@@ -158,8 +168,10 @@
                   {{ elementLabels[key] }}
                 </button>
                 @if (key === "name") {
-                  <span class="certificates__required"
-                    ><img src="/assets/icons/svg/lock.svg" alt="" />обязательно</span
+                  <span class="certificates__required" title="Обязательный элемент"
+                    ><img src="/assets/icons/svg/lock.svg" alt="" /><span class="sr-only"
+                      >Обязательный элемент</span
+                    ></span
                   >
                 } @else {
                   <button
@@ -349,11 +361,22 @@
           ></textarea>
         </label>
         <p class="certificates__muted">Подстановки: {{ placeholders }}</p>
-        <button type="button" appButton="secondary" [disabled]="busy()" (click)="test()">
-          {{
-            dirty() ? "Сохранить и отправить пробное письмо себе" : "Отправить пробное письмо себе"
-          }}
+        <button
+          type="button"
+          appButton="secondary"
+          aria-label="Отправить пробное письмо себе"
+          [disabled]="busy()"
+          (click)="test()"
+        >
+          Пробное письмо себе
         </button>
+        <p class="certificates__muted">
+          {{
+            dirty()
+              ? "Сохраним изменения и отправим письмо только вам."
+              : "Письмо будет отправлено только вам."
+          }}
+        </p>
       }
       <div class="certificates__launch">
         <div>
@@ -368,13 +391,7 @@
           [disabled]="busy() || (!snapshot()?.batch?.active && !!launchProblem())"
           (click)="prepareLaunch()"
         >
-          {{
-            snapshot()?.batch?.active
-              ? "Открыть отправки"
-              : dirty()
-                ? "Сохранить и перейти к запуску"
-                : "Перейти к запуску"
-          }}
+          {{ snapshot()?.batch?.active ? "Открыть отправки" : "Перейти к запуску" }}
         </button>
       </div>
       @if (!snapshot()?.batch?.active) {
@@ -599,8 +616,14 @@
           Сохранить
         </button>
         @if (step() === 1) {
-          <button type="button" appButton="primary" [disabled]="busy()" (click)="setStep(2)">
-            К автовыдаче →
+          <button
+            type="button"
+            appButton="primary"
+            aria-label="Перейти к автовыдаче"
+            [disabled]="busy()"
+            (click)="setStep(2)"
+          >
+            Далее
           </button>
         }
       </div>
@@ -626,10 +649,11 @@
             <button
               type="button"
               appButton="text"
+              aria-label="Отменить действие"
               [disabled]="busy() || !undoStack().length"
               (click)="undo()"
             >
-              Отменить действие
+              Отменить
             </button>
             <button
               type="button"

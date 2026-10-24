@@ -5,6 +5,8 @@
 :host {
   display: block;
   min-width: 0;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .ui-button.ui-button {
@@ -14,6 +16,12 @@
 
 .ui-field {
   @include ui-foundation.control;
+
+  min-height: 32px;
+  padding: 5px 8px;
+  font-size: 12px;
+  line-height: 20px;
+  border-radius: 8px;
 }
 
 .ui-choice {
@@ -169,9 +177,9 @@
   &__selection-tools {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 8px 12px;
     align-items: center;
-    min-height: 40px;
+    min-height: 32px;
     margin-bottom: 12px;
 
     .ui-button {
@@ -183,14 +191,11 @@
     display: flex;
     gap: 6px;
     align-items: center;
-    font-size: 11px;
+    min-height: 32px;
 
     input {
-      width: 60px;
-      min-height: 32px;
-      padding: 5px 8px;
+      width: 56px;
       font-size: 12px;
-      border-radius: 8px;
     }
 
     span {
@@ -198,10 +203,16 @@
     }
   }
 
+  &__alignment {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
   &__bottom {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 8px 16px;
     align-items: center;
     justify-content: space-between;
     margin-top: 12px;
@@ -212,18 +223,19 @@
     display: flex;
     gap: 8px;
     align-items: center;
+    min-height: 32px;
   }
 
   &__zoom {
     max-width: 100%;
-    font-size: 11px;
     color: var(--grey-for-text);
 
     select {
-      width: 180px;
-      min-height: 32px;
-      padding-block: 5px;
+      width: 164px;
+      padding-right: 28px;
       font-size: 12px;
+      background-position: right 8px center;
+      background-size: 12px;
     }
   }
 
@@ -239,26 +251,23 @@
     padding: 16px 12px;
   }
 
-  .canvas__font input {
-    width: 64px;
-    min-height: 40px;
-    font-size: 16px;
+  .canvas__selection-tools {
+    gap: 0 8px;
   }
 
-  .canvas__selection-tools .ui-button {
-    min-height: 40px;
-    padding-inline: 4px;
-    font-size: 11px;
+  .canvas__font {
+    flex-basis: 100%;
   }
 
+  .canvas__font,
+  .canvas__check,
   .canvas__zoom {
-    flex-wrap: wrap;
+    min-height: 44px;
+  }
 
-    select {
-      width: 224px;
-      min-height: 44px;
-      font-size: 16px;
-    }
+  .canvas__bottom {
+    gap: 0 16px;
+    margin-top: 8px;
   }
 
   .canvas__resize {

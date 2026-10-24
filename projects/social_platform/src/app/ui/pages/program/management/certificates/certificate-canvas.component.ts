@@ -62,8 +62,9 @@ export class CertificateCanvasComponent {
   private readonly destroy = inject(DestroyRef);
   readonly paperWidth = computed(() => {
     const width = this.availableWidth();
+    // Leave room for tools, the PDF action and the sticky save footer in the dialog.
     const fit = this.expanded()
-      ? Math.min(width, (Math.max(200, this.viewportHeight() - 400) * 297) / 210)
+      ? Math.min(width, (Math.max(200, this.viewportHeight() - 480) * 297) / 210)
       : width;
     return fit * this.zoom();
   });

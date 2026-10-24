@@ -58,10 +58,46 @@ must fill A4. This is an exception to generic cramped-padding diagnostics.
 The scale control is one labeled UI foundation select: По размеру окна, 125%,
 150%, 200%. Separate fit/minus/plus buttons are removed. Browser selection at all
 four values scales the paper correctly and restores its original width; ArrowDown
-and Home also change and reset the value. At 320/390 the select remains inside the
-page and has a 44px touch target. The 26 relevant tests and Angular build passed;
-targeted Prettier/Stylelint and diff checks passed. Desktop/mobile evidence below
-was refreshed. No API or certificate content change is involved.
+and Home also change and reset the value. The select remains inside the page at
+320/390. Its final visual size is 164 × 32px with 12px type, matching the canvas
+tools; the label row is 44px tall on narrow screens. Physical touch and Safari
+were not exercised. No API or certificate content change is involved.
+
+### UI consistency revision — 2026-10-25
+
+This is a bounded correction of the approved flow, following feedback on the
+whole section's inconsistent proportions. The visual references are the existing
+management Experts and Criteria implementations: Mont, 12px controls, compact
+32px actions, light containers and the existing UI foundation. The Experts screen
+was also opened alongside certificate QA. Form fields keep their normal foundation
+geometry; secondary canvas fields receive the existing compact management density.
+No Figma screen, global token, shared primitive or API was changed in this pass.
+
+| Priority finding                                                               | Correction                                                                                                                                                                      |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Canvas mixes 11/12/16px labels and 32/40/44px controls; scale dominates        | Canvas type is 12px, visible tool controls are 32px. Scale is 164px wide. Scoped selectors prevent the foundation's mobile 16px rule from overriding these utilities.           |
+| Header actions have an inherited top margin and wrap unpredictably             | Remove the extra action margin, keep alignment actions together, use two equal action columns on narrow editor headers and short visible labels with explicit accessible names. |
+| Mobile save actions occupy multiple rows; modal content shows under the footer | Compact labels/padding keep all three actions together. The editor uses its natural content height and the sticky footer covers the dialog's bottom inset.                      |
+| Journal filters shrink to 10px while mobile search grows to 16px               | Search and filters use 12px. Filters wrap at narrow widths instead of shrinking their type.                                                                                     |
+| Email textarea uses a pill-like radius and audience labels are too heavy       | Use the neighboring management textarea's modest radius and a 600 weight for audience labels.                                                                                   |
+
+The PDF, test-mail and launch actions have stable compact labels. Adjacent help
+explicitly explains save-before-action when the template is dirty. The expanded
+fit mode reserves room for tools, the PDF action and the save footer, including
+1280 × 720. The required-name lock has accessible text without squeezing its label.
+Required-name protection, optional
+layers, zoom values, draft/history and separate issuance confirmation are unchanged.
+
+Verification: targeted Stylelint/Prettier and diff checks, the 26 relevant component
+and layout tests, Angular build and actual Angular/Django browser checks. The full
+template, issuance settings and delivery journal are reviewed together, including
+320/390 narrow layouts, 1030 intermediate and 1440 wide layouts. Updated full-view
+evidence: [editor](certificates-editor-20261024/desktop.jpg),
+[mobile editor](certificates-editor-20261024/mobile.jpg),
+[template in page context](certificates-editor-20261024/template-page.jpg),
+[issuance settings](certificates-editor-20261024/automation.jpg),
+[mobile issuance settings](certificates-editor-20261024/mobile-automation.jpg),
+[delivery journal](certificates-editor-20261024/deliveries.jpg).
 
 ### Outline button focus adjustment
 
@@ -70,8 +106,8 @@ instead of adding a separate outer ring. Keyboard focus has a 2px inset outline,
 the existing light accent fill and dark text. The ordinary state keeps its 1px
 border. Other button variants and the global Button foundation are unchanged.
 The preview button was checked before and after Tab: its dimensions remain the
-same, focus stays visible, and there is no second contour. Mobile evidence
-intentionally includes the focused preview button. This CSS-only adjustment was
+same, focus stays visible, and there is no second contour. The focused preview
+state is included in the separate keyboard evidence. This CSS-only adjustment was
 verified with the Angular build, targeted Stylelint, diff check and browser states;
 the behavioral test suite was not rerun for this styling change.
 Desktop keyboard state: [focused preview button](certificates-editor-20261024/button-focus-desktop.jpg).
