@@ -214,6 +214,19 @@
     align-items: center;
   }
 
+  &__zoom {
+    max-width: 100%;
+    font-size: 11px;
+    color: var(--grey-for-text);
+
+    select {
+      width: 180px;
+      min-height: 32px;
+      padding-block: 5px;
+      font-size: 12px;
+    }
+  }
+
   &__instruction {
     margin: 8px 0 0;
     font-size: 11px;
@@ -238,9 +251,14 @@
     font-size: 11px;
   }
 
-  .canvas__zoom .ui-button {
-    min-width: 40px;
-    min-height: 40px;
+  .canvas__zoom {
+    flex-wrap: wrap;
+
+    select {
+      width: 224px;
+      min-height: 44px;
+      font-size: 16px;
+    }
   }
 
   .canvas__resize {

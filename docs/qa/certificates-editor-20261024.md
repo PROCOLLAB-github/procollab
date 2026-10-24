@@ -53,6 +53,16 @@ must fill A4. This is an exception to generic cramped-padding diagnostics.
 
 ## Evidence and limits
 
+### Zoom control adjustment
+
+The scale control is one labeled UI foundation select: По размеру окна, 125%,
+150%, 200%. Separate fit/minus/plus buttons are removed. Browser selection at all
+four values scales the paper correctly and restores its original width; ArrowDown
+and Home also change and reset the value. At 320/390 the select remains inside the
+page and has a 44px touch target. The 26 relevant tests and Angular build passed;
+targeted Prettier/Stylelint and diff checks passed. Desktop/mobile evidence below
+was refreshed. No API or certificate content change is involved.
+
 Screenshots: [desktop](certificates-editor-20261024/desktop.jpg),
 [mobile](certificates-editor-20261024/mobile.jpg),
 [launch confirmation](certificates-editor-20261024/confirmation.jpg).

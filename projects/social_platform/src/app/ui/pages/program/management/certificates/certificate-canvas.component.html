@@ -110,25 +110,20 @@
       (change)="longNameChange.emit($any($event.target).checked)"
     />Длинное имя</label
   >
-  <div class="canvas__zoom">
-    <button
-      type="button"
-      appButton="icon"
-      aria-label="Уменьшить масштаб"
-      (click)="setZoom(zoom() - 0.25)"
+  <label class="canvas__zoom">
+    <span>Масштаб</span>
+    <select
+      appField
+      [value]="zoom()"
+      [disabled]="disabled()"
+      (change)="setZoom(+$any($event.target).value)"
     >
-      −</button
-    ><button type="button" appButton="text" (click)="setZoom(1)">
-      {{ zoom() === 1 ? "Вписать" : zoom() * 100 + "%" }}</button
-    ><button
-      type="button"
-      appButton="icon"
-      aria-label="Увеличить масштаб"
-      (click)="setZoom(zoom() + 0.25)"
-    >
-      +
-    </button>
-  </div>
+      <option value="1">По размеру окна</option>
+      <option value="1.25">125%</option>
+      <option value="1.5">150%</option>
+      <option value="2">200%</option>
+    </select>
+  </label>
 </div>
 <p class="canvas__instruction">
   Перетащите элемент · тяните за угол для размера · стрелки для точного перемещения
