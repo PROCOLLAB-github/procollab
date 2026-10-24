@@ -23,7 +23,7 @@ describe("Shared expert / preview criterion validation", () => {
       expect(control.invalid).toBe(true);
     }
   });
-  it("supports negative scales, legacy fractions, No, and optional 50-character comments", () => {
+  it("supports negative scales, legacy fractions, deliberate No, and optional 1000-character comments", () => {
     expect(evaluationCriterionControl({ ...definition, minValue: -5, value: -2 }).valid).toBe(true);
     expect(evaluationCriterionControl({ ...definition, type: "float", value: 0.5 }).valid).toBe(
       true,
@@ -31,9 +31,16 @@ describe("Shared expert / preview criterion validation", () => {
     const no = evaluationCriterionControl({ ...definition, type: "bool", value: "False" });
     expect(no.value).toBe(false);
     expect(no.valid).toBe(true);
+    const unanswered = evaluationCriterionControl({ ...definition, type: "bool" });
+    expect(unanswered.value).toBeNull();
+    expect(unanswered.invalid).toBe(true);
+    unanswered.setValue(false);
+    expect(unanswered.valid).toBe(true);
     const comment = evaluationCriterionControl({ ...definition, type: "str" });
     expect(comment.valid).toBe(true);
-    comment.setValue("a".repeat(51));
+    comment.setValue("я".repeat(1000));
+    expect(comment.valid).toBe(true);
+    comment.setValue("я".repeat(1001));
     expect(comment.invalid).toBe(true);
   });
 });

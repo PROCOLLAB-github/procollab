@@ -73,6 +73,15 @@ describe("RatingCardService evaluation modes", () => {
 
   afterEach(() => vi.restoreAllMocks());
 
+  it("recognizes an existing own score from the real API ID list and permits editing at the cap", () => {
+    service.initProject({ ...project(true), scoredExpertId: undefined, ratedExperts: [user.id] });
+    expect(service.showEditButton()).toBe(true);
+    service.redoRating();
+    expect(service.canOpenModal()).toBe(true);
+    service.confirmRateProject();
+    expect(service.ratedCount()).toBe(1);
+  });
+
   it("starts with create mode and returns to readonly after the first successful rating", () => {
     service.initProject(project());
     expect(programUI.registerDateExpired()).toBe(true);

@@ -5,7 +5,11 @@
       criterion.type === "str" && criterion.description === "Доп. поле для впечатлений о проекте"
         ? ""
         : criterion.description;
-    <section class="rating__criterion" [class.rating__criterion--text]="criterion.type === 'str'">
+    <section
+      class="rating__criterion"
+      [attr.data-criterion]="criterion.id"
+      [class.rating__criterion--text]="criterion.type === 'str'"
+    >
       @if (layout() === "compact" && description) {
         <details class="rating__details">
           <summary>{{ criterion.name }}</summary>
@@ -47,7 +51,7 @@
             "
             [attr.aria-pressed]="form.get(criterion.id.toString())?.value === true"
             [disabled]="disabled"
-            (click)="form.get(criterion.id.toString())?.setValue(true)"
+            (click)="chooseBoolean(criterion.id, true)"
           >
             Да
           </button>
@@ -58,14 +62,11 @@
             "
             [attr.aria-pressed]="form.get(criterion.id.toString())?.value === false"
             [disabled]="disabled"
-            (click)="form.get(criterion.id.toString())?.setValue(false)"
+            (click)="chooseBoolean(criterion.id, false)"
           >
             Нет
           </button>
         </div>
-        @if (layout() === "full") {
-          <p class="rating__hint">«Нет» — заполненный ответ.</p>
-        }
       } @else {
         @if (layout() === "full" && description) {
           <p class="rating__description">{{ description }}</p>
@@ -74,18 +75,26 @@
           appField
           [attr.aria-label]="criterion.name"
           [formControlName]="criterion.id"
-          maxlength="50"
+          maxlength="1000"
           [rows]="layout() === 'compact' ? 2 : 6"
           placeholder="Впечатления и рекомендации эксперта"
         ></textarea>
         <p class="rating__hint rating__counter">
-          {{ form.get(criterion.id.toString())?.value?.length || 0 }} / 50 · необязательно
+          {{ form.get(criterion.id.toString())?.value?.length || 0 }} / 1000 · необязательно
         </p>
       }
       @if (
         form.get(criterion.id.toString())?.invalid && form.get(criterion.id.toString())?.touched
       ) {
-        <p class="rating__error" role="alert">Проверьте тип ответа и допустимый диапазон.</p>
+        <p class="rating__error" role="alert">
+          {{
+            criterion.type === "bool"
+              ? "Выберите «Да» или «Нет»."
+              : criterion.type === "str"
+                ? "Не больше 1000 символов."
+                : "Введите баллы в допустимом диапазоне."
+          }}
+        </p>
       }
     </section>
   } @empty {

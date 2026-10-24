@@ -60,7 +60,10 @@ export class RatingCardService {
     const p = this.project();
     if (!currentUser || !p) return false;
 
-    return p.ratedExperts.some(user => user.id === currentUser.id);
+    return (
+      p.scored ||
+      p.ratedExperts.some(user => (typeof user === "number" ? user : user.id) === currentUser.id)
+    );
   });
 
   readonly userRatedThisProject = computed(() => {
@@ -143,6 +146,11 @@ export class RatingCardService {
   /** Инициализация начального состояния проекта. */
   initProject(project: ProjectRate | null): void {
     if (!project) return;
+    this.form.set(new FormControl());
+    this.locallyRatedByCurrentUser.set(false);
+    this.ratingError.set(null);
+    this.criteriaChanged.set(false);
+    this.retainedAnswers.set([]);
     this.project.set(project);
     const isScored = project.scored || false;
     this.projectConfirmed.set(isScored);
@@ -193,7 +201,11 @@ export class RatingCardService {
             proj.ratedExperts = [];
           }
 
-          if (!proj.ratedExperts.some(user => user.id === profile.id)) {
+          if (
+            !proj.ratedExperts.some(
+              user => (typeof user === "number" ? user : user.id) === profile.id,
+            )
+          ) {
             proj.ratedExperts = [...proj.ratedExperts, profile];
             isFirstTimeRating = true;
           }
@@ -203,7 +215,8 @@ export class RatingCardService {
           this.ratedCount.update(count => count + 1);
         }
 
-        this.project.set({ ...proj });
+        this.project.set({ ...proj, scored: true });
+        this.form().markAsPristine();
         this.showConfirmRateModal.set(false);
       },
     });

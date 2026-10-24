@@ -11,9 +11,18 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/analytics.component";
 import { ProgramManagementComponent } from "@ui/pages/program/management/management.component";
 import { canLeaveManagement } from "./management-leave.guard";
+import { RatingWorkspaceComponent } from "@ui/pages/program/rating/rating-workspace.component";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
+  ...["projects-rating", "projects-rating/:projectId"].map(path => ({
+    path,
+    component: RatingWorkspaceComponent,
+    providers: [ProgramDetailMainUIInfoService],
+    resolve: { data: ProgramDetailResolver },
+    canDeactivate: [canLeaveManagement],
+    runGuardsAndResolvers: "pathParamsChange" as const,
+  })),
   {
     path: "solutions/new",
     loadComponent: () =>
@@ -74,11 +83,6 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
           data: ProgramMembersResolver,
         },
         data: { listType: "members" },
-      },
-      {
-        path: "projects-rating",
-        component: ProgramListComponent,
-        data: { listType: "rating" },
       },
       {
         path: "analytics",
