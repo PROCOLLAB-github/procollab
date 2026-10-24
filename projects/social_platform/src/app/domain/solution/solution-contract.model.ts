@@ -68,10 +68,23 @@ export type SolutionValidation = {
 };
 
 export type SolutionFieldType =
-  "text" | "textarea" | "url" | "number" | "select" | "checkbox" | "file" | "radio";
+  | "text"
+  | "textarea"
+  | "url"
+  | "number"
+  | "select"
+  | "checkbox"
+  | "file"
+  | "radio";
 
 export type SolutionPurpose =
-  "other" | "case" | "presentation" | "repository" | "demo" | "video" | "run_instructions";
+  | "other"
+  | "case"
+  | "presentation"
+  | "repository"
+  | "demo"
+  | "video"
+  | "run_instructions";
 
 export type SolutionTemplateName = "case_championship" | "hackathon";
 

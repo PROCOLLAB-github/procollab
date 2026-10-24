@@ -105,7 +105,10 @@ export interface ProgramAnalyticsError {
  * pending/in_progress различаются наличием оценённых критериев, не длительностью ожидания.
  */
 export type ProgramAnalyticsAssignmentStatus =
-  "not_ready" | "pending" | "in_progress" | "completed";
+  | "not_ready"
+  | "pending"
+  | "in_progress"
+  | "completed";
 
 /** pending включает все незавершённые назначения, в том числе not_ready. */
 export type ProgramAnalyticsAssignmentScope = "all" | "completed" | "pending";

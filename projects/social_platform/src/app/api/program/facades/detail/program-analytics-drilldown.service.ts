@@ -40,7 +40,12 @@ export type AnalyticsAttentionView =
   | "projects-awaiting-evaluation"
   | "projects-not-submitted";
 export type AnalyticsDrilldownView =
-  "case" | "assignments" | "scores" | "delayed" | "backlog" | AnalyticsAttentionView;
+  | "case"
+  | "assignments"
+  | "scores"
+  | "delayed"
+  | "backlog"
+  | AnalyticsAttentionView;
 
 /** Живёт вместе с одной analytics-модалкой, не сохраняет manager-данные между открытиями. */
 @Injectable()

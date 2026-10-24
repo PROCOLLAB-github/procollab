@@ -81,11 +81,11 @@ projectRepository.getOne(projectId).pipe(
 
 `projects/core/src/lib/models/` — **набор интерфейсов и enum'ов общего назначения**.
 
-| Файл | Экспорт | Что |
+| Файл                     | Экспорт                                                      | Что                                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | --- |
-| `error/error-code.ts` | `enum ErrorCode { NOT_FOUND = "404", SERVER_ERROR = "500" }` | Используется `ErrorService` для построения URL `/error/<code>`. |
-| `error/error-message.ts` | `enum ErrorMessage` | Все текстовые сообщения об ошибках на русском, сгруппированы по категориям: AUTH, VALIDATION, USER, рейтинг проектов. Полная таблица — ниже. |
-| `http.model.ts` | `interface ApiError { detail: string }` | Типизация ошибок API: бэк отдаёт `{ detail: "..." }` для 4xx. | |
+| `error/error-code.ts`    | `enum ErrorCode { NOT_FOUND = "404", SERVER_ERROR = "500" }` | Используется `ErrorService` для построения URL `/error/<code>`.                                                                              |
+| `error/error-message.ts` | `enum ErrorMessage`                                          | Все текстовые сообщения об ошибках на русском, сгруппированы по категориям: AUTH, VALIDATION, USER, рейтинг проектов. Полная таблица — ниже. |
+| `http.model.ts`          | `interface ApiError { detail: string }`                      | Типизация ошибок API: бэк отдаёт `{ detail: "..." }` для 4xx.                                                                                |     |
 
 ### ErrorMessage — все значения
 

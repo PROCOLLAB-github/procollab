@@ -315,7 +315,8 @@ type AsyncState<T, E = string> =
 
 ```ts
 type Result<T, E = string> =
-  { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: E };
+  | { readonly ok: true; readonly value: T }
+  | { readonly ok: false; readonly error: E };
 ```
 
 Хелперы: `ok(value)`, `fail(error)`.
