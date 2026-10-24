@@ -8,7 +8,9 @@
       >
       @if (readonly()) {
         @if (fileLink(field); as link) {
-          <a [href]="link" target="_blank" rel="noopener noreferrer">Открыть файл</a>
+          <a [href]="link" target="_blank" rel="noopener noreferrer">{{
+            field.type === "url" ? "Открыть ссылку" : "Открыть файл"
+          }}</a>
         } @else {
           <p class="answer">{{ labelValue(field) }}</p>
         }

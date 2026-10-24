@@ -16,6 +16,24 @@ import { RatingWorkspaceComponent } from "@ui/pages/program/rating/rating-worksp
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
+  {
+    path: "solutions-rating",
+    providers: [ProgramDetailMainUIInfoService],
+    resolve: { data: ProgramDetailResolver },
+    runGuardsAndResolvers: "pathParamsChange",
+    loadComponent: () =>
+      import("@ui/pages/program/solution-evaluation/solution-evaluation-list.component").then(
+        m => m.SolutionEvaluationListComponent,
+      ),
+  },
+  {
+    path: "solutions/:solutionId/evaluation",
+    canDeactivate: [canLeaveManagement],
+    loadComponent: () =>
+      import("@ui/pages/program/solution-evaluation/solution-evaluation.component").then(
+        m => m.SolutionEvaluationComponent,
+      ),
+  },
   ...["projects-rating", "projects-rating/:projectId"].map(path => ({
     path,
     component: RatingWorkspaceComponent,

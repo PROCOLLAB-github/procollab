@@ -1,0 +1,186 @@
+<!-- @format -->
+
+<main class="rating-workspace" aria-labelledby="solution-evaluation-title">
+  <a class="rating-workspace__back" [routerLink]="returnTree()">{{
+    returnUrl().startsWith("/office/evaluation") ? "В кабинет эксперта" : "К оценке решений"
+  }}</a>
+  @if (loading()) {
+    <h1 id="solution-evaluation-title">Оценка решения</h1>
+    <p role="status">Загружаем решение…</p>
+  } @else if (error(); as problem) {
+    <h1 id="solution-evaluation-title">Решение недоступно</h1>
+    <p role="alert">{{ problem.detail }}</p>
+    @if (problem.code === "unauthorized" || problem.code === "authentication_required") {
+      <a appButton="secondary" routerLink="/auth/login" [queryParams]="{ returnUrl: router.url }"
+        >Войти в аккаунт</a
+      >
+    } @else {
+      <button appButton="secondary" type="button" (click)="reload()">Повторить</button>
+    }
+  } @else if (frame(); as data) {
+    <header class="rating-workspace__header">
+      <div>
+        <h1 id="solution-evaluation-title">{{ data.solution.name }}</h1>
+        <p>{{ data.program.name }}</p>
+        @if (data.deadline) {
+          <p>Оценить до {{ data.deadline | date: "dd.MM.yyyy, HH:mm" }}</p>
+        }
+      </div>
+    </header>
+    <nav class="solution-evaluation-sections" aria-label="Разделы решения">
+      <button
+        type="button"
+        appButton="secondary"
+        [attr.aria-current]="!teamTab() ? 'page' : null"
+        (click)="teamTab.set(false)"
+      >
+        Решение</button
+      ><button
+        type="button"
+        appButton="secondary"
+        [attr.aria-current]="teamTab() ? 'page' : null"
+        (click)="teamTab.set(true)"
+      >
+        Команда
+      </button>
+    </nav>
+    <div [hidden]="teamTab()" class="scoring">
+      <aside class="scoring__materials">
+        <h2>Материалы решения</h2>
+        <app-solution-fields
+          [fields]="data.solution.form.fields"
+          [group]="materials()"
+          [readonly]="true"
+        />
+      </aside>
+      <section class="scoring__form" aria-label="Форма оценки">
+        <div class="scoring__heading">
+          <h2>Моя оценка</h2>
+          @if (data.isCompleted && !editing()) {
+            <span class="scoring__status">Оценка сохранена</span>
+          }
+        </div>
+        @if (!data.canRate) {
+          <p class="scoring__notice">
+            {{ data.blockedReason || "Оценка доступна только для просмотра." }}
+          </p>
+        }
+        @if (!data.criteria.length) {
+          <p>Организатор еще не настроил критерии оценки.</p>
+        } @else if (!editing()) {
+          <dl class="scoring__answers">
+            @for (c of ordered(); track c.id) {
+              <div [class.scoring__answer--text]="c.type === 'str'">
+                <dt>{{ c.name }}</dt>
+                <dd>{{ text(form.getRawValue()["" + c.id]) }}</dd>
+              </div>
+            }
+          </dl>
+          @if (data.canRate) {
+            <button appButton="secondary" type="button" (click)="edit()">Изменить оценку</button>
+          }
+        } @else {
+          <app-project-rating layout="full" [criteria]="criteria()" [formControl]="form" />
+          @if (saveError(); as problem) {
+            <div class="scoring__error" role="alert">
+              <p>{{ problem.detail }}</p>
+              @if (problem.code === "criteria_changed") {
+                <button appButton="secondary" type="button" (click)="reload(true)">
+                  Обновить критерии
+                </button>
+              }
+            </div>
+          }
+          <div class="scoring__actions">
+            <button
+              appButton="primary"
+              type="button"
+              [disabled]="busy() || !data.canRate || saveError()?.code === 'criteria_changed'"
+              (click)="prepare()"
+            >
+              Сохранить оценку
+            </button>
+          </div>
+        }
+        @if (previous().length) {
+          <details class="scoring__previous">
+            <summary>Предыдущие ответы</summary>
+            @for (item of previous(); track $index) {
+              <p>{{ item.name }}: {{ item.value }}</p>
+            }
+          </details>
+        }
+      </section>
+    </div>
+    <section [hidden]="!teamTab()">
+      <app-solution-team [solution]="data.solution" [blocked]="true" />
+    </section>
+    <app-modal
+      [open]="confirmation()"
+      (openChange)="closeConfirmation()"
+      labelledBy="solution-rating-confirm-title"
+      bodyClass="modal__body--no-flex"
+      ><div class="scoring-dialog" [attr.aria-busy]="busy()">
+        <header>
+          <h2 id="solution-rating-confirm-title">Проверьте оценку</h2>
+          <button
+            type="button"
+            class="scoring-dialog__close"
+            aria-label="Закрыть"
+            [disabled]="busy()"
+            (click)="closeConfirmation()"
+          >
+            ×
+          </button>
+        </header>
+        <div class="scoring-dialog__body">
+          <h3>{{ data.solution.name }}</h3>
+          <dl class="scoring__answers">
+            @for (c of ordered(); track c.id) {
+              <div [class.scoring__answer--text]="c.type === 'str'">
+                <dt>{{ c.name }}</dt>
+                <dd>{{ text(form.getRawValue()["" + c.id]) }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+        <footer>
+          <button
+            appButton="secondary"
+            type="button"
+            [disabled]="busy()"
+            (click)="closeConfirmation()"
+          >
+            Вернуться к форме</button
+          ><button appButton="primary" type="button" [disabled]="busy()" (click)="confirm()">
+            {{ busy() ? "Сохраняем…" : "Подтвердить оценку" }}
+          </button>
+        </footer>
+      </div></app-modal
+    >
+  }
+  <app-modal
+    [open]="leaveOpen()"
+    (openChange)="answerLeave(false)"
+    labelledBy="solution-rating-leave-title"
+    bodyClass="modal__body--no-flex"
+    ><div class="scoring-dialog">
+      <header>
+        <h2 id="solution-rating-leave-title">Выйти без сохранения?</h2>
+        <button
+          type="button"
+          class="scoring-dialog__close"
+          aria-label="Закрыть"
+          (click)="answerLeave(false)"
+        >
+          ×
+        </button>
+      </header>
+      <p>Введенные ответы не сохранятся.</p>
+      <footer>
+        <button type="button" appButton="secondary" (click)="answerLeave(false)">Остаться</button
+        ><button type="button" appButton="primary" (click)="answerLeave(true)">Выйти</button>
+      </footer>
+    </div></app-modal
+  >
+</main>

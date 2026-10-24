@@ -3,8 +3,11 @@
 import { AbstractControl, FormControl, Validators } from "@angular/forms";
 import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 
+/** Только данные поля; renderer не требует Project или вымышленного ID эксперта. */
+export type EvaluationCriterion = Omit<ProjectRatingCriterion, "expertId">;
+
 /** One validation contract for real expert forms and organizer preview. */
-export function evaluationCriterionControl(c: ProjectRatingCriterion): FormControl {
+export function evaluationCriterionControl(c: EvaluationCriterion): FormControl {
   if (c.type === "bool") {
     const value =
       c.value == null || c.value === "" ? null : String(c.value).toLowerCase() === "true";

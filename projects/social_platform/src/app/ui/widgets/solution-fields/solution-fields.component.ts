@@ -40,10 +40,15 @@ export class SolutionFieldsComponent {
   }
   fileLink(field: SolutionField): string | null {
     const value = this.value(field);
-    if (!value || typeof value !== "object" || !("url" in value) || typeof value.url !== "string")
-      return null;
+    const link =
+      field.type === "url" && typeof value === "string"
+        ? value
+        : value && typeof value === "object" && "url" in value && typeof value.url === "string"
+          ? value.url
+          : null;
+    if (!link) return null;
     try {
-      const url = new URL(value.url);
+      const url = new URL(link);
       return ["http:", "https:"].includes(url.protocol) ? url.href : null;
     } catch {
       return null;

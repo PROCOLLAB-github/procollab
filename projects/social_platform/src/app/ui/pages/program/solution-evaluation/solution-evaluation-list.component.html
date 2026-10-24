@@ -1,0 +1,168 @@
+<!-- @format -->
+
+<main class="rating-workspace">
+  <a class="rating-workspace__back" [routerLink]="'/office/program/' + program()?.id"
+    >На страницу программы</a
+  >
+  <header class="rating-workspace__header">
+    <div>
+      <h1>Оценка решений</h1>
+      <p>{{ program()?.name }}</p>
+    </div>
+  </header>
+  <section class="rating-list">
+    <nav class="rating-list__tabs" aria-label="Статус моей оценки">
+      <button
+        appButton="secondary"
+        type="button"
+        [attr.aria-current]="status() === 'pending' ? 'page' : null"
+        (click)="setStatus('pending')"
+      >
+        Осталось оценить · {{ counts().pending }}</button
+      ><button
+        appButton="secondary"
+        type="button"
+        [attr.aria-current]="status() === 'completed' ? 'page' : null"
+        (click)="setStatus('completed')"
+      >
+        Оцененные · {{ counts().completed }}
+      </button>
+    </nav>
+    <div class="rating-list__toolbar">
+      <input
+        appField
+        type="search"
+        maxlength="200"
+        aria-label="Поиск по названию решения"
+        placeholder="Поиск по названию решения"
+        [formControl]="search"
+      /><button appButton="secondary" type="button" (click)="openFilters()">
+        <i appIcon icon="filter" appSquare="12"></i>Фильтры
+      </button>
+    </div>
+    @if (loading()) {
+      <p role="status">Загружаем решения…</p>
+    } @else if (error(); as problem) {
+      <section role="alert">
+        <p>{{ problem.detail }}</p>
+        <button appButton="secondary" type="button" (click)="reload()">Повторить</button>
+        @if (filtered()) {
+          <button appButton="secondary" type="button" (click)="reset()">Сбросить фильтры</button>
+        }
+      </section>
+    } @else if (data(); as pageData) {
+      <ul class="rating-list__rows">
+        @for (row of pageData.results; track row.application.solutionId) {
+          <li>
+            <div>
+              <h2>{{ row.application.name }}</h2>
+              @if (row.caseName) {
+                <p>{{ row.caseName }}</p>
+              }
+              @if (!row.canRate && !row.isCompleted) {
+                <p>{{ row.blockedReason }}</p>
+              }
+            </div>
+            <span class="rating-list__status" [class.rating-list__status--done]="row.isCompleted">{{
+              row.isCompleted ? "Оценено" : "Не оценено"
+            }}</span>
+            @if (row.canRate || row.isCompleted) {
+              <a
+                [appButton]="row.isCompleted ? 'secondary' : 'primary'"
+                [routerLink]="
+                  '/office/program/' +
+                  row.application.programId +
+                  '/solutions/' +
+                  row.application.solutionId +
+                  '/evaluation'
+                "
+                [queryParams]="{ returnUrl: router.url }"
+                (click)="navigation.remember(router.url)"
+                >{{ row.isCompleted ? "Посмотреть" : "Оценить" }}</a
+              >
+            } @else {
+              <button appButton="secondary" type="button" disabled>Оценить</button>
+            }
+          </li>
+        } @empty {
+          <li class="rating-list__empty">
+            <h2>
+              {{
+                filtered()
+                  ? "Решения не найдены"
+                  : status() === "completed"
+                    ? "Сохраненных оценок пока нет"
+                    : counts().completed
+                      ? "Все решения оценены"
+                      : "Пока нет решений для оценки"
+              }}
+            </h2>
+            <p>
+              {{
+                filtered() ? "Измените поиск или фильтры." : "Здесь появятся доступные вам решения."
+              }}
+            </p>
+            @if (filtered()) {
+              <button appButton="secondary" type="button" (click)="reset()">
+                Сбросить фильтры
+              </button>
+            }
+          </li>
+        }
+      </ul>
+      @if (count()) {
+        <nav class="solution-evaluation-tabs" aria-label="Страницы решений">
+          <button
+            appButton="secondary"
+            type="button"
+            [disabled]="page() <= 1"
+            (click)="navigate({ page: page() - 1 })"
+          >
+            Назад</button
+          ><span>Страница {{ page() }}</span
+          ><button
+            appButton="secondary"
+            type="button"
+            [disabled]="page() * 20 >= count()"
+            (click)="navigate({ page: page() + 1 })"
+          >
+            Далее
+          </button>
+        </nav>
+      }
+    }
+  </section>
+</main>
+<app-modal
+  [open]="filtersOpen()"
+  (openChange)="filtersOpen.set(false)"
+  labelledBy="solution-rating-filters-title"
+  bodyClass="modal__body--no-flex"
+  ><div class="rating-dialog">
+    <header>
+      <h2 id="solution-rating-filters-title">Фильтры</h2>
+      <button
+        type="button"
+        class="rating-dialog__close"
+        aria-label="Закрыть"
+        (click)="filtersOpen.set(false)"
+      >
+        ×
+      </button>
+    </header>
+    <div class="rating-dialog__body">
+      <label
+        >Кейс или задача<select appField [formControl]="caseValue">
+          <option value="">Все кейсы</option>
+          @for (name of caseOptions(); track name) {
+            <option [value]="name">{{ name }}</option>
+          }
+        </select></label
+      >
+    </div>
+    <footer>
+      <button appButton="secondary" type="button" (click)="caseValue.setValue('')">Сбросить</button
+      ><button appButton="primary" type="button" (click)="applyFilters()">Применить</button>
+    </footer>
+  </div></app-modal
+>
