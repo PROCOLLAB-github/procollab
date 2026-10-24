@@ -111,7 +111,7 @@ describe("Кабинет эксперта: только реальные наз�
       offset: 0,
     });
     const link = fixture.nativeElement.querySelector(".cabinet__project a") as HTMLAnchorElement;
-    expect(link.getAttribute("href")).toContain("/office/program/7/projects-rating?project_id=42");
+    expect(link.getAttribute("href")).toContain("/office/program/7/projects-rating/42?returnUrl=");
     expect(fixture.nativeElement.textContent).toContain("Осталось 1 из 2");
     expect(fixture.nativeElement.textContent).not.toContain("Продолжить");
   });

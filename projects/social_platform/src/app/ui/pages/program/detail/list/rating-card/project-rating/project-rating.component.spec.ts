@@ -47,7 +47,7 @@ describe("Shared expert form lifecycle", () => {
     expect(fixture.componentInstance.form.getRawValue()).toEqual(answers);
   });
 
-  it("publishes zero and default No after replacing criteria, validates the new scale", async () => {
+  it("requires a deliberate boolean answer after criteria change and preserves zero", async () => {
     await TestBed.configureTestingModule({
       imports: [ProjectRatingComponent],
       providers: [provideZonelessChangeDetection()],
@@ -75,9 +75,11 @@ describe("Shared expert form lifecycle", () => {
       { ...points, id: 2, name: "Новый", type: "bool", value: "" },
     ]);
     await fixture.whenStable();
-    expect(changed).toHaveBeenLastCalledWith({ 1: 0, 2: false });
+    expect(changed).toHaveBeenLastCalledWith({ 1: 0, 2: null });
     expect(component.form.invalid).toBe(true);
     component.form.get("1")?.setValue(1);
+    expect(component.form.invalid).toBe(true);
+    component.chooseBoolean(2, false);
     expect(component.form.valid).toBe(true);
   });
 });

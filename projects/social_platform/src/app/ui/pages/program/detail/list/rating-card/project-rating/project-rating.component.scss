@@ -169,3 +169,21 @@ p {
     }
   }
 }
+
+.rating:not(.rating--compact) .ui-button {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 16px;
+}
+
+@media (max-width: 999px) {
+  .rating:not(.rating--compact) .ui-button {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      inset: -6px 0;
+      content: "";
+    }
+  }
+}

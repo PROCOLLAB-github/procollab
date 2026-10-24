@@ -1,0 +1,234 @@
+<!-- @format -->
+<main class="rating-workspace">
+  <a
+    class="rating-workspace__back"
+    [routerLink]="projectId ? returnTree : '/office/program/' + program()?.id"
+    >{{
+      projectId
+        ? fromCabinet
+          ? "В кабинет эксперта"
+          : "К оценке проектов"
+        : "На страницу программы"
+    }}</a
+  >
+  <header class="rating-workspace__header">
+    <div>
+      <h1>{{ projectId ? project()?.name || "Оценка проекта" : "Оценка проектов" }}</h1>
+      <p>{{ program()?.name }}</p>
+      @if (program()?.datetimeEvaluationEnds; as ends) {
+        <p class="rating-workspace__deadline">
+          {{ expired() ? "Оценивание завершено" : "Оценить до" }}
+          {{ ends | date: "dd.MM.yyyy, HH:mm" }}
+        </p>
+      }
+    </div>
+    @if (!projectId) {
+      <button
+        type="button"
+        class="rating-workspace__export"
+        aria-label="Выгрузить оценки"
+        title="Выгрузить оценки"
+        [disabled]="exports.loadingExports$().status === 'loading'"
+        (click)="exports.downloadRates()"
+      >
+        <i appIcon icon="download" appSquare="14"></i>
+      </button>
+    }
+  </header>
+  @if (!projectId) {
+    <section class="rating-list" aria-label="Проекты для оценки">
+      <div class="rating-list__tabs" role="group" aria-label="Статус моей оценки">
+        <button
+          type="button"
+          [appButton]="status() === 'pending' ? 'primary' : 'secondary'"
+          [attr.aria-pressed]="status() === 'pending'"
+          (click)="setStatus('pending')"
+        >
+          Осталось оценить · {{ counts().pending }}
+        </button>
+        <button
+          type="button"
+          [appButton]="status() === 'completed' ? 'primary' : 'secondary'"
+          [attr.aria-pressed]="status() === 'completed'"
+          (click)="setStatus('completed')"
+        >
+          Оцененные · {{ counts().completed }}
+        </button>
+      </div>
+      <div class="rating-list__toolbar">
+        <input
+          appField
+          type="search"
+          aria-label="Поиск по названию проекта"
+          placeholder="Поиск по названию проекта"
+          [formControl]="search"
+        />
+        <button type="button" appButton="secondary" (click)="openFilters()">
+          <i appIcon icon="filter" appSquare="12"></i>Фильтры{{
+            Object.keys(activeFilters).length ? " · " + Object.keys(activeFilters).length : ""
+          }}
+        </button>
+      </div>
+      @if (exports.loadingExports$().status === "failure") {
+        <p role="alert">Не удалось выгрузить оценки. Попробуйте еще раз.</p>
+      }
+      @if (!loading() && !failed() && !rows().length) {
+        <div class="rating-list__empty">
+          <h2>
+            {{
+              search.value || Object.keys(activeFilters).length
+                ? "Проекты не найдены"
+                : status() === "completed"
+                  ? "Сохраненных оценок пока нет"
+                  : counts().completed
+                    ? "Все проекты оценены"
+                    : "Пока нет проектов для оценки"
+            }}
+          </h2>
+          <p>
+            {{
+              search.value || Object.keys(activeFilters).length
+                ? "Измените поиск или фильтры."
+                : "Здесь появятся назначенные вам проекты."
+            }}
+          </p>
+        </div>
+      }
+      @if (rows().length) {
+        <div class="rating-list__columns" aria-hidden="true">
+          <span>Проект</span><span>Моя оценка</span><span></span>
+        </div>
+        <ul class="rating-list__rows">
+          @for (row of rows(); track row.id) {
+            <li>
+              <h2>{{ row.name }}</h2>
+              <span class="rating-list__status" [class.rating-list__status--done]="row.scored">{{
+                row.scored ? "Оценен" : "Не оценен"
+              }}</span>
+              <a
+                [appButton]="row.scored ? 'secondary' : 'primary'"
+                [routerLink]="[base, row.id]"
+                [queryParams]="{ returnUrl: router.url }"
+                (click)="remember()"
+                >{{ row.scored || expired() ? "Посмотреть" : "Оценить" }}</a
+              >
+            </li>
+          }
+        </ul>
+        @if (rows().length < count()) {
+          <button
+            #more
+            type="button"
+            appButton="secondary"
+            [disabled]="loading()"
+            (click)="load(true)"
+          >
+            Показать еще
+          </button>
+        }
+      }
+    </section>
+  } @else if (project(); as current) {
+    <app-rating-card [project]="current" />
+  }
+  @if (loading()) {
+    <p class="rating-workspace__message" role="status">Загружаем проекты…</p>
+  }
+  @if (failed(); as error) {
+    <section class="rating-workspace__message" role="alert">
+      <p>{{ error }}</p>
+      @if (unauthorized()) {
+        <a appButton="primary" routerLink="/auth/login" [queryParams]="{ returnUrl: router.url }"
+          >Войти в аккаунт</a
+        >
+      } @else {
+        <button type="button" appButton="secondary" (click)="load()">Повторить</button>
+      }
+    </section>
+  }
+</main>
+<app-modal
+  [open]="filtersOpen()"
+  (openChange)="filtersOpen.set(false)"
+  labelledBy="rating-filter-title"
+  bodyClass="modal__body--no-flex"
+>
+  <div class="rating-dialog">
+    <header>
+      <h2 id="rating-filter-title">Фильтры проектов</h2>
+      <button
+        class="rating-dialog__close"
+        type="button"
+        aria-label="Закрыть"
+        (click)="filtersOpen.set(false)"
+      >
+        ×
+      </button>
+    </header>
+    <div class="rating-dialog__body">
+      @for (field of fields(); track field.id) {
+        <label
+          >{{ field.label
+          }}<select
+            appField
+            [attr.aria-label]="field.label"
+            (change)="setFilter(field.name, $event)"
+          >
+            <option value="" [selected]="!draftFilters[field.name]?.length">Все варианты</option>
+            @if (field.fieldType === "select") {
+              @for (option of field.options; track option) {
+                <option [value]="option" [selected]="draftFilters[field.name]?.includes(option)">
+                  {{ option }}
+                </option>
+              }
+            } @else {
+              <option value="true" [selected]="draftFilters[field.name]?.includes('true')">
+                Да
+              </option>
+              <option value="false" [selected]="draftFilters[field.name]?.includes('false')">
+                Нет
+              </option>
+            }
+          </select></label
+        >
+      } @empty {
+        @if (!filtersFailed()) {
+          <p>Для этой программы дополнительные фильтры не настроены.</p>
+        }
+      }
+      @if (filtersFailed()) {
+        <p role="alert">Не удалось загрузить фильтры.</p>
+        <button type="button" appButton="secondary" (click)="loadFilters()">Повторить</button>
+      }
+    </div>
+    <footer>
+      <button type="button" appButton="secondary" (click)="draftFilters = {}">Сбросить</button
+      ><button type="button" appButton="primary" (click)="applyFilters()">Применить</button>
+    </footer>
+  </div>
+</app-modal>
+<app-modal
+  [open]="leaveOpen()"
+  (openChange)="answerLeave(false)"
+  labelledBy="rating-leave-title"
+  bodyClass="modal__body--no-flex"
+>
+  <div class="rating-dialog">
+    <header>
+      <h2 id="rating-leave-title">Выйти без сохранения?</h2>
+      <button
+        type="button"
+        class="rating-dialog__close"
+        aria-label="Закрыть"
+        (click)="answerLeave(false)"
+      >
+        ×
+      </button>
+    </header>
+    <p>Введенные ответы не сохранятся.</p>
+    <footer>
+      <button type="button" appButton="secondary" (click)="answerLeave(false)">Остаться</button
+      ><button type="button" appButton="primary" (click)="answerLeave(true)">Выйти</button>
+    </footer>
+  </div>
+</app-modal>

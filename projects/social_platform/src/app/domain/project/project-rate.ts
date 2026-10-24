@@ -17,8 +17,8 @@ export interface ProjectRate {
   viewsCount: number;
   industry: number;
   scored: boolean;
-  scoredExpertId: number | null;
-  ratedExperts: User[];
+  scoredExpertId?: number | null;
+  ratedExperts: (number | User)[];
   ratedCount: number;
   maxRates: number;
   criterias: ProjectRatingCriterion[];
