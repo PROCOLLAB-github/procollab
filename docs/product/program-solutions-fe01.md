@@ -24,11 +24,15 @@ npm run test:ci -- projects/social_platform/src/app/api/solution/solution-contra
 
 Проверены casing реальных HTTP requests/responses через interceptor, независимые C00 состояния, безопасные ID, error issues/meta, legacy/new маршруты, double click, ошибка контекста, точные ID, отмена старой программы, загрузка страницы, retry, отсутствие повторного POST и переключение вкладки без повторной загрузки.
 
-Checked by build: `npm run build:pr` PASS на штатной environment.ts. Существующие Sass deprecation и Angular template warnings остаются. Scoped ESLint всех новых/измененных TS и scoped Stylelint нового SCSS PASS. Массовый autofix и изменение package/lock не выполнялись.
+Checked by build: `npm run build:pr` PASS на штатной environment.ts. Существующие Sass deprecation и Angular template warnings остаются. Полный `npm run lint:ts` PASS (6 прежних warnings), scoped Stylelint нового SCSS PASS. Package/lock не менялись.
+
+Дополнительно полный `npm run test:ci -- --maxWorkers=2`: **2471 tests / 452 files PASS**. Генерация моделей и сценариев из C00 повторена с последующим scoped Prettier; итоговый diff двух generated файлов пустой.
+
+Форматирование: исходный `npm run format:check` на Windows сигнализировал о CRLF из `core.autocrlf=true` и 14 прежних стилевых расхождениях dev. В отдельном коммите `style: fix existing formatting that blocks dev checks` исправлены только эти 14 файлов (4 docs и 10 TS), без изменения поведения. Все 1885 первоначально отмеченных файлов затем проверены `prettier.check(source.replace(/\r\n/g, "\n"), resolvedConfig)` — **0 failures** при канонических LF. Неизмененные файлы не переписывались. Новые/измененные файлы проходят scoped Prettier. Общий SCSS autofix не запускался; локальный commit hook с таким действием заменен на ручные проверки в этой операции, без изменения конфигурации Git репозитория.
 
 Checked in browser: обычное Angular приложение на localhost → локальный Django BE01 → изолированная PostgreSQL 18, реальная JWT авторизация и вымышленные данные. Создание дает solution 1 без Project; повтор `/solutions/new` и кнопка программы открывают тот же ID. «Команда» — вторая вкладка той же заявки. GET несуществующего решения показывает not_found с retry; Enter запускает повтор. Старый режим создает проект и открывает прежний редактор с exact programLinkId. Временный локальный API URL восстановлен, в diff environment.ts отсутствует.
 
-Desktop 1280×720 и mobile 390×844 проверены визуально. На mobile scrollWidth=innerWidth=390, font-family Mont. Строки команды перестраиваются в один столбец, вкладки доступны ссылками и имеют aria-current. Семантические heading/main/nav, role=status/alert, native кнопка retry. [Desktop](program-solutions-fe01/team-desktop.png), [Mobile](program-solutions-fe01/team-mobile.png).
+Desktop 1280×720 и mobile 390×844 проверены визуально. На mobile scrollWidth=innerWidth=390, font-family Mont. Строки команды перестраиваются в один столбец, вкладки доступны ссылками и имеют aria-current. Семантические heading/main/nav, role=status/alert, native кнопка retry. [Desktop](program-solutions-fe01/team-desktop.jpg), [Mobile](program-solutions-fe01/team-mobile.jpg).
 
 | AC в scope FE01                     | Evidence                                                                                   | Verdict           |
 | ----------------------------------- | ------------------------------------------------------------------------------------------ | ----------------- |
@@ -39,6 +43,6 @@ Desktop 1280×720 и mobile 390×844 проверены визуально. На
 
 UI review: иерархия и два раздела согласованного D00 v3; нет конкурирующих или фиктивных изменяющих действий. Существующие Mont, цвета, Button foundation и кабинет; строки с разделителями, без дополнительных карточек. Данные могут переноситься по строкам, mobile порядок чтения совпадает с DOM. Полные формы и invitation modal не входят в FE01 и не считаются реализованными этим экраном.
 
-Review: исправлена нормализация meta ошибок под те же camelCase моки. BLOCKER/MAJOR/MINOR в scope не осталось. Not checked: полный frontend suite, screen reader, четыре роли в браузере, настоящие загрузки/приглашения/сдача; последние относятся к FE03–FE08 и QA01. Негативный доступ проверен server-side в BE01 и в тестах ошибки UI.
+Review: исправлена нормализация meta ошибок под те же camelCase моки. BLOCKER/MAJOR/MINOR в scope не осталось. Not checked: screen reader, четыре роли в браузере, настоящие загрузки/приглашения/сдача; последние относятся к FE03–FE08 и QA01. Негативный доступ проверен server-side в BE01 и в тестах ошибки UI. Отдельный коммит форматирования проверен по diff: только переносы строк, отступы и эквивалентная запись TypeScript union.
 
 Внедрение: сначала BE01 с миграциями и default legacy_project, затем FE01. Новый режим для реальных участников не включать до REL01. Merge и deployment выполняет пользователь.
