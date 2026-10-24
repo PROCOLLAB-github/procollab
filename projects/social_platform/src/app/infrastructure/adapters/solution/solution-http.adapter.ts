@@ -42,6 +42,7 @@ import {
   SolutionInvitationQuery,
   SolutionRatingQuery,
   SolutionResultsQuery,
+  SolutionResultsExportQuery,
   SolutionCabinetQuery,
   validSolutionId,
 } from "@domain/solution/ports/solution.repository.port";
@@ -86,6 +87,13 @@ export class SolutionHttpAdapter {
     this.path(programId);
     return this.api.get<SolutionResults>(
       `/programs/${programId}/management/solution-results/`,
+      this.evaluationQuery(query),
+    );
+  }
+  exportResults(programId: number, query: SolutionResultsExportQuery = {}) {
+    this.path(programId);
+    return this.api.getFile(
+      `/programs/${programId}/management/solution-results/export/`,
       this.evaluationQuery(query),
     );
   }

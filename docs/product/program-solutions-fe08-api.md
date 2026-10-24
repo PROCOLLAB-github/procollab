@@ -1,6 +1,6 @@
 <!-- @format -->
 
-# FE08: единая страница назначений
+# FE08: API общего кабинета и выгрузки результатов
 
 Статус: API-слой одного общего входа подготовлен; FE07/FE08 UI по-прежнему ожидает согласования дизайна. Первый выпуск не завершен.
 
@@ -10,4 +10,8 @@ C00 1.4.0 добавляет GET /evaluation/applications/ и ApplicationRef о�
 
 Checked by tests: полный Vitest — 2563 PASS в 466 файлах; после review повторно 11 wire tests и strict C00 types PASS. Проверены общая смешанная страница и отдельный запрос program_id с согласованным ответом сервера. Checked by build: Angular development build PASS. ESLint: 0 errors / 6 прежних warnings. Locked Prettier 3.8.3: 1945 файлов с LF, нарушений нет. C00 1.3 operations/schemas/examples семантически сохранены, 1.4 синхронизирован byte-for-byte в обоих репозиториях. Проверка product UI нового кабинета в браузере еще неприменима: реализация UI не начата до согласования D01. Запущенный backend обеих локальных форм проверен через HTTP/JWT, включая общую пагинацию и совместимую старую проекцию.
 
-Осталось: административные команды с реальными SolutionRef, публикация материалов после уточнения неконкурсного сценария, BE09/FE08 аналитика и выгрузки; сам экспертный UI/результаты и QA01/REL01. Новые заглушки или автоматически включенный режим не добавлялись.
+Следующий блок C00 1.5.0: ExportSolutionResultsUseCase → SolutionRepositoryPort/repository → HTTP adapter → GET /programs/{program_id}/management/solution-results/export/. Query использует прежние search/case_scope/case_name/status/order и scope=current/all; получает исходный Blob через ApiService.getFile. JSON ошибки при responseType=blob декодируются и проходят общий SolutionApiError. Ни solution_id, ни project_id не подменяются; файл относится к явной программе решения.
+
+Checked by tests нового блока: 5 wire/error/ID tests PASS; полный Vitest — 2568 tests / 467 файлов PASS, strict C00 types PASS. Angular development build PASS; ESLint измененных TS — 0 errors. C00 1.5.0: 74 схемы, 34 операции, 57 независимых примеров; старые схемы/операции/примеры сохранены и обе копии контракта byte identical. Запущенный backend двух форм проверен через HTTP/JWT и чтение настоящей XLSX-книги. UI кнопки/результатов в браузере еще не проверяется: он ожидает согласования дизайна, API-слой интерфейс не добавляет.
+
+Осталось: административные команды с реальными SolutionRef, публикация материалов после уточнения неконкурсного сценария, остальная BE09/FE08 аналитика и выгрузки; сам экспертный UI/результаты и QA01/REL01. Новые заглушки или автоматически включенный режим не добавлялись.

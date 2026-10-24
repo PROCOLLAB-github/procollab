@@ -7,6 +7,7 @@ import {
   SolutionInvitationQuery,
   SolutionRatingQuery,
   SolutionResultsQuery,
+  SolutionResultsExportQuery,
   SolutionCabinetQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
@@ -44,6 +45,9 @@ export class SolutionRepository implements SolutionRepositoryPort {
   }
   results(programId: number, query?: SolutionResultsQuery) {
     return this.http.results(programId, query);
+  }
+  exportResults(programId: number, query?: SolutionResultsExportQuery) {
+    return this.http.exportResults(programId, query);
   }
   ratings(programId: number, query?: SolutionRatingQuery) {
     return this.http.ratings(programId, query);

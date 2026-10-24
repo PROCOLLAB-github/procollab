@@ -51,6 +51,7 @@ export abstract class SolutionRepositoryPort {
   abstract previewQuota(programId: number, requiredEvaluators: number): Observable<SolutionQuota>;
   abstract saveQuota(programId: number, command: SolutionQuotaWrite): Observable<SolutionQuota>;
   abstract results(programId: number, query?: SolutionResultsQuery): Observable<SolutionResults>;
+  abstract exportResults(programId: number, query?: SolutionResultsExportQuery): Observable<Blob>;
   abstract ratings(programId: number, query?: SolutionRatingQuery): Observable<SolutionRatingPage>;
   abstract rating(programId: number, solutionId: number): Observable<SolutionRatingFrame>;
   abstract rate(
@@ -162,6 +163,10 @@ export type SolutionResultsQuery = {
   caseName?: string;
   order?: "asc" | "desc";
   status?: "all" | "complete" | "pending";
+};
+
+export type SolutionResultsExportQuery = SolutionResultsQuery & {
+  scope?: "current" | "all";
 };
 
 export type SolutionCabinetQuery = {

@@ -4834,4 +4834,22 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
       ],
     },
   },
+  {
+    name: "solution_results_export_invalid_scope",
+    operationId: "exportSolutionResults",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте данные запроса.",
+      errors: [
+        {
+          path: "scope",
+          code: "invalid_choice",
+          detail: "Выберите current или all.",
+          fieldId: null,
+        },
+      ],
+      meta: {},
+    },
+  },
 ];

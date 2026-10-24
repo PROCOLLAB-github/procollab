@@ -7,6 +7,15 @@ import type {
   SolutionAllocationWrite,
   SolutionQuotaWrite,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
+import type { SolutionResultsExportQuery } from "../projects/social_platform/src/app/domain/solution/ports/solution.repository.port";
+
+const validResultsExport = {
+  scope: "all",
+  caseScope: "selected",
+  caseName: "Задача 1",
+} satisfies SolutionResultsExportQuery;
+// @ts-expect-error Выгрузка принимает только current/all.
+const invalidResultsExport: SolutionResultsExportQuery = { scope: "everything" };
 
 // Независимые примеры C00: у обеих команд обязательны ревизии и хотя бы одно изменение.
 const role = {
@@ -77,6 +86,8 @@ const wrongPlan: SolutionAllocationWrite = { revision: "revision", projectIds: [
 const missingQuotaRevision: SolutionQuotaWrite = { requiredEvaluators: 2 };
 
 void [
+  validResultsExport,
+  invalidResultsExport,
   role,
   cleared,
   text,
