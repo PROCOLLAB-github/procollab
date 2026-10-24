@@ -17,6 +17,8 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
 import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.const";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { GetSolutionContextUseCase } from "@api/solution/use-cases/solution.use-cases";
+import { solutionApplicationRoute } from "@api/solution/solution-navigation";
 
 @Injectable()
 export class DetailProgramInfoService {
@@ -31,6 +33,7 @@ export class DetailProgramInfoService {
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
 
   private readonly applyProjectToProgramUseCase = inject(ApplyProjectToProgramUseCase);
+  private readonly getSolutionContext = inject(GetSolutionContextUseCase);
   private readonly getProgramProjectAdditionalFieldsUseCase = inject(
     GetProgramProjectAdditionalFieldsUseCase,
   );
@@ -62,6 +65,42 @@ export class DetailProgramInfoService {
 
   addNewProject(programId: number): void {
     if (this.applicationPending() || this.application()?.submitted) return;
+    // Existing legacy references already carry the exact project and program-link IDs.
+    if (this.application()) {
+      this.openApplication();
+      return;
+    }
+    this.applicationPending.set(true);
+    this.getSolutionContext
+      .execute(programId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        this.applicationPending.set(false);
+        if (this.programDetailMainUIInfoService.program()?.id !== programId) return;
+        if (!result.ok) {
+          this.assignProjectToProgramModalMessage.set(result.error.detail);
+          this.isAssignProjectToProgramModalOpen.set(true);
+          return;
+        }
+        const context = result.value;
+        if (context.currentApplication) {
+          const destination = solutionApplicationRoute(context.currentApplication);
+          void this.router.navigate([destination.path], { queryParams: destination.queryParams });
+        } else if (context.storageMode === "legacy_project") {
+          this.addLegacyProject(programId);
+        } else if (context.canCreate) {
+          void this.router.navigate([AppRoutes.program.solutionCreate(programId)]);
+        } else {
+          this.assignProjectToProgramModalMessage.set(
+            "Создание заявки сейчас недоступно. Проверьте регистрацию и сроки программы.",
+          );
+          this.isAssignProjectToProgramModalOpen.set(true);
+        }
+      });
+  }
+
+  private addLegacyProject(programId: number): void {
+    if (this.applicationPending() || this.application()?.submitted) return;
     if (this.application()) {
       this.openApplication();
       return;
@@ -71,6 +110,7 @@ export class DetailProgramInfoService {
       .execute(programId)
       .pipe(
         switchMap(filtersResult => {
+          if (this.programDetailMainUIInfoService.program()?.id !== programId) return [];
           const fields = filtersResult.ok ? filtersResult.value.programFields : [];
           const newFieldsFormValues = fields
             .filter(field => field.fieldType !== "file" && field.name !== PROGRAM_CASE_FIELD_NAME)
@@ -85,10 +125,10 @@ export class DetailProgramInfoService {
       )
       .subscribe({
         next: result => {
+          if (this.programDetailMainUIInfoService.program()?.id !== programId) return;
           if (!result.ok) {
             const error = result.error.cause as
-              | { status?: number; error?: { detail?: string } }
-              | undefined;
+              { status?: number; error?: { detail?: string } } | undefined;
             if (error?.status === 400) {
               this.isAssignProjectToProgramModalOpen.set(true);
               this.assignProjectToProgramModalMessage.set(error.error?.detail ?? null);

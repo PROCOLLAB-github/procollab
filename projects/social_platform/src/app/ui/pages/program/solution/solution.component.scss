@@ -1,0 +1,121 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.solution {
+  max-width: 864px;
+  padding: 0 20px;
+  margin: 28px auto 64px;
+  font-size: 14px;
+  color: var(--black);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+header {
+  display: flex;
+  gap: 20px;
+  align-items: start;
+  justify-content: space-between;
+  margin: 28px 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.muted {
+  color: var(--grey-for-text);
+}
+
+nav {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+}
+
+nav a {
+  padding: 12px 4px;
+  color: var(--black);
+  border-bottom: 2px solid transparent;
+}
+
+nav a[aria-current] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+dl {
+  margin: 0;
+}
+
+dl > div {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+}
+
+dt {
+  margin-bottom: 8px;
+}
+
+dd {
+  margin: 0;
+  color: var(--grey-for-text);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.members {
+  padding: 0;
+  list-style: none;
+}
+
+.members li {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+}
+
+.name small {
+  display: block;
+  margin-top: 6px;
+}
+
+.ui-button {
+  @include ui-foundation.button;
+}
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+  }
+
+  .members li {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

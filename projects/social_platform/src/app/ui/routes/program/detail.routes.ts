@@ -14,6 +14,21 @@ import { canLeaveManagement } from "./management-leave.guard";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
+  {
+    path: "solutions/new",
+    loadComponent: () =>
+      import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
+  },
+  {
+    path: "solutions/:solutionId/edit",
+    loadComponent: () =>
+      import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
+  },
+  {
+    path: "solutions/:solutionId",
+    loadComponent: () =>
+      import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
+  },
   { path: "management", pathMatch: "full", redirectTo: "management/participants" },
   {
     path: "management/projects/:linkId/evaluation",
