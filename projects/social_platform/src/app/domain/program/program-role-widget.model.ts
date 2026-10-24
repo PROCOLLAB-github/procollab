@@ -6,12 +6,7 @@
 
 export type ProgramWidgetRole = "organizer" | "expert" | "participant";
 export type ParticipantStage =
-  | "none"
-  | "not_submitted"
-  | "submitted"
-  | "review"
-  | "evaluated"
-  | "not_applicable";
+  "none" | "not_submitted" | "submitted" | "review" | "evaluated" | "not_applicable";
 export interface ParticipantWidget {
   participantProject: { id: number; name: string; programLinkId: number } | null;
   caseProvided: boolean;
@@ -42,8 +37,4 @@ export type ProgramRoleWidget = WidgetContext &
     | { role: "expert"; expert: ExpertWidget }
   );
 export type ProgramWidgetError =
-  | "network"
-  | "forbidden"
-  | "unauthorized"
-  | "not_found"
-  | "integrity";
+  "network" | "forbidden" | "unauthorized" | "not_found" | "integrity";

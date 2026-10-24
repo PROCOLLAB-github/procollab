@@ -87,8 +87,4 @@ export interface WriteQuestion extends BaseStep {
 
 /** Объединенный тип всех возможных типов шагов */
 export type StepType =
-  | InfoSlide
-  | ConnectQuestion
-  | SingleQuestion
-  | ExcludeQuestion
-  | WriteQuestion;
+  InfoSlide | ConnectQuestion | SingleQuestion | ExcludeQuestion | WriteQuestion;

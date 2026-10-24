@@ -14,13 +14,7 @@ export type ManagementSection =
   | "settings"
   | "evaluation";
 export type SettingsSection =
-  | "basic"
-  | "dates"
-  | "materials"
-  | "project-form"
-  | "criteria"
-  | "organizers"
-  | "registration";
+  "basic" | "dates" | "materials" | "project-form" | "criteria" | "organizers" | "registration";
 export interface ManagementMaterial {
   id: number;
   title: string;
@@ -67,11 +61,7 @@ export interface ManagementParticipant {
   registrationAnswers?: { label: string; value: string | string[] | number | null }[];
 }
 export type ManagementEvaluationStatus =
-  | "not_submitted"
-  | "awaiting_evaluation"
-  | "partially_evaluated"
-  | "evaluated"
-  | "not_applicable";
+  "not_submitted" | "awaiting_evaluation" | "partially_evaluated" | "evaluated" | "not_applicable";
 export interface ManagementProject {
   id: number;
   projectId: number;

@@ -60,8 +60,7 @@ readonly loading = computed(() => isLoading(this.course$()));
 
 ```ts
 type Result<T, E = string> =
-  | { readonly ok: true; readonly value: T }
-  | { readonly ok: false; readonly error: E };
+  { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: E };
 ```
 
 `ok(value)` / `fail(error)` — фабрики. Use-case возвращает `Observable<Result<T, E>>` и **никогда не выбрасывает** — все ошибки представимы в `Result.fail`.

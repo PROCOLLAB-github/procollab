@@ -257,8 +257,7 @@ export class ProfileFormService {
           if ([2, 3, 4].includes(profile.personal.userType)) {
             this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
             const role = profile.roles[this.userTypeMap[profile.personal.userType]] as
-              | { preferredIndustries?: string[] }
-              | undefined;
+              { preferredIndustries?: string[] } | undefined;
             role?.preferredIndustries?.forEach((industry: string) =>
               this.addPreferredIndustry(industry),
             );
