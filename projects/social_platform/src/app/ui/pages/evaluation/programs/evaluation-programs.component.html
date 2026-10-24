@@ -144,8 +144,9 @@
             @if (project.canRate || project.isCompleted) {
               <a
                 appButton="secondary"
-                [routerLink]="paths.program.projectsRating(project.programId)"
-                [queryParams]="{ project_id: project.projectId, returnUrl: router.url }"
+                [routerLink]="[paths.program.projectsRating(project.programId), project.projectId]"
+                [queryParams]="{ returnUrl: router.url }"
+                (click)="navigation.remember(router.url)"
                 >{{ project.isCompleted ? "Посмотреть" : "Оценить" }}</a
               >
             } @else {

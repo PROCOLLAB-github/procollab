@@ -1,33 +1,25 @@
 /** @format */
-
 import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-  inject,
   ChangeDetectionStrategy,
+  Component,
+  Input,
+  computed,
+  inject,
   viewChild,
 } from "@angular/core";
-import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { ProjectRatingComponent } from "./project-rating/project-rating.component";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
-import { TagComponent } from "@ui/primitives/tag/tag.component";
+import { ButtonDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { TruncatePipe, ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ProjectRate } from "@domain/project/project-rate";
+import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 import { AppRoutes } from "@api/paths/app-routes";
-import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { presentationHref } from "@utils/program-case-analytics";
+import { ProjectRatingComponent } from "./project-rating/project-rating.component";
 import { RatingCardService } from "./services/rating-card.service";
-import { ExpandService } from "@api/expand/expand.service";
-import { map } from "rxjs";
 
-/** Карточка оценки проекта экспертом: форма с критериями, навигация, переоценка. */
+/** One complete assessment, shared by the cabinet and the program entry. */
 @Component({
   selector: "app-rating-card",
   templateUrl: "./rating-card.component.html",
@@ -35,114 +27,59 @@ import { map } from "rxjs";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    AvatarComponent,
-    IconComponent,
-    ButtonComponent,
-    ParseLinksPipe,
-    ParseBreaksPipe,
-    ProjectRatingComponent,
-    ControlErrorPipe,
     RouterLink,
-    TagComponent,
+    ButtonDirective,
+    IconComponent,
     ModalComponent,
-    TruncatePipe,
+    ProjectRatingComponent,
   ],
+  providers: [RatingCardService],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [RatingCardService, ExpandService],
 })
-export class RatingCardComponent implements AfterViewInit {
-  private readonly ratingCardService = inject(RatingCardService);
-  private readonly expandService = inject(ExpandService);
-  private readonly breakpointObserver = inject(BreakpointObserver);
-
+export class RatingCardComponent {
+  readonly state = inject(RatingCardService);
+  readonly editor = viewChild(ProjectRatingComponent);
+  readonly orderedCriteria = computed(() => {
+    const criteria = this.state.project()?.criterias ?? [];
+    return [...criteria.filter(c => c.type !== "str"), ...criteria.filter(c => c.type === "str")];
+  });
   protected readonly AppRoutes = AppRoutes;
-  private readonly industryRepository = inject(IndustryRepositoryPort);
+  protected readonly presentationHref = presentationHref;
 
-  private readonly descEl = viewChild<ElementRef | undefined>("descEl");
-
-  @Input({ required: true }) set project(proj: ProjectRate | null) {
-    this.ratingCardService.initProject(proj);
+  @Input({ required: true }) set project(value: ProjectRate | null) {
+    this.state.initProject(value);
   }
-
   get project(): ProjectRate | null {
-    return this.ratingCardService.project();
+    return this.state.project();
   }
 
-  protected readonly desktopMode$ = this.breakpointObserver
-    .observe("(min-width: 1000px)")
-    .pipe(map(result => result.matches));
-
-  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
-  protected readonly readFullDescription = this.expandService.readFullDescription;
-
-  protected readonly ratedCount = this.ratingCardService.ratedCount;
-  protected readonly isProjectCriterias = this.ratingCardService.isProjectCriterias;
-  protected readonly form = this.ratingCardService.form;
-  protected readonly ratingError = this.ratingCardService.ratingError;
-  protected readonly criteriaChanged = this.ratingCardService.criteriaChanged;
-  protected readonly refreshingCriteria = this.ratingCardService.refreshingCriteria;
-  protected readonly retainedAnswers = this.ratingCardService.retainedAnswers;
-  protected readonly refreshCriteria = () => this.ratingCardService.refreshCriteria();
-  protected readonly profile = this.ratingCardService.profile;
-  protected readonly evaluationDateExpired = this.ratingCardService.evaluationDateExpired;
-  protected readonly isRatingFormDisabled = this.ratingCardService.isRatingFormDisabled;
-  protected readonly showRatingForm = this.ratingCardService.showRatingForm;
-  protected readonly showRatedStatus = this.ratingCardService.showRatedStatus;
-  protected readonly showConfirmedState = this.ratingCardService.showConfirmedState;
-  protected readonly submitLoading = this.ratingCardService.submitLoading;
-  protected readonly confirmLoading = this.ratingCardService.confirmLoading;
-  protected readonly isButtonDisabled = this.ratingCardService.isButtonDisabled;
-  protected readonly buttonOpacity = this.ratingCardService.buttonOpacity;
-  protected readonly buttonColor = this.ratingCardService.buttonColor;
-  protected readonly buttonTooltip = this.ratingCardService.buttonTooltip;
-  protected readonly rateButtonText = this.ratingCardService.rateButtonText;
-  protected readonly showEditButton = this.ratingCardService.showEditButton;
-  protected readonly showConfirmRateModal = this.ratingCardService.showConfirmRateModal;
-
-  protected readonly industryRepositoryGetOne = (id: number) => this.industryRepository.getOne(id);
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.expandService.checkExpandable("description", true, this.descEl());
-    });
-  }
-
-  protected onExpandDescription(elem: HTMLElement): void {
-    this.expandService.onExpand(
-      "description",
-      elem,
-      "expanded",
-      this.expandService.readFullDescription(),
+  hasUnsavedChanges(): boolean {
+    return (
+      !this.state.projectConfirmed() &&
+      (!!this.editor()?.form.dirty || !!this.state.retainedAnswers().length)
     );
   }
 
-  protected openPresentation(url: string): void {
-    if (url) {
-      window.open(url, "_blank");
-    }
-  }
-
   protected handleRateButtonClick(): void {
-    if (this.ratingCardService.canOpenModal()) {
-      this.ratingCardService.showConfirmRateModal.set(true);
-    }
+    if (!this.editor()?.validateAndFocus()) return;
+    if (this.state.canOpenModal() && !this.state.criteriaChanged())
+      this.state.showConfirmRateModal.set(true);
   }
-
   protected confirmRateProject(): void {
-    this.ratingCardService.form().markAsTouched();
-    if (this.ratingCardService.form().invalid) return;
-    this.ratingCardService.confirmRateProject();
+    this.state.confirmRateProject();
   }
-
   protected redoRating(): void {
-    this.ratingCardService.redoRating();
+    this.state.redoRating();
   }
-
-  protected toggleConfirmRateModal(): void {
-    this.ratingCardService.showConfirmRateModal.set(!this.ratingCardService.showConfirmRateModal());
-  }
-
   protected closeConfirmRateModal(): void {
-    this.ratingCardService.showConfirmRateModal.set(false);
+    if (!this.state.submitLoading()) this.state.showConfirmRateModal.set(false);
+  }
+  protected answer(criterion: ProjectRatingCriterion): string {
+    const value = this.state.form().value?.[criterion.id] ?? criterion.value;
+    if (criterion.type === "bool") {
+      if (value == null || value === "") return "—";
+      return String(value).toLowerCase() === "true" ? "Да" : "Нет";
+    }
+    return value == null || value === "" ? "—" : String(value);
   }
 }

@@ -145,7 +145,7 @@ export class NavComponent implements OnInit, OnDestroy {
       projects: "Проекты",
       members: "Участники",
       program: "Программы",
-      evaluation: "Кабинет эксперта",
+      evaluation: "Оценивание",
       courses: "Курсы",
       vacancies: "Вакансии",
       profile: "Профиль",
