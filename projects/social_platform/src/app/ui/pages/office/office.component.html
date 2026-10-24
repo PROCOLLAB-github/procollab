@@ -43,16 +43,28 @@
 
                 @if (profile() !== undefined && invites() !== undefined) {
                   <app-profile-control-panel
+                    #profilePanel
                     [invites]="invites()"
-                    [hasNotifications]="!!(notificationService.hasNotifications | async)"
-                    [hasNotificationItems]="!!(notificationService.notifications | async)?.length"
+                    [hasNotifications]="
+                      !!(notificationService.hasNotifications | async) || solutionInbox.count() > 0
+                    "
+                    [hasNotificationItems]="
+                      !!(notificationService.notifications | async)?.length ||
+                      solutionInbox.count() > 0 ||
+                      solutionInbox.loading() ||
+                      !!solutionInbox.error()
+                    "
                     [hasUnreads]="chatUnreadState.hasUnreads()"
                     [user]="profile()"
                     (acceptInvite)="onAcceptInvite($event)"
                     (rejectInvite)="onRejectInvite($event)"
                     (logout)="onLogout()"
-                    ><app-notification-list notifications
-                  /></app-profile-control-panel>
+                    ><app-notification-list notifications />
+                    <app-solution-invitation-inbox
+                      notifications
+                      (handled)="profilePanel.showNotifications = false"
+                    />
+                  </app-profile-control-panel>
                 }
               </div>
               <router-outlet></router-outlet>

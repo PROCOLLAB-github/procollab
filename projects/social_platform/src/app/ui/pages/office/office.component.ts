@@ -7,6 +7,7 @@ import {
   signal,
   inject,
   computed,
+  effect,
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
@@ -28,6 +29,8 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { AsyncPipe } from "@angular/common";
 import { NotificationService } from "@ui/services/notification/notification.service";
 import { NotificationListComponent } from "@ui/widgets/notification-list/notification-list.component";
+import { SolutionInvitationInboxComponent } from "@ui/widgets/solution-invitation-inbox/solution-invitation-inbox.component";
+import { SolutionInvitationInboxService } from "@api/solution/facades/solution-invitation-inbox.service";
 
 /** Корневой компонент рабочего пространства с навигацией и управлением состоянием. */
 @Component({
@@ -47,12 +50,20 @@ import { NotificationListComponent } from "@ui/widgets/notification-list/notific
     ProgramSidebarCardComponent,
     AsyncPipe,
     NotificationListComponent,
+    SolutionInvitationInboxComponent,
   ],
-  providers: [OfficeInfoService, OfficeUIInfoService, AuthUIInfoService, AuthRegisterService],
+  providers: [
+    OfficeInfoService,
+    OfficeUIInfoService,
+    AuthUIInfoService,
+    AuthRegisterService,
+    SolutionInvitationInboxService,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit {
   readonly notificationService = inject(NotificationService);
+  readonly solutionInbox = inject(SolutionInvitationInboxService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly officeInfoService = inject(OfficeInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
@@ -84,6 +95,10 @@ export class OfficeComponent implements OnInit {
   protected readonly AppRoutes = AppRoutes;
 
   protected currentYear = signal(new Date().getFullYear());
+
+  constructor() {
+    effect(() => this.solutionInbox.bindUser(this.profile()?.id ?? null));
+  }
 
   ngOnInit(): void {
     this.notificationService.start();

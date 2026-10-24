@@ -1,19 +1,16 @@
 /** @format */
 
-import { ButtonDirective, StateComponent } from "@uilib";
 /** @format */
 import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
   effect,
-  ElementRef,
   inject,
   input,
   output,
-  ViewChild,
 } from "@angular/core";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Project } from "@domain/project/project.model";
 import { User } from "@domain/auth/user.model";
@@ -22,20 +19,11 @@ import { isLoading } from "@domain/shared/async-state";
 import { InviteParticipantSearchFacade } from "@api/invite/facades/invite-participant-search.facade";
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
-import { ProjectInviteDialogComponent } from "./project-invite-dialog.component";
-import { ProjectInviteRoleInputComponent } from "./project-invite-role-input.component";
-import { ParticipantPickerComponent } from "./participant-picker.component";
+import { MemberInviteFormComponent } from "./member-invite-form.component";
 
 @Component({
   selector: "app-project-member-invite-modal",
-  imports: [
-    StateComponent,
-    ButtonDirective,
-    ReactiveFormsModule,
-    ProjectInviteDialogComponent,
-    ProjectInviteRoleInputComponent,
-    ParticipantPickerComponent,
-  ],
+  imports: [MemberInviteFormComponent],
   providers: [InviteParticipantSearchFacade],
   templateUrl: "./project-member-invite-modal.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,7 +39,8 @@ export class ProjectMemberInviteModalComponent {
   readonly search = inject(InviteParticipantSearchFacade);
   readonly query = new FormControl("", { nonNullable: true });
   readonly isLoading = isLoading;
-  @ViewChild("searchInput") private searchInput!: ElementRef<HTMLInputElement>;
+  readonly candidateReason = (id: number) =>
+    inviteCandidateReason(id, this.project()?.leader, this.ui.collaborators(), this.ui.invites());
 
   constructor() {
     const destroyRef = inject(DestroyRef);
@@ -76,6 +65,5 @@ export class ProjectMemberInviteModalComponent {
 
   clear(): void {
     this.ui.selectRecipient(null);
-    this.searchInput.nativeElement.focus();
   }
 }

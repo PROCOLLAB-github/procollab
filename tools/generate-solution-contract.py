@@ -30,6 +30,21 @@ def ts(schema):
         return " | ".join(json.dumps(v, ensure_ascii=False) for v in schema["enum"])
     for key, separator in [("anyOf", " | "), ("oneOf", " | "), ("allOf", " & ")]:
         if key in schema:
+            if schema.get("properties"):
+                base = {k: v for k, v in schema.items() if k != key}
+                if key in ("anyOf", "oneOf"):
+                    # required-only ветви уточняют общий объект, а не заменяют его unknown.
+                    variants = []
+                    for branch in schema[key]:
+                        if set(branch) <= {"required", "properties", "type"}:
+                            combined = {**base, **branch,
+                                        "properties": {**base["properties"], **branch.get("properties", {})},
+                                        "required": sorted(set(base.get("required", [])) | set(branch.get("required", [])))}
+                            variants.append(ts(combined))
+                        else:
+                            variants.append("(" + ts(base) + ") & (" + ts(branch) + ")")
+                    return separator.join("(" + variant + ")" for variant in variants)
+                return "(" + ts(base) + ") & " + separator.join("(" + ts(v) + ")" for v in schema[key])
             return separator.join("(" + ts(v) + ")" for v in schema[key])
     kind = schema.get("type")
     if isinstance(kind, list):
@@ -45,7 +60,7 @@ def ts(schema):
     return {"string": "string", "integer": "number", "number": "number", "boolean": "boolean", "null": "null"}.get(kind, "unknown")
 
 
-types = "// Сгенерировано tools/generate-solution-contract.py из C00 1.0.0.\n// camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.\n\n"
+types = f"// Сгенерировано tools/generate-solution-contract.py из C00 {spec['info']['version']}.\n// camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.\n\n"
 types += "\n\n".join("export type " + name(k) + " = " + ts(v) + ";" for k, v in spec["components"]["schemas"].items()) + "\n"
 model = APP / "domain/solution/solution-contract.model.ts"
 model.parent.mkdir(parents=True, exist_ok=True)

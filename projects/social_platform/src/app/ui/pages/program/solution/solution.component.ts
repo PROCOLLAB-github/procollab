@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { combineLatest, EMPTY, map, startWith, Subject, switchMap } from "rxjs";
+import { combineLatest, EMPTY, finalize, map, startWith, Subject, switchMap } from "rxjs";
 import {
   GetSolutionContextUseCase,
   CreateSolutionUseCase,
@@ -15,12 +15,13 @@ import { ProgramSolution, SolutionApiError } from "@domain/solution/solution-con
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
 import { ButtonDirective } from "@uilib";
 import { DatePipe } from "@angular/common";
+import { SolutionTeamComponent } from "./solution-team.component";
 
 /** FE01: read surface and route foundation. Editing/team commands follow in FE03–FE06. */
 @Component({
   selector: "app-program-solution",
   standalone: true,
-  imports: [RouterLink, ButtonDirective, DatePipe],
+  imports: [RouterLink, ButtonDirective, DatePipe, SolutionTeamComponent],
   templateUrl: "./solution.component.html",
   styleUrl: "./solution.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,14 +37,51 @@ export class ProgramSolutionComponent {
   readonly error = signal<SolutionApiError | null>(null);
   readonly teamTab = signal(false);
   readonly programId = signal(0);
+  readonly refreshingTeam = signal(false);
+  readonly teamRefreshError = signal("");
   readonly routes = AppRoutes;
   private readonly retry = new Subject<void>();
+  private readonly teamRefresh = new Subject<{ programId: number; solutionId: number } | null>();
 
   reload(): void {
     this.retry.next();
   }
 
+  refreshTeam(): void {
+    const solution = this.solution();
+    if (solution) this.teamRefresh.next({ programId: solution.programId, solutionId: solution.id });
+  }
+
+  teamLeft(): void {
+    void this.router.navigate([AppRoutes.program.detail(this.programId())]);
+  }
+
   constructor() {
+    this.teamRefresh
+      .pipe(
+        switchMap(context => {
+          if (!context) return EMPTY;
+          this.refreshingTeam.set(true);
+          this.teamRefreshError.set("");
+          return this.get.execute(context.programId, context.solutionId).pipe(
+            map(result => ({ context, result })),
+            finalize(() => this.refreshingTeam.set(false)),
+          );
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe(({ context, result }) => {
+        if (this.programId() !== context.programId || this.solution()?.id !== context.solutionId)
+          return;
+        if (result.ok) {
+          this.solution.set(result.value);
+          return;
+        }
+        if (["not_found", "forbidden", "authentication_required"].includes(result.error.code)) {
+          this.solution.set(null);
+          this.showError(result.error);
+        } else this.teamRefreshError.set(result.error.detail);
+      });
     this.route.queryParamMap
       .pipe(takeUntilDestroyed())
       .subscribe(params => this.teamTab.set(params.get("tab") === "team"));
@@ -57,6 +95,9 @@ export class ProgramSolutionComponent {
           solutionId: params.find(p => p.has("solutionId"))?.get("solutionId"),
         })),
         switchMap(({ programId, solutionId }) => {
+          this.teamRefresh.next(null);
+          this.refreshingTeam.set(false);
+          this.teamRefreshError.set("");
           this.solution.set(null);
           this.error.set(null);
           this.loading.set(true);
