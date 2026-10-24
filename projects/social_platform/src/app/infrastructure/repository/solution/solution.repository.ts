@@ -7,6 +7,7 @@ import {
   SolutionInvitationQuery,
   SolutionRatingQuery,
   SolutionResultsQuery,
+  SolutionCabinetQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
   CreateSolutionCommand,
@@ -26,6 +27,9 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  cabinetApplications(query?: SolutionCabinetQuery) {
+    return this.http.cabinetApplications(query);
+  }
   previewAllocation(programId: number, command: SolutionAllocationWrite) {
     return this.http.previewAllocation(programId, command);
   }

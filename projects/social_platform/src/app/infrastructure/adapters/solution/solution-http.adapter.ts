@@ -35,17 +35,25 @@ import {
   SolutionQuota,
   SolutionQuotaWrite,
   SolutionResults,
+  SolutionCabinetApplications,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
   SolutionInvitationQuery,
   SolutionRatingQuery,
   SolutionResultsQuery,
+  SolutionCabinetQuery,
   validSolutionId,
 } from "@domain/solution/ports/solution.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  cabinetApplications(query: SolutionCabinetQuery = {}) {
+    return this.api.get<SolutionCabinetApplications>(
+      "/evaluation/applications/",
+      this.evaluationQuery(query),
+    );
+  }
   private evaluationManagementPath(programId: number) {
     this.path(programId);
     return `/programs/${programId}/management/solution-evaluation/`;
@@ -81,12 +89,15 @@ export class SolutionHttpAdapter {
       this.evaluationQuery(query),
     );
   }
-  private evaluationQuery(query: SolutionRatingQuery | SolutionResultsQuery) {
+  private evaluationQuery(
+    query: SolutionRatingQuery | SolutionResultsQuery | SolutionCabinetQuery,
+  ) {
     let params = new HttpParams();
     const wireKeys: Record<string, string> = {
       caseScope: "case_scope",
       caseName: "case_name",
       assignedOnly: "assigned_only",
+      programId: "program_id",
     };
     for (const [key, value] of Object.entries(query)) {
       if (value !== undefined) params = params.set(wireKeys[key] ?? key, value);

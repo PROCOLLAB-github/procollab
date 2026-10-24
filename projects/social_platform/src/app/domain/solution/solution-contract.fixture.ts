@@ -4782,4 +4782,56 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
       ],
     },
   },
+  {
+    name: "mixed_cabinet_applications",
+    operationId: "getCabinetApplications",
+    status: 200,
+    response: {
+      count: 2,
+      limit: 20,
+      offset: 0,
+      pending: 2,
+      completed: 0,
+      unavailable: 0,
+      results: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            name: "Работа команды",
+            solutionId: 301,
+          },
+          assignmentId: 7,
+          program: {
+            id: 12,
+            name: "Программа",
+          },
+          deadline: null,
+          caseName: null,
+          isCompleted: false,
+          canRate: true,
+          blockedReason: null,
+        },
+        {
+          application: {
+            kind: "legacy_project",
+            programId: 13,
+            name: "Работа команды",
+            projectId: 301,
+            programLinkId: 44,
+          },
+          assignmentId: 7,
+          program: {
+            id: 13,
+            name: "Программа",
+          },
+          deadline: null,
+          caseName: null,
+          isCompleted: false,
+          canRate: true,
+          blockedReason: null,
+        },
+      ],
+    },
+  },
 ];

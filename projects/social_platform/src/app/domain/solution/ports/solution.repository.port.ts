@@ -33,9 +33,13 @@ import {
   SolutionQuota,
   SolutionQuotaWrite,
   SolutionResults,
+  SolutionCabinetApplications,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract cabinetApplications(
+    query?: SolutionCabinetQuery,
+  ): Observable<SolutionCabinetApplications>;
   abstract previewAllocation(
     programId: number,
     command: SolutionAllocationWrite,
@@ -158,6 +162,14 @@ export type SolutionResultsQuery = {
   caseName?: string;
   order?: "asc" | "desc";
   status?: "all" | "complete" | "pending";
+};
+
+export type SolutionCabinetQuery = {
+  status?: "pending" | "completed";
+  q?: string;
+  programId?: number;
+  limit?: number;
+  offset?: number;
 };
 
 export function validSolutionId(value: unknown): value is number {

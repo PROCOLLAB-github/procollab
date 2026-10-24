@@ -5,6 +5,7 @@ import {
   SolutionRepositoryPort,
   SolutionRatingQuery,
   SolutionResultsQuery,
+  SolutionCabinetQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
   RateSolutionCommand,
@@ -13,6 +14,14 @@ import {
   SolutionQuotaWrite,
 } from "@domain/solution/solution-contract.model";
 import { solutionRequestResult } from "./solution.use-cases";
+
+@Injectable({ providedIn: "root" })
+export class GetCabinetApplicationsUseCase {
+  private readonly repository = inject(SolutionRepositoryPort);
+  execute(query?: SolutionCabinetQuery) {
+    return solutionRequestResult(() => this.repository.cabinetApplications(query));
+  }
+}
 
 @Injectable({ providedIn: "root" })
 export class PreviewSolutionAllocationUseCase {

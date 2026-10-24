@@ -10,6 +10,7 @@ import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { SolutionRepositoryPort } from "@domain/solution/ports/solution.repository.port";
 import { SolutionRepository } from "@infrastructure/repository/solution/solution.repository";
 import { solutionContractScenarios } from "@domain/solution/solution-contract.fixture";
+import { SolutionCabinetApplications } from "@domain/solution/solution-contract.model";
 import {
   GetSolutionRatingsUseCase,
   GetSolutionRatingUseCase,
@@ -21,6 +22,7 @@ import {
   PreviewSolutionQuotaUseCase,
   SaveSolutionQuotaUseCase,
   GetSolutionResultsUseCase,
+  GetCabinetApplicationsUseCase,
 } from "./use-cases/solution-evaluation.use-cases";
 
 const example = (name: string) =>
@@ -41,6 +43,39 @@ describe("C00 solution evaluation wire contract", () => {
     }),
   );
   afterEach(() => TestBed.inject(HttpTestingController).verify());
+
+  it("preserves kind and equal IDs across projects and solutions in one cabinet page", async () => {
+    const pending = firstValueFrom(
+      TestBed.inject(GetCabinetApplicationsUseCase).execute({
+        status: "pending",
+        q: "Работа",
+        limit: 20,
+        offset: 0,
+      }),
+    );
+    const req = TestBed.inject(HttpTestingController).expectOne(
+      request => request.url === "https://local.test/evaluation/applications/",
+    );
+    expect(req.request.params.has("program_id")).toBe(false);
+    expect(req.request.params.get("q")).toBe("Работа");
+    const expected = example("mixed_cabinet_applications") as SolutionCabinetApplications;
+    req.flush(snakecaseKeys(expected, { deep: true }));
+    expect(await pending).toEqual({ ok: true, value: expected });
+    const filtered = firstValueFrom(
+      TestBed.inject(GetCabinetApplicationsUseCase).execute({ programId: 12 }),
+    );
+    const selected = TestBed.inject(HttpTestingController).expectOne(
+      request => request.url === "https://local.test/evaluation/applications/",
+    );
+    expect(selected.request.params.get("program_id")).toBe("12");
+    const page = {
+      ...expected,
+      count: 1,
+      results: expected.results.filter(row => row.program.id === 12),
+    };
+    selected.flush(snakecaseKeys(page, { deep: true }));
+    expect(await filtered).toEqual({ ok: true, value: page });
+  });
 
   it("encodes filters once in snake case and preserves false, zero and exact case names", async () => {
     const pending = firstValueFrom(
