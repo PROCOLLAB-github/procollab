@@ -17,7 +17,7 @@ def camel(value):
 def name(value):
     special = {"Solution": "ProgramSolution", "Context": "SolutionContext", "Error": "SolutionApiError",
                "CreateSolution": "CreateSolutionCommand", "UpdateSolution": "UpdateSolutionCommand",
-               "Submit": "SubmitSolutionCommand"}
+               "Submit": "SubmitSolutionCommand", "RateSolution": "RateSolutionCommand"}
     return special.get(value, value if value.startswith("Solution") else "Solution" + value)
 
 
@@ -54,6 +54,8 @@ def ts(schema):
     if kind == "object":
         props = schema.get("properties", {})
         if not props:
+            if isinstance(schema.get("additionalProperties"), dict):
+                return "Record<string, " + ts(schema["additionalProperties"]) + ">"
             return "Record<string, unknown>"
         required = schema.get("required", [])
         return "{\n" + "\n".join("  " + camel(k) + ("" if k in required else "?") + ": " + ts(v) + ";" for k, v in props.items()) + "\n}"

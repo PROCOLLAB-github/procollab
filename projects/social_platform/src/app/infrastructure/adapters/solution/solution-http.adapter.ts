@@ -24,15 +24,107 @@ import {
   UpdateSolutionCommand,
   SolutionUploadResponse,
   SubmitSolutionCommand,
+  RateSolutionCommand,
+  SolutionRatingPage,
+  SolutionRatingFrame,
+  SolutionAssignmentOptions,
+  SolutionAssignmentsWrite,
+  SolutionAllocationWrite,
+  SolutionAllocationPlan,
+  SolutionAssignmentReceipt,
+  SolutionQuota,
+  SolutionQuotaWrite,
+  SolutionResults,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
   SolutionInvitationQuery,
+  SolutionRatingQuery,
+  SolutionResultsQuery,
   validSolutionId,
 } from "@domain/solution/ports/solution.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private evaluationManagementPath(programId: number) {
+    this.path(programId);
+    return `/programs/${programId}/management/solution-evaluation/`;
+  }
+  previewAllocation(programId: number, command: SolutionAllocationWrite) {
+    return this.api.post<SolutionAllocationPlan>(
+      `${this.evaluationManagementPath(programId)}allocation/`,
+      command,
+    );
+  }
+  applyAllocation(programId: number, planToken: string) {
+    return this.api.post<SolutionAssignmentReceipt>(
+      `${this.evaluationManagementPath(programId)}allocation/apply/`,
+      { planToken },
+    );
+  }
+  previewQuota(programId: number, requiredEvaluators: number) {
+    return this.api.get<SolutionQuota>(
+      `${this.evaluationManagementPath(programId)}quota/`,
+      new HttpParams().set("required_evaluators", requiredEvaluators),
+    );
+  }
+  saveQuota(programId: number, command: SolutionQuotaWrite) {
+    return this.api.put<SolutionQuota>(
+      `${this.evaluationManagementPath(programId)}quota/`,
+      command,
+    );
+  }
+  results(programId: number, query: SolutionResultsQuery = {}) {
+    this.path(programId);
+    return this.api.get<SolutionResults>(
+      `/programs/${programId}/management/solution-results/`,
+      this.evaluationQuery(query),
+    );
+  }
+  private evaluationQuery(query: SolutionRatingQuery | SolutionResultsQuery) {
+    let params = new HttpParams();
+    const wireKeys: Record<string, string> = {
+      caseScope: "case_scope",
+      caseName: "case_name",
+      assignedOnly: "assigned_only",
+    };
+    for (const [key, value] of Object.entries(query)) {
+      if (value !== undefined) params = params.set(wireKeys[key] ?? key, value);
+    }
+    return params;
+  }
+  ratings(programId: number, query: SolutionRatingQuery = {}) {
+    this.path(programId);
+    return this.api.get<SolutionRatingPage>(
+      `/programs/${programId}/solution-evaluation/`,
+      this.evaluationQuery(query),
+    );
+  }
+  rating(programId: number, solutionId: number) {
+    return this.api.get<SolutionRatingFrame>(
+      `${this.solutionPath(programId, solutionId)}evaluation/`,
+    );
+  }
+  rate(programId: number, solutionId: number, command: RateSolutionCommand) {
+    return this.api.post<SolutionRatingFrame>(
+      `${this.solutionPath(programId, solutionId)}evaluation/`,
+      command,
+    );
+  }
+  private expertAssignmentsPath(programId: number, expertId: number) {
+    this.path(programId);
+    if (!validSolutionId(expertId)) throw new RangeError("Invalid expert ID");
+    return `/programs/${programId}/management/solution-evaluation/experts/${expertId}/assignments/`;
+  }
+  expertAssignments(programId: number, expertId: number) {
+    return this.api.get<SolutionAssignmentOptions>(this.expertAssignmentsPath(programId, expertId));
+  }
+  saveExpertAssignments(programId: number, expertId: number, command: SolutionAssignmentsWrite) {
+    return this.api.put<SolutionAssignmentOptions>(
+      this.expertAssignmentsPath(programId, expertId),
+      command,
+    );
+  }
   submit(programId: number, solutionId: number, command: SubmitSolutionCommand) {
     return this.api.post<ProgramSolution>(
       `${this.solutionPath(programId, solutionId)}submit/`,

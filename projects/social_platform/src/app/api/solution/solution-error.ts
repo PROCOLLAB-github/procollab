@@ -31,6 +31,10 @@ export function solutionError(error: unknown): SolutionApiError {
                 code: row["code"],
                 detail: row["detail"],
                 fieldId: typeof row["field_id"] === "number" ? row["field_id"] : null,
+                ...(typeof row["criterion_id"] === "number" &&
+                Number.isSafeInteger(row["criterion_id"])
+                  ? { criterionId: row["criterion_id"] }
+                  : {}),
               },
             ];
           })

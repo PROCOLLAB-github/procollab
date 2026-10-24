@@ -3,6 +3,9 @@
 import type {
   SolutionUpdateInvitation,
   UpdateSolutionCommand,
+  RateSolutionCommand,
+  SolutionAllocationWrite,
+  SolutionQuotaWrite,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
 
 // Независимые примеры C00: у обеих команд обязательны ревизии и хотя бы одно изменение.
@@ -50,6 +53,29 @@ const emptySolution: UpdateSolutionCommand = {
 // @ts-expect-error Отсутствует обязательная ревизия формы.
 const missingRevision: UpdateSolutionCommand = { expectedVersion: 1, name: "Решение" };
 
+const validRating = {
+  expectedCriteriaRevision: "revision",
+  scores: [{ criterionId: 21, value: "False" }],
+} satisfies RateSolutionCommand;
+// @ts-expect-error Оценка требует подтвержденную ревизию критериев.
+const missingCriteriaRevision: RateSolutionCommand = { scores: [] };
+const wrongRatingValue: RateSolutionCommand = {
+  expectedCriteriaRevision: "revision",
+  scores: [
+    // @ts-expect-error На проводе оценки используют string/null, а не boolean.
+    { criterionId: 21, value: false },
+  ],
+};
+const validPlan = {
+  revision: "revision",
+  expertIds: [91],
+  solutionIds: [301],
+} satisfies SolutionAllocationWrite;
+// @ts-expect-error Распределение не принимает projectIds вместо обязательных expertIds.
+const wrongPlan: SolutionAllocationWrite = { revision: "revision", projectIds: [301] };
+// @ts-expect-error Изменение числа экспертов требует ревизию назначений.
+const missingQuotaRevision: SolutionQuotaWrite = { requiredEvaluators: 2 };
+
 void [
   role,
   cleared,
@@ -61,4 +87,10 @@ void [
   invalidRole,
   emptySolution,
   missingRevision,
+  validRating,
+  missingCriteriaRevision,
+  wrongRatingValue,
+  validPlan,
+  wrongPlan,
+  missingQuotaRevision,
 ];

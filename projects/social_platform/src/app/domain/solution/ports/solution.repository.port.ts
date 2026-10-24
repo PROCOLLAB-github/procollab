@@ -22,9 +22,47 @@ import {
   UpdateSolutionCommand,
   SolutionUploadResponse,
   SubmitSolutionCommand,
+  RateSolutionCommand,
+  SolutionRatingPage,
+  SolutionRatingFrame,
+  SolutionAssignmentOptions,
+  SolutionAssignmentsWrite,
+  SolutionAllocationWrite,
+  SolutionAllocationPlan,
+  SolutionAssignmentReceipt,
+  SolutionQuota,
+  SolutionQuotaWrite,
+  SolutionResults,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewAllocation(
+    programId: number,
+    command: SolutionAllocationWrite,
+  ): Observable<SolutionAllocationPlan>;
+  abstract applyAllocation(
+    programId: number,
+    planToken: string,
+  ): Observable<SolutionAssignmentReceipt>;
+  abstract previewQuota(programId: number, requiredEvaluators: number): Observable<SolutionQuota>;
+  abstract saveQuota(programId: number, command: SolutionQuotaWrite): Observable<SolutionQuota>;
+  abstract results(programId: number, query?: SolutionResultsQuery): Observable<SolutionResults>;
+  abstract ratings(programId: number, query?: SolutionRatingQuery): Observable<SolutionRatingPage>;
+  abstract rating(programId: number, solutionId: number): Observable<SolutionRatingFrame>;
+  abstract rate(
+    programId: number,
+    solutionId: number,
+    command: RateSolutionCommand,
+  ): Observable<SolutionRatingFrame>;
+  abstract expertAssignments(
+    programId: number,
+    expertId: number,
+  ): Observable<SolutionAssignmentOptions>;
+  abstract saveExpertAssignments(
+    programId: number,
+    expertId: number,
+    command: SolutionAssignmentsWrite,
+  ): Observable<SolutionAssignmentOptions>;
   abstract submit(
     programId: number,
     solutionId: number,
@@ -102,6 +140,24 @@ export type SolutionListQuery = {
   submission?: "all" | "submitted" | "not_submitted";
   limit?: number;
   offset?: number;
+};
+
+export type SolutionRatingQuery = {
+  search?: string;
+  caseScope?: "all" | "selected" | "without_case";
+  caseName?: string;
+  status?: "all" | "pending" | "completed";
+  assignedOnly?: boolean;
+  limit?: number;
+  offset?: number;
+};
+
+export type SolutionResultsQuery = {
+  search?: string;
+  caseScope?: "all" | "selected" | "without_case";
+  caseName?: string;
+  order?: "asc" | "desc";
+  status?: "all" | "complete" | "pending";
 };
 
 export function validSolutionId(value: unknown): value is number {

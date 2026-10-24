@@ -5,6 +5,8 @@ import {
   SolutionRepositoryPort,
   SolutionListQuery,
   SolutionInvitationQuery,
+  SolutionRatingQuery,
+  SolutionResultsQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
   CreateSolutionCommand,
@@ -15,11 +17,45 @@ import {
   SolutionFormWrite,
   UpdateSolutionCommand,
   SubmitSolutionCommand,
+  RateSolutionCommand,
+  SolutionAssignmentsWrite,
+  SolutionAllocationWrite,
+  SolutionQuotaWrite,
 } from "@domain/solution/solution-contract.model";
 import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapter";
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  previewAllocation(programId: number, command: SolutionAllocationWrite) {
+    return this.http.previewAllocation(programId, command);
+  }
+  applyAllocation(programId: number, planToken: string) {
+    return this.http.applyAllocation(programId, planToken);
+  }
+  previewQuota(programId: number, requiredEvaluators: number) {
+    return this.http.previewQuota(programId, requiredEvaluators);
+  }
+  saveQuota(programId: number, command: SolutionQuotaWrite) {
+    return this.http.saveQuota(programId, command);
+  }
+  results(programId: number, query?: SolutionResultsQuery) {
+    return this.http.results(programId, query);
+  }
+  ratings(programId: number, query?: SolutionRatingQuery) {
+    return this.http.ratings(programId, query);
+  }
+  rating(programId: number, solutionId: number) {
+    return this.http.rating(programId, solutionId);
+  }
+  rate(programId: number, solutionId: number, command: RateSolutionCommand) {
+    return this.http.rate(programId, solutionId, command);
+  }
+  expertAssignments(programId: number, expertId: number) {
+    return this.http.expertAssignments(programId, expertId);
+  }
+  saveExpertAssignments(programId: number, expertId: number, command: SolutionAssignmentsWrite) {
+    return this.http.saveExpertAssignments(programId, expertId, command);
+  }
   submit(programId: number, solutionId: number, command: SubmitSolutionCommand) {
     return this.http.submit(programId, solutionId, command);
   }
