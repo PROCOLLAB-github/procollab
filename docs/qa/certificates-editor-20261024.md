@@ -63,6 +63,19 @@ page and has a 44px touch target. The 26 relevant tests and Angular build passed
 targeted Prettier/Stylelint and diff checks passed. Desktop/mobile evidence below
 was refreshed. No API or certificate content change is involved.
 
+### Outline button focus adjustment
+
+Certificate secondary buttons keep the focus outline on their existing contour
+instead of adding a separate outer ring. Keyboard focus has a 2px inset outline,
+the existing light accent fill and dark text. The ordinary state keeps its 1px
+border. Other button variants and the global Button foundation are unchanged.
+The preview button was checked before and after Tab: its dimensions remain the
+same, focus stays visible, and there is no second contour. Mobile evidence
+intentionally includes the focused preview button. This CSS-only adjustment was
+verified with the Angular build, targeted Stylelint, diff check and browser states;
+the behavioral test suite was not rerun for this styling change.
+Desktop keyboard state: [focused preview button](certificates-editor-20261024/button-focus-desktop.jpg).
+
 Screenshots: [desktop](certificates-editor-20261024/desktop.jpg),
 [mobile](certificates-editor-20261024/mobile.jpg),
 [launch confirmation](certificates-editor-20261024/confirmation.jpg).
