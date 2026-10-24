@@ -1,0 +1,55 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "../../projects/edit/components/project-team-step/team-member-row";
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+h3 {
+  margin: 24px 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.muted {
+  color: var(--grey-for-text);
+}
+
+.team-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.team-header p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.members {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.empty {
+  padding: 20px 0;
+  font-size: 12px;
+  color: var(--grey-for-text);
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+}
+
+.team-header .ui-button,
+section > .ui-button,
+.invite-actions .ui-button {
+  @include ui-foundation.button;
+}

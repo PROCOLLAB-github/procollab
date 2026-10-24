@@ -227,6 +227,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: false,
@@ -422,6 +423,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: true,
@@ -610,6 +612,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: false,
         canInvite: false,
         canSubmit: false,
+        canLeave: false,
       },
       readiness: {
         isReady: true,
@@ -792,6 +795,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: false,
+        canLeave: false,
       },
       readiness: null,
     },
@@ -971,6 +975,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: false,
+        canLeave: false,
       },
       readiness: {
         isReady: false,
@@ -1132,6 +1137,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: false,
@@ -1340,6 +1346,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: false,
@@ -1555,6 +1562,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: true,
@@ -1747,6 +1755,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: false,
@@ -1946,6 +1955,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: false,
         canInvite: false,
         canSubmit: false,
+        canLeave: false,
       },
       readiness: {
         isReady: true,
@@ -3149,6 +3159,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: true,
         canInvite: true,
         canSubmit: true,
+        canLeave: false,
       },
       readiness: {
         isReady: true,
@@ -3727,6 +3738,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: false,
         canInvite: false,
         canSubmit: false,
+        canLeave: true,
       },
       readiness: {
         isReady: false,
@@ -3922,6 +3934,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
         canManageTeam: false,
         canInvite: false,
         canSubmit: false,
+        canLeave: false,
       },
       readiness: null,
     },

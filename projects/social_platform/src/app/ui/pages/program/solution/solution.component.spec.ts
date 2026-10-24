@@ -1,6 +1,9 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
+import { signal } from "@angular/core";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { SolutionRepositoryPort } from "@domain/solution/ports/solution.repository.port";
 import { provideRouter, Router } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { Observable, of, Subject } from "rxjs";
@@ -51,6 +54,15 @@ describe("Solution route foundation", () => {
         { provide: GetSolutionUseCase, useValue: get },
         { provide: CreateSolutionUseCase, useValue: create },
         { provide: GetSolutionContextUseCase, useValue: getContext },
+        { provide: ProfileInfoService, useValue: { profile: signal({ id: 7 }) } },
+        {
+          provide: SolutionRepositoryPort,
+          useValue: {
+            invitations: vi
+              .fn()
+              .mockReturnValue(of({ count: 0, next: null, previous: null, results: [] })),
+          },
+        },
       ],
     });
   });

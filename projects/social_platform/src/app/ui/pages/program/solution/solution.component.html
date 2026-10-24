@@ -35,26 +35,16 @@
       >
     </nav>
     @if (teamTab()) {
-      <section aria-labelledby="team-title">
-        <h2 id="team-title">Команда заявки</h2>
-        <p class="muted">Участники команды · {{ item.team.acceptedCount }}</p>
-        <ul class="members">
-          @for (member of item.team.members; track member.user.id) {
-            <li>
-              <span class="name"
-                >{{ member.user.firstName }} {{ member.user.lastName
-                }}<small class="muted">{{
-                  member.isCaptain ? "Капитан" : "Участник команды"
-                }}</small></span
-              >
-              <span>{{ member.role || "Роль не указана" }}</span>
-              <span class="muted">В команде</span>
-            </li>
-          } @empty {
-            <li>В команде пока нет участников.</li>
-          }
-        </ul>
-      </section>
+      @if (teamRefreshError()) {
+        <p role="alert">{{ teamRefreshError() }}</p>
+        <button appButton="secondary" type="button" (click)="refreshTeam()">Обновить заявку</button>
+      }
+      <app-solution-team
+        [solution]="item"
+        [refreshing]="refreshingTeam() || !!teamRefreshError()"
+        (changed)="refreshTeam()"
+        (left)="teamLeft()"
+      />
     } @else {
       <section aria-labelledby="data-title">
         <h2 id="data-title">Данные решения</h2>

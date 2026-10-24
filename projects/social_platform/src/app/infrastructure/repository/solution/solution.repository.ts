@@ -4,8 +4,15 @@ import { inject, Injectable } from "@angular/core";
 import {
   SolutionRepositoryPort,
   SolutionListQuery,
+  SolutionInvitationQuery,
 } from "@domain/solution/ports/solution.repository.port";
-import { CreateSolutionCommand } from "@domain/solution/solution-contract.model";
+import {
+  CreateSolutionCommand,
+  SolutionTeamCommand,
+  SolutionCaptainCommand,
+  SolutionCreateInvitation,
+  SolutionUpdateInvitation,
+} from "@domain/solution/solution-contract.model";
 import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapter";
 
 @Injectable({ providedIn: "root" })
@@ -22,5 +29,40 @@ export class SolutionRepository implements SolutionRepositoryPort {
   }
   list(programId: number, query?: SolutionListQuery) {
     return this.http.list(programId, query);
+  }
+  removeMember(
+    programId: number,
+    solutionId: number,
+    userId: number,
+    expectedSolutionVersion: number,
+  ) {
+    return this.http.removeMember(programId, solutionId, userId, expectedSolutionVersion);
+  }
+  leave(programId: number, solutionId: number, command: SolutionTeamCommand) {
+    return this.http.leave(programId, solutionId, command);
+  }
+  transferCaptain(programId: number, solutionId: number, command: SolutionCaptainCommand) {
+    return this.http.transferCaptain(programId, solutionId, command);
+  }
+  invitations(programId: number, solutionId: number, query?: SolutionInvitationQuery) {
+    return this.http.invitations(programId, solutionId, query);
+  }
+  createInvitation(programId: number, solutionId: number, command: SolutionCreateInvitation) {
+    return this.http.createInvitation(programId, solutionId, command);
+  }
+  myInvitations(query?: SolutionInvitationQuery) {
+    return this.http.myInvitations(query);
+  }
+  invitation(invitationId: number) {
+    return this.http.invitation(invitationId);
+  }
+  updateInvitation(invitationId: number, command: SolutionUpdateInvitation) {
+    return this.http.updateInvitation(invitationId, command);
+  }
+  revokeInvitation(invitationId: number, expectedVersion: number, expectedSolutionVersion: number) {
+    return this.http.revokeInvitation(invitationId, expectedVersion, expectedSolutionVersion);
+  }
+  decideInvitation(invitationId: number, decision: "accept" | "decline", expectedVersion: number) {
+    return this.http.decideInvitation(invitationId, decision, expectedVersion);
   }
 }

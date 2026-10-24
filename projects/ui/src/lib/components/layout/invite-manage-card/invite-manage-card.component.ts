@@ -3,6 +3,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   input,
   Input,
@@ -15,6 +16,21 @@ import { ButtonComponent } from "../../primitives/button/button.component";
 import { RouterLink } from "@angular/router";
 import { AvatarComponent } from "../../primitives/avatar/avatar.component";
 import { TruncatePipe } from "@corelib";
+
+export interface InvitationNotice {
+  id: number;
+  senderId: number;
+  senderName: string;
+  avatarUrl?: string | null;
+  resourceName: string;
+  resourceLabel: string;
+  resourceRoute?: (string | number)[];
+  context?: string;
+  role?: string | null;
+  canAccept: boolean;
+  canDecline: boolean;
+  pending?: boolean;
+}
 
 /**
  * Компонент карточки управления приглашением
@@ -43,7 +59,25 @@ import { TruncatePipe } from "@corelib";
 })
 export class InviteManageCardComponent implements OnInit {
   /** Данные приглашения для отображения */
-  readonly invite = input.required<Invite>();
+  readonly invite = input<Invite | null>(null);
+  readonly notice = input<InvitationNotice | null>(null);
+  readonly view = computed<InvitationNotice | null>(() => {
+    const notice = this.notice();
+    if (notice) return notice;
+    const invite = this.invite();
+    if (!invite) return null;
+    return {
+      id: invite.id,
+      senderId: invite.sender.id,
+      senderName: invite.sender.firstName + " " + invite.sender.lastName,
+      avatarUrl: invite.sender.personal.avatar,
+      resourceName: invite.project.name,
+      resourceLabel: "проект",
+      resourceRoute: ["/office/projects", invite.project.id],
+      canAccept: true,
+      canDecline: true,
+    };
+  });
 
   /** Событие принятия приглашения (передает ID приглашения) */
   readonly accept = output<number>();

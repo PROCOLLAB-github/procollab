@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.0.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.1.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -191,6 +191,7 @@ export type SolutionPermissions = {
   canManageTeam: boolean;
   canInvite: boolean;
   canSubmit: boolean;
+  canLeave?: boolean;
 };
 
 export type SolutionSubmission = {
@@ -237,7 +238,19 @@ export type CreateSolutionCommand = {
   name?: string;
 };
 
-export type UpdateSolutionCommand = unknown | unknown;
+export type UpdateSolutionCommand =
+  | {
+      expectedVersion: number;
+      expectedFormRevision: string;
+      name: string;
+      answers?: Array<SolutionAnswerPatch>;
+    }
+  | {
+      expectedVersion: number;
+      expectedFormRevision: string;
+      name?: string;
+      answers: Array<SolutionAnswerPatch>;
+    };
 
 export type SubmitSolutionCommand = {
   expectedVersion: number;
@@ -284,7 +297,28 @@ export type SolutionCreateInvitation = {
   motivationalLetter?: string | null;
 };
 
-export type SolutionUpdateInvitation = unknown | unknown | unknown;
+export type SolutionUpdateInvitation =
+  | {
+      expectedVersion: number;
+      expectedSolutionVersion: number;
+      role: string | null;
+      specialization?: string | null;
+      motivationalLetter?: string | null;
+    }
+  | {
+      expectedVersion: number;
+      expectedSolutionVersion: number;
+      role?: string | null;
+      specialization: string | null;
+      motivationalLetter?: string | null;
+    }
+  | {
+      expectedVersion: number;
+      expectedSolutionVersion: number;
+      role?: string | null;
+      specialization?: string | null;
+      motivationalLetter: string | null;
+    };
 
 export type SolutionInvitationAction = {
   expectedVersion: number;
