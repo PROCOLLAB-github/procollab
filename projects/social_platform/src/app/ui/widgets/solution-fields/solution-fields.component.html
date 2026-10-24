@@ -59,10 +59,12 @@
           }
           @case ("file") {
             @if (fileLink(field); as link) {
-              <a [href]="link" target="_blank" rel="noopener noreferrer">Открыть файл</a
-              ><button appButton="text" type="button" (click)="clearFile.emit(field.id)">
-                Убрать файл
-              </button>
+              <div class="file-current">
+                <a [href]="link" target="_blank" rel="noopener noreferrer">Открыть файл</a
+                ><button appButton="text" type="button" (click)="clearFile.emit(field.id)">
+                  Убрать файл
+                </button>
+              </div>
             }
             <input
               #fileInput
@@ -123,7 +125,9 @@
       <p class="help" [id]="'field-' + field.id + '-help'">{{ field.helpText }}</p>
       @if (errors()[field.id]) {
         <p class="error" role="alert">{{ errors()[field.id] }}</p>
-      } @else if (!readonly() && attempted() && field.required && !hasAnswer(value(field))) {
+      } @else if (
+        !readonly() && attempted() && requireAnswers() && field.required && !hasAnswer(value(field))
+      ) {
         <p class="error" role="alert">Заполните обязательное поле.</p>
       } @else if (
         !readonly() && control(field)?.invalid && (attempted() || control(field)?.touched)

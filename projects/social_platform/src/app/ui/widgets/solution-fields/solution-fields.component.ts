@@ -20,6 +20,7 @@ export class SolutionFieldsComponent {
   readonly preview = input(false);
   readonly busy = input(false);
   readonly attempted = input(false);
+  readonly requireAnswers = input(false);
   readonly errors = input<Record<number, string>>({});
   readonly upload = output<{ fieldId: number; file: File }>();
   readonly clearFile = output<number>();

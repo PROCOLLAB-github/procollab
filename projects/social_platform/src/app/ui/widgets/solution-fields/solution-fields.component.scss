@@ -38,7 +38,8 @@ textarea.ui-field {
   border-radius: 12px;
 }
 
-.file-upload {
+.file-upload,
+.file-current {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;

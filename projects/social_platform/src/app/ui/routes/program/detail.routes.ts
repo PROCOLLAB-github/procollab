@@ -11,21 +11,25 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/analytics.component";
 import { ProgramManagementComponent } from "@ui/pages/program/management/management.component";
 import { canLeaveManagement } from "./management-leave.guard";
+import { canLeaveSolution } from "./solution-leave.guard";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
   {
     path: "solutions/new",
+    canDeactivate: [canLeaveSolution],
     loadComponent: () =>
       import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
   },
   {
     path: "solutions/:solutionId/edit",
+    canDeactivate: [canLeaveSolution],
     loadComponent: () =>
       import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
   },
   {
     path: "solutions/:solutionId",
+    canDeactivate: [canLeaveSolution],
     loadComponent: () =>
       import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
   },

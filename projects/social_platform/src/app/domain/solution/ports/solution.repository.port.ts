@@ -19,9 +19,17 @@ import {
   SolutionFormWrite,
   SolutionFormManagement,
   SolutionTemplates,
+  UpdateSolutionCommand,
+  SolutionUploadResponse,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract update(
+    programId: number,
+    solutionId: number,
+    command: UpdateSolutionCommand,
+  ): Observable<ProgramSolution>;
+  abstract upload(file: File): Observable<SolutionUploadResponse>;
   abstract form(programId: number): Observable<SolutionForm>;
   abstract managedForm(programId: number): Observable<SolutionFormManagement>;
   abstract saveManagedForm(

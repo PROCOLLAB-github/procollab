@@ -21,6 +21,8 @@ import {
   SolutionFormWrite,
   SolutionFormManagement,
   SolutionTemplates,
+  UpdateSolutionCommand,
+  SolutionUploadResponse,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -31,6 +33,14 @@ import {
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
   private readonly api = inject(ApiService);
+  update(programId: number, solutionId: number, command: UpdateSolutionCommand) {
+    return this.api.patch<ProgramSolution>(this.solutionPath(programId, solutionId), command);
+  }
+  upload(file: File) {
+    const body = new FormData();
+    body.append("file", file, file.name);
+    return this.api.post<SolutionUploadResponse>("/files/?preserve_original=true", body);
+  }
 
   private path(programId: number): string {
     if (!validSolutionId(programId)) throw new RangeError("Invalid program ID");

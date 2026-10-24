@@ -1,6 +1,7 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { combineLatest, EMPTY, finalize, map, startWith, Subject, switchMap } from "rxjs";
@@ -13,15 +14,25 @@ import { solutionApplicationRoute } from "@api/solution/solution-navigation";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProgramSolution, SolutionApiError } from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
-import { ButtonDirective } from "@uilib";
+import { ButtonDirective, FieldDirective } from "@uilib";
 import { DatePipe } from "@angular/common";
 import { SolutionTeamComponent } from "./solution-team.component";
+import { SolutionDraftFacade } from "@api/solution/facades/solution-draft.facade";
+import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
 
-/** FE01: read surface and route foundation. Editing/team commands follow in FE03–FE06. */
 @Component({
   selector: "app-program-solution",
   standalone: true,
-  imports: [RouterLink, ButtonDirective, DatePipe, SolutionTeamComponent],
+  imports: [
+    RouterLink,
+    ButtonDirective,
+    FieldDirective,
+    ReactiveFormsModule,
+    DatePipe,
+    SolutionTeamComponent,
+    SolutionFieldsComponent,
+  ],
+  providers: [SolutionDraftFacade],
   templateUrl: "./solution.component.html",
   styleUrl: "./solution.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +43,7 @@ export class ProgramSolutionComponent {
   private readonly context = inject(GetSolutionContextUseCase);
   private readonly create = inject(CreateSolutionUseCase);
   private readonly get = inject(GetSolutionUseCase);
+  readonly draft = inject(SolutionDraftFacade);
   readonly solution = signal<ProgramSolution | null>(null);
   readonly loading = signal(true);
   readonly error = signal<SolutionApiError | null>(null);
@@ -42,6 +54,61 @@ export class ProgramSolutionComponent {
   readonly routes = AppRoutes;
   private readonly retry = new Subject<void>();
   private readonly teamRefresh = new Subject<{ programId: number; solutionId: number } | null>();
+  private reconcileDraft = false;
+
+  canLeave(): boolean {
+    return (
+      !(this.draft.dirty() || this.draft.busy()) ||
+      confirm("В заявке есть несохраненные изменения. Покинуть страницу?")
+    );
+  }
+
+  @HostListener("window:beforeunload", ["$event"])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.draft.dirty() || this.draft.busy()) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  }
+
+  saveDraft(): void {
+    if (this.refreshingTeam() || this.teamRefreshError()) return;
+    this.draft.save().subscribe(result => {
+      if (result.ok) this.solution.set(result.value);
+      else {
+        void this.router.navigate([], { relativeTo: this.route, queryParams: {} });
+        if (
+          [
+            "version_conflict",
+            "form_revision_conflict",
+            "not_solution_captain",
+            "team_frozen",
+            "solution_mode_unavailable",
+          ].includes(result.error.code)
+        ) {
+          this.reconcileDraft = true;
+          this.refreshTeam();
+        } else if (
+          [
+            "not_found",
+            "forbidden",
+            "permission_denied",
+            "unauthorized",
+            "authentication_required",
+          ].includes(result.error.code)
+        ) {
+          this.draft.clear();
+          this.solution.set(null);
+          this.showError(result.error);
+        }
+      }
+    });
+  }
+
+  discardDraft(): void {
+    if (!this.draft.busy() && confirm("Отменить несохраненные изменения решения?"))
+      this.draft.discard();
+  }
 
   reload(): void {
     this.retry.next();
@@ -74,10 +141,23 @@ export class ProgramSolutionComponent {
         if (this.programId() !== context.programId || this.solution()?.id !== context.solutionId)
           return;
         if (result.ok) {
-          this.solution.set(result.value);
+          if (this.draft.hydrate(result.value)) this.solution.set(result.value);
+          if (this.reconcileDraft) {
+            this.reconcileDraft = false;
+            this.draft.reconciled();
+          }
           return;
         }
-        if (["not_found", "forbidden", "authentication_required"].includes(result.error.code)) {
+        if (
+          [
+            "not_found",
+            "forbidden",
+            "permission_denied",
+            "unauthorized",
+            "authentication_required",
+          ].includes(result.error.code)
+        ) {
+          this.draft.clear();
           this.solution.set(null);
           this.showError(result.error);
         } else this.teamRefreshError.set(result.error.detail);
@@ -98,6 +178,8 @@ export class ProgramSolutionComponent {
           this.teamRefresh.next(null);
           this.refreshingTeam.set(false);
           this.teamRefreshError.set("");
+          this.reconcileDraft = false;
+          this.draft.clear();
           this.solution.set(null);
           this.error.set(null);
           this.loading.set(true);
@@ -156,6 +238,7 @@ export class ProgramSolutionComponent {
           return;
         }
         this.solution.set(result.value);
+        this.draft.hydrate(result.value);
         if (!this.route.snapshot.paramMap.has("solutionId")) {
           void this.router.navigate(
             [AppRoutes.program.solution(this.programId(), result.value.id)],
@@ -168,13 +251,5 @@ export class ProgramSolutionComponent {
   private showError(error: SolutionApiError): void {
     this.error.set(error);
     this.loading.set(false);
-  }
-
-  answer(fieldId: number): string {
-    const value = this.solution()?.answers.find(answer => answer.fieldId === fieldId)?.value;
-    if (value === null || value === undefined || value === "") return "Не заполнено";
-    if (typeof value === "boolean") return value ? "Да" : "Нет";
-    // File metadata is displayed as text until the validated download flow in FE03.
-    return typeof value === "object" ? "Файл прикреплен" : String(value);
   }
 }

@@ -241,7 +241,11 @@ export class ManagementSolutionFormComponent {
       .subscribe(result => {
         if (id !== this.context) return;
         if (!result.ok) {
-          if (["forbidden", "not_found", "authentication_required"].includes(result.error.code)) {
+          if (
+            ["forbidden", "permission_denied", "not_found", "authentication_required"].includes(
+              result.error.code,
+            )
+          ) {
             this.snapshot.set(null);
             this.fields.set([]);
             this.editing.set(null);

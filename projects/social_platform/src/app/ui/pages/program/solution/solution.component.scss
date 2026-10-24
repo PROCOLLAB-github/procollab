@@ -81,42 +81,43 @@ nav a:focus-visible {
   outline-offset: 2px;
 }
 
-dl {
-  margin: 0;
+.solution-name {
+  display: grid;
+  gap: 8px;
+  margin: 24px 0;
 }
 
-dl > div {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--medium-grey-for-outline);
+.solution-name .ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
 }
 
-dt {
-  margin-bottom: 8px;
+.error {
+  color: var(--error, var(--ui-error-text));
 }
 
-dd {
-  margin: 0;
-  color: var(--grey-for-text);
+.local-answers {
+  padding: 20px 0;
+  border-top: 1px solid var(--medium-grey-for-outline);
+}
+
+.local-answers p {
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
-.members {
-  padding: 0;
-  list-style: none;
+.draft-actions {
+  padding-top: 20px;
+  margin-top: 24px;
+  border-top: 1px solid var(--medium-grey-for-outline);
 }
 
-.members li {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 24px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--medium-grey-for-outline);
-}
-
-.name small {
-  display: block;
-  margin-top: 6px;
+.draft-actions__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
 }
 
 .ui-button {
@@ -128,8 +129,8 @@ dd {
     flex-direction: column;
   }
 
-  .members li {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .draft-actions__buttons {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
