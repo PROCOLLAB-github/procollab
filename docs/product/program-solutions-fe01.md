@@ -12,14 +12,14 @@
 
 ## Verification и review от 24 октября 2026
 
-Checked by source: diff от `origin/dev` 5e22c54c. Доменные типы и независимые сценарии сгенерированы из неизмененного C00 1.0.0. Генератор не зависит от сети: `python tools/generate-solution-contract.py`, затем targeted Prettier. Полные определения приглашений/форм/команд готовы для следующих этапов; FE01 вызывает только контекст, создание и чтение. Adapter списка подготовлен. Project/Team ID в новом создании отсутствуют.
+Checked by source: diff от актуального `origin/dev` 2c4e91a1 (исходная база 5e22c54c). Доменные типы и независимые сценарии сгенерированы из неизмененного C00 1.0.0. Генератор не зависит от сети: `python tools/generate-solution-contract.py`, затем targeted Prettier. Полные определения приглашений/форм/команд готовы для следующих этапов; FE01 вызывает только контекст, создание и чтение. Adapter списка подготовлен. Project/Team ID в новом создании отсутствуют.
 
 Wire boundary: существующий CamelcaseInterceptor преобразует успешные ответы и тело запроса. Ошибки HttpErrorResponse преобразуются отдельно, включая `field_id` и ключи meta. Неизвестная ошибка показывает безопасный текст. Ветвление по storageMode; при ошибке контекста нет fallback создания проекта. Legacy reference содержит точный programLinkId. При смене программы подписка страницы отменяет предыдущий запрос; entry point игнорирует устаревший результат.
 
-Checked by tests: **40 tests PASS**:
+Checked by tests: **44 tests PASS** на актуальном dev: 40 проверок FE01 и 4 проверки независимого исправления сертификата:
 
 ```text
-npm run test:ci -- projects/social_platform/src/app/api/solution/solution-contract.spec.ts projects/social_platform/src/app/ui/pages/program/solution/solution.component.spec.ts projects/social_platform/src/app/ui/widgets/detail/services/program/detail-program-info.service.spec.ts projects/social_platform/src/app/ui/routes/program/detail.routes.spec.ts
+npm run test:ci -- projects/social_platform/src/app/api/solution/solution-contract.spec.ts projects/social_platform/src/app/ui/pages/program/solution/solution.component.spec.ts projects/social_platform/src/app/ui/widgets/detail/services/program/detail-program-info.service.spec.ts projects/social_platform/src/app/ui/routes/program/detail.routes.spec.ts projects/social_platform/src/app/ui/pages/program/detail/main/my-certificate.component.spec.ts
 ```
 
 Проверены casing реальных HTTP requests/responses через interceptor, независимые C00 состояния, безопасные ID, error issues/meta, legacy/new маршруты, double click, ошибка контекста, точные ID, отмена старой программы, загрузка страницы, retry, отсутствие повторного POST и переключение вкладки без повторной загрузки.
