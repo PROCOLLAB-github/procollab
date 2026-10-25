@@ -34,6 +34,25 @@ describe("Certificate layout geometry", () => {
     expect((resized.width * (297 / 210)) / resized.height).toBeCloseTo(3);
     expect(resized.height + resized.y).toBeLessThanOrEqual(100);
   });
+  it("preserves signature proportions and page bounds on portrait A4", () => {
+    const resized = resizeCertificateBox(box, 20, 80, 3, "portrait");
+    expect((resized.width * (210 / 297)) / resized.height).toBeCloseTo(3);
+    expect(resized.height + resized.y).toBeLessThanOrEqual(100);
+    expect(resized.width + resized.x).toBeLessThanOrEqual(100);
+  });
+  it("fits a long name into portrait A4 using the portrait dimensions", () => {
+    const value = "Александра Константиновна Добровольская";
+    const fitted = fitCertificateText(
+      value,
+      { ...box, width: 70, height: 12, fontSize: 40 },
+      text => Array.from(text).length * 550,
+      "portrait",
+    );
+    expect(fitted.lines.join(" ")).toBe(value);
+    expect(fitted.lines.length * fitted.fontSize * 1.3).toBeLessThanOrEqual(12 * 11.22 - 2);
+    for (const line of fitted.lines)
+      expect(line.length * 0.55 * fitted.fontSize * 1.02).toBeLessThanOrEqual(70 * 7.937 - 2);
+  });
   it("limits a tall signature by remaining height without stretching", () => {
     const resized = resizeCertificateBox({ ...box, y: 80 }, 100, 0, 0.5);
     expect(resized.height).toBe(20);

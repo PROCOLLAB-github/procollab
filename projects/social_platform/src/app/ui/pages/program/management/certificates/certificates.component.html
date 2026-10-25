@@ -35,7 +35,7 @@
       <header class="certificates__editor-heading">
         <div>
           <h3>Шаблон сертификата</h3>
-          <p class="certificates__muted">А4 · альбомный · 297 × 210 мм</p>
+          <p class="certificates__muted">{{ formatLabel() }}</p>
         </div>
         <div class="certificates__actions">
           <button
@@ -117,6 +117,16 @@
         </div>
       </div>
       <aside class="certificates__settings">
+        <section class="certificates__format-settings">
+          <label class="certificates__format">
+            <span>Ориентация А4</span>
+            <select appField [ngModel]="d.orientation" (ngModelChange)="setOrientation($event)">
+              <option value="landscape">Альбомная</option>
+              <option value="portrait">Вертикальная</option>
+            </select>
+          </label>
+          <p class="certificates__muted">Подбирается по фону. Можно изменить вручную.</p>
+        </section>
         <section>
           <h4>Фон сертификата</h4>
           <p class="certificates__filename">{{ assets().background?.name || "Фон не загружен" }}</p>
@@ -643,7 +653,7 @@
         <header class="certificates__editor-heading">
           <div>
             <h2 id="certificate-editor-heading">Шаблон сертификата</h2>
-            <p class="certificates__muted">А4 · альбомный</p>
+            <p class="certificates__muted">{{ formatLabel() }}</p>
           </div>
           <div class="certificates__actions">
             <button

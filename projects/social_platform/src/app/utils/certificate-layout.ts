@@ -6,6 +6,11 @@ import {
   CertificateElement,
 } from "@domain/program/program-certificates.model";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+export function certificatePage(orientation: CertificateDraft["orientation"] = "landscape") {
+  return orientation === "portrait"
+    ? { widthMm: 210, heightMm: 297, widthPx: 793.7, heightPx: 1122 }
+    : { widthMm: 297, heightMm: 210, widthPx: 1122, heightPx: 793.7 };
+}
 export function moveCertificateBox(
   box: CertificateBox,
   dx: number,
@@ -23,11 +28,13 @@ export function resizeCertificateBox(
   dw: number,
   dh: number,
   imageRatio?: number,
+  orientation: CertificateDraft["orientation"] = "landscape",
 ): CertificateBox {
   let width = clamp(box.width + dw, 2, 100 - box.x);
   let height = clamp(box.height + dh, 1, 100 - box.y);
   if (imageRatio) {
-    const aspect = 297 / 210;
+    const page = certificatePage(orientation);
+    const aspect = page.widthMm / page.heightMm;
     const verticalWidth = (dh * imageRatio) / aspect;
     const delta = Math.abs(verticalWidth) > Math.abs(dw) ? verticalWidth : dw;
     const minWidth = Math.max(2, imageRatio / aspect);
@@ -57,7 +64,12 @@ export function hiddenCertificateElements(
 }
 
 export function normalizeCertificateDraft(draft: CertificateDraft): CertificateDraft {
-  return { ...draft, showText: true, hiddenElements: hiddenCertificateElements(draft) };
+  return {
+    ...draft,
+    orientation: draft.orientation ?? "landscape",
+    showText: true,
+    hiddenElements: hiddenCertificateElements(draft),
+  };
 }
 
 /** Тот же перенос и поиск размера, что у PDF renderer. measure возвращает ширину Mont 1000px. */
@@ -65,9 +77,11 @@ export function fitCertificateText(
   value: string,
   box: CertificateBox,
   measure: (text: string) => number,
+  orientation: CertificateDraft["orientation"] = "landscape",
 ): { fontSize: number; lines: string[] } {
-  const width = Math.max(1, box.width * 11.22 - 2),
-    height = Math.max(1, box.height * 7.937 - 2);
+  const page = certificatePage(orientation);
+  const width = Math.max(1, (box.width * page.widthPx) / 100 - 2),
+    height = Math.max(1, (box.height * page.heightPx) / 100 - 2);
   const linesAt = (size: number): string[] => {
     const fits = (text: string) => (measure(text) / 1000) * size * 1.02 <= width;
     const lines: string[] = [];
