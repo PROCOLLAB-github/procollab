@@ -42,6 +42,10 @@ export const AppRoutes = {
   },
 
   program: {
+    publishedSolutions: (programId: number | string) =>
+      `/office/program/${programId}/published-solutions`,
+    publishedSolution: (programId: number | string, solutionId: number | string) =>
+      `/office/program/${programId}/published-solutions/${solutionId}`,
     solutionCreate: (programId: number | string) => `/office/program/${programId}/solutions/new`,
     solution: (programId: number | string, solutionId: number | string) =>
       `/office/program/${programId}/solutions/${solutionId}`,

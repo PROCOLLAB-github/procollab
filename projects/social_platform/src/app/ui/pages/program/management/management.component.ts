@@ -72,6 +72,7 @@ import {
 } from "./project-actions/project-actions.component";
 import { ManagementProjectFormComponent } from "./project-form/project-form.component";
 import { ManagementSolutionFormComponent } from "./solution-form/solution-form.component";
+import { SolutionApplicationsComponent } from "./solution-applications/solution-applications.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
 import { ResultProjectScoresComponent } from "./results/result-project-scores.component";
@@ -112,6 +113,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     ManagementProjectActionsComponent,
     ManagementProjectFormComponent,
     ManagementSolutionFormComponent,
+    SolutionApplicationsComponent,
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
     ManagementResultsComponent,
@@ -147,6 +149,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly href = presentationHref;
   readonly evaluationLabel = evaluationLabel;
   readonly section = signal<ManagementSection>("participants");
+  readonly solutionActionBusy = signal(false);
   readonly settingsTab = signal<SettingsSection>("basic");
   readonly search = this.fb.control("");
   readonly caseFilter = this.fb.control("all");
@@ -418,6 +421,7 @@ export class ProgramManagementComponent implements OnInit {
       this.saving() ||
       this.uploading() ||
       this.projectActionBusy() ||
+      this.solutionActionBusy() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||
       this.expertsStatus().busy ||
@@ -1099,6 +1103,7 @@ export class ProgramManagementComponent implements OnInit {
       this.saving() ||
       this.removingParticipants() ||
       this.projectActionBusy() ||
+      this.solutionActionBusy() ||
       this.uploading() ||
       this.projectFormStatus().busy ||
       this.criteriaStatus().busy ||

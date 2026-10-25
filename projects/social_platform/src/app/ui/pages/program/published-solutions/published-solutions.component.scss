@@ -1,0 +1,87 @@
+/** @format */
+@use "styles/ui-foundation";
+
+.ui-field {
+  @include ui-foundation.control;
+
+  font-size: 12px;
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+}
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.published {
+  padding: 24px;
+  font-family: Mont, sans-serif;
+  background: var(--white);
+  border-radius: 15px;
+
+  h2 {
+    margin: 16px 0;
+    font-size: 20px;
+    line-height: 28px;
+    overflow-wrap: anywhere;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  a {
+    color: var(--accent);
+    overflow-wrap: anywhere;
+  }
+
+  &__muted,
+  small {
+    color: var(--grey-for-text);
+  }
+
+  &__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  &__search {
+    display: grid;
+    gap: 8px;
+    margin: 20px 0;
+  }
+
+  &__list,
+  &__team {
+    display: grid;
+    gap: 16px;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__list {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+
+  &__list li {
+    padding: 20px;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+  }
+
+  &__team li {
+    display: grid;
+    gap: 4px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--medium-grey-for-outline);
+  }
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
+}

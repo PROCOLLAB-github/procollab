@@ -1,0 +1,74 @@
+<!-- @format -->
+<app-modal
+  [open]="!!request()"
+  size="small"
+  labelledBy="solution-case-title"
+  (openChange)="!$event && close()"
+>
+  @if (request(); as item) {
+    <section class="solution-dialog" [attr.aria-busy]="loading() || applying()">
+      <header>
+        <h2 id="solution-case-title">Сменить кейс</h2>
+        <button
+          type="button"
+          appButton="icon"
+          aria-label="Закрыть"
+          [disabled]="applying()"
+          (click)="close()"
+        >
+          ×
+        </button>
+      </header>
+      <p>{{ item.name }}</p>
+      <label
+        >Новый кейс<select
+          appField
+          [formControl]="caseControl"
+          [attr.disabled]="applying() ? '' : null"
+        >
+          <option value="">Выберите кейс</option>
+          @for (name of caseOptions(); track name) {
+            <option [value]="name">{{ name }}</option>
+          }
+        </select></label
+      >
+      <p>
+        Материалы, команда и оценки сохранятся. Изменение кейса и снимка сдачи попадет в историю.
+      </p>
+      @if (loading()) {
+        <p role="status">Проверяем изменение кейса…</p>
+      }
+      @if (preview(); as checked) {
+        <div role="status">
+          <p>Текущий кейс: {{ checked.currentCase || "Не выбран" }}.</p>
+          <p>
+            Будет снято назначений без оценок, не подходящих новому кейсу:
+            {{ checked.removedAssignmentsCount }}. Сохранится оценок по критериям:
+            {{ checked.scoreCount }}.
+          </p>
+        </div>
+        @for (issue of checked.errors; track $index) {
+          <p role="alert">{{ issue.detail }}</p>
+        }
+      }
+      @if (error()) {
+        <p role="alert">{{ error() }}</p>
+        <button
+          appButton="secondary"
+          type="button"
+          [disabled]="loading() || applying()"
+          (click)="refresh()"
+        >
+          Обновить данные
+        </button>
+      }
+      <footer>
+        <button appButton="secondary" type="button" [disabled]="applying()" (click)="close()">
+          Отмена</button
+        ><button appButton="primary" type="button" [disabled]="!canApply()" (click)="confirm()">
+          {{ applying() ? "Сохраняем…" : "Сменить кейс" }}
+        </button>
+      </footer>
+    </section>
+  }
+</app-modal>

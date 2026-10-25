@@ -25,7 +25,11 @@
               ? 'page'
               : null
           "
-          >{{ tab.label }}</a
+          >{{
+            tab.id === "projects" && program.solutionStorageMode === "solution"
+              ? "Заявки"
+              : tab.label
+          }}</a
         >
       }
     </nav>
@@ -62,7 +66,16 @@
         (statusChange)="expertsStatus.set($event)"
       />
     }
-    @if (section() === "participants" || section() === "projects") {
+    @if (section() === "projects" && program.solutionStorageMode === "solution") {
+      <app-solution-applications
+        [program]="program"
+        (busyChange)="solutionActionBusy.set($event)"
+      />
+    }
+    @if (
+      section() === "participants" ||
+      (section() === "projects" && program.solutionStorageMode !== "solution")
+    ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <div class="management__list-heading">
           <div>

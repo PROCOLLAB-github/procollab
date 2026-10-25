@@ -40,6 +40,7 @@ export class RowActionsComponent {
   readonly actions = input.required<readonly RowAction[]>();
   readonly disabled = input(false);
   readonly action = output<RowActionEvent>();
+  readonly opened = output<void>();
   readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>("trigger");
   readonly positions: ConnectedPosition[] = [
     { originX: "end", originY: "bottom", overlayX: "end", overlayY: "top", offsetY: 4 },

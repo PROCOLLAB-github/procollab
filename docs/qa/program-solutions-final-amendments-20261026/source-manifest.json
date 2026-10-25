@@ -1,0 +1,187 @@
+{
+  "baseHead": "8bf663c7db666ee447cd26742871e66d1b52cb2f",
+  "observedDev": "08414b794dd5b34de5471dddaa19cd0af7f4a167",
+  "files": [
+    {
+      "path": "projects/social_platform/src/app/api/paths/app-routes.ts",
+      "sha256Raw": "f4b6d42369fdde655aa4dfea716e6bbec41103e6a1068ad61804de36898f7fb5",
+      "sha256LF": "f4b6d42369fdde655aa4dfea716e6bbec41103e6a1068ad61804de36898f7fb5",
+      "gitBlob": "857e99042a2976db541cbe585e3fe7f7c6ff2cd7"
+    },
+    {
+      "path": "projects/social_platform/src/app/api/program/facades/detail/program-management.service.spec.ts",
+      "sha256Raw": "3c4f5b51f7ba34c59d1236c6fd615babe2e072b3f7879357d0391b0492e3b55b",
+      "sha256LF": "3c4f5b51f7ba34c59d1236c6fd615babe2e072b3f7879357d0391b0492e3b55b",
+      "gitBlob": "45671cec7500a3391bc5dc97eeabc2a501863f3e"
+    },
+    {
+      "path": "projects/social_platform/src/app/api/program/facades/detail/program-management.service.ts",
+      "sha256Raw": "64b0b7796aac50cb115af44200f523c9ce26d6b90ca0c65c8932d2f1076fc870",
+      "sha256LF": "64b0b7796aac50cb115af44200f523c9ce26d6b90ca0c65c8932d2f1076fc870",
+      "gitBlob": "4c3984f2178c6c7d3f1902c455c7785558974dff"
+    },
+    {
+      "path": "projects/social_platform/src/app/api/solution/use-cases/solution.use-cases.ts",
+      "sha256Raw": "155598550cd8a1bc0927ef39e25713e417527f3e6afdf3f3dc2f4768fd3d1984",
+      "sha256LF": "155598550cd8a1bc0927ef39e25713e417527f3e6afdf3f3dc2f4768fd3d1984",
+      "gitBlob": "e5377e4d41c4adb052938e0d2e542ca4d05f40d1"
+    },
+    {
+      "path": "projects/social_platform/src/app/app.routes.ts",
+      "sha256Raw": "93b347e879aa86bde5d01843a820c8990e6c05268f471723b386aa93c73e7454",
+      "sha256LF": "93b347e879aa86bde5d01843a820c8990e6c05268f471723b386aa93c73e7454",
+      "gitBlob": "0ad9c45e367fbc706fe7d22426ac99313f4e81f3"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.html",
+      "sha256Raw": "b696ff891d71d7d67601f219b06c9a7618675f4eb74a8e46c98aca5c443138b6",
+      "sha256LF": "b696ff891d71d7d67601f219b06c9a7618675f4eb74a8e46c98aca5c443138b6",
+      "gitBlob": "c93fdcb140fc758400e2ae4b533032fb20b7c424"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.ts",
+      "sha256Raw": "83186522c741152b348926170e6565b3e0497bb355fde2e4d121c92c9ac4391f",
+      "sha256LF": "83186522c741152b348926170e6565b3e0497bb355fde2e4d121c92c9ac4391f",
+      "gitBlob": "a365e8dec74fbf7708ade924511ae3e8284db81d"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-allocation.component.spec.ts",
+      "sha256Raw": "5841731d1eb4c5dad83ef372481f7b8eb6c4db526a1e94d595b9a4ffb16f0093",
+      "sha256LF": "5841731d1eb4c5dad83ef372481f7b8eb6c4db526a1e94d595b9a4ffb16f0093",
+      "gitBlob": "890a395f1edd58fdf6ccbbdd0848fef42120ea73"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-allocation.component.ts",
+      "sha256Raw": "63f5269882c27825e0ef2f0faffabe8fa41b58fdc6f9d5c2a330bac57faf3039",
+      "sha256LF": "63f5269882c27825e0ef2f0faffabe8fa41b58fdc6f9d5c2a330bac57faf3039",
+      "gitBlob": "636e7b71f7dfd88e1d5a8af8cab3aea64ae8fe74"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.html",
+      "sha256Raw": "a706d1c63d42ac92a0f7f34629738c6cd9f3c31db2fd6199b3f74303006073dd",
+      "sha256LF": "a706d1c63d42ac92a0f7f34629738c6cd9f3c31db2fd6199b3f74303006073dd",
+      "gitBlob": "a104a67679549d6821f860efe55c7efb4f9f0dda"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.scss",
+      "sha256Raw": "28048a7efbe080dd179d313533178dc08de6344e1717db093e4633abdc29752c",
+      "sha256LF": "28048a7efbe080dd179d313533178dc08de6344e1717db093e4633abdc29752c",
+      "gitBlob": "0c4a6205696f19b8aee95bd0034620ce88386d51"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.spec.ts",
+      "sha256Raw": "dbf0e22306382c0e191c59bec510676d9eaed54f12ebac4fb81a65ec368c07ee",
+      "sha256LF": "dbf0e22306382c0e191c59bec510676d9eaed54f12ebac4fb81a65ec368c07ee",
+      "gitBlob": "9e3b93965a8ffab33517ebf0bcc706ee6b76dba8"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.ts",
+      "sha256Raw": "6d998e6671397571d3221f1e328f2602b0e50e35137a18b3577bd97d32e0aa55",
+      "sha256LF": "6d998e6671397571d3221f1e328f2602b0e50e35137a18b3577bd97d32e0aa55",
+      "gitBlob": "5625aa2158d3dc166464b90827d5cb71ae195be0"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.html",
+      "sha256Raw": "78f5bfeb0c65f181bfa5e5dc9de5749b705c7ab41a6227814be5db30cbeec5e6",
+      "sha256LF": "78f5bfeb0c65f181bfa5e5dc9de5749b705c7ab41a6227814be5db30cbeec5e6",
+      "gitBlob": "97ae60906f296875aaea6c1404b8cc8aa85bd7c1"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.spec.ts",
+      "sha256Raw": "67d3910bd457c2dd71edadfed458f9da550e83a9f0f20551c7b3e225747f45d4",
+      "sha256LF": "67d3910bd457c2dd71edadfed458f9da550e83a9f0f20551c7b3e225747f45d4",
+      "gitBlob": "0cc47ea37d79c5a92ff85788f0aac911b9045936"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.ts",
+      "sha256Raw": "bb205ae896c4ad5a6e6ebf01f41f0c0c18268e39012f694665829f8dee3bc197",
+      "sha256LF": "bb205ae896c4ad5a6e6ebf01f41f0c0c18268e39012f694665829f8dee3bc197",
+      "gitBlob": "92c4b21a27d1778e76c685695a700f4f8f6c6a9d"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/published-solutions/public-program-solutions.component.ts",
+      "sha256Raw": "0d5067f87929f3385757515e8ee7b3cbf86491fe0c1c45123fabee02d4e229b7",
+      "sha256LF": "0d5067f87929f3385757515e8ee7b3cbf86491fe0c1c45123fabee02d4e229b7",
+      "gitBlob": "66ce51f1e4f2159cefdc2205b372235d3ac8a018"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/published-solutions/published-solutions.component.html",
+      "sha256Raw": "75047031419058c559bebcd68c660bd04d6868fcc58a0d505e3c28e425453f4a",
+      "sha256LF": "75047031419058c559bebcd68c660bd04d6868fcc58a0d505e3c28e425453f4a",
+      "gitBlob": "4a4d097a15584aefefbc0ed643eb276f49aabaf3"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/published-solutions/published-solutions.component.scss",
+      "sha256Raw": "c8cd1cd47112a3252390ccb7d4af61930e70f5996a56b736f4db20777865d2d9",
+      "sha256LF": "c8cd1cd47112a3252390ccb7d4af61930e70f5996a56b736f4db20777865d2d9",
+      "gitBlob": "926569334dd51c0ceb2b3a958292f37098502f59"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/published-solutions/published-solutions.component.spec.ts",
+      "sha256Raw": "d43e0153d52a0a8add25491b76d94419ce73c635ec5bc16d93ff2bf081a3fe12",
+      "sha256LF": "d43e0153d52a0a8add25491b76d94419ce73c635ec5bc16d93ff2bf081a3fe12",
+      "gitBlob": "60fb6d80d59663a24e3d05f846a5edf9ea95c259"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/published-solutions/published-solutions.component.ts",
+      "sha256Raw": "8f4164358412f7bf810f5b0fb9fc4550983da14a41a90b75465085e11c0a8eba",
+      "sha256LF": "8f4164358412f7bf810f5b0fb9fc4550983da14a41a90b75465085e11c0a8eba",
+      "gitBlob": "9620ff39c52555373b05ed72cffb6d792e41e767"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/primitives/row-actions/row-actions.component.html",
+      "sha256Raw": "18e987c2a58fd5c6d44fb9c2945febee9091364189615d0df8acfb85ce1fd39b",
+      "sha256LF": "18e987c2a58fd5c6d44fb9c2945febee9091364189615d0df8acfb85ce1fd39b",
+      "gitBlob": "1056e41350bacf64f1aa0666c0df67cabea340e5"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/primitives/row-actions/row-actions.component.spec.ts",
+      "sha256Raw": "b181850704e3bbc62042d5ff5a1eae56ab16b8911cb7af18bad07c8bf2e49e70",
+      "sha256LF": "b181850704e3bbc62042d5ff5a1eae56ab16b8911cb7af18bad07c8bf2e49e70",
+      "gitBlob": "307ded674532519e88967f5b39b034c3f0a9df9d"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/primitives/row-actions/row-actions.component.ts",
+      "sha256Raw": "84a48f0c188af0d95b190ff84cccaa573f8aab8be3f5485ae4f46adedadfa282",
+      "sha256LF": "84a48f0c188af0d95b190ff84cccaa573f8aab8be3f5485ae4f46adedadfa282",
+      "gitBlob": "96611d91ebeaa0453bf24c49a2d87c9bf99e7190"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/routes/program/published-solutions.routes.spec.ts",
+      "sha256Raw": "ed72dafc709fe26507b0e1976d0cdfd7c797ac8fa8618c5ef5f20f555ce93354",
+      "sha256LF": "ed72dafc709fe26507b0e1976d0cdfd7c797ac8fa8618c5ef5f20f555ce93354",
+      "gitBlob": "8d31eda3fb97bf4857568f5efdf769091778c7d7"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/routes/program/published-solutions.routes.ts",
+      "sha256Raw": "61f6d8047128a1c68a2337490f99463a2835992082cef1fc72b7de4acea677ee",
+      "sha256LF": "61f6d8047128a1c68a2337490f99463a2835992082cef1fc72b7de4acea677ee",
+      "gitBlob": "f60ced3e2862d04dc2e36185bd9059c4f5afbe3b"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/widgets/detail/detail.component.html",
+      "sha256Raw": "ab4e41d2100e1895d707ae5c624fc8268285ae74e5cbbba2f402550f9d827d0c",
+      "sha256LF": "ab4e41d2100e1895d707ae5c624fc8268285ae74e5cbbba2f402550f9d827d0c",
+      "gitBlob": "01bc5050ba89872c66c01d3b9e7cbb27fde0bf9e"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/widgets/detail/detail.component.ts",
+      "sha256Raw": "7ec4127c3e536791d3ea3d56811aa6014f402857ff948ca1478dc43b6f733d61",
+      "sha256LF": "7ec4127c3e536791d3ea3d56811aa6014f402857ff948ca1478dc43b6f733d61",
+      "gitBlob": "b46dc0cda4d8a7be449a98ea45222559aa1a11b9"
+    }
+  ],
+  "contractVersion": "1.21.0",
+  "backendHead": "fdec3dcbd6693ddb487816114301d0df01798f93",
+  "verification": {
+    "featureTests": 2986,
+    "featureTestFiles": 489,
+    "strictC00": "PASS",
+    "focusedTestsAfterFocusFix": 43,
+    "focusedTestFiles": 7,
+    "angularBuild": "PASS",
+    "browserChecksBeforeFocusFallback": 22,
+    "prototypeChecks": 100
+  },
+  "scope": "Working product source delta, source unchanged after final focused/build checks. Full feature tests precede only the focus fallback; focused checks cover that change. Historical prospective dev tests have a different source scope."
+}

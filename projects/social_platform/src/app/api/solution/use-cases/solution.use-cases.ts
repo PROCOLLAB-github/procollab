@@ -2,7 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, defer, map, Observable, of } from "rxjs";
-import { SolutionRepositoryPort } from "@domain/solution/ports/solution.repository.port";
+import {
+  SolutionListQuery,
+  SolutionRepositoryPort,
+} from "@domain/solution/ports/solution.repository.port";
 import { CreateSolutionCommand } from "@domain/solution/solution-contract.model";
 import { fail, ok } from "@domain/shared/result.type";
 import { solutionError } from "../solution-error";
@@ -35,5 +38,13 @@ export class GetSolutionUseCase {
   private readonly repository = inject(SolutionRepositoryPort);
   execute(programId: number, solutionId: number) {
     return solutionRequestResult(() => this.repository.get(programId, solutionId));
+  }
+}
+
+@Injectable({ providedIn: "root" })
+export class ListSolutionsUseCase {
+  private readonly repository = inject(SolutionRepositoryPort);
+  execute(programId: number, query?: SolutionListQuery) {
+    return solutionRequestResult(() => this.repository.list(programId, query));
   }
 }

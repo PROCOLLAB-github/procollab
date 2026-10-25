@@ -92,7 +92,7 @@
           }
 
           <ng-template #programTpl>
-            @if (userType() !== undefined) {
+            @if (userType() !== undefined || publicationsOnly()) {
               @if (
                 (isProjectsPage() ||
                   isProjectsRatingPage() ||
@@ -271,7 +271,21 @@
                     </app-button>
                   }
                 }
-                @if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
+                @if (info().solutionStorageMode === "solution") {
+                  <a
+                    [routerLink]="AppRoutes.program.publishedSolutions(info().id)"
+                    routerLinkActive
+                    #publishedLink="routerLinkActive"
+                    [attr.aria-current]="publishedLink.isActive ? 'page' : null"
+                  >
+                    <app-button
+                      [appearance]="publishedLink.isActive ? 'inline' : 'outline'"
+                      [size]="appWidth >= 1000 ? 'medium' : 'small'"
+                      customTypographyClass="text-body-12"
+                      >решения</app-button
+                    >
+                  </a>
+                } @else if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
                   <a [routerLink]="AppRoutes.program.projects(info().id)">
                     <app-button
                       [appearance]="isProjectsPage() ? 'inline' : 'outline'"

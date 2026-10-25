@@ -1,0 +1,600 @@
+{
+  "status": "PASS",
+  "scope": "Synthetic final amendments only; separate actual Angular/API evidence exists",
+  "checks": [
+    {
+      "surface": "manager",
+      "format": "kch",
+      "width": 320
+    },
+    {
+      "surface": "manager",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "surface": "manager",
+      "format": "kch",
+      "width": 768
+    },
+    {
+      "surface": "manager",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "surface": "manager",
+      "format": "hack",
+      "width": 320
+    },
+    {
+      "surface": "manager",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "surface": "manager",
+      "format": "hack",
+      "width": 768
+    },
+    {
+      "surface": "manager",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "surface": "manager",
+      "format": "noncompetitive",
+      "width": 320
+    },
+    {
+      "surface": "manager",
+      "format": "noncompetitive",
+      "width": 390
+    },
+    {
+      "surface": "manager",
+      "format": "noncompetitive",
+      "width": 768
+    },
+    {
+      "surface": "manager",
+      "format": "noncompetitive",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "loading",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "loading",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "loading",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "loading",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "empty",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "empty",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "empty",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "empty",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-results",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-results",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-results",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-results",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "error",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "error",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "error",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "error",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-access",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-access",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-access",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "no-access",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "long",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "long",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "long",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "long",
+      "width": 1440
+    },
+    {
+      "surface": "manager-state",
+      "state": "ready-draft",
+      "width": 320
+    },
+    {
+      "surface": "manager-state",
+      "state": "ready-draft",
+      "width": 390
+    },
+    {
+      "surface": "manager-state",
+      "state": "ready-draft",
+      "width": 768
+    },
+    {
+      "surface": "manager-state",
+      "state": "ready-draft",
+      "width": 1440
+    },
+    {
+      "surface": "public",
+      "format": "kch",
+      "width": 320
+    },
+    {
+      "surface": "public",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "surface": "public",
+      "format": "kch",
+      "width": 768
+    },
+    {
+      "surface": "public",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "surface": "public",
+      "format": "hack",
+      "width": 320
+    },
+    {
+      "surface": "public",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "surface": "public",
+      "format": "hack",
+      "width": 768
+    },
+    {
+      "surface": "public",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "surface": "public",
+      "format": "noncompetitive",
+      "width": 320
+    },
+    {
+      "surface": "public",
+      "format": "noncompetitive",
+      "width": 390
+    },
+    {
+      "surface": "public",
+      "format": "noncompetitive",
+      "width": 768
+    },
+    {
+      "surface": "public",
+      "format": "noncompetitive",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "loading",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "loading",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "empty",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "empty",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "no-results",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "no-results",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "error",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "error",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "not-found",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "not-found",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "detail-error",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "detail-error",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "partial",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "partial",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "long",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "kch",
+      "state": "long",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "loading",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "loading",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "empty",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "empty",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "no-results",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "no-results",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "error",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "error",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "not-found",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "not-found",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "detail-error",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "detail-error",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "partial",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "partial",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "long",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "hack",
+      "state": "long",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "loading",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "loading",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "empty",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "empty",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "no-results",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "no-results",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "error",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "error",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "not-found",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "not-found",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "detail-error",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "detail-error",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "partial",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "partial",
+      "width": 1440
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "long",
+      "width": 390
+    },
+    {
+      "surface": "public-state",
+      "format": "noncompetitive",
+      "state": "long",
+      "width": 1440
+    }
+  ],
+  "sourceHeaderParity": true,
+  "legacyNineColumnsSolutionEightColumns": true,
+  "rowMenuParity": true,
+  "teamSecondTab": true,
+  "filtersModal": true,
+  "archiveInsideExistingFilters": true,
+  "archiveReadonlyAndNoExport": true,
+  "administrativeCasePreviewInlineOneScreen": true,
+  "publicEntryInsideProgram": true,
+  "publicRoundtrip": true,
+  "errors": [],
+  "denied": [],
+  "shots": [
+    {
+      "name": "manager-applications-1440.png",
+      "sha256": "9a8a1bd6b835710c0b998482f319976ce22987d05b7c86ec072669b4e36a8598"
+    },
+    {
+      "name": "manager-existing-projects-1440.png",
+      "sha256": "93bf0b4fb2de0bd11efa69d9451db0fd06a3f3912fca6b2bb7d49033dd1e3a05"
+    },
+    {
+      "name": "manager-row-menu-1440.png",
+      "sha256": "fab9002942c8b5a6da7232817f19d9a034147c12863b2fd0f5d8618576953aed"
+    },
+    {
+      "name": "manager-applications-390.png",
+      "sha256": "4018a54f9436042ed4e76f1b071b73ceebdf55d9166a775caf7a444cc1c17dd2"
+    },
+    {
+      "name": "program-public-entry-1440.png",
+      "sha256": "ea447718e77148f09b63091a1778d3f2dda747ed30f504799a6f1da081047082"
+    },
+    {
+      "name": "program-public-solutions-1440.png",
+      "sha256": "6bb1dda52e3bcce9b9edb8acdcd9cb9118b026a00a581370caf43623f55a12c1"
+    },
+    {
+      "name": "program-public-entry-390.png",
+      "sha256": "b03df6623b41f87238dc1748893bc0b066c310201a91f4f81dcac0540c4d4a7f"
+    },
+    {
+      "name": "program-public-solutions-390.png",
+      "sha256": "cf583a7d6dfd36c0278fa4053c57766263197cc587684d331084061681b4b99d"
+    }
+  ]
+}

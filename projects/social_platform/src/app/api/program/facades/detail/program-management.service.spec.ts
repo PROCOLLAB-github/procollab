@@ -54,6 +54,16 @@ describe("ProgramManagementService", () => {
     service.select(second);
     expect(service.selected()?.id).toBe(second.id);
   });
+  it("в режиме решений не обращается к старому списку проектов или оценке Project", () => {
+    const { service, api } = setup();
+    api.get.mockReturnValue(of({ ...program, solutionStorageMode: "solution" }));
+    service.load(context());
+    expect(service.program()?.solutionStorageMode).toBe("solution");
+    expect(service.projects()).toBeNull();
+    expect(api.projects).not.toHaveBeenCalled();
+    service.load({ ...context(), section: "evaluation", linkId: 11 });
+    expect(api.evaluation).not.toHaveBeenCalled();
+  });
   it("очищает выбор, если проект исчез после фильтрации", () => {
     const { service, api } = setup();
     service.load(context());

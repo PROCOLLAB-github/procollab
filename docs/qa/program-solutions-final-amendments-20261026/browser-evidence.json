@@ -1,0 +1,306 @@
+{
+  "checkedAt": "2026-10-25T22:44:57.802Z",
+  "source": "current Angular development build; real local Django fdec3dc and PostgreSQL; static bytes served verbatim through local route",
+  "checks": [
+    "public-list:320",
+    "public-list:390",
+    "public-list:768",
+    "public-list:1440",
+    "public-team:320",
+    "public-team:390",
+    "public-team:768",
+    "public-team:1440",
+    "anonymous-public-header-list-detail-team-roundtrip-no-private-solution-api",
+    "manager-applications:320",
+    "manager-applications:390",
+    "manager-applications:768",
+    "manager-applications:1440",
+    "case-one-screen-server-preview-no-apply-no-second-step",
+    "manager-team-second-tab",
+    "manager-selection:320",
+    "manager-selection:390",
+    "manager-selection:768",
+    "manager-selection:1440",
+    "allocation-draft-rejected-by-server-solution-ids-only",
+    "presentation-menu-is-direct-file-link",
+    "same-server-field-zero-filter-manager-list-xlsx"
+  ],
+  "wire": [
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/51/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/51/published-solutions/?search=&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/51/published-solutions/70/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/51/published-solutions/?search=&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/management/solution-form/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/management/solution-analytics/solutions/?submission=all&case_scope=all&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/solutions/67/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/49/management/solutions/67/case/preview/",
+      "status": 200,
+      "request": {
+        "case_name": "Образование"
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/solutions/67/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/solutions/67/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/management/solution-analytics/solutions/?submission=all&case_scope=all&offset=0&limit=100",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/49/management/experts/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/49/management/solution-evaluation/allocation/",
+      "status": 400,
+      "request": {
+        "revision": "91b655b43ff67d0077701a4764cb64e71884028a021accb587ee7e57c16c6c0a",
+        "expert_ids": [12],
+        "solution_ids": [67]
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/51/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/51/management/solution-form/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/51/management/solution-analytics/solutions/?submission=all&case_scope=all&field_id=328&answer_state=present&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/51/solutions/70/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/51/management/solution-analytics/export/?kind=solutions&submission=all&case_scope=all&field_id=328&answer_state=present",
+      "status": 200,
+      "request": null
+    }
+  ],
+  "errors": [],
+  "ignoredExternalCount": 19,
+  "mutations": [
+    "/programs/49/management/solutions/67/case/preview/",
+    "/programs/49/management/solution-evaluation/allocation/"
+  ],
+  "export": {
+    "count": 1,
+    "solutionIds": [70],
+    "sha256": "060a71b6ae250cf72697c1e69f8c9299fc30dcd625dcb6a10255a252807a2bf8"
+  }
+}

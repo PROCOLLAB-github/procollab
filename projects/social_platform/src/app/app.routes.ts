@@ -3,6 +3,7 @@
 import { Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { AuthRequiredGuard } from "@core/lib/guards/auth/auth-required.guard";
+import { PUBLISHED_SOLUTION_ROUTES } from "./ui/routes/program/published-solutions.routes";
 
 /**
  * Основные маршруты приложения
@@ -15,6 +16,7 @@ import { AuthRequiredGuard } from "@core/lib/guards/auth/auth-required.guard";
  */
 
 export const APP_ROUTES: Routes = [
+  ...PUBLISHED_SOLUTION_ROUTES,
   {
     path: "program-registration/:id",
     loadComponent: () =>
