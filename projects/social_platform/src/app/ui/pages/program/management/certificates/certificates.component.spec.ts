@@ -1,11 +1,13 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
 import { of, Subject, throwError } from "rxjs";
 import { describe, expect, it, vi } from "vitest";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
 import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
 import { CertificateDraft, CertificateSettings } from "@domain/program/program-certificates.model";
 import { ManagementCertificatesComponent } from "./certificates.component";
+import { CertificateCanvasComponent } from "./certificate-canvas.component";
 const keys = [
   "title",
   "subtitle",
@@ -80,6 +82,69 @@ async function setup(data = settings()) {
   return { fixture, component: fixture.componentInstance, repository };
 }
 describe("Program certificates", () => {
+  it("changes only the selected element font with history, saves it and keeps geometry", async () => {
+    const { fixture, component, repository } = await setup();
+    const initial = structuredClone(component.draft()!.layout);
+    const select = fixture.nativeElement.querySelector(
+      ".canvas__family select",
+    ) as HTMLSelectElement;
+    expect(select.value).toBe("mont");
+    select.value = "pt-serif";
+    select.dispatchEvent(new Event("change"));
+    fixture.detectChanges();
+    expect(component.draft()!.layout.name).toEqual({ ...initial.name, fontFamily: "pt-serif" });
+    expect(component.draft()!.layout.director).toEqual(initial.director);
+    expect(fixture.nativeElement.querySelector(".canvas__element").style.fontFamily).toContain(
+      "Certificate PT Serif",
+    );
+    component.undo();
+    expect(component.draft()!.layout).toEqual(initial);
+    component.redo();
+    expect(component.draft()!.layout.name.fontFamily).toBe("pt-serif");
+    await component.save();
+    expect(repository.save).toHaveBeenCalledWith(
+      9,
+      1,
+      expect.objectContaining({
+        layout: expect.objectContaining({
+          name: expect.objectContaining({ fontFamily: "pt-serif" }),
+        }),
+      }),
+    );
+    expect(component.dirty()).toBe(false);
+    fixture.destroy();
+  });
+  it("preserves the saved font while centering, and blocks font changes for images and preview", async () => {
+    const data = settings();
+    data.draft.layout.name.fontFamily = "lobster";
+    const { fixture, component } = await setup(data);
+    expect(
+      (fixture.nativeElement.querySelector(".canvas__family select") as HTMLSelectElement).value,
+    ).toBe("lobster");
+    const canvas = fixture.debugElement.query(By.directive(CertificateCanvasComponent))
+      .componentInstance as CertificateCanvasComponent;
+    canvas.center();
+    fixture.detectChanges();
+    expect(component.draft()!.layout.name.fontFamily).toBe("lobster");
+    expect(canvas.fontWeight("name")).toBe(400);
+    component.selected.set("signature");
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(
+      (fixture.nativeElement.querySelector(".canvas__family select") as HTMLSelectElement).disabled,
+    ).toBe(true);
+    canvas.familyChanged("pt-serif");
+    expect(component.draft()!.layout.signature.fontFamily).toBeUndefined();
+    component.selected.set("name");
+    component.editorPreview.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    canvas.familyChanged("pt-serif");
+    expect(component.draft()!.layout.name.fontFamily).toBe("lobster");
+    fixture.destroy();
+  });
   it("defaults legacy templates to landscape and saves portrait with undo and redo", async () => {
     const { fixture, component, repository } = await setup();
     expect(component.draft()!.orientation).toBe("landscape");

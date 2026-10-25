@@ -13,9 +13,12 @@ import {
   viewChild,
 } from "@angular/core";
 import { ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
+import { FormsModule } from "@angular/forms";
 import {
   CERTIFICATE_ELEMENTS,
   CERTIFICATE_LABELS,
+  CERTIFICATE_FONTS,
+  certificateFont,
   CertificateBox,
   CertificateDraft,
   CertificateElement,
@@ -30,7 +33,7 @@ import {
 
 @Component({
   selector: "app-certificate-canvas",
-  imports: [ButtonDirective, ChoiceDirective, FieldDirective],
+  imports: [FormsModule, ButtonDirective, ChoiceDirective, FieldDirective],
   templateUrl: "./certificate-canvas.component.html",
   styleUrl: "./certificate-canvas.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,6 +56,8 @@ export class CertificateCanvasComponent {
   readonly removeElement = output<CertificateElement>();
   readonly keys = CERTIFICATE_ELEMENTS;
   readonly labels = CERTIFICATE_LABELS;
+  readonly fonts = CERTIFICATE_FONTS;
+  readonly fontLoadError = signal(false);
   readonly zoom = signal(1);
   readonly dragging = signal(false);
   readonly viewport = viewChild<ElementRef<HTMLElement>>("viewport");
@@ -81,11 +86,12 @@ export class CertificateCanvasComponent {
     const result = {} as Record<CertificateElement, { fontSize: number; text: string }>;
     const cache = new Map<string, number>();
     for (const key of this.keys) {
-      const weight = key === "name" || key === "title" ? 600 : 400;
+      const font = this.font(key);
+      const weight = this.fontWeight(key);
       const measure = (value: string) => {
-        const id = `${weight}:${value}`;
+        const id = `${font.key}:${weight}:${value}`;
         if (!cache.has(id)) {
-          if (this.context) this.context.font = `${weight} 1000px Mont`;
+          if (this.context) this.context.font = `${weight} 1000px "${font.family}"`;
           cache.set(id, this.context?.measureText(value).width ?? Array.from(value).length * 550);
         }
         return cache.get(id)!;
@@ -133,9 +139,24 @@ export class CertificateCanvasComponent {
       if (this.viewport()) observer?.observe(this.viewport()!.nativeElement);
       window.addEventListener("resize", measure);
       measure();
-      void document.fonts?.ready.then(() => {
-        if (!this.destroy.destroyed) this.fontsReady.set(true);
-      });
+      if (document.fonts) {
+        void document.fonts.ready
+          .then(() =>
+            Promise.all(
+              this.fonts.flatMap(font =>
+                [...new Set([400, font.boldWeight])].map(weight =>
+                  document.fonts.load(`${weight} 1000px "${font.family}"`),
+                ),
+              ),
+            ),
+          )
+          .then(() => {
+            if (!this.destroy.destroyed) this.fontsReady.set(true);
+          })
+          .catch(() => {
+            if (!this.destroy.destroyed) this.fontLoadError.set(true);
+          });
+      }
       this.destroy.onDestroy(() => {
         observer?.disconnect();
         window.removeEventListener("resize", measure);
@@ -144,6 +165,19 @@ export class CertificateCanvasComponent {
   }
   box(): CertificateBox {
     return this.draft().layout[this.selected()];
+  }
+  font(key: CertificateElement) {
+    return certificateFont(this.draft().layout[key].fontFamily);
+  }
+  fontWeight(key: CertificateElement): number {
+    return key === "name" || key === "title" ? this.font(key).boldWeight : 400;
+  }
+  familyChanged(value: string): void {
+    if (this.disabled() || this.preview() || this.selected() === "signature") return;
+    const font = this.fonts.find(font => font.key === value);
+    if (!font || font.key === certificateFont(this.box().fontFamily).key) return;
+    this.interactionStart.emit();
+    this.update(this.selected(), { ...this.box(), fontFamily: font.key });
   }
   visible(key: CertificateElement): boolean {
     return !hiddenCertificateElements(this.draft()).includes(
