@@ -4,6 +4,9 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import {
+  SolutionMemberRemovalPreviewRequest,
+  SolutionMemberRemovalApplyRequest,
+  SolutionMemberRemovalPreview,
   SolutionCaseChangePreviewRequest,
   SolutionCaseChangeApplyRequest,
   SolutionCaseChangePreview,
@@ -73,6 +76,28 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  previewMemberRemoval(
+    programId: number,
+    solutionId: number,
+    command: SolutionMemberRemovalPreviewRequest,
+  ) {
+    if (!validSolutionId(command.userId)) throw new RangeError("Invalid user ID");
+    return this.api.post<SolutionMemberRemovalPreview>(
+      `${this.managementPath(programId, solutionId)}/members/remove/preview/`,
+      command,
+    );
+  }
+  applyMemberRemoval(
+    programId: number,
+    solutionId: number,
+    command: SolutionMemberRemovalApplyRequest,
+  ) {
+    if (!validSolutionId(command.userId)) throw new RangeError("Invalid user ID");
+    return this.api.post<SolutionMutationReceipt>(
+      `${this.managementPath(programId, solutionId)}/members/remove/apply/`,
+      command,
+    );
+  }
   private managementPath(programId: number, solutionId: number) {
     this.path(programId);
     if (!validSolutionId(solutionId)) throw new RangeError("Invalid solution ID");

@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.17.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.18.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -1061,7 +1061,44 @@ export type SolutionCaseChangePreview = {
   scoreCount: number;
 };
 
-export type SolutionAdminChange = {
+export type SolutionAdminChange = SolutionCaseAdminChange | SolutionMemberAdminChange;
+
+export type SolutionAdminChangePage = {
+  count: number;
+  offset: number;
+  limit: number;
+  results: Array<SolutionAdminChange>;
+};
+
+export type SolutionAdminChangeDetail = {
+  change: SolutionAdminChange;
+  beforeSnapshot: SolutionSubmissionSnapshot | null;
+  afterSnapshot: SolutionSubmissionSnapshot | null;
+};
+
+export type SolutionMemberRemovalPreviewRequest = {
+  userId: number;
+};
+
+export type SolutionMemberRemovalApplyRequest = {
+  userId: number;
+  previewToken: string;
+};
+
+export type SolutionMemberRemovalPreview = {
+  application: SolutionRef;
+  member: SolutionMember;
+  solutionVersion: number;
+  isSubmitted: boolean;
+  remainingMemberCount: number;
+  revokedInvitationCount: number;
+  scoreCount: number;
+  errors: Array<SolutionIssue>;
+  canApply: boolean;
+  previewToken: string | null;
+};
+
+export type SolutionCaseAdminChange = {
   id: number;
   application: SolutionRef;
   action: "change_case";
@@ -1078,15 +1115,18 @@ export type SolutionAdminChange = {
   wasSubmitted: boolean;
 };
 
-export type SolutionAdminChangePage = {
-  count: number;
-  offset: number;
-  limit: number;
-  results: Array<SolutionAdminChange>;
-};
-
-export type SolutionAdminChangeDetail = {
-  change: SolutionAdminChange;
-  beforeSnapshot: SolutionSubmissionSnapshot | null;
-  afterSnapshot: SolutionSubmissionSnapshot | null;
+export type SolutionMemberAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "remove_member";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  removedAssignmentsCount: 0;
+  scoreCount: number;
+  wasSubmitted: boolean;
+  removedMember: SolutionMember;
+  revokedInvitationCount: number;
 };

@@ -2,6 +2,9 @@
 
 import { Observable } from "rxjs";
 import {
+  SolutionMemberRemovalPreviewRequest,
+  SolutionMemberRemovalApplyRequest,
+  SolutionMemberRemovalPreview,
   SolutionCaseChangePreviewRequest,
   SolutionCaseChangeApplyRequest,
   SolutionCaseChangePreview,
@@ -56,6 +59,16 @@ import {
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewMemberRemoval(
+    programId: number,
+    solutionId: number,
+    command: SolutionMemberRemovalPreviewRequest,
+  ): Observable<SolutionMemberRemovalPreview>;
+  abstract applyMemberRemoval(
+    programId: number,
+    solutionId: number,
+    command: SolutionMemberRemovalApplyRequest,
+  ): Observable<SolutionMutationReceipt>;
   abstract listAdministrativeChanges(
     programId: number,
     solutionId: number,

@@ -1,6 +1,9 @@
 /** @format */
 
 import type {
+  SolutionMemberRemovalApplyRequest,
+  SolutionMemberRemovalPreviewRequest,
+  SolutionMemberAdminChange,
   SolutionCaseChangePreviewRequest,
   SolutionCaseChangeApplyRequest,
   SolutionCaseChangePreview,
@@ -283,3 +286,22 @@ const wrongHistoryReference: SolutionAdminChange["application"] = {
   projectId: 301,
 };
 void [preservedSubmission, confirmedEffects, wrongHistoryReference];
+
+const memberRemoval: SolutionMemberRemovalPreviewRequest = { userId: 10 };
+const confirmedMemberRemoval: SolutionMemberRemovalApplyRequest = {
+  userId: 10,
+  previewToken: "opaque",
+};
+// @ts-expect-error Подтверждение исключения требует подписанный preview token.
+const unsignedMemberRemoval: SolutionMemberRemovalApplyRequest = { userId: 10 };
+// @ts-expect-error Команда решения не принимает Project ID.
+const projectMemberRemoval: SolutionMemberRemovalPreviewRequest = { userId: 10, projectId: 301 };
+declare const historyEvent: SolutionAdminChange;
+if (historyEvent.action === "remove_member") {
+  const removed: SolutionMemberAdminChange = historyEvent;
+  const affectedUser: number = removed.removedMember.user.id;
+  // @ts-expect-error Поля смены кейса не относятся к исключению участника.
+  const unrelatedCase: string = removed.caseName;
+  void [affectedUser, unrelatedCase];
+}
+void [memberRemoval, confirmedMemberRemoval, unsignedMemberRemoval, projectMemberRemoval];

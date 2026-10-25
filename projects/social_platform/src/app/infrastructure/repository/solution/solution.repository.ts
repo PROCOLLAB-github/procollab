@@ -17,6 +17,8 @@ import {
 } from "@domain/solution/ports/solution.repository.port";
 import {
   SolutionCaseChangePreviewRequest,
+  SolutionMemberRemovalPreviewRequest,
+  SolutionMemberRemovalApplyRequest,
   SolutionCaseChangeApplyRequest,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
@@ -38,6 +40,20 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  previewMemberRemoval(
+    programId: number,
+    solutionId: number,
+    command: SolutionMemberRemovalPreviewRequest,
+  ) {
+    return this.http.previewMemberRemoval(programId, solutionId, command);
+  }
+  applyMemberRemoval(
+    programId: number,
+    solutionId: number,
+    command: SolutionMemberRemovalApplyRequest,
+  ) {
+    return this.http.applyMemberRemoval(programId, solutionId, command);
+  }
   listAdministrativeChanges(programId: number, solutionId: number, query?: SolutionHistoryQuery) {
     return this.http.listAdministrativeChanges(programId, solutionId, query);
   }
