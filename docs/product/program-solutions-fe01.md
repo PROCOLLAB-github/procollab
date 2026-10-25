@@ -46,3 +46,15 @@ UI review: иерархия и два раздела согласованног�
 Review: исправлена нормализация meta ошибок под те же camelCase моки. BLOCKER/MAJOR/MINOR в scope не осталось. Not checked: screen reader, четыре роли в браузере, настоящие загрузки/приглашения/сдача; последние относятся к FE03–FE08 и QA01. Негативный доступ проверен server-side в BE01 и в тестах ошибки UI. Отдельный коммит форматирования проверен по diff: только переносы строк, отступы и эквивалентная запись TypeScript union.
 
 Внедрение: сначала BE01 с миграциями и default legacy_project, затем FE01. Новый режим для реальных участников не включать до REL01. Merge и deployment выполняет пользователь.
+
+## REL01: отдельная приостановка создания, C00 1.13.0
+
+Backend добавляет persisted program-scoped solution_creation_enabled=False и 409/blockedReason=solution_creation_disabled. Context и все 120 DTO schemas прежние, 45 операций/161 сценарий, старые 158 сохранены; новые mocks/types сгенерированы. Flag не передается клиентом. Существующие currentApplication/direct detail имеют приоритет; старый frontend уже не создает при canCreate=False.
+
+Изменен только текст существующего error state в direct new route и program entry через solutionCreationBlockedMessage. При technical pause показано «Создание новых решений временно приостановлено. Ранее созданные заявки доступны.». Для остальных причин прежний общий текст сохранен. Новых controls/layout/SCSS нет; D00 v3 не меняется, D02/D03 не реализуются этим этапом.
+
+6 новых tests: 3 actual interceptor wire сценария (disabled context/error/repeat), direct new route без POST/legacy fallback, direct existing read без проверки creation context, program entry с понятным сообщением. 55 focused PASS; полный npm run test:ci — 2760 tests/478 files и strict C00 types PASS. Development build/scoped ESLint/locked Prettier 3.8.3 по 1969 files PASS. Только три C00 файла (README/openapi/examples) общие с backend, byte-identical; validator остается в backend.
+
+Actual Edge/Angular/JWT/Django/PostgreSQL rehearsal КЧ/хакатона на программах 9/10: off direct route/entry → enable/create → disable → save/приглашения/accept/submit/frozen → re-enable/новая draft → disable. Mont, JS errors=0; 37 mutating HTTP requests (включая expected conflicts), это не zero writes. Отдельно 30 HTTP/C00 checks подтвердили итоговые snapshots/права/PDF bytes и unchanged прежний домен; сам verifier не менял данные. Основной путь mobile 390, состояния team/materials/readonly на 320/390/768/1440 и desktop материалы; paused states просмотрены визуально. Полный desktop/a11y/zoom/production CDN не заявляются; default remote avatars блокировались local harness.
+
+Spec/audit/evidence находятся в парном backend PR #822: docs/product/program-solutions-rel01.md и docs/qa/program-solutions-creation-switch-20261025/. Backend migration 0034 → frontend; flag остается False до отдельного утвержденного пилота, откат выключает только новое создание. Общие QA01/REL01 и полная feature не завершены; PR остается draft, merge/deploy не выполнялись.

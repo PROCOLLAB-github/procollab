@@ -122,6 +122,32 @@ describe("Solution route foundation", () => {
     expect(create.execute).not.toHaveBeenCalled();
   });
 
+  it("shows paused creation at a direct new route without creating or falling back", async () => {
+    getContext.execute.mockReturnValue(
+      of(ok({ ...context, canCreate: false, blockedReason: "solution_creation_disabled" })),
+    );
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl("/office/program/12/solutions/new", ProgramSolutionComponent);
+    expect(harness.routeNativeElement?.querySelector('[role="alert"]')?.textContent).toContain(
+      "Создание новых решений временно приостановлено. Ранее созданные заявки доступны.",
+    );
+    expect(create.execute).not.toHaveBeenCalled();
+    expect(get.execute).not.toHaveBeenCalled();
+    expect(TestBed.inject(Router).url).toBe("/office/program/12/solutions/new");
+  });
+
+  it("reads an existing solution during paused creation without consulting creation context", async () => {
+    getContext.execute.mockReturnValue(
+      of(ok({ ...context, canCreate: false, blockedReason: "solution_creation_disabled" })),
+    );
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl("/office/program/12/solutions/88", ProgramSolutionComponent);
+    expect(get.execute).toHaveBeenCalledExactlyOnceWith(12, 88);
+    expect(getContext.execute).not.toHaveBeenCalled();
+    expect(harness.routeNativeElement?.textContent).toContain(solution.name);
+    expect(create.execute).not.toHaveBeenCalled();
+  });
+
   it("error state supports retry and does not render stale solution data", async () => {
     get.execute.mockReturnValueOnce(
       of(fail({ code: "not_found", detail: "Заявка не найдена.", errors: [], meta: {} })),

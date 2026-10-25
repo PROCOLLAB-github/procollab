@@ -19,3 +19,9 @@ export function solutionApplicationRoute(application: SolutionApplicationRef) {
         },
       };
 }
+
+export function solutionCreationBlockedMessage(reason: string | null): string {
+  return reason === "solution_creation_disabled"
+    ? "Создание новых решений временно приостановлено. Ранее созданные заявки доступны."
+    : "Создание заявки сейчас недоступно. Проверьте регистрацию и сроки программы.";
+}

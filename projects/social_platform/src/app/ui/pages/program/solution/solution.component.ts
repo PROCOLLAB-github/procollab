@@ -20,7 +20,10 @@ import {
   CreateSolutionUseCase,
   GetSolutionUseCase,
 } from "@api/solution/use-cases/solution.use-cases";
-import { solutionApplicationRoute } from "@api/solution/solution-navigation";
+import {
+  solutionApplicationRoute,
+  solutionCreationBlockedMessage,
+} from "@api/solution/solution-navigation";
 import { AppRoutes } from "@api/paths/app-routes";
 import {
   ProgramSolution,
@@ -370,8 +373,7 @@ export class ProgramSolutionComponent {
               } else {
                 this.showError({
                   code: context.blockedReason ?? "forbidden",
-                  detail:
-                    "Создание заявки сейчас недоступно. Проверьте регистрацию и сроки программы.",
+                  detail: solutionCreationBlockedMessage(context.blockedReason),
                   errors: [],
                   meta: {},
                 });

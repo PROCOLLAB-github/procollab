@@ -165,6 +165,27 @@ describe("DetailProgramInfoService", () => {
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
+  it("explains paused creation at the program entry without navigation or legacy apply", () => {
+    programUI.program.set(program({ id: 12, isUserMember: true, solutionStorageMode: "solution" }));
+    vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
+      of(
+        ok({
+          ...legacyContext,
+          storageMode: "solution",
+          canCreate: false,
+          blockedReason: "solution_creation_disabled",
+        }),
+      ),
+    );
+    service.addNewProject(12);
+    expect(service.assignProjectToProgramModalMessage()).toBe(
+      "Создание новых решений временно приостановлено. Ранее созданные заявки доступны.",
+    );
+    expect(service.isAssignProjectToProgramModalOpen()).toBe(true);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+  });
+
   it("ignores stale program context and guards double clicks", () => {
     const response = new Subject<Result<SolutionContext, never>>();
     const getContext = vi
