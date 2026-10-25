@@ -1,0 +1,18 @@
+{
+  "status": "PASS source provenance; runtime results in evidence.json",
+  "feature": "ca1b203a34fddedd6f7d7d6a45752073697dfd7c",
+  "observedDev": "08414b794dd5b34de5471dddaa19cd0af7f4a167",
+  "prospectiveTree": "2f4f4f23b39b198247c3da01685685debf534faa",
+  "trackedFiles": 3681,
+  "trackedSourcesManifestSha256": "1199f2ca996a9fc9cb430687e4b9bdb7bb169e03452bbc17da7a2f93d991ddcc",
+  "packageInputsUnchanged": true,
+  "noDependencyInstall": true,
+  "noBranchMerge": true,
+  "buildOutputsWillStayInOwnedSnapshot": true,
+  "sharedContracts": {
+    "examples.json": "1c7f220fc5f956dd9aa4043f68c52a1918ed18b048d56bffa31a1afe3499edcc",
+    "openapi.json": "49b6e5741e64aac9169e4d5e945a9e054020a1f4d807ac0b015e025c32860af2",
+    "README.md": "6dc80bae4062f523a1e88fcd3edbc849c3b1fe423e20ebb0b83ece836d5500f2"
+  },
+  "dependencyReuse": "Owned TEMP junction to existing unchanged node_modules; no install"
+}
