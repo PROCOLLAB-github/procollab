@@ -102,19 +102,8 @@
           (interactionStart)="remember()"
           (layoutChange)="patch({ layout: $event }, false)"
           (removeElement)="hideElement($event)"
+          (downloadPreview)="preview()"
         />
-        <div class="certificates__pdf-actions">
-          <button type="button" appButton="secondary" [disabled]="busy()" (click)="preview()">
-            Скачать пробный PDF
-          </button>
-          <p class="certificates__muted">
-            {{
-              dirty()
-                ? "Перед скачиванием сохраним изменения шаблона."
-                : "Проверьте расположение элементов в готовом PDF."
-            }}
-          </p>
-        </div>
       </div>
       <aside class="certificates__settings">
         <section class="certificates__format-settings">
@@ -125,7 +114,6 @@
               <option value="portrait">Вертикальная</option>
             </select>
           </label>
-          <p class="certificates__muted">Подбирается по фону. Можно изменить вручную.</p>
         </section>
         <section>
           <h4>Фон сертификата</h4>
@@ -159,9 +147,6 @@
               Только имя
             </button>
           </div>
-          <p class="certificates__muted">
-            Все надписи уже есть на фоне? Оставьте только имя участника.
-          </p>
           <div class="certificates__layers" aria-label="Элементы сертификата">
             @for (key of visibleElements(); track key) {
               <div
@@ -212,9 +197,7 @@
         <section class="certificates__element-settings">
           <h4>{{ elementLabels[selected()] }}</h4>
           @if (selected() === "name") {
-            <p class="certificates__muted">
-              Подставляется для каждого участника автоматически. Этот элемент нельзя удалить.
-            </p>
+            <p class="certificates__muted">Имя подставится автоматически.</p>
           }
           @if (selected() === "director") {
             <label class="certificates__field"
@@ -296,9 +279,6 @@
           ></label
         >
       </div>
-      <p class="certificates__muted">
-        Состав участников проверяется в момент запуска. Один участник получает один сертификат.
-      </p>
       <h3>Когда выдать</h3>
       <label class="certificates__check"
         ><input
@@ -342,17 +322,34 @@
         </label>
       }
       <div class="certificates__divider"></div>
-      <label class="certificates__check"
-        ><input
-          type="checkbox"
-          appChoice
-          [ngModel]="d.sendEmail"
-          (ngModelChange)="patch({ sendEmail: $event })"
-        /><strong>Отправлять сертификат на почту участника</strong></label
-      >
-      <p class="certificates__muted">
-        В письме будет персональная ссылка на PDF. Сертификат также доступен на странице программы.
-      </p>
+      <h3>Где участник получит сертификат</h3>
+      <div class="certificates__audience">
+        <label class="certificates__option" [class.certificates__option--selected]="!d.sendEmail">
+          <input
+            type="radio"
+            appChoice
+            name="delivery"
+            [value]="false"
+            [ngModel]="d.sendEmail"
+            (ngModelChange)="patch({ sendEmail: $event })"
+          />
+          <span><strong>На платформе</strong><small>На странице программы</small></span>
+        </label>
+        <label class="certificates__option" [class.certificates__option--selected]="d.sendEmail">
+          <input
+            type="radio"
+            appChoice
+            name="delivery"
+            [value]="true"
+            [ngModel]="d.sendEmail"
+            (ngModelChange)="patch({ sendEmail: $event })"
+          />
+          <span
+            ><strong>На платформе и по почте</strong
+            ><small>PDF на платформе, ссылка в письме</small></span
+          >
+        </label>
+      </div>
       @if (d.sendEmail) {
         <label class="certificates__field"
           >Тема письма<input
@@ -401,26 +398,16 @@
           [disabled]="busy() || (!snapshot()?.batch?.active && !!launchProblem())"
           (click)="prepareLaunch()"
         >
-          {{ snapshot()?.batch?.active ? "Открыть отправки" : "Перейти к запуску" }}
+          {{ snapshot()?.batch?.active ? "Открыть отправление" : "Перейти к запуску" }}
         </button>
       </div>
       @if (!snapshot()?.batch?.active) {
         @if (launchProblem()) {
           <p class="certificates__launch-problem" role="status">{{ launchProblem() }}</p>
-        } @else {
-          <p class="certificates__muted">
-            {{
-              dirty()
-                ? "Есть изменения. Сначала сохраним их, затем вы проверите параметры запуска."
-                : "После нажатия вы проверите параметры запуска."
-            }}
-          </p>
         }
       }
       @if (snapshot()?.batch?.active) {
-        <p class="certificates__muted">
-          Выдача уже работает. Управление очередью — на шаге «Отправки».
-        </p>
+        <p class="certificates__muted">Выдача работает. Очередь доступна на шаге «Отправление».</p>
       }
     </fieldset>
   }
@@ -443,7 +430,7 @@
       @if (snapshot()?.batch; as batch) {
         <div class="certificates__queue">
           <p>
-            {{ batch.active ? "Автовыдача работает" : "Выдача приостановлена" }} · запуск
+            {{ batch.active ? "Автовыдача работает" : "Автовыдача приостановлена" }} · запуск
             {{ batch.issueAt | date: "dd.MM.yyyy, HH:mm" : "+0300" }} (МСК)
           </p>
           <button type="button" appButton="secondary" [disabled]="busy()" (click)="queue()">
@@ -464,6 +451,13 @@
         <button type="button" [attr.aria-pressed]="filter() === 'all'" (click)="setFilter('all')">
           Все · {{ journal()?.summary?.total ?? 0 }}
         </button>
+        <button
+          type="button"
+          [attr.aria-pressed]="filter() === 'unsent'"
+          (click)="setFilter('unsent')"
+        >
+          Не отправлено · {{ journal()?.summary?.unsent ?? 0 }}
+        </button>
         <button type="button" [attr.aria-pressed]="filter() === 'sent'" (click)="setFilter('sent')">
           Отправлено · {{ journal()?.summary?.sent ?? 0 }}
         </button>
@@ -475,6 +469,27 @@
           Ошибки · {{ journal()?.summary?.failed ?? 0 }}
         </button>
       </div>
+      <div class="certificates__selection" aria-label="Действия с выбранными участниками">
+        <span aria-live="polite">Выбрано: {{ selectedCount() }}</span>
+        <div class="certificates__actions">
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="busy() || journalLoading() || !selectedCount()"
+            (click)="selectionAction.set('refresh')"
+          >
+            Обновить PDF
+          </button>
+          <button
+            type="button"
+            appButton="primary"
+            [disabled]="busy() || journalLoading() || !selectedCount()"
+            (click)="selectionAction.set('send')"
+          >
+            Отправить выбранным
+          </button>
+        </div>
+      </div>
       @if (journalError()) {
         <p appAlert="error" role="alert">
           {{ journalError() }}
@@ -485,8 +500,20 @@
         <table>
           <thead>
             <tr>
+              <th class="certificates__select-cell">
+                <input
+                  type="checkbox"
+                  appChoice
+                  aria-label="Выбрать всех по текущему фильтру"
+                  [checked]="allChecked()"
+                  [indeterminate]="selectedCount() > 0 && !allChecked()"
+                  [disabled]="busy() || !journal()?.count || journalLoading()"
+                  (change)="selectAll($any($event.target).checked)"
+                />
+                <span class="certificates__mobile-select">Выбрать всех</span>
+              </th>
               <th>Участник</th>
-              <th>Отправка</th>
+              <th>Письмо</th>
               <th>Сертификат</th>
               <th>Действие</th>
             </tr>
@@ -494,26 +521,48 @@
           <tbody>
             @for (row of journal()?.results; track row.id) {
               <tr>
+                <td class="certificates__select-cell">
+                  <input
+                    type="checkbox"
+                    appChoice
+                    [attr.aria-label]="'Выбрать: ' + row.name"
+                    [checked]="isSelected(row.id)"
+                    [disabled]="busy() || journalLoading()"
+                    (change)="toggleRow(row.id, $any($event.target).checked)"
+                  />
+                </td>
                 <td>
                   <strong>{{ row.name }}</strong
                   ><small>{{ row.email }}</small>
                 </td>
-                <td>
-                  <span [class.certificates__error]="row.status === 'failed'">{{
-                    labels[row.status]
-                  }}</span
-                  ><small>{{
-                    row.error || (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300")
-                  }}</small>
+                <td data-label="Письмо">
+                  <span [class.certificates__error]="row.status === 'failed' && row.pdfReady">{{
+                    row.status === "failed" && !row.pdfReady ? "Не отправлено" : labels[row.status]
+                  }}</span>
+                  @if (row.pdfReady && (row.error || row.sentAt)) {
+                    <small>{{
+                      row.error || (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300")
+                    }}</small>
+                  }
                 </td>
-                <td>{{ row.pdfReady ? "PDF готов" : "Готовится" }}</td>
+                <td data-label="Сертификат">
+                  <span [class.certificates__error]="row.status === 'failed' && !row.pdfReady">{{
+                    row.status === "failed" && !row.pdfReady
+                      ? "PDF не создан"
+                      : row.outdated
+                        ? "Шаблон изменен"
+                        : row.pdfReady
+                          ? "PDF готов"
+                          : "Готовится"
+                  }}</span>
+                </td>
                 <td>
                   @if (row.status === "failed") {
                     <button
                       type="button"
                       appButton="secondary"
-                      [disabled]="busy() || !snapshot()?.batch?.active"
-                      (click)="retry(row.id)"
+                      [disabled]="busy()"
+                      (click)="selectFailed(row.id)"
                     >
                       Повторить
                     </button>
@@ -522,25 +571,30 @@
                     <button
                       type="button"
                       appButton="secondary"
-                      [disabled]="busy()"
+                      [disabled]="
+                        busy() ||
+                        row.status === 'pending' ||
+                        row.status === 'generating' ||
+                        row.status === 'sending'
+                      "
                       (click)="pdf(row.id)"
                     >
-                      Скачать PDF
+                      {{ row.outdated || dirty() ? "Обновить и скачать" : "Скачать PDF" }}
                     </button>
                   }
                 </td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="4" class="certificates__empty">
+                <td colspan="5" class="certificates__empty">
                   {{
                     journalLoading()
-                      ? "Загружаем отправки…"
+                      ? "Загружаем сертификаты…"
                       : filter() === "failed"
                         ? "Ошибок отправки не найдено."
                         : search()
                           ? "Никого не нашли. Измените запрос."
-                          : "Отправок пока нет. Настройте шаблон и запустите выдачу."
+                          : "Сертификатов пока нет. Настройте шаблон и запустите выдачу."
                   }}
                 </td>
               </tr>
@@ -578,20 +632,23 @@
             [disabled]="busy() || !journal()?.summary?.ready"
             (click)="archive()"
           >
-            Скачать PDF по фильтру</button
+            {{
+              journal()?.summary?.outdated || dirty()
+                ? "Обновить и скачать PDF"
+                : selectedCount()
+                  ? "Скачать выбранные PDF"
+                  : "Скачать PDF по фильтру"
+            }}</button
           ><button
             type="button"
             appButton="primary"
-            [disabled]="busy() || !journal()?.summary?.failed || !snapshot()?.batch?.active"
-            (click)="retry()"
+            [disabled]="busy() || !journal()?.summary?.failed"
+            (click)="selectFailed()"
           >
             Повторить ошибки ({{ journal()?.summary?.failed ?? 0 }})
           </button>
         </div>
       </div>
-      <p class="certificates__muted certificates__footnote">
-        Повтор использует готовый PDF. «Отправлено» означает, что письмо принято почтовым сервисом.
-      </p>
     </section>
   }
   <ng-template #saveControls>
@@ -605,7 +662,7 @@
               : "Все изменения сохранены"
         }}
         @if (snapshot()?.batch) {
-          <small>Изменения применятся к следующей выдаче.</small>
+          <small>Для выданных сертификатов: «Обновить PDF» в отправлении.</small>
         }
       </span>
       <div class="certificates__actions">
@@ -691,6 +748,38 @@
         <ng-container [ngTemplateOutlet]="saveControls" />
       </div>
     }
+  </app-modal>
+  <app-modal
+    [open]="!!selectionAction()"
+    (openChange)="!$event && selectionAction.set(null)"
+    size="small"
+    labelledBy="certificate-selection-heading"
+  >
+    <div class="certificates__confirmation">
+      <h2 id="certificate-selection-heading">
+        {{ selectionCopy().title }}
+      </h2>
+      @if (error()) {
+        <p appAlert="error" role="alert">{{ error() }}</p>
+      }
+      <p>Выбрано участников: {{ selectedCount() }}.</p>
+      <p>
+        {{ selectionCopy().hint }}
+      </p>
+      <div class="certificates__actions">
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="busy()"
+          (click)="selectionAction.set(null)"
+        >
+          Отмена
+        </button>
+        <button type="button" appButton="primary" [disabled]="busy()" (click)="performSelection()">
+          {{ selectionCopy().button }}
+        </button>
+      </div>
+    </div>
   </app-modal>
   <app-modal
     [open]="confirmOpen()"

@@ -1,8 +1,28 @@
 /** @format */
 import { describe, expect, it } from "vitest";
-import { fitCertificateText, moveCertificateBox, resizeCertificateBox } from "./certificate-layout";
+import {
+  fitCertificateText,
+  moveCertificateBox,
+  resizeCertificateBox,
+  sizeCertificateText,
+} from "./certificate-layout";
 const box = { x: 10, y: 20, width: 30, height: 15, fontSize: 18 };
 describe("Certificate layout geometry", () => {
+  it("makes a requested size visible in both orientations and keeps the grown box on the sheet", () => {
+    const value = "Александра Константиновна Добровольская";
+    const measure = (text: string) => Array.from(text).length * 550;
+    for (const orientation of ["portrait", "landscape"] as const) {
+      const resized = sizeCertificateText(
+        value,
+        { ...box, y: 98, height: 2, width: 80 },
+        48,
+        measure,
+        orientation,
+      );
+      expect(resized.y + resized.height).toBeLessThanOrEqual(100);
+      expect(fitCertificateText(value, resized, measure, orientation).fontSize).toBeCloseTo(48, 2);
+    }
+  });
   it("keeps dragged elements inside the page at every edge", () => {
     expect(moveCertificateBox(box, -100, -100)).toMatchObject({ x: 0, y: 0 });
     expect(moveCertificateBox(box, 100, 100)).toMatchObject({ x: 70, y: 85 });

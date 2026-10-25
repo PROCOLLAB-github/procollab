@@ -9,6 +9,7 @@ import {
   CertificateFilter,
   CertificateJournal,
   CertificateSettings,
+  CertificateSelection,
 } from "@domain/program/program-certificates.model";
 @Injectable()
 export class ProgramCertificatesHttpAdapter implements ProgramCertificatesRepositoryPort {
@@ -31,8 +32,8 @@ export class ProgramCertificatesHttpAdapter implements ProgramCertificatesReposi
   asset(id: number, assetId: number) {
     return this.api.getFile(this.root(id) + `assets/${assetId}/`);
   }
-  preview(id: number, revision: number) {
-    return this.api.postFile(this.root(id) + "preview/", { revision });
+  preview(id: number, revision: number, longName = false) {
+    return this.api.postFile(this.root(id) + "preview/", { revision, longName });
   }
   test(id: number, revision: number) {
     return this.api.post<{ detail: string }>(this.root(id) + "test/", { revision });
@@ -58,8 +59,26 @@ export class ProgramCertificatesHttpAdapter implements ProgramCertificatesReposi
   pdf(id: number, certificateId: string) {
     return this.api.getFile(this.root(id) + `deliveries/${certificateId}/pdf/`);
   }
+  currentPdf(id: number, certificateId: string, revision: number) {
+    return this.api.postFile(this.root(id) + `deliveries/${certificateId}/pdf/`, { revision });
+  }
+  selection(
+    id: number,
+    revision: number,
+    action: "send" | "refresh" | "retry",
+    selection: CertificateSelection,
+  ) {
+    return this.api.post<{ count: number; skipped: number }>(this.root(id) + "selection/", {
+      revision,
+      action,
+      ...selection,
+    });
+  }
   archive(id: number, status: CertificateFilter, search: string) {
     return this.api.getFile(this.root(id) + "archive/", this.query(status, search));
+  }
+  currentArchive(id: number, revision: number, selection: CertificateSelection) {
+    return this.api.postFile(this.root(id) + "archive/", { revision, ...selection });
   }
   mine(id: number) {
     return this.api.get<{ id: string; issuedAt: string; url: string }[]>(

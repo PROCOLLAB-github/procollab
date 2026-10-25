@@ -50,6 +50,23 @@ export function resizeCertificateBox(
   return { ...box, width, height };
 }
 
+/** Grow the text area with the requested type size instead of silently shrinking the type. */
+export function sizeCertificateText(
+  value: string,
+  box: CertificateBox,
+  fontSize: number,
+  measure: (text: string) => number,
+  orientation: CertificateDraft["orientation"] = "landscape",
+): CertificateBox {
+  const page = certificatePage(orientation);
+  const fit = fitCertificateText(value, { ...box, height: 100, fontSize }, measure, orientation);
+  const height = Math.min(
+    100,
+    Math.max(box.height, ((fit.lines.length * fontSize * 1.3 + 2.1) / page.heightPx) * 100),
+  );
+  return { ...box, fontSize, height, y: clamp(box.y - (height - box.height) / 2, 0, 100 - height) };
+}
+
 export function hiddenCertificateElements(
   draft: CertificateDraft,
 ): Exclude<CertificateElement, "name">[] {

@@ -261,31 +261,11 @@
     margin-top: 12px;
   }
 
-  &__check,
-  &__zoom {
+  &__check {
     display: flex;
     gap: 8px;
     align-items: center;
     min-height: 32px;
-  }
-
-  &__zoom {
-    max-width: 100%;
-    color: var(--grey-for-text);
-
-    select {
-      width: 164px;
-      padding-right: 28px;
-      font-size: 12px;
-      background-position: right 8px center;
-      background-size: 12px;
-    }
-  }
-
-  &__instruction {
-    margin: 8px 0 0;
-    font-size: 11px;
-    color: var(--grey-for-text);
   }
 }
 
@@ -304,8 +284,7 @@
 
   .canvas__font,
   .canvas__family,
-  .canvas__check,
-  .canvas__zoom {
+  .canvas__check {
     min-height: 44px;
   }
 
