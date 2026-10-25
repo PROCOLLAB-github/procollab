@@ -45,6 +45,7 @@ export interface CertificateAsset {
   height: number;
 }
 export interface CertificateDraft {
+  orientation?: "landscape" | "portrait";
   backgroundId: number | null;
   signatureId: number | null;
   director: string;

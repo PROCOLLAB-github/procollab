@@ -21,6 +21,7 @@ import {
   CertificateElement,
 } from "@domain/program/program-certificates.model";
 import {
+  certificatePage,
   fitCertificateText,
   hiddenCertificateElements,
   moveCertificateBox,
@@ -60,12 +61,19 @@ export class CertificateCanvasComponent {
   private readonly fontsReady = signal(false);
   private context: CanvasRenderingContext2D | null = null;
   private readonly destroy = inject(DestroyRef);
+  readonly page = computed(() => certificatePage(this.draft().orientation));
   readonly paperWidth = computed(() => {
     const width = this.availableWidth();
+    const page = this.page();
     // Leave room for tools, the PDF action and the sticky save footer in the dialog.
-    const fit = this.expanded()
-      ? Math.min(width, (Math.max(200, this.viewportHeight() - 480) * 297) / 210)
-      : width;
+    const height = Math.max(
+      this.draft().orientation === "portrait" ? 360 : 200,
+      this.viewportHeight() - (this.expanded() ? 480 : 320),
+    );
+    const fit =
+      this.expanded() || this.draft().orientation === "portrait"
+        ? Math.min(width, (height * page.widthMm) / page.heightMm)
+        : width;
     return fit * this.zoom();
   });
   readonly fits = computed(() => {
@@ -82,7 +90,12 @@ export class CertificateCanvasComponent {
         }
         return cache.get(id)!;
       };
-      const fit = fitCertificateText(this.text(key), this.draft().layout[key], measure);
+      const fit = fitCertificateText(
+        this.text(key),
+        this.draft().layout[key],
+        measure,
+        this.draft().orientation,
+      );
       result[key] = { fontSize: fit.fontSize, text: fit.lines.join("\n") };
     }
     return result;
@@ -196,6 +209,7 @@ export class CertificateCanvasComponent {
             dx,
             dy,
             drag.key === "signature" ? this.signatureRatio() : undefined,
+            this.draft().orientation,
           )
         : moveCertificateBox(drag.box, dx, dy),
     );
@@ -233,6 +247,7 @@ export class CertificateCanvasComponent {
             vector[0] * amount,
             vector[1] * amount,
             key === "signature" ? this.signatureRatio() : undefined,
+            this.draft().orientation,
           )
         : moveCertificateBox(box, vector[0] * amount, vector[1] * amount, false),
     );

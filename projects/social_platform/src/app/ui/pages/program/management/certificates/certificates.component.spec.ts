@@ -80,6 +80,46 @@ async function setup(data = settings()) {
   return { fixture, component: fixture.componentInstance, repository };
 }
 describe("Program certificates", () => {
+  it("defaults legacy templates to landscape and saves portrait with undo and redo", async () => {
+    const { fixture, component, repository } = await setup();
+    expect(component.draft()!.orientation).toBe("landscape");
+    expect(component.dirty()).toBe(false);
+    component.setOrientation("portrait");
+    fixture.detectChanges();
+    expect(component.formatLabel()).toContain("210 × 297");
+    expect(fixture.nativeElement.querySelector(".canvas").style.aspectRatio).toBe("210 / 297");
+    component.undo();
+    expect(component.draft()!.orientation).toBe("landscape");
+    component.redo();
+    expect(component.draft()!.orientation).toBe("portrait");
+    await component.save();
+    expect(repository.save).toHaveBeenCalledWith(
+      9,
+      1,
+      expect.objectContaining({ orientation: "portrait" }),
+    );
+    expect(component.dirty()).toBe(false);
+    fixture.destroy();
+  });
+  it("chooses orientation from a portrait background and undoes the file and orientation together", async () => {
+    const { fixture, component, repository } = await setup();
+    repository.upload.mockReturnValue(
+      of({ id: 12, name: "portrait.png", width: 2480, height: 3508 }),
+    );
+    repository.asset.mockReturnValue(of(new Blob(["image"])));
+    await component.upload(
+      { target: { files: [new File(["image"], "portrait.png")] } } as unknown as Event,
+      "background",
+    );
+    expect(component.draft()!.orientation).toBe("portrait");
+    expect(component.draft()!.backgroundId).toBe(12);
+    component.undo();
+    expect(component.draft()!.orientation).toBe("landscape");
+    expect(component.draft()!.backgroundId).toBeNull();
+    component.redo();
+    expect(component.draft()!.orientation).toBe("portrait");
+    fixture.destroy();
+  });
   it("allows only the name to remain, restores removed elements and preserves geometry", async () => {
     const { fixture, component } = await setup();
     const layout = structuredClone(component.draft()!.layout);

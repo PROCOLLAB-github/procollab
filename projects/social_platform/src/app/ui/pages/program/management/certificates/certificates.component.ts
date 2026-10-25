@@ -33,6 +33,7 @@ import {
   CERTIFICATE_LABELS,
 } from "@domain/program/program-certificates.model";
 import {
+  certificatePage,
   hiddenCertificateElements,
   normalizeCertificateDraft,
   resizeCertificateBox,
@@ -94,6 +95,11 @@ export class ManagementCertificatesComponent {
   readonly editorPreview = signal(false);
   readonly keys = CERTIFICATE_ELEMENTS;
   readonly elementLabels = CERTIFICATE_LABELS;
+  readonly formatLabel = computed(() =>
+    this.draft()?.orientation === "portrait"
+      ? "А4 · вертикальный · 210 × 297 мм"
+      : "А4 · альбомный · 297 × 210 мм",
+  );
   readonly undoStack = signal<CertificateEditState[]>([]);
   readonly redoStack = signal<CertificateEditState[]>([]);
   readonly visibleElements = computed(() =>
@@ -296,6 +302,9 @@ export class ManagementCertificatesComponent {
     if (remember) this.remember();
     this.draft.update(d => (d ? { ...d, ...values } : d));
   }
+  setOrientation(orientation: CertificateDraft["orientation"]): void {
+    if (orientation && orientation !== this.draft()?.orientation) this.patch({ orientation });
+  }
   schedule(value: string): void {
     this.patch({ scheduledAt: value ? fromMoscowInput(value) : null });
   }
@@ -358,19 +367,30 @@ export class ManagementCertificatesComponent {
     this.remember();
     this.assets.update(assets => ({ ...assets, [kind]: asset }));
     this.patch(
-      kind === "background" ? { backgroundId: asset.id } : { signatureId: asset.id },
+      kind === "background"
+        ? {
+            backgroundId: asset.id,
+            orientation:
+              asset.width === asset.height
+                ? this.draft()!.orientation
+                : asset.height > asset.width
+                  ? "portrait"
+                  : "landscape",
+          }
+        : { signatureId: asset.id },
       false,
     );
     if (kind === "signature") {
       const draft = this.draft()!;
       const box = draft.layout.signature;
       const ratio = asset.width / asset.height;
-      const width = Math.min(box.width, (box.height * ratio) / (297 / 210));
+      const page = certificatePage(draft.orientation);
+      const width = Math.min(box.width, (box.height * ratio) / (page.widthMm / page.heightMm));
       this.patch(
         {
           layout: {
             ...draft.layout,
-            signature: resizeCertificateBox({ ...box, width }, 0, 0, ratio),
+            signature: resizeCertificateBox({ ...box, width }, 0, 0, ratio, draft.orientation),
           },
         },
         false,

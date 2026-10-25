@@ -65,6 +65,33 @@ button {
 }
 
 .certificates {
+  &__format-settings {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--medium-grey-for-outline);
+  }
+
+  &__format {
+    display: grid;
+    gap: 8px;
+
+    > span {
+      font-weight: 600;
+    }
+
+    .ui-field {
+      width: 164px;
+      max-width: 100%;
+      min-height: 32px;
+      padding: 5px 28px 5px 8px;
+      font-size: 12px;
+      line-height: 20px;
+      background-position: right 8px center;
+      background-size: 12px;
+      border-radius: 8px;
+    }
+  }
+
   &__heading {
     margin-bottom: 20px;
 
