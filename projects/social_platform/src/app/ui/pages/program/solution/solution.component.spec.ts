@@ -511,6 +511,10 @@ describe("Solution route foundation", () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl("/office/program/12/solutions/88", ProgramSolutionComponent);
     expect(harness.routeNativeElement?.textContent).toContain("Программа не требует сдачи");
+    expect(harness.routeNativeElement?.textContent).toContain(
+      "Заполняйте решение постепенно и сохраняйте материалы по мере готовности.",
+    );
+    expect(harness.routeNativeElement?.textContent).not.toContain("понадобятся при сдаче");
     expect(
       [...harness.routeNativeElement!.querySelectorAll("button")].some(
         button => button.textContent?.trim() === "Сдать решение",

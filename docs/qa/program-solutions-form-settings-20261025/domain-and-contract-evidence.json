@@ -1,0 +1,285 @@
+{
+  "status": "PASS",
+  "backend": "ad3945ea2ebcd214a26b64ab09c92d334f9d2c77",
+  "frontendBase": "d2a2cd3f80549e7dcbc6b3e32e55fea7ead57175",
+  "prefix": "qa01f-20261025-a8f2c339",
+  "validation": {
+    "responses": 85,
+    "requests": 22
+  },
+  "programs": [
+    {
+      "program": 27,
+      "key": "case_championship",
+      "template": "case_championship",
+      "solution": 42,
+      "fieldIds": [202, 203, 204, 205, 206, 207, 208, 209],
+      "numberId": 206,
+      "falseId": 208,
+      "captainOnly": true,
+      "emptyAnswersOmitted": true,
+      "zeroFalseSaved": true,
+      "creationFlagOff": true,
+      "requiredSubmission": true
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "template": "hackathon",
+      "solution": 43,
+      "fieldIds": [210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221],
+      "numberId": 218,
+      "falseId": 220,
+      "captainOnly": true,
+      "emptyAnswersOmitted": true,
+      "zeroFalseSaved": true,
+      "creationFlagOff": true,
+      "requiredSubmission": true
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "template": "case_championship",
+      "solution": 44,
+      "fieldIds": [222, 223, 224, 225, 226, 227, 228, 229],
+      "numberId": 226,
+      "falseId": 228,
+      "captainOnly": true,
+      "emptyAnswersOmitted": true,
+      "zeroFalseSaved": true,
+      "creationFlagOff": true,
+      "requiredSubmission": false
+    }
+  ],
+  "browserChecks": 19,
+  "browserResponses": 61,
+  "verifierRequests": 24,
+  "verifierDomainMutations": 0,
+  "preexistingSelectedDomainUnchangedSinceBaseline": true,
+  "baselineTiming": "Captured after isolated program/registration setup and before any tested API or browser writes. Initial seed committed three empty programs but failed generating manifest because Expert has a non-id primary key. No pre-seed SHA is claimed.",
+  "baselineModels": [
+    "partner_programs.PartnerProgram",
+    "partner_programs.PartnerProgramField",
+    "partner_programs.PartnerProgramUserProfile",
+    "partner_programs.ProgramSolution",
+    "partner_programs.ProgramSolutionAnswer",
+    "partner_programs.ProgramSolutionMember",
+    "partner_programs.SolutionInvitation",
+    "project_rates.SolutionScore",
+    "project_rates.SolutionExpertAssignment",
+    "project_rates.Criteria",
+    "users.Expert",
+    "files.UserFile",
+    "projects.Project",
+    "users.Expert_programs",
+    "partner_programs.PartnerProgram_managers"
+  ],
+  "catalogMutationScope": "Changed only inside this verifier Python process via unittest.mock.patch; actual API workers/catalog were not patched. Persisted forms stayed identical; before/after real template GET also matches.",
+  "originalProjectCountUnchanged": true,
+  "events": [
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-form-templates/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "ffb494ccc9660ff3945a3f381f5c5440d7059b82c43b58d9c972167b9605b79f"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/27/solutions/42/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "d7bcbd548ee07c33fa275c5461962c03a05ae85d8598f744cdc7c984552bea5d"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/27/management/solution-form/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "103ab1310e967972fb6f1070c77ceb0906ac8be7a23fb4bc28523398a8bf918a"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/27/management/solution-form/",
+      "status": 403,
+      "code": "permission_denied",
+      "responseSha256": "2fb8879ebaa01000c0cc48921160c73fb1ae3d92dcb96b66d38befee3211ff9b"
+    },
+    {
+      "role": "foreign_manager",
+      "method": "GET",
+      "path": "/programs/27/management/solution-form/",
+      "status": 403,
+      "code": "permission_denied",
+      "responseSha256": "2fb8879ebaa01000c0cc48921160c73fb1ae3d92dcb96b66d38befee3211ff9b"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/27/solutions/42/",
+      "status": 400,
+      "code": "invalid_answers",
+      "responseSha256": "61a1ae3d9cce7dce04e39d64a023b966cbbaae8f6250781d2882930ec099f7c0"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/27/solutions/42/",
+      "status": 400,
+      "code": "invalid_answers",
+      "responseSha256": "95e6625f99e950d4cc3605947ab249e417e548ff01af8ef8575f85b1a1777b14"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/27/solutions/42/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "d7bcbd548ee07c33fa275c5461962c03a05ae85d8598f744cdc7c984552bea5d"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/28/solutions/43/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "b8d9e37a6a29461e121338a343da5ce4a50f02c50a91b8dd12bdfca8d913c012"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/28/management/solution-form/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "27faec73c95aa59da6e9dc48775924a55c8c96ce5d29c2dd2e123f4d1a3fdd2a"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/28/management/solution-form/",
+      "status": 403,
+      "code": "permission_denied",
+      "responseSha256": "2fb8879ebaa01000c0cc48921160c73fb1ae3d92dcb96b66d38befee3211ff9b"
+    },
+    {
+      "role": "foreign_manager",
+      "method": "GET",
+      "path": "/programs/28/management/solution-form/",
+      "status": 403,
+      "code": "permission_denied",
+      "responseSha256": "2fb8879ebaa01000c0cc48921160c73fb1ae3d92dcb96b66d38befee3211ff9b"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/28/solutions/43/",
+      "status": 400,
+      "code": "invalid_answers",
+      "responseSha256": "d54a0cfc57cee62c952c29af17c37e1881904afe459e11883b11f9765e14806b"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/28/solutions/43/",
+      "status": 400,
+      "code": "invalid_answers",
+      "responseSha256": "2cc985ecebf9002a9cd22bcf3a201d887244b1ca374f1276d23b7766f2dc3072"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/28/solutions/43/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "b8d9e37a6a29461e121338a343da5ce4a50f02c50a91b8dd12bdfca8d913c012"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/29/solutions/44/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "6dcbd5572cf4c835b7ae3b463f1af52e6cd4f3eb718b13febf9b203ed8a0473a"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/29/management/solution-form/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "29d26f65d64afe32866e6b8de7d492c7cbfaaf48b51262f7bdc614c740686d61"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/29/management/solution-form/",
+      "status": 403,
+      "code": "permission_denied",
+      "responseSha256": "2fb8879ebaa01000c0cc48921160c73fb1ae3d92dcb96b66d38befee3211ff9b"
+    },
+    {
+      "role": "foreign_manager",
+      "method": "GET",
+      "path": "/programs/29/management/solution-form/",
+      "status": 403,
+      "code": "permission_denied",
+      "responseSha256": "2fb8879ebaa01000c0cc48921160c73fb1ae3d92dcb96b66d38befee3211ff9b"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/29/solutions/44/",
+      "status": 400,
+      "code": "invalid_answers",
+      "responseSha256": "78d439d129ebce357fcf1fd3192335f8dc1e785694b509075d086a94fb734259"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/29/solutions/44/",
+      "status": 400,
+      "code": "invalid_answers",
+      "responseSha256": "8003ab9d2e81e0b7a94de6cc712a3bf683a238e80f95c809794c28b939c26691"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/29/solutions/44/submit/",
+      "status": 409,
+      "code": "not_competitive",
+      "responseSha256": "4780f804f123a53f4c0c3ab1045f2fd2ad0951036d46a6514064ec6ec9884101"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/29/solutions/44/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "6dcbd5572cf4c835b7ae3b463f1af52e6cd4f3eb718b13febf9b203ed8a0473a"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-form-templates/",
+      "status": 200,
+      "code": null,
+      "responseSha256": "ffb494ccc9660ff3945a3f381f5c5440d7059b82c43b58d9c972167b9605b79f"
+    }
+  ],
+  "independentTeamModels": [],
+  "limits": [
+    "Baseline was captured after 3 empty programs/registrations were set up; no pre-seed SHA is claimed.",
+    "UI config/draft phases resume only saved checkpoints; initial false-dirty product failure and separate harness mistakes retained.",
+    "No submission of competitive fixtures, full invitation lifecycle, production file upload, new manager analytics/public UI or a11y/zoom acceptance in this checkpoint."
+  ],
+  "aggregateValidation": {
+    "responses": 86,
+    "requests": 22
+  },
+  "finalCopyReadResponses": 1,
+  "curation": "Raw verifier events retained locally; committed event bodies replaced with SHA256. Primary verifier validation remains unchanged; aggregate adds final copy read."
+}

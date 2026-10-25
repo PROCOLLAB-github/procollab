@@ -72,6 +72,48 @@ describe("Конструктор формы решения", () => {
     expect(save.execute).not.toHaveBeenCalled();
     expect(component.dirty()).toBe(true);
   });
+  it.each(["case_championship", "hackathon"] as const)(
+    "starts an unconfigured form clean and only confirms discarding real edits: %s",
+    async template => {
+      read.execute.mockReturnValue(
+        of(
+          ok({
+            ...structuredClone(base),
+            form: {
+              ...structuredClone(base.form),
+              template: null,
+              isConfigured: false,
+              fields: [],
+            },
+            hasAnswers: false,
+            hasSolutions: false,
+            affectedDraftCount: 0,
+            fieldsUsage: [],
+          }),
+        ),
+      );
+      const fixture = await setup(),
+        component = fixture.componentInstance,
+        confirmDiscard = vi.fn(() => Promise.resolve(false));
+      fixture.componentRef.setInput("confirmDiscard", confirmDiscard);
+      fixture.detectChanges();
+      expect(component.dirty()).toBe(false);
+      expect(component.template()).toBeNull();
+      component.templateChoice.setValue(template);
+      expect(component.dirty()).toBe(false);
+      await component.applyTemplate();
+      expect(confirmDiscard).not.toHaveBeenCalled();
+      expect(component.template()).toBe(template);
+      expect(component.fields().length).toBeGreaterThan(0);
+      expect(component.dirty()).toBe(true);
+      expect(save.execute).not.toHaveBeenCalled();
+      const edits = component.fields();
+      await component.applyTemplate();
+      expect(confirmDiscard).toHaveBeenCalledTimes(1);
+      expect(component.fields()).toBe(edits);
+      expect(save.execute).not.toHaveBeenCalled();
+    },
+  );
   it("sends exact form revision and excludes client keys from PUT", async () => {
     const fixture = await setup(),
       component = fixture.componentInstance;

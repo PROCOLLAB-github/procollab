@@ -1,0 +1,18 @@
+{
+  "status": "FAIL before fix",
+  "frontend": "d2a2cd3f80549e7dcbc6b3e32e55fea7ead57175",
+  "program": 27,
+  "actual": "Untouched form with template=null/fields=[] was dirty and initial apply opened discard confirmation.",
+  "artifact": "browser-attempt-1792918390582.json",
+  "screenshot": "browser-failure-1792918390585.png",
+  "unitBefore": {
+    "passed": 7,
+    "failed": 2
+  },
+  "unitAfter": {
+    "passed": 9,
+    "failed": 0
+  },
+  "runtimeFix": "Dirty comparison preserves actual null template; request serializer is unchanged.",
+  "limits": "Actual initial UI finding on case program27; both formats reproduced in component regressions, not two separate baseline browser runs."
+}

@@ -170,7 +170,7 @@ export class ManagementSolutionFormComponent {
     const original = this.snapshot();
     return (
       !!original &&
-      (JSON.stringify(this.writeBody()) !==
+      (JSON.stringify({ ...this.writeBody(), template: this.template() }) !==
         JSON.stringify({
           expectedRevision: original.form.revision,
           template: original.form.template,

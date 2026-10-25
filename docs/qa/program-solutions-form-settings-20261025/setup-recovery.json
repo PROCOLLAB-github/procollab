@@ -1,0 +1,42 @@
+{
+  "prefix": "qa01f-20261025-a8f2c339",
+  "programs": [
+    {
+      "id": 27,
+      "key": "case_championship",
+      "template": "case_championship",
+      "competitive": true
+    },
+    {
+      "id": 28,
+      "key": "hackathon",
+      "template": "hackathon",
+      "competitive": true
+    },
+    {
+      "id": 29,
+      "key": "noncompetitive",
+      "template": "case_championship",
+      "competitive": false
+    }
+  ],
+  "baselineTiming": "Captured after isolated program/registration setup and before any tested API or browser writes. Initial seed committed three empty programs but failed generating manifest because Expert has a non-id primary key. No pre-seed SHA is claimed.",
+  "baselineExcludedSetupRows": {
+    "partner_programs.PartnerProgram": [27, 28, 29],
+    "partner_programs.PartnerProgramField": [],
+    "partner_programs.PartnerProgramUserProfile": [83, 84, 85],
+    "partner_programs.ProgramSolution": [],
+    "partner_programs.ProgramSolutionAnswer": [],
+    "partner_programs.ProgramSolutionMember": [],
+    "partner_programs.SolutionInvitation": [],
+    "project_rates.SolutionScore": [],
+    "project_rates.SolutionExpertAssignment": [],
+    "project_rates.Criteria": [],
+    "users.Expert": [],
+    "files.UserFile": [],
+    "projects.Project": [],
+    "users.Expert_programs": [],
+    "partner_programs.PartnerProgram_managers": [32, 33, 34]
+  },
+  "source": "ad3945ea2ebcd214a26b64ab09c92d334f9d2c77"
+}
