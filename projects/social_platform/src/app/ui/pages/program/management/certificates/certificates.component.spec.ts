@@ -176,11 +176,12 @@ describe("Program certificates", () => {
     fixture.destroy();
   });
   it.each([
-    { pdfReady: false, label: "PDF не создан" },
-    { pdfReady: true, label: "PDF не обновлен" },
+    { pdfReady: false, label: "PDF не создан", sentAt: null },
+    { pdfReady: true, label: "PDF не обновлен", sentAt: null },
+    { pdfReady: true, label: "PDF не обновлен", sentAt: "2026-10-24T10:00:00Z" },
   ])(
     "distinguishes a failed PDF generation/update from a mail failure ($pdfReady)",
-    async ({ pdfReady, label }) => {
+    async ({ pdfReady, label, sentAt }) => {
       const { fixture, component } = await setup();
       component.step.set(3);
       component.journal.set({
@@ -195,13 +196,13 @@ describe("Program certificates", () => {
             pdfReady,
             pdfError: true,
             error: "Не удалось создать PDF или отправить письмо.",
-            sentAt: null,
+            sentAt,
           },
         ],
       });
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('td[data-label="Письмо"]').textContent).toContain(
-        "Не отправлено",
+        sentAt ? "Отправлено" : "Не отправлено",
       );
       const pdf = fixture.nativeElement.querySelector('td[data-label="Сертификат"]').textContent;
       expect(pdf).toContain(label);

@@ -538,17 +538,19 @@
                 <td data-label="Письмо">
                   <span
                     [class.certificates__error]="
-                      row.status === 'failed' && row.pdfReady && !row.pdfError
+                      !row.sentAt && row.status === 'failed' && row.pdfReady && !row.pdfError
                     "
                     >{{
-                      row.status === "failed" && (!row.pdfReady || row.pdfError)
-                        ? "Не отправлено"
-                        : labels[row.status]
+                      row.sentAt
+                        ? "Отправлено"
+                        : row.status === "failed" && (!row.pdfReady || row.pdfError)
+                          ? "Не отправлено"
+                          : labels[row.status]
                     }}</span
                   >
-                  @if (row.pdfReady && !row.pdfError && (row.error || row.sentAt)) {
+                  @if (row.sentAt || (row.pdfReady && !row.pdfError && row.error)) {
                     <small>{{
-                      row.error || (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300")
+                      row.sentAt ? (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300") : row.error
                     }}</small>
                   }
                 </td>

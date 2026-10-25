@@ -25,8 +25,8 @@ recipient selection and responsive editor access.
 
 ## Verified locally
 
-- 45 Angular component/layout/participant tests, build and targeted ESLint/Stylelint/Prettier.
-- Paired API: 47 certificate tests, 44 passed and 3 PostgreSQL concurrency tests
+- 46 Angular component/layout/participant tests, dev build and targeted ESLint/Stylelint/Prettier.
+- Paired API: 48 certificate tests, 45 passed and 3 PostgreSQL concurrency tests
   skipped on SQLite. The earlier full PostgreSQL CI passed for base API commit
   `04008df927b75c1fa0b4de6a1c29c09f54db251c`; the provenance migration follow-up
   requires its own PostgreSQL CI before deployment.
@@ -46,6 +46,9 @@ recipient selection and responsive editor access.
 - A regeneration failure now retains the previous PDF and secret link. API tests
   cover access while queued/failed, successful replacement, provenance backfill
   without file/token/mail changes and program deletion with both batch references.
+- PDF refreshes also retain the prior mail delivery date and sent filter. A PDF
+  failure/retry cannot turn an already delivered certificate into a new email;
+  both the selection API and worker prevent duplicate delivery.
 - Native browser widths 390 and 320: the expanded editor computes the remaining
   height below the tools and above the sticky footer; the whole page and PDF
   button are visible. The mobile journal uses stacked rows with mail/PDF labels,
