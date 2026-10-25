@@ -6,6 +6,7 @@ import type {
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionUpdateInvitation,
+  SolutionCreateInvitation,
   UpdateSolutionCommand,
   RateSolutionCommand,
   SolutionAllocationWrite,
@@ -91,11 +92,18 @@ const role = {
   expectedSolutionVersion: 2,
   role: "Аналитик",
 } satisfies SolutionUpdateInvitation;
-const cleared = {
+const cleared: SolutionUpdateInvitation = {
   expectedVersion: 1,
   expectedSolutionVersion: 2,
+  // @ts-expect-error Переданную роль нельзя очистить в null.
   role: null,
-} satisfies SolutionUpdateInvitation;
+};
+// @ts-expect-error Новое приглашение требует роль.
+const missingInvitationRole: SolutionCreateInvitation = {
+  expectedSolutionVersion: 1,
+  recipientUserId: 9,
+};
+void missingInvitationRole;
 const text = {
   expectedVersion: 1,
   expectedSolutionVersion: 2,

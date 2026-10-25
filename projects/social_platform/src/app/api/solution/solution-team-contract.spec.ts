@@ -15,6 +15,7 @@ import {
   CreateSolutionInvitationUseCase,
   DecideSolutionInvitationUseCase,
   GetMySolutionInvitationsUseCase,
+  GetSolutionInvitationUseCase,
   GetSolutionInvitationsUseCase,
   LeaveSolutionUseCase,
   RemoveSolutionMemberUseCase,
@@ -22,6 +23,7 @@ import {
   TransferSolutionCaptainUseCase,
   UpdateSolutionInvitationUseCase,
 } from "./use-cases/solution-team.use-cases";
+import { SolutionCreateInvitation } from "@domain/solution/solution-contract.model";
 
 describe("C00 team and invitation wire contracts", () => {
   beforeEach(() =>
@@ -60,12 +62,67 @@ describe("C00 team and invitation wire contracts", () => {
     expect(await result).toEqual({ ok: true, value: expected });
   });
 
+  it.each(["invitation_role_one_character", "invitation_role_maximum"])(
+    "%s preserves the exact required role on the wire",
+    async name => {
+      const scenario = solutionContractScenarios.find(item => item.name === name)!;
+      const command = scenario.request as SolutionCreateInvitation;
+      const result = firstValueFrom(
+        TestBed.inject(CreateSolutionInvitationUseCase).execute(12, 301, command),
+      );
+      const request = TestBed.inject(HttpTestingController).expectOne(
+        "https://local.test/programs/12/solutions/301/invitations/",
+      );
+      expect(request.request.body).toEqual(snakecaseKeys(command, { deep: true }));
+      expect(request.request.body.role.length).toBe(name.endsWith("maximum") ? 128 : 1);
+      request.flush(snakecaseKeys(scenario.response as object, { deep: true }));
+      expect(await result).toEqual({ ok: true, value: scenario.response });
+    },
+  );
+
+  it.each([
+    ["invitation_missing_role", undefined],
+    ["invitation_null_role", null],
+    ["invitation_blank_role", "   "],
+  ])("%s surfaces server validation without retrying", async (name, role) => {
+    const command = {
+      expectedSolutionVersion: 8,
+      recipientUserId: 9,
+      ...(role === undefined ? {} : { role }),
+    } as unknown as SolutionCreateInvitation;
+    const result = firstValueFrom(
+      TestBed.inject(CreateSolutionInvitationUseCase).execute(12, 301, command),
+    );
+    const request = TestBed.inject(HttpTestingController).expectOne(
+      "https://local.test/programs/12/solutions/301/invitations/",
+    );
+    const scenario = solutionContractScenarios.find(item => item.name === name)!;
+    request.flush(snakecaseKeys(scenario.response as object, { deep: true }), {
+      status: 400,
+      statusText: "Bad Request",
+    });
+    expect(await result).toEqual({ ok: false, error: scenario.response });
+    TestBed.inject(HttpTestingController).expectNone(() => true);
+  });
+
+  it("reads a historical invitation with null role", async () => {
+    const result = firstValueFrom(TestBed.inject(GetSolutionInvitationUseCase).execute(701));
+    const request = TestBed.inject(HttpTestingController).expectOne(
+      "https://local.test/solution-invitations/701/",
+    );
+    const scenario = solutionContractScenarios.find(
+      item => item.name === "invitation_legacy_null_role",
+    )!;
+    request.flush(snakecaseKeys(scenario.response as object, { deep: true }));
+    expect(await result).toEqual({ ok: true, value: scenario.response });
+  });
+
   it("preserves both invitation and solution versions in PATCH and DELETE query", async () => {
     const updated = firstValueFrom(
       TestBed.inject(UpdateSolutionInvitationUseCase).execute(701, {
         expectedVersion: 1,
         expectedSolutionVersion: 8,
-        role: null,
+        role: "Аналитик",
       }),
     );
     const patch = TestBed.inject(HttpTestingController).expectOne(
@@ -75,7 +132,7 @@ describe("C00 team and invitation wire contracts", () => {
     expect(patch.request.body).toEqual({
       expected_version: 1,
       expected_solution_version: 8,
-      role: null,
+      role: "Аналитик",
     });
     patch.flush({ invitation: { id: 701, version: 2 }, solution_version: 9 });
     expect(await updated).toEqual({

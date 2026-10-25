@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.15.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.16.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -293,7 +293,7 @@ export type SolutionInvitation = {
 export type SolutionCreateInvitation = {
   expectedSolutionVersion: number;
   recipientUserId: number;
-  role?: string | null;
+  role: string;
   specialization?: string | null;
   motivationalLetter?: string | null;
 };
@@ -302,21 +302,21 @@ export type SolutionUpdateInvitation =
   | {
       expectedVersion: number;
       expectedSolutionVersion: number;
-      role: string | null;
+      role: string;
       specialization?: string | null;
       motivationalLetter?: string | null;
     }
   | {
       expectedVersion: number;
       expectedSolutionVersion: number;
-      role?: string | null;
+      role?: string;
       specialization: string | null;
       motivationalLetter?: string | null;
     }
   | {
       expectedVersion: number;
       expectedSolutionVersion: number;
-      role?: string | null;
+      role?: string;
       specialization?: string | null;
       motivationalLetter: string | null;
     };

@@ -2124,6 +2124,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
     request: {
       expectedSolutionVersion: 8,
       recipientUserId: 9,
+      role: "Аналитик",
     },
     response: {
       code: "duplicate_pending_invite",
@@ -2139,6 +2140,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
     request: {
       expectedSolutionVersion: 8,
       recipientUserId: 9,
+      role: "Аналитик",
     },
     response: {
       code: "team_max_size",
@@ -3555,6 +3557,7 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
     request: {
       expectedSolutionVersion: 10,
       recipientUserId: 9,
+      role: "Аналитик",
     },
     response: {
       code: "team_frozen",
@@ -8318,6 +8321,278 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
     request: {
       caseName: "Образование | наука",
       previewToken: "opaque-case-preview-token",
+    },
+  },
+  {
+    name: "invitation_role_one_character",
+    operationId: "createSolutionInvitation",
+    status: 201,
+    request: {
+      expectedSolutionVersion: 8,
+      recipientUserId: 9,
+      role: "Р",
+    },
+    response: {
+      invitation: {
+        id: 701,
+        version: 1,
+        program: {
+          id: 12,
+          name: "Кейс-чемпионат PROCOLLAB",
+        },
+        solution: {
+          kind: "solution",
+          programId: 12,
+          solutionId: 301,
+          name: "Сервис для студентов",
+        },
+        captain: {
+          id: 7,
+          firstName: "Иван",
+          lastName: "Петров",
+          avatarUrl: null,
+        },
+        recipient: {
+          id: 9,
+          firstName: "Олег",
+          lastName: "Иванов",
+          avatarUrl: null,
+        },
+        role: "Р",
+        specialization: "Исследования",
+        motivationalLetter: "Приглашаем в команду.",
+        status: "pending",
+        createdAt: "2026-10-23T09:00:00Z",
+        updatedAt: "2026-10-23T10:00:00Z",
+        permissions: {
+          canEdit: true,
+          canRevoke: true,
+          canAccept: false,
+          canDecline: false,
+        },
+      },
+      solutionVersion: 9,
+    },
+  },
+  {
+    name: "invitation_role_maximum",
+    operationId: "createSolutionInvitation",
+    status: 201,
+    request: {
+      expectedSolutionVersion: 8,
+      recipientUserId: 9,
+      role: "РРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРР",
+    },
+    response: {
+      invitation: {
+        id: 701,
+        version: 1,
+        program: {
+          id: 12,
+          name: "Кейс-чемпионат PROCOLLAB",
+        },
+        solution: {
+          kind: "solution",
+          programId: 12,
+          solutionId: 301,
+          name: "Сервис для студентов",
+        },
+        captain: {
+          id: 7,
+          firstName: "Иван",
+          lastName: "Петров",
+          avatarUrl: null,
+        },
+        recipient: {
+          id: 9,
+          firstName: "Олег",
+          lastName: "Иванов",
+          avatarUrl: null,
+        },
+        role: "РРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРРР",
+        specialization: "Исследования",
+        motivationalLetter: "Приглашаем в команду.",
+        status: "pending",
+        createdAt: "2026-10-23T09:00:00Z",
+        updatedAt: "2026-10-23T10:00:00Z",
+        permissions: {
+          canEdit: true,
+          canRevoke: true,
+          canAccept: false,
+          canDecline: false,
+        },
+      },
+      solutionVersion: 9,
+    },
+  },
+  {
+    name: "invitation_missing_role",
+    operationId: "createSolutionInvitation",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте поля приглашения.",
+      errors: [
+        {
+          path: "role",
+          code: "invalid",
+          detail: "Укажите роль от 1 до 128 символов.",
+          fieldId: null,
+        },
+      ],
+      meta: {},
+    },
+  },
+  {
+    name: "invitation_blank_role",
+    operationId: "createSolutionInvitation",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте поля приглашения.",
+      errors: [
+        {
+          path: "role",
+          code: "invalid",
+          detail: "Укажите роль от 1 до 128 символов.",
+          fieldId: null,
+        },
+      ],
+      meta: {},
+    },
+  },
+  {
+    name: "invitation_null_role",
+    operationId: "createSolutionInvitation",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте поля приглашения.",
+      errors: [
+        {
+          path: "role",
+          code: "invalid",
+          detail: "Укажите роль от 1 до 128 символов.",
+          fieldId: null,
+        },
+      ],
+      meta: {},
+    },
+  },
+  {
+    name: "invitation_update_null_role",
+    operationId: "updateSolutionInvitation",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте поля приглашения.",
+      errors: [
+        {
+          path: "role",
+          code: "invalid",
+          detail: "Укажите роль от 1 до 128 символов.",
+          fieldId: null,
+        },
+      ],
+      meta: {},
+    },
+  },
+  {
+    name: "invitation_legacy_null_role",
+    operationId: "getSolutionInvitation",
+    status: 200,
+    response: {
+      id: 701,
+      version: 1,
+      program: {
+        id: 12,
+        name: "Кейс-чемпионат PROCOLLAB",
+      },
+      solution: {
+        kind: "solution",
+        programId: 12,
+        solutionId: 301,
+        name: "Сервис для студентов",
+      },
+      captain: {
+        id: 7,
+        firstName: "Иван",
+        lastName: "Петров",
+        avatarUrl: null,
+      },
+      recipient: {
+        id: 9,
+        firstName: "Олег",
+        lastName: "Иванов",
+        avatarUrl: null,
+      },
+      role: null,
+      specialization: "Исследования",
+      motivationalLetter: "Приглашаем в команду.",
+      status: "pending",
+      createdAt: "2026-10-23T09:00:00Z",
+      updatedAt: "2026-10-23T10:00:00Z",
+      permissions: {
+        canEdit: true,
+        canRevoke: true,
+        canAccept: false,
+        canDecline: false,
+      },
+    },
+  },
+  {
+    name: "invitation_legacy_null_role_accept",
+    operationId: "acceptSolutionInvitation",
+    status: 200,
+    request: {
+      expectedVersion: 1,
+    },
+    response: {
+      invitation: {
+        id: 701,
+        version: 2,
+        program: {
+          id: 12,
+          name: "Кейс-чемпионат PROCOLLAB",
+        },
+        solution: {
+          kind: "solution",
+          programId: 12,
+          solutionId: 301,
+          name: "Сервис для студентов",
+        },
+        captain: {
+          id: 7,
+          firstName: "Иван",
+          lastName: "Петров",
+          avatarUrl: null,
+        },
+        recipient: {
+          id: 9,
+          firstName: "Олег",
+          lastName: "Иванов",
+          avatarUrl: null,
+        },
+        role: null,
+        specialization: "Исследования",
+        motivationalLetter: "Приглашаем в команду.",
+        status: "accepted",
+        createdAt: "2026-10-23T09:00:00Z",
+        updatedAt: "2026-10-23T10:00:00Z",
+        permissions: {
+          canEdit: false,
+          canRevoke: false,
+          canAccept: false,
+          canDecline: false,
+        },
+      },
+      application: {
+        kind: "solution",
+        programId: 12,
+        solutionId: 301,
+        name: "Сервис для студентов",
+      },
+      solutionVersion: 9,
     },
   },
 ];
