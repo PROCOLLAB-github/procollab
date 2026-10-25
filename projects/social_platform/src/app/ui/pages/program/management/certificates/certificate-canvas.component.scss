@@ -36,6 +36,12 @@
 .ui-button.ui-button {
   @include ui-foundation.button;
   @include program-management-controls.compact-action;
+
+  &.ui-button--secondary:focus-visible {
+    color: var(--black);
+    background: var(--accent-light);
+    outline-offset: -2px;
+  }
 }
 
 .ui-field {
