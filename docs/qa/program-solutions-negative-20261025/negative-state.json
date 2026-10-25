@@ -1,0 +1,49 @@
+{
+  "prefix": "qa01n-20261025-bdb96b29",
+  "programs": {
+    "11": {
+      "solutionId": 14,
+      "checks": [
+        "empty draft saves, team focus, explicit missing case focus; no submit POST",
+        "pending does not satisfy team minimum; accepted member permits material/file focus from team tab",
+        "deadline closes after confirmation PATCH: submit 409, remains draft; later draft save still works",
+        "save network failure preserves local input and does not persist until explicit retry",
+        "form conflict preserves unsaved name/text/0/false/case; new required blocks only draft; anchor snapshot unchanged",
+        "unknown submit result reconciled by GET without automatic POST retry"
+      ],
+      "emptyDone": true,
+      "basicsDone": true,
+      "deadlineDone": true,
+      "networkDone": true,
+      "addedFieldId": 82,
+      "previousRevision": "1642e7f74cb7810d2b06358b86cdbe314a5a88a41e982349d50e9747da5dd588",
+      "updatedRevision": "d399ec97f8f832812145b9cccb13d577134e95119267a494c17c7dc62c11da3f",
+      "rebaseDone": true,
+      "committedUnknownOutcome": true,
+      "complete": true,
+      "staleNetworkAlertAfterConfirmedSubmit": true
+    },
+    "12": {
+      "solutionId": 15,
+      "checks": [
+        "empty draft saves, team focus, explicit missing case focus; no submit POST",
+        "pending does not satisfy team minimum; accepted member permits material/file focus from team tab",
+        "deadline closes after confirmation PATCH: submit 409, remains draft; later draft save still works",
+        "save network failure preserves local input and does not persist until explicit retry",
+        "form conflict preserves unsaved name/text/0/false/case; new required blocks only draft; anchor snapshot unchanged",
+        "unknown submit result reconciled by GET without automatic POST retry"
+      ],
+      "emptyDone": true,
+      "basicsDone": true,
+      "deadlineDone": true,
+      "networkDone": true,
+      "addedFieldId": 83,
+      "previousRevision": "946c1dae1f6f53d603098d44da51c7504fe6110e3fd978b002840352d1cbb1d4",
+      "updatedRevision": "3e2981472138fcaa60afe45a8826a0a665debd1cff9eb7f78aabd5a2db5e0682",
+      "rebaseDone": true,
+      "committedUnknownOutcome": true,
+      "complete": true,
+      "staleNetworkAlertAfterConfirmedSubmit": true
+    }
+  }
+}

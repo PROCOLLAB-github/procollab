@@ -1,0 +1,292 @@
+{
+  "status": "FAIL",
+  "checkedAt": "2026-10-25T05:19:40.688Z",
+  "message": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n",
+  "events": [
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solution-context/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/11/solutions/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/11/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/11/news/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/11/certificates/me/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/11/analytics-widget/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/11/acknowledge-welcome/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/solution-invitations/28/accept/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/files/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/11/solutions/14/submit/",
+      "status": 409
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    }
+  ],
+  "checks": [
+    {
+      "program": 11,
+      "check": "local deadline fixture close",
+      "receipt": {
+        "program_id": 11,
+        "action": "close",
+        "submission_open": false,
+        "mode": "solution"
+      }
+    },
+    {
+      "program": 11,
+      "check": "local deadline fixture restore",
+      "receipt": {
+        "program_id": 11,
+        "action": "restore",
+        "submission_open": true,
+        "mode": "solution"
+      }
+    }
+  ],
+  "faults": [],
+  "findings": [],
+  "state": {
+    "prefix": "qa01n-20261025-bdb96b29",
+    "programs": {
+      "11": {
+        "solutionId": 14,
+        "checks": [
+          "empty draft saves, team focus, explicit missing case focus; no submit POST",
+          "pending does not satisfy team minimum; accepted member permits material/file focus from team tab"
+        ],
+        "emptyDone": true,
+        "basicsDone": true
+      }
+    }
+  },
+  "javascriptErrors": []
+}

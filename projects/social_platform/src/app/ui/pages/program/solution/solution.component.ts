@@ -292,10 +292,19 @@ export class ProgramSolutionComponent {
         if (this.programId() !== context.programId || this.solution()?.id !== context.solutionId)
           return;
         if (result.ok) {
-          if (this.draft.hydrate(result.value)) this.solution.set(result.value);
+          const hydrated = this.draft.hydrate(result.value);
+          if (hydrated) this.solution.set(result.value);
           if (this.reconcileDraft) {
             this.reconcileDraft = false;
             this.draft.reconciled();
+          }
+          // GET подтверждает сдачу даже после потери ответа POST. Локальные
+          // несохраненные правки остаются в hydrate и отдельном блоке копирования.
+          if (hydrated && result.value.submission.status === "submitted") {
+            this.draft.error.set(null);
+            this.draft.notice.set("Решение сдано.");
+            this.submissionIssues.set([]);
+            this.submissionAttempted.set(false);
           }
           return;
         }

@@ -1,0 +1,205 @@
+{
+  "backendRuntime": "2ad47438e666963819665222253d9b0672df074f",
+  "backendWithCIChange": "6db9050c2d1eb7313006a285566501a104dbc415",
+  "frontendBefore": "55332ef295658d5473c9d500958d8567c161ab1c",
+  "frontendAfter": "working tree with confirmed-submit reconciliation; component source hash below",
+  "componentSourceSha256": "0db6ba8a18789cff01aebd66f55e320df4757d5885590d8ca9c53434c5161651",
+  "artifacts": [
+    {
+      "file": "negative-baseline.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\baseline-evidence.json",
+      "sourceSha256": "fb14189188916f80720e0236b8b72df97f2d204ba28d4b0e016c8427ce060c78",
+      "semanticSha256": "3a3f5e21588822f8f1645fa29e4b482e668f6888370fda98e18c0152b565c901"
+    },
+    {
+      "file": "negative-seed.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\seed-evidence.json",
+      "sourceSha256": "869689bbefa26acf09c3b2e09a915788bccd8f07c8f2a64328e3ccab796bdce8",
+      "semanticSha256": "d15a7ab6949ddd0a56b8ea767f08ca933863ce5600a7ee231c3dbcb5a5263dd8"
+    },
+    {
+      "file": "negative-browser-before-fix.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\browser-evidence.json",
+      "sourceSha256": "392ed202717be8e8207d07739bedc4a2fda7aefa97694cd7f1b7115228fbcc05",
+      "semanticSha256": "2d5417e95203c55d3489902d440d907e193c52fc769720acee0f299beb3322ab"
+    },
+    {
+      "file": "negative-domain.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\domain-evidence.json",
+      "sourceSha256": "26fafed76ceb3af3a075344b6fd7bd80160592220b227ecab57b751e0094f8ad",
+      "semanticSha256": "56abc21da02687e80e3163fca5da2081ab1c13a26bf7a59e7a0fda862c8015ac"
+    },
+    {
+      "file": "negative-state.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\run-state.json",
+      "sourceSha256": "ebd871d6d44f64af1eb7ce4df205c2d52480611d118f9fbd79c0bf33387575fe",
+      "semanticSha256": "af8cbea709226ad1138ad8db2a34b70571a2c70914b84d0953e912584fa9c0b9"
+    },
+    {
+      "file": "negative-attempt-1792905580688.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\attempt-1792905580688.json",
+      "sourceSha256": "9f8de2161bf29c761c5ac62ef378cdfaefbffb43c0474470bf1909d6d25d74db",
+      "semanticSha256": "7b380bd2d0038fd4537090ee0b2e3d3fa5f1865824117883e43a5134caab35aa"
+    },
+    {
+      "file": "negative-attempt-1792905674286.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative\\attempt-1792905674286.json",
+      "sourceSha256": "cad17b0928c38f42e1c44cdc264ff81c07d27dbf411b06c3e7a7ee76d257f6b1",
+      "semanticSha256": "c26198d4893dd215af656f6b6078a288c2d08abddaa1b234bf481553377e2216"
+    },
+    {
+      "file": "unknown-baseline.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit\\baseline-evidence.json",
+      "sourceSha256": "51b945f2660febe09614fcb2acf2ef2981f80c98c1c83d716b1b682fc557edd6",
+      "semanticSha256": "9128de236677c4035367fa709c7b13ea001f17d9259985e48e8c10bf68a162ea"
+    },
+    {
+      "file": "unknown-seed.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit\\seed-evidence.json",
+      "sourceSha256": "03ef0063e641d5dd04ad57c0df5dc93a7a70d15c19cfb92e61cae423ebac9d4f",
+      "semanticSha256": "72feabe89c3d4b370f0a817e8800cfe89c6e21ee61ee0472db4bd6d7341feff5"
+    },
+    {
+      "file": "unknown-browser-after-fix.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit\\browser-evidence.json",
+      "sourceSha256": "14a60232c053dd4a7302d58d4625508fef78261067cf719b9b93dbc879838148",
+      "semanticSha256": "70222f890e4cb8735b8fc6c8ed857848d404ce227428566342a2d31c488b5fbd"
+    },
+    {
+      "file": "unknown-domain.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit\\domain-evidence.json",
+      "sourceSha256": "1e45bb48c23cb3b243dccf177dd8e32d7d00f75e478b4d63ba5316e5df4106f8",
+      "semanticSha256": "54a4d19c88d2c7b74696411f34924161ffa37b01b6c8267b4d4aa9594ea73a8b"
+    },
+    {
+      "file": "unknown-state.json",
+      "source": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit\\run-state.json",
+      "sourceSha256": "519fc280cea53165678098763478f7ae04cd9a07979210bccd9ff1c5e596a3d2",
+      "semanticSha256": "4798682264130a10abeae13c70c42f3d9c4a3b7dba0ea126e7397d9e02cc3270"
+    },
+    {
+      "file": "build-provenance-after-fix.json",
+      "source": "C:\\Users\\evsee\\AppData\\Local\\Temp\\procollab-unknown-angular\\qa-build-provenance.json",
+      "sourceSha256": "629c89f6c94bc6fa3375f451c6bf9728a3f1d4948da547cc84c26a2d8d705ace",
+      "semanticSha256": "683d27be55467ce7051638d95ea380c3a681087a5a2f4ad800a085ea139362f3"
+    }
+  ],
+  "helpers": [
+    {
+      "file": "procollab-qa01-negative-seed.py",
+      "sha256": "12fcce6c2e279eed973e1a9f9ee931c99cb454359dd30dbc06c8e9534a5a0bf3"
+    },
+    {
+      "file": "procollab-qa01-negative-deadline.py",
+      "sha256": "7eb36d7eb66a507c5a6e9e50626abed9f65f6bb44f1747aadf4511b9756d5aec"
+    },
+    {
+      "file": "procollab-qa01-negative-browser.cjs",
+      "sha256": "d367ba3b99d6b503bd9156c5d03a346227f9b35c762dd956bb670ff322624ab9"
+    },
+    {
+      "file": "procollab-qa01-negative-verify.py",
+      "sha256": "de960234984d7f6c1101477129492b4c908b7de3c57a5b3679cf3b71482dce60"
+    },
+    {
+      "file": "procollab-qa01-unknown-seed.py",
+      "sha256": "8d9fa4796af8095960d140491108d9a1b081f3af01c474c46006376bd504af63"
+    },
+    {
+      "file": "procollab-qa01-unknown-browser.cjs",
+      "sha256": "d11fefc264bfd19a44fd6306116347655a2a97c64170057261955d9896a838f2"
+    },
+    {
+      "file": "procollab-qa01-unknown-build.cjs",
+      "sha256": "12e80c561944b85ea91cabb854af3cb54c8a15a620d46a08a3778e03301228ff"
+    }
+  ],
+  "screenshots": [
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "browser-error.png",
+      "sha256": "c487ca07eb847aba20301a6f30955790a721ba7f0f1684737239677419a28073"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "case_championship-case-error-mobile.png",
+      "sha256": "c3d7c01e44e5c9396c82fda2ca864e4f8ec7895cacf5dbf37e90dfb8bdfb8a00"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "case_championship-closed-draft-mobile.png",
+      "sha256": "70831ae6ea52a13185a0a53d71edc14da5cd21deca0903ed22e65454bb6566d2"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "case_championship-material-error-mobile.png",
+      "sha256": "98dde1ecc79fdc97a43a9f6a398a629cabebef331ae5c55e724440d0a4c9f1c9"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "case_championship-new-required-mobile.png",
+      "sha256": "9161a5d91d23e81f2124457ed30e8f143449a5b3dd11ef31ccf6f38746cea315"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "case_championship-unknown-submit-desktop.png",
+      "sha256": "f459c6a921db134af748ba4f1776a6561255f0d6a0a7df3521e48d5cc4cd22d8"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "case_championship-unknown-submit-mobile.png",
+      "sha256": "14d844d042c2e5246f84f9ace6718abac8fd81c21ac821ce2e4543b8027d73fa"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "hackathon-case-error-mobile.png",
+      "sha256": "c5afebadb0e50ddab1d45a3af234eb1710af39348c9b420408249226dff91219"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "hackathon-closed-draft-mobile.png",
+      "sha256": "c896378125cd34007bdcbe853f636f1a2bc5760cb559cdb54686a6c7d8f858da"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "hackathon-material-error-mobile.png",
+      "sha256": "e9146cc3586c16d2481fbd68d969f7c0251cf8de287844ada402c653b954681c"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "hackathon-new-required-mobile.png",
+      "sha256": "ab1a24535242aa2ad5500409b76cdb62841c48bfedfcc4cff02c2fa40cc3c23a"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "hackathon-unknown-submit-desktop.png",
+      "sha256": "dcaae09935ba9af6dbbd7657703b33a366c64d4cbe6a524ba9477e6219cc09e6"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-negative",
+      "file": "hackathon-unknown-submit-mobile.png",
+      "sha256": "3c7647df38d8ed5b9268c071fdab27171a7dcd5fa64d8cdf1f75546d6b39b354"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit",
+      "file": "case_championship-confirmed-desktop.png",
+      "sha256": "5276782ef275b821bfc42b82a93a00b253fef6677d4ffedea141247c2b0e2b12"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit",
+      "file": "case_championship-confirmed-mobile.png",
+      "sha256": "057d31ec72197ed08d1d8f69e7d670e9d7c36e394cfcd1c0e67edfb2d49e8787"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit",
+      "file": "hackathon-confirmed-desktop.png",
+      "sha256": "8f7a6d2093f156bc0c67be17d8ebab121dac292bc366c1edb512dc4388bc002c"
+    },
+    {
+      "directory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-unknown-submit",
+      "file": "hackathon-confirmed-mobile.png",
+      "sha256": "5a89e8b7ab8c4f33fcf60473ed3a18e79f2120808a9644b1a6136d690f06b497"
+    }
+  ],
+  "representation": "Copies may use repository Prettier formatting; source raw SHA and semantic SHA preserve original records, including FAIL findings"
+}

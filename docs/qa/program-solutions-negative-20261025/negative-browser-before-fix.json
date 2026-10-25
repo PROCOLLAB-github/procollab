@@ -1,0 +1,649 @@
+{
+  "status": "FAIL",
+  "checkedAt": "2026-10-25T05:23:12.507Z",
+  "prefix": "qa01n-20261025-bdb96b29",
+  "programs": {
+    "11": {
+      "solutionId": 14,
+      "checks": [
+        "empty draft saves, team focus, explicit missing case focus; no submit POST",
+        "pending does not satisfy team minimum; accepted member permits material/file focus from team tab",
+        "deadline closes after confirmation PATCH: submit 409, remains draft; later draft save still works",
+        "save network failure preserves local input and does not persist until explicit retry",
+        "form conflict preserves unsaved name/text/0/false/case; new required blocks only draft; anchor snapshot unchanged",
+        "unknown submit result reconciled by GET without automatic POST retry"
+      ],
+      "emptyDone": true,
+      "basicsDone": true,
+      "deadlineDone": true,
+      "networkDone": true,
+      "addedFieldId": 82,
+      "previousRevision": "1642e7f74cb7810d2b06358b86cdbe314a5a88a41e982349d50e9747da5dd588",
+      "updatedRevision": "d399ec97f8f832812145b9cccb13d577134e95119267a494c17c7dc62c11da3f",
+      "rebaseDone": true,
+      "committedUnknownOutcome": true,
+      "complete": true,
+      "staleNetworkAlertAfterConfirmedSubmit": true
+    },
+    "12": {
+      "solutionId": 15,
+      "checks": [
+        "empty draft saves, team focus, explicit missing case focus; no submit POST",
+        "pending does not satisfy team minimum; accepted member permits material/file focus from team tab",
+        "deadline closes after confirmation PATCH: submit 409, remains draft; later draft save still works",
+        "save network failure preserves local input and does not persist until explicit retry",
+        "form conflict preserves unsaved name/text/0/false/case; new required blocks only draft; anchor snapshot unchanged",
+        "unknown submit result reconciled by GET without automatic POST retry"
+      ],
+      "emptyDone": true,
+      "basicsDone": true,
+      "deadlineDone": true,
+      "networkDone": true,
+      "addedFieldId": 83,
+      "previousRevision": "946c1dae1f6f53d603098d44da51c7504fe6110e3fd978b002840352d1cbb1d4",
+      "updatedRevision": "3e2981472138fcaa60afe45a8826a0a665debd1cff9eb7f78aabd5a2db5e0682",
+      "rebaseDone": true,
+      "committedUnknownOutcome": true,
+      "complete": true,
+      "staleNetworkAlertAfterConfirmedSubmit": true
+    }
+  },
+  "checks": [
+    {
+      "program": 11,
+      "check": "local deadline fixture close",
+      "receipt": {
+        "program_id": 11,
+        "action": "close",
+        "submission_open": false,
+        "mode": "solution"
+      }
+    },
+    {
+      "program": 11,
+      "check": "local deadline fixture restore",
+      "receipt": {
+        "program_id": 11,
+        "action": "restore",
+        "submission_open": true,
+        "mode": "solution"
+      }
+    },
+    {
+      "program": 11,
+      "solutionId": 14,
+      "checks": [
+        "empty draft saves, team focus, explicit missing case focus; no submit POST",
+        "pending does not satisfy team minimum; accepted member permits material/file focus from team tab",
+        "deadline closes after confirmation PATCH: submit 409, remains draft; later draft save still works",
+        "save network failure preserves local input and does not persist until explicit retry",
+        "form conflict preserves unsaved name/text/0/false/case; new required blocks only draft; anchor snapshot unchanged",
+        "unknown submit result reconciled by GET without automatic POST retry"
+      ]
+    },
+    {
+      "program": 12,
+      "check": "local deadline fixture close",
+      "receipt": {
+        "program_id": 12,
+        "action": "close",
+        "submission_open": false,
+        "mode": "solution"
+      }
+    },
+    {
+      "program": 12,
+      "check": "local deadline fixture restore",
+      "receipt": {
+        "program_id": 12,
+        "action": "restore",
+        "submission_open": true,
+        "mode": "solution"
+      }
+    },
+    {
+      "program": 12,
+      "solutionId": 15,
+      "checks": [
+        "empty draft saves, team focus, explicit missing case focus; no submit POST",
+        "pending does not satisfy team minimum; accepted member permits material/file focus from team tab",
+        "deadline closes after confirmation PATCH: submit 409, remains draft; later draft save still works",
+        "save network failure preserves local input and does not persist until explicit retry",
+        "form conflict preserves unsaved name/text/0/false/case; new required blocks only draft; anchor snapshot unchanged",
+        "unknown submit result reconciled by GET without automatic POST retry"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solution-context/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/11/solutions/14/submit/",
+      "status": 409
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "manager-http",
+      "method": "GET",
+      "path": "/programs/11/management/solution-form/",
+      "status": 200
+    },
+    {
+      "role": "manager-http",
+      "method": "PUT",
+      "path": "/programs/11/management/solution-form/",
+      "status": 200
+    },
+    {
+      "role": "manager-http",
+      "method": "GET",
+      "path": "/programs/11/management/solution-form/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 409
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solution-context/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/12/solutions/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/12/solutions/15/invitations/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/12/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/12/news/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/12/certificates/me/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/12/analytics-widget/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/12/acknowledge-welcome/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/solution-invitations/29/accept/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/12/solutions/15/submit/",
+      "status": 409
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "manager-http",
+      "method": "GET",
+      "path": "/programs/12/management/solution-form/",
+      "status": 200
+    },
+    {
+      "role": "manager-http",
+      "method": "PUT",
+      "path": "/programs/12/management/solution-form/",
+      "status": 200
+    },
+    {
+      "role": "manager-http",
+      "method": "GET",
+      "path": "/programs/12/management/solution-form/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 409
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/12/solutions/15/",
+      "status": 200
+    }
+  ],
+  "faults": [
+    {
+      "program": 11,
+      "kind": "PATCH aborted before network",
+      "serverDataUnchanged": true
+    },
+    {
+      "program": 11,
+      "kind": "submit response lost after real server commit",
+      "status": 200,
+      "solutionId": 14,
+      "version": 16
+    },
+    {
+      "program": 12,
+      "kind": "PATCH aborted before network",
+      "serverDataUnchanged": true
+    },
+    {
+      "program": 12,
+      "kind": "submit response lost after real server commit",
+      "status": 200,
+      "solutionId": 15,
+      "version": 14
+    }
+  ],
+  "findings": [
+    {
+      "program": 11,
+      "solutionId": 14,
+      "issue": "Successful authoritative GET confirms submitted, but stale network error still claims failure"
+    },
+    {
+      "program": 12,
+      "solutionId": 15,
+      "issue": "Successful authoritative GET confirms submitted, but stale network error still claims failure"
+    }
+  ],
+  "javascriptErrors": [],
+  "browser": "Headless Edge / Playwright",
+  "origin": "http://127.0.0.1:8875",
+  "api": "http://127.0.0.1:8871",
+  "widths": [320, 390, 768, 1440],
+  "limitations": [
+    "synthetic fixtures intentionally changed; not zero writes",
+    "deadline controlled only in guarded local fixtures, restored after each phase",
+    "PATCH-before-send and lost-JSON-response fault injection explicitly recorded; API otherwise real",
+    "primary journey 390; final readonly states at other widths; full desktop/a11y/zoom not claimed",
+    "external avatars and injected external scripts blocked"
+  ]
+}

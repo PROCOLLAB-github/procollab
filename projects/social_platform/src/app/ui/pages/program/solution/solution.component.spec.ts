@@ -360,7 +360,14 @@ describe("Solution route foundation", () => {
             status: "submitted",
             submittedAt: "2026-10-24T12:00:00Z",
           },
-          permissions: { ...saved.permissions, canEdit: false, canSubmit: false },
+          permissions: {
+            ...saved.permissions,
+            canEdit: false,
+            canSubmit: false,
+            canManageTeam: false,
+            canInvite: false,
+          },
+          form: { ...saved.form, isSnapshot: true },
         }),
       ),
     );
@@ -368,6 +375,104 @@ describe("Solution route foundation", () => {
     expect(submit.execute).toHaveBeenCalledTimes(1);
     expect(component.solution()?.submission.status).toBe("submitted");
     expect(component.draft.canEdit()).toBe(false);
+    expect(component.draft.error()).toBeNull();
+    expect(component.draft.notice()).toBe("Решение сдано.");
+    harness.detectChanges();
+    expect(harness.routeNativeElement?.textContent).not.toContain("Соединение прервано");
+  });
+
+  it("keeps the uncertain submit error when the authoritative GET still returns a draft", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    const saved = { ...solution, version: 2, readiness: { isReady: true, issues: [] } };
+    update.execute.mockReturnValue(of(ok(saved)));
+    component.prepareSubmission({ currentTarget: null } as unknown as Event);
+    submit.execute.mockReturnValue(
+      of(fail({ code: "network", detail: "Соединение прервано", errors: [], meta: {} })),
+    );
+    get.execute.mockReturnValue(of(ok(saved)));
+    component.confirmSubmission();
+    expect(get.execute).toHaveBeenCalledTimes(2);
+    expect(submit.execute).toHaveBeenCalledTimes(1);
+    expect(component.solution()?.submission.status).toBe("draft");
+    expect(component.draft.error()?.code).toBe("network");
+    expect(component.draft.notice()).not.toBe("Решение сдано.");
+    expect(component.draft.canEdit()).toBe(true);
+    expect(component.draft.name.value).toBe(saved.name);
+  });
+
+  it("confirms the submitted snapshot without discarding a later local edit", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    const saved = { ...solution, version: 2, readiness: { isReady: true, issues: [] } };
+    update.execute.mockReturnValue(of(ok(saved)));
+    component.prepareSubmission({ currentTarget: null } as unknown as Event);
+    component.draft.name.setValue("Локальная правка после сохранения");
+    submit.execute.mockReturnValue(
+      of(fail({ code: "network", detail: "Соединение прервано", errors: [], meta: {} })),
+    );
+    get.execute.mockReturnValue(
+      of(
+        ok({
+          ...saved,
+          version: 3,
+          submission: {
+            ...saved.submission,
+            status: "submitted",
+            submittedAt: "2026-10-24T12:00:00Z",
+          },
+          permissions: { ...saved.permissions, canEdit: false, canSubmit: false },
+          form: { ...saved.form, isSnapshot: true },
+        }),
+      ),
+    );
+    component.confirmSubmission();
+    harness.detectChanges();
+    expect(submit.execute).toHaveBeenCalledTimes(1);
+    expect(component.solution()?.name).toBe(saved.name);
+    expect(component.draft.name.value).toBe("Локальная правка после сохранения");
+    expect(component.draft.dirty()).toBe(true);
+    expect(component.draft.error()).toBeNull();
+    expect(component.draft.notice()).toBe("Решение сдано.");
+    expect(harness.routeNativeElement?.querySelector(".local-answers")?.textContent).toContain(
+      "Локальная правка после сохранения",
+    );
+  });
+
+  it("does not claim submission success when the verification GET also fails", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    const saved = { ...solution, version: 2, readiness: { isReady: true, issues: [] } };
+    update.execute.mockReturnValue(of(ok(saved)));
+    component.prepareSubmission({ currentTarget: null } as unknown as Event);
+    submit.execute.mockReturnValue(
+      of(fail({ code: "network", detail: "Соединение прервано", errors: [], meta: {} })),
+    );
+    get.execute.mockReturnValue(
+      of(fail({ code: "network", detail: "Не удалось уточнить состояние", errors: [], meta: {} })),
+    );
+    component.confirmSubmission();
+    expect(get.execute).toHaveBeenCalledTimes(2);
+    expect(submit.execute).toHaveBeenCalledTimes(1);
+    expect(component.solution()?.submission.status).toBe("draft");
+    expect(component.draft.error()?.code).toBe("network");
+    expect(component.teamRefreshError()).toBe("Не удалось уточнить состояние");
+    expect(component.draft.notice()).not.toBe("Решение сдано.");
+    harness.detectChanges();
+    expect(
+      harness.routeNativeElement
+        ?.querySelector(".draft-actions__buttons button")
+        ?.hasAttribute("disabled"),
+    ).toBe(true);
   });
 
   it("a closed deadline after PATCH keeps the saved draft and does not open confirmation", async () => {

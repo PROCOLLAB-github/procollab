@@ -1,0 +1,661 @@
+{
+  "status": "PASS",
+  "checkedAt": "2026-10-25T05:30:21.682Z",
+  "prefix": "qa01u-20261025-c5cbadd8",
+  "programs": {
+    "13": {
+      "solutionId": 18,
+      "confirmedVersion": 4,
+      "serverCommittedVersion": 5,
+      "serverCommitted": true,
+      "complete": true,
+      "networkErrorCleared": true,
+      "successNotice": true,
+      "submitPostCount": 1
+    },
+    "14": {
+      "solutionId": 19,
+      "confirmedVersion": 4,
+      "serverCommittedVersion": 5,
+      "serverCommitted": true,
+      "complete": true,
+      "networkErrorCleared": true,
+      "successNotice": true,
+      "submitPostCount": 1
+    }
+  },
+  "checks": [
+    {
+      "program": 13,
+      "solutionId": 18,
+      "unknownOutcomeResolvedByGet": true,
+      "networkErrorCleared": true,
+      "readonly": true,
+      "zeroFalseRetained": true,
+      "automaticSubmitRetries": 0
+    },
+    {
+      "program": 14,
+      "solutionId": 19,
+      "unknownOutcomeResolvedByGet": true,
+      "networkErrorCleared": true,
+      "readonly": true,
+      "zeroFalseRetained": true,
+      "automaticSubmitRetries": 0
+    }
+  ],
+  "events": [
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solution-context/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/13/solutions/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/13/solutions/18/invitations/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/13/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/13/news/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/13/certificates/me/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/13/analytics-widget/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/13/acknowledge-welcome/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/solution-invitations/32/accept/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/files/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/13/solutions/18/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/13/solutions/18/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solution-context/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/14/solutions/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/14/solutions/19/invitations/",
+      "status": 201
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/14/news/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/14/certificates/me/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/14/analytics-widget/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/14/acknowledge-welcome/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/solution-invitations/33/accept/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_a",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/14/solutions/19/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/14/solutions/19/",
+      "status": 200
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/users/current/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/types/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/roles/"
+    },
+    {
+      "method": "GET",
+      "path": "/industries/"
+    },
+    {
+      "method": "GET",
+      "path": "/invites/"
+    },
+    {
+      "method": "GET",
+      "path": "/chats/has-unreads/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/"
+    },
+    {
+      "method": "GET",
+      "path": "/core/notifications/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solution-context/"
+    },
+    {
+      "method": "GET",
+      "path": "/solution-invitations/"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/13/solutions/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/public-users/"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/13/solutions/18/invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/current/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/types/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/roles/"
+    },
+    {
+      "method": "GET",
+      "path": "/industries/"
+    },
+    {
+      "method": "GET",
+      "path": "/invites/"
+    },
+    {
+      "method": "GET",
+      "path": "/chats/has-unreads/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/"
+    },
+    {
+      "method": "GET",
+      "path": "/core/notifications/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/"
+    },
+    {
+      "method": "GET",
+      "path": "/solution-invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/invitations/"
+    },
+    {
+      "method": "POST",
+      "path": "/files/"
+    },
+    {
+      "method": "PATCH",
+      "path": "/programs/13/solutions/18/"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/13/solutions/18/submit/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/13/solutions/18/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/current/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/types/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/roles/"
+    },
+    {
+      "method": "GET",
+      "path": "/industries/"
+    },
+    {
+      "method": "GET",
+      "path": "/invites/"
+    },
+    {
+      "method": "GET",
+      "path": "/chats/has-unreads/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/"
+    },
+    {
+      "method": "GET",
+      "path": "/core/notifications/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solution-context/"
+    },
+    {
+      "method": "GET",
+      "path": "/solution-invitations/"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/14/solutions/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/public-users/"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/14/solutions/19/invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/current/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/types/"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/users/roles/"
+    },
+    {
+      "method": "GET",
+      "path": "/industries/"
+    },
+    {
+      "method": "GET",
+      "path": "/invites/"
+    },
+    {
+      "method": "GET",
+      "path": "/chats/has-unreads/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/"
+    },
+    {
+      "method": "GET",
+      "path": "/core/notifications/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/"
+    },
+    {
+      "method": "GET",
+      "path": "/solution-invitations/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/invitations/"
+    },
+    {
+      "method": "PATCH",
+      "path": "/programs/14/solutions/19/"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/14/solutions/19/submit/"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/14/solutions/19/"
+    }
+  ],
+  "faults": [
+    {
+      "program": 13,
+      "solutionId": 18,
+      "kind": "real POST committed, response intentionally aborted",
+      "status": 200,
+      "version": 5
+    },
+    {
+      "program": 14,
+      "solutionId": 19,
+      "kind": "real POST committed, response intentionally aborted",
+      "status": 200,
+      "version": 5
+    }
+  ],
+  "javascriptErrors": [],
+  "browser": "Headless Edge / Playwright",
+  "origin": "http://127.0.0.1:8876",
+  "api": "http://127.0.0.1:8871",
+  "widths": [320, 390, 768, 1440],
+  "buildProvenance": "C:/Users/evsee/AppData/Local/Temp/procollab-unknown-angular/qa-build-provenance.json",
+  "limitations": [
+    "synthetic data intentionally created and submitted",
+    "only JSON submit response fault injected after real commit; no mocked success body",
+    "primary flow mobile 390; final states checked at other widths; full desktop/a11y/zoom not claimed",
+    "external avatars/scripts blocked; local file storage, no production CDN/mail/deploy"
+  ]
+}

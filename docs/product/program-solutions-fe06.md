@@ -11,3 +11,11 @@
 Проверено в браузере: настоящие Angular + Django/PostgreSQL/JWT, КЧ и хакатон, оба вида ошибок с tab/focus, приглашение и принятие второго участника, отмена и подтверждение, версия POST из PATCH, accepted-only snapshot, pending revoke после сдачи, readonly капитана и участника, 0/false. Изменение организатором подписей, порядка и добавление required не меняет сданный просмотр. Проверены desktop и 390 px; ошибок JavaScript и горизонтального overflow нет. Подтверждение переиспользует существующий dialog/controls и Mont.
 
 Эксперт, управление, аналитика и QA первого выпуска остаются в плане. PR остается draft во время следующих интеграций.
+
+## QA01 от 25.10.2026: ошибки, новая форма и потерянный ответ
+
+[NEG01–NEG08 и evidence](../qa/program-solutions-negative-20261025/README.md): реальные КЧ/хакатон, пустая заявка и обе вкладки/focus, accepted-only минимум, required PDF/repository, закрытие срока после подтверждения, сохранение после срока, потеря PATCH без потери ввода, actual manager PUT при несохраненных name/text/0/False/case, form revision conflict/rebase и новое required без изменения прежней сдачи. Domain verifiers: 42 настоящих HTTP/C00 checks с неизменным hash прежних данных, readonly snapshots, правами и actual PDF bytes. Частичные ранние попытки harness и before-fix FAIL сохранены отдельно.
+
+Найден и исправлен stale network alert после lost POST response: сервер уже коммитил сдачу, GET возвращал submitted, а footer продолжал показывать ошибку. Теперь принятый submitted GET переводит существующий UI в success notice и убирает старую командную ошибку, сохраняя локальные несохраненные данные. GET draft или failed GET не подтверждают успех; automatic POST retry не добавляется. API/C00/permissions/layout/SCSS не менялись.
+
+Усиленный interrupted-POST regression был красным; после fix 31 focused и полный test:ci 2763 tests/478 files + strict types PASS, development build/scoped ESLint PASS. На новых программах 13/14 повторен actual browser lost-response сценарий обеих форм: реальный commit → намеренный обрыв JSON response → GET → readonly/«Решение сдано.» без сетевой ошибки, по одному POST. Mont/0/False сохранены. Основной путь mobile, final responsive состояния отдельно; полный desktop/a11y/CDN не заявляется. Общий QA01/REL01 еще открыт.
