@@ -76,18 +76,34 @@ export interface CertificateSettings {
   eligibleCounts: { all: number; submitted: number };
   batch: { id: number; active: boolean; issueAt: string; initializedAt: string | null } | null;
 }
-export type CertificateFilter = "all" | "sent" | "failed";
+export type CertificateFilter = "all" | "sent" | "failed" | "unsent";
+export interface CertificateSelection {
+  ids?: string[];
+  allMatching?: boolean;
+  excludedIds?: string[];
+  status?: CertificateFilter;
+  search?: string;
+}
 export interface CertificateDelivery {
   id: string;
   name: string;
   email: string;
   status: "pending" | "generating" | "sending" | "sent" | "failed" | "ready";
   pdfReady: boolean;
+  pdfError?: boolean;
   error: string;
   sentAt: string | null;
+  outdated?: boolean;
 }
 export interface CertificateJournal {
   count: number;
   results: CertificateDelivery[];
-  summary: { total: number; ready: number; sent: number; failed: number };
+  summary: {
+    total: number;
+    ready: number;
+    sent: number;
+    failed: number;
+    unsent?: number;
+    outdated?: number;
+  };
 }

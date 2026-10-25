@@ -15,6 +15,9 @@ export class ProgramCertificatesUseCase {
   readonly journal = this.repository.journal.bind(this.repository);
   readonly retry = this.repository.retry.bind(this.repository);
   readonly pdf = this.repository.pdf.bind(this.repository);
+  readonly currentPdf = this.repository.currentPdf.bind(this.repository);
+  readonly selection = this.repository.selection.bind(this.repository);
   readonly archive = this.repository.archive.bind(this.repository);
+  readonly currentArchive = this.repository.currentArchive.bind(this.repository);
   readonly mine = this.repository.mine.bind(this.repository);
 }

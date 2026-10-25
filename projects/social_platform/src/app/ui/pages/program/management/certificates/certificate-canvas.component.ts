@@ -29,6 +29,7 @@ import {
   hiddenCertificateElements,
   moveCertificateBox,
   resizeCertificateBox,
+  sizeCertificateText,
 } from "@utils/certificate-layout";
 
 @Component({
@@ -54,15 +55,17 @@ export class CertificateCanvasComponent {
   readonly layoutChange = output<CertificateDraft["layout"]>();
   readonly interactionStart = output<void>();
   readonly removeElement = output<CertificateElement>();
+  readonly downloadPreview = output<void>();
   readonly keys = CERTIFICATE_ELEMENTS;
   readonly labels = CERTIFICATE_LABELS;
   readonly fonts = CERTIFICATE_FONTS;
   readonly fontLoadError = signal(false);
-  readonly zoom = signal(1);
   readonly dragging = signal(false);
   readonly viewport = viewChild<ElementRef<HTMLElement>>("viewport");
+  readonly bottom = viewChild<ElementRef<HTMLElement>>("bottom");
   private readonly availableWidth = signal(0);
   private readonly viewportHeight = signal(900);
+  private readonly expandedPaperHeight = signal(360);
   private readonly fontsReady = signal(false);
   private context: CanvasRenderingContext2D | null = null;
   private readonly destroy = inject(DestroyRef);
@@ -71,15 +74,14 @@ export class CertificateCanvasComponent {
     const width = this.availableWidth();
     const page = this.page();
     // Leave room for tools, the PDF action and the sticky save footer in the dialog.
-    const height = Math.max(
-      this.draft().orientation === "portrait" ? 360 : 200,
-      this.viewportHeight() - (this.expanded() ? 480 : 320),
-    );
+    const height = this.expanded()
+      ? this.expandedPaperHeight()
+      : Math.max(this.draft().orientation === "portrait" ? 360 : 200, this.viewportHeight() - 320);
     const fit =
       this.expanded() || this.draft().orientation === "portrait"
         ? Math.min(width, (height * page.widthMm) / page.heightMm)
         : width;
-    return fit * this.zoom();
+    return fit;
   });
   readonly fits = computed(() => {
     this.fontsReady();
@@ -131,12 +133,37 @@ export class CertificateCanvasComponent {
         if (!element) return;
         const style = getComputedStyle(element);
         this.availableWidth.set(
-          element.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+          element.clientWidth -
+            (parseFloat(style.paddingLeft) || 0) -
+            (parseFloat(style.paddingRight) || 0),
         );
         this.viewportHeight.set(window.innerHeight);
+        if (this.expanded()) {
+          const footer = element
+            .closest(".certificates__editor")
+            ?.querySelector(".certificates__save");
+          this.expandedPaperHeight.set(
+            Math.max(
+              120,
+              window.innerHeight -
+                24 -
+                (footer?.getBoundingClientRect().height ?? 80) -
+                Math.max(0, element.getBoundingClientRect().top) -
+                (parseFloat(style.paddingTop) || 0) -
+                (parseFloat(style.paddingBottom) || 0) -
+                (this.bottom()?.nativeElement.getBoundingClientRect().height ?? 44) -
+                12,
+            ),
+          );
+        }
       };
       const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
       if (this.viewport()) observer?.observe(this.viewport()!.nativeElement);
+      if (this.bottom()) observer?.observe(this.bottom()!.nativeElement);
+      const footer = this.viewport()
+        ?.nativeElement.closest(".certificates__editor")
+        ?.querySelector(".certificates__save");
+      if (footer) observer?.observe(footer);
       window.addEventListener("resize", measure);
       measure();
       if (document.fonts) {
@@ -296,18 +323,31 @@ export class CertificateCanvasComponent {
     );
   }
   fontChanged(event: Event): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.preview() || this.selected() === "signature") return;
     const target = event.target as HTMLInputElement,
       value = Number(target.value);
     if (!Number.isFinite(value) || value < 8 || value > 72) {
-      target.value = String(this.box().fontSize);
+      if (event.type === "change") target.value = String(this.box().fontSize);
       return;
     }
+    if (value === this.box().fontSize) return;
+    const font = this.font(this.selected());
+    const measure = (text: string) => {
+      if (this.context)
+        this.context.font = `${this.fontWeight(this.selected())} 1000px "${font.family}"`;
+      return this.context?.measureText(text).width ?? Array.from(text).length * 550;
+    };
     this.interactionStart.emit();
-    this.update(this.selected(), { ...this.box(), fontSize: value });
-  }
-  setZoom(value: number): void {
-    this.zoom.set(Math.max(1, Math.min(2, value)));
+    this.update(
+      this.selected(),
+      sizeCertificateText(
+        this.text(this.selected()),
+        this.box(),
+        value,
+        measure,
+        this.draft().orientation,
+      ),
+    );
   }
   private update(key: CertificateElement, box: CertificateBox): void {
     this.layoutChange.emit({ ...this.draft().layout, [key]: box });

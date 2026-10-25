@@ -21,7 +21,8 @@
       min="8"
       max="72"
       [value]="box().fontSize"
-      [disabled]="selected() === 'signature' || preview()"
+      [disabled]="selected() === 'signature' || preview() || disabled()"
+      (input)="fontChanged($event)"
       (change)="fontChanged($event)"
     />
     <span>px</span>
@@ -122,30 +123,21 @@
     }
   </div>
 </div>
-<div class="canvas__bottom">
+<div class="canvas__bottom" #bottom>
   <label class="canvas__check"
     ><input
       type="checkbox"
       appChoice
       [checked]="longName()"
       (change)="longNameChange.emit($any($event.target).checked)"
-    />Длинное имя</label
+    />Проверить длинное имя</label
   >
-  <label class="canvas__zoom">
-    <span>Масштаб</span>
-    <select
-      appField
-      [value]="zoom()"
-      [disabled]="disabled()"
-      (change)="setZoom(+$any($event.target).value)"
-    >
-      <option value="1">По размеру окна</option>
-      <option value="1.25">125%</option>
-      <option value="1.5">150%</option>
-      <option value="2">200%</option>
-    </select>
-  </label>
+  <button
+    type="button"
+    appButton="secondary"
+    [disabled]="disabled()"
+    (click)="downloadPreview.emit()"
+  >
+    Скачать пробный PDF
+  </button>
 </div>
-<p class="canvas__instruction">
-  Перетащите элемент · тяните за угол для размера · стрелки для точного перемещения
-</p>

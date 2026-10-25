@@ -1,6 +1,7 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
+import { HttpErrorResponse } from "@angular/common/http";
 import { of, Subject, throwError } from "rxjs";
 import { describe, expect, it, vi } from "vitest";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
@@ -60,7 +61,10 @@ async function setup(data = settings()) {
     activate: vi.fn(() => of({ ...data, revision: 2 })),
     queue: vi.fn(),
     pdf: vi.fn(),
+    currentPdf: vi.fn(() => of(new Blob(["%PDF"]))),
+    selection: vi.fn(() => of({ count: 1, skipped: 0 })),
     archive: vi.fn(),
+    currentArchive: vi.fn(() => of(new Blob(["zip"]))),
     mine: vi.fn(),
   };
   TestBed.configureTestingModule({ imports: [ManagementCertificatesComponent] });
@@ -82,6 +86,130 @@ async function setup(data = settings()) {
   return { fixture, component: fixture.componentInstance, repository };
 }
 describe("Program certificates", () => {
+  it("applies a typed font size immediately, grows the old short box and supports undo", async () => {
+    const data = settings();
+    data.draft.layout.name.height = 2;
+    const { fixture, component } = await setup(data);
+    const input = fixture.nativeElement.querySelector(".canvas__font input") as HTMLInputElement;
+    input.value = "48";
+    input.dispatchEvent(new Event("input"));
+    fixture.detectChanges();
+    expect(component.draft()!.layout.name.fontSize).toBe(48);
+    expect(component.draft()!.layout.name.height).toBeGreaterThan(2);
+    const canvas = fixture.debugElement.query(By.directive(CertificateCanvasComponent))
+      .componentInstance as CertificateCanvasComponent;
+    expect(canvas.fits().name.fontSize).toBeCloseTo(48, 2);
+    expect(fixture.nativeElement.querySelector(".canvas__zoom")).toBeNull();
+    component.undo();
+    expect(component.draft()!.layout.name.height).toBe(2);
+    expect(component.draft()!.layout.name.fontSize).toBe(18);
+    fixture.destroy();
+  });
+  it("uses the long-name preview flag for the downloaded PDF", async () => {
+    const { fixture, component, repository } = await setup();
+    component.longName.set(true);
+    await component.preview();
+    expect(repository.preview).toHaveBeenCalledWith(9, 1, true);
+    fixture.destroy();
+  });
+  it("selects every matching recipient across pages, allows exclusions and clears on filter change", async () => {
+    const { fixture, component, repository } = await setup();
+    component.journal.set({
+      count: 128,
+      results: [],
+      summary: { total: 128, ready: 128, sent: 2, failed: 1 },
+    });
+    component.selectAll(true);
+    component.toggleRow("excluded-id", false);
+    expect(component.selectedCount()).toBe(127);
+    expect(component.allChecked()).toBe(false);
+    expect(component.isSelected("next-page-id")).toBe(true);
+    component.selectionAction.set("send");
+    await component.performSelection();
+    expect(repository.selection).toHaveBeenCalledWith(9, 1, "send", {
+      allMatching: true,
+      excludedIds: ["excluded-id"],
+      status: "all",
+      search: "",
+    });
+    expect(component.selectedCount()).toBe(0);
+    component.toggleRow("one-id", true);
+    component.setFilter("failed");
+    expect(component.selectedCount()).toBe(0);
+    fixture.destroy();
+  });
+  it("saves changes before downloading a participant PDF and uses the current template endpoint", async () => {
+    const { fixture, component, repository } = await setup();
+    component.patch({ director: "Новый директор" });
+    await component.pdf("certificate-id");
+    expect(repository.save).toHaveBeenCalled();
+    expect(repository.currentPdf).toHaveBeenCalledWith(9, "certificate-id", 2);
+    expect(repository.pdf).not.toHaveBeenCalled();
+    fixture.destroy();
+  });
+  it("keeps selection on a rejected action and exposes the failure in its confirmation", async () => {
+    const { fixture, component, repository } = await setup();
+    component.toggleRow("one-id", true);
+    component.selectionAction.set("refresh");
+    repository.selection.mockReturnValue(
+      throwError(
+        () => new HttpErrorResponse({ status: 409, error: { detail: "Настройки изменены" } }),
+      ),
+    );
+    await component.performSelection();
+    expect(component.selectedCount()).toBe(1);
+    expect(component.selectionAction()).toBe("refresh");
+    expect(component.error()).toContain("Настройки изменены");
+    fixture.destroy();
+  });
+  it("shows an actionable API error when a PDF request returns a JSON blob", async () => {
+    const { fixture, component, repository } = await setup();
+    const text = JSON.stringify({ detail: "Дождитесь завершения обработки." });
+    const error = Object.assign(new Blob([text], { type: "application/json" }), {
+      text: async () => text,
+    });
+    repository.currentPdf.mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status: 400, error })),
+    );
+    await component.pdf("certificate-id");
+    expect(component.error()).toBe("Дождитесь завершения обработки.");
+    fixture.destroy();
+  });
+  it.each([
+    { pdfReady: false, label: "PDF не создан", sentAt: null },
+    { pdfReady: true, label: "PDF не обновлен", sentAt: null },
+    { pdfReady: true, label: "PDF не обновлен", sentAt: "2026-10-24T10:00:00Z" },
+  ])(
+    "distinguishes a failed PDF generation/update from a mail failure ($pdfReady)",
+    async ({ pdfReady, label, sentAt }) => {
+      const { fixture, component } = await setup();
+      component.step.set(3);
+      component.journal.set({
+        count: 1,
+        summary: { total: 1, ready: Number(pdfReady), sent: 0, failed: 1 },
+        results: [
+          {
+            id: "failed-id",
+            name: "Тестовый участник",
+            email: "test@example.test",
+            status: "failed",
+            pdfReady,
+            pdfError: true,
+            error: "Не удалось создать PDF или отправить письмо.",
+            sentAt,
+          },
+        ],
+      });
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('td[data-label="Письмо"]').textContent).toContain(
+        sentAt ? "Отправлено" : "Не отправлено",
+      );
+      const pdf = fixture.nativeElement.querySelector('td[data-label="Сертификат"]').textContent;
+      expect(pdf).toContain(label);
+      expect(pdf).not.toContain("Готовится");
+      fixture.destroy();
+    },
+  );
   it("changes only the selected element font with history, saves it and keeps geometry", async () => {
     const { fixture, component, repository } = await setup();
     const initial = structuredClone(component.draft()!.layout);
@@ -396,10 +524,13 @@ describe("Program certificates", () => {
     expect(component.journal()?.count).toBe(1);
     fixture.destroy();
   });
-  it("retries a single selected error without resubmitting the template", async () => {
+  it("retries a single selected error using the current template and preserving delivery mode", async () => {
     const { fixture, component, repository } = await setup();
-    await component.retry("certificate-id");
-    expect(repository.retry).toHaveBeenCalledWith(9, ["certificate-id"]);
+    component.selectFailed("certificate-id");
+    expect(component.selectionCopy().hint).toContain("Способ доставки сохраняется");
+    await component.performSelection();
+    expect(repository.selection).toHaveBeenCalledWith(9, 1, "retry", { ids: ["certificate-id"] });
+    expect(repository.save).not.toHaveBeenCalled();
     expect(repository.activate).not.toHaveBeenCalled();
     fixture.destroy();
   });

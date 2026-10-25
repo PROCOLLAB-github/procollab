@@ -366,8 +366,13 @@ button {
       padding-left: 0;
     }
 
-    td:first-child {
+    td:nth-child(2) {
       width: 34%;
+    }
+
+    .certificates__select-cell {
+      width: 36px;
+      min-width: 36px;
     }
 
     td {
@@ -393,8 +398,25 @@ button {
     }
   }
 
+  &__mobile-select {
+    display: none;
+  }
+
   &__error {
     color: var(--red-dark, #b22b38);
+  }
+
+  &__selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 12px;
+
+    .certificates__actions {
+      margin-top: 0;
+    }
   }
 
   &__empty {
@@ -602,10 +624,6 @@ button {
     border-top: 1px solid var(--medium-grey-for-outline);
   }
 
-  &__pdf-actions {
-    margin-top: 12px;
-  }
-
   &__launch-problem {
     margin-top: 12px;
     color: var(--ui-error-text);
@@ -811,6 +829,83 @@ button {
       td {
         padding: 12px 6px;
         font-size: 11px;
+      }
+
+      table,
+      thead,
+      tbody {
+        display: block;
+      }
+
+      thead tr {
+        display: block;
+      }
+
+      th:not(.certificates__select-cell) {
+        display: none;
+      }
+
+      th.certificates__select-cell {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        width: auto;
+      }
+
+      .certificates__mobile-select {
+        display: inline;
+        color: var(--black);
+      }
+
+      tbody tr {
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr);
+        gap: 8px 12px;
+        padding-block: 16px;
+        border-bottom: 1px solid var(--medium-grey-for-outline);
+      }
+
+      tbody td {
+        min-width: 0;
+        padding: 0;
+        font-size: 12px;
+        border: 0;
+      }
+
+      tbody td:nth-child(n + 2) {
+        grid-column: 2;
+        width: auto;
+      }
+
+      td.certificates__select-cell {
+        grid-row: 1 / span 4;
+        width: 24px;
+        min-width: 24px;
+        padding-top: 2px;
+      }
+
+      td[data-label]::before {
+        margin-right: 6px;
+        font-size: 11px;
+        color: var(--grey-for-text);
+        content: attr(data-label) ":";
+      }
+
+      tbody td:last-child .ui-button {
+        width: auto;
+      }
+
+      strong {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      small {
+        font-size: 11px;
+      }
+
+      td.certificates__empty {
+        grid-column: 1 / -1;
       }
     }
   }

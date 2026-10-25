@@ -12,6 +12,7 @@ import {
   untracked,
 } from "@angular/core";
 import { DatePipe, NgTemplateOutlet } from "@angular/common";
+import { HttpErrorResponse } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Observable, Subject, debounceTime, firstValueFrom, interval } from "rxjs";
@@ -29,6 +30,7 @@ import {
   CertificateJournal,
   CertificateSettings,
   CertificateElement,
+  CertificateSelection,
   CERTIFICATE_ELEMENTS,
   CERTIFICATE_LABELS,
 } from "@domain/program/program-certificates.model";
@@ -146,7 +148,7 @@ export class ManagementCertificatesComponent {
   readonly scheduleInput = computed(() =>
     this.draft()?.scheduledAt ? toMoscowInput(this.draft()!.scheduledAt) : "",
   );
-  readonly steps = ["1. Шаблон", "2. Автовыдача", "3. Отправки"];
+  readonly steps = ["1. Шаблон", "2. Выдача", "3. Отправление"];
   readonly placeholders = "{name}, {program}, {date}, {number}";
   readonly labels = {
     pending: "В очереди",
@@ -154,8 +156,43 @@ export class ManagementCertificatesComponent {
     sending: "Отправляем",
     sent: "Отправлено",
     failed: "Ошибка",
-    ready: "Без отправки",
+    ready: "Не отправлено",
   };
+  readonly selectedIds = signal<string[]>([]);
+  readonly excludedIds = signal<string[]>([]);
+  readonly allMatching = signal(false);
+  readonly selectionAction = signal<"send" | "refresh" | "retry" | null>(null);
+  readonly selectionCopy = computed(
+    () =>
+      ({
+        send: {
+          title: "Отправить сертификаты по почте?",
+          hint: "Текущий шаблон. Уже отправленные письма пропустим.",
+          button: "Отправить",
+          progress: "Отправляем",
+        },
+        refresh: {
+          title: "Обновить выданные PDF?",
+          hint: "Текущий шаблон. Ссылки сохранятся, письма не отправляем.",
+          button: "Обновить PDF",
+          progress: "Обновляем PDF",
+        },
+        retry: {
+          title: "Повторить обработку сертификатов?",
+          hint: "Текущий шаблон. Способ доставки сохраняется.",
+          button: "Повторить",
+          progress: "Повторяем",
+        },
+      })[this.selectionAction() ?? "send"],
+  );
+  readonly selectedCount = computed(() =>
+    this.allMatching()
+      ? Math.max(0, (this.journal()?.count ?? 0) - this.excludedIds().length)
+      : this.selectedIds().length,
+  );
+  readonly allChecked = computed(
+    () => !!this.journal()?.count && this.allMatching() && !this.excludedIds().length,
+  );
   private readonly searchChanges = new Subject<void>();
   private sequence = 0;
   private loadSequence = 0;
@@ -176,13 +213,7 @@ export class ManagementCertificatesComponent {
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe(() => {
         this.currentTime.set(Date.now());
-        if (
-          this.step() === 3 &&
-          !this.journalLoading() &&
-          !this.busy() &&
-          this.snapshot()?.batch?.active
-        )
-          void this.loadJournal();
+        if (this.step() === 3 && !this.journalLoading() && !this.busy()) void this.loadJournal();
       });
     this.destroy.onDestroy(() => this.objectUrls.forEach(url => URL.revokeObjectURL(url)));
   }
@@ -325,7 +356,18 @@ export class ManagementCertificatesComponent {
     try {
       accept(await this.observe(request()));
     } catch (error) {
-      this.error.set(evaluationError(error));
+      let requestError = error;
+      if (error instanceof HttpErrorResponse && error.error instanceof Blob) {
+        try {
+          requestError = new HttpErrorResponse({
+            status: error.status,
+            error: JSON.parse(await error.error.text()),
+          });
+        } catch {
+          /* Non-JSON file errors use the standard request error. */
+        }
+      }
+      this.error.set(evaluationError(requestError));
     } finally {
       this.busy.set(false);
     }
@@ -411,7 +453,7 @@ export class ManagementCertificatesComponent {
     const id = this.programId();
     if (!(await this.save()) || id !== this.programId()) return;
     return this.run(
-      () => this.api.preview(this.programId(), this.snapshot()!.revision),
+      () => this.api.preview(this.programId(), this.snapshot()!.revision, this.longName()),
       blob => saveAs(blob, "certificate-preview.pdf"),
     );
   }
@@ -473,11 +515,15 @@ export class ManagementCertificatesComponent {
     if (step === 3) void this.loadJournal();
   }
   setFilter(filter: CertificateFilter): void {
+    this.clearSelection();
     this.filter.set(filter);
     this.offset.set(0);
     void this.loadJournal();
   }
   searchChanged(value: string): void {
+    this.clearSelection();
+    ++this.sequence;
+    this.journalLoading.set(true);
     this.search.set(value);
     this.searchChanges.next();
   }
@@ -500,25 +546,88 @@ export class ManagementCertificatesComponent {
     this.offset.update(offset => Math.max(0, offset + delta * 20));
     void this.loadJournal();
   }
-  retry(id?: string): Promise<void> {
-    return this.run(
-      () => this.api.retry(this.programId(), id ? [id] : undefined),
+  isSelected(id: string): boolean {
+    return this.allMatching() ? !this.excludedIds().includes(id) : this.selectedIds().includes(id);
+  }
+  clearSelection(): void {
+    this.allMatching.set(false);
+    this.selectedIds.set([]);
+    this.excludedIds.set([]);
+  }
+  selectAll(checked: boolean): void {
+    this.clearSelection();
+    this.allMatching.set(checked);
+  }
+  toggleRow(id: string, checked: boolean): void {
+    if (this.allMatching())
+      this.excludedIds.update(ids => (checked ? ids.filter(value => value !== id) : [...ids, id]));
+    else
+      this.selectedIds.update(ids =>
+        checked ? [...new Set([...ids, id])] : ids.filter(value => value !== id),
+      );
+  }
+  selectionPayload(): CertificateSelection {
+    return this.allMatching()
+      ? {
+          allMatching: true,
+          excludedIds: this.excludedIds(),
+          status: this.filter(),
+          search: this.search(),
+        }
+      : { ids: this.selectedIds() };
+  }
+  async performSelection(): Promise<void> {
+    const action = this.selectionAction();
+    if (!action || !this.selectedCount()) return;
+    const selection = this.selectionPayload();
+    if (!(await this.save())) return;
+    await this.run(
+      () => this.api.selection(this.programId(), this.snapshot()!.revision, action, selection),
       data => {
-        this.message.set(`Поставлено в очередь: ${data.count}.`);
+        const progress = this.selectionCopy().progress;
+        this.selectionAction.set(null);
+        this.clearSelection();
+        this.message.set(
+          data.count
+            ? `${progress}: ${data.count}.${data.skipped ? ` Уже отправлено: ${data.skipped}.` : ""}`
+            : data.skipped
+              ? "Все выбранные сертификаты уже отправлены."
+              : "Выбранные сертификаты не найдены.",
+        );
         void this.loadJournal();
       },
     );
   }
-  pdf(id: string): Promise<void> {
+  async pdf(id: string): Promise<void> {
+    if (!(await this.save())) return;
     return this.run(
-      () => this.api.pdf(this.programId(), id),
-      blob => saveAs(blob, `certificate-${id.slice(0, 8)}.pdf`),
+      () => this.api.currentPdf(this.programId(), id, this.snapshot()!.revision),
+      blob => {
+        saveAs(blob, `certificate-${id.slice(0, 8)}.pdf`);
+        void this.loadJournal();
+      },
     );
   }
-  archive(): Promise<void> {
+  selectFailed(id?: string): void {
+    this.clearSelection();
+    if (id) this.selectedIds.set([id]);
+    else {
+      this.setFilter("failed");
+      this.allMatching.set(true);
+    }
+    this.selectionAction.set("retry");
+  }
+  async archive(): Promise<void> {
+    const selection = this.selectedCount()
+      ? this.selectionPayload()
+      : { allMatching: true, status: this.filter(), search: this.search() };
+    if (!(await this.save())) return;
     return this.run(
-      () => this.api.archive(this.programId(), this.filter(), this.search()),
-      blob => saveAs(blob, "certificates.zip"),
+      () => this.api.currentArchive(this.programId(), this.snapshot()!.revision, selection),
+      blob => {
+        saveAs(blob, "certificates.zip");
+        void this.loadJournal();
+      },
     );
   }
 }
