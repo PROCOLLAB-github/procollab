@@ -6914,12 +6914,13 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
   {
     name: "published_solution_list_competitive_pending_rule",
     operationId: "getPublishedSolutions",
-    status: 404,
+    status: 200,
     response: {
-      code: "not_found",
-      detail: "Контролируемая ошибка.",
-      errors: [],
-      meta: {},
+      programId: 14,
+      count: 0,
+      next: null,
+      previous: null,
+      results: [],
     },
   },
   {
@@ -12162,6 +12163,199 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
     response: {
       code: "solution_archived",
       detail: "Решение снято с участия. Материалы доступны для просмотра.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "published_competitive_submitted_list",
+    operationId: "getPublishedSolutions",
+    status: 200,
+    response: {
+      programId: 14,
+      count: 1,
+      next: null,
+      previous: null,
+      results: [
+        {
+          application: {
+            kind: "solution",
+            programId: 14,
+            solutionId: 501,
+            name: "Сданное конкурсное решение",
+          },
+          publishedAt: "2026-10-25T06:00:00Z",
+          captain: {
+            id: 11,
+            firstName: "Иван",
+            lastName: "Токарев",
+            avatarUrl: null,
+          },
+          acceptedCount: 1,
+        },
+      ],
+    },
+  },
+  {
+    name: "published_competitive_submitted_snapshot",
+    operationId: "getPublishedSolution",
+    status: 200,
+    response: {
+      application: {
+        kind: "solution",
+        programId: 14,
+        solutionId: 501,
+        name: "Сданное конкурсное решение",
+      },
+      publishedAt: "2026-10-25T06:00:00Z",
+      fields: [
+        {
+          id: 701,
+          type: "number",
+          purpose: "other",
+          label: "Размер пилота",
+          helpText: "",
+          required: false,
+          position: 0,
+          options: [],
+          validation: {
+            minLength: null,
+            maxLength: null,
+            minimum: null,
+            maximum: null,
+            allowedExtensions: [],
+            maxFileSizeBytes: null,
+          },
+        },
+        {
+          id: 702,
+          type: "checkbox",
+          purpose: "other",
+          label: "Разрешение на демонстрацию",
+          helpText: "",
+          required: false,
+          position: 1,
+          options: [],
+          validation: {
+            minLength: null,
+            maxLength: null,
+            minimum: null,
+            maximum: null,
+            allowedExtensions: [],
+            maxFileSizeBytes: null,
+          },
+        },
+        {
+          id: 703,
+          type: "file",
+          purpose: "other",
+          label: "Материалы",
+          helpText: "",
+          required: false,
+          position: 2,
+          options: [],
+          validation: {
+            minLength: null,
+            maxLength: null,
+            minimum: null,
+            maximum: null,
+            allowedExtensions: [],
+            maxFileSizeBytes: null,
+          },
+        },
+      ],
+      answers: [
+        {
+          fieldId: 701,
+          value: 0,
+        },
+        {
+          fieldId: 702,
+          value: false,
+        },
+        {
+          fieldId: 703,
+          value: {
+            url: "https://cdn.example.org/solution/materials.zip",
+          },
+        },
+      ],
+      team: {
+        members: [
+          {
+            user: {
+              id: 11,
+              firstName: "Иван",
+              lastName: "Токарев",
+              avatarUrl: null,
+            },
+            role: "Капитан",
+            specialization: null,
+            isCaptain: true,
+          },
+        ],
+        acceptedCount: 1,
+      },
+    },
+  },
+  {
+    name: "published_competitive_submitted_page",
+    operationId: "getPublishedSolutions",
+    status: 200,
+    response: {
+      programId: 14,
+      count: 25,
+      next: "https://local.test/programs/14/published-solutions/?limit=1&offset=1",
+      previous: null,
+      results: [
+        {
+          application: {
+            kind: "solution",
+            programId: 14,
+            solutionId: 501,
+            name: "Сданное конкурсное решение",
+          },
+          publishedAt: "2026-10-25T06:00:00Z",
+          captain: {
+            id: 11,
+            firstName: "Иван",
+            lastName: "Токарев",
+            avatarUrl: null,
+          },
+          acceptedCount: 1,
+        },
+      ],
+    },
+  },
+  {
+    name: "published_competitive_draft_hidden",
+    operationId: "getPublishedSolution",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "published_competitive_archived_hidden",
+    operationId: "getPublishedSolution",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "published_competitive_unpublished_hidden",
+    operationId: "getPublishedSolution",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Контролируемая ошибка.",
       errors: [],
       meta: {},
     },
