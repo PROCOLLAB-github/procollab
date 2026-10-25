@@ -184,7 +184,7 @@ describe("Solution evaluation using the shared criterion form", () => {
     page.prepare();
     expect(page.confirmation()).toBe(true);
   });
-  it.each(["not_found", "not_program_expert"])(
+  it.each(["not_found", "not_program_expert", "solution_archived"])(
     "shows saved/closed results read-only and clears a revoked evaluation frame: %s",
     async code => {
       const { page, fixture, rate, get, data } = await setup(true);
@@ -198,6 +198,11 @@ describe("Solution evaluation using the shared criterion form", () => {
       fixture.detectChanges();
       expect(page.frame()).toBeNull();
       expect(page.form.value).toEqual({});
+      expect(page.previous()).toEqual([]);
+      expect(page.renderer()).toBeUndefined();
+      expect(fixture.nativeElement.textContent).toContain("Решение недоступно");
+      expect(fixture.nativeElement.querySelector("app-solution-fields")).toBeNull();
+      expect(get.execute).toHaveBeenCalledTimes(1);
       const closed = structuredClone(data);
       closed.canRate = false;
       closed.blockedReason = "Срок оценивания завершен.";

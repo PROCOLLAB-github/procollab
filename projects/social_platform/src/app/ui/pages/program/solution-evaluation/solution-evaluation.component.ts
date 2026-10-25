@@ -280,6 +280,7 @@ export class SolutionEvaluationComponent {
           if (
             [
               "not_found",
+              "solution_archived",
               "forbidden",
               "not_assigned",
               "not_program_expert",

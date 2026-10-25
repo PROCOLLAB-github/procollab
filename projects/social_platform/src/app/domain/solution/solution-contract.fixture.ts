@@ -12102,4 +12102,68 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
       projectId: 1,
     },
   },
+  {
+    name: "rate_archived_solution_open",
+    operationId: "rateSolution",
+    status: 409,
+    request: {
+      expectedCriteriaRevision: "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      scores: [
+        {
+          criterionId: 21,
+          value: "0",
+        },
+        {
+          criterionId: 22,
+          value: "4.5",
+        },
+        {
+          criterionId: 23,
+          value: "False",
+        },
+        {
+          criterionId: 24,
+          value: "",
+        },
+      ],
+    },
+    response: {
+      code: "solution_archived",
+      detail: "Решение снято с участия. Материалы доступны для просмотра.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "rate_archived_solution_distributed",
+    operationId: "rateSolution",
+    status: 409,
+    request: {
+      expectedCriteriaRevision: "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      scores: [
+        {
+          criterionId: 21,
+          value: "0",
+        },
+        {
+          criterionId: 22,
+          value: "4.5",
+        },
+        {
+          criterionId: 23,
+          value: "False",
+        },
+        {
+          criterionId: 24,
+          value: "",
+        },
+      ],
+    },
+    response: {
+      code: "solution_archived",
+      detail: "Решение снято с участия. Материалы доступны для просмотра.",
+      errors: [],
+      meta: {},
+    },
+  },
 ];
