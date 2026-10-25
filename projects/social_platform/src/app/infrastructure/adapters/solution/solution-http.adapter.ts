@@ -44,6 +44,8 @@ import {
   SolutionReminderPreviewRequest,
   SolutionReminderPreview,
   SolutionReminderReceipt,
+  SolutionPublishedSolution,
+  SolutionPublishedSolutionPage,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -55,11 +57,28 @@ import {
   SolutionManagerAssignmentQuery,
   SolutionManagerSolutionsQuery,
   SolutionAnalyticsExportQuery,
+  SolutionPublishedQuery,
   validSolutionId,
 } from "@domain/solution/ports/solution.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private publishedPath(programId: number) {
+    this.path(programId);
+    return `/programs/${programId}/published-solutions/`;
+  }
+  publishedSolutions(programId: number, query: SolutionPublishedQuery = {}) {
+    return this.api.get<SolutionPublishedSolutionPage>(
+      this.publishedPath(programId),
+      this.evaluationQuery(query),
+    );
+  }
+  publishedSolution(programId: number, solutionId: number) {
+    if (!validSolutionId(solutionId)) throw new RangeError("Некорректный ID решения.");
+    return this.api.get<SolutionPublishedSolution>(
+      `${this.publishedPath(programId)}${solutionId}/`,
+    );
+  }
   private expertReminderPath(programId: number) {
     return `${this.analyticsPath(programId)}attention/solutions-awaiting-evaluation/`;
   }

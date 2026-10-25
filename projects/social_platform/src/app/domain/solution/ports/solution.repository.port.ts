@@ -42,9 +42,19 @@ import {
   SolutionReminderPreviewRequest,
   SolutionReminderPreview,
   SolutionReminderReceipt,
+  SolutionPublishedSolution,
+  SolutionPublishedSolutionPage,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract publishedSolutions(
+    programId: number,
+    query?: SolutionPublishedQuery,
+  ): Observable<SolutionPublishedSolutionPage>;
+  abstract publishedSolution(
+    programId: number,
+    solutionId: number,
+  ): Observable<SolutionPublishedSolution>;
   abstract previewExpertReminder(
     programId: number,
     command: SolutionReminderPreviewRequest,
@@ -180,6 +190,8 @@ export type SolutionListQuery = {
   limit?: number;
   offset?: number;
 };
+
+export type SolutionPublishedQuery = Pick<SolutionListQuery, "limit" | "offset" | "search">;
 
 export type SolutionRatingQuery = {
   search?: string;

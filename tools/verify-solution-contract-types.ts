@@ -11,6 +11,7 @@ import type {
   SolutionManagerAssignment,
   SolutionManagerSolutionFunnel,
   SolutionReminderPreviewRequest,
+  SolutionPublishedSolutionMember,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
 
 const reminderSelection = {
@@ -23,7 +24,19 @@ void reminderWithoutIds;
 import type {
   SolutionResultsExportQuery,
   SolutionAnalyticsExportQuery,
+  SolutionPublishedQuery,
 } from "../projects/social_platform/src/app/domain/solution/ports/solution.repository.port";
+
+const publicQuery = { search: "Прототип", limit: 25, offset: 0 } satisfies SolutionPublishedQuery;
+// @ts-expect-error Публичный список не принимает закрытый фильтр сдачи.
+const privatePublicQuery: SolutionPublishedQuery = { submission: "submitted" };
+function publishedMemberPrivacy(member: SolutionPublishedSolutionMember) {
+  // @ts-expect-error В публичном участнике нет email.
+  return member.user.email;
+}
+void publicQuery;
+void privatePublicQuery;
+void publishedMemberPrivacy;
 
 const validResultsExport = {
   scope: "all",

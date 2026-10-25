@@ -12,6 +12,7 @@ import {
   SolutionManagerAssignmentQuery,
   SolutionManagerSolutionsQuery,
   SolutionAnalyticsExportQuery,
+  SolutionPublishedQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
   CreateSolutionCommand,
@@ -32,6 +33,12 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  publishedSolutions(programId: number, query?: SolutionPublishedQuery) {
+    return this.http.publishedSolutions(programId, query);
+  }
+  publishedSolution(programId: number, solutionId: number) {
+    return this.http.publishedSolution(programId, solutionId);
+  }
   previewExpertReminder(programId: number, command: SolutionReminderPreviewRequest) {
     return this.http.previewExpertReminder(programId, command);
   }
