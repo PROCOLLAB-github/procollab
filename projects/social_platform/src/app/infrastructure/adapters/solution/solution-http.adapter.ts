@@ -41,6 +41,9 @@ import {
   SolutionManagerAssignments,
   SolutionManagerAssignmentDetail,
   SolutionManagerSolutions,
+  SolutionReminderPreviewRequest,
+  SolutionReminderPreview,
+  SolutionReminderReceipt,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -57,6 +60,21 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private expertReminderPath(programId: number) {
+    return `${this.analyticsPath(programId)}attention/solutions-awaiting-evaluation/`;
+  }
+  previewExpertReminder(programId: number, command: SolutionReminderPreviewRequest) {
+    return this.api.post<SolutionReminderPreview>(
+      `${this.expertReminderPath(programId)}reminder-preview/`,
+      command,
+    );
+  }
+  confirmExpertReminder(programId: number, token: string) {
+    return this.api.post<SolutionReminderReceipt>(
+      `${this.expertReminderPath(programId)}reminders/`,
+      { token },
+    );
+  }
   private analyticsPath(programId: number) {
     this.path(programId);
     return `/programs/${programId}/management/solution-analytics/`;

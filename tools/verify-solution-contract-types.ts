@@ -10,7 +10,16 @@ import type {
   SolutionWidgetOrganizer,
   SolutionManagerAssignment,
   SolutionManagerSolutionFunnel,
+  SolutionReminderPreviewRequest,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
+
+const reminderSelection = {
+  selection: { mode: "selected", ids: [301] },
+} satisfies SolutionReminderPreviewRequest;
+// @ts-expect-error Для selected нужны настоящие IDs решений.
+const reminderWithoutIds: SolutionReminderPreviewRequest = { selection: { mode: "selected" } };
+void reminderSelection;
+void reminderWithoutIds;
 import type {
   SolutionResultsExportQuery,
   SolutionAnalyticsExportQuery,

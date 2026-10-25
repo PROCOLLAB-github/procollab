@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.9.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.10.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -932,4 +932,46 @@ export type SolutionManagerSolutions = {
   submissionApplicable: boolean;
   mode: "open" | "distributed";
   results: Array<SolutionManagerSolutionRow>;
+};
+
+export type SolutionReminderSelection =
+  | {
+      mode: "selected";
+      ids: Array<number>;
+      excludedIds?: Array<number>;
+    }
+  | {
+      mode: "all";
+      ids?: Array<number>;
+      excludedIds?: Array<number>;
+    };
+
+export type SolutionReminderPreviewRequest = {
+  search?: string;
+  selection: SolutionReminderSelection;
+};
+
+export type SolutionReminderRecipient = {
+  userId: number;
+  fullName: string;
+};
+
+export type SolutionReminderPreview = {
+  token: string | null;
+  selectedCount: number;
+  recipientCount: number;
+  withoutAssignmentsCount: number;
+  unavailableCount: number;
+  previewText: string;
+  recipients: Array<SolutionReminderRecipient>;
+  expiresIn: 900;
+};
+
+export type SolutionReminderConfirm = {
+  token: string;
+};
+
+export type SolutionReminderReceipt = {
+  createdCount: number;
+  skippedCount: number;
 };

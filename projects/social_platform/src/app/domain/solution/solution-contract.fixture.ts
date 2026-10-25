@@ -6277,4 +6277,229 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
       meta: {},
     },
   },
+  {
+    name: "solution_reminder_preview_selected",
+    operationId: "previewSolutionExpertReminder",
+    status: 200,
+    response: {
+      token: "opaque-signed-example-token",
+      selectedCount: 3,
+      recipientCount: 1,
+      withoutAssignmentsCount: 1,
+      unavailableCount: 0,
+      previewText: "Эксперт, здравствуйте! В программе остались незавершенные оценки решений.",
+      recipients: [
+        {
+          userId: 27,
+          fullName: "Анна Петрова",
+        },
+      ],
+      expiresIn: 900,
+    },
+    request: {
+      selection: {
+        mode: "selected",
+        ids: [301, 302, 303],
+      },
+    },
+  },
+  {
+    name: "solution_reminder_preview_all_search_excluded",
+    operationId: "previewSolutionExpertReminder",
+    status: 200,
+    response: {
+      token: "opaque-signed-example-token",
+      selectedCount: 2,
+      recipientCount: 1,
+      withoutAssignmentsCount: 0,
+      unavailableCount: 0,
+      previewText: "Эксперт, здравствуйте! В программе остались незавершенные оценки решений.",
+      recipients: [
+        {
+          userId: 27,
+          fullName: "Анна Петрова",
+        },
+      ],
+      expiresIn: 900,
+    },
+    request: {
+      search: "Сервис",
+      selection: {
+        mode: "all",
+        excludedIds: [304],
+      },
+    },
+  },
+  {
+    name: "solution_reminder_preview_no_assignments",
+    operationId: "previewSolutionExpertReminder",
+    status: 200,
+    response: {
+      token: null,
+      selectedCount: 1,
+      recipientCount: 0,
+      withoutAssignmentsCount: 1,
+      unavailableCount: 0,
+      previewText: "",
+      recipients: [],
+      expiresIn: 900,
+    },
+    request: {
+      selection: {
+        mode: "selected",
+        ids: [303],
+      },
+    },
+  },
+  {
+    name: "solution_reminder_preview_missing_email",
+    operationId: "previewSolutionExpertReminder",
+    status: 200,
+    response: {
+      token: null,
+      selectedCount: 1,
+      recipientCount: 0,
+      withoutAssignmentsCount: 0,
+      unavailableCount: 1,
+      previewText: "",
+      recipients: [],
+      expiresIn: 900,
+    },
+    request: {
+      selection: {
+        mode: "selected",
+        ids: [302],
+      },
+    },
+  },
+  {
+    name: "solution_reminder_preview_no_auth",
+    operationId: "previewSolutionExpertReminder",
+    status: 401,
+    response: {
+      code: "authentication_required",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_reminder_preview_forbidden",
+    operationId: "previewSolutionExpertReminder",
+    status: 403,
+    response: {
+      code: "permission_denied",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_reminder_preview_not_found",
+    operationId: "previewSolutionExpertReminder",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_reminder_preview_legacy",
+    operationId: "previewSolutionExpertReminder",
+    status: 409,
+    response: {
+      code: "solution_mode_unavailable",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_reminder_preview_not_applicable",
+    operationId: "previewSolutionExpertReminder",
+    status: 409,
+    response: {
+      code: "reminders_not_applicable",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_reminder_preview_invalid_selection",
+    operationId: "previewSolutionExpertReminder",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_reminder_confirm",
+    operationId: "confirmSolutionExpertReminder",
+    status: 200,
+    response: {
+      createdCount: 1,
+      skippedCount: 0,
+    },
+    request: {
+      token: "opaque-signed-example-token",
+    },
+  },
+  {
+    name: "solution_reminder_confirm_idempotent",
+    operationId: "confirmSolutionExpertReminder",
+    status: 200,
+    response: {
+      createdCount: 1,
+      skippedCount: 0,
+    },
+    request: {
+      token: "opaque-signed-example-token",
+    },
+  },
+  {
+    name: "solution_reminder_confirm_completed_before_confirm",
+    operationId: "confirmSolutionExpertReminder",
+    status: 200,
+    response: {
+      createdCount: 0,
+      skippedCount: 1,
+    },
+    request: {
+      token: "opaque-signed-example-token",
+    },
+  },
+  {
+    name: "solution_reminder_confirm_bad_token",
+    operationId: "confirmSolutionExpertReminder",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      token: "bad-token",
+    },
+  },
+  {
+    name: "solution_reminder_confirm_cross_actor",
+    operationId: "confirmSolutionExpertReminder",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Контролируемая ошибка.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      token: "another-actor-token",
+    },
+  },
 ];

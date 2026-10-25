@@ -39,9 +39,20 @@ import {
   SolutionManagerAssignments,
   SolutionManagerAssignmentDetail,
   SolutionManagerSolutions,
+  SolutionReminderPreviewRequest,
+  SolutionReminderPreview,
+  SolutionReminderReceipt,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewExpertReminder(
+    programId: number,
+    command: SolutionReminderPreviewRequest,
+  ): Observable<SolutionReminderPreview>;
+  abstract confirmExpertReminder(
+    programId: number,
+    token: string,
+  ): Observable<SolutionReminderReceipt>;
   abstract managerAnalytics(programId: number): Observable<SolutionManagerAnalytics>;
   abstract managerAssignments(
     programId: number,

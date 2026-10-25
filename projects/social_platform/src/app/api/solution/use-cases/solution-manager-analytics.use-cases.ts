@@ -9,6 +9,22 @@ import {
 } from "@domain/solution/ports/solution.repository.port";
 import { solutionRequestResult } from "./solution.use-cases";
 import { solutionFileRequestResult } from "./solution-results-export.use-case";
+import { SolutionReminderPreviewRequest } from "@domain/solution/solution-contract.model";
+
+@Injectable({ providedIn: "root" })
+export class PreviewSolutionExpertReminderUseCase {
+  private readonly repository = inject(SolutionRepositoryPort);
+  execute(programId: number, command: SolutionReminderPreviewRequest) {
+    return solutionRequestResult(() => this.repository.previewExpertReminder(programId, command));
+  }
+}
+@Injectable({ providedIn: "root" })
+export class ConfirmSolutionExpertReminderUseCase {
+  private readonly repository = inject(SolutionRepositoryPort);
+  execute(programId: number, token: string) {
+    return solutionRequestResult(() => this.repository.confirmExpertReminder(programId, token));
+  }
+}
 
 @Injectable({ providedIn: "root" })
 export class GetSolutionManagerAnalyticsUseCase {

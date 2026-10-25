@@ -26,11 +26,18 @@ import {
   SolutionAssignmentsWrite,
   SolutionAllocationWrite,
   SolutionQuotaWrite,
+  SolutionReminderPreviewRequest,
 } from "@domain/solution/solution-contract.model";
 import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapter";
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  previewExpertReminder(programId: number, command: SolutionReminderPreviewRequest) {
+    return this.http.previewExpertReminder(programId, command);
+  }
+  confirmExpertReminder(programId: number, token: string) {
+    return this.http.confirmExpertReminder(programId, token);
+  }
   managerAnalytics(programId: number) {
     return this.http.managerAnalytics(programId);
   }
