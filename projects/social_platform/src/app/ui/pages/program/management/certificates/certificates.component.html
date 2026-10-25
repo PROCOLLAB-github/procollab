@@ -645,7 +645,9 @@
           <button
             type="button"
             appButton="secondary"
-            [disabled]="busy() || !journal()?.summary?.ready"
+            [disabled]="
+              busy() || journalLoading() || !journal()?.count || !journal()?.summary?.ready
+            "
             (click)="archive()"
           >
             {{
