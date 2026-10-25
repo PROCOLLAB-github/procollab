@@ -60,6 +60,7 @@ export function expertWidgetPresentation(
   expert: ExpertWidget,
   competitive: boolean,
   now: number,
+  entity: "project" | "solution" = "project",
 ): ExpertWidgetStatus {
   const deadline = expert.evaluationEnds ? Date.parse(expert.evaluationEnds) : NaN;
   const tooltip = Number.isFinite(deadline)
@@ -91,8 +92,13 @@ export function expertWidgetPresentation(
   if (!competitive && expert.mode === "distributed")
     return status("Без обязательной сдачи", "neutral");
   if (expert.mode === "distributed") {
-    if (expert.assigned === 0) return status("Нет назначенных проектов", "neutral");
-    if (expert.remaining === 0) return status("Все проекты оценены", "green");
+    if (expert.assigned === 0)
+      return status(
+        entity === "solution" ? "Нет назначенных решений" : "Нет назначенных проектов",
+        "neutral",
+      );
+    if (expert.remaining === 0)
+      return status(entity === "solution" ? "Все решения оценены" : "Все проекты оценены", "green");
   }
   if (!Number.isFinite(deadline)) return status("Срок не установлен", "neutral");
   const remaining = deadline - now;

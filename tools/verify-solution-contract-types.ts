@@ -6,6 +6,8 @@ import type {
   RateSolutionCommand,
   SolutionAllocationWrite,
   SolutionQuotaWrite,
+  SolutionWidgetParticipant,
+  SolutionWidgetOrganizer,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
 import type { SolutionResultsExportQuery } from "../projects/social_platform/src/app/domain/solution/ports/solution.repository.port";
 
@@ -85,6 +87,30 @@ const wrongPlan: SolutionAllocationWrite = { revision: "revision", projectIds: [
 // @ts-expect-error Изменение числа экспертов требует ревизию назначений.
 const missingQuotaRevision: SolutionQuotaWrite = { requiredEvaluators: 2 };
 
+const solutionWidgetParticipant: SolutionWidgetParticipant = {
+  application: { kind: "solution", programId: 12, solutionId: 301, name: "Решение" },
+  caseProvided: false,
+  caseName: null,
+  stage: "not_submitted",
+  submissionOpen: true,
+};
+const wrongWidgetReference: SolutionWidgetParticipant = {
+  ...solutionWidgetParticipant,
+  // @ts-expect-error Решение не принимает projectId вместо solutionId.
+  application: { kind: "solution", programId: 12, projectId: 55, name: "Решение" },
+};
+const wrongWidgetProjection: SolutionWidgetParticipant = {
+  ...solutionWidgetParticipant,
+  // @ts-expect-error У решения нет фиктивного participantProject.
+  participantProject: { id: 55, name: "Проект", programLinkId: 65 },
+};
+const solutionOrganizer: SolutionWidgetOrganizer = {
+  participants: 1,
+  solutions: 0,
+  submittedSolutions: null,
+  participantsWithoutSolution: 1,
+};
+
 void [
   validResultsExport,
   invalidResultsExport,
@@ -104,4 +130,8 @@ void [
   validPlan,
   wrongPlan,
   missingQuotaRevision,
+  solutionWidgetParticipant,
+  wrongWidgetReference,
+  wrongWidgetProjection,
+  solutionOrganizer,
 ];

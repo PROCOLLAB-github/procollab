@@ -13,8 +13,8 @@
     <div class="widget__body">
       @switch (data.role) {
         @case ("participant") {
-          @let participant = data.participant;
-          @let project = participant.participantProject;
+          @let participant = participantView()!;
+          @let application = participant.applicationLink;
           @let caseText =
             participant.caseProvided
               ? participant.caseName
@@ -35,18 +35,18 @@
             } @else {
               <span class="widget__empty">{{ caseText }}</span>
             }
-            @if (project) {
+            @if (application) {
               <a
                 class="widget__detail-row"
-                [routerLink]="routes.projects.detail(project.id)"
-                [queryParams]="{ programLinkId: project.programLinkId }"
-                [matTooltip]="'Проект: ' + project.name"
+                [routerLink]="application.path"
+                [queryParams]="application.queryParams"
+                [matTooltip]="participant.label + ': ' + application.name"
               >
-                <span class="widget__label">Проект:</span
-                ><span class="widget__ellipsis">{{ project.name }}</span>
+                <span class="widget__label">{{ participant.label }}:</span
+                ><span class="widget__ellipsis">{{ application.name }}</span>
               </a>
             } @else {
-              <span class="widget__empty">Проект не подан</span>
+              <span class="widget__empty">{{ participant.empty }}</span>
             }
           </div>
           <div class="widget__stage-state">
@@ -57,8 +57,8 @@
               Сдача не предусмотрена
             }
           </div>
-          <ol class="widget__steps" aria-label="Этапы проекта">
-            @for (step of steps(participant.stage, project !== null); track step.label) {
+          <ol class="widget__steps" [attr.aria-label]="participant.stagesLabel">
+            @for (step of steps(participant.stage, application !== null); track step.label) {
               <li
                 [class.widget__step--current]="step.current"
                 [class.widget__step--complete]="step.completed"
@@ -71,7 +71,7 @@
           </ol>
         }
         @case ("organizer") {
-          @let metrics = data.organizer;
+          @let metrics = organizerView()!;
           <dl class="widget__metrics widget__metrics--organizer">
             <div>
               <dt>Участники</dt>
@@ -80,9 +80,9 @@
               </dd>
             </div>
             <div>
-              <dt>Проекты</dt>
-              <dd tabindex="0" [matTooltip]="'' + metrics.projects">
-                {{ count(metrics.projects) }}
+              <dt>{{ metrics.workLabel }}</dt>
+              <dd tabindex="0" [matTooltip]="'' + metrics.workCount">
+                {{ count(metrics.workCount) }}
               </dd>
             </div>
             <div>
@@ -97,17 +97,18 @@
               </dd>
             </div>
             <div>
-              <dt>Без проектов</dt>
+              <dt>{{ metrics.withoutLabel }}</dt>
               <dd
                 tabindex="0"
                 [matTooltip]="
-                  metrics.participantsWithoutProject +
+                  metrics.withoutTeam +
                   ' из ' +
                   metrics.participants +
-                  ' участников без проекта'
+                  ' ' +
+                  metrics.withoutDescription
                 "
               >
-                {{ count(metrics.participantsWithoutProject) }}
+                {{ count(metrics.withoutTeam) }}
               </dd>
             </div>
           </dl>
@@ -115,7 +116,7 @@
         @case ("expert") {
           <dl class="widget__metrics">
             <div>
-              <dt>Назначено<br />проектов</dt>
+              <dt>Назначено<br />{{ data.storageMode === "solution" ? "решений" : "проектов" }}</dt>
               <dd
                 tabindex="0"
                 [matTooltip]="
@@ -163,17 +164,19 @@
           <a [routerLink]="routes.program.management(data.programId, 'analytics')">Открыть →</a>
         }
         @case ("expert") {
-          <a [routerLink]="routes.program.rating(data.programId, program()?.solutionStorageMode)"
+          <a
+            [routerLink]="
+              routes.program.rating(
+                data.programId,
+                data.storageMode ?? program()?.solutionStorageMode
+              )
+            "
             >Открыть →</a
           >
         }
         @case ("participant") {
-          @if (data.participant.participantProject; as project) {
-            <a
-              [routerLink]="routes.projects.detail(project.id)"
-              [queryParams]="{ programLinkId: project.programLinkId }"
-              >Открыть →</a
-            >
+          @if (participantView()?.applicationLink; as application) {
+            <a [routerLink]="application.path" [queryParams]="application.queryParams">Открыть →</a>
           } @else if (data.participant.submissionOpen) {
             <button
               appButton="primary"

@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.6.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.7.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -598,4 +598,107 @@ export type SolutionCabinetApplications = {
   completed: number;
   unavailable: number;
   results: Array<SolutionCabinetApplication>;
+};
+
+export type SolutionWidgetProjectRef = {
+  id: number;
+  name: string;
+  programLinkId: number;
+};
+
+export type SolutionWidgetStage =
+  | "none"
+  | "not_submitted"
+  | "submitted"
+  | "review"
+  | "evaluated"
+  | "not_applicable";
+
+export type SolutionWidgetLegacyParticipant = {
+  participantProject: SolutionWidgetProjectRef | null;
+  caseProvided: boolean;
+  caseName: string | null;
+  stage: SolutionWidgetStage;
+  submissionOpen: boolean;
+};
+
+export type SolutionWidgetParticipant = {
+  application: SolutionRef | null;
+  caseProvided: boolean;
+  caseName: string | null;
+  stage: SolutionWidgetStage;
+  submissionOpen: boolean;
+};
+
+export type SolutionWidgetLegacyOrganizer = {
+  participants: number;
+  projects: number;
+  submittedSolutions: number | null;
+  participantsWithoutProject: number;
+};
+
+export type SolutionWidgetOrganizer = {
+  participants: number;
+  solutions: number;
+  submittedSolutions: number | null;
+  participantsWithoutSolution: number;
+};
+
+export type SolutionWidgetExpert = {
+  mode: "open" | "distributed";
+  assigned: number | null;
+  remaining: number | null;
+  evaluationEnds: string | null;
+};
+
+export type SolutionWidget =
+  | {
+      programId: number;
+      role: "participant";
+      isCompetitive: boolean;
+      storageMode: "solution";
+      participant: SolutionWidgetParticipant;
+    }
+  | {
+      programId: number;
+      role: "organizer";
+      isCompetitive: boolean;
+      storageMode: "solution";
+      organizer: SolutionWidgetOrganizer;
+    }
+  | {
+      programId: number;
+      role: "expert";
+      isCompetitive: boolean;
+      storageMode: "solution";
+      expert: SolutionWidgetExpert;
+    };
+
+export type SolutionLegacyWidget =
+  | {
+      programId: number;
+      role: "participant";
+      isCompetitive: boolean;
+      storageMode?: "legacy_project";
+      participant: SolutionWidgetLegacyParticipant;
+    }
+  | {
+      programId: number;
+      role: "organizer";
+      isCompetitive: boolean;
+      storageMode?: "legacy_project";
+      organizer: SolutionWidgetLegacyOrganizer;
+    }
+  | {
+      programId: number;
+      role: "expert";
+      isCompetitive: boolean;
+      storageMode?: "legacy_project";
+      expert: SolutionWidgetExpert;
+    };
+
+export type SolutionRoleWidget = SolutionWidget | SolutionLegacyWidget;
+
+export type SolutionWidgetError = {
+  detail: string;
 };
