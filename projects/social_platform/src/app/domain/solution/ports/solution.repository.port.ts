@@ -2,6 +2,9 @@
 
 import { Observable } from "rxjs";
 import {
+  SolutionCaseChangePreviewRequest,
+  SolutionCaseChangeApplyRequest,
+  SolutionCaseChangePreview,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionActionPreview,
@@ -51,6 +54,16 @@ import {
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewCaseChange(
+    programId: number,
+    solutionId: number,
+    command: SolutionCaseChangePreviewRequest,
+  ): Observable<SolutionCaseChangePreview>;
+  abstract applyCaseChange(
+    programId: number,
+    solutionId: number,
+    command: SolutionCaseChangeApplyRequest,
+  ): Observable<SolutionMutationReceipt>;
   abstract previewSubmitAction(
     programId: number,
     command: SolutionActionPreviewRequest,

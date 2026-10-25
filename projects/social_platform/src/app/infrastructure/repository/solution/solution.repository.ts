@@ -15,6 +15,8 @@ import {
   SolutionPublishedQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
+  SolutionCaseChangePreviewRequest,
+  SolutionCaseChangeApplyRequest,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   CreateSolutionCommand,
@@ -35,6 +37,16 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  previewCaseChange(
+    programId: number,
+    solutionId: number,
+    command: SolutionCaseChangePreviewRequest,
+  ) {
+    return this.http.previewCaseChange(programId, solutionId, command);
+  }
+  applyCaseChange(programId: number, solutionId: number, command: SolutionCaseChangeApplyRequest) {
+    return this.http.applyCaseChange(programId, solutionId, command);
+  }
   previewSubmitAction(programId: number, command: SolutionActionPreviewRequest) {
     return this.http.previewSubmitAction(programId, command);
   }

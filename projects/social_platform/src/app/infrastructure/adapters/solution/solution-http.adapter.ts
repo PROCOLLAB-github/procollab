@@ -4,6 +4,9 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import {
+  SolutionCaseChangePreviewRequest,
+  SolutionCaseChangeApplyRequest,
+  SolutionCaseChangePreview,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionActionPreview,
@@ -67,6 +70,27 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private caseActionPath(programId: number, solutionId: number) {
+    this.path(programId);
+    if (!validSolutionId(solutionId)) throw new RangeError("Invalid solution ID");
+    return `/programs/${programId}/management/solutions/${solutionId}/case/`;
+  }
+  previewCaseChange(
+    programId: number,
+    solutionId: number,
+    command: SolutionCaseChangePreviewRequest,
+  ) {
+    return this.api.post<SolutionCaseChangePreview>(
+      `${this.caseActionPath(programId, solutionId)}preview/`,
+      command,
+    );
+  }
+  applyCaseChange(programId: number, solutionId: number, command: SolutionCaseChangeApplyRequest) {
+    return this.api.post<SolutionMutationReceipt>(
+      `${this.caseActionPath(programId, solutionId)}apply/`,
+      command,
+    );
+  }
   private submissionActionPath(programId: number, ids: number[]) {
     this.path(programId);
     if (

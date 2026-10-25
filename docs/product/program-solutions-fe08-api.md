@@ -75,3 +75,11 @@ C00 125 schemas/47 operations/185 scenarios; прежние 120/45/161 стру�
 На бэке общий finalize сохраняет captain deadline, ready validation и accepted-only snapshot, а confirmed manager command использует прежнее late-first-submit исключение. Сданные данные не перезаписываются. File locks захватываются до signed state fingerprint. Подробные spec/audit/evidence находятся в API repo docs/product/program-solutions-be08-submit-actions.md и docs/qa/program-solutions-submit-actions-20261025.
 
 Новых Angular screen/route/control/SCSS нет: D02 по-прежнему ожидает approval. Post-submission case/detach/removal, D03/конкурсная публикация и общий QA01/REL01 остаются открытыми. Это готовность API слоя, не всего административного интерфейса.
+
+## C00 1.15 Смена кейса черновика организатором
+
+Добавлены отдельные single-solution case preview/apply: DTO → port/repository/adapter → Preview/ApplySolutionCaseChangeUseCase. Точные caseName/opaque previewToken, настоящие program/solution IDs, nullable currentCase/token, field ID и MutationReceipt. Safe ID validation до HTTP; подпись, состояние и права проверяет сервер. Старые submit action schemas/scenarios не расширялись, Project ID не подменяет solution.
+
+128 schemas/49 operations/209 scenarios, прежние125/47/185 неизменны и три файла byte-identical.31 новых real-interceptor wire tests охватывают24 независимых сценария, errors/null/token/exact spaces/pipe/ID bounds; вместе с прежними submit61 PASS. Final test:ci2827 tests/480 files+strict types, development build/scoped lint PASS. Backend:19 новых tests, три observed PostgreSQL races, broad356 до final token guard и final52 после; actual115 response/88 valid requests+15 rejected invalid types трех форматов, без изменения прежних15 domain моделей. [Spec/evidence](https://github.com/PROCOLLAB-github/api/blob/d4709651e45b7d3411e19001ee4eada516afea48/docs/product/program-solutions-be08-case-actions.md).
+
+Это API слой до согласования D02; новых UI/layout/SCSS/routes нет. Submitted сохраняет freeze до ответа на ранее заданный вопрос, удаление/отвязка и конкурсная публикация не реализованы этим case command. Полные BE08/FE08/QA01/REL01 и первый выпуск остаются открытыми.

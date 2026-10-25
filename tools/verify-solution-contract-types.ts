@@ -1,6 +1,8 @@
 /** @format */
 
 import type {
+  SolutionCaseChangePreviewRequest,
+  SolutionCaseChangeApplyRequest,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionUpdateInvitation,
@@ -17,6 +19,15 @@ import type {
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
 
 const validSubmitPreview: SolutionActionPreviewRequest = { action: "submit", ids: [301] };
+const validCasePreview: SolutionCaseChangePreviewRequest = { caseName: "Кейс A" };
+const validCaseApply: SolutionCaseChangeApplyRequest = {
+  ...validCasePreview,
+  previewToken: "opaque",
+};
+// @ts-expect-error Case confirmation requires its own signed token.
+const missingCaseToken: SolutionCaseChangeApplyRequest = { caseName: "Кейс A" };
+// @ts-expect-error A project reference cannot be used as a case-change command.
+const projectCaseCommand: SolutionCaseChangePreviewRequest = { caseName: "Кейс A", projectId: 301 };
 const validSubmitApply: SolutionActionApplyRequest = {
   ...validSubmitPreview,
   previewToken: "opaque",
@@ -31,6 +42,10 @@ const wrongSubmissionReference: SolutionActionPreviewRequest = {
   projectIds: [301],
 };
 void [
+  validCasePreview,
+  validCaseApply,
+  missingCaseToken,
+  projectCaseCommand,
   validSubmitPreview,
   validSubmitApply,
   missingSubmitToken,
