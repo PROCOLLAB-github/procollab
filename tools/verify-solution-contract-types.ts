@@ -1,4 +1,9 @@
 /** @format */
+import type {
+  SolutionRegistrationRemovalPreviewRequest,
+  SolutionRegistrationRemovalApplyRequest,
+  SolutionRegistrationAdminChange,
+} from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
 
 import type {
   SolutionArchiveApplyRequest,
@@ -335,4 +340,36 @@ void [
   projectArchive,
   capturedAt,
   artificialSubmission,
+];
+
+const registrationSelection: SolutionRegistrationRemovalPreviewRequest = { registrationIds: [601] };
+const registrationConfirmation: SolutionRegistrationRemovalApplyRequest = {
+  registrationIds: [601],
+  previewToken: "opaque",
+};
+// @ts-expect-error Подтверждение удаления регистраций требует signed proof.
+const unsignedRegistrationRemoval: SolutionRegistrationRemovalApplyRequest = {
+  registrationIds: [601],
+};
+// @ts-expect-error Команда принимает ID регистрации, а не поле userId.
+const userRemoval: SolutionRegistrationRemovalPreviewRequest = { userId: 10 };
+const projectRegistrationRemoval: SolutionRegistrationRemovalPreviewRequest = {
+  registrationIds: [601],
+  // @ts-expect-error Команда не принимает Project ID.
+  projectId: 301,
+};
+declare const registrationEvent: SolutionAdminChange;
+if (registrationEvent.action === "remove_registrations") {
+  const typed: SolutionRegistrationAdminChange = registrationEvent;
+  const auditId: number = typed.registrationRemovalId;
+  // @ts-expect-error Смена кейса относится к другой ветке истории.
+  const unrelatedCase: string = typed.caseName;
+  void [auditId, unrelatedCase];
+}
+void [
+  registrationSelection,
+  registrationConfirmation,
+  unsignedRegistrationRemoval,
+  userRemoval,
+  projectRegistrationRemoval,
 ];

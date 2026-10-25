@@ -2,6 +2,12 @@
 
 import { Observable } from "rxjs";
 import {
+  SolutionRegistrationRemovalPreviewRequest,
+  SolutionRegistrationRemovalApplyRequest,
+  SolutionRegistrationRemovalPreview,
+  SolutionRegistrationRemovalReceipt,
+  SolutionRegistrationRemovalAuditPage,
+  SolutionRegistrationRemovalAuditDetail,
   SolutionArchivePreviewRequest,
   SolutionArchiveApplyRequest,
   SolutionArchivePreview,
@@ -63,6 +69,22 @@ import {
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewRegistrationRemoval(
+    programId: number,
+    command: SolutionRegistrationRemovalPreviewRequest,
+  ): Observable<SolutionRegistrationRemovalPreview>;
+  abstract applyRegistrationRemoval(
+    programId: number,
+    command: SolutionRegistrationRemovalApplyRequest,
+  ): Observable<SolutionRegistrationRemovalReceipt>;
+  abstract listRegistrationRemovals(
+    programId: number,
+    query?: SolutionHistoryQuery,
+  ): Observable<SolutionRegistrationRemovalAuditPage>;
+  abstract readRegistrationRemoval(
+    programId: number,
+    auditId: number,
+  ): Observable<SolutionRegistrationRemovalAuditDetail>;
   abstract previewArchive(
     programId: number,
     command: SolutionArchivePreviewRequest,

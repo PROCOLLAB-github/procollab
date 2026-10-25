@@ -11391,4 +11391,715 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
       },
     },
   },
+  {
+    name: "registration_removal_preview_member_submitted",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      registrations: [
+        {
+          registrationId: 601,
+          user: {
+            id: 10,
+            firstName: "Участник",
+            lastName: "Команды",
+            avatarUrl: null,
+          },
+        },
+      ],
+      effects: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          solutionVersion: 7,
+          isSubmitted: true,
+          effect: "remove_members",
+          removedMembers: [
+            {
+              user: {
+                id: 10,
+                firstName: "Участник",
+                lastName: "Команды",
+                avatarUrl: null,
+              },
+              role: "Backend-разработчик",
+              specialization: null,
+              joinedAt: "2026-10-24T10:00:00Z",
+              isCaptain: false,
+            },
+          ],
+          removedAssignmentsCount: 0,
+          revokedInvitationCount: 1,
+          scoreCount: 2,
+        },
+      ],
+      deletedCount: 1,
+      archivedCount: 0,
+      removedMemberCount: 1,
+      removedAssignmentsCount: 0,
+      revokedInvitationCount: 1,
+      scoreCount: 2,
+      canApply: true,
+      errors: [],
+      previewToken: "opaque-registration-removal-proof",
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_preview_pending_only",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      registrations: [
+        {
+          registrationId: 601,
+          user: {
+            id: 10,
+            firstName: "Участник",
+            lastName: "Команды",
+            avatarUrl: null,
+          },
+        },
+      ],
+      effects: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          solutionVersion: 7,
+          isSubmitted: true,
+          effect: "revoke_invitations",
+          removedMembers: [],
+          removedAssignmentsCount: 0,
+          revokedInvitationCount: 1,
+          scoreCount: 2,
+        },
+      ],
+      deletedCount: 1,
+      archivedCount: 0,
+      removedMemberCount: 0,
+      removedAssignmentsCount: 0,
+      revokedInvitationCount: 1,
+      scoreCount: 2,
+      canApply: true,
+      errors: [],
+      previewToken: "opaque-registration-removal-proof",
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_preview_captain_submitted",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      registrations: [
+        {
+          registrationId: 601,
+          user: {
+            id: 10,
+            firstName: "Участник",
+            lastName: "Команды",
+            avatarUrl: null,
+          },
+        },
+      ],
+      effects: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          solutionVersion: 7,
+          isSubmitted: true,
+          effect: "archive",
+          removedMembers: [],
+          removedAssignmentsCount: 2,
+          revokedInvitationCount: 1,
+          scoreCount: 2,
+        },
+      ],
+      deletedCount: 1,
+      archivedCount: 1,
+      removedMemberCount: 0,
+      removedAssignmentsCount: 2,
+      revokedInvitationCount: 1,
+      scoreCount: 2,
+      canApply: true,
+      errors: [],
+      previewToken: "opaque-registration-removal-proof",
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_preview_member_draft",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      registrations: [
+        {
+          registrationId: 601,
+          user: {
+            id: 10,
+            firstName: "Участник",
+            lastName: "Команды",
+            avatarUrl: null,
+          },
+        },
+      ],
+      effects: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          solutionVersion: 7,
+          isSubmitted: false,
+          effect: "remove_members",
+          removedMembers: [
+            {
+              user: {
+                id: 10,
+                firstName: "Участник",
+                lastName: "Команды",
+                avatarUrl: null,
+              },
+              role: "Backend-разработчик",
+              specialization: null,
+              joinedAt: "2026-10-24T10:00:00Z",
+              isCaptain: false,
+            },
+          ],
+          removedAssignmentsCount: 0,
+          revokedInvitationCount: 1,
+          scoreCount: 0,
+        },
+      ],
+      deletedCount: 1,
+      archivedCount: 0,
+      removedMemberCount: 1,
+      removedAssignmentsCount: 0,
+      revokedInvitationCount: 1,
+      scoreCount: 0,
+      canApply: true,
+      errors: [],
+      previewToken: "opaque-registration-removal-proof",
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_preview_without_solution",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      registrations: [
+        {
+          registrationId: 601,
+          user: {
+            id: 10,
+            firstName: "Участник",
+            lastName: "Команды",
+            avatarUrl: null,
+          },
+        },
+      ],
+      effects: [],
+      deletedCount: 1,
+      archivedCount: 0,
+      removedMemberCount: 0,
+      removedAssignmentsCount: 0,
+      revokedInvitationCount: 0,
+      scoreCount: 0,
+      canApply: true,
+      errors: [],
+      previewToken: "opaque-registration-removal-proof",
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_apply_member",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      auditId: 801,
+      deletedCount: 1,
+      items: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          solutionVersion: 8,
+          changeId: 901,
+          action: "remove_registrations",
+        },
+      ],
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_apply_captain",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      auditId: 801,
+      deletedCount: 1,
+      items: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          solutionVersion: 8,
+          changeId: 901,
+          action: "archive",
+        },
+      ],
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_apply_without_solution",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      auditId: 801,
+      deletedCount: 1,
+      items: [],
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_audit_list",
+    operationId: "listSolutionRegistrationRemovals",
+    status: 200,
+    response: {
+      count: 1,
+      offset: 0,
+      limit: 20,
+      results: [
+        {
+          id: 801,
+          programId: 12,
+          actor: {
+            id: 8,
+            firstName: "Организатор",
+            lastName: "Программы",
+            avatarUrl: null,
+          },
+          actorName: "Организатор Программы",
+          createdAt: "2026-10-25T12:00:00Z",
+          registrations: [
+            {
+              registrationId: 601,
+              user: {
+                id: 10,
+                firstName: "Участник",
+                lastName: "Команды",
+                avatarUrl: null,
+              },
+            },
+          ],
+          deletedCount: 1,
+        },
+      ],
+    },
+  },
+  {
+    name: "registration_removal_audit_detail",
+    operationId: "readSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      audit: {
+        id: 801,
+        programId: 12,
+        actor: {
+          id: 8,
+          firstName: "Организатор",
+          lastName: "Программы",
+          avatarUrl: null,
+        },
+        actorName: "Организатор Программы",
+        createdAt: "2026-10-25T12:00:00Z",
+        registrations: [
+          {
+            registrationId: 601,
+            user: {
+              id: 10,
+              firstName: "Участник",
+              lastName: "Команды",
+              avatarUrl: null,
+            },
+          },
+        ],
+        deletedCount: 1,
+      },
+      changes: [
+        {
+          id: 73,
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          action: "remove_registrations",
+          actor: {
+            id: 8,
+            firstName: "Организатор",
+            lastName: "Программы",
+            avatarUrl: null,
+          },
+          actorName: "Организатор Программы",
+          createdAt: "2026-10-25T12:00:00Z",
+          beforeVersion: 7,
+          afterVersion: 8,
+          removedAssignmentsCount: 0,
+          scoreCount: 0,
+          wasSubmitted: false,
+          revokedInvitationCount: 1,
+          removedMembers: [
+            {
+              user: {
+                id: 10,
+                firstName: "Участник",
+                lastName: "Команды",
+                avatarUrl: null,
+              },
+              role: "Backend-разработчик",
+              specialization: null,
+              joinedAt: "2026-10-24T10:00:00Z",
+              isCaptain: false,
+            },
+          ],
+          registrationRemovalId: 801,
+        },
+      ],
+    },
+  },
+  {
+    name: "registration_removal_audit_no_solution",
+    operationId: "readSolutionRegistrationRemoval",
+    status: 200,
+    response: {
+      audit: {
+        id: 801,
+        programId: 12,
+        actor: {
+          id: 8,
+          firstName: "Организатор",
+          lastName: "Программы",
+          avatarUrl: null,
+        },
+        actorName: "Организатор Программы",
+        createdAt: "2026-10-25T12:00:00Z",
+        registrations: [
+          {
+            registrationId: 601,
+            user: {
+              id: 10,
+              firstName: "Участник",
+              lastName: "Команды",
+              avatarUrl: null,
+            },
+          },
+        ],
+        deletedCount: 1,
+      },
+      changes: [],
+    },
+  },
+  {
+    name: "registration_removal_solution_history",
+    operationId: "readSolutionAdminChange",
+    status: 200,
+    response: {
+      change: {
+        id: 73,
+        application: {
+          kind: "solution",
+          programId: 12,
+          solutionId: 301,
+          name: "Решение команды",
+        },
+        action: "remove_registrations",
+        actor: {
+          id: 8,
+          firstName: "Организатор",
+          lastName: "Программы",
+          avatarUrl: null,
+        },
+        actorName: "Организатор Программы",
+        createdAt: "2026-10-25T12:00:00Z",
+        beforeVersion: 7,
+        afterVersion: 8,
+        removedAssignmentsCount: 0,
+        scoreCount: 0,
+        wasSubmitted: false,
+        revokedInvitationCount: 1,
+        removedMembers: [
+          {
+            user: {
+              id: 10,
+              firstName: "Участник",
+              lastName: "Команды",
+              avatarUrl: null,
+            },
+            role: "Backend-разработчик",
+            specialization: null,
+            joinedAt: "2026-10-24T10:00:00Z",
+            isCaptain: false,
+          },
+        ],
+        registrationRemovalId: 801,
+      },
+      beforeSnapshot: null,
+      afterSnapshot: null,
+    },
+  },
+  {
+    name: "registration_removal_stale",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Срок сдачи завершен.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_replay",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Срок сдачи завершен.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_expired",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Срок сдачи завершен.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_other_actor",
+    operationId: "applySolutionRegistrationRemoval",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Срок сдачи завершен.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+      previewToken: "opaque-registration-removal-proof",
+    },
+  },
+  {
+    name: "registration_removal_legacy_mode",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 409,
+    response: {
+      code: "solution_mode_unavailable",
+      detail: "Срок сдачи завершен.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_mixed_legacy",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 409,
+    response: {
+      code: "legacy_application_conflict",
+      detail: "Срок сдачи завершен.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_foreign_registration",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Решение или программа не найдены.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_participant",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 403,
+    response: {
+      code: "permission_denied",
+      detail: "Сдать решение может только капитан.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      registrationIds: [601],
+    },
+  },
+  {
+    name: "registration_removal_foreign_audit",
+    operationId: "readSolutionRegistrationRemoval",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Решение или программа не найдены.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "registration_removal_invalid_empty",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 400,
+    response: {
+      code: "required_program_fields",
+      detail: "Заполните обязательные поля.",
+      errors: [
+        {
+          path: "answers",
+          code: "required",
+          fieldId: 1003,
+          detail: "Загрузите презентацию.",
+        },
+      ],
+      meta: {},
+    },
+    invalidRequest: {
+      registrationIds: [],
+    },
+  },
+  {
+    name: "registration_removal_invalid_duplicate",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 400,
+    response: {
+      code: "required_program_fields",
+      detail: "Заполните обязательные поля.",
+      errors: [
+        {
+          path: "answers",
+          code: "required",
+          fieldId: 1003,
+          detail: "Загрузите презентацию.",
+        },
+      ],
+      meta: {},
+    },
+    invalidRequest: {
+      registrationIds: [601, 601],
+    },
+  },
+  {
+    name: "registration_removal_invalid_user_id_instead",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 400,
+    response: {
+      code: "required_program_fields",
+      detail: "Заполните обязательные поля.",
+      errors: [
+        {
+          path: "answers",
+          code: "required",
+          fieldId: 1003,
+          detail: "Загрузите презентацию.",
+        },
+      ],
+      meta: {},
+    },
+    invalidRequest: {
+      userId: 10,
+    },
+  },
+  {
+    name: "registration_removal_invalid_unknown",
+    operationId: "previewSolutionRegistrationRemoval",
+    status: 400,
+    response: {
+      code: "required_program_fields",
+      detail: "Заполните обязательные поля.",
+      errors: [
+        {
+          path: "answers",
+          code: "required",
+          fieldId: 1003,
+          detail: "Загрузите презентацию.",
+        },
+      ],
+      meta: {},
+    },
+    invalidRequest: {
+      registrationIds: [601],
+      projectId: 1,
+    },
+  },
 ];

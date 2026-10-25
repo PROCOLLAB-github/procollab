@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.19.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.20.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -1066,7 +1066,8 @@ export type SolutionCaseChangePreview = {
 export type SolutionAdminChange =
   | SolutionCaseAdminChange
   | SolutionMemberAdminChange
-  | SolutionArchiveAdminChange;
+  | SolutionArchiveAdminChange
+  | SolutionRegistrationAdminChange;
 
 export type SolutionAdminChangePage = {
   count: number;
@@ -1207,4 +1208,96 @@ export type SolutionArchiveAdminChange = {
   archivedAt: string;
   reason: "detached" | "registration_removed";
   revokedInvitationCount: number;
+  registrationRemovalId?: number;
+};
+
+export type SolutionRegistrationRemovalPreviewRequest = {
+  registrationIds: Array<number>;
+};
+
+export type SolutionRegistrationRemovalApplyRequest = {
+  registrationIds: Array<number>;
+  previewToken: string;
+};
+
+export type SolutionRemovedRegistration = {
+  registrationId: number;
+  user: SolutionUser;
+};
+
+export type SolutionRegistrationRemovalEffect = {
+  application: SolutionRef;
+  solutionVersion: number;
+  isSubmitted: boolean;
+  effect: "archive" | "remove_members" | "revoke_invitations";
+  removedMembers: Array<SolutionMember>;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  scoreCount: number;
+};
+
+export type SolutionRegistrationRemovalPreview = {
+  registrations: Array<SolutionRemovedRegistration>;
+  effects: Array<SolutionRegistrationRemovalEffect>;
+  deletedCount: number;
+  archivedCount: number;
+  removedMemberCount: number;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  scoreCount: number;
+  canApply: boolean;
+  errors: Array<SolutionIssue>;
+  previewToken: string | null;
+};
+
+export type SolutionRegistrationRemovalResult = {
+  application: SolutionRef;
+  solutionVersion: number;
+  changeId: number;
+  action: "archive" | "remove_registrations";
+};
+
+export type SolutionRegistrationRemovalReceipt = {
+  auditId: number;
+  deletedCount: number;
+  items: Array<SolutionRegistrationRemovalResult>;
+};
+
+export type SolutionRegistrationRemovalAudit = {
+  id: number;
+  programId: number;
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  registrations: Array<SolutionRemovedRegistration>;
+  deletedCount: number;
+};
+
+export type SolutionRegistrationRemovalAuditDetail = {
+  audit: SolutionRegistrationRemovalAudit;
+  changes: Array<SolutionAdminChange>;
+};
+
+export type SolutionRegistrationRemovalAuditPage = {
+  count: number;
+  offset: number;
+  limit: number;
+  results: Array<SolutionRegistrationRemovalAudit>;
+};
+
+export type SolutionRegistrationAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "remove_registrations";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  removedAssignmentsCount: 0;
+  scoreCount: number;
+  wasSubmitted: boolean;
+  revokedInvitationCount: number;
+  removedMembers: Array<SolutionMember>;
+  registrationRemovalId: number;
 };

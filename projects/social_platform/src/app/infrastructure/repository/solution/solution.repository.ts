@@ -17,6 +17,12 @@ import {
 } from "@domain/solution/ports/solution.repository.port";
 import {
   SolutionCaseChangePreviewRequest,
+  SolutionRegistrationRemovalPreviewRequest,
+  SolutionRegistrationRemovalApplyRequest,
+  SolutionRegistrationRemovalPreview,
+  SolutionRegistrationRemovalReceipt,
+  SolutionRegistrationRemovalAuditPage,
+  SolutionRegistrationRemovalAuditDetail,
   SolutionArchivePreviewRequest,
   SolutionArchiveApplyRequest,
   SolutionMemberRemovalPreviewRequest,
@@ -42,6 +48,21 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  previewRegistrationRemoval(
+    programId: number,
+    command: SolutionRegistrationRemovalPreviewRequest,
+  ) {
+    return this.http.previewRegistrationRemoval(programId, command);
+  }
+  applyRegistrationRemoval(programId: number, command: SolutionRegistrationRemovalApplyRequest) {
+    return this.http.applyRegistrationRemoval(programId, command);
+  }
+  listRegistrationRemovals(programId: number, query?: SolutionHistoryQuery) {
+    return this.http.listRegistrationRemovals(programId, query);
+  }
+  readRegistrationRemoval(programId: number, auditId: number) {
+    return this.http.readRegistrationRemoval(programId, auditId);
+  }
   previewArchive(programId: number, command: SolutionArchivePreviewRequest) {
     return this.http.previewArchive(programId, command);
   }

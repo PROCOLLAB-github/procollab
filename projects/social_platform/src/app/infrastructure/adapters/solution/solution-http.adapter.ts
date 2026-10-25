@@ -4,6 +4,12 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import {
+  SolutionRegistrationRemovalPreviewRequest,
+  SolutionRegistrationRemovalApplyRequest,
+  SolutionRegistrationRemovalPreview,
+  SolutionRegistrationRemovalReceipt,
+  SolutionRegistrationRemovalAuditPage,
+  SolutionRegistrationRemovalAuditDetail,
   SolutionArchivePreviewRequest,
   SolutionArchiveApplyRequest,
   SolutionArchivePreview,
@@ -80,6 +86,47 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private registrationRemovalPath(programId: number, ids: number[]) {
+    this.path(programId);
+    if (
+      !Array.isArray(ids) ||
+      !ids.length ||
+      ids.length > 10000 ||
+      !ids.every(validSolutionId) ||
+      new Set(ids).size !== ids.length
+    )
+      throw new RangeError("Выберите регистрации без повторов.");
+    return `/programs/${programId}/management/registrations/remove/`;
+  }
+  previewRegistrationRemoval(
+    programId: number,
+    command: SolutionRegistrationRemovalPreviewRequest,
+  ) {
+    return this.api.post<SolutionRegistrationRemovalPreview>(
+      `${this.registrationRemovalPath(programId, command.registrationIds)}preview/`,
+      command,
+    );
+  }
+  applyRegistrationRemoval(programId: number, command: SolutionRegistrationRemovalApplyRequest) {
+    return this.api.post<SolutionRegistrationRemovalReceipt>(
+      `${this.registrationRemovalPath(programId, command.registrationIds)}apply/`,
+      command,
+    );
+  }
+  listRegistrationRemovals(programId: number, query: SolutionHistoryQuery = {}) {
+    this.path(programId);
+    return this.api.get<SolutionRegistrationRemovalAuditPage>(
+      `/programs/${programId}/management/registrations/removals/`,
+      this.evaluationQuery(query),
+    );
+  }
+  readRegistrationRemoval(programId: number, auditId: number) {
+    this.path(programId);
+    if (!validSolutionId(auditId)) throw new RangeError("Invalid audit ID");
+    return this.api.get<SolutionRegistrationRemovalAuditDetail>(
+      `/programs/${programId}/management/registrations/removals/${auditId}/`,
+    );
+  }
   private archivePath(programId: number, ids: number[]) {
     this.path(programId);
     if (
