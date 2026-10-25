@@ -227,19 +227,27 @@ export type SolutionManagerAssignmentQuery = {
   scope?: "all" | "completed" | "pending";
 };
 
-export type SolutionManagerSolutionsQuery = {
-  limit?: number;
-  offset?: number;
+export type SolutionManagerSolutionFilters = {
   search?: string;
   scope?: "all" | "not_submitted" | "awaiting_evaluation";
   submission?: "all" | "submitted" | "not_submitted";
   caseScope?: "all" | "selected" | "without_case";
   caseName?: string;
+  fieldId?: number;
+  answerState?: "all" | "present" | "missing" | "not_applicable";
 };
 
-export type SolutionAnalyticsExportQuery = {
-  kind?: "program" | "solutions" | "submitted" | "scores";
+export type SolutionManagerSolutionsQuery = SolutionManagerSolutionFilters & {
+  limit?: number;
+  offset?: number;
 };
+
+export type SolutionAnalyticsExportQuery = { limit?: never; offset?: never } & (
+  | ({ kind?: "program" | "solutions" | "submitted" | "scores" } & {
+      [Key in keyof SolutionManagerSolutionFilters]?: never;
+    })
+  | ({ kind: "solutions" | "submitted" } & SolutionManagerSolutionFilters)
+);
 
 export function validSolutionId(value: unknown): value is number {
   return typeof value === "number" && Number.isSafeInteger(value) && value > 0;

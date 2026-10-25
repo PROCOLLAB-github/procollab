@@ -116,11 +116,17 @@ export class SolutionHttpAdapter {
   managerSolutions(programId: number, query: SolutionManagerSolutionsQuery = {}) {
     return this.api.get<SolutionManagerSolutions>(
       `${this.analyticsPath(programId)}solutions/`,
-      this.evaluationQuery(query),
+      this.managerQuery(query),
     );
   }
   exportAnalytics(programId: number, query: SolutionAnalyticsExportQuery = {}) {
-    return this.api.getFile(`${this.analyticsPath(programId)}export/`, this.evaluationQuery(query));
+    return this.api.getFile(`${this.analyticsPath(programId)}export/`, this.managerQuery(query));
+  }
+  private managerQuery(query: SolutionManagerSolutionsQuery | SolutionAnalyticsExportQuery) {
+    if (query.fieldId !== undefined && !validSolutionId(query.fieldId)) {
+      throw new RangeError("Invalid field ID");
+    }
+    return this.evaluationQuery(query);
   }
   caseAnalytics(programId: number) {
     this.path(programId);
@@ -191,6 +197,8 @@ export class SolutionHttpAdapter {
       caseName: "case_name",
       assignedOnly: "assigned_only",
       programId: "program_id",
+      fieldId: "field_id",
+      answerState: "answer_state",
     };
     for (const [key, value] of Object.entries(query)) {
       if (value !== undefined) params = params.set(wireKeys[key] ?? key, value);

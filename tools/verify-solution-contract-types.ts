@@ -161,7 +161,32 @@ const wrongAssignmentReference: SolutionManagerAssignment["application"] = {
 // @ts-expect-error Выгрузка решения не принимает legacy kind проектов.
 const wrongAnalyticsExport: SolutionAnalyticsExportQuery = { kind: "projects" };
 
+const filteredExport: SolutionAnalyticsExportQuery = {
+  kind: "solutions",
+  fieldId: 123,
+  answerState: "not_applicable",
+  caseScope: "selected",
+  caseName: "Кейс",
+  scope: "awaiting_evaluation",
+};
+// @ts-expect-error Глобальная сводка не принимает фильтры списка решений.
+const filteredProgramExport: SolutionAnalyticsExportQuery = { kind: "program", fieldId: 123 };
+// @ts-expect-error Выгрузка оценок сохраняет полный scope.
+const filteredScoresExport: SolutionAnalyticsExportQuery = { kind: "scores", search: "Кейс" };
+// @ts-expect-error XLSX включает все найденные решения, без pagination.
+const paginatedSolutionsExport: SolutionAnalyticsExportQuery = { kind: "solutions", limit: 20 };
+const invalidAnswerState: SolutionAnalyticsExportQuery = {
+  kind: "solutions",
+  // @ts-expect-error Состояние ответа совпадает с C00, нового answered enum нет.
+  answerState: "answered",
+};
+
 void [
+  filteredExport,
+  filteredProgramExport,
+  filteredScoresExport,
+  paginatedSolutionsExport,
+  invalidAnswerState,
   noncompetitiveFunnel,
   assignmentReference,
   wrongAssignmentReference,

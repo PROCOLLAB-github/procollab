@@ -2,7 +2,17 @@
 
 # FE08: API общего кабинета и выгрузки результатов
 
-Статус: API-слой одного общего входа подготовлен; FE07/FE08 UI по-прежнему ожидает согласования дизайна. Первый выпуск не завершен.
+## C00 1.12.0: фильтр поля и XLSX найденных решений
+
+Before: manager list принимал search/case/scope/submission/pagination, analytics export — только kind. After: list добавляет fieldId/answerState=all/present/missing/not_applicable; export kind=solutions/submitted получает те же непагинационные фильтры. Backend применяет snapshot/current форму и существующий empty_value (0/false present, новое поле не missing у старой сдачи); JSON и четыре листа книги используют одну выборку, XLSX включает все найденные, submitted — дополнительное пересечение. Неизвестное/чужое поле, invalid pair/state/blank, фильтры program/scores и export pagination дают C00 400. Права/no-store прежние, публикация не затрагивается.
+
+Реализовано: общий SolutionManagerSolutionFilters и строгий SolutionAnalyticsExportQuery; старый вызов с любым kind без фильтров остается допустимым, filtered program/scores и limit/offset в XLSX запрещены типами. Adapter передает field_id/answer_state через существующий API/interceptor, unsafe field ID отклоняет до HTTP. Repository/use cases и общий Blob error decoder сохраняются. Компоненты/фасады UI/route/SCSS этим checkpoint не меняются; D02 и D03 еще требуют approval.
+
+Checked by tests: 20 новых wire tests + 61 manager/C00 + 5 прежних export = 86 PASS; все состояния ответа, пересечение прежних query, original XLSX Blob, C00 JSON в Blob и unsafe IDs проверены. Полный npm run test:ci: **2754 tests / 478 files**, strict C00 types PASS; типовые negative cases для program/scores/pagination/unknown answer state. C00 1.12.0: **120 schemas / 45 operations / 158 scenarios**, обе копии трех документов byte-identical, прежние schemas/responses/144 сценария сохранены.
+
+Checked by build/static: Angular development build PASS (прежние Sass warnings), scoped ESLint 0 errors, locked Prettier 3.8.3 по 1969 LF-normalized files PASS. Backend: 15 новых PostgreSQL tests, общий прогон 244 PASS; 143 настоящих HTTP/JWT/anonymous checks трех форматов и filtered XLSX, без domain mutations. Evidence: design-artifacts/program-solutions-20261024/expert-v1/implementation/field-filters-http-evidence.json. Роли/размеры/сохраненные данные не менялись. Новый browser UI, production/CDN/Excel пересчет и большой memory benchmark не проверялись; это API scope, первый выпуск не завершен.
+
+Статус первого блока: API-слой общего входа подготовлен. D00 v3 и D01 согласованы, первый UI FE07 реализован; новые manager/public UI ожидают D02/D03. Первый выпуск не завершен.
 
 C00 1.4.0 добавляет GET /evaluation/applications/ и ApplicationRef обоих видов. Старая проекция /evaluation/programs/?include=projects остается прежней. Новая страница объединяет реальные назначения на сервере и только затем применяет общий limit/offset; фронт не объединяет два частично загруженных списка. Query использует status/q/program_id/limit/offset. Вкладочные счетчики pending/completed/unavailable возвращает сервер.
 
