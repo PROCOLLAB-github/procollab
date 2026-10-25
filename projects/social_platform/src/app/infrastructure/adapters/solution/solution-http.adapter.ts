@@ -4,6 +4,10 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import {
+  SolutionActionPreviewRequest,
+  SolutionActionApplyRequest,
+  SolutionActionPreview,
+  SolutionActionResult,
   CreateSolutionCommand,
   ProgramSolution,
   SolutionContext,
@@ -63,6 +67,30 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private submissionActionPath(programId: number, ids: number[]) {
+    this.path(programId);
+    if (
+      !Array.isArray(ids) ||
+      ids.length === 0 ||
+      ids.length > 10000 ||
+      !ids.every(validSolutionId)
+    ) {
+      throw new RangeError("Выберите корректные решения.");
+    }
+    return `/programs/${programId}/management/solutions/actions/`;
+  }
+  previewSubmitAction(programId: number, command: SolutionActionPreviewRequest) {
+    return this.api.post<SolutionActionPreview>(
+      `${this.submissionActionPath(programId, command.ids)}preview/`,
+      command,
+    );
+  }
+  applySubmitAction(programId: number, command: SolutionActionApplyRequest) {
+    return this.api.post<SolutionActionResult>(
+      `${this.submissionActionPath(programId, command.ids)}apply/`,
+      command,
+    );
+  }
   private publishedPath(programId: number) {
     this.path(programId);
     return `/programs/${programId}/published-solutions/`;

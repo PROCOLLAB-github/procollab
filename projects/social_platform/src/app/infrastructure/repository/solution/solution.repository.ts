@@ -15,6 +15,8 @@ import {
   SolutionPublishedQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
+  SolutionActionPreviewRequest,
+  SolutionActionApplyRequest,
   CreateSolutionCommand,
   SolutionTeamCommand,
   SolutionCaptainCommand,
@@ -33,6 +35,12 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  previewSubmitAction(programId: number, command: SolutionActionPreviewRequest) {
+    return this.http.previewSubmitAction(programId, command);
+  }
+  applySubmitAction(programId: number, command: SolutionActionApplyRequest) {
+    return this.http.applySubmitAction(programId, command);
+  }
   publishedSolutions(programId: number, query?: SolutionPublishedQuery) {
     return this.http.publishedSolutions(programId, query);
   }

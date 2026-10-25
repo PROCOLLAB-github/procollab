@@ -2,6 +2,10 @@
 
 import { Observable } from "rxjs";
 import {
+  SolutionActionPreviewRequest,
+  SolutionActionApplyRequest,
+  SolutionActionPreview,
+  SolutionActionResult,
   CreateSolutionCommand,
   ProgramSolution,
   SolutionContext,
@@ -47,6 +51,14 @@ import {
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewSubmitAction(
+    programId: number,
+    command: SolutionActionPreviewRequest,
+  ): Observable<SolutionActionPreview>;
+  abstract applySubmitAction(
+    programId: number,
+    command: SolutionActionApplyRequest,
+  ): Observable<SolutionActionResult>;
   abstract publishedSolutions(
     programId: number,
     query?: SolutionPublishedQuery,

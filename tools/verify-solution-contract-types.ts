@@ -1,6 +1,8 @@
 /** @format */
 
 import type {
+  SolutionActionPreviewRequest,
+  SolutionActionApplyRequest,
   SolutionUpdateInvitation,
   UpdateSolutionCommand,
   RateSolutionCommand,
@@ -13,6 +15,28 @@ import type {
   SolutionReminderPreviewRequest,
   SolutionPublishedSolutionMember,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
+
+const validSubmitPreview: SolutionActionPreviewRequest = { action: "submit", ids: [301] };
+const validSubmitApply: SolutionActionApplyRequest = {
+  ...validSubmitPreview,
+  previewToken: "opaque",
+};
+// @ts-expect-error Confirmation requires the exact signed preview token.
+const missingSubmitToken: SolutionActionApplyRequest = { action: "submit", ids: [301] };
+// @ts-expect-error Post-submission administrative exceptions are not part of this contract.
+const destructiveSolutionAction: SolutionActionPreviewRequest = { action: "detach", ids: [301] };
+const wrongSubmissionReference: SolutionActionPreviewRequest = {
+  action: "submit",
+  // @ts-expect-error Project link IDs cannot replace the required solution selection.
+  projectIds: [301],
+};
+void [
+  validSubmitPreview,
+  validSubmitApply,
+  missingSubmitToken,
+  destructiveSolutionAction,
+  wrongSubmissionReference,
+];
 
 const reminderSelection = {
   selection: { mode: "selected", ids: [301] },

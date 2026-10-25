@@ -7467,4 +7467,425 @@ export const solutionContractScenarios: SolutionContractScenario[] = [
       },
     },
   },
+  {
+    name: "solution_action_preview_ready",
+    operationId: "previewSolutionSubmitAction",
+    status: 200,
+    response: {
+      items: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Готовое решение",
+          },
+          errors: [],
+        },
+      ],
+      readyCount: 1,
+      alreadySubmittedCount: 0,
+      canApply: true,
+      previewToken: "opaque-preview-token",
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_incomplete",
+    operationId: "previewSolutionSubmitAction",
+    status: 200,
+    response: {
+      items: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Готовое решение",
+          },
+          errors: [
+            {
+              path: "answers",
+              code: "required",
+              fieldId: 1001,
+              detail: "Заполните обязательное поле.",
+            },
+          ],
+        },
+      ],
+      readyCount: 0,
+      alreadySubmittedCount: 0,
+      canApply: false,
+      previewToken: null,
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_already",
+    operationId: "previewSolutionSubmitAction",
+    status: 200,
+    response: {
+      items: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Готовое решение",
+          },
+          errors: [],
+        },
+      ],
+      readyCount: 0,
+      alreadySubmittedCount: 1,
+      canApply: false,
+      previewToken: null,
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_mixed",
+    operationId: "previewSolutionSubmitAction",
+    status: 200,
+    response: {
+      items: [
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Готовое решение",
+          },
+          errors: [],
+        },
+        {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 302,
+            name: "Готовое решение",
+          },
+          errors: [],
+        },
+      ],
+      readyCount: 1,
+      alreadySubmittedCount: 1,
+      canApply: true,
+      previewToken: "opaque-preview-token",
+    },
+    request: {
+      action: "submit",
+      ids: [301, 302],
+    },
+  },
+  {
+    name: "solution_action_preview_noncompetitive",
+    operationId: "previewSolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "not_competitive",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_forbidden",
+    operationId: "previewSolutionSubmitAction",
+    status: 403,
+    response: {
+      code: "permission_denied",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_anonymous",
+    operationId: "previewSolutionSubmitAction",
+    status: 401,
+    response: {
+      code: "authentication_required",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_foreign",
+    operationId: "previewSolutionSubmitAction",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_preview_invalid",
+    operationId: "previewSolutionSubmitAction",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_action_preview_legacy",
+    operationId: "previewSolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_mode_unavailable",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+    },
+  },
+  {
+    name: "solution_action_apply_ready",
+    operationId: "applySolutionSubmitAction",
+    status: 200,
+    response: {
+      changedCount: 1,
+      alreadySubmittedCount: 0,
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_mixed",
+    operationId: "applySolutionSubmitAction",
+    status: 200,
+    response: {
+      changedCount: 1,
+      alreadySubmittedCount: 1,
+    },
+    request: {
+      action: "submit",
+      ids: [301, 302],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_replay",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_bad_signature",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_expired",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_changed_state",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_other_manager",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_action_conflict",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_forbidden",
+    operationId: "applySolutionSubmitAction",
+    status: 403,
+    response: {
+      code: "permission_denied",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_foreign",
+    operationId: "applySolutionSubmitAction",
+    status: 404,
+    response: {
+      code: "not_found",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_noncompetitive",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "not_competitive",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_legacy",
+    operationId: "applySolutionSubmitAction",
+    status: 409,
+    response: {
+      code: "solution_mode_unavailable",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_invalid",
+    operationId: "applySolutionSubmitAction",
+    status: 400,
+    response: {
+      code: "validation_error",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+  },
+  {
+    name: "solution_action_apply_file_invalid",
+    operationId: "applySolutionSubmitAction",
+    status: 400,
+    response: {
+      code: "invalid_answers",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
+  {
+    name: "solution_action_apply_anonymous",
+    operationId: "applySolutionSubmitAction",
+    status: 401,
+    response: {
+      code: "authentication_required",
+      detail: "Проверьте действие.",
+      errors: [],
+      meta: {},
+    },
+    request: {
+      action: "submit",
+      ids: [301],
+      previewToken: "opaque-preview-token",
+    },
+  },
 ];
